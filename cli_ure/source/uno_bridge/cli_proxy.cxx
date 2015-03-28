@@ -79,11 +79,7 @@ UnoInterfaceInfo::UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
         sal_Bool bComplete = ::typelib_typedescription_complete( & _pt);
         if( ! bComplete)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "cannot make type complete: " );
-            buf.append( *reinterpret_cast< OUString const * >(
-                            & m_typeDesc->aBase.pTypeName));
-            throw BridgeRuntimeError(buf.makeStringAndClear());
+            throw BridgeRuntimeError("cannot make type complete: " + *reinterpret_cast< OUString const * >(& m_typeDesc->aBase.pTypeName));
         }
     }
 }
@@ -198,13 +194,7 @@ void UnoInterfaceProxy::addUnoInterface(uno_Interface* pUnoI,
                  "id:\n\t{0}\n\t{1}"), m_oid, sInterfaceName));
         // add to the string that contains all interface names
         _numInterfaces++;
-        OUStringBuffer buf(512);
-        buf.append("\t");
-        buf.append( OUString::number(_numInterfaces));
-        buf.append(". ");
-        buf.append(mapCliString(sInterfaceName));
-        buf.append("\n");
-        OUString _sNewInterface = buf.makeStringAndClear();
+        OUString _sNewInterface = "\t" + OUString::number(_numInterfaces) + ". " + mapCliString(sInterfaceName) + "\n";
         pin_ptr<rtl_uString *> pp_sInterfaces = &_sInterfaces;
         rtl_uString_newConcat( pp_sInterfaces, * pp_sInterfaces,
                                _sNewInterface.pData);
@@ -551,13 +541,9 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
         }
         // ToDo check if the message of the exception is not crippled
         // the thing that should not be... no method info found!
-        OUStringBuffer buf( 64 );
-        buf.append( "[cli_uno bridge]calling undeclared function on interface " );
-        buf.append( *reinterpret_cast< OUString const * >(
-                  & ((typelib_TypeDescription *)info->m_typeDesc)->pTypeName));
-        buf.append( ": " );
-        buf.append( usMethodName );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[cli_uno bridge]calling undeclared function on interface " +
+            *reinterpret_cast< OUString const * >(& ((typelib_TypeDescription *)info->m_typeDesc)->pTypeName) +
+            ": " + usMethodName);
     }
     catch (BridgeRuntimeError & err)
     {
@@ -750,11 +736,7 @@ void CliProxy::makeMethodInfos()
     }
     catch (System::InvalidCastException^ )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "[cli_uno bridge] preparing proxy for cli interface: " );
-        buf.append(mapCliString(m_type->ToString() ));
-        buf.append( " \nfailed!" );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[cli_uno bridge] preparing proxy for cli interface: " + mapCliString(m_type->ToString()) + " \nfailed!");
     }
 }
 
@@ -814,11 +796,7 @@ sr::MethodInfo^ CliProxy::getMethodInfo(int nUnoFunctionPos,
         }
         if (indexCliMethod == -1)
         {
-            OUStringBuffer buf(256);
-            buf.append( "[cli_uno bridge] CliProxy::getMethodInfo():"
-                        "cli object does not implement interface method: " );
-            buf.append(usMethodName);
-            throw BridgeRuntimeError(buf.makeStringAndClear());
+            throw BridgeRuntimeError("[cli_uno bridge] CliProxy::getMethodInfo():cli object does not implement interface method: " + usMethodName);
         }
         m_arUnoPosToCliPos[nUnoFunctionPos] = indexCliMethod;
         ret = m_arMethodInfos[indexCliMethod];

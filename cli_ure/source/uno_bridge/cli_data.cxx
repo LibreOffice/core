@@ -443,10 +443,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type^ cliType)
     }
     if (retVal == NULL)
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "[cli_uno bridge] mapCliType():could not map type: " );
-        buf.append(mapCliString(cliType->FullName));
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[cli_uno bridge] mapCliType():could not map type: " + mapCliString(cliType->FullName));
     }
     return retVal;
 }
@@ -975,11 +972,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 }
                 default:
                 {
-                    OUStringBuffer buf( 128 );
-                    buf.append( "[map_to_uno():" );
-                    buf.append(value_td.getTypeName());
-                    buf.append( "] unsupported value type of any!" );
-                    throw BridgeRuntimeError( buf.makeStringAndClear() );
+                    throw BridgeRuntimeError("[map_to_uno():" + value_td.getTypeName() + "] unsupported value type of any!");
                 }
                 }
             }
@@ -988,20 +981,15 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
 // ToDo check this
                 if (assign)
                     uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any
-                OUStringBuffer buf( 256 );
-                buf.append( "[map_to_uno():Any" );
-                buf.append(value_td.getTypeName());
-                buf.append( "]The Any type ");
-                buf.append(value_td.getTypeName());
-                buf.append( " does not correspond to its value type: " );
+                OUString str = "[map_to_uno():Any" + value_td.getTypeName() + "]The Any type " + value_td.getTypeName() + " does not correspond to its value type: ";
                 if(aAny.Value != nullptr)
                 {
                     css::uno::Type td(mapCliType(aAny.Value->GetType()), SAL_NO_ACQUIRE);
-                    buf.append(td.getTypeName());
+                    str += td.getTypeName();
                 }
                 if (assign)
                     uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any
-                throw BridgeRuntimeError( buf.makeStringAndClear() );
+                throw BridgeRuntimeError(str);
             }
             catch (BridgeRuntimeError& )
             {
@@ -1081,10 +1069,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                             }
                             else
                             {
-                                OUStringBuffer buf(512);
-                                buf.append("[map_to_uno(): Member: ");
-                                buf.append(comp_td->ppMemberNames[nPos]);
-                                throw BridgeRuntimeError(buf.makeStringAndClear());
+                                throw BridgeRuntimeError("[map_to_uno(): Member: " + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]));
                             }
                         }
                         else
@@ -1179,31 +1164,24 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             catch (BridgeRuntimeError& e)
             {
                 bException= true;
-                OUStringBuffer buf(512);
-                buf.append("[map_to_uno():");
+                OUString str = "[map_to_uno():";
                 if (cliType)
                 {
-                    buf.append(mapCliString(cliType->FullName));
-                    buf.append(".");
-                    buf.append(comp_td->ppMemberNames[nPos]);
-                    buf.append(" ");
+                    str += mapCliString(cliType->FullName) + "." + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]) + " ";
                 }
-                buf.append(e.m_message);
-                throw BridgeRuntimeError(buf.makeStringAndClear());
+                str += e.m_message;
+                throw BridgeRuntimeError(str);
             }
             catch (System::InvalidCastException^ )
             {
                 bException= true;
-                OUStringBuffer buf( 256 );
-                buf.append( "[map_to_uno():" );
+                OUString str = "[map_to_uno():";
                 if (cliType)
                 {
-                    buf.append(mapCliString(cliType->FullName));
-                    buf.append( "." );
-                    buf.append(comp_td->ppMemberNames[nPos]);
+                    str += mapCliString(cliType->FullName) + "." + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]);
                 }
-                buf.append( "] Value has not the required type." );
-                throw BridgeRuntimeError(buf.makeStringAndClear());
+                str += "] Value has not the required type.";
+                throw BridgeRuntimeError(str);
             }
             catch (...)
             {
@@ -1367,33 +1345,20 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     default:
                     {
-                        OUStringBuffer buf( 128 );
-                        buf.append( "[map_to_uno():" );
-                        buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-                        buf.append( "] unsupported sequence element type: " );
-                        buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
-                        throw BridgeRuntimeError( buf.makeStringAndClear() );
+                        throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) +
+                            "] unsupported sequence element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
                     }
                     }
                 }
                 catch (BridgeRuntimeError& e)
                 {
-                    OUStringBuffer buf( 128 );
-                    buf.append( "[map_to_uno():" );
-                    buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ));
-                    buf.append( "] conversion failed\n ");
-                    buf.append(e.m_message);
-                    throw BridgeRuntimeError(buf.makeStringAndClear());
+                    throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] conversion failed\n " + e.m_message);
                 }
                 catch (System::InvalidCastException^ )
                 {
                     // Ok, checked
-                    OUStringBuffer buf( 128 );
-                    buf.append( "[map_to_uno():" );
-                    buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName) );
-                    buf.append( "] could not convert sequence element type: " );
-                    buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
-                    throw BridgeRuntimeError( buf.makeStringAndClear() );
+                    throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName) +
+                        "] could not convert sequence element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
                 }
                 catch (...)
                 {
@@ -1436,11 +1401,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
         default:
         {
             //ToDo check
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.append( "] unsupported type!" );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] unsupported type!");
         }
         }
     }
@@ -1448,18 +1409,11 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
     catch (System::InvalidCastException^ )
     {
         //ToDo check
-        OUStringBuffer buf( 128 );
-        buf.append( "[map_to_uno():" );
-        buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-        buf.append( "] could not convert type!" );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] could not convert type!");
     }
     catch (System::NullReferenceException ^ e)
     {
-        OUStringBuffer buf(512);
-        buf.append( "[map_to_uno()] Illegal null reference passed!\n" );
-        buf.append(mapCliString(e->StackTrace));
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[map_to_uno()] Illegal null reference passed!\n" + mapCliString(e->StackTrace));
     }
     catch (BridgeRuntimeError& )
     {
@@ -1938,12 +1892,8 @@ void Bridge::map_to_cli(
         }
         default:
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_cli():" );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.append( "] unsupported element type: " );
-            buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError("[map_to_cli():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) +
+                "] unsupported element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
         }
         }
         break;
@@ -1964,11 +1914,7 @@ void Bridge::map_to_cli(
     default:
     {
         //ToDo check this exception. The String is probably crippled
-        OUStringBuffer buf( 128 );
-        buf.append( "[map_to_cli():" );
-        buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-        buf.append( "] unsupported type!" );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError("[map_to_cli():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] unsupported type!");
     }
     } //switch
 } // method

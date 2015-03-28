@@ -368,12 +368,7 @@ SAL_IMPLEMENT_MAIN()
                         }
                         if (option_info == 0)
                         {
-                            OUStringBuffer buf;
-                            buf.append("unknown option ");
-                            buf.append( cmd_arg );
-                            buf.append( "!  Use climaker --help to print all options." );
-                            throw RuntimeException(
-                                buf.makeStringAndClear() );
+                            throw RuntimeException("unknown option " + cmd_arg + "!  Use climaker --help to print all options.");
                         }
                         else
                         {
