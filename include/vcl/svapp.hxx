@@ -1501,15 +1501,6 @@ public:
     static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
 
-    /** Is the access interface enabled?
-
-     @returns true
-    */
-    static bool                 IsEnableAccessInterface()
-    {
-        return true;
-    }
-
     ///@}
 
     // For vclbootstrapprotector:
