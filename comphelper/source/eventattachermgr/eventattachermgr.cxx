@@ -290,24 +290,24 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
                 case TypeClass_BOOLEAN:
                     // FALSE -> Return
-                    if( !(*(sal_Bool*)aRet.getValue()) )
+                    if( !(*static_cast<sal_Bool const *>(aRet.getValue())) )
                         return aRet;
                     break;
 
                 case TypeClass_STRING:
                     // none empty string -> return
-                    if( !((OUString*)aRet.getValue())->isEmpty() )
+                    if( !(static_cast<OUString const *>(aRet.getValue()))->isEmpty() )
                         return aRet;
                     break;
 
                     // none zero number -> return
-                case TypeClass_FLOAT:           if( *((float*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_DOUBLE:          if( *((double*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_BYTE:            if( *((sal_uInt8*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_SHORT:           if( *((sal_Int16*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )   return aRet; break;
+                case TypeClass_FLOAT:           if( *static_cast<float const *>(aRet.getValue()) )    return aRet; break;
+                case TypeClass_DOUBLE:          if( *static_cast<double const *>(aRet.getValue()) )   return aRet; break;
+                case TypeClass_BYTE:            if( *static_cast<sal_uInt8 const *>(aRet.getValue()) )    return aRet; break;
+                case TypeClass_SHORT:           if( *static_cast<sal_Int16 const *>(aRet.getValue()) )    return aRet; break;
+                case TypeClass_LONG:            if( *static_cast<sal_Int32 const *>(aRet.getValue()) )    return aRet; break;
+                case TypeClass_UNSIGNED_SHORT:  if( *static_cast<sal_uInt16 const *>(aRet.getValue()) )   return aRet; break;
+                case TypeClass_UNSIGNED_LONG:   if( *static_cast<sal_uInt32 const *>(aRet.getValue()) )   return aRet; break;
 
                 default:
                     OSL_ASSERT(false);

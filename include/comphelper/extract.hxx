@@ -110,7 +110,7 @@ inline bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
 {
     if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
     {
-        return *(sal_Bool *)rAny.getValue();
+        return *static_cast<sal_Bool const *>(rAny.getValue());
     }
     else
     {

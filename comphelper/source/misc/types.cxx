@@ -123,7 +123,7 @@ bool getBOOL(const Any& _rAny)
 {
     bool nReturn = false;
     if (_rAny.getValueType() == ::getCppuBooleanType())
-        nReturn = *(sal_Bool*)_rAny.getValue();
+        nReturn = *static_cast<sal_Bool const *>(_rAny.getValue());
     else
         OSL_FAIL("comphelper::getBOOL : invalid argument !");
     return nReturn;
@@ -295,7 +295,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        bRes = *(FontDescriptor*)pData == aTemp;
+                        bRes = *static_cast<FontDescriptor const *>(pData) == aTemp;
                     }
                     else
                         bRes = false;

@@ -241,7 +241,7 @@ static const char* strListSqlKeyWords[] = {
 
 extern "C" int compare_strings( const void *arg1, const void *arg2 )
 {
-    return strcmp( (char *)arg1, *(char **)arg2 );
+    return strcmp( static_cast<char const *>(arg1), *static_cast<char * const *>(arg2) );
 }
 
 

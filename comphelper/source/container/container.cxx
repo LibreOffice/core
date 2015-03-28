@@ -66,7 +66,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
             {
                 ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
-                xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue();
+                xSearchLoop = *static_cast<css::uno::Reference< ::com::sun::star::uno::XInterface> const *>(aElement.getValue());
                 bCheckingStartingPoint = false;
 
                 m_arrChildIndizies.push_back((sal_Int32)0);
@@ -91,7 +91,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
                         ++nOldSearchChildIndex;
                         // and check the next child
                         ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
-                        xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aElement.getValue();
+                        xSearchLoop = *static_cast<css::uno::Reference< ::com::sun::star::uno::XInterface> const *>(aElement.getValue());
                         bCheckingStartingPoint = false;
                         // and update its position in the list.
                         m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);
