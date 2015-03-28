@@ -888,6 +888,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         desktop::Desktop::GetCommandLineArgs().setHeadless();
 
         Application::EnableHeadlessMode(true);
+        Application::EnableConsoleOnly();
 
         // We could use InitVCL() here -- and used to before using soffice_main,
         // however that now deals with the initialisation for us (and it's not
