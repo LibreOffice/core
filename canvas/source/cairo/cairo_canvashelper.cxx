@@ -441,7 +441,7 @@ namespace cairocanvas
                 if( aBmpEx.IsTransparent() || aBmpEx.IsAlpha() )
                     pAlphaReadAcc = aAlpha.AcquireReadAccess();
 
-                data = (unsigned char*) malloc( nWidth*nHeight*4 );
+                data = static_cast<unsigned char*>(malloc( nWidth*nHeight*4 ));
 
                 long nOff = 0;
                 ::Color aColor;

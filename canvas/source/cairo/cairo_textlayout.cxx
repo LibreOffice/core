@@ -520,7 +520,7 @@ namespace cairocanvas
             font_face = cairo_win32_font_face_create_for_hfont(rSysFontData.hFont);
 
 #elif defined CAIRO_HAS_FT_FONT
-            font_face = cairo_ft_font_face_create_for_ft_face((FT_Face)rSysFontData.nFontId,
+            font_face = cairo_ft_font_face_create_for_ft_face(static_cast<FT_Face>(rSysFontData.nFontId),
                                                               rSysFontData.nFontFlags);
 #else
 # error Native API needed.
