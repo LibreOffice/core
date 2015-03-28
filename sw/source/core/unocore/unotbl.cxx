@@ -2161,79 +2161,76 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
 {
     // attachToRange must only be called once
     if(!bIsDescriptor)  /* already attached ? */
-        throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
-    uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
+    SwXTextRange* pRange(nullptr);
+    OTextCursorHelper* pCursor(nullptr);
     if(xRangeTunnel.is())
     {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+        pRange  = reinterpret_cast<SwXTextRange*>(
+                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(SwXTextRange::getUnoTunnelId())));
+        pCursor = reinterpret_cast<OTextCursorHelper*>(
+                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
     }
-    SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
-    if(pDoc && nRows && nColumns)
-    {
-        SwUnoInternalPaM aPam(*pDoc);
-        // this now needs to return TRUE
-        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
-
-        {
-            UnoActionContext aCont( pDoc );
-
-            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-            const SwTable *pTable = 0;
-            if( 0 != aPam.Start()->nContent.GetIndex() )
-            {
-                pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false );
-            }
-            //TODO: if it is the last paragraph than add another one!
-            if( aPam.HasMark() )
-            {
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
-                aPam.DeleteMark();
-            }
-            pTable = pDoc->InsertTable( SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),
-                                        *aPam.GetPoint(),
-                                        nRows,
-                                        nColumns,
-                                        text::HoriOrientation::FULL );
-            if(pTable)
-            {
-                // here, the properties of the descriptor need to be analyzed
-                pTableProps->ApplyTblAttr(*pTable, *pDoc);
-                SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
-                lcl_FormatTable( pTblFmt );
-
-                pTblFmt->Add(this);
-                if(!m_sTableName.isEmpty())
-                {
-                    sal_uInt16 nIndex = 1;
-                    OUString sTmpNameIndex(m_sTableName);
-                    while(pDoc->FindTblFmtByName( sTmpNameIndex, true ) && nIndex < USHRT_MAX)
-                    {
-                        sTmpNameIndex = m_sTableName + OUString::number(nIndex++);
-                    }
-                    pDoc->SetTableName( *pTblFmt, sTmpNameIndex);
-                }
-
-                const::uno::Any* pName;
-                if(pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
-                {
-                    OUString sTmp;
-                    (*pName) >>= sTmp;
-                    setName(sTmp);
-                }
-                bIsDescriptor = false;
-                DELETEZ(pTableProps);
-            }
-            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
-        }
-    }
-    else
+    SwDoc* pDoc = pRange ? const_cast<SwDoc*>(pRange->GetDoc()) : pCursor ? const_cast<SwDoc*>(pCursor->GetDoc()) : nullptr;
+    if(!pDoc || !nRows || !nColumns)
         throw lang::IllegalArgumentException();
+    SwUnoInternalPaM aPam(*pDoc);
+    // this now needs to return TRUE
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+
+    {
+        UnoActionContext aCont( pDoc );
+
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        const SwTable *pTable = 0;
+        if( 0 != aPam.Start()->nContent.GetIndex() )
+        {
+            pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false );
+        }
+        //TODO: if it is the last paragraph than add another one!
+        if( aPam.HasMark() )
+        {
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+            aPam.DeleteMark();
+        }
+        pTable = pDoc->InsertTable( SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),
+                                    *aPam.GetPoint(),
+                                    nRows,
+                                    nColumns,
+                                    text::HoriOrientation::FULL );
+        if(pTable)
+        {
+            // here, the properties of the descriptor need to be analyzed
+            pTableProps->ApplyTblAttr(*pTable, *pDoc);
+            SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
+            lcl_FormatTable( pTblFmt );
+
+            pTblFmt->Add(this);
+            if(!m_sTableName.isEmpty())
+            {
+                sal_uInt16 nIndex = 1;
+                OUString sTmpNameIndex(m_sTableName);
+                while(pDoc->FindTblFmtByName( sTmpNameIndex, true ) && nIndex < USHRT_MAX)
+                {
+                    sTmpNameIndex = m_sTableName + OUString::number(nIndex++);
+                }
+                pDoc->SetTableName( *pTblFmt, sTmpNameIndex);
+            }
+
+            const::uno::Any* pName;
+            if(pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
+            {
+                OUString sTmp;
+                (*pName) >>= sTmp;
+                setName(sTmp);
+            }
+            bIsDescriptor = false;
+            DELETEZ(pTableProps);
+        }
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
 }
 
 void SwXTextTable::attach(const uno::Reference< text::XTextRange > & xTextRange)
