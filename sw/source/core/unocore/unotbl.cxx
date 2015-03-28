@@ -1629,32 +1629,28 @@ sal_Bool SwXTextTableCursor::mergeRange()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
+    if(!pUnoCrsr)
+        return false;
     {
-        {
-            // The Actions need to be revoked here
-            UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-        }
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        rTblCrsr.MakeBoxSels();
-
-        {
-            UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = TBLMERGE_OK == rTblCrsr.GetDoc()->MergeTbl(rTblCrsr);
-            if(bRet)
-            {
-                size_t nCount = rTblCrsr.GetSelectedBoxesCount();
-                while (nCount--)
-                {
-                    rTblCrsr.DeleteBox(nCount);
-                }
-            }
-        }
-        rTblCrsr.MakeBoxSels();
+        // The Actions need to be revoked here
+        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
-    return bRet;
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    rTblCrsr.MakeBoxSels();
+    bool bResult;
+    {
+        UnoActionContext aContext(pUnoCrsr->GetDoc());
+        bResult = TBLMERGE_OK == rTblCrsr.GetDoc()->MergeTbl(rTblCrsr);
+    }
+    if(bResult)
+    {
+        size_t nCount = rTblCrsr.GetSelectedBoxesCount();
+        while (nCount--)
+            rTblCrsr.DeleteBox(nCount);
+    }
+    rTblCrsr.MakeBoxSels();
+    return bResult;
 }
 
 sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
