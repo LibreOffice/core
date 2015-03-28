@@ -160,7 +160,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
                 if (bCorrectType)
-                    aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
+                    aControlProps = *static_cast<Sequence< ::com::sun::star::beans::PropertyValue> const *>(pArguments->Value.getValue());
             }
             else
                 SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (" << pArguments->Name << ") !");
@@ -222,7 +222,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         {
             if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {
-                xMasterForm = Reference< XRowSet > (*(Reference< XInterface > *)pArguments->Value.getValue(), UNO_QUERY);
+                xMasterForm = Reference< XRowSet > (*static_cast<Reference< XInterface > const *>(pArguments->Value.getValue()), UNO_QUERY);
                 break;
             }
         }

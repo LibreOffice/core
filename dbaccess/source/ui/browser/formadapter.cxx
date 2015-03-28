@@ -1377,7 +1377,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
-    Reference< ::com::sun::star::form::XFormComponent >  xElement(*(Reference< XInterface > *)aElement.getValue(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(aElement.getValue()), UNO_QUERY);
     if (!xElement.is())
     {
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -1546,7 +1546,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
-    Reference< ::com::sun::star::form::XFormComponent >  xElement(*(Reference< XInterface > *)Element.getValue(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(Element.getValue()), UNO_QUERY);
     if (!xElement.is())
     {
         throw ::com::sun::star::lang::IllegalArgumentException();
