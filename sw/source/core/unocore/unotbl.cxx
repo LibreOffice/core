@@ -750,36 +750,35 @@ double sw_getValue( SwXCell &rCell )
 /* non UNO function call to set value in SwXCell */
 void sw_setValue( SwXCell &rCell, double nVal )
 {
-    if(rCell.IsValid())
+    if(!rCell.IsValid())
+        return;
+    // first this text (maybe) needs to be deleted
+    sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( true );
+    if(ULONG_MAX != nNdPos)
+        sw_setString( rCell, OUString(), true );   // true == keep number format
+    SwDoc* pDoc = rCell.GetDoc();
+    UnoActionContext aAction(pDoc);
+    SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
+    SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
+    const SfxPoolItem* pItem;
+
+    //!! do we need to set a new number format? Yes, if
+    // - there is no current number format
+    // - the current number format is not a number format according to the number formatter, but rather a text format
+    // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
+    if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
+        ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue())
+        ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == css::util::NumberFormat::TEXT)
     {
-        // first this text (maybe) needs to be deleted
-        sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( true );
-        if(ULONG_MAX != nNdPos)
-            sw_setString( rCell, OUString(), true );   // true == keep number format
-        SwDoc* pDoc = rCell.GetDoc();
-        UnoActionContext aAction(pDoc);
-        SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
-        SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
-        const SfxPoolItem* pItem;
-
-        //!! do we need to set a new number format? Yes, if
-        // - there is no current number format
-        // - the current number format is not a number format according to the number formatter, but rather a text format
-        // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
-        if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-            ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue())
-            ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == css::util::NumberFormat::TEXT)
-        {
-            aSet.Put(SwTblBoxNumFormat(0));
-        }
-
-        SwTblBoxValue aVal(nVal);
-        aSet.Put(aVal);
-        pDoc->SetTblBoxFormulaAttrs( *rCell.pBox, aSet );
-        // update table
-        SwTableFmlUpdate aTblUpdate( SwTable::FindTable( rCell.GetFrmFmt() ));
-        pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
+        aSet.Put(SwTblBoxNumFormat(0));
     }
+
+    SwTblBoxValue aVal(nVal);
+    aSet.Put(aVal);
+    pDoc->SetTblBoxFormulaAttrs( *rCell.pBox, aSet );
+    // update table
+    SwTableFmlUpdate aTblUpdate( SwTable::FindTable( rCell.GetFrmFmt() ));
+    pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
 }
 
 TYPEINIT1(SwXCell, SwClient);
