@@ -1812,59 +1812,51 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
            std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
+    if(!pUnoCrsr)
+        return uno::Any();
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
+        auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
-        lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if(pEntry)
-        {
-            rTblCrsr.MakeBoxSels();
-            switch(pEntry->nWID )
-            {
-                case FN_UNO_TABLE_CELL_BACKGROUND:
-                {
-                    SvxBrushItem aBrush( RES_BACKGROUND );
-                    if (rTblCrsr.GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
-                        aBrush.QueryValue(aRet, pEntry->nMemberId);
-
-                }
-                break;
-                case RES_BOXATR_FORMAT:
-                    // TODO: GetAttr for table selections in a Doc is missing
-                    OSL_FAIL("not implemented");
-                break;
-                case FN_UNO_PARA_STYLE:
-                {
-                    SwFmtColl *const pFmt =
-                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, false);
-                    OUString sRet;
-                    if(pFmt)
-                        sRet = pFmt->GetName();
-                    aRet <<= sRet;
-                }
-                break;
-                default:
-                {
-                    SfxItemSet aSet(rTblCrsr.GetDoc()->GetAttrPool(),
-                        RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
-                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                        0L);
-                    SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
-                            aSet);
-                    m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
-                }
-            }
-        }
-        else
-            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        lcl_FormatTable(pTblNode->GetTable().GetFrmFmt());
     }
-    return aRet;
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
+    if(!pEntry)
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    rTblCrsr.MakeBoxSels();
+    uno::Any aResult;
+    switch(pEntry->nWID)
+    {
+        case FN_UNO_TABLE_CELL_BACKGROUND:
+        {
+            SvxBrushItem aBrush(RES_BACKGROUND);
+            if (rTblCrsr.GetDoc()->GetBoxAttr(*pUnoCrsr, aBrush))
+                aBrush.QueryValue(aResult, pEntry->nMemberId);
+        }
+        break;
+        case RES_BOXATR_FORMAT:
+            // TODO: GetAttr for table selections in a Doc is missing
+            throw uno::RuntimeException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        break;
+        case FN_UNO_PARA_STYLE:
+        {
+            auto pFmt(SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, false));
+            if(pFmt)
+                aResult = uno::makeAny(pFmt->GetName());
+        }
+        break;
+        default:
+        {
+            SfxItemSet aSet(rTblCrsr.GetDoc()->GetAttrPool(),
+                RES_CHRATR_BEGIN, RES_FRMATR_END-1,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                0L);
+            SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(), aSet);
+            m_pPropSet->getPropertyValue(*pEntry, aSet, aResult);
+        }
+    }
+    return aResult;
 }
 
 void SwXTextTableCursor::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
