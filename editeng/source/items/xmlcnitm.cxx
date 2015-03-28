@@ -95,7 +95,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 
     if( rVal.getValue() != NULL && rVal.getValueType().getTypeClass() == TypeClass_INTERFACE )
     {
-        xRef = *(Reference<XInterface>*)rVal.getValue();
+        xRef = *static_cast<Reference<XInterface> const *>(rVal.getValue());
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
         if( xTunnel.is() )
             pContainer = reinterpret_cast<SvUnoAttributeContainer*>((sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId()));
@@ -130,7 +130,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                 if( aAny.getValue() == NULL || aAny.getValueType() != cppu::UnoType<AttributeData>::get() )
                     return false;
 
-                AttributeData* pData = (AttributeData*)aAny.getValue();
+                AttributeData const * pData = static_cast<AttributeData const *>(aAny.getValue());
                 sal_Int32 pos = aName.indexOf( ':' );
                 if( pos != -1 )
                 {

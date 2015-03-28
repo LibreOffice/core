@@ -141,51 +141,51 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                 switch(nProp)
                 {
                     case  0:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= SaveWordCplSttLst;
                     break;//"Exceptions/TwoCapitalsAtStart",
                     case  1:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= SaveWordWrdSttLst;
                     break;//"Exceptions/CapitalAtStartSentence",
                     case  2:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= Autocorrect;
                     break;//"UseReplacementTable",
                     case  3:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= CptlSttWrd;
                     break;//"TwoCapitalsAtStart",
                     case  4:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= CptlSttSntnc;
                     break;//"CapitalAtStartSentence",
                     case  5:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= ChgWeightUnderl;
                     break;//"ChangeUnderlineWeight",
                     case  6:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= SetINetAttr;
                     break;//"SetInetAttribute",
                     case  7:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= ChgOrdinalNumber;
                     break;//"ChangeOrdinalNumber",
                     case 8:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                              nFlags |= AddNonBrkSpace;
                     break;//"AddNonBreakingSpace"
                     case  9:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= ChgToEnEmDash;
                     break;//"ChangeDash",
                     case 10:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= IgnoreDoubleSpace;
                     break;//"RemoveDoubleSpaces",
                     case 11:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= ChgSglQuotes;
                     break;//"ReplaceSingleQuote",
                     case 12:
@@ -199,7 +199,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"SingleQuoteAtEnd",
                     case 14:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= ChgQuotes;
                     break;//"ReplaceDoubleQuote",
                     case 15:
@@ -213,7 +213,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
                     case 17:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             nFlags |= CorrectCapsLock;
                     break;//"CorrectAccidentalCapsLock"
                 }
@@ -405,23 +405,23 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
             {
                 switch(nProp)
                 {
-                    case   0: rParent.bFileRel = *(sal_Bool*)pValues[nProp].getValue(); break; // "Text/FileLinks",
-                    case   1: rParent.bNetRel = *(sal_Bool*)pValues[nProp].getValue();  break; // "Text/InternetLinks",
-                    case   2: rParent.bAutoTextPreview = *(sal_Bool*)pValues[nProp].getValue(); break; // "Text/ShowPreview",
-                    case   3: rParent.bAutoTextTip = *(sal_Bool*)pValues[nProp].getValue();  break; // "Text/ShowToolTip",
-                    case   4: rParent.bSearchInAllCategories = *(sal_Bool*)pValues[nProp].getValue();  break; //"Text/SearchInAllCategories"
-                    case   5: rSwFlags.bAutoCorrect = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/UseReplacementTable",
-                    case   6: rSwFlags.bCptlSttSntnc = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/TwoCapitalsAtStart",
-                    case   7: rSwFlags.bCptlSttWrd = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/CapitalAtStartSentence",
-                    case   8: rSwFlags.bChgWeightUnderl = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeUnderlineWeight",
-                    case   9: rSwFlags.bSetINetAttr = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/SetInetAttribute",
-                    case  10: rSwFlags.bChgOrdinalNumber = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeOrdinalNumber",
-                    case  11: rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break; // "Format/Option/AddNonBreakingSpace",
+                    case   0: rParent.bFileRel = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Text/FileLinks",
+                    case   1: rParent.bNetRel = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; // "Text/InternetLinks",
+                    case   2: rParent.bAutoTextPreview = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Text/ShowPreview",
+                    case   3: rParent.bAutoTextTip = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; // "Text/ShowToolTip",
+                    case   4: rParent.bSearchInAllCategories = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; //"Text/SearchInAllCategories"
+                    case   5: rSwFlags.bAutoCorrect = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/UseReplacementTable",
+                    case   6: rSwFlags.bCptlSttSntnc = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/TwoCapitalsAtStart",
+                    case   7: rSwFlags.bCptlSttWrd = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CapitalAtStartSentence",
+                    case   8: rSwFlags.bChgWeightUnderl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeUnderlineWeight",
+                    case   9: rSwFlags.bSetINetAttr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/SetInetAttribute",
+                    case  10: rSwFlags.bChgOrdinalNumber = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeOrdinalNumber",
+                    case  11: rSwFlags.bAddNonBrkSpace = *static_cast<sal_Bool const *>(pValues[nProp].getValue( )); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
-//                  case  12: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeDash",
-                    case  13: rSwFlags.bDelEmptyNode = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelEmptyParagraphs",
-                    case  14: rSwFlags.bChgUserColl = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ReplaceUserStyle",
-                    case  15: rSwFlags.bChgEnumNum = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeToBullets/Enable",
+//                  case  12: rSwFlags.bChgToEnEmDash = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeDash",
+                    case  13: rSwFlags.bDelEmptyNode = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelEmptyParagraphs",
+                    case  14: rSwFlags.bChgUserColl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ReplaceUserStyle",
+                    case  15: rSwFlags.bChgEnumNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeToBullets/Enable",
                     case  16:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -453,7 +453,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                         rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
-                    case  21: rSwFlags.bRightMargin = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/CombineParagraphs",
+                    case  21: rSwFlags.bRightMargin = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CombineParagraphs",
                     case  22:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -461,17 +461,17 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt8 >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
-                    case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
-                    case  24: rSwFlags.bAFmtDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesBetween",
-                    case  25: rParent.bAutoFmtByInput = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/Enable",
-                    case  26: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeDash",
-                    case  27: rSwFlags.bSetNumRule = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ApplyNumbering/Enable",
-                    case  28: rSwFlags.bSetBorder = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToBorders",
-                    case  29: rSwFlags.bCreateTable = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToTable",
-                    case  30: rSwFlags.bReplaceStyles =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ReplaceStyle",
-                    case  31: rSwFlags.bAFmtByInpDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesAtStartEnd",
-                    case  32: rSwFlags.bAFmtByInpDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesBetween",
-                    case  33: rSwFlags.bAutoCompleteWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/Enable",
+                    case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesAtStartEnd",
+                    case  24: rSwFlags.bAFmtDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesBetween",
+                    case  25: rParent.bAutoFmtByInput = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/Enable",
+                    case  26: rSwFlags.bChgToEnEmDash = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeDash",
+                    case  27: rSwFlags.bSetNumRule = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ApplyNumbering/Enable",
+                    case  28: rSwFlags.bSetBorder = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToBorders",
+                    case  29: rSwFlags.bCreateTable = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToTable",
+                    case  30: rSwFlags.bReplaceStyles =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ReplaceStyle",
+                    case  31: rSwFlags.bAFmtByInpDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesAtStartEnd",
+                    case  32: rSwFlags.bAFmtByInpDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesBetween",
+                    case  33: rSwFlags.bAutoCompleteWords = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/Enable",
                     case  34:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -486,10 +486,10 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MaxListLen",
-                    case  36: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
-                    case  37: rSwFlags.bAutoCmpltEndless = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/EndlessList",
-                    case  38: rSwFlags.bAutoCmpltAppendBlanc = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/AppendBlank",
-                    case  39: rSwFlags.bAutoCmpltShowAsTip = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/ShowAsTip",
+                    case  36: rSwFlags.bAutoCmpltCollectWords = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/CollectWords",
+                    case  37: rSwFlags.bAutoCmpltEndless = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/EndlessList",
+                    case  38: rSwFlags.bAutoCmpltAppendBlanc = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/AppendBlank",
+                    case  39: rSwFlags.bAutoCmpltShowAsTip = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/ShowAsTip",
                     case  40:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -497,7 +497,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/AcceptKey"
-                    case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
+                    case 41 :rSwFlags.bAutoCmpltKeepList = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;//"Completion/KeepList"
                     case 42 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
