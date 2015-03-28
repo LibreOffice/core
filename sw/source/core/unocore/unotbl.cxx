@@ -1246,35 +1246,24 @@ void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTable )
 {
-    SwXCell* pRet = 0;
-    if(pTblFmt && pBox)
+    if(!pTblFmt || !pBox)
+        return nullptr;
+    if( !pTable )
+        pTable = SwTable::FindTable( pTblFmt );
+    SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox );
+    if( it == pTable->GetTabSortBoxes().end() )
+        return nullptr;
+    // if the box exists, then return a cell
+    SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
+    for(SwXCell* pXCell = aIter.First(); pXCell; pXCell = aIter.Next())
     {
-        if( !pTable )
-            pTable = SwTable::FindTable( pTblFmt );
-        SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox );
-
-        // if the box exists, then return a cell
-        if( it != pTable->GetTabSortBoxes().end() )
-        {
-            size_t const nPos = it - pTable->GetTabSortBoxes().begin();
-            SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
-            SwXCell* pXCell = aIter.First();
-            while( pXCell )
-            {
-                // is there already a proper cell?
-                if(pXCell->GetTblBox() == pBox)
-                    break;
-                pXCell = aIter.Next();
-            }
-            // otherwise create it
-            if(!pXCell)
-            {
-                pXCell = new SwXCell(pTblFmt, pBox, nPos);
-            }
-            pRet = pXCell;
-        }
+        // is there already a proper cell?
+        if(pXCell->GetTblBox() == pBox)
+            return pXCell;
     }
-    return pRet;
+    // otherwise create it
+    size_t const nPos = it - pTable->GetTabSortBoxes().begin();
+    return new SwXCell(pTblFmt, pBox, nPos);
 }
 
 /** search if a box exists in a table
