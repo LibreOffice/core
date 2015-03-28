@@ -1474,13 +1474,8 @@ SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrmFmt()->Ge
 const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return static_cast<const SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
 SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return static_cast<SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
 
-uno::Sequence< OUString > SwXTextTableCursor::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextTableCursor";
-    return aRet;
-}
+uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+    { return {"com.sun.star.text.TextTableCursor"}; }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     SwClient(pFmt),
