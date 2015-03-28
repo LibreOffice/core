@@ -232,7 +232,7 @@ bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal
     sal_Char  buffer[32];
     sal_Int32 nChr;
 
-    oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == NULL)
         return false;
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 
 static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
-    oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == NULL || pSecImpl->m_pPasswd.pw_name == NULL)
         return false;
@@ -294,7 +294,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
 
 static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
-    oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == NULL)
         return false;
@@ -495,7 +495,7 @@ static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDir
 
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
-    oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == NULL)
         return sal_False;

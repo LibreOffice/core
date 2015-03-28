@@ -141,7 +141,7 @@ sal_uInt32 SAL_CALL rtl_crc32 (
 {
     if (Data)
     {
-        const sal_uInt8 *p = (const sal_uInt8 *)Data;
+        const sal_uInt8 *p = static_cast<const sal_uInt8 *>(Data);
         const sal_uInt8 *q = p + DatLen;
 
         Crc = ~Crc;

@@ -44,7 +44,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
     unsigned char                   cTrail;
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
-    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
+    const ImplDBCSConvertData*  pConvertData = static_cast<const ImplDBCSConvertData*>(pData);
     const ImplDBCSToUniLeadTab* pLeadTab = pConvertData->mpToUniLeadTab;
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
@@ -222,7 +222,7 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
     sal_uInt16                  cConv;
     sal_Unicode                 c;
     const ImplUniToDBCSHighTab* pHighEntry;
-    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
+    const ImplDBCSConvertData*  pConvertData = static_cast<const ImplDBCSConvertData*>(pData);
     const ImplUniToDBCSHighTab* pHighTab = pConvertData->mpToDBCSHighTab;
     char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
@@ -385,7 +385,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
     const ImplDBCSToUniLeadTab* pLeadTab;
-    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
+    const ImplEUCJPConvertData* pConvertData = static_cast<const ImplEUCJPConvertData*>(pData);
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
 
@@ -547,7 +547,7 @@ sal_Size ImplUnicodeToEUCJP( const void* pData,
     unsigned char                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplUniToDBCSHighTab* pHighTab;
-    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
+    const ImplEUCJPConvertData* pConvertData = static_cast<const ImplEUCJPConvertData*>(pData);
     char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
 

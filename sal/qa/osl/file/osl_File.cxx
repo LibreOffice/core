@@ -1793,9 +1793,9 @@ namespace osl_FileStatus
         void getAccessTime_001()
         {
             TimeValue *pTV_current = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
             TimeValue *pTV_access = NULL;
-            CPPUNIT_ASSERT( ( pTV_access = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
 
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_AccessTime );
             nError = rItem.getFileStatus( rFileStatus );
@@ -1833,7 +1833,7 @@ namespace osl_FileStatus
         void getModifyTime_001()
         {
             TimeValue *pTV_current = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
 
             //create file
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -1853,7 +1853,7 @@ namespace osl_FileStatus
 
             //get modify time
             TimeValue* pTV_modify = NULL;
-            CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
             *pTV_modify = rFileStatus.getModifyTime();
 
             bool bOK = t_compareTime( pTV_modify, pTV_current, delta );
@@ -3452,13 +3452,13 @@ namespace osl_File
         void setTime_001()
         {
              TimeValue *pTV_current  = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
             TimeValue *pTV_creation = NULL;
-            CPPUNIT_ASSERT( ( pTV_creation = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_creation = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
             TimeValue *pTV_access   = NULL;
-            CPPUNIT_ASSERT( ( pTV_access = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
             TimeValue *pTV_modify   = NULL;
-            CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
+            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
 
             //get current time
             bool bOk = osl_getSystemTime( pTV_current );

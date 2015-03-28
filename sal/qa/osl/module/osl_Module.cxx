@@ -135,7 +135,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( rtl::OUString("firstfunc") ));
 
             OUString aFileURL;
             bRes = osl::Module::getUrlFromAddress(
@@ -258,7 +258,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( rtl::OUString("firstfunc") ));
             bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );
@@ -306,7 +306,7 @@ namespace osl_Module
             ::osl::Module aMod( getDllURL( ) );
             ::rtl::OUString funcName( "firstfunc" );
 
-            FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
+            FuncPtr pFunc = reinterpret_cast<FuncPtr>(osl_getSymbol( (oslModule)aMod, funcName.pData ));
             bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );

@@ -200,7 +200,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     SAL_WARN_IF(g_command_args.m_nCount != 0, "sal.osl", "args already set");
     if (g_command_args.m_nCount == 0)
     {
-        rtl_uString** ppArgs = (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
+        rtl_uString** ppArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory (argc * sizeof(rtl_uString*)));
         if (ppArgs != 0)
         {
             rtl_TextEncoding encoding = osl_getThreadTextEncoding();

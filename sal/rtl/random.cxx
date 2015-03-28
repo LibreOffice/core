@@ -269,7 +269,7 @@ static void __rtl_random_readPool (
 rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl = (RandomPool_Impl*)NULL;
-    pImpl = (RandomPool_Impl*)rtl_allocateZeroMemory (sizeof(RandomPool_Impl));
+    pImpl = static_cast<RandomPool_Impl*>(rtl_allocateZeroMemory (sizeof(RandomPool_Impl)));
     if (pImpl)
     {
         if (!__rtl_random_initPool (pImpl))
@@ -286,7 +286,7 @@ rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
  */
 void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl = (RandomPool_Impl *)Pool;
+    RandomPool_Impl *pImpl = static_cast<RandomPool_Impl *>(Pool);
     if (pImpl)
     {
         rtl_digest_destroy (pImpl->m_hDigest);
@@ -300,8 +300,8 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
 rtlRandomError SAL_CALL rtl_random_addBytes (
     rtlRandomPool Pool, const void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
-    const sal_uInt8 *pBuffer = (const sal_uInt8 *)Buffer;
+    RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
+    const sal_uInt8 *pBuffer = static_cast<const sal_uInt8 *>(Buffer);
 
     if ((pImpl == NULL) || (pBuffer == NULL))
         return rtl_Random_E_Argument;
@@ -316,8 +316,8 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
 rtlRandomError SAL_CALL rtl_random_getBytes (
     rtlRandomPool Pool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
-    sal_uInt8       *pBuffer = (sal_uInt8 *)Buffer;
+    RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
+    sal_uInt8       *pBuffer = static_cast<sal_uInt8 *>(Buffer);
 
     if ((pImpl == NULL) || (pBuffer == NULL))
         return rtl_Random_E_Argument;

@@ -127,7 +127,7 @@ sal_Size ImplUpperCharToUnicode( const void* pData,
                             sal_Size* pSrcCvtBytes )
 {
     sal_Unicode                 cConv;
-    const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
+    const ImplByteConvertData*  pConvertData = static_cast<const ImplByteConvertData*>(pData);
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
 

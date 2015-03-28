@@ -52,7 +52,7 @@ void init()
         sal_Int32 i, n = osl_getCommandArgCount();
 
         g_ppCommandArgs =
-            (rtl_uString**)rtl_allocateZeroMemory (n * sizeof(rtl_uString*));
+            static_cast<rtl_uString**>(rtl_allocateZeroMemory (n * sizeof(rtl_uString*)));
         for (i = 0; i < n; i++)
         {
             rtl_uString * pArg = 0;

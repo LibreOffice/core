@@ -1736,7 +1736,7 @@ namespace osl_Thread
 // destroy function when the binding thread terminate
 void SAL_CALL destroyCallback(void * data)
 {
-    delete[] (char *) data;
+    delete[] static_cast<char *>(data);
 }
 
 static ThreadData myThreadData(destroyCallback);
@@ -1765,7 +1765,7 @@ private:
             pc[1] = '\0';
 
             myThreadData.setData(pc);
-            char* pData = (char*)myThreadData.getData();
+            char* pData = static_cast<char*>(myThreadData.getData());
             m_Char_Test = *pData;
             // wait for long time to check the data value in main thread
             ThreadHelper::thread_sleep_tenth_sec(3);
@@ -1792,7 +1792,7 @@ private:
             oslThreadIdentifier* pId = new oslThreadIdentifier;
             *pId = getIdentifier();
             idData.setData(pId);
-            oslThreadIdentifier* pIdData = (oslThreadIdentifier*)idData.getData();
+            oslThreadIdentifier* pIdData = static_cast<oslThreadIdentifier*>(idData.getData());
             //t_print("Thread %d has Data %d\n", getIdentifier(), *pIdData);
             m_Id = *pIdData;
             delete pId;
@@ -1883,7 +1883,7 @@ namespace osl_ThreadData
                 myKeyThread aThread2('b');
                 aThread2.create();
                 // aThread1 and aThread2 should have not terminated yet, check current data, not 'a' 'b'
-                char* pChar = (char*)myThreadData.getData();
+                char* pChar = static_cast<char*>(myThreadData.getData());
                 char aChar = *pChar;
 
                 aThread1.join();
@@ -1922,7 +1922,7 @@ namespace osl_ThreadData
                 pc2[1] = '\0';
 
                 myThreadData.setData(pc2);
-                char* pChar = (char*)myThreadData.getData();
+                char* pChar = static_cast<char*>(myThreadData.getData());
                 char aChar = *pChar;
 
                 aThread1.join();
@@ -1976,7 +1976,7 @@ namespace osl_ThreadData
                 char cData1 = aThread1.m_Char_Test;
                 char cData2 = aThread2.m_Char_Test;
 
-                char* pChar = (char*)myThreadData.getData();
+                char* pChar = static_cast<char*>(myThreadData.getData());
                 char aChar = *pChar;
 
                 CPPUNIT_ASSERT_MESSAGE(
@@ -2007,7 +2007,7 @@ namespace osl_ThreadData
                 pc[1] = '\0';
 
                 void* pChar = myThreadData.getData();
-                char aChar = *(char*)pChar;
+                char aChar = *static_cast<char*>(pChar);
 
                 aThread1.join();
                 aThread2.join();

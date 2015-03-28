@@ -441,7 +441,7 @@ oslSocket __osl_createSocketImpl(int Socket)
 {
     oslSocket pSocket;
 
-    pSocket = (oslSocket)calloc(1, sizeof(struct oslSocketImpl));
+    pSocket = static_cast<oslSocket>(calloc(1, sizeof(struct oslSocketImpl)));
 
     pSocket->m_Socket = Socket;
     pSocket->m_nLastError = 0;
@@ -468,7 +468,7 @@ void __osl_destroySocketImpl(oslSocket Socket)
 
 static oslSocketAddr __osl_createSocketAddr(void)
 {
-    oslSocketAddr pAddr = (oslSocketAddr) rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl ));
+    oslSocketAddr pAddr = static_cast<oslSocketAddr>(rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl )));
 #if OSL_DEBUG_LEVEL > 1
     g_nSocketAddr ++;
 #endif
@@ -832,7 +832,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
         return (oslHostAddr)NULL;
     }
 
-    pAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
+    pAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
     OSL_ASSERT(pAddr);
     if (pAddr == NULL)
     {
@@ -891,7 +891,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
     if (cn == NULL)
         return (oslHostAddr)NULL;
 
-    pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
+    pHostAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
     OSL_ASSERT(pHostAddr);
     if (pHostAddr == NULL)
     {
@@ -1779,7 +1779,7 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket pSocket,
     do
     {
         nRead =  recv(pSocket->m_Socket,
-                      (sal_Char*)pBuffer,
+                      pBuffer,
                       BytesToRead,
                       MSG_FLAG_TO_NATIVE(Flag));
     } while ( nRead < 0 && errno == EINTR );
@@ -1822,7 +1822,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
     pSocket->m_nLastError=0;
 
     nRead = recvfrom(pSocket->m_Socket,
-                     (sal_Char*)pBuffer,
+                     pBuffer,
                      BufferSize,
                      MSG_FLAG_TO_NATIVE(Flag),
                      pSystemSockAddr,
@@ -1860,7 +1860,7 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket pSocket,
     do
     {
         nWritten = send(pSocket->m_Socket,
-                        (sal_Char*)pBuffer,
+                        pBuffer,
                         BytesToSend,
                         MSG_FLAG_TO_NATIVE(Flag));
     } while ( nWritten < 0 && errno == EINTR );
@@ -1907,7 +1907,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
     /* Then sendto should behave like send. */
 
     nWritten = sendto(pSocket->m_Socket,
-                      (sal_Char*)pBuffer,
+                      pBuffer,
                       BytesToSend,
                       MSG_FLAG_TO_NATIVE(Flag),
                       pSystemSockAddr,
@@ -1929,7 +1929,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
 sal_Int32 SAL_CALL osl_readSocket (
     oslSocket pSocket, void *pBuffer, sal_Int32 n )
 {
-    sal_uInt8 * Ptr = (sal_uInt8 *)pBuffer;
+    sal_uInt8 * Ptr = static_cast<sal_uInt8 *>(pBuffer);
     sal_uInt32 BytesRead= 0;
     sal_uInt32 BytesToRead= n;
 
@@ -1964,7 +1964,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
     /* loop until all desired bytes were send or an error occurred */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
-    sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
+    sal_uInt8 const *Ptr = static_cast<sal_uInt8 const *>(pBuffer);
 
     OSL_ASSERT( pSocket );
 
@@ -2166,7 +2166,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
     if(getsockopt(pSocket->m_Socket,
                   OPTION_LEVEL_TO_NATIVE(Level),
                   OPTION_TO_NATIVE(Option),
-                  (sal_Char*)pBuffer,
+                  pBuffer,
                   &nOptLen) == -1)
     {
         pSocket->m_nLastError=errno;
@@ -2195,7 +2195,7 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
     nRet = setsockopt(pSocket->m_Socket,
                       OPTION_LEVEL_TO_NATIVE(Level),
                       OPTION_TO_NATIVE(Option),
-                      (sal_Char*)pBuffer,
+                      pBuffer,
                       BufferLen);
 
     if ( nRet < 0 )
@@ -2336,7 +2336,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 {
     oslSocketSetImpl* pSet;
 
-    pSet= (oslSocketSetImpl*)malloc(sizeof(oslSocketSetImpl));
+    pSet= static_cast<oslSocketSetImpl*>(malloc(sizeof(oslSocketSetImpl)));
 
     OSL_ASSERT(pSet);
 

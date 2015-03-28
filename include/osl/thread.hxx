@@ -180,7 +180,7 @@ private:
 
 extern "C" inline void SAL_CALL threadFunc( void* param)
 {
-        Thread* pObj= (Thread*)param;
+        Thread* pObj= static_cast<Thread*>(param);
         pObj->run();
         pObj->onTerminated();
 }

@@ -203,7 +203,7 @@ static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
 static void* osl_thread_start_Impl (void* pData)
 {
     bool terminate;
-    Thread_Impl* pImpl= (Thread_Impl*)pData;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(pData);
 
     assert(pImpl);
 
@@ -349,7 +349,7 @@ oslThread osl_createSuspendedThread (
 void SAL_CALL osl_destroyThread(oslThread Thread)
 {
     if (Thread != NULL) {
-        Thread_Impl * impl = (Thread_Impl *) Thread;
+        Thread_Impl * impl = static_cast<Thread_Impl *>(Thread);
         bool active;
         pthread_mutex_lock(&impl->m_Lock);
         active = (impl->m_Flags & THREADIMPL_FLAGS_ACTIVE) != 0;
@@ -363,7 +363,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
 
 void SAL_CALL osl_resumeThread(oslThread Thread)
 {
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -385,7 +385,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
 
 void SAL_CALL osl_suspendThread(oslThread Thread)
 {
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -413,7 +413,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 {
     bool active;
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
         return sal_False;
@@ -429,7 +429,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 {
     pthread_t thread;
     bool attached;
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
         return;
@@ -457,7 +457,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 
 void SAL_CALL osl_terminateThread(oslThread Thread)
 {
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -482,7 +482,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
 sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
 {
     bool terminate;
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -608,7 +608,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
     if (pEntry == NULL)
     {
-        pEntry = (HashEntry*) calloc(sizeof(HashEntry), 1);
+        pEntry = static_cast<HashEntry*>(calloc(sizeof(HashEntry), 1));
 
         pEntry->Handle = hThread;
 
@@ -661,7 +661,7 @@ static void removeThreadId (pthread_t hThread)
 
 oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
 {
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
     sal_uInt16   Ident;
 
     if (pImpl)
@@ -796,7 +796,7 @@ void SAL_CALL osl_setThreadPriority (
 
 #endif /* NO_PTHREAD_PRIORITY */
 
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -880,7 +880,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
 #endif /* NO_PTHREAD_PRIORITY */
 
     oslThreadPriority Priority = osl_Thread_PriorityNormal;
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
+    Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
     {
@@ -940,7 +940,7 @@ typedef struct _wrapper_pthread_key
 
 oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
-    wrapper_pthread_key *pKey = (wrapper_pthread_key*)rtl_allocateMemory(sizeof(wrapper_pthread_key));
+    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(rtl_allocateMemory(sizeof(wrapper_pthread_key)));
 
     if (pKey)
     {
@@ -958,7 +958,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
 
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 {
-    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     if (pKey)
     {
         pthread_key_delete(pKey->m_key);
@@ -968,7 +968,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 
 void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
-    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     return pKey ? pthread_getspecific(pKey->m_key) : NULL;
 }
 
@@ -976,7 +976,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     bool bRet;
     void *pOldData = NULL;
-    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     if (!pKey)
         return sal_False;
 

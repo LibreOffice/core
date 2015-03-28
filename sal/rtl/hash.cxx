@@ -76,11 +76,11 @@ hashString (rtl_uString *pString)
 static StringHashTable *
 rtl_str_hash_new (sal_uInt32 nSize)
 {
-    StringHashTable *pHash = (StringHashTable *)malloc (sizeof (StringHashTable));
+    StringHashTable *pHash = static_cast<StringHashTable *>(malloc (sizeof (StringHashTable)));
 
     pHash->nEntries = 0;
     pHash->nSize = getNextSize (nSize);
-    pHash->pData = (rtl_uString **) calloc (sizeof (rtl_uString *), pHash->nSize);
+    pHash->pData = static_cast<rtl_uString **>(calloc (sizeof (rtl_uString *), pHash->nSize));
 
     return pHash;
 }

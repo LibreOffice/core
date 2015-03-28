@@ -102,7 +102,7 @@ rtl_cache_hash_rescale (
     sal_Size                 new_bytes;
 
     new_bytes = new_size * sizeof(rtl_cache_bufctl_type*);
-    new_table = (rtl_cache_bufctl_type**)rtl_arena_alloc(gp_cache_arena, &new_bytes);
+    new_table = static_cast<rtl_cache_bufctl_type**>(rtl_arena_alloc(gp_cache_arena, &new_bytes));
 
     if (new_table != 0)
     {
@@ -236,7 +236,7 @@ rtl_cache_hash_remove (
 int
 rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
-    rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
+    rtl_cache_slab_type * slab = static_cast<rtl_cache_slab_type*>(obj);
 
     QUEUE_START_NAMED(slab, slab_);
     slab->m_ntypes = 0;
@@ -278,7 +278,7 @@ rtl_cache_slab_create (
         {
             /* allocate slab struct from slab cache */
             assert(cache != gp_cache_slab_cache);
-            slab = (rtl_cache_slab_type*)rtl_cache_alloc (gp_cache_slab_cache);
+            slab = static_cast<rtl_cache_slab_type*>(rtl_cache_alloc (gp_cache_slab_cache));
         }
         else
         {
@@ -413,7 +413,7 @@ rtl_cache_slab_alloc (
             {
                 /* allocate bufctl */
                 assert(cache != gp_cache_bufctl_cache);
-                bufctl = (rtl_cache_bufctl_type*)rtl_cache_alloc (gp_cache_bufctl_cache);
+                bufctl = static_cast<rtl_cache_bufctl_type*>(rtl_cache_alloc (gp_cache_bufctl_cache));
                 if (bufctl == 0)
                 {
                     /* out of memory */
@@ -490,7 +490,7 @@ rtl_cache_slab_free (
     else
     {
         /* embedded slab struct */
-        bufctl = (rtl_cache_bufctl_type*)(addr);
+        bufctl = static_cast<rtl_cache_bufctl_type*>(addr);
         slab = RTL_CACHE_SLAB(addr, cache->m_slab_size);
     }
 
@@ -540,7 +540,7 @@ rtl_cache_slab_free (
 int
 rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
-    rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
+    rtl_cache_magazine_type * mag = static_cast<rtl_cache_magazine_type*>(obj);
     /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
 
     mag->m_mag_next = 0;
@@ -704,7 +704,7 @@ rtl_cache_depot_populate (
     {
         /* allocate new empty magazine */
         RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-        empty = (rtl_cache_magazine_type*)rtl_cache_alloc (cache->m_magazine_cache);
+        empty = static_cast<rtl_cache_magazine_type*>(rtl_cache_alloc (cache->m_magazine_cache));
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
         if (empty != 0)
         {
@@ -722,7 +722,7 @@ rtl_cache_depot_populate (
 int
 rtl_cache_constructor (void * obj)
 {
-    rtl_cache_type * cache = (rtl_cache_type*)(obj);
+    rtl_cache_type * cache = static_cast<rtl_cache_type*>(obj);
 
     memset (cache, 0, sizeof(rtl_cache_type));
 
@@ -750,7 +750,7 @@ rtl_cache_constructor (void * obj)
 void
 rtl_cache_destructor (void * obj)
 {
-    rtl_cache_type * cache = (rtl_cache_type*)(obj);
+    rtl_cache_type * cache = static_cast<rtl_cache_type*>(obj);
 
     /* linkage */
     assert(QUEUE_STARTED_NAMED(cache, cache_));
@@ -1059,7 +1059,7 @@ SAL_CALL rtl_cache_create (
     sal_Size         size   = sizeof(rtl_cache_type);
 
 try_alloc:
-    result = (rtl_cache_type*)rtl_arena_alloc (gp_cache_arena, &size);
+    result = static_cast<rtl_cache_type*>(rtl_arena_alloc (gp_cache_arena, &size));
     if (result != 0)
     {
         rtl_cache_type * cache = result;

@@ -387,7 +387,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
 //    assert(nLen >= 0);
 #if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
-    IMPL_RTL_STRCODE* p = (IMPL_RTL_STRCODE*) memchr(pStr, c, nLen);
+    IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(const_cast<void *>(memchr(pStr, c, nLen)));
     return p ? p - pStr : -1;
 #else
     const IMPL_RTL_STRCODE* pTempStr = pStr;
@@ -1148,8 +1148,8 @@ static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
         = (sal::static_int_cast< sal_uInt32 >(nLen)
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
                / sizeof (IMPL_RTL_STRCODE)))
-        ? (IMPL_RTL_STRINGDATA *) rtl_allocateMemory(
-            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE))
+        ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateMemory(
+            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE)))
         : NULL;
     if (pData != NULL) {
         pData->refCount = 1;

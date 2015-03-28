@@ -195,7 +195,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
             if( pdir )
             {
                 /* create and initialize impl structure */
-                oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) rtl_allocateMemory( sizeof(oslDirectoryImpl) );
+                oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(rtl_allocateMemory( sizeof(oslDirectoryImpl) ));
 
                 if( pDirImpl )
                 {
@@ -229,7 +229,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
 oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
 {
-    oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) Directory;
+    oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(Directory);
     oslFileError err = osl_File_E_None;
 
     OSL_ASSERT( Directory );
@@ -283,7 +283,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
-    oslDirectoryImpl* pDirImpl     = (oslDirectoryImpl*)Directory;
+    oslDirectoryImpl* pDirImpl     = static_cast<oslDirectoryImpl*>(Directory);
     rtl_uString*      ustrFileName = NULL;
     rtl_uString*      ustrFilePath = NULL;
     struct dirent*    pEntry;

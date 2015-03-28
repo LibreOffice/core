@@ -127,7 +127,7 @@ static void ChildStatusProc(void *pData)
     ProcessData *pdata;
     int     stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
 
-    pdata = (ProcessData *)pData;
+    pdata = static_cast<ProcessData *>(pData);
 
     /* make a copy of our data, because forking will only copy
        our local stack of the thread, so the process data will not be accessible
@@ -469,7 +469,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ( pArguments == 0 && nArguments > 0 )
     {
-        pArguments = (sal_Char**) malloc( ( nArguments + 2 ) * sizeof(sal_Char*) );
+        pArguments = static_cast<sal_Char**>(malloc( ( nArguments + 2 ) * sizeof(sal_Char*) ));
     }
 
     for ( idx = 0 ; idx < nArguments ; ++idx )
@@ -493,7 +493,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         if ( pEnvironment == 0 )
         {
-            pEnvironment = (sal_Char**) malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) );
+            pEnvironment = static_cast<sal_Char**>(malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) ));
         }
 
         rtl_uString2String( &strEnv,
@@ -626,14 +626,14 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     if (Security != NULL)
     {
-        Data.m_uid  = ((oslSecurityImpl*)Security)->m_pPasswd.pw_uid;
-        Data.m_gid  = ((oslSecurityImpl*)Security)->m_pPasswd.pw_gid;
-        Data.m_name = ((oslSecurityImpl*)Security)->m_pPasswd.pw_name;
+        Data.m_uid  = static_cast<oslSecurityImpl*>(Security)->m_pPasswd.pw_uid;
+        Data.m_gid  = static_cast<oslSecurityImpl*>(Security)->m_pPasswd.pw_gid;
+        Data.m_name = static_cast<oslSecurityImpl*>(Security)->m_pPasswd.pw_name;
     }
     else
         Data.m_uid = (uid_t)-1;
 
-    Data.m_pProcImpl = (oslProcessImpl*) malloc(sizeof(oslProcessImpl));
+    Data.m_pProcImpl = static_cast<oslProcessImpl*>(malloc(sizeof(oslProcessImpl)));
     Data.m_pProcImpl->m_pid = 0;
     Data.m_pProcImpl->m_terminated = osl_createCondition();
     Data.m_pProcImpl->m_pnext = NULL;
@@ -693,7 +693,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     if (Process == NULL)
         return osl_Process_E_Unknown;
 
-    if (kill(((oslProcessImpl*)Process)->m_pid, SIGKILL) != 0)
+    if (kill(static_cast<oslProcessImpl*>(Process)->m_pid, SIGKILL) != 0)
     {
         switch (errno)
         {
@@ -735,7 +735,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
             pChild = pChild->m_pnext;
         }
 
-        pProcImpl = (oslProcessImpl*) malloc(sizeof(oslProcessImpl));
+        pProcImpl = static_cast<oslProcessImpl*>(malloc(sizeof(oslProcessImpl)));
         pProcImpl->m_pid        = Ident;
         pProcImpl->m_terminated = osl_createCondition();
 
@@ -781,7 +781,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
         /* remove process from child list */
         while (pChild != NULL)
         {
-            if (pChild == (oslProcessImpl*)Process)
+            if (pChild == static_cast<oslProcessImpl*>(Process))
             {
                 if (pPrev != NULL)
                     pPrev->m_pnext = pChild->m_pnext;
@@ -797,7 +797,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 
         osl_releaseMutex(ChildListMutex);
 
-        osl_destroyCondition(((oslProcessImpl*)Process)->m_terminated);
+        osl_destroyCondition(static_cast<oslProcessImpl*>(Process)->m_terminated);
 
         free(Process);
     }
@@ -992,7 +992,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     if (Process == NULL)
         pid = getpid();
     else
-        pid = ((oslProcessImpl*)Process)->m_pid;
+        pid = static_cast<oslProcessImpl*>(Process)->m_pid;
 
     if (! pInfo || (pInfo->Size != sizeof(oslProcessInfo)))
         return osl_Process_E_Unknown;
@@ -1008,9 +1008,9 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     if (Fields & osl_Process_EXITCODE)
     {
         if ((Process != NULL) &&
-            osl_checkCondition(((oslProcessImpl*)Process)->m_terminated))
+            osl_checkCondition(static_cast<oslProcessImpl*>(Process)->m_terminated))
         {
-            pInfo->Code = ((oslProcessImpl*)Process)->m_status;
+            pInfo->Code = static_cast<oslProcessImpl*>(Process)->m_status;
             pInfo->Fields |= osl_Process_EXITCODE;
         }
     }
@@ -1159,7 +1159,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     /* check if process is a child of ours */
     while (pChild != NULL)
     {
-        if (pChild == (oslProcessImpl*)Process)
+        if (pChild == static_cast<oslProcessImpl*>(Process))
             break;
 
         pChild = pChild->m_pnext;
@@ -1179,7 +1179,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     else /* alien process; StatusThread will not be able
                to set the condition terminated */
     {
-        pid_t pid = ((oslProcessImpl*)Process)->m_pid;
+        pid_t pid = static_cast<oslProcessImpl*>(Process)->m_pid;
 
         if (pTimeout)
         {

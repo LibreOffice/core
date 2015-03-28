@@ -40,7 +40,7 @@ oslCondition SAL_CALL osl_createCondition()
     oslConditionImpl* pCond;
     int nRet=0;
 
-    pCond = (oslConditionImpl*) malloc(sizeof(oslConditionImpl));
+    pCond = static_cast<oslConditionImpl*>(malloc(sizeof(oslConditionImpl)));
 
     if ( pCond == 0 )
     {
@@ -80,7 +80,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
 
-    pCond = (oslConditionImpl*)Condition;
+    pCond = static_cast<oslConditionImpl*>(Condition);
 
     SAL_INFO( "sal.osl.condition", "osl_destroyCondition(" << pCond << ")" );
 
@@ -103,7 +103,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    int nRet=0;
 
    assert(Condition);
-   pCond = (oslConditionImpl*)Condition;
+   pCond = static_cast<oslConditionImpl*>(Condition);
 
    nRet = pthread_mutex_lock(&pCond->m_Lock);
    if ( nRet != 0 )
@@ -142,7 +142,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 
     assert(Condition);
 
-    pCond = (oslConditionImpl*)Condition;
+    pCond = static_cast<oslConditionImpl*>(Condition);
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     if ( nRet != 0 )
@@ -172,7 +172,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     oslConditionResult Result = osl_cond_result_ok;
 
     assert(Condition);
-    pCond = (oslConditionImpl*)Condition;
+    pCond = static_cast<oslConditionImpl*>(Condition);
 
     SAL_INFO( "sal.osl.condition", "osl_waitCondition(" << pCond << ")" );
 
@@ -253,7 +253,7 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
     int nRet=0;
 
     assert(Condition);
-    pCond = (oslConditionImpl*)Condition;
+    pCond = static_cast<oslConditionImpl*>(Condition);
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_checkCondition(" << pCond << "): pthread_mutex_lock failed: " << strerror(nRet) );

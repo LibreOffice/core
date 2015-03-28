@@ -88,12 +88,12 @@ extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
     if (*table)
         rtl_hashtable_destroy(*table);
 
-    *table = (RTL_HASHTABLE*)rtl_allocateMemory( sizeof(RTL_HASHTABLE) );
+    *table = static_cast<RTL_HASHTABLE*>(rtl_allocateMemory( sizeof(RTL_HASHTABLE) ));
 
     (*table)->iSize = sizeIndex;
     (*table)->Size = nSize;
     (*table)->Elements = 0;
-    (*table)->Table = (RTL_HASHENTRY**)rtl_allocateMemory( (*table)->Size * sizeof(RTL_HASHENTRY*) );
+    (*table)->Table = static_cast<RTL_HASHENTRY**>(rtl_allocateMemory( (*table)->Size * sizeof(RTL_HASHENTRY*) ));
 
     while (nSize)
     {
@@ -129,7 +129,7 @@ extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* valu
         pEntry = &(*pEntry)->Next;
     }
 
-    RTL_HASHENTRY *newEntry = (RTL_HASHENTRY*)rtl_allocateMemory( sizeof(RTL_HASHENTRY) );
+    RTL_HASHENTRY *newEntry = static_cast<RTL_HASHENTRY*>(rtl_allocateMemory( sizeof(RTL_HASHENTRY) ));
     newEntry->Entry = value;
     newEntry->Next = NULL;
     *pEntry = newEntry;
@@ -248,7 +248,7 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
     rtl_uString_newFromStr(&sCountry, country);
     rtl_uString_newFromStr(&sVariant, variant);
 
-    newLocale = (rtl_Locale*)rtl_allocateMemory( sizeof(rtl_Locale) );
+    newLocale = static_cast<rtl_Locale*>(rtl_allocateMemory( sizeof(rtl_Locale) ));
 
     newLocale->Language = sLanguage;
     newLocale->Country = sCountry;

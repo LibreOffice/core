@@ -306,7 +306,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
 
     if (pContext)
         nHighSurrogate
-            = ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate;
+            = static_cast<ImplUnicodeToTextContext *>(pContext)->m_nHighSurrogate;
 
     for (; nConverted < nSrcChars; ++nConverted)
     {
@@ -472,7 +472,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
     }
 
     if (pContext)
-        ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate
+        static_cast<ImplUnicodeToTextContext *>(pContext)->m_nHighSurrogate
             = nHighSurrogate;
     if (pInfo)
         *pInfo = nInfo;

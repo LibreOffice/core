@@ -354,7 +354,7 @@ static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ust
 
 oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
 {
-    oslVolumeDeviceHandleImpl* pItem = (oslVolumeDeviceHandleImpl*) Handle;
+    oslVolumeDeviceHandleImpl* pItem = static_cast<oslVolumeDeviceHandleImpl*>(Handle);
     sal_Char Buffer[PATH_MAX];
 
     Buffer[0] = '\0';
@@ -386,7 +386,7 @@ oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uSt
 
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
-    oslVolumeDeviceHandleImpl* pItem =(oslVolumeDeviceHandleImpl*) Handle;
+    oslVolumeDeviceHandleImpl* pItem =static_cast<oslVolumeDeviceHandleImpl*>(Handle);
 
     if ( pItem == 0 )
     {
@@ -409,7 +409,7 @@ oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handl
 
 oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
-    oslVolumeDeviceHandleImpl* pItem =(oslVolumeDeviceHandleImpl*) Handle;
+    oslVolumeDeviceHandleImpl* pItem =static_cast<oslVolumeDeviceHandleImpl*>(Handle);
 
     if ( pItem == 0 )
     {

@@ -124,7 +124,7 @@ void ImplUTF7DestroyTextToUnicodeContext( void* pContext )
 
 void ImplUTF7ResetTextToUnicodeContext( void* pContext )
 {
-    ImplUTF7ToUCContextData* pContextData = (ImplUTF7ToUCContextData*)pContext;
+    ImplUTF7ToUCContextData* pContextData = static_cast<ImplUTF7ToUCContextData*>(pContext);
     pContextData->mbShifted         = sal_False;
     pContextData->mbFirst           = sal_False;
     pContextData->mbWroteOne        = sal_False;
@@ -140,7 +140,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
-    ImplUTF7ToUCContextData*    pContextData = (ImplUTF7ToUCContextData*)pContext;
+    ImplUTF7ToUCContextData*    pContextData = static_cast<ImplUTF7ToUCContextData*>(pContext);
     unsigned char                   c ='\0';
     unsigned char                   nBase64Value = 0;
     int                         bEnd = sal_False;
@@ -419,7 +419,7 @@ void ImplUTF7DestroyUnicodeToTextContext( void* pContext )
 
 void ImplUTF7ResetUnicodeToTextContext( void* pContext )
 {
-    ImplUTF7FromUCContextData* pContextData = (ImplUTF7FromUCContextData*)pContext;
+    ImplUTF7FromUCContextData* pContextData = static_cast<ImplUTF7FromUCContextData*>(pContext);
     pContextData->mbShifted         = sal_False;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
@@ -433,7 +433,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             SAL_UNUSED_PARAMETER sal_uInt32, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars )
 {
-    ImplUTF7FromUCContextData*  pContextData = (ImplUTF7FromUCContextData*)pContext;
+    ImplUTF7FromUCContextData*  pContextData = static_cast<ImplUTF7FromUCContextData*>(pContext);
     sal_Unicode                 c = '\0';
     int                         bEnd = sal_False;
     int                         bShifted;

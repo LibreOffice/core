@@ -60,7 +60,7 @@ public:
     // initialise your test code values here.
     void setUp() SAL_OVERRIDE
     {
-        m_pMemory = (char*) rtl_allocateMemory( m_nSizeOfMemory );
+        m_pMemory = static_cast<char*>(rtl_allocateMemory( m_nSizeOfMemory ));
     }
 
     void tearDown() SAL_OVERRIDE
@@ -79,7 +79,7 @@ public:
     void rtl_reallocateMemory_001()
     {
         sal_uInt32 nSize = 2 * 1024;
-        m_pMemory = (char*)rtl_reallocateMemory(m_pMemory, nSize);
+        m_pMemory = static_cast<char*>(rtl_reallocateMemory(m_pMemory, nSize));
 
         CPPUNIT_ASSERT_MESSAGE( "Can reallocate memory.", m_pMemory != NULL);
         memset(m_pMemory, 2, nSize);
@@ -108,7 +108,7 @@ public:
     // initialise your test code values here.
     void setUp() SAL_OVERRIDE
     {
-        m_pZeroMemory = (char*) rtl_allocateZeroMemory( m_nSizeOfZeroMemory );
+        m_pZeroMemory = static_cast<char*>(rtl_allocateZeroMemory( m_nSizeOfZeroMemory ));
     }
 
     void tearDown() SAL_OVERRIDE

@@ -91,7 +91,7 @@ rtl_machdep_pagesize();
 int
 rtl_arena_segment_constructor (void * obj)
 {
-    rtl_arena_segment_type * segment = (rtl_arena_segment_type*)(obj);
+    rtl_arena_segment_type * segment = static_cast<rtl_arena_segment_type*>(obj);
 
     QUEUE_START_NAMED(segment, s);
     QUEUE_START_NAMED(segment, f);
@@ -272,7 +272,7 @@ rtl_arena_hash_rescale (
     sal_Size                  new_bytes;
 
     new_bytes = new_size * sizeof(rtl_arena_segment_type*);
-    new_table = (rtl_arena_segment_type **)rtl_arena_alloc (gp_arena_arena, &new_bytes);
+    new_table = static_cast<rtl_arena_segment_type **>(rtl_arena_alloc (gp_arena_arena, &new_bytes));
 
     if (new_table != 0)
     {
@@ -586,7 +586,7 @@ rtl_arena_segment_coalesce (
 void
 rtl_arena_constructor (void * obj)
 {
-    rtl_arena_type * arena = (rtl_arena_type*)(obj);
+    rtl_arena_type * arena = static_cast<rtl_arena_type*>(obj);
     rtl_arena_segment_type * head;
     size_t i;
 
@@ -627,7 +627,7 @@ rtl_arena_constructor (void * obj)
 void
 rtl_arena_destructor (void * obj)
 {
-    rtl_arena_type * arena = (rtl_arena_type*)(obj);
+    rtl_arena_type * arena = static_cast<rtl_arena_type*>(obj);
     rtl_arena_segment_type * head;
     size_t i;
 
@@ -705,7 +705,7 @@ rtl_arena_activate (
             int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
 
             sal_Size size = n * sizeof(rtl_cache_type*);
-            arena->m_qcache_ptr = (rtl_cache_type**)rtl_arena_alloc (gp_arena_arena, &size);
+            arena->m_qcache_ptr = static_cast<rtl_cache_type**>(rtl_arena_alloc (gp_arena_arena, &size));
             if (!(arena->m_qcache_ptr))
             {
                 /* out of memory */
@@ -878,7 +878,7 @@ SAL_CALL rtl_arena_create (
     sal_Size         size   = sizeof(rtl_arena_type);
 
 try_alloc:
-    result = (rtl_arena_type*)rtl_arena_alloc (gp_arena_arena, &size);
+    result = static_cast<rtl_arena_type*>(rtl_arena_alloc (gp_arena_arena, &size));
     if (result != 0)
     {
         rtl_arena_type * arena = result;

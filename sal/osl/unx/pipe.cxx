@@ -77,7 +77,7 @@ oslPipe __osl_createPipeImpl(void)
 {
     oslPipe pPipeImpl;
 
-    pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
+    pPipeImpl = static_cast<oslPipe>(calloc(1, sizeof(struct oslPipeImpl)));
     if (pPipeImpl == NULL)
         return NULL;
     pPipeImpl->m_nRefCount =1;
@@ -490,7 +490,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     }
 
     nRet = recv(pPipe->m_Socket,
-                  (sal_Char*)pBuffer,
+                  pBuffer,
                   BytesToRead, 0);
 
     if ( nRet < 0 )
@@ -517,7 +517,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     }
 
     nRet = send(pPipe->m_Socket,
-                  (sal_Char*)pBuffer,
+                  pBuffer,
                   BytesToSend, 0);
 
     if ( nRet <= 0 )
@@ -555,7 +555,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
         BytesToSend -= RetVal;
         BytesSend += RetVal;
-        pBuffer= (sal_Char*)pBuffer + RetVal;
+        pBuffer= static_cast<sal_Char const *>(pBuffer) + RetVal;
     }
 
     return BytesSend;
@@ -581,7 +581,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 
         BytesToRead -= RetVal;
         BytesRead += RetVal;
-        pBuffer= (sal_Char*)pBuffer + RetVal;
+        pBuffer= static_cast<sal_Char*>(pBuffer) + RetVal;
     }
     return BytesRead;
 }

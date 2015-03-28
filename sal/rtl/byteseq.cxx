@@ -50,7 +50,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
         nElements = pSequence->nElements;
         if (nElements)
         {
-            pNew = (sal_Sequence *)rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nElements );
+            pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nElements ));
 
             if ( pNew != 0 )
                 memcpy( pNew->elements, pSequence->elements, nElements );
@@ -60,7 +60,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
         }
         else
         {
-            pNew = (sal_Sequence *)rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE );
+            pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE ));
         }
 
         if ( pNew != 0 )
@@ -88,7 +88,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
 
     if (pSequence->nRefCount > 1) // split
     {
-        pNew = (sal_Sequence *)rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nSize );
+        pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nSize ));
 
         if ( pNew != 0 )
         {
@@ -109,8 +109,8 @@ void SAL_CALL rtl_byte_sequence_realloc(
     }
     else
     {
-        pSequence = (sal_Sequence *)rtl_reallocateMemory(
-            pSequence, SAL_SEQUENCE_HEADER_SIZE + nSize );
+        pSequence = static_cast<sal_Sequence *>(rtl_reallocateMemory(
+            pSequence, SAL_SEQUENCE_HEADER_SIZE + nSize ));
     }
 
     if ( pSequence != 0 )
@@ -153,7 +153,7 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
 
     if( nLength )
     {
-        *ppSequence = (sal_Sequence *) rtl_allocateZeroMemory( SAL_SEQUENCE_HEADER_SIZE + nLength );
+        *ppSequence = static_cast<sal_Sequence *>(rtl_allocateZeroMemory( SAL_SEQUENCE_HEADER_SIZE + nLength ));
 
         if ( *ppSequence != 0 )
         {
@@ -178,7 +178,7 @@ void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , 
         *ppSequence = 0;
     }
 
-    *ppSequence = (sal_Sequence *) rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nLength );
+    *ppSequence = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nLength ));
 
     if ( *ppSequence != 0 )
     {

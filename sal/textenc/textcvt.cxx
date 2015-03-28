@@ -121,7 +121,7 @@ void SAL_CALL rtl_destroyTextToUnicodeConverter(
 
 rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( !pConverter )
         return 0;
     else if ( pConverter->mpCreateTextToUnicodeContext )
@@ -135,7 +135,7 @@ rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnic
 void SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter,
                                                rtl_TextToUnicodeContext hContext )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( pConverter && hContext && pConverter->mpDestroyTextToUnicodeContext )
         pConverter->mpDestroyTextToUnicodeContext( hContext );
 }
@@ -145,7 +145,7 @@ void SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeConverter hConve
 void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter,
                                              rtl_TextToUnicodeContext hContext )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( pConverter && hContext && pConverter->mpResetTextToUnicodeContext )
         pConverter->mpResetTextToUnicodeContext( hContext );
 }
@@ -159,7 +159,7 @@ sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverte
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtBytes )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
 
     /* Only temporary, because we don't want die, if we don't have a
        converter, because not all converters are implemented yet */
@@ -199,7 +199,7 @@ void SAL_CALL rtl_destroyUnicodeToTextConverter(
 
 rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( !pConverter )
         return 0;
     else if ( pConverter->mpCreateUnicodeToTextContext )
@@ -213,7 +213,7 @@ rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToT
 void SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter,
                                                rtl_UnicodeToTextContext hContext )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( pConverter && hContext && pConverter->mpDestroyUnicodeToTextContext )
         pConverter->mpDestroyUnicodeToTextContext( hContext );
 }
@@ -223,7 +223,7 @@ void SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextConverter hConve
 void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter,
                                              rtl_UnicodeToTextContext hContext )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( pConverter && hContext && pConverter->mpResetUnicodeToTextContext )
         pConverter->mpResetUnicodeToTextContext( hContext );
 }
@@ -237,7 +237,7 @@ sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverte
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtChars )
 {
-    const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
+    const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
 
     /* Only temporary, because we don't want die, if we don't have a
        converter, because not all converters are implemented yet */

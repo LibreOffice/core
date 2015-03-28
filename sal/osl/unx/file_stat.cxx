@@ -422,8 +422,8 @@ oslFileError SAL_CALL osl_setFileTime (
 sal_Bool
 SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
-    DirectoryItem_Impl *pA = (DirectoryItem_Impl *) a;
-    DirectoryItem_Impl *pB = (DirectoryItem_Impl *) b;
+    DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);
+    DirectoryItem_Impl *pB = static_cast<DirectoryItem_Impl *>(b);
     if (a == b)
         return sal_True;
     /* same name => same item, unless renaming / moving madness has occurred */
