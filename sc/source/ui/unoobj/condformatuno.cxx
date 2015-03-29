@@ -303,16 +303,20 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
     switch (pEntry->GetType())
     {
         case condformat::CONDITION:
-            return new ScConditionEntryObj(xParent);
+            return new ScConditionEntryObj(xParent,
+                    static_cast<const ScCondFormatEntry*>(pEntry));
         break;
         case condformat::COLORSCALE:
-            return new ScColorScaleFormatObj(xParent);
+            return new ScColorScaleFormatObj(xParent,
+                    static_cast<const ScColorScaleFormat*>(pEntry));
         break;
         case condformat::DATABAR:
-            return new ScDataBarFormatObj(xParent);
+            return new ScDataBarFormatObj(xParent,
+                    static_cast<const ScDataBarFormat*>(pEntry));
         break;
         case condformat::ICONSET:
-            return new ScIconSetFormatObj(xParent);
+            return new ScIconSetFormatObj(xParent,
+                    static_cast<const ScIconSetFormat*>(pEntry));
         break;
         case condformat::DATE:
         break;
@@ -519,10 +523,26 @@ void SAL_CALL ScCondFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent):
+namespace {
+
+bool isObjectStillAlive(ScConditionalFormat* pFormat, const ScFormatEntry* pEntry)
+{
+    for(size_t i = 0, n= pFormat->size(); i < n; ++i)
+    {
+        if (pFormat->GetEntry(i) == pEntry)
+            return true;
+    }
+    return false;
+}
+
+}
+
+ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent,
+        const ScCondFormatEntry* pFormat):
     mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
-    maPropSet(getConditionEntryrPropSet())
+    maPropSet(getConditionEntryrPropSet()),
+    mpFormat(pFormat)
 {
 }
 
@@ -532,7 +552,11 @@ ScConditionEntryObj::~ScConditionEntryObj()
 
 ScCondFormatEntry* ScConditionEntryObj::getCoreObject()
 {
-    return NULL;
+    ScConditionalFormat* pFormat = mxParent->getCoreObject();
+    if (isObjectStillAlive(pFormat, mpFormat))
+        return const_cast<ScCondFormatEntry*>(mpFormat);
+
+    throw lang::IllegalArgumentException();
 }
 
 sal_Int32 ScConditionEntryObj::getType()
@@ -697,10 +721,12 @@ void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+        const ScColorScaleFormat* pFormat):
     mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
-    maPropSet(getColorScalePropSet())
+    maPropSet(getColorScalePropSet()),
+    mpFormat(pFormat)
 {
 }
 
@@ -710,7 +736,11 @@ ScColorScaleFormatObj::~ScColorScaleFormatObj()
 
 ScColorScaleFormat* ScColorScaleFormatObj::getCoreObject()
 {
-    return NULL;
+    ScConditionalFormat* pFormat = mxParent->getCoreObject();
+    if (isObjectStillAlive(pFormat, mpFormat))
+        return const_cast<ScColorScaleFormat*>(mpFormat);
+
+    throw lang::IllegalArgumentException();
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPropertySetInfo()
@@ -799,10 +829,12 @@ void SAL_CALL ScColorScaleFormatObj::removeVetoableChangeListener( const OUStrin
     SAL_WARN("sc", "not implemented");
 }
 
-ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+        const ScDataBarFormat* pFormat):
     mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
-    maPropSet(getDataBarPropSet())
+    maPropSet(getDataBarPropSet()),
+    mpFormat(pFormat)
 {
 }
 
@@ -812,7 +844,11 @@ ScDataBarFormatObj::~ScDataBarFormatObj()
 
 ScDataBarFormat* ScDataBarFormatObj::getCoreObject()
 {
-    return NULL;
+    ScConditionalFormat* pFormat = mxParent->getCoreObject();
+    if (isObjectStillAlive(pFormat, mpFormat))
+        return const_cast<ScDataBarFormat*>(mpFormat);
+
+    throw lang::IllegalArgumentException();
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getPropertySetInfo()
@@ -1028,10 +1064,12 @@ void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+        const ScIconSetFormat* pFormat):
     mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
-    maPropSet(getIconSetPropSet())
+    maPropSet(getIconSetPropSet()),
+    mpFormat(pFormat)
 {
 }
 
@@ -1041,7 +1079,11 @@ ScIconSetFormatObj::~ScIconSetFormatObj()
 
 ScIconSetFormat* ScIconSetFormatObj::getCoreObject()
 {
-    return NULL;
+    ScConditionalFormat* pFormat = mxParent->getCoreObject();
+    if (isObjectStillAlive(pFormat, mpFormat))
+        return const_cast<ScIconSetFormat*>(mpFormat);
+
+    throw lang::IllegalArgumentException();
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getPropertySetInfo()
