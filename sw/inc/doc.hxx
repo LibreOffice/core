@@ -47,6 +47,7 @@
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>
+#include <pagedesc.hxx>
 
 #include <svtools/embedhlp.hxx>
 
@@ -107,7 +108,6 @@ class SwNodeRange;
 class SwNodes;
 class SwNumRule;
 class SwNumRuleTable;
-class SwPageDesc;
 class SwPagePreviewPrtData;
 class SwRootFrame;
 class SwRubyList;
@@ -222,8 +222,6 @@ namespace sfx2 {
     class IXmlIdRegistry;
     class LinkManager;
 }
-
-typedef std::vector<std::unique_ptr<SwPageDesc>> SwPageDescs;
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
@@ -907,7 +905,7 @@ public:
     SwPageDesc& GetPageDesc(size_t const i) { return *m_PageDescs[i]; }
     SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = nullptr) const;
     // Just searches the pointer in the m_PageDescs vector!
-    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = nullptr);
+    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = nullptr) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFormatId, -HlpId can be prevented. */

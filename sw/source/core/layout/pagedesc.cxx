@@ -51,6 +51,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE) )
     , m_IsLandscape( false )
     , m_IsHidden( false )
+    , m_pdList( nullptr )
 {
 }
 
@@ -71,6 +72,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_IsLandscape( rCpy.GetLandscape() )
     , m_IsHidden( rCpy.IsHidden() )
     , m_IsFootnoteInfo( rCpy.GetFootnoteInfo() )
+    , m_pdList( nullptr )
 {
 }
 
@@ -98,6 +100,22 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
 
 SwPageDesc::~SwPageDesc()
 {
+}
+
+bool SwPageDesc::SetName( const OUString& rNewName )
+{
+    bool renamed = true;
+    if (m_pdList) {
+        SwPageDescs::iterator it = m_pdList->find_( m_StyleName );
+        if( m_pdList->end() == it ) {
+            SAL_WARN( "sw", "SwPageDesc not found in expected m_pdList" );
+            return false;
+        }
+        renamed = m_pdList->modify( it, change_name( rNewName ), change_name( m_StyleName ) );
+    }
+    else
+        m_StyleName = rNewName;
+    return renamed;
 }
 
 /// Only the margin is mirrored.
@@ -460,6 +478,57 @@ SwPageDescExt::operator SwPageDesc() const
         aResult.SetFollow(pPageDesc);
 
     return aResult;
+}
+
+SwPageDescs::~SwPageDescs()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
+}
+
+SwPageDescs::iterator SwPageDescs::find_(const OUString &name) const
+{
+    const ByName &pd_named = get<1>();
+    ByName::iterator it = pd_named.find( name );
+    return iterator_to( *it );
+}
+
+std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::push_back( const value_type& x )
+{
+    // SwPageDesc is not already in a SwPageDescs list!
+    assert( x->m_pdList == nullptr );
+
+    std::pair<iterator,bool> res = ByPos::push_back( x );
+    if( res.second )
+        x->m_pdList = this;
+    return res;
+}
+
+void SwPageDescs::erase( const value_type& x )
+{
+    // SwPageDesc is not in this SwPageDescs list!
+    assert( x->m_pdList == this );
+
+    iterator const ret = find_( x->GetName() );
+    if (ret != end())
+        ByPos::erase( ret );
+    else
+        SAL_WARN( "sw", "SwPageDesc is not in SwPageDescs m_pdList!" );
+    x->m_pdList = nullptr;
+}
+
+void SwPageDescs::erase( const_iterator const& position )
+{
+    // SwPageDesc is not in this SwPageDescs list!
+    assert( (*position)->m_pdList == this );
+
+    (*position)->m_pdList = nullptr;
+    ByPos::erase( position );
+}
+
+void SwPageDescs::erase( size_type index_ )
+{
+    erase( begin() + index_ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
