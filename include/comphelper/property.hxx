@@ -28,16 +28,8 @@
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/unotype.hxx>
 
-
-//= property helper classes
-
-
-//... namespace comphelper .......................................................
 namespace comphelper
 {
-
-/** compare two properties by name
-*/
 
     // comparing two property instances
     struct PropertyCompareByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
@@ -48,9 +40,6 @@ namespace comphelper
         }
     };
 
-
-    /** compare two properties by name
-     */
     struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, OUString, bool >
     {
 
@@ -65,7 +54,6 @@ namespace comphelper
         }
     };
 
-    // comparing two property instances
     struct PropertyEqualByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
     {
         bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
@@ -74,10 +62,8 @@ namespace comphelper
         }
     };
 
-
 /// remove the property with the given name from the given sequence
 COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property>& seqProps, const OUString& _rPropName);
-
 
 /** within the given property sequence, modify attributes of a special property
     @param  _rProps         the sequence of properties to search in
@@ -87,21 +73,15 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property
 */
 COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(css::uno::Sequence<css::beans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
-
 /** check if the given set has the given property.
 */
 COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
-
 
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
 COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<css::beans::XPropertySet>& _rxSource,
                     const css::uno::Reference<css::beans::XPropertySet>& _rxDest);
-
-
-//= property conversion helpers
-
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
     @param          _rConvertedValue    the conversion result (if successful)
@@ -192,9 +172,7 @@ inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::A
 */
 COMPHELPER_DLLPUBLIC bool tryPropertyValue(css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
 
-
 }
-//... namespace comphelper .......................................................
 
 #endif // INCLUDED_COMPHELPER_PROPERTY_HXX
 

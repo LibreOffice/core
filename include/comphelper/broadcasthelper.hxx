@@ -23,16 +23,12 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-//... namespace comphelper .......................................................
 namespace comphelper
 {
-
-
-
-    //= OMutexAndBroadcastHelper - a class which holds a Mutex and a OBroadcastHelper;
-    //=                 needed because when deriving from OPropertySetHelper,
-    //=                 the OBroadcastHelper has to be initialized before
-    //=                 the OPropertySetHelper
+    // OMutexAndBroadcastHelper - a class which holds a Mutex and a OBroadcastHelper;
+    //                 needed because when deriving from OPropertySetHelper,
+    //                 the OBroadcastHelper has to be initialized before
+    //                 the OPropertySetHelper
 
     class OMutexAndBroadcastHelper
     {
@@ -58,6 +54,7 @@ namespace comphelper
         mutable ::osl::Mutex m_aMutex;
     };
 }
+
 #endif // INCLUDED_COMPHELPER_BROADCASTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

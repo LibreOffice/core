@@ -30,13 +30,11 @@ namespace cppu {
     class IPropertyArrayHelper;
 }
 
-//... namespace comphelper ................................................
 namespace comphelper
 {
 
 template <typename TYPE> struct OPropertyArrayUsageHelperMutex
     : public rtl::Static< ::osl::Mutex, OPropertyArrayUsageHelperMutex<TYPE> > {};
-
 
 template <class TYPE>
 class OPropertyArrayUsageHelper
@@ -78,7 +76,6 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const = 0;
 };
 
-
 /** a OPropertyArrayUsageHelper which will create an OPropertyArrayAggregationHelper
 */
 template <class TYPE>
@@ -114,13 +111,11 @@ protected:
     virtual sal_Int32 getFirstAggregateId() const { return DEFAULT_AGGREGATE_PROPERTY_ID; }
 };
 
-
 template<class TYPE>
 sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
 
 template<class TYPE>
 ::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = NULL;
-
 
 template <class TYPE>
 OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
@@ -128,7 +123,6 @@ OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
     ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
     ++s_nRefCount;
 }
-
 
 template <class TYPE>
 ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
@@ -146,7 +140,6 @@ template <class TYPE>
     return s_pProps;
 }
 
-
 template <class TYPE> inline
 ::cppu::IPropertyArrayHelper* OAggregationArrayUsageHelper<TYPE>::createArrayHelper() const
 {
@@ -157,11 +150,8 @@ template <class TYPE> inline
     return new OPropertyArrayAggregationHelper(aProps, aAggregateProps, getInfoService(), getFirstAggregateId());
 }
 
-
 }
-//... namespace comphelper ................................................
 
 #endif // INCLUDED_COMPHELPER_PROPARRHLP_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

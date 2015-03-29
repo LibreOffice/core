@@ -26,18 +26,14 @@
 #include <math.h>
 #include <functional>
 
-
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//... namespace comphelper ................................................
 namespace comphelper
 {
-
-
 
 // comparison functors
 
@@ -56,7 +52,6 @@ public:
 
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
-
 
 class UStringMixEqual: public std::binary_function<OUString, OUString, bool>
 {
@@ -93,10 +88,7 @@ public:
     }
 };
 
-
-//= OInterfaceCompare
-
-/** is stl-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
+/** STL-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
 */
 template < class IAFCE >
 struct OInterfaceCompare
@@ -132,7 +124,6 @@ inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
     return mem_fun1_t<_Tp,_Arg>(__f);
 }
 
-
 /** output iterator that appends OUStrings into an OUStringBuffer.
  */
 class OUStringBufferAppender :
@@ -161,7 +152,6 @@ private:
     OUStringBuffer & m_rBuffer;
 };
 
-
 /** algorithm similar to std::copy, but inserts a separator between elements.
  */
 template< typename ForwardIter, typename OutputIter, typename T >
@@ -185,9 +175,7 @@ OutputIter intersperse(
     return out;
 }
 
-
 }
-//... namespace comphelper ................................................
 
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
