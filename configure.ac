@@ -8519,7 +8519,7 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.10.3], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.11.2], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
 
 dnl ===================================================================
 dnl Check for system glm
