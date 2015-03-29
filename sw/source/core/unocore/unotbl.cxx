@@ -4385,21 +4385,14 @@ throw (uno::RuntimeException, std::exception)
 }
 
 sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/) throw( uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-    return sal_False;
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-    return 0.;
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-
     return SwUnoCursorHelper::CreateSortDescriptor(true);
 }
 
@@ -4409,26 +4402,21 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
 {
     SolarMutexGuard aGuard;
     SwSortOptions aSortOpt;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt &&
-        SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(pFmt && SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
         SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pTblCrsr);
         rTableCrsr.MakeBoxSels();
-        UnoActionContext aContext( pFmt->GetDoc() );
+        UnoActionContext aContext(pFmt->GetDoc());
         pFmt->GetDoc()->SortTbl(rTableCrsr.GetSelectedBoxes(), aSortOpt);
     }
 }
 
 sal_uInt16 SwXCellRange::getColumnCount(void)
-{
-    return static_cast<sal_uInt16>(aRgDesc.nRight - aRgDesc.nLeft + 1);
-}
+    { return static_cast<sal_uInt16>(aRgDesc.nRight - aRgDesc.nLeft + 1); }
 
 sal_uInt16 SwXCellRange::getRowCount(void)
-{
-    return static_cast<sal_uInt16>(aRgDesc.nBottom - aRgDesc.nTop + 1);
-}
+    { return static_cast<sal_uInt16>(aRgDesc.nBottom - aRgDesc.nTop + 1); }
 
 const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
 {
