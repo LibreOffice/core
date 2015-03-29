@@ -94,6 +94,7 @@ void ScAccessibleFilterTopWindow::setAccessibleChild(
     {
         case EDIT_SEARCH_BOX:
             mxAccEditSearchBox = rAccessible;
+        break;
         case LISTBOX:
             mxAccListBox = rAccessible;
         break;
