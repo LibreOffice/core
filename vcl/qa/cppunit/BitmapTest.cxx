@@ -75,7 +75,7 @@ void BitmapTest::testConvert()
 
 void BitmapTest::testScale()
 {
-    bool bExportBitmap(false);
+    const bool bExportBitmap(false);
 
     Bitmap aBitmap24Bit(Size(10, 10), 24);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
