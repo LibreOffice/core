@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
     (void) pObject;
     NSString* pDictStr = [NSString stringWithFormat:@"%@", pChangeDict];
     OSL_TRACE( "MacAVObserver::onKeyChange k=\"%s\" c=%s", [pKeyPath UTF8String], [pDictStr UTF8String]);
-    avmedia::macavf::MacAVObserverHandler* pHandler = (avmedia::macavf::MacAVObserverHandler*)pContext;
+    avmedia::macavf::MacAVObserverHandler* pHandler = static_cast<avmedia::macavf::MacAVObserverHandler*>(pContext);
     pHandler->handleObservation( pKeyPath );
 }
 
