@@ -4154,36 +4154,25 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     const sal_uInt16 nColCount = getColumnCount();
-
     if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    uno::Sequence<double>* pRowArray = aRowSeq.getArray();
+    const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+    for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
     {
-        uno::Sequence< double >* pRowArray = aRowSeq.getArray();
-
-        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+        uno::Sequence<double> aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+        double* pArray = aColSeq.getArray();
+        const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
         {
-            uno::Sequence< double > aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
-            double * pArray = aColSeq.getArray();
-            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                pArray[nCol - nColStart] = xCell->getValue();
-            }
-            pRowArray[nRow - nRowStart] = aColSeq;
+            uno::Reference<table::XCell>  xCell = getCellByPosition(nCol, nRow);
+            if(!xCell.is())
+                throw uno::RuntimeException();
+            pArray[nCol - nColStart] = xCell->getValue();
         }
+        pRowArray[nRow - nRowStart] = aColSeq;
     }
     return aRowSeq;
 }
