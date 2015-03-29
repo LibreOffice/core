@@ -97,8 +97,8 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
             break;
     }
     // Proxy enabled?
-    enableNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
-                                                   proxiesEnable );
+    enableNum = static_cast<CFNumberRef>(CFDictionaryGetValue( proxyDict,
+                                                   proxiesEnable ));
 
     result = (enableNum != NULL) && (CFGetTypeID(enableNum) == CFNumberGetTypeID());
 
@@ -108,8 +108,8 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     // Proxy enabled -> get hostname
     if (result)
     {
-        hostStr = (CFStringRef) CFDictionaryGetValue( proxyDict,
-                                                     proxiesProxy );
+        hostStr = static_cast<CFStringRef>(CFDictionaryGetValue( proxyDict,
+                                                     proxiesProxy ));
 
         result = (hostStr != NULL) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
     }
@@ -120,8 +120,8 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     // Get proxy port
     if (result)
     {
-        portNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
-                                                     proxiesPort );
+        portNum = static_cast<CFNumberRef>(CFDictionaryGetValue( proxyDict,
+                                                     proxiesPort ));
 
         result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
     }
@@ -401,13 +401,13 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         if (!rProxyDict)
             rExceptionsList = 0;
         else
-            rExceptionsList = (CFArrayRef) CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList);
+            rExceptionsList = static_cast<CFArrayRef>(CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList));
 
         if (rExceptionsList)
         {
             for (CFIndex idx = 0; idx < CFArrayGetCount(rExceptionsList); idx++)
             {
-                CFStringRef rException = (CFStringRef) CFArrayGetValueAtIndex(rExceptionsList, idx);
+                CFStringRef rException = static_cast<CFStringRef>(CFArrayGetValueAtIndex(rExceptionsList, idx));
 
                 if (idx>0)
                     aProxyBypassList += rtl::OUString(";");

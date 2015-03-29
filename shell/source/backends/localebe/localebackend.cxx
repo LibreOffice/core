@@ -106,7 +106,7 @@ namespace /* private */
         if (ref == NULL)
             return NULL;
 
-        CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)ref, 0) : (CFStringRef)ref;
+        CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? static_cast<CFStringRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(ref), 0)) : static_cast<CFStringRef>(ref);
 
         // NOTE: this API is only available with Mac OS X >=10.3. We need to use it because
         // Apple used non-ISO values on systems <10.2 like "German" for instance but didn't
@@ -133,7 +133,7 @@ namespace /* private */
             {
                 aLocaleBuffer.setLength(0); // clear buffer which still contains fallback value
 
-                CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
+                CFStringRef lang = static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 0));
                 OUStringBufferAppendCFString(aLocaleBuffer, lang);
 
                 // country also available? Assumption: if the array contains more than one
@@ -141,7 +141,7 @@ namespace /* private */
                 if (CFArrayGetCount(subs) > 1)
                 {
                     aLocaleBuffer.appendAscii("-");
-                    CFStringRef country = (CFStringRef)CFArrayGetValueAtIndex(subs, 1);
+                    CFStringRef country = static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 1));
                     OUStringBufferAppendCFString(aLocaleBuffer, country);
                 }
             }
