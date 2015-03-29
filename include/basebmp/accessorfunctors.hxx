@@ -82,7 +82,7 @@ template< typename T,
 
         // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
-        return v1*(M)(1-mask) + v2*mask;
+        return v1*static_cast<M>(1-mask) + v2*mask;
     }
 };
 template< typename T,
@@ -98,7 +98,7 @@ template< typename T,
 
         // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
-        return v1*mask + v2*(M)(1-mask);
+        return v1*mask + v2*static_cast<M>(1-mask);
     }
 };
 
@@ -114,7 +114,7 @@ template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,true>
     {
         OSL_ASSERT(m<=1);
 
-        return v1*(M)(1-m) + v2*m;
+        return v1*static_cast<M>(1-m) + v2*m;
     }
 };
 template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,false> :
@@ -125,7 +125,7 @@ template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,false
     {
         OSL_ASSERT(m<=1);
 
-        return v1*m + v2*(M)(1-m);
+        return v1*m + v2*static_cast<M>(1-m);
     }
 };
 

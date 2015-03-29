@@ -959,7 +959,7 @@ template<typename TableBorderType>
 void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBorderType& rBorder )
 {
     ::editeng::SvxBorderLine aLine;
-    rOuter.SetDistance( (sal_uInt16)HMMToTwips( rBorder.Distance ) );
+    rOuter.SetDistance( static_cast<sal_uInt16>(HMMToTwips( rBorder.Distance )) );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         BOX_LINE_TOP );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      BOX_LINE_BOTTOM );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        BOX_LINE_LEFT );

@@ -106,7 +106,7 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
 template< class T>
 sal_IntPtr ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, void* pCaller)
 {
-    return ((ScrollableWrapper<T>*)pThis )->ScrollBarHdl( static_cast<ScrollBar*>(pCaller) );
+    return static_cast<ScrollableWrapper<T>*>(pThis)->ScrollBarHdl( static_cast<ScrollBar*>(pCaller) );
 }
 
 template< class T>

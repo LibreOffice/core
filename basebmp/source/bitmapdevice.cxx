@@ -762,7 +762,7 @@ namespace
             sal_Int32 nDestX = rDstRect.getMinX();
             sal_Int32 nDestY = rDstRect.getMinY();
 
-            char* dstBuf =  (char*)getBuffer().get();
+            char* dstBuf =  reinterpret_cast<char*>(getBuffer().get());
             char* srcBuf =  reinterpret_cast<char*>(rSrcBitmap->getBuffer().get());
             sal_Int32 dstStride =  getScanlineStride();
             sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();

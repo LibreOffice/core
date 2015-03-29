@@ -40,7 +40,7 @@ namespace cppu
     {
         css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
-        return reinterpret_cast<T *>(curr2outer.mapInterface(pT, getCppuType((css::uno::Reference<T> *)NULL)));
+        return reinterpret_cast<T *>(curr2outer.mapInterface(pT, cppu::UnoType<T>::get()));
     }
 
 
@@ -55,7 +55,7 @@ namespace cppu
     {
         css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
-        return reinterpret_cast<T *>(outer2curr.mapInterface(pT, getCppuType((css::uno::Reference<T> *)NULL)));
+        return reinterpret_cast<T *>(outer2curr.mapInterface(pT, cppu::UnoType<T>::get()));
     }
 
 

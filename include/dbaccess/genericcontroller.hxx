@@ -83,7 +83,7 @@ namespace dbaui
     public:
                  optional ( ) : base_type( ) { }
         explicit optional ( T const& val ) : base_type( val ) { }
-                 optional ( optional const& rhs ) : base_type( (base_type const&)rhs ) { }
+                 optional ( optional const& rhs ) : base_type( static_cast<base_type const&>(rhs) ) { }
 
     public:
         optional& operator= ( T const& rhs )

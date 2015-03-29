@@ -381,7 +381,7 @@ T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
         return T();
 
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
-        return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+        return *reinterpret_cast<T*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
     else
         return retrieveValue< ORowSetValue >(nColumnIndex, 0);
 }

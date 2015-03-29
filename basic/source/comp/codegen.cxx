@@ -520,7 +520,7 @@ public:
                 break;
 
         }
-        m_ConvertedBuf += (S)nOp1;
+        m_ConvertedBuf += static_cast<S>(nOp1);
     }
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 )
     {
@@ -528,8 +528,8 @@ public:
         if ( eOp == _CASEIS )
                 if ( nOp1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
-        m_ConvertedBuf += (S)nOp1;
-        m_ConvertedBuf += (S)nOp2;
+        m_ConvertedBuf += static_cast<S>(nOp1);
+        m_ConvertedBuf += static_cast<S>(nOp2);
 
     }
     virtual bool processParams(){ return true; }
@@ -569,7 +569,7 @@ PCodeBuffConvertor<T,S>::convert()
     PCodeBufferWalker< T > aBuf( m_pStart, m_nSize );
     BufferTransformer< T, S > aTrnsfrmer;
     aBuf.visitBuffer( aTrnsfrmer );
-    m_pCnvtdBuf = (sal_uInt8*)aTrnsfrmer.buffer().GetBuffer();
+    m_pCnvtdBuf = reinterpret_cast<sal_uInt8*>(aTrnsfrmer.buffer().GetBuffer());
     m_nCnvtdSize = static_cast<S>( aTrnsfrmer.buffer().GetSize() );
 }
 

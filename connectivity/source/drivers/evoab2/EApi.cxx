@@ -112,8 +112,8 @@ tryLink( oslModule &aModule, const char *pName, const ApiMap (&pMap)[N])
 {
     for (guint i = 0; i < N; ++i)
     {
-        SymbolFunc aMethod = (SymbolFunc)osl_getFunctionSymbol
-            (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData);
+        SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getFunctionSymbol
+            (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData));
         if( !aMethod )
         {
             fprintf( stderr, "Warning: missing symbol '%s' in '%s'\n",

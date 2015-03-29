@@ -73,8 +73,8 @@ namespace
     {
         for (size_t i = 0; i < N; ++i)
         {
-            SymbolFunc aMethod = ( SymbolFunc )osl_getFunctionSymbol
-                ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData );
+            SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getFunctionSymbol
+                ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData ));
             if ( !aMethod )
             {
                 SAL_WARN("avmedia", "Cannot load method " << pMap[ i ].symName);

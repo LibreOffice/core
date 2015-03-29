@@ -62,7 +62,7 @@ void XMLPropertyBackpatcher<A>::ResolveId(
     {
         // aah, we have a backpatch list!
         BackpatchListType* pList =
-            (BackpatchListType*)aBackpatchListMap[sName];
+            static_cast<BackpatchListType*>(aBackpatchListMap[sName]);
 
         // a) remove list from list map
         aBackpatchListMap.erase(sName);
@@ -133,7 +133,7 @@ void XMLPropertyBackpatcher<A>::SetProperty(
         }
 
         // insert footnote
-        ((BackpatchListType*)aBackpatchListMap[sName])->push_back(xPropSet);
+        static_cast<BackpatchListType*>(aBackpatchListMap[sName])->push_back(xPropSet);
     }
 }
 

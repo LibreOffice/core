@@ -65,7 +65,7 @@ public:
 
     pointer allocate(size_type n)
     {
-        return (pointer)rtl_allocateAlignedMemory(_Alignment, n*sizeof(value_type));
+        return static_cast<pointer>(rtl_allocateAlignedMemory(_Alignment, n*sizeof(value_type)));
     }
 
     void deallocate(pointer p, size_type)

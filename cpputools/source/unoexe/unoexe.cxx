@@ -174,7 +174,7 @@ void createInstance(
     rxOut = Reference< T >::query( x );
     if (! rxOut.is())
     {
-        const Type & rType = ::getCppuType( (const Reference< T > *)0 );
+        const Type & rType = cppu::UnoType<T>::get();
         throw RuntimeException(
             "service instance \"" + rServiceName +
             "\" does not support demanded interface \"" +

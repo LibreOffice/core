@@ -62,7 +62,7 @@ public:
     virtual SfxChildWinInfo GetInfo() const SAL_OVERRIDE
     {
         SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-        ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );
+        static_cast<SfxModelessDialog*>(GetWindow())->FillInfo( aInfo );
         return aInfo;
     }
 

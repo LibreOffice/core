@@ -42,7 +42,7 @@ namespace io_acceptor {
     {
         size_t operator () (const ::com::sun::star::uno::Reference<T> & ref) const
         {
-            return (size_t)ref.get();
+            return reinterpret_cast<size_t>(ref.get());
         }
     };
 

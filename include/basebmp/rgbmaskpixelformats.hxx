@@ -118,29 +118,29 @@ template< typename     PixelType,
         // spread the value into the component_type range
         ColorType res( (shiftRight(red,
                                    base_type::red_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    base_type::red_bits)) |
                        (shiftRight(red,
                                    base_type::red_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    2*base_type::red_bits)),
 
                        (shiftRight(green,
                                    base_type::green_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    base_type::green_bits)) |
                        (shiftRight(green,
                                    base_type::green_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    2*base_type::green_bits)),
 
                        (shiftRight(blue,
                                    base_type::blue_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    base_type::blue_bits)) |
                        (shiftRight(blue,
                                    base_type::blue_shift-8*
-                                   (signed)sizeof(typename base_type::component_type)+
+                                   static_cast<signed>(sizeof(typename base_type::component_type))+
                                    2*base_type::blue_bits)) );
         return res;
     }
@@ -178,15 +178,15 @@ template< typename     PixelType,
             BaseValue |
             (shiftLeft(red,
                        base_type::red_shift-8*
-                       (signed)sizeof(typename base_type::component_type)+
+                       static_cast<signed>(sizeof(typename base_type::component_type))+
                        base_type::red_bits) & RedMask) |
             (shiftLeft(green,
                        base_type::green_shift-8*
-                       (signed)sizeof(typename base_type::component_type)+
+                       static_cast<signed>(sizeof(typename base_type::component_type))+
                        base_type::green_bits) & GreenMask) |
             (shiftLeft(blue,
                        base_type::blue_shift-8*
-                       (signed)sizeof(typename base_type::component_type)+
+                       static_cast<signed>(sizeof(typename base_type::component_type))+
                        base_type::blue_bits) & BlueMask) );
 
         return SwapBytes ? byteSwap(res) : res;

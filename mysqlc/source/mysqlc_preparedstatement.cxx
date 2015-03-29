@@ -536,7 +536,7 @@ namespace
         sal_Int32 nValue(0);
         if ( !( _value >>= nValue ) )
             mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", _rxParam );
-        (_rxParam.get()->*_Setter)( _parameterIndex, (INTTYPE)nValue );
+        (_rxParam.get()->*_Setter)( _parameterIndex, static_cast<INTTYPE>(nValue) );
     }
 }
 

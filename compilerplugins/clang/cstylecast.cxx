@@ -120,10 +120,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
             incompTo = "incomplete ";
         }
     }
-    // ignore stuff from inside templates for now
-    if( expr->getCastKind() == CK_Dependent ) {
-        return true;
-    }
     if (externCFunction || expr->getLocStart().isMacroID()) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
             expr->getLocStart());

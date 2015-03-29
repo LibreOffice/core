@@ -1511,7 +1511,7 @@ public:
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 1 << ": cl_mem: " << mpClmem2);
-        err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void*)&mpClmem2);
+        err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), &mpClmem2);
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -1540,11 +1540,11 @@ public:
         {
             /*average need more reduction kernel for count computing*/
             boost::scoped_array<double> pAllBuffer(new double[2 * w]);
-            double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+            double* resbuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 mpClmem2,
                 CL_TRUE, CL_MAP_READ, 0,
                 sizeof(double) * w, 0, NULL, NULL,
-                &err);
+                &err));
             if (err != CL_SUCCESS)
                 throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -1569,7 +1569,7 @@ public:
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
             SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 1 << ": cl_mem: " << mpClmem2);
-            err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void*)&mpClmem2);
+            err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), &mpClmem2);
             if (CL_SUCCESS != err)
                 throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
 
@@ -1594,11 +1594,11 @@ public:
             err = clFinish(kEnv.mpkCmdQueue);
             if (CL_SUCCESS != err)
                 throw OpenCLError("clFinish", err, __FILE__, __LINE__);
-            resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+            resbuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 mpClmem2,
                 CL_TRUE, CL_MAP_READ, 0,
                 sizeof(double) * w, 0, NULL, NULL,
-                &err);
+                &err));
             if (err != CL_SUCCESS)
                 throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
             for (int i = 0; i < w; i++)
@@ -1622,7 +1622,7 @@ public:
         }
         // set kernel arg
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
-        err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
+        err = clSetKernelArg(k, argno, sizeof(cl_mem), &(mpClmem2));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
