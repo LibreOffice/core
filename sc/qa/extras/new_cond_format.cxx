@@ -38,6 +38,7 @@ public:
     void testCondFormatProperties();
     void testCondFormatXIndex();
     void testDataBarProperties();
+    void testColorScaleProperties();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
@@ -46,6 +47,7 @@ public:
     CPPUNIT_TEST(testCondFormatProperties);
     CPPUNIT_TEST(testCondFormatXIndex);
     CPPUNIT_TEST(testDataBarProperties);
+    CPPUNIT_TEST(testColorScaleProperties);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -257,6 +259,25 @@ void ScConditionalFormatTest::testDataBarProperties()
         testNegativeColor(xPropSet, COL_LIGHTRED);
         testAxisColor(xPropSet, COL_BLACK);
     }
+}
+
+void ScConditionalFormatTest::testColorScaleProperties()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormatList =
+        getConditionalFormatList(init(3));
+
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+        xCondFormatList->getConditionalFormats();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
+
+    uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
+    CPPUNIT_ASSERT(xCondFormat.is());
+
+    uno::Type aType = xCondFormat->getElementType();
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
+
+    CPPUNIT_ASSERT(xCondFormat->hasElements());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
 }
 
 void ScConditionalFormatTest::setUp()
