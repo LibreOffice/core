@@ -121,6 +121,12 @@ namespace
             throw uno::RuntimeException("Lost connection to core objects", pObject);
         return pFmt;
     }
+    SwTable* lcl_EnsureTableNotComplex(SwTable* pTable, cppu::OWeakObject* pObject)
+    {
+        if(pTable->IsTblComplex())
+            throw uno::RuntimeException("Table too complex", pObject);
+        return pTable;
+    }
 }
 
 #define UNO_TABLE_COLUMN_SUM    10000
@@ -4446,9 +4452,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     if (nCount == 0)
         return;
     SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
-    SwTable* pTable = SwTable::FindTable(pFrmFmt);
-    if(pTable->IsTblComplex())
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrmFmt), static_cast<cppu::OWeakObject*>(this));
     const size_t nRowCount = pTable->GetTabLines().size();
     if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nRowCount))
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
@@ -4490,9 +4494,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     if(nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
     bool bSuccess = false;
-    SwTable* pTable = SwTable::FindTable( pFrmFmt );
-    if(pTable->IsTblComplex())
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrmFmt), static_cast<cppu::OWeakObject*>(this));
     OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTblBox(sTLName);
     if(!pTLBox)
@@ -4591,9 +4593,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     if (nCount == 0)
         return;
     SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
-    SwTable* pTable = SwTable::FindTable( pFrmFmt );
-    if(pTable->IsTblComplex())
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrmFmt), static_cast<cppu::OWeakObject*>(this));
     SwTableLines& rLines = pTable->GetTabLines();
     SwTableLine* pLine = rLines.front();
     const size_t nColCount = pLine->GetTabBoxes().size();
@@ -4636,9 +4636,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
     if(nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
-    SwTable* pTable = SwTable::FindTable(pFrmFmt);
-    if(pTable->IsTblComplex())
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrmFmt), static_cast<cppu::OWeakObject*>(this));
     const OUString sTLName = sw_GetCellName(nIndex, 0);
     const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
     if(!pTLBox)
