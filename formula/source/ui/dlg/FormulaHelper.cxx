@@ -197,7 +197,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
 {
     sal_Int32 nStrLen = rFormula.getLength();
 
-    if ( nStrLen < nStart )
+    if ( nStrLen <= nStart )
         return nStart;
 
     sal_Int32  nFStart = FUNC_NOTFOUND;
