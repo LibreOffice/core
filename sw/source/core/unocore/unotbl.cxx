@@ -4262,37 +4262,23 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
 
 ///@see SwXTextTable::setRowDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
-        throw( uno::RuntimeException, std::exception )
+        throw(uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(!pFmt)
+        return;
+    const sal_uInt16 nRowCount = getRowCount();
+    if(!nRowCount || bFirstRowAsLabel|| RowDesc.getLength() < nRowCount)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    const OUString* pArray = rRowDesc.getConstArray();
+    for(sal_uInt16 i = 0; i < nRowCount; i++)
     {
-        const sal_uInt16 nRowCount = getRowCount();
-        if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
-        {
+        uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
+        if(!xCell.is())
             throw uno::RuntimeException();
-        }
-        const OUString* pArray = rRowDesc.getConstArray();
-        if(bFirstColumnAsLabel)
-        {
-            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
-            for(sal_uInt16 i = nStart; i < nRowCount; i++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                uno::Reference< text::XText >  xText(xCell, uno::UNO_QUERY);
-                xText->setString(pArray[i - nStart]);
-            }
-        }
-        else
-        {
-            OSL_FAIL("Where to put theses labels?");
-        }
+        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+        xText->setString(pArray[i]);
     }
 }
 
