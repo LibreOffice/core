@@ -78,6 +78,8 @@ COMMA :=,
 
 CLOSE_PAREN :=)
 
+gb_VERBOSE := $(verbose)$(VERBOSE)
+
 include $(GBUILDDIR)/Helper.mk
 
 # optional extensions that should never be essential

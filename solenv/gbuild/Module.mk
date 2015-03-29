@@ -123,46 +123,46 @@ build-tools : $(gb_BUILD_TOOLS)
 
 build :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6))
 	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
 
 build-l10n-only :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),LOC,6)
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),LOC,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),LOC,6))
 	$(call gb_Output_announce_title,l10n done.)
 	$(call gb_Output_announce_bell)
 
 build-non-l10n-only :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),BIN,6)
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),BIN,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),BIN,6))
 	$(call gb_Output_announce_title,non-l10n done.)
 	$(call gb_Output_announce_bell)
 
 unitcheck :
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6))
 	$(call gb_Output_announce_title,all unittests checked.)
 	$(call gb_Output_announce_bell)
 
 slowcheck :
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SLC,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SLC,6))
 	$(call gb_Output_announce_title,all slowtests checked.)
 	$(call gb_Output_announce_bell)
 
 # removing the dependency on build for now until we can make a full build with gbuild
 #subsequentcheck : all
 subsequentcheck :
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6))
 	$(call gb_Output_announce_title,all subsequent tests checked.)
 	$(call gb_Output_announce_bell)
 
 perfcheck :
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),PFC,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),PFC,6))
 	$(call gb_Output_announce_title,all perftests checked.)
 	$(call gb_Output_announce_bell)
 
 clean :
-	$(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6)
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6))
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
 	$(call gb_Output_announce_title,all cleared.)
 	$(call gb_Output_announce_bell)
