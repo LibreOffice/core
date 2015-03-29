@@ -4220,43 +4220,27 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
 }
 
 ///@see SwXTextTable::getRowDescriptions (TODO: seems to be copy and paste programming here)
-uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
-                                            throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount)
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    uno::Sequence<OUString> aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(!pFmt || !bFirstColumnAsLabel)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    OUString* pArray = aRet.getArray();
+    const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+    for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
+        auto xCell = getCellByPosition(0, i);
+        if(!xCell.is())
+            throw uno::RuntimeException();
+        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+        pArray[i - nStart] = xText->getString();
     }
-    uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        OUString* pArray = aRet.getArray();
-        if(bFirstColumnAsLabel)
-        {
-            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
-            for(sal_uInt16 i = nStart; i < nRowCount; i++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                uno::Reference< text::XText >  xText(xCell, uno::UNO_QUERY);
-                pArray[i - nStart] = xText->getString();
-            }
-        }
-        else
-        {
-            OSL_FAIL("Where do these labels come from?");
-        }
-    }
-    else
-        throw uno::RuntimeException();
     return aRet;
 }
 
