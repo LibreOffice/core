@@ -2396,37 +2396,11 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
-    // see SwXTextTable::getData(...) also
-
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
-    if(!nRowCount || !nColCount)
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    SwFrmFmt* pFmt(GetFrmFmt());
-    uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
-    if(!pFmt)
-        throw uno::RuntimeException();
-    sal_uInt16 nRow = 0;
-    for(auto& rRow : aRowSeq)
-    {
-        rRow = uno::Sequence< uno::Any >(nColCount);
-        sal_uInt16 nCol = 0;
-        for(auto& rCellAny : rRow)
-        {
-            SwXCell* pXCell(lcl_CreateXCell(pFmt, nCol++, nRow));
-            uno::Reference<table::XCell> xCell = pXCell; // to prevent distruction in UNO calls
-            SwTableBox* pBox = pXCell ? pXCell->GetTblBox() : nullptr;
-            if(!pBox)
-                throw uno::RuntimeException();
-            // check if table box value item is set
-            SwFrmFmt* pBoxFmt(pBox->GetFrmFmt());
-            const bool bIsNum = pBoxFmt->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pXCell)) : uno::makeAny(lcl_getString(*pXCell));
-        }
-        ++nRow;
-    }
-    return aRowSeq;
+    //auto xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1));
+    //return static_cast<SwXCellRange*>(xAllRange.get())->getDataArray();
+    uno::Reference<sheet::XCellRangeData> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    return xAllRange->getDataArray();
 }
 
 void SAL_CALL SwXTextTable::setDataArray(
@@ -4037,49 +4011,30 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     const sal_uInt16 nColCount = getColumnCount();
-
     if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwFrmFmt* pFmt(GetFrmFmt());
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    if(!pFmt)
+        throw uno::RuntimeException();
+    sal_uInt16 nRow = 0;
+    for(auto& rRow : aRowSeq)
     {
-        uno::Sequence< uno::Any >* pRowArray = aRowSeq.getArray();
-        uno::Reference< table::XCell > xCellRef;
-        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        rRow = uno::Sequence< uno::Any >(nColCount);
+        sal_uInt16 nCol = 0;
+        for(auto& rCellAny : rRow)
         {
-            uno::Sequence< uno::Any > aColSeq(nColCount);
-            uno::Any * pColArray = aColSeq.getArray();
-            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
-            {
-                SwXCell * pXCell = lcl_CreateXCell(pFmt,
-                                    aRgDesc.nLeft + nCol,
-                                    aRgDesc.nTop + nRow);
-                //! keep (additional) reference to object to prevent implicit destruction
-                //! in following UNO calls (when object will get referenced)
-                xCellRef = pXCell;
-                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
-                if(!pBox)
-                {
-                    throw uno::RuntimeException();
-                }
-                else
-                {
-                    // check if table box value item is set
-                    SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
-                    if(!bIsNum)
-                        pColArray[nCol] <<= lcl_getString(*pXCell);
-                    else
-                        pColArray[nCol] <<= sw_getValue(*pXCell);
-                }
-            }
-            pRowArray[nRow] = aColSeq;
+            SwXCell* pXCell(lcl_CreateXCell(pFmt, nCol++, nRow));
+            uno::Reference<table::XCell> xCell = pXCell; // to prevent distruction in UNO calls
+            SwTableBox* pBox = pXCell ? pXCell->GetTblBox() : nullptr;
+            if(!pBox)
+                throw uno::RuntimeException();
+            // check if table box value item is set
+            SwFrmFmt* pBoxFmt(pBox->GetFrmFmt());
+            const bool bIsNum = pBoxFmt->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
+            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pXCell)) : uno::makeAny(lcl_getString(*pXCell));
         }
+        ++nRow;
     }
     return aRowSeq;
 }
