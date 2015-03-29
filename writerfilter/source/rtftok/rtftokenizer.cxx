@@ -282,7 +282,7 @@ bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 
 RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
-    if (m_rImport.getDestinationState() == DESTINATION_SKIP)
+    if (m_rImport.getDestination() == Destination::SKIP)
         return RTFError::OK;
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");

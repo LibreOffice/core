@@ -81,12 +81,12 @@ RTFError RTFLookahead::popState()
     return RTFError::OK;
 }
 
-RTFDestinationState RTFLookahead::getDestinationState()
+Destination RTFLookahead::getDestination()
 {
-    return DESTINATION_NORMAL;
+    return Destination::NORMAL;
 }
 
-void RTFLookahead::setDestinationState(RTFDestinationState /*nDestinationState*/)
+void RTFLookahead::setDestination(Destination /*eDestination*/)
 {
 }
 

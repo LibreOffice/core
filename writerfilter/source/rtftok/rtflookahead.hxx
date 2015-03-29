@@ -37,8 +37,8 @@ public:
     virtual RTFError resolveChars(char ch) SAL_OVERRIDE;
     virtual RTFError pushState() SAL_OVERRIDE;
     virtual RTFError popState() SAL_OVERRIDE;
-    virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
-    virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
+    virtual Destination getDestination() SAL_OVERRIDE;
+    virtual void setDestination(Destination eDestination) SAL_OVERRIDE;
     virtual RTFInternalState getInternalState() SAL_OVERRIDE;
     virtual void setInternalState(RTFInternalState nInternalState) SAL_OVERRIDE;
     virtual bool getSkipUnknown() SAL_OVERRIDE;
