@@ -4422,21 +4422,18 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
 
 sal_uInt16 SwXCellRange::getColumnCount(void)
 {
-    return static_cast< sal_uInt16 >(aRgDesc.nRight - aRgDesc.nLeft + 1);
+    return static_cast<sal_uInt16>(aRgDesc.nRight - aRgDesc.nLeft + 1);
 }
 
 sal_uInt16 SwXCellRange::getRowCount(void)
 {
-    return static_cast< sal_uInt16 >(aRgDesc.nBottom - aRgDesc.nTop + 1);
+    return static_cast<sal_uInt16>(aRgDesc.nBottom - aRgDesc.nTop + 1);
 }
 
 const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
 {
-    const SwUnoCrsr* pRet = 0;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-        pRet = pTblCrsr;
-    return pRet;
+    return pFmt ? pTblCrsr : nullptr;
 }
 
 void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
