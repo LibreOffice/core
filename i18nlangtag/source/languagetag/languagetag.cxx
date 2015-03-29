@@ -8,6 +8,7 @@
  */
 
 #include <config_folders.h>
+#include <config_liblangtag.h>
 
 #include "i18nlangtag/languagetag.hxx"
 #include "i18nlangtag/applelangid.hxx"
@@ -24,10 +25,9 @@
 //#define erDEBUG
 
 #if defined(ENABLE_LIBLANGTAG)
+#if defined(LIBLANGTAG_INLINE_FIX)
 #define LT_HAVE_INLINE
-    // TODO: remove above line again for liblangtag >= 0.5.5, cf.
-    // <https://bitbucket.org/tagoh/liblangtag/commits/9324836a0d1c> "Fix a
-    // build issue with inline keyword"
+#endif
 #include <liblangtag/langtag.h>
 #else
 /* Replacement code for LGPL phobic and Android systems.
