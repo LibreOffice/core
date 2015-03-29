@@ -1395,18 +1395,6 @@ static sal_uInt16 GetTransferableAction_Impl(
             const SotAction_Impl*   pArrayStart = pArray;
             SotClipboardFormatId    nId = pArray->nFormatId;
 
-#if OSL_DEBUG_LEVEL > 1
-// used for testing a specific format - change in the debugger the value
-    static sal_uLong nChkFormat = 0;
-    if( nChkFormat )
-    {
-        for( ; static_cast<SotClipboardFormatId>(0xffff) != pArray->nFormatId &&
-               nChkFormat != pArray->nFormatId; ++pArray )
-            ;
-        nId = pArray->nFormatId;
-    }
-#endif
-
             while( nId != static_cast<SotClipboardFormatId>(0xffff) )
             {
                 rFormat = nId;
