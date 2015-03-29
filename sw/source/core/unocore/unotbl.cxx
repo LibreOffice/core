@@ -4269,7 +4269,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(!pFmt)
         return;
     const sal_uInt16 nRowCount = getRowCount();
-    if(!nRowCount || bFirstRowAsLabel|| RowDesc.getLength() < nRowCount)
+    if(!nRowCount || bFirstRowAsLabel|| rRowDesc.getLength() < nRowCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = rRowDesc.getConstArray();
     for(sal_uInt16 i = 0; i < nRowCount; i++)
@@ -4573,8 +4573,8 @@ sal_Int32 SwXTableColumns::getCount(void) throw( uno::RuntimeException, std::exc
     if(!pFrmFmt)
         throw uno::RuntimeException();
     SwTable* pTable = SwTable::FindTable( pFrmFmt );
-    if(!pTable->IsTblComplex())
-        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+//    if(!pTable->IsTblComplex())
+//        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     SwTableLines& rLines = pTable->GetTabLines();
     SwTableLine* pLine = rLines.front();
     return pLine->GetTabBoxes().size();
