@@ -802,8 +802,46 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPrope
     return aRef;
 }
 
+namespace {
+
+void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorScaleEntry> xEntry)
+{
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType = xEntry->getType();
+    bool bFound = false;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aColorScaleEntryTypeMap); ++i)
+    {
+        if (aColorScaleEntryTypeMap[i].nApiType == nApiType)
+        {
+            eType = aColorScaleEntryTypeMap[i].eType;
+            bFound = true;
+            break;
+        }
+    }
+
+    if (!bFound)
+        throw lang::IllegalArgumentException();
+
+    pEntry->SetType(eType);
+    pEntry->SetColor(xEntry->getColor());
+    switch (eType)
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+        break;
+        default:
+        {
+            double nVal = xEntry->getFormula().toDouble();
+            pEntry->SetValue(nVal);
+        }
+        break;
+    }
+}
+
+}
+
 void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
@@ -818,6 +856,19 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
     switch(pEntry->nWID)
     {
         case ColorScaleEntries:
+        {
+            uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
+            if (aValue >>= aEntries)
+            {
+                size_t n = size_t(aEntries.getLength());
+                for (size_t i = 0; i < n; ++i)
+                {
+                    setColorScaleEntry(getCoreObject()->GetEntry(i), aEntries[i]);
+                }
+            }
+            else
+                throw lang::IllegalArgumentException();
+        }
         break;
         default:
             SAL_WARN("sc", "unknown property");
