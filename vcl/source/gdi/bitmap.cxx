@@ -443,52 +443,52 @@ void Bitmap::ReleaseAccess( BitmapInfoAccess* pBitmapAccess )
     delete pBitmapAccess;
 }
 
-bool Bitmap::Erase( const Color& rFillColor )
+bool Bitmap::Erase(const Color& rFillColor)
 {
-    if( !(*this) )
+    if (IsEmpty())
         return true;
 
-    BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
-    bool                bRet = false;
+    Bitmap::ScopedWriteAccess  pWriteAcc(*this);
+    bool bRet = false;
 
-    if( pWriteAcc )
+    if (pWriteAcc)
     {
         const sal_uLong nFormat = pWriteAcc->GetScanlineFormat();
-        sal_uInt8       cIndex = 0;
-        bool            bFast = false;
+        sal_uInt8 cIndex = 0;
+        bool bFast = false;
 
-        switch( nFormat )
+        switch (nFormat)
         {
-            case( BMP_FORMAT_1BIT_MSB_PAL ):
-            case( BMP_FORMAT_1BIT_LSB_PAL ):
+            case BMP_FORMAT_1BIT_MSB_PAL:
+            case BMP_FORMAT_1BIT_LSB_PAL:
             {
-                cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
-                cIndex = ( cIndex ? 255 : 0 );
+                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
+                cIndex = (cIndex ? 255 : 0);
                 bFast = true;
             }
             break;
 
-            case( BMP_FORMAT_4BIT_MSN_PAL ):
-            case( BMP_FORMAT_4BIT_LSN_PAL ):
+            case BMP_FORMAT_4BIT_MSN_PAL:
+            case BMP_FORMAT_4BIT_LSN_PAL:
             {
-                cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
+                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
                 cIndex = cIndex | ( cIndex << 4 );
                 bFast = true;
             }
             break;
 
-            case( BMP_FORMAT_8BIT_PAL ):
+            case BMP_FORMAT_8BIT_PAL:
             {
-                cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
+                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
                 bFast = true;
             }
             break;
 
-            case( BMP_FORMAT_24BIT_TC_BGR ):
-            case( BMP_FORMAT_24BIT_TC_RGB ):
+            case BMP_FORMAT_24BIT_TC_BGR:
+            case BMP_FORMAT_24BIT_TC_RGB:
             {
-                if( ( rFillColor.GetRed() == rFillColor.GetGreen() ) &&
-                    ( rFillColor.GetRed() == rFillColor.GetBlue() ) )
+                if (rFillColor.GetRed() == rFillColor.GetGreen() &&
+                    rFillColor.GetRed() == rFillColor.GetBlue())
                 {
                     cIndex = rFillColor.GetRed();
                     bFast = true;
@@ -516,7 +516,6 @@ bool Bitmap::Erase( const Color& rFillColor )
             pWriteAcc->FillRect( aRect );
         }
 
-        ReleaseAccess( pWriteAcc );
         bRet = true;
     }
 

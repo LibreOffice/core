@@ -588,69 +588,77 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     return bRet;
 }
 
-bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
+bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
 {
     DBG_ASSERT( nBitCount > GetBitCount(), "New BitCount must be greater!" );
 
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
-    if( pReadAcc )
+    if (pReadAcc)
     {
-        BitmapPalette aPal;
-        Bitmap aNewBmp( GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPal );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapPalette aPalette;
+        Bitmap aNewBmp(GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPalette);
+        Bitmap::ScopedWriteAccess pWriteAcc(aNewBmp);
 
-        if( pWriteAcc )
+        if (pWriteAcc)
         {
             const long nWidth = pWriteAcc->Width();
             const long nHeight = pWriteAcc->Height();
 
-            if( pWriteAcc->HasPalette() )
+            if (pWriteAcc->HasPalette())
             {
                 const sal_uInt16 nOldCount = 1 << GetBitCount();
-                const BitmapPalette& rOldPal = pReadAcc->GetPalette();
+                const BitmapPalette& rOldPalette = pReadAcc->GetPalette();
 
-                aPal.SetEntryCount( 1 << nBitCount );
+                aPalette.SetEntryCount(1 << nBitCount);
 
-                for( sal_uInt16 i = 0; i < nOldCount; i++ )
-                    aPal[ i ] = rOldPal[ i ];
+                for (sal_uInt16 i = 0; i < nOldCount; i++)
+                    aPalette[i] = rOldPalette[i];
 
-                if( pExtColor )
-                    aPal[ aPal.GetEntryCount() - 1 ] = *pExtColor;
+                if (pExtColor)
+                    aPalette[aPalette.GetEntryCount() - 1] = *pExtColor;
 
-                pWriteAcc->SetPalette( aPal );
+                pWriteAcc->SetPalette(aPalette);
 
-                for( long nY = 0L; nY < nHeight; nY++ )
-                    for( long nX = 0L; nX < nWidth; nX++ )
-                        pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nY, nX ) );
+                for (long nY = 0L; nY < nHeight; nY++)
+                {
+                    for (long nX = 0L; nX < nWidth; nX++)
+                    {
+                        pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPixel(nY, nX));
+                    }
+                }
             }
             else
             {
-                if( pReadAcc->HasPalette() )
+                if (pReadAcc->HasPalette())
                 {
-                    for( long nY = 0L; nY < nHeight; nY++ )
-                        for( long nX = 0L; nX < nWidth; nX++ )
-                            pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) ) );
+                    for (long nY = 0L; nY < nHeight; nY++)
+                    {
+                        for (long nX = 0L; nX < nWidth; nX++)
+                        {
+                            pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nY, nX)));
+                        }
+                    }
                 }
                 else
                 {
-                    for( long nY = 0L; nY < nHeight; nY++ )
-                        for( long nX = 0L; nX < nWidth; nX++ )
-                            pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nY, nX ) );
+                    for (long nY = 0L; nY < nHeight; nY++)
+                    {
+                        for (long nX = 0L; nX < nWidth; nX++)
+                        {
+                            pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPixel(nY, nX));
+                        }
+                    }
                 }
             }
-
-            aNewBmp.ReleaseAccess( pWriteAcc );
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
-
-        if( bRet )
+        if (bRet)
         {
-            const MapMode aMap( maPrefMapMode );
-            const Size aSize( maPrefSize );
+            const MapMode aMap(maPrefMapMode);
+            const Size aSize(maPrefSize);
 
             *this = aNewBmp;
 
@@ -662,116 +670,115 @@ bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
     return bRet;
 }
 
-bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
+bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 {
-    DBG_ASSERT( nBitCount <= GetBitCount(), "New BitCount must be lower ( or equal when pExtColor is set )!" );
+    DBG_ASSERT(nBitCount <= GetBitCount(), "New BitCount must be lower ( or equal when pExtColor is set )!");
 
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
-    if( pReadAcc )
+    if (pReadAcc)
     {
-        BitmapPalette aPal;
-        Bitmap aNewBmp( GetSizePixel(), nBitCount, &aPal );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapPalette aPalette;
+        Bitmap aNewBmp(GetSizePixel(), nBitCount, &aPalette);
+        Bitmap::ScopedWriteAccess pWriteAcc(aNewBmp);
 
-        if( pWriteAcc )
+        if (pWriteAcc)
         {
             const sal_uInt16 nCount = 1 << nBitCount;
             const long nWidth = pWriteAcc->Width();
             const long nWidth1 = nWidth - 1L;
             const long nHeight = pWriteAcc->Height();
-            Octree aOctree( *pReadAcc, pExtColor ? ( nCount - 1 ) : nCount );
-            InverseColorMap aColorMap( aPal = aOctree.GetPalette() );
+            Octree aOctree(*pReadAcc, pExtColor ? (nCount - 1) : nCount);
+            aPalette = aOctree.GetPalette();
+            InverseColorMap aColorMap(aPalette);
             BitmapColor aColor;
             ImpErrorQuad aErrQuad;
-            boost::scoped_array<ImpErrorQuad> pErrQuad1(new ImpErrorQuad[ nWidth ]);
-            boost::scoped_array<ImpErrorQuad> pErrQuad2(new ImpErrorQuad[ nWidth ]);
-            ImpErrorQuad* pQLine1 = pErrQuad1.get();
-            ImpErrorQuad* pQLine2 = 0;
+            std::vector<ImpErrorQuad> pErrQuad1(nWidth);
+            std::vector<ImpErrorQuad> pErrQuad2(nWidth);
+            ImpErrorQuad* pQLine1 = pErrQuad1.data();
+            ImpErrorQuad* pQLine2 = NULL;
             long nYTmp = 0L;
             sal_uInt8 cIndex;
             bool bQ1 = true;
 
-            if( pExtColor )
+            if (pExtColor)
             {
-                aPal.SetEntryCount( aPal.GetEntryCount() + 1 );
-                aPal[ aPal.GetEntryCount() - 1 ] = *pExtColor;
+                aPalette.SetEntryCount(aPalette.GetEntryCount() + 1);
+                aPalette[aPalette.GetEntryCount() - 1] = *pExtColor;
             }
 
             // set Black/White always, if we have enough space
-            if( aPal.GetEntryCount() < ( nCount - 1 ) )
+            if (aPalette.GetEntryCount() < (nCount - 1))
             {
-                aPal.SetEntryCount( aPal.GetEntryCount() + 2 );
-                aPal[ aPal.GetEntryCount() - 2 ] = Color( COL_BLACK );
-                aPal[ aPal.GetEntryCount() - 1 ] = Color( COL_WHITE );
+                aPalette.SetEntryCount(aPalette.GetEntryCount() + 2);
+                aPalette[aPalette.GetEntryCount() - 2] = Color(COL_BLACK);
+                aPalette[aPalette.GetEntryCount() - 1] = Color(COL_WHITE);
             }
 
-            pWriteAcc->SetPalette( aPal );
+            pWriteAcc->SetPalette(aPalette);
 
-            for( long nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
+            for (long nY = 0L; nY < std::min(nHeight, 2L); nY++, nYTmp++)
             {
-                pQLine2 = !nY ? pErrQuad1.get() : pErrQuad2.get();
-                for( long nX = 0L; nX < nWidth; nX++ )
+                pQLine2 = !nY ? pErrQuad1.data() : pErrQuad2.data();
+                for (long nX = 0L; nX < nWidth; nX++)
                 {
-                    if( pReadAcc->HasPalette() )
-                        pQLine2[ nX ] = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nYTmp, nX ) );
+                    if (pReadAcc->HasPalette())
+                        pQLine2[nX] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nYTmp, nX));
                     else
-                        pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
+                        pQLine2[nX] = pReadAcc->GetPixel(nYTmp, nX);
                 }
             }
 
-            for( long nY = 0L; nY < nHeight; nY++, nYTmp++ )
+            for (long nY = 0L; nY < nHeight; nY++, nYTmp++)
             {
                 // first pixel in the line
-                cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ 0 ].ImplGetColor() );
-                pWriteAcc->SetPixelIndex( nY, 0, cIndex );
+                cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor());
+                pWriteAcc->SetPixelIndex(nY, 0, cIndex);
 
                 long nX;
-                for( nX = 1L; nX < nWidth1; nX++ )
+                for (nX = 1L; nX < nWidth1; nX++)
                 {
-                    cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( aColor = pQLine1[ nX ].ImplGetColor() );
-                    aErrQuad = ( ImpErrorQuad( aColor ) -= pWriteAcc->GetPaletteColor( cIndex ) );
-                    pQLine1[ ++nX ].ImplAddColorError7( aErrQuad );
-                    pQLine2[ nX-- ].ImplAddColorError1( aErrQuad );
-                    pQLine2[ nX-- ].ImplAddColorError5( aErrQuad );
-                    pQLine2[ nX++ ].ImplAddColorError3( aErrQuad );
-                    pWriteAcc->SetPixelIndex( nY, nX, cIndex );
+                    aColor = pQLine1[nX].ImplGetColor();
+                    cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(aColor));
+                    aErrQuad = (ImpErrorQuad(aColor) -= pWriteAcc->GetPaletteColor(cIndex));
+                    pQLine1[++nX].ImplAddColorError7(aErrQuad);
+                    pQLine2[nX--].ImplAddColorError1(aErrQuad);
+                    pQLine2[nX--].ImplAddColorError5(aErrQuad);
+                    pQLine2[nX++].ImplAddColorError3(aErrQuad);
+                    pWriteAcc->SetPixelIndex(nY, nX, cIndex);
                 }
 
                 // Last RowPixel
-                if( nX < nWidth )
+                if (nX < nWidth)
                 {
-                    cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ nWidth1 ].ImplGetColor() );
-                    pWriteAcc->SetPixelIndex( nY, nX, cIndex );
+                    cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(pQLine1[nWidth1].ImplGetColor()));
+                    pWriteAcc->SetPixelIndex(nY, nX, cIndex);
                 }
 
                 // Refill/copy row buffer
                 pQLine1 = pQLine2;
-                pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2.get() : pErrQuad1.get();
+                pQLine2 = (bQ1 = !bQ1) ? pErrQuad2.data() : pErrQuad1.data();
 
-                if( nYTmp < nHeight )
+                if (nYTmp < nHeight)
                 {
-                    for( nX = 0L; nX < nWidth; nX++ )
+                    for (nX = 0L; nX < nWidth; nX++)
                     {
-                        if( pReadAcc->HasPalette() )
-                            pQLine2[ nX ] = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nYTmp, nX ) );
+                        if (pReadAcc->HasPalette())
+                            pQLine2[nX] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nYTmp, nX));
                         else
-                            pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
+                            pQLine2[nX] = pReadAcc->GetPixel(nYTmp, nX);
                     }
                 }
             }
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
-
-        if( bRet )
+        if(bRet)
         {
-            const MapMode aMap( maPrefMapMode );
-            const Size aSize( maPrefSize );
+            const MapMode aMap(maPrefMapMode);
+            const Size aSize(maPrefSize);
 
             *this = aNewBmp;
 

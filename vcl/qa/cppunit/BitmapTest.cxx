@@ -25,12 +25,48 @@ namespace
 
 class BitmapTest : public CppUnit::TestFixture
 {
+    void testConvert();
     void testScale();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
+    CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void BitmapTest::testConvert()
+{
+    Bitmap aBitmap(Size(10, 10), 8);
+
+    aBitmap.Erase(COL_LIGHTGRAYBLUE);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), aBitmap.GetBitCount());
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+        CPPUNIT_ASSERT(pReadAccess->HasPalette());
+        const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetGreen()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(255), sal_Int32(rColor.GetBlue()));
+    }
+
+    aBitmap.Convert(BMP_CONVERSION_24BIT);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        // 24 bit Bitmap on SVP backend uses 32bit BGRX format
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(32), pReadAccess->GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
+        CPPUNIT_ASSERT(!pReadAccess->HasPalette());
+        Color aColor = pReadAccess->GetPixel(0, 0);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetRed()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(aColor.GetGreen()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(255), sal_Int32(aColor.GetBlue()));
+    }
+}
 
 void BitmapTest::testScale()
 {
