@@ -496,6 +496,8 @@ SwDoc::~SwDoc()
     // Destroy these only after destroying the FormatIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
+    for( SwPageDesc *pPageDesc : m_PageDescs )
+        delete pPageDesc;
     m_PageDescs.clear();
 
     // Delete content selections.
@@ -707,7 +709,9 @@ void SwDoc::ClearDoc()
     // remove the dummy pagedesc from the array and delete all the old ones
     size_t nDummyPgDsc = 0;
     if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
-        pDummyPgDsc = m_PageDescs[nDummyPgDsc].release();
+        m_PageDescs.erase( nDummyPgDsc );
+    for( SwPageDesc *pPageDesc : m_PageDescs )
+        delete pPageDesc;
     m_PageDescs.clear();
 
     // Delete for Collections
@@ -744,7 +748,7 @@ void SwDoc::ClearDoc()
     getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
     nDummyPgDsc = m_PageDescs.size();
-    m_PageDescs.push_back(std::unique_ptr<SwPageDesc>(pDummyPgDsc));
+    m_PageDescs.push_back( pDummyPgDsc );
     // set the layout back to the new standard pagedesc
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc

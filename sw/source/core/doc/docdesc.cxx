@@ -556,13 +556,13 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         return;
 
     // mba: test iteration as clients are removed while iteration
-    SwPageDescHint aHint(m_PageDescs[0].get());
+    SwPageDescHint aHint( m_PageDescs[0] );
     pDel->CallSwClientNotify( aHint );
 
     bool bHasLayout = getIDocumentLayoutAccess().HasLayout();
     if ( mpFootnoteInfo->DependsOn( pDel ) )
     {
-        mpFootnoteInfo->ChgPageDesc(m_PageDescs[0].get());
+        mpFootnoteInfo->ChgPageDesc( m_PageDescs[0] );
         if ( bHasLayout )
         {
             for( auto aLayout : GetAllLayouts() )
@@ -571,7 +571,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     }
     else if ( mpEndNoteInfo->DependsOn( pDel ) )
     {
-        mpEndNoteInfo->ChgPageDesc(m_PageDescs[0].get());
+        mpEndNoteInfo->ChgPageDesc( m_PageDescs[0] );
         if ( bHasLayout )
         {
             for( auto aLayout : GetAllLayouts() )
@@ -579,11 +579,11 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         }
     }
 
-    for (std::unique_ptr<SwPageDesc> & rpPageDesc : m_PageDescs)
+    for (SwPageDesc* pPageDesc : m_PageDescs)
     {
-        if (rpPageDesc->GetFollow() == pDel)
+        if (pPageDesc->GetFollow() == pDel)
         {
-            rpPageDesc->SetFollow(nullptr);
+            pPageDesc->SetFollow(nullptr);
             if( bHasLayout )
             {
                 for( auto aLayout : GetAllLayouts() )
@@ -666,7 +666,9 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
         pNew->GetFirstMaster().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetFirstLeft().SetFormatAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
-    m_PageDescs.push_back(std::unique_ptr<SwPageDesc>(pNew));
+
+    std::pair<SwPageDescs::const_iterator, bool> res = m_PageDescs.push_back( pNew );
+    SAL_WARN_IF(!res.second, "sw", "MakePageDesc called with existing name" );
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SfxStyleFamily::Page,
@@ -808,22 +810,14 @@ IMPL_LINK_NOARG_TYPED( SwDoc, DoUpdateModifiedOLE, Idle *, void )
     }
 }
 
-struct CompareSwPageDescName {
-    explicit CompareSwPageDescName(const OUString &rName) : mName(rName) {}
-    bool operator () (const std::unique_ptr<SwPageDesc>& other) const { return other->GetName() == mName; }
-    const OUString &mName;
-};
-
-template <class UnaryPredicate>
-static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
-                                     size_t *pPos, UnaryPredicate pred )
+static SwPageDesc* lcl_FindPageDesc( const SwPageDescs *pPageDescs,
+                                     size_t *pPos, const OUString &rName )
 {
-    SwPageDescs::iterator it = std::find_if(
-        pPageDescs->begin(), pPageDescs->end(), pred);
     SwPageDesc* res = nullptr;
+    SwPageDescs::const_iterator it = pPageDescs->find( rName );
     if( it != pPageDescs->end() )
     {
-        res = it->get();
+        res = *it;
         if( pPos )
             *pPos = std::distance( pPageDescs->begin(), it );
     }
@@ -834,25 +828,26 @@ static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
 
 SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos ) const
 {
-    return lcl_FindPageDesc<CompareSwPageDescName>(
-        const_cast <SwPageDescs *>( &m_PageDescs ), pPos,
-        CompareSwPageDescName(rName) );
+    return lcl_FindPageDesc(
+        const_cast <SwPageDescs *>( &m_PageDescs ), pPos, rName );
 }
 
-struct CompareSwPageDescToPtr {
-    explicit CompareSwPageDescToPtr(const SwPageDesc* ptr) : mPtr(ptr) {}
-    bool operator () (const std::unique_ptr<SwPageDesc>& other) const { return other.get() == mPtr; }
-    const SwPageDesc *mPtr;
-};
-
-bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos )
+bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos ) const
 {
-    if (pDesc == nullptr)
+    if( pDesc == nullptr )
         return false;
-    SwPageDesc *res = lcl_FindPageDesc<CompareSwPageDescToPtr>(
-        &m_PageDescs, pPos,
-        CompareSwPageDescToPtr(pDesc) );
-    return res != nullptr;
+    if( !m_PageDescs.contains( const_cast <SwPageDesc*>( pDesc ) ) ) {
+        if( pPos )
+            *pPos = SIZE_MAX;
+        return false;
+    }
+    if( ! pPos )
+        return true;
+
+    SwPageDesc* desc = lcl_FindPageDesc(
+        &m_PageDescs, pPos, pDesc->GetName() );
+    SAL_WARN_IF( desc != pDesc, "sw", "SwPageDescs container is broken!" );
+    return true;
 }
 
 void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
