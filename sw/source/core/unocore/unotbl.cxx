@@ -4242,7 +4242,7 @@ uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
     uno::Sequence<OUString> aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     if(!bFirstColumnAsLabel)
-        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+        return {};  // without labels we have no descriptions
     OUString* pArray = aRet.getArray();
     const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
@@ -4263,16 +4263,19 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     SolarMutexGuard aGuard;
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     const sal_uInt16 nRowCount = getRowCount();
-    if(!nRowCount || bFirstRowAsLabel|| rRowDesc.getLength() < nRowCount)
+    if(!bFirstColumnAsLabel)
+        return; // if there are no labels we cannot set descriptions
+    if(!nRowCount || rRowDesc.getLength() < nRowCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = rRowDesc.getConstArray();
-    for(sal_uInt16 i = 0; i < nRowCount; i++)
+    const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+    for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
         uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
         if(!xCell.is())
             throw uno::RuntimeException();
         uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-        xText->setString(pArray[i]);
+        xText->setString(pArray[i-nStart]);
     }
 }
 
