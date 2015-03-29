@@ -210,7 +210,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "nofirststartwizard" )
             {
-                m_nofirststartwizard = true;
+                // Do nothing, accept only for backward compatibility
             }
             else if ( oArg == "nologo" )
             {
@@ -600,7 +600,6 @@ void CommandLineArgs::InitParamValues()
     m_quickstart = false;
     m_noquickstart = false;
     m_terminateafterinit = false;
-    m_nofirststartwizard = false;
     m_nologo = false;
     m_nolockcheck = false;
     m_nodefault = false;

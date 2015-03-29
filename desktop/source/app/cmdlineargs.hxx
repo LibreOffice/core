@@ -126,7 +126,6 @@ class CommandLineArgs: private boost::noncopyable
         bool m_quickstart;
         bool m_noquickstart;
         bool m_terminateafterinit;
-        bool m_nofirststartwizard;
         bool m_nologo;
         bool m_nolockcheck;
         bool m_nodefault;
