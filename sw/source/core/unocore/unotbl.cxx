@@ -115,6 +115,12 @@ namespace
         const Tcoretype* const m_pCore;
         mutable Tunotype* m_pResult;
     };
+    SwFrmFmt* lcl_EnsureCoreConnected(SwFrmFmt* pFmt, cppu::OWeakObject* pObject)
+    {
+        if(!pFmt)
+            throw uno::RuntimeException("Lost connection to core objects", pObject);
+        return pFmt;
+    }
 }
 
 #define UNO_TABLE_COLUMN_SUM    10000
@@ -4228,8 +4234,8 @@ uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
     if(!nRowCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     uno::Sequence<OUString> aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(!pFmt || !bFirstColumnAsLabel)
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    if(!bFirstColumnAsLabel)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     OUString* pArray = aRet.getArray();
     const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
@@ -4249,9 +4255,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         throw(uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(!pFmt)
-        return;
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount || bFirstRowAsLabel|| rRowDesc.getLength() < nRowCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
@@ -4279,9 +4283,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
 {
     SolarMutexGuard aGuard;
     const sal_uInt16 nColCount = getColumnCount();
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(!pFmt)
-        return;
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = ColumnDesc.getConstArray();
     if(bFirstColumnAsLabel || ColumnDesc.getLength() < nColCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
@@ -4407,8 +4409,8 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt || nIndex < 0 )
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
+    if(nIndex < 0)
         throw lang::IndexOutOfBoundsException();
     SwTable* pTable = SwTable::FindTable( pFrmFmt );
     if(static_cast<size_t>(nIndex) >= pTable->GetTabLines().size())
@@ -4443,9 +4445,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SolarMutexGuard aGuard;
     if (nCount == 0)
         return;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
     SwTable* pTable = SwTable::FindTable(pFrmFmt);
     if(pTable->IsTblComplex())
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
@@ -4486,8 +4486,8 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SolarMutexGuard aGuard;
     if (nCount == 0)
         return;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt || nIndex < 0 || nCount <=0 )
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
+    if(nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
     bool bSuccess = false;
     SwTable* pTable = SwTable::FindTable( pFrmFmt );
@@ -4553,9 +4553,7 @@ SwXTableColumns::~SwXTableColumns()
 sal_Int32 SwXTableColumns::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFrmFmt(GetFrmFmt());
-    if(!pFrmFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
     SwTable* pTable = SwTable::FindTable( pFrmFmt );
 //    if(!pTable->IsTblComplex())
 //        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
@@ -4581,9 +4579,7 @@ uno::Type SAL_CALL SwXTableColumns::getElementType(void) throw( uno::RuntimeExce
 sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt)
-        throw uno::RuntimeException();
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     return sal_True;
 }
 
@@ -4594,9 +4590,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SolarMutexGuard aGuard;
     if (nCount == 0)
         return;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
     SwTable* pTable = SwTable::FindTable( pFrmFmt );
     if(pTable->IsTblComplex())
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
@@ -4639,8 +4633,8 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SolarMutexGuard aGuard;
     if (nCount == 0)
         return;
-    SwFrmFmt* pFrmFmt(GetFrmFmt());
-    if(!pFrmFmt|| nIndex < 0 || nCount <=0 )
+    SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
+    if(nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
     SwTable* pTable = SwTable::FindTable(pFrmFmt);
     if(pTable->IsTblComplex())
