@@ -75,7 +75,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     data.nFPR = nFPR;
 
     // Get pointer to method
-    sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
+    sal_uInt64 pMethod = *static_cast<sal_uInt64 *>(pThis);
     pMethod += 8 * nVtableIndex;
     data.pMethod = *reinterpret_cast<sal_uInt64 *>(pMethod);
 
@@ -84,7 +84,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     {
         // 16-bytes aligned
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
-        sal_uInt64 *pCallStack = (sal_uInt64 *) __builtin_alloca( nStackBytes );
+        sal_uInt64 *pCallStack = static_cast<sal_uInt64 *>(__builtin_alloca( nStackBytes ));
         std::memcpy( pCallStack, pStack, nStackBytes );
     }
 
