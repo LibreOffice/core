@@ -697,11 +697,8 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
         if (osl::realpath(result, resolved))
         {
-#if OSL_DEBUG_LEVEL > 0
-            oslFileError osl_error =
-#endif
-                osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
-            OSL_ASSERT(osl_File_E_None == osl_error);
+            oslFileError osl_error = osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
+            SAL_WARN_IF(osl_File_E_None != osl_error, "sal.file", "osl_getFileURLFromSystemPath failed");
             bfound = true;
         }
     }
