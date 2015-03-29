@@ -14,6 +14,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <unonames.hxx>
 
 using namespace css;
@@ -36,6 +37,7 @@ public:
     void testCondFormatListFormats();
     void testCondFormatProperties();
     void testCondFormatXIndex();
+    void testDataBarProperties();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
@@ -43,6 +45,7 @@ public:
     CPPUNIT_TEST(testCondFormatListFormats);
     CPPUNIT_TEST(testCondFormatProperties);
     CPPUNIT_TEST(testCondFormatXIndex);
+    CPPUNIT_TEST(testDataBarProperties);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -172,6 +175,90 @@ void ScConditionalFormatTest::testCondFormatXIndex()
     uno::Any aAny = xCondFormat->getByIndex(0);
     CPPUNIT_ASSERT(aAny.hasValue());
     */
+}
+
+namespace {
+
+void testAxisPosition(uno::Reference<beans::XPropertySet> xPropSet, sal_Int32 ePos)
+{
+    sal_Int32 eAxisPos;
+    uno::Any aAny = xPropSet->getPropertyValue("AxisPosition");
+    CPPUNIT_ASSERT(aAny >>= eAxisPos);
+    CPPUNIT_ASSERT_EQUAL(ePos, eAxisPos);
+}
+
+void testShowValue(uno::Reference<beans::XPropertySet> xPropSet, bool bShowVal)
+{
+    bool bShow;
+    uno::Any aAny = xPropSet->getPropertyValue("ShowValue");
+    CPPUNIT_ASSERT(aAny >>= bShow);
+    CPPUNIT_ASSERT_EQUAL(bShowVal, bShow);
+}
+
+void testUseGradient(uno::Reference<beans::XPropertySet> xPropSet, bool bUseGradient)
+{
+    bool bGradient;
+    uno::Any aAny = xPropSet->getPropertyValue("UseGradient");
+    CPPUNIT_ASSERT(aAny >>= bGradient);
+    CPPUNIT_ASSERT_EQUAL(bUseGradient, bGradient);
+}
+
+void testPositiveColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+{
+    sal_Int32 nColor;
+    uno::Any aAny = xPropSet->getPropertyValue("Color");
+    CPPUNIT_ASSERT(aAny >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+}
+
+void testNegativeColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+{
+    sal_Int32 nColor;
+    uno::Any aAny = xPropSet->getPropertyValue("NegativeColor");
+    CPPUNIT_ASSERT(aAny >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+}
+
+void testAxisColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+{
+    sal_Int32 nColor;
+    uno::Any aAny = xPropSet->getPropertyValue("AxisColor");
+    CPPUNIT_ASSERT(aAny >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+}
+
+}
+
+void ScConditionalFormatTest::testDataBarProperties()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormatList =
+        getConditionalFormatList(init(2));
+
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+        xCondFormatList->getConditionalFormats();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
+
+    uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
+    CPPUNIT_ASSERT(xCondFormat.is());
+
+    uno::Type aType = xCondFormat->getElementType();
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
+
+    CPPUNIT_ASSERT(xCondFormat->hasElements());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xCondFormat->getCount());
+
+    uno::Reference<beans::XPropertySet> xPropSet;
+    {
+        uno::Any aAny = xCondFormat->getByIndex(0);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testAxisPosition(xPropSet, sheet::DataBarAxis::AXIS_AUTOMATIC);
+        testShowValue(xPropSet, true);
+        testUseGradient(xPropSet, true);
+        testPositiveColor(xPropSet, COL_LIGHTBLUE);
+        testNegativeColor(xPropSet, COL_LIGHTRED);
+        testAxisColor(xPropSet, COL_BLACK);
+    }
 }
 
 void ScConditionalFormatTest::setUp()
