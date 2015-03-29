@@ -57,7 +57,7 @@ namespace
         if (pref == NULL) // return fallback value 'en_US'
              return CFStringCreateWithCString(kCFAllocatorDefault, "en_US", kCFStringEncodingASCII);
 
-        CFStringRef sref = (CFGetTypeID(pref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)pref, 0) : (CFStringRef)pref;
+        CFStringRef sref = (CFGetTypeID(pref) == CFArrayGetTypeID()) ? static_cast<CFStringRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(pref), 0)) : static_cast<CFStringRef>(pref);
 
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
@@ -84,14 +84,14 @@ rtl::OUString macosx_getLocale()
     CFArrayGuard arrGuard(subs);
 
     rtl::OUStringBuffer buf;
-    append(buf, (CFStringRef)CFArrayGetValueAtIndex(subs, 0));
+    append(buf, static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 0)));
 
     // country also available? Assumption: if the array contains more than one
     // value the second value is always the country!
     if (CFArrayGetCount(subs) > 1)
     {
         buf.append("_");
-        append(buf, (CFStringRef)CFArrayGetValueAtIndex(subs, 1));
+        append(buf, static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 1)));
     }
     // Append 'UTF-8' to the locale because the Mac OS X file
     // system interface is UTF-8 based and sal tries to determine
