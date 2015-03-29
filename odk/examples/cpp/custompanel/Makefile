@@ -47,7 +47,7 @@ OUT_COMP_DEPLOY=$(OUT_DEPLOY)/$(COMP_NAME)
 OUT_DEPLOY_DIR=$(subst /,$(PS),$(OUT_COMP_DEPLOY))
 OUT_DEPLOY_URL=$(URLPREFIX)$(OUT_COMP_DEPLOY)
 ENV_USER_INSTALL=-env:"UserInstallation=$(OUT_DEPLOY_URL)"
-OFFICE_START_OPTIONS=-nologo -nofirststartwizard -norestore -writer
+OFFICE_START_OPTIONS=-nologo -norestore -writer
 OXT_DEPLOYEDFLAG=$(OUT_MISC)/cpp_$(COMP_NAME)_deployed_oxt.flag
 
 CXXFILES = \

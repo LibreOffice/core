@@ -55,7 +55,6 @@ void OfficeConnection::setUp() {
     if (argSoffice.match("path:")) {
         desc = "pipe,name=" + uniquePipeName(OUString("oootest"));
         OUString noquickArg("--quickstart=no");
-        OUString nofirstArg("--nofirststartwizard");
         OUString norestoreArg("--norestore");
         OUString nologoArg("--nologo");
             // disable use of the unix standalone splash screen app for the
@@ -70,7 +69,7 @@ void OfficeConnection::setUp() {
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
         OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
         rtl_uString * args[] = {
-            noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
+            noquickArg.pData, norestoreArg.pData,
             nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
             jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
