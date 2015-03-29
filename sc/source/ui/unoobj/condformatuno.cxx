@@ -1228,6 +1228,44 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getProperty
     return aRef;
 }
 
+namespace {
+
+void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEntry> xEntry, size_t nPos)
+{
+    ScIconSetFormatData* pData = pFormat->GetIconSetData();
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType = xEntry->getType();
+    bool bFound = false;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    {
+        if (aIconSetEntryTypeMap[i].nApiType == nApiType)
+        {
+            eType = aIconSetEntryTypeMap[i].eType;
+            bFound = true;
+            break;
+        }
+    }
+
+    if (!bFound)
+        throw lang::IllegalArgumentException();
+
+    pData->maEntries[nPos].SetType(eType);
+    switch (eType)
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+        break;
+        default:
+        {
+            double nVal = xEntry->getFormula().toDouble();
+            pData->maEntries[nPos].SetValue(nVal);
+        }
+        break;
+    }
+}
+
+}
+
 void SAL_CALL ScIconSetFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -1286,7 +1324,11 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
             uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
             if (aValue >>= aEntries)
             {
-
+                sal_Int32 nLength = aEntries.getLength();
+                for (size_t i = 0; i < size_t(nLength); ++i)
+                {
+                    setIconSetEntry(getCoreObject(), aEntries[i], i);
+                }
             }
             else
                 throw lang::IllegalArgumentException();
