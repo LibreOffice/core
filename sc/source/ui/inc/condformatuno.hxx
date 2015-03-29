@@ -441,6 +441,32 @@ private:
     const ScIconSetFormat* mpFormat;
 };
 
+class ScIconSetEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XIconSetEntry>
+{
+public:
+    ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent, size_t nPos);
+
+    virtual ~ScIconSetEntryObj();
+
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setType(sal_Int32 nType)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual OUString SAL_CALL getFormula()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setFormula(const OUString& rString)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+private:
+    ScColorScaleEntry* getCoreObject();
+
+    rtl::Reference<ScIconSetFormatObj> mxParent;
+    size_t mnPos;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

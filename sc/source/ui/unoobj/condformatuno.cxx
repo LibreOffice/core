@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/ConditionFormatOperator.hpp>
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
+#include <com/sun/star/sheet/IconSetFormatEntry.hpp>
 
 namespace {
 
@@ -227,6 +228,21 @@ const IconSetTypeApiMap aIconSetApiMap[] =
     { IconSet_5ArrowsGray, sheet::IconSetType::ICONSET_4ARROWS_GRAY },
     { IconSet_5Ratings, sheet::IconSetType::ICONSET_5RATINGS },
     { IconSet_5Quarters, sheet::IconSetType::ICONSET_5QUARTERS },
+};
+
+struct IconSetEntryTypeApiMap
+{
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType;
+};
+
+IconSetEntryTypeApiMap aIconSetEntryTypeMap[] =
+{
+    { COLORSCALE_MIN, sheet::IconSetFormatEntry::ICONSET_MIN },
+    { COLORSCALE_VALUE, sheet::IconSetFormatEntry::ICONSET_VALUE },
+    { COLORSCALE_FORMULA, sheet::IconSetFormatEntry::ICONSET_FORMULA },
+    { COLORSCALE_PERCENT, sheet::IconSetFormatEntry::ICONSET_PERCENT },
+    { COLORSCALE_PERCENTILE, sheet::IconSetFormatEntry::ICONSET_PERCENTILE }
 };
 
 }
@@ -1266,6 +1282,15 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
         }
         break;
         case IconSetEntries:
+        {
+            uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
+            if (aValue >>= aEntries)
+            {
+
+            }
+            else
+                throw lang::IllegalArgumentException();
+        }
         break;
         default:
         break;
@@ -1308,11 +1333,13 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case IconSetEntries:
         {
-            uno::Sequence< sheet::XIconSetEntry > aEntries(getCoreObject()->size());
-            for (auto it = getCoreObject()->begin(), itEnd = getCoreObject()->end(); it != itEnd; ++it)
+            uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries(getCoreObject()->size());
+            size_t i = 0;
+            for (auto it = getCoreObject()->begin(), itEnd = getCoreObject()->end(); it != itEnd; ++it, ++i)
             {
-                //aEntries.operator[] = ;
+                aEntries[i] = new ScIconSetEntryObj(this, i);
             }
+            aAny <<= aEntries;
         }
         break;
         default:
@@ -1351,6 +1378,88 @@ void SAL_CALL ScIconSetFormatObj::removeVetoableChangeListener( const OUString&,
                                 lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SAL_WARN("sc", "not implemented");
+}
+
+ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent,
+        size_t nPos):
+    mxParent(xParent),
+    mnPos(nPos)
+{
+}
+
+ScIconSetEntryObj::~ScIconSetEntryObj()
+{
+}
+
+ScColorScaleEntry* ScIconSetEntryObj::getCoreObject()
+{
+    ScIconSetFormat* pFormat = mxParent->getCoreObject();
+    if (pFormat->GetIconSetData()->maEntries.size() <= mnPos)
+        throw lang::IllegalArgumentException();
+
+    return &pFormat->GetIconSetData()->maEntries[mnPos];
+}
+
+sal_Int32 ScIconSetEntryObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    {
+        if (aIconSetEntryTypeMap[i].eType == pEntry->GetType())
+        {
+            return aIconSetEntryTypeMap[i].nApiType;
+        }
+    }
+
+    throw lang::IllegalArgumentException();
+}
+
+void ScIconSetEntryObj::setType(sal_Int32 nType)
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    {
+        if (aIconSetEntryTypeMap[i].nApiType == nType)
+        {
+            pEntry->SetType(aIconSetEntryTypeMap[i].eType);
+            return;
+        }
+    }
+    throw lang::IllegalArgumentException();
+}
+
+OUString ScIconSetEntryObj::getFormula()
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    switch (pEntry->GetType())
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+        break;
+        default:
+            return OUString::number(pEntry->GetValue());
+    }
+
+    return OUString();
+}
+
+void ScIconSetEntryObj::setFormula(const OUString& rFormula)
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    switch (pEntry->GetType())
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+            // pEntry->SetFormula(rFormula);
+        break;
+        default:
+            pEntry->SetValue(rFormula.toDouble());
+        break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
