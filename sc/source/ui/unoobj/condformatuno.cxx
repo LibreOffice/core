@@ -894,6 +894,43 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getProperty
     return aRef;
 }
 
+namespace {
+
+void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEntry> xEntry)
+{
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType = xEntry->getType();
+    bool bFound = false;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    {
+        if (aDataBarEntryTypeMap[i].nApiType == nApiType)
+        {
+            eType = aDataBarEntryTypeMap[i].eType;
+            bFound = true;
+            break;
+        }
+    }
+
+    if (!bFound)
+        throw lang::IllegalArgumentException();
+
+    pEntry->SetType(eType);
+    switch (eType)
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+        break;
+        default:
+        {
+            double nVal = xEntry->getFormula().toDouble();
+            pEntry->SetValue(nVal);
+        }
+        break;
+    }
+}
+
+}
+
 void SAL_CALL ScDataBarFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -994,6 +1031,10 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
                 if (aEntries.getLength() != 2)
                     throw lang::IllegalArgumentException();
 
+                setDataBarEntry(getCoreObject()->GetDataBarData()->mpLowerLimit.get(),
+                        aEntries[0]);
+                setDataBarEntry(getCoreObject()->GetDataBarData()->mpUpperLimit.get(),
+                        aEntries[1]);
             }
             else
                 throw lang::IllegalArgumentException();
