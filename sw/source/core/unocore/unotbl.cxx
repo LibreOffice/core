@@ -4262,9 +4262,10 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
 
 ///@see SwXTextTable::setRowDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
-                                                    throw( uno::RuntimeException, std::exception )
+        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
+
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -4295,48 +4296,14 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     }
 }
 
-///@see SwXTextTable::setColumnDescriptions (TODO: seems to be copy and paste programming here)
 uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
-                                        throw( uno::RuntimeException, std::exception )
+        throw(uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    const sal_uInt16 nColCount = getColumnCount();
-    if(!nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-    uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        OUString* pArray = aRet.getArray();
-        if(bFirstRowAsLabel)
-        {
-            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
-            for(sal_uInt16 i = nStart; i < nColCount; i++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                uno::Reference< text::XText >  xText(xCell, uno::UNO_QUERY);
-                pArray[i - nStart] = xText->getString();
-            }
-        }
-        else
-        {
-            OSL_FAIL("Where do these labels come from?");
-        }
-    }
-    else
-        throw uno::RuntimeException();
-    return aRet;
+    uno::Sequence<OUString> vResult(getColumnCount());
+    setColumnDescriptions(vResult);
+    return vResult;
 }
 
-///@see SwXTextTable::setColumnDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& ColumnDesc)
         throw( uno::RuntimeException, std::exception )
 {
