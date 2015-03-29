@@ -29,6 +29,9 @@
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 
+namespace vcl
+{
+
 #define PNGCHUNK_IHDR       0x49484452
 #define PNGCHUNK_PLTE       0x504c5445
 #define PNGCHUNK_IDAT       0x49444154
@@ -41,8 +44,6 @@
 #define VIEWING_GAMMA       2.35
 #define DISPLAY_GAMMA       1.0
 
-namespace vcl
-{
 
 static const sal_uInt8 mpDefaultColorTable[ 256 ] =
 {   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
@@ -69,9 +70,9 @@ private:
     SvStream&           mrPNGStream;
     SvStreamEndian      mnOrigStreamMode;
 
-    std::vector< vcl::PNGReader::ChunkData >    maChunkSeq;
-    std::vector< vcl::PNGReader::ChunkData >::iterator maChunkIter;
-    std::vector< sal_uInt8 >::iterator          maDataIter;
+    std::vector<vcl::PNGReader::ChunkData> maChunkSeq;
+    std::vector<vcl::PNGReader::ChunkData>::iterator maChunkIter;
+    std::vector<sal_uInt8>::iterator maDataIter;
 
     Bitmap*             mpBmp;
     BitmapWriteAccess*  mpAcc;
@@ -79,11 +80,11 @@ private:
     AlphaMask*          mpAlphaMask;
     BitmapWriteAccess*  mpMaskAcc;
     ZCodec              mpZCodec;
-    sal_uInt8*              mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
-    sal_uInt8*              mpScanPrior;    // pointer to the latest scanline
-    sal_uInt8*              mpTransTab;     // for transparency in images with palette colortype
-    sal_uInt8*              mpScanCurrent;  // pointer into the current scanline
-    sal_uInt8*              mpColorTable;
+    sal_uInt8*          mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
+    sal_uInt8*          mpScanPrior;    // pointer to the latest scanline
+    sal_uInt8*          mpTransTab;     // for transparency in images with palette colortype
+    sal_uInt8*          mpScanCurrent;  // pointer into the current scanline
+    sal_uInt8*          mpColorTable;
     sal_Size            mnStreamSize;   // estimate of PNG file size
     sal_uInt32          mnChunkType;    // Type of current PNG chunk
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
@@ -99,28 +100,28 @@ private:
     sal_uInt32          mnYAdd;         // the increment for input images Y coords for the current pass
     int                 mnPreviewShift; // shift to convert orig image coords into preview image coords
     int                 mnPreviewMask;  // == ((1 << mnPreviewShift) - 1)
-    sal_uInt16              mnTargetDepth;      // pixel depth of target bitmap
-    sal_uInt8               mnTransRed;
-    sal_uInt8               mnTransGreen;
-    sal_uInt8               mnTransBlue;
-    sal_uInt8               mnPngDepth;     // pixel depth of PNG data
-    sal_uInt8               mnColorType;
-    sal_uInt8               mnCompressionType;
-    sal_uInt8               mnFilterType;
-    sal_uInt8               mnInterlaceType;
+    sal_uInt16          mnTargetDepth;      // pixel depth of target bitmap
+    sal_uInt8           mnTransRed;
+    sal_uInt8           mnTransGreen;
+    sal_uInt8           mnTransBlue;
+    sal_uInt8           mnPngDepth;     // pixel depth of PNG data
+    sal_uInt8           mnColorType;
+    sal_uInt8           mnCompressionType;
+    sal_uInt8           mnFilterType;
+    sal_uInt8           mnInterlaceType;
     BitmapColor         mcTranspColor;  // transparency mask's transparency "color"
     BitmapColor         mcOpaqueColor;  // transparency mask's opaque "color"
-    bool                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
-    bool                mbAlphaChannel; // is true for ColorType 4 and 6
-    bool                mbRGBTriple;
-    bool                mbPalette;      // false if we need a Palette
-    bool                mbGrayScale;
-    bool                mbzCodecInUse;
-    bool                mbStatus;
-    bool                mbIDAT;         // true if finished with enough IDAT chunks
-    bool                mbGamma;        // true if Gamma Correction available
-    bool                mbpHYs;         // true if pysical size of pixel available
-    bool                mbIgnoreGammaChunk;
+    bool                mbTransparent : 1;  // graphic includes an tRNS Chunk or an alpha Channel
+    bool                mbAlphaChannel : 1; // is true for ColorType 4 and 6
+    bool                mbRGBTriple : 1;
+    bool                mbPalette : 1;      // false if we need a Palette
+    bool                mbGrayScale : 1;
+    bool                mbzCodecInUse : 1;
+    bool                mbStatus : 1;
+    bool                mbIDAT : 1;         // true if finished with enough IDAT chunks
+    bool                mbGamma : 1;        // true if Gamma Correction available
+    bool                mbpHYs : 1;         // true if pysical size of pixel available
+    bool                mbIgnoreGammaChunk : 1;
 
 #if OSL_DEBUG_LEVEL > 0
     // do some checks in debug mode
@@ -146,7 +147,7 @@ private:
     bool                ImplReadTransparent();
     void                ImplGetGamma();
     void                ImplGetBackground();
-    sal_uInt8               ImplScaleColor();
+    sal_uInt8           ImplScaleColor();
     bool                ImplReadHeader( const Size& rPreviewSizeHint );
     bool                ImplReadPalette();
     void                ImplGetGrayPalette( sal_uInt16 );
@@ -158,7 +159,7 @@ public:
                         ~PNGReaderImpl();
 
     BitmapEx            GetBitmapEx( const Size& rPreviewSizeHint );
-    const std::vector< PNGReader::ChunkData >& GetAllChunks();
+    const std::vector<vcl::PNGReader::ChunkData>& GetAllChunks();
     void                SetIgnoreGammaChunk( bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
 };
 
@@ -1639,14 +1640,13 @@ sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
     return nRet;
 }
 
-PNGReader::PNGReader( SvStream& rIStm ) :
-    mpImpl( new ::vcl::PNGReaderImpl( rIStm ) )
+PNGReader::PNGReader(SvStream& rIStream) :
+    mpImpl(new ::vcl::PNGReaderImpl(rIStream))
 {
 }
 
 PNGReader::~PNGReader()
 {
-    delete mpImpl;
 }
 
 BitmapEx PNGReader::Read( const Size& i_rPreviewSizeHint )
@@ -1659,9 +1659,9 @@ const std::vector< vcl::PNGReader::ChunkData >& PNGReader::GetChunks() const
     return mpImpl->GetAllChunks();
 }
 
-void PNGReader::SetIgnoreGammaChunk( bool b )
+void PNGReader::SetIgnoreGammaChunk(bool bIgnoreGammaChunk)
 {
-    mpImpl->SetIgnoreGammaChunk( b );
+    mpImpl->SetIgnoreGammaChunk(bIgnoreGammaChunk);
 }
 
 } // namespace vcl

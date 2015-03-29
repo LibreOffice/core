@@ -24,40 +24,38 @@
 #include <vcl/bitmapex.hxx>
 #include <vector>
 
-
-// - PNGReader -
-
-
 namespace vcl
 {
-    class PNGReaderImpl;
 
-    class VCL_DLLPUBLIC PNGReader
+class PNGReaderImpl;
+
+class VCL_DLLPUBLIC PNGReader
+{
+    std::unique_ptr<PNGReaderImpl> mpImpl;
+
+public:
+
+    /* the PNG chunks are read within the c'tor, so the stream will
+    be positioned at the end of the PNG */
+    explicit PNGReader(SvStream& rStream);
+    ~PNGReader();
+
+    /* an empty preview size hint (=default) will read the whole image
+    */
+    BitmapEx Read(const Size& i_rPreviewHint = Size());
+
+    // retrieve every chunk that resides inside the PNG
+    struct ChunkData
     {
-        PNGReaderImpl*          mpImpl;
-
-    public:
-
-        /* the PNG chunks are read within the c'tor, so the stream will
-        be positioned at the end of the PNG */
-        explicit PNGReader( SvStream& rStm );
-        ~PNGReader();
-
-        /* an empty preview size hint (=default) will read the whole image
-        */
-        BitmapEx                        Read( const Size& i_rPreviewHint = Size() );
-
-        // retrieve every chunk that resides inside the PNG
-        struct ChunkData
-        {
-            sal_uInt32                  nType;
-            std::vector< sal_uInt8 >    aData;
-        };
-        const std::vector< ChunkData >& GetChunks() const;
-
-        void SetIgnoreGammaChunk( bool b );
+        sal_uInt32 nType;
+        std::vector<sal_uInt8> aData;
     };
-}
+    const std::vector<ChunkData>& GetChunks() const;
+
+    void SetIgnoreGammaChunk(bool bIgnoreGammaChunk);
+};
+
+} // end namespace vcl
 
 #endif // INCLUDED_VCL_PNGREAD_HXX
 
