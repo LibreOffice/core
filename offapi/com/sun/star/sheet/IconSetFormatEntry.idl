@@ -14,13 +14,18 @@ module com {  module sun {  module star {  module sheet {
 
 constants IconSetFormatEntry
 {
-    const long ICONSET_PERCENTILE = 0;
+    /**
+      * Can not be set! Will always be the type of the first entry.
+      */
+    const long ICONSET_MIN = 0;
 
-    const long ICONSET_VALUE = 1;
+    const long ICONSET_PERCENTILE = 1;
 
-    const long ICONSET_PERCENT = 2;
+    const long ICONSET_VALUE = 2;
 
-    const long ICONSET_FORMULA = 3;
+    const long ICONSET_PERCENT = 3;
+
+    const long ICONSET_FORMULA = 4;
 };
 
 
