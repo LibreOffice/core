@@ -2193,7 +2193,7 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
     // a bitmap context will be needed for manual XORing
     // create one unless the target context is a bitmap context
     if( nTargetDepth )
-        m_pTempBuffer = (sal_uLong*)CGBitmapContextGetData( m_xTargetContext );
+        m_pTempBuffer = static_cast<sal_uLong*>(CGBitmapContextGetData( m_xTargetContext ));
     if( !m_pTempBuffer )
     {
         // create a bitmap context matching to the target context

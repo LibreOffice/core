@@ -1033,7 +1033,7 @@ static void getAppleScrollBarVariant(StyleSettings &rSettings)
     CFStringRef AppleScrollBarType = CFSTR("AppleScrollBarVariant");
     if( AppleScrollBarType )
     {
-        CFStringRef ScrollBarVariant = ((CFStringRef)CFPreferencesCopyAppValue( AppleScrollBarType, kCFPreferencesCurrentApplication ));
+        CFStringRef ScrollBarVariant = static_cast<CFStringRef>(CFPreferencesCopyAppValue( AppleScrollBarType, kCFPreferencesCurrentApplication ));
         if( ScrollBarVariant )
         {
             if( CFGetTypeID( ScrollBarVariant ) == CFStringGetTypeID() )
@@ -1059,7 +1059,7 @@ static void getAppleScrollBarVariant(StyleSettings &rSettings)
     CFStringRef jumpScroll = CFSTR("AppleScrollerPagingBehavior");
     if( jumpScroll )
     {
-        CFBooleanRef jumpStr = ((CFBooleanRef)CFPreferencesCopyAppValue( jumpScroll, kCFPreferencesCurrentApplication ));
+        CFBooleanRef jumpStr = static_cast<CFBooleanRef>(CFPreferencesCopyAppValue( jumpScroll, kCFPreferencesCurrentApplication ));
         if( jumpStr )
         {
             if( CFGetTypeID( jumpStr ) == CFBooleanGetTypeID() )

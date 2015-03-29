@@ -517,7 +517,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
 
         for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
         {
-            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
+            CTRunRef run = static_cast<CTRunRef>(CFArrayGetValueAtIndex(runArray, runIndex));
             CFIndex runGlyphCount = CTRunGetGlyphCount(run);
             CGPoint position;
             CGSize advance;
@@ -534,8 +534,8 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                     CGFloat ascent;
                     CGFloat descent;
                     CGFloat leading;
-                    CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
-                                                                        kCTFontAttributeName);
+                    CTFontRef runFont = static_cast<CTFontRef>(CFDictionaryGetValue(CTRunGetAttributes(run),
+                                                                        kCTFontAttributeName));
                     CGFloat baseSize = CTFontGetSize(runFont);
                     CTRunGetTypographicBounds ( run, glyphRange,
                                                 &ascent, &descent, &leading);
@@ -600,7 +600,7 @@ bool CTLayout::CacheGlyphLayout(void) const // eew!
 
     for( int i = 0; i < nRun; ++i )
     {
-        CTRunRef pRun = (CTRunRef)CFArrayGetValueAtIndex( aRuns, i );
+        CTRunRef pRun = static_cast<CTRunRef>(CFArrayGetValueAtIndex( aRuns, i ));
         CTRunData* pRunData = new CTRunData(pRun, nPos);
         m_vRunData.push_back(pRunData);
         nPos += pRunData->m_nGlyphs;
@@ -645,7 +645,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     {
         if( pFallbackFonts )
         {
-            pFont = (CTFontRef)CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName );
+            pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
             pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
             rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
         }
@@ -694,7 +694,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
             }
             if( pFallbackFonts )
             {
-                pFont = (CTFontRef)CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName );
+                pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
                 pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
                 rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
             }
@@ -749,7 +749,7 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 
     for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
     {
-        CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
+        CTRunRef pGlyphRun = static_cast<CTRunRef>(CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex ));
         const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
         const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
 

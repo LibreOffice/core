@@ -22,7 +22,7 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     assert(pRun);
 
     CFDictionaryRef pRunAttributes = CTRunGetAttributes( m_pRun );
-    m_pFont = (CTFontRef)CFDictionaryGetValue( pRunAttributes, kCTFontAttributeName );
+    m_pFont = static_cast<CTFontRef>(CFDictionaryGetValue( pRunAttributes, kCTFontAttributeName ));
 
     m_nGlyphs = CTRunGetGlyphCount(m_pRun);
     m_EndPos = m_StartPos + m_nGlyphs;
@@ -33,7 +33,7 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     {
         m_pAdvances = new CGSize[m_nGlyphs];
         ownership_flags |= CTRUNDATA_F_OWN_ADVANCES;
-        CTRunGetAdvances( pRun, aAll, (CGSize*)m_pAdvances );
+        CTRunGetAdvances( pRun, aAll, const_cast<CGSize*>(m_pAdvances) );
     }
 
     m_pGlyphs = CTRunGetGlyphsPtr( m_pRun );
@@ -41,7 +41,7 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     {
         m_pGlyphs = new CGGlyph[m_nGlyphs];
         ownership_flags |= CTRUNDATA_F_OWN_GLYPHS;
-        CTRunGetGlyphs( pRun, aAll, (CGGlyph*)m_pGlyphs);
+        CTRunGetGlyphs( pRun, aAll, const_cast<CGGlyph*>(m_pGlyphs));
     }
 
     m_pStringIndices = CTRunGetStringIndicesPtr( pRun );
@@ -49,15 +49,15 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     {
         m_pStringIndices = new CFIndex[m_nGlyphs];
         ownership_flags |= CTRUNDATA_F_OWN_INDICES;
-        CTRunGetStringIndices( pRun, aAll, (CFIndex*)m_pStringIndices );
+        CTRunGetStringIndices( pRun, aAll, const_cast<CFIndex*>(m_pStringIndices) );
     }
 
-    m_pPositions = (CGPoint*)CTRunGetPositionsPtr( pRun );
+    m_pPositions = CTRunGetPositionsPtr( pRun );
     if( !m_pPositions )
     {
         m_pPositions = new CGPoint[m_nGlyphs];
         ownership_flags |= CTRUNDATA_F_OWN_POSITIONS;
-        CTRunGetPositions( pRun, aAll, (CGPoint*)m_pPositions );
+        CTRunGetPositions( pRun, aAll, const_cast<CGPoint*>(m_pPositions) );
     }
     for(int i = 0; i < m_nGlyphs; i++)
     {

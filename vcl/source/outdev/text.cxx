@@ -1016,7 +1016,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     DeviceCoordinate* pDXPixelArray = NULL;
     if(pDXAry)
     {
-        pDXPixelArray = (DeviceCoordinate*)alloca(nLen * sizeof(DeviceCoordinate));
+        pDXPixelArray = static_cast<DeviceCoordinate*>(alloca(nLen * sizeof(DeviceCoordinate)));
     }
     DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
@@ -1357,7 +1357,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
         else
         {
 #if VCL_FLOAT_DEVICE_PIXEL
-            pDXPixelArray = (DeviceCoordinate*)alloca( nLen * sizeof(DeviceCoordinate) );
+            pDXPixelArray = static_cast<DeviceCoordinate*>(alloca( nLen * sizeof(DeviceCoordinate) ));
             for( int i = 0; i < nLen; ++i )
             {
                 pDXPixelArray[i] = pDXArray[i];

@@ -45,7 +45,7 @@ inline double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-:   mpFontData( const_cast<CoreTextFontData*>(static_cast<CoreTextFontData const *>(rFSD.mpFontData)) )
+:   mpFontData( static_cast<CoreTextFontData const *>(rFSD.mpFontData) )
 ,   mfFontStretch( 1.0 )
 ,   mfFontRotation( 0.0 )
 ,   mpStyleDict( NULL )
@@ -119,7 +119,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
-    CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
+    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
     const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
@@ -142,7 +142,7 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
 {
     CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
-    CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
+    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
     const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, NULL, 1 );
@@ -200,7 +200,7 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
 
     CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
-    CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
+    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
     if (!xPath) {
         return false;
@@ -287,14 +287,14 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
     CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault, aUILang.getStr(), aUILang.getLength() );
     CFStringRef pLang = NULL;
-    CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang );
+    CFStringRef pFamilyName = static_cast<CFStringRef>(CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
     if ( !pLang || ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo ))
     {
         if(pFamilyName)
         {
             CFRelease( pFamilyName );
         }
-        pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
+        pFamilyName = static_cast<CFStringRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute ));
     }
 #else
     // No "Application" on iOS. And it is unclear whether this code
@@ -306,19 +306,19 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.SetFamilyName( GetOUString( pFamilyName ) );
 
     // get font style
-    CFStringRef pStyleName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontStyleNameAttribute );
+    CFStringRef pStyleName = static_cast<CFStringRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontStyleNameAttribute ));
     rDFA.SetStyleName( GetOUString( pStyleName ) );
 
     // get font-enabled status
     if( bFontEnabled ) {
         int bEnabled = TRUE; // by default (and when we're on OS X < 10.6) it's "enabled"
-        CFNumberRef pEnabled = (CFNumberRef)CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute );
+        CFNumberRef pEnabled = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute ));
         CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
         *bFontEnabled = bEnabled;
     }
 
     // get font attributes
-    CFDictionaryRef pAttrDict = (CFDictionaryRef)CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute );
+    CFDictionaryRef pAttrDict = static_cast<CFDictionaryRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute ));
 
     // get symbolic trait
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too
@@ -331,7 +331,7 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
 
     // get the font weight
     double fWeight = 0;
-    CFNumberRef pWeightNum = (CFNumberRef)CFDictionaryGetValue( pAttrDict, kCTFontWeightTrait );
+    CFNumberRef pWeightNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWeightTrait ));
     CFNumberGetValue( pWeightNum, kCFNumberDoubleType, &fWeight );
     int nInt = WEIGHT_NORMAL;
     if( fWeight > 0 ) {
@@ -347,14 +347,14 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
 
     // get the font slant
     double fSlant = 0;
-    CFNumberRef pSlantNum = (CFNumberRef)CFDictionaryGetValue( pAttrDict, kCTFontSlantTrait );
+    CFNumberRef pSlantNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontSlantTrait ));
     CFNumberGetValue( pSlantNum, kCFNumberDoubleType, &fSlant );
     if( fSlant >= 0.035 )
         rDFA.SetItalic( ITALIC_NORMAL );
 
     // get width trait
     double fWidth = 0;
-    CFNumberRef pWidthNum = (CFNumberRef)CFDictionaryGetValue( pAttrDict, kCTFontWidthTrait );
+    CFNumberRef pWidthNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWidthTrait ));
     CFNumberGetValue( pWidthNum, kCFNumberDoubleType, &fWidth );
     nInt = WIDTH_NORMAL;
     if( fWidth > 0 ) {
@@ -388,7 +388,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     {
         const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
         CoreTextFontData* pFontData = new CoreTextFontData( rDFA, nFontId );
-        SystemFontList* pFontList = (SystemFontList*)pContext;
+        SystemFontList* pFontList = static_cast<SystemFontList*>(pContext);
         pFontList->AddFont( pFontData );
     }
 }
