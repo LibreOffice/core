@@ -447,7 +447,7 @@ inline NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWind
                                  const void* pEvent, long nRet )
 {
     mpWindow    = pWindow;
-    mpData      = (void*)pEvent;
+    mpData      = const_cast<void*>(pEvent);
     mnEventType  = nEventType;
     mnRetValue  = nRet;
 }
@@ -521,7 +521,7 @@ inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
                                            const void* pData,
                                            AllSettingsFlags nChangeFlags )
 {
-    mpData  = (void*)pData;
+    mpData  = const_cast<void*>(pData);
     mnFlags = nChangeFlags;
     mnType  = nType;
 }

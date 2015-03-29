@@ -4799,7 +4799,7 @@ bool StructRefInfo::setValue( const Any& rValue )
 {
     return uno_type_assignData( getInst(),
        maType.getTypeLibType(),
-       (void*)rValue.getValue(),
+       const_cast<void*>(rValue.getValue()),
        rValue.getValueTypeRef(),
        reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),

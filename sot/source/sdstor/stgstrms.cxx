@@ -984,7 +984,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) write
-                    nRes = (short) rIo.Write( nPage, (void*) p, 1 ) * nPageSize;
+                    nRes = (short) rIo.Write( nPage, const_cast<void*>(p), 1 ) * nPageSize;
             }
             else
             {

@@ -258,7 +258,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             // construct temp uno val to do proper assignment: todo opt
             void * pTemp = alloca( pValueTD->nSize );
             uno_copyAndConvertData(
-                pTemp, (void *)rValue.getValue(), pValueTD, getReflection()->getCpp2Uno().get() );
+                pTemp, const_cast<void *>(rValue.getValue()), pValueTD, getReflection()->getCpp2Uno().get() );
             uno_constructData(
                 pArg, pTD );
             // assignment does simple conversion
@@ -636,14 +636,14 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         pCppArgs[nPos].getValueTypeRef(), pTD->pWeakRef ))
                 {
                     uno_type_copyAndConvertData(
-                        ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
+                        ppUnoArgs[nPos], const_cast<void *>(pCppArgs[nPos].getValue()),
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = true;
                 }
                 else if (pTD->eTypeClass == typelib_TypeClass_ANY)
                 {
                     uno_type_any_constructAndConvert(
-                        static_cast<uno_Any *>(ppUnoArgs[nPos]), (void *)pCppArgs[nPos].getValue(),
+                        static_cast<uno_Any *>(ppUnoArgs[nPos]), const_cast<void *>(pCppArgs[nPos].getValue()),
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = true;
                 }
@@ -666,7 +666,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                     // construct temp uno val to do proper assignment: todo opt
                     void * pTemp = alloca( pValueTD->nSize );
                     uno_copyAndConvertData(
-                        pTemp, (void *)pCppArgs[nPos].getValue(), pValueTD,
+                        pTemp, const_cast<void *>(pCppArgs[nPos].getValue()), pValueTD,
                         getReflection()->getCpp2Uno().get() );
                     uno_constructData(
                         ppUnoArgs[nPos], pTD );

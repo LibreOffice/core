@@ -165,7 +165,7 @@ data2string(void *data,
 static OUString
 any2string(uno::Any any)
 {
-    return data2string((void*)any.getValue(), any.pType);
+    return data2string(const_cast<void*>(any.getValue()), any.pType);
 }
 
 // Class SvXMLAutoStylePoolProperties_Impl

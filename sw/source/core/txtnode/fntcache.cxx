@@ -104,7 +104,7 @@ void SwFntCache::Flush( )
 }
 
 SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell const *pSh)
-    : SwCacheObj((void*)pOwn)
+    : SwCacheObj(pOwn)
     , aFont(rFont)
     , pScrFont(NULL)
     , pPrtFont(&aFont)

@@ -95,9 +95,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         if (t1->isPointerType() && t2->isPointerType()) {
             t1 = t1->getAs<PointerType>()->getPointeeType();
             t2 = t2->getAs<PointerType>()->getPointeeType();
-            if (t2->isVoidType()) {
-                return true;
-            }
         } else if (t1->isLValueReferenceType() && t2->isLValueReferenceType()) {
             t1 = t1->getAs<LValueReferenceType>()->getPointeeType();
             t2 = t2->getAs<LValueReferenceType>()->getPointeeType();

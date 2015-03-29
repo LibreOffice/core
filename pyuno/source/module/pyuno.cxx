@@ -408,7 +408,7 @@ PyObject *PyUNO_str( PyObject * self )
         {
             PyThreadDetach antiguard;
             Any a = rHolder->getMaterial();
-            OUString s = val2str( (void*) a.getValue(), a.getValueType().getTypeLibType() );
+            OUString s = val2str( a.getValue(), a.getValueType().getTypeLibType() );
             buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
         }
     }
@@ -418,7 +418,7 @@ PyObject *PyUNO_str( PyObject * self )
         PyThreadDetach antiguard;
         buf.append( "pyuno object " );
 
-        OUString s = val2str( (void*)me->members->wrappedObject.getValue(),
+        OUString s = val2str( me->members->wrappedObject.getValue(),
                               me->members->wrappedObject.getValueType().getTypeLibType() );
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
     }

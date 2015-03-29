@@ -439,7 +439,7 @@ inline CommandEvent::CommandEvent( const Point& rMousePos,
                                    sal_uInt16 nCmd, bool bMEvt, const void* pCmdData ) :
             maPos( rMousePos )
 {
-    mpData          = (void*)pCmdData;
+    mpData          = const_cast<void*>(pCmdData);
     mnCommand       = nCmd;
     mbMouseEvent    = bMEvt;
 }

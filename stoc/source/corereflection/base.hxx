@@ -425,7 +425,7 @@ inline bool coerce_assign(
     {
         return uno_type_assignData(
             pDest, pTD->pWeakRef,
-            (void *)rSource.getValue(), rSource.getValueTypeRef(),
+            const_cast<void *>(rSource.getValue()), rSource.getValueTypeRef(),
             reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
             reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
             reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );

@@ -499,8 +499,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
 
             // assuming that the Message is always the first member, wuuuu
-            void *pData = (void*)a.getValue();
-            OUString message = *static_cast<OUString *>(pData);
+            void const *pData = a.getValue();
+            OUString message = *static_cast<OUString const *>(pData);
             PyRef pymsg = ustring2PyString( message );
             PyTuple_SetItem( args.get(), 0 , pymsg.getAcquired() );
             // the exception base functions want to have an "args" tuple,

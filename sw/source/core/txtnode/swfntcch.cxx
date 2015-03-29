@@ -30,7 +30,7 @@ extern const sal_uInt8 StackPos[];
 SwFontCache *pSwFontCache = NULL;
 
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
-    SwCacheObj( (void*)pOwn ),
+    SwCacheObj( pOwn ),
     aSwFont( &static_cast<SwTxtFmtColl const *>(pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );

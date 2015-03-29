@@ -162,7 +162,7 @@ bool AstStruct::dump(RegistryKey& rKey)
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
     if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
-                            (RegValue)pBlob, aBlobSize))
+                            const_cast<RegValue>(pBlob), aBlobSize))
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
