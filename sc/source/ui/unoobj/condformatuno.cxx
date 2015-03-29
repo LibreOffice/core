@@ -398,7 +398,7 @@ uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (getCoreObject()->size() >= size_t(nIndex))
+    if (getCoreObject()->size() <= size_t(nIndex))
         throw lang::IllegalArgumentException();
 
     const ScFormatEntry* pEntry = getCoreObject()->GetEntry(nIndex);
