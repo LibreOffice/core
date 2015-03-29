@@ -44,5 +44,5 @@ cmd/sc_savegraphic.png cmd/sc_save.png
 cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 
 # writer table of context context menu
-cmd/sc_updatecurindex.png cmd/sc_sc_reload.png
-cmd/sc_removetableof.png cmd/sc_sc_cancel.png
+cmd/sc_updatecurindex.png cmd/sc_reload.png
+cmd/sc_removetableof.png cmd/sc_cancel.png
