@@ -251,6 +251,8 @@ public:
     iterator end();
     const_iterator end() const;
 
+    ScColorScaleEntry* GetEntry(size_t nPos);
+
     size_t size() const;
 };
 

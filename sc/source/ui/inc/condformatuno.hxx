@@ -297,6 +297,38 @@ private:
     const ScColorScaleFormat* mpFormat;
 };
 
+class ScColorScaleEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XColorScaleEntry>
+{
+public:
+    ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent, size_t nPos);
+
+    virtual ~ScColorScaleEntryObj();
+
+    virtual com::sun::star::util::Color SAL_CALL getColor()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setColor(com::sun::star::util::Color aColor)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setType(sal_Int32 nType)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual OUString SAL_CALL getFormula()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setFormula(const OUString& rString)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+private:
+    ScColorScaleEntry* getCoreObject();
+
+    rtl::Reference<ScColorScaleFormatObj> mxParent;
+    size_t mnPos;
+};
+
 class ScDataBarFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
