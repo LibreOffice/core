@@ -190,23 +190,23 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
     {
         case kABStringProperty:
             result = CFStringCompare(
-                (CFStringRef) _field1->value,
-                (CFStringRef) _field2->value,
+                static_cast<CFStringRef>(_field1->value),
+                static_cast<CFStringRef>(_field2->value),
                 kCFCompareLocalized); // Specifies that the comparison should take into account differences related to locale, such as the thousands separator character.
             break;
 
         case kABDateProperty:
             result = CFDateCompare(
-                (CFDateRef) _field1->value,
-                (CFDateRef) _field2->value,
+                static_cast<CFDateRef>(_field1->value),
+                static_cast<CFDateRef>(_field2->value),
                 NULL); // NULL = unused variable
             break;
 
         case kABIntegerProperty:
         case kABRealProperty:
             result = CFNumberCompare(
-                (CFNumberRef) _field1->value,
-                (CFNumberRef) _field2->value,
+                static_cast<CFNumberRef>(_field1->value),
+                static_cast<CFNumberRef>(_field2->value),
                 NULL); // NULL = unused variable
         break;
 
@@ -301,30 +301,30 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
     switch(_aField->type)
     {
         case kABStringProperty:
-            fieldString = CFStringToOUString((CFStringRef) _aField->value);
+            fieldString = CFStringToOUString(static_cast<CFStringRef>(_aField->value));
             break;
         case kABDateProperty:
             {
-                DateTime aTime = CFDateToDateTime((CFDateRef) _aField->value);
+                DateTime aTime = CFDateToDateTime(static_cast<CFDateRef>(_aField->value));
                 fieldString = DBTypeConversion::toDateTimeString(aTime);
             }
             break;
         case kABIntegerProperty:
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) _aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->value) );
                 sal_Int64 nVal;
                 // Should we check for the wrong type here, e.g., a float?
-                bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
+                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->value), numberType, &nVal);
                 if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }
             break;
         case kABRealProperty:
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) _aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->value) );
                 double nVal;
                 // Should we check for the wrong type here, e.g., an int?
-                bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
+                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->value), numberType, &nVal);
                 if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }

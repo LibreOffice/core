@@ -75,7 +75,7 @@ void MacabPreparedStatement::getNextParameter(OUString &rParameter) const throw(
         const OUString sError( aResources.getResourceString(
                 STR_INVALID_PARA_COUNT
              ) );
-        ::dbtools::throwGenericSQLException(sError,*(MacabPreparedStatement *) this);
+        ::dbtools::throwGenericSQLException(sError,*const_cast<MacabPreparedStatement *>(this));
     }
 
     rParameter = (m_aParameterRow->get())[m_nParameterIndex];

@@ -219,7 +219,7 @@ OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLExce
         {
             if(aField->type == kABStringProperty)
             {
-                aRet = CFStringToOUString( (CFStringRef) aField->value);
+                aRet = CFStringToOUString(static_cast<CFStringRef>(aField->value));
                 m_bWasNull = false;
             }
         }
@@ -278,10 +278,10 @@ sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex) throw(SQLExcept
         {
             if(aField->type == kABIntegerProperty)
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(aField->value) );
                 // m_bWasNull now becomes whether getting the value was successful
                 // Should we check for the wrong type here, e.g., a float or a 64 bit int?
-                m_bWasNull = !CFNumberGetValue((CFNumberRef) aField->value, numberType, &nRet);
+                m_bWasNull = !CFNumberGetValue(static_cast<CFNumberRef>(aField->value), numberType, &nRet);
             }
         }
     }
@@ -307,10 +307,10 @@ sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex) throw(SQLExcep
         {
             if(aField->type == kABIntegerProperty)
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(aField->value) );
                 // m_bWasNull now becomes whether getting the value was successful
                 // Should we check for the wrong type here, e.g., a float or a 32 bit int?
-                m_bWasNull = !CFNumberGetValue((CFNumberRef) aField->value, numberType, &nRet);
+                m_bWasNull = !CFNumberGetValue(static_cast<CFNumberRef>(aField->value), numberType, &nRet);
             }
         }
     }
@@ -336,10 +336,10 @@ float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex) throw(SQLExceptio
         {
             if(aField->type == kABRealProperty)
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(aField->value) );
                 // m_bWasNull now becomes whether getting the value was successful
                 // Should we check for the wrong type here, e.g., an int or a double?
-                m_bWasNull = !CFNumberGetValue((CFNumberRef) aField->value, numberType, &nVal);
+                m_bWasNull = !CFNumberGetValue(static_cast<CFNumberRef>(aField->value), numberType, &nVal);
             }
         }
     }
@@ -365,10 +365,10 @@ double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex) throw(SQLExcept
         {
             if(aField->type == kABRealProperty)
             {
-                CFNumberType numberType = CFNumberGetType( (CFNumberRef) aField->value );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(aField->value) );
                 // m_bWasNull now becomes whether getting the value was successful
                 // Should we check for the wrong type here, e.g., an int or a float?
-                m_bWasNull = !CFNumberGetValue((CFNumberRef) aField->value, numberType, &nVal);
+                m_bWasNull = !CFNumberGetValue(static_cast<CFNumberRef>(aField->value), numberType, &nVal);
             }
         }
     }
@@ -426,7 +426,7 @@ DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLE
         {
             if(aField->type == kABDateProperty)
             {
-                nRet = CFDateToDateTime((CFDateRef) aField->value);
+                nRet = CFDateToDateTime(static_cast<CFDateRef>(aField->value));
                 m_bWasNull = false;
             }
         }
@@ -885,7 +885,7 @@ Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeExceptio
         {
             if(uidField->type == kABStringProperty)
             {
-                return makeAny(CFStringToOUString( (CFStringRef) uidField->value ));
+                return makeAny(CFStringToOUString( static_cast<CFStringRef>(uidField->value) ));
             }
         }
     }
@@ -907,7 +907,7 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
         {
             if(uidField->type == kABStringProperty)
             {
-                OUString sUniqueIdentifier = CFStringToOUString( (CFStringRef) uidField->value );
+                OUString sUniqueIdentifier = CFStringToOUString( static_cast<CFStringRef>(uidField->value) );
                 if (sUniqueIdentifier == sBookmark)
                 {
                     m_nRowPos = nRow;

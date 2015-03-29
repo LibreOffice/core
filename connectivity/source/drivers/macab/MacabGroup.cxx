@@ -43,7 +43,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
 
     // Set the group's name (stored in MacabRecords as m_sName)
     CFStringRef sGroupName;
-    sGroupName = (CFStringRef) ABRecordCopyValue(_xGroup, kABGroupNameProperty);
+    sGroupName = static_cast<CFStringRef>(ABRecordCopyValue(_xGroup, kABGroupNameProperty));
     m_sName = CFStringToOUString(sGroupName);
     CFRelease(sGroupName);
 
@@ -60,10 +60,10 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
     nAllRecordsSize = _allRecords->size();
     for(i = 0; i < recordsSize; i++)
     {
-        xPerson = (ABPersonRef) CFArrayGetValueAtIndex(xGroupMembers,i);
+        xPerson = static_cast<ABPersonRef>(const_cast<void *>(CFArrayGetValueAtIndex(xGroupMembers,i)));
         if(xPerson != NULL)
         {
-            sGroupMemberUID = (CFStringRef) ABRecordCopyValue(xPerson, kABUIDProperty);
+            sGroupMemberUID = static_cast<CFStringRef>(ABRecordCopyValue(xPerson, kABUIDProperty));
             if(sGroupMemberUID != NULL)
             {
                 bFound = false;

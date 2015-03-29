@@ -140,7 +140,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
         /* Go through each group and create a MacabGroup out of it. */
         for(i = 0; i < nGroups; i++)
         {
-            xGroup = (ABGroupRef) CFArrayGetValueAtIndex(allGroups, i);
+            xGroup = static_cast<ABGroupRef>(const_cast<void *>(CFArrayGetValueAtIndex(allGroups, i)));
             m_xMacabGroups[i] = new MacabGroup(m_aAddressBook, m_xMacabRecords, xGroup);
         }
 

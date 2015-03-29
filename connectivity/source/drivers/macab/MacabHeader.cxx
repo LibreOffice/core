@@ -150,7 +150,7 @@ OUString MacabHeader::getString(const sal_Int32 i) const
             return OUString();
         try
         {
-            nRet = CFStringToOUString( (CFStringRef) fields[i]->value);
+            nRet = CFStringToOUString(static_cast<CFStringRef>(fields[i]->value));
         }
         catch(...){ }
     }
@@ -256,8 +256,8 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
         return -1;
 
     CFComparisonResult result = CFStringCompare(
-        (CFStringRef) _field1->value,
-        (CFStringRef) _field2->value,
+        static_cast<CFStringRef>(_field1->value),
+        static_cast<CFStringRef>(_field2->value),
         0); // 0 = no options (like ignore case)
 
     return (sal_Int32) result;

@@ -66,7 +66,7 @@ namespace
         {
 
             const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
-            _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
+            _rFunction = reinterpret_cast<FUNCTION>( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
             {   // did not find the symbol
