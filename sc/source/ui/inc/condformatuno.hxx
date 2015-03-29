@@ -177,7 +177,8 @@ class ScConditionEntryObj : public cppu::WeakImplHelper2<com::sun::star::beans::
 {
 public:
 
-    ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent);
+    ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent,
+            const ScCondFormatEntry* pFormat);
     virtual ~ScConditionEntryObj();
 
     static ScConditionEntryObj* getImplementation(uno::Reference<sheet::XConditionEntry> xCondition);
@@ -233,13 +234,14 @@ private:
     ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
+    const ScCondFormatEntry* mpFormat;
 };
 
 class ScColorScaleFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
 
-    ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent);
+    ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent, const ScColorScaleFormat* pFormat);
     virtual ~ScColorScaleFormatObj();
 
     static ScColorScaleFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
@@ -291,12 +293,14 @@ private:
     ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
+    const ScColorScaleFormat* mpFormat;
 };
 
 class ScDataBarFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
-    ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent);
+    ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+            const ScDataBarFormat* pFormat);
     virtual ~ScDataBarFormatObj();
 
     static ScDataBarFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
@@ -348,12 +352,14 @@ private:
     ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
+    const ScDataBarFormat* mpFormat;
 };
 
 class ScIconSetFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
-    ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent);
+    ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+            const ScIconSetFormat* pFormat);
     virtual ~ScIconSetFormatObj();
 
     static ScIconSetFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
@@ -405,6 +411,7 @@ private:
     ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
+    const ScIconSetFormat* mpFormat;
 };
 
 #endif
