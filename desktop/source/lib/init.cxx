@@ -22,6 +22,7 @@
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
+#include <osl/lok.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
@@ -851,6 +852,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
     if (bInitialized)
         return 1;
+
+    osl::LibreOfficeKit::setActive();
 
     OUString aAppPath;
     if (pAppPath)

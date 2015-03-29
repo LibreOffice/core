@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/time.h"
+#include <osl/lok.hxx>
+#include <osl/time.h>
 
 /*
  *   mfe : maybe it would be wishful to include initialization
@@ -45,5 +46,22 @@ public:
 
 static OGlobalTimer aGlobalTimer;
 
+namespace LibreOfficeKit
+{
+
+static bool bActive(false);
+
+void setActive()
+{
+    bActive = true;
 }
+
+bool isActive()
+{
+    return bActive;
+}
+
+} // namespace LibreOfficeKit
+} // namespace osl
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

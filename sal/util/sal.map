@@ -713,6 +713,11 @@ PRIVATE_textenc.1 { # LibreOffice 3.6
         _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversion*;
 };
 
+PRIVATE_4.5 { # LibreOffice 4.5
+        _ZN3osl14LibreOfficeKit8isActive*;
+        _ZN3osl14LibreOfficeKit9setActive*;
+};
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:
