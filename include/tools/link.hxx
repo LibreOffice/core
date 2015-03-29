@@ -70,7 +70,7 @@ typedef sal_IntPtr (*PSTUB)( void*, void* );
     sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER Class*, SAL_UNUSED_PARAMETER void* )
 
 #define LINK( Inst, Class, Member ) \
-    Link( static_cast<Class*>(Inst), (PSTUB)&Class::LinkStub##Member )
+    Link( static_cast<Class*>(Inst), &Class::LinkStub##Member )
 
 #define STATIC_LINK( Inst, Class, Member ) LINK(Inst, Class, Member)
 
