@@ -34,6 +34,7 @@ class ScIconSetFormat;
 class ScDataBarFormat;
 class ScColorScaleFormat;
 class ScCondFormatEntry;
+class ScColorScaleEntry;
 
 using namespace com::sun::star;
 
@@ -353,6 +354,32 @@ private:
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
     const ScDataBarFormat* mpFormat;
+};
+
+class ScDataBarEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XDataBarEntry>
+{
+public:
+    ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent, size_t nPos);
+
+    virtual ~ScDataBarEntryObj();
+
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setType(sal_Int32 nType)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual OUString SAL_CALL getFormula()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setFormula(const OUString& rString)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+private:
+    ScColorScaleEntry* getCoreObject();
+
+    rtl::Reference<ScDataBarFormatObj> mxParent;
+    size_t mnPos;
 };
 
 class ScIconSetFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>

@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/IconSetType.hpp>
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/ConditionFormatOperator.hpp>
+#include <com/sun/star/sheet/DataBarEntryType.hpp>
 
 namespace {
 
@@ -159,6 +160,23 @@ DataBarAxisApiMap aDataBarAxisMap[] =
     { databar::NONE, sheet::DataBarAxis::AXIS_NONE },
     { databar::AUTOMATIC, sheet::DataBarAxis::AXIS_AUTOMATIC },
     { databar::MIDDLE, sheet::DataBarAxis::AXIS_MIDDLE }
+};
+
+struct DataBarEntryTypeApiMap
+{
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType;
+};
+
+DataBarEntryTypeApiMap aDataBarEntryTypeMap[] =
+{
+    { COLORSCALE_AUTO, sheet::DataBarEntryType::DATABAR_MAX },
+    { COLORSCALE_MIN, sheet::DataBarEntryType::DATABAR_MIN },
+    { COLORSCALE_MAX, sheet::DataBarEntryType::DATABAR_MAX },
+    { COLORSCALE_VALUE, sheet::DataBarEntryType::DATABAR_VALUE },
+    { COLORSCALE_FORMULA, sheet::DataBarEntryType::DATABAR_FORMULA },
+    { COLORSCALE_PERCENT, sheet::DataBarEntryType::DATABAR_PERCENT },
+    { COLORSCALE_PERCENTILE, sheet::DataBarEntryType::DATABAR_PERCENTILE }
 };
 
 enum IconSetProperties
@@ -954,6 +972,15 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         break;
         case DataBarEntries:
         {
+            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
+            if (aValue >>= aEntries)
+            {
+                if (aEntries.getLength() != 2)
+                    throw lang::IllegalArgumentException();
+
+            }
+            else
+                throw lang::IllegalArgumentException();
         }
         break;
     }
@@ -1026,6 +1053,10 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case DataBarEntries:
         {
+            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries(2);
+            aEntries[0] = new ScDataBarEntryObj(this, 0);
+            aEntries[1] = new ScDataBarEntryObj(this, 1);
+            aAny <<= aEntries;
         }
         break;
     }
@@ -1063,6 +1094,92 @@ void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
 {
     SAL_WARN("sc", "not implemented");
 }
+
+ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent,
+        size_t nPos):
+    mxParent(xParent),
+    mnPos(nPos)
+{
+}
+
+ScDataBarEntryObj::~ScDataBarEntryObj()
+{
+}
+
+ScColorScaleEntry* ScDataBarEntryObj::getCoreObject()
+{
+    ScDataBarFormat* pFormat = mxParent->getCoreObject();
+    ScColorScaleEntry* pEntry;
+    if (mnPos == 0)
+        pEntry = pFormat->GetDataBarData()->mpLowerLimit.get();
+    else
+        pEntry = pFormat->GetDataBarData()->mpUpperLimit.get();
+
+    return pEntry;
+}
+
+sal_Int32 ScDataBarEntryObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    {
+        if (aDataBarEntryTypeMap[i].eType == pEntry->GetType())
+        {
+            return aDataBarEntryTypeMap[i].nApiType;
+        }
+    }
+
+    throw lang::IllegalArgumentException();
+}
+
+void ScDataBarEntryObj::setType(sal_Int32 nType)
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    {
+        if (aDataBarEntryTypeMap[i].nApiType == nType)
+        {
+            pEntry->SetType(aDataBarEntryTypeMap[i].eType);
+            return;
+        }
+    }
+    throw lang::IllegalArgumentException();
+}
+
+OUString ScDataBarEntryObj::getFormula()
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    switch (pEntry->GetType())
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+        break;
+        default:
+            return OUString::number(pEntry->GetValue());
+    }
+
+    return OUString();
+}
+
+void ScDataBarEntryObj::setFormula(const OUString& rFormula)
+    throw(uno::RuntimeException, std::exception)
+{
+    ScColorScaleEntry* pEntry = getCoreObject();
+    switch (pEntry->GetType())
+    {
+        case COLORSCALE_FORMULA:
+            // TODO: Implement
+            // pEntry->SetFormula(rFormula);
+        break;
+        default:
+            pEntry->SetValue(rFormula.toDouble());
+        break;
+    }
+}
+
 
 ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScIconSetFormat* pFormat):
