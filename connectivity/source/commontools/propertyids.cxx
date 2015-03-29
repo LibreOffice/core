@@ -53,7 +53,7 @@ namespace dbtools
                 case PROPERTY_ID_NAME:                      pStr = "Name"; break;
                 case PROPERTY_ID_TYPE:                      pStr = "Type"; break;
                 case PROPERTY_ID_TYPENAME:                  pStr = "TypeName"; break;
-                case PROPERTY_ID_PRECISION:                 pStr = "Precision";
+                case PROPERTY_ID_PRECISION:                 pStr = "Precision"; break;
                 case PROPERTY_ID_SCALE:                     pStr = "Scale"; break;
                 case PROPERTY_ID_ISNULLABLE:                pStr = "IsNullable"; break;
                 case PROPERTY_ID_ISAUTOINCREMENT:           pStr = "IsAutoIncrement"; break;
