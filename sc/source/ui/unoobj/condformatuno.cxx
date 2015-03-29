@@ -1404,6 +1404,10 @@ sal_Int32 ScIconSetEntryObj::getType()
     throw(uno::RuntimeException, std::exception)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
+    // the first entry always is minimum
+    if (mnPos == 0)
+        return sheet::IconSetFormatEntry::ICONSET_MIN;
+
     for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
     {
         if (aIconSetEntryTypeMap[i].eType == pEntry->GetType())
@@ -1418,6 +1422,10 @@ sal_Int32 ScIconSetEntryObj::getType()
 void ScIconSetEntryObj::setType(sal_Int32 nType)
     throw(uno::RuntimeException, std::exception)
 {
+    // first entry is always MIN
+    if (mnPos == 0)
+        return;
+
     ScColorScaleEntry* pEntry = getCoreObject();
     for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
     {
