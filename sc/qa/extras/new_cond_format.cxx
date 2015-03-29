@@ -170,11 +170,9 @@ void ScConditionalFormatTest::testCondFormatXIndex()
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
-    /*
-     * missing implementation
+
     uno::Any aAny = xCondFormat->getByIndex(0);
     CPPUNIT_ASSERT(aAny.hasValue());
-    */
 }
 
 namespace {
