@@ -862,10 +862,9 @@ public:
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapInfoAccess* pAccess );
 
-    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess >
-        ScopedReadAccess;
-    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess >
-        ScopedWriteAccess;
+    typedef vcl::ScopedBitmapAccess<BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess> ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess> ScopedWriteAccess;
+    typedef vcl::ScopedBitmapAccess<BitmapInfoAccess, Bitmap, &Bitmap::AcquireInfoAccess> ScopedInfoAccess;
 
 private:
 
