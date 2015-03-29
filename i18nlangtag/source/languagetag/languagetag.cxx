@@ -25,7 +25,7 @@
 //#define erDEBUG
 
 #if defined(ENABLE_LIBLANGTAG)
-#if defined(LIBLANGTAG_INLINE_FIX)
+#if LIBLANGTAG_INLINE_FIX
 #define LT_HAVE_INLINE
 #endif
 #include <liblangtag/langtag.h>
