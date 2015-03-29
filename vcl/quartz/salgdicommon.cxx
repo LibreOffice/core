@@ -1693,7 +1693,7 @@ void AquaSalGraphics::initResolution( NSWindow* )
         if( pScreen == nil )
         {
             NSArray* pScreens = [NSScreen screens];
-            if( pScreens )
+            if( pScreens && [pScreens count] > 0)
                 pScreen = [pScreens objectAtIndex: 0];
         }
 
