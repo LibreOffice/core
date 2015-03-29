@@ -152,14 +152,14 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     // considering an additional "-" for hyphenation
     if( bHyph )
     {
-        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos, rInf.GetCachedVclData().get() );
+        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos );
 
         if ( !nHyphPos && rInf.GetIdx() )
             nHyphPos = rInf.GetIdx() - 1;
     }
     else
     {
-        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
+        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
 #if OSL_DEBUG_LEVEL > 1
         if ( COMPLETE_STRING != nCutPos )
@@ -504,8 +504,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if( nPorLen )
     {
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nPorLen,
-                         nMaxComp, nBreakWidth, nMaxSizeDiff,
-                         rInf.GetCachedVclData().get() );
+                         nMaxComp, nBreakWidth, nMaxSizeDiff );
 
         // save maximum width for later use
         if ( nMaxSizeDiff )

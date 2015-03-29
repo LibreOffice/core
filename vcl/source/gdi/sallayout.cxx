@@ -486,8 +486,7 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 }
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
-    int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag,
-    vcl::TextLayoutCache const*const pLayoutCache)
+    int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag )
 :
     maLanguageTag( rLanguageTag ),
     mnFlags( nFlags ),
@@ -495,7 +494,6 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     mnMinCharPos( nMinCharPos ),
     mnEndCharPos( nEndCharPos ),
     mpStr( pStr ),
-    m_pTextLayoutCache(pLayoutCache),
     mpDXArray( NULL ),
     mnLayoutWidth( 0 ),
     mnOrientation( 0 )
@@ -2128,12 +2126,6 @@ bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
     }
 
     return bRet;
-}
-
-std::shared_ptr<vcl::TextLayoutCache> SalLayout::CreateTextLayoutCache(
-        OUString const&) const
-{
-    return 0; // by default, nothing to cache
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

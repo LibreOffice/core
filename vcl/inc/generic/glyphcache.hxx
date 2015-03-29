@@ -299,9 +299,6 @@ public:
 
     ServerFont&             GetServerFont() const   { return mrServerFont; }
 
-    virtual std::shared_ptr<vcl::TextLayoutCache>
-        CreateTextLayoutCache(OUString const&) const SAL_OVERRIDE;
-
 private:
     ServerFont&             mrServerFont;
     com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;

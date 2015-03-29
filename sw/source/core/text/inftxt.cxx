@@ -21,7 +21,6 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
-#include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -361,7 +360,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const OUString& rTxt,
                                      const sal_Int32 nIndex,
                                      const sal_Int32 nLength,
-                                     const sal_uInt16 nComp) const
+                                     const sal_uInt16 nComp ) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rTxt, nIndex, nLength );
     aDrawInf.SetFrm( m_pFrm );
@@ -394,11 +393,9 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
 
 void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
                                 const sal_Int32 nLength, const sal_uInt16 nComp,
-                                sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
-                                vcl::TextLayoutCache const*const pCache) const
+                                sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const
 {
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pTxt, nIndex, nLength,
-            0, false, pCache);
+    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pTxt, nIndex, nLength );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -410,15 +407,14 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
 
 sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const sal_Int32 nMaxLen,
-                                       const sal_uInt16 nComp,
-                                       vcl::TextLayoutCache const*const pCache) const
+                                       const sal_uInt16 nComp ) const
 {
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pTxt, GetIdx(), nMaxLen,  0, false, pCache );
+                             *m_pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -431,15 +427,14 @@ sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const sal_Int32 nMaxLen,
                                        const sal_uInt16 nComp,
-                                       sal_Int32& rExtraCharPos,
-                                       vcl::TextLayoutCache const*const pCache) const
+                                       sal_Int32& rExtraCharPos ) const
 {
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pTxt, GetIdx(), nMaxLen, 0, false, pCache );
+                             *m_pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -1344,19 +1339,6 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
     nLineHeight = 0;
     nLineNetHeight = 0;
     SetLineStart(0);
-
-    SvtCTLOptions::TextNumerals const nTextNumerals(
-            SW_MOD()->GetCTLOptions().GetCTLTextNumerals());
-    // cannot cache for NUMERALS_CONTEXT because we need to know the string
-    // for the whole paragraph now
-    if (nTextNumerals != SvtCTLOptions::NUMERALS_CONTEXT)
-    {
-        // set digit mode to what will be used later to get same results
-        SwDigitModeModifier const m(*m_pRef, LANGUAGE_NONE /*dummy*/);
-        assert(m_pRef->GetDigitLanguage() != LANGUAGE_NONE);
-        SetCachedVclData(m_pRef->CreateTextLayoutCache(*m_pTxt));
-    }
-
     Init();
 }
 
@@ -1660,11 +1642,9 @@ SwTxtSlot::SwTxtSlot(
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());
-        m_pOldCachedVclData = pInf->GetCachedVclData();
         pInf->SetTxt( aTxt );
         pInf->SetIdx( 0 );
         pInf->SetLen( bTxtLen ? pInf->GetTxt().getLength() : pPor->GetLen() );
-        pInf->SetCachedVclData(nullptr);
 
         // ST2
         if ( bExgLists )
@@ -1709,7 +1689,6 @@ SwTxtSlot::~SwTxtSlot()
 {
     if( bOn )
     {
-        pInf->SetCachedVclData(m_pOldCachedVclData);
         pInf->SetTxt( *pOldTxt );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );

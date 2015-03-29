@@ -925,11 +925,10 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawText( rStartPt, rStr, nIndex, nLen, pVector, pDisplayText );
 }
 
-long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-     vcl::TextLayoutCache const*const pLayoutCache) const
+long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
 
-    long nWidth = GetTextArray( rStr, NULL, nIndex, nLen, pLayoutCache );
+    long nWidth = GetTextArray( rStr, NULL, nIndex, nLen );
 
     return nWidth;
 }
@@ -994,8 +993,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 }
 
 long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
-                                 sal_Int32 nIndex, sal_Int32 nLen,
-                                 vcl::TextLayoutCache const*const pLayoutCache) const
+                                 sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -1011,8 +1009,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
         nLen = rStr.getLength() - nIndex;
     }
     // do layout
-    SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     if( !pSalLayout )
         return 0;
 #if VCL_FLOAT_DEVICE_PIXEL
@@ -1194,8 +1191,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
 ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                                     DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
-                                                    int nLayoutFlags,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+                                                    int nLayoutFlags ) const
 {
     assert(nMinIndex >= 0);
     assert(nLen >= 0);
@@ -1294,7 +1290,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache );
+    ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag() );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -1308,8 +1304,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, long nLogicalWidth,
-                                    const long* pDXArray, int flags,
-         vcl::TextLayoutCache const* pLayoutCache) const
+                                    const long* pDXArray, int flags) const
 {
     // we need a graphics
     if( !mpGraphics )
@@ -1338,7 +1333,6 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     // recode string if needed
     if( mpFontEntry->mpConversion ) {
         mpFontEntry->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
-        pLayoutCache = nullptr; // don't use cache with modified string!
     }
     DeviceCoordinate nPixelWidth = (DeviceCoordinate)nLogicalWidth;
     DeviceCoordinate* pDXPixelArray = NULL;
@@ -1374,8 +1368,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
         }
     }
 
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
-            nPixelWidth, pDXPixelArray, flags, pLayoutCache);
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXPixelArray, flags);
 
     // get matching layout object for base font
     SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
@@ -1414,24 +1407,6 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     return pSalLayout;
 }
 
-std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
-        OUString const& rString) const
-{
-    if (!mpGraphics) // can happen in e.g Insert Index/Table dialog
-        return nullptr;
-    OUString copyBecausePrepareModifiesIt(rString);
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs(copyBecausePrepareModifiesIt,
-            0, rString.getLength(), 0, nullptr, 0, nullptr);
-
-    SalLayout *const pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
-    if (!pSalLayout)
-        return nullptr;
-    std::shared_ptr<vcl::TextLayoutCache> const ret(
-            pSalLayout->CreateTextLayoutCache(copyBecausePrepareModifiesIt));
-    pSalLayout->Release();
-    return ret;
-}
-
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     OUString aStr( rString );
@@ -1445,11 +1420,9 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
 
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                       long nCharExtra,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+                                       long nCharExtra ) const
 {
-    SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1478,13 +1451,11 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                       long nCharExtra,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+                                       long nCharExtra ) const
 {
     rHyphenPos = -1;
 
-    SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {

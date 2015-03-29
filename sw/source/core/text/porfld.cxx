@@ -136,7 +136,6 @@ sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
  */
 class SwFldSlot
 {
-    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldTxt;
     OUString aTxt;
     sal_Int32 nIdx;
@@ -163,9 +162,7 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());
-        m_pOldCachedVclData = pInf->GetCachedVclData();
         pInf->SetLen( aTxt.getLength() );
-        pInf->SetCachedVclData(nullptr);
         if( pPor->IsFollow() )
         {
             pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
@@ -183,7 +180,6 @@ SwFldSlot::~SwFldSlot()
 {
     if( bOn )
     {
-        pInf->SetCachedVclData(m_pOldCachedVclData);
         pInf->SetTxt( *pOldTxt );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );

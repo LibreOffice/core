@@ -41,9 +41,6 @@ typedef unsigned short LanguageType;
 class SalGraphics;
 class PhysicalFontFace;
 
-namespace vcl {
-    class TextLayoutCache;
-}
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_PLUGIN_PUBLIC ImplLayoutRuns
@@ -79,9 +76,6 @@ public:
     int                 mnEndCharPos;
     const sal_Unicode*  mpStr;
 
-    // performance hack
-    vcl::TextLayoutCache const* m_pTextLayoutCache;
-
     // positioning related inputs
     const DeviceCoordinate* mpDXArray;     // in pixel units
     DeviceCoordinate    mnLayoutWidth;      // in pixel units
@@ -94,8 +88,7 @@ public:
 public:
                 ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
                                 int nMinCharPos, int nEndCharPos, int nFlags,
-                                const LanguageTag& rLanguageTag,
-                                vcl::TextLayoutCache const* pLayoutCache);
+                                const LanguageTag& rLanguageTag );
 
     void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
     void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
@@ -200,9 +193,6 @@ public:
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
     virtual void    DisableGlyphInjection( bool /*bDisable*/ ) {}
-
-    virtual std::shared_ptr<vcl::TextLayoutCache>
-        CreateTextLayoutCache(OUString const&) const;
 
 protected:
     // used by layout engines
