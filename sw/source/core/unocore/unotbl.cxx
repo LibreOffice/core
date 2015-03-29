@@ -4189,44 +4189,31 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
 }
 
 void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData)
-                                                throw( uno::RuntimeException, std::exception )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+    if(rData.getLength() < nRowCount - nRowStart)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    const uno::Sequence< double >* pRowArray = rData.getConstArray();
+    for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; ++nRow)
     {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt )
-    {
-        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-        if(rData.getLength() < nRowCount - nRowStart)
+        const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
+        const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+        if(rColSeq.getLength() < nColCount - nColStart)
+            throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+        const double * pColArray = rColSeq.getConstArray();
+        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
         {
-            throw uno::RuntimeException();
-        }
-        const uno::Sequence< double >* pRowArray = rData.getConstArray();
-        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
-        {
-            const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-            if(rColSeq.getLength() < nColCount - nColStart)
-            {
-                throw uno::RuntimeException();
-            }
-            const double * pColArray = rColSeq.getConstArray();
-            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                xCell->setValue(pColArray[nCol - nColStart]);
-            }
+            uno::Reference<table::XCell> xCell = getCellByPosition(nCol, nRow);
+            if(!xCell.is())
+                throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+            xCell->setValue(pColArray[nCol - nColStart]);
         }
     }
 }
