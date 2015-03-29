@@ -671,6 +671,14 @@ ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
     return maColorScales.end();
 }
 
+ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos)
+{
+    if (maColorScales.size() <= nPos)
+        return NULL;
+
+    return &maColorScales[nPos];
+}
+
 size_t ScColorScaleFormat::size() const
 {
     return maColorScales.size();
