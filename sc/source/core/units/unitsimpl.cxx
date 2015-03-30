@@ -11,6 +11,7 @@
 
 #include "util.hxx"
 
+#include "dociter.hxx"
 #include "document.hxx"
 #include "refdata.hxx"
 #include "stringutil.hxx"
@@ -170,6 +171,82 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
     // TODO: implement further sensible opcode handling
 
     return pOut;
+}
+
+class RangeListIterator {
+private:
+    const ScRangeList mRangeList;
+    ScDocument* mpDoc;
+
+    ScCellIterator mIt;
+    size_t nCurrentIndex;
+
+public:
+    RangeListIterator(ScDocument* pDoc, const ScRangeList& rRangeList)
+        :
+        mRangeList(rRangeList),
+        mpDoc(pDoc),
+        mIt(pDoc, ScRange()),
+        nCurrentIndex(0)
+    {
+        if (rRangeList.size() > 0) {
+            mIt = ScCellIterator(pDoc, *rRangeList[0]);
+            mIt.first();
+        }
+    }
+
+    const ScAddress& GetPos() const {
+        return mIt.GetPos();
+    }
+
+    bool next() {
+        if (!(mRangeList.size() > 0) || nCurrentIndex >= mRangeList.size()) {
+            return false;
+        }
+
+        if (mIt.next()) {
+            return true;
+        } else if (++nCurrentIndex < mRangeList.size()) {
+            mIt = ScCellIterator(mpDoc, *mRangeList[nCurrentIndex]);
+            mIt.first();
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+UnitsResult UnitsImpl::getOutputUnitForDoubleRefOpcode(const OpCode& rOpCode, const ScRangeList& rRangeList, ScDocument* pDoc) {
+    RangeListIterator aIt(pDoc, rRangeList);
+
+    switch (rOpCode) {
+    case ocSum:
+    case ocMin:
+    case ocMax:
+    case ocAverage:
+    {
+        UtUnit aFirstUnit = getUnitForCell(aIt.GetPos(), pDoc);
+
+        while (aIt.next()) {
+            UtUnit aCurrentUnit = getUnitForCell(aIt.GetPos(), pDoc);
+            if (aFirstUnit != aCurrentUnit) {
+                return { UnitsStatus::UNITS_INVALID, boost::none };
+            }
+        }
+
+        return { UnitsStatus::UNITS_VALID, aFirstUnit };
+    }
+    case ocProduct:
+    {
+        UtUnit aUnit = getUnitForCell(aIt.GetPos(), pDoc);
+        while (aIt.next()) {
+            aUnit *= getUnitForCell(aIt.GetPos(), pDoc);
+        }
+        return { UnitsStatus::UNITS_VALID, aUnit };
+    }
+    default:
+        return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+    }
 }
 
 OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
@@ -411,6 +488,53 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             }
 
             aUnitStack.push(pUnit);
+            break;
+        }
+        case formula::svDoubleRef:
+        {
+            ScComplexRefData* pDoubleRef = pToken->GetDoubleRef();
+            ScRangeList aRangeList(pDoubleRef->toAbs(rFormulaAddress));
+
+            // Functions operating on DoubleRefs seem to have a variable number of input
+            // arguments (which will all preceed the opcode in the TokenArray), hence
+            // we read all the ranges in first before operating on them.
+            // The appropriate handling of the opcode depends on the specific opcode
+            // (i.e. identical units needed for sum, but not for multiplication), hence
+            // we need to handle that opcode here as opposed to as part of the usual flow
+            // (where we would simply push the units onto the stack).
+            pToken = pArray->NextRPN();
+            while (pToken->GetType() == formula::svDoubleRef) {
+                pDoubleRef = pToken->GetDoubleRef();
+                aRangeList.Append(pDoubleRef->toAbs(rFormulaAddress));
+                pToken = pArray->NextRPN();
+            }
+
+            if (!pToken) {
+                // It's possible to have DoubleRef as the last token, e.g the simplest
+                // example being "=A1:B1" - in this case the formula can't be evaluated
+                // anyways, so giving up on unit verification is the most sensible option.
+                // (I.e. the formula ends up spewing out #VALUE to the end-user - there's
+                // no point in doing any verification here.)
+                return true;
+            }
+
+            UnitsResult aResult(getOutputUnitForDoubleRefOpcode(pToken->GetOpCode(), aRangeList, pDoc));
+
+
+            switch (aResult.status) {
+            case UnitsStatus::UNITS_INVALID:
+                SAL_INFO("sc.units", "svDoubleRef opcode unit error detected");
+                return false;
+            case UnitsStatus::UNITS_UNKNOWN:
+                // Unsupported hence we stop processing.
+                return true;
+            case UnitsStatus::UNITS_VALID:
+                assert(aResult.units); // ensure that we have the optional unit
+                assert(aResult.units->isValid());
+                aUnitStack.push(aResult.units.get());
+                break;
+            }
+
             break;
         }
         case formula::svByte:
