@@ -44,7 +44,12 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
+#if defined WNT
+        // Scanlines padded to DWORD multiples, it seems
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
+#else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+#endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
@@ -63,7 +68,11 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
 #else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
+#if defined WNT
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
+#else
         CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
+#endif
 #endif
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
         Color aColor = pReadAccess->GetPixel(0, 0);
