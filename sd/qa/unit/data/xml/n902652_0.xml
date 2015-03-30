@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="899" positionY="9525" sizeX="9000" sizeY="4800" type="com.sun.star.drawing.CustomShape" name="Rounded Rectangle 3" text=" LibreOffice" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="3000" textRightDistance="500" textUpperDistance="300" textLowerDistance="3000" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="9bbb59" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="0.000000" column2="4801.000000" column3="899.000000"/>
+   <Line2 column1="-9001.000000" column2="0.000000" column3="9525.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="13" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="15" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="10" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="ooxml-roundRect" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="0" height="0"/>
+   </PropertyValue>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="15800" positionY="7848" sizeX="9000" sizeY="4800" type="com.sun.star.drawing.CustomShape" name="Rounded Rectangle 4" text=" LibreOffice" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="1000" textRightDistance="0" textUpperDistance="3000" textLowerDistance="300" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="9bbb59" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="-9001.000000" column2="-0.000000" column3="15800.000000"/>
+   <Line2 column1="0.000000" column2="-4801.000000" column3="7848.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="13" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="15" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="10" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="TextPreRotateAngle" value="-90" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="ooxml-roundRect" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="0" height="0"/>
+   </PropertyValue>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="16224" positionY="14365" sizeX="9000" sizeY="4800" type="com.sun.star.drawing.CustomShape" name="Rounded Rectangle 5" text=" LibreOffice" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="1000" textUpperDistance="900" textLowerDistance="3000" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="9bbb59" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="-9001.000000" column2="-0.000000" column3="16224.000000"/>
+   <Line2 column1="0.000000" column2="-4801.000000" column3="14365.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="13" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="15" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="10" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="17" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="TextPreRotateAngle" value="-270" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="ooxml-roundRect" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="0" height="0"/>
+   </PropertyValue>
+  </CustomShapeGeometry>
+ </XShape>
+</XShapes>

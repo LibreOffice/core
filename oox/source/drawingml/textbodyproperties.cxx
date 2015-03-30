@@ -60,17 +60,17 @@ void TextBodyProperties::pushVertSimulation()
 }
 
 /* Push adjusted values, taking into consideration Shape Rotation */
-void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
+void TextBodyProperties::pushRotationAdjustments()
 {
     sal_Int32 nOff      = 0;
     sal_Int32 aProps[]  = { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
     sal_Int32 n         = ( sal_Int32 )( sizeof( aProps ) / sizeof( sal_Int32 ) );
 
-    switch( nRotation ) // TODO: What happens for part rotations ?
+    switch( moRotation.get(0) )
     {
-        case (90*1*60000): nOff = 1; break;
+        case (90*1*60000): nOff = 3; break;
         case (90*2*60000): nOff = 2; break;
-        case (90*3*60000): nOff = 3; break;
+        case (90*3*60000): nOff = 1; break;
         default: break;
     }
 
