@@ -16,6 +16,24 @@
       "revId": "86eeef7e884dbe5fe524255389cab58b9f7c8956",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_51a7534f",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T10:46:43Z",
+      "side": 1,
+      "message": "All this listener code was introduced with 4c93c341be1425401112eed3581e8b8a6308880d to fix tdf#88398 when a group is split. EndListeningIntersectedGroup() actually works only on this one position. If the string forms a formula merging into a group, setting up those listeners is handled deeper down. Stepping through StartNeededListeners() in these cases confirmed that indeed no listener is marked needed and calling the function is superfluous.",
+      "parentUuid": "3a29b11f_91488b2f",
+      "revId": "86eeef7e884dbe5fe524255389cab58b9f7c8956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
