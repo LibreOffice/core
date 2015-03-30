@@ -34,7 +34,6 @@ static struct {
     /* no splash */
     { "nologo",     1, 0, 0, 0, NULL },
     { "headless",   1, 0, 0, 0, NULL },
-    { "invisible",  1, 0, 0, 0, NULL },
     { "quickstart", 1, 0, 0, 0, NULL },
     { "minimized",  1, 0, 0, 0, NULL },
     { "convert-to", 1, 0, 0, 0, NULL },

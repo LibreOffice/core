@@ -57,7 +57,6 @@ class CommandLineArgs: private boost::noncopyable
 
         // Access to bool parameters
         bool                IsMinimized() const { return m_minimized;}
-        bool                IsInvisible() const { return m_invisible;}
         bool                IsNoRestore() const { return m_norestore;}
         bool                IsNoDefault() const { return m_nodefault;}
         bool                IsHeadless() const { return m_headless;}
@@ -111,7 +110,7 @@ class CommandLineArgs: private boost::noncopyable
         // Special analyzed states (does not match directly to a command line parameter!)
         bool IsEmpty() const { return m_bEmpty;}
 
-        void setHeadless() { m_headless = true; m_invisible = true; }
+        void setHeadless() { m_headless = true; }
 
     private:
         void                    ParseCommandLine_Impl( Supplier& supplier );
@@ -120,7 +119,6 @@ class CommandLineArgs: private boost::noncopyable
         boost::optional< OUString > m_cwdUrl;
 
         bool m_minimized;
-        bool m_invisible;
         bool m_norestore;
         bool m_headless;
         bool m_quickstart;

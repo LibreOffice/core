@@ -169,10 +169,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_minimized = true;
             }
-            else if ( oArg == "invisible" )
-            {
-                m_invisible = true;
-            }
             else if ( oArg == "norestore" )
             {
                 m_norestore = true;
@@ -181,7 +177,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_nodefault = true;
             }
-            else if ( oArg == "headless" )
+            else if ( oArg == "invisible" ||
+                      oArg == "headless" )
             {
                 setHeadless();
             }
@@ -591,10 +588,8 @@ void CommandLineArgs::InitParamValues()
     m_minimized = false;
     m_norestore = false;
 #ifdef LIBO_HEADLESS
-    m_invisible = true;
     m_headless = true;
 #else
-    m_invisible = false;
     m_headless = false;
 #endif
     m_quickstart = false;
