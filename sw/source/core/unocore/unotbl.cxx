@@ -2539,39 +2539,13 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions(void)
     return xAllRange->getRowDescriptions();
 }
 
-void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc) throw( uno::RuntimeException, std::exception )
+void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        const sal_uInt16 nRowCount = getRowCount();
-        if(!nRowCount || rRowDesc.getLength() < (m_bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
-        {
-            throw uno::RuntimeException();
-        }
-        const OUString* pArray = rRowDesc.getConstArray();
-        if(m_bFirstColumnAsLabel)
-        {
-            const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
-            for(sal_uInt16 i = nStart; i < nRowCount; i++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                uno::Reference< text::XText >  xText(xCell, uno::UNO_QUERY);
-                xText->setString(pArray[i - nStart]);
-            }
-        }
-        else
-        {
-            OSL_FAIL("Where to put theses labels?");
-        }
-    }
-    else
-        throw uno::RuntimeException();
+    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    xAllRange->setRowDescriptions(rRowDesc);
 }
 
 uno::Sequence<OUString> SwXTextTable::getColumnDescriptions(void)
@@ -2583,41 +2557,13 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions(void)
     return xAllRange->getColumnDescriptions();
 }
 
-void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColumnDesc) throw( uno::RuntimeException, std::exception )
+void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnDesc)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nColCount = getColumnCount();
-    if(!nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        const OUString* pArray = rColumnDesc.getConstArray();
-        if(m_bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - (m_bFirstColumnAsLabel ? 1 : 0))
-        {
-            const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
-            for(sal_uInt16 i = nStart; i < nColCount; i++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                uno::Reference< text::XText >  xText(xCell, uno::UNO_QUERY);
-                xText->setString(pArray[i - nStart]);
-            }
-        }
-        else
-        {
-            OSL_FAIL("Where do these labels come from?");
-        }
-    }
-    else
-        throw uno::RuntimeException();
+    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    return xAllRange->setColumnDescriptions(rColumnDesc);
 }
 
 void SAL_CALL SwXTextTable::addChartDataChangeEventListener(
