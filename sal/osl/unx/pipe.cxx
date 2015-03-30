@@ -260,7 +260,6 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         {
             if ( connect(pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
             {
-                SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
                 close (pPipe->m_Socket);
                 __osl_destroyPipeImpl(pPipe);
                 return NULL;
