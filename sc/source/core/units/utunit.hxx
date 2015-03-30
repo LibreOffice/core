@@ -90,6 +90,11 @@ public:
         return UtUnit(ut_multiply(this->get(), rUnit.get()));
     }
 
+    UtUnit& operator*=(const UtUnit& rUnit) {
+        reset(ut_multiply(this->get(), rUnit.get()));
+        return *this;
+    }
+
     /**
      * Multiply a unit by a given constant.
      * This scales the unit by the inverse of that constant,
