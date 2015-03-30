@@ -16,13 +16,13 @@ constants ConditionEntryType
 {
     const long CONDITION = 0;
 
-    const long COLORSCALE = 0;
+    const long COLORSCALE = 1;
 
-    const long DATABAR = 0;
+    const long DATABAR = 2;
 
-    const long ICONSET = 0;
+    const long ICONSET = 3;
 
-    const long DATE = 0;
+    const long DATE = 4;
 };
 
 
