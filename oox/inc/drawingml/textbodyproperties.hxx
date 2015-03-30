@@ -45,7 +45,7 @@ struct TextBodyProperties
 
     explicit            TextBodyProperties();
 
-    void                pushRotationAdjustments( sal_Int32 nRotation );
+    void                pushRotationAdjustments();
     void                pushVertSimulation();
 };
 
