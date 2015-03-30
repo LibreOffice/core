@@ -40,7 +40,9 @@
 
 using namespace ::com::sun::star::uno;
 
-// Macros for easier insertion of values to registers or stack
+namespace {
+
+// Functions for easier insertion of values to registers or stack
 // pSV - pointer to the source
 // nr - order of the value [will be increased if stored to register]
 // pFPR, pGPR - pointer to the registers
@@ -48,38 +50,50 @@ using namespace ::com::sun::star::uno;
 
 // The value in %xmm register is already prepared to be retrieved as a float,
 // thus we treat float and double the same
-#define INSERT_FLOAT_DOUBLE( pSV, nr, pFPR, pDS ) \
-    if ( nr < x86_64::MAX_SSE_REGS ) \
-        pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
+void INSERT_FLOAT_DOUBLE(
+    void const * pSV, sal_uInt32 & nr, double * pFPR, sal_uInt64 *& pDS)
+{
+    if ( nr < x86_64::MAX_SSE_REGS )
+        pFPR[nr++] = *static_cast<double const *>( pSV );
+    else
+        *pDS++ = *static_cast<sal_uInt64 const *>( pSV ); // verbatim!
+}
 
-#define INSERT_INT64( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
+void INSERT_INT64(
+    void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
+{
+    if ( nr < x86_64::MAX_GPR_REGS )
+        pGPR[nr++] = *static_cast<sal_uInt64 const *>( pSV );
+    else
+        *pDS++ = *static_cast<sal_uInt64 const *>( pSV );
+}
 
-#define INSERT_INT32( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
+void INSERT_INT32(
+    void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
+{
+    if ( nr < x86_64::MAX_GPR_REGS )
+        pGPR[nr++] = *static_cast<sal_uInt32 const *>( pSV );
+    else
+        *pDS++ = *static_cast<sal_uInt32 const *>( pSV );
+}
 
-#define INSERT_INT16( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
+void INSERT_INT16(
+    void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
+{
+    if ( nr < x86_64::MAX_GPR_REGS )
+        pGPR[nr++] = *static_cast<sal_uInt16 const *>( pSV );
+    else
+        *pDS++ = *static_cast<sal_uInt16 const *>( pSV );
+}
 
-#define INSERT_INT8( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
-
-
-namespace {
+void INSERT_INT8(
+    void const * pSV, sal_uInt32 & nr, sal_uInt64 * pGPR, sal_uInt64 *& pDS)
+{
+    if ( nr < x86_64::MAX_GPR_REGS )
+        pGPR[nr++] = *static_cast<sal_uInt8 const *>( pSV );
+    else
+        *pDS++ = *static_cast<sal_uInt8 const *>( pSV );
+}
 
 void appendCString(OUStringBuffer & buffer, char const * text) {
     if (text != 0) {
