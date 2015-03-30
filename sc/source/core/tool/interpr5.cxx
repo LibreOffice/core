@@ -1092,7 +1092,6 @@ static inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 
 template<class _Function>
 static ScMatrixRef lcl_MatrixCalculation(
-    svl::SharedStringPool& rPool,
     const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
     static _Function Op;
@@ -1111,13 +1110,19 @@ static ScMatrixRef lcl_MatrixCalculation(
         {
             for (j = 0; j < nMinR; j++)
             {
+                sal_uInt16 nErr;
                 if (rMat1.IsValueOrEmpty(i,j) && rMat2.IsValueOrEmpty(i,j))
                 {
                     double d = Op(rMat1.GetDouble(i,j), rMat2.GetDouble(i,j));
                     xResMat->PutDouble( d, i, j);
                 }
+                else if (((nErr = rMat1.GetErrorIfNotString(i,j)) != 0) ||
+                         ((nErr = rMat2.GetErrorIfNotString(i,j)) != 0))
+                {
+                    xResMat->PutError( nErr, i, j);
+                }
                 else
-                    xResMat->PutString(rPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
+                    xResMat->PutError( errNoValue, i, j);
             }
         }
     }
@@ -1250,11 +1255,11 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat;
         if ( _bSub )
         {
-            pResMat = lcl_MatrixCalculation<MatrixSub>(mrStrPool, *pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation<MatrixSub>( *pMat1, *pMat2, this);
         }
         else
         {
-            pResMat = lcl_MatrixCalculation<MatrixAdd>(mrStrPool, *pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation<MatrixAdd>( *pMat1, *pMat2, this);
         }
 
         if (!pResMat)
@@ -1419,7 +1424,7 @@ void ScInterpreter::ScMul()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(mrStrPool, *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>( *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1488,7 +1493,7 @@ void ScInterpreter::ScDiv()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>(mrStrPool, *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>( *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1554,7 +1559,7 @@ void ScInterpreter::ScPow()
         fVal1 = GetDouble();
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>(mrStrPool, *pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>( *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1751,7 +1756,7 @@ void ScInterpreter::ScSumXMY2()
         PushNoValue();
         return;
     } // if (nC1 != nC2 || nR1 != nR2)
-    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>(mrStrPool, *pMat1, *pMat2, this);
+    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>( *pMat1, *pMat2, this);
     if (!pResMat)
     {
         PushNoValue();
