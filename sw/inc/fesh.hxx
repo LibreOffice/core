@@ -35,6 +35,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
+#include <memory>
 
 namespace editeng { class SvxBorderLine; }
 
@@ -182,7 +183,8 @@ class SdrDropMarkerOverlay;
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
 private:
-    SdrDropMarkerOverlay *m_pChainFrom, *m_pChainTo;
+    std::unique_ptr<SdrDropMarkerOverlay> m_pChainTo;
+    std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
 
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;

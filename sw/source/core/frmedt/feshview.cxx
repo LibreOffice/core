@@ -607,7 +607,8 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
     SdrView *pView = Imp()->GetDrawView();
     if ( pView && pView->AreObjectsMarked() )
     {
-        delete m_pChainFrom; delete m_pChainTo; m_pChainFrom = m_pChainTo = nullptr;
+        m_pChainFrom.reset();
+        m_pChainTo.reset();
         SdrHdl* pHdl = pView->PickHandle( *pPt );
         if (pView->BegDragObj( *pPt, 0, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
@@ -2568,16 +2569,8 @@ void SwFEShell::Unchain( SwFrmFmt &rFmt )
 
 void SwFEShell::HideChainMarker()
 {
-    if (m_pChainFrom)
-    {
-        delete m_pChainFrom;
-        m_pChainFrom = nullptr;
-    }
-    if (m_pChainTo)
-    {
-        delete m_pChainTo;
-        m_pChainTo = nullptr;
-    }
+    m_pChainFrom.reset();
+    m_pChainTo.reset();
 }
 
 void SwFEShell::SetChainMarker()
@@ -2598,7 +2591,8 @@ void SwFEShell::SetChainMarker()
 
             if (!m_pChainFrom)
             {
-                m_pChainFrom = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+                m_pChainFrom.reset(
+                    new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd ));
             }
         }
         if ( pFly->GetNextLink() )
@@ -2611,19 +2605,20 @@ void SwFEShell::SetChainMarker()
 
             if (!m_pChainTo)
             {
-                m_pChainTo = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+                m_pChainTo.reset(
+                    new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd ));
             }
         }
     }
 
     if ( bDelFrom )
     {
-        delete m_pChainFrom, m_pChainFrom = nullptr;
+        m_pChainFrom.reset();
     }
 
     if ( bDelTo )
     {
-        delete m_pChainTo, m_pChainTo = nullptr;
+        m_pChainTo.reset();
     }
 }
 

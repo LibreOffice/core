@@ -608,24 +608,18 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 
 SwFEShell::SwFEShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions )
-    , m_pChainFrom(nullptr)
-    , m_pChainTo(nullptr)
     , m_bCheckForOLEInCaption(false)
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, vcl::Window *pWindow )
     : SwEditShell( rShell, pWindow )
-    , m_pChainFrom(nullptr)
-    , m_pChainTo(nullptr)
     , m_bCheckForOLEInCaption(false)
 {
 }
 
 SwFEShell::~SwFEShell()
 {
-    delete m_pChainFrom;
-    delete m_pChainTo;
 }
 
 // #i17567# - adjustments for allowing
