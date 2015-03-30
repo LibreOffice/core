@@ -661,36 +661,36 @@ void Test::testSkipImages()
     // during DOC and DOCX import, using the "SkipImages" FilterOptions.
 
     const char* aFilterNames[][2] = {
-        { "/sw/qa/extras/globalfilter/data/skipimages.doc", "" },
+        { "/sw/qa/extras/globalfilter/data/skipimages.doc", NULL },
         { "/sw/qa/extras/globalfilter/data/skipimages.doc", "SkipImages" },
-        { "/sw/qa/extras/globalfilter/data/skipimages.docx", "" },
+        { "/sw/qa/extras/globalfilter/data/skipimages.docx", NULL },
         { "/sw/qa/extras/globalfilter/data/skipimages.docx", "SkipImages" }
     };
 
-    // FilterOptions parameter (Value will be set before loadFromDesktop call)
-
-    uno::Sequence<beans::PropertyValue> args(1);
-    args[0].Name = "FilterOptions";
-    args[0].Handle = -1;
-    args[0].State = beans::PropertyState_DIRECT_VALUE;
-
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
-        bool bSkipImages = *(aFilterNames[nFilter][1]) != '\0';
+        bool bSkipImages = aFilterNames[nFilter][1] != NULL;
+        OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter][0];
 
         if (mxComponent.is())
             mxComponent->dispose();
 
-        args[0].Value <<= OUString::createFromAscii(aFilterNames[nFilter][1]);
+        if (bSkipImages)
+        {
+            // FilterOptions parameter
+            uno::Sequence<beans::PropertyValue> args(1);
+            args[0].Name = "FilterOptions";
+            args[0].Handle = -1;
+            args[0].Value <<= OUString::createFromAscii(aFilterNames[nFilter][1]);
+            args[0].State = beans::PropertyState_DIRECT_VALUE;
+            mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
+            sFailedMessage = sFailedMessage + " - " + aFilterNames[nFilter][1];
+        } else
+            mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument");
 
-        mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
-
-        // Check shapes (images, textboxes, custom shapes
+        // Check shapes (images, textboxes, custom shapes)
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-
-        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter][0] + " - " + aFilterNames[nFilter][1];
-
         uno::Reference<drawing::XShape> xShape;
         uno::Reference<graphic::XGraphic> xGraphic;
         uno::Reference< beans::XPropertySet > XPropSet;
@@ -708,13 +708,20 @@ void Test::testSkipImages()
             {
                 XPropSet->getPropertyValue("Graphic") >>= xGraphic;
                 xBitmap.set(xGraphic, uno::UNO_QUERY);
-                if (xBitmap.is()) nImageCount++;
+                if (xBitmap.is())
+                    nImageCount++;
             }
             catch (beans::UnknownPropertyException &)
+            { /* ignore */ }
+
+            uno::Reference<text::XTextRange> xText(xShape, uno::UNO_QUERY);
+            if (xText.is())
             {
-                uno::Reference<text::XTextRange> xText(xShape, uno::UNO_QUERY);
-                if (xText->getString().startsWith("Lorem ipsum")) bHasTextboxText = true;
-                if (xText->getString().startsWith("Nam pretium")) bHasCustomShapeText = true;
+                OUString shapeText = xText->getString();
+                if (shapeText.startsWith("Lorem ipsum"))
+                    bHasTextboxText = true;
+                else if (shapeText.startsWith("Nam pretium"))
+                    bHasCustomShapeText = true;
             }
         }
 
