@@ -652,7 +652,7 @@ Reference< XShape > Shape::createAndInsert(
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
         {
-            mpTextBody->getTextProperties().pushRotationAdjustments( mnRotation );
+            mpTextBody->getTextProperties().pushRotationAdjustments();
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
             if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.has() )
