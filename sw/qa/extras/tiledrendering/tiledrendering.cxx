@@ -12,6 +12,7 @@
 #include <comphelper/string.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <vcl/svapp.hxx>
 #include <crsskip.hxx>
 #include <drawdoc.hxx>
 #include <wrtsh.hxx>
@@ -80,6 +81,18 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
+#ifdef MACOSX
+    // For some reason this particular test requires window system access on OS X.
+
+    // Without window system access, we do get a number of "<<<WARNING>>>
+    // AquaSalGraphics::CheckContext() FAILED!!!!" [sic] and " <Warning>: CGSConnectionByID: 0 is
+    // not a valid connection ID" warnings while running the other tests, too, but they still
+    // succeed.
+
+    if (!vcl::IsWindowSystemAvailable())
+        return;
+#endif
+
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
