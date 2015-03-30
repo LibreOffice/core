@@ -4147,7 +4147,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     const OUString* pArray = rColumnDesc.getConstArray();
     for(sal_uInt16 i = nStart; i < nColumnCount; i++)
     {
-        uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
+        uno::Reference<table::XCell> xCell = getCellByPosition(i, 0);
         if(!xCell.is())
             throw uno::RuntimeException();
         uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
