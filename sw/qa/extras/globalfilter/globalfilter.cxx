@@ -33,6 +33,7 @@ public:
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
+    void testSkipImages();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testCharHighlight);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
     CPPUNIT_TEST(testCharBackgroundToHighlighting);
+    CPPUNIT_TEST(testSkipImages);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -652,6 +654,76 @@ void Test::testCharBackgroundToHighlighting()
         }
     }
 }
+
+void Test::testSkipImages()
+{
+    // Check how LO skips image loading (but not texts of textboxes and custom shapes)
+    // during DOC and DOCX import, using the "SkipImages" FilterOptions.
+
+    const char* aFilterNames[][2] = {
+        { "/sw/qa/extras/globalfilter/data/skipimages.doc", "" },
+        { "/sw/qa/extras/globalfilter/data/skipimages.doc", "SkipImages" },
+        { "/sw/qa/extras/globalfilter/data/skipimages.docx", "" },
+        { "/sw/qa/extras/globalfilter/data/skipimages.docx", "SkipImages" }
+    };
+
+    // FilterOptions parameter (Value will be set before loadFromDesktop call)
+
+    uno::Sequence<beans::PropertyValue> args(1);
+    args[0].Name = "FilterOptions";
+    args[0].Handle = -1;
+    args[0].State = beans::PropertyState_DIRECT_VALUE;
+
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
+    {
+        bool bSkipImages = *(aFilterNames[nFilter][1]) != '\0';
+
+        if (mxComponent.is())
+            mxComponent->dispose();
+
+        args[0].Value <<= OUString::createFromAscii(aFilterNames[nFilter][1]);
+
+        mxComponent = loadFromDesktop(getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
+
+        // Check shapes (images, textboxes, custom shapes
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter][0] + " - " + aFilterNames[nFilter][1];
+
+        uno::Reference<drawing::XShape> xShape;
+        uno::Reference<graphic::XGraphic> xGraphic;
+        uno::Reference< beans::XPropertySet > XPropSet;
+        uno::Reference<awt::XBitmap> xBitmap;
+
+        bool bHasTextboxText = false;
+        bool bHasCustomShapeText = false;
+        sal_Int32 nImageCount = 0;
+
+        for (int i = 1; i<= xDraws->getCount(); i++)
+        {
+            xShape = getShape(i);
+            XPropSet.set( xShape, uno::UNO_QUERY_THROW );
+            try
+            {
+                XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+                xBitmap.set(xGraphic, uno::UNO_QUERY);
+                if (xBitmap.is()) nImageCount++;
+            }
+            catch (beans::UnknownPropertyException &)
+            {
+                uno::Reference<text::XTextRange> xText(xShape, uno::UNO_QUERY);
+                if (xText->getString().startsWith("Lorem ipsum")) bHasTextboxText = true;
+                if (xText->getString().startsWith("Nam pretium")) bHasCustomShapeText = true;
+            }
+        }
+
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), bHasTextboxText);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), bHasCustomShapeText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(bSkipImages ? 0 : 3), nImageCount );
+    }
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

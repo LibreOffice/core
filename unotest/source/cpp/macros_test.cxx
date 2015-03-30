@@ -19,7 +19,7 @@ using namespace css;
 
 namespace unotest {
 
-uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService)
+uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService, uno::Sequence<beans::PropertyValue> extraArgs)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
@@ -37,6 +37,19 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
         args[1].Handle = -1;
         args[1].Value <<= rDocService;
         args[1].State = beans::PropertyState_DIRECT_VALUE;
+    }
+
+    if (extraArgs.getLength() > 0)
+    {
+        sal_Int32 aSize = args.getLength();
+        args.realloc(aSize + extraArgs.getLength());
+        for (int i = 0; i < extraArgs.getLength(); i++)
+        {
+            args[aSize + i].Name = extraArgs[i].Name;
+            args[aSize + i].Handle = extraArgs[i].Handle;
+            args[aSize + i].Value = extraArgs[i].Value;
+            args[aSize + i].State = extraArgs[i].State;
+        }
     }
 
     uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);

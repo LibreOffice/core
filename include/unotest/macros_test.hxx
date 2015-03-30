@@ -27,7 +27,8 @@ namespace unotest {
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
-    css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString() );
+    css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
+        css::uno::Sequence<css::beans::PropertyValue> extra_args = css::uno::Sequence<css::beans::PropertyValue>() );
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
