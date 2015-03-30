@@ -763,7 +763,7 @@ void _FinitCore()
     delete SwSelPaintRects::s_pMapMode;
     delete SwFntObj::pPixMap;
 
-    delete SwEditShell::pAutoFmtFlags;
+    delete SwEditShell::s_pAutoFmtFlags;
 
 #if OSL_DEBUG_LEVEL > 0
     // free defaults to prevent assertions

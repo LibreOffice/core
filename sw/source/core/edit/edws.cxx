@@ -148,25 +148,25 @@ bool SwEditShell::HasOtherCnt() const
 // access control functions for file name handling
 
 SwActContext::SwActContext(SwEditShell *pShell)
-    : pSh(pShell)
+    : m_rShell(*pShell)
 {
-    pSh->StartAction();
+    m_rShell.StartAction();
 }
 
 SwActContext::~SwActContext()
 {
-    pSh->EndAction();
+    m_rShell.EndAction();
 }
 
 SwMvContext::SwMvContext(SwEditShell *pShell)
-    : pSh(pShell)
+    : m_rShell(*pShell)
 {
-    pSh->SttCrsrMove();
+    m_rShell.SttCrsrMove();
 }
 
 SwMvContext::~SwMvContext()
 {
-    pSh->EndCrsrMove();
+    m_rShell.EndCrsrMove();
 }
 
 SwFrmFmt *SwEditShell::GetTableFmt() // fastest test on a table

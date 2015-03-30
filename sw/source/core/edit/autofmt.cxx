@@ -81,7 +81,7 @@ const int cnPosEnDash = 2, cnPosEmDash = 4;
 const sal_Unicode cStarSymbolEnDash = 0x2013;
 const sal_Unicode cStarSymbolEmDash = 0x2014;
 
-SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
+SvxSwAutoFmtFlags* SwEditShell::s_pAutoFmtFlags = nullptr;
 
 // Number of num-/bullet-paragraph templates. MAXLEVEL will soon be raised
 // to x, but not the number of templates. (Artifact from <= 4.0)
@@ -2606,10 +2606,10 @@ void SwEditShell::AutoFmtBySplitNode()
 
 SvxSwAutoFmtFlags* SwEditShell::GetAutoFmtFlags()
 {
-    if (!pAutoFmtFlags)
-        pAutoFmtFlags = new SvxSwAutoFmtFlags;
+    if (!s_pAutoFmtFlags)
+        s_pAutoFmtFlags = new SvxSwAutoFmtFlags;
 
-    return pAutoFmtFlags;
+    return s_pAutoFmtFlags;
 }
 
 void SwEditShell::SetAutoFmtFlags(SvxSwAutoFmtFlags * pFlags)

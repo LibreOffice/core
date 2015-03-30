@@ -137,9 +137,9 @@ typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
-class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
+class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
 {
-    static SvxSwAutoFmtFlags* pAutoFmtFlags;
+    static SvxSwAutoFmtFlags* s_pAutoFmtFlags;
 
     /// For the private methods DelRange and those of AutoCorrect.
     friend class SwAutoFormat;
@@ -952,7 +952,7 @@ inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 
  /// Class for automated call of Start- and EndAction().
 class SwActContext {
-    SwEditShell *pSh;
+    SwEditShell & m_rShell;
 public:
     SwActContext(SwEditShell *pShell);
     ~SwActContext();
@@ -960,7 +960,7 @@ public:
 
  /// Class for automated call of Start- and EndCrsrMove().
 class SwMvContext {
-    SwEditShell *pSh;
+    SwEditShell & m_rShell;
 public:
     SwMvContext(SwEditShell *pShell);
     ~SwMvContext();
