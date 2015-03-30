@@ -58,29 +58,31 @@ class SwDrawModel;
 // as needed, one or both parameters may be zero
 void SAL_DLLPRIVATE InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawModel);
 
-class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
+class SW_DLLPUBLIC SwDocShell
+    : public SfxObjectShell
+    , public SfxListener
 {
-    SwDoc*                  mpDoc;                          ///< Document.
-    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     ///< Passing through for formats.
-    FontList*               mpFontList;                     ///< Current Fontlist.
-    bool                    mbInUpdateFontList; ///< prevent nested calls of UpdateFontList
+    SwDoc*      m_pDoc;               ///< Document.
+    rtl::Reference< SfxStyleSheetBasePool > m_xBasePool; ///< Passing through for formats.
+    FontList*   m_pFontList;          ///< Current Fontlist.
+    bool        m_IsInUpdateFontList; ///< prevent nested calls of UpdateFontList
 
     /** For "historical reasons" nothing can be done without the WrtShell.
      Back-pointer on View (again "for historical reasons").
      Back-pointer is valid until in Activate a new one is set
      or until it is deleted in the View's Dtor. */
 
-    SwView*                 mpView;
-    SwWrtShell*             mpWrtShell;
+    SwView*     m_pView;
+    SwWrtShell* m_pWrtShell;
 
-    Timer                   aFinishedTimer; /**< Timer for checking graphics-links.
-                                             If all are present, the doc is loaded completely. */
+    Timer       m_FinishedTimer; /**< Timer for checking graphics-links.
+                         If all are present, the doc is loaded completely. */
 
-    comphelper::EmbeddedObjectContainer*    mpOLEChildList;
-    sal_Int16               mnUpdateDocMode;    ///< contains the com::sun::star::document::UpdateDocMode
-    bool                    bIsATemplate;      ///< prevent nested calls of UpdateFontList
+    comphelper::EmbeddedObjectContainer* m_pOLEChildList;
+    sal_Int16   m_nUpdateDocMode;   ///< contains the com::sun::star::document::UpdateDocMode
+    bool        m_IsATemplate;      ///< prevent nested calls of UpdateFontList
 
-    bool mbRemovedInvisibleContent;
+    bool m_IsRemovedInvisibleContent;
         ///< whether SID_MAIL_PREPAREEXPORT removed content that
         ///< SID_MAIL_EXPORT_FINISHED needs to restore
 
@@ -199,8 +201,8 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     /// returns Doc. But be careful!
-    inline SwDoc*                   GetDoc() { return mpDoc; }
-    inline const SwDoc*             GetDoc() const { return mpDoc; }
+    inline SwDoc*                   GetDoc() { return m_pDoc; }
+    inline const SwDoc*             GetDoc() const { return m_pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
@@ -216,12 +218,12 @@ public:
 
     /// Set View for actions via Shell.
     void          SetView(SwView* pVw);
-    const SwView *GetView() const { return mpView; }
-    SwView       *GetView()       { return mpView; }
+    const SwView *GetView() const { return m_pView; }
+    SwView       *GetView()       { return m_pView; }
 
     /// Accress to the SwWrtShell belonging to SwView.
-          SwWrtShell *GetWrtShell()       { return mpWrtShell; }
-    const SwWrtShell *GetWrtShell() const { return mpWrtShell; }
+          SwWrtShell *GetWrtShell()       { return m_pWrtShell; }
+    const SwWrtShell *GetWrtShell() const { return m_pWrtShell; }
     // Same as GetWrtShell, but return pointer to SwEditShell base of
     // (potentially incomplete) SwWrtShell:
     SwEditShell * GetEditShell();
@@ -279,7 +281,7 @@ public:
     /// Re-read Doc from Html-source.
     void    ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView );
 
-    sal_Int16   GetUpdateDocMode() const {return mnUpdateDocMode;}
+    sal_Int16   GetUpdateDocMode() const { return m_nUpdateDocMode; }
 
     void ToggleBrowserMode(bool bOn, SwView* pView);
 
@@ -302,8 +304,8 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
-    SAL_DLLPRIVATE bool IsTemplate() { return bIsATemplate; }
-    SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
+    SAL_DLLPRIVATE bool IsTemplate() { return m_IsATemplate; }
+    SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { m_IsATemplate = bValue; }
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const SAL_OVERRIDE;
 

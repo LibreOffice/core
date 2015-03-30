@@ -165,7 +165,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     sal_uInt16 nMask = 0;
-                    if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
+                    if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -191,7 +191,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
+                if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -207,7 +207,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -294,8 +294,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 false, &pItem ))
                 sParent = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-            if (sName.isEmpty() && mxBasePool.get())
-                sName = SfxStyleDialog::GenerateUnusedName(*mxBasePool);
+            if (sName.isEmpty() && m_xBasePool.get())
+                sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
             nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), 0, rReq.IsAPI() );
         }
@@ -430,14 +430,14 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                         case SFX_STYLE_FAMILY_FRAME:
                         {
-                            SwFrmFmt* pFrm = mpWrtShell->GetCurFrmFmt();
+                            SwFrmFmt* pFrm = m_pWrtShell->GetCurFrmFmt();
                             if( pFrm )
                                 aParam = pFrm->GetName();
                         }
                         break;
                         case SFX_STYLE_FAMILY_CHAR:
                         {
-                            SwCharFmt* pChar = mpWrtShell->GetCurCharFmt();
+                            SwCharFmt* pChar = m_pWrtShell->GetCurCharFmt();
                             if( pChar )
                                 aParam = pChar->GetName();
                         }
@@ -630,7 +630,7 @@ sal_uInt16 SwDocShell::Edit(
     SfxStyleSheetBase *pStyle = 0;
 
     sal_uInt16 nRet = nMask;
-    bool bModified = mpDoc->getIDocumentState().IsModified();
+    bool bModified = m_pDoc->getIDocumentState().IsModified();
 
     if( bNew )
     {
@@ -639,7 +639,7 @@ sal_uInt16 SwDocShell::Edit(
         else
             nMask = SFXSTYLEBIT_USERDEF;
 
-        pStyle = &mxBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
+        pStyle = &m_xBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
 
         // set the current one as Parent
         SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
@@ -649,12 +649,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwTxtFmtColl* pColl = mpWrtShell->FindTxtFmtCollByName( rParent );
+                    SwTxtFmtColl* pColl = m_pWrtShell->FindTxtFmtCollByName( rParent );
                     if(!pColl)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                         if(USHRT_MAX != nId)
-                            pColl =  mpWrtShell->GetTxtCollFromPool( nId );
+                            pColl = m_pWrtShell->GetTxtCollFromPool( nId );
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
@@ -672,7 +672,7 @@ sal_uInt16 SwDocShell::Edit(
                 }
                 else
                 {
-                    SwTxtFmtColl* pColl = mpWrtShell->GetCurTxtFmtColl();
+                    SwTxtFmtColl* pColl = m_pWrtShell->GetCurTxtFmtColl();
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     if( pColl )
                         pDStyle->PresetParent( pColl->GetName() );
@@ -683,12 +683,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwCharFmt* pCFmt = mpWrtShell->FindCharFmtByName( rParent );
+                    SwCharFmt* pCFmt = m_pWrtShell->FindCharFmtByName(rParent);
                     if(!pCFmt)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         if(USHRT_MAX != nId)
-                            pCFmt =  mpWrtShell->GetCharFmtFromPool( nId );
+                            pCFmt = m_pWrtShell->GetCharFmtFromPool( nId );
                     }
 
                     pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
@@ -696,7 +696,7 @@ sal_uInt16 SwDocShell::Edit(
                 }
                 else
                 {
-                    SwCharFmt* pCFmt = mpWrtShell->GetCurCharFmt();
+                    SwCharFmt* pCFmt = m_pWrtShell->GetCurCharFmt();
                     pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
                         if( pCFmt )
                             pDStyle->PresetParent( pCFmt->GetName() );
@@ -707,12 +707,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwFrmFmt* pFFmt = mpWrtShell->GetDoc()->FindFrmFmtByName( rParent );
+                    SwFrmFmt* pFFmt = m_pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
                     if(!pFFmt)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
                         if(USHRT_MAX != nId)
-                            pFFmt =  mpWrtShell->GetFrmFmtFromPool( nId );
+                            pFFmt = m_pWrtShell->GetFrmFmtFromPool( nId );
                     }
                     pDStyle->GetFrmFmt()->SetDerivedFrom( pFFmt );
                     pDStyle->PresetParent( rParent );
@@ -723,7 +723,7 @@ sal_uInt16 SwDocShell::Edit(
     }
     else
     {
-        pStyle = mxBasePool->Find( rName, (SfxStyleFamily)nFamily );
+        pStyle = m_xBasePool->Find( rName, (SfxStyleFamily)nFamily );
         SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     }
 
@@ -767,7 +767,7 @@ sal_uInt16 SwDocShell::Edit(
         // In HTML mode, we do not always have a printer. In order to show
         // the correct page size in the Format - Page dialog, we have to
         // get one here.
-        SwWrtShell* pCurrShell = ( pActShell ? pActShell : mpWrtShell );
+        SwWrtShell* pCurrShell = (pActShell) ? pActShell : m_pWrtShell;
         if( ( HTMLMODE_ON & nHtmlMode ) &&
             !pCurrShell->getIDocumentDeviceAccess()->getPrinter( false ) )
             pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess()->getPrinter( true ) );
@@ -779,9 +779,9 @@ sal_uInt16 SwDocShell::Edit(
         assert( pFact );
         boost::scoped_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, sPage,
-                                                    pActShell ? pActShell : mpWrtShell, bNew));
+                                                    pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );
-        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), mxBasePool, bModified);
+        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
 
         if (RET_OK == pDlg->Execute())
@@ -793,11 +793,11 @@ sal_uInt16 SwDocShell::Edit(
             if( bNew )
             {
                 GetWrtShell()->Undo(1);
-                mpDoc->GetIDocumentUndoRedo().ClearRedo();
+                m_pDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 
             if( !bModified )
-                mpDoc->getIDocumentState().ResetModified();
+                m_pDoc->getIDocumentState().ResetModified();
         }
 
         nRet = aApplyStyleHelper.getRet();
@@ -826,15 +826,15 @@ sal_uInt16 SwDocShell::Edit(
             ::ConvertAttrGenToChar(xTmp->GetItemSet(), xTmp->GetItemSet(), CONV_ATTR_STD);
         }
         if(SFX_STYLE_FAMILY_PAGE == nFamily)
-            mpView->InvalidateRulerPos();
+            m_pView->InvalidateRulerPos();
 
         if( bNew )
-            mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
+            m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
-        mpDoc->getIDocumentState().SetModified();
+        m_pDoc->getIDocumentState().SetModified();
         if( !bModified )        // Bug 57028
         {
-            mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+            m_pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
         GetWrtShell()->EndAllAction();
     }
@@ -844,14 +844,14 @@ sal_uInt16 SwDocShell::Edit(
 
 sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
 {
-    SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+    SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
     if(pStyle)
     {
         assert( GetWrtShell() );
 
         GetWrtShell()->StartAllAction();
-        mxBasePool->Remove(pStyle);
+        m_xBasePool->Remove(pStyle);
         GetWrtShell()->EndAllAction();
 
         return sal_True;
@@ -861,7 +861,7 @@ sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
 
 sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden)
 {
-    SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+    SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
     if(pStyle)
     {
@@ -881,7 +881,7 @@ sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHid
 sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
                                SwWrtShell* pShell, const sal_uInt16 nMode )
 {
-    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( mxBasePool->Find( rName, (SfxStyleFamily) nFamily ) );
+    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( m_xBasePool->Find( rName, (SfxStyleFamily) nFamily ) );
 
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
 
@@ -944,7 +944,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
 {
     assert( GetWrtShell() );
 
-    SwEditWin& rEdtWin = mpView->GetEditWin();
+    SwEditWin& rEdtWin = m_pView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
     bool bWaterCan = !(pApply && pApply->eType != 0);
 
@@ -957,7 +957,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
     if(bWaterCan)
     {
         SwDocStyleSheet* pStyle =
-            static_cast<SwDocStyleSheet*>( mxBasePool->Find(rName, (SfxStyleFamily)nFamily) );
+            static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, (SfxStyleFamily)nFamily) );
 
         SAL_WARN_IF( !pStyle, "sw.ui", "Where's the StyleSheet" );
 
@@ -988,7 +988,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
     else
         aTemplate.eType = 0;
 
-    mpView->GetEditWin().SetApplyTemplate(aTemplate);
+    m_pView->GetEditWin().SetApplyTemplate(aTemplate);
 
     return nFamily;
 }
@@ -1000,7 +1000,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
     assert( pCurrWrtShell );
 
     SwDocStyleSheet* pStyle =
-        static_cast<SwDocStyleSheet*>( mxBasePool->Find(rName, (SfxStyleFamily)nFamily) );
+        static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, (SfxStyleFamily)nFamily) );
 
     if(!pStyle)
         return nFamily;
@@ -1083,7 +1083,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                                     sal_uInt16 nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
-    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( mxBasePool->Find(
+    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( m_xBasePool->Find(
                                             rName, (SfxStyleFamily)nFamily ) );
     if(!pStyle)
     {
@@ -1094,7 +1094,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
         else
             nMask |= SFXSTYLEBIT_USERDEF;
 
-        pStyle = static_cast<SwDocStyleSheet*>( &mxBasePool->Make(rName,
+        pStyle = static_cast<SwDocStyleSheet*>( &m_xBasePool->Make(rName,
                                 (SfxStyleFamily)nFamily, nMask ) );
     }
 
@@ -1227,7 +1227,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
 
 std::set<Color> SwDocShell::GetDocColors()
 {
-    return mpDoc->GetDocColors();
+    return m_pDoc->GetDocColors();
 }
 
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
@@ -1258,27 +1258,27 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            static_cast<SwDocShell&>(rSource).mpDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
-        if( mpWrtShell )
+            static_cast<SwDocShell&>(rSource).m_pDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
+        if (m_pWrtShell)
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
             // which pushes a bunch of SfxShells that are not cleared
             // (for unknown reasons) when closing the document, causing crash;
             // setting g_bNoInterrupt appears to avoid the problem.
             ::comphelper::FlagRestorationGuard g(g_bNoInterrupt, true);
-            mpWrtShell->StartAllAction();
-            mpDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).mpDoc );
-            mpWrtShell->EndAllAction();
+            m_pWrtShell->StartAllAction();
+            m_pDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_pDoc );
+            m_pWrtShell->EndAllAction();
         }
         else
         {
-            bool bModified = mpDoc->getIDocumentState().IsModified();
-            mpDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).mpDoc );
-            if( !bModified && mpDoc->getIDocumentState().IsModified() && !mpView )
+            bool bModified = m_pDoc->getIDocumentState().IsModified();
+            m_pDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_pDoc );
+            if (!bModified && m_pDoc->getIDocumentState().IsModified() && !m_pView)
             {
                 // the View is created later, but overwrites the Modify-Flag.
                 // Undo doesn't work anymore anyways.
-                mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                m_pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
             }
         }
     }
