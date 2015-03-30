@@ -3472,10 +3472,10 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border_right, pRight );
     }
 
-    long nTopDist = pTop ? rBoxItem.GetDistance( BOX_LINE_TOP ) : 0;
-    long nBottomDist = pBottom ? rBoxItem.GetDistance( BOX_LINE_BOTTOM ) : 0;
-    long nLeftDist = pLeft ? rBoxItem.GetDistance( BOX_LINE_LEFT ) : 0;
-    long nRightDist = pRight ? rBoxItem.GetDistance( BOX_LINE_RIGHT ) : 0;
+    long nTopDist = pTop ? rBoxItem.GetDistance( SvxBoxItemLine::TOP ) : 0;
+    long nBottomDist = pBottom ? rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) : 0;
+    long nLeftDist = pLeft ? rBoxItem.GetDistance( SvxBoxItemLine::LEFT ) : 0;
+    long nRightDist = pRight ? rBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) : 0;
 
     if( nTopDist == nBottomDist && nLeftDist == nRightDist )
     {

@@ -399,9 +399,9 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
 
                 SvxBoxItem aNew( rBoxItem );
                 if( 8 > pCpyPara->nDelBorderFlag )
-                    aNew.SetLine( 0, BOX_LINE_TOP );
+                    aNew.SetLine( 0, SvxBoxItemLine::TOP );
                 else
-                    aNew.SetLine( 0, BOX_LINE_RIGHT );
+                    aNew.SetLine( 0, SvxBoxItemLine::RIGHT );
 
                 if( 1 == pCpyPara->nDelBorderFlag ||
                     8 == pCpyPara->nDelBorderFlag )
@@ -724,7 +724,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
                         SvxBoxItem aTmp( rNxtBoxItem );
                         aTmp.SetLine( rBoxItem.GetLeft() ? rBoxItem.GetLeft()
                                                          : rBoxItem.GetRight(),
-                                                            BOX_LINE_LEFT );
+                                                            SvxBoxItemLine::LEFT );
                         if( pShareFmts )
                             pShareFmts->SetAttr( *pNxtBox, aTmp );
                         else
@@ -746,7 +746,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
                         SvxBoxItem aTmp( rPrvBoxItem );
                         aTmp.SetLine( rBoxItem.GetLeft() ? rBoxItem.GetLeft()
                                                          : rBoxItem.GetRight(),
-                                                            BOX_LINE_RIGHT );
+                                                            SvxBoxItemLine::RIGHT );
                         if( pShareFmts )
                             pShareFmts->SetAttr( *pPrvBox, aTmp );
                         else
@@ -945,7 +945,7 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
                 SvxBoxItem aTmp( rNxtBoxItem );
                 aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
                                                 : rBoxItem.GetBottom(),
-                                                BOX_LINE_TOP );
+                                                SvxBoxItemLine::TOP );
                 rShareFmts.SetAttr( *pNxtBox, aTmp );
                 bChgd = true;
             }
@@ -959,7 +959,7 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
                 SvxBoxItem aTmp( rPrvBoxItem );
                 aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
                                                 : rBoxItem.GetBottom(),
-                                                BOX_LINE_BOTTOM );
+                                                SvxBoxItemLine::BOTTOM );
                 rShareFmts.SetAttr( *pPrvBox, aTmp );
             }
         }
@@ -1147,7 +1147,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                 {
                     pCpyBoxFrmFmt = static_cast<SwTableBoxFmt*>(pNewLine->GetTabBoxes()[ 0 ]->ClaimFrmFmt());
                     SvxBoxItem aTmp( pCpyBoxFrmFmt->GetBox() );
-                    aTmp.SetLine( 0, BOX_LINE_TOP );
+                    aTmp.SetLine( 0, SvxBoxItemLine::TOP );
                     pCpyBoxFrmFmt->SetFmtAttr( aTmp );
                     bChkBorder = false;
                 }
@@ -1269,7 +1269,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
             pInsLine->GetTabBoxes()[ nBoxPos + nCnt ]->ClaimFrmFmt();
 
             SvxBoxItem aTmp( aSelBoxItem );
-            aTmp.SetLine( 0, BOX_LINE_RIGHT );
+            aTmp.SetLine( 0, SvxBoxItemLine::RIGHT );
             aFindFrm.pNewFrmFmt->SetFmtAttr( aTmp );
 
             // Remove the Format from the "cache"
@@ -2661,7 +2661,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                         if( rBoxItem.GetRight() )
                         {
                             SvxBoxItem aTmp( rBoxItem );
-                            aTmp.SetLine( 0, BOX_LINE_RIGHT );
+                            aTmp.SetLine( 0, SvxBoxItemLine::RIGHT );
                             rParam.aShareFmts.SetAttr( rParam.bLeft
                                                             ? *pNewBox
                                                             : *pBox, aTmp );
@@ -4074,7 +4074,7 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                 if( rBoxItem.GetTop() )
                 {
                     SvxBoxItem aTmp( rBoxItem );
-                    aTmp.SetLine( 0, BOX_LINE_TOP );
+                    aTmp.SetLine( 0, SvxBoxItemLine::TOP );
                     rParam.aShareFmts.SetAttr( rParam.bTop
                                                 ? *pOld
                                                 : *rNewBoxes[ n ], aTmp );

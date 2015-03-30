@@ -698,10 +698,10 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetBottomBorder( aBoxItem.GetBottom() );
             rFnt.SetRightBorder( aBoxItem.GetRight() );
             rFnt.SetLeftBorder( aBoxItem.GetLeft() );
-            rFnt.SetTopBorderDist( aBoxItem.GetDistance(BOX_LINE_TOP) );
-            rFnt.SetBottomBorderDist( aBoxItem.GetDistance(BOX_LINE_BOTTOM) );
-            rFnt.SetRightBorderDist( aBoxItem.GetDistance(BOX_LINE_RIGHT) );
-            rFnt.SetLeftBorderDist( aBoxItem.GetDistance(BOX_LINE_LEFT) );
+            rFnt.SetTopBorderDist( aBoxItem.GetDistance(SvxBoxItemLine::TOP) );
+            rFnt.SetBottomBorderDist( aBoxItem.GetDistance(SvxBoxItemLine::BOTTOM) );
+            rFnt.SetRightBorderDist( aBoxItem.GetDistance(SvxBoxItemLine::RIGHT) );
+            rFnt.SetLeftBorderDist( aBoxItem.GetDistance(SvxBoxItemLine::LEFT) );
             break;
         }
         case RES_CHRATR_SHADOW:

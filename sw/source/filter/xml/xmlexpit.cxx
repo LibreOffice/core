@@ -566,10 +566,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 const SvxBorderLine* pRight   = pBox->GetRight();
                 const SvxBorderLine* pTop     = pBox->GetTop();
                 const SvxBorderLine* pBottom  = pBox->GetBottom();
-                const sal_uInt16 nTopDist     = pBox->GetDistance( BOX_LINE_TOP );
-                const sal_uInt16 nBottomDist  = pBox->GetDistance( BOX_LINE_BOTTOM );
-                const sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
-                const sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
+                const sal_uInt16 nTopDist     = pBox->GetDistance( SvxBoxItemLine::TOP );
+                const sal_uInt16 nBottomDist  = pBox->GetDistance( SvxBoxItemLine::BOTTOM );
+                const sal_uInt16 nLeftDist    = pBox->GetDistance( SvxBoxItemLine::LEFT );
+                const sal_uInt16 nRightDist   = pBox->GetDistance( SvxBoxItemLine::RIGHT );
 
                 // check if we need to export it
                 switch( nMemberId )

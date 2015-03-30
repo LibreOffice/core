@@ -1085,13 +1085,13 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     SvxBoxItem aBox( RES_BOX );
     aBox.SetDistance( 55 );
     SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_0 );
-    aBox.SetLine( &aLn, BOX_LINE_LEFT );
-    aBox.SetLine( &aLn, BOX_LINE_BOTTOM );
+    aBox.SetLine( &aLn, SvxBoxItemLine::LEFT );
+    aBox.SetLine( &aLn, SvxBoxItemLine::BOTTOM );
 
     for( i = 0; i <= 15; ++i )
     {
-        aBox.SetLine( i <= 3 ? &aLn : 0, BOX_LINE_TOP );
-        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, BOX_LINE_RIGHT );
+        aBox.SetLine( i <= 3 ? &aLn : 0, SvxBoxItemLine::TOP );
+        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, SvxBoxItemLine::RIGHT );
         const_cast<SwBoxAutoFmt&>(pNew->GetBoxFmt( i )).SetBox( aBox );
     }
 

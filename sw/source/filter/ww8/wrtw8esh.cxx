@@ -96,6 +96,8 @@
 #include "sfx2/sfxsids.hrc"
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
+#include <o3tl/enumrange.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <algorithm>
 
@@ -1903,14 +1905,14 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     bool bFirstLine = true;
     if (SfxItemState::SET == rFmt.GetItemState(RES_BOX, true, &pItem))
     {
-        static const sal_uInt16 aExhperProp[4] =
+        static const o3tl::enumarray<SvxBoxItemLine, sal_uInt16> aExhperProp =
         {
             ESCHER_Prop_dyTextTop,  ESCHER_Prop_dyTextBottom,
             ESCHER_Prop_dxTextLeft, ESCHER_Prop_dxTextRight
         };
         const SvxBorderLine* pLine;
 
-        for( sal_uInt16 n = 0; n < 4; ++n )
+        for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
             if( 0 != ( pLine = static_cast<const SvxBoxItem*>(pItem)->GetLine( n )) )
             {
                 if( bFirstLine )

@@ -2225,8 +2225,8 @@ void Test::testDataArea()
     // Now, set borders in some cells....
     ::editeng::SvxBorderLine aLine(NULL, 50, table::BorderLineStyle::SOLID);
     SvxBoxItem aBorderItem(ATTR_BORDER);
-    aBorderItem.SetLine(&aLine, BOX_LINE_LEFT);
-    aBorderItem.SetLine(&aLine, BOX_LINE_RIGHT);
+    aBorderItem.SetLine(&aLine, SvxBoxItemLine::LEFT);
+    aBorderItem.SetLine(&aLine, SvxBoxItemLine::RIGHT);
     for (SCROW i = 0; i < 100; ++i)
         // Set borders from row 1 to 100.
         m_pDoc->ApplyAttr(0, i, 0, aBorderItem);

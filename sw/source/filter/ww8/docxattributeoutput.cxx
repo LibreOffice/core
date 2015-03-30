@@ -2644,19 +2644,19 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
 static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
 {
     return  (
-                ( rBox.GetDistance( BOX_LINE_TOP ) / 20 ) > 31 ||
-                ( rBox.GetDistance( BOX_LINE_LEFT ) / 20 ) > 31 ||
-                ( rBox.GetDistance( BOX_LINE_BOTTOM ) / 20 ) > 31 ||
-                ( rBox.GetDistance( BOX_LINE_RIGHT ) / 20 ) > 31
+                ( rBox.GetDistance( SvxBoxItemLine::TOP ) / 20 ) > 31 ||
+                ( rBox.GetDistance( SvxBoxItemLine::LEFT ) / 20 ) > 31 ||
+                ( rBox.GetDistance( SvxBoxItemLine::BOTTOM ) / 20 ) > 31 ||
+                ( rBox.GetDistance( SvxBoxItemLine::RIGHT ) / 20 ) > 31
             );
 }
 
 static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins,
-                          std::map<sal_uInt16, css::table::BorderLine2> &rTableStyleConf )
+                          std::map<SvxBoxItemLine, css::table::BorderLine2> &rTableStyleConf )
 {
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
     const sal_Int32 aXmlElements[] =
@@ -2667,7 +2667,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
         rOptions.bUseStartEnd ? XML_end : XML_right
     };
     bool tagWritten = false;
-    const sal_uInt16* pBrd = aBorders;
+    const SvxBoxItemLine* pBrd = aBorders;
 
     bool bExportDistanceFromPageEdge = false;
     if ( rOptions.bCheckDistanceSize == true && boxHasLineLargerThan31(rBox) == true )
@@ -2714,10 +2714,10 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
             // If there is a shadow, and it's not the regular 'Bottom-Right',
             // then write only the 'shadowed' sides of the border
             if  (
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT      )    &&  *pBrd == BOX_LINE_TOP   )  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT    )    &&  *pBrd == BOX_LINE_LEFT  )  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT  || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == BOX_LINE_BOTTOM)  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT    || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == BOX_LINE_RIGHT )
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT      )    &&  *pBrd == SvxBoxItemLine::TOP   )  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT    )    &&  *pBrd == SvxBoxItemLine::LEFT  )  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT  || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == SvxBoxItemLine::BOTTOM)  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT    || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == SvxBoxItemLine::RIGHT )
                 )
             {
                 bWriteShadow = true;
@@ -2730,13 +2730,13 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
             if (bExportDistanceFromPageEdge)
             {
                 // Export 'Distance from Page Edge'
-                if ( *pBrd == BOX_LINE_TOP)
+                if ( *pBrd == SvxBoxItemLine::TOP)
                     nDist = pageMargins->nPageMarginTop - rBox.GetDistance( *pBrd );
-                else if ( *pBrd == BOX_LINE_LEFT)
+                else if ( *pBrd == SvxBoxItemLine::LEFT)
                     nDist = pageMargins->nPageMarginLeft - rBox.GetDistance( *pBrd );
-                else if ( *pBrd == BOX_LINE_BOTTOM)
+                else if ( *pBrd == SvxBoxItemLine::BOTTOM)
                     nDist = pageMargins->nPageMarginBottom - rBox.GetDistance( *pBrd );
-                else if ( *pBrd == BOX_LINE_RIGHT)
+                else if ( *pBrd == SvxBoxItemLine::RIGHT)
                     nDist = pageMargins->nPageMarginRight - rBox.GetDistance( *pBrd );
             }
             else
@@ -2759,16 +2759,16 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     if (bWriteInsideH)
     {
         const table::BorderLine2 *aStyleProps = NULL;
-        if( rTableStyleConf.find( BOX_LINE_BOTTOM ) != rTableStyleConf.end() )
-            aStyleProps = &rTableStyleConf[ BOX_LINE_BOTTOM ];
-        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(BOX_LINE_BOTTOM), 0, false, aStyleProps );
+        if( rTableStyleConf.find( SvxBoxItemLine::BOTTOM ) != rTableStyleConf.end() )
+            aStyleProps = &rTableStyleConf[ SvxBoxItemLine::BOTTOM ];
+        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(SvxBoxItemLine::BOTTOM), 0, false, aStyleProps );
     }
     if (bWriteInsideV)
     {
         const table::BorderLine2 *aStyleProps = NULL;
-        if( rTableStyleConf.find( BOX_LINE_RIGHT ) != rTableStyleConf.end() )
-            aStyleProps = &rTableStyleConf[ BOX_LINE_RIGHT ];
-        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(BOX_LINE_RIGHT), 0, false, aStyleProps );
+        if( rTableStyleConf.find( SvxBoxItemLine::RIGHT ) != rTableStyleConf.end() )
+            aStyleProps = &rTableStyleConf[ SvxBoxItemLine::RIGHT ];
+        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(SvxBoxItemLine::RIGHT), 0, false, aStyleProps );
     }
     if (tagWritten && rOptions.bWriteTag) {
         pSerializer->endElementNS( XML_w, rOptions.tag );
@@ -2777,9 +2777,9 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
 
 static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = 0)
 {
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
     const sal_Int32 aXmlElements[] =
@@ -2790,12 +2790,12 @@ static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
         bUseStartEnd ? XML_end : XML_right
     };
     bool tagWritten = false;
-    const sal_uInt16* pBrd = aBorders;
+    const SvxBoxItemLine* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         sal_Int32 nDist = sal_Int32( rBox.GetDistance( *pBrd ) );
 
-        if ( aBorders[i] == BOX_LINE_LEFT ) {
+        if ( aBorders[i] == SvxBoxItemLine::LEFT ) {
             // Office's cell margin is measured from the right of the border.
             // While LO's cell spacing is measured from the center of the border.
             // So we add half left-border width to tblIndent value
@@ -3148,13 +3148,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                     FSEND );
         }
         else if( aGrabBagElement->first == "TableStyleTopBorder" )
-            m_aTableStyleConf[ BOX_LINE_TOP ] = aGrabBagElement->second.get<table::BorderLine2>();
+            m_aTableStyleConf[ SvxBoxItemLine::TOP ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if( aGrabBagElement->first == "TableStyleBottomBorder" )
-            m_aTableStyleConf[ BOX_LINE_BOTTOM ] = aGrabBagElement->second.get<table::BorderLine2>();
+            m_aTableStyleConf[ SvxBoxItemLine::BOTTOM ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if( aGrabBagElement->first == "TableStyleLeftBorder" )
-            m_aTableStyleConf[ BOX_LINE_LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
+            m_aTableStyleConf[ SvxBoxItemLine::LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if( aGrabBagElement->first == "TableStyleRightBorder" )
-            m_aTableStyleConf[ BOX_LINE_RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
+            m_aTableStyleConf[ SvxBoxItemLine::RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if (aGrabBagElement->first == "TableStyleLook")
         {
             FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
@@ -3277,7 +3277,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             {
                 const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
                 const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
-                nIndent += sal_Int32( pFrmFmt->GetBox( ).GetDistance( BOX_LINE_LEFT ) );
+                nIndent += sal_Int32( pFrmFmt->GetBox( ).GetDistance( SvxBoxItemLine::LEFT ) );
             }
             break;
         }
@@ -4195,10 +4195,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->endElementNS( XML_a, XML_prstGeom );
 
     const SvxBoxItem& rBoxItem = pFrmFmt->GetBox();
-    const SvxBorderLine* pLeft = rBoxItem.GetLine(BOX_LINE_LEFT);
-    const SvxBorderLine* pRight = rBoxItem.GetLine(BOX_LINE_RIGHT);
-    const SvxBorderLine* pTop = rBoxItem.GetLine(BOX_LINE_TOP);
-    const SvxBorderLine* pBottom = rBoxItem.GetLine(BOX_LINE_BOTTOM);
+    const SvxBorderLine* pLeft = rBoxItem.GetLine(SvxBoxItemLine::LEFT);
+    const SvxBorderLine* pRight = rBoxItem.GetLine(SvxBoxItemLine::RIGHT);
+    const SvxBorderLine* pTop = rBoxItem.GetLine(SvxBoxItemLine::TOP);
+    const SvxBorderLine* pBottom = rBoxItem.GetLine(SvxBoxItemLine::BOTTOM);
     if (pLeft || pRight || pTop || pBottom)
         m_rExport.SdrExporter().writeBoxItemLine(rBoxItem);
 
@@ -5476,7 +5476,7 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
         if (aGlue.HasFooter())
             aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
 
-        std::map<sal_uInt16, css::table::BorderLine2> aEmptyMap; // empty styles map
+        std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
         impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &aMargins,
                       aEmptyMap );
 
@@ -7121,8 +7121,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
         if ( pItem )
         {
-            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_LEFT );
-            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_RIGHT );
+            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT );
+            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT );
         }
         else
             m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;
@@ -7677,18 +7677,18 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
         if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
         {
-            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_lIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_LEFT))));
-            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_tIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_TOP))));
-            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_rIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_RIGHT))));
-            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_bIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_BOTTOM))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_lIns, OString::number(TwipsToEMU(rBox.GetDistance(SvxBoxItemLine::LEFT))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_tIns, OString::number(TwipsToEMU(rBox.GetDistance(SvxBoxItemLine::TOP))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_rIns, OString::number(TwipsToEMU(rBox.GetDistance(SvxBoxItemLine::RIGHT))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_bIns, OString::number(TwipsToEMU(rBox.GetDistance(SvxBoxItemLine::BOTTOM))));
             return;
         }
 
         // v:textbox's inset attribute: inner margin values for textbox text - write only non-default values
-        double fDistanceLeftTwips = double(rBox.GetDistance(BOX_LINE_LEFT));
-        double fDistanceTopTwips = double(rBox.GetDistance(BOX_LINE_TOP));
-        double fDistanceRightTwips = double(rBox.GetDistance(BOX_LINE_RIGHT));
-        double fDistanceBottomTwips = double(rBox.GetDistance(BOX_LINE_BOTTOM));
+        double fDistanceLeftTwips = double(rBox.GetDistance(SvxBoxItemLine::LEFT));
+        double fDistanceTopTwips = double(rBox.GetDistance(SvxBoxItemLine::TOP));
+        double fDistanceRightTwips = double(rBox.GetDistance(SvxBoxItemLine::RIGHT));
+        double fDistanceBottomTwips = double(rBox.GetDistance(SvxBoxItemLine::BOTTOM));
 
         // Convert 'TWIPS' to 'INCH' (because in Word the default values are in Inches)
         double fDistanceLeftInch = fDistanceLeftTwips / 1440;
@@ -7735,7 +7735,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // Open the paragraph's borders tag
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
 
-        std::map<sal_uInt16, css::table::BorderLine2> aEmptyMap; // empty styles map
+        std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
         impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins,
                       aEmptyMap );
 

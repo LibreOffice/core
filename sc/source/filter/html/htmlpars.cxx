@@ -2329,12 +2329,12 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
                 SCROW nCellRow2 = nCellRow1 + GetDocSize( tdRow, nRow ) - 1;
                 for( SCCOL nCellCol = nCellCol1; nCellCol <= nCellCol2; ++nCellCol )
                 {
-                    aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : 0, BOX_LINE_LEFT );
-                    aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : 0, BOX_LINE_RIGHT );
+                    aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : 0, SvxBoxItemLine::LEFT );
+                    aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : 0, SvxBoxItemLine::RIGHT );
                     for( SCROW nCellRow = nCellRow1; nCellRow <= nCellRow2; ++nCellRow )
                     {
-                        aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : 0, BOX_LINE_TOP );
-                        aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : 0, BOX_LINE_BOTTOM );
+                        aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : 0, SvxBoxItemLine::TOP );
+                        aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : 0, SvxBoxItemLine::BOTTOM );
                         pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
                     }
                 }

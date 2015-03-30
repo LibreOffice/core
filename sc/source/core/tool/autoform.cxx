@@ -845,10 +845,10 @@ ScAutoFormat::ScAutoFormat() :
     Color aBlack( COL_BLACK );
     ::editeng::SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
     SvxBoxItem aBox( ATTR_BORDER );
-    aBox.SetLine(&aLine, BOX_LINE_LEFT);
-    aBox.SetLine(&aLine, BOX_LINE_TOP);
-    aBox.SetLine(&aLine, BOX_LINE_RIGHT);
-    aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
+    aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
+    aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+    aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
+    aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
     Color aWhite(COL_WHITE);
     Color aBlue(COL_BLUE);

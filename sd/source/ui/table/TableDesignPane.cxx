@@ -43,6 +43,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include "TableDesignPane.hxx"
 #include "createtabledesignpanel.hxx"
@@ -694,7 +695,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     sal_Int32* pDiff = &border_diffs[0];
 
                     // draw top border
-                    for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
+                    for( SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>() )
                     {
                         const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
                         if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
@@ -708,8 +709,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             boost::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
                             if( xBorderInfo.get() )
                             {
-                                const sal_uInt16 nOtherLine = nLine ^ 1;
-                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
+                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1^1));
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
                             }
@@ -718,10 +718,10 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                         pAccess->SetLineColor( pBorderLine->GetColor() );
                         switch( nLine )
                         {
-                        case 0: pAccess->DrawLine( aPntTL, aPntTR ); break;
-                        case 1: pAccess->DrawLine( aPntBL, aPntBR ); break;
-                        case 2: pAccess->DrawLine( aPntTL, aPntBL ); break;
-                        case 3: pAccess->DrawLine( aPntTR, aPntBR ); break;
+                        case SvxBoxItemLine::TOP: pAccess->DrawLine( aPntTL, aPntTR ); break;
+                        case SvxBoxItemLine::BOTTOM: pAccess->DrawLine( aPntBL, aPntBR ); break;
+                        case SvxBoxItemLine::LEFT: pAccess->DrawLine( aPntTL, aPntBL ); break;
+                        case SvxBoxItemLine::RIGHT: pAccess->DrawLine( aPntTR, aPntBR ); break;
                         }
                     }
                 }

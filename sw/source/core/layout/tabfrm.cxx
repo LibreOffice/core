@@ -3838,7 +3838,7 @@ static sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, true );
+            nTmpTopSpace = rBoxItem.CalcLineSpace( SvxBoxItemLine::TOP, true );
         }
         nTopSpace  = std::max( nTopSpace, nTmpTopSpace );
     }
@@ -3859,7 +3859,7 @@ static sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpTopLineDist = rBoxItem.GetDistance( BOX_LINE_TOP );
+            nTmpTopLineDist = rBoxItem.GetDistance( SvxBoxItemLine::TOP );
         }
         nTopLineDist = std::max( nTopLineDist, nTmpTopLineDist );
     }
@@ -3883,8 +3883,8 @@ static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, true ) -
-                                 rBoxItem.GetDistance( BOX_LINE_BOTTOM );
+            nTmpBottomLineSize = rBoxItem.CalcLineSpace( SvxBoxItemLine::BOTTOM, true ) -
+                                 rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM );
         }
         nBottomLineSize = std::max( nBottomLineSize, nTmpBottomLineSize );
     }
@@ -3908,7 +3908,7 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpBottomLineDist = rBoxItem.GetDistance( BOX_LINE_BOTTOM );
+            nTmpBottomLineDist = rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM );
         }
         nBottomLineDist = std::max( nBottomLineDist, nTmpBottomLineDist );
     }
@@ -4666,8 +4666,8 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             if ( pTab->IsCollapsingBorders() && !Lower()->IsRowFrm()  )
             {
                 const SvxBoxItem& rBoxItem = pAttrs->GetBox();
-                nLeftSpace   = rBoxItem.GetDistance( BOX_LINE_LEFT );
-                nRightSpace  = rBoxItem.GetDistance( BOX_LINE_RIGHT );
+                nLeftSpace   = rBoxItem.GetDistance( SvxBoxItemLine::LEFT );
+                nRightSpace  = rBoxItem.GetDistance( SvxBoxItemLine::RIGHT );
                 nTopSpace    =  static_cast<SwRowFrm*>(GetUpper())->GetTopMarginForLowers();
                 nBottomSpace =  static_cast<SwRowFrm*>(GetUpper())->GetBottomMarginForLowers();
             }

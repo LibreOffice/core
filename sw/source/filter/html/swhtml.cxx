@@ -5316,7 +5316,7 @@ void SwHTMLParser::InsertHorzRule()
         }
 
         SvxBoxItem aBoxItem(RES_BOX);
-        aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
+        aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
         _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aBoxItem );
         aSetAttrTab.push_back( pTmp );
     }

@@ -1587,39 +1587,39 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
         // Inner Table:
         case 9: // HOR
             pTop = pBottom = &theDefLine;
-            aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_HORI );
-            aBorderInner.SetLine( NULL, BOXINFO_LINE_VERT );
+            aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
+            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_HINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
             break;
 
         case 10: // HORINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
-            aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_HORI );
-            aBorderInner.SetLine( NULL, BOXINFO_LINE_VERT );
+            aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
+            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_RIGHT|FRM_VALID_LEFT|FRM_VALID_HINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
             break;
 
         case 11: // VERINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
-            aBorderInner.SetLine( NULL, BOXINFO_LINE_HORI );
-            aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_VERT );
+            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::HORI );
+            aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_RIGHT|FRM_VALID_LEFT|FRM_VALID_VINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
         break;
 
         case 12: // ALL
             pLeft = pRight = pTop = pBottom = &theDefLine;
-            aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_HORI );
-            aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_VERT );
+            aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
+            aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_ALL;
             break;
 
         default:
         break;
     }
-    aBorderOuter.SetLine( pLeft, BOX_LINE_LEFT );
-    aBorderOuter.SetLine( pRight, BOX_LINE_RIGHT );
-    aBorderOuter.SetLine( pTop, BOX_LINE_TOP );
-    aBorderOuter.SetLine( pBottom, BOX_LINE_BOTTOM );
+    aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+    aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+    aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+    aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
     if(nModifier == KEY_SHIFT)
         nValidFlags |= FRM_VALID_ALL;

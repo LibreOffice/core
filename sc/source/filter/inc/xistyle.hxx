@@ -32,6 +32,7 @@
 #include "xiroot.hxx"
 
 struct ScAttrEntry;
+enum class SvxBoxItemLine;
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF)
@@ -648,9 +649,9 @@ private:
     /** Copies border of the last cell of the range to the first cell to keep it visible
         when the range is merged.
         @param nLine
-        BOX_LINE_RIGHT = copy most-right border of top row;
-        BOX_LINE_BOTTOM = copy most-bottom border of first column. */
-    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine );
+        SvxBoxItemLine::RIGHT = copy most-right border of top row;
+        SvxBoxItemLine::BOTTOM = copy most-bottom border of first column. */
+    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine );
 
 private:
     typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;

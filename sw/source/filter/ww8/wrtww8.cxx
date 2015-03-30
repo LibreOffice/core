@@ -2402,10 +2402,10 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
 
     //Set Default, just taken from the first cell of the first
     //row
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT,
-        BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+        SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
     for ( int i = 0; i < 4; ++i )

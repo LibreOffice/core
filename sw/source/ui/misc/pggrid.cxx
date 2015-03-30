@@ -299,11 +299,11 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
         sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
 
         sal_Int32 nValue1 = rSize.GetSize().Height() - nDistanceUL -
-                rBox.GetDistance(BOX_LINE_TOP) -
-                                    rBox.GetDistance(BOX_LINE_BOTTOM);
+                rBox.GetDistance(SvxBoxItemLine::TOP) -
+                                    rBox.GetDistance(SvxBoxItemLine::BOTTOM);
         sal_Int32 nValue2 = rSize.GetSize().Width() - nDistanceLR -
-                rBox.GetDistance(BOX_LINE_LEFT) -
-                                    rBox.GetDistance(BOX_LINE_RIGHT);
+                rBox.GetDistance(SvxBoxItemLine::LEFT) -
+                                    rBox.GetDistance(SvxBoxItemLine::RIGHT);
         if(m_bVertical)
         {
             m_aPageSize.Width() = nValue1;

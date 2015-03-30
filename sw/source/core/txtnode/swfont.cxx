@@ -673,10 +673,10 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetBottomBorder(pBoxItem->GetBottom());
             SetRightBorder(pBoxItem->GetRight());
             SetLeftBorder(pBoxItem->GetLeft());
-            SetTopBorderDist(pBoxItem->GetDistance(BOX_LINE_TOP));
-            SetBottomBorderDist(pBoxItem->GetDistance(BOX_LINE_BOTTOM));
-            SetRightBorderDist(pBoxItem->GetDistance(BOX_LINE_RIGHT));
-            SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
+            SetTopBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP));
+            SetBottomBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM));
+            SetRightBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::RIGHT));
+            SetLeftBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_SHADOW,
             true, &pItem ))
@@ -857,10 +857,10 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetBottomBorder(pBoxItem->GetBottom());
         SetRightBorder(pBoxItem->GetRight());
         SetLeftBorder(pBoxItem->GetLeft());
-        SetTopBorderDist(pBoxItem->GetDistance(BOX_LINE_TOP));
-        SetBottomBorderDist(pBoxItem->GetDistance(BOX_LINE_BOTTOM));
-        SetRightBorderDist(pBoxItem->GetDistance(BOX_LINE_RIGHT));
-        SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
+        SetTopBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP));
+        SetBottomBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM));
+        SetRightBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::RIGHT));
+        SetLeftBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
     }
     else
     {

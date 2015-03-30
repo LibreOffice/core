@@ -141,8 +141,8 @@ public:
 
     void Clear();
 
-    SvxCSS1BorderInfo *GetBorderInfo( sal_uInt16 nLine, bool bCreate=true );
-    void CopyBorderInfo( sal_uInt16 nSrcLine, sal_uInt16 nDstLine, sal_uInt16 nWhat );
+    SvxCSS1BorderInfo *GetBorderInfo( SvxBoxItemLine nLine, bool bCreate=true );
+    void CopyBorderInfo( SvxBoxItemLine nSrcLine, SvxBoxItemLine nDstLine, sal_uInt16 nWhat );
     void CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat );
 
     void SetBoxItem( SfxItemSet& rItemSet, sal_uInt16 nMinBorderDist,

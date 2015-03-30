@@ -2021,48 +2021,48 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_
         if (pLeftBox)
         {
             if (ScHasPriority(pTheBox->GetLeft(), pLeftBox->GetRight()))
-                aBox.SetLine(pTheBox->GetLeft(), BOX_LINE_LEFT);
+                aBox.SetLine(pTheBox->GetLeft(), SvxBoxItemLine::LEFT);
             else
-                aBox.SetLine(pLeftBox->GetRight(), BOX_LINE_LEFT);
+                aBox.SetLine(pLeftBox->GetRight(), SvxBoxItemLine::LEFT);
         }
         else
-            aBox.SetLine(pTheBox->GetLeft(), BOX_LINE_LEFT);
+            aBox.SetLine(pTheBox->GetLeft(), SvxBoxItemLine::LEFT);
     }
     if (nFlags & LF_TOP)
     {
         if (pTopBox)
         {
             if (ScHasPriority(pTheBox->GetTop(), pTopBox->GetBottom()))
-                aBox.SetLine(pTheBox->GetTop(), BOX_LINE_TOP);
+                aBox.SetLine(pTheBox->GetTop(), SvxBoxItemLine::TOP);
             else
-                aBox.SetLine(pTopBox->GetBottom(), BOX_LINE_TOP);
+                aBox.SetLine(pTopBox->GetBottom(), SvxBoxItemLine::TOP);
         }
         else
-            aBox.SetLine(pTheBox->GetTop(), BOX_LINE_TOP);
+            aBox.SetLine(pTheBox->GetTop(), SvxBoxItemLine::TOP);
     }
     if (nFlags & LF_RIGHT)
     {
         if (pRightBox)
         {
             if (ScHasPriority(pTheBox->GetRight(), pRightBox->GetLeft()))
-                aBox.SetLine(pTheBox->GetRight(), BOX_LINE_RIGHT);
+                aBox.SetLine(pTheBox->GetRight(), SvxBoxItemLine::RIGHT);
             else
-                aBox.SetLine(pRightBox->GetLeft(), BOX_LINE_RIGHT);
+                aBox.SetLine(pRightBox->GetLeft(), SvxBoxItemLine::RIGHT);
         }
         else
-            aBox.SetLine(pTheBox->GetRight(), BOX_LINE_RIGHT);
+            aBox.SetLine(pTheBox->GetRight(), SvxBoxItemLine::RIGHT);
     }
     if (nFlags & LF_BOTTOM)
     {
         if (pBottomBox)
         {
             if (ScHasPriority(pTheBox->GetBottom(), pBottomBox->GetTop()))
-                aBox.SetLine(pTheBox->GetBottom(), BOX_LINE_BOTTOM);
+                aBox.SetLine(pTheBox->GetBottom(), SvxBoxItemLine::BOTTOM);
             else
-                aBox.SetLine(pBottomBox->GetTop(), BOX_LINE_BOTTOM);
+                aBox.SetLine(pBottomBox->GetTop(), SvxBoxItemLine::BOTTOM);
         }
         else
-            aBox.SetLine(pTheBox->GetBottom(), BOX_LINE_BOTTOM);
+            aBox.SetLine(pTheBox->GetBottom(), SvxBoxItemLine::BOTTOM);
     }
     rData.PutItem( nIndex, aBox );
 }

@@ -525,17 +525,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             bool bLine = false;
             if( aBox.GetTop() != NULL )
-                aBox.SetLine(&aBorderLine, BOX_LINE_TOP), bLine |= true;
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::TOP), bLine |= true;
             if( aBox.GetBottom() != NULL )
-                aBox.SetLine(&aBorderLine, BOX_LINE_BOTTOM), bLine |= true;
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM), bLine |= true;
             if( aBox.GetLeft() != NULL )
-                aBox.SetLine(&aBorderLine, BOX_LINE_LEFT), bLine |= true;
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::LEFT), bLine |= true;
             if( aBox.GetRight() != NULL )
-                aBox.SetLine(&aBorderLine, BOX_LINE_RIGHT), bLine |= true;
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT), bLine |= true;
             if( aInfo.GetHori() != NULL )
-                aInfo.SetLine(&aBorderLine, BOXINFO_LINE_HORI), bLine |= true;
+                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI), bLine |= true;
             if( aInfo.GetVert() != NULL )
-                aInfo.SetLine(&aBorderLine, BOXINFO_LINE_VERT), bLine |= true;
+                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT), bLine |= true;
 
             aCoreSet.Put( aBox  );
             aCoreSet.Put( aInfo );

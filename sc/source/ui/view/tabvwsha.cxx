@@ -490,9 +490,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         SvxBoxInfoItem aTempInfo( aLineInner );
 
         if ( aLineInner.IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-            aNewFrame.SetLine( aLineOuter.GetLeft(), BOX_LINE_RIGHT );
+            aNewFrame.SetLine( aLineOuter.GetLeft(), SvxBoxItemLine::RIGHT );
         if ( aLineInner.IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-            aNewFrame.SetLine( aLineOuter.GetRight(), BOX_LINE_LEFT );
+            aNewFrame.SetLine( aLineOuter.GetRight(), SvxBoxItemLine::LEFT );
 
         aLineInner.SetValid( SvxBoxInfoItemValidFlags::LEFT, aTempInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT));
         aLineInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT));

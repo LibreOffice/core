@@ -135,9 +135,9 @@ static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
         {
             SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
             if( bTop )
-                aBox.SetLine( 0, BOX_LINE_TOP );
+                aBox.SetLine( 0, SvxBoxItemLine::TOP );
             else
-                aBox.SetLine( 0, BOX_LINE_BOTTOM );
+                aBox.SetLine( 0, SvxBoxItemLine::BOTTOM );
 
             if( pShareFmts )
                 pShareFmts->SetAttr( *pBox, aBox );
@@ -191,7 +191,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                         aBPara.IsAnyBorderFound() )
                     {
                         SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
-                        aBox.SetLine( 0, BOX_LINE_RIGHT );
+                        aBox.SetLine( 0, SvxBoxItemLine::RIGHT );
                         if( pGCPara->pShareFmts )
                             pGCPara->pShareFmts->SetAttr( *pBox, aBox );
                         else

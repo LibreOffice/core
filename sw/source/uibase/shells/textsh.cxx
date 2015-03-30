@@ -601,7 +601,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxBoxInfoItem aBoxInfo(static_cast<const SvxBoxInfoItem &>(aSet.Get(SID_ATTR_BORDER_INNER)));
             const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
             aBoxInfo.SetMinDist(false);
-            aBoxInfo.SetDefDist(rBox.GetDistance(BOX_LINE_LEFT));
+            aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
             aSet.Put(aBoxInfo);
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));

@@ -656,13 +656,13 @@ const SwRect SwFrm::UnionFrm( bool bBorder ) const
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         const SvxBoxItem &rBox = rAttrs.GetBox();
         if ( rBox.GetLeft() )
-            nLeft -= rBox.CalcLineSpace( BOX_LINE_LEFT );
+            nLeft -= rBox.CalcLineSpace( SvxBoxItemLine::LEFT );
         else if ( rAttrs.IsBorderDist() )
-            nLeft -= rBox.GetDistance( BOX_LINE_LEFT ) + 1;
+            nLeft -= rBox.GetDistance( SvxBoxItemLine::LEFT ) + 1;
         if ( rBox.GetRight() )
-            nAdd += rBox.CalcLineSpace( BOX_LINE_RIGHT );
+            nAdd += rBox.CalcLineSpace( SvxBoxItemLine::RIGHT );
         else if ( rAttrs.IsBorderDist() )
-            nAdd += rBox.GetDistance( BOX_LINE_RIGHT ) + 1;
+            nAdd += rBox.GetDistance( SvxBoxItemLine::RIGHT ) + 1;
         if( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
         {
             const SvxShadowItem &rShadow = rAttrs.GetShadow();

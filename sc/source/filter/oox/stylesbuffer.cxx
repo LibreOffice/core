@@ -1601,19 +1601,19 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 
          if (SvxBoxItem::LineToSvxLine(maApiData.maLeft, aLine, false))
          {
-             aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
+             aBoxItem.SetLine( &aLine, SvxBoxItemLine::LEFT );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maRight, aLine, false))
          {
-             aBoxItem.SetLine( &aLine, BOX_LINE_RIGHT );
+             aBoxItem.SetLine( &aLine, SvxBoxItemLine::RIGHT );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maTop, aLine, false))
          {
-             aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
+             aBoxItem.SetLine( &aLine, SvxBoxItemLine::TOP );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maBottom, aLine, false))
          {
-             aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
+             aBoxItem.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
          }
          ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
     }

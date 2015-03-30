@@ -743,8 +743,8 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
         long nPaperWidth = ( aPageSize.Width() - nLeftMargin - nRightMargin -
                                 rParam.nLeft - rParam.nRight ) * 100 / nZoom;
         if (rParam.pBorder)
-            nPaperWidth -= ( rParam.pBorder->GetDistance(BOX_LINE_LEFT) +
-                             rParam.pBorder->GetDistance(BOX_LINE_RIGHT) +
+            nPaperWidth -= ( rParam.pBorder->GetDistance(SvxBoxItemLine::LEFT) +
+                             rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT) +
                              lcl_LineTotal(rParam.pBorder->GetLeft()) +
                              lcl_LineTotal(rParam.pBorder->GetRight()) ) * 100 / nZoom;
 
@@ -770,8 +770,8 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 
         rParam.nHeight = nMaxHeight + rParam.nDistance;
         if (rParam.pBorder)
-            rParam.nHeight += rParam.pBorder->GetDistance(BOX_LINE_TOP) +
-                              rParam.pBorder->GetDistance(BOX_LINE_BOTTOM) +
+            rParam.nHeight += rParam.pBorder->GetDistance(SvxBoxItemLine::TOP) +
+                              rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM) +
                               lcl_LineTotal( rParam.pBorder->GetTop() ) +
                               lcl_LineTotal( rParam.pBorder->GetBottom() );
         if (rParam.pShadow && rParam.pShadow->GetLocation() != SVX_SHADOW_NONE)
@@ -1721,12 +1721,12 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
     Size aPaperSize( nLineWidth, rParam.nHeight-rParam.nDistance );
     if ( rParam.pBorder )
     {
-        long nLeft = lcl_LineTotal( rParam.pBorder->GetLeft() ) + rParam.pBorder->GetDistance(BOX_LINE_LEFT);
-        long nTop = lcl_LineTotal( rParam.pBorder->GetTop() ) + rParam.pBorder->GetDistance(BOX_LINE_TOP);
+        long nLeft = lcl_LineTotal( rParam.pBorder->GetLeft() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::LEFT);
+        long nTop = lcl_LineTotal( rParam.pBorder->GetTop() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::TOP);
         aStart.X() += nLeft;
         aStart.Y() += nTop;
-        aPaperSize.Width() -= nLeft + lcl_LineTotal( rParam.pBorder->GetRight() ) + rParam.pBorder->GetDistance(BOX_LINE_RIGHT);
-        aPaperSize.Height() -= nTop + lcl_LineTotal( rParam.pBorder->GetBottom() ) + rParam.pBorder->GetDistance(BOX_LINE_BOTTOM);
+        aPaperSize.Width() -= nLeft + lcl_LineTotal( rParam.pBorder->GetRight() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT);
+        aPaperSize.Height() -= nTop + lcl_LineTotal( rParam.pBorder->GetBottom() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM);
     }
 
     if ( rParam.pShadow && rParam.pShadow->GetLocation() != SVX_SHADOW_NONE )
@@ -1760,8 +1760,8 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
         if (rParam.pBorder)
             nMaxHeight += lcl_LineTotal( rParam.pBorder->GetTop() ) +
                           lcl_LineTotal( rParam.pBorder->GetBottom() ) +
-                                    rParam.pBorder->GetDistance(BOX_LINE_TOP) +
-                                    rParam.pBorder->GetDistance(BOX_LINE_BOTTOM);
+                                    rParam.pBorder->GetDistance(SvxBoxItemLine::TOP) +
+                                    rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM);
         if (rParam.pShadow && rParam.pShadow->GetLocation() != SVX_SHADOW_NONE)
             nMaxHeight += rParam.pShadow->CalcShadowSpace(SHADOW_TOP) +
                           rParam.pShadow->CalcShadowSpace(SHADOW_BOTTOM);
@@ -2069,8 +2069,8 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         if (aTableParam.bHeaders)
             nDataWidth += (long) PRINT_HEADER_WIDTH;
         if (pBorderItem)
-            nDataWidth += pBorderItem->GetDistance(BOX_LINE_LEFT) +
-                           pBorderItem->GetDistance(BOX_LINE_RIGHT);        //! Line width?
+            nDataWidth += pBorderItem->GetDistance(SvxBoxItemLine::LEFT) +
+                           pBorderItem->GetDistance(SvxBoxItemLine::RIGHT);        //! Line width?
         if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
             nDataWidth += pShadowItem->CalcShadowSpace(SHADOW_LEFT) +
                            pShadowItem->CalcShadowSpace(SHADOW_RIGHT);
@@ -2092,8 +2092,8 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         if (aTableParam.bHeaders)
             nDataHeight += (long) PRINT_HEADER_HEIGHT;
         if (pBorderItem)
-            nDataHeight += pBorderItem->GetDistance(BOX_LINE_TOP) +
-                           pBorderItem->GetDistance(BOX_LINE_BOTTOM);       //! Line width?
+            nDataHeight += pBorderItem->GetDistance(SvxBoxItemLine::TOP) +
+                           pBorderItem->GetDistance(SvxBoxItemLine::BOTTOM);       //! Line width?
         if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
             nDataHeight += pShadowItem->CalcShadowSpace(SHADOW_TOP) +
                            pShadowItem->CalcShadowSpace(SHADOW_BOTTOM);
@@ -2136,9 +2136,9 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if (pBorderItem)
     {
         nInnerStartX += (long) ( ( lcl_LineTotal(pBorderItem->GetLeft()) +
-                                    pBorderItem->GetDistance(BOX_LINE_LEFT) ) * nScaleX );
+                                    pBorderItem->GetDistance(SvxBoxItemLine::LEFT) ) * nScaleX );
         nInnerStartY += (long) ( ( lcl_LineTotal(pBorderItem->GetTop()) +
-                                    pBorderItem->GetDistance(BOX_LINE_TOP) ) * nScaleY );
+                                    pBorderItem->GetDistance(SvxBoxItemLine::TOP) ) * nScaleY );
     }
     if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
     {
@@ -2190,9 +2190,9 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if (pBorderItem)
     {
         nBorderEndX += (long) ( ( lcl_LineTotal(pBorderItem->GetRight()) +
-                                    pBorderItem->GetDistance(BOX_LINE_RIGHT) ) * nScaleX );
+                                    pBorderItem->GetDistance(SvxBoxItemLine::RIGHT) ) * nScaleX );
         nBorderEndY += (long) ( ( lcl_LineTotal(pBorderItem->GetBottom()) +
-                                    pBorderItem->GetDistance(BOX_LINE_BOTTOM) ) * nScaleY );
+                                    pBorderItem->GetDistance(SvxBoxItemLine::BOTTOM) ) * nScaleY );
     }
     if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
     {
@@ -2911,12 +2911,12 @@ Size ScPrintFunc::GetDocPageSize()
     {
         aDocPageSize.Width()  -= lcl_LineTotal(pBorderItem->GetLeft()) +
                                  lcl_LineTotal(pBorderItem->GetRight()) +
-                                 pBorderItem->GetDistance(BOX_LINE_LEFT) +
-                                 pBorderItem->GetDistance(BOX_LINE_RIGHT);
+                                 pBorderItem->GetDistance(SvxBoxItemLine::LEFT) +
+                                 pBorderItem->GetDistance(SvxBoxItemLine::RIGHT);
         aDocPageSize.Height() -= lcl_LineTotal(pBorderItem->GetTop()) +
                                  lcl_LineTotal(pBorderItem->GetBottom()) +
-                                 pBorderItem->GetDistance(BOX_LINE_TOP) +
-                                 pBorderItem->GetDistance(BOX_LINE_BOTTOM);
+                                 pBorderItem->GetDistance(SvxBoxItemLine::TOP) +
+                                 pBorderItem->GetDistance(SvxBoxItemLine::BOTTOM);
     }
     if (pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE)
     {

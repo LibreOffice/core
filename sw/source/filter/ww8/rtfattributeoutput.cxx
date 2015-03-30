@@ -557,9 +557,9 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
 
     // Cell margins
     const SvxBoxItem& rBox = pFmt->GetBox();
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
     static const char* aRowPadNames[] =
@@ -642,9 +642,9 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
     if (pCellFmt->GetAttrSet().HasItem(RES_BOX, &pItem))
     {
         const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(*pItem);
-        static const sal_uInt16 aBorders[] =
+        static const SvxBoxItemLine aBorders[] =
         {
-            BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+            SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
         };
         static const char* aBorderNames[] =
         {
@@ -1143,22 +1143,22 @@ void RtfAttributeOutput::SectionPageBorders(const SwFrmFmt* pFmt, const SwFrmFmt
     if (pLine)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine,
                                               OOO_STRING_SVTOOLS_RTF_PGBRDRT,
-                                              rBox.GetDistance(BOX_LINE_TOP)));
+                                              rBox.GetDistance(SvxBoxItemLine::TOP)));
     pLine = rBox.GetBottom();
     if (pLine)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine,
                                               OOO_STRING_SVTOOLS_RTF_PGBRDRB,
-                                              rBox.GetDistance(BOX_LINE_BOTTOM)));
+                                              rBox.GetDistance(SvxBoxItemLine::BOTTOM)));
     pLine = rBox.GetLeft();
     if (pLine)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine,
                                               OOO_STRING_SVTOOLS_RTF_PGBRDRL,
-                                              rBox.GetDistance(BOX_LINE_LEFT)));
+                                              rBox.GetDistance(SvxBoxItemLine::LEFT)));
     pLine = rBox.GetRight();
     if (pLine)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine,
                                               OOO_STRING_SVTOOLS_RTF_PGBRDRR,
-                                              rBox.GetDistance(BOX_LINE_RIGHT)));
+                                              rBox.GetDistance(SvxBoxItemLine::RIGHT)));
 }
 
 void RtfAttributeOutput::SectionBiDi(bool bBiDi)
@@ -3118,9 +3118,9 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
 
 void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 {
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
     static const sal_Char* aBorderNames[] =
     {
@@ -3132,15 +3132,15 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     if (m_rExport.bRTFFlySyntax)
     {
         // Borders: spacing to contents, convert from twips to EMUs.
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextLeft", OString::number(rBox.GetDistance(BOX_LINE_LEFT) * 635)));
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextTop", OString::number(rBox.GetDistance(BOX_LINE_TOP) * 635)));
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextRight", OString::number(rBox.GetDistance(BOX_LINE_RIGHT) * 635)));
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextBottom", OString::number(rBox.GetDistance(BOX_LINE_BOTTOM) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextLeft", OString::number(rBox.GetDistance(SvxBoxItemLine::LEFT) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextTop", OString::number(rBox.GetDistance(SvxBoxItemLine::TOP) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextRight", OString::number(rBox.GetDistance(SvxBoxItemLine::RIGHT) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextBottom", OString::number(rBox.GetDistance(SvxBoxItemLine::BOTTOM) * 635)));
 
-        const SvxBorderLine* pLeft = rBox.GetLine(BOX_LINE_LEFT);
-        const SvxBorderLine* pRight = rBox.GetLine(BOX_LINE_RIGHT);
-        const SvxBorderLine* pTop = rBox.GetLine(BOX_LINE_TOP);
-        const SvxBorderLine* pBottom = rBox.GetLine(BOX_LINE_BOTTOM);
+        const SvxBorderLine* pLeft = rBox.GetLine(SvxBoxItemLine::LEFT);
+        const SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
+        const SvxBorderLine* pTop = rBox.GetLine(SvxBoxItemLine::TOP);
+        const SvxBorderLine* pBottom = rBox.GetLine(SvxBoxItemLine::BOTTOM);
         if (pLeft && pRight && pTop && pBottom && *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
             const Color& rColor = pTop->GetColor();
@@ -3166,10 +3166,10 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             *rBox.GetTop() == *rBox.GetBottom() &&
             *rBox.GetTop() == *rBox.GetLeft() &&
             *rBox.GetTop() == *rBox.GetRight() &&
-            nDist == rBox.GetDistance(BOX_LINE_TOP) &&
-            nDist == rBox.GetDistance(BOX_LINE_LEFT) &&
-            nDist == rBox.GetDistance(BOX_LINE_BOTTOM) &&
-            nDist == rBox.GetDistance(BOX_LINE_RIGHT))
+            nDist == rBox.GetDistance(SvxBoxItemLine::TOP) &&
+            nDist == rBox.GetDistance(SvxBoxItemLine::LEFT) &&
+            nDist == rBox.GetDistance(SvxBoxItemLine::BOTTOM) &&
+            nDist == rBox.GetDistance(SvxBoxItemLine::RIGHT))
         m_aSectionBreaks.append(OutBorderLine(m_rExport, rBox.GetTop(), OOO_STRING_SVTOOLS_RTF_BOX, nDist));
     else
     {
@@ -3177,7 +3177,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         if (const SfxPoolItem* pItem = GetExport().HasItem(RES_SHADOW))
             eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
 
-        const sal_uInt16* pBrd = aBorders;
+        const SvxBoxItemLine* pBrd = aBorders;
         const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {

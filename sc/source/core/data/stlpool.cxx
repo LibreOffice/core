@@ -368,10 +368,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_REP );
 
     // Background and border
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::TOP );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::LEFT );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::RIGHT );
     aBoxItem.SetDistance( 10 ); // 0.2mm
     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP, true );
     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, true );

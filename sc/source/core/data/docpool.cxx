@@ -218,8 +218,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
                                      ATTR_PAGE_ON,    ATTR_PAGE_SHARED,
                                      0 );
 
-    pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_HORI);
-    pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_VERT);
+    pGlobalBorderInnerAttr->SetLine(NULL, SvxBoxInfoItemLine::HORI);
+    pGlobalBorderInnerAttr->SetLine(NULL, SvxBoxInfoItemLine::VERT);
     pGlobalBorderInnerAttr->SetTable(true);
     pGlobalBorderInnerAttr->SetDist(true);
     pGlobalBorderInnerAttr->SetMinDist(false);

@@ -119,10 +119,10 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         nLine >>= 2;
         LotusToScBorderLine( nLine, aBottom );
 
-        aBox.SetLine( &aTop, BOX_LINE_TOP );
-        aBox.SetLine( &aLeft, BOX_LINE_LEFT );
-        aBox.SetLine( &aBottom, BOX_LINE_BOTTOM );
-        aBox.SetLine( &aRight, BOX_LINE_RIGHT );
+        aBox.SetLine( &aTop, SvxBoxItemLine::TOP );
+        aBox.SetLine( &aLeft, SvxBoxItemLine::LEFT );
+        aBox.SetLine( &aBottom, SvxBoxItemLine::BOTTOM );
+        aBox.SetLine( &aRight, SvxBoxItemLine::RIGHT );
 
         rItemSet.Put( aBox );
     }

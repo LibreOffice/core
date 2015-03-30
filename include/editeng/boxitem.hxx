@@ -34,11 +34,10 @@
     This item describes a border attribute
     (all four edges and the inward distance)
 */
-
-#define BOX_LINE_TOP    ((sal_uInt16)0)
-#define BOX_LINE_BOTTOM ((sal_uInt16)1)
-#define BOX_LINE_LEFT   ((sal_uInt16)2)
-#define BOX_LINE_RIGHT  ((sal_uInt16)3)
+enum class SvxBoxItemLine
+{
+    TOP, BOTTOM, LEFT, RIGHT, LAST = RIGHT
+};
 
 /**
 This version causes SvxBoxItem to store the 4 cell spacing distances separately
@@ -93,20 +92,20 @@ public:
     const   editeng::SvxBorderLine* GetLeft()   const { return pLeft; }
     const   editeng::SvxBorderLine* GetRight()  const { return pRight; }
 
-    const   editeng::SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
+    const   editeng::SvxBorderLine* GetLine( SvxBoxItemLine nLine ) const;
 
     //The Pointers are being copied!
-    void    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
+    void    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxItemLine nLine );
 
-    sal_uInt16  GetDistance( sal_uInt16 nLine ) const;
+    sal_uInt16  GetDistance( SvxBoxItemLine nLine ) const;
     sal_uInt16  GetDistance() const;
 
-    void    SetDistance( sal_uInt16 nNew, sal_uInt16 nLine );
+    void    SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine );
     inline void SetDistance( sal_uInt16 nNew );
 
     // Line width plus Space plus inward distance
     // bIgnoreLine = TRUE -> Also return distance, when no Line is set
-    sal_uInt16  CalcLineSpace( sal_uInt16 nLine, bool bIgnoreLine = false ) const;
+    sal_uInt16  CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine = false ) const;
     static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
     static bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
     static bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
@@ -127,8 +126,10 @@ inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
     transported the borderline for the inner horizontal and vertical lines.
 */
 
-#define BOXINFO_LINE_HORI   ((sal_uInt16)0)
-#define BOXINFO_LINE_VERT   ((sal_uInt16)1)
+enum class SvxBoxInfoItemLine
+{
+    HORI, VERT, LAST = VERT
+};
 
 enum class SvxBoxInfoItemValidFlags
 {
@@ -181,8 +182,8 @@ public:
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool            GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -199,22 +200,22 @@ public:
     const editeng::SvxBorderLine*   GetVert() const { return pVert; }
 
     //The Pointers are being copied!
-    void                    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
+    void                    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxInfoItemLine nLine );
 
-    bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
-    void    SetTable( bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
+    bool                    IsTable() const             { return mbEnableHor && mbEnableVer; }
+    void                    SetTable( bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
 
-    inline bool         IsHorEnabled() const { return mbEnableHor; }
-    inline void         EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
-    inline bool         IsVerEnabled() const { return mbEnableVer; }
-    inline void         EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
+    inline bool             IsHorEnabled() const { return mbEnableHor; }
+    inline void             EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
+    inline bool             IsVerEnabled() const { return mbEnableVer; }
+    inline void             EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
 
-    bool    IsDist() const              { return bDist; }
-    void    SetDist( bool bNew )        { bDist = bNew; }
-    bool    IsMinDist() const           { return bMinDist; }
-    void    SetMinDist( bool bNew )     { bMinDist = bNew; }
-    sal_uInt16  GetDefDist() const            { return nDefDist; }
-    void        SetDefDist( sal_uInt16 nNew ) { nDefDist = nNew; }
+    bool                    IsDist() const              { return bDist; }
+    void                    SetDist( bool bNew )        { bDist = bNew; }
+    bool                    IsMinDist() const           { return bMinDist; }
+    void                    SetMinDist( bool bNew )     { bMinDist = bNew; }
+    sal_uInt16              GetDefDist() const            { return nDefDist; }
+    void                    SetDefDist( sal_uInt16 nNew ) { nDefDist = nNew; }
 
     bool                    IsValid( SvxBoxInfoItemValidFlags nValid ) const
                                 { return bool( nValidFlags & nValid ); }

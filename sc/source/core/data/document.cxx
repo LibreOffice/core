@@ -4900,14 +4900,14 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
                                     SvxBoxItem&     rLineOuter,
                                     SvxBoxInfoItem& rLineInner )
 {
-    rLineOuter.SetLine(NULL, BOX_LINE_TOP);
-    rLineOuter.SetLine(NULL, BOX_LINE_BOTTOM);
-    rLineOuter.SetLine(NULL, BOX_LINE_LEFT);
-    rLineOuter.SetLine(NULL, BOX_LINE_RIGHT);
+    rLineOuter.SetLine(NULL, SvxBoxItemLine::TOP);
+    rLineOuter.SetLine(NULL, SvxBoxItemLine::BOTTOM);
+    rLineOuter.SetLine(NULL, SvxBoxItemLine::LEFT);
+    rLineOuter.SetLine(NULL, SvxBoxItemLine::RIGHT);
     rLineOuter.SetDistance(0);
 
-    rLineInner.SetLine(NULL, BOXINFO_LINE_HORI);
-    rLineInner.SetLine(NULL, BOXINFO_LINE_VERT);
+    rLineInner.SetLine(NULL, SvxBoxInfoItemLine::HORI);
+    rLineInner.SetLine(NULL, SvxBoxInfoItemLine::VERT);
     rLineInner.SetTable(true);
     rLineInner.SetDist(true);
     rLineInner.SetMinDist(false);

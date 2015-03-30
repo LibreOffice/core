@@ -456,16 +456,16 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, BOX_LINE_LEFT );
+                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::LEFT );
                     if( nMemberId == RIGHT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, BOX_LINE_RIGHT );
+                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::RIGHT );
                     if( nMemberId == TOP_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, BOX_LINE_TOP );
+                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::TOP );
                     if( nMemberId == BOTTOM_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, BOX_LINE_BOTTOM);
+                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::BOTTOM);
                     break;
 
                 case ALL_BORDER:
@@ -578,10 +578,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
             }
 
-            pBox->SetLine( aBoxes.pTop,    BOX_LINE_TOP    );
-            pBox->SetLine( aBoxes.pBottom, BOX_LINE_BOTTOM );
-            pBox->SetLine( aBoxes.pLeft,   BOX_LINE_LEFT   );
-            pBox->SetLine( aBoxes.pRight,  BOX_LINE_RIGHT  );
+            pBox->SetLine( aBoxes.pTop,    SvxBoxItemLine::TOP    );
+            pBox->SetLine( aBoxes.pBottom, SvxBoxItemLine::BOTTOM );
+            pBox->SetLine( aBoxes.pLeft,   SvxBoxItemLine::LEFT   );
+            pBox->SetLine( aBoxes.pRight,  SvxBoxItemLine::RIGHT  );
 
             bOk = true;
         }

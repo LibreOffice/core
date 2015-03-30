@@ -68,6 +68,8 @@
 #include <vcl/msgbox.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <memory>
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::sdr::table;
@@ -889,10 +891,10 @@ namespace
     {
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( rAttrSet.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), BOX_LINE_BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), SvxBoxItemLine::LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), SvxBoxItemLine::RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), SvxBoxItemLine::TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), SvxBoxItemLine::BOTTOM );
         return aBoxItem;
     }
 }
@@ -942,17 +944,17 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
-            if( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) != aBoxItem.GetDistance( BOX_LINE_LEFT ) )
-                aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
+            if( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) != aBoxItem.GetDistance( SvxBoxItemLine::LEFT ) )
+                aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) ) );
 
-            if( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) != aBoxItem.GetDistance( BOX_LINE_RIGHT ) )
-                aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
+            if( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) != aBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) )
+                aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) ) );
 
-            if( aNewBoxItem.GetDistance( BOX_LINE_TOP ) != aBoxItem.GetDistance( BOX_LINE_TOP ) )
-                aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( BOX_LINE_TOP ) ) );
+            if( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) != aBoxItem.GetDistance( SvxBoxItemLine::TOP ) )
+                aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) ) );
 
-            if( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) != aBoxItem.GetDistance( BOX_LINE_BOTTOM ) )
-                aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
+            if( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) != aBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
+                aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) ) );
 
             SetAttrToSelectedCells(aNewSet, false);
         }
@@ -2249,7 +2251,7 @@ const sal_uInt16 CELL_LOWER  = 0x0080;
 
 
 
-static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, sal_uInt16 nLine )
+static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 {
     if( pNew )
     {
@@ -2278,12 +2280,12 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
             if( nCellFlags & CELL_UPPER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) )
-                    rNewFrame.SetLine(0, BOX_LINE_BOTTOM );
+                    rNewFrame.SetLine(0, SvxBoxItemLine::BOTTOM );
             }
             else if( nCellFlags & CELL_LOWER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) )
-                    rNewFrame.SetLine( 0, BOX_LINE_TOP );
+                    rNewFrame.SetLine( 0, SvxBoxItemLine::TOP );
             }
         }
         else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
@@ -2291,12 +2293,12 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
             if( nCellFlags & CELL_BEFORE )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-                    rNewFrame.SetLine( 0, BOX_LINE_RIGHT );
+                    rNewFrame.SetLine( 0, SvxBoxItemLine::RIGHT );
             }
             else if( nCellFlags & CELL_AFTER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-                    rNewFrame.SetLine( 0, BOX_LINE_LEFT );
+                    rNewFrame.SetLine( 0, SvxBoxItemLine::LEFT );
             }
         }
     }
@@ -2305,27 +2307,27 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
         // current cell is inside the selection
 
         if( (nCellFlags & CELL_LEFT) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            rNewFrame.SetLine( (nCellFlags & CELL_LEFT) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(), BOX_LINE_LEFT );
+            rNewFrame.SetLine( (nCellFlags & CELL_LEFT) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(), SvxBoxItemLine::LEFT );
 
         if( (nCellFlags & CELL_RIGHT) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            rNewFrame.SetLine( (nCellFlags & CELL_RIGHT) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(), BOX_LINE_RIGHT );
+            rNewFrame.SetLine( (nCellFlags & CELL_RIGHT) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(), SvxBoxItemLine::RIGHT );
 
         if( (nCellFlags & CELL_TOP) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-            rNewFrame.SetLine( (nCellFlags & CELL_TOP) ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(), BOX_LINE_TOP );
+            rNewFrame.SetLine( (nCellFlags & CELL_TOP) ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(), SvxBoxItemLine::TOP );
 
         if( (nCellFlags & CELL_BOTTOM) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-            rNewFrame.SetLine( (nCellFlags & CELL_BOTTOM) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(), BOX_LINE_BOTTOM );
+            rNewFrame.SetLine( (nCellFlags & CELL_BOTTOM) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(), SvxBoxItemLine::BOTTOM );
 
         // apply distance to borders
         if( pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::DISTANCE ) )
-            for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
+            for( SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>() )
                 rNewFrame.SetDistance( pBoxItem->GetDistance( nLine ), nLine );
     }
 }
 
 
 
-static void ImplSetLineColor( SvxBoxItem& rNewFrame, sal_uInt16 nLine, const Color& rColor )
+static void ImplSetLineColor( SvxBoxItem& rNewFrame, SvxBoxItemLine nLine, const Color& rColor )
 {
     const SvxBorderLine* pSourceLine = rNewFrame.GetLine( nLine );
     if( pSourceLine )
@@ -2343,16 +2345,16 @@ static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* p
     const Color aColor( pLineColorItem->GetValue() );
 
     if( (nCellFlags & (CELL_LOWER|CELL_BEFORE|CELL_AFTER)) == 0 )
-        ImplSetLineColor( rNewFrame, BOX_LINE_BOTTOM, aColor );
+        ImplSetLineColor( rNewFrame, SvxBoxItemLine::BOTTOM, aColor );
 
     if( (nCellFlags & (CELL_UPPER|CELL_BEFORE|CELL_AFTER)) == 0 )
-        ImplSetLineColor( rNewFrame, BOX_LINE_TOP, aColor );
+        ImplSetLineColor( rNewFrame, SvxBoxItemLine::TOP, aColor );
 
     if( (nCellFlags & (CELL_UPPER|CELL_LOWER|CELL_AFTER)) == 0 )
-        ImplSetLineColor( rNewFrame, BOX_LINE_RIGHT, aColor );
+        ImplSetLineColor( rNewFrame, SvxBoxItemLine::RIGHT, aColor );
 
     if( (nCellFlags & (CELL_UPPER|CELL_LOWER|CELL_BEFORE)) == 0 )
-        ImplSetLineColor( rNewFrame, BOX_LINE_LEFT, aColor );
+        ImplSetLineColor( rNewFrame, SvxBoxItemLine::LEFT, aColor );
 }
 
 
@@ -2366,12 +2368,12 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
             if( nCellFlags & CELL_UPPER )
             {
                 if( rNewFrame.GetBottom() )
-                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_BOTTOM );
+                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::BOTTOM );
             }
             else if( nCellFlags & CELL_LOWER )
             {
                 if( rNewFrame.GetTop() )
-                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_TOP );
+                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::TOP );
             }
         }
         else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
@@ -2379,25 +2381,25 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
             if( nCellFlags & CELL_BEFORE )
             {
                 if( rNewFrame.GetRight() )
-                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_RIGHT );
+                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::RIGHT );
             }
             else if( nCellFlags & CELL_AFTER )
             {
                 if( rNewFrame.GetLeft() )
-                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_LEFT );
+                    ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::LEFT );
             }
         }
     }
     else
     {
         if( rNewFrame.GetBottom() )
-            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_BOTTOM );
+            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::BOTTOM );
         if( rNewFrame.GetTop() )
-            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_TOP );
+            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::TOP );
         if( rNewFrame.GetRight() )
-            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_RIGHT );
+            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::RIGHT );
         if( rNewFrame.GetLeft() )
-            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, BOX_LINE_LEFT );
+            ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::LEFT );
     }
 }
 
@@ -2817,29 +2819,29 @@ struct LinesState
         , rBoxInfoItem(rBoxInfoItem_)
         , bDistanceIndeterminate(false)
     {
-        std::fill_n(aBorderSet, 4, false);
-        std::fill_n(aInnerLineSet, 2, false);
-        std::fill_n(aBorderIndeterminate, 4, false);
-        std::fill_n(aInnerLineIndeterminate, 2, false);
-        std::fill_n(aDistanceSet, 4, false);
-        std::fill_n(aDistance, 4, 0);
+        aBorderSet.fill(false);
+        aInnerLineSet.fill(false);
+        aBorderIndeterminate.fill(false);
+        aInnerLineIndeterminate.fill(false);
+        aDistanceSet.fill(false);
+        aDistance.fill(0);
     }
 
     SvxBoxItem& rBoxItem;
     SvxBoxInfoItem& rBoxInfoItem;
-    bool aBorderSet[4];
-    bool aInnerLineSet[2];
-    bool aBorderIndeterminate[4];
-    bool aInnerLineIndeterminate[2];
-    bool aDistanceSet[4];
-    sal_uInt16 aDistance[4];
+    o3tl::enumarray<SvxBoxItemLine, bool>       aBorderSet;
+    o3tl::enumarray<SvxBoxInfoItemLine, bool>   aInnerLineSet;
+    o3tl::enumarray<SvxBoxItemLine, bool>       aBorderIndeterminate;
+    o3tl::enumarray<SvxBoxInfoItemLine, bool>   aInnerLineIndeterminate;
+    o3tl::enumarray<SvxBoxItemLine, bool>       aDistanceSet;
+    o3tl::enumarray<SvxBoxItemLine, sal_uInt16> aDistance;
     bool bDistanceIndeterminate;
 };
 
 class BoxItemWrapper
 {
 public:
-    BoxItemWrapper(SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem, sal_uInt16 nBorderLine, sal_uInt16 nInnerLine, bool bBorder);
+    BoxItemWrapper(SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem, SvxBoxItemLine nBorderLine, SvxBoxInfoItemLine nInnerLine, bool bBorder);
 
     const SvxBorderLine* getLine() const;
     void setLine(const SvxBorderLine* pLine);
@@ -2847,42 +2849,43 @@ public:
 private:
     SvxBoxItem& m_rBoxItem;
     SvxBoxInfoItem& m_rBoxInfoItem;
-    const sal_uInt16 m_nLine;
+    const SvxBoxItemLine m_nBorderLine;
+    const SvxBoxInfoItemLine m_nInnerLine;
     const bool m_bBorder;
 };
 
 BoxItemWrapper::BoxItemWrapper(
         SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem,
-        const sal_uInt16 nBorderLine, const sal_uInt16 nInnerLine, const bool bBorder)
+        const SvxBoxItemLine nBorderLine, const SvxBoxInfoItemLine nInnerLine, const bool bBorder)
     : m_rBoxItem(rBoxItem)
     , m_rBoxInfoItem(rBoxInfoItem)
-    , m_nLine(bBorder ? nBorderLine : nInnerLine)
+    , m_nBorderLine(nBorderLine)
+    , m_nInnerLine(nInnerLine)
     , m_bBorder(bBorder)
 {
-    assert(bBorder ? (m_nLine <= BOX_LINE_RIGHT) : (m_nLine <= BOXINFO_LINE_VERT));
 }
 
 const SvxBorderLine* BoxItemWrapper::getLine() const
 {
     if (m_bBorder)
-        return m_rBoxItem.GetLine(m_nLine);
+        return m_rBoxItem.GetLine(m_nBorderLine);
     else
-        return (m_nLine == BOXINFO_LINE_HORI) ? m_rBoxInfoItem.GetHori() : m_rBoxInfoItem.GetVert();
+        return (m_nInnerLine == SvxBoxInfoItemLine::HORI) ? m_rBoxInfoItem.GetHori() : m_rBoxInfoItem.GetVert();
 }
 
 void BoxItemWrapper::setLine(const SvxBorderLine* pLine)
 {
     if (m_bBorder)
-        m_rBoxItem.SetLine(pLine, m_nLine);
+        m_rBoxItem.SetLine(pLine, m_nBorderLine);
     else
-        m_rBoxInfoItem.SetLine(pLine, m_nLine);
+        m_rBoxInfoItem.SetLine(pLine, m_nInnerLine);
 }
 
 void lcl_MergeBorderLine(
-        LinesState& rLinesState, const SvxBorderLine* const pLine, const sal_uInt16 nLine,
+        LinesState& rLinesState, const SvxBorderLine* const pLine, const SvxBoxItemLine nLine,
         SvxBoxInfoItemValidFlags nValidFlag, const bool bBorder = true)
 {
-    const sal_uInt16 nInnerLine(bBorder ? 0 : ((nValidFlag & SvxBoxInfoItemValidFlags::HORI) ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT));
+    const SvxBoxInfoItemLine nInnerLine(bBorder ? SvxBoxInfoItemLine::HORI : ((nValidFlag & SvxBoxInfoItemValidFlags::HORI) ? SvxBoxInfoItemLine::HORI : SvxBoxInfoItemLine::VERT));
     BoxItemWrapper aBoxItem(rLinesState.rBoxItem, rLinesState.rBoxInfoItem, nLine, nInnerLine, bBorder);
     bool& rbSet(bBorder ? rLinesState.aBorderSet[nLine] : rLinesState.aInnerLineSet[nInnerLine]);
 
@@ -2907,20 +2910,20 @@ void lcl_MergeBorderLine(
 }
 
 void lcl_MergeBorderOrInnerLine(
-        LinesState& rLinesState, const SvxBorderLine* const pLine, const sal_uInt16 nLine,
+        LinesState& rLinesState, const SvxBorderLine* const pLine, const SvxBoxItemLine nLine,
         SvxBoxInfoItemValidFlags nValidFlag, const bool bBorder)
 {
     if (bBorder)
         lcl_MergeBorderLine(rLinesState, pLine, nLine, nValidFlag);
     else
     {
-        const bool bVertical = (nLine == BOX_LINE_LEFT) || (nLine == BOX_LINE_RIGHT);
+        const bool bVertical = (nLine == SvxBoxItemLine::LEFT) || (nLine == SvxBoxItemLine::RIGHT);
         lcl_MergeBorderLine(rLinesState, pLine, nLine, bVertical ? SvxBoxInfoItemValidFlags::VERT : SvxBoxInfoItemValidFlags::HORI, false);
     }
 }
 
 void lcl_MergeDistance(
-        LinesState& rLinesState, const sal_uInt16 nIndex, const sal_uInt16 nDistance)
+        LinesState& rLinesState, const SvxBoxItemLine nIndex, const sal_uInt16 nDistance)
 {
     if (rLinesState.aDistanceSet[nIndex])
     {
@@ -2943,16 +2946,16 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
         if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if its not nw or ne corner
         {
             if( nCellFlags & CELL_UPPER )
-                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_TOP, SvxBoxInfoItemValidFlags::TOP);
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP);
             else if( nCellFlags & CELL_LOWER )
-                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM);
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM);
         }
         else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
         {
             if( nCellFlags & CELL_BEFORE )
-                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_LEFT, SvxBoxInfoItemValidFlags::LEFT);
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT);
             else if( nCellFlags & CELL_AFTER )
-                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_RIGHT, SvxBoxInfoItemValidFlags::RIGHT);
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT);
         }
 
         // NOTE: inner distances for cells outside the selected range
@@ -2962,15 +2965,15 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
     {
         // current cell is inside the selection
 
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_TOP, SvxBoxInfoItemValidFlags::TOP, (nCellFlags & CELL_TOP) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, (nCellFlags & CELL_BOTTOM) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_LEFT, SvxBoxInfoItemValidFlags::LEFT, (nCellFlags & CELL_LEFT) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_RIGHT, SvxBoxInfoItemValidFlags::RIGHT, (nCellFlags & CELL_RIGHT) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP, (nCellFlags & CELL_TOP) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, (nCellFlags & CELL_BOTTOM) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT, (nCellFlags & CELL_LEFT) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT, (nCellFlags & CELL_RIGHT) != 0);
 
-        lcl_MergeDistance(rLinesState, BOX_LINE_TOP, rCellBoxItem.GetDistance(BOX_LINE_TOP));
-        lcl_MergeDistance(rLinesState, BOX_LINE_BOTTOM, rCellBoxItem.GetDistance(BOX_LINE_BOTTOM));
-        lcl_MergeDistance(rLinesState, BOX_LINE_LEFT, rCellBoxItem.GetDistance(BOX_LINE_LEFT));
-        lcl_MergeDistance(rLinesState, BOX_LINE_RIGHT, rCellBoxItem.GetDistance(BOX_LINE_RIGHT));
+        lcl_MergeDistance(rLinesState, SvxBoxItemLine::TOP, rCellBoxItem.GetDistance(SvxBoxItemLine::TOP));
+        lcl_MergeDistance(rLinesState, SvxBoxItemLine::BOTTOM, rCellBoxItem.GetDistance(SvxBoxItemLine::BOTTOM));
+        lcl_MergeDistance(rLinesState, SvxBoxItemLine::LEFT, rCellBoxItem.GetDistance(SvxBoxItemLine::LEFT));
+        lcl_MergeDistance(rLinesState, SvxBoxItemLine::RIGHT, rCellBoxItem.GetDistance(SvxBoxItemLine::RIGHT));
     }
 }
 
@@ -3030,29 +3033,29 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
                 }
             }
 
-            if (!aLinesState.aBorderIndeterminate[BOX_LINE_TOP])
+            if (!aLinesState.aBorderIndeterminate[SvxBoxItemLine::TOP])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::TOP);
-            if (!aLinesState.aBorderIndeterminate[BOX_LINE_BOTTOM])
+            if (!aLinesState.aBorderIndeterminate[SvxBoxItemLine::BOTTOM])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::BOTTOM);
-            if (!aLinesState.aBorderIndeterminate[BOX_LINE_LEFT])
+            if (!aLinesState.aBorderIndeterminate[SvxBoxItemLine::LEFT])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::LEFT);
-            if (!aLinesState.aBorderIndeterminate[BOX_LINE_RIGHT])
+            if (!aLinesState.aBorderIndeterminate[SvxBoxItemLine::RIGHT])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::RIGHT);
-            if (!aLinesState.aInnerLineIndeterminate[BOXINFO_LINE_HORI])
+            if (!aLinesState.aInnerLineIndeterminate[SvxBoxInfoItemLine::HORI])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::HORI);
-            if (!aLinesState.aInnerLineIndeterminate[BOXINFO_LINE_VERT])
+            if (!aLinesState.aInnerLineIndeterminate[SvxBoxInfoItemLine::VERT])
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::VERT);
 
             if (!aLinesState.bDistanceIndeterminate)
             {
-                if (aLinesState.aDistanceSet[BOX_LINE_TOP])
-                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_TOP], BOX_LINE_TOP);
-                if (aLinesState.aDistanceSet[BOX_LINE_BOTTOM])
-                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_BOTTOM], BOX_LINE_BOTTOM);
-                if (aLinesState.aDistanceSet[BOX_LINE_LEFT])
-                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_LEFT], BOX_LINE_LEFT);
-                if (aLinesState.aDistanceSet[BOX_LINE_RIGHT])
-                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_RIGHT], BOX_LINE_RIGHT);
+                if (aLinesState.aDistanceSet[SvxBoxItemLine::TOP])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[SvxBoxItemLine::TOP], SvxBoxItemLine::TOP);
+                if (aLinesState.aDistanceSet[SvxBoxItemLine::BOTTOM])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[SvxBoxItemLine::BOTTOM], SvxBoxItemLine::BOTTOM);
+                if (aLinesState.aDistanceSet[SvxBoxItemLine::LEFT])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[SvxBoxItemLine::LEFT], SvxBoxItemLine::LEFT);
+                if (aLinesState.aDistanceSet[SvxBoxItemLine::RIGHT])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[SvxBoxItemLine::RIGHT], SvxBoxItemLine::RIGHT);
                 aLinesState.rBoxInfoItem.SetValid(SvxBoxInfoItemValidFlags::DISTANCE);
             }
         }

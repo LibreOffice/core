@@ -240,31 +240,31 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     SvxBoxItem aBox( ATTR_BORDER );
 
     if ( nStartCol == mnTabStartCol )
-        aBox.SetLine(&aOutLine, BOX_LINE_LEFT);
+        aBox.SetLine(&aOutLine, SvxBoxItemLine::LEFT);
     else
-        aBox.SetLine(&aLine, BOX_LINE_LEFT);
+        aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
 
     if ( nStartRow == mnTabStartRow )
-        aBox.SetLine(&aOutLine, BOX_LINE_TOP);
+        aBox.SetLine(&aOutLine, SvxBoxItemLine::TOP);
     else
-        aBox.SetLine(&aLine, BOX_LINE_TOP);
+        aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
 
     if ( nEndCol == mnTabEndCol ) //bottom row
-        aBox.SetLine(&aOutLine, BOX_LINE_RIGHT);
+        aBox.SetLine(&aOutLine, SvxBoxItemLine::RIGHT);
     else
-        aBox.SetLine(&aLine,  BOX_LINE_RIGHT);
+        aBox.SetLine(&aLine,  SvxBoxItemLine::RIGHT);
 
      if ( nEndRow == mnTabEndRow ) //bottom
-        aBox.SetLine(&aOutLine,  BOX_LINE_BOTTOM);
+        aBox.SetLine(&aOutLine,  SvxBoxItemLine::BOTTOM);
     else
-        aBox.SetLine(&aLine,  BOX_LINE_BOTTOM);
+        aBox.SetLine(&aLine,  SvxBoxItemLine::BOTTOM);
 
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false );
     if ( bHori )
     {
         aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,true);
-        aBoxInfo.SetLine( &aLine, BOXINFO_LINE_HORI );
+        aBoxInfo.SetLine( &aLine, SvxBoxInfoItemLine::HORI );
     }
     else
         aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false );
@@ -311,10 +311,10 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
 {
     ::editeng::SvxBorderLine aLine(0, nWidth, table::BorderLineStyle::SOLID);
     SvxBoxItem aBox( ATTR_BORDER );
-    aBox.SetLine(&aLine, BOX_LINE_LEFT);
-    aBox.SetLine(&aLine, BOX_LINE_TOP);
-    aBox.SetLine(&aLine, BOX_LINE_RIGHT);
-    aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
+    aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
+    aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+    aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
+    aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false);
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false);
