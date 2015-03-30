@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_f1177f52",
+        "filename": "formula/source/ui/dlg/FormulaHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T15:45:11Z",
+      "side": 1,
+      "message": "This fixes the symptom of the assertion but is not a correct solution. Notice that with this change after having clicked the Back button there is no cursor in the edit field and no selection and the wizard does not jump back to the previously selected function. In fact you then can click Back over and over again and nothing happens.",
+      "revId": "95aecfcb4752290c9f0eb981bca849c6ca6e0768",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
