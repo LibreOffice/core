@@ -42,33 +42,34 @@ enum SwFtnAdj
 /// Footnote information.
 class SW_DLLPUBLIC SwPageFtnInfo
 {
-    SwTwips     nMaxHeight;              ///< maximum height of the footnote area.
-    sal_uLong   nLineWidth;              ///< width of separator line
-    editeng::SvxBorderStyle eLineStyle;  ///< Style of the separator line
-    Color       aLineColor;              ///< color of the separator line
-    Fraction    aWidth;                  ///< percentage width of the separator line.
-    SwFtnAdj    eAdj;                    ///< line adjustment.
-    SwTwips     nTopDist;                ///< distance between body and separator.
-    SwTwips     nBottomDist;             ///< distance between separator and first footnote
+private:
+    SwTwips     m_nMaxHeight;   ///< maximum height of the footnote area.
+    sal_uLong   m_nLineWidth;   ///< width of separator line
+    editeng::SvxBorderStyle m_eLineStyle;  ///< Style of the separator line
+    Color       m_LineColor;    ///< color of the separator line
+    Fraction    m_Width;        ///< percentage width of the separator line.
+    SwFtnAdj    m_eAdjust;      ///< line adjustment.
+    SwTwips     m_nTopDist;     ///< distance between body and separator.
+    SwTwips     m_nBottomDist;  ///< distance between separator and first footnote
 
 public:
-    SwTwips     GetHeight() const       { return nMaxHeight; }
-    sal_uLong           GetLineWidth() const { return nLineWidth; }
-    const Color&    GetLineColor() const { return aLineColor;}
-    editeng::SvxBorderStyle  GetLineStyle() const { return eLineStyle; }
-    const Fraction& GetWidth() const    { return aWidth; }
-    SwFtnAdj    GetAdj()    const       { return eAdj; }
-    SwTwips     GetTopDist()const       { return nTopDist; }
-    SwTwips     GetBottomDist() const   { return nBottomDist; }
+    SwTwips     GetHeight() const       { return m_nMaxHeight; }
+    sal_uLong   GetLineWidth() const    { return m_nLineWidth; }
+    const Color& GetLineColor() const   { return m_LineColor;}
+    editeng::SvxBorderStyle  GetLineStyle() const { return m_eLineStyle; }
+    const Fraction& GetWidth() const    { return m_Width; }
+    SwFtnAdj    GetAdj() const          { return m_eAdjust; }
+    SwTwips     GetTopDist() const      { return m_nTopDist; }
+    SwTwips     GetBottomDist() const   { return m_nBottomDist; }
 
-    void SetHeight( SwTwips  nNew )     { nMaxHeight = nNew; }
-    void SetLineWidth(sal_uLong nSet  )     { nLineWidth = nSet; }
-    void SetLineStyle( editeng::SvxBorderStyle eSet )   { eLineStyle = eSet; }
-    void SetLineColor(const Color& rCol )  { aLineColor = rCol;}
-    void SetWidth( const Fraction &rNew){ aWidth = rNew; }
-    void SetAdj   ( SwFtnAdj eNew )     { eAdj = eNew; }
-    void SetTopDist   ( SwTwips nNew )  { nTopDist = nNew; }
-    void SetBottomDist( SwTwips nNew )  { nBottomDist = nNew; }
+    void SetHeight(SwTwips const nNew)      { m_nMaxHeight = nNew; }
+    void SetLineWidth(sal_uLong const nSet) { m_nLineWidth = nSet; }
+    void SetLineStyle(editeng::SvxBorderStyle const eSet) {m_eLineStyle = eSet;}
+    void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
+    void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
+    void SetAdj(SwFtnAdj const eNew)        { m_eAdjust = eNew; }
+    void SetTopDist   (SwTwips const nNew)  { m_nTopDist = nNew; }
+    void SetBottomDist(SwTwips const nNew)  { m_nBottomDist = nNew; }
 
     SwPageFtnInfo();
     SwPageFtnInfo( const SwPageFtnInfo& );

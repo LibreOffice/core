@@ -355,54 +355,54 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
     return 0;
 }
 
-SwPageFtnInfo::SwPageFtnInfo() :
-    nMaxHeight( 0 ),
-    nLineWidth(10),
-    eLineStyle( table::BorderLineStyle::SOLID ),
-    aWidth( 25, 100 ),
-    nTopDist( 57 ),         //1mm
-    nBottomDist( 57 )
+SwPageFtnInfo::SwPageFtnInfo()
+    : m_nMaxHeight( 0 )
+    , m_nLineWidth(10)
+    , m_eLineStyle( table::BorderLineStyle::SOLID )
+    , m_Width( 25, 100 )
+    , m_nTopDist( 57 )         //1mm
+    , m_nBottomDist( 57 )
 {
-    eAdj = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
+    m_eAdjust = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
            FTNADJ_RIGHT :
            FTNADJ_LEFT;
 }
 
-SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
-    nMaxHeight( rCpy.GetHeight() ),
-    nLineWidth(rCpy.nLineWidth),
-    eLineStyle(rCpy.eLineStyle),
-    aLineColor(rCpy.aLineColor),
-    aWidth( rCpy.GetWidth() ),
-    eAdj( rCpy.GetAdj() ),
-    nTopDist( rCpy.GetTopDist() ),
-    nBottomDist( rCpy.GetBottomDist() )
+SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy )
+    : m_nMaxHeight(rCpy.GetHeight())
+    , m_nLineWidth(rCpy.m_nLineWidth)
+    , m_eLineStyle(rCpy.m_eLineStyle)
+    , m_LineColor(rCpy.m_LineColor)
+    , m_Width(rCpy.GetWidth())
+    , m_eAdjust(rCpy.GetAdj())
+    , m_nTopDist(rCpy.GetTopDist())
+    , m_nBottomDist(rCpy.GetBottomDist())
 {
 }
 
 SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
-    nMaxHeight  = rCpy.GetHeight();
-    nLineWidth  = rCpy.nLineWidth;
-    eLineStyle  = rCpy.eLineStyle;
-    aLineColor  = rCpy.aLineColor;
-    aWidth      = rCpy.GetWidth();
-    eAdj        = rCpy.GetAdj();
-    nTopDist    = rCpy.GetTopDist();
-    nBottomDist = rCpy.GetBottomDist();
+    m_nMaxHeight  = rCpy.GetHeight();
+    m_nLineWidth  = rCpy.m_nLineWidth;
+    m_eLineStyle  = rCpy.m_eLineStyle;
+    m_LineColor   = rCpy.m_LineColor;
+    m_Width       = rCpy.GetWidth();
+    m_eAdjust     = rCpy.GetAdj();
+    m_nTopDist    = rCpy.GetTopDist();
+    m_nBottomDist = rCpy.GetBottomDist();
     return *this;
 }
 
 bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
-    return ( nMaxHeight == rCmp.GetHeight() &&
-             nLineWidth == rCmp.nLineWidth &&
-             eLineStyle == rCmp.eLineStyle &&
-             aLineColor == rCmp.aLineColor &&
-             aWidth     == rCmp.GetWidth() &&
-             eAdj       == rCmp.GetAdj() &&
-             nTopDist   == rCmp.GetTopDist() &&
-             nBottomDist== rCmp.GetBottomDist() );
+    return m_nMaxHeight == rCmp.GetHeight()
+        && m_nLineWidth == rCmp.m_nLineWidth
+        && m_eLineStyle == rCmp.m_eLineStyle
+        && m_LineColor  == rCmp.m_LineColor
+        && m_Width      == rCmp.GetWidth()
+        && m_eAdjust    == rCmp.GetAdj()
+        && m_nTopDist   == rCmp.GetTopDist()
+        && m_nBottomDist== rCmp.GetBottomDist();
 }
 
 SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * _pDoc)
