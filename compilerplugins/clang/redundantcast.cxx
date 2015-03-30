@@ -115,10 +115,6 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
             Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
             while (isa<CXXConstCastExpr>(e)) {
                 auto cc = dyn_cast<CXXConstCastExpr>(e);
-if(!cc->getSubExpr()->getType()->isPointerType()){
-    report(DiagnosticsEngine::Warning,"TODO",cc->getExprLoc())<<expr->getSourceRange();
-    return true;
-}
                 if (expr->getType()->getAs<PointerType>()->getPointeeType()
                     .isAtLeastAsQualifiedAs(
                         cc->getSubExpr()->getType()
