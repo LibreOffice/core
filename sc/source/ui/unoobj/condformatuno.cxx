@@ -30,6 +30,7 @@
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
 #include <com/sun/star/sheet/ColorScaleEntryType.hpp>
 #include <com/sun/star/sheet/IconSetFormatEntry.hpp>
+#include <com/sun/star/sheet/ConditionEntryType.hpp>
 
 namespace {
 
@@ -613,7 +614,7 @@ ScCondFormatEntry* ScConditionEntryObj::getCoreObject()
 sal_Int32 ScConditionEntryObj::getType()
     throw(uno::RuntimeException, std::exception)
 {
-    return 0;
+    return sheet::ConditionEntryType::CONDITION;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropertySetInfo()
@@ -729,7 +730,6 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
                 {
                     aAny <<= aConditionEntryMap[i].nApiMode;
                     break;
-
                 }
             }
         }
@@ -792,6 +792,12 @@ ScColorScaleFormat* ScColorScaleFormatObj::getCoreObject()
         return const_cast<ScColorScaleFormat*>(mpFormat);
 
     throw lang::IllegalArgumentException();
+}
+
+sal_Int32 ScColorScaleFormatObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return sheet::ConditionEntryType::COLORSCALE;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPropertySetInfo()
@@ -1055,6 +1061,12 @@ ScDataBarFormat* ScDataBarFormatObj::getCoreObject()
         return const_cast<ScDataBarFormat*>(mpFormat);
 
     throw lang::IllegalArgumentException();
+}
+
+sal_Int32 ScDataBarFormatObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return sheet::ConditionEntryType::DATABAR;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getPropertySetInfo()
@@ -1430,6 +1442,12 @@ ScIconSetFormat* ScIconSetFormatObj::getCoreObject()
         return const_cast<ScIconSetFormat*>(mpFormat);
 
     throw lang::IllegalArgumentException();
+}
+
+sal_Int32 ScIconSetFormatObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return sheet::ConditionEntryType::ICONSET;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getPropertySetInfo()
