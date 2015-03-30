@@ -1787,7 +1787,6 @@ void ScIconSetEntryObj::setFormula(const OUString& rFormula)
 
 ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScCondDateFormatEntry* pFormat):
-    mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
     maPropSet(getCondDatePropSet()),
     mpFormat(pFormat)

@@ -573,7 +573,6 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
     const ScCondDateFormatEntry* mpFormat;
