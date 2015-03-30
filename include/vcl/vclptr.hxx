@@ -97,6 +97,12 @@ public:
         : m_rInnerRef(pBody)
     {}
 
+    /** Constructor... that doesn't take a ref.
+     */
+    inline VclPtr (reference_type * pBody, __sal_NoAcquire)
+        : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
+    {}
+
     /** Copy constructor...
      */
     inline VclPtr (const VclPtr<reference_type> & handle)
@@ -215,11 +221,6 @@ public:
     {
         return (m_rInnerRef > handle.m_rInnerRef);
     }
-
-protected:
-    inline VclPtr (reference_type * pBody, __sal_NoAcquire)
-        : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
-    {}
 }; // class VclPtr
 
 /**

@@ -706,7 +706,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     Size aStdSize( aStandardSize, aStandardSize );
     Rectangle aRect(aEmptyPoint, aStdSize );
 
-    ScopedVclPtr<VirtualDevice> aVirDevice( new VirtualDevice(*Application::GetDefaultDevice(), 0, 1) );
+    ScopedVclPtrInstance< VirtualDevice > aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
     aVirDevice->SetOutputSizePixel( aStdSize );
     aVirDevice->SetFillColor( COL_TRANSPARENT );
     aVirDevice->SetLineColor( COL_TRANSPARENT );

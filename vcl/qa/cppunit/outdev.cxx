@@ -32,7 +32,7 @@ public:
 
 void VclOutdevTest::testVirtualDevice()
 {
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetOutputSizePixel(Size(32,32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
     pVDev->Erase();

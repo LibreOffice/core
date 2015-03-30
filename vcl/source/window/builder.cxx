@@ -1770,7 +1770,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     SAL_WARN_IF(!pWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
     if (pWindow)
     {
-        VclPtr< Window > xWindow( pWindow, SAL_NO_ACQUIRE );
+        VclPtr< vcl::Window > xWindow( pWindow, SAL_NO_ACQUIRE );
         pWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name.getStr() <<
             ", created " << pWindow << " child of " <<

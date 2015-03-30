@@ -1092,7 +1092,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
     if (!( GetStyle() & WB_NOBORDER ))
     {
-        ScopedVclPtr<ImplBorderWindow> aImplWin( new ImplBorderWindow(this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP) );
+        ScopedVclPtrInstance< ImplBorderWindow > aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
         aImplWin->SetText( GetText() );
         aImplWin->setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         aImplWin->SetDisplayActive( true );

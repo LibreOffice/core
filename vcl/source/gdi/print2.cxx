@@ -728,7 +728,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         ConnectedComponents aBackgroundComponent;
 
         // create an OutputDevice to record mapmode changes and the like
-        ScopedVclPtr<VirtualDevice> aMapModeVDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
         aMapModeVDev->mnDPIX = mnDPIX;
         aMapModeVDev->mnDPIY = mnDPIY;
         aMapModeVDev->EnableOutput(false);

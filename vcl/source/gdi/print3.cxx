@@ -321,7 +321,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     if (!xController->getPrinter())
     {
         OUString aPrinterName( i_rInitSetup.GetPrinterName() );
-        VclPtr<Printer> xPrinter( new Printer( aPrinterName ) );
+        VclPtrInstance<Printer> xPrinter( aPrinterName );
         xPrinter->SetJobSetup(i_rInitSetup);
         xController->setPrinter(xPrinter);
     }
@@ -472,7 +472,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            ScopedVclPtrInstance<PrintDialog> aDlg( nullptr, xController );
+            ScopedVclPtrInstance< PrintDialog > aDlg( nullptr, xController );
             if( ! aDlg->Execute() )
             {
                 xController->abortJob();

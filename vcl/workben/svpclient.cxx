@@ -121,7 +121,7 @@ public:
 
 void Main()
 {
-    ScopedVclPtr<MyWin> aMainWin(new MyWin(NULL, WB_STDWORK) );
+    ScopedVclPtrInstance< MyWin > aMainWin( nullptr, WB_STDWORK );
     aMainWin->SetText( OUString( "SvpClient" ) );
     aMainWin->Show();
 

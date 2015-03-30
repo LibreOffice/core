@@ -660,7 +660,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
                 double, double,
                 UCHAR* cLine, bool TextFit)
 {
-    ScopedVclPtr<VirtualDevice> vOut( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > vOut;
     UCHAR        c,c0;
     bool         First;               // first char ?
     sal_uInt8    Just = 0;            // paragraph format

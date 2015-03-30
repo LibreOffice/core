@@ -10938,7 +10938,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_Int32 nFunctionObject = createObject();
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
-    ScopedVclPtr<VirtualDevice> aDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > aDev;
     aDev->SetOutputSizePixel( rObject.m_aSize );
     aDev->SetMapMode( MapMode( MAP_PIXEL ) );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )

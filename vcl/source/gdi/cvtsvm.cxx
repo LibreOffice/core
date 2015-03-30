@@ -498,7 +498,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     LineInfo            aLineInfo( LINE_NONE, 0 );
     ::std::stack< LineInfo* >    aLIStack;
-    ScopedVclPtr<VirtualDevice>  aFontVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     bool                bFatLine = false;
 
@@ -1374,7 +1374,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
     bool                bRop_0_1 = false;
-    ScopedVclPtr<VirtualDevice>  aSaveVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > aSaveVDev;
     Color               aLineCol( COL_BLACK );
     ::std::stack< Color* >  aLineColStack;
 
@@ -2311,7 +2311,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 {
                     // write actions for hatch
-                    ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
+                    ScopedVclPtrInstance< VirtualDevice > aVDev;
                     GDIMetaFile     aTmpMtf;
 
                     aVDev->AddHatchActions( rPolyPoly, rHatch, aTmpMtf );

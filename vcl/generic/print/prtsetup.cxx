@@ -502,7 +502,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    ScopedVclPtr<RTSDialog> aDialog(new RTSDialog( rJobData, NULL ) );
+    ScopedVclPtrInstance< RTSDialog > aDialog(  rJobData, nullptr  );
 
     if( aDialog->Execute() )
     {

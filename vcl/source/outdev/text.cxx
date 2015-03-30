@@ -2493,7 +2493,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    ScopedVclPtr<VirtualDevice> aVDev(new VirtualDevice( 1 ));
+    ScopedVclPtrInstance< VirtualDevice > aVDev(  1  );
     vcl::Font aFont( GetFont() );
     aFont.SetShadow( false );
     aFont.SetOutline( false );
@@ -2717,7 +2717,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         + mnEmphasisDescent;
     pSalLayout->Release();
 
-    ScopedVclPtr<VirtualDevice> aVDev(new VirtualDevice(1));
+    ScopedVclPtrInstance< VirtualDevice > aVDev( 1 );
 
     vcl::Font aFont(GetFont());
     aFont.SetShadow(false);
