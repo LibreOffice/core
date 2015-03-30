@@ -257,7 +257,7 @@ bool UnitsImpl::findUnitInStandardHeader(const OUString& rsHeader, UtUnit& aUnit
 
 
 bool UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
-    // We just split the string and test whether each token is either a valid unit in it's own right,
+    // We just split the string and test whether each token is either a valid unit in its own right,
     // or is an operator that could glue together multiple units (i.e. multiplication/division).
     // This is sufficient for when there are spaces between elements composing the unit, and none
     // of the individual elements starts or begins with an operator.
