@@ -9,10 +9,12 @@
 
 
 #include "ooxmlimport.hxx"
+#include "types.hxx"
 
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace oox;
 using namespace oox::formulaimport;
