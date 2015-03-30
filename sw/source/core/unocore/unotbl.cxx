@@ -4434,7 +4434,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(nIndex < 0 || getCount() <= static_cast<size_t>(nIndex))
+    if(nIndex < 0 || getCount() <= nIndex)
         throw lang::IndexOutOfBoundsException();
     return uno::makeAny(uno::Reference<uno::XInterface>()); // i#21699 not supported
 }
