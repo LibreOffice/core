@@ -447,7 +447,6 @@ void SwDocShell::RemoveLink()
     // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
-    m_FinishedTimer.Stop();
     if (m_pDoc)
     {
         if (m_xBasePool.is())

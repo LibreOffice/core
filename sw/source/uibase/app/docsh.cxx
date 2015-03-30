@@ -1108,7 +1108,6 @@ void SwDocShell::LoadingFinished()
 void SwDocShell::CancelTransfers()
 {
     // Cancel all links from LinkManager
-    m_FinishedTimer.Stop();
     m_pDoc->getIDocumentLinksAdministration().GetLinkManager().CancelTransfers();
     SfxObjectShell::CancelTransfers();
 }

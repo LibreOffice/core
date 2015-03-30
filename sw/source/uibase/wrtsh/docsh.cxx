@@ -13,7 +13,7 @@
 #include <wrtsh.hxx>
 
 SwEditShell * SwDocShell::GetEditShell() {
-    return mpWrtShell;
+    return m_pWrtShell;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

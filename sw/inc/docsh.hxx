@@ -22,7 +22,6 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <vcl/timer.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
@@ -49,7 +48,6 @@ class SwgReaderOption;
 class SwOLEObj;
 class IDocumentDeviceAccess;
 class IDocumentSettingAccess;
-class IDocumentTimerAccess;
 class IDocumentChartDataProviderAccess;
 class SwDocShell;
 class SwDrawModel;
@@ -74,9 +72,6 @@ class SW_DLLPUBLIC SwDocShell
 
     SwView*     m_pView;
     SwWrtShell* m_pWrtShell;
-
-    Timer       m_FinishedTimer; /**< Timer for checking graphics-links.
-                         If all are present, the doc is loaded completely. */
 
     comphelper::EmbeddedObjectContainer* m_pOLEChildList;
     sal_Int16   m_nUpdateDocMode;   ///< contains the com::sun::star::document::UpdateDocMode
