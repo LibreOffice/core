@@ -163,6 +163,7 @@ public class _XChartDataArray extends MultiMethodTest {
         bResult &= dscs.length == colDscs.length;
         if (bResult) {
             for (int i = 0; i < dscs.length; i++) {
+                log.println("Col " + i + ": got " + dscs[i] + " expected: " + colDscs[i]);
                 bResult &= dscs[i].equals(colDscs[i]);
             }
         }
@@ -187,6 +188,7 @@ public class _XChartDataArray extends MultiMethodTest {
         bResult &= dscs.length == rowDscs.length;
         if (bResult) {
             for (int i = 0; i < dscs.length; i++) {
+                log.println("Row " + i + ": got " + dscs[i] + " expected: " + rowDscs[i]);
                 bResult &= dscs[i].equals(rowDscs[i]);
             }
         }
