@@ -966,7 +966,7 @@ namespace
     {
         bool bRet = false;
 
-        ScopedVclPtr<RTSPWDialog> aDialog(new RTSPWDialog(rServer, rUserName, NULL));
+        ScopedVclPtrInstance<RTSPWDialog> aDialog(rServer, rUserName, nullptr);
         if (aDialog->Execute())
         {
             rUserName = aDialog->getUserName();

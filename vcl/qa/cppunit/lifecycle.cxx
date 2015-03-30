@@ -59,7 +59,11 @@ void LifecycleTest::testCast()
 
 void LifecycleTest::testVirtualDevice()
 {
-    VclPtr<VirtualDevice> pVDev = new VirtualDevice();
+    VclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtr<VirtualDevice> pVDev2( new VirtualDevice() );
+    VclPtrInstance<VirtualDevice> pVDev3;
+    VclPtrInstance<VirtualDevice> pVDev4( 1 );
+    CPPUNIT_ASSERT(!!pVDev && !!pVDev2 && !!pVDev3 && !!pVDev4);
 }
 
 void LifecycleTest::testMultiDispose()
@@ -99,8 +103,8 @@ void LifecycleTest::testIsolatedWidgets()
 
 void LifecycleTest::testParentedWidgets()
 {
-    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
-                                                 WB_APP|WB_STDWORK));
+    ScopedVclPtrInstance<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
+                                                         WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
     xWin->Show();
     testWidgets(xWin);
@@ -129,7 +133,7 @@ void LifecycleTest::testChildDispose()
 
 void LifecycleTest::testPostDispose()
 {
-    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL, WB_STDWORK));
+    VclPtrInstance<WorkWindow> xWin((vcl::Window *)NULL, WB_STDWORK);
     xWin->disposeOnce();
 
     // check selected methods continue to work post-dispose

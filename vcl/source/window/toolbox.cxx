@@ -4833,7 +4833,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
     else
     {
         // create dummy toolbox for measurements
-        VclPtr< ToolBox > pToolBox = new ToolBox( GetParent(), GetStyle() );
+        VclPtrInstance< ToolBox > pToolBox( GetParent(), GetStyle() );
 
         // copy until first useful item
         std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();

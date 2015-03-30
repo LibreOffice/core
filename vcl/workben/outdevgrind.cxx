@@ -898,7 +898,7 @@ sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
 
 int GrindApp::Main()
 {
-    ScopedVclPtr<TestWindow> aWindow(new TestWindow);
+    ScopedVclPtrInstance<TestWindow> aWindow;
     aWindow->Execute();
     return 0;
 }

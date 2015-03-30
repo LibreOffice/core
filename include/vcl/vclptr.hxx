@@ -22,6 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <cstddef>
+#include <utility>
 
 /// @cond INTERNAL
 namespace vcl { namespace detail {
@@ -90,13 +91,11 @@ public:
         : m_rInnerRef()
     {}
 
-
     /** Constructor...
      */
     inline VclPtr (reference_type * pBody)
         : m_rInnerRef(pBody)
     {}
-
 
     /** Copy constructor...
      */
@@ -216,8 +215,31 @@ public:
     {
         return (m_rInnerRef > handle.m_rInnerRef);
     }
+
+protected:
+    inline VclPtr (reference_type * pBody, __sal_NoAcquire)
+        : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
+    {}
 }; // class VclPtr
 
+/**
+ * A construction helper for VclPtr. Since VclPtr types are created
+ * with a reference-count of one - to help fit into the existing
+ * code-flow; this helps us to construct them easily.
+ *
+ * For more details on the design please see vcl/README.lifecycle
+ *
+ * @param reference_type must be a subclass of vcl::Window
+ */
+template <class reference_type>
+class VclPtrInstance : public VclPtr<reference_type>
+{
+public:
+    template<typename... Arg> VclPtrInstance(Arg &&... arg)
+        : VclPtr<reference_type>( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE )
+    {
+    }
+};
 
 template <class reference_type>
 class ScopedVclPtr : public VclPtr<reference_type>
@@ -277,6 +299,30 @@ private:
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
     // And certainly we don't want a default assignment operator.
     ScopedVclPtr<reference_type>& SAL_CALL operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+
+protected:
+    inline ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)
+        : VclPtr<reference_type>(pBody, SAL_NO_ACQUIRE)
+    {}
+};
+
+/**
+ * A construction helper for ScopedVclPtr. Since VclPtr types are created
+ * with a reference-count of one - to help fit into the existing
+ * code-flow; this helps us to construct them easily.
+ *
+ * For more details on the design please see vcl/README.lifecycle
+ *
+ * @param reference_type must be a subclass of vcl::Window
+ */
+template <class reference_type>
+class ScopedVclPtrInstance : public ScopedVclPtr<reference_type>
+{
+public:
+    template<typename... Arg> ScopedVclPtrInstance(Arg &&... arg)
+        : ScopedVclPtr<reference_type>( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE )
+    {
+    }
 };
 
 #endif // INCLUDED_VCL_PTR_HXX

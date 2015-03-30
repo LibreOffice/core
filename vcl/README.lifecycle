@@ -45,8 +45,9 @@ to lingering pointers to freed objects.
 	to reduce code-thrash. VclPtr is used to wrap all OutputDevice
 	derived classes thus:
 
-	VclPtr<Dialog> pDialog( new Dialog( ... ) );
-	// gotcha - this is not a good idea ...
+	VclPtr<Dialog> pDialog( new Dialog( ... ), SAL_NO_ACQUIRE );
+	...
+	pDialog.disposeAndClear();
 
 	However - while the VclPtr reference count controls the
 	lifecycle of the Dialog object, it is necessary to be able to
@@ -84,30 +85,47 @@ to lingering pointers to freed objects.
 	Luckily it is easy to avoid that with a ScopedVclPtr which
 	does this for you when it goes out of scope.
 
+** One extra gotcha - an initial reference-count of 1
+
+	In the normal world of love and sanity, eg. creating UNO
+	objects, the objects start with a ref-count of zero. Thus
+	the first reference is always taken after construction by
+	the surrounding smart pointer.
+
+	Unfortunately, the existing VCL code is somewhat tortured,
+	and does a lot of reference and de-reference action on the
+	class -during- construction. This forces us to construct with
+	a reference of 1 - and to hand that into the initial smart
+	pointer with a SAL_NO_ACQUIRE.
+
+	To make this easier, we have 'Instance' template wrappers
+	that make this apparently easier, by constructing the
+	pointer for you.
+
 ** How does my familiar code change ?
 
 	Lets tweak the exemplary code above to fit the new model:
 
--	Dialog aDialog(...);
+-	Dialog aDialog(... dialog params ... );
 -	aDialog.Execute(...);
-+	ScopedVclPtr<Dialog> pDialog(new Dialog(...));
++	ScopedVclPtrInstance<Dialog> pDialog(... dialog params ... );
 +	pDialog->Execute(...); // VclPtr behaves much like a pointer
 
 or:
--	Dialog *pDialog = new Dialog(...);
-+	VclPtr<Dialog> pDialog(newDialog(...));
+-	Dialog *pDialog = new Dialog(... dialog params ...);
++	VclPtrInstance<Dialog> pDialog(... dialog params ...);
 	pDialog->Execute(...);
 -	delete pDialog;
 +	pDialog.disposeAndClear(); // done manually - replaces a delete
 or:
--	boost::shared_ptr<Dialog> xDialog(new pDialog());
-+	ScopedVclPtr<Dialog> xDialog(new Dialog(...));
+-	boost::shared_ptr<Dialog> xDialog(new Dialog(...));
++	ScopedVclPtrInstance<Dialog> xDialog(...);
 	xDialog->Execute(...);
 +	// depending how shared_ptr was shared perhaps
 +	// someone else gets a VclPtr to xDialog
 or:
 -	VirtualDevice aDev;
-+	ScopedVclPtr<VirtualDevice> pDev(new VirtualDevice());
++	ScopedVclPtrInstance<VirtualDevice> pDev();
 
 ** Why are these 'disposeOnce' calls in destructors ?
 
