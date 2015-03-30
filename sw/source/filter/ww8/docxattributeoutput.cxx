@@ -2921,9 +2921,9 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
-        m_pTableWrt = new SwWriteTable( pLayout );
+        m_pTableWrt.reset(new SwWriteTable(pLayout));
     else
-        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), nPageSize, nTblSz, false);
+        m_pTableWrt.reset(new SwWriteTable(pTable->GetTabLines(), nPageSize, nTblSz, false));
 }
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -2955,7 +2955,7 @@ void DocxAttributeOutput::EndTable()
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
-    delete m_pTableWrt, m_pTableWrt = NULL;
+    m_pTableWrt.reset(0);
 
     m_aTableStyleConf.clear();
 }
@@ -8279,7 +8279,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
-      m_pTableWrt( NULL ),
       m_pCurrentFrame( NULL ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
@@ -8323,7 +8322,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pTableWrt, m_pTableWrt = NULL;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()

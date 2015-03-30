@@ -796,7 +796,7 @@ private:
     std::vector<css::beans::PropertyValue> m_aTextEffectsGrabBag;
 
     /// The current table helper
-    SwWriteTable *m_pTableWrt;
+    std::unique_ptr<SwWriteTable> m_pTableWrt;
 
     sw::Frame* m_pCurrentFrame;
 
