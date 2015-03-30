@@ -85,7 +85,7 @@ UnitsImpl::~UnitsImpl() {
     // (i.e. if udunits can't handle being used across threads)?
 }
 
-UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpCode& rOpCode) {
+UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpCode& rOpCode) {
     UtUnit pOut;
 
     auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(rOpCode);
@@ -98,7 +98,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
 
         if (!(rUnitStack.size() >= 1)) {
             SAL_WARN("sc.units", "no units on stack for unary operation");
-            return UtUnit();
+            return { UnitsStatus::UNITS_INVALID, boost::none };
         }
 
         UtUnit pUnit = rUnitStack.top();
@@ -107,7 +107,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
         switch (rOpCode) {
         case ocNot:
             if (!pUnit.isDimensionless()) {
-                return UtUnit();
+                return { UnitsStatus::UNITS_INVALID, boost::none };
             }
             // We just keep the same unit (in this case no unit) so can
             // fall through.
@@ -132,7 +132,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             SAL_WARN("sc.units", "less than two units on stack when attempting binary operation");
             // TODO: what should we be telling the user in this case? Can this even happen (i.e.
             // should we just be asserting here?)
-            return UtUnit();
+            return { UnitsStatus::UNITS_INVALID, boost::none };
         }
 
         UtUnit pSecondUnit = rUnitStack.top();
@@ -150,6 +150,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
                 pOut = pFirstUnit;
                 SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
             } else {
+                return { UnitsStatus::UNITS_INVALID, boost::none };
                 // TODO: notify/link UI.
             }
             break;
@@ -166,11 +167,11 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
 
     } else {
         SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
+        return { UnitsStatus::UNITS_UNKNOWN, boost::none };
     }
     // TODO: else if unary, or no params, or ...
     // TODO: implement further sensible opcode handling
-
-    return pOut;
+    return { UnitsStatus::UNITS_VALID, pOut };
 }
 
 class RangeListIterator {
