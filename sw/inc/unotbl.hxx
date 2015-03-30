@@ -322,8 +322,8 @@ private:
     unsigned short              nRows;
     unsigned short              nColumns;
 
-    bool                        bFirstRowAsLabel    :1;
-    bool                        bFirstColumnAsLabel :1;
+    bool m_bFirstRowAsLabel;
+    bool m_bFirstColumnAsLabel;
 protected:
     virtual ~SwXTextTable();
     SwXTextTable();
@@ -462,11 +462,13 @@ class SwXCellRange : public cppu::WeakImplHelper7
 
     SwUnoCrsr*                  pTblCrsr;
 
-    bool                        bFirstRowAsLabel    :1;
-    bool                        bFirstColumnAsLabel :1;
+    bool m_bFirstRowAsLabel;
+    bool m_bFirstColumnAsLabel;
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
+    void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
+        { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     virtual ~SwXCellRange();
 
     TYPEINFO_OVERRIDE();

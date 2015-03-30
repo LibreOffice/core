@@ -2056,8 +2056,8 @@ SwXTextTable::SwXTextTable()
     bIsDescriptor(true),
     nRows(2),
     nColumns(2),
-    bFirstRowAsLabel(false),
-    bFirstColumnAsLabel(false)
+    m_bFirstRowAsLabel(false),
+    m_bFirstColumnAsLabel(false)
 { }
 
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
@@ -2069,8 +2069,8 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
     bIsDescriptor(false),
     nRows(0),
     nColumns(0),
-    bFirstRowAsLabel(false),
-    bFirstColumnAsLabel(false)
+    m_bFirstRowAsLabel(false),
+    m_bFirstColumnAsLabel(false)
 { }
 
 SwXTextTable::~SwXTextTable()
@@ -2397,8 +2397,6 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    //auto xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1));
-    //return static_cast<SwXCellRange*>(xAllRange.get())->getDataArray();
     uno::Reference<sheet::XCellRangeData> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
     return xAllRange->getDataArray();
 }
@@ -2472,45 +2470,12 @@ void SAL_CALL SwXTextTable::setDataArray(
 }
 
 uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
-                                        throw( uno::RuntimeException, std::exception )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
-    if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-
-    SwFrmFmt* pFmt = GetFrmFmt();
-    uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
-    if(pFmt)
-    {
-        uno::Sequence< double >* pArray = aRowSeq.getArray();
-
-        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
-        {
-            uno::Sequence< double >  aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
-            double* pColArray = aColSeq.getArray();
-            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                pColArray[nCol - nColStart] = xCell->getValue();
-            }
-            pArray[nRow - nRowStart] = aColSeq;
-        }
-    }
-    else
-        throw uno::RuntimeException();
-    return aRowSeq;
+    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    return xAllRange->getData();
 }
 
 void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData)
@@ -2532,7 +2497,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     {
         bool bChanged = false;
 
-        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
         if(rData.getLength() < nRowCount - nRowStart)
         {
             throw uno::RuntimeException();
@@ -2541,7 +2506,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
         for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
             const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
             if(rColSeq.getLength() < nColCount - nColStart)
             {
                 throw uno::RuntimeException();
@@ -2575,15 +2540,15 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
-    uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
+    uno::Sequence< OUString > aRet(m_bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
 
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
         OUString* pArray = aRet.getArray();
-        if(bFirstColumnAsLabel)
+        if(m_bFirstColumnAsLabel)
         {
-            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -2613,14 +2578,14 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(pFmt)
     {
         const sal_uInt16 nRowCount = getRowCount();
-        if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
+        if(!nRowCount || rRowDesc.getLength() < (m_bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
         }
         const OUString* pArray = rRowDesc.getConstArray();
-        if(bFirstColumnAsLabel)
+        if(m_bFirstColumnAsLabel)
         {
-            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -2652,14 +2617,14 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
-    uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
+    uno::Sequence< OUString > aRet(m_bFirstRowAsLabel ? nColCount - 1 : nColCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
         OUString* pArray = aRet.getArray();
-        if(bFirstRowAsLabel)
+        if(m_bFirstRowAsLabel)
         {
-            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -2696,9 +2661,9 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
     if(pFmt)
     {
         const OUString* pArray = rColumnDesc.getConstArray();
-        if(bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - (bFirstColumnAsLabel ? 1 : 0))
+        if(m_bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - (m_bFirstColumnAsLabel ? 1 : 0))
         {
-            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -2857,10 +2822,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(bFirstRowAsLabel != bTmp)
+                    if(m_bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
-                        bFirstRowAsLabel = bTmp;
+                        m_bFirstRowAsLabel = bTmp;
                     }
                 }
                 break;
@@ -2868,10 +2833,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_RANGE_COL_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(bFirstColumnAsLabel != bTmp)
+                    if(m_bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
-                        bFirstColumnAsLabel = bTmp;
+                        m_bFirstColumnAsLabel = bTmp;
                     }
                 }
                 break;
@@ -3107,12 +3072,12 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    aRet <<= bFirstRowAsLabel;
+                    aRet <<= m_bFirstRowAsLabel;
                 }
                 break;
 
                 case FN_UNO_RANGE_COL_LABEL:
-                    aRet <<= bFirstColumnAsLabel;
+                    aRet <<= m_bFirstColumnAsLabel;
                 break;
 
                 case FN_UNO_TABLE_BORDER:
@@ -3531,8 +3496,8 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     aRgDesc(rDesc),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE)),
     pTblCrsr(pCrsr),
-    bFirstRowAsLabel(false),
-    bFirstColumnAsLabel(false)
+    m_bFirstRowAsLabel(false),
+    m_bFirstColumnAsLabel(false)
 {
     aRgDesc.Normalize();
 }
@@ -3726,20 +3691,20 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(bFirstRowAsLabel != bTmp)
+                    if(m_bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
-                        bFirstRowAsLabel = bTmp;
+                        m_bFirstRowAsLabel = bTmp;
                     }
                 }
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(bFirstColumnAsLabel != bTmp)
+                    if(m_bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
-                        bFirstColumnAsLabel = bTmp;
+                        m_bFirstColumnAsLabel = bTmp;
                     }
                 }
                 break;
@@ -3816,10 +3781,10 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
-                    aRet <<= bFirstRowAsLabel;
+                    aRet <<= m_bFirstRowAsLabel;
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
-                    aRet <<= bFirstColumnAsLabel;
+                    aRet <<= m_bFirstColumnAsLabel;
                 break;
                 default:
                 {
@@ -4111,15 +4076,15 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
+    uno::Sequence< uno::Sequence< double > > aRowSeq(m_bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     uno::Sequence<double>* pRowArray = aRowSeq.getArray();
-    const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+    const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
     for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<double> aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+        uno::Sequence<double> aColSeq(m_bFirstColumnAsLabel ? nColCount - 1 : nColCount);
         double* pArray = aColSeq.getArray();
-        const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+        const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
         for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
         {
             uno::Reference<table::XCell>  xCell = getCellByPosition(nCol, nRow);
@@ -4141,14 +4106,14 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+    const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
     if(rData.getLength() < nRowCount - nRowStart)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const uno::Sequence< double >* pRowArray = rData.getConstArray();
     for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; ++nRow)
     {
         const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-        const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+        const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
         if(rColSeq.getLength() < nColCount - nColStart)
             throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
         const double * pColArray = rColSeq.getConstArray();
@@ -4170,12 +4135,12 @@ uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
     const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    uno::Sequence<OUString> aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
+    uno::Sequence<OUString> aRet(m_bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    if(!bFirstColumnAsLabel)
+    if(!m_bFirstColumnAsLabel)
         return {};  // without labels we have no descriptions
     OUString* pArray = aRet.getArray();
-    const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+    const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
         auto xCell = getCellByPosition(0, i);
@@ -4194,12 +4159,12 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     SolarMutexGuard aGuard;
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     const sal_uInt16 nRowCount = getRowCount();
-    if(!bFirstColumnAsLabel)
+    if(!m_bFirstColumnAsLabel)
         return; // if there are no labels we cannot set descriptions
     if(!nRowCount || rRowDesc.getLength() < nRowCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = rRowDesc.getConstArray();
-    const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+    const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
         uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
@@ -4225,7 +4190,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
     const sal_uInt16 nColCount = getColumnCount();
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = ColumnDesc.getConstArray();
-    if(bFirstColumnAsLabel || ColumnDesc.getLength() < nColCount)
+    if(m_bFirstColumnAsLabel || ColumnDesc.getLength() < nColCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     for(sal_uInt16 i = 0; i < nColCount; i++)
     {
