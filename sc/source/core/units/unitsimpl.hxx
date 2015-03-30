@@ -74,8 +74,6 @@ public:
 
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
-    OUString extractUnitStringFromFormat(const OUString& rFormatString);
-    OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
 
     /**
      * Find and extract a Unit in the standard header notation,
@@ -100,6 +98,9 @@ private:
     bool findFreestandingUnitInHeader(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
 
     bool extractUnitFromHeaderString(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+
+    OUString extractUnitStringFromFormat(const OUString& rFormatString);
+    OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
 
     /**
      * Retrieve the units for a given cell. This probes based on the usual rules
