@@ -4025,11 +4025,8 @@ uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
     const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
-        auto xCell = getCellByPosition(0, i);
-        if(!xCell.is())
-            throw uno::RuntimeException();
-        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-        pArray[i - nStart] = xText->getString();
+        const uno::Reference<text::XText> xCell(getCellByPosition(0, i), uno::UNO_QUERY_THROW);
+        pArray[i - nStart] = xCell->getString();
     }
     return aRet;
 }
@@ -4048,16 +4045,12 @@ uno::Sequence<OUString> SwXCellRange::getColumnDescriptions(void)
     const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nColumnCount; i++)
     {
-        auto xCell = getCellByPosition(i, 0);
-        if(!xCell.is())
-            throw uno::RuntimeException();
-        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-        pArray[i - nStart] = xText->getString();
+        const uno::Reference<text::XText> xCell(getCellByPosition(i, 0), uno::UNO_QUERY_THROW);
+        pArray[i - nStart] = xCell->getString();
     }
     return aRet;
 }
 
-///@see SwXTextTable::setRowDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
         throw(uno::RuntimeException, std::exception)
 {
@@ -4072,11 +4065,8 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
-        uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
-        if(!xCell.is())
-            throw uno::RuntimeException();
-        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-        xText->setString(pArray[i-nStart]);
+        uno::Reference<text::XText> xCell(getCellByPosition(0, i), uno::UNO_QUERY_THROW);
+        xCell->setString(pArray[i-nStart]);
     }
 }
 void SwXCellRange::setColumnDescriptions(const uno::Sequence<OUString>& rColumnDesc)
@@ -4093,11 +4083,8 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     const OUString* pArray = rColumnDesc.getConstArray();
     for(sal_uInt16 i = nStart; i < nColumnCount; i++)
     {
-        uno::Reference<table::XCell> xCell = getCellByPosition(i, 0);
-        if(!xCell.is())
-            throw uno::RuntimeException();
-        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-        xText->setString(pArray[i-nStart]);
+        uno::Reference<text::XText> xCell(getCellByPosition(i, 0), uno::UNO_QUERY_THROW);
+        xCell->setString(pArray[i-nStart]);
     }
 }
 
