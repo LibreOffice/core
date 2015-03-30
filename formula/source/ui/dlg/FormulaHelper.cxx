@@ -56,7 +56,7 @@ namespace formula
 //  class FormulaHelper - static Method
 
 
-#define FUNC_NOTFOUND 0xffff
+#define FUNC_NOTFOUND -1
 
 FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
     :m_pSysLocale(new SvtSysLocale)
