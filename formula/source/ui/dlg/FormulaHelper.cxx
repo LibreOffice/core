@@ -201,7 +201,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
         return nStart;
 
     sal_Int32  nFStart = FUNC_NOTFOUND;
-    sal_Int32  nParPos = nStart;
+    sal_Int32  nParPos = bBack ? ::std::min( nStart, nStrLen - 1) : nStart;
 
     bool bRepeat;
     do
