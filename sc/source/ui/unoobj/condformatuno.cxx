@@ -812,7 +812,7 @@ namespace {
 
 void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorScaleEntry> xEntry)
 {
-    ScColorScaleEntryType eType;
+    ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
     for (size_t i = 0; i < SAL_N_ELEMENTS(aColorScaleEntryTypeMap); ++i)
@@ -1082,7 +1082,7 @@ namespace {
 
 void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEntry> xEntry)
 {
-    ScColorScaleEntryType eType;
+    ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
     for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
@@ -1464,7 +1464,7 @@ namespace {
 void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEntry> xEntry, size_t nPos)
 {
     ScIconSetFormatData* pData = pFormat->GetIconSetData();
-    ScColorScaleEntryType eType;
+    ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
     for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
