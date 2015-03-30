@@ -4360,7 +4360,6 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrmFmt* pFrmFmt(lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this)));
     if(nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
-    bool bSuccess = false;
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrmFmt), static_cast<cppu::OWeakObject*>(this));
     OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTblBox(sTLName);
