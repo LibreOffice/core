@@ -91,13 +91,13 @@ protected:
                 )   const;
 
     /// ensures that two property values in a sequence have a certain order
-    void    ImplEnsureHandleOrder(
+    static void ImplEnsureHandleOrder(
                 const sal_Int32 _nCount,                /// number of entries in the array
                 sal_Int32* _pHandles,                   /// pointer to the handles
                 ::com::sun::star::uno::Any* _pValues,   /// pointer to the values
                 sal_Int32 _nFirstHandle,                /// first handle, which should precede _nSecondHandle in the sequence
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
-            ) const;
+            );
 
 protected:
 #ifdef _MSC_VER

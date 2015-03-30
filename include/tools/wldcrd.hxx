@@ -29,7 +29,7 @@ private:
     OString aWildString;
     char cSepSymbol;
 
-    bool ImpMatch( const char *pWild, const char *pStr ) const;
+    static bool ImpMatch( const char *pWild, const char *pStr );
 
 public:
     WildCard()

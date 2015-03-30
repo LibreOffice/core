@@ -83,7 +83,7 @@ namespace com { namespace sun { namespace star {
         bool        m_bCloneable;
 
     protected:
-        ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle) const;
+        static ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle);
         ::com::sun::star::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
         void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue);
 

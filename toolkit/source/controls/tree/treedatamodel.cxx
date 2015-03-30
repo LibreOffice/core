@@ -123,7 +123,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     static MutableTreeNode* getImplementation( const Reference< XTreeNode >& xNode, bool bThrows ) throw (IllegalArgumentException);
-    Reference< XTreeNode > getReference( MutableTreeNode* pNode )
+    static Reference< XTreeNode > getReference( MutableTreeNode* pNode )
     {
         return Reference< XTreeNode >( pNode );
     }

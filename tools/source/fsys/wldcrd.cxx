@@ -25,7 +25,7 @@
  * '?' in pWild mean match exactly one character.
  *
  */
-bool WildCard::ImpMatch( const char *pWild, const char *pStr ) const
+bool WildCard::ImpMatch( const char *pWild, const char *pStr )
 {
     int    pos=0;
     int    flag=0;

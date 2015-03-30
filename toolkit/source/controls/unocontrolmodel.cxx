@@ -1364,7 +1364,7 @@ void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*
 }
 
 void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32* _pHandles,
-        uno::Any* _pValues, sal_Int32 _nFirstHandle, sal_Int32 _nSecondHandle ) const
+        uno::Any* _pValues, sal_Int32 _nFirstHandle, sal_Int32 _nSecondHandle )
 {
     for ( sal_Int32 i=0; i < _nCount; ++_pHandles, ++_pValues, ++i )
     {

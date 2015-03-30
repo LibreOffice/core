@@ -182,7 +182,7 @@ protected:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent, WinBits nWinBits );
+    static vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent, WinBits nWinBits );
     css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor, WinBits nWinBits );
 
 public:

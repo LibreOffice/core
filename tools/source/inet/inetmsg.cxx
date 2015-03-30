@@ -597,7 +597,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 
         if (pChild->pParent == &rMsg)
         {
-            pChild = pChild->CreateMessage (*pChild);
+            pChild = INetMIMEMessage::CreateMessage (*pChild);
             pChild->pParent = this;
         }
         aChildren.push_back( pChild );
@@ -607,7 +607,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 INetMIMEMessage *INetMIMEMessage::CreateMessage (
     const INetMIMEMessage& rMsg) const
 {
-    return (new INetMIMEMessage (rMsg));
+    return new INetMIMEMessage (rMsg);
 }
 
 // Header Field Parser

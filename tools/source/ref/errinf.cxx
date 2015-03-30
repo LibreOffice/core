@@ -51,7 +51,7 @@ class EDcr_Impl
     sal_uInt16                  nMask;
 
     void                        RegisterEDcr(DynamicErrorInfo *);
-    void                        UnRegisterEDcr(DynamicErrorInfo *);
+    static void                 UnRegisterEDcr(DynamicErrorInfo *);
     static ErrorInfo           *GetDynamicErrorInfo(sal_uIntPtr lId);
 
 friend class DynamicErrorInfo;
@@ -143,7 +143,7 @@ DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
 
 DynamicErrorInfo::~DynamicErrorInfo()
 {
-    pImpl->UnRegisterEDcr(this);
+    EDcr_Impl::UnRegisterEDcr(this);
     delete pImpl;
 }
 

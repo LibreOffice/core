@@ -57,7 +57,7 @@ bool StdTabController::ImplCreateComponentSequence(
         const Sequence< Reference< XControlModel > >&   rModels,
         Sequence< Reference< XWindow > >&               rComponents,
         Sequence< Any>*                                 pTabStops,
-        bool bPeerComponent ) const
+        bool bPeerComponent )
 {
     bool bOK = true;
 

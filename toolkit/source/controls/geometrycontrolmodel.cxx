@@ -182,7 +182,7 @@
     }
 
 
-    ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle) const
+    ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle)
     {
         ::com::sun::star::uno::Any aDefault;
 
