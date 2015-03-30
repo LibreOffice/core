@@ -12,8 +12,6 @@
 
 #include <oox/mathml/importutils.hxx>
 
-#include "node.hxx"
-
 /**
  Class implementing reading of formulas from OOXML. The toplevel element is expected
  to be oMath (handle oMathPara outside of this code).
