@@ -305,9 +305,9 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
     // Standard-Buttons have the right text already
-    if ( !((eType == StandardButtonType::OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
-         !((eType == StandardButtonType::Cancel) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
-         !((eType == StandardButtonType::Help)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
+    if ( !((eType == StandardButtonType::OK     && pItem->mpPushButton->GetType() == WINDOW_OKBUTTON) ||
+           (eType == StandardButtonType::Cancel && pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON) ||
+           (eType == StandardButtonType::Help   && pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
     {
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
     }
