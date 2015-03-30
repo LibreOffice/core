@@ -8,20 +8,16 @@ from com.sun.star.table.BorderLineStyle import (DOUBLE, SOLID, EMBOSSED,\
 
 class CheckTable(unittest.TestCase):
     _uno = None
-    _xDoc = None
-    _xDocF = None
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyWriterDoc()
-        cls._xDocF = cls._uno.openEmptyWriterDoc()
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
 
     def test_tableborder(self):
-        xDoc = self.__class__._xDoc
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(3, 3)
@@ -229,11 +225,9 @@ class CheckTable(unittest.TestCase):
 
     # close document
         xDoc.dispose()
-    # set border
 
     def test_fdo58242(self):
-
-        xDoc = self.__class__._xDocF
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
     # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(3, 3)
@@ -255,7 +249,7 @@ class CheckTable(unittest.TestCase):
         xDoc.dispose()
 
     def test_descriptions(self):
-        xDoc = self.__class__._xDoc
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(3, 3)
@@ -278,6 +272,7 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(2, len(xTable.ColumnDescriptions))
         self.assertEqual('Cell 1 0', xTable.ColumnDescriptions[0])
         self.assertEqual('Cell 2 0', xTable.ColumnDescriptions[1])
+        xDoc.dispose()
 
 
 if __name__ == '__main__':
