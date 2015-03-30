@@ -296,10 +296,9 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     }
 
 
-    OUString const & from_env_typename = *reinterpret_cast< OUString const * >(
+    OUString const & from_env_typename = OUString::unacquired(
         &pFrom->pTypeName );
-    OUString const & to_env_typename = *reinterpret_cast< OUString const * >(
-        &pTo->pTypeName );
+    OUString const & to_env_typename = OUString::unacquired( &pTo->pTypeName );
 
     uno_Mapping * mapping = 0;
 

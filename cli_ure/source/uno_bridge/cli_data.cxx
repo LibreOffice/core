@@ -1069,7 +1069,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                             }
                             else
                             {
-                                throw BridgeRuntimeError("[map_to_uno(): Member: " + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]));
+                                throw BridgeRuntimeError("[map_to_uno(): Member: " + OUString::unacquired(&comp_td->ppMemberNames[nPos]));
                             }
                         }
                         else
@@ -1167,7 +1167,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 OUString str = "[map_to_uno():";
                 if (cliType)
                 {
-                    str += mapCliString(cliType->FullName) + "." + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]) + " ";
+                    str += mapCliString(cliType->FullName) + "." + OUString::unacquired(&comp_td->ppMemberNames[nPos]) + " ";
                 }
                 str += e.m_message;
                 throw BridgeRuntimeError(str);
@@ -1178,7 +1178,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 OUString str = "[map_to_uno():";
                 if (cliType)
                 {
-                    str += mapCliString(cliType->FullName) + "." + *reinterpret_cast< OUString const * >(comp_td->ppMemberNames[nPos]);
+                    str += mapCliString(cliType->FullName) + "." + OUString::unacquired(&comp_td->ppMemberNames[nPos]);
                 }
                 str += "] Value has not the required type.";
                 throw BridgeRuntimeError(str);
@@ -1345,20 +1345,20 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     default:
                     {
-                        throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) +
-                            "] unsupported sequence element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
+                        throw BridgeRuntimeError("[map_to_uno():" + OUString::unacquired( &type->pTypeName ) +
+                            "] unsupported sequence element type: " + OUString::unacquired( &element_type->pTypeName ));
                     }
                     }
                 }
                 catch (BridgeRuntimeError& e)
                 {
-                    throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] conversion failed\n " + e.m_message);
+                    throw BridgeRuntimeError("[map_to_uno():" + OUString::unacquired( &type->pTypeName ) + "] conversion failed\n " + e.m_message);
                 }
                 catch (System::InvalidCastException^ )
                 {
                     // Ok, checked
-                    throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName) +
-                        "] could not convert sequence element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
+                    throw BridgeRuntimeError("[map_to_uno():" + OUString::unacquired( &type->pTypeName) +
+                        "] could not convert sequence element type: " + OUString::unacquired( &element_type->pTypeName ));
                 }
                 catch (...)
                 {
@@ -1401,7 +1401,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
         default:
         {
             //ToDo check
-            throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] unsupported type!");
+            throw BridgeRuntimeError("[map_to_uno():" + OUString::unacquired( &type->pTypeName ) + "] unsupported type!");
         }
         }
     }
@@ -1409,7 +1409,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
     catch (System::InvalidCastException^ )
     {
         //ToDo check
-        throw BridgeRuntimeError("[map_to_uno():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] could not convert type!");
+        throw BridgeRuntimeError("[map_to_uno():" + OUString::unacquired( &type->pTypeName ) + "] could not convert type!");
     }
     catch (System::NullReferenceException ^ e)
     {
@@ -1892,8 +1892,8 @@ void Bridge::map_to_cli(
         }
         default:
         {
-            throw BridgeRuntimeError("[map_to_cli():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) +
-                "] unsupported element type: " + *reinterpret_cast< OUString const * >( &element_type->pTypeName ));
+            throw BridgeRuntimeError("[map_to_cli():" + OUString::unacquired( &type->pTypeName ) +
+                "] unsupported element type: " + OUString::unacquired( &element_type->pTypeName ));
         }
         }
         break;
@@ -1914,7 +1914,7 @@ void Bridge::map_to_cli(
     default:
     {
         //ToDo check this exception. The String is probably crippled
-        throw BridgeRuntimeError("[map_to_cli():" + *reinterpret_cast< OUString const * >( &type->pTypeName ) + "] unsupported type!");
+        throw BridgeRuntimeError("[map_to_cli():" + OUString::unacquired( &type->pTypeName ) + "] unsupported type!");
     }
     } //switch
 } // method

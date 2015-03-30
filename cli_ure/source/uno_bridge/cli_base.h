@@ -160,7 +160,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     {
         throw BridgeRuntimeError(
             "cannot get comprehensive type description for " +
-            *reinterpret_cast< OUString const * >( &td_ref->pTypeName ) );
+            OUString::unacquired(&td_ref->pTypeName) );
     }
 }
 

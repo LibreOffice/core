@@ -79,7 +79,7 @@ UnoInterfaceInfo::UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
         sal_Bool bComplete = ::typelib_typedescription_complete( & _pt);
         if( ! bComplete)
         {
-            throw BridgeRuntimeError("cannot make type complete: " + *reinterpret_cast< OUString const * >(& m_typeDesc->aBase.pTypeName));
+            throw BridgeRuntimeError("cannot make type complete: " + OUString::unacquired(& m_typeDesc->aBase.pTypeName));
         }
     }
 }
@@ -542,7 +542,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
         // ToDo check if the message of the exception is not crippled
         // the thing that should not be... no method info found!
         throw BridgeRuntimeError("[cli_uno bridge]calling undeclared function on interface " +
-            *reinterpret_cast< OUString const * >(& ((typelib_TypeDescription *)info->m_typeDesc)->pTypeName) +
+            OUString::unacquired(& ((typelib_TypeDescription *)info->m_typeDesc)->pTypeName) +
             ": " + usMethodName);
     }
     catch (BridgeRuntimeError & err)
