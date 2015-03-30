@@ -52,6 +52,7 @@ namespace desktop
         "Options:\n";
     const char aCmdLineHelp_left[] =
         "--minimized    \n"\
+        "--invisible    \n"\
         "--norestore    \n"\
         "--quickstart   \n"\
         "--nologo       \n"\
@@ -72,12 +73,13 @@ namespace desktop
         "-n             \n";
     const char aCmdLineHelp_right[] =
         "keep startup bitmap minimized.\n"\
+        "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
         "starts the quickstart service\n"\
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
-        "no startup screen, no default document and no user interaction.\n"\
+        "like invisible but no user interaction at all.\n"\
         "show this message and exit.\n"\
         "display the version information.\n"\
         "create new text document.\n"\

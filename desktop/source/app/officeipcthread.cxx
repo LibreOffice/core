@@ -819,7 +819,7 @@ void OfficeIPCThread::execute()
                 cProcessed.reset();
                 pRequest->pcProcessed = &cProcessed;
 
-                // Print requests are not dependent on the --headless cmdline argument as they are
+                // Print requests are not dependent on the --invisible cmdline argument as they are
                 // loaded with the "hidden" flag! So they are always checked.
                 pRequest->aPrintList = aCmdLineArgs->GetPrintList();
                 bDocRequestSent |= !pRequest->aPrintList.empty();
@@ -827,10 +827,10 @@ void OfficeIPCThread::execute()
                 pRequest->aPrinterName = aCmdLineArgs->GetPrinterName();
                 bDocRequestSent |= !( pRequest->aPrintToList.empty() || pRequest->aPrinterName.isEmpty() );
 
-                if ( !rCurrentCmdLineArgs.IsHeadless() )
+                if ( !rCurrentCmdLineArgs.IsInvisible() )
                 {
                     // Read cmdline args that can open/create documents. As they would open a window
-                    // they are only allowed if the "--headless" is currently not used!
+                    // they are only allowed if the "--invisible" is currently not used!
                     pRequest->aOpenList = aCmdLineArgs->GetOpenList();
                     bDocRequestSent |= !pRequest->aOpenList.empty();
                     pRequest->aViewList = aCmdLineArgs->GetViewList();

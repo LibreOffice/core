@@ -439,7 +439,8 @@ void FatalError(const OUString& sMessage)
 
 static bool ShouldSuppressUI(const CommandLineArgs& rCmdLine)
 {
-    return  rCmdLine.IsHeadless() ||
+    return  rCmdLine.IsInvisible() ||
+            rCmdLine.IsHeadless() ||
             rCmdLine.IsQuickstart();
 }
 
@@ -1364,7 +1365,7 @@ int Desktop::Main()
         // there is no other instance using our data files from a remote host
         m_xLockfile.reset(new Lockfile);
 
-        if ( !rCmdLineArgs.IsHeadless() &&
+        if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
         {
             // Lockfile exists, and user clicked 'no'
@@ -1500,7 +1501,7 @@ int Desktop::Main()
             true);
         if ( !pExecGlobals->bRestartRequested )
         {
-            if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
+            if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
@@ -1532,7 +1533,7 @@ int Desktop::Main()
     SetSplashScreenProgress(60);
 
 #if ENABLE_TELEPATHY
-    bool bListen = rCmdLineArgs.IsHeadless();
+    bool bListen = rCmdLineArgs.IsInvisible();
     TeleManager::init( bListen );
 #endif
 
@@ -1549,7 +1550,7 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
 
-        if ( !bTerminateRequested && !rCmdLineArgs.IsHeadless() &&
+        if ( !bTerminateRequested && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
 
@@ -1598,7 +1599,7 @@ int Desktop::Main()
             if ( !pExecGlobals->bRestartRequested )
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
-                DoRestartActionsIfNecessary( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsNoQuickstart() );
+                DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
                 Execute();
             }
@@ -2372,7 +2373,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() )
         return;
 
-    if ( rArgs.IsQuickstart() || rArgs.IsHeadless() || Application::AnyInput( VclInputFlags::APPEVENT ) )
+    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VclInputFlags::APPEVENT ) )
         // soffice was started as tray icon ...
         return;
 
@@ -2497,7 +2498,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         createAcceptor(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::TYPE_APPEAR:
-        if ( !GetCommandLineArgs().IsHeadless() )
+        if ( !GetCommandLineArgs().IsInvisible() )
         {
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
@@ -2551,7 +2552,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::TYPE_OPEN:
         {
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
-            if ( !rCmdLine.IsHeadless() && !rCmdLine.IsTerminateAfterInit() )
+            if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
@@ -2572,7 +2573,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::TYPE_PRINT:
         {
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
-            if ( !rCmdLine.IsHeadless() && !rCmdLine.IsTerminateAfterInit() )
+            if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
@@ -2595,13 +2596,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         break;
     case ApplicationEvent::TYPE_QUICKSTART:
-        if ( !GetCommandLineArgs().IsHeadless()  )
+        if ( !GetCommandLineArgs().IsInvisible()  )
         {
             // If the office has been started the second time its command line arguments are sent through a pipe
             // connection to the first office. We want to reuse the quickstart option for the first office.
             // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
             // application events to do this (they are executed inside main thread)!!!
-            // Don't start quickstart service if the user specified "--headless" on the command line!
+            // Don't start quickstart service if the user specified "--invisible" on the command line!
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             css::office::Quickstart::createStart(xContext, true/*Quickstart*/);
         }
@@ -2647,7 +2648,8 @@ void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
-    if ( !rCmdLine.IsHeadless() &&
+    if ( !rCmdLine.IsInvisible() &&
+         !rCmdLine.IsHeadless() &&
          !rCmdLine.IsQuickstart() &&
          !rCmdLine.IsMinimized() &&
          !rCmdLine.IsNoLogo() &&

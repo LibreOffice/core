@@ -7,7 +7,7 @@ libreoffice \- LibreOffice office suite
 [\fB\-\-accept\=\fIaccept\-string\fR] [\fB\-\-base\fR] [\fB\-\-calc\fR]
 [\fB\-\-convert\-to\fR output_file_extension[:output_filter_name] [\-\-outdir output_dir] \fIfile\fR]...
 [\fB\-\-display \fIdisplay\fR] [\fB\-\-draw\fR] [\fB\-\-global\fR] [\fB\-\-headless\fR]
-[\fB\-\-help\fR|\fB\-h\fR|\fB\-?\fR] [\fB\-\-impress\fR] [\fB\-\-infilter="<filter>"\fR]
+[\fB\-\-help\fR|\fB\-h\fR|\fB\-?\fR] [\fB\-\-impress\fR] [\fB\-\-invisible\fR] [\fB\-\-infilter="<filter>"\fR]
 [\fB\-\-math\fR] [\fB\-\-minimized\fR] [\fB\-n \fIfile\fR]... [\fB\-\-nodefault\fR]
 [\fB\-\-nolockcheck\fR] [\fB\-\-nologo\fR] [\fB\-\-norestore\fR]
 [\fB\-o \fIfile\fR]... [\fB\-p \fIfile\fR...]
@@ -90,12 +90,13 @@ Starts with a new Global document.
 
 .TP
 \fB\-\-headless\fR
-Starts in invisible or "headless" mode, which allows using the application without user a
+Starts in "headless mode", which allows using the application without user a
 interface.
 
 This special mode can be used when the application is controlled by external
 clients via the API.
 
+It implies \-\-invisible and strictly ignores any GUI environment.
 \-\-quickstart does not work with this parameter.
 
 .TP
@@ -105,6 +106,18 @@ Lists LibreOffice command line parameters.
 .TP
 \fB\-\-impress\fR
 Starts with a new Impress document.
+
+.TP
+\fB\-\-invisible\fR
+Starts in invisible mode.
+
+Neither the start\-up logo nor the initial program window will be visible.
+LO can be controlled and documents and dialogs can be opened via the API.
+
+When started with this parameter, it can only be quit using the taskmanager (Windows)
+or the kill command (UNIX based systems).
+
+\-\-quickstart does not work with this parameter.
 
 .TP
 \fB\-\-infilter="<filter>"\fR
@@ -191,7 +204,7 @@ If a file name contains spaces, then it must be enclosed in quotation marks.
 Starts LO with it's quick starter.
 \fB\-\-quickstart disable the quick starter.
 
-Does not work with \-\-headless.
+Does not work with \-\-invisible or \-\-headless.
 
 .TP
 \fB\-\-show \fIImpress file\fR...
