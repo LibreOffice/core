@@ -4120,10 +4120,10 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     const sal_uInt16 nRowCount = getRowCount();
     if(!m_bFirstColumnAsLabel)
         return; // if there are no labels we cannot set descriptions
-    if(!nRowCount || rRowDesc.getLength() < nRowCount)
-        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = rRowDesc.getConstArray();
     const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
+    if(!nRowCount || rRowDesc.getLength() + nStart < nRowCount)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     for(sal_uInt16 i = nStart; i < nRowCount; i++)
     {
         uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
@@ -4141,10 +4141,10 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     const sal_uInt16 nColumnCount = getColumnCount();
     if(!m_bFirstRowAsLabel)
         return; // if there are no labels we cannot set descriptions
-    if(!nColumnCount || rColumnDesc.getLength() < nColumnCount)
+    const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
+    if(!nColumnCount || rColumnDesc.getLength() + nStart < nColumnCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString* pArray = rColumnDesc.getConstArray();
-    const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
     for(sal_uInt16 i = nStart; i < nColumnCount; i++)
     {
         uno::Reference<table::XCell> xCell = getCellByPosition(0, i);
