@@ -141,6 +141,10 @@ struct LOKDocView_Impl
     void renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor, cairo_surface_t* pHandle, GdkRectangle& rRectangle);
     /// Renders pHandle around an rSelection rectangle on pCairo.
     void renderGraphicHandle(cairo_t* pCairo, const GdkRectangle& rSelection, cairo_surface_t* pHandle);
+    /// Takes care of the blinking cursor.
+    static gboolean handleTimeout(gpointer pData);
+    /// Implementation of the timeout handler, invoked by handleTimeout().
+    gboolean handleTimeoutImpl();
 };
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
@@ -632,31 +636,24 @@ void LOKDocView_Impl::renderGraphicHandle(cairo_t* pCairo, const GdkRectangle& r
     }
 }
 
-static void lok_docview_class_init( gpointer );
-static void lok_docview_init( GTypeInstance *, gpointer );
-
-SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
+gboolean LOKDocView_Impl::handleTimeout(gpointer pData)
 {
-    static guint lok_docview_type = 0;
+    LOKDocView* pDocView = static_cast<LOKDocView*>(pData);
+    return pDocView->m_pImpl->handleTimeoutImpl();
+}
 
-    if (!lok_docview_type)
+gboolean LOKDocView_Impl::handleTimeoutImpl()
+{
+    if (m_bEdit)
     {
-        char pName[] = "LokDocView";
-        GtkTypeInfo lok_docview_info =
-        {
-            pName,
-            sizeof( LOKDocView ),
-            sizeof( LOKDocViewClass ),
-            lok_docview_class_init,
-            lok_docview_init,
-            NULL,
-            NULL,
-            (GtkClassInitFunc) NULL
-        };
-
-        lok_docview_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_docview_info );
+        if (m_bCursorOverlayVisible)
+            m_bCursorOverlayVisible = false;
+        else
+            m_bCursorOverlayVisible = true;
+        gtk_widget_queue_draw(GTK_WIDGET(m_pEventBox));
     }
-    return lok_docview_type;
+
+    return G_SOURCE_CONTINUE;
 }
 
 enum
@@ -707,28 +704,35 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     g_signal_connect_after(pDocView->m_pImpl->m_pEventBox, "expose-event", G_CALLBACK(LOKDocView_Impl::renderOverlay), pDocView);
 }
 
+SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
+{
+    static guint lok_docview_type = 0;
+
+    if (!lok_docview_type)
+    {
+        char pName[] = "LokDocView";
+        GtkTypeInfo lok_docview_info =
+        {
+            pName,
+            sizeof( LOKDocView ),
+            sizeof( LOKDocViewClass ),
+            lok_docview_class_init,
+            lok_docview_init,
+            NULL,
+            NULL,
+            (GtkClassInitFunc) NULL
+        };
+
+        lok_docview_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_docview_info );
+    }
+    return lok_docview_type;
+}
+
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
 {
     LOKDocView* pDocView = LOK_DOCVIEW(gtk_type_new(lok_docview_get_type()));
     pDocView->m_pImpl->m_pOffice = pOffice;
     return GTK_WIDGET( pDocView );
-}
-
-/// Takes care of the blinking cursor.
-static gboolean lcl_handleTimeout(gpointer pData)
-{
-    LOKDocView* pDocView = LOK_DOCVIEW(pData);
-
-    if (pDocView->m_pImpl->m_bEdit)
-    {
-        if (pDocView->m_pImpl->m_bCursorOverlayVisible)
-            pDocView->m_pImpl->m_bCursorOverlayVisible = false;
-        else
-            pDocView->m_pImpl->m_bCursorOverlayVisible = true;
-        gtk_widget_queue_draw(GTK_WIDGET(pDocView->m_pImpl->m_pEventBox));
-    }
-
-    return G_SOURCE_CONTINUE;
 }
 
 void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
@@ -1035,7 +1039,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     {
         pDocView->m_pImpl->m_pDocument->pClass->initializeForRendering(pDocView->m_pImpl->m_pDocument);
         pDocView->m_pImpl->m_pDocument->pClass->registerCallback(pDocView->m_pImpl->m_pDocument, &lok_docview_callback_worker, pDocView);
-        g_timeout_add(600, &lcl_handleTimeout, pDocView);
+        g_timeout_add(600, &LOKDocView_Impl::handleTimeout, pDocView);
         renderDocument(pDocView, NULL);
     }
 
