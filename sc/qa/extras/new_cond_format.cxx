@@ -205,7 +205,7 @@ void testUseGradient(uno::Reference<beans::XPropertySet> xPropSet, bool bUseGrad
 
 void testPositiveColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
 {
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("Color");
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
@@ -213,7 +213,7 @@ void testPositiveColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColo
 
 void testNegativeColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
 {
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("NegativeColor");
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
@@ -221,7 +221,7 @@ void testNegativeColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColo
 
 void testAxisColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
 {
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("AxisColor");
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
