@@ -1990,8 +1990,8 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 void SwBorderAttrs::_CalcTopLine()
 {
     nTopLine = (bBorderDist && !rBox.GetTop())
-                            ? rBox.GetDistance  (BOX_LINE_TOP)
-                            : rBox.CalcLineSpace(BOX_LINE_TOP);
+                            ? rBox.GetDistance  (SvxBoxItemLine::TOP)
+                            : rBox.CalcLineSpace(SvxBoxItemLine::TOP);
     nTopLine = nTopLine + rShadow.CalcShadowSpace(SHADOW_TOP);
     bTopLine = false;
 }
@@ -1999,8 +1999,8 @@ void SwBorderAttrs::_CalcTopLine()
 void SwBorderAttrs::_CalcBottomLine()
 {
     nBottomLine = (bBorderDist && !rBox.GetBottom())
-                            ? rBox.GetDistance  (BOX_LINE_BOTTOM)
-                            : rBox.CalcLineSpace(BOX_LINE_BOTTOM);
+                            ? rBox.GetDistance  (SvxBoxItemLine::BOTTOM)
+                            : rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
     nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SHADOW_BOTTOM);
     bBottomLine = false;
 }
@@ -2008,8 +2008,8 @@ void SwBorderAttrs::_CalcBottomLine()
 void SwBorderAttrs::_CalcLeftLine()
 {
     nLeftLine = (bBorderDist && !rBox.GetLeft())
-                            ? rBox.GetDistance  (BOX_LINE_LEFT)
-                            : rBox.CalcLineSpace(BOX_LINE_LEFT);
+                            ? rBox.GetDistance  (SvxBoxItemLine::LEFT)
+                            : rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
     nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SHADOW_LEFT);
     bLeftLine = false;
 }
@@ -2017,8 +2017,8 @@ void SwBorderAttrs::_CalcLeftLine()
 void SwBorderAttrs::_CalcRightLine()
 {
     nRightLine = (bBorderDist && !rBox.GetRight())
-                            ? rBox.GetDistance  (BOX_LINE_RIGHT)
-                            : rBox.CalcLineSpace(BOX_LINE_RIGHT);
+                            ? rBox.GetDistance  (SvxBoxItemLine::RIGHT)
+                            : rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
     nRightLine = nRightLine + rShadow.CalcShadowSpace(SHADOW_RIGHT);
     bRightLine = false;
 }

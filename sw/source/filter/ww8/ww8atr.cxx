@@ -135,6 +135,7 @@
 #include <vcl/outdev.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <o3tl/enumrange.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -3901,8 +3902,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_BOX );
         if ( pItem )
         {
-            nRDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_LEFT );
-            nLDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_RIGHT );
+            nRDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT );
+            nLDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT );
         }
         else
             nLDist = nRDist = 0;
@@ -4377,9 +4378,9 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
     if ( bOutPageDescs && !bWrtWW8 )
         return; // no page ouline in WW6
 
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
     static const sal_uInt16 aPBrc[] =
     {
@@ -4404,7 +4405,7 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
         38, 39, 40, 41
     };
 
-    const sal_uInt16* pBrd = aBorders;
+    const SvxBoxItemLine* pBrd = aBorders;
     for( sal_uInt16 i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
@@ -4437,18 +4438,13 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
 void WW8Export::Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
 {
     // moeglich und vielleicht besser waere 0xffff
-    static const sal_uInt16 aBorders[] =
-    {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
-    };
     static const SvxBorderLine aBorderLine;
 
-    const sal_uInt16* pBrd = aBorders;
-    for( int i = 0; i < 4; ++i, ++pBrd )
+    for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
     {
         const SvxBorderLine* pLn;
         if (pBox != NULL)
-            pLn = pBox->GetLine( *pBrd );
+            pLn = pBox->GetLine( i );
         else
             pLn = & aBorderLine;
 
@@ -4459,9 +4455,9 @@ void WW8Export::Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
 void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
        sal_uInt8 nLimit )
 {
-    static const sal_uInt16 aBorders[] =
+    static const SvxBoxItemLine aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
     for( int i = 0; i < 4; ++i )
@@ -5512,22 +5508,22 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
     if( rBox.GetTop() )
     {
        pBorderLine = rBox.GetTop();
-       nDist = rBox.GetDistance( BOX_LINE_TOP );
+       nDist = rBox.GetDistance( SvxBoxItemLine::TOP );
     }
     else if( rBox.GetLeft() )
     {
        pBorderLine = rBox.GetLeft();
-       nDist = rBox.GetDistance( BOX_LINE_LEFT );
+       nDist = rBox.GetDistance( SvxBoxItemLine::LEFT );
     }
     else if( rBox.GetBottom() )
     {
        pBorderLine = rBox.GetBottom();
-       nDist = rBox.GetDistance( BOX_LINE_BOTTOM );
+       nDist = rBox.GetDistance( SvxBoxItemLine::BOTTOM );
     }
     else if( rBox.GetRight() )
     {
        pBorderLine = rBox.GetRight();
-       nDist = rBox.GetDistance( BOX_LINE_RIGHT );
+       nDist = rBox.GetDistance( SvxBoxItemLine::RIGHT );
     }
 
     if( pBorderLine )

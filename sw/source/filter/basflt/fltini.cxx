@@ -361,7 +361,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
 
                 // consider border and distance to content
                 const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rFlySet.Get( RES_BOX ));
-                sal_uInt16 nLine = BOX_LINE_LEFT;
+                SvxBoxItemLine nLine = SvxBoxItemLine::LEFT;
                 for( int i = 0; i < 2; ++i )
                 {
                     const editeng::SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
@@ -372,7 +372,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                         nMinFrm += nWidthTmp;
                         nMaxFrm += nWidthTmp;
                     }
-                    nLine = BOX_LINE_RIGHT;
+                    nLine = SvxBoxItemLine::RIGHT;
                 }
 
                 // enforce minimum width for contents

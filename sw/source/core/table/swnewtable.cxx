@@ -742,7 +742,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         if( aSelBoxItem.GetRight() )
         {
             pNoRightBorder = new SvxBoxItem( aSelBoxItem );
-            pNoRightBorder->SetLine( 0, BOX_LINE_RIGHT );
+            pNoRightBorder->SetLine( 0, SvxBoxItemLine::RIGHT );
         }
         for( sal_uInt16 j = 0; j < nCnt; ++j )
         {
@@ -951,8 +951,8 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
             SvxBoxItem aBox( pMergeBox->GetFrmFmt()->GetBox() );
             bool bOld = aBox.GetRight() || aBox.GetBottom();
             const SvxBoxItem& rBox = pLastBox->GetFrmFmt()->GetBox();
-            aBox.SetLine( rBox.GetRight(), BOX_LINE_RIGHT );
-            aBox.SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
+            aBox.SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
+            aBox.SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
             if( bOld || aBox.GetLeft() || aBox.GetTop() || aBox.GetRight() || aBox.GetBottom() )
                 (*ppMergeBox)->GetFrmFmt()->SetFmtAttr( aBox );
         }

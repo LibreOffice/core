@@ -1030,7 +1030,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                         .GetItemState( RES_BOX, false, &pItem ))
                             {
                                 SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
-                                aBox.SetLine( 0, BOX_LINE_RIGHT );
+                                aBox.SetLine( 0, SvxBoxItemLine::RIGHT );
                                 pBox->GetFrmFmt()->SetFmtAttr( aBox );
                             }
                             }
@@ -1313,8 +1313,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         {
             SvxBoxItem aBox( pFirstBox->GetFrmFmt()->GetBox() );
             const SvxBoxItem& rBox = pLastBox->GetFrmFmt()->GetBox();
-            aBox.SetLine( rBox.GetRight(), BOX_LINE_RIGHT );
-            aBox.SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
+            aBox.SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
+            aBox.SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
             if( aBox.GetLeft() || aBox.GetTop() ||
                 aBox.GetRight() || aBox.GetBottom() )
                 (*ppMergeBox)->GetFrmFmt()->SetFmtAttr( aBox );

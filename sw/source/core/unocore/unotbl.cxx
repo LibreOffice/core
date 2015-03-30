@@ -2974,22 +2974,22 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SvxBoxItem aBox( RES_BOX );
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
-                    aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, BOX_LINE_TOP);
+                    aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, SvxBoxItemLine::TOP);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, aBorder.IsTopLineValid);
 
-                    aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, BOX_LINE_BOTTOM);
+                    aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, SvxBoxItemLine::BOTTOM);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, aBorder.IsBottomLineValid);
 
-                    aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, BOX_LINE_LEFT);
+                    aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, SvxBoxItemLine::LEFT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, aBorder.IsLeftLineValid);
 
-                    aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, BOX_LINE_RIGHT);
+                    aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, SvxBoxItemLine::RIGHT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, aBorder.IsRightLineValid);
 
-                    aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, BOXINFO_LINE_HORI);
+                    aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, SvxBoxInfoItemLine::HORI);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, aBorder.IsHorizontalLineValid);
 
-                    aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, BOXINFO_LINE_VERT);
+                    aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, SvxBoxInfoItemLine::VERT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
                     aBox.SetDistance((sal_uInt16)convertMm100ToTwip(aBorder.Distance));
@@ -3031,21 +3031,21 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                             const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                             const SvxBoxItem& rBox = pBoxFmt->GetBox();
                             if(
-                                (aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( BOX_LINE_LEFT )) ||
-                                (aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( BOX_LINE_RIGHT )) ||
-                                (aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( BOX_LINE_TOP )) ||
-                                (aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( BOX_LINE_BOTTOM )))
+                                (aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( SvxBoxItemLine::LEFT )) ||
+                                (aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( SvxBoxItemLine::RIGHT )) ||
+                                (aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( SvxBoxItemLine::TOP )) ||
+                                (aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( SvxBoxItemLine::BOTTOM )))
                             {
                                 SvxBoxItem aSetBox( rBox );
                                 SwFrmFmt* pSetBoxFmt = pBox->ClaimFrmFmt();
                                 if( aTableBorderDistances.IsLeftDistanceValid )
-                                    aSetBox.SetDistance( nLeftDistance, BOX_LINE_LEFT );
+                                    aSetBox.SetDistance( nLeftDistance, SvxBoxItemLine::LEFT );
                                 if( aTableBorderDistances.IsRightDistanceValid )
-                                    aSetBox.SetDistance( nRightDistance, BOX_LINE_RIGHT );
+                                    aSetBox.SetDistance( nRightDistance, SvxBoxItemLine::RIGHT );
                                 if( aTableBorderDistances.IsTopDistanceValid )
-                                    aSetBox.SetDistance( nTopDistance, BOX_LINE_TOP );
+                                    aSetBox.SetDistance( nTopDistance, SvxBoxItemLine::TOP );
                                 if( aTableBorderDistances.IsBottomDistanceValid )
-                                    aSetBox.SetDistance( nBottomDistance, BOX_LINE_BOTTOM );
+                                    aSetBox.SetDistance( nBottomDistance, SvxBoxItemLine::BOTTOM );
                                 pDoc->SetAttr( aSetBox, *pSetBoxFmt );
                             }
                         }
@@ -3232,25 +3232,25 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                             const SvxBoxItem& rBox = pBoxFmt->GetBox();
                             if( bFirst )
                             {
-                                nLeftDistance =     convertTwipToMm100( rBox.GetDistance( BOX_LINE_LEFT   ));
-                                nRightDistance =    convertTwipToMm100( rBox.GetDistance( BOX_LINE_RIGHT  ));
-                                nTopDistance =      convertTwipToMm100( rBox.GetDistance( BOX_LINE_TOP    ));
-                                nBottomDistance =   convertTwipToMm100( rBox.GetDistance( BOX_LINE_BOTTOM ));
+                                nLeftDistance =     convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::LEFT   ));
+                                nRightDistance =    convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::RIGHT  ));
+                                nTopDistance =      convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::TOP    ));
+                                nBottomDistance =   convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::BOTTOM ));
                                 bFirst = false;
                             }
                             else
                             {
                                 if( aTableBorderDistances.IsLeftDistanceValid &&
-                                    nLeftDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_LEFT   )))
+                                    nLeftDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::LEFT   )))
                                     aTableBorderDistances.IsLeftDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsRightDistanceValid &&
-                                    nRightDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_RIGHT   )))
+                                    nRightDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::RIGHT   )))
                                     aTableBorderDistances.IsRightDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsTopDistanceValid &&
-                                    nTopDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_TOP   )))
+                                    nTopDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::TOP   )))
                                     aTableBorderDistances.IsTopDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsBottomDistanceValid &&
-                                    nBottomDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_BOTTOM   )))
+                                    nBottomDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::BOTTOM   )))
                                     aTableBorderDistances.IsBottomDistanceValid = sal_False;
                             }
 

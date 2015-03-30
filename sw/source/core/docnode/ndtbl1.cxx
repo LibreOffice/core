@@ -50,6 +50,7 @@
 #include "undobj.hxx"
 #include <calbck.hxx>
 #include <UndoTable.hxx>
+#include <o3tl/enumrange.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -669,12 +670,12 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 {
                     if ( bFirst && bTopOver )
                     {
-                        aBox.SetLine( pTop, BOX_LINE_TOP );
+                        aBox.SetLine( pTop, SvxBoxItemLine::TOP );
                         nType |= 0x0001;
                     }
                     else if ( bHoriValid )
                     {
-                        aBox.SetLine( 0, BOX_LINE_TOP );
+                        aBox.SetLine( 0, SvxBoxItemLine::TOP );
                         nType |= 0x0002;
                     }
                 }
@@ -686,12 +687,12 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                         {
                             if ( bLeftValid )
                             {
-                                aBox.SetLine( pLeft, BOX_LINE_RIGHT );
+                                aBox.SetLine( pLeft, SvxBoxItemLine::RIGHT );
                                 nType |= 0x0010;
                             }
                             if ( bRightValid )
                             {
-                                aBox.SetLine( pRight, BOX_LINE_LEFT );
+                                aBox.SetLine( pRight, SvxBoxItemLine::LEFT );
                                 nType |= 0x0004;
                             }
                         }
@@ -699,20 +700,20 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                         {
                             if ( bLeftValid )
                             {
-                                aBox.SetLine( bRightOver ? pLeft : 0, BOX_LINE_RIGHT );
+                                aBox.SetLine( bRightOver ? pLeft : 0, SvxBoxItemLine::RIGHT );
                                 bVertValid ? nType |= 0x0020 : nType |= 0x0010;
                             }
                             if ( bLeftOver )
                             {
                                 if ( bRightValid )
                                 {
-                                    aBox.SetLine( pRight, BOX_LINE_LEFT );
+                                    aBox.SetLine( pRight, SvxBoxItemLine::LEFT );
                                     nType |= 0x0004;
                                 }
                             }
                             else if ( bVertValid )
                             {
-                                aBox.SetLine( pVert, BOX_LINE_LEFT );
+                                aBox.SetLine( pVert, SvxBoxItemLine::LEFT );
                                 nType |= 0x0008;
                             }
                         }
@@ -724,13 +725,13 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                     {
                         if( bLeftValid )
                         {
-                            aBox.SetLine( pLeft, BOX_LINE_LEFT );
+                            aBox.SetLine( pLeft, SvxBoxItemLine::LEFT );
                             nType |= 0x0004;
                         }
                     }
                     else if( bVertValid )
                     {
-                        aBox.SetLine( pVert, BOX_LINE_LEFT );
+                        aBox.SetLine( pVert, SvxBoxItemLine::LEFT );
                         nType |= 0x0008;
                     }
 
@@ -739,12 +740,12 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                     {
                         if ( bRightOver )
                         {
-                            aBox.SetLine( pRight, BOX_LINE_RIGHT );
+                            aBox.SetLine( pRight, SvxBoxItemLine::RIGHT );
                             nType |= 0x0010;
                         }
                         else if ( bVertValid )
                         {
-                            aBox.SetLine( 0, BOX_LINE_RIGHT );
+                            aBox.SetLine( 0, SvxBoxItemLine::RIGHT );
                             nType |= 0x0020;
                         }
                     }
@@ -755,24 +756,20 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 {
                     if( bBottomValid )
                     {
-                        aBox.SetLine( pBottom, BOX_LINE_BOTTOM );
+                        aBox.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
                         nType |= 0x0040;
                     }
                 }
                 else if( bHoriValid )
                 {
-                    aBox.SetLine( pHori, BOX_LINE_BOTTOM );
+                    aBox.SetLine( pHori, SvxBoxItemLine::BOTTOM );
                     nType |= 0x0080;
                 }
 
                 if( pSetBox )
                 {
-                    static sal_uInt16 const aBorders[] = {
-                        BOX_LINE_BOTTOM, BOX_LINE_TOP,
-                        BOX_LINE_RIGHT, BOX_LINE_LEFT };
-                    const sal_uInt16* pBrd = aBorders;
-                    for( int k = 0; k < 4; ++k, ++pBrd )
-                        aBox.SetDistance( pSetBox->GetDistance( *pBrd ), *pBrd );
+                   for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                        aBox.SetDistance( pSetBox->GetDistance( k ), k );
                 }
 
                 SwTableBox *pBox = const_cast<SwTableBox*>(pCell->GetTabBox());
@@ -981,14 +978,14 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     {
                         if ( !bTopSet )
                         {   bTopSet = true;
-                            aSetBox.SetLine( rBox.GetTop(), BOX_LINE_TOP );
+                            aSetBox.SetLine( rBox.GetTop(), SvxBoxItemLine::TOP );
                         }
                         else if ((aSetBox.GetTop() && rBox.GetTop() &&
                                  !(*aSetBox.GetTop() == *rBox.GetTop())) ||
                                  ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // != expression is true, if one and only one of the two pointers is !0
                         {
                             aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, false );
-                            aSetBox.SetLine( 0, BOX_LINE_TOP );
+                            aSetBox.SetLine( 0, SvxBoxItemLine::TOP );
                         }
                     }
                 }
@@ -1000,14 +997,14 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     {
                         if ( !bLeftSet )
                         {   bLeftSet = true;
-                            aSetBox.SetLine( rBox.GetLeft(), BOX_LINE_LEFT );
+                            aSetBox.SetLine( rBox.GetLeft(), SvxBoxItemLine::LEFT );
                         }
                         else if ((aSetBox.GetLeft() && rBox.GetLeft() &&
                                  !(*aSetBox.GetLeft() == *rBox.GetLeft())) ||
                                  ((!aSetBox.GetLeft()) != (!rBox.GetLeft())))
                         {
                             aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, false );
-                            aSetBox.SetLine( 0, BOX_LINE_LEFT );
+                            aSetBox.SetLine( 0, SvxBoxItemLine::LEFT );
                         }
                     }
                 }
@@ -1017,13 +1014,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     {
                         if ( !bVertSet )
                         {   bVertSet = true;
-                            aSetBoxInfo.SetLine( rBox.GetLeft(), BOXINFO_LINE_VERT );
+                            aSetBoxInfo.SetLine( rBox.GetLeft(), SvxBoxInfoItemLine::VERT );
                         }
                         else if ((aSetBoxInfo.GetVert() && rBox.GetLeft() &&
                                  !(*aSetBoxInfo.GetVert() == *rBox.GetLeft())) ||
                                  ((!aSetBoxInfo.GetVert()) != (!rBox.GetLeft())))
                         {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::VERT, false );
-                            aSetBoxInfo.SetLine( 0, BOXINFO_LINE_VERT );
+                            aSetBoxInfo.SetLine( 0, SvxBoxInfoItemLine::VERT );
                         }
                     }
                 }
@@ -1033,13 +1030,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 {
                     if ( !bRightSet )
                     {   bRightSet = true;
-                        aSetBox.SetLine( rBox.GetRight(), BOX_LINE_RIGHT );
+                        aSetBox.SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
                     }
                     else if ((aSetBox.GetRight() && rBox.GetRight() &&
                              !(*aSetBox.GetRight() == *rBox.GetRight())) ||
                              (!aSetBox.GetRight() != !rBox.GetRight()))
                     {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, false );
-                        aSetBox.SetLine( 0, BOX_LINE_RIGHT );
+                        aSetBox.SetLine( 0, SvxBoxItemLine::RIGHT );
                     }
                 }
 
@@ -1050,13 +1047,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     {
                         if ( !bBottomSet )
                         {   bBottomSet = true;
-                            aSetBox.SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
+                            aSetBox.SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
                         }
                         else if ((aSetBox.GetBottom() && rBox.GetBottom() &&
                                  !(*aSetBox.GetBottom() == *rBox.GetBottom())) ||
                                  (!aSetBox.GetBottom() != !rBox.GetBottom()))
                         {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, false );
-                            aSetBox.SetLine( 0, BOX_LINE_BOTTOM );
+                            aSetBox.SetLine( 0, SvxBoxItemLine::BOTTOM );
                         }
                     }
                 }
@@ -1068,14 +1065,14 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     {
                         if ( !bHoriSet )
                         {   bHoriSet = true;
-                            aSetBoxInfo.SetLine( rBox.GetBottom(), BOXINFO_LINE_HORI );
+                            aSetBoxInfo.SetLine( rBox.GetBottom(), SvxBoxInfoItemLine::HORI );
                         }
                         else if ((aSetBoxInfo.GetHori() && rBox.GetBottom() &&
                                  !(*aSetBoxInfo.GetHori() == *rBox.GetBottom())) ||
                                  ((!aSetBoxInfo.GetHori()) != (!rBox.GetBottom())))
                         {
                             aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::HORI, false );
-                            aSetBoxInfo.SetLine( 0, BOXINFO_LINE_HORI );
+                            aSetBoxInfo.SetLine( 0, SvxBoxInfoItemLine::HORI );
                         }
                     }
                 }
@@ -1083,22 +1080,17 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 // Distance to text
                 if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
                 {
-                    static sal_uInt16 const aBorders[] = {
-                        BOX_LINE_BOTTOM, BOX_LINE_TOP,
-                        BOX_LINE_RIGHT, BOX_LINE_LEFT };
-                    const sal_uInt16* pBrd = aBorders;
-
                     if( !bDistanceSet ) // Set on first iteration
                     {
                         bDistanceSet = true;
-                        for( int k = 0; k < 4; ++k, ++pBrd )
-                            aSetBox.SetDistance( rBox.GetDistance( *pBrd ), *pBrd );
+                        for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                            aSetBox.SetDistance( rBox.GetDistance( k ), k );
                     }
                     else
                     {
-                        for( int k = 0; k < 4; ++k, ++pBrd )
-                            if( aSetBox.GetDistance( *pBrd ) !=
-                                rBox.GetDistance( *pBrd ) )
+                        for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                            if( aSetBox.GetDistance( k ) !=
+                                rBox.GetDistance( k ) )
                             {
                                 aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
                                 aSetBox.SetDistance( (sal_uInt16) 0 );
@@ -1115,9 +1107,9 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             SvxBoxItem     aTempBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
             SvxBoxInfoItem aTempBoxInfo(static_cast<const SvxBoxInfoItem&>( rSet.Get(SID_ATTR_BORDER_INNER)));
 
-            aTempBox.SetLine( aSetBox.GetRight(), BOX_LINE_RIGHT);
-            aSetBox.SetLine( aSetBox.GetLeft(), BOX_LINE_RIGHT);
-            aSetBox.SetLine( aTempBox.GetRight(), BOX_LINE_LEFT);
+            aTempBox.SetLine( aSetBox.GetRight(), SvxBoxItemLine::RIGHT);
+            aSetBox.SetLine( aSetBox.GetLeft(), SvxBoxItemLine::RIGHT);
+            aSetBox.SetLine( aTempBox.GetRight(), SvxBoxItemLine::LEFT);
 
             aTempBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT) );
             aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT) );

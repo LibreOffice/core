@@ -1341,8 +1341,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aCoreSet.Put( aBoxInfo );
                         rSh.GetFlyFrmAttr( aCoreSet );
                         const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aCoreSet.Get(RES_BOX));
-                        aDistLR.SetLeft(rBox.GetDistance(BOX_LINE_LEFT));
-                        aDistLR.SetRight(rBox.GetDistance(BOX_LINE_RIGHT));
+                        aDistLR.SetLeft(rBox.GetDistance(SvxBoxItemLine::LEFT));
+                        aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
                         //add the paragraph border distance
                         SfxItemSet aCoreSet1( GetPool(),
@@ -1350,8 +1350,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                 0 );
                         rSh.GetCurAttr( aCoreSet1 );
                         const SvxBoxItem& rParaBox = static_cast<const SvxBoxItem&>(aCoreSet1.Get(RES_BOX));
-                        aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(BOX_LINE_LEFT));
-                        aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(BOX_LINE_RIGHT));
+                        aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));
+                        aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(SvxBoxItemLine::RIGHT));
                     }
                     rSet.Put(aDistLR);
                     m_nLeftBorderDistance  = static_cast< sal_uInt16 >(aDistLR.GetLeft());
@@ -1370,15 +1370,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aCoreSet2.Put(aBoxInfo);
                     rSh.GetTabBorders( aCoreSet2 );
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aCoreSet2.Get(RES_BOX));
-                    aDistLR.SetLeft(rBox.GetDistance(BOX_LINE_LEFT));
-                    aDistLR.SetRight(rBox.GetDistance(BOX_LINE_RIGHT));
+                    aDistLR.SetLeft(rBox.GetDistance(SvxBoxItemLine::LEFT));
+                    aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
                     //add the border distance of the paragraph
                     SfxItemSet aCoreSet1( GetPool(), RES_BOX, RES_BOX );
                     rSh.GetCurAttr( aCoreSet1 );
                     const SvxBoxItem& rParaBox = static_cast<const SvxBoxItem&>(aCoreSet1.Get(RES_BOX));
-                    aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(BOX_LINE_LEFT));
-                    aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(BOX_LINE_RIGHT));
+                    aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));
+                    aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(SvxBoxItemLine::RIGHT));
                     rSet.Put(aDistLR);
                     m_nLeftBorderDistance  = static_cast< sal_uInt16 >(aDistLR.GetLeft());
                     m_nRightBorderDistance = static_cast< sal_uInt16 >(aDistLR.GetRight());
@@ -1388,8 +1388,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     //get the page/header/footer border distance
                     const SwFrmFmt& rMaster = rDesc.GetMaster();
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rMaster.GetAttrSet().Get(RES_BOX));
-                    aDistLR.SetLeft(rBox.GetDistance(BOX_LINE_LEFT));
-                    aDistLR.SetRight(rBox.GetDistance(BOX_LINE_RIGHT));
+                    aDistLR.SetLeft(rBox.GetDistance(SvxBoxItemLine::LEFT));
+                    aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
                     const SvxBoxItem* pBox = 0;
                     if(nFrmType & FrmTypeFlags::HEADER)
@@ -1409,8 +1409,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     if(pBox)
                     {
-                        aDistLR.SetLeft(pBox->GetDistance(BOX_LINE_LEFT));
-                        aDistLR.SetRight(pBox->GetDistance(BOX_LINE_RIGHT));
+                        aDistLR.SetLeft(pBox->GetDistance(SvxBoxItemLine::LEFT));
+                        aDistLR.SetRight(pBox->GetDistance(SvxBoxItemLine::RIGHT));
                     }
 
                     //add the border distance of the paragraph
@@ -1419,8 +1419,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
                     rSh.GetCurAttr( aCoreSetTmp );
                     const SvxBoxItem& rParaBox = static_cast<const SvxBoxItem&>(aCoreSetTmp.Get(RES_BOX));
-                    aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(BOX_LINE_LEFT));
-                    aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(BOX_LINE_RIGHT));
+                    aDistLR.SetLeft(aDistLR.GetLeft() + rParaBox.GetDistance(SvxBoxItemLine::LEFT));
+                    aDistLR.SetRight(aDistLR.GetRight() + rParaBox.GetDistance(SvxBoxItemLine::RIGHT));
                     rSet.Put(aDistLR);
                     m_nLeftBorderDistance  = static_cast< sal_uInt16 >(aDistLR.GetLeft());
                     m_nRightBorderDistance = static_cast< sal_uInt16 >(aDistLR.GetRight());

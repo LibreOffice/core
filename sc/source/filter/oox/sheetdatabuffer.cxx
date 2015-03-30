@@ -719,10 +719,10 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
     }
 }
 
-void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
+void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
 {
-    SCCOL nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
-    SCROW nFromScRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
+    SCCOL nFromScCol = (nLine == SvxBoxItemLine::RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
+    SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
 
     const SvxBoxItem* pFromItem = static_cast< const SvxBoxItem* >(
         rDoc.GetAttr( nFromScCol, nFromScRow, nScTab, ATTR_BORDER ) );
@@ -746,10 +746,10 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
     ScDocument& rDoc = getScDocument();
     // set correct right border
     if( bMultiCol )
-        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_RIGHT );
+        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), SvxBoxItemLine::RIGHT );
         // set correct lower border
     if( bMultiRow )
-        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_BOTTOM );
+        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), SvxBoxItemLine::BOTTOM );
     // do merge
     if( bMultiCol || bMultiRow )
         rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );

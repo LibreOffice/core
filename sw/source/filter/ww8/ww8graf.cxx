@@ -93,6 +93,7 @@
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
+#include <o3tl/enumrange.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1538,7 +1539,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         aLine.SetWidth( nLineThick ); // No conversion here, nLineThick is already in twips
         aLine.SetBorderLineStyle(nIdx);
 
-        for(sal_uInt16 nLine = 0; nLine < 4; ++nLine)
+        for(SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>())
         {
             // aLine is cloned by SetLine
             rBox.SetLine(&aLine, nLine);
@@ -1622,35 +1623,35 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rInnerDist.Bottom()+=nLineThick;
 
     const SvxBorderLine *pLine;
-    if (0 != (pLine = aBox.GetLine(BOX_LINE_LEFT)))
+    if (0 != (pLine = aBox.GetLine(SvxBoxItemLine::LEFT)))
     {
         rInnerDist.Left() -= (pLine->GetScaledWidth());
     }
 
-    if (0 != (pLine = aBox.GetLine(BOX_LINE_TOP)))
+    if (0 != (pLine = aBox.GetLine(SvxBoxItemLine::TOP)))
     {
         rInnerDist.Top() -= (pLine->GetScaledWidth());
     }
 
-    if (0 != (pLine = aBox.GetLine(BOX_LINE_RIGHT)))
+    if (0 != (pLine = aBox.GetLine(SvxBoxItemLine::RIGHT)))
     {
         rInnerDist.Right() -= (pLine->GetScaledWidth());
     }
 
-    if (0 != (pLine = aBox.GetLine(BOX_LINE_BOTTOM)))
+    if (0 != (pLine = aBox.GetLine(SvxBoxItemLine::BOTTOM)))
     {
         rInnerDist.Bottom() -= (pLine->GetScaledWidth());
     }
 
     // set distances from box's border to text contained within the box
     if( 0 < rInnerDist.Left() )
-        aBox.SetDistance( (sal_uInt16)rInnerDist.Left(), BOX_LINE_LEFT );
+        aBox.SetDistance( (sal_uInt16)rInnerDist.Left(), SvxBoxItemLine::LEFT );
     if( 0 < rInnerDist.Top() )
-        aBox.SetDistance( (sal_uInt16)rInnerDist.Top(), BOX_LINE_TOP );
+        aBox.SetDistance( (sal_uInt16)rInnerDist.Top(), SvxBoxItemLine::TOP );
     if( 0 < rInnerDist.Right() )
-        aBox.SetDistance( (sal_uInt16)rInnerDist.Right(), BOX_LINE_RIGHT );
+        aBox.SetDistance( (sal_uInt16)rInnerDist.Right(), SvxBoxItemLine::RIGHT );
     if( 0 < rInnerDist.Bottom() )
-        aBox.SetDistance( (sal_uInt16)rInnerDist.Bottom(), BOX_LINE_BOTTOM );
+        aBox.SetDistance( (sal_uInt16)rInnerDist.Bottom(), SvxBoxItemLine::BOTTOM );
 
     bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
         SdrOnOffItem));

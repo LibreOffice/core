@@ -572,7 +572,7 @@ bool SwAutoFormat::DoUnderline()
                     0);
         aSet.Put( SwParaConnectBorderItem( false ) );
         SvxBoxItem aBox( RES_BOX );
-        aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
+        aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
         aSet.Put(aBox);
         m_pDoc->getIDocumentContentOperations().InsertItemSet( m_aDelPam, aSet );

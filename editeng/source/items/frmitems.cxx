@@ -82,6 +82,7 @@
 #include <editeng/memberids.hrc>
 #include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
+#include <o3tl/enumrange.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -1652,10 +1653,10 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
     nBottomDist = rBox.nBottomDist;
     nLeftDist = rBox.nLeftDist;
     nRightDist = rBox.nRightDist;
-    SetLine( rBox.GetTop(), BOX_LINE_TOP );
-    SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
-    SetLine( rBox.GetLeft(), BOX_LINE_LEFT );
-    SetLine( rBox.GetRight(), BOX_LINE_RIGHT );
+    SetLine( rBox.GetTop(), SvxBoxItemLine::TOP );
+    SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
+    SetLine( rBox.GetLeft(), SvxBoxItemLine::LEFT );
+    SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
     return *this;
 }
 
@@ -1862,9 +1863,9 @@ lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
     return false;
 }
 
-template<typename Item>
+template<typename Item, typename Line>
 bool
-lcl_setLine(const uno::Any& rAny, Item& rItem, sal_uInt16 nLine, const bool bConvert)
+lcl_setLine(const uno::Any& rAny, Item& rItem, Line nLine, const bool bConvert)
 {
     bool bDone = false;
     table::BorderLine2 aBorderLine;
@@ -1883,7 +1884,7 @@ lcl_setLine(const uno::Any& rAny, Item& rItem, sal_uInt16 nLine, const bool bCon
 bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    sal_uInt16 nLine = BOX_LINE_TOP;
+    SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
     bool bDistMember = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1894,7 +1895,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
             {
                 // 4 Borders and 5 distances
-                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::TOP };
                 for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
                 {
                     if (!lcl_setLine(aSeq[n], *this, aBorders[n], bConvert))
@@ -1902,7 +1903,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
 
                 // WTH are the borders and the distances saved in different order?
-                sal_uInt16 nLines[4] = { BOX_LINE_TOP, BOX_LINE_BOTTOM, BOX_LINE_LEFT, BOX_LINE_RIGHT };
+                SvxBoxItemLine nLines[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT };
                 for ( sal_Int32 n = 4; n < 9; n++ )
                 {
                     sal_Int32 nDist = 0;
@@ -1929,28 +1930,28 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             //fall-through
         case LEFT_BORDER:
         case MID_LEFT_BORDER:
-            nLine = BOX_LINE_LEFT;
+            nLine = SvxBoxItemLine::LEFT;
             break;
         case RIGHT_BORDER_DISTANCE:
             bDistMember = true;
             //fall-through
         case RIGHT_BORDER:
         case MID_RIGHT_BORDER:
-            nLine = BOX_LINE_RIGHT;
+            nLine = SvxBoxItemLine::RIGHT;
             break;
         case BOTTOM_BORDER_DISTANCE:
             bDistMember = true;
             //fall-through
         case BOTTOM_BORDER:
         case MID_BOTTOM_BORDER:
-            nLine = BOX_LINE_BOTTOM;
+            nLine = SvxBoxItemLine::BOTTOM;
             break;
         case TOP_BORDER_DISTANCE:
             bDistMember = true;
             //fall-through
         case TOP_BORDER:
         case MID_TOP_BORDER:
-            nLine = BOX_LINE_TOP;
+            nLine = SvxBoxItemLine::TOP;
             break;
         case LINE_STYLE:
             {
@@ -1971,10 +1972,9 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
 
                 // Set the line style on all borders
-                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
-                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
                 {
-                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( n ) );
                     if( pLine )
                         pLine->SetBorderLineStyle( eBorderStyle );
                 }
@@ -1990,10 +1990,9 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nWidth = convertMm100ToTwip( nWidth );
 
                 // Set the line Width on all borders
-                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
-                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
                 {
-                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( n ) );
                     if( pLine )
                         pLine->SetWidth( nWidth );
                 }
@@ -2308,8 +2307,8 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
     rStrm.ReadUInt16( nDistance );
     SvxBoxItem* pAttr = new SvxBoxItem( Which() );
 
-    sal_uInt16 aLineMap[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
-                           BOX_LINE_RIGHT, BOX_LINE_BOTTOM };
+    SvxBoxItemLine aLineMap[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+                           SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM };
 
     sal_Int8 cLine;
     while( true )
@@ -2342,22 +2341,22 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
 
 
 
-const SvxBorderLine *SvxBoxItem::GetLine( sal_uInt16 nLine ) const
+const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
 {
     const SvxBorderLine *pRet = 0;
 
     switch ( nLine )
     {
-        case BOX_LINE_TOP:
+        case SvxBoxItemLine::TOP:
             pRet = pTop;
             break;
-        case BOX_LINE_BOTTOM:
+        case SvxBoxItemLine::BOTTOM:
             pRet = pBottom;
             break;
-        case BOX_LINE_LEFT:
+        case SvxBoxItemLine::LEFT:
             pRet = pLeft;
             break;
-        case BOX_LINE_RIGHT:
+        case SvxBoxItemLine::RIGHT:
             pRet = pRight;
             break;
         default:
@@ -2370,25 +2369,25 @@ const SvxBorderLine *SvxBoxItem::GetLine( sal_uInt16 nLine ) const
 
 
 
-void SvxBoxItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
+void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 {
     SvxBorderLine* pTmp = pNew ? new SvxBorderLine( *pNew ) : 0;
 
     switch ( nLine )
     {
-        case BOX_LINE_TOP:
+        case SvxBoxItemLine::TOP:
             delete pTop;
             pTop = pTmp;
             break;
-        case BOX_LINE_BOTTOM:
+        case SvxBoxItemLine::BOTTOM:
             delete pBottom;
             pBottom = pTmp;
             break;
-        case BOX_LINE_LEFT:
+        case SvxBoxItemLine::LEFT:
             delete pLeft;
             pLeft = pTmp;
             break;
-        case BOX_LINE_RIGHT:
+        case SvxBoxItemLine::RIGHT:
             delete pRight;
             pRight = pTmp;
             break;
@@ -2416,21 +2415,21 @@ sal_uInt16 SvxBoxItem::GetDistance() const
 
 
 
-sal_uInt16 SvxBoxItem::GetDistance( sal_uInt16 nLine ) const
+sal_uInt16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine ) const
 {
     sal_uInt16 nDist = 0;
     switch ( nLine )
     {
-        case BOX_LINE_TOP:
+        case SvxBoxItemLine::TOP:
             nDist = nTopDist;
             break;
-        case BOX_LINE_BOTTOM:
+        case SvxBoxItemLine::BOTTOM:
             nDist = nBottomDist;
             break;
-        case BOX_LINE_LEFT:
+        case SvxBoxItemLine::LEFT:
             nDist = nLeftDist;
             break;
-        case BOX_LINE_RIGHT:
+        case SvxBoxItemLine::RIGHT:
             nDist = nRightDist;
             break;
         default:
@@ -2442,20 +2441,20 @@ sal_uInt16 SvxBoxItem::GetDistance( sal_uInt16 nLine ) const
 
 
 
-void SvxBoxItem::SetDistance( sal_uInt16 nNew, sal_uInt16 nLine )
+void SvxBoxItem::SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine )
 {
     switch ( nLine )
     {
-        case BOX_LINE_TOP:
+        case SvxBoxItemLine::TOP:
             nTopDist = nNew;
             break;
-        case BOX_LINE_BOTTOM:
+        case SvxBoxItemLine::BOTTOM:
             nBottomDist = nNew;
             break;
-        case BOX_LINE_LEFT:
+        case SvxBoxItemLine::LEFT:
             nLeftDist = nNew;
             break;
-        case BOX_LINE_RIGHT:
+        case SvxBoxItemLine::RIGHT:
             nRightDist = nNew;
             break;
         default:
@@ -2465,25 +2464,25 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, sal_uInt16 nLine )
 
 
 
-sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, bool bIgnoreLine ) const
+sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine ) const
 {
     SvxBorderLine* pTmp = 0;
     sal_uInt16 nDist = 0;
     switch ( nLine )
     {
-    case BOX_LINE_TOP:
+    case SvxBoxItemLine::TOP:
         pTmp = pTop;
         nDist = nTopDist;
         break;
-    case BOX_LINE_BOTTOM:
+    case SvxBoxItemLine::BOTTOM:
         pTmp = pBottom;
         nDist = nBottomDist;
         break;
-    case BOX_LINE_LEFT:
+    case SvxBoxItemLine::LEFT:
         pTmp = pLeft;
         nDist = nLeftDist;
         break;
-    case BOX_LINE_RIGHT:
+    case SvxBoxItemLine::RIGHT:
         pTmp = pRight;
         nDist = nRightDist;
         break;
@@ -2575,16 +2574,16 @@ bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 
 
 
-void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
+void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLine )
 {
     SvxBorderLine* pTmp = pNew ? new SvxBorderLine( *pNew ) : 0;
 
-    if ( BOXINFO_LINE_HORI == nLine )
+    if ( SvxBoxInfoItemLine::HORI == nLine )
     {
         delete pHori;
         pHori = pTmp;
     }
-    else if ( BOXINFO_LINE_VERT == nLine )
+    else if ( SvxBoxInfoItemLine::VERT == nLine )
     {
         delete pVert;
         pVert = pTmp;
@@ -2698,8 +2697,8 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
         switch( cLine )
         {
-            case 0: pAttr->SetLine( &aBorder, BOXINFO_LINE_HORI ); break;
-            case 1: pAttr->SetLine( &aBorder, BOXINFO_LINE_VERT ); break;
+            case 0: pAttr->SetLine( &aBorder, SvxBoxInfoItemLine::HORI ); break;
+            case 1: pAttr->SetLine( &aBorder, SvxBoxInfoItemLine::VERT ); break;
         }
     }
     return pAttr;
@@ -2788,9 +2787,9 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
-                if (!lcl_setLine(aSeq[0], *this, BOXINFO_LINE_HORI, bConvert))
+                if (!lcl_setLine(aSeq[0], *this, SvxBoxInfoItemLine::HORI, bConvert))
                     return false;
-                if (!lcl_setLine(aSeq[1], *this, BOXINFO_LINE_VERT, bConvert))
+                if (!lcl_setLine(aSeq[1], *this, SvxBoxInfoItemLine::VERT, bConvert))
                     return false;
 
                 sal_Int16 nFlags( 0 );
@@ -2896,7 +2895,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SvxBorderLine aLine;
             bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
             if ( bSet )
-                SetLine( &aLine, nMemberId == MID_HORIZONTAL ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT );
+                SetLine( &aLine, nMemberId == MID_HORIZONTAL ? SvxBoxInfoItemLine::HORI : SvxBoxInfoItemLine::VERT );
             break;
         }
         case MID_FLAGS:

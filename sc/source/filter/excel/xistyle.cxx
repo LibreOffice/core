@@ -973,13 +973,13 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
         SvxBoxItem aBoxItem( ATTR_BORDER );
         ::editeng::SvxBorderLine aLine;
         if( mbLeftUsed && lclConvertBorderLine( aLine, rPalette, mnLeftLine, mnLeftColor ) )
-            aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
+            aBoxItem.SetLine( &aLine, SvxBoxItemLine::LEFT );
         if( mbRightUsed && lclConvertBorderLine( aLine, rPalette, mnRightLine, mnRightColor ) )
-            aBoxItem.SetLine( &aLine, BOX_LINE_RIGHT );
+            aBoxItem.SetLine( &aLine, SvxBoxItemLine::RIGHT );
         if( mbTopUsed && lclConvertBorderLine( aLine, rPalette, mnTopLine, mnTopColor ) )
-            aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
+            aBoxItem.SetLine( &aLine, SvxBoxItemLine::TOP );
         if( mbBottomUsed && lclConvertBorderLine( aLine, rPalette, mnBottomLine, mnBottomColor ) )
-            aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
+            aBoxItem.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
         ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
     }
     if( mbDiagUsed )
@@ -1954,10 +1954,10 @@ void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
     maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
 }
 
-void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
+void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
 {
-    SCCOL nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
-    SCROW nFromScRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
+    SCCOL nFromScCol = (nLine == SvxBoxItemLine::RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
+    SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
     ScDocument& rDoc = GetDoc();
 
     const SvxBoxItem* pFromItem = static_cast< const SvxBoxItem* >(
@@ -2052,10 +2052,10 @@ void XclImpXFRangeBuffer::Finalize()
         bool bMultiRow = rStart.Row() != rEnd.Row();
         // set correct right border
         if( bMultiCol )
-            SetBorderLine( *pRange, nScTab, BOX_LINE_RIGHT );
+            SetBorderLine( *pRange, nScTab, SvxBoxItemLine::RIGHT );
         // set correct lower border
         if( bMultiRow )
-            SetBorderLine( *pRange, nScTab, BOX_LINE_BOTTOM );
+            SetBorderLine( *pRange, nScTab, SvxBoxItemLine::BOTTOM );
         // do merge
         if( bMultiCol || bMultiRow )
             rDoc.getDoc().DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );

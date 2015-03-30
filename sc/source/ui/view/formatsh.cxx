@@ -1799,13 +1799,13 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         //  -> Substitute existing lines with pDefLine only if widths are 0.
                         SvxBoxItem aBoxItem ( *static_cast<const SvxBoxItem*>(pItem ));
                         if ( aBoxItem.GetTop() && aBoxItem.GetTop()->GetOutWidth() == 0 )
-                            aBoxItem.SetLine( pDefLine, BOX_LINE_TOP );
+                            aBoxItem.SetLine( pDefLine, SvxBoxItemLine::TOP );
                         if ( aBoxItem.GetBottom() && aBoxItem.GetBottom()->GetOutWidth() == 0 )
-                            aBoxItem.SetLine( pDefLine, BOX_LINE_BOTTOM );
+                            aBoxItem.SetLine( pDefLine, SvxBoxItemLine::BOTTOM );
                         if ( aBoxItem.GetLeft() && aBoxItem.GetLeft()->GetOutWidth() == 0 )
-                            aBoxItem.SetLine( pDefLine, BOX_LINE_LEFT );
+                            aBoxItem.SetLine( pDefLine, SvxBoxItemLine::LEFT );
                         if ( aBoxItem.GetRight() && aBoxItem.GetRight()->GetOutWidth() == 0 )
-                            aBoxItem.SetLine( pDefLine, BOX_LINE_RIGHT );
+                            aBoxItem.SetLine( pDefLine, SvxBoxItemLine::RIGHT );
                         pNewSet->Put( aBoxItem );
                         rReq.AppendItem( aBoxItem );
                     }
@@ -1815,17 +1815,17 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     {
                         SvxBoxInfoItem aBoxInfoItem( *static_cast<const SvxBoxInfoItem*>(pItem) );
                         if ( aBoxInfoItem.GetHori() && aBoxInfoItem.GetHori()->GetOutWidth() == 0 )
-                            aBoxInfoItem.SetLine( pDefLine, BOXINFO_LINE_HORI );
+                            aBoxInfoItem.SetLine( pDefLine, SvxBoxInfoItemLine::HORI );
                         if ( aBoxInfoItem.GetVert() && aBoxInfoItem.GetVert()->GetOutWidth() == 0 )
-                            aBoxInfoItem.SetLine( pDefLine, BOXINFO_LINE_VERT );
+                            aBoxInfoItem.SetLine( pDefLine, SvxBoxInfoItemLine::VERT );
                         pNewSet->Put( aBoxInfoItem );
                         rReq.AppendItem( aBoxInfoItem );
                     }
                     else
                     {
                         SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
-                        aBoxInfoItem.SetLine( NULL, BOXINFO_LINE_HORI );
-                        aBoxInfoItem.SetLine( NULL, BOXINFO_LINE_VERT );
+                        aBoxInfoItem.SetLine( NULL, SvxBoxInfoItemLine::HORI );
+                        aBoxInfoItem.SetLine( NULL, SvxBoxInfoItemLine::VERT );
                         pNewSet->Put( aBoxInfoItem );
                     }
 

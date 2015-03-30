@@ -1060,27 +1060,27 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             SvxBorderLine aLine;
 
             bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_TOP);
+            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::TOP);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, pBorder->IsTopLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM);
+            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::BOTTOM);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, pBorder->IsBottomLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT);
+            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::LEFT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, pBorder->IsLeftLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT);
+            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::RIGHT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, pBorder->IsRightLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_HORI);
+            aBoxInfo.SetLine(bSet ? &aLine : 0, SvxBoxInfoItemLine::HORI);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, pBorder->IsHorizontalLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_VERT);
+            aBoxInfo.SetLine(bSet ? &aLine : 0, SvxBoxInfoItemLine::VERT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, pBorder->IsVerticalLineValid);
 
             aBox.SetDistance(pBorder->Distance); //TODO

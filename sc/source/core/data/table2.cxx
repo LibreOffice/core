@@ -881,14 +881,14 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
                     {
                         SvxBoxItem aNew( ATTR_BORDER );
-                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_TOP ), BOX_LINE_LEFT );
-                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_LEFT ), BOX_LINE_TOP );
-                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_BOTTOM ), BOX_LINE_RIGHT );
-                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_RIGHT ), BOX_LINE_BOTTOM );
-                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_TOP ), BOX_LINE_LEFT );
-                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_LEFT ), BOX_LINE_TOP );
-                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_BOTTOM ), BOX_LINE_RIGHT );
-                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_RIGHT ), BOX_LINE_BOTTOM );
+                        aNew.SetLine( rOldBox.GetLine( SvxBoxItemLine::TOP ), SvxBoxItemLine::LEFT );
+                        aNew.SetLine( rOldBox.GetLine( SvxBoxItemLine::LEFT ), SvxBoxItemLine::TOP );
+                        aNew.SetLine( rOldBox.GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::RIGHT );
+                        aNew.SetLine( rOldBox.GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::BOTTOM );
+                        aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::TOP ), SvxBoxItemLine::LEFT );
+                        aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::LEFT ), SvxBoxItemLine::TOP );
+                        aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::RIGHT );
+                        aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::BOTTOM );
                         rNewSet.Put( aNew );
                     }
 

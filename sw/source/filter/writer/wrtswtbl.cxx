@@ -263,16 +263,16 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     // boxes.
     if( bCollectBorderWidth )
     {
-        sal_uInt16 nDist = rBoxItem.GetDistance( BOX_LINE_TOP );
+        sal_uInt16 nDist = rBoxItem.GetDistance( SvxBoxItemLine::TOP );
         if( nDist && (!nCellPadding || nDist < nCellPadding) )
             nCellPadding = nDist;
-        nDist = rBoxItem.GetDistance( BOX_LINE_BOTTOM );
+        nDist = rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM );
         if( nDist && (!nCellPadding || nDist < nCellPadding) )
             nCellPadding = nDist;
-        nDist = rBoxItem.GetDistance( BOX_LINE_LEFT );
+        nDist = rBoxItem.GetDistance( SvxBoxItemLine::LEFT );
         if( nDist && (!nCellPadding || nDist < nCellPadding) )
             nCellPadding = nDist;
-        nDist = rBoxItem.GetDistance( BOX_LINE_RIGHT );
+        nDist = rBoxItem.GetDistance( SvxBoxItemLine::RIGHT );
         if( nDist && (!nCellPadding || nDist < nCellPadding) )
             nCellPadding = nDist;
     }

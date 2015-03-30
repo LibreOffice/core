@@ -539,10 +539,10 @@ IMAGE_SETEVENT:
         }
 
         SvxBoxItem aBoxItem( RES_BOX );
-        aBoxItem.SetLine( &aHBorderLine, BOX_LINE_TOP );
-        aBoxItem.SetLine( &aHBorderLine, BOX_LINE_BOTTOM );
-        aBoxItem.SetLine( &aVBorderLine, BOX_LINE_LEFT );
-        aBoxItem.SetLine( &aVBorderLine, BOX_LINE_RIGHT );
+        aBoxItem.SetLine( &aHBorderLine, SvxBoxItemLine::TOP );
+        aBoxItem.SetLine( &aHBorderLine, SvxBoxItemLine::BOTTOM );
+        aBoxItem.SetLine( &aVBorderLine, SvxBoxItemLine::LEFT );
+        aBoxItem.SetLine( &aVBorderLine, SvxBoxItemLine::RIGHT );
         aFrmSet.Put( aBoxItem );
     }
 

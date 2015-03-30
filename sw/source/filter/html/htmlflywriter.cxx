@@ -666,10 +666,10 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     {
         const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
 
-        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_LEFT );
-        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_RIGHT );
-        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_TOP );
-        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_BOTTOM );
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT );
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( SvxBoxItemLine::TOP );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( SvxBoxItemLine::BOTTOM );
     }
 
     // WIDTH und/oder HEIGHT
@@ -932,10 +932,10 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
     {
         const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
 
-        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_LEFT );
-        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_RIGHT );
-        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_TOP );
-        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_BOTTOM );
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT );
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( SvxBoxItemLine::TOP );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( SvxBoxItemLine::BOTTOM );
     }
 
     // "width" and/or "height"
@@ -1132,7 +1132,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         if (!rFrmSize.GetWidthPercent() && rRealSize.Width())
         {
             SwTwips nWidth = rFrmSize.GetWidth();
-            nWidth -= rBox.CalcLineSpace(BOX_LINE_LEFT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
+            nWidth -= rBox.CalcLineSpace(SvxBoxItemLine::LEFT) + rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
 
             OSL_ENSURE( nWidth > 0, "Gibt es 0 twip breite Grafiken!?" );
             if (nWidth <= 0) // sollte nicht passieren
@@ -1149,7 +1149,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         {
             SwTwips nHeight = rFrmSize.GetHeight();
 
-            nHeight -= rBox.CalcLineSpace(BOX_LINE_TOP) + rBox.CalcLineSpace(BOX_LINE_BOTTOM);
+            nHeight -= rBox.CalcLineSpace(SvxBoxItemLine::TOP) + rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
 
             OSL_ENSURE( nHeight > 0, "Gibt es 0 twip hohe Grafiken!?" );
             if (nHeight <= 0)
