@@ -92,7 +92,7 @@ public:
                                          const OUString& rsOldUnit) SAL_OVERRIDE;
 
 private:
-    UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
+    UnitsResult getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
     UnitsResult getOutputUnitForDoubleRefOpcode(const OpCode& rOpCode, const ScRangeList& rRange, ScDocument* pDoc);
 
     /**
