@@ -1,0 +1,49 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_DateType_idl__
+#define __com_sun_star_sheet_DateType_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+constants DateType
+{
+    const long TODAY = 0;
+
+    const long YESTERDAY = 1;
+
+    const long TOMORROW = 2;
+
+    const long LAST7DAYS = 3;
+
+    const long THISWEEK = 4;
+
+    const long LASTWEEK = 5;
+
+    const long NEXTWEEK = 6;
+
+    const long THISMONTH = 7;
+
+    const long LASTMONTH = 8;
+
+    const long NEXTMONTH = 9;
+
+    const long THISYEAR = 10;
+
+    const long LASTYEAR = 11;
+
+    const long NEXTYEAR = 12;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
