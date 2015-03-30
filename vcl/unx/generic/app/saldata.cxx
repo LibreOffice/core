@@ -39,10 +39,6 @@
 #include <sys/time.h>
 #endif
 
-#include <prex.h>
-#include <X11/Xproto.h>
-#include <postx.h>
-
 #include <osl/process.h>
 #include <osl/mutex.hxx>
 
@@ -52,6 +48,7 @@
 #include "unx/sm.hxx"
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
+#include "unx/x11/x11display.hxx"
 #include "salinst.hxx"
 
 #include <osl/signal.h>
@@ -395,53 +392,8 @@ void SalXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    /*
-     * open connection to X11 Display
-     * try in this order:
-     *  o  -display command line parameter,
-     *  o  $DISPLAY environment variable
-     *  o  default display
-     */
-
-    Display *pDisp = NULL;
-
-    // is there a -display command line parameter?
-
-    sal_uInt32 nParams = osl_getCommandArgCount();
-    OUString aParam;
     OString aDisplay;
-    for (sal_uInt16 i=0; i<nParams; i++)
-    {
-        osl_getCommandArg(i, &aParam.pData);
-        if ( aParam == "-display" )
-        {
-            osl_getCommandArg(i+1, &aParam.pData);
-            aDisplay = OUStringToOString(
-                   aParam, osl_getThreadTextEncoding());
-
-            if ((pDisp = XOpenDisplay(aDisplay.getStr()))!=NULL)
-            {
-                /*
-                 * if a -display switch was used, we need
-                 * to set the environment accoringly since
-                 * the clipboard build another connection
-                 * to the xserver using $DISPLAY
-                 */
-                OUString envVar("DISPLAY");
-                osl_setEnvironment(envVar.pData, aParam.pData);
-            }
-            break;
-        }
-    }
-
-    if (!pDisp && aDisplay.isEmpty())
-    {
-        // Open $DISPLAY or default...
-        char *pDisplay = getenv("DISPLAY");
-        if (pDisplay != NULL)
-            aDisplay = OString(pDisplay);
-        pDisp  = XOpenDisplay(pDisplay);
-    }
+    Display *pDisp = OpenX11Display(aDisplay);
 
     if ( !pDisp )
     {
