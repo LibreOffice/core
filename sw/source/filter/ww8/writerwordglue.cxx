@@ -341,11 +341,11 @@ static SvxLRSpaceItem lcl_getWordLRSpace(const SwFrmFmt& rFmt)
     SvxLRSpaceItem aLR(rFmt.GetLRSpace());
     const SvxBoxItem& rBox = rFmt.GetBox();
 
-    aLR.SetLeft(aLR.GetLeft() + rBox.GetDistance(BOX_LINE_LEFT));
+    aLR.SetLeft(aLR.GetLeft() + rBox.GetDistance(SvxBoxItemLine::LEFT));
     if (const editeng::SvxBorderLine* pLeft = rBox.GetLeft())
         aLR.SetLeft(aLR.GetLeft() + pLeft->GetWidth());
 
-    aLR.SetRight(aLR.GetRight() + rBox.GetDistance(BOX_LINE_RIGHT));
+    aLR.SetRight(aLR.GetRight() + rBox.GetDistance(SvxBoxItemLine::RIGHT));
     if (const editeng::SvxBorderLine* pRight = rBox.GetRight())
         aLR.SetRight(aLR.GetRight() + pRight->GetWidth());
 
@@ -394,8 +394,8 @@ namespace sw
         {
             if (const SvxBoxItem *pBox = HasItem<SvxBoxItem>(rPage, RES_BOX))
             {
-                dyaHdrTop = pBox->CalcLineSpace(BOX_LINE_TOP);
-                dyaHdrBottom = pBox->CalcLineSpace(BOX_LINE_BOTTOM);
+                dyaHdrTop = pBox->CalcLineSpace(SvxBoxItemLine::TOP);
+                dyaHdrBottom = pBox->CalcLineSpace(SvxBoxItemLine::BOTTOM);
             }
             else
             {

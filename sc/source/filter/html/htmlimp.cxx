@@ -148,13 +148,13 @@ void ScHTMLImport::WriteToDocument(
                 {
                     const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
                         mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER ) );
-                    aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_RIGHT ), BOX_LINE_RIGHT );
+                    aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
                     const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
                         mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER ) );
-                    aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_BOTTOM ), BOX_LINE_BOTTOM );
+                    aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::BOTTOM );
                 }
                 mpDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
             }

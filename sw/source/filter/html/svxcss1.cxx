@@ -285,10 +285,10 @@ struct SvxCSS1BorderInfo
         nNamedWidth( rInfo.nNamedWidth ), eStyle( rInfo.eStyle )
     {}
 
-    void SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) const;
+    void SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxItem ) const;
 };
 
-void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) const
+void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxItem ) const
 {
     if( CSS1_BS_NONE==eStyle || nAbsWidth==0 ||
         (nAbsWidth==USHRT_MAX && nNamedWidth==USHRT_MAX) )
@@ -512,15 +512,15 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     }
 }
 
-SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( sal_uInt16 nLine, bool bCreate )
+SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( SvxBoxItemLine nLine, bool bCreate )
 {
     sal_uInt16 nPos = 0;
     switch( nLine )
     {
-    case BOX_LINE_TOP:      nPos = 0;   break;
-    case BOX_LINE_BOTTOM:   nPos = 1;   break;
-    case BOX_LINE_LEFT:     nPos = 2;   break;
-    case BOX_LINE_RIGHT:    nPos = 3;   break;
+    case SvxBoxItemLine::TOP:      nPos = 0;   break;
+    case SvxBoxItemLine::BOTTOM:   nPos = 1;   break;
+    case SvxBoxItemLine::LEFT:     nPos = 2;   break;
+    case SvxBoxItemLine::RIGHT:    nPos = 3;   break;
     }
 
     if( !aBorderInfos[nPos] && bCreate )
@@ -529,7 +529,7 @@ SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( sal_uInt16 nLine, bool bC
     return aBorderInfos[nPos];
 }
 
-void SvxCSS1PropertyInfo::CopyBorderInfo( sal_uInt16 nSrcLine, sal_uInt16 nDstLine,
+void SvxCSS1PropertyInfo::CopyBorderInfo( SvxBoxItemLine nSrcLine, SvxBoxItemLine nDstLine,
                                           sal_uInt16 nWhat )
 {
     SvxCSS1BorderInfo *pSrcInfo = GetBorderInfo( nSrcLine, false );
@@ -554,12 +554,12 @@ void SvxCSS1PropertyInfo::CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat )
 {
     if( nCount==0 )
     {
-        CopyBorderInfo( BOX_LINE_BOTTOM, BOX_LINE_TOP, nWhat );
-        CopyBorderInfo( BOX_LINE_TOP, BOX_LINE_LEFT, nWhat );
+        CopyBorderInfo( SvxBoxItemLine::BOTTOM, SvxBoxItemLine::TOP, nWhat );
+        CopyBorderInfo( SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, nWhat );
     }
     if( nCount<=1 )
     {
-        CopyBorderInfo( BOX_LINE_LEFT, BOX_LINE_RIGHT, nWhat );
+        CopyBorderInfo( SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT, nWhat );
     }
 }
 
@@ -584,40 +584,41 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     if( pDfltItem )
         aBoxItem = *pDfltItem;
 
-    SvxCSS1BorderInfo *pInfo = GetBorderInfo( BOX_LINE_TOP, false );
+    SvxCSS1BorderInfo *pInfo = GetBorderInfo( SvxBoxItemLine::TOP, false );
     if( pInfo )
-        pInfo->SetBorderLine( BOX_LINE_TOP, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::TOP, aBoxItem );
 
-    pInfo = GetBorderInfo( BOX_LINE_BOTTOM, false );
+    pInfo = GetBorderInfo( SvxBoxItemLine::BOTTOM, false );
     if( pInfo )
-        pInfo->SetBorderLine( BOX_LINE_BOTTOM, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::BOTTOM, aBoxItem );
 
-    pInfo = GetBorderInfo( BOX_LINE_LEFT, false );
+    pInfo = GetBorderInfo( SvxBoxItemLine::LEFT, false );
     if( pInfo )
-        pInfo->SetBorderLine( BOX_LINE_LEFT, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::LEFT, aBoxItem );
 
-    pInfo = GetBorderInfo( BOX_LINE_RIGHT, false );
+    pInfo = GetBorderInfo( SvxBoxItemLine::RIGHT, false );
     if( pInfo )
-        pInfo->SetBorderLine( BOX_LINE_RIGHT, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, aBoxItem );
 
     for( i=0; i<4; i++ )
     {
-        sal_uInt16 nLine = BOX_LINE_TOP, nDist = 0;
+        SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
+        sal_uInt16 nDist = 0;
         switch( i )
         {
-        case 0: nLine = BOX_LINE_TOP;
+        case 0: nLine = SvxBoxItemLine::TOP;
                 nDist = nTopBorderDistance;
                 nTopBorderDistance = USHRT_MAX;
                 break;
-        case 1: nLine = BOX_LINE_BOTTOM;
+        case 1: nLine = SvxBoxItemLine::BOTTOM;
                 nDist = nBottomBorderDistance;
                 nBottomBorderDistance = USHRT_MAX;
                 break;
-        case 2: nLine = BOX_LINE_LEFT;
+        case 2: nLine = SvxBoxItemLine::LEFT;
                 nDist = nLeftBorderDistance;
                 nLeftBorderDistance = USHRT_MAX;
                 break;
-        case 3: nLine = BOX_LINE_RIGHT;
+        case 3: nLine = SvxBoxItemLine::RIGHT;
                 nDist = nRightBorderDistance;
                 nRightBorderDistance = USHRT_MAX;
                 break;
@@ -2387,7 +2388,7 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                                    SfxItemSet & /*rItemSet*/,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& /*rParser*/,
-                                   sal_uInt16 nWhichLine )
+                                   SvxBoxItemLine nWhichLine )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -2431,10 +2432,10 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
     {
         switch( nWhichLine )
         {
-        case BOX_LINE_TOP:      rPropInfo.nTopBorderDistance = nDist;   break;
-        case BOX_LINE_BOTTOM:   rPropInfo.nBottomBorderDistance = nDist;break;
-        case BOX_LINE_LEFT:     rPropInfo.nLeftBorderDistance = nDist;  break;
-        case BOX_LINE_RIGHT:    rPropInfo.nRightBorderDistance = nDist; break;
+        case SvxBoxItemLine::TOP:      rPropInfo.nTopBorderDistance = nDist;   break;
+        case SvxBoxItemLine::BOTTOM:   rPropInfo.nBottomBorderDistance = nDist;break;
+        case SvxBoxItemLine::LEFT:     rPropInfo.nLeftBorderDistance = nDist;  break;
+        case SvxBoxItemLine::RIGHT:    rPropInfo.nRightBorderDistance = nDist; break;
         }
     }
 
@@ -2446,7 +2447,7 @@ static void ParseCSS1_padding_top( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_TOP );
+    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::TOP );
 }
 
 static void ParseCSS1_padding_bottom( const CSS1Expression *pExpr,
@@ -2455,7 +2456,7 @@ static void ParseCSS1_padding_bottom( const CSS1Expression *pExpr,
                                       const SvxCSS1Parser& rParser )
 {
     ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
-                           BOX_LINE_BOTTOM );
+                           SvxBoxItemLine::BOTTOM );
 }
 
 static void ParseCSS1_padding_left( const CSS1Expression *pExpr,
@@ -2463,7 +2464,7 @@ static void ParseCSS1_padding_left( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& rPropInfo,
                                     const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_LEFT );
+    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::LEFT );
 }
 
 static void ParseCSS1_padding_right( const CSS1Expression *pExpr,
@@ -2472,7 +2473,7 @@ static void ParseCSS1_padding_right( const CSS1Expression *pExpr,
                                      const SvxCSS1Parser& rParser )
 {
     ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
-                           BOX_LINE_RIGHT );
+                           SvxBoxItemLine::RIGHT );
 }
 
 static void ParseCSS1_padding( const CSS1Expression *pExpr,
@@ -2483,7 +2484,7 @@ static void ParseCSS1_padding( const CSS1Expression *pExpr,
     sal_uInt16 n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
-        sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
+        SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
         if( ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
                                    nLine ) )
         {
@@ -2505,7 +2506,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                                   SfxItemSet & /*rItemSet*/,
                                   SvxCSS1PropertyInfo& rPropInfo,
                                   const SvxCSS1Parser& /*rParser*/,
-                                  sal_uInt16 nWhichLine, bool bAll )
+                                  SvxBoxItemLine nWhichLine, bool bAll )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -2550,8 +2551,8 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 
         case CSS1_PIXLENGTH:
             {
-                bool bHori = nWhichLine == BOX_LINE_TOP ||
-                             nWhichLine == BOX_LINE_BOTTOM;
+                bool bHori = nWhichLine == SvxBoxItemLine::TOP ||
+                             nWhichLine == SvxBoxItemLine::BOTTOM;
                 // Ein Pixel wird zur Haarlinie (ist huebscher)
                 long nWidthL = (long)pExpr->GetNumber();
                 if( nWidthL > 1 )
@@ -2575,13 +2576,13 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 
     for( sal_uInt16 i=0; i<4; i++ )
     {
-        sal_uInt16 nLine = 0;
+        SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
         switch( i )
         {
-        case 0: nLine = BOX_LINE_TOP; break;
-        case 1: nLine = BOX_LINE_BOTTOM; break;
-        case 2: nLine = BOX_LINE_LEFT; break;
-        case 3: nLine = BOX_LINE_RIGHT; break;
+        case 0: nLine = SvxBoxItemLine::TOP; break;
+        case 1: nLine = SvxBoxItemLine::BOTTOM; break;
+        case 2: nLine = SvxBoxItemLine::LEFT; break;
+        case 3: nLine = SvxBoxItemLine::RIGHT; break;
         }
 
         if( bAll || nLine == nWhichLine )
@@ -2600,7 +2601,7 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
                                         SfxItemSet & /*rItemSet*/,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& /*rParser*/,
-                                        sal_uInt16 nWhichLine )
+                                        SvxBoxItemLine nWhichLine )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -2625,8 +2626,8 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
 
     case CSS1_PIXLENGTH:
         {
-            bool bHori = nWhichLine == BOX_LINE_TOP ||
-                         nWhichLine == BOX_LINE_BOTTOM;
+            bool bHori = nWhichLine == SvxBoxItemLine::TOP ||
+                         nWhichLine == SvxBoxItemLine::BOTTOM;
             long nWidthL = (long)pExpr->GetNumber();
             long nPWidth = bHori ? 0 : nWidthL;
             long nPHeight = bHori ? nWidthL : 0;
@@ -2649,7 +2650,7 @@ static void ParseCSS1_border_top_width( const CSS1Expression *pExpr,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_TOP );
+    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::TOP );
 }
 
 static void ParseCSS1_border_right_width( const CSS1Expression *pExpr,
@@ -2657,7 +2658,7 @@ static void ParseCSS1_border_right_width( const CSS1Expression *pExpr,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_RIGHT );
+    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::RIGHT );
 }
 
 static void ParseCSS1_border_bottom_width( const CSS1Expression *pExpr,
@@ -2665,7 +2666,7 @@ static void ParseCSS1_border_bottom_width( const CSS1Expression *pExpr,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_BOTTOM );
+    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::BOTTOM );
 }
 
 static void ParseCSS1_border_left_width( const CSS1Expression *pExpr,
@@ -2673,7 +2674,7 @@ static void ParseCSS1_border_left_width( const CSS1Expression *pExpr,
                                         SvxCSS1PropertyInfo& rPropInfo,
                                         const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_LEFT );
+    ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::LEFT );
 }
 
 static void ParseCSS1_border_width( const CSS1Expression *pExpr,
@@ -2684,7 +2685,7 @@ static void ParseCSS1_border_width( const CSS1Expression *pExpr,
     sal_uInt16 n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
-        sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
+        SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
         ParseCSS1_border_xxx_width( pExpr, rItemSet, rPropInfo, rParser, nLine );
         rPropInfo.CopyBorderInfo( n, SVX_CSS1_BORDERINFO_WIDTH );
 
@@ -2701,7 +2702,7 @@ static void ParseCSS1_border_color( const CSS1Expression *pExpr,
     sal_uInt16 n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
-        sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
+        SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
         Color aColor;
         switch( pExpr->GetType() )
         {
@@ -2729,7 +2730,7 @@ static void ParseCSS1_border_style( const CSS1Expression *pExpr,
     sal_uInt16 n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
-        sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
+        SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
         sal_uInt16 nValue = 0;
         if( CSS1_IDENT==pExpr->GetType() &&
             SvxCSS1Parser::GetEnum( aBorderStyleTable, pExpr->GetString(),
@@ -2749,7 +2750,7 @@ static void ParseCSS1_border_top( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& rPropInfo,
                                   const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_TOP, false );
+    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::TOP, false );
 }
 
 static void ParseCSS1_border_right( const CSS1Expression *pExpr,
@@ -2757,7 +2758,7 @@ static void ParseCSS1_border_right( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& rPropInfo,
                                     const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_RIGHT, false );
+    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::RIGHT, false );
 }
 
 static void ParseCSS1_border_bottom( const CSS1Expression *pExpr,
@@ -2765,7 +2766,7 @@ static void ParseCSS1_border_bottom( const CSS1Expression *pExpr,
                                      SvxCSS1PropertyInfo& rPropInfo,
                                      const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_BOTTOM, false );
+    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::BOTTOM, false );
 }
 
 static void ParseCSS1_border_left( const CSS1Expression *pExpr,
@@ -2773,7 +2774,7 @@ static void ParseCSS1_border_left( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, BOX_LINE_LEFT, false );
+    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::LEFT, false );
 }
 
 static void ParseCSS1_border( const CSS1Expression *pExpr,
@@ -2781,7 +2782,7 @@ static void ParseCSS1_border( const CSS1Expression *pExpr,
                               SvxCSS1PropertyInfo& rPropInfo,
                               const SvxCSS1Parser& rParser )
 {
-    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, 0, true );
+    ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::TOP, true );
 }
 
 static void ParseCSS1_float( const CSS1Expression *pExpr,

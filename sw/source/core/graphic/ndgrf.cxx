@@ -818,8 +818,8 @@ void SwGrfNode::ScaleImageMap()
     {
         SwTwips nWidth = rFrmSize.GetWidth();
 
-        nWidth -= rBox.CalcLineSpace(BOX_LINE_LEFT) +
-                  rBox.CalcLineSpace(BOX_LINE_RIGHT);
+        nWidth -= rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
+                  rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
 
         OSL_ENSURE( nWidth>0, "Do any 0 twip wide graphics exist!?" );
 
@@ -833,8 +833,8 @@ void SwGrfNode::ScaleImageMap()
     {
         SwTwips nHeight = rFrmSize.GetHeight();
 
-        nHeight -= rBox.CalcLineSpace(BOX_LINE_TOP) +
-                   rBox.CalcLineSpace(BOX_LINE_BOTTOM);
+        nHeight -= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
+                   rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
 
         OSL_ENSURE( nHeight>0, "Do any 0 twip high graphics exist!?" );
 

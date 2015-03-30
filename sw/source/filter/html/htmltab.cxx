@@ -1417,12 +1417,12 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
             if( bTopLine )
             {
-                aBoxItem.SetLine( &aTopBorderLine, BOX_LINE_TOP );
+                aBoxItem.SetLine( &aTopBorderLine, SvxBoxItemLine::TOP );
                 bSet = true;
             }
             if( bLastBottomLine )
             {
-                aBoxItem.SetLine( &aBottomBorderLine, BOX_LINE_BOTTOM );
+                aBoxItem.SetLine( &aBottomBorderLine, SvxBoxItemLine::BOTTOM );
                 bSet = true;
             }
             else if( bBottomLine )
@@ -1439,11 +1439,11 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                     aThickBorderLine.SetBorderLineStyle(
                             table::BorderLineStyle::SOLID);
                     aThickBorderLine.SetWidth( nBorderWidth );
-                    aBoxItem.SetLine( &aThickBorderLine, BOX_LINE_BOTTOM );
+                    aBoxItem.SetLine( &aThickBorderLine, SvxBoxItemLine::BOTTOM );
                 }
                 else
                 {
-                    aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
+                    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
                 }
                 bSet = true;
             }
@@ -1451,13 +1451,13 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
             {
                 const SvxBorderLine& rBorderLine =
                     0==nCol ? aLeftBorderLine : aBorderLine;
-                aBoxItem.SetLine( &rBorderLine, BOX_LINE_LEFT );
+                aBoxItem.SetLine( &rBorderLine, SvxBoxItemLine::LEFT );
                 nInnerFrmWidth -= GetBorderWidth( rBorderLine );
                 bSet = true;
             }
             if( nCol+nColSpan == nCols && bRightBorder )
             {
-                aBoxItem.SetLine( &aRightBorderLine, BOX_LINE_RIGHT );
+                aBoxItem.SetLine( &aRightBorderLine, SvxBoxItemLine::RIGHT );
                 nInnerFrmWidth -= GetBorderWidth( aRightBorderLine );
                 bSet = true;
             }
@@ -1569,13 +1569,13 @@ void HTMLTable::FixFillerFrameFmt( SwTableBox *pBox, bool bRight ) const
     {
         SvxBoxItem aBoxItem( RES_BOX );
         if( bFillerTopBorder )
-            aBoxItem.SetLine( &aTopBorderLine, BOX_LINE_TOP );
+            aBoxItem.SetLine( &aTopBorderLine, SvxBoxItemLine::TOP );
         if( bFillerBottomBorder )
-            aBoxItem.SetLine( &aBottomBorderLine, BOX_LINE_BOTTOM );
+            aBoxItem.SetLine( &aBottomBorderLine, SvxBoxItemLine::BOTTOM );
         if( !bRight && bInhLeftBorder )
-            aBoxItem.SetLine( &aInhLeftBorderLine, BOX_LINE_LEFT );
+            aBoxItem.SetLine( &aInhLeftBorderLine, SvxBoxItemLine::LEFT );
         if( bRight && bInhRightBorder )
-            aBoxItem.SetLine( &aInhRightBorderLine, BOX_LINE_RIGHT );
+            aBoxItem.SetLine( &aInhRightBorderLine, SvxBoxItemLine::RIGHT );
         aBoxItem.SetDistance( MIN_BORDER_DIST );
         pFrmFmt->SetFmtAttr( aBoxItem );
     }

@@ -832,16 +832,16 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
               SvxBoxItem aBox( ATTR_BORDER );
               aLine.SetWidth(nLeft);
               aLine.SetColor(ColorLeft);
-              aBox.SetLine(&aLine, BOX_LINE_LEFT);
+              aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
               aLine.SetWidth(nTop);
               aLine.SetColor(ColorTop);
-              aBox.SetLine(&aLine, BOX_LINE_TOP);
+              aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
               aLine.SetWidth(nRight);
               aLine.SetColor(ColorRight);
-              aBox.SetLine(&aLine, BOX_LINE_RIGHT);
+              aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
               aLine.SetWidth(nBottom);
               aLine.SetColor(ColorBottom);
-              aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
+              aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
               aSetItemItemSet.Put(aBox);
             }
@@ -1256,16 +1256,16 @@ void Sc10Import::LoadPatternCollection()
 
                     aLine.SetWidth( nLeft );
                     aLine.SetColor( ColorLeft );
-                    aBox.SetLine( &aLine, BOX_LINE_LEFT );
+                    aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
                     aLine.SetWidth( nTop );
                     aLine.SetColor( ColorTop );
-                    aBox.SetLine( &aLine, BOX_LINE_TOP );
+                    aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
                     aLine.SetWidth( nRight );
                     aLine.SetColor( ColorRight );
-                    aBox.SetLine( &aLine, BOX_LINE_RIGHT );
+                    aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
                     aLine.SetWidth( nBottom );
                     aLine.SetColor( ColorBottom );
-                    aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
+                    aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
                     rItemSet.Put( aBox );
                 }
             }
@@ -1936,19 +1936,19 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
             aLine.SetWidth( nLeft );
             aLine.SetColor( ColorLeft );
-            aBox.SetLine( &aLine, BOX_LINE_LEFT );
+            aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
 
             aLine.SetWidth( nTop );
             aLine.SetColor( ColorTop );
-            aBox.SetLine( &aLine, BOX_LINE_TOP );
+            aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
 
             aLine.SetWidth( nRight );
             aLine.SetColor( ColorRight );
-            aBox.SetLine( &aLine, BOX_LINE_RIGHT );
+            aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
 
             aLine.SetWidth( nBottom );
             aLine.SetColor( ColorBottom );
-            aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
+            aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
 
             aScPattern.GetItemSet().Put( aBox );
             pDoc->ApplyPatternAreaTab( Col, nStart, Col, nEnd, Tab, aScPattern );

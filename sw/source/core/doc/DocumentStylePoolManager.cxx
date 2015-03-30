@@ -997,7 +997,7 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
                 SvxBoxItem aBox( RES_BOX );
                 Color aColor( COL_GRAY );
                 SvxBorderLine aNew(&aColor, 1, table::BorderLineStyle::DOUBLE);
-                aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
+                aBox.SetLine( &aNew, SvxBoxItemLine::BOTTOM );
 
                 aSet.Put( aBox );
                 aSet.Put( SwParaConnectBorderItem( false ) );
@@ -1257,10 +1257,10 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
                 Color aCol( COL_BLACK );
                 SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
                 SvxBoxItem aBox( RES_BOX );
-                aBox.SetLine( &aLine, BOX_LINE_TOP );
-                aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
-                aBox.SetLine( &aLine, BOX_LINE_LEFT );
-                aBox.SetLine( &aLine, BOX_LINE_RIGHT );
+                aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
+                aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
+                aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
+                aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
                 aBox.SetDistance( 85 );
                 aSet.Put( aBox );
                 aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );

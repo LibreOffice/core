@@ -1012,13 +1012,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     SvxBorderLine aDestBorderLine;
 
                     if( aBoxItem.GetTop() != NULL )
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_TOP);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
                     if( aBoxItem.GetBottom() != NULL )
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_BOTTOM);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
                     if( aBoxItem.GetLeft() != NULL )
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_LEFT);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
                     if( aBoxItem.GetRight() != NULL )
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_RIGHT);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
                 }
             }
             break;
@@ -1037,41 +1037,41 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                         if (!aBoxItem.GetTop() && !aBoxItem.GetBottom() &&
                             !aBoxItem.GetLeft() && !aBoxItem.GetRight())
                         {
-                            aBoxItem.SetLine(&aBorderLine, BOX_LINE_TOP);
-                            aBoxItem.SetLine(&aBorderLine, BOX_LINE_BOTTOM);
-                            aBoxItem.SetLine(&aBorderLine, BOX_LINE_LEFT);
-                            aBoxItem.SetLine(&aBorderLine, BOX_LINE_RIGHT);
+                            aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+                            aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+                            aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+                            aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
                         }
                         else
                         {
                             if( aBoxItem.GetTop() )
                             {
                                 aBorderLine.SetColor( aBoxItem.GetTop()->GetColor() );
-                                aBoxItem.SetLine(&aBorderLine, BOX_LINE_TOP);
+                                aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
                             }
                             if( aBoxItem.GetBottom() )
                             {
                                 aBorderLine.SetColor( aBoxItem.GetBottom()->GetColor());
-                                aBoxItem.SetLine(&aBorderLine, BOX_LINE_BOTTOM);
+                                aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
                             }
                             if( aBoxItem.GetLeft() )
                             {
                                 aBorderLine.SetColor( aBoxItem.GetLeft()->GetColor());
-                                aBoxItem.SetLine(&aBorderLine, BOX_LINE_LEFT);
+                                aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
                             }
                             if( aBoxItem.GetRight() )
                             {
                                 aBorderLine.SetColor(aBoxItem.GetRight()->GetColor());
-                                aBoxItem.SetLine(&aBorderLine, BOX_LINE_RIGHT);
+                                aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
                             }
                         }
                     }
                     else
                     {
-                        aBoxItem.SetLine(0, BOX_LINE_TOP);
-                        aBoxItem.SetLine(0, BOX_LINE_BOTTOM);
-                        aBoxItem.SetLine(0, BOX_LINE_LEFT);
-                        aBoxItem.SetLine(0, BOX_LINE_RIGHT);
+                        aBoxItem.SetLine(0, SvxBoxItemLine::TOP);
+                        aBoxItem.SetLine(0, SvxBoxItemLine::BOTTOM);
+                        aBoxItem.SetLine(0, SvxBoxItemLine::LEFT);
+                        aBoxItem.SetLine(0, SvxBoxItemLine::RIGHT);
                     }
                 }
             }
@@ -1087,10 +1087,10 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                         !aBoxItem.GetLeft() && !aBoxItem.GetRight())
                     {
                         aBorderLine.SetColor( rNewColor );
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_TOP);
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_BOTTOM);
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_LEFT);
-                        aBoxItem.SetLine(&aBorderLine, BOX_LINE_RIGHT);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+                        aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
                     }
                     else
                     {

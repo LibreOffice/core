@@ -65,6 +65,7 @@
 
 #include "docsh.hxx"
 #include <cstdio>
+#include <o3tl/enumrange.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -574,16 +575,14 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                     (pSI->GetWidth() != 0);
             }
 
-            sal_uInt8 aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
-                                BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-            for( sal_uInt8 i = 0; i < 4; ++i )
+            for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
             {
-                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( i );
                 WW8_BRC aBrc;
                 if (pLn)
                 {
                     WW8_BRCVer9 aBrc90 = rWrt.TranslateBorderLine( *pLn,
-                        pBox->GetDistance( aLnArr[ i ] ), bShadow );
+                        pBox->GetDistance( i ), bShadow );
                     sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
                         aBrc90.cv()));
                     aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
@@ -594,15 +593,15 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                 // border will really be in word and adjust accordingly
                 short nSpacing;
                 short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-                switch (aLnArr[ i ])
+                switch (i)
                 {
-                    case BOX_LINE_TOP:
-                    case BOX_LINE_BOTTOM:
+                    case SvxBoxItemLine::TOP:
+                    case SvxBoxItemLine::BOTTOM:
                         nHeight -= bShadow ? nThick*2 : nThick;
                         nHeight = nHeight - nSpacing;
                         break;
-                    case BOX_LINE_LEFT:
-                    case BOX_LINE_RIGHT:
+                    case SvxBoxItemLine::LEFT:
+                    case SvxBoxItemLine::RIGHT:
                     default:
                         nWidth -= bShadow ? nThick*2 : nThick;
                         nWidth = nWidth - nSpacing;
@@ -764,23 +763,21 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
     sal_uInt8* pArr = aArr + 0x2E;  //Do borders first
 
-    sal_uInt8 aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
-    BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-    for( sal_uInt8 i = 0; i < 4; ++i )
+    for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
     {
         WW8_BRC aBrc;
 
         short nSpacing;
         short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-        switch (aLnArr[ i ])
+        switch (i)
         {
-            case BOX_LINE_TOP:
-            case BOX_LINE_BOTTOM:
+            case SvxBoxItemLine::TOP:
+            case SvxBoxItemLine::BOTTOM:
             nHeight -= nThick;
             nHeight = nHeight - nSpacing;
             break;
-            case BOX_LINE_LEFT:
-            case BOX_LINE_RIGHT:
+            case SvxBoxItemLine::LEFT:
+            case SvxBoxItemLine::RIGHT:
             default:
             nWidth -= nThick;
             nWidth = nWidth - nSpacing;

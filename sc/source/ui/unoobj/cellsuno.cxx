@@ -963,12 +963,12 @@ void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBo
 {
     ::editeng::SvxBorderLine aLine;
     rOuter.SetDistance( static_cast<sal_uInt16>(HMMToTwips( rBorder.Distance )) );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         BOX_LINE_TOP );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      BOX_LINE_BOTTOM );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        BOX_LINE_LEFT );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),       BOX_LINE_RIGHT );
-    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),  BOXINFO_LINE_HORI );
-    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),    BOXINFO_LINE_VERT );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         SvxBoxItemLine::TOP );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      SvxBoxItemLine::BOTTOM );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        SvxBoxItemLine::LEFT );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),       SvxBoxItemLine::RIGHT );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),  SvxBoxInfoItemLine::HORI );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),    SvxBoxInfoItemLine::VERT );
     rInner.SetValid( SvxBoxInfoItemValidFlags::TOP,      rBorder.IsTopLineValid );
     rInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,   rBorder.IsBottomLineValid );
     rInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,     rBorder.IsLeftLineValid );

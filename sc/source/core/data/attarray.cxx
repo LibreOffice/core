@@ -695,10 +695,10 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     if( pNewBoxItem )
                     {
-                        if ( pNewBoxItem->GetTop() )    pNewBoxItem->SetLine( NULL, BOX_LINE_TOP );
-                        if ( pNewBoxItem->GetBottom() ) pNewBoxItem->SetLine( NULL, BOX_LINE_BOTTOM );
-                        if ( pNewBoxItem->GetLeft() )   pNewBoxItem->SetLine( NULL, BOX_LINE_LEFT );
-                        if ( pNewBoxItem->GetRight() )  pNewBoxItem->SetLine( NULL, BOX_LINE_RIGHT );
+                        if ( pNewBoxItem->GetTop() )    pNewBoxItem->SetLine( NULL, SvxBoxItemLine::TOP );
+                        if ( pNewBoxItem->GetBottom() ) pNewBoxItem->SetLine( NULL, SvxBoxItemLine::BOTTOM );
+                        if ( pNewBoxItem->GetLeft() )   pNewBoxItem->SetLine( NULL, SvxBoxItemLine::LEFT );
+                        if ( pNewBoxItem->GetRight() )  pNewBoxItem->SetLine( NULL, SvxBoxItemLine::RIGHT );
                     }
                     if( pNewTLBRItem && pNewTLBRItem->GetLine() )
                         pNewTLBRItem->SetLine( 0 );
@@ -1006,45 +1006,45 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
     if (bTop)
     {
         if (lcl_TestAttr( pLineOuter->GetTop(), pTopAttr, rFlags.nTop, pNew ))
-            pLineOuter->SetLine( pNew, BOX_LINE_TOP );
+            pLineOuter->SetLine( pNew, SvxBoxItemLine::TOP );
     }
     else
     {
         if (lcl_TestAttr( pLineInner->GetHori(), pTopAttr, rFlags.nHori, pNew ))
-            pLineInner->SetLine( pNew, BOXINFO_LINE_HORI );
+            pLineInner->SetLine( pNew, SvxBoxInfoItemLine::HORI );
     }
 
     if (nDistBottom == 0)
     {
         if (lcl_TestAttr( pLineOuter->GetBottom(), pBottomAttr, rFlags.nBottom, pNew ))
-            pLineOuter->SetLine( pNew, BOX_LINE_BOTTOM );
+            pLineOuter->SetLine( pNew, SvxBoxItemLine::BOTTOM );
     }
     else
     {
         if (lcl_TestAttr( pLineInner->GetHori(), pBottomAttr, rFlags.nHori, pNew ))
-            pLineInner->SetLine( pNew, BOXINFO_LINE_HORI );
+            pLineInner->SetLine( pNew, SvxBoxInfoItemLine::HORI );
     }
 
     if (bLeft)
     {
         if (lcl_TestAttr( pLineOuter->GetLeft(), pLeftAttr, rFlags.nLeft, pNew ))
-            pLineOuter->SetLine( pNew, BOX_LINE_LEFT );
+            pLineOuter->SetLine( pNew, SvxBoxItemLine::LEFT );
     }
     else
     {
         if (lcl_TestAttr( pLineInner->GetVert(), pLeftAttr, rFlags.nVert, pNew ))
-            pLineInner->SetLine( pNew, BOXINFO_LINE_VERT );
+            pLineInner->SetLine( pNew, SvxBoxInfoItemLine::VERT );
     }
 
     if (nDistRight == 0)
     {
         if (lcl_TestAttr( pLineOuter->GetRight(), pRightAttr, rFlags.nRight, pNew ))
-            pLineOuter->SetLine( pNew, BOX_LINE_RIGHT );
+            pLineOuter->SetLine( pNew, SvxBoxItemLine::RIGHT );
     }
     else
     {
         if (lcl_TestAttr( pLineInner->GetVert(), pRightAttr, rFlags.nVert, pNew ))
-            pLineInner->SetLine( pNew, BOXINFO_LINE_VERT );
+            pLineInner->SetLine( pNew, SvxBoxInfoItemLine::VERT );
     }
 }
 
@@ -1112,35 +1112,35 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
         if( bLeft && nDistRight==0)
         {
             if ( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-                aNewFrame.SetLine( pBoxItem->GetLeft(), BOX_LINE_RIGHT );
+                aNewFrame.SetLine( pBoxItem->GetLeft(), SvxBoxItemLine::RIGHT );
             if ( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-                aNewFrame.SetLine( pBoxItem->GetRight(), BOX_LINE_LEFT );
+                aNewFrame.SetLine( pBoxItem->GetRight(), SvxBoxItemLine::LEFT );
         }
         else
         {
             if ( (nDistRight==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
                 aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
-                    BOX_LINE_RIGHT );
+                    SvxBoxItemLine::RIGHT );
             if ( bLeft ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
                 aNewFrame.SetLine( bLeft ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
-                    BOX_LINE_LEFT );
+                    SvxBoxItemLine::LEFT );
         }
     }
     else
     {
         if ( bLeft ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
             aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
-                BOX_LINE_LEFT );
+                SvxBoxItemLine::LEFT );
         if ( (nDistRight==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
             aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
-                BOX_LINE_RIGHT );
+                SvxBoxItemLine::RIGHT );
     }
     if ( bTop ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
         aNewFrame.SetLine( bTop ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(),
-            BOX_LINE_TOP );
+            SvxBoxItemLine::TOP );
     if ( (nDistBottom==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
         aNewFrame.SetLine( (nDistBottom==0) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(),
-            BOX_LINE_BOTTOM );
+            SvxBoxItemLine::BOTTOM );
 
     if (aNewFrame == *pOldFrame)
     {

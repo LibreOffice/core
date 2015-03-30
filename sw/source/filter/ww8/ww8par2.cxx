@@ -2947,18 +2947,18 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     {
         aFmtBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwTOP],
-            BOX_LINE_TOP);
+            SvxBoxItemLine::TOP);
     }
     else
-        aFmtBox.SetDistance(pActBand->mnDefaultTop, BOX_LINE_TOP);
+        aFmtBox.SetDistance(pActBand->mnDefaultTop, SvxBoxItemLine::TOP);
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwBOTTOM))
     {
         aFmtBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwBOTTOM],
-            BOX_LINE_BOTTOM);
+            SvxBoxItemLine::BOTTOM);
     }
     else
-        aFmtBox.SetDistance(pActBand->mnDefaultBottom,BOX_LINE_BOTTOM);
+        aFmtBox.SetDistance(pActBand->mnDefaultBottom,SvxBoxItemLine::BOTTOM);
 
     // nGapHalf for WW is a *horizontal* gap between table cell and content.
     short nLeftDist =
@@ -2969,18 +2969,18 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     {
         aFmtBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwLEFT],
-            BOX_LINE_LEFT);
+            SvxBoxItemLine::LEFT);
     }
     else
-        aFmtBox.SetDistance(nLeftDist, BOX_LINE_LEFT);
+        aFmtBox.SetDistance(nLeftDist, SvxBoxItemLine::LEFT);
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwRIGHT))
     {
         aFmtBox.SetDistance(
             pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwRIGHT],
-            BOX_LINE_RIGHT);
+            SvxBoxItemLine::RIGHT);
     }
     else
-        aFmtBox.SetDistance(nRightDist,BOX_LINE_RIGHT);
+        aFmtBox.SetDistance(nRightDist,SvxBoxItemLine::RIGHT);
 
     pBox->GetFrmFmt()->SetFmtAttr(aFmtBox);
 }
@@ -3144,7 +3144,7 @@ void WW8TabDesc::AdjustNewBand()
         // we have to mimick this in the filter by picking the larger of the
         // sides and using that one on one side of the line (right)
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrmFmt()), RES_BOX));
-        const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
+        const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(SvxBoxItemLine::LEFT);
         int nCurrentRightLineWidth = 0;
         if(pLeftLine)
             nCurrentRightLineWidth = pLeftLine->GetScaledWidth();
@@ -3153,15 +3153,15 @@ void WW8TabDesc::AdjustNewBand()
         {
             SwTableBox* pBox2 = (*pTabBoxes)[i-1];
             SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrmFmt()), RES_BOX));
-            const ::editeng::SvxBorderLine *pRightLine = aOldBox.GetLine(BOX_LINE_RIGHT);
+            const ::editeng::SvxBorderLine *pRightLine = aOldBox.GetLine(SvxBoxItemLine::RIGHT);
             int nOldBoxRightLineWidth = 0;
             if(pRightLine)
                 nOldBoxRightLineWidth = pRightLine->GetScaledWidth();
 
             if(nOldBoxRightLineWidth>nCurrentRightLineWidth)
-                aCurrentBox.SetLine(aOldBox.GetLine(BOX_LINE_RIGHT), BOX_LINE_LEFT);
+                aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);
 
-            aOldBox.SetLine(0, BOX_LINE_RIGHT);
+            aOldBox.SetLine(0, SvxBoxItemLine::RIGHT);
             pBox2->GetFrmFmt()->SetFmtAttr(aOldBox);
         }
 

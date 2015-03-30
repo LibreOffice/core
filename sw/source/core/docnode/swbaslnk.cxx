@@ -318,10 +318,10 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 aCalcSz = rGrfSz;
 
             const SvxBoxItem     &rBox = pFmt->GetBox();
-            aCalcSz.Width() += rBox.CalcLineSpace(BOX_LINE_LEFT) +
-                               rBox.CalcLineSpace(BOX_LINE_RIGHT);
-            aCalcSz.Height()+= rBox.CalcLineSpace(BOX_LINE_TOP) +
-                               rBox.CalcLineSpace(BOX_LINE_BOTTOM);
+            aCalcSz.Width() += rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
+            aCalcSz.Height()+= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
             const SwFmtFrmSize& rOldAttr = pFmt->GetFrmSize();
             if( rOldAttr.GetSize() != aCalcSz )
             {

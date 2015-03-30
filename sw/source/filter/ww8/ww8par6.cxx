@@ -449,41 +449,41 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
     SvxULSpaceItem aUL(ItemGet<SvxULSpaceItem>(aSet, RES_UL_SPACE));
 
     SvxBoxItem aBox(ItemGet<SvxBoxItem>(aSet, RES_BOX));
-    short aOriginalBottomMargin = aBox.GetDistance(BOX_LINE_BOTTOM);
+    short aOriginalBottomMargin = aBox.GetDistance(SvxBoxItemLine::BOTTOM);
 
     if (rSection.maSep.pgbOffsetFrom == 1)
     {
         sal_uInt16 nDist;
         if (aBox.GetLeft())
         {
-            nDist = aBox.GetDistance(BOX_LINE_LEFT);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetLeft() - nDist)), BOX_LINE_LEFT);
+            nDist = aBox.GetDistance(SvxBoxItemLine::LEFT);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetLeft() - nDist)), SvxBoxItemLine::LEFT);
             aSizeArray[WW8_LEFT] =
-                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(BOX_LINE_LEFT);
+                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(SvxBoxItemLine::LEFT);
         }
 
         if (aBox.GetRight())
         {
-            nDist = aBox.GetDistance(BOX_LINE_RIGHT);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetRight() - nDist)), BOX_LINE_RIGHT);
+            nDist = aBox.GetDistance(SvxBoxItemLine::RIGHT);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetRight() - nDist)), SvxBoxItemLine::RIGHT);
             aSizeArray[WW8_RIGHT] =
-                aSizeArray[WW8_RIGHT] - nDist + aBox.GetDistance(BOX_LINE_RIGHT);
+                aSizeArray[WW8_RIGHT] - nDist + aBox.GetDistance(SvxBoxItemLine::RIGHT);
         }
 
         if (aBox.GetTop())
         {
-            nDist = aBox.GetDistance(BOX_LINE_TOP);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetUpper() - nDist)), BOX_LINE_TOP);
+            nDist = aBox.GetDistance(SvxBoxItemLine::TOP);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetUpper() - nDist)), SvxBoxItemLine::TOP);
             aSizeArray[WW8_TOP] =
-                aSizeArray[WW8_TOP] - nDist + aBox.GetDistance(BOX_LINE_TOP);
+                aSizeArray[WW8_TOP] - nDist + aBox.GetDistance(SvxBoxItemLine::TOP);
         }
 
         if (aBox.GetBottom())
         {
-            nDist = aBox.GetDistance(BOX_LINE_BOTTOM);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetLower() - nDist)), BOX_LINE_BOTTOM);
+            nDist = aBox.GetDistance(SvxBoxItemLine::BOTTOM);
+            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetLower() - nDist)), SvxBoxItemLine::BOTTOM);
             aSizeArray[WW8_BOT] =
-                aSizeArray[WW8_BOT] - nDist + aBox.GetDistance(BOX_LINE_BOTTOM);
+                aSizeArray[WW8_BOT] - nDist + aBox.GetDistance(SvxBoxItemLine::BOTTOM);
         }
 
         aSet.Put(aBox);
@@ -1320,7 +1320,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
 }
 
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
-    sal_uInt32 cv, short nIdx, sal_uInt16 nOOIndex, sal_uInt16 nWWIndex,
+    sal_uInt32 cv, short nIdx, SvxBoxItemLine nOOIndex, sal_uInt16 nWWIndex,
     short *pSize=0)
 {
     // LO cannot handle outset/inset (new in WW9 BRC) so fall back same as WW8
@@ -1352,7 +1352,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
 
 }
 
-void Set1Border(SvxBoxItem &rBox, const WW8_BRCVer9& rBor, sal_uInt16 nOOIndex,
+void Set1Border(SvxBoxItem &rBox, const WW8_BRCVer9& rBor, SvxBoxItemLine nOOIndex,
     sal_uInt16 nWWIndex, short *pSize, const bool bIgnoreSpace)
 {
     short nSpace;
@@ -1381,25 +1381,25 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
     short *pSizeArray, sal_uInt8 nSetBorders) const
 {
     bool bChange = false;
-    static const sal_uInt16 aIdArr[ 10 ] =
+    static const std::pair<sal_uInt16, SvxBoxItemLine> aIdArr[] =
     {
-        WW8_TOP,    BOX_LINE_TOP,
-        WW8_LEFT,   BOX_LINE_LEFT,
-        WW8_RIGHT,  BOX_LINE_RIGHT,
-        WW8_BOT,    BOX_LINE_BOTTOM,
-        WW8_BETW,   BOX_LINE_BOTTOM
+        { WW8_TOP,    SvxBoxItemLine::TOP },
+        { WW8_LEFT,   SvxBoxItemLine::LEFT },
+        { WW8_RIGHT,  SvxBoxItemLine::RIGHT },
+        { WW8_BOT,    SvxBoxItemLine::BOTTOM },
+        { WW8_BETW,   SvxBoxItemLine::BOTTOM }
     };
 
-    for( int i = 0, nEnd = 8; i < nEnd; i += 2 )
+    for( int i = 0, nEnd = 4; i < nEnd; ++i )
     {
         // ungueltige Borders ausfiltern
-        const WW8_BRCVer9& rB = pbrc[ aIdArr[ i ] ];
+        const WW8_BRCVer9& rB = pbrc[ aIdArr[ i ].first ];
         if( !rB.isNil() && rB.brcType() )
         {
-            Set1Border(rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray, false);
+            Set1Border(rBox, rB, aIdArr[i].second, aIdArr[i].first, pSizeArray, false);
             bChange = true;
         }
-        else if ( nSetBorders & (1 << aIdArr[i]) )
+        else if ( nSetBorders & (1 << aIdArr[i].first) )
         {
             /*
             ##826##, ##653##
@@ -1412,7 +1412,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
             border, so with a sprm set, but no border, then disable the
             appropriate border
             */
-            rBox.SetLine( 0, aIdArr[ i+1 ] );
+            rBox.SetLine( 0, aIdArr[ i ].second );
         }
     }
     return bChange;
@@ -4721,16 +4721,16 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 GetBorderDistance( aBrcs, aInnerDist );
 
                 if (nBorder & (1 << WW8_LEFT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), BOX_LINE_LEFT );
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), SvxBoxItemLine::LEFT );
 
                 if (nBorder & (1 << WW8_TOP))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), BOX_LINE_TOP );
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), SvxBoxItemLine::TOP );
 
                 if (nBorder & (1 << WW8_RIGHT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), BOX_LINE_RIGHT );
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), SvxBoxItemLine::RIGHT );
 
                 if (nBorder & (1 << WW8_BOT))
-                    aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), SvxBoxItemLine::BOTTOM );
 
                 NewAttr( aBox );
 
@@ -4769,10 +4769,10 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != table::BorderLineStyle::NONE )
             {
-                Set1Border(aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, 0, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, 0, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, 0, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, 0, true);
                 NewAttr( aBoxItem );
 
                 short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;

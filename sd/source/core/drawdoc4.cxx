@@ -603,10 +603,10 @@ void SdDrawDocument::CreateDefaultCellStyles()
             &aWhite, 1, table::BorderLineStyle::SOLID);
 
     SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
-    aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::TOP );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::LEFT );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::RIGHT );
 
     rISet.Put( aBoxItem );
 

@@ -434,13 +434,13 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                             m_pBottomMF->SetMin( 0 );
                             m_pBottomMF->SetFirst( 0 );
                         }
-                        long nLeftDist = pBoxItem->GetDistance( BOX_LINE_LEFT);
+                        long nLeftDist = pBoxItem->GetDistance( SvxBoxItemLine::LEFT);
                         SetMetricValue(*m_pLeftMF, nLeftDist, eCoreUnit);
-                        long nRightDist = pBoxItem->GetDistance( BOX_LINE_RIGHT);
+                        long nRightDist = pBoxItem->GetDistance( SvxBoxItemLine::RIGHT);
                         SetMetricValue(*m_pRightMF, nRightDist, eCoreUnit);
-                        long nTopDist = pBoxItem->GetDistance( BOX_LINE_TOP);
+                        long nTopDist = pBoxItem->GetDistance( SvxBoxItemLine::TOP);
                         SetMetricValue( *m_pTopMF, nTopDist, eCoreUnit );
-                        long nBottomDist = pBoxItem->GetDistance( BOX_LINE_BOTTOM);
+                        long nBottomDist = pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM);
                         SetMetricValue( *m_pBottomMF, nBottomDist, eCoreUnit );
 
                         // if the distance is set with no active border line
@@ -603,12 +603,11 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // outer border:
 
-    typedef ::std::pair<svx::FrameBorderType,sal_uInt16> TBorderPair;
-    TBorderPair eTypes1[] = {
-                                TBorderPair(svx::FRAMEBORDER_TOP,BOX_LINE_TOP),
-                                TBorderPair(svx::FRAMEBORDER_BOTTOM,BOX_LINE_BOTTOM),
-                                TBorderPair(svx::FRAMEBORDER_LEFT,BOX_LINE_LEFT),
-                                TBorderPair(svx::FRAMEBORDER_RIGHT,BOX_LINE_RIGHT),
+    ::std::pair<svx::FrameBorderType,SvxBoxItemLine> eTypes1[] = {
+                                { svx::FRAMEBORDER_TOP,SvxBoxItemLine::TOP },
+                                { svx::FRAMEBORDER_BOTTOM,SvxBoxItemLine::BOTTOM },
+                                { svx::FRAMEBORDER_LEFT,SvxBoxItemLine::LEFT },
+                                { svx::FRAMEBORDER_RIGHT,SvxBoxItemLine::RIGHT },
                             };
 
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(eTypes1); ++i)
@@ -617,9 +616,9 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // border hor/ver and TableFlag
 
-    TBorderPair eTypes2[] = {
-                                TBorderPair(svx::FRAMEBORDER_HOR,BOXINFO_LINE_HORI),
-                                TBorderPair(svx::FRAMEBORDER_VER,BOXINFO_LINE_VERT)
+    ::std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> eTypes2[] = {
+                                { svx::FRAMEBORDER_HOR,SvxBoxInfoItemLine::HORI },
+                                { svx::FRAMEBORDER_VER,SvxBoxInfoItemLine::VERT }
                             };
     for (sal_uInt32 j=0; j < SAL_N_ELEMENTS(eTypes2); ++j)
         aBoxInfoItem.SetLine( m_pFrameSel->GetFrameBorderStyle( eTypes2[j].first ), eTypes2[j].second );
@@ -664,17 +663,17 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
                        )
                     {
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pRightMF, eCoreUnit ), BOX_LINE_RIGHT );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pTopMF, eCoreUnit ), BOX_LINE_TOP   );
-                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pBottomMF, eCoreUnit ), BOX_LINE_BOTTOM);
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pLeftMF, eCoreUnit ), SvxBoxItemLine::LEFT  );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pRightMF, eCoreUnit ), SvxBoxItemLine::RIGHT );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pTopMF, eCoreUnit ), SvxBoxItemLine::TOP   );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pBottomMF, eCoreUnit ), SvxBoxItemLine::BOTTOM);
                     }
                     else
                     {
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_LEFT ), BOX_LINE_LEFT);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_RIGHT),  BOX_LINE_RIGHT);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_TOP  ), BOX_LINE_TOP);
-                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_BOTTOM), BOX_LINE_BOTTOM);
+                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::LEFT ), SvxBoxItemLine::LEFT);
+                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::RIGHT),  SvxBoxItemLine::RIGHT);
+                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::TOP  ), SvxBoxItemLine::TOP);
+                        aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM);
                     }
                     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
                 }

@@ -2884,13 +2884,13 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                 SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
                 SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
-                SET_LINE_ATTRIBUTES(Top,BOX_LINE_TOP)
-                SET_LINE_ATTRIBUTES(Bottom,BOX_LINE_BOTTOM)
-                SET_LINE_ATTRIBUTES(Left,BOX_LINE_LEFT)
-                SET_LINE_ATTRIBUTES(Right,BOX_LINE_RIGHT)
+                SET_LINE_ATTRIBUTES(Top,SvxBoxItemLine::TOP)
+                SET_LINE_ATTRIBUTES(Bottom,SvxBoxItemLine::BOTTOM)
+                SET_LINE_ATTRIBUTES(Left,SvxBoxItemLine::LEFT)
+                SET_LINE_ATTRIBUTES(Right,SvxBoxItemLine::RIGHT)
 
-                aBoxInfoItem.SetLine( aBoxItem.GetTop(), BOXINFO_LINE_HORI );
-                aBoxInfoItem.SetLine( aBoxItem.GetLeft(), BOXINFO_LINE_VERT );
+                aBoxInfoItem.SetLine( aBoxItem.GetTop(), SvxBoxInfoItemLine::HORI );
+                aBoxInfoItem.SetLine( aBoxItem.GetLeft(), SvxBoxInfoItemLine::VERT );
                 aBoxInfoItem.ResetFlags(); // set Lines to Valid
 
                 pOldSet->Put( *pBorderAttr );

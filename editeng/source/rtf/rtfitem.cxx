@@ -1366,22 +1366,22 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
     {
     case RTF_BOX:           // run through all levels
     case RTF_BRDRT:
-        rItem.SetLine( &rBorder, BOX_LINE_TOP );
+        rItem.SetLine( &rBorder, SvxBoxItemLine::TOP );
         if( RTF_BOX != nBorderTyp )
             return;
         // fall-through
     case RTF_BRDRB:
-        rItem.SetLine( &rBorder, BOX_LINE_BOTTOM );
+        rItem.SetLine( &rBorder, SvxBoxItemLine::BOTTOM );
         if( RTF_BOX != nBorderTyp )
             return;
         // fall-through
     case RTF_BRDRL:
-        rItem.SetLine( &rBorder, BOX_LINE_LEFT );
+        rItem.SetLine( &rBorder, SvxBoxItemLine::LEFT );
         if( RTF_BOX != nBorderTyp )
             return;
         // fall-through
     case RTF_BRDRR:
-        rItem.SetLine( &rBorder, BOX_LINE_RIGHT );
+        rItem.SetLine( &rBorder, SvxBoxItemLine::RIGHT );
         if( RTF_BOX != nBorderTyp )
             return;
     }
@@ -1525,19 +1525,19 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 switch( nBorderTyp )
                 {
                 case RTF_BRDRB:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_BOTTOM );
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::BOTTOM );
                     break;
 
                 case RTF_BRDRT:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_TOP );
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::TOP );
                     break;
 
                 case RTF_BRDRL:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_LEFT );
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::LEFT );
                     break;
 
                 case RTF_BRDRR:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_RIGHT );
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, SvxBoxItemLine::RIGHT );
                     break;
 
                 case RTF_BOX:

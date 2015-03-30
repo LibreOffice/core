@@ -127,13 +127,13 @@ static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     }
     SvxBoxItem aBox(RES_BOX); aBox.SetDistance( 55 );
     if ( bTop )
-        aBox.SetLine( &aLine, BOX_LINE_TOP );
+        aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
     if ( bBottom )
-        aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
+        aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
     if ( bLeft )
-        aBox.SetLine( &aLine, BOX_LINE_LEFT );
+        aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
     if ( bRight )
-        aBox.SetLine( &aLine, BOX_LINE_RIGHT );
+        aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
     rFmt.SetFmtAttr( aBox );
 }
 
@@ -3039,7 +3039,7 @@ void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
             if( !rBoxItem.GetTop() )
             {
                 SvxBoxItem aNew( rBoxItem );
-                aNew.SetLine( pFmt->GetBox().GetBottom(), BOX_LINE_TOP );
+                aNew.SetLine( pFmt->GetBox().GetBottom(), SvxBoxItemLine::TOP );
                 if( aNew != rBoxItem )
                     pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
             }

@@ -1450,10 +1450,10 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
             if ( bTop )
             {
                 SwTwips nDiff = rBox.GetTop() ?
-                    rBox.CalcLineSpace( BOX_LINE_TOP ) :
+                    rBox.CalcLineSpace( SvxBoxItemLine::TOP ) :
                     ( rAttrs.IsBorderDist() ?
                       // Increase of distance by one twip is incorrect.
-                      rBox.GetDistance( BOX_LINE_TOP ) : 0 );
+                      rBox.GetDistance( SvxBoxItemLine::TOP ) : 0 );
                 if( nDiff )
                     (rRect.*fnRect->fnSubTop)( nDiff );
             }
@@ -1473,26 +1473,26 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                 else
                 {
                     nDiff = rBox.GetBottom() ?
-                    rBox.CalcLineSpace( BOX_LINE_BOTTOM ) :
+                    rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) :
                     ( rAttrs.IsBorderDist() ?
                       // Increase of distance by one twip is incorrect.
-                      rBox.GetDistance( BOX_LINE_BOTTOM ) : 0 );
+                      rBox.GetDistance( SvxBoxItemLine::BOTTOM ) : 0 );
                 }
                 if( nDiff )
                     (rRect.*fnRect->fnAddBottom)( nDiff );
             }
 
             if ( rBox.GetLeft() )
-                (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( BOX_LINE_LEFT ) );
+                (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
             else if ( rAttrs.IsBorderDist() )
                  // Increase of distance by one twip is incorrect.
-                (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( BOX_LINE_LEFT ) );
+                (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( SvxBoxItemLine::LEFT ) );
 
             if ( rBox.GetRight() )
-                (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( BOX_LINE_RIGHT ) );
+                (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
             else if ( rAttrs.IsBorderDist() )
                  // Increase of distance by one twip is incorrect.
-                (rRect.*fnRect->fnAddRight)( rBox.GetDistance( BOX_LINE_RIGHT ) );
+                (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
 
             if ( bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
             {

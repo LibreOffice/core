@@ -160,8 +160,8 @@ IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
         break;
     case TBI_BORDER1_ALL:
         pLeft = pRight = pTop = pBottom = &theDefLine;
-        aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_HORI );
-        aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_VERT );
+        aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
+        aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
         nValidFlags |= FRM_VALID_ALL;
         break;
     case TBI_BORDER1_OUTER:
@@ -175,10 +175,10 @@ IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
         break;
     }
 
-    aBorderOuter.SetLine( pLeft, BOX_LINE_LEFT );
-    aBorderOuter.SetLine( pRight, BOX_LINE_RIGHT );
-    aBorderOuter.SetLine( pTop, BOX_LINE_TOP );
-    aBorderOuter.SetLine( pBottom, BOX_LINE_BOTTOM );
+    aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+    aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+    aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+    aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       0 != (nValidFlags&FRM_VALID_TOP ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    0 != (nValidFlags&FRM_VALID_BOTTOM ));
@@ -244,10 +244,10 @@ IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox)
             nValidFlags |=  FRM_VALID_RIGHT|FRM_VALID_LEFT;
             break;
         }
-        aBorderOuter.SetLine( pLeft, BOX_LINE_LEFT );
-        aBorderOuter.SetLine( pRight, BOX_LINE_RIGHT );
-        aBorderOuter.SetLine( pTop, BOX_LINE_TOP );
-        aBorderOuter.SetLine( pBottom, BOX_LINE_BOTTOM );
+        aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+        aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+        aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+        aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       0 != (nValidFlags&FRM_VALID_TOP ));
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    0 != (nValidFlags&FRM_VALID_BOTTOM ));
@@ -316,10 +316,10 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
         break;
     }
 
-    aBorderOuter.SetLine( pTop.get(), BOX_LINE_TOP );
-    aBorderOuter.SetLine( pBottom.get(), BOX_LINE_BOTTOM );
-    aBorderOuter.SetLine( NULL, BOX_LINE_LEFT );
-    aBorderOuter.SetLine( NULL, BOX_LINE_RIGHT );
+    aBorderOuter.SetLine( pTop.get(), SvxBoxItemLine::TOP );
+    aBorderOuter.SetLine( pBottom.get(), SvxBoxItemLine::BOTTOM );
+    aBorderOuter.SetLine( NULL, SvxBoxItemLine::LEFT );
+    aBorderOuter.SetLine( NULL, SvxBoxItemLine::RIGHT );
 
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       0 != (nValidFlags&FRM_VALID_TOP ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    0 != (nValidFlags&FRM_VALID_BOTTOM ));
