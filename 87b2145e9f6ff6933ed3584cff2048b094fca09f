@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_31589756",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T13:59:34Z",
+      "side": 1,
+      "message": "Does not build: error: ‘bEditEngineText’ was not declared in this scope",
+      "revId": "87b2145e9f6ff6933ed3584cff2048b094fca09f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
