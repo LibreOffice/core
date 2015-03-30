@@ -536,17 +536,14 @@ void ViewShell::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
 {
     if (SdrView* pSdrView = GetView())
     {
-        if (pSdrView->GetTextEditObject())
+        rtl::Reference<sdr::SelectionController> xSelectionController(GetView()->getSelectionController());
+        if (!xSelectionController.is() || !xSelectionController->setCursorLogicPosition(rPosition, bPoint))
         {
-            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-            rEditView.SetCursorLogicPosition(rPosition, bPoint, bClearMark);
-        }
-        else
-        {
-            // No text edit object, then try to adjust table selection.
-            rtl::Reference<sdr::SelectionController> xSelectionController(GetView()->getSelectionController());
-            if (xSelectionController.is())
-                xSelectionController->setCursorLogicPosition(rPosition, bPoint);
+            if (pSdrView->GetTextEditObject())
+            {
+                EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+                rEditView.SetCursorLogicPosition(rPosition, bPoint, bClearMark);
+            }
         }
     }
 }

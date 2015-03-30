@@ -105,8 +105,9 @@ bool SelectionController::hasSelectedCells() const
     return false;
 }
 
-void SelectionController::setCursorLogicPosition(const Point& /*rPosition*/, bool /*bPoint*/)
+bool SelectionController::setCursorLogicPosition(const Point& /*rPosition*/, bool /*bPoint*/)
 {
+    return false;
 }
 
 }

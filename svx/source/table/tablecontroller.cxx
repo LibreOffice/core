@@ -3152,21 +3152,31 @@ bool SvxTableController::isColumnHeader()
     return aSettings.mbUseFirstColumn;
 }
 
-void SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPoint)
+bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPoint)
 {
     if (mxTableObj->GetObjIdentifier() != OBJ_TABLE)
-        return;
+        return false;
 
     SdrTableObj* pTableObj = static_cast<SdrTableObj*>(mxTableObj.get());
     CellPos aCellPos;
     if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow, 0) != SDRTABLEHIT_NONE)
     {
-        if (bPoint)
-            maCursorLastPos = aCellPos;
-        else
-            maCursorFirstPos = aCellPos;
-        mpView->MarkListHasChanged();
+        // Position is a table cell.
+        if (mbCellSelectionMode)
+        {
+            // We have a table selection already: adjust the point or the mark.
+            if (bPoint)
+                setSelectedCells(maCursorFirstPos, aCellPos);
+            else
+                setSelectedCells(aCellPos, maCursorLastPos);
+            return true;
+        }
+        else if (aCellPos != maMouseDownPos)
+            // No selection, but rPosition is at an other cell: start table selection.
+            StartSelection(maMouseDownPos);
     }
+
+    return false;
 }
 
 } }

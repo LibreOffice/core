@@ -72,7 +72,7 @@ public:
     /// This is a table object, and one or more of its cells are selected.
     virtual bool hasSelectedCells() const;
     /// Allows adjusting the point or mark of the selection to a document coordinate.
-    virtual void setCursorLogicPosition(const Point& rPosition, bool bPoint);
+    virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint);
 };
 
 }
