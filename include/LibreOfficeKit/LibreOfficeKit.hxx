@@ -21,12 +21,14 @@
 namespace lok
 {
 
+/// The lok::Document class represents one loaded document instance.
 class Document
 {
 private:
     LibreOfficeKitDocument* mpDoc;
 
 public:
+    /// A lok::Document is typically created by the lok::Office::documentLoad() method.
     inline Document(LibreOfficeKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
@@ -36,39 +38,77 @@ public:
         mpDoc->pClass->destroy(mpDoc);
     }
 
+    /**
+     * Stores the document's persistent data to a URL and
+     * continues to be a representation of the old URL.
+     *
+     * @param pUrl the location where to store the document
+     * @param pFormat the format to use while exporting, when omitted, then deducted from pURL's extension
+     * @param pFilterOptions options for the export filter, e.g. SkipImages.
+     */
     inline bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
         return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat, pFilterOptions) != 0;
     }
 
+    /// Gives access to the underlying C pointer.
     inline LibreOfficeKitDocument *get() { return mpDoc; }
 
 #ifdef LOK_USE_UNSTABLE_API
+    /**
+     * Get document type.
+     *
+     * @return an element of the LibreOfficeKitDocumentType enum.
+     */
     inline int getDocumentType()
     {
         return mpDoc->pClass->getDocumentType(mpDoc);
     }
 
+    /**
+     * Get number of part that the document contains.
+     *
+     * Part refers to either indivual sheets in a Calc, or slides in Impress,
+     * and has no relevance for Writer.
+     */
     inline int getParts()
     {
         return mpDoc->pClass->getParts(mpDoc);
     }
 
+    /// Get the current part of the document.
     inline int getPart()
     {
         return mpDoc->pClass->getPart(mpDoc);
     }
 
+    /// Set the current part of the document.
     inline void setPart(int nPart)
     {
         mpDoc->pClass->setPart(mpDoc, nPart);
     }
 
+    /// Get the current part's name.
     inline char* getPartName(int nPart)
     {
         return mpDoc->pClass->getPartName(mpDoc, nPart);
     }
 
+    /**
+     * Renders a subset of the document to a pre-allocated buffer.
+     *
+     * Note that the buffer size and the tile size implicitly supports
+     * rendering at different zoom levels, as the number of rendered pixels and
+     * the rendered rectangle of the document are independent.
+     *
+     * @param pBuffer pointer to the buffer, its size is determined by nCanvasWidth and nCanvasHeight.
+     * @param nCanvasWidth number of pixels in a row of pBuffer.
+     * @param nCanvasHeight number of pixels in a column of pBuffer.
+     * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTilePosY logical Y position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
+     * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
+     */
     inline void paintTile(
                           unsigned char* pBuffer,
                           const int nCanvasWidth,
@@ -82,11 +122,20 @@ public:
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     }
 
+    /// Get the document sizes in TWIPs.
     inline void getDocumentSize(long* pWidth, long* pHeight)
     {
         mpDoc->pClass->getDocumentSize(mpDoc, pWidth, pHeight);
     }
 
+    /**
+     * Initialize document for rendering.
+     *
+     * Sets the rendering and document parameters to default values that are
+     * needed to render the document correctly using tiled rendering. This
+     * method has to be called right after documentLoad() in case any of the
+     * tiled rendering methods are to be used later.
+     */
     inline void initializeForRendering()
     {
         mpDoc->pClass->initializeForRendering(mpDoc);
@@ -173,12 +222,14 @@ public:
 #endif // LOK_USE_UNSTABLE_API
 };
 
+/// The lok::Office class represents one started LibreOfficeKit instance.
 class Office
 {
 private:
     LibreOfficeKit* mpThis;
 
 public:
+    /// A lok::Office is typically created by the lok_cpp_init() function.
     inline Office(LibreOfficeKit* pThis) :
         mpThis(pThis)
     {}
@@ -188,6 +239,12 @@ public:
         mpThis->pClass->destroy(mpThis);
     }
 
+    /**
+     * Loads a document from an URL.
+     *
+     * @param pUrl the URL of the document to load
+     * @param pFilterOptions options for the import filter, e.g. SkipImages.
+     */
     inline Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
         LibreOfficeKitDocument* pDoc = NULL;
@@ -203,13 +260,14 @@ public:
         return new Document(pDoc);
     }
 
-    // return the last error as a string, free me.
+    /// Returns the last error as a string, the returned pointer has to be freed by the caller.
     inline char* getError()
     {
         return mpThis->pClass->getError(mpThis);
     }
 };
 
+/// Factory method to create a lok::Office instance.
 inline Office* lok_cpp_init(const char* pInstallPath)
 {
     LibreOfficeKit* pThis = lok_init(pInstallPath);

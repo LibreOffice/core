@@ -65,24 +65,19 @@ struct _LibreOfficeKitDocumentClass
                      const char* pFormat,
                      const char* pFilterOptions);
 #ifdef LOK_USE_UNSTABLE_API
-  /** Get document type.
-   *
-   * @returns an element of the LibreOfficeKitDocumentType enum.
-   */
+  /// @see lok::Document::getDocumentType().
   int (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
-  /** Get number of part that the document contains.
-   * Part refers to either indivual sheets in a Spreadsheet,
-   * or slides in a Slideshow, and has no relevance for
-   * writer documents.
-   */
+  /// @see lok::Document::getParts().
   int (*getParts) (LibreOfficeKitDocument* pThis);
 
-  /** Get current part of the document */
+  /// @see lok::Document::getPart().
   int (*getPart)          (LibreOfficeKitDocument* pThis);
+  /// @see lok::Document::setPart().
   void (*setPart)         (LibreOfficeKitDocument* pThis,
                            int nPart);
 
+  /// @see lok::Document::getPartName().
   char* (*getPartName)    (LibreOfficeKitDocument* pThis,
                            int nPart);
 
@@ -93,6 +88,7 @@ struct _LibreOfficeKitDocumentClass
   void (*setPartMode)     (LibreOfficeKitDocument* pThis,
                            int nMode);
 
+  /// @see lok::Document::paintTile().
   void (*paintTile)       (LibreOfficeKitDocument* pThis,
                            unsigned char* pBuffer,
                            const int nCanvasWidth,
@@ -102,16 +98,12 @@ struct _LibreOfficeKitDocumentClass
                            const int nTileWidth,
                            const int nTileHeight);
 
-  /** Get the document sizes in twips. */
+  /// @see lok::Document::getDocumentSize().
   void (*getDocumentSize) (LibreOfficeKitDocument* pThis,
                            long* pWidth,
                            long* pHeight);
 
-  /** Initialize document for rendering.
-   * Sets the rendering and document parameters to default values
-   * that are needed to render the document correctly using
-   * tiled rendering.
-   */
+  /// @see lok::Document::initializeForRendering().
   void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
 
   void (*registerCallback)   (LibreOfficeKitDocument* pThis,
