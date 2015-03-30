@@ -31,6 +31,7 @@
 #include <com/sun/star/sheet/ColorScaleEntryType.hpp>
 #include <com/sun/star/sheet/IconSetFormatEntry.hpp>
 #include <com/sun/star/sheet/ConditionEntryType.hpp>
+#include <com/sun/star/sheet/DateType.hpp>
 
 namespace {
 
@@ -263,6 +264,45 @@ IconSetEntryTypeApiMap aIconSetEntryTypeMap[] =
     { COLORSCALE_PERCENTILE, sheet::IconSetFormatEntry::ICONSET_PERCENTILE }
 };
 
+enum DateProperties
+{
+    Date_StyleName,
+    DateType
+};
+
+const SfxItemPropertyMapEntry* getCondDatePropSet()
+{
+    static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
+    {
+        {OUString("StyleName"), StyleName, cppu::UnoType<OUString>::get(), 0, 0},
+        {OUString(), 0, css::uno::Type(), 0, 0}
+    };
+    return aCondDatePropertyMap_Impl;
+}
+
+struct DateTypeApiMap
+{
+    condformat::ScCondFormatDateType eType;
+    sal_Int32 nApiType;
+};
+
+DateTypeApiMap aDateTypeApiMap[] =
+{
+    { condformat::TODAY, sheet::DateType::TODAY },
+    { condformat::YESTERDAY, sheet::DateType::YESTERDAY },
+    { condformat::TOMORROW, sheet::DateType::TOMORROW },
+    { condformat::LAST7DAYS, sheet::DateType::LAST7DAYS },
+    { condformat::THISWEEK, sheet::DateType::THISWEEK },
+    { condformat::LASTWEEK, sheet::DateType::LASTWEEK },
+    { condformat::NEXTWEEK, sheet::DateType::NEXTWEEK },
+    { condformat::THISMONTH, sheet::DateType::THISMONTH },
+    { condformat::LASTMONTH, sheet::DateType::LASTMONTH },
+    { condformat::NEXTMONTH, sheet::DateType::NEXTMONTH },
+    { condformat::THISYEAR, sheet::DateType::THISYEAR },
+    { condformat::LASTYEAR, sheet::DateType::LASTYEAR },
+    { condformat::NEXTYEAR, sheet::DateType::NEXTYEAR }
+};
+
 }
 
 ScCondFormatsObj::ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab):
@@ -371,6 +411,8 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
                     static_cast<const ScIconSetFormat*>(pEntry));
         break;
         case condformat::DATE:
+            return new ScCondDateFormatObj(xParent,
+                    static_cast<const ScCondDateFormatEntry*>(pEntry));
         break;
         default:
         break;
@@ -1741,6 +1783,162 @@ void ScIconSetEntryObj::setFormula(const OUString& rFormula)
             pEntry->SetValue(rFormula.toDouble());
         break;
     }
+}
+
+ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+        const ScCondDateFormatEntry* pFormat):
+    mpDocShell(xParent->getDocShell()),
+    mxParent(xParent),
+    maPropSet(getCondDatePropSet()),
+    mpFormat(pFormat)
+{
+}
+
+ScCondDateFormatObj::~ScCondDateFormatObj()
+{
+}
+
+ScCondDateFormatEntry* ScCondDateFormatObj::getCoreObject()
+{
+    ScConditionalFormat* pFormat = mxParent->getCoreObject();
+    if (isObjectStillAlive(pFormat, mpFormat))
+        return const_cast<ScCondDateFormatEntry*>(mpFormat);
+
+    throw lang::IllegalArgumentException();
+}
+
+sal_Int32 ScCondDateFormatObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return sheet::ConditionEntryType::DATE;
+}
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondDateFormatObj::getPropertySetInfo()
+    throw(uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( maPropSet.getPropertyMap() ));
+    return aRef;
+}
+
+void SAL_CALL ScCondDateFormatObj::setPropertyValue(
+                        const OUString& aPropertyName, const uno::Any& aValue )
+                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                        lang::IllegalArgumentException, lang::WrappedTargetException,
+                        uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
+    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
+        throw beans::UnknownPropertyException();
+
+    switch(pEntry->nWID)
+    {
+        case Date_StyleName:
+        {
+            OUString aStyleName;
+            if (aValue >>= aStyleName)
+            {
+                getCoreObject()->SetStyleName(aStyleName);
+            }
+            else
+                throw lang::IllegalArgumentException();
+        }
+        break;
+        case DateType:
+        {
+            sal_Int32 nApiType = -1;
+            if (!(aValue >>= nApiType))
+                throw lang::IllegalArgumentException();
+
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aDateTypeApiMap); ++i)
+            {
+                if (aDateTypeApiMap[i].nApiType == nApiType)
+                {
+                    getCoreObject()->SetDateType(aDateTypeApiMap[i].eType);
+                    break;
+                }
+            }
+        }
+        break;
+        default:
+        break;
+    }
+}
+
+uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aPropertyName )
+                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                        uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
+    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
+        throw beans::UnknownPropertyException();
+
+    uno::Any aAny;
+
+    switch(pEntry->nWID)
+    {
+        case Date_StyleName:
+        {
+            OUString aStyleName = getCoreObject()->GetStyleName();
+            aAny <<= aStyleName;
+        }
+        break;
+        case DateType:
+        {
+            condformat::ScCondFormatDateType eType = getCoreObject()->GetDateType();
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aDateTypeApiMap); ++i)
+            {
+                if (aDateTypeApiMap[i].eType == eType)
+                {
+                    aAny <<= aDateTypeApiMap[i].nApiType;
+                    break;
+                }
+            }
+        }
+        break;
+        default:
+            SAL_WARN("sc", "unknown property");
+    }
+    return aAny;
+}
+
+void SAL_CALL ScCondDateFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+                            const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
+                            throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sc", "not implemented");
+}
+
+void SAL_CALL ScCondDateFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+                            const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
+                            throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sc", "not implemented");
+}
+
+void SAL_CALL ScCondDateFormatObj::addVetoableChangeListener( const OUString&,
+                            const uno::Reference<beans::XVetoableChangeListener>&)
+                            throw(beans::UnknownPropertyException,
+                                lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sc", "not implemented");
+}
+
+void SAL_CALL ScCondDateFormatObj::removeVetoableChangeListener( const OUString&,
+                            const uno::Reference<beans::XVetoableChangeListener>&)
+                            throw(beans::UnknownPropertyException,
+                                lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sc", "not implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

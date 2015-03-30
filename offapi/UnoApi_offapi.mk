@@ -1192,6 +1192,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	DatabaseRange \
 	DatabaseRanges \
 	DatabaseRangesEnumeration \
+	DateCondition \
 	DocumentSettings \
 	FormulaParser \
 	FunctionAccess \
@@ -3338,6 +3339,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	ConditionOperator2 \
 	DataBarAxis \
 	DataBarEntryType \
+	DateType \
 	DDEItemInfo \
 	DDELinkInfo \
 	DDELinkMode \
