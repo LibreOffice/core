@@ -238,7 +238,8 @@ private:
     const ScCondFormatEntry* mpFormat;
 };
 
-class ScColorScaleFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
+class ScColorScaleFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+                                com::sun::star::sheet::XConditionEntry>
 {
 public:
 
@@ -246,6 +247,11 @@ public:
     virtual ~ScColorScaleFormatObj();
 
     static ScColorScaleFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
+
+    // XConditionEntry
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
 
     ScColorScaleFormat* getCoreObject();
 
@@ -329,7 +335,8 @@ private:
     size_t mnPos;
 };
 
-class ScDataBarFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
+class ScDataBarFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+                                com::sun::star::sheet::XConditionEntry>
 {
 public:
     ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
@@ -340,7 +347,11 @@ public:
 
     ScDataBarFormat* getCoreObject();
 
-                            // XPropertySet
+    // XConditionEntry
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -414,7 +425,8 @@ private:
     size_t mnPos;
 };
 
-class ScIconSetFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
+class ScIconSetFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+                                com::sun::star::sheet::XConditionEntry>
 {
 public:
     ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
@@ -425,7 +437,11 @@ public:
 
     ScIconSetFormat* getCoreObject();
 
-                            // XPropertySet
+    // XConditionEntry
+    virtual sal_Int32 SAL_CALL getType()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
