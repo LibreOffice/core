@@ -11,12 +11,12 @@ $(dir $(call gb_Postprocess_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_Postprocess_get_target,%) :
-	$(call gb_Output_announce,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),$(true),ALL)
+	$(call gb_Output_announce,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),$(true),ALL,6)
 	touch $@
 
 .PHONY : $(call gb_Postprocess_get_clean_target,%)
 $(call gb_Postprocess_get_clean_target,%) :
-	$(call gb_Output_announce,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),$(false),ALL)
+	$(call gb_Output_announce,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),$(false),ALL,6)
 	rm -f $(call gb_Postprocess_get_target,$*)
 
 define gb_Postprocess_Postprocess
