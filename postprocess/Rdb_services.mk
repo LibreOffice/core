@@ -173,7 +173,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		scripting/util/scriptframe \
 		sw/util/vbaswobj \
 		vbahelper/util/msforms \
-		$(ifneq ($(DISABLE_PYTHON),TRUE) \
+		$(if $(DISABLE_PYTHON),, \
 			scripting/source/pyprov/mailmerge \
 			wizards/com/sun/star/wizards/agenda/agenda \
 			wizards/com/sun/star/wizards/fax/fax \
