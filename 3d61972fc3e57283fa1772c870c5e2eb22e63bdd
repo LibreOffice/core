@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_1136bb03",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T14:36:55Z",
+      "side": 1,
+      "message": "This results in the reference being shifted by two sheets instead of one if the formula is on a sheet before the deleted one. It is correct if the formula is on a sheet after the deleted one.",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_b13a67e6",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T14:36:55Z",
+      "side": 1,
+      "message": "For an absolute sheet reference the update is correct, but Undo doesn\u0027t restore the original sheet reference.",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_9122cbb8",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3338,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-30T14:36:55Z",
+      "side": 1,
+      "message": "The update is correct, but Undo does not undo.",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
