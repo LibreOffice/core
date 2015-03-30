@@ -1294,7 +1294,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         const SwTxtNode* pTNd;
         const SwpHints* pHts;
         const SwFmtFrmSize& rFrmSz = pFly->GetFmt()->GetFrmSize();
-        if( bCheckForOLEInCaption &&
+        if (m_bCheckForOLEInCaption &&
             0 != rFrmSz.GetWidthPercent() &&
             0 != (pAnchor = pFly->GetAnchorFrm()) &&
             pAnchor->IsTxtFrm() &&

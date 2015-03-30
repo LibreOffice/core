@@ -181,8 +181,9 @@ class SdrDropMarkerOverlay;
 
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
-    SdrDropMarkerOverlay *pChainFrom, *pChainTo;
-    bool bCheckForOLEInCaption;
+private:
+    SdrDropMarkerOverlay *m_pChainFrom, *m_pChainTo;
+    bool m_bCheckForOLEInCaption;
 
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
@@ -422,8 +423,8 @@ public:
     void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
 
     /// Check resize of OLE-Object.
-    bool IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
-    void SetCheckForOLEInCaption( bool bFlag )  { bCheckForOLEInCaption = bFlag; }
+    bool IsCheckForOLEInCaption() const         { return m_bCheckForOLEInCaption; }
+    void SetCheckForOLEInCaption( bool bFlag )  { m_bCheckForOLEInCaption = bFlag; }
 
     /// Set name at selected FlyFrame.
     void SetFlyName( const OUString& rName );

@@ -607,7 +607,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
     SdrView *pView = Imp()->GetDrawView();
     if ( pView && pView->AreObjectsMarked() )
     {
-        delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
+        delete m_pChainFrom; delete m_pChainTo; m_pChainFrom = m_pChainTo = nullptr;
         SdrHdl* pHdl = pView->PickHandle( *pPt );
         if (pView->BegDragObj( *pPt, 0, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
@@ -2568,15 +2568,15 @@ void SwFEShell::Unchain( SwFrmFmt &rFmt )
 
 void SwFEShell::HideChainMarker()
 {
-    if ( pChainFrom )
+    if (m_pChainFrom)
     {
-        delete pChainFrom;
-        pChainFrom = 0L;
+        delete m_pChainFrom;
+        m_pChainFrom = nullptr;
     }
-    if ( pChainTo )
+    if (m_pChainTo)
     {
-        delete pChainTo;
-        pChainTo = 0L;
+        delete m_pChainTo;
+        m_pChainTo = nullptr;
     }
 }
 
@@ -2596,9 +2596,9 @@ void SwFEShell::SetChainMarker()
             Point aStart( pPre->Frm().Right(), pPre->Frm().Bottom());
             Point aEnd(pFly->Frm().Pos());
 
-            if ( !pChainFrom )
+            if (!m_pChainFrom)
             {
-                pChainFrom = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+                m_pChainFrom = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
             }
         }
         if ( pFly->GetNextLink() )
@@ -2609,21 +2609,21 @@ void SwFEShell::SetChainMarker()
             Point aStart( pFly->Frm().Right(), pFly->Frm().Bottom());
             Point aEnd(pNxt->Frm().Pos());
 
-            if ( !pChainTo )
+            if (!m_pChainTo)
             {
-                pChainTo = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+                m_pChainTo = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
             }
         }
     }
 
     if ( bDelFrom )
     {
-        delete pChainFrom, pChainFrom = 0;
+        delete m_pChainFrom, m_pChainFrom = nullptr;
     }
 
     if ( bDelTo )
     {
-        delete pChainTo,   pChainTo = 0;
+        delete m_pChainTo, m_pChainTo = nullptr;
     }
 }
 
