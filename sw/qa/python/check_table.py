@@ -254,6 +254,32 @@ class CheckTable(unittest.TestCase):
     # close document
         xDoc.dispose()
 
+    def test_descriptions(self):
+        xDoc = self.__class__._xDoc
+        # insert table
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(3, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        self.assertEqual(3, xTable.Rows.Count)
+        self.assertEqual(3, xTable.Columns.Count)
+        for x in range(3):
+            for y in range(3):
+                xCell = xTable.getCellByPosition(x, y)
+                xCell.String = 'Cell %d %d' % (x, y)
+        self.assertEqual('Cell 0 0', xTable.getCellByPosition(0,0).String)
+        self.assertEqual('Cell 1 1', xTable.getCellByPosition(1,1).String)
+        self.assertEqual('Cell 2 2', xTable.getCellByPosition(2,2).String)
+        xTable.ChartColumnAsLabel = True
+        xTable.ChartRowAsLabel = True
+        self.assertEqual(2, len(xTable.RowDescriptions))
+        self.assertEqual('Cell 0 1', xTable.RowDescriptions[0])
+        self.assertEqual('Cell 0 2', xTable.RowDescriptions[1])
+        self.assertEqual(2, len(xTable.ColumnDescriptions))
+        self.assertEqual('Cell 1 0', xTable.ColumnDescriptions[0])
+        self.assertEqual('Cell 2 0', xTable.ColumnDescriptions[1])
+
+
 if __name__ == '__main__':
     unittest.main()
 
