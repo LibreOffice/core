@@ -18,7 +18,7 @@
 
 #include <vcl/dllapi.h>
 
-Display* VCL_DLLPUBLIC OpenX11Display(OString& rDisplay);
+VCL_DLLPUBLIC Display* OpenX11Display(OString& rDisplay);
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
 
