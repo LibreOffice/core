@@ -21,9 +21,9 @@
 #include "swdllapi.h"
 #include "docsh.hxx"
 
-class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
+class SW_DLLPUBLIC SwWebDocShell : public SwDocShell
 {
-    sal_uInt16      nSourcePara;    // Active line in source view.
+    sal_uInt16      m_nSourcePara;    ///< Active line in source view.
 
 public:
     // But implement yourself.
@@ -46,9 +46,8 @@ public:
                                    OUString * pUserName,
                                    sal_Int32 nFileFormat,
                                    bool bTemplate = false ) const SAL_OVERRIDE;
-    sal_uInt16      GetSourcePara()const
-                            {return nSourcePara;}
-    void        SetSourcePara(sal_uInt16 nSet) {nSourcePara = nSet;}
+    sal_uInt16      GetSourcePara()const { return m_nSourcePara; }
+    void        SetSourcePara(sal_uInt16 nSet) { m_nSourcePara = nSet; }
 };
 
 #endif
