@@ -43,10 +43,6 @@ public final class Bootstrap
     // Wrapper for putenv()
     public static native void putenv(String string);
 
-    // A wrapper for InitVCL() in libvcl (svmain.cxx), called indirectly
-    // through the lo-bootstrap library
-    public static native void initVCL();
-
     // A wrapper for osl_setCommandArgs(). Before calling
     // osl_setCommandArgs(), argv[0] is prefixed with the parent directory of
     // where the lo-bootstrap library is.

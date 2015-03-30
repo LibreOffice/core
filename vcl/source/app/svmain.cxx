@@ -294,23 +294,6 @@ bool InitVCL()
     return true;
 }
 
-#ifdef ANDROID
-
-extern "C" __attribute__ ((visibility("default"))) void
-InitVCLWrapper()
-{
-    uno::Reference<uno::XComponentContext> xContext( cppu::defaultBootstrap_InitialComponentContext() );
-    uno::Reference<lang::XMultiComponentFactory> xFactory( xContext->getServiceManager() );
-
-    uno::Reference<lang::XMultiServiceFactory> xSM( xFactory, uno::UNO_QUERY_THROW );
-
-    comphelper::setProcessServiceFactory( xSM );
-
-    InitVCL();
-}
-
-#endif
-
 namespace
 {
 

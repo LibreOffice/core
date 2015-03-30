@@ -821,21 +821,6 @@ extract_files(const char *root,
  * functions here in this file.
  */
 
-// public static native void initVCL();
-
-extern void InitVCLWrapper(void);
-
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_Bootstrap_initVCL(JNIEnv* env,
-                                               jobject clazz)
-{
-    (void) env;
-    (void) clazz;
-
-    InitVCLWrapper();
-}
-
 extern void osl_setCommandArgs(int, char **);
 
 __attribute__ ((visibility("default")))
