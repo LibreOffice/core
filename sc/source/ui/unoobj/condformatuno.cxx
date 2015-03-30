@@ -275,6 +275,7 @@ const SfxItemPropertyMapEntry* getCondDatePropSet()
     static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
     {
         {OUString("StyleName"), StyleName, cppu::UnoType<OUString>::get(), 0, 0},
+        {OUString("DateType"), Icons, getCppuType(&sheet::DateType::TODAY), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aCondDatePropertyMap_Impl;
