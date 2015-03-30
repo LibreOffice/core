@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_UNITS_UNITSIMPL_HXX
 #define INCLUDED_SC_SOURCE_CORE_UNITS_UNITSIMPL_HXX
 
+#include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -20,7 +21,9 @@
 
 #include <udunits2.h>
 
-#include <units.hxx>
+#include "rangelst.hxx"
+#include "units.hxx"
+
 #include "utunit.hxx"
 
 #include <stack>
@@ -37,6 +40,22 @@ namespace units {
 namespace test {
     class UnitsTest;
 }
+
+enum class UnitsStatus {
+    UNITS_VALID,
+    UNITS_UNKNOWN,
+    UNITS_INVALID
+};
+
+/**
+ * The result for a given units operation.
+ * If UNITS_VALID then the resulting unit is also included,
+ * otherwise units is empty.
+ */
+struct UnitsResult {
+    UnitsStatus status;
+    boost::optional<UtUnit> units;
+};
 
 class UnitsImpl: public Units {
     friend class test::UnitsTest;
@@ -74,6 +93,7 @@ public:
 
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
+    UnitsResult getOutputUnitForDoubleRefOpcode(const OpCode& rOpCode, const ScRangeList& rRange, ScDocument* pDoc);
 
     /**
      * Find and extract a Unit in the standard header notation,

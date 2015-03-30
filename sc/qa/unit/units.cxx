@@ -79,6 +79,11 @@ void UnitsTest::setUp() {
     mpDoc = &m_xDocShRef->GetDocument();
 
     mpUnitsImpl = UnitsImpl::GetUnits();
+
+    // Set separators for formulae - for now just argument separators (no matrix separators)
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(",");
+    m_xDocShRef->SetFormulaOptions(aOptions);
 }
 
 void UnitsTest::tearDown() {
@@ -183,10 +188,18 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetNumberFormat(address, nKeyS);
     mpDoc->SetValue(address, 3);
 
-    // 4th column: 5cm/s
+    // 4th column: 5cm/s, 10cm/s, 15cm/s
     address = ScAddress(3, 0, 0);
     mpDoc->SetNumberFormat(address, nKeyCM_S);
     mpDoc->SetValue(address, 5);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    mpDoc->SetValue(address, 10);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    mpDoc->SetValue(address, 15);
 
     // 5th column: 1m
     address = ScAddress(4, 0, 0);
@@ -256,11 +269,81 @@ void UnitsTest::testUnitVerification() {
 
     // And scaling doesn't help when adding incompatible units (kg + 100*m)
     address = ScAddress(0, 13, 0);
-    mpDoc->SetFormula(address, "=B1+100E1");
+    mpDoc->SetFormula(address, "=B1+100*E1");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
     CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
 
+    // Test Ranges:
+    // SUM("kg")
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(B1:B3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // SUM("cm"&"kg")
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1:B3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // SUM("cm"&"kg") - multiple ranges
+    address.IncRow();
+    // TODO: by default / when testing: separator is...?
+    mpDoc->SetFormula(address, "=SUM(A1:A3,B1:B3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // SUM("cm")+SUM("kg")
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1:A3)+SUM(B1:B3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // SUM("cm")/SUM("s")+SUM("cm/s")
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1:A3)/SUM(C1:C3)+SUM(D1:D3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // PRODUCT("cm/","s")+"cm"
+    address.IncRow();
+    mpDoc->SetFormula(address, "=PRODUCT(C1:D1)+A1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // PRODUCT("cm/","s")+"kg"
+    address.IncRow();
+    mpDoc->SetFormula(address, "=PRODUCT(C1:D1)+B1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Do a quick sanity check for all the other supported functions
+    // The following all expect identically united inputs, and should
+    // preserve that unit:
+    std::vector<OUString> aPreservingFuncs{ "SUM", "AVERAGE", "MIN", "MAX" };
+    for (const OUString& aFunc: aPreservingFuncs) {
+        // FOO(cm) + cm
+        address.IncRow();
+        mpDoc->SetFormula(address, "=" + aFunc + "(A1:A2)+A3");
+        pCell = mpDoc->GetFormulaCell(address);
+        pTokens = pCell->GetCode();
+        CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+        // FOO(cm) + kg
+        address.IncRow();
+        mpDoc->SetFormula(address, "=" + aFunc + "(A1:A2)+B3");
+        pCell = mpDoc->GetFormulaCell(address);
+        pTokens = pCell->GetCode();
+        CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+    }
 }
 
 void UnitsTest::testUnitFromFormatStringExtraction() {
