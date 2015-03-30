@@ -314,6 +314,29 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rsHeader, UtUnit& aU
     return false;
 }
 
+UtUnit UnitsImpl::getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc) {
+    OUString sUnitString = extractUnitStringForCell(rCellAddress, pDoc);
+
+    UtUnit aUnit;
+    if (sUnitString.getLength() > 0 &&
+        UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
+        return aUnit;
+    }
+
+    OUString aHeaderUnitString; // Unused -- passed by reference below
+    ScAddress aHeaderAddress; // Unused too
+    UtUnit aHeaderUnit = findHeaderUnitForCell(rCellAddress, pDoc, aHeaderUnitString, aHeaderAddress);
+    if (aHeaderUnit.isValid())
+        return aHeaderUnit;
+
+    SAL_INFO("sc.units", "no unit obtained for token at cell " << rCellAddress.GetColRowString());
+
+    // We return the dimensionless unit 1 if we don't find any other data suggesting a unit.
+    UtUnit::createUnit("", aUnit, mpUnitSystem);
+    return aUnit;
+
+}
+
 UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaAddress,
                     ScDocument* pDoc) {
     assert(pToken->GetType() == formula::svSingleRef);
@@ -324,27 +347,9 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // Addresses can/will be relative to the formula, for extracting
     // units however we will need to get the absolute address (i.e.
     // by adding the current address to the relative formula address).
-    const ScAddress aInputAddress = pRef->toAbs( rFormulaAddress );
+    const ScAddress aCellAddress = pRef->toAbs( rFormulaAddress );
 
-    OUString sUnitString = extractUnitStringForCell(aInputAddress, pDoc);
-
-    UtUnit aUnit;
-    if (sUnitString.getLength() > 0 &&
-        UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
-        return aUnit;
-    }
-
-    OUString aHeaderUnitString; // Unused -- passed by reference below
-    ScAddress aHeaderAddress; // Unused too
-    UtUnit aHeaderUnit = findHeaderUnitForCell(aInputAddress, pDoc, aHeaderUnitString, aHeaderAddress);
-    if (aHeaderUnit.isValid())
-        return aHeaderUnit;
-
-    SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
-
-    // We return the dimensionless unit 1 if we don't find any other data suggesting a unit.
-    UtUnit::createUnit("", aUnit, mpUnitSystem);
-    return aUnit;
+    return getUnitForCell(aCellAddress, pDoc);
 }
 
 UtUnit UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddress,

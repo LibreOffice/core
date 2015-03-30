@@ -101,6 +101,12 @@ private:
 
     bool extractUnitFromHeaderString(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
 
+    /**
+     * Retrieve the units for a given cell. This probes based on the usual rules
+     * for cell annotation/column header.
+     * Retrieving units for a formula cell is not yet supported.
+     */
+    UtUnit getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
                          const ScAddress& rFormulaAddress,
                          ScDocument* pDoc);
