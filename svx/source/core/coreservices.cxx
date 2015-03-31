@@ -44,7 +44,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         if( ::svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::ExtrusionDepthController_getImplementationName(),
                 ::svx::ExtrusionDepthController_createInstance,
                 ::svx::ExtrusionDepthController_getSupportedServiceNames() );
@@ -52,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         else if( ::svx::ExtrusionDirectionControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::ExtrusionDirectionControl_getImplementationName(),
                 ::svx::ExtrusionDirectionControl_createInstance,
                 ::svx::ExtrusionDirectionControl_getSupportedServiceNames() );
@@ -60,7 +60,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         else if( ::svx::ExtrusionLightingControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::ExtrusionLightingControl_getImplementationName(),
                 ::svx::ExtrusionLightingControl_createInstance,
                 ::svx::ExtrusionLightingControl_getSupportedServiceNames() );
@@ -68,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         else if( ::svx::ExtrusionSurfaceControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::ExtrusionSurfaceControl_getImplementationName(),
                 ::svx::ExtrusionSurfaceControl_createInstance,
                 ::svx::ExtrusionSurfaceControl_getSupportedServiceNames() );
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         else if( ::svx::FontworkAlignmentControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::FontworkAlignmentControl_getImplementationName(),
                 ::svx::FontworkAlignmentControl_createInstance,
                 ::svx::FontworkAlignmentControl_getSupportedServiceNames() );
@@ -84,7 +84,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
         else if( ::svx::FontworkCharacterSpacingControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 ::svx::FontworkCharacterSpacingControl_getImplementationName(),
                 ::svx::FontworkCharacterSpacingControl_createInstance,
                 ::svx::FontworkCharacterSpacingControl_getSupportedServiceNames() );
