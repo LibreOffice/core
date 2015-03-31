@@ -50,6 +50,7 @@
 #include <editeng/unoipset.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <sddllapi.h>
 
 class SdDrawDocument;
 class SdPage;
@@ -65,7 +66,7 @@ extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
+class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
                            public SvxFmMSFactory,
                            public ::com::sun::star::drawing::XDrawPageDuplicator,
                            public ::com::sun::star::drawing::XLayerSupplier,
