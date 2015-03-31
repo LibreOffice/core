@@ -469,6 +469,7 @@ public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
+    std::vector< css::uno::Reference< css::table::XCell > > getCells();
     virtual ~SwXCellRange();
 
     TYPEINFO_OVERRIDE();

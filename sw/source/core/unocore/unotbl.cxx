@@ -20,6 +20,7 @@
 #include <list>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 #include <svx/svxids.hrc>
 #include <editeng/memberids.hrc>
@@ -3324,6 +3325,19 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     aRgDesc.Normalize();
 }
 
+std::vector< uno::Reference< table::XCell > > SwXCellRange::getCells()
+{
+    SwFrmFmt* const pFmt = GetFrmFmt();
+    const size_t nRowCount(getRowCount());
+    const size_t nColCount(getColumnCount());
+    std::vector< uno::Reference< table::XCell > > vResult;
+    vResult.reserve(nRowCount*nColCount);
+    for(sal_uInt16 nRow = 0; nRow < nRowCount; ++nRow)
+        for(sal_uInt16 nCol = 0; nCol < nColCount; ++nCol)
+            vResult.push_back(uno::Reference< table::XCell >(lcl_CreateXCell(pFmt, aRgDesc.nLeft + nCol, aRgDesc.nTop + nRow)));
+    return vResult;
+}
+
 SwXCellRange::~SwXCellRange()
 {
     SolarMutexGuard aGuard;
@@ -3957,18 +3971,18 @@ uno::Sequence<OUString> SwXCellRange::getRowDescriptions(void)
     const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    uno::Sequence<OUString> aRet(m_bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     if(!m_bFirstColumnAsLabel)
         return {};  // without labels we have no descriptions
-    OUString* pArray = aRet.getArray();
-    const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
-    for(sal_uInt16 i = nStart; i < nRowCount; i++)
-    {
-        const uno::Reference<text::XText> xCell(getCellByPosition(0, i), uno::UNO_QUERY_THROW);
-        pArray[i - nStart] = xCell->getString();
-    }
-    return aRet;
+    uno::Reference<chart::XChartDataArray> xRowLabelRange(getCellRangeByPosition(0, m_bFirstRowAsLabel ? 1 : 0, 0, nRowCount-1), uno::UNO_QUERY);
+    auto vCells(static_cast<SwXCellRange*>(xRowLabelRange.get())->getCells());
+    uno::Sequence<OUString> vResult(vCells.size());
+    //size_t i = 0;
+    //for(auto& xCell : vCells)
+    //    vResult[i++] = uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->getString();
+    std::transform(vCells.begin(), vCells.end(), vResult.begin(),
+        [](uno::Reference<table::XCell> xCell) -> OUString { return uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->getString(); });
+    return vResult;
 }
 uno::Sequence<OUString> SwXCellRange::getColumnDescriptions(void)
         throw(uno::RuntimeException, std::exception)
