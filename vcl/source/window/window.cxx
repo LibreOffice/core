@@ -1211,7 +1211,6 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
 
 void Window::ImplInitWindowData( WindowType nType )
 {
-    mnRefCnt = 0;
     mpWindowImpl = new WindowImpl( nType );
 
     meOutDevType        = OUTDEV_WINDOW;

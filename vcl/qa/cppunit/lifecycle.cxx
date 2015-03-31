@@ -68,8 +68,7 @@ void LifecycleTest::testVirtualDevice()
 
 void LifecycleTest::testMultiDispose()
 {
-    VclPtrInstance<WorkWindow> xWin((vcl::Window *)NULL,
-                                    WB_APP|WB_STDWORK);
+    VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
     CPPUNIT_ASSERT(xWin.get() != NULL);
     xWin->disposeOnce();
     xWin->disposeOnce();
