@@ -57,7 +57,7 @@ inline bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::
 {
     if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_ENUM)
     {
-        rnEnum = * reinterpret_cast< const int * >( rAny.getValue() );
+        rnEnum = * static_cast< const int * >( rAny.getValue() );
         return true;
     }
 

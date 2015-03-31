@@ -196,7 +196,7 @@ void appendValue( OUStringBuffer & buf,
         break;
     }
     case typelib_TypeClass_TYPE:
-        buf.append( (*reinterpret_cast<
+        buf.append( (*static_cast<
                      typelib_TypeDescriptionReference * const * >(val)
                         )->pTypeName );
         break;

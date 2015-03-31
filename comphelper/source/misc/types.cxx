@@ -167,7 +167,7 @@ template<class TYPE>
 bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, TYPE& _rOut)
 {
     bool bSuccess = _rValue >>= _rOut;
-    _bIdentical = bSuccess && (_rOut == *reinterpret_cast<const TYPE*>(_pData));
+    _bIdentical = bSuccess && (_rOut == *static_cast<const TYPE*>(_pData));
     return bSuccess;
 }
 
@@ -191,13 +191,13 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
         // beides AnyWerte
         if (_rValue.getValueType().getTypeClass() == TypeClass_ANY)
             bRes = compare_impl(
-                reinterpret_cast<const Any*>(pData)->getValueType(),
-                reinterpret_cast<const Any*>(pData)->getValue(),
-                *reinterpret_cast<const Any*>(_rValue.getValue()));
+                static_cast<const Any*>(pData)->getValueType(),
+                static_cast<const Any*>(pData)->getValue(),
+                *static_cast<const Any*>(_rValue.getValue()));
         else
             bRes = compare_impl(
-                reinterpret_cast<const Any*>(pData)->getValueType(),
-                reinterpret_cast<const Any*>(pData)->getValue(),
+                static_cast<const Any*>(pData)->getValueType(),
+                static_cast<const Any*>(pData)->getValue(),
                 _rValue);
     }
     else if (   (_rType.getTypeClass() == TypeClass_VOID)
@@ -261,7 +261,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
             {
                 sal_Int32 nAsInt32 = 0;
                 bConversionSuccess = ::cppu::enum2int(nAsInt32, _rValue);
-                bRes = bConversionSuccess && (nAsInt32== *reinterpret_cast<const sal_Int32*>(pData));
+                bRes = bConversionSuccess && (nAsInt32== *static_cast<const sal_Int32*>(pData));
                 break;
             }
             case TypeClass_LONG:
@@ -327,7 +327,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_Int8>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int8>*>(pData);
+                        const Sequence<sal_Int8>& rLeftSeq = *static_cast<const Sequence<sal_Int8>*>(pData);
                         const Sequence<sal_Int8>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
@@ -339,7 +339,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_uInt8>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt8>*>(pData);
+                        const Sequence<sal_uInt8>& rLeftSeq = *static_cast<const Sequence<sal_uInt8>*>(pData);
                         const Sequence<sal_uInt8>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
@@ -351,7 +351,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_Int16>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int16>*>(pData);
+                        const Sequence<sal_Int16>& rLeftSeq = *static_cast<const Sequence<sal_Int16>*>(pData);
                         const Sequence<sal_Int16>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int16)) == 0;
@@ -363,7 +363,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_uInt16>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt16>*>(pData);
+                        const Sequence<sal_uInt16>& rLeftSeq = *static_cast<const Sequence<sal_uInt16>*>(pData);
                         const Sequence<sal_uInt16>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt16)) == 0;
@@ -375,7 +375,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_Int32>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int32>*>(pData);
+                        const Sequence<sal_Int32>& rLeftSeq = *static_cast<const Sequence<sal_Int32>*>(pData);
                         const Sequence<sal_Int32>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int32)) == 0;
@@ -387,7 +387,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence<sal_uInt32>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt32>*>(pData);
+                        const Sequence<sal_uInt32>& rLeftSeq = *static_cast<const Sequence<sal_uInt32>*>(pData);
                         const Sequence<sal_uInt32>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt32)) == 0;
@@ -399,7 +399,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence< OUString >& rLeftSeq = *reinterpret_cast<const Sequence< OUString>*>(pData);
+                        const Sequence< OUString >& rLeftSeq = *static_cast<const Sequence< OUString>*>(pData);
                         const Sequence< OUString >& rRightSeq = aTemp;
                         sal_Int32 nSeqLen = rLeftSeq.getLength();
                         bRes = ( nSeqLen == rRightSeq.getLength() );

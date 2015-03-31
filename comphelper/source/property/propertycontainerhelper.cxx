@@ -288,7 +288,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
                 pPropContainer = &(*aIter);
             }
             else
-                pPropContainer = reinterpret_cast<Any*>(aPos->aLocation.pDerivedClassMember);
+                pPropContainer = static_cast<Any*>(aPos->aLocation.pDerivedClassMember);
 
             // check if the new value differs from the current one
             if (!pPropContainer->hasValue() || !aNewRequestedValue.hasValue())
@@ -386,7 +386,7 @@ bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
             break;
 
         case PropertyDescription::ltDerivedClassAnyType:
-            *reinterpret_cast< Any* >(aPos->aLocation.pDerivedClassMember) = _rValue;
+            *static_cast< Any* >(aPos->aLocation.pDerivedClassMember) = _rValue;
             break;
 
         case PropertyDescription::ltDerivedClassRealType:
@@ -427,7 +427,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;
         case PropertyDescription::ltDerivedClassAnyType:
-            _rValue = *reinterpret_cast<Any*>(aPos->aLocation.pDerivedClassMember);
+            _rValue = *static_cast<Any*>(aPos->aLocation.pDerivedClassMember);
             break;
         case PropertyDescription::ltDerivedClassRealType:
             _rValue.setValue(aPos->aLocation.pDerivedClassMember, aPos->aProperty.Type);
