@@ -487,7 +487,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
             }
         }
         else
-        {   rDesc.SetFollow( rChged.pFollow );
+        {   rDesc.SetFollow( rChged.m_pFollow );
             bFollow = true;
         }
     }

@@ -38,61 +38,60 @@
 
 using namespace ::com::sun::star;
 
-SwPageDesc::SwPageDesc( const OUString& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
-    SwModify( 0 ),
-    aDescName( rName ),
-    aMaster( pDc->GetAttrPool(), rName, pFmt ),
-    aLeft( pDc->GetAttrPool(), rName, pFmt ),
-    m_FirstMaster( pDc->GetAttrPool(), rName, pFmt ),
-    m_FirstLeft( pDc->GetAttrPool(), rName, pFmt ),
-    aDepend( this, 0 ),
-    pFollow( this ),
-    nRegHeight( 0 ),
-    nRegAscent( 0 ),
-    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE ) ),
-    bLandscape( false ),
-    bHidden( false ),
-    aFtnInfo()
+SwPageDesc::SwPageDesc(const OUString& rName, SwFrmFmt *pFmt, SwDoc *const pDoc)
+    : SwModify(nullptr)
+    , m_StyleName( rName )
+    , m_Master( pDoc->GetAttrPool(), rName, pFmt )
+    , m_Left( pDoc->GetAttrPool(), rName, pFmt )
+    , m_FirstMaster( pDoc->GetAttrPool(), rName, pFmt )
+    , m_FirstLeft( pDoc->GetAttrPool(), rName, pFmt )
+    , m_Depend( this, 0 )
+    , m_pFollow( this )
+    , m_nRegHeight( 0 )
+    , m_nRegAscent( 0 )
+    , m_eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE) )
+    , m_IsLandscape( false )
+    , m_IsHidden( false )
 {
 }
 
-SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
-    SwModify( 0 ),
-    aDescName( rCpy.GetName() ),
-    aNumType( rCpy.GetNumType() ),
-    aMaster( rCpy.GetMaster() ),
-    aLeft( rCpy.GetLeft() ),
-    m_FirstMaster( rCpy.GetFirstMaster() ),
-    m_FirstLeft( rCpy.GetFirstLeft() ),
-    aDepend( this, const_cast<SwModify*>(rCpy.aDepend.GetRegisteredIn()) ),
-    pFollow( rCpy.pFollow ),
-    nRegHeight( rCpy.GetRegHeight() ),
-    nRegAscent( rCpy.GetRegAscent() ),
-    eUse( rCpy.ReadUseOn() ),
-    bLandscape( rCpy.GetLandscape() ),
-    bHidden( rCpy.IsHidden() ),
-    aFtnInfo( rCpy.GetFtnInfo() )
+SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
+    : SwModify(nullptr)
+    , m_StyleName( rCpy.GetName() )
+    , m_NumType( rCpy.GetNumType() )
+    , m_Master( rCpy.GetMaster() )
+    , m_Left( rCpy.GetLeft() )
+    , m_FirstMaster( rCpy.GetFirstMaster() )
+    , m_FirstLeft( rCpy.GetFirstLeft() )
+    , m_Depend( this, const_cast<SwModify*>(rCpy.m_Depend.GetRegisteredIn()) )
+    , m_pFollow( rCpy.m_pFollow )
+    , m_nRegHeight( rCpy.GetRegHeight() )
+    , m_nRegAscent( rCpy.GetRegAscent() )
+    , m_eUse( rCpy.ReadUseOn() )
+    , m_IsLandscape( rCpy.GetLandscape() )
+    , m_IsHidden( rCpy.IsHidden() )
+    , m_IsFtnInfo( rCpy.GetFtnInfo() )
 {
 }
 
 SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
 {
-    aDescName = rSrc.aDescName;
-    aNumType = rSrc.aNumType;
-    aMaster = rSrc.aMaster;
-    aLeft = rSrc.aLeft;
+    m_StyleName = rSrc.m_StyleName;
+    m_NumType = rSrc.m_NumType;
+    m_Master = rSrc.m_Master;
+    m_Left = rSrc.m_Left;
     m_FirstMaster = rSrc.m_FirstMaster;
     m_FirstLeft = rSrc.m_FirstLeft;
 
-    if (rSrc.pFollow == &rSrc)
-        pFollow = this;
+    if (rSrc.m_pFollow == &rSrc)
+        m_pFollow = this;
     else
-        pFollow = rSrc.pFollow;
+        m_pFollow = rSrc.m_pFollow;
 
-    nRegHeight = rSrc.nRegHeight;
-    nRegAscent = rSrc.nRegAscent;
-    eUse = rSrc.eUse;
-    bLandscape = rSrc.bLandscape;
+    m_nRegHeight = rSrc.m_nRegHeight;
+    m_nRegAscent = rSrc.m_nRegAscent;
+    m_eUse = rSrc.m_eUse;
+    m_IsLandscape = rSrc.m_IsLandscape;
     return *this;
 }
 
@@ -106,22 +105,22 @@ void SwPageDesc::Mirror()
 {
     //Only the margins are mirrored, all other values are just copied.
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    const SvxLRSpaceItem &rLR = aMaster.GetLRSpace();
+    const SvxLRSpaceItem &rLR = m_Master.GetLRSpace();
     aLR.SetLeft(  rLR.GetRight() );
     aLR.SetRight( rLR.GetLeft() );
 
-    SfxItemSet aSet( *aMaster.GetAttrSet().GetPool(),
-                     aMaster.GetAttrSet().GetRanges() );
+    SfxItemSet aSet( *m_Master.GetAttrSet().GetPool(),
+                     m_Master.GetAttrSet().GetRanges() );
     aSet.Put( aLR );
-    aSet.Put( aMaster.GetFrmSize() );
-    aSet.Put( aMaster.GetPaperBin() );
-    aSet.Put( aMaster.GetULSpace() );
-    aSet.Put( aMaster.GetBox() );
-    aSet.Put( aMaster.makeBackgroundBrushItem() );
-    aSet.Put( aMaster.GetShadow() );
-    aSet.Put( aMaster.GetCol() );
-    aSet.Put( aMaster.GetFrmDir() );    // #112217#
-    aLeft.SetFmtAttr( aSet );
+    aSet.Put( m_Master.GetFrmSize() );
+    aSet.Put( m_Master.GetPaperBin() );
+    aSet.Put( m_Master.GetULSpace() );
+    aSet.Put( m_Master.GetBox() );
+    aSet.Put( m_Master.makeBackgroundBrushItem() );
+    aSet.Put( m_Master.GetShadow() );
+    aSet.Put( m_Master.GetCol() );
+    aSet.Put( m_Master.GetFrmDir() );    // #112217#
+    m_Left.SetFmtAttr( aSet );
 }
 
 void SwPageDesc::ResetAllAttr( bool bLeft )
@@ -136,9 +135,9 @@ void SwPageDesc::ResetAllAttr( bool bLeft )
 // gets information from Modify
 bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
-    if( !aMaster.GetInfo( rInfo ) )
+    if (!m_Master.GetInfo(rInfo))
         return false;       // found
-    if ( !aLeft.GetInfo( rInfo ) )
+    if (!m_Left.GetInfo(rInfo))
         return false ;
     if ( !m_FirstMaster.GetInfo( rInfo ) )
         return false;
@@ -151,9 +150,9 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
     if( pFmt != GetRegisterFmtColl() )
     {
         if( pFmt )
-            const_cast<SwTxtFmtColl*>(pFmt)->Add( &aDepend );
+            const_cast<SwTxtFmtColl*>(pFmt)->Add(&m_Depend);
         else
-            const_cast<SwTxtFmtColl*>(GetRegisterFmtColl())->Remove( &aDepend );
+            const_cast<SwTxtFmtColl*>(GetRegisterFmtColl())->Remove(&m_Depend);
 
         RegisterChange();
     }
@@ -162,7 +161,7 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 /// retrieve the style for the grid alignment
 const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 {
-    const SwModify* pReg = aDepend.GetRegisteredIn();
+    const SwModify* pReg = m_Depend.GetRegisteredIn();
     return static_cast<const SwTxtFmtColl*>(pReg);
 }
 
@@ -183,7 +182,7 @@ void SwPageDesc::RegisterChange()
         return;
     }
 
-    nRegHeight = 0;
+    m_nRegHeight = 0;
     {
         SwIterator<SwFrm,SwFmt> aIter( GetMaster() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
@@ -305,29 +304,29 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 
 SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst)
 {
-    return (nsUseOnPage::PD_LEFT & eUse)
-            ? ((bFirst) ? &m_FirstLeft : &aLeft)
+    return (nsUseOnPage::PD_LEFT & m_eUse)
+            ? ((bFirst) ? &m_FirstLeft : &m_Left)
             : 0;
 }
 
 SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
 {
-    return (nsUseOnPage::PD_RIGHT & eUse)
-            ? ((bFirst) ? &m_FirstMaster : &aMaster)
+    return (nsUseOnPage::PD_RIGHT & m_eUse)
+            ? ((bFirst) ? &m_FirstMaster : &m_Master)
             : 0;
 }
 
 bool SwPageDesc::IsFirstShared() const
 {
-    return (eUse & nsUseOnPage::PD_FIRSTSHARE) != 0;
+    return (m_eUse & nsUseOnPage::PD_FIRSTSHARE) != 0;
 }
 
 void SwPageDesc::ChgFirstShare( bool bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FIRSTSHARE);
+        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_FIRSTSHARE);
     else
-        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFIRSTSHARE);
+        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOFIRSTSHARE);
 }
 
 SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)

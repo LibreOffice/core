@@ -79,29 +79,29 @@ public:
 };
 
 /*
- *  Use of UseOnPage (eUse) and of FrmFmts
+ *  Use of UseOnPage (m_eUse) and of FrmFmts
  *
- *  RIGHT   - aMaster only for right hand (odd) pages, left hand (even) pages
+ *  RIGHT   - m_Master only for right hand (odd) pages, left hand (even) pages
  *            always empty.
- *  LEFT    - aLeft for left-hand pages, right-hand pages always empty.
- *            aLeft is a copy of master.
- *  ALL     - aMaster for right hand pages, aLeft for left hand pages.
- *          - aLeft is a copy of master.
- * MIRROR   - aMaster for right hand pages, aLeft for left hand pagers.
- *            aLeft is a copy of master, margins are mirrored.
+ *  LEFT    - m_Left for left-hand pages, right-hand pages always empty.
+ *            m_Left is a copy of master.
+ *  ALL     - m_Master for right hand pages, m_Left for left hand pages.
+ *          - m_Left is a copy of master.
+ * MIRROR   - m_Master for right hand pages, m_Left for left hand pagers.
+ *            m_Left is a copy of master, margins are mirrored.
  *
- * UI works exclusively on master! aLeft is adjusted on Chg at document
- * according to eUse.
+ * UI works exclusively on master! m_Left is adjusted on Chg at document
+ * according to m_eUse.
  *
  * In order to simplify the work of the filters some more values are placed
- * into eUse:
+ * into m_eUse:
  *
  * HEADERSHARE - Content of header is equal on left and right hand pages.
  * FOOTERSHARE - Content of footer is equal on left and right hand pages.
  *
  * The values are masked out in the respective getter and setter methods.
- * Access to complete eUse including the information on header and footer
- * via ReadUseOn(), WriteUseOn() (fuer Filter und CopyCTor)!
+ * Access to complete m_eUse including the information on header and footer
+ * via ReadUseOn(), WriteUseOn() (for Filter and CopyCTor)!
  *
  * The Frmformats for header/footer are adjusted by the UI according to
  * the attributes for header and footer at master (height, margin, back-
@@ -132,23 +132,23 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
 
-    OUString    aDescName;
-    SvxNumberType   aNumType;
-    SwFrmFmt    aMaster;
-    SwFrmFmt    aLeft;
+    OUString    m_StyleName;
+    SvxNumberType m_NumType;
+    SwFrmFmt    m_Master;
+    SwFrmFmt    m_Left;
     // FIXME epicycles growing here - page margins need to be stored differently
     SwFrmFmt    m_FirstMaster;
     SwFrmFmt    m_FirstLeft;
-    SwDepend    aDepend;    ///< Because of grid alignment (Registerhaltigkeit).
-    SwPageDesc *pFollow;
-    sal_uInt16  nRegHeight; ///< Sentence spacing and fontascent of style.
-    sal_uInt16  nRegAscent; ///< For grid alignment (Registerhaltigkeit).
-    UseOnPage   eUse;
-    bool        bLandscape;
-    bool    bHidden;
+    SwDepend    m_Depend; ///< Because of grid alignment (Registerhaltigkeit).
+    SwPageDesc *m_pFollow;
+    sal_uInt16  m_nRegHeight; ///< Sentence spacing and fontascent of style.
+    sal_uInt16  m_nRegAscent; ///< For grid alignment (Registerhaltigkeit).
+    UseOnPage   m_eUse;
+    bool        m_IsLandscape;
+    bool        m_IsHidden;
 
     /// Footnote information.
-    SwPageFtnInfo aFtnInfo;
+    SwPageFtnInfo m_IsFtnInfo;
 
     /** Called for mirroring of Chg (doc).
        No adjustment at any other place. */
@@ -162,19 +162,19 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) SAL_OVERRIDE;
 
 public:
-    OUString GetName() const { return aDescName; }
-    bool HasName( const OUString& rThisName ) const { return aDescName == rThisName; }
-    void SetName( const OUString& rNewName ) { aDescName = rNewName; }
+    OUString GetName() const { return m_StyleName; }
+    bool HasName(const OUString& rThisName) const { return m_StyleName == rThisName; }
+    void SetName(const OUString& rNewName) { m_StyleName = rNewName; }
 
-    bool GetLandscape() const { return bLandscape; }
-    void SetLandscape( bool bNew ) { bLandscape = bNew; }
+    bool GetLandscape() const { return m_IsLandscape; }
+    void SetLandscape( bool bNew ) { m_IsLandscape = bNew; }
 
-    const SvxNumberType &GetNumType() const { return aNumType; }
-          void          SetNumType( const SvxNumberType& rNew ) { aNumType = rNew; }
+    const SvxNumberType &GetNumType() const { return m_NumType; }
+    void  SetNumType(const SvxNumberType& rNew) { m_NumType = rNew; }
 
-    const SwPageFtnInfo &GetFtnInfo() const { return aFtnInfo; }
-          SwPageFtnInfo &GetFtnInfo()       { return aFtnInfo; }
-    void  SetFtnInfo( const SwPageFtnInfo &rNew ) { aFtnInfo = rNew; }
+    const SwPageFtnInfo &GetFtnInfo() const { return m_IsFtnInfo; }
+          SwPageFtnInfo &GetFtnInfo()       { return m_IsFtnInfo; }
+    void  SetFtnInfo(const SwPageFtnInfo &rNew) { m_IsFtnInfo = rNew; }
 
     inline bool IsHeaderShared() const;
     inline bool IsFooterShared() const;
@@ -183,22 +183,22 @@ public:
     bool IsFirstShared() const;
     void ChgFirstShare( bool bNew );
 
-    bool IsHidden( ) const { return bHidden; }
-    void SetHidden( bool bValue ) { bHidden = bValue; }
+    bool IsHidden() const { return m_IsHidden; }
+    void SetHidden(bool const bValue) { m_IsHidden = bValue; }
 
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
 
-    void      WriteUseOn( UseOnPage eNew ) { eUse = eNew; }
-    UseOnPage ReadUseOn () const { return eUse; }
+    void      WriteUseOn(UseOnPage const eNew) { m_eUse = eNew; }
+    UseOnPage ReadUseOn() const { return m_eUse; }
 
-          SwFrmFmt &GetMaster() { return aMaster; }
-          SwFrmFmt &GetLeft()   { return aLeft; }
-          SwFrmFmt &GetFirstMaster()   { return m_FirstMaster; }
+          SwFrmFmt &GetMaster()      { return m_Master; }
+          SwFrmFmt &GetLeft()        { return m_Left; }
+          SwFrmFmt &GetFirstMaster() { return m_FirstMaster; }
           SwFrmFmt &GetFirstLeft()   { return m_FirstLeft; }
-    const SwFrmFmt &GetMaster() const { return aMaster; }
-    const SwFrmFmt &GetLeft()   const { return aLeft; }
-    const SwFrmFmt &GetFirstMaster()   const { return m_FirstMaster; }
+    const SwFrmFmt &GetMaster() const      { return m_Master; }
+    const SwFrmFmt &GetLeft()   const      { return m_Left; }
+    const SwFrmFmt &GetFirstMaster() const { return m_FirstMaster; }
     const SwFrmFmt &GetFirstLeft()   const { return m_FirstLeft; }
 
     /** Reset all attrs of the format but keep the ones a pagedesc
@@ -213,26 +213,26 @@ public:
            SwFrmFmt *GetLeftFmt(bool const bFirst = false);
     inline const SwFrmFmt *GetLeftFmt(bool const bFirst = false) const;
 
-    sal_uInt16 GetRegHeight() const { return nRegHeight; }
-    sal_uInt16 GetRegAscent() const { return nRegAscent; }
-    void SetRegHeight( sal_uInt16 nNew ){ nRegHeight = nNew; }
-    void SetRegAscent( sal_uInt16 nNew ){ nRegAscent = nNew; }
+    sal_uInt16 GetRegHeight() const { return m_nRegHeight; }
+    sal_uInt16 GetRegAscent() const { return m_nRegAscent; }
+    void SetRegHeight(sal_uInt16 const nNew) { m_nRegHeight = nNew; }
+    void SetRegAscent(sal_uInt16 const nNew) { m_nRegAscent = nNew; }
 
     inline void SetFollow( const SwPageDesc* pNew );
-    const SwPageDesc* GetFollow() const { return pFollow; }
-          SwPageDesc* GetFollow() { return pFollow; }
+    const SwPageDesc* GetFollow() const { return m_pFollow; }
+          SwPageDesc* GetFollow() { return m_pFollow; }
 
     void SetRegisterFmtColl( const SwTxtFmtColl* rFmt );
     const SwTxtFmtColl* GetRegisterFmtColl() const;
     void RegisterChange();
 
     /// Query and set PoolFormat-Id.
-    sal_uInt16 GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
-    void SetPoolFmtId( sal_uInt16 nId )     { aMaster.SetPoolFmtId( nId ); }
-    sal_uInt16 GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
-    void SetPoolHelpId( sal_uInt16 nId )    { aMaster.SetPoolHelpId( nId ); }
-    sal_uInt8 GetPoolHlpFileId() const      { return aMaster.GetPoolHlpFileId(); }
-    void SetPoolHlpFileId( sal_uInt8 nId )  { aMaster.SetPoolHlpFileId( nId ); }
+    sal_uInt16 GetPoolFmtId() const         { return m_Master.GetPoolFmtId(); }
+    void SetPoolFmtId(sal_uInt16 const nId) { m_Master.SetPoolFmtId(nId); }
+    sal_uInt16 GetPoolHelpId() const        { return m_Master.GetPoolHelpId(); }
+    void SetPoolHelpId(sal_uInt16 const nId){ m_Master.SetPoolHelpId(nId); }
+    sal_uInt8 GetPoolHlpFileId() const      { return m_Master.GetPoolHlpFileId(); }
+    void SetPoolHlpFileId(sal_uInt8 const nId) { m_Master.SetPoolHlpFileId(nId); }
 
     /// Query information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -254,46 +254,46 @@ public:
 
 inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
 {
-    pFollow = pNew ? const_cast<SwPageDesc*>(pNew) : this;
+    m_pFollow = pNew ? const_cast<SwPageDesc*>(pNew) : this;
 }
 
 inline bool SwPageDesc::IsHeaderShared() const
 {
-    return (eUse & nsUseOnPage::PD_HEADERSHARE) != 0;
+    return (m_eUse & nsUseOnPage::PD_HEADERSHARE) != 0;
 }
 inline bool SwPageDesc::IsFooterShared() const
 {
-    return (eUse & nsUseOnPage::PD_FOOTERSHARE) != 0;
+    return (m_eUse & nsUseOnPage::PD_FOOTERSHARE) != 0;
 }
 inline void SwPageDesc::ChgHeaderShare( bool bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHARE);
+        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_HEADERSHARE);
     else
-        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHARE);
+        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOHEADERSHARE);
 }
 inline void SwPageDesc::ChgFooterShare( bool bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHARE);
+        m_eUse = (UseOnPage) (m_eUse | nsUseOnPage::PD_FOOTERSHARE);
     else
-        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHARE);
+        m_eUse = (UseOnPage) (m_eUse & nsUseOnPage::PD_NOFOOTERSHARE);
 }
 inline void SwPageDesc::SetUseOn( UseOnPage eNew )
 {
     UseOnPage eTmp = nsUseOnPage::PD_NONE;
-    if ( eUse & nsUseOnPage::PD_HEADERSHARE )
+    if (m_eUse & nsUseOnPage::PD_HEADERSHARE)
         eTmp = nsUseOnPage::PD_HEADERSHARE;
-    if ( eUse & nsUseOnPage::PD_FOOTERSHARE )
+    if (m_eUse & nsUseOnPage::PD_FOOTERSHARE)
         eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FOOTERSHARE);
-    if ( eUse & nsUseOnPage::PD_FIRSTSHARE )
+    if (m_eUse & nsUseOnPage::PD_FIRSTSHARE)
         eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FIRSTSHARE);
-    eUse = (UseOnPage) (eTmp | eNew);
+    m_eUse = (UseOnPage) (eTmp | eNew);
 
 }
 inline UseOnPage SwPageDesc::GetUseOn() const
 {
-    UseOnPage eRet = eUse;
+    UseOnPage eRet = m_eUse;
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOHEADERSHARE);
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFOOTERSHARE);
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFIRSTSHARE);
