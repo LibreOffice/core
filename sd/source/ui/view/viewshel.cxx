@@ -525,7 +525,7 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     assert(GetDoc()->isTiledRendering());
 
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
-    mpActiveWindow->SetPointerPosPixel(rMouseEvent.GetPosPixel());
+    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
     MouseButtonUp(rMouseEvent, 0);
 
