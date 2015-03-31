@@ -67,7 +67,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL mcnttype_component_getFactory( const sal_Cha
         aSNS.getArray( )[0] = "com.sun.star.datatransfer.MimeContentTypeFactory";
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+            static_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createInstance,
             aSNS ) );
