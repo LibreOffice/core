@@ -45,7 +45,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL package2_component_getFactory(
 {
     void * pRet = 0;
     uno::Reference< XMultiServiceFactory > xSMgr(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+            static_cast< XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< XSingleServiceFactory > xFactory;
 
     if (ManifestReader::static_getImplementationName().equalsAscii( pImplName ) )

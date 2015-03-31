@@ -37,7 +37,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xstor_component_getFactory( const sal_Char 
 
     if ( pServiceManager && aImplName.equals( OStorageFactory::impl_staticGetImplementationName() ) )
     {
-        xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+        xFactory= ::cppu::createOneInstanceFactory( static_cast< lang::XMultiServiceFactory*>( pServiceManager ),
                                             OStorageFactory::impl_staticGetImplementationName(),
                                             OStorageFactory::impl_staticCreateSelfInstance,
                                             OStorageFactory::impl_staticGetSupportedServiceNames() );
