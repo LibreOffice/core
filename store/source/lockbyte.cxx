@@ -766,7 +766,7 @@ storeError MemoryLockBytes::setSize_Impl (sal_uInt32 nSize)
 {
     if (nSize != m_nSize)
     {
-        sal_uInt8 * pData = reinterpret_cast<sal_uInt8*>(rtl_reallocateMemory (m_pData, nSize));
+        sal_uInt8 * pData = static_cast<sal_uInt8*>(rtl_reallocateMemory (m_pData, nSize));
         if (pData != 0)
         {
             if (nSize > m_nSize)
