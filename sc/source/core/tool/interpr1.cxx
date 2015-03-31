@@ -4851,11 +4851,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
-                sal_uInt32 nIndex = 0;
-                bool bNumber = pFormatter->IsNumberFormat(
-                        rItem.maString.getString(), nIndex, rItem.mfVal);
-                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
             }
@@ -5150,11 +5146,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
-                    sal_uInt32 nIndex = 0;
-                    bool bNumber = pFormatter->IsNumberFormat(
-                            rItem.maString.getString(), nIndex, rItem.mfVal);
-                    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                     if (rItem.meType == ScQueryEntry::ByString)
                         rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
                 }
@@ -5408,11 +5400,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             }
             else
             {
-                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
-                sal_uInt32 nIndex = 0;
-                bool bNumber = pFormatter->IsNumberFormat(
-                        rItem.maString.getString(), nIndex, rItem.mfVal);
-                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
             }
