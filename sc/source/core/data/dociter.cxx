@@ -1117,8 +1117,24 @@ bool ScQueryCellIterator::GetThis()
 
         if (maCurPos.first->type == sc::element_type_empty)
         {
-            IncBlock();
-            continue;
+            if (rItem.mbMatchEmpty && rEntry.GetQueryItems().size() == 1)
+            {
+                // This shortcut, instead of determining if any SC_OR query
+                // exists or this query is SC_AND'ed (which wouldn't make
+                // sense, but..) and evaluating them in ValidQuery(), is
+                // possible only because the interpreter is the only caller
+                // that sets mbMatchEmpty and there is only one item in those
+                // cases.
+                // XXX this would have to be reworked if other filters used it
+                // in different manners and evaluation would have to be done in
+                // ValidQuery().
+                return true;
+            }
+            else
+            {
+                IncBlock();
+                continue;
+            }
         }
 
         ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
