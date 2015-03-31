@@ -654,7 +654,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
 
         for( int nJobIteration = 0; nJobIteration < nJobs; nJobIteration++ )
         {
-            bool bError = false, bAborted = false;
+            bool bError = false;
             if( mpPrinter->StartJob( pPrintFile,
                                      i_rJobName,
                                      Application::GetDisplayName(),
@@ -663,6 +663,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                                      i_xController->isDirectPrint(),
                                      maJobSetup.ImplGetConstData() ) )
             {
+                bool bAborted = false;
                 mbJobActive             = true;
                 i_xController->createProgressDialog();
                 const int nPages = i_xController->getFilteredPageCount();
