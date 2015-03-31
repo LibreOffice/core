@@ -891,7 +891,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         desktop::Desktop::GetCommandLineArgs().setHeadless();
 
         Application::EnableHeadlessMode(true);
-        Application::EnableConsoleOnly();
 
         // This is horrible crack. I really would want to go back to simply just call
         // InitVCL() here. The OfficeIPCThread thing is just horrible.

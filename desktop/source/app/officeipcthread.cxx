@@ -26,6 +26,7 @@
 #include "dispatchwatcher.hxx"
 #include <boost/scoped_ptr.hpp>
 #include <stdio.h>
+#include <osl/lok.hxx>
 #include <osl/process.h>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
@@ -460,13 +461,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
 #ifndef ANDROID // On Android it might be that we still for some reason need the pipe?
 
-    // When console-only (which includes in LibreOfficeKit-based programs) we want to be totally
-    // independent from any other LibreOffice instance or LOKit-using program. Certainly no need for
-    // any IPC pipes by definition, as we don't have any reason to do any IPC. Why we even call this
-    // EnableOfficeIPCThread function from LibreOfficeKit's lo_initialize() I am not completely
-    // sure, but that code, and this, is such horrible crack that I don't want to change it too much.
+    // In LibreOfficeKit-based programs we want to be totally independent from any other LibreOffice
+    // instance or LOKit-using program. Certainly no need for any IPC pipes by definition, as we
+    // don't have any reason to do any IPC. Why we even call this EnableOfficeIPCThread function
+    // from LibreOfficeKit's lo_initialize() I am not completely sure, but that code, and this, is
+    // such horrible crack that I don't want to change it too much.
 
-    if (Application::IsConsoleOnly())
+    if (osl::LibreOfficeKit::isActive())
     {
         // Setting nPipeMode to PIPEMODE_CREATED causes the trivial path to be taken below, starting
         // the listeing thread. (Which will immediately finish, see the execute() function, but what
@@ -706,7 +707,7 @@ void OfficeIPCThread::execute()
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 #ifndef ANDROID
-    if (Application::IsConsoleOnly())
+    if (osl::LibreOfficeKit::isActive())
         return;
 #endif
 
