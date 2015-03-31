@@ -301,4 +301,4 @@ echo " * Auto deployment = $SDK_AUTO_DEPLOYMENT"
 echo " *"
 echo " ************************************************************************"
 
-echo "]2;Shell prepared with the SDK environment"
+echo "]2;Shell prepared with the LibreOffice SDK environment"
