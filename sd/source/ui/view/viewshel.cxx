@@ -548,7 +548,7 @@ void ViewShell::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
     }
 }
 
-void ViewShell::SetGraphicLogicPosition(bool bStart, const Point& rPosition)
+void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)
 {
     if (bStart)
     {

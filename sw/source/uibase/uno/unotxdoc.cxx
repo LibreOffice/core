@@ -3234,10 +3234,10 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
     switch (nType)
     {
     case LOK_SETGRAPHICSELECTION_START:
-        rEditWin.SetGraphicLogicPosition(/*bStart=*/true, Point(nX, nY));
+        rEditWin.SetGraphicTwipPosition(/*bStart=*/true, Point(nX, nY));
         break;
     case LOK_SETGRAPHICSELECTION_END:
-        rEditWin.SetGraphicLogicPosition(/*bStart=*/false, Point(nX, nY));
+        rEditWin.SetGraphicTwipPosition(/*bStart=*/false, Point(nX, nY));
         break;
     default:
         assert(false);

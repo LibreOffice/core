@@ -2440,10 +2440,10 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
     switch (nType)
     {
     case LOK_SETGRAPHICSELECTION_START:
-        pViewShell->SetGraphicLogicPosition(/*bStart=*/true, aPoint);
+        pViewShell->SetGraphicMm100Position(/*bStart=*/true, aPoint);
         break;
     case LOK_SETGRAPHICSELECTION_END:
-        pViewShell->SetGraphicLogicPosition(/*bStart=*/false, aPoint);
+        pViewShell->SetGraphicMm100Position(/*bStart=*/false, aPoint);
         break;
     default:
         assert(false);

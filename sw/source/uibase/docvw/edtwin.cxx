@@ -6229,7 +6229,7 @@ void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
         rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
 }
 
-void SwEditWin::SetGraphicLogicPosition(bool bStart, const Point& rPosition)
+void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
 {
     if (bStart)
     {

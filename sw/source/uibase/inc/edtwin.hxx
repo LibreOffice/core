@@ -305,7 +305,7 @@ public:
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Allows starting or ending a graphic move or resize action.
-    void SetGraphicLogicPosition(bool bStart, const Point& rPosition);
+    void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
 };
 
 #endif
