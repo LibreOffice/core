@@ -15,7 +15,8 @@ import android.view.inputmethod.InputConnection;
 import org.mozilla.gecko.gfx.InputConnectionHandler;
 
 /**
- * Implementation of InputConnectionHandler.When a key event happens it is directed to this class which is then directed further to LOKitThread.
+ * Implementation of InputConnectionHandler. When a key event happens it is
+ * directed to this class which is then directed further to LOKitThread.
  */
 public class LOKitInputConnectionHandler implements InputConnectionHandler {
     private static String LOGTAG = LOKitInputConnectionHandler.class.getSimpleName();
@@ -52,7 +53,8 @@ public class LOKitInputConnectionHandler implements InputConnectionHandler {
     }
 
     /**
-     * When key multiple event happens. Key multiple event is triggered when non-ascii characters are entered on soft keyboard
+     * When key multiple event happens. Key multiple event is triggered when
+     * non-ascii characters are entered on soft keyboard.
      */
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {

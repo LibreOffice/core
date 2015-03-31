@@ -58,7 +58,7 @@ public class GraphicSelectionHandle implements CanvasElement {
     }
 
     /**
-     * The position of the handle
+     * The position of the handle.
      * @return
      */
     public HandlePosition getHandlePosition() {
@@ -80,7 +80,7 @@ public class GraphicSelectionHandle implements CanvasElement {
     }
 
     /**
-     * Draw a filled and stroked circle to the canvas
+     * Draw a filled and stroked circle to the canvas.
      */
     private void drawFilledCircle(Canvas canvas, float x, float y, float radius, Paint strokePaint, Paint fillPaint) {
         canvas.drawCircle(x, y, radius, fillPaint);

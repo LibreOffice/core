@@ -214,7 +214,7 @@ public class GraphicSelection implements CanvasElement {
     }
 
     /**
-     * Send graphic selection start event to LOKitTread
+     * Send graphic selection start event to LOKitTread.
      * @param screenPosition - screen position of the selection
      */
     private void sendGraphicSelectionStart(PointF screenPosition) {
@@ -222,7 +222,7 @@ public class GraphicSelection implements CanvasElement {
     }
 
     /**
-     * Send graphic selection end event to LOKitTread
+     * Send graphic selection end event to LOKitTread.
      * @param screenPosition - screen position of the selection
      */
     private void sendGraphicSelectionEnd(PointF screenPosition) {
@@ -230,7 +230,7 @@ public class GraphicSelection implements CanvasElement {
     }
 
     /**
-     * Send graphic selection event to LOKitTread
+     * Send graphic selection event to LOKitTread.
      * @param type - type of the graphic selection
      * @param screenPosition - screen position of the selection
      */
