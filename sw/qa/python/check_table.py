@@ -249,6 +249,14 @@ class CheckTable(unittest.TestCase):
         xDoc.dispose()
 
     def test_descriptions(self):
+        def fill_table():
+            for x in range(3):
+                for y in range(3):
+                    xTable.getCellByPosition(x, y).String = 'Cell %d %d' % (x, y)
+        def check_table():
+            for x in range(3):
+                for y in range(3):
+                    self.assertEqual('Cell %d %d' % (x, y), xTable.getCellByPosition(x, y).String)
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
@@ -257,13 +265,18 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         self.assertEqual(3, xTable.Rows.Count)
         self.assertEqual(3, xTable.Columns.Count)
-        for x in range(3):
-            for y in range(3):
-                xCell = xTable.getCellByPosition(x, y)
-                xCell.String = 'Cell %d %d' % (x, y)
-        self.assertEqual('Cell 0 0', xTable.getCellByPosition(0,0).String)
-        self.assertEqual('Cell 1 1', xTable.getCellByPosition(1,1).String)
-        self.assertEqual('Cell 2 2', xTable.getCellByPosition(2,2).String)
+        # fill table
+        fill_table()
+        check_table()
+        # check without labels first
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        self.assertEqual(0, len(xTable.RowDescriptions))
+        self.assertEqual(0, len(xTable.ColumnDescriptions))
+        self.RowDescriptions = ('foo', 'bar', 'baz') # no labels, thus noop
+        self.ColumnDescriptions = ('foo', 'bar', 'baz') # no labels, thus noop
+        check_table()
+        # now check with labels
         xTable.ChartColumnAsLabel = True
         xTable.ChartRowAsLabel = True
         self.assertEqual(2, len(xTable.RowDescriptions))
@@ -272,6 +285,29 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(2, len(xTable.ColumnDescriptions))
         self.assertEqual('Cell 1 0', xTable.ColumnDescriptions[0])
         self.assertEqual('Cell 2 0', xTable.ColumnDescriptions[1])
+        with self.assertRaises(Exception):
+            xTable.RowDescriptions = ('foo',) # too short
+        with self.assertRaises(Exception):
+            xTable.ColumnDescriptions = ('foo',) # too short
+        check_table()
+        xTable.RowDescriptions = ('fooRow', 'bazRow')
+        xTable.ColumnDescriptions = ('fooColumn', 'bazColumn')
+        self.assertEqual('fooRow', xTable.getCellByPosition(0,1).String)
+        self.assertEqual('bazRow', xTable.getCellByPosition(0,2).String)
+        self.assertEqual('fooColumn', xTable.getCellByPosition(1,0).String)
+        self.assertEqual('bazColumn', xTable.getCellByPosition(2,0).String)
+        xTable.getCellByPosition(0,1).String = 'Cell 0 1' # reset changes values ...
+        xTable.getCellByPosition(0,2).String = 'Cell 0 2'
+        xTable.getCellByPosition(1,0).String = 'Cell 1 0'
+        xTable.getCellByPosition(2,0).String = 'Cell 2 0'
+        check_table() # ... to ensure the rest was untouched
+        # check disconnected table excepts, but doesnt crash
+        xTable2 = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable2.initialize(3, 3)
+        with self.assertRaises(Exception):
+            foo = xTable2.RowDescriptions
+        with self.assertRaises(Exception):
+            foo = xTable2.ColumnDescriptions
         xDoc.dispose()
 
 
