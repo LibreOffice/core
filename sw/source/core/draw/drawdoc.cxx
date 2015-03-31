@@ -49,20 +49,20 @@ const OUString GetPalettePath()
     return aPathOpt.GetPalettePath();
 }
 
-SwDrawModel::SwDrawModel( SwDoc* pD ) :
-    FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetDocShell(), true ),
-    pDoc( pD )
+SwDrawModel::SwDrawModel(SwDoc *const pDoc)
+    : FmFormModel( ::GetPalettePath(), &pDoc->GetAttrPool(),
+                     pDoc->GetDocShell(), true )
+    , m_pDoc( pDoc )
 {
     SetScaleUnit( MAP_TWIP );
     SetSwapGraphics( true );
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,
     // including SvxColorTableItem  with WhichID SID_COLOR_TABLE
-    InitDrawModelAndDocShell(pDoc ? pDoc->GetDocShell() : 0, this);
+    InitDrawModelAndDocShell(m_pDoc ? m_pDoc->GetDocShell() : 0, this);
 
     // copy all the default values to the SdrModel
-    SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
+    SfxItemPool* pSdrPool = pDoc->GetAttrPool().GetSecondaryPool();
     if( pSdrPool )
     {
         const sal_uInt16 aWhichRanges[] =
@@ -72,7 +72,7 @@ SwDrawModel::SwDrawModel( SwDoc* pD ) :
                 0
             };
 
-        SfxItemPool& rDocPool = pD->GetAttrPool();
+        SfxItemPool& rDocPool = pDoc->GetAttrPool();
         sal_uInt16 nEdtWhich, nSlotId;
         const SfxPoolItem* pItem;
         for( const sal_uInt16* pRangeArr = aWhichRanges;
@@ -92,9 +92,10 @@ SwDrawModel::SwDrawModel( SwDoc* pD ) :
                 }
     }
 
-    SetForbiddenCharsTable( pD->GetDocumentSettingManager().getForbiddenCharacterTable() );
+    SetForbiddenCharsTable( pDoc->GetDocumentSettingManager().getForbiddenCharacterTable() );
     // Implementation for asian compression
-    SetCharCompressType( static_cast<sal_uInt16>(pD->GetDocumentSettingManager().getCharacterCompressionType() ));
+    SetCharCompressType( static_cast<sal_uInt16>(
+            pDoc->GetDocumentSettingManager().getCharacterCompressionType()));
 }
 
 // Destructor
@@ -122,13 +123,13 @@ SdrPage* SwDrawModel::AllocPage(bool bMasterPage)
 
 uno::Reference<embed::XStorage> SwDrawModel::GetDocumentStorage() const
 {
-    return pDoc->GetDocStorage();
+    return m_pDoc->GetDocStorage();
 }
 
 SdrLayerID SwDrawModel::GetControlExportLayerId( const SdrObject & ) const
 {
     //for versions < 5.0, there was only Hell and Heaven
-    return (SdrLayerID)pDoc->getIDocumentDrawModelAccess().GetHeavenId();
+    return static_cast<SdrLayerID>(m_pDoc->getIDocumentDrawModelAccess().GetHeavenId());
 }
 
 uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()

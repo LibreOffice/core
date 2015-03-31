@@ -26,13 +26,15 @@ class SwDocShell;
 
 class SwDrawModel : public FmFormModel
 {
-    SwDoc* pDoc;
+private:
+    SwDoc* m_pDoc;
+
 public:
     SwDrawModel( SwDoc* pDoc );
     virtual ~SwDrawModel();
 
-    const SwDoc& GetDoc() const { return *pDoc; }
-          SwDoc& GetDoc()       { return *pDoc; }
+    const SwDoc& GetDoc() const { return *m_pDoc; }
+          SwDoc& GetDoc()       { return *m_pDoc; }
 
     virtual SdrPage* AllocPage(bool bMasterPage) SAL_OVERRIDE;
 
