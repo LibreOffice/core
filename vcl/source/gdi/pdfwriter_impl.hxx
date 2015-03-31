@@ -333,7 +333,7 @@ public:
         sal_Int32           m_nFontID;
         FontEmitMapping     m_aMapping;
 
-        FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
+        explicit FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
     };
     typedef std::list< FontEmit > FontEmitList;
     struct Glyph
@@ -494,12 +494,12 @@ public:
                   nValue( 0 )
         {}
 
-        PDFStructureAttribute( PDFWriter::StructAttributeValue eVal )
+        explicit PDFStructureAttribute( PDFWriter::StructAttributeValue eVal )
                 : eValue( eVal ),
                   nValue( 0 )
         {}
 
-        PDFStructureAttribute( sal_Int32 nVal )
+        explicit PDFStructureAttribute( sal_Int32 nVal )
                 : eValue( PDFWriter::Invalid ),
                   nValue( nVal )
         {}
@@ -513,7 +513,7 @@ public:
                             // else the page object relevant to MCID
         sal_Int32 nMCID;    // an MCID if >= 0
 
-        PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
+        explicit PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
         PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
     };
 

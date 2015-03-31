@@ -12608,7 +12608,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     {
         rEle.m_nObject      = createObject();
         // update parent's kids list
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.push_back( rEle.m_nObject );
+        m_aStructure[ rEle.m_nParentElement ].m_aKids.push_back(PDFStructureElementKid(rEle.m_nObject));
     }
     return nNewId;
 }

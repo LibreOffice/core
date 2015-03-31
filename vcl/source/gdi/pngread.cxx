@@ -155,8 +155,8 @@ private:
 
 public:
 
-                        PNGReaderImpl( SvStream& );
-                        ~PNGReaderImpl();
+    explicit PNGReaderImpl( SvStream& );
+    ~PNGReaderImpl();
 
     BitmapEx            GetBitmapEx( const Size& rPreviewSizeHint );
     const std::vector<vcl::PNGReader::ChunkData>& GetAllChunks();
