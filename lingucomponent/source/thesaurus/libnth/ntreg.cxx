@@ -36,7 +36,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL lnth_component_getFactory(
 {
     void * pRet = Thesaurus_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     return pRet;

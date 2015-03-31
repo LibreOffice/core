@@ -36,7 +36,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL hyphen_component_getFactory(
 {
     void * pRet = Hyphenator_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     return pRet;
