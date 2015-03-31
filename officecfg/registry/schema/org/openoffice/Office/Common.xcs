@@ -6323,7 +6323,6 @@
       </prop>
       <prop oor:name="EdgeBlending" oor:type="xs:short">
         <info>
-          <author>ALG</author>
           <desc>
             Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle
             previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
@@ -6338,7 +6337,6 @@
       </prop>
       <prop oor:name="ListBoxMaximumLineCount" oor:type="xs:short">
         <info>
-          <author>ALG</author>
           <desc>
             This option controls how many lines of a ListBox will be shown as a maximum. If the ListBox has less lines,
             all lines will be shown when opening the drop down content. If it has more lines, the visible number of
@@ -6352,7 +6350,6 @@
       </prop>
       <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
         <info>
-          <author>ALG</author>
           <desc>
             This option controls how many columns the ColorValueSets (the matrix-organized dialogs for color select)
             will have. The default is 12 and this is aligned with the layout of the standard color palette. thus, when you
@@ -6365,7 +6362,6 @@
       </prop>
       <prop oor:name="PreviewUsesCheckeredBackground" oor:type="xs:boolean">
         <info>
-          <author>ALG</author>
           <desc>
             This option allows to make previews (e.g. UI previews for object attributes) show the content with a checkered
             background to allow simple identification and better preview of transparent content, e.g. when a draw object

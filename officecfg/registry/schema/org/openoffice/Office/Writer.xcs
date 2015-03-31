@@ -1256,7 +1256,6 @@
         <prop oor:name="ShowScrollBarTips" oor:type="xs:boolean">
           <!-- UIHints: Not accessible via user interface -->
           <info>
-            <author>arielch</author>
             <desc>Enables the user to prevent the display of help tips on the scrollbars programmatically.</desc>
             <label>Prevent scrollbars help tips</label>
           </info>
