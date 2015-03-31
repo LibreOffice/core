@@ -102,7 +102,7 @@ public:
 
             if (nEvent == VCLEVENT_APPLICATION_DATACHANGED )
             {
-                DataChangedEvent* pData = reinterpret_cast<DataChangedEvent*>(_pEvt->GetData());
+                DataChangedEvent* pData = static_cast<DataChangedEvent*>(_pEvt->GetData());
                 if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
                                 ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
                                ( pData->GetFlags() & AllSettingsFlags::STYLE     )))
