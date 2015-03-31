@@ -574,22 +574,17 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
 
     SwPageFrm *pOldPage = m_rThis.FindPageFrm();
 
-    //JoinLock pParent for the lifetime of the Cut/Paste call to avoid
-    //SwSectionFrm::MergeNext removing the pParent we're trying to reparent
-    //into
-    bool bOldJoinLocked(false);
-    SwFlowFrm *pParentFlow = SwFlowFrm::CastFlowFrm(pParent);
-    if (pParentFlow)
+    SwLayoutFrm *pOldParent;
+    bool bInvaLay;
+
     {
-        bOldJoinLocked = pParentFlow->IsJoinLocked();
-        pParentFlow->LockJoin();
+        //JoinLock pParent for the lifetime of the Cut/Paste call to avoid
+        //SwSectionFrm::MergeNext removing the pParent we're trying to reparent
+        //into
+        JoinLockGuard aJoinGuard(pParent);
+        pOldParent = CutTree( &m_rThis );
+        bInvaLay = PasteTree( &m_rThis, pParent, pSibling, pOldParent );
     }
-
-    SwLayoutFrm *pOldParent = CutTree( &m_rThis );
-    const bool bInvaLay = PasteTree( &m_rThis, pParent, pSibling, pOldParent );
-
-    if (pParentFlow && !bOldJoinLocked)
-        pParentFlow->UnlockJoin();
 
     // If, by cutting & pasting, an empty SectionFrm came into existence, it should
     // disappear automatically.
