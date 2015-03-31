@@ -419,7 +419,7 @@ inline void doubleToString(StringT ** pResult,
           : nDigits + nDecPlaces ) + 10 + (pGroups ? abs(nDigits) * 2 : 0);
     if ( nBuf > nBufMax )
     {
-        pBuf = reinterpret_cast< typename T::Char * >(
+        pBuf = static_cast< typename T::Char * >(
             rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
         OSL_ENSURE(pBuf != 0, "Out of memory");
     }
