@@ -24,7 +24,8 @@ import static org.libreoffice.canvas.GraphicSelectionHandle.HandlePosition;
  * rectangle.
  */
 public class GraphicSelection implements CanvasElement {
-    private final Paint mPaint;
+    private final Paint mPaintStroke;
+    private final Paint mPaintFill;
     public RectF mRectangle = new RectF();
     public RectF mScaledRectangle = new RectF();
     private RectF mDrawRectangle = new RectF();
@@ -39,10 +40,17 @@ public class GraphicSelection implements CanvasElement {
      */
     public GraphicSelection() {
         // Create the paint, which is needed at drawing
-        mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStrokeWidth(2);
+        mPaintStroke = new Paint();
+        mPaintStroke.setStyle(Paint.Style.STROKE);
+        mPaintStroke.setColor(Color.GRAY);
+        mPaintStroke.setStrokeWidth(2);
+        mPaintStroke.setAntiAlias(true);
+
+        mPaintFill = new Paint();
+        mPaintFill.setStyle(Paint.Style.FILL);
+        mPaintFill.setColor(Color.WHITE);
+        mPaintFill.setAlpha(200);
+        mPaintFill.setAntiAlias(true);
 
         // Create the handles of the selection
         mHandles[0] = new GraphicSelectionHandle(HandlePosition.TOP_LEFT);
@@ -95,7 +103,10 @@ public class GraphicSelection implements CanvasElement {
      */
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawRect(mDrawRectangle, mPaint);
+        canvas.drawRect(mDrawRectangle, mPaintStroke);
+        if (mType != DragType.NONE) {
+            canvas.drawRect(mDrawRectangle, mPaintFill);
+        }
         for (GraphicSelectionHandle handle : mHandles) {
             handle.draw(canvas);
         }

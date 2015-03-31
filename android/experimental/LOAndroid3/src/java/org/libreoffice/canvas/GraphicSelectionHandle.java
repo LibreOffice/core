@@ -42,14 +42,19 @@ public class GraphicSelectionHandle implements CanvasElement {
         mHandlePosition = position;
 
         mStrokePaint.setStyle(Paint.Style.STROKE);
-        mStrokePaint.setColor(Color.BLACK);
+        mStrokePaint.setColor(Color.GRAY);
         mStrokePaint.setStrokeWidth(3);
+        mStrokePaint.setAntiAlias(true);
 
         mFillPaint.setStyle(Paint.Style.FILL);
         mFillPaint.setColor(Color.WHITE);
+        mFillPaint.setAlpha(200);
+        mFillPaint.setAntiAlias(true);
 
         mSelectedFillPaint.setStyle(Paint.Style.FILL);
-        mSelectedFillPaint.setColor(Color.BLUE);
+        mSelectedFillPaint.setColor(Color.GRAY);
+        mSelectedFillPaint.setAlpha(200);
+        mSelectedFillPaint.setAntiAlias(true);
     }
 
     /**
