@@ -48,7 +48,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
     {
         // Define variables which are used in following macros.
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
-        Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        Reference< XMultiServiceFactory >    xServiceManager( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
         if( SIDEModel::getImplementationName_Static().equalsAscii( pImplementationName ) )
         {
