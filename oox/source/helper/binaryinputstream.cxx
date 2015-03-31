@@ -174,7 +174,7 @@ sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t 
     if( !mbEof && (nBytes > 0) )
     {
         sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, INPUTSTREAM_BUFFERSIZE );
-        sal_uInt8* opnMem = reinterpret_cast< sal_uInt8* >( opMem );
+        sal_uInt8* opnMem = static_cast< sal_uInt8* >( opMem );
         while( !mbEof && (nBytes > 0) )
         {
             sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );

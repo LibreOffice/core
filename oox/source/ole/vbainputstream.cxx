@@ -85,7 +85,7 @@ sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes
 sal_Int32 VbaInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     sal_Int32 nRet = 0;
-    sal_uInt8* opnMem = reinterpret_cast< sal_uInt8* >( opMem );
+    sal_uInt8* opnMem = static_cast< sal_uInt8* >( opMem );
     while( (nBytes > 0) && updateChunk() )
     {
         sal_Int32 nChunkLeft = static_cast< sal_Int32 >( maChunk.size() - mnChunkPos );
