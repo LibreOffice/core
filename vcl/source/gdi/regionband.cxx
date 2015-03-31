@@ -1277,7 +1277,7 @@ sal_uInt32 RegionBand::getRectangleCount() const
 #ifdef DBG_UTIL
 const char* ImplDbgTestRegionBand(const void* pObj)
 {
-    const RegionBand* pRegionBand = reinterpret_cast< const RegionBand* >(pObj);
+    const RegionBand* pRegionBand = static_cast< const RegionBand* >(pObj);
 
     if(pRegionBand)
     {

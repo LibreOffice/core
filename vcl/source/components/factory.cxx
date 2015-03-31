@@ -43,7 +43,7 @@ extern "C" {
         if( pXUnoSMgr )
         {
             Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr(
-                reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
+                static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
                 );
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( vcl_session_getImplementationName().equalsAscii( pImplementationName ) )

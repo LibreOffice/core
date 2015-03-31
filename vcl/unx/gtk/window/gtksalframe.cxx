@@ -580,7 +580,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
     if ( hud_active )
     {
         SolarMutexGuard aGuard;
-        GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+        GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
         GtkSalMenu* pSalMenu = reinterpret_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
 
         if ( pSalMenu )
@@ -655,7 +655,7 @@ static const GActionEntry app_entries[] = {
 
 gboolean ensure_dbus_setup( gpointer data )
 {
-    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( data );
+    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( data );
     GdkWindow* gdkWindow = widget_get_window( pSalFrame->getWindow() );
 
     if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
@@ -782,7 +782,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
 {
     SolarMutexGuard aGuard;
 
-    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
 
     SalMenu* pSalMenu = pSalFrame->GetMenu();
 
@@ -804,7 +804,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
     SAL_INFO("vcl.unity", "on_registrar_unavailable");
 
     //pSessionBus = NULL;
-    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
 
     SalMenu* pSalMenu = pSalFrame->GetMenu();
 

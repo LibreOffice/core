@@ -154,7 +154,7 @@ static accessibility::XAccessibleText*
         if( !pWrap->mpText && pWrap->mpContext )
         {
             uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleText>::get() );
-            pWrap->mpText = reinterpret_cast< accessibility::XAccessibleText * > (any.pReserved);
+            pWrap->mpText = static_cast< accessibility::XAccessibleText * > (any.pReserved);
             pWrap->mpText->acquire();
         }
 
@@ -181,7 +181,7 @@ static accessibility::XAccessibleTextMarkup*
              */
             if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
             {
-                pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
+                pWrap->mpTextMarkup = static_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
                 if( pWrap->mpTextMarkup )
                     pWrap->mpTextMarkup->acquire();
             }
@@ -210,7 +210,7 @@ static accessibility::XAccessibleTextAttributes*
              */
             if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
             {
-                pWrap->mpTextAttributes = reinterpret_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
+                pWrap->mpTextAttributes = static_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
                 pWrap->mpTextAttributes->acquire();
             }
         }
@@ -238,7 +238,7 @@ static accessibility::XAccessibleMultiLineText*
              */
             if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
             {
-                pWrap->mpMultiLineText = reinterpret_cast< accessibility::XAccessibleMultiLineText * > (any.pReserved);
+                pWrap->mpMultiLineText = static_cast< accessibility::XAccessibleMultiLineText * > (any.pReserved);
                 pWrap->mpMultiLineText->acquire();
             }
         }
@@ -270,7 +270,7 @@ text_wrapper_get_text (AtkText *text,
     if( pData != NULL )
     {
         accessibility::TextSegment * pTextSegment =
-            reinterpret_cast <accessibility::TextSegment *> (pData);
+            static_cast <accessibility::TextSegment *> (pData);
 
         if( pTextSegment->SegmentStart == start_offset &&
             pTextSegment->SegmentEnd == end_offset )

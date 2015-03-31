@@ -158,7 +158,7 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
 #if HAVE_FEATURE_JAVA
-    JNIEnv*     pJavaEnv = reinterpret_cast< JNIEnv* >( pEnv );
+    JNIEnv*     pJavaEnv = static_cast< JNIEnv* >( pEnv );
     jthrowable  jtThrowable = pJavaEnv->ExceptionOccurred();
 
     if( jtThrowable )

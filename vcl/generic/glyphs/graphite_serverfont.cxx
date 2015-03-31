@@ -32,7 +32,7 @@ float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
     ServerFont * pServerFont =
         const_cast<ServerFont*>
-        (reinterpret_cast<const ServerFont*>(appFontHandle));
+        (static_cast<const ServerFont*>(appFontHandle));
     if (pServerFont)
     {
         return static_cast<float>(pServerFont->GetGlyphMetric(glyphId).GetCharWidth());

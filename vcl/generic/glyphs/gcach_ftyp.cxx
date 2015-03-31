@@ -192,7 +192,7 @@ void FtFontFile::Unmap()
 // wrap FtFontInfo's table function
 const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
 {
-    const FtFontInfo * pFontInfo = reinterpret_cast<const FtFontInfo*>(appFaceHandle);
+    const FtFontInfo * pFontInfo = static_cast<const FtFontInfo*>(appFaceHandle);
     typedef union {
         char m_c[5];
         unsigned int m_id;
@@ -1473,7 +1473,7 @@ extern "C" {
 // then uncomment the const-tokens in the function interfaces below
 static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
 {
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
 
     // move_to implies a new polygon => finish old polygon first
     rA.ClosePolygon();
@@ -1484,14 +1484,14 @@ static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
 
 static int FT_line_to( FT_Vector_CPtr p1, void* vpPolyArgs )
 {
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_NORMAL );
     return 0;
 }
 
 static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
 {
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
 
     // VCL's Polygon only knows cubic beziers
     const long nX1 = (2 * rA.GetPosX() + 4 * p1->x + 3) / 6;
@@ -1508,7 +1508,7 @@ static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
 
 static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3, void* vpPolyArgs )
 {
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_CONTROL );
     rA.AddPoint( p2->x, p2->y, POLY_CONTROL );
     rA.AddPoint( p3->x, p3->y, POLY_NORMAL );

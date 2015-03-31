@@ -1157,7 +1157,7 @@ bool OpenGLContext::initWindow()
     m_pChildWindow->SetControlForeground();
     m_pChildWindow->SetControlBackground();
 
-    m_aGLWin.dpy = reinterpret_cast<Display*>(pChildSysData->pDisplay);
+    m_aGLWin.dpy = static_cast<Display*>(pChildSysData->pDisplay);
     m_aGLWin.win = pChildSysData->aWindow;
     m_aGLWin.screen = pChildSysData->nScreen;
 
@@ -1292,7 +1292,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 #if !defined(LIBO_HEADLESS)
     const SystemEnvData* sysData(pParent->GetSystemData());
 
-    Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
+    Display *dpy = static_cast<Display*>(sysData->pDisplay);
     Window win = sysData->aWindow;
 
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )

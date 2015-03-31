@@ -744,7 +744,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
     // Convert to OOo
     for( GSList *pElem = pPathList; pElem; pElem = pElem->next)
     {
-        gchar *pURI = reinterpret_cast<gchar*>(pElem->data);
+        gchar *pURI = static_cast<gchar*>(pElem->data);
         aSelectedFiles[ nIndex ] = uritounicode(pURI);
 
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
@@ -1743,7 +1743,7 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
 
     for( GSList *iter = filters; !bFound && iter; iter = iter->next )
     {
-        GtkFileFilter* pFilter = reinterpret_cast<GtkFileFilter *>( iter->data );
+        GtkFileFilter* pFilter = static_cast<GtkFileFilter *>( iter->data );
         G_CONST_RETURN gchar * filtername = gtk_file_filter_get_name( pFilter );
         OUString sFilterName( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
 

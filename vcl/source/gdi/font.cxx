@@ -944,7 +944,7 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
     Font aResult;
     if( ! identifyTrueTypeFont( i_pBuffer, i_nSize, aResult ) )
     {
-        const char* pStream = reinterpret_cast<const char*>(i_pBuffer);
+        const char* pStream = static_cast<const char*>(i_pBuffer);
         if( pStream && i_nSize > 100 &&
              *pStream == '%' && pStream[1] == '!' )
         {

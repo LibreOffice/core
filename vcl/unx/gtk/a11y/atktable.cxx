@@ -65,7 +65,7 @@ static accessibility::XAccessibleTable*
         if( !pWrap->mpTable && pWrap->mpContext )
         {
             uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTable>::get() );
-            pWrap->mpTable = reinterpret_cast< accessibility::XAccessibleTable * > (any.pReserved);
+            pWrap->mpTable = static_cast< accessibility::XAccessibleTable * > (any.pReserved);
             pWrap->mpTable->acquire();
         }
 

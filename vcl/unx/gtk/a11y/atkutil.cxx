@@ -76,7 +76,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
     focus_notify_handler = 0;
 
     uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject::get();
-    if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
+    if( xAccessible.get() == static_cast < accessibility::XAccessible * > (data) )
     {
         AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
         // Gail does not notify focus changes to NULL, so do we ..
@@ -100,7 +100,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
                     if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&
                          any.pReserved != 0 )
                     {
-                        wrapper_obj->mpText = reinterpret_cast< accessibility::XAccessibleText * > (any.pReserved);
+                        wrapper_obj->mpText = static_cast< accessibility::XAccessibleText * > (any.pReserved);
                         if ( wrapper_obj->mpText != 0 )
                         {
                             wrapper_obj->mpText->acquire();
@@ -599,7 +599,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 sal_IntPtr WindowEventHandler(void *, void * p)
 {
-    VclSimpleEvent * pEvent = reinterpret_cast<VclSimpleEvent *>(p);
+    VclSimpleEvent * pEvent = static_cast<VclSimpleEvent *>(p);
     try
     {
         switch (pEvent->GetId())

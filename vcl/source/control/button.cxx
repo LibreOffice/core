@@ -595,7 +595,7 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
 
 sal_IntPtr Button::dispatchCommandHandler(void *, void *pCaller)
 {
-    const Button *pButton = reinterpret_cast<Button*>(pCaller);
+    const Button *pButton = static_cast<Button*>(pCaller);
     if (pButton == NULL)
         return 0;
 

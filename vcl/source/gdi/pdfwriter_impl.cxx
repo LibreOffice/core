@@ -6390,7 +6390,7 @@ const SEC_ASN1Template Accuracy_Template[] =
 
 size_t AppendToBuffer(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-    OStringBuffer *pBuffer = reinterpret_cast<OStringBuffer*>(userdata);
+    OStringBuffer *pBuffer = static_cast<OStringBuffer*>(userdata);
     pBuffer->append(ptr, size*nmemb);
 
     return size*nmemb;
