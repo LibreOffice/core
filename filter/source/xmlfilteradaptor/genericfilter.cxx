@@ -39,7 +39,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xmlfa_component_getFactory(
     if ( pServiceManager && implName.equals(XmlFilterAdaptor_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             XmlFilterAdaptor_createInstance, XmlFilterAdaptor_getSupportedServiceNames() ) );
         if (xFactory.is())

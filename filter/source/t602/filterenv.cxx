@@ -43,7 +43,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
     if ( pServiceManager && implName.equals(T602ImportFilter_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             T602ImportFilter_createInstance, T602ImportFilter_getSupportedServiceNames() ) );
 
@@ -56,7 +56,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
     else if ( pServiceManager && implName.equals(T602ImportFilterDialog_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             T602ImportFilterDialog_createInstance, T602ImportFilterDialog_getSupportedServiceNames() ) );
 

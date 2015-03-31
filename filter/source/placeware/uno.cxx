@@ -45,7 +45,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL placeware_component_getFactory(
     if ( pServiceManager && implName.equals(PlaceWareExportFilter_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             PlaceWareExportFilter_createInstance, PlaceWareExportFilter_getSupportedServiceNames() ) );
 

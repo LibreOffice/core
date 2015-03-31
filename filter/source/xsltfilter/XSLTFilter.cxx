@@ -589,7 +589,7 @@ extern "C"
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(
-                                                reinterpret_cast<XMultiServiceFactory *> (pServiceManager),
+                                                static_cast<XMultiServiceFactory *> (pServiceManager),
                                                 OUString::createFromAscii(
                                                         pImplName),
                                                 CreateFilterInstance,
@@ -608,7 +608,7 @@ extern "C"
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(
-                                                reinterpret_cast<XMultiServiceFactory *> (pServiceManager),
+                                                static_cast<XMultiServiceFactory *> (pServiceManager),
                                                 OUString::createFromAscii(
                                                         pImplName),
                                                 CreateTransformerInstance,

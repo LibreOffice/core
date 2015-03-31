@@ -857,7 +857,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     if( aFilter.ExportGraphic( aGraphic, OUString(), aDstStm,
                                 aFilter.GetExportFormatNumberForShortName( OUString(JPG_SHORTNAME) ), &aFilterData ) == ERRCODE_NONE )
     {
-        pJpgData = reinterpret_cast<const sal_uInt8*>(aDstStm.GetData());
+        pJpgData = static_cast<const sal_uInt8*>(aDstStm.GetData());
         nJpgDataLength = aDstStm.Seek( STREAM_SEEK_TO_END );
     }
 

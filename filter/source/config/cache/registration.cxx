@@ -41,7 +41,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
         return NULL;
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        xSMGR = reinterpret_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
+        xSMGR = static_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
     com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory;
     OUString sImplName = OUString::createFromAscii(pImplementationName);
 

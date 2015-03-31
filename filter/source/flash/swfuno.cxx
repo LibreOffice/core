@@ -48,7 +48,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL flash_component_getFactory(
         if ( implName.equals(FlashExportFilter_getImplementationName()) )
         {
             xFactory = createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 FlashExportFilter_createInstance, FlashExportFilter_getSupportedServiceNames() );
 
@@ -56,7 +56,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL flash_component_getFactory(
         else if ( implName.equals(SWFDialog_getImplementationName()) )
         {
             xFactory = createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SWFDialog_createInstance, SWFDialog_getSupportedServiceNames() );
         }

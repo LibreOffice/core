@@ -1502,7 +1502,7 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
     if( m_pErrors->GetEntryCount() > 0 )
     {
         m_pErrors->SelectEntryPos( 0 );
-        OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetEntryData( 0 ));
+        OUString* pStr = static_cast<OUString*>(m_pErrors->GetEntryData( 0 ));
         m_pExplanation->SetText( pStr ? *pStr : OUString() );
     }
 
@@ -1518,7 +1518,7 @@ ImplErrorDialog::~ImplErrorDialog()
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
-    OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetSelectEntryData());
+    OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectEntryData());
     m_pExplanation->SetText( pStr ? *pStr : OUString() );
     return 0;
 }

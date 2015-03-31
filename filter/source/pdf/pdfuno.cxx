@@ -46,21 +46,21 @@ extern "C"
 
             if( aImplName.equals( PDFFilter_getImplementationName() ) )
             {
-                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                xFactory = createSingleFactory( static_cast< XMultiServiceFactory* >( pServiceManager ),
                                                 OUString::createFromAscii( pImplName ),
                                                 PDFFilter_createInstance, PDFFilter_getSupportedServiceNames() );
 
             }
             else if( aImplName.equals( PDFDialog_getImplementationName() ) )
             {
-                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                xFactory = createSingleFactory( static_cast< XMultiServiceFactory* >( pServiceManager ),
                                                 OUString::createFromAscii( pImplName ),
                                                 PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
 
             }
             else if( aImplName.equals( PDFInteractionHandler_getImplementationName() ) )
             {
-                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                xFactory = createSingleFactory( static_cast< XMultiServiceFactory* >( pServiceManager ),
                                                 OUString::createFromAscii( pImplName ),
                                                 PDFInteractionHandler_createInstance, PDFInteractionHandler_getSupportedServiceNames() );
 

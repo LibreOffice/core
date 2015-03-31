@@ -380,7 +380,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltdlg_component_getFactory(
         if ( implName.equals(XMLFilterDialogComponent_getImplementationName()) )
         {
             xFactory = createOneInstanceFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 XMLFilterDialogComponent_createInstance, XMLFilterDialogComponent_getSupportedServiceNames() );
 
