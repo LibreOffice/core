@@ -5764,6 +5764,22 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 
 void ScGridWindow::UpdateCursorOverlay()
 {
+    ScDocument* pDoc = pViewData->GetDocument();
+    bool bIsTiledRendering = pDoc->GetDrawLayer()->isTiledRendering();
+
+    // in the tiled rendering case, exit early if we are not supposed to draw
+    // the cell cursor:
+    // - there is a selection (either cell selection, or graphic object)
+    // - the user is typing inside a shape or so
+    if (bIsTiledRendering &&
+        (pViewData->GetMarkData().IsMarked() || pViewData->GetMarkData().IsMultiMarked() ||
+         pViewData->GetViewShell()->GetScDrawView()->IsMarking() ||
+         pViewData->GetViewShell()->GetScDrawView()->IsTextEdit() ||
+         pViewData->HasEditView(eWhich)))
+    {
+        return;
+    }
+
     MapMode aDrawMode = GetDrawMapMode();
     MapMode aOldMode = GetMapMode();
     if ( aOldMode != aDrawMode )
@@ -5782,7 +5798,6 @@ void ScGridWindow::UpdateCursorOverlay()
     SCCOL nX = pViewData->GetCurX();
     SCROW nY = pViewData->GetCurY();
 
-    ScDocument* pDoc = pViewData->GetDocument();
     const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
 
     if (!maVisibleRange.isInside(nX, nY))
@@ -5840,7 +5855,6 @@ void ScGridWindow::UpdateCursorOverlay()
         }
 
         // in the tiled rendering case, don't limit to the screen size
-        bool bIsTiledRendering = pDoc->GetDrawLayer()->isTiledRendering();
         if (bMaybeVisible || bIsTiledRendering)
         {
             long nSizeXPix;
@@ -5925,15 +5939,8 @@ void ScGridWindow::UpdateCursorOverlay()
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             mpOOCursors->append(*pOverlay);
 
-            // notify the LibreOfficeKit too, but only if there's no
-            // selection yet (either cell selection, or graphic object),
-            // to avoid setting the LOK selection twice
-            // (once for the cell only, and then for the selection)
-            if (!pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked() &&
-                !pViewData->GetViewShell()->GetScDrawView()->IsMarking())
-            {
-                updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
-            }
+            // notify the LibreOfficeKit too
+            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
         }
     }
 
