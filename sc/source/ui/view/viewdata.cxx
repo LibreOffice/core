@@ -1868,7 +1868,8 @@ void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
 
 void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 {
-    if (nNewPosX != 0)
+    // in the tiled rendering case, nPosX [the leftmost visible column] must be 0
+    if (nNewPosX != 0 && !GetDocument()->GetDrawLayer()->isTiledRendering())
     {
         SCCOL nOldPosX = pThisTab->nPosX[eWhich];
         long nTPosX = pThisTab->nTPosX[eWhich];
@@ -1895,15 +1896,18 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
         pThisTab->nPixPosX[eWhich] = nPixPosX;
     }
     else
+    {
         pThisTab->nPixPosX[eWhich] =
         pThisTab->nTPosX[eWhich] =
         pThisTab->nMPosX[eWhich] =
         pThisTab->nPosX[eWhich] = 0;
+    }
 }
 
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
-    if (nNewPosY != 0)
+    // in the tiled rendering case, nPosY [the topmost visible row] must be 0
+    if (nNewPosY != 0 && !GetDocument()->GetDrawLayer()->isTiledRendering())
     {
         SCROW nOldPosY = pThisTab->nPosY[eWhich];
         long nTPosY = pThisTab->nTPosY[eWhich];
@@ -1934,10 +1938,12 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
     else
+    {
         pThisTab->nPixPosY[eWhich] =
         pThisTab->nTPosY[eWhich] =
         pThisTab->nMPosY[eWhich] =
         pThisTab->nPosY[eWhich] = 0;
+    }
 }
 
 void ScViewData::RecalcPixPos()             // after zoom changes

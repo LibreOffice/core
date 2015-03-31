@@ -588,12 +588,37 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
 bool ScGridWindow::UpdateVisibleRange()
 {
-    SCCOL nPosX = pViewData->GetPosX(eHWhich);
-    SCROW nPosY = pViewData->GetPosY(eVWhich);
-    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-    if (nXRight > MAXCOL) nXRight = MAXCOL;
-    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-    if (nYBottom > MAXROW) nYBottom = MAXROW;
+    ScDocument& rDoc = pViewData->GetDocShell()->GetDocument();
+
+    SCCOL nPosX = 0;
+    SCROW nPosY = 0;
+    SCCOL nXRight = MAXCOL;
+    SCROW nYBottom = MAXROW;
+
+    if (rDoc.GetDrawLayer()->isTiledRendering())
+    {
+        // entire table in the tiled rendering case
+        SCTAB nTab = pViewData->GetTabNo();
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = 0;
+
+        if (rDoc.GetPrintArea(nTab, nEndCol, nEndRow, false))
+        {
+            nXRight = nEndCol;
+            nYBottom = nEndRow;
+        }
+    }
+    else
+    {
+        nPosX = pViewData->GetPosX(eHWhich);
+        nPosY = pViewData->GetPosY(eVWhich);
+        nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+        if (nXRight > MAXCOL)
+            nXRight = MAXCOL;
+        nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+        if (nYBottom > MAXROW)
+            nYBottom = MAXROW;
+    }
 
     // Store the current visible range.
     bool bChanged = maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);

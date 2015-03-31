@@ -133,8 +133,8 @@ private:
     SCROW           nCurY;
     SCCOL           nOldCurX;
     SCROW           nOldCurY;
-    SCCOL           nPosX[2];
-    SCROW           nPosY[2];
+    SCCOL           nPosX[2];                   ///< X position of the top left cell of the visible area.
+    SCROW           nPosY[2];                   ///< Y position of the top left cell of the visible area.
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
