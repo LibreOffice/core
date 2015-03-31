@@ -106,41 +106,41 @@ data2string(void *data,
     case typelib_TypeClass_VOID:
         break;
     case typelib_TypeClass_BOOLEAN:
-        result.append((*reinterpret_cast<const sal_Bool*>(data) == sal_False ) ? OUString("false") : OUString("true"));
+        result.append((*static_cast<const sal_Bool*>(data) == sal_False ) ? OUString("false") : OUString("true"));
         break;
     case typelib_TypeClass_BYTE:
-        result.append(OUString::number((*reinterpret_cast<const sal_Int8*>(data))));
+        result.append(OUString::number((*static_cast<const sal_Int8*>(data))));
         break;
     case typelib_TypeClass_SHORT:
-        result.append(OUString::number((*reinterpret_cast<const sal_Int16*>(data))));
+        result.append(OUString::number((*static_cast<const sal_Int16*>(data))));
         break;
     case typelib_TypeClass_LONG:
-        result.append(OUString::number((*reinterpret_cast<const sal_Int32*>(data))));
+        result.append(OUString::number((*static_cast<const sal_Int32*>(data))));
         break;
     case typelib_TypeClass_HYPER:
-        result.append(OUString::number((*reinterpret_cast<const sal_Int64*>(data))));
+        result.append(OUString::number((*static_cast<const sal_Int64*>(data))));
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        result.append(OUString::number((*reinterpret_cast<const sal_uInt16*>(data))));
+        result.append(OUString::number((*static_cast<const sal_uInt16*>(data))));
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
-        result.append(OUString::number((*reinterpret_cast<const sal_uInt32*>(data)), 16));
+        result.append(OUString::number((*static_cast<const sal_uInt32*>(data)), 16));
         break;
     case typelib_TypeClass_UNSIGNED_HYPER:
-        result.append(OUString::number((*reinterpret_cast<const sal_uInt64*>(data)), 16));
+        result.append(OUString::number((*static_cast<const sal_uInt64*>(data)), 16));
         break;
     case typelib_TypeClass_FLOAT:
-        result.append(OUString::number((*reinterpret_cast<const float*>(data))));
+        result.append(OUString::number((*static_cast<const float*>(data))));
         break;
     case typelib_TypeClass_DOUBLE:
-        result.append(OUString::number((*reinterpret_cast<const double*>(data))));
+        result.append(OUString::number((*static_cast<const double*>(data))));
         break;
     case typelib_TypeClass_CHAR:
         result.append("U+");
-        result.append(OUString::number((*reinterpret_cast<const sal_uInt16*>(data))));
+        result.append(OUString::number((*static_cast<const sal_uInt16*>(data))));
         break;
     case typelib_TypeClass_STRING:
-        result.append(*reinterpret_cast<OUString*>(data));
+        result.append(*static_cast<OUString*>(data));
         break;
     case typelib_TypeClass_TYPE:
     case typelib_TypeClass_SEQUENCE:
@@ -152,7 +152,7 @@ data2string(void *data,
         result.append(struct2string(data, type->pType));
         break;
     case typelib_TypeClass_ENUM:
-        result.append(OUString::number((*reinterpret_cast<const sal_Int32*>(data))));
+        result.append(OUString::number((*static_cast<const sal_Int32*>(data))));
         break;
     default:
         assert(false); // this cannot happen I hope

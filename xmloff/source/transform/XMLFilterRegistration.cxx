@@ -95,7 +95,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xof_component_getFactory( const sal_Char * p
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+            uno::Reference< lang::XMultiServiceFactory > xMSF( static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
 
             const sal_Int32 nImplNameLen = strlen( pImplName );
 

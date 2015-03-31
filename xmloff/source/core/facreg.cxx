@@ -53,7 +53,7 @@ XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImpl
     void * pRet = 0;
     if( pServiceManager )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF( static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
 
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
