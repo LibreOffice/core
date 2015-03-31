@@ -56,8 +56,8 @@ namespace /* private */
 
     inline xml_parser* get_parser_instance(void* data)
     {
-        return reinterpret_cast<xml_parser*>(XML_GetUserData(
-            reinterpret_cast<XML_Parser>(data)));
+        return static_cast<xml_parser*>(XML_GetUserData(
+            static_cast<XML_Parser>(data)));
     }
 
     bool has_only_whitespaces(const XML_Char* s, int len)
