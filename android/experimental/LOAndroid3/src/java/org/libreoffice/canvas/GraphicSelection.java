@@ -23,7 +23,7 @@ import static org.libreoffice.canvas.GraphicSelectionHandle.HandlePosition;
  * This class is responsible to draw and reposition the selection
  * rectangle.
  */
-public class GraphicSelection implements CanvasElement {
+public class GraphicSelection extends CommonCanvasElement {
     private final Paint mPaintStroke;
     private final Paint mPaintFill;
     public RectF mRectangle = new RectF();

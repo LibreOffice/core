@@ -28,5 +28,16 @@ public interface CanvasElement {
      * @param y - y coordinate of the
      */
     boolean contains(float x, float y);
+
+    /**
+     * Return if element is visible.
+     */
+    boolean isVisible();
+
+    /**
+     * Set element visibility.
+     * @param visible - is element visible
+     */
+    void setVisible(boolean visible);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

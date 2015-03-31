@@ -19,7 +19,7 @@ import android.graphics.RectF;
  * position and perform a hit test to determine if the selection handle was
  * touched.
  */
-public class GraphicSelectionHandle implements CanvasElement {
+public class GraphicSelectionHandle extends CommonCanvasElement {
     /**
      * The factor used to inflate the hit area.
      */
