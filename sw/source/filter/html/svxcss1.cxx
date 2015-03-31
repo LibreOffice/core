@@ -3137,23 +3137,23 @@ extern "C"
 static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
 {
     int nRet;
-    if( reinterpret_cast<const CSS1PropEntry*>(pFirst)->pFunc )
+    if( static_cast<const CSS1PropEntry*>(pFirst)->pFunc )
     {
-        if( reinterpret_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = strcmp( reinterpret_cast<const CSS1PropEntry*>(pFirst)->sName ,
-                    reinterpret_cast<const CSS1PropEntry*>(pSecond)->sName );
+        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
+            nRet = strcmp( static_cast<const CSS1PropEntry*>(pFirst)->sName ,
+                    static_cast<const CSS1PropEntry*>(pSecond)->sName );
         else
-            nRet = -1 * reinterpret_cast<const CSS1PropEntry*>(pSecond)->pName->compareToAscii(
-                            reinterpret_cast<const CSS1PropEntry*>(pFirst)->sName );
+            nRet = -1 * static_cast<const CSS1PropEntry*>(pSecond)->pName->compareToAscii(
+                            static_cast<const CSS1PropEntry*>(pFirst)->sName );
     }
     else
     {
-        if( reinterpret_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = reinterpret_cast<const CSS1PropEntry*>(pFirst)->pName->compareToAscii(
-                        reinterpret_cast<const CSS1PropEntry*>(pSecond)->sName );
+        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
+            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareToAscii(
+                        static_cast<const CSS1PropEntry*>(pSecond)->sName );
         else
-            nRet = reinterpret_cast<const CSS1PropEntry*>(pFirst)->pName->compareTo(
-                        *reinterpret_cast<const CSS1PropEntry*>(pSecond)->pName );
+            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareTo(
+                        *static_cast<const CSS1PropEntry*>(pSecond)->pName );
     }
 
     return nRet;

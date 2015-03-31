@@ -150,23 +150,23 @@ extern "C" {
 static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
-    if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pFirst)->eOp )
+    if( CALC_NAME == static_cast<const _CalcOp*>(pFirst)->eOp )
     {
-        if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pSecond)->eOp )
-            nRet = reinterpret_cast<const _CalcOp*>(pFirst)->pUName->compareTo(
-                   *reinterpret_cast<const _CalcOp*>(pSecond)->pUName );
+        if( CALC_NAME == static_cast<const _CalcOp*>(pSecond)->eOp )
+            nRet = static_cast<const _CalcOp*>(pFirst)->pUName->compareTo(
+                   *static_cast<const _CalcOp*>(pSecond)->pUName );
         else
-            nRet = reinterpret_cast<const _CalcOp*>(pFirst)->pUName->compareToAscii(
-                   reinterpret_cast<const _CalcOp*>(pSecond)->pName );
+            nRet = static_cast<const _CalcOp*>(pFirst)->pUName->compareToAscii(
+                   static_cast<const _CalcOp*>(pSecond)->pName );
     }
     else
     {
-        if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pSecond)->eOp )
-            nRet = -1 * reinterpret_cast<const _CalcOp*>(pSecond)->pUName->compareToAscii(
-                        reinterpret_cast<const _CalcOp*>(pFirst)->pName );
+        if( CALC_NAME == static_cast<const _CalcOp*>(pSecond)->eOp )
+            nRet = -1 * static_cast<const _CalcOp*>(pSecond)->pUName->compareToAscii(
+                        static_cast<const _CalcOp*>(pFirst)->pName );
         else
-            nRet = strcmp( reinterpret_cast<const _CalcOp*>(pFirst)->pName,
-                           reinterpret_cast<const _CalcOp*>(pSecond)->pName );
+            nRet = strcmp( static_cast<const _CalcOp*>(pFirst)->pName,
+                           static_cast<const _CalcOp*>(pSecond)->pName );
     }
     return nRet;
 }

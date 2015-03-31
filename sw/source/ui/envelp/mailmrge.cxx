@@ -397,7 +397,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
 
     for( sal_Int32 nFilter = 0; nFilter < m_pFilterLB->GetEntryCount(); ++nFilter )
     {
-        OUString* pData = reinterpret_cast< OUString* >( m_pFilterLB->GetEntryData(nFilter) );
+        OUString* pData = static_cast< OUString* >( m_pFilterLB->GetEntryData(nFilter) );
         delete pData;
     }
     delete pImpl;

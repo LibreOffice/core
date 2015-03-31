@@ -50,7 +50,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
     if( pServiceManager )
     {
         uno::Reference< XMultiServiceFactory > xMSF(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+            static_cast< XMultiServiceFactory * >( pServiceManager ) );
 
         uno::Reference< XSingleServiceFactory > xFactory;
 

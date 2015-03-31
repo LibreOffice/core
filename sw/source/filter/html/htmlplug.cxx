@@ -1290,7 +1290,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
             aMediaDescriptor["OutputStream"] <<= xOutputStream;
             xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-            OString aData(reinterpret_cast<const char*>(aStream.GetData()), aStream.GetSize());
+            OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
             // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
             rWrt.Strm().WriteCharPtr(aData.getStr());

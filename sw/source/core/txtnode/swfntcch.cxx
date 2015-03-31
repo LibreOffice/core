@@ -45,7 +45,7 @@ SwFontObj::~SwFontObj()
 
 SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
     SwCacheAccess( *pSwFontCache, pOwn,
-            reinterpret_cast<const SwTxtFmtColl*>(pOwn)->IsInSwFntCache() ),
+            static_cast<const SwTxtFmtColl*>(pOwn)->IsInSwFntCache() ),
     pShell( pSh )
 {
 }
@@ -57,7 +57,7 @@ SwFontObj *SwFontAccess::Get( )
 
 SwCacheObj *SwFontAccess::NewObj( )
 {
-    const_cast<SwTxtFmtColl*>(reinterpret_cast<const SwTxtFmtColl*>(pOwner))->SetInSwFntCache( true );
+    const_cast<SwTxtFmtColl*>(static_cast<const SwTxtFmtColl*>(pOwner))->SetInSwFntCache( true );
     return new SwFontObj( pOwner, pShell );
 }
 

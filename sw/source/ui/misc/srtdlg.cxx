@@ -73,7 +73,7 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
     const sal_Int32 nEnd = rLstBox.GetEntryCount();
     for( sal_Int32 n = 0; n < nEnd; ++n )
     {
-        delete reinterpret_cast<OUString *>(rLstBox.GetEntryData( n ));
+        delete static_cast<OUString *>(rLstBox.GetEntryData( n ));
     }
     rLstBox.Clear();
 }

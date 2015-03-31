@@ -1003,7 +1003,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     if( pCNd == NULL)
         return true;
 
-    sw::DocumentContentOperationsManager::ParaRstFmt* pPara = reinterpret_cast<sw::DocumentContentOperationsManager::ParaRstFmt*>(pArgs);
+    sw::DocumentContentOperationsManager::ParaRstFmt* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFmt*>(pArgs);
 
     SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
     if ( pPara->bReset )

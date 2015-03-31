@@ -257,7 +257,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     {
         OUString aName(pBox->GetEntryText(pEntry));
         m_pNameED->SetText(aName);
-        m_pShortNameEdit->SetText(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
+        m_pShortNameEdit->SetText(*static_cast<OUString*>(pEntry->GetUserData()));
         m_pInsertBtn->Enable( !bIsDocReadOnly);
         ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
@@ -325,7 +325,7 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
             SvTreeListEntry* pChild = m_pCategoryBox->GetEntry( pEntry, i );
             if (rBlock == m_pCategoryBox->GetEntryText(pChild) &&
                 (rShort.isEmpty() ||
-                 rShort==*reinterpret_cast<OUString*>(pChild->GetUserData()))
+                 rShort==*static_cast<OUString*>(pChild->GetUserData()))
                )
             {
                 return pChild;
@@ -479,7 +479,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             SvTreeListEntry* pNewEntry = m_pCategoryBox->InsertEntry(
                     pNewNameDlg->GetNewName(), m_pCategoryBox->GetParent(pEntry));
             pNewEntry->SetUserData(new OUString(pNewNameDlg->GetNewShort()));
-            delete reinterpret_cast<OUString*>(pEntry->GetUserData());
+            delete static_cast<OUString*>(pEntry->GetUserData());
             m_pCategoryBox->GetModel()->Remove(pEntry);
             m_pCategoryBox->Select(pNewEntry);
             m_pCategoryBox->MakeVisible(pNewEntry);
@@ -830,7 +830,7 @@ void SwGlTreeListBox::Clear()
     while(pEntry)
     {
         if(GetParent(pEntry))
-            delete reinterpret_cast<OUString*>(pEntry->GetUserData());
+            delete static_cast<OUString*>(pEntry->GetUserData());
         else
             delete static_cast<GroupUserData*>(pEntry->GetUserData());
         pEntry = Next(pEntry);
@@ -877,7 +877,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 }
             }
             else
-                sMsg = *reinterpret_cast<OUString*>(pEntry->GetUserData());
+                sMsg = *static_cast<OUString*>(pEntry->GetUserData());
             Help::ShowQuickHelp( this, aItemRect, sMsg,
                         QUICKHELP_LEFT|QUICKHELP_VCENTER );
         }
@@ -968,7 +968,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
 
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
         OUString sTitle(GetEntryText(pEntry));
-        OUString sShortName(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
+        OUString sShortName(*static_cast<OUString*>(pEntry->GetUserData()));
 
         GroupUserData* pDestData = static_cast<GroupUserData*>(pDestParent->GetUserData());
         OUString sDestName = pDestData->sGroupName
