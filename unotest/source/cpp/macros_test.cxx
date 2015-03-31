@@ -9,11 +9,14 @@
 
 #include "unotest/macros_test.hxx"
 
+#include <vector>
+
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 #include "cppunit/TestAssert.h"
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace css;
 
@@ -24,35 +27,31 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
-    uno::Sequence<beans::PropertyValue> args(1);
-    args[0].Name = "MacroExecutionMode";
-    args[0].Handle = -1;
-    args[0].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-    args[0].State = beans::PropertyState_DIRECT_VALUE;
+    std::vector<beans::PropertyValue> args;
+    beans::PropertyValue aMacroValue;
+    aMacroValue.Name = "MacroExecutionMode";
+    aMacroValue.Handle = -1;
+    aMacroValue.Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
+    args.push_back(aMacroValue);
 
     if (!rDocService.isEmpty())
     {
-        args.realloc(2);
-        args[1].Name = "DocumentService";
-        args[1].Handle = -1;
-        args[1].Value <<= rDocService;
-        args[1].State = beans::PropertyState_DIRECT_VALUE;
+        beans::PropertyValue aValue;
+        aValue.Name = "DocumentService";
+        aValue.Handle = -1;
+        aValue.Value <<= rDocService;
+        aValue.State = beans::PropertyState_DIRECT_VALUE;
+        args.push_back(aValue);
     }
 
     if (rExtraArgs.getLength() > 0)
     {
-        sal_Int32 aSize = args.getLength();
-        args.realloc(aSize + rExtraArgs.getLength());
         for (int i = 0; i < rExtraArgs.getLength(); i++)
-        {
-            args[aSize + i].Name = rExtraArgs[i].Name;
-            args[aSize + i].Handle = rExtraArgs[i].Handle;
-            args[aSize + i].Value = rExtraArgs[i].Value;
-            args[aSize + i].State = rExtraArgs[i].State;
-        }
+            args.push_back(rExtraArgs[i]);
     }
 
-    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);
+    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, comphelper::containerToSequence(args));
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
