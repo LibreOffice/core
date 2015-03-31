@@ -57,7 +57,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( 
     {
         const OUString aServiceName( SERVICE_NAME );
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                        reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                        static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         IMPL_NAME, create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
