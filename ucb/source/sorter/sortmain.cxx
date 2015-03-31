@@ -32,7 +32,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL srtrs1_component_getFactory(
     void * pRet = 0;
 
     Reference< XMultiServiceFactory > xSMgr(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+            static_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
 

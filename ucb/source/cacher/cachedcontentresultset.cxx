@@ -290,7 +290,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
             m_xContentIdentifierMapping.clear();
     }
     const Sequence< Any >& rRow =
-        (* reinterpret_cast< const Sequence< Any > * >
+        (* static_cast< const Sequence< Any > * >
         (getRowAny( nRow ).getValue() ));
 
     if( nColumnIndex > rRow.getLength() )
@@ -312,7 +312,7 @@ const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifierString( aValue );
             remindMapped( nRow );
         }
-        return (* reinterpret_cast< const OUString * >
+        return (* static_cast< const OUString * >
                 (getRowAny( nRow ).getValue() ));
     }
     catch(const SQLException&)
@@ -335,7 +335,7 @@ const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cac
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifier( aValue );
             remindMapped( nRow );
         }
-        return (* reinterpret_cast< const Reference< XContentIdentifier > * >
+        return (* static_cast< const Reference< XContentIdentifier > * >
                 (getRowAny( nRow ).getValue() ));
     }
     catch(const SQLException&)
@@ -358,7 +358,7 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
             rRow <<= m_xContentIdentifierMapping->mapContent( aValue );
             remindMapped( nRow );
         }
-        return (* reinterpret_cast< const Reference< XContent > * >
+        return (* static_cast< const Reference< XContent > * >
                 (getRowAny( nRow ).getValue() ));
     }
     catch (const SQLException&)

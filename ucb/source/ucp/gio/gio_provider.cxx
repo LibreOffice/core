@@ -117,7 +117,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgio1_component_getFactory( co
     void * pRet = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr
-        (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+        (static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 #if !GLIB_CHECK_VERSION(2,36,0)
     g_type_init();

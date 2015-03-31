@@ -130,7 +130,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpcmis1_component_getFactory( c
     void * pRet = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr
-        (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+        (static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     if ( ::cmis::ContentProvider::getImplementationName_Static().equalsAscii( pImplName ) )

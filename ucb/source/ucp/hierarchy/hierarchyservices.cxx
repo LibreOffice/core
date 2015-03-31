@@ -32,7 +32,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
     void * pRet = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr(
-            reinterpret_cast< lang::XMultiServiceFactory * >(
+            static_cast< lang::XMultiServiceFactory * >(
                 pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
