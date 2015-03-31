@@ -139,25 +139,29 @@ public class TextCursorView extends View implements View.OnTouchListener {
     }
 
     public void repositionWithViewport(float x, float y, float zoom) {
-        mCursorScaledPosition = convertPosition(mCursorPosition, x, y, zoom);
+        mCursorScaledPosition = convertToScreen(mCursorPosition, x, y, zoom);
         mCursorScaledPosition.right = mCursorScaledPosition.left + CURSOR_WIDTH;
 
         mScaledSelections.clear();
         for (RectF selection : mSelections) {
-            RectF scaledSelection = convertPosition(selection, x, y, zoom);
+            RectF scaledSelection = convertToScreen(selection, x, y, zoom);
             mScaledSelections.add(scaledSelection);
         }
 
-        RectF scaledGraphicSelection = convertPosition(mGraphicSelection.mRectangle, x, y, zoom);
+        RectF scaledGraphicSelection = convertToScreen(mGraphicSelection.mRectangle, x, y, zoom);
         mGraphicSelection.reposition(scaledGraphicSelection);
 
         invalidate();
     }
 
-    private RectF convertPosition(RectF cursorPosition, float x, float y, float zoom) {
-        RectF cursor = RectUtils.scale(cursorPosition, zoom);
-        cursor.offset(-x, -y);
-        return cursor;
+    /**
+     * Convert the input rectangle from document to screen coordinates
+     * according to current viewport data (x, y, zoom).
+     */
+    private static RectF convertToScreen(RectF inputRect, float x, float y, float zoom) {
+        RectF rect = RectUtils.scale(inputRect, zoom);
+        rect.offset(-x, -y);
+        return rect;
     }
 
     /**
