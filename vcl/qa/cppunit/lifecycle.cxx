@@ -46,12 +46,12 @@ public:
 // A compile time sanity check
 void LifecycleTest::testCast()
 {
-    VclPtr<PushButton> xButton(new PushButton(NULL, 0));
-    VclPtr<vcl::Window> xWindow(xButton);
+    ScopedVclPtrInstance< PushButton > xButton( nullptr, 0 );
+    ScopedVclPtr<vcl::Window> xWindow(xButton);
 
-    VclPtr<MetricField> xField(new MetricField(NULL, 0));
-    VclPtr<SpinField> xSpin(xField);
-    VclPtr<Edit> xEdit(xField);
+    ScopedVclPtrInstance< MetricField > xField( nullptr, 0 );
+    ScopedVclPtr<SpinField> xSpin(xField);
+    ScopedVclPtr<Edit> xEdit(xField);
 
 // the following line should NOT compile
 //    VclPtr<PushButton> xButton2(xWindow);
@@ -59,8 +59,8 @@ void LifecycleTest::testCast()
 
 void LifecycleTest::testVirtualDevice()
 {
-    VclPtr<VirtualDevice> pVDev( new VirtualDevice() );
-    ScopedVclPtr<VirtualDevice> pVDev2( new VirtualDevice() );
+    VclPtrInstance< VirtualDevice > pVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev2;
     VclPtrInstance<VirtualDevice> pVDev3;
     VclPtrInstance<VirtualDevice> pVDev4( 1 );
     CPPUNIT_ASSERT(!!pVDev && !!pVDev2 && !!pVDev3 && !!pVDev4);
@@ -80,18 +80,18 @@ void LifecycleTest::testMultiDispose()
 
 void LifecycleTest::testWidgets(vcl::Window *pParent)
 {
-    { VclPtr<PushButton>   aPtr(new PushButton(pParent));   }
-    { VclPtr<OKButton>     aPtr(new OKButton(pParent));     }
-    { VclPtr<CancelButton> aPtr(new CancelButton(pParent)); }
-    { VclPtr<HelpButton>   aPtr(new HelpButton(pParent));   }
+    { ScopedVclPtrInstance< PushButton > aPtr( pParent );   }
+    { ScopedVclPtrInstance< OKButton > aPtr( pParent );     }
+    { ScopedVclPtrInstance< CancelButton > aPtr( pParent ); }
+    { ScopedVclPtrInstance< HelpButton > aPtr( pParent );   }
 
     // Some widgets really insist on adoption.
     if (pParent)
     {
-        { VclPtr<CheckBox>     aPtr(new CheckBox(pParent));     }
-        { VclPtr<Edit>         aPtr(new Edit(pParent));         }
-        { VclPtr<ComboBox>     aPtr(new ComboBox(pParent));     }
-        { VclPtr<RadioButton>  aPtr(new RadioButton(pParent));  }
+        { ScopedVclPtrInstance< CheckBox > aPtr( pParent );     }
+        { ScopedVclPtrInstance< Edit > aPtr( pParent );         }
+        { ScopedVclPtrInstance< ComboBox > aPtr( pParent );     }
+        { ScopedVclPtrInstance< RadioButton > aPtr( pParent );  }
     }
 }
 
@@ -102,8 +102,7 @@ void LifecycleTest::testIsolatedWidgets()
 
 void LifecycleTest::testParentedWidgets()
 {
-    ScopedVclPtrInstance<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
-                                                         WB_APP|WB_STDWORK));
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
     CPPUNIT_ASSERT(xWin.get() != NULL);
     xWin->Show();
     testWidgets(xWin);
@@ -121,10 +120,9 @@ public:
 
 void LifecycleTest::testChildDispose()
 {
-    VclPtrInstance<WorkWindow> xWin((vcl::Window *)NULL,
-                                    WB_APP|WB_STDWORK);
+    VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
     CPPUNIT_ASSERT(xWin.get() != NULL);
-    VclPtr<DisposableChild> xChild(new DisposableChild(xWin.get()));
+    VclPtrInstance< DisposableChild > xChild( xWin.get() );
     xWin->Show();
     xChild->disposeOnce();
     xWin->disposeOnce();
@@ -132,7 +130,7 @@ void LifecycleTest::testChildDispose()
 
 void LifecycleTest::testPostDispose()
 {
-    VclPtrInstance<WorkWindow> xWin((vcl::Window *)NULL, WB_STDWORK);
+    VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
     xWin->disposeOnce();
 
     // check selected methods continue to work post-dispose

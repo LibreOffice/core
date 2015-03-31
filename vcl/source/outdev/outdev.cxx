@@ -88,7 +88,6 @@ OutputDevice::OutputDevice() :
     maTextLineColor( COL_TRANSPARENT ),
     mxSettings( new AllSettings(Application::GetSettings()) )
 {
-
     mpGraphics                      = NULL;
     mpUnoGraphicsList               = NULL;
     mpPrevGraphics                  = NULL;
