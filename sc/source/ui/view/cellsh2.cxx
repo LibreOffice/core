@@ -189,7 +189,7 @@ namespace
 {
     sal_IntPtr DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
     {
-        delete reinterpret_cast<SfxAbstractTabDialog*>( pAbstractDialog );
+        delete static_cast<SfxAbstractTabDialog*>( pAbstractDialog );
         return 0;
     }
 }

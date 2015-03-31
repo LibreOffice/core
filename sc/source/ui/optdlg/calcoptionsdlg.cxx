@@ -129,7 +129,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     if(!pEntry)
         return;
 
-    OpenCLDeviceInfo* pInfo = reinterpret_cast<OpenCLDeviceInfo*>(pEntry->GetUserData());
+    OpenCLDeviceInfo* pInfo = static_cast<OpenCLDeviceInfo*>(pEntry->GetUserData());
     if(pInfo)
     {
         mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));

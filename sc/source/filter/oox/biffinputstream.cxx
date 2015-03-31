@@ -276,7 +276,7 @@ sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t nAt
     sal_Int32 nRet = 0;
     if( !mbEof && opMem && (nBytes > 0) )
     {
-        sal_uInt8* pnBuffer = reinterpret_cast< sal_uInt8* >( opMem );
+        sal_uInt8* pnBuffer = static_cast< sal_uInt8* >( opMem );
         sal_Int32 nBytesLeft = nBytes;
 
         while( !mbEof && (nBytesLeft > 0) )

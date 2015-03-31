@@ -3526,7 +3526,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     /*  Pass pointer to top-level object back to caller. If the processed
         object is embedded in a group, the pointer is already set to the
         top-level parent object. */
-    XclImpDrawObjBase** ppTopLevelObj = reinterpret_cast< XclImpDrawObjBase** >( pClientData );
+    XclImpDrawObjBase** ppTopLevelObj = static_cast< XclImpDrawObjBase** >( pClientData );
     bool bIsTopLevel = !ppTopLevelObj || !*ppTopLevelObj;
     if( ppTopLevelObj && bIsTopLevel )
         *ppTopLevelObj = xDrawObj.get();

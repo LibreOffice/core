@@ -94,7 +94,7 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
         if( IsValid() )
         {
             Update( rStrm, mnRecSize );
-            nRet = OnRead( rStrm, reinterpret_cast< sal_uInt8* >( pData ), nBytes );
+            nRet = OnRead( rStrm, static_cast< sal_uInt8* >( pData ), nBytes );
             mnOldPos = rStrm.Tell();
         }
         else
@@ -699,7 +699,7 @@ sal_Size XclImpStream::Read( void* pData, sal_Size nBytes )
     sal_Size nRet = 0;
     if( mbValid && pData && (nBytes > 0) )
     {
-        sal_uInt8* pnBuffer = reinterpret_cast< sal_uInt8* >( pData );
+        sal_uInt8* pnBuffer = static_cast< sal_uInt8* >( pData );
         sal_Size nBytesLeft = nBytes;
 
         while( mbValid && (nBytesLeft > 0) )

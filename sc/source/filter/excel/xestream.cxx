@@ -217,7 +217,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
     {
         if( mbInRec )
         {
-            const sal_uInt8* pBuffer = reinterpret_cast< const sal_uInt8* >( pData );
+            const sal_uInt8* pBuffer = static_cast< const sal_uInt8* >( pData );
             sal_Size nBytesLeft = nBytes;
             bool bValid = true;
 
