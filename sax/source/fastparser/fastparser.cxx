@@ -292,19 +292,19 @@ extern "C" {
 static void call_callbackStartElement(void *userData, const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
     int numNamespaces, const xmlChar** namespaces, int numAttributes, int defaultedAttributes, const xmlChar **attributes)
 {
-    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackStartElement( localName, prefix, URI, numNamespaces, namespaces, numAttributes, defaultedAttributes, attributes );
 }
 
 static void call_callbackEndElement(void *userData, const xmlChar* localName, const xmlChar* prefix, const xmlChar* URI)
 {
-    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackEndElement( localName, prefix, URI );
 }
 
 static void call_callbackCharacters( void *userData , const xmlChar *s , int nLen )
 {
-    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackCharacters( s, nLen );
 }
 
