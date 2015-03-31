@@ -1112,6 +1112,11 @@ void SwDocShell::CancelTransfers()
     SfxObjectShell::CancelTransfers();
 }
 
+SwEditShell * SwDocShell::GetEditShell()
+{
+    return m_pWrtShell;
+}
+
 SwFEShell* SwDocShell::GetFEShell()
 {
     return m_pWrtShell;
