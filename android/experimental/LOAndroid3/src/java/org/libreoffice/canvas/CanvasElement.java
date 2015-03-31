@@ -17,10 +17,20 @@ import android.graphics.Canvas;
  */
 public interface CanvasElement {
     /**
-     * Called when the element needs to be draw no the canvas.
+     * Called when the element needs to be draw no the canvas. This method
+     * should call onDraw when conditions to draw are satisfied.
+     *
      * @param canvas - the canvas
      */
     void draw(Canvas canvas);
+
+    /**
+     * Called inside draw if the element is visible. Override this method to
+     * draw the element on the canvas.
+     *
+     * @param canvas - the canvas
+     */
+    void onDraw(Canvas canvas);
 
     /**
      * Hit test - returns true if the object has been hit

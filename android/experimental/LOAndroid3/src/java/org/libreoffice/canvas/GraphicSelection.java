@@ -103,7 +103,7 @@ public class GraphicSelection extends CommonCanvasElement {
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         canvas.drawRect(mDrawRectangle, mPaintStroke);
         if (mType != DragType.NONE) {
             canvas.drawRect(mDrawRectangle, mPaintFill);

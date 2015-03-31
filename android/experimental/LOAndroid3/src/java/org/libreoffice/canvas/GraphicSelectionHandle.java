@@ -71,7 +71,7 @@ public class GraphicSelectionHandle extends CommonCanvasElement {
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         if (mSelected) {
             drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mStrokePaint, mSelectedFillPaint);
         } else {
