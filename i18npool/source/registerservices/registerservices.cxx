@@ -567,7 +567,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Cha
     void* pRet = NULL;
 
     lang::XMultiServiceFactory* pServiceManager =
-        reinterpret_cast< lang::XMultiServiceFactory* >( _pServiceManager );
+        static_cast< lang::XMultiServiceFactory* >( _pServiceManager );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     for( const InstancesArray* pArr = aInstances; pArr->pServiceNm; ++pArr )

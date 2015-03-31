@@ -1117,7 +1117,7 @@ i18nsearch_component_getFactory( const sal_Char* sImplementationName,
     void* pRet = NULL;
 
     ::com::sun::star::lang::XMultiServiceFactory* pServiceManager =
-        reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >
+        static_cast< ::com::sun::star::lang::XMultiServiceFactory* >
             ( _pServiceManager );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XSingleServiceFactory > xFactory;
