@@ -118,7 +118,7 @@ bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
     {
         // Suche nach dem Schluesselwort
         aSearchName.nName = nName;
-        pKey = reinterpret_cast<KEY_STRUCT *>(bsearch(
+        pKey = static_cast<KEY_STRUCT *>(bsearch(
                 &aSearchName, pTable,
                 nEntries, sizeof( KEY_STRUCT ), KeyCompare ));
     }
