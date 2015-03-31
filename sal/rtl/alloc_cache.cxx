@@ -1318,7 +1318,7 @@ void SAL_CALL
 rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     //currently glibc doesn't implement memset_s
-    volatile char *p = reinterpret_cast<volatile char*>(Ptr);
+    volatile char *p = static_cast<volatile char*>(Ptr);
     while (Bytes--)
         *p++ = 0;
 }
