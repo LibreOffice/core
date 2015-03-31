@@ -134,7 +134,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
         UnoInterfaceReference ret;
         if (ret_val.pType->eTypeClass == typelib_TypeClass_INTERFACE)
         {
-            ret.set( *reinterpret_cast< uno_Interface ** >(ret_val.pData),
+            ret.set( *static_cast< uno_Interface ** >(ret_val.pData),
                      SAL_NO_ACQUIRE );
             typelib_typedescriptionreference_release( ret_val.pType );
         }
@@ -203,7 +203,7 @@ static void SAL_CALL binuno_proxy_free(
 {
     (void) pEnv; // avoid warning about unused parameter
     binuno_Proxy * proxy = static_cast< binuno_Proxy * >(
-        reinterpret_cast< uno_Interface * >( pProxy ) );
+        static_cast< uno_Interface * >( pProxy ) );
     OSL_ASSERT( proxy->m_root->m_factory->m_uno_env.get()->pExtEnv == pEnv );
     delete proxy;
 }
@@ -254,7 +254,7 @@ static void SAL_CALL binuno_proxy_dispatch(
         try
         {
             Type const & rType =
-                *reinterpret_cast< Type const * >( pArgs[ 0 ] );
+                *static_cast< Type const * >( pArgs[ 0 ] );
             Any ret( that->m_root->queryInterface( rType ) );
             uno_type_copyAndConvertData(
                 pReturn, &ret, ::getCppuType( &ret ).getTypeLibType(),

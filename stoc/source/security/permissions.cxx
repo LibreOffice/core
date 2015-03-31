@@ -493,17 +493,17 @@ PermissionCollection::PermissionCollection(
         if (perm_type.equals( cppu::UnoType<io::FilePermission>::get()))
         {
             m_head = new FilePermission(
-                *reinterpret_cast< io::FilePermission const * >( perm.pData ), m_head );
+                *static_cast< io::FilePermission const * >( perm.pData ), m_head );
         }
         else if (perm_type.equals( cppu::UnoType<connection::SocketPermission>::get()))
         {
             m_head = new SocketPermission(
-                *reinterpret_cast< connection::SocketPermission const * >( perm.pData ), m_head );
+                *static_cast< connection::SocketPermission const * >( perm.pData ), m_head );
         }
         else if (perm_type.equals( cppu::UnoType<security::RuntimePermission>::get()))
         {
             m_head = new RuntimePermission(
-                *reinterpret_cast< security::RuntimePermission const * >( perm.pData ), m_head );
+                *static_cast< security::RuntimePermission const * >( perm.pData ), m_head );
         }
         else if (perm_type.equals( cppu::UnoType<security::AllPermission>::get()))
         {
@@ -578,7 +578,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     if (demanded_type.equals( cppu::UnoType<io::FilePermission>::get()))
     {
         FilePermission demanded(
-            *reinterpret_cast< io::FilePermission const * >( perm.pData ) );
+            *static_cast< io::FilePermission const * >( perm.pData ) );
         if (__implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
@@ -591,7 +591,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     else if (demanded_type.equals( cppu::UnoType<connection::SocketPermission>::get()))
     {
         SocketPermission demanded(
-            *reinterpret_cast< connection::SocketPermission const * >( perm.pData ) );
+            *static_cast< connection::SocketPermission const * >( perm.pData ) );
         if (__implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE
@@ -604,7 +604,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     else if (demanded_type.equals( cppu::UnoType<security::RuntimePermission>::get()))
     {
         RuntimePermission demanded(
-            *reinterpret_cast< security::RuntimePermission const * >( perm.pData ) );
+            *static_cast< security::RuntimePermission const * >( perm.pData ) );
         if (__implies( m_head, demanded ))
         {
 #ifdef __DIAGNOSE

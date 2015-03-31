@@ -1152,7 +1152,7 @@ sal_Bool OServiceManager::has( const Any & Element )
     else if (Element.getValueTypeClass() == TypeClass_STRING)
     {
         OUString const & implName =
-            *reinterpret_cast< OUString const * >(Element.getValue());
+            *static_cast< OUString const * >(Element.getValue());
         MutexGuard aGuard( m_mutex );
         return m_ImplementationNameMap.find( implName ) !=
             m_ImplementationNameMap.end();
@@ -1231,7 +1231,7 @@ void OServiceManager::remove( const Any & Element )
     else if (Element.getValueTypeClass() == TypeClass_STRING)
     {
         OUString const & implName =
-            *reinterpret_cast< OUString const * >(Element.getValue());
+            *static_cast< OUString const * >(Element.getValue());
         MutexGuard aGuard( m_mutex );
         HashMap_OWString_Interface::const_iterator const iFind(
             m_ImplementationNameMap.find( implName ) );

@@ -387,7 +387,7 @@ inline bool extract(
         }
         else if (rObj.getValueTypeClass() == css::uno::TypeClass_TYPE)
         {
-            rDest = pRefl->forType( reinterpret_cast< const css::uno::Type * >( rObj.getValue() )->getTypeLibType() );
+            rDest = pRefl->forType( static_cast< const css::uno::Type * >( rObj.getValue() )->getTypeLibType() );
             return rDest.is();
         }
     }

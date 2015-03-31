@@ -275,7 +275,7 @@ bool AdapterImpl::coerce_assign(
                 // set runtime exception
                 constructRuntimeException(
                     pOutExc, "type coercion failed: " +
-                    reinterpret_cast< Exception const * >(
+                    static_cast< Exception const * >(
                         p_exc->pData )->Message );
             }
             ::uno_any_destruct( p_exc, 0 );
@@ -330,7 +330,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
     {
         // unwrap invocation target exception
         uno_Any * target_exc =
-            &reinterpret_cast< reflection::InvocationTargetException * >(
+            &static_cast< reflection::InvocationTargetException * >(
                 pSource->pData )->TargetException;
         ::uno_type_any_construct(
             pDest, target_exc->pData, target_exc->pType, 0 );
@@ -773,7 +773,7 @@ static inline AdapterImpl * lookup_adapter(
     t_ptr_set::const_iterator const iEnd( adapters_set.end() );
     while (iEnd != iPos)
     {
-        AdapterImpl * that = reinterpret_cast< AdapterImpl * >( *iPos );
+        AdapterImpl * that = static_cast< AdapterImpl * >( *iPos );
         // iterate through all types if that is a matching adapter
         sal_Int32 nPosTypes;
         for ( nPosTypes = nTypes; nPosTypes--; )

@@ -276,12 +276,12 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
             if ( typeName == "com.sun.star.security.XAccessControlContext" )
             {
                 return Reference< security::XAccessControlContext >(
-                    *reinterpret_cast< security::XAccessControlContext ** const >( acc.pData ) );
+                    *static_cast< security::XAccessControlContext ** const >( acc.pData ) );
             }
             else // try to query
             {
                 return Reference< security::XAccessControlContext >::query(
-                    *reinterpret_cast< XInterface ** const >( acc.pData ) );
+                    *static_cast< XInterface ** const >( acc.pData ) );
             }
         }
     }
@@ -530,14 +530,14 @@ static void dumpPermissions(
 
 inline void AccessController::clearPostPoned()
 {
-    delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+    delete static_cast< t_rec_vec * >( m_rec.getData() );
     m_rec.setData( 0 );
 }
 
 void AccessController::checkAndClearPostPoned()
 {
     // check postponed permissions
-    boost::scoped_ptr< t_rec_vec > rec( reinterpret_cast< t_rec_vec * >( m_rec.getData() ) );
+    boost::scoped_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( 0 ); // takeover ownership
     OSL_ASSERT( rec.get() );
     if (rec.get())
@@ -646,7 +646,7 @@ PermissionCollection AccessController::getEffectivePermissions(
 
     // call on policy
     // iff this is a recurring call for the default user, then grant all permissions
-    t_rec_vec * rec = reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+    t_rec_vec * rec = static_cast< t_rec_vec * >( m_rec.getData() );
     if (rec) // tls entry exists => this is recursive call
     {
         if (demanded_perm.hasValue())
@@ -756,7 +756,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     {
         // dont check postponed, just cleanup
         clearPostPoned();
-        delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+        delete static_cast< t_rec_vec * >( m_rec.getData() );
         m_rec.setData( 0 );
         throw;
     }
