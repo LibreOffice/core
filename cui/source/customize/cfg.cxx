@@ -4933,7 +4933,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
         if ( pTbSymbol->IsItemChecked( nId ) )
         {
             result = uno::Reference< graphic::XGraphic >(
-                reinterpret_cast< graphic::XGraphic* >(
+                static_cast< graphic::XGraphic* >(
                     pTbSymbol->GetItemData( nId ) ) );
         }
     }

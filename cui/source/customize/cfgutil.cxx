@@ -878,7 +878,7 @@ void SfxConfigGroupListBox::GroupSelected()
             if ( !GetChildCount( pEntry ) )
             {
                 Reference< browse::XBrowseNode > rootNode(
-                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+                    static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
 
                 try {
                     if ( rootNode->hasChildNodes() )
@@ -1006,7 +1006,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
             if ( !GetChildCount( pEntry ) )
             {
                 Reference< browse::XBrowseNode > rootNode(
-                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+                    static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
 
                 try {
                     if ( rootNode->hasChildNodes() )

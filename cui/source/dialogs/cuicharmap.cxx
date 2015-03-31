@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 {
     sal_uInt16 nPos = m_pSubsetLB->GetSelectEntryPos();
-    const Subset* pSubset = reinterpret_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
+    const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
     if( pSubset )
     {
         sal_UCS4 cFirst = pSubset->GetRangeMin();
