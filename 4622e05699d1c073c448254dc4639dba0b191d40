@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_736f0093",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-31T14:27:02Z",
+      "side": 1,
+      "message": "please either omit the 2nd \"using\" or write it as com::sun::star::util",
+      "revId": "4622e05699d1c073c448254dc4639dba0b191d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_5372047e",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-31T14:27:02Z",
+      "side": 1,
+      "message": "you can omit the \"com::sun::star\" prefix because you\u0027ve added a \"using namespace\" above",
+      "revId": "4622e05699d1c073c448254dc4639dba0b191d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
