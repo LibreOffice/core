@@ -475,19 +475,24 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     // If UseOn or the Follow change, the paragraphs need to know about it.
     bool bUseOn  = false;
     bool bFollow = false;
-    if ( rDesc.GetUseOn() != rChged.GetUseOn() )
-    {   rDesc.SetUseOn( rChged.GetUseOn() );
+    if (rDesc.GetUseOn() != rChged.GetUseOn())
+    {
+        rDesc.SetUseOn( rChged.GetUseOn() );
         bUseOn = true;
     }
-    if ( rDesc.GetFollow() != rChged.GetFollow() )
-    {   if ( rChged.GetFollow() == &rChged )
-        {   if ( rDesc.GetFollow() != &rDesc )
-            {   rDesc.SetFollow( &rDesc );
+    if (rDesc.GetFollow() != rChged.GetFollow())
+    {
+        if (rChged.GetFollow() == &rChged)
+        {
+            if (rDesc.GetFollow() != &rDesc)
+            {
+                rDesc.SetFollow( &rDesc );
                 bFollow = true;
             }
         }
         else
-        {   rDesc.SetFollow( rChged.m_pFollow );
+        {
+            rDesc.SetFollow( rChged.m_pFollow );
             bFollow = true;
         }
     }
