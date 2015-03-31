@@ -161,7 +161,10 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+        // register TextSelection and TextCursorLayer in LayerView
         mLayerClient.setView(layerView);
+        layerView.addLayer(mTextSelection);
+        layerView.addLayer(mTextCursorLayer);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
     }

@@ -70,10 +70,6 @@ public class TextCursorLayer extends Layer {
                 mViewLeft = 0.0f;
                 mViewTop = 0.0f;
                 mViewZoom = 0.0f;
-                LayerView layerView = LOKitShell.getLayerView();
-                if (layerView != null) {
-                    layerView.addLayer(TextCursorLayer.this);
-                }
                 mCursorView.showCursor();
             }
         });
@@ -107,10 +103,6 @@ public class TextCursorLayer extends Layer {
     public void showSelections() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                LayerView layerView = LOKitShell.getLayerView();
-                if (layerView != null) {
-                    layerView.addLayer(TextCursorLayer.this);
-                }
                 mCursorView.showSelections();
             }
         });

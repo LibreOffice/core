@@ -94,10 +94,6 @@ public class TextSelection extends Layer {
                 mViewLeft = 0.0f;
                 mViewTop = 0.0f;
                 mViewZoom = 0.0f;
-                LayerView layerView = LOKitShell.getLayerView();
-                if (layerView != null) {
-                    layerView.addLayer(TextSelection.this);
-                }
             }
         });
     }
