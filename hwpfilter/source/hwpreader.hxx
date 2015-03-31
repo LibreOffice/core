@@ -304,7 +304,7 @@ extern "C"
         if (pServiceManager )
         {
             Reference< XSingleServiceFactory > xRet;
-            Reference< XMultiServiceFactory > xSMgr = reinterpret_cast< XMultiServiceFactory * > ( pServiceManager );
+            Reference< XMultiServiceFactory > xSMgr = static_cast< XMultiServiceFactory * > ( pServiceManager );
 
             OUString aImplementationName = OUString::createFromAscii( pImplName );
 
