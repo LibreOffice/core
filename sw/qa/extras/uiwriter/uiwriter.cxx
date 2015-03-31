@@ -51,9 +51,6 @@
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
-using namespace ::com::sun::star;
-using namespace util;
-
 class SwUiWriterTest : public SwModelTestBase
 {
 
