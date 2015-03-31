@@ -203,7 +203,7 @@ void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
     TrueTypeCreator* ptr = static_cast<TrueTypeCreator*>(smalloc(sizeof(TrueTypeCreator)));
 
     ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, reinterpret_cast<list_destructor>(TrueTypeTableDispose));
+    listSetElementDtor(ptr->tables, TrueTypeTableDispose);
 
     ptr->tag = tag;
 
@@ -1502,8 +1502,9 @@ extern "C"
     /**
      * Destructor for the TrueTypeTable object.
      */
-     void TrueTypeTableDispose(vcl::TrueTypeTable *_this)
+     void TrueTypeTableDispose(void * arg)
     {
+        vcl::TrueTypeTable *_this = static_cast<vcl::TrueTypeTable *>(arg);
         /* XXX do a binary search */
         unsigned int i;
 

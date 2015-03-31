@@ -219,7 +219,7 @@ extern "C"
 /**
  * Destructor for the TrueTypeTable object.
  */
- void TrueTypeTableDispose(vcl::TrueTypeTable *);
+ void TrueTypeTableDispose(void *);
 
 /**
  * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
