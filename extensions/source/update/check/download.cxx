@@ -131,7 +131,7 @@ getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
 static size_t
 write_function( void *ptr, size_t size, size_t nmemb, void *stream )
 {
-    OutData *out = reinterpret_cast < OutData * > (stream);
+    OutData *out = static_cast < OutData * > (stream);
 
     if( NULL == out->FileHandle )
         openFile(*out);
@@ -152,7 +152,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
     (void) ultotal;
     (void) ulnow;
 
-    OutData *out = reinterpret_cast < OutData * > (clientp);
+    OutData *out = static_cast < OutData * > (clientp);
 
     assert(out);
 

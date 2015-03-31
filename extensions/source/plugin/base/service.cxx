@@ -67,7 +67,7 @@ extern "C" {
         if( pXUnoSMgr )
         {
             Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr(
-                reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
+                static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
                 );
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( aImplName.equals( XPluginManager_Impl::getImplementationName_Static() ) )
