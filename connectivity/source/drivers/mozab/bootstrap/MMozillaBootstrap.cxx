@@ -224,7 +224,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
 {
-        MozillaBootstrap * pBootstrap = reinterpret_cast<MozillaBootstrap*>(OMozillaBootstrap_CreateInstance(rServiceManager));
+        MozillaBootstrap * pBootstrap = static_cast<MozillaBootstrap*>(OMozillaBootstrap_CreateInstance(rServiceManager));
         return *pBootstrap;
 }
 
@@ -245,7 +245,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozbootstrap_component_getFactory
                     aSNS[0] = "com.sun.star.mozilla.MozillaBootstrap";
 
                     xFactory = ::cppu::createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory* > ( pServiceManager),
+                        static_cast< XMultiServiceFactory* > ( pServiceManager),
                         aImplName, createInstance, aSNS );
                 }
                 if ( xFactory.is() )

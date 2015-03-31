@@ -46,7 +46,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mysql_component_getFactory(
     }
 
     Reference< XSingleServiceFactory > xRet;
-    const Reference< XMultiServiceFactory > xServiceManager( reinterpret_cast<XMultiServiceFactory*>(pServiceManager) );
+    const Reference< XMultiServiceFactory > xServiceManager( static_cast<XMultiServiceFactory*>(pServiceManager) );
     const OUString sImplementationName( OUString::createFromAscii(pImplementationName) );
 
     if( ODriverDelegator::getImplementationName_Static() == sImplementationName )

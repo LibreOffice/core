@@ -178,21 +178,21 @@ bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLException*() const
 {
     OSL_ENSURE(isKindOf(SQL_EXCEPTION), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return reinterpret_cast<const ::com::sun::star::sdbc::SQLException*>(m_aContent.getValue());
+    return static_cast<const ::com::sun::star::sdbc::SQLException*>(m_aContent.getValue());
 }
 
 
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLWarning*() const
 {
     OSL_ENSURE(isKindOf(SQL_WARNING), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return reinterpret_cast<const ::com::sun::star::sdbc::SQLWarning*>(m_aContent.getValue());
+    return static_cast<const ::com::sun::star::sdbc::SQLWarning*>(m_aContent.getValue());
 }
 
 
 SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 {
     OSL_ENSURE(isKindOf(SQL_CONTEXT), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
+    return static_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
 }
 
 
