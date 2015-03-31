@@ -263,19 +263,16 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     }
 
     sal_Int64 nRet = SfxBaseModel::getSomething( rId );
-    if ( nRet )
+    if (nRet)
         return nRet;
-    else
-    {
-        GetNumberFormatter();
-        Any aNumTunnel = xNumFmtAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
-        Reference<XUnoTunnel> xNumTunnel;
-        aNumTunnel >>= xNumTunnel;
-        if(xNumTunnel.is())
-            return xNumTunnel->getSomething(rId);
-    }
 
-    return SfxBaseModel::getSomething( rId );
+    GetNumberFormatter();
+    if (!xNumFmtAgg.is()) // may happen if not valid or no SwDoc
+        return 0;
+    Any aNumTunnel = xNumFmtAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
+    Reference<XUnoTunnel> xNumTunnel;
+    aNumTunnel >>= xNumTunnel;
+    return (xNumTunnel.is()) ? xNumTunnel->getSomething(rId) : 0;
 }
 
 Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(RuntimeException, std::exception)
