@@ -1066,7 +1066,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
                     addAttribute( XMLNS_DIALOGS_PREFIX ":control-implementation", sCtrlName );
         }
     }
-    addAttribute( XMLNS_DIALOGS_PREFIX ":id", * reinterpret_cast< const OUString * >( a.getValue() ) );
+    addAttribute( XMLNS_DIALOGS_PREFIX ":id", * static_cast< const OUString * >( a.getValue() ) );
     readShortAttr( "TabIndex", XMLNS_DIALOGS_PREFIX ":tab-index" );
 
     bool bEnabled = false;
