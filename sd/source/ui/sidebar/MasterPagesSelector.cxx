@@ -465,7 +465,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     const ::osl::MutexGuard aGuard (maMutex);
 
     if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
-        return reinterpret_cast<UserData*>(PreviewValueSet::GetItemData((sal_uInt16)nIndex));
+        return static_cast<UserData*>(PreviewValueSet::GetItemData((sal_uInt16)nIndex));
     else
         return NULL;
 }

@@ -907,7 +907,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
             {
                 case DC_ACCEPT:
                     nResult = pDrawViewShell->AcceptDrop(
-                        *reinterpret_cast<const AcceptDropEvent*>(pDropEvent),
+                        *static_cast<const AcceptDropEvent*>(pDropEvent),
                         rTargetHelper,
                         pTargetWindow,
                         nPage,
@@ -916,7 +916,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
 
                 case DC_EXECUTE:
                     nResult = pDrawViewShell->ExecuteDrop(
-                        *reinterpret_cast<const ExecuteDropEvent*>(pDropEvent),
+                        *static_cast<const ExecuteDropEvent*>(pDropEvent),
                         rTargetHelper,
                         pTargetWindow,
                         nPage,

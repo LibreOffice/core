@@ -667,7 +667,7 @@ bool ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
-        CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
+        CommandEvent* pCmdEvent = static_cast< CommandEvent* >(rNEvt.GetData());
         nRet = HandleScrollCommand(*pCmdEvent, pWin);
     }
     return nRet;

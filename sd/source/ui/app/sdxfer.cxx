@@ -827,7 +827,7 @@ bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& rFla
             {
                 SvMemoryStream aMemStm( 65535, 65535 );
                 sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );
-                return SetAny( Any( Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ), rFlavor );
+                return SetAny( Any( Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ), rFlavor );
             }
         }
     }

@@ -1226,7 +1226,7 @@ void SdPageObjsTLB::DoDrag()
         SdrObject* pObject = NULL;
         void* pUserData = GetCurEntry()->GetUserData();
         if (pUserData != NULL && pUserData != reinterpret_cast<void*>(1))
-            pObject = reinterpret_cast<SdrObject*>(pUserData);
+            pObject = static_cast<SdrObject*>(pUserData);
         if (pObject != NULL)
         {
             // For shapes without a user supplied name (the automatically
@@ -1413,8 +1413,8 @@ TriState SdPageObjsTLB::NotifyMoving(
     while (GetParent(pDestination) != NULL && GetParent(GetParent(pDestination)) != NULL)
         pDestination = GetParent(pDestination);
 
-    SdrObject* pTargetObject = reinterpret_cast<SdrObject*>(pDestination->GetUserData());
-    SdrObject* pSourceObject = reinterpret_cast<SdrObject*>(pEntry->GetUserData());
+    SdrObject* pTargetObject = static_cast<SdrObject*>(pDestination->GetUserData());
+    SdrObject* pSourceObject = static_cast<SdrObject*>(pEntry->GetUserData());
     if (pSourceObject == reinterpret_cast<SdrObject*>(1))
         pSourceObject = NULL;
 

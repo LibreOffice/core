@@ -1081,7 +1081,7 @@ OUString HtmlExport::DocumentMetadata() const
             "  ", RTL_TEXTENCODING_UTF8,
             &aNonConvertableCharacters);
 
-    OString aData(reinterpret_cast<const char*>(aStream.GetData()), aStream.GetSize());
+    OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
 
     return OStringToOUString(aData, RTL_TEXTENCODING_UTF8);
 }

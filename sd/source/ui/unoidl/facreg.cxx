@@ -71,7 +71,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
 
     if( pServiceManager )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF( static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
 
         uno::Reference<lang::XSingleServiceFactory> xFactory;
         uno::Reference<lang::XSingleComponentFactory> xComponentFactory;
