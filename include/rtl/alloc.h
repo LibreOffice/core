@@ -71,7 +71,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
     void * Ptr
 ) SAL_THROW_EXTERN_C();
 
-
 /** Allocate and zero memory.
 
     A call to this function will return NULL upon the requested
@@ -84,17 +83,31 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
+/** Zero memory
+
+    Fills a block of memory with zeros in a way that is guaranteed to be secure
+
+    @param  Ptr   [in] pointer to previously allocated memory.
+    @param  Bytes [in] memory size.
+
+    @since LibreOffice 4.5
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_secureZeroMemory (
+    void *   Ptr,
+    sal_Size Bytes
+) SAL_THROW_EXTERN_C();
+
 
 /** Zero and free memory.
     @param  Ptr   [in] pointer to previously allocated memory.
     @param  Bytes [in] memory size.
-    @return none. Memory is zero'ed and released. Ptr is invalid.
+    @return none. Memory is zero'ed with rtl_secureZeroMemory and released. Ptr
+                  is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     void *   Ptr,
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
-
 
 /** Allocate aligned memory.
 
