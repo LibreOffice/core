@@ -10,6 +10,7 @@
 #include <sal/types.h>
 #include <math.h>
 #include <string.h>
+#include <vector>
 
 #include <gdk/gdkkeysyms.h>
 
@@ -61,7 +62,7 @@ struct LOKDocView_Impl
     /// Time of the last button release.
     guint32 m_nLastButtonReleaseTime;
     /// Rectangles of the current text selection.
-    GList* m_pTextSelectionRectangles;
+    std::vector<GdkRectangle> m_aTextSelectionRectangles;
     /// Position and size of the selection start (as if there would be a cursor caret there).
     GdkRectangle m_aTextSelectionStart;
     /// Position and size of the selection end.
@@ -155,6 +156,10 @@ struct LOKDocView_Impl
      * the tiles that intersect with pPartial.
      */
     void renderDocument(GdkRectangle* pPartial);
+    /// Returns the GdkRectangle of a width,height,x,y string.
+    static GdkRectangle payloadToRectangle(const char* pPayload);
+    /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
+    static std::vector<GdkRectangle> payloadToRectangles(const char* pPayload);
 };
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
@@ -171,7 +176,6 @@ LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     m_bCursorVisible(true),
     m_nLastButtonPressTime(0),
     m_nLastButtonReleaseTime(0),
-    m_pTextSelectionRectangles(0),
     m_aTextSelectionStart({0, 0, 0, 0}),
     m_aTextSelectionEnd({0, 0, 0, 0}),
     m_aGraphicSelection({0, 0, 0, 0}),
@@ -498,7 +502,7 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
         cairo_fill(pCairo);
     }
 
-    if (m_bEdit && m_bCursorVisible && !isEmptyRectangle(m_aVisibleCursor) && !m_pTextSelectionRectangles)
+    if (m_bEdit && m_bCursorVisible && !isEmptyRectangle(m_aVisibleCursor) && m_aTextSelectionRectangles.empty())
     {
         // Have a cursor, but no selection: we need the middle handle.
         if (!m_pHandleMiddle)
@@ -506,18 +510,17 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
         renderHandle(pCairo, m_aVisibleCursor, m_pHandleMiddle, m_aHandleMiddleRect);
     }
 
-    if (m_pTextSelectionRectangles)
+    if (!m_aTextSelectionRectangles.empty())
     {
-        for (GList* i = m_pTextSelectionRectangles; i != NULL; i = i->next)
+        for (GdkRectangle& rRectangle : m_aTextSelectionRectangles)
         {
-            GdkRectangle* pRectangle = static_cast<GdkRectangle*>(i->data);
             // Blue with 75% transparency.
             cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
             cairo_rectangle(pCairo,
-                            twipToPixel(pRectangle->x),
-                            twipToPixel(pRectangle->y),
-                            twipToPixel(pRectangle->width),
-                            twipToPixel(pRectangle->height));
+                            twipToPixel(rRectangle.x),
+                            twipToPixel(rRectangle.y),
+                            twipToPixel(rRectangle.width),
+                            twipToPixel(rRectangle.height));
             cairo_fill(pCairo);
         }
 
@@ -766,6 +769,44 @@ void LOKDocView_Impl::renderDocument(GdkRectangle* pPartial)
     }
 }
 
+GdkRectangle LOKDocView_Impl::payloadToRectangle(const char* pPayload)
+{
+    GdkRectangle aRet;
+
+    aRet.width = aRet.height = aRet.x = aRet.y = 0;
+    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 4);
+    gchar** ppCoordinate = ppCoordinates;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.x = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.y = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.width = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.height = atoi(*ppCoordinate);
+    g_strfreev(ppCoordinates);
+    return aRet;
+}
+
+std::vector<GdkRectangle> LOKDocView_Impl::payloadToRectangles(const char* pPayload)
+{
+    std::vector<GdkRectangle> aRet;
+
+    gchar** ppRectangles = g_strsplit(pPayload, "; ", 0);
+    for (gchar** ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
+        aRet.push_back(payloadToRectangle(*ppRectangle));
+    g_strfreev(ppRectangles);
+
+    return aRet;
+}
+
 enum
 {
     EDIT_CHANGED,
@@ -854,51 +895,6 @@ typedef struct
 }
 LOKDocViewCallbackData;
 
-/// Returns the GdkRectangle of a width,height,x,y string.
-static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
-{
-    GdkRectangle aRet;
-
-    aRet.width = aRet.height = aRet.x = aRet.y = 0;
-    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 4);
-    gchar** ppCoordinate = ppCoordinates;
-    if (!*ppCoordinate)
-        return aRet;
-    aRet.x = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return aRet;
-    aRet.y = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return aRet;
-    aRet.width = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return aRet;
-    aRet.height = atoi(*ppCoordinate);
-    g_strfreev(ppCoordinates);
-    return aRet;
-}
-
-/// Returns the GdkRectangle list of a w,h,x,y;w2,h2,x2,y2;... string.
-static GList* lcl_payloadToRectangles(const char* pPayload)
-{
-    GList* pRet = NULL;
-
-    gchar** ppRectangles = g_strsplit(pPayload, "; ", 0);
-    for (gchar** ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
-    {
-        GdkRectangle aRect = lcl_payloadToRectangle(*ppRectangle);
-        GdkRectangle* pRect = g_new0(GdkRectangle, 1);
-        *pRect = aRect;
-        pRet = g_list_prepend(pRet, pRect);
-    }
-    g_strfreev(ppRectangles);
-
-    return pRet;
-}
-
 static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
 {
     switch (nType)
@@ -935,7 +931,7 @@ static gboolean lok_docview_callback(gpointer pData)
     {
         if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
         {
-            GdkRectangle aRectangle = lcl_payloadToRectangle(pCallback->m_pPayload);
+            GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
             pCallback->m_pDocView->m_pImpl->renderDocument(&aRectangle);
         }
         else
@@ -944,7 +940,7 @@ static gboolean lok_docview_callback(gpointer pData)
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
-        pCallback->m_pDocView->m_pImpl->m_aVisibleCursor = lcl_payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
         pCallback->m_pDocView->m_pImpl->m_bCursorOverlayVisible = true;
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->m_pImpl->m_pEventBox));
     }
@@ -952,13 +948,10 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         LOKDocView* pDocView = pCallback->m_pDocView;
-        GList* pRectangles = lcl_payloadToRectangles(pCallback->m_pPayload);
-        if (pDocView->m_pImpl->m_pTextSelectionRectangles)
-            g_list_free_full(pDocView->m_pImpl->m_pTextSelectionRectangles, g_free);
-        pDocView->m_pImpl->m_pTextSelectionRectangles = pRectangles;
+        pDocView->m_pImpl->m_aTextSelectionRectangles = LOKDocView_Impl::payloadToRectangles(pCallback->m_pPayload);
 
         // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
-        if (pRectangles == NULL)
+        if (pDocView->m_pImpl->m_aTextSelectionRectangles.empty())
         {
             memset(&pDocView->m_pImpl->m_aTextSelectionStart, 0, sizeof(pDocView->m_pImpl->m_aTextSelectionStart));
             memset(&pDocView->m_pImpl->m_aHandleStartRect, 0, sizeof(pDocView->m_pImpl->m_aHandleStartRect));
@@ -972,12 +965,12 @@ static gboolean lok_docview_callback(gpointer pData)
     break;
     case LOK_CALLBACK_TEXT_SELECTION_START:
     {
-        pCallback->m_pDocView->m_pImpl->m_aTextSelectionStart = lcl_payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aTextSelectionStart = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION_END:
     {
-        pCallback->m_pDocView->m_pImpl->m_aTextSelectionEnd = lcl_payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aTextSelectionEnd = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
     }
     break;
     case LOK_CALLBACK_CURSOR_VISIBLE:
@@ -988,7 +981,7 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_GRAPHIC_SELECTION:
     {
         if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
-            pCallback->m_pDocView->m_pImpl->m_aGraphicSelection = lcl_payloadToRectangle(pCallback->m_pPayload);
+            pCallback->m_pDocView->m_pImpl->m_aGraphicSelection = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
         else
             memset(&pCallback->m_pDocView->m_pImpl->m_aGraphicSelection, 0, sizeof(pCallback->m_pDocView->m_pImpl->m_aGraphicSelection));
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->m_pImpl->m_pEventBox));
