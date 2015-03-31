@@ -223,6 +223,14 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     m_pLbShadowColor->SelectEntryPos( nPos );
 
+                SfxItemSet rAttribs( rSet );
+                // rSet contains shadow attributes too, but we want
+                // to use it for updating rectangle attributes only,
+                // so set the shadow to none here
+                SdrOnOffItem aItem( makeSdrShadowItem( false ));
+                rAttribs.Put( aItem );
+
+                m_pCtlXRectPreview->SetRectangleAttributes( rAttribs );
                 ModifyShadowHdl_Impl( this );
             }
             nPageType = PT_SHADOW;
