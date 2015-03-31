@@ -322,12 +322,12 @@ inline const SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst) const
 class SwPageDescExt
 {
 public:
-    SwPageDesc aPageDesc;
+    SwPageDesc m_PageDesc;
 private:
-    SwDoc * pDoc;
-    OUString sFollow;
+    SwDoc * m_pDoc;
+    OUString m_sFollow;
 
-    void SetPageDesc(const SwPageDesc & aPageDesc);
+    void SetPageDesc(const SwPageDesc & rPageDesc);
 
 public:
     SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * pDoc);

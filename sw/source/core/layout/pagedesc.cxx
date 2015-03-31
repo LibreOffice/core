@@ -405,16 +405,18 @@ bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
         && m_nBottomDist== rCmp.GetBottomDist();
 }
 
-SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * _pDoc)
-    : aPageDesc(rPageDesc), pDoc(_pDoc)
+SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc *const pDoc)
+    : m_PageDesc(rPageDesc)
+    , m_pDoc(pDoc)
 {
     SetPageDesc(rPageDesc);
 }
 
 SwPageDescExt::SwPageDescExt(const SwPageDescExt & rSrc)
-    : aPageDesc(rSrc.aPageDesc), pDoc(rSrc.pDoc)
+    : m_PageDesc(rSrc.m_PageDesc)
+    , m_pDoc(rSrc.m_pDoc)
 {
-    SetPageDesc(rSrc.aPageDesc);
+    SetPageDesc(rSrc.m_PageDesc);
 }
 
 SwPageDescExt::~SwPageDescExt()
@@ -423,15 +425,15 @@ SwPageDescExt::~SwPageDescExt()
 
 OUString SwPageDescExt::GetName() const
 {
-    return aPageDesc.GetName();
+    return m_PageDesc.GetName();
 }
 
-void SwPageDescExt::SetPageDesc(const SwPageDesc & _aPageDesc)
+void SwPageDescExt::SetPageDesc(const SwPageDesc & rPageDesc)
 {
-    aPageDesc = _aPageDesc;
+    m_PageDesc = rPageDesc;
 
-    if (aPageDesc.GetFollow())
-        sFollow = aPageDesc.GetFollow()->GetName();
+    if (m_PageDesc.GetFollow())
+        m_sFollow = m_PageDesc.GetFollow()->GetName();
 }
 
 SwPageDescExt & SwPageDescExt::operator = (const SwPageDesc & rSrc)
@@ -443,16 +445,16 @@ SwPageDescExt & SwPageDescExt::operator = (const SwPageDesc & rSrc)
 
 SwPageDescExt & SwPageDescExt::operator = (const SwPageDescExt & rSrc)
 {
-    SetPageDesc(rSrc.aPageDesc);
+    SetPageDesc(rSrc.m_PageDesc);
 
     return *this;
 }
 
 SwPageDescExt::operator SwPageDesc() const
 {
-    SwPageDesc aResult(aPageDesc);
+    SwPageDesc aResult(m_PageDesc);
 
-    SwPageDesc * pPageDesc = pDoc->FindPageDesc(sFollow);
+    SwPageDesc * pPageDesc = m_pDoc->FindPageDesc(m_sFollow);
 
     if ( 0 != pPageDesc )
         aResult.SetFollow(pPageDesc);
