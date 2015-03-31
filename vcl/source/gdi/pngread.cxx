@@ -349,8 +349,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
 
     // parse the remaining chunks
-    bool bRetFromNextChunk;
-    while( mbStatus && !mbIDAT && (bRetFromNextChunk = ReadNextChunk()) )
+    while (mbStatus && !mbIDAT && ReadNextChunk())
     {
         switch( mnChunkType )
         {
