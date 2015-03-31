@@ -185,7 +185,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
             OUString::createFromAscii( pImplName ) == ScaPricingAddIn::getImplementationName_Static() )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 ScaPricingAddIn::getImplementationName_Static(),
                 ScaPricingAddIn_CreateInstance,
                 ScaPricingAddIn::getSupportedServiceNames_Static() ) );

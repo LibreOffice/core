@@ -180,7 +180,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
             OUString::createFromAscii( pImplName ) == ScaDateAddIn::getImplementationName_Static() )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 ScaDateAddIn::getImplementationName_Static(),
                 ScaDateAddIn_CreateInstance,
                 ScaDateAddIn::getSupportedServiceNames_Static() ) );

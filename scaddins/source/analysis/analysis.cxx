@@ -49,7 +49,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     if( pServiceManager && OUString::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
     {
         uno::Reference< lang::XSingleServiceFactory >  xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 AnalysisAddIn::getImplementationName_Static(),
                 AnalysisAddIn_CreateInstance,
                 AnalysisAddIn::getSupportedServiceNames_Static() ) );
