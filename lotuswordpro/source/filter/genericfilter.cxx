@@ -24,7 +24,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL lotuswordpro_component_getFactory(
     if ( pServiceManager && implName.equals(LotusWordProImportFilter_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             LotusWordProImportFilter_createInstance, LotusWordProImportFilter_getSupportedServiceNames() ) );
 
