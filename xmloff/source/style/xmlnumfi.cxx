@@ -1230,7 +1230,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 // exponential interval for engineering notation
                 if( !aNumInfo.bGrouping && aNumInfo.nExpInterval > aNumInfo.nInteger )
                 {
-                    for (sal_Int32 i=0; i<aNumInfo.nExpInterval-aNumInfo.nInteger; i++)
+                    for (sal_Int32 i=aNumInfo.nInteger; i<aNumInfo.nExpInterval; i++)
                     {
                         rParent.AddToCode( '#' );
                     }
@@ -1825,12 +1825,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             else
                 nIndex = -1;
         }
-        if( rInfo.nExpInterval > nDigits )
+        while ( rInfo.nExpInterval > nDigits )
         {
-            for (sal_Int32 i=0; i<rInfo.nExpInterval-nDigits; i++)
-            {
-                aNumStr.insert( 0, '#' );
-            }
+            nDigits++;
+            aNumStr.insert( 0, '#' );
         }
     }
 
