@@ -297,7 +297,7 @@ void OCreationList::updateHelpText()
 {
     sal_uInt16 nHelpTextId = 0;
     if ( GetCurEntry() )
-        nHelpTextId = reinterpret_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
+        nHelpTextId = static_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
     m_rTaskWindow.setHelpText( nHelpTextId );
 }
 
@@ -305,7 +305,7 @@ void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
-    aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
+    aCommand.Complete = static_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 }
 
@@ -431,7 +431,7 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 {
     SvTreeListEntry* pEntry = m_aCreation.GetHdlEntry();
     if ( pEntry )
-        m_aHelpText.SetText( ModuleRes( reinterpret_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
+        m_aHelpText.SetText( ModuleRes( static_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
     return 1L;
 }
 
@@ -512,7 +512,7 @@ void OTasksWindow::Clear()
     SvTreeListEntry* pEntry = m_aCreation.First();
     while ( pEntry )
     {
-        delete reinterpret_cast< TaskEntry* >( pEntry->GetUserData() );
+        delete static_cast< TaskEntry* >( pEntry->GetUserData() );
         pEntry = m_aCreation.Next(pEntry);
     }
     m_aCreation.Clear();

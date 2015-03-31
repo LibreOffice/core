@@ -34,7 +34,7 @@ namespace dbaui
     {
         if(nUserObjectId == SotClipboardFormatId::SBA_TABED)
         {
-            ::std::vector< ::boost::shared_ptr<OTableRow> >* pRows = reinterpret_cast< ::std::vector< ::boost::shared_ptr<OTableRow> >* >(pUserObject);
+            ::std::vector< ::boost::shared_ptr<OTableRow> >* pRows = static_cast< ::std::vector< ::boost::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
             {
                 (*rxOStm).WriteInt32( pRows->size() ); // first stream the size
