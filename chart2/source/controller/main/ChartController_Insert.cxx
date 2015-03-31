@@ -179,7 +179,7 @@ void ChartController::executeDispatch_InsertTitles()
         aDialogInput.readFromModel( getModel() );
 
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchTitleDlg> aDlg(new SchTitleDlg( m_pChartWindow, aDialogInput ));
+        ScopedVclPtrInstance< SchTitleDlg > aDlg( m_pChartWindow, aDialogInput );
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
@@ -232,7 +232,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
     {
         //prepare and open dialog
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchLegendDlg> aDlg(new SchLegendDlg( m_pChartWindow, m_xCC ));
+        ScopedVclPtrInstance< SchLegendDlg > aDlg( m_pChartWindow, m_xCC );
         aDlg->init( getModel() );
         if( aDlg->Execute() == RET_OK )
         {
@@ -292,7 +292,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-        ScopedVclPtr<DataLabelsDialog> aDlg(new DataLabelsDialog( m_pChartWindow, aItemSet, pNumberFormatter));
+        ScopedVclPtrInstance< DataLabelsDialog > aDlg( m_pChartWindow, aItemSet, pNumberFormatter);
 
         if( aDlg->Execute() == RET_OK )
         {

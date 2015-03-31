@@ -263,7 +263,7 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 {
     ScDocument* pDoc = GetViewData().GetDocument();
 
-    VclPtr<ScRetypePassDlg> pDlg(new ScRetypePassDlg(GetDialogParent()));
+    VclPtrInstance< ScRetypePassDlg > pDlg(GetDialogParent());
     pDlg->SetDataFromDocument(*pDoc);
     pDlg->SetDesiredHash(eDesiredHash);
     if (pDlg->Execute() != RET_OK)

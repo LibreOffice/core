@@ -966,7 +966,7 @@ void SbiIoSystem::CloseAll(void)
 void SbiIoSystem::ReadCon(OString& rIn)
 {
     OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
-    ScopedVclPtr<SbiInputDialog> aDlg(new SbiInputDialog(NULL, aPromptStr) );
+    ScopedVclPtrInstance< SbiInputDialog > aDlg(nullptr, aPromptStr);
     if( aDlg->Execute() )
     {
         rIn = OUStringToOString(aDlg->GetInput(), osl_getThreadTextEncoding());

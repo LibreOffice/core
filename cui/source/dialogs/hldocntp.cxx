@@ -271,7 +271,7 @@ bool SvxHyperlinkNewDocTp::AskApply()
     bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        ScopedVclPtr<WarningBox> aWarning(new WarningBox( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) ) );
+        ScopedVclPtrInstance< WarningBox > aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
         aWarning->Execute();
     }
     return bRet;

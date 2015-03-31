@@ -1182,7 +1182,7 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
 
     if (pViewShell)
     {
-        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         ScViewData& rViewData = pViewShell->GetViewData();
         sc::RowHeightContext aCxt(
             rViewData.GetPPTX(), rViewData.GetPPTY(), rViewData.GetZoomX(), rViewData.GetZoomY(),

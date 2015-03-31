@@ -832,7 +832,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
     if (!bIsEmpty)
     {
-        ScopedVclPtr<ScReplaceWarnBox> aBox(new ScReplaceWarnBox(pParentWnd));
+        ScopedVclPtrInstance< ScReplaceWarnBox > aBox(pParentWnd);
         if (aBox->Execute() != RET_YES)
         {
             //  changing the configuration is within the ScReplaceWarnBox

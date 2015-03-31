@@ -277,7 +277,7 @@ void SvxColorDockingWindow::FillValueSet()
         const Size aColorSize(aColorSet->getEntryEdgeLength(), aColorSet->getEntryEdgeLength());
         long nPtX = aColorSize.Width() - 1;
         long nPtY = aColorSize.Height() - 1;
-        ScopedVclPtr<VirtualDevice> pVD(new VirtualDevice());
+        ScopedVclPtrInstance< VirtualDevice > pVD;
 
         pVD->SetOutputSizePixel( aColorSize );
         pVD->SetLineColor( Color( COL_BLACK ) );

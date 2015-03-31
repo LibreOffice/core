@@ -418,7 +418,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     {
         Bitmap aBmp( rGraphic.GetBitmap() );
         pAMTF = new GDIMetaFile();
-        ScopedVclPtr<VirtualDevice> pTmpVDev(new VirtualDevice());
+        ScopedVclPtrInstance< VirtualDevice > pTmpVDev;
         pAMTF->Record( pTmpVDev );
         pTmpVDev->DrawBitmap( Point(), aBmp );
         pAMTF->Stop();
@@ -486,7 +486,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() );
         if( pResMgr )
         {
-            ScopedVclPtr<InfoBox> aInfoBox(new InfoBox( NULL, ResId(KEY_VERSION_CHECK, *pResMgr).toString() ) );
+            ScopedVclPtrInstance< InfoBox > aInfoBox( nullptr, ResId(KEY_VERSION_CHECK, *pResMgr).toString() );
             aInfoBox->Execute();
             delete pResMgr;
         }
@@ -940,7 +940,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_HATCH_ACTION :
             {
-                ScopedVclPtr<VirtualDevice> l_pVirDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > l_pVirDev;
                 GDIMetaFile     aTmpMtf;
 
                 l_pVirDev->SetMapMode( rVDev.GetMapMode() );
@@ -1608,7 +1608,7 @@ void PSWriter::ImplIntersect( const tools::PolyPolygon& rPolyPoly )
 
 void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
-    ScopedVclPtr<VirtualDevice> l_pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > l_pVDev;
     GDIMetaFile     aTmpMtf;
     l_pVDev->SetMapMode( rVDev.GetMapMode() );
     l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
@@ -2141,7 +2141,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
 
-        ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+        ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
         pVirDev->SetMapMode( rVDev.GetMapMode() );
         pVirDev->SetFont( aNotRotatedFont );
         pVirDev->SetTextAlign( eTextAlign );

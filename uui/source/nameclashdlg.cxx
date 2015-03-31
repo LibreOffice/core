@@ -34,7 +34,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         OUString aNewName = m_pEDNewName->GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
-            ScopedVclPtr<MessageDialog> aError(new MessageDialog(NULL, maSameName));
+            ScopedVclPtrInstance< MessageDialog > aError(nullptr, maSameName);
             aError->Execute();
             return 1;
         }

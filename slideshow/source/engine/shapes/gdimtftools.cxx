@@ -286,12 +286,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     // normalize animations to n bitmaps of same size. An Animation,
     // though, can contain bitmaps of varying sizes and different
     // update modes)
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetOutputSizePixel( aAnimSize );
     pVDev->EnableMapMode( false );
 
     // setup mask VDev (alpha VDev is currently rather slow)
-    ScopedVclPtr<VirtualDevice> pVDevMask( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDevMask;
     pVDevMask->SetOutputSizePixel( aAnimSize );
     pVDevMask->EnableMapMode( false );
 

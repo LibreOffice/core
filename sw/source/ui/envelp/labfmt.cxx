@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
-    ScopedVclPtr<SwSaveLabelDlg> pSaveDlg(new SwSaveLabelDlg(this, aRec));
+    ScopedVclPtrInstance< SwSaveLabelDlg > pSaveDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))

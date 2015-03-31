@@ -1271,7 +1271,7 @@ IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotIntere
 {
     if ( m_aCurrentError.isValid() )
     {
-        ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( getBrowserView(), m_aCurrentError ));
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getBrowserView(), m_aCurrentError );
         aDlg->Execute();
     }
     return 0L;
@@ -1764,14 +1764,14 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            ScopedVclPtr<DlgFilterCrit> aDlg(new DlgFilterCrit( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() ) );
+            ScopedVclPtrInstance< DlgFilterCrit > aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
             if ( !aDlg->Execute() )
                 return; // if so we don't need to update the grid
             aDlg->BuildWherePart();
         }
         else
         {
-            ScopedVclPtr<DlgOrderCrit> aDlg(new DlgOrderCrit( getBrowserView(),xCon,xParser,xSup->getColumns() ) );
+            ScopedVclPtrInstance< DlgOrderCrit > aDlg( getBrowserView(),xCon,xParser,xSup->getColumns() );
             if(!aDlg->Execute())
             {
                 return; // if so we don't need to actualize the grid

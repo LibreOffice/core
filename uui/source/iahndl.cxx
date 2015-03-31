@@ -1024,7 +1024,7 @@ executeMessageBox(
 {
     SolarMutexGuard aGuard;
 
-    ScopedVclPtr<MessBox> xBox(new MessBox(pParent, nButtonMask, rTitle, rMessage));
+    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
 
     sal_uInt16 aResult = xBox->Execute();
     switch( aResult )

@@ -455,7 +455,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     }
     else // delete everything
     {
-        ScopedVclPtr<WarningBox> aWarnBox(new WarningBox( this, WB_YES_NO, SD_RESSTR( STR_ASK_DELETE_ALL_PICTURES ) ));
+        ScopedVclPtrInstance< WarningBox > aWarnBox( this, WB_YES_NO, SD_RESSTR( STR_ASK_DELETE_ALL_PICTURES ) );
         short nReturn = aWarnBox->Execute();
 
         if( nReturn == RET_YES )
@@ -548,7 +548,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             static_cast<SdrObject*>(pPage->GetObj(m_nCurrentFrame));
         if( pObject )
         {
-            ScopedVclPtr<VirtualDevice> pVD(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pVD;
             Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );

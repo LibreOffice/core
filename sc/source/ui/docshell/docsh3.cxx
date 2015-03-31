@@ -368,7 +368,7 @@ void ScDocShell::CalcOutputFactor()
     pRefDev->SetFont(aOldFont);
     pRefDev->SetMapMode(aOldMode);
 
-    ScopedVclPtr<VirtualDevice> pVirtWindow( new VirtualDevice( *Application::GetDefaultDevice() ) );
+    ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *Application::GetDefaultDevice() );
     pVirtWindow->SetMapMode(MAP_PIXEL);
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
@@ -1202,7 +1202,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 while ( bLoop )
                 {
                     bLoop = false;
-                    ScopedVclPtr<ScConflictsDlg> aDlg(new ScConflictsDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList ) );
+                    ScopedVclPtrInstance< ScConflictsDlg > aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
                     if ( aDlg->Execute() == RET_CANCEL )
                     {
                         ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
@@ -1320,7 +1320,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         PostPaintExtras();
         PostPaintGridAll();
 
-        ScopedVclPtr<InfoBox> aInfoBox(new InfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) ) );
+        ScopedVclPtrInstance< InfoBox > aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
         aInfoBox->Execute();
     }
 

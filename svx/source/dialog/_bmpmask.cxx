@@ -1006,7 +1006,7 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
 
 GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const Color& rColor )
 {
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();

@@ -127,7 +127,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     std::shared_ptr<GDIMetaFile> xFile(new GDIMetaFile);
 
-    ScopedVclPtr<VirtualDevice> pDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->EnableOutput( false );
 
     MapMode aMode( this->GetMapUnit() );
@@ -464,7 +464,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
                         sMessage = sMessage.replaceAll( "$(ARG1)", aTemplName );
-                        ScopedVclPtr<sfx2::QueryTemplateBox> aBox(new sfx2::QueryTemplateBox(GetDialogParent(), sMessage) );
+                        ScopedVclPtrInstance< sfx2::QueryTemplateBox > aBox(GetDialogParent(), sMessage);
                         if ( RET_YES == aBox->Execute() )
                             bLoad = true;
                     }

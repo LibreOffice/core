@@ -803,7 +803,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
-            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
             aErrorBox->SetText( "Explanations" );
             aErrorBox->Execute();
         }

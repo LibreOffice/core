@@ -624,7 +624,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     if( !pPage )
         return false;
 
-    ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > aVDev;
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
@@ -907,7 +907,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         if( !bSingleGraphic )
         {
             // create a metafile for all shapes
-            ScopedVclPtr<VirtualDevice> aOut(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > aOut;
 
             // calculate bound rect for all shapes
             Rectangle aBound;

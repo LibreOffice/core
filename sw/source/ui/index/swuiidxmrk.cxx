@@ -584,7 +584,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 {
-    ScopedVclPtr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
+    ScopedVclPtrInstance< SwNewUserIdxDlg > pDlg(this);
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewName(pDlg->GetName());
@@ -1208,7 +1208,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if(RET_YES != aQuery->Execute())
                     return 0;
             }

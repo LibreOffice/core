@@ -576,7 +576,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if(nTables > 1 && bWidthDialog)
             {
                 //now call the table select dialog - if more than one table exists
-                VclPtr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
+                VclPtrInstance<SwSelectDBTableDialog> pDlg(this, pUserData->xConnection);
                 const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);

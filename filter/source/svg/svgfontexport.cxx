@@ -78,7 +78,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 
 void SVGFontExport::implCollectGlyphs()
 {
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     ObjectVector::const_iterator    aIter( maObjects.begin() );
 
     pVDev->EnableOutput( false );
@@ -189,7 +189,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                 SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", true, true );
                 OUString     aCurIdStr( aEmbeddedFontStr );
                 OUString     aUnitsPerEM( OUString::number( nFontEM ) );
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 vcl::Font           aFont( rFont );
 
                 aFont.SetSize( Size( 0, nFontEM ) );

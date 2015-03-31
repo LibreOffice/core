@@ -337,7 +337,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
                                                  aBlock.aStart.Tab() );
-            ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev;
             pVirtDev->SetOutputSizePixel( pVirtDev->LogicToPixel( aMMRect.GetSize(), MAP_100TH_MM ) );
 
             PaintToDev( pVirtDev, pDoc, 1.0, aBlock, false );
@@ -358,7 +358,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             // like SvEmbeddedTransfer::GetData:
             GDIMetaFile     aMtf;
-            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
             Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
 

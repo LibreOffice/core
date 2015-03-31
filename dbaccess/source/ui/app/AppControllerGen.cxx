@@ -111,7 +111,7 @@ void OApplicationController::convertToView(const OUString& _sName)
         OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        ScopedVclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker ) );
+        ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
         if ( aDlg->Execute() == RET_OK )
         {
             OUString sName = aDlg->getName();
@@ -534,7 +534,7 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance< MessageDialog > aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
             switch (aQry->Execute())
             {
                 case RET_YES:

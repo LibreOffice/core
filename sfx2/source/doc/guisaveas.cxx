@@ -1856,7 +1856,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
         return true;
 
     vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-    ScopedVclPtr<SfxAlienWarningDialog> aDlg(new SfxAlienWarningDialog(pWin, aOldUIName));
+    ScopedVclPtrInstance< SfxAlienWarningDialog > aDlg(pWin, aOldUIName);
 
     return aDlg->Execute() == RET_OK;
 }

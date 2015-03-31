@@ -993,7 +993,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-                    ScopedVclPtr<CompressGraphicsDialog> dialog(new CompressGraphicsDialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() ) );
+                    ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
                     if ( dialog->Execute() == RET_OK )
                     {
                         SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();

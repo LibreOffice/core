@@ -177,7 +177,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pSdrView )
         {
             SdrObject* pObj = NULL;
-            ScopedVclPtr<svx::FontWorkGalleryDialog> aDlg(new svx::FontWorkGalleryDialog( pSdrView, pWin, nSlotId ));
+            ScopedVclPtrInstance< svx::FontWorkGalleryDialog > aDlg( pSdrView, pWin, nSlotId );
             aDlg->SetSdrObjectRef( &pObj, pSdrView->GetModel() );
             aDlg->Execute();
             if ( pObj )

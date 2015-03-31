@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui"));
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
 
         if ( aQueryBox->Execute() == RET_YES )
         {

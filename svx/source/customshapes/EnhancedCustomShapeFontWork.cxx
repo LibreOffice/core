@@ -165,7 +165,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     aFont.SetOrientation( 0 );
     // initializing virtual device
 
-    ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+    ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
     pVirDev->SetMapMode( MAP_100TH_MM );
     pVirDev->SetFont( aFont );
 
@@ -259,7 +259,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
-            ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+            ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
             pVirDev->SetMapMode( MAP_100TH_MM );
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL( true );

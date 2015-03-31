@@ -151,7 +151,7 @@ void SwGlossaryGroupDlg::Apply()
         const OUString sMsg(SW_RESSTR(STR_QUERY_DELETE_GROUP1)
                             + sTitle
                             + SW_RESSTR(STR_QUERY_DELETE_GROUP2));
-        ScopedVclPtr<QueryBox> aQuery(new QueryBox(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg ));
+        ScopedVclPtrInstance< QueryBox > aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
         if(RET_YES == aQuery->Execute())
             pGlosHdl->DelGroup( sDelGroup );
     }

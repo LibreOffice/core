@@ -2608,7 +2608,7 @@ namespace pcr
         OSL_PRECOND( m_pInfoService.get(), "FormComponentPropertyHandler::impl_dialogListSelection_nothrow: no property meta data!" );
 
         OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
-        ScopedVclPtr<ListSelectionDialog> aDialog(new ListSelectionDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName ) );
+        ScopedVclPtrInstance< ListSelectionDialog > aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog->Execute() );
     }
@@ -2685,7 +2685,7 @@ namespace pcr
             return false;
 
 
-        ScopedVclPtr<FormLinkDialog> aDialog(new FormLinkDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext ) );
+        ScopedVclPtrInstance< FormLinkDialog > aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog->Execute() );
     }
@@ -2871,7 +2871,7 @@ namespace pcr
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
             // destroyItemSet
-            ScopedVclPtr<ControlCharacterDialog> aDlg(new ControlCharacterDialog( impl_getDefaultDialogParent_nothrow(), *pSet ) );
+            ScopedVclPtrInstance< ControlCharacterDialog > aDlg( impl_getDefaultDialogParent_nothrow(), *pSet );
             _rClearBeforeDialog.clear();
             if ( RET_OK == aDlg->Execute() )
             {
@@ -2942,7 +2942,7 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ScopedVclPtr<OSelectLabelDialog> dlgSelectLabel(new OSelectLabelDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent ) );
+        ScopedVclPtrInstance< OSelectLabelDialog > dlgSelectLabel( impl_getDefaultDialogParent_nothrow(), m_xComponent );
         _rClearBeforeDialog.clear();
         bool bSuccess = ( RET_OK == dlgSelectLabel->Execute() );
         if ( bSuccess )

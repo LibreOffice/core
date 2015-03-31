@@ -163,7 +163,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
 {
     try
     {
-        VclPtr<SwAddressListDialog> xAddrDialog(new SwAddressListDialog(this));
+        VclPtrInstance< SwAddressListDialog > xAddrDialog(this);
         if(RET_OK == xAddrDialog->Execute())
         {
             SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();

@@ -3446,7 +3446,7 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
     bool bStart = pBox == m_pStartBracketLB;
-    VclPtr<SvxCharacterMap> aDlg(new SvxCharacterMap( this ));
+    VclPtrInstance< SvxCharacterMap > aDlg( this );
     aDlg->DisableFontSelection();
 
     if ( aDlg->Execute() == RET_OK )

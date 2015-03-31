@@ -360,7 +360,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
     {
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MAP_100TH_MM));
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
@@ -1155,7 +1155,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if(nSymType >= 0)
     {
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);

@@ -87,7 +87,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         Graphic aGraphic( pGalleryItem->GetGraphic() );
 
         // reduce size if necessary
-        ScopedVclPtr<Window> aWindow(new Window(GetActiveWindow()));
+        ScopedVclPtrInstance< Window > aWindow(GetActiveWindow());
         aWindow->SetMapMode(aGraphic.GetPrefMapMode());
         Size aSizePix = aWindow->LogicToPixel(aGraphic.GetPrefSize());
         aWindow->SetMapMode( MapMode(MAP_100TH_MM) );

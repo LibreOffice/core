@@ -116,7 +116,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
         // Call printer setup
         if (pPrt)
         {
-            VclPtr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+            VclPtrInstance< PrinterSetupDialog > pDlg(this);
             pDlg->SetPrinter(pPrt);
             pDlg->Execute();
             pDlg.reset();

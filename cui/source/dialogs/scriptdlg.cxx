@@ -922,7 +922,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
-                        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+                        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
                         aErrorBox->SetText( m_createErrTitleStr );
                         aErrorBox->Execute();
                         xNewDlg->SetObjectName( aNewName );
@@ -1004,7 +1004,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
         aErrorBox->SetText( m_createErrTitleStr );
         aErrorBox->Execute();
     }
@@ -1080,7 +1080,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
         aErrorBox->SetText( m_renameErrTitleStr );
         aErrorBox->Execute();
     }
@@ -1091,7 +1091,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    VclPtr<MessageDialog> aQueryBox(new MessageDialog(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     aQueryBox->SetText( m_delQueryTitleStr );
     if ( aQueryBox->Execute() == RET_NO )
     {
@@ -1126,7 +1126,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), m_delErrStr));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
         aErrorBox->SetText( m_delErrTitleStr );
         aErrorBox->Execute();
     }

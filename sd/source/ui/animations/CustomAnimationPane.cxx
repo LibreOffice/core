@@ -1573,7 +1573,7 @@ void CustomAnimationPane::showOptions(const OString& sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 
-    VclPtr<CustomAnimationDialog> pDlg(new CustomAnimationDialog(this, pSet, sPage));
+    VclPtrInstance< CustomAnimationDialog > pDlg(this, pSet, sPage);
     if( pDlg->Execute() )
     {
         addUndo();
@@ -1752,7 +1752,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
     }
 
-    VclPtr<CustomAnimationCreateDialog> pDlg(new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration ));
+    VclPtrInstance< CustomAnimationCreateDialog > pDlg( this, this, aTargets, bHasText, sPresetId, fDuration );
     if( pDlg->Execute() )
     {
         addUndo();

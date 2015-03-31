@@ -257,7 +257,7 @@ bool ScBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVirtDev;
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
@@ -355,7 +355,7 @@ void ScMultiBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVirtDev;
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;

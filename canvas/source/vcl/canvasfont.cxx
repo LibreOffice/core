@@ -121,7 +121,7 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont(getVCLFont());
         const ::FontMetric& aMetric( pVDev->GetFontMetric() );
 

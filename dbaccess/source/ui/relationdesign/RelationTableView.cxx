@@ -223,7 +223,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
-    ScopedVclPtr<ORelationDialog> aRelDlg(new ORelationDialog( this, pConnection->GetData() ));
+    ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, pConnection->GetData() );
     switch (aRelDlg->Execute())
     {
         case RET_OK:
@@ -251,7 +251,7 @@ void ORelationTableView::AddNewRelation()
 {
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ScopedVclPtr<ORelationDialog> aRelDlg(new ORelationDialog(this, pNewConnData, true));
+    ScopedVclPtrInstance< ORelationDialog > aRelDlg(this, pNewConnData, true);
 
     bool bSuccess = (aRelDlg->Execute() == RET_OK);
     if (bSuccess)
@@ -326,7 +326,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    ScopedVclPtr<OSQLWarningBox> aDlg(new OSQLWarningBox( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES ));
+    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg->Execute() == RET_YES )
     {
         m_pView->getController().ClearUndoManager();
@@ -344,7 +344,7 @@ void ORelationTableView::lookForUiActivities()
     {
         OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        ScopedVclPtrInstance<OSQLMessageBox> aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
         aDlg->SetText(sTitle);
         aDlg->RemoveButton(aDlg->GetButtonId(0));
         aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
@@ -364,7 +364,7 @@ void ORelationTableView::lookForUiActivities()
     }
     if(m_pCurrentlyTabConnData)
     {
-        ScopedVclPtr<ORelationDialog> aRelDlg(new ORelationDialog( this, m_pCurrentlyTabConnData ) );
+        ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, m_pCurrentlyTabConnData );
         if (aRelDlg->Execute() == RET_OK)
         {
             // already updated by the dialog

@@ -4397,7 +4397,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 rOutliner.SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pModel->GetStyleSheetPool()) );
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
-                            ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+                            ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
                             pVirDev->SetMapMode( MAP_100TH_MM );
                             sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )

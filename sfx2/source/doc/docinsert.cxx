@@ -190,7 +190,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for the password
-                    ScopedVclPtr<SfxPasswordDialog> aPasswordDlg( new SfxPasswordDialog(NULL) );
+                    ScopedVclPtrInstance< SfxPasswordDialog > aPasswordDlg(nullptr);
                     aPasswordDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
                     short nRet = aPasswordDlg->Execute();
                     if ( RET_OK == nRet )

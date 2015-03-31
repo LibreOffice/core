@@ -124,7 +124,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
         {
-            ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             const Point aNull(0, 0);
 
             if (GetDPIScaleFactor() > 1)

@@ -1623,7 +1623,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
 {
     OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
 
-    ScopedVclPtr<VirtualDevice> aDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > aDevice;
     if (sRet.isEmpty() || (-1 != aDevice->HasGlyphs(rFont, sRet)))
     {
         aDevice->SetFont(rFont);

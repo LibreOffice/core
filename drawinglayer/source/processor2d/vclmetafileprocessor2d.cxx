@@ -252,7 +252,7 @@ namespace drawinglayer
             const Rectangle aPrimitiveRectangle(
                 basegfx::fround(aPrimitiveRange.getMinX()), basegfx::fround(aPrimitiveRange.getMinY()),
                 basegfx::fround(aPrimitiveRange.getMaxX()), basegfx::fround(aPrimitiveRange.getMaxY()));
-            ScopedVclPtr<VirtualDevice> aContentVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > aContentVDev;
             MapMode aNewMapMode(pLastOutputDevice->GetMapMode());
 
             mpOutputDevice = aContentVDev.get();
@@ -2016,7 +2016,7 @@ namespace drawinglayer
                             const Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
                             Size aSizePixel(aRectPixel.GetSize());
                             const Point aEmptyPoint;
-                            ScopedVclPtr<VirtualDevice> aBufferDevice( new VirtualDevice() );
+                            ScopedVclPtrInstance< VirtualDevice > aBufferDevice;
                             const sal_uInt32 nMaxQuadratPixels(500000);
                             const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
                             double fReduceFactor(1.0);

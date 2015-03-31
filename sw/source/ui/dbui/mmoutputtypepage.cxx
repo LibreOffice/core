@@ -583,7 +583,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
 
     if (pError)
     {
-        VclPtr<SwSendWarningBox_Impl> pDlg(new SwSendWarningBox_Impl(0, *pError));
+        VclPtrInstance< SwSendWarningBox_Impl > pDlg(nullptr, *pError);
         pDlg->Execute();
     }
 }

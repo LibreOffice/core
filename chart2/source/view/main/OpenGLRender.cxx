@@ -625,7 +625,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 
 int OpenGLRender::CreateTextTexture(::rtl::OUString const &textValue, vcl::Font aFont, long , awt::Point aPos, awt::Size aSize, long rotation)
 {
-    ScopedVclPtr<VirtualDevice> pDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0));
+    ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(), 0, 0);
     pDevice->Erase();
     Rectangle aRect;
     pDevice->SetFont(aFont);

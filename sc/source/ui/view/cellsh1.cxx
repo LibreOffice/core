@@ -2682,7 +2682,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (nSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            ScopedVclPtr<InfoBox> aBox(new InfoBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId)));
+            ScopedVclPtrInstance< InfoBox > aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
             aBox->Execute();
             return;
         }

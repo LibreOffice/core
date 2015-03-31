@@ -112,7 +112,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
             aErrorBox->Execute();
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;

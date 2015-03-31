@@ -553,7 +553,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
         if( !aMtf.GetActionSize() )
         {
-            ScopedVclPtr<VirtualDevice> pOut(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pOut;
             const Size aDummySize(2, 2);
 
             pOut->SetOutputSizePixel(aDummySize);
@@ -640,7 +640,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // if graphic could not be retrieved => go the hard way and create a MetaFile
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
-            ScopedVclPtr<VirtualDevice> pOut(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pOut;
             GDIMetaFile     aMtf;
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const MapMode   aMap( pModel->GetScaleUnit(),

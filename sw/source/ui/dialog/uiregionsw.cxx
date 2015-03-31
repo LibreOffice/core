@@ -404,7 +404,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
             bRet = false;
             if (aPasswdDlg->Execute())
             {
@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-        ScopedVclPtr<SwSectionPropertyTabDialog> aTabDlg(new SwSectionPropertyTabDialog(this, aSet, rSh));
+        ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
         if(RET_OK == aTabDlg->Execute())
         {
             const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
@@ -1260,7 +1260,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
+                ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
                 aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
                 if(RET_OK == aPasswdDlg->Execute())
                 {
@@ -1721,7 +1721,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
             aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
             if(RET_OK == aPasswdDlg->Execute())
             {

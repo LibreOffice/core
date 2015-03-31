@@ -861,7 +861,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    ScopedVclPtr<ScSolverProgressDialog> aProgress(new ScSolverProgressDialog( this ) );
+    ScopedVclPtrInstance< ScSolverProgressDialog > aProgress( this );
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
         aProgress->SetTimeLimit( nTimeout );
@@ -1086,7 +1086,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 
-        ScopedVclPtr<ScSolverSuccessDialog> aDialog(new ScSolverSuccessDialog( this, aResultStr ) );
+        ScopedVclPtrInstance< ScSolverSuccessDialog > aDialog( this, aResultStr );
         if ( aDialog->Execute() == RET_OK )
         {
             // keep results and close dialog
@@ -1100,7 +1100,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component
-        ScopedVclPtr<ScSolverNoSolutionDialog> aDialog(new ScSolverNoSolutionDialog( this, aError ) );
+        ScopedVclPtrInstance< ScSolverNoSolutionDialog > aDialog( this, aError );
         aDialog->Execute();
     }
 

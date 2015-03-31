@@ -200,7 +200,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
         if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            ScopedVclPtr<CompressGraphicsDialog> dialog(new CompressGraphicsDialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() ) );
+            ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
             if ( dialog->Execute() == RET_OK )
             {
                 SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();

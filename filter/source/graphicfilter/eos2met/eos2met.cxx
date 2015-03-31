@@ -1851,7 +1851,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE)
                 {
-                    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                    ScopedVclPtrInstance< VirtualDevice > pVDev;
 
                     if( aGDIFont.GetAlign()==ALIGN_TOP )
                         aPt.Y()+=(long)pVDev->GetFontMetric( aGDIFont ).GetAscent();
@@ -1880,7 +1880,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE )
                 {
-                    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                    ScopedVclPtrInstance< VirtualDevice > pVDev;
                     if( aGDIFont.GetAlign() == ALIGN_TOP )
                         aPt.Y()+=(long)pVDev->GetFontMetric(aGDIFont).GetAscent();
                     else
@@ -1923,7 +1923,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_STRETCHTEXT_ACTION:
             {
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 sal_uInt16                          i;
                 sal_Int32                       nNormSize;
                 OUString                        aStr;
@@ -2068,7 +2068,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_GRADIENT_ACTION:
             {
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile                 aTmpMtf;
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
 
@@ -2080,7 +2080,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_HATCH_ACTION:
             {
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile             aTmpMtf;
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
 

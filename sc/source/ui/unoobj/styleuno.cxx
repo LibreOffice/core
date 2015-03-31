@@ -755,7 +755,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
@@ -1096,7 +1096,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             {
                 //  Zeilenhoehen anpassen...
 
-                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
@@ -1463,7 +1463,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
         {
             //  row heights
 
-            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
@@ -1845,7 +1845,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         {
             //  Zeilenhoehen anpassen...
 
-            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;

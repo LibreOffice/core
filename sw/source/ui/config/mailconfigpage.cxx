@@ -217,7 +217,7 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 
 IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl)
 {
-    ScopedVclPtr<SwAuthenticationSettingsDialog> aDlg(new SwAuthenticationSettingsDialog(this, *m_pConfigItem));
+    ScopedVclPtrInstance< SwAuthenticationSettingsDialog > aDlg(this, *m_pConfigItem);
     aDlg->Execute();
     return 0;
 }

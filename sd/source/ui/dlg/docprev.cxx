@@ -241,7 +241,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             pMtf = new GDIMetaFile;
 
-            ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
 
             const Fraction      aFrac( pDoc->GetScaleFraction() );
             const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );

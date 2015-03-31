@@ -116,7 +116,7 @@ namespace drawinglayer
                     if(nSizeX > 0 && nSizeY > 0)
                     {
                         // prepare VirtualDevice
-                        ScopedVclPtr<VirtualDevice> aVirtualDevice(new VirtualDevice(*Application::GetDefaultDevice()));
+                        ScopedVclPtrInstance< VirtualDevice > aVirtualDevice(*Application::GetDefaultDevice());
                         const Size aSizePixel(nSizeX, nSizeY);
                         aVirtualDevice->SetOutputSizePixel(aSizePixel);
 

@@ -125,7 +125,7 @@ static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 
 static void MakeAsMeta(Graphic &rGraphic)
 {
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     GDIMetaFile     aMtf;
     Bitmap          aBmp( rGraphic.GetBitmap() );
     Size            aSize = aBmp.GetPrefSize();
@@ -442,7 +442,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     long nWidth, long nHeight, Graphic &rGraphic)
 {
     GDIMetaFile aMtf;
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     vcl::Font       aFont;
 
     pVDev->EnableOutput( false );

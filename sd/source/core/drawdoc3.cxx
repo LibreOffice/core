@@ -242,7 +242,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
     if (!bOK)
     {
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SD_RESSTR(STR_READ_DATA_ERROR)));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SD_RESSTR(STR_READ_DATA_ERROR));
         aErrorBox->Execute();
 
         CloseBookmarkDoc();

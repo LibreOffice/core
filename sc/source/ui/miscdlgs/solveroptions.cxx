@@ -317,7 +317,7 @@ void ScSolverOptionsDialog::EditOption()
             {
                 if ( pStringItem->IsDouble() )
                 {
-                    ScopedVclPtr<ScSolverValueDialog> aValDialog(new ScSolverValueDialog( this ));
+                    ScopedVclPtrInstance< ScSolverValueDialog > aValDialog( this );
                     aValDialog->SetOptionName( pStringItem->GetText() );
                     aValDialog->SetValue( pStringItem->GetDoubleValue() );
                     if ( aValDialog->Execute() == RET_OK )
@@ -328,7 +328,7 @@ void ScSolverOptionsDialog::EditOption()
                 }
                 else
                 {
-                    ScopedVclPtr<ScSolverIntegerDialog> aIntDialog(new ScSolverIntegerDialog( this ));
+                    ScopedVclPtrInstance< ScSolverIntegerDialog > aIntDialog( this );
                     aIntDialog->SetOptionName( pStringItem->GetText() );
                     aIntDialog->SetValue( pStringItem->GetIntValue() );
                     if ( aIntDialog->Execute() == RET_OK )

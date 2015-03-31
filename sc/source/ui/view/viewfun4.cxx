@@ -99,7 +99,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         if (pActWin)
         {
             pEngine->SetPaperSize(Size(100000,100000));
-            VclPtr<vcl::Window> aWin(new vcl::Window( pActWin ));
+            VclPtrInstance< vcl::Window > aWin( pActWin );
             EditView aEditView( pEngine.get(), aWin.get() );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
@@ -387,7 +387,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
-        ScopedVclPtr<InfoBox> aBox(new InfoBox( GetViewData().GetDialogParent(), aErr ) );
+        ScopedVclPtrInstance< InfoBox > aBox( GetViewData().GetDialogParent(), aErr );
         aBox->Execute();
     }
     if (pThesaurusEngine->IsModified())

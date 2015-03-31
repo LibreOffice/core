@@ -1877,7 +1877,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
     // create the MetaFile
     pRetval = new GDIMetaFile;
-    ScopedVclPtr<VirtualDevice> pBlackHole(new VirtualDevice());
+    ScopedVclPtrInstance< VirtualDevice > pBlackHole;
     pBlackHole->EnableOutput(false);
     pRetval->Record(pBlackHole);
     Point aPaintPos = aPaintRect.TopLeft();

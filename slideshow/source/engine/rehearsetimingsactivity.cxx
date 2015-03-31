@@ -159,7 +159,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maFont.SetColor( COL_BLACK );
 
     // determine sprite size (in pixel):
-    ScopedVclPtr<VirtualDevice> blackHole( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > blackHole;
     blackHole->EnableOutput(false);
     blackHole->SetFont( maFont );
     blackHole->SetMapMode( MAP_PIXEL );
@@ -444,7 +444,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
 
     // create the MetaFile:
     GDIMetaFile metaFile;
-    ScopedVclPtr<VirtualDevice> blackHole( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > blackHole;
     metaFile.Record( blackHole );
     metaFile.SetPrefSize( Size( 1, 1 ) );
     blackHole->EnableOutput(false);

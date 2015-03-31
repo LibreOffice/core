@@ -821,7 +821,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
                                             aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                            ScopedVclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage ) );
+                                            ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
                                             if ( aBox->Execute() == RET_RETRY )
                                             {
                                                 bRetry = true;
@@ -1457,7 +1457,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
-        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)

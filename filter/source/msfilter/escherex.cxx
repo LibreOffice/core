@@ -1387,7 +1387,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     // do not create a bitmap in page size, that would explode file sizes (and have no good quality).
     // Better use a MetaFile graphic in page size; thus we have good quality due to vector format and
     // no bit file sizes.
-    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     GDIMetaFile aMtf;
 
     pVDev->SetOutputSizePixel(Size(2, 2));

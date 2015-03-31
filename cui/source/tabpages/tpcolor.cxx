@@ -872,7 +872,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui"));
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui");
 
         if( aQueryBox->Execute() == RET_YES )
         {

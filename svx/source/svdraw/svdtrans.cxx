@@ -634,13 +634,13 @@ FrPair GetInchOrMM(MapUnit eU)
         case MAP_MM         : return FrPair(   1,1);
         case MAP_CM         : return FrPair(   1,10);
         case MAP_PIXEL      : {
-            ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVD;
             pVD->SetMapMode(MapMode(MAP_100TH_MM));
             Point aP(pVD->PixelToLogic(Point(64,64))); // 64 pixels for more accuracy
             return FrPair(6400,aP.X(),6400,aP.Y());
         }
         case MAP_APPFONT: case MAP_SYSFONT: {
-            ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVD;
             pVD->SetMapMode(MapMode(eU));
             Point aP(pVD->LogicToPixel(Point(32,32))); // 32 units for more accuracy
             pVD->SetMapMode(MapMode(MAP_100TH_MM));

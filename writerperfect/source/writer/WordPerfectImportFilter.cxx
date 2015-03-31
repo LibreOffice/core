@@ -119,7 +119,7 @@ throw (RuntimeException, std::exception)
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(0));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(0);
             aPasswdDlg->SetMinLen(0);
             if (!aPasswdDlg->Execute())
                 return false;
@@ -303,7 +303,7 @@ throw (RuntimeException, std::exception)
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(0));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(0);
             aPasswdDlg->SetMinLen(0);
             if (!aPasswdDlg->Execute())
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;

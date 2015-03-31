@@ -99,7 +99,7 @@ static bool lcl_GetPassword(
     /*out*/OUString &rPassword )
 {
     bool bRes = false;
-    ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(pParent));
+    ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(pParent);
     aPasswdDlg->SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg->ShowExtras( SHOWEXTRAS_CONFIRM );

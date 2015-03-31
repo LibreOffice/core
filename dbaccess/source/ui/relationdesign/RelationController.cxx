@@ -205,7 +205,7 @@ void ORelationController::impl_initialize()
         {
             OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
-            ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE)));
+            ScopedVclPtrInstance< OSQLMessageBox > aDlg(nullptr,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg->Execute();
         }
         disconnect();

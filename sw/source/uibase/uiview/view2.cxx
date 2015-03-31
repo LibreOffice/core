@@ -240,7 +240,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             const sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui") );
+                ScopedVclPtrInstance< MessageDialog > aQueryBox( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui");
                 if (aQueryBox->Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
@@ -439,7 +439,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             // really store as link only?
             if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
             {
-                ScopedVclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(GetWindow(),pFileDlg->GetPath()));
+                ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(GetWindow(),pFileDlg->GetPath());
                 if( aWarnDlg->Execute() != RET_OK )
                     bAsLink=false; // don't store as link
             }
@@ -504,7 +504,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO) );
+                ScopedVclPtrInstance< MessageDialog > aInfoBox( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO);
                 aInfoBox->Execute();
             }
             rReq.Ignore();
@@ -585,7 +585,7 @@ void SwView::Execute(SfxRequest &rReq)
                         pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
-                    ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+                    ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
                     aPasswdDlg->SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     (void)aPasswdDlg->Execute();
@@ -623,7 +623,7 @@ void SwView::Execute(SfxRequest &rReq)
                 pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
-            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
             aPasswdDlg->SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
@@ -2390,7 +2390,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         SfxApplication* pSfxApp = SfxGetpApp();
         vcl::Window* pTopWin = pSfxApp->GetTopWindow();
 
-        ScopedVclPtr<SfxTemplateManagerDlg> aDocTemplDlg(new SfxTemplateManagerDlg);
+        ScopedVclPtrInstance< SfxTemplateManagerDlg > aDocTemplDlg;
         int nRet = aDocTemplDlg->Execute();
         bool bNewWin = false;
         if ( nRet == RET_OK )

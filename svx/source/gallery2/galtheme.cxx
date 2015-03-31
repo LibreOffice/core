@@ -808,7 +808,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
                             bRet = true;
                         else
                         {
-                            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                            ScopedVclPtrInstance< VirtualDevice > pVDev;
                             pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
                             FmFormView aView( aModel.GetModel(), pVDev );
 

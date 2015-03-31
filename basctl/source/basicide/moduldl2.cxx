@@ -688,7 +688,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                VclPtr<SvxPasswordDialog> pDlg(new SvxPasswordDialog( this, true, !bProtected ));
+                VclPtrInstance< SvxPasswordDialog > pDlg( this, true, !bProtected );
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
@@ -1128,7 +1128,7 @@ void LibPage::Export( void )
             return;
     }
 
-    ScopedVclPtr<ExportDialog> aNewDlg(new ExportDialog(this));
+    ScopedVclPtrInstance< ExportDialog > aNewDlg(this);
     if (aNewDlg->Execute() == RET_OK)
     {
         try
@@ -1504,7 +1504,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    ScopedVclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(pWin, ObjectMode::Library));
+    ScopedVclPtrInstance< NewObjectDialog > aNewDlg(pWin, ObjectMode::Library);
     aNewDlg->SetObjectName(aLibName);
 
     if (aNewDlg->Execute())

@@ -2908,7 +2908,7 @@ namespace cppcanvas
 
             VectorOfOutDevStates    aStateStack;
 
-            ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > aVDev;
             aVDev->EnableOutput( false );
 
             // Setup VDev for state tracking and mapping

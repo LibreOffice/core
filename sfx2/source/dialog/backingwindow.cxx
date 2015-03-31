@@ -395,7 +395,7 @@ void BackingWindow::Paint( const Rectangle& )
     DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
     Pop();
 
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *this ) );
+    ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
     pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetOutputSizePixel( maStartCentButtons.GetSize() );
     Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());

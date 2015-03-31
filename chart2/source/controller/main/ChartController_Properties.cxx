@@ -825,7 +825,7 @@ void ChartController::executeDispatch_View3D()
 
         //open dialog
         SolarMutexGuard aSolarGuard;
-        ScopedVclPtr<View3DDialog> aDlg(new View3DDialog( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorList() ));
+        ScopedVclPtrInstance< View3DDialog > aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorList() );
         if( aDlg->Execute() == RET_OK )
             aUndoGuard.commit();
     }

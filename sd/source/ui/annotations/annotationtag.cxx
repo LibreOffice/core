@@ -515,7 +515,7 @@ void AnnotationTag::deselect()
 
 BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 {
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
 
     OUString sAuthor( getInitials( mxAnnotation->getAuthor() ) );
     sAuthor += OUString( ' ' );

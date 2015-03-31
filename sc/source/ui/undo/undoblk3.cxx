@@ -841,7 +841,7 @@ void ScUndoAutoFormat::Redo()
 
     if (bSize)
     {
-        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         Fraction aZoomX(1,1);
         Fraction aZoomY = aZoomX;
         double nPPTX,nPPTY;

@@ -197,7 +197,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
         std::vector< Graphic > aGraphics;
 
-        ScopedVclPtr<VirtualDevice> pDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pDev;
         pDev->SetMapMode(MapMode(MAP_PIXEL));
 
         Size aSize;

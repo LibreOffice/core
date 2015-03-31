@@ -287,7 +287,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         nLevelNo = 9;
     else if (sIdent == "saveas")
     {
-        VclPtr<SwNumNamesDlg> pDlg(new SwNumNamesDlg(this));
+        VclPtrInstance< SwNumNamesDlg > pDlg(this);
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -931,7 +931,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     const Size aSize(PixelToLogic(GetOutputSizePixel()));
 
-    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtrInstance< VirtualDevice > pVDev(*this);
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 

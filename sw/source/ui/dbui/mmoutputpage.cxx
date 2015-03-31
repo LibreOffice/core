@@ -540,7 +540,7 @@ IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButto
 
 IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
 {
-    ScopedVclPtr<SwCopyToDialog> pDlg(new SwCopyToDialog(pButton));
+    ScopedVclPtrInstance< SwCopyToDialog > pDlg(pButton);
     pDlg->SetCC(m_sCC );
     pDlg->SetBCC(m_sBCC);
     if(RET_OK == pDlg->Execute())
@@ -733,7 +733,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
 
         SwView* pSourceView = rConfigItem.GetSourceView();
-        ScopedVclPtrInstance<PrintMonitor> aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
+        ScopedVclPtrInstance< PrintMonitor > aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
         aSaveMonitor->m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
         aSaveMonitor->SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
         aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
@@ -799,7 +799,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
                 if(bFailed)
                 {
-                    ScopedVclPtr<SwSaveWarningBox_Impl> aWarning(new SwSaveWarningBox_Impl( pButton, sOutPath ));
+                    ScopedVclPtrInstance< SwSaveWarningBox_Impl > aWarning( pButton, sOutPath );
                     if(RET_OK == aWarning->Execute())
                         sOutPath = aWarning->GetFileName();
                     else
@@ -983,12 +983,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(rConfigItem.GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
     {
-        ScopedVclPtr<QueryBox> aQuery(new QueryBox(pButton, WB_YES_NO_CANCEL, m_sConfigureMail));
+        ScopedVclPtrInstance< QueryBox > aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
         sal_uInt16 nRet = aQuery->Execute();
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
-            ScopedVclPtr<SwMailConfigDlg> pDlg(new SwMailConfigDlg(pButton, aSet));
+            ScopedVclPtrInstance< SwMailConfigDlg > pDlg(pButton, aSet);
             nRet = pDlg->Execute();
         }
 

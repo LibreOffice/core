@@ -670,7 +670,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     if( !mpObj.is() || mpModel == NULL || !mpObj->IsInserted() || NULL == mpObj->GetPage() )
         return aAny;
 
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
     SdrModel* pModel = mpObj->GetModel();

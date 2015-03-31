@@ -1439,7 +1439,7 @@ namespace
     {
         if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
         {
-            ScopedVclPtr<VirtualDevice> pVirtualDevice( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
             pVirtualDevice->SetOutputSizePixel(rSize);
 
             if(rBitmapEx.IsTransparent())
@@ -1710,7 +1710,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         return;
 
     long nCount = pList->Count();
-    ScopedVclPtrInstance<VirtualDevice> pVD;
+    ScopedVclPtrInstance< VirtualDevice > pVD;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
@@ -1740,7 +1740,7 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
 {
     if(!rBitmap.IsEmpty())
     {
-        ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVD;
         const Size aBmpSize(rBitmap.GetSizePixel());
 
         pVD->SetOutputSizePixel(aBmpSize, false);
@@ -1765,7 +1765,7 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
 
     if(!rBitmap.IsEmpty())
     {
-        ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVD;
         const Size aBmpSize(rBitmap.GetSizePixel());
 
         pVD->SetOutputSizePixel(aBmpSize, false);

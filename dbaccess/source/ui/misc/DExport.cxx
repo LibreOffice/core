@@ -754,7 +754,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         OUString aMsg(e.Message);
         aMsg += "\n";
         aMsg += ModuleRes( STR_QRY_CONTINUE );
-        ScopedVclPtr<OSQLWarningBox> aBox(new OSQLWarningBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO ) );
+        ScopedVclPtrInstance< OSQLWarningBox > aBox( nullptr, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox->Execute() == RET_YES)
             m_bDontAskAgain = true;

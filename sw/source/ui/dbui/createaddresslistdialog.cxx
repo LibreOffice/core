@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
 
 IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
 {
-    VclPtr<SwCustomizeAddressListDialog> pDlg(new SwCustomizeAddressListDialog(pButton, *m_pCSVData));
+    VclPtrInstance< SwCustomizeAddressListDialog > pDlg(pButton, *m_pCSVData);
     if(RET_OK == pDlg->Execute())
     {
         delete m_pCSVData;

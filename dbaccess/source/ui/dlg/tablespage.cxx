@@ -327,7 +327,7 @@ namespace dbaui
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                ScopedVclPtr<OSQLMessageBox> aMessageBox(new OSQLMessageBox( GetParentDialog(), aErrorInfo ));
+                ScopedVclPtrInstance< OSQLMessageBox > aMessageBox( GetParentDialog(), aErrorInfo );
                 aMessageBox->Execute();
                 m_pTables->Enable(false);
                 m_pTablesList->Clear();

@@ -462,7 +462,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         bool bNewWin = false;
         vcl::Window* pTopWin = GetTopWindow();
 
-        ScopedVclPtr<SfxTemplateManagerDlg> aTemplDlg(new SfxTemplateManagerDlg);
+        ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
         int nRet = aTemplDlg->Execute();
         if ( nRet == RET_OK )
         {

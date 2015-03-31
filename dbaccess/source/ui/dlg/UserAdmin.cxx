@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(this, aErrorMsg));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
         aErrorBox->Execute();
         m_pEDPassword->SetText( OUString() );
         m_pEDPasswordRepeat->SetText( OUString() );
@@ -213,7 +213,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     {
         if(pButton == m_pNEWUSER)
         {
-            ScopedVclPtr<SfxPasswordDialog> aPwdDlg(new SfxPasswordDialog(this));
+            ScopedVclPtrInstance< SfxPasswordDialog > aPwdDlg(this);
             aPwdDlg->ShowExtras(SHOWEXTRAS_ALL);
             if(aPwdDlg->Execute())
             {
@@ -240,7 +240,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 if(xUser.is())
                 {
                     OUString sNewPassword,sOldPassword;
-                    ScopedVclPtr<OPasswordDialog> aDlg(new OPasswordDialog(this,sName));
+                    ScopedVclPtrInstance< OPasswordDialog > aDlg(this,sName);
                     if(aDlg->Execute() == RET_OK)
                     {
                         sNewPassword = aDlg->GetNewPassword();
@@ -259,7 +259,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    ScopedVclPtr<MessageDialog> aQry(new MessageDialog(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                    ScopedVclPtrInstance< MessageDialog > aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                     if(aQry->Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }

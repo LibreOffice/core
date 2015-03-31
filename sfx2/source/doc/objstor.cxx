@@ -3019,7 +3019,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
         {
             sMessage += "\n";
             sMessage += SfxResId(nResId).toString();
-            ScopedVclPtr<WarningBox> aWBox(new WarningBox(pParent, WB_YES_NO | WB_DEF_NO, sMessage));
+            ScopedVclPtrInstance< WarningBox > aWBox(pParent, WB_YES_NO | WB_DEF_NO, sMessage);
             nRet = aWBox->Execute();
         }
     }

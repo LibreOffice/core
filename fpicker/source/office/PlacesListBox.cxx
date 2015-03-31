@@ -194,7 +194,7 @@ IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() == true && !pPlace->IsLocal( ) )
     {
-        ScopedVclPtr<PlaceEditDialog> aDlg(new PlaceEditDialog(mpDlg, pPlace));
+        ScopedVclPtrInstance< PlaceEditDialog > aDlg(mpDlg, pPlace);
         short aRetCode = aDlg->Execute();
         switch(aRetCode) {
             case RET_OK :

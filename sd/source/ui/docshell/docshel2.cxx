@@ -193,7 +193,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     MapMode         aMapMode( MAP_100TH_MM );
     const Size      aSize( pPage->GetSize() );
     const Point     aNullPt;
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *Application::GetDefaultDevice() ) );
+    ScopedVclPtrInstance< VirtualDevice > pVDev( *Application::GetDefaultDevice() );
 
     pVDev->SetMapMode( aMapMode );
 

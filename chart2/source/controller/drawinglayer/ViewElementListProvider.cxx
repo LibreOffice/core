@@ -143,7 +143,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
 
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MAP_100TH_MM));
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();

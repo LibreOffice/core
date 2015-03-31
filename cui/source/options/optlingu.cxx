@@ -1596,7 +1596,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             pLinguData = new SvxLinguData_Impl;
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
-        ScopedVclPtr<SvxEditModulesDlg>   aDlg(new SvxEditModulesDlg( this, *pLinguData ));
+        ScopedVclPtrInstance< SvxEditModulesDlg > aDlg( this, *pLinguData );
         if (aDlg->Execute() != RET_OK)
             *pLinguData = aOldLinguData;
 
@@ -1745,7 +1745,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             if(aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
-                ScopedVclPtr<OptionsBreakSet> aDlg( new OptionsBreakSet(this, nRID) );
+                ScopedVclPtrInstance< OptionsBreakSet > aDlg(this, nRID);
                 aDlg->GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg->Execute() )
                 {

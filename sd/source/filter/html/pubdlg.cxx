@@ -1162,7 +1162,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
         {
             bRetry = false;
 
-            ScopedVclPtr<SdDesignNameDlg> aDlg(new SdDesignNameDlg(this, aName ));
+            ScopedVclPtrInstance< SdDesignNameDlg > aDlg(this, aName );
 
             if ( aDlg->Execute() == RET_OK )
             {

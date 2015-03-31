@@ -49,7 +49,7 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(pParent, aErrorMsg));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(pParent, aErrorMsg);
         aErrorBox->Execute();
     }
 

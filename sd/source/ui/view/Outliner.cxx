@@ -1068,7 +1068,7 @@ void Outliner::ShowEndOfSearchDialog (void)
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog(NULL, aString, VCL_MESSAGE_INFO));
+    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
 
     ShowModalMessageBox (*aInfoBox.get());
 
@@ -1376,7 +1376,7 @@ bool Outliner::HandleFailedSearch (void)
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.  Tell the user.
-            ScopedVclPtr<InfoBox> aInfoBox (new InfoBox(NULL, SD_RESSTR(STR_SAR_NOT_FOUND)));
+            ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, SD_RESSTR(STR_SAR_NOT_FOUND));
             ShowModalMessageBox (*aInfoBox.get());
         }
 

@@ -761,7 +761,7 @@ namespace svx
 
     IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnOption )
     {
-        ScopedVclPtr<HangulHanjaOptionsDialog> aOptDlg( new HangulHanjaOptionsDialog(this) );
+        ScopedVclPtrInstance< HangulHanjaOptionsDialog > aOptDlg(this);
         aOptDlg->Execute();
         m_aOptionsChangedLink.Call( this );
         return 0L;
@@ -1041,7 +1041,7 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, NewDictHdl)
     {
         OUString                    aName;
-        ScopedVclPtr<HangulHanjaNewDictDialog> aNewDlg( new HangulHanjaNewDictDialog(this) );
+        ScopedVclPtrInstance< HangulHanjaNewDictDialog > aNewDlg(this);
         aNewDlg->Execute();
         if( aNewDlg->GetName( aName ) )
         {
@@ -1077,7 +1077,7 @@ namespace svx
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
         if( pEntry )
         {
-            ScopedVclPtr<HangulHanjaEditDictDialog>   aEdDlg( new HangulHanjaEditDictDialog(this, m_aDictList, m_pDictsLB->GetSelectEntryPos()) );
+            ScopedVclPtrInstance< HangulHanjaEditDictDialog > aEdDlg(this, m_aDictList, m_pDictsLB->GetSelectEntryPos());
             aEdDlg->Execute();
         }
         return 0L;

@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     else
     {
         OUString  aText;
-        VclPtr<SfxSingleTabDialog> pDlg(new SfxSingleTabDialog(this, aDataSet));
+        VclPtrInstance< SfxSingleTabDialog > pDlg(this, aDataSet);
         const int nSettingsId = 42;
         bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );

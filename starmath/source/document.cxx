@@ -989,7 +989,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
-            VclPtr<SmFontTypeDialog> xFontTypeDialog(new SmFontTypeDialog( NULL, pDev ));
+            VclPtrInstance< SmFontTypeDialog > xFontTypeDialog( nullptr, pDev );
 
             SmFormat aOldFormat  = GetFormat();
             xFontTypeDialog->ReadFrom( aOldFormat );
@@ -1011,7 +1011,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONTSIZE:
         {
-            VclPtr<SmFontSizeDialog> xFontSizeDialog(new SmFontSizeDialog(NULL));
+            VclPtrInstance< SmFontSizeDialog > xFontSizeDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xFontSizeDialog->ReadFrom( aOldFormat );
@@ -1034,7 +1034,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_DISTANCE:
         {
-            VclPtr<SmDistanceDialog> xDistanceDialog(new SmDistanceDialog(NULL));
+            VclPtrInstance< SmDistanceDialog > xDistanceDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xDistanceDialog->ReadFrom( aOldFormat );
@@ -1057,7 +1057,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_ALIGN:
         {
-            VclPtr<SmAlignDialog> xAlignDialog(new SmAlignDialog(NULL));
+            VclPtrInstance< SmAlignDialog > xAlignDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xAlignDialog->ReadFrom( aOldFormat );

@@ -2443,7 +2443,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2486,7 +2486,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName;
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
-        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
@@ -2523,7 +2523,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2563,9 +2563,8 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
 {
     (void)pButton;
 
-    VclPtr<SvxMainMenuOrganizerDialog> pDialog(
-        new SvxMainMenuOrganizerDialog( 0,
-            GetSaveInData()->GetEntries(), NULL, true ));
+    VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog( nullptr,
+            GetSaveInData()->GetEntries(), NULL, true );
 
     if ( pDialog->Execute() == RET_OK )
     {
@@ -3103,7 +3102,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pToolbar->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3189,7 +3188,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -4356,7 +4355,7 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    ScopedVclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
+    ScopedVclPtrInstance< QueryBox > qbox( this, WB_YES_NO, label );
 
     return qbox->Execute();
 }
@@ -4447,7 +4446,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     OUString aNewURL =
         generateCustomURL( GetSaveInData()->GetEntries() );
 
-    VclPtr<SvxNewToolbarDialog> pNameDialog(new SvxNewToolbarDialog( 0, aNewName ));
+    VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 
     sal_uInt16 nInsertPos;
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
@@ -4593,7 +4592,7 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     // in all color modes, like high contrast.
     const AllSettings& rSettings = Application::GetSettings();
 
-    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     Size            aSize( 26, 20 );
 
     pVDev->SetOutputSizePixel( aSize );
@@ -5298,7 +5297,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             message += newLine;
         }
 
-        ScopedVclPtr<SvxIconChangeDialog> aDialog(new SvxIconChangeDialog(this, message));
+        ScopedVclPtrInstance< SvxIconChangeDialog > aDialog(this, message);
         aDialog->Execute();
     }
 }

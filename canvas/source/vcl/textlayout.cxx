@@ -104,7 +104,7 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
         setupLayoutMode( *pVDev.get(), mnTextDirection );
@@ -157,7 +157,7 @@ namespace vclcanvas
 
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
         setupLayoutMode( *pVDev.get(), mnTextDirection );
@@ -237,7 +237,7 @@ namespace vclcanvas
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
 
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders

@@ -1619,7 +1619,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                ScopedVclPtr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
+                ScopedVclPtrInstance< SfxNewStyleDlg > pDlg(pWindow, *pStyleSheetPool);
                     // why? : FloatingWindow must not be parent of a modal dialog
                 if(RET_OK == pDlg->Execute())
                 {

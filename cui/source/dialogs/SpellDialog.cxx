@@ -2055,7 +2055,7 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
         aErrorBox->SetText(sTitle);
         aErrorBox->Execute();
     }

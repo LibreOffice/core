@@ -624,7 +624,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     }
     else if (nMenuId == MNI_REPOSITORY_NEW)
     {
-        ScopedVclPtr<PlaceEditDialog> dlg(new PlaceEditDialog(this));
+        ScopedVclPtrInstance< PlaceEditDialog > dlg(this);
 
         if (dlg->Execute())
         {
@@ -1168,14 +1168,14 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 {
     const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
 
-    ScopedVclPtr<SfxTemplateInfoDlg> aDlg(new SfxTemplateInfoDlg);
+    ScopedVclPtrInstance< SfxTemplateInfoDlg > aDlg;
     aDlg->loadDocument(pItem->getPath());
     aDlg->Execute();
 }
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
-    ScopedVclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
     if ( aQueryDlg->Execute() != RET_YES )
         return;
@@ -1246,7 +1246,7 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
 void SfxTemplateManagerDlg::OnFolderNew()
 {
-    ScopedVclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
+    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
     int ret = dlg->Execute();
 
@@ -1260,7 +1260,7 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
-    ScopedVclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
     if ( aQueryDlg->Execute() != RET_YES )
         return;
@@ -1313,7 +1313,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
         return;
     }
 
-    ScopedVclPtr<InputDialog> aDlg(new InputDialog(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this));
+    ScopedVclPtrInstance< InputDialog > aDlg(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this);
 
     if (aDlg->Execute())
     {
@@ -1323,7 +1323,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
         {
             OUString aFolderList;
             OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
-            ScopedVclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if (mpLocalView->isNonRootRegionVisible())
             {
@@ -1451,7 +1451,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        ScopedVclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
+        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
         int ret = dlg->Execute();
 
@@ -1499,7 +1499,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        ScopedVclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
+        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
         int ret = dlg->Execute();
 
@@ -1553,7 +1553,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        ScopedVclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
+        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
         int ret = dlg->Execute();
 

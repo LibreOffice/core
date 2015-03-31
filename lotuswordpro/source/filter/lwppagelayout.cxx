@@ -640,7 +640,7 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
     if(GetUsePrinterSettings())
     {
         //replaced by printer paper size
-        ScopedVclPtr<Printer> pPrinter( new Printer() );
+        ScopedVclPtrInstance< Printer > pPrinter;
         bool bScreen = pPrinter->IsDisplayPrinter();
         if (!bScreen)//Printer available
         {

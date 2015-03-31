@@ -1699,7 +1699,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 if ( aSrcFont.GetAlign() != ALIGN_BASELINE )
                 {
-                    ScopedVclPtrInstance<VirtualDevice> pVirDev;
+                    ScopedVclPtrInstance< VirtualDevice > pVirDev;
                     if (aSrcFont.GetAlign()==ALIGN_TOP)
                         aPt.Y()+=(long)pVirDev->GetFontMetric(aSrcFont).GetAscent();
                     else
@@ -1719,7 +1719,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 if (aSrcFont.GetAlign()!=ALIGN_BASELINE)
                 {
-                    ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+                    ScopedVclPtrInstance< VirtualDevice > pVirDev;
 
                     if (aSrcFont.GetAlign()==ALIGN_TOP)
                         aPt.Y()+=(long)pVirDev->GetFontMetric(aSrcFont).GetAscent();
@@ -1737,7 +1737,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
                 Point                           aPt( pA->GetPoint() );
                 OUString                        aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
-                ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVirDev;
                 boost::scoped_array<long>       pDXAry(new long[ aStr.getLength() ]);
                 sal_Int32                       nNormSize( pVirDev->GetTextArray( aStr,pDXAry.get() ) );
 
@@ -1773,7 +1773,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaBmpAction*    pA = static_cast<const MetaBmpAction*>(pMA);
                 const Bitmap            aBmp( pA->GetBitmap() );
-                ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVirDev;
 
                 WriteOpcode_BitsRect( pA->GetPoint(), pVirDev->PixelToLogic( aBmp.GetSizePixel(), aSrcMapMode ), aBmp );
             }
@@ -1800,7 +1800,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pMA);
                 const Bitmap            aBmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
-                ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+                ScopedVclPtrInstance< VirtualDevice > pVirDev;
 
                 WriteOpcode_BitsRect( pA->GetPoint(), pVirDev->PixelToLogic( aBmp.GetSizePixel(), aSrcMapMode ), aBmp );
             }

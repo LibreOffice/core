@@ -577,7 +577,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     }
 
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    ScopedVclPtr<VirtualDevice> pVirtWindow( new VirtualDevice( *pDefaultDev ) );
+    ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *pDefaultDev );
     pVirtWindow->SetMapMode(MAP_PIXEL);
     vcl::Font aDefFont;
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow); // Font color doesn't matter here

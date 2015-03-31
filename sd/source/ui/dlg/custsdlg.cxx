@@ -126,7 +126,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     if( p == m_pBtnNew )
     {
         pCustomShow = NULL;
-        ScopedVclPtr<SdDefineCustomShowDlg> aDlg(new SdDefineCustomShowDlg( this, rDoc, pCustomShow ));
+        ScopedVclPtrInstance< SdDefineCustomShowDlg > aDlg( this, rDoc, pCustomShow );
         if( aDlg->Execute() == RET_OK )
         {
             if( pCustomShow )
@@ -154,7 +154,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
             pCustomShow = (*pCustomShowList)[ nPos ];
-            ScopedVclPtr<SdDefineCustomShowDlg> aDlg(new SdDefineCustomShowDlg( this, rDoc, pCustomShow ));
+            ScopedVclPtrInstance< SdDefineCustomShowDlg > aDlg( this, rDoc, pCustomShow );
 
             if( aDlg->Execute() == RET_OK )
             {

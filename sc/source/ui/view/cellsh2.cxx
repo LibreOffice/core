@@ -740,7 +740,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
         case SID_DATA_STREAMS:
         {
-            ScopedVclPtr<sc::DataStreamDlg> aDialog(new sc::DataStreamDlg( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() ) );
+            ScopedVclPtrInstance< sc::DataStreamDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
             ScDocument *pDoc = GetViewData()->GetDocument();
             sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();

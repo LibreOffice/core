@@ -158,7 +158,7 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     }
     else if(1 < nCount)
     {
-        ScopedVclPtr<SwGlossDecideDlg> aDlg(new SwGlossDecideDlg(0));
+        ScopedVclPtrInstance< SwGlossDecideDlg > aDlg(0);
         OUString sTitle = aDlg->GetText() + " " + aTripleStrings.front().sBlock;
         aDlg->SetText(sTitle);
 

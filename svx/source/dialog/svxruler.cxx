@@ -3457,7 +3457,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         {
             PopupMenu aMenu;
             aMenu.SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
-            ScopedVclPtrInstance<VirtualDevice()
+            ScopedVclPtrInstance< VirtualDevice > pDev;
             const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
             pDev->SetOutputSize(aSz);
             pDev->SetBackground(Wallpaper(Color(COL_WHITE)));

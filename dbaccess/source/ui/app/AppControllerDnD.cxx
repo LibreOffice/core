@@ -175,7 +175,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         else
         {
             OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-            ScopedVclPtr<MessageDialog> aError(new MessageDialog(getView(), sMessage));
+            ScopedVclPtrInstance< MessageDialog > aError(getView(), sMessage);
             aError->Execute();
         }
     }
@@ -210,7 +210,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
-                ScopedVclPtr<svtools::QueryDeleteDlg_Impl> aDlg( new svtools::QueryDeleteDlg_Impl(getView(), *aThisRound) );
+                ScopedVclPtrInstance< svtools::QueryDeleteDlg_Impl > aDlg(getView(), *aThisRound);
 
                 if ( !sDialogPosition.isEmpty() )
                     aDlg->SetWindowState( sDialogPosition );

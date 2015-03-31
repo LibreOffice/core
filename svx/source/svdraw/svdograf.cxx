@@ -1026,7 +1026,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
 
     if(isEmbeddedSvg() && GetModel())
     {
-        ScopedVclPtr<VirtualDevice> pOut( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pOut;
         const Rectangle aBoundRect(GetCurrentBoundRect());
         const MapMode aMap(GetModel()->GetScaleUnit(), Point(), GetModel()->GetScaleFraction(), GetModel()->GetScaleFraction());
 

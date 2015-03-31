@@ -504,7 +504,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     if( SLIDE_NO_TIMEOUT != mnPauseTimeout )
     {
         MapMode         aVMap( rMap );
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *this ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
 
         aVMap.SetOrigin( Point() );
         pVDev->SetMapMode( aVMap );

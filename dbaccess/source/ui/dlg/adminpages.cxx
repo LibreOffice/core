@@ -117,7 +117,7 @@ namespace dbaui
             // show an error message
             OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            ScopedVclPtr<MessageDialog> aDialog(new MessageDialog(this, sError));
+            ScopedVclPtrInstance< MessageDialog > aDialog(this, sError);
             aDialog->Execute();
             return false;
         }
@@ -125,7 +125,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ScopedVclPtr<ODatasourceSelectDialog> aSelector(new ODatasourceSelectDialog(GetParent(), aOdbcDatasources));
+            ScopedVclPtrInstance< ODatasourceSelectDialog > aSelector(GetParent(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
                 aSelector->Select(_sCurr);
             if ( RET_OK == aSelector->Execute() )
@@ -242,7 +242,7 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = ModuleRes(STR_CONNECTION_NO_SUCCESS);
                 }
-                ScopedVclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox( this, sTitle, aMessage, WB_OK, eImage ) );
+                ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg->Execute();
             }
             if ( !bSuccess )

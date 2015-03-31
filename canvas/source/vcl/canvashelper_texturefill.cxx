@@ -1026,7 +1026,7 @@ namespace vclcanvas
                             // cannot do direct XOR, but have to
                             // prepare the filled polygon within a
                             // VDev
-                            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+                            ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
                             pVDev->SetOutputSizePixel( aPolygonDeviceRect.GetSize() );
 
                             // shift output to origin of VDev

@@ -1567,7 +1567,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    ScopedVclPtr<ConditionalFormattingDialog> aDlg(new ConditionalFormattingDialog( getView(), xFormattedField.get(), *this ));
+                    ScopedVclPtrInstance< ConditionalFormattingDialog > aDlg( getView(), xFormattedField.get(), *this );
                     aDlg->Execute();
                 }
             }
@@ -1577,7 +1577,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ScopedVclPtr<ODateTimeDialog> aDlg(new ODateTimeDialog(getView(),getDesignView()->getCurrentSection(),this));
+                    ScopedVclPtrInstance< ODateTimeDialog > aDlg(getView(),getDesignView()->getCurrentSection(),this);
                     aDlg->Execute();
                 }
                 else
@@ -1589,7 +1589,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ScopedVclPtr<OPageNumberDialog> aDlg(new OPageNumberDialog(getView(),m_xReportDefinition,this));
+                    ScopedVclPtrInstance< OPageNumberDialog > aDlg(getView(),m_xReportDefinition,this);
                     aDlg->Execute();
                 }
                 else

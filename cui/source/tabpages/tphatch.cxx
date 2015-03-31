@@ -645,7 +645,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui"));
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
 
         if( aQueryBox->Execute() == RET_YES )
         {

@@ -318,7 +318,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
             }
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
-            ScopedVclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker ) );
+            ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
             if ( aDlg->Execute() != RET_OK )
                 return false;
 
@@ -415,7 +415,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     {
         OUString sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
         sText = sText.replaceFirst( "#" , m_sName);
-        ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error ) );
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
         aDlg->Execute();
         bError = true;
@@ -447,7 +447,7 @@ void OTableController::doEditIndexes()
     // table needs to be saved before editing indexes
     if (m_bNew || isModified())
     {
-        ScopedVclPtr<MessageDialog> aAsk(new MessageDialog(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtrInstance< MessageDialog > aAsk(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         if (RET_YES != aAsk->Execute())
             return;
 
@@ -490,7 +490,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    ScopedVclPtr<DbaIndexDialog> aDialog(new DbaIndexDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0));
+    ScopedVclPtrInstance< DbaIndexDialog > aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0);
     if (RET_OK != aDialog->Execute())
         return;
 
@@ -946,7 +946,7 @@ bool OTableController::checkColumns(bool _bNew)
     {
         OUString sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
         OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
-        ScopedVclPtr<OSQLMessageBox> aBox(new OSQLMessageBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES));
+        ScopedVclPtrInstance< OSQLMessageBox > aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
 
         switch ( aBox->Execute() )
         {
@@ -1075,7 +1075,7 @@ void OTableController::alterColumns()
                         aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-                        ScopedVclPtr<OSQLWarningBox> aMsg(new OSQLWarningBox( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError ) );
+                        ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
                         bNotOk = aMsg->Execute() == RET_YES;
                     }
                     else
@@ -1131,7 +1131,7 @@ void OTableController::alterColumns()
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage = aMessage.replaceFirst("$column$",pField->GetName());
-                    ScopedVclPtr<OSQLWarningBox> aMsg(new OSQLWarningBox( getView(), aMessage, WB_YES_NO | WB_DEF_YES ) );
+                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
                     if ( aMsg->Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
@@ -1198,7 +1198,7 @@ void OTableController::alterColumns()
                     OUString aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
                     aMsgT = aMsgT.replaceFirst("$column$",*pIter);
                     OUString aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
-                    ScopedVclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES));
+                    ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg->Execute() == RET_YES)
                     {
                         xKeyColumns = NULL;

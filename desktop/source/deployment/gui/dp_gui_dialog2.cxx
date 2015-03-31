@@ -408,7 +408,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_SHOW_LICENSE:
                 {
-                    ScopedVclPtr<ShowLicenseDialog> aLicenseDlg(new ShowLicenseDialog( m_pParent, GetEntryData( nPos )->m_xPackage ));
+                    ScopedVclPtrInstance< ShowLicenseDialog > aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
                     aLicenseDlg->Execute();
                     break;
                 }
@@ -626,7 +626,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
         aErrorBox->SetText( sTitle );
         aErrorBox->Execute();
     }

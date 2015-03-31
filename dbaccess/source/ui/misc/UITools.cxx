@@ -852,7 +852,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        ScopedVclPtr<SbaSbAttrDlg> aDlg(new SbaSbAttrDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat));
+        ScopedVclPtrInstance< SbaSbAttrDlg > aDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat);
         if (RET_OK == aDlg->Execute())
         {
             // ItemSet->UNO
@@ -997,7 +997,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 
     Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MAP_MM ) );
 
-    ScopedVclPtr<DlgSize> aColumnSizeDlg(new DlgSize( _pBox, nColSize, false, aDefaultMM.Width() * 10 ) );
+    ScopedVclPtrInstance< DlgSize > aColumnSizeDlg( _pBox, nColSize, false, aDefaultMM.Width() * 10 );
     if ( aColumnSizeDlg->Execute() )
     {
         sal_Int32 nValue = aColumnSizeDlg->GetValue();
@@ -1286,7 +1286,7 @@ sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _
     SolarMutexGuard aGuard;
     OUString aMsg = ModuleRes(_nText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    ScopedVclPtr<OSQLMessageBox> aAsk(new OSQLMessageBox(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query));
+    ScopedVclPtrInstance< OSQLMessageBox > aAsk(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {
         aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);

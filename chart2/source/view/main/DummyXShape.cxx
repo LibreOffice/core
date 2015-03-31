@@ -836,7 +836,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     {
         vcl::Font aFont;
         std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
-        ScopedVclPtr<VirtualDevice> pDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0));
+        ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(), 0, 0);
         pDevice->Erase();
         Rectangle aRect;
         pDevice->SetFont(aFont);

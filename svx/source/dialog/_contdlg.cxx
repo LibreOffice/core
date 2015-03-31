@@ -113,7 +113,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     {
         if( rGraphic.IsAnimated() )
         {
-            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode             aTransMap;
             const Animation     aAnim( rGraphic.GetAnimation() );
             const Size&         rSizePix = aAnim.GetDisplaySizePixel();
@@ -152,7 +152,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     else if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
         Size            aSizePix( pVDev->LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 
         if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
@@ -314,7 +314,7 @@ bool SvxSuperContourDlg::Close()
 
     if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
-        ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui") );
+        ScopedVclPtrInstance< MessageDialog > aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
         const long  nRet = aQBox->Execute();
 
         if ( nRet == RET_YES )
@@ -446,7 +446,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     {
         if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" ));
+            ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" );
 
             if ( !m_pContourWnd->IsContourChanged() || ( aQBox->Execute() == RET_YES ) )
                 m_pContourWnd->SetWorkplaceMode( true );
@@ -713,7 +713,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" ));
+                ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" );
                 bool        bNewContour;
 
                 aRedoGraphic = Graphic();

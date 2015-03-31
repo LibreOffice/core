@@ -179,7 +179,7 @@ namespace cairocanvas
         if( !pOutDev )
             return geometry::RealRectangle2D();
 
-        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *pOutDev ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( *pOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders

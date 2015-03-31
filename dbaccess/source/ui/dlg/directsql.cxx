@@ -106,7 +106,7 @@ namespace dbaui
 
         {
             OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
-            ScopedVclPtr<MessageDialog> aError(new MessageDialog(this, sMessage));
+            ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
             aError->Execute();
         }
 

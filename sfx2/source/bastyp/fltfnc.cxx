@@ -534,7 +534,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
         // Here could a  re-installation be offered
         OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
-        ScopedVclPtr<QueryBox> aQuery(new QueryBox(NULL, WB_YES_NO | WB_DEF_YES, aText) );
+        ScopedVclPtrInstance< QueryBox > aQuery(nullptr, WB_YES_NO | WB_DEF_YES, aText);
         short nRet = aQuery->Execute();
         if ( nRet == RET_YES )
         {

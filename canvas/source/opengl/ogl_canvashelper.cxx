@@ -725,7 +725,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             pVDev->EnableOutput(false);
 
             CanvasFont* pFont=dynamic_cast<CanvasFont*>(xLayoutetText->getFont().get());

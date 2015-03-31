@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( false );
-        ScopedVclPtr<SfxMacroAssignDlg> aDlg(new SfxMacroAssignDlg( this, mxDocumentFrame, *pItemSet ));
+        ScopedVclPtrInstance< SfxMacroAssignDlg > aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
         SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );

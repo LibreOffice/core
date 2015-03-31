@@ -265,7 +265,7 @@ bool XMLFilterTabDialog::onOk()
             aMessage = aMessage.replaceAll( "%s", aReplace1 );
         }
 
-        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, aMessage));
+        ScopedVclPtrInstance< MessageDialog > aBox(this, aMessage);
         aBox->Execute();
 
         if( pFocusWindow )

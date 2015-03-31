@@ -712,7 +712,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ScopedVclPtr<ORptPageDialog> aDlg(new ORptPageDialog(pParent, pDescriptor.get(), "CharDialog"));
+            ScopedVclPtrInstance< ORptPageDialog > aDlg(pParent, pDescriptor.get(), "CharDialog");
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg->RemoveTabPage("background");

@@ -88,7 +88,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         if (!pPrinter)
             pPrinter = new Printer;
 
-        VclPtr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+        VclPtrInstance< PrinterSetupDialog > pDlg(this);
         pDlg->SetPrinter(pPrinter);
         pDlg->Execute();
         pDlg.reset();

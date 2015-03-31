@@ -2095,7 +2095,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 {
-    VclPtr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
+    VclPtrInstance< SvxCharacterMap > pMap( this, true );
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = 0;
@@ -2379,7 +2379,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
     const Color aBackColor = rStyleSettings.GetFieldColor();
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtrInstance< VirtualDevice > pVDev(*this);
     pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );

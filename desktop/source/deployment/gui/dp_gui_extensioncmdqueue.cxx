@@ -506,7 +506,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        ScopedVclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg));
+        ScopedVclPtrInstance< MessageDialog > box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, sMsg);
         box->Execute();
         approve = true;
     }
@@ -571,7 +571,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, text));
+        ScopedVclPtrInstance< MessageDialog > aBox(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, text);
         aBox->Execute();
     }
     ++m_nCurrentProgress;

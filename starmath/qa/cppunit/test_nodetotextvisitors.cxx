@@ -519,7 +519,7 @@ void Test::testBinomInBinHor()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -547,7 +547,7 @@ void Test::testBinVerInUnary()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -576,7 +576,7 @@ void Test::testBinHorInSubSup()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // Insert an RSup expression with a BinHor for the exponent
     aCursor.InsertText("a");
@@ -604,7 +604,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
+    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 3; ++i)

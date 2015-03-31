@@ -523,7 +523,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     else if (sItemIdent == "delete")
     {
-        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         if (RET_YES == aQuery->Execute())
         {
             const OUString aShortName(m_pShortNameEdit->GetText());
@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         if(bIsWritable)
         {
 
-            ScopedVclPtr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
+            ScopedVclPtrInstance< SwGlossaryGroupDlg > pDlg( this, pGloss->GetPathArray(), pGlossaryHdl );
             if ( RET_OK == pDlg->Execute() )
             {
                 Init();
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         }
         else
         {
-            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if(RET_YES == aBox->Execute())
                 PathHdl(m_pPathBtn);

@@ -271,7 +271,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 
 void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
 {
-    ScopedVclPtr<SvDDELinkEditDialog> aDlg(new SvDDELinkEditDialog(pParent, pBaseLink) );
+    ScopedVclPtrInstance< SvDDELinkEditDialog > aDlg(pParent, pBaseLink);
     if ( RET_OK == aDlg->Execute() && rEndEditHdl.IsSet() )
     {
         OUString sCommand = aDlg->GetCmd();

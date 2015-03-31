@@ -843,7 +843,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
         aBuf.appendAscii("\n\n");
         aBuf.append(aFile);
-        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pWin, aBuf.makeStringAndClear()));
+        ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());
         aBox->Execute();
     }
 

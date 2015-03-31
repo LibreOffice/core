@@ -483,7 +483,7 @@ namespace svxform
             DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
             if ( DGTSubmission == m_eGroup )
             {
-                ScopedVclPtr<AddSubmissionDialog> aDlg(new AddSubmissionDialog( this, NULL, m_xUIHelper ));
+                ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, nullptr, m_xUIHelper );
                 if ( aDlg->Execute() == RET_OK && aDlg->GetNewSubmission().is() )
                 {
                     try
@@ -515,7 +515,7 @@ namespace svxform
                 {
                     if ( !m_sInstanceURL.isEmpty() )
                     {
-                        ScopedVclPtr<LinkedInstanceWarningBox> aMsgBox(new LinkedInstanceWarningBox( this ));
+                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
                         if ( aMsgBox->Execute() != RET_OK )
                             return bHandled;
                     }
@@ -610,7 +610,7 @@ namespace svxform
                     }
                 }
 
-                ScopedVclPtr<AddDataItemDialog> aDlg(new AddDataItemDialog( this, pNode, m_xUIHelper ));
+                ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
                 aDlg->SetText( SVX_RESSTR( nResId ) );
                 aDlg->InitText( eType );
                 short nReturn = aDlg->Execute();
@@ -678,12 +678,12 @@ namespace svxform
                 {
                     if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
                     {
-                        ScopedVclPtr<LinkedInstanceWarningBox> aMsgBox(new LinkedInstanceWarningBox( this ));
+                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
                         if ( aMsgBox->Execute() != RET_OK )
                             return bHandled;
                     }
 
-                    ScopedVclPtr<AddDataItemDialog> aDlg(new AddDataItemDialog( this, pNode, m_xUIHelper ));
+                    ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
                     sal_uInt16 nResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
@@ -749,7 +749,7 @@ namespace svxform
                 }
                 else
                 {
-                    ScopedVclPtr<AddSubmissionDialog> aDlg(new AddSubmissionDialog( this, pNode, m_xUIHelper ));
+                    ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, pNode, m_xUIHelper );
                     aDlg->SetText( SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
                     if ( aDlg->Execute() == RET_OK )
                     {
@@ -764,7 +764,7 @@ namespace svxform
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
             {
-                ScopedVclPtr<LinkedInstanceWarningBox> aMsgBox(new LinkedInstanceWarningBox( this ));
+                ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
                 if ( aMsgBox->Execute() != RET_OK )
                     return bHandled;
             }
@@ -956,7 +956,7 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
@@ -1496,7 +1496,7 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "modelsadd")
             {
-                ScopedVclPtr<AddModelDialog> aDlg(new AddModelDialog( this, false ));
+                ScopedVclPtrInstance< AddModelDialog > aDlg( this, false );
                 bool bShowDialog = true;
                 while ( bShowDialog )
                 {
@@ -1509,7 +1509,7 @@ namespace svxform
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
                             // error: model name already exists
-                            ScopedVclPtr<MessageDialog> aErrBox(new MessageDialog( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) ));
+                            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) );
                             aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
                             aErrBox->Execute();
                             bShowDialog = true;
@@ -1542,7 +1542,7 @@ namespace svxform
             }
             else if (sIdent == "modelsedit")
             {
-                ScopedVclPtr<AddModelDialog> aDlg(new AddModelDialog( this, true ));
+                ScopedVclPtrInstance< AddModelDialog > aDlg( this, true );
                 aDlg->SetName( sSelectedModel );
 
                 bool bDocumentData( false );
@@ -1637,7 +1637,7 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "instancesadd")
             {
-                ScopedVclPtr<AddInstanceDialog> aDlg(new AddInstanceDialog( this, false ));
+                ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, false );
                 if ( aDlg->Execute() == RET_OK )
                 {
                     sal_uInt16 nInst = GetNewPageId();
@@ -1669,7 +1669,7 @@ namespace svxform
                 XFormsPage* pPage = GetCurrentPage( nId );
                 if ( pPage )
                 {
-                    ScopedVclPtr<AddInstanceDialog> aDlg(new AddInstanceDialog( this, true ));
+                    ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, true );
                     aDlg->SetName( pPage->GetInstanceName() );
                     aDlg->SetURL( pPage->GetInstanceURL() );
                     aDlg->SetLinkInstance( pPage->GetLinkOnce() );
@@ -2405,7 +2405,7 @@ namespace svxform
             sPropName = PN_READONLY_EXPR;
         else if (m_pCalculateBtn == pBtn)
             sPropName = PN_CALCULATE_EXPR;
-        ScopedVclPtr<AddConditionDialog> aDlg(new AddConditionDialog(this, sPropName, m_xTempBinding));
+        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, sPropName, m_xTempBinding);
         bool bIsDefBtn = ( m_pDefaultBtn == pBtn );
         OUString sCondition;
         if ( bIsDefBtn )
@@ -2479,7 +2479,7 @@ namespace svxform
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            ScopedVclPtr<MessageDialog> aErrBox(new MessageDialog( this, SVX_RES( RID_STR_INVALID_XMLNAME ) ) );
+            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
             aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
             aErrBox->Execute();
             return 0;
@@ -2845,7 +2845,7 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
         }
-        ScopedVclPtr<NamespaceItemDialog> aDlg(new NamespaceItemDialog( this, xNameContnr ) );
+        ScopedVclPtrInstance< NamespaceItemDialog > aDlg( this, xNameContnr );
         aDlg->Execute();
         try
         {
@@ -2975,7 +2975,7 @@ namespace svxform
     {
         if ( m_pAddNamespaceBtn == pBtn )
         {
-            ScopedVclPtr<ManageNamespaceDialog> aDlg( new ManageNamespaceDialog(this, m_pConditionDlg, false) );
+            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg(this, m_pConditionDlg, false);
             if ( aDlg->Execute() == RET_OK )
             {
                 OUString sEntry = aDlg->GetPrefix();
@@ -2986,7 +2986,7 @@ namespace svxform
         }
         else if ( m_pEditNamespaceBtn == pBtn )
         {
-            ScopedVclPtr<ManageNamespaceDialog> aDlg(new ManageNamespaceDialog( this, m_pConditionDlg, true ));
+            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg( this, m_pConditionDlg, true );
             SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
             OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
@@ -3120,7 +3120,7 @@ namespace svxform
         {
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
-                ScopedVclPtr<MessageDialog> aErrBox(new MessageDialog(this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) ) );
+                ScopedVclPtrInstance< MessageDialog > aErrBox(this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
                 aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
                 aErrBox->Execute();
                 return 0;
@@ -3183,7 +3183,7 @@ namespace svxform
 
     IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
     {
-        ScopedVclPtr<AddConditionDialog> aDlg(new AddConditionDialog(this, PN_BINDING_EXPR, m_xTempBinding ));
+        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, PN_BINDING_EXPR, m_xTempBinding );
         aDlg->SetCondition( m_pRefED->GetText() );
         if ( aDlg->Execute() == RET_OK )
             m_pRefED->SetText( aDlg->GetCondition() );
@@ -3197,7 +3197,7 @@ namespace svxform
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
 
-            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME)));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
             aErrorBox->set_primary_text( Application::GetDisplayName() );
             aErrorBox->Execute();
             return 0;

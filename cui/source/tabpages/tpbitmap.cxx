@@ -747,7 +747,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" ));
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" );
 
         if( aQueryBox->Execute() == RET_YES )
         {

@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 
         if ( aFactories.empty() )
         {
-            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO) );
+            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO);
             aBox->Execute();
         }
     }
@@ -1225,7 +1225,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
             sal_Int32 nPos = GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                ScopedVclPtr<SfxAddHelpBookmarkDialog_Impl> aDlg(new SfxAddHelpBookmarkDialog_Impl(this, true));
+                ScopedVclPtrInstance< SfxAddHelpBookmarkDialog_Impl > aDlg(this, true);
                 aDlg->SetTitle( GetEntry( nPos ) );
                 if ( aDlg->Execute() == RET_OK )
                 {
@@ -2337,7 +2337,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
                 else
                 {
                     DBG_ASSERT( pSrchDlg, "no search dialog" );
-                    ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO) );
+                    ScopedVclPtrInstance< MessageDialog > aBox(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO);
                     aBox->Execute();
                     pSrchDlg->SetFocusOnEdit();
                 }
@@ -3212,7 +3212,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                         if ( aAny >>= aValue )
                         {
                             OUString aTitle( aValue );
-                            ScopedVclPtr<SfxAddHelpBookmarkDialog_Impl> aDlg(new SfxAddHelpBookmarkDialog_Impl(this, false));
+                            ScopedVclPtrInstance< SfxAddHelpBookmarkDialog_Impl > aDlg(this, false);
                             aDlg->SetTitle( aTitle );
                             if ( aDlg->Execute() == RET_OK )
                             {

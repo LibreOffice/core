@@ -222,7 +222,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     aMessage += sTarget;
                     aMessage += aTemplate.getToken( 1, '#' );
 
-                    ScopedVclPtr<QueryBox> aBox(new QueryBox( 0, WinBits(WB_YES_NO | WB_DEF_YES), aMessage ));
+                    ScopedVclPtrInstance< QueryBox > aBox( nullptr, WinBits(WB_YES_NO | WB_DEF_YES), aMessage );
                     bDo = ( aBox->Execute() == RET_YES );
                 }
 
@@ -913,7 +913,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     break;
                 }
 
-                ScopedVclPtr<ScShareDocumentDlg> aDlg(new ScShareDocumentDlg( GetActiveDialogParent(), pViewData ) );
+                ScopedVclPtrInstance< ScShareDocumentDlg > aDlg( GetActiveDialogParent(), pViewData );
                 if ( aDlg->Execute() == RET_OK )
                 {
                     bool bSetShared = aDlg->IsShareDocumentChecked();
@@ -1016,7 +1016,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                        ScopedVclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage ) );
+                                        ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
                                         aBox->Execute();
                                     }
                                     else

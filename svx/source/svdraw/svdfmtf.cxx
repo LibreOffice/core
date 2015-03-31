@@ -1558,7 +1558,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
         else
         {
             // gradient transparence
-            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
 
             pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
             pVDev->DrawGradient(Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
