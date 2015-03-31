@@ -50,16 +50,17 @@
       </prop>
     </group>
     <group oor:name="HiddenContent">
+      <info>
+        <author>SH</author>
+        <desc>Specifies whether to remove the hidden content when sending the document attached to an e-mail</desc>
+      </info>
+      <prop oor:name="RemoveHiddenContent" oor:type="xs:boolean"
+          oor:nillable="false">
         <info>
-            <author>SH</author>
-            <desc>Specifies whether to remove the hidden content when sending the document attached to an e-mail</desc>
+          <desc>Specify wheter hidden content should be removed when sending via email</desc>
         </info>
-        <prop oor:name="RemoveHiddenContent" oor:type="xs:boolean" oor:nillable="false">
-            <info>
-                <desc>Specify wheter hidden content should be removed when sending via email</desc>
-            </info>
         <value>true</value>
-        </prop>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
