@@ -59,10 +59,10 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,
     // including SvxColorTableItem  with WhichID SID_COLOR_TABLE
-    InitDrawModelAndDocShell(m_pDoc ? m_pDoc->GetDocShell() : 0, this);
+    InitDrawModelAndDocShell(m_pDoc->GetDocShell(), this);
 
     // copy all the default values to the SdrModel
-    SfxItemPool* pSdrPool = pDoc->GetAttrPool().GetSecondaryPool();
+    SfxItemPool* pSdrPool = m_pDoc->GetAttrPool().GetSecondaryPool();
     if( pSdrPool )
     {
         const sal_uInt16 aWhichRanges[] =
@@ -72,7 +72,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                 0
             };
 
-        SfxItemPool& rDocPool = pDoc->GetAttrPool();
+        SfxItemPool& rDocPool = m_pDoc->GetAttrPool();
         sal_uInt16 nEdtWhich, nSlotId;
         const SfxPoolItem* pItem;
         for( const sal_uInt16* pRangeArr = aWhichRanges;
@@ -92,10 +92,10 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                 }
     }
 
-    SetForbiddenCharsTable( pDoc->GetDocumentSettingManager().getForbiddenCharacterTable() );
+    SetForbiddenCharsTable(m_pDoc->GetDocumentSettingManager().getForbiddenCharacterTable());
     // Implementation for asian compression
     SetCharCompressType( static_cast<sal_uInt16>(
-            pDoc->GetDocumentSettingManager().getCharacterCompressionType()));
+            m_pDoc->GetDocumentSettingManager().getCharacterCompressionType()));
 }
 
 // Destructor
