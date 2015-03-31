@@ -42,6 +42,13 @@
 
 #include "UndoManager.hxx"
 
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
+#include "com/sun/star/util/SearchAlgorithms.hpp"
+#include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
+
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
 class SwUiWriterTest : public SwModelTestBase
@@ -80,6 +87,7 @@ public:
     void testTdf68183();
     void testCp1000115();
     void testTdf90003();
+    void testSearchWithTransliterate();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -112,6 +120,7 @@ public:
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
+    CPPUNIT_TEST(testSearchWithTransliterate);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -845,6 +854,40 @@ void SwUiWriterTest::testTdf90003()
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
     assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
+}
+
+void SwUiWriterTest::testSearchWithTransliterate()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is paragraph one");
+    pWrtShell->SplitNode();
+    aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    aPaM = SwPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
+    com::sun::star::util::SearchOptions SearchOpt;
+    SearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_ABSOLUTE;
+    SearchOpt.searchFlag = 0x00000001;
+    SearchOpt.searchString = "other";
+    SearchOpt.replaceString = "";
+    SearchOpt.changedChars = 0;
+    SearchOpt.deletedChars = 0;
+    SearchOpt.insertedChars = 0;
+    SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+    //transliteration option set so that at least one of the search strings is not found
+    sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
+    CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(0,(int)case1);
+    SearchOpt.searchString = "paragraph";
+    SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+    //transliteration option set so that all search strings are found
+    sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
+    pShellCrsr = pWrtShell->getShellCrsr(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(1,(int)case2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
