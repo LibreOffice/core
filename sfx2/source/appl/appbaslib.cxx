@@ -43,6 +43,19 @@ SfxBasicManagerHolder::SfxBasicManagerHolder()
 {
 }
 
+void SfxBasicManagerHolder::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
+{
+    if (!mpBasicManager || &rBC != mpBasicManager)
+        return;
+    SfxSimpleHint const*const pSimpleHint(dynamic_cast<SfxSimpleHint const*>(&rHint));
+    if (pSimpleHint && SFX_HINT_DYING == pSimpleHint->GetId())
+    {
+        mpBasicManager = nullptr;
+        mxBasicContainer.clear();
+        mxDialogContainer.clear();
+    }
+}
+
 void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 {
     impl_releaseContainers();
@@ -59,6 +72,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 
     if ( mpBasicManager )
     {
+        StartListening(*mpBasicManager);
         try
         {
             mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer(), UNO_QUERY_THROW );

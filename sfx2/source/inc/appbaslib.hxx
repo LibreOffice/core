@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_APPBASLIB_HXX
 #define INCLUDED_SFX2_SOURCE_INC_APPBASLIB_HXX
 
+#include <svl/lstner.hxx>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -29,6 +31,7 @@ class BasicManager;
 /** helper class which holds and manipulates a BasicManager
 */
 class SfxBasicManagerHolder
+    : public SfxListener
 {
 private:
     BasicManager*   mpBasicManager;
@@ -84,6 +87,7 @@ public:
     */
     bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
 
+    virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) SAL_OVERRIDE;
 
 private:
     void    impl_releaseContainers();
