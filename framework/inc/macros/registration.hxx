@@ -66,7 +66,7 @@ ________________________________________________________________________________
             /* Define variables which are used in following macros. */                                                                  \
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   xFactory;                   \
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager;                   \
-            xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager );                   \
+            xServiceManager = static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager );                   \
             /* These parameter will expand to      */                                                                                   \
             /* "IF_NAME_CREATECOMPONENTFACTORY(a)  */                                                                                   \
             /*  else                               */                                                                                   \
