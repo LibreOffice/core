@@ -2882,7 +2882,7 @@ void ScDPResultDimension::LateInitFrom(
         ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "%s", aDimensionName.getStr() );
+        OSL_TRACE( "%s", OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr() );
         if ( pMembers->IsHasHideDetailsMembers() )
             OSL_TRACE( "HasHideDetailsMembers" );
 #endif
