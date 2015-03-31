@@ -835,7 +835,7 @@ private:
 
 inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 {
-    return *reinterpret_cast<DataFlavorExVector*>(implGetDataFlavors());
+    return *static_cast<DataFlavorExVector*>(implGetDataFlavors());
 }
 
 #endif

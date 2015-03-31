@@ -62,7 +62,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory(
     void * pResult = 0;
     if (_pServiceManager)
     {
-        Reference< XMultiServiceFactory > xSMgr(reinterpret_cast< XMultiServiceFactory * >(_pServiceManager));
+        Reference< XMultiServiceFactory > xSMgr(static_cast< XMultiServiceFactory * >(_pServiceManager));
 
         pResult = cppu::component_getFactoryHelper(pImplementationName,
                 _pServiceManager,
