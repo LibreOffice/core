@@ -115,9 +115,7 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -133,9 +131,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
-using com::sun::star::container::XNameAccess;
-using com::sun::star::beans::PropertyValue;
-using namespace com::sun::star::configuration;
 
 // create DocInfo (virtual)
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
@@ -841,25 +836,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 mpWrtShell->StartAllAction();
             mpDoc->getIDocumentFieldsAccess().UpdateFlds( NULL, false );
             mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
-            OUString aConfigRoot = "org.openoffice.Office.Common/ExternalMailer";
 
-            PropertyValue aProperty;
-            aProperty.Name = "nodepath";
-            aProperty.Value = makeAny( aConfigRoot );
-
-            Sequence< Any > aArgumentList( 1 );
-            aArgumentList[0] = makeAny( aProperty );
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigurationProvider;
-            m_xConfigurationProvider = theDefaultProvider::get(xContext);
-            Reference< XNameAccess > xNameAccess =
-            Reference< XNameAccess > (m_xConfigurationProvider->createInstanceWithArguments(
-                   OUString("com.sun.star.configuration.ConfigurationAccess"),
-                  aArgumentList ),
-                   UNO_QUERY );
-            bool bRemoveInvisible;
-            xNameAccess->getByName("Hidden") >>= bRemoveInvisible;
-            if(bRemoveInvisible)
+            if(officecfg::Office::Common::ExternalMailer::Hidden::get())
                 mpDoc->RemoveInvisibleContent();
             if(mpWrtShell)
                 mpWrtShell->EndAllAction();
