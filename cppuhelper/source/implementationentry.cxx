@@ -42,7 +42,7 @@ sal_Bool component_writeInfoHelper(
             {
                 OUString sKey = "/" + entries[i].getImplementationName() + "/UNO/SERVICES";
                 Reference< XRegistryKey > xNewKey(
-                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( sKey ) );
+                    static_cast< XRegistryKey * >( pRegistryKey )->createKey( sKey ) );
 
                 Sequence< OUString > seq = entries[i].getSupportedServiceNames();
                 const OUString *pArray = seq.getConstArray();

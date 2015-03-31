@@ -202,7 +202,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
     uno::Mapping target2curr(target_env, curr_env);
 
     return Reference<lang::XSingleComponentFactory>(
-        reinterpret_cast<lang::XSingleComponentFactory *>(
+        static_cast<lang::XSingleComponentFactory *>(
             target2curr.mapInterface(free.get(), ::getCppuType(&free))),
         SAL_NO_ACQUIRE);
 }

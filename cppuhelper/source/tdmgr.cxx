@@ -579,7 +579,7 @@ static void SAL_CALL typelib_callback(
         if (pContext && pTypeName)
         {
             Reference< container::XHierarchicalNameAccess > access(
-                reinterpret_cast< container::XHierarchicalNameAccess * >(
+                static_cast< container::XHierarchicalNameAccess * >(
                     pContext));
             try
             {
@@ -649,7 +649,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
 
 
     Reference<container::XHierarchicalNameAccess> xTDMgr(
-        reinterpret_cast<container::XHierarchicalNameAccess *>(
+        static_cast<container::XHierarchicalNameAccess *>(
             curr2target.mapInterface(xTDMgr_c.get(), ::getCppuType(&xTDMgr_c))),
         SAL_NO_ACQUIRE);
 

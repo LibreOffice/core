@@ -86,7 +86,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
     case 0: // queryInterace()
     {
         Type const & rType_demanded =
-            *reinterpret_cast< Type const * >( pArgs[ 0 ] );
+            *static_cast< Type const * >( pArgs[ 0 ] );
         if (rType_demanded.equals(
                 ::getCppuType( reinterpret_cast<
                                Reference< XInterface > const * >(0) ) ) ||
@@ -95,13 +95,13 @@ static void SAL_CALL ExceptionThrower_dispatch(
             typelib_TypeDescription * pTD = 0;
             TYPELIB_DANGER_GET( &pTD, rType_demanded.getTypeLibType() );
             uno_any_construct(
-                reinterpret_cast< uno_Any * >( pReturn ), &pUnoI, pTD, 0 );
+                static_cast< uno_Any * >( pReturn ), &pUnoI, pTD, 0 );
             TYPELIB_DANGER_RELEASE( pTD );
         }
         else
         {
             uno_any_construct(
-                reinterpret_cast< uno_Any * >( pReturn ), 0, 0, 0 );
+                static_cast< uno_Any * >( pReturn ), 0, 0, 0 );
         }
         *ppException = 0;
         break;
@@ -112,7 +112,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
         break;
     case 3: // throwException()
     {
-        uno_Any * pAny = reinterpret_cast< uno_Any * >( pArgs[ 0 ] );
+        uno_Any * pAny = static_cast< uno_Any * >( pArgs[ 0 ] );
         OSL_ASSERT( pAny->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
         uno_type_any_construct( *ppException, pAny->pData, pAny->pType, 0 );
         break;
