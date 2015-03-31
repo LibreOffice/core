@@ -94,14 +94,14 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     {
 #if OSL_DEBUG_LEVEL > 0
         // append java stack trace to Message member
-        reinterpret_cast< ::com::sun::star::uno::Exception * >(
+        static_cast< ::com::sun::star::uno::Exception * >(
             uno_exc->pData )->Message += jni.get_stack_trace();
 #endif
         SAL_INFO(
             "bridges",
             "exception occurred java->uno: ["
                 << OUString::unacquired(&uno_exc->pType->pTypeName) << "] "
-                << reinterpret_cast<css::uno::Exception const *>(
+                << static_cast<css::uno::Exception const *>(
                     uno_exc->pData)->Message);
         // signal exception
         jvalue java_exc;

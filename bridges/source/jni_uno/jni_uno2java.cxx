@@ -114,7 +114,7 @@ void Bridge::handle_java_exc(
     SAL_INFO(
         "bridges",
         "exception occurred uno->java: [" << exc_name << "] "
-        << (reinterpret_cast<css::uno::Exception const *>(uno_exc->pData)
+        << (static_cast<css::uno::Exception const *>(uno_exc->pData)
             ->Message));
 }
 
@@ -520,7 +520,7 @@ extern "C"
 void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C()
 {
-    UNO_proxy * that = reinterpret_cast< UNO_proxy * >( proxy );
+    UNO_proxy * that = static_cast< UNO_proxy * >( proxy );
     Bridge const * bridge = that->m_bridge;
 
     assert(env == bridge->m_uno_env); (void) env;
@@ -655,7 +655,7 @@ void SAL_CALL UNO_proxy_dispatch(
             case 0: // queryInterface()
             {
                 TypeDescr demanded_td(
-                    *reinterpret_cast< typelib_TypeDescriptionReference ** >(
+                    *static_cast< typelib_TypeDescriptionReference ** >(
                         uno_args[ 0 ] ) );
                 if (typelib_TypeClass_INTERFACE !=
                       demanded_td.get()->eTypeClass)
@@ -733,7 +733,7 @@ void SAL_CALL UNO_proxy_dispatch(
                         else // object does not support demanded interface
                         {
                             uno_any_construct(
-                                reinterpret_cast< uno_Any * >( uno_ret ),
+                                static_cast< uno_Any * >( uno_ret ),
                                 0, 0, 0 );
                         }
                         // no exception occurred
@@ -743,7 +743,7 @@ void SAL_CALL UNO_proxy_dispatch(
                 else
                 {
                     uno_any_construct(
-                        reinterpret_cast< uno_Any * >( uno_ret ),
+                        static_cast< uno_Any * >( uno_ret ),
                         &pInterface, demanded_td.get(), 0 );
                     (*pInterface->release)( pInterface );
                     *uno_exc = 0;

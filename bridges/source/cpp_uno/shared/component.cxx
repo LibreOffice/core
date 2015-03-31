@@ -100,7 +100,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         {
             ::com::sun::star::uno::Reference<
                   ::com::sun::star::uno::XInterface > xHome(
-                      reinterpret_cast< ::com::sun::star::uno::XInterface * >(
+                      static_cast< ::com::sun::star::uno::XInterface * >(
                           pInterface ),
                       ::com::sun::star::uno::UNO_QUERY );
             assert(xHome.is() && "### query to XInterface failed!");
@@ -142,7 +142,7 @@ static void s_stub_acquireInterface(va_list * pParam)
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
 
-    reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
+    static_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
 
 static void SAL_CALL acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
@@ -155,7 +155,7 @@ static void s_stub_releaseInterface(va_list * pParam)
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
 
-    reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
+    static_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 
 static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )

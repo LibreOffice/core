@@ -56,8 +56,8 @@ void cpp2unoMapping(
     assert(ppUnoI && pTypeDescr);
     if (*ppUnoI)
     {
-        (*reinterpret_cast< uno_Interface * >( *ppUnoI )->release)(
-            reinterpret_cast< uno_Interface * >( *ppUnoI ) );
+        (*static_cast< uno_Interface * >( *ppUnoI )->release)(
+            static_cast< uno_Interface * >( *ppUnoI ) );
         *ppUnoI = 0;
     }
     if (pCppI)

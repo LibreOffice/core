@@ -125,25 +125,25 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = data.rax;
+        *static_cast<sal_uInt64 *>( pRegisterReturn ) = data.rax;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
-        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &data.rax );
+        *static_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &data.rax );
         break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &data.rax );
+        *static_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &data.rax );
         break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &data.rax );
+        *static_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &data.rax );
         break;
     case typelib_TypeClass_FLOAT:
     case typelib_TypeClass_DOUBLE:
-        *reinterpret_cast<double *>( pRegisterReturn ) = data.xmm0;
+        *static_cast<double *>( pRegisterReturn ) = data.xmm0;
         break;
     default:
         {

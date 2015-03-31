@@ -412,7 +412,7 @@ void unoInterfaceProxyDispatch(
         case 0: // queryInterface() opt
         {
             typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
             if (pTD)
             {
                 uno_Interface * pInterface = 0;
@@ -423,7 +423,7 @@ void unoInterfaceProxyDispatch(
                 if (pInterface)
                 {
                     ::uno_any_construct(
-                        reinterpret_cast< uno_Any * >( pReturn ),
+                        static_cast< uno_Any * >( pReturn ),
                         &pInterface, pTD, 0 );
                     (*pInterface->release)( pInterface );
                     TYPELIB_DANGER_RELEASE( pTD );

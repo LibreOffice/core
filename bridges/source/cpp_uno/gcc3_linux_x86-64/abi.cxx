@@ -306,7 +306,7 @@ void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_
 
     n = classify_argument( pTypeRef, classes, 0 );
 
-    sal_uInt64 *pStructAlign = reinterpret_cast<sal_uInt64 *>( pStruct );
+    sal_uInt64 *pStructAlign = static_cast<sal_uInt64 *>( pStruct );
     for ( n--; n >= 0; n-- )
         switch ( classes[n] )
         {

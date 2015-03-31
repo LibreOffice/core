@@ -32,7 +32,7 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 {
     UnoInterfaceProxy * pThis =
         static_cast< UnoInterfaceProxy * >(
-            reinterpret_cast< uno_Interface * >( pProxy ) );
+            static_cast< uno_Interface * >( pProxy ) );
     if (pEnv != pThis->pBridge->getUnoEnv()) {
         assert(false);
     }
