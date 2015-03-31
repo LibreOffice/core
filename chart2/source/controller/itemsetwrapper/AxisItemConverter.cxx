@@ -288,7 +288,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 {
                     OSL_ASSERT( rSubIncrements[0].IntervalCount.getValueTypeClass() == uno::TypeClass_LONG );
                     rOutItemSet.Put( SfxInt32Item( nWhichId,
-                            *reinterpret_cast< const sal_Int32 * >(
+                            *static_cast< const sal_Int32 * >(
                                 rSubIncrements[0].IntervalCount.getValue()) ));
                 }
                 else

@@ -62,7 +62,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::co
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
         if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
-            fResult = * reinterpret_cast< const double * >( rAny.getValue() );
+            fResult = * static_cast< const double * >( rAny.getValue() );
         }
 
         return fResult;
@@ -79,7 +79,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
         if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
-            const double* pDouble = reinterpret_cast< const double * >( rAny.getValue() );
+            const double* pDouble = static_cast< const double * >( rAny.getValue() );
             if( ::rtl::math::isNan(*pDouble) )
                 return OUString();
             return ::rtl::math::doubleToUString(
@@ -92,7 +92,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
         }
         else if( eClass == ::com::sun::star::uno::TypeClass_STRING )
         {
-            return * reinterpret_cast< const OUString * >( rAny.getValue() );
+            return * static_cast< const OUString * >( rAny.getValue() );
         }
 
         return OUString();

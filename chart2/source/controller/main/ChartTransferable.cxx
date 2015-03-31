@@ -109,7 +109,7 @@ bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
     {
         case CHARTTRANSFER_OBJECTTYPE_DRAWMODEL:
             {
-                SdrModel* pMarkedObjModel = reinterpret_cast< SdrModel* >( pUserObject );
+                SdrModel* pMarkedObjModel = static_cast< SdrModel* >( pUserObject );
                 if ( pMarkedObjModel )
                 {
                     rxOStm->SetBufferSize( 0xff00 );
