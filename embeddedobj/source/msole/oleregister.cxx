@@ -45,7 +45,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL emboleobj_component_getFactory(
     {
         if ( aImplName.equals( OleEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
         {
-            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+            xFactory= ::cppu::createOneInstanceFactory( static_cast< lang::XMultiServiceFactory*>( pServiceManager ),
                                                 OleEmbeddedObjectFactory::impl_staticGetImplementationName(),
                                                 OleEmbeddedObjectFactory::impl_staticCreateSelfInstance,
                                                 OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
