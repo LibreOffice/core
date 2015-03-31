@@ -40,7 +40,7 @@ extern "C"
         if(drawinglayer::unorenderer::XPrimitive2DRenderer_getImplementationName().equalsAscii(pImplName))
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >(pServiceManager),
+                static_cast< lang::XMultiServiceFactory * >(pServiceManager),
                 drawinglayer::unorenderer::XPrimitive2DRenderer_getImplementationName(),
                 drawinglayer::unorenderer::XPrimitive2DRenderer_createInstance,
                 drawinglayer::unorenderer::XPrimitive2DRenderer_getSupportedServiceNames());
