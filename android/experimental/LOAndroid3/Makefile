@@ -1,4 +1,5 @@
 ifeq ($(BUILDDIR),)
+gb_Side:=host
 include ../../../config_host.mk
 endif
 
