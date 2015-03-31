@@ -2331,8 +2331,9 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
         // The implicit conversion from float to double can result in a precision loss, i.e. 1.2 is converted to
         // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
         double nZoom( fZoomX );
-        nZoom = ::rtl::math::round( nZoom, 4 );
-        GetWindow()->SetZoom( Fraction( nZoom ) );
+        Fraction aZoom(::rtl::math::round(nZoom, 4));
+        aZoom.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
+        GetWindow()->SetZoom(aZoom);
     }
 }
 
