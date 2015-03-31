@@ -891,10 +891,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // set the correct mapmode
         Rectangle aBackground(aStart, aEnd);
         if (bIsTiledRendering)
-        {
-            aBackground += Point(nScrX, nScrY);
             rDevice.SetMapMode(aDrawMode);
-        }
         else
             rDevice.SetMapMode(pViewData->GetLogicMode());
 
