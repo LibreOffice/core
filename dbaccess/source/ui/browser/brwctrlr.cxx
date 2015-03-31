@@ -2172,9 +2172,9 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getBrowserView()->getVclControl(),
-                           "SaveModifiedDialog",
-                           "dbaccess/ui/savemodifieddialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQry( getBrowserView()->getVclControl(),
+                                                  "SaveModifiedDialog",
+                                                  "dbaccess/ui/savemodifieddialog.ui" );
 
         switch (aQry->Execute())
         {

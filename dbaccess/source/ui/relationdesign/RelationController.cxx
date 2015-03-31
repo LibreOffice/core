@@ -255,8 +255,8 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getView(), "DesignSaveModifiedDialog",
-                                      "dbaccess/ui/designsavemodifieddialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DesignSaveModifiedDialog",
+                                                 "dbaccess/ui/designsavemodifieddialog.ui");
         nSaved = aQry->Execute();
         if(nSaved == RET_YES)
             Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());

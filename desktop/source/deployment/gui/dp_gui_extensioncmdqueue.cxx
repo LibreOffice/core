@@ -451,8 +451,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            ScopedVclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
-                ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
+            ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+                                                    ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
             OUString s;
             if (bEqualNames)
             {

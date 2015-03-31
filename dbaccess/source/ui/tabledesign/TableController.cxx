@@ -285,7 +285,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     if (!xTablesSup.is())
     {
         OUString aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
-        ScopedVclPtr<OSQLWarningBox>(new OSQLWarningBox( getView(), aMessage ) )->Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage )->Execute();
         return false;
     }
 
@@ -522,7 +522,7 @@ void OTableController::impl_initialize()
     }
     catch(const SQLException&)
     {
-        ScopedVclPtr<OSQLWarningBox>(new OSQLWarningBox( getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ) ) )->Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ))->Execute();
         throw;
     }
     try
@@ -563,8 +563,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             ::boost::mem_fn(&OTableRow::isValid));
         if ( aIter != m_vRowList.end() )
         {
-            ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getView(), "TableDesignSaveModifiedDialog",
-                               "dbaccess/ui/tabledesignsavemodifieddialog.ui"));
+            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
+                                                     "dbaccess/ui/tabledesignsavemodifieddialog.ui");
             switch (aQry->Execute())
             {
                 case RET_YES:
@@ -580,8 +580,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
         }
         else if ( !m_bNew )
         {
-            ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getView(), "DeleteAllRowsDialog",
-                               "dbaccess/ui/deleteallrowsdialog.ui"));
+            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DeleteAllRowsDialog",
+                                                     "dbaccess/ui/deleteallrowsdialog.ui");
             switch (aQry->Execute())
             {
                 case RET_YES:
@@ -936,7 +936,7 @@ bool OTableController::checkColumns(bool _bNew)
                 {
                     OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
                     strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
-                    ScopedVclPtr<OSQLWarningBox>(new OSQLWarningBox( getView(), strMessage ) )->Execute();
+                    ScopedVclPtrInstance<OSQLWarningBox>(getView(), strMessage)->Execute();
                     return false;
                 }
             }

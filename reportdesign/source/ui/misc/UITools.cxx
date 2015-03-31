@@ -1027,8 +1027,9 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             CharClass aCC(_xContext, aLangTag);
             svl::SharedStringPool aStringPool(&aCC);
 
-            ScopedVclPtr<FormulaDialog> aDlg(new FormulaDialog(
-                pParent, xServiceFactory, pFormulaManager, aFormula.getUndecoratedContent(), _xRowSet, aStringPool));
+            ScopedVclPtrInstance<FormulaDialog> aDlg(
+                pParent, xServiceFactory, pFormulaManager,
+                aFormula.getUndecoratedContent(), _xRowSet, aStringPool);
 
             bSuccess = aDlg->Execute() == RET_OK;
             if ( bSuccess )

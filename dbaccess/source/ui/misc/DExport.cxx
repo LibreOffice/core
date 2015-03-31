@@ -687,8 +687,8 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
 {
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
-    ScopedVclPtr<OCopyTableWizard> aWizard(new OCopyTableWizard(
-        NULL,
+    ScopedVclPtrInstance<OCopyTableWizard> aWizard(
+        nullptr,
         sTableName,
         bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
         m_aDestColumns,
@@ -698,7 +698,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
         getTypeSelectionPageFactory(),
         m_rInputStream,
         m_xContext
-    ));
+    );
 
     bool bError = false;
     try

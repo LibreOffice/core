@@ -101,8 +101,8 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
-        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent,
-            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
+        ScopedVclPtrInstance<MessageDialog> aErrorBox(m_pParent,
+            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2);
         aErrorBox->Execute();
     }
     else // check for mismatched passwords...

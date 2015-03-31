@@ -586,8 +586,8 @@ namespace dbaui
 
             if (aSelected->isModified() || aSelected->isNew())
             {
-                ScopedVclPtr<MessageDialog> aQuestion(new MessageDialog(this, "SaveIndexDialog",
-                                        "dbaccess/ui/saveindexdialog.ui"));
+                ScopedVclPtrInstance<MessageDialog> aQuestion(this, "SaveIndexDialog",
+                                                              "dbaccess/ui/saveindexdialog.ui" );
                 nResponse = aQuestion->Execute();
             }
         }

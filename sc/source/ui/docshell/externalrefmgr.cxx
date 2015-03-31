@@ -3020,8 +3020,8 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
                     ScDocShell* pDocShell = static_cast< ScDocShell* >( pObjShell );
-                    ScopedVclPtr<WarningBox> aBox(new WarningBox(  pDocShell->GetActiveDialogParent(), WinBits( WB_OK ),
-                                        ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) ) );
+                    ScopedVclPtrInstance<WarningBox> aBox( pDocShell->GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
                     aBox->Execute();
                 }
                 break;

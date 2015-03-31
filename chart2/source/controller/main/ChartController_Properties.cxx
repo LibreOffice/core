@@ -761,8 +761,11 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider
-            , uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ) ));
+        ScopedVclPtrInstance<SchAttribTabDlg> aDlg(
+                m_pChartWindow, &aItemSet, &aDialogParameter,
+                &aViewElementListProvider,
+                uno::Reference< util::XNumberFormatsSupplier >(
+                        getModel(), uno::UNO_QUERY ) );
 
         if(aDialogParameter.HasSymbolProperties())
         {

@@ -1238,8 +1238,8 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
 
 void OQueryController::execute_QueryPropDlg()
 {
-    ScopedVclPtr<QueryPropertiesDialog> aQueryPropDlg(new QueryPropertiesDialog(
-        getContainer(), m_bDistinct, m_nLimit ));
+    ScopedVclPtrInstance<QueryPropertiesDialog> aQueryPropDlg(
+        getContainer(), m_bDistinct, m_nLimit );
 
     if( aQueryPropDlg->Execute() == RET_OK )
     {
@@ -1398,14 +1398,14 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-        ScopedVclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg(
+        ScopedVclPtrInstance<OSaveAsDlg> aDlg(
                 getView(),
                 m_nCommandType,
                 getORB(),
                 getConnection(),
                 aDefaultName,
                 aNameChecker,
-                SAD_DEFAULT ));
+                SAD_DEFAULT );
 
         bRet = ( aDlg->Execute() == RET_OK );
         if ( bRet )

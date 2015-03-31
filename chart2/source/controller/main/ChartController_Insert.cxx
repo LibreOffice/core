@@ -109,7 +109,7 @@ void ChartController::executeDispatch_InsertAxes()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, true );
 
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchAxisDlg> aDlg(new SchAxisDlg( m_pChartWindow, aDialogInput ));
+        ScopedVclPtrInstance<SchAxisDlg> aDlg( m_pChartWindow, aDialogInput );
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
@@ -397,8 +397,11 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    ScopedVclPtr<SchAttribTabDlg> aDialog(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
-                          uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
+    ScopedVclPtrInstance<SchAttribTabDlg> aDialog(
+        m_pChartWindow, &aItemSet, &aDialogParameter,
+        &aViewElementListProvider,
+        uno::Reference< util::XNumberFormatsSupplier >(
+                getModel(), uno::UNO_QUERY ) );
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
@@ -452,8 +455,11 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
-                              uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
+        ScopedVclPtrInstance<SchAttribTabDlg> aDlg(
+                m_pChartWindow, &aItemSet, &aDialogParameter,
+                &aViewElementListProvider,
+                uno::Reference< util::XNumberFormatsSupplier >(
+                        getModel(), uno::UNO_QUERY ) );
         aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));
@@ -489,10 +495,10 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
-            ScopedVclPtr<InsertErrorBarsDialog> aDlg(new InsertErrorBarsDialog(
+            ScopedVclPtrInstance<InsertErrorBarsDialog> aDlg(
                 m_pChartWindow, aItemSet,
                 uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
-                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X));
+                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
 
             aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, OUString() ) );

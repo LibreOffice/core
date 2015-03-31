@@ -539,10 +539,10 @@ long SvxColorTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                        SVX_RESSTR( RID_SVXSTR_COLOR ),
-                                                        ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
-                                                        &aWarningBoxImage ));
+            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                          SVX_RESSTR( RID_SVXSTR_COLOR ),
+                                                          ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
+                                                          &aWarningBoxImage );
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
@@ -705,9 +705,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
     {
-        ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
-                                   ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
+                                                         ,"DuplicateNameDialog"
+                                                         ,"cui/ui/queryduplicatedialog.ui");
         aWarningBox->Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -776,9 +776,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
         {
-            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
-                                      ,"DuplicateNameDialog"
-                                      ,"cui/ui/queryduplicatedialog.ui"));
+            ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
+                                                             ,"DuplicateNameDialog"
+                                                             ,"cui/ui/queryduplicatedialog.ui");
             aWarningBox->Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

@@ -446,10 +446,10 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                        SVX_RES( RID_SVXSTR_BITMAP ),
-                                                        CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
-                                                        &aWarningBoxImage  ));
+            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                          SVX_RES( RID_SVXSTR_BITMAP ),
+                                                          CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
+                                                          &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
@@ -728,9 +728,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                ScopedVclPtr<MessageDialog> aBox( new MessageDialog(GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog> aBox(
+                                   GetParentDialog()
                                    ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui"));
+                                   ,"cui/ui/queryduplicatedialog.ui");
                 aBox->Execute();
             }
         }

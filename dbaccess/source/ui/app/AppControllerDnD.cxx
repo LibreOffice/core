@@ -686,13 +686,14 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    ScopedVclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( getView(),
+                    ScopedVclPtrInstance<OSaveAsDlg> aAskForName(
+                                            getView(),
                                             CommandType::QUERY,
                                             getORB(),
                                             getConnection(),
                                             sTargetName,
                                             aNameChecker,
-                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS));
+                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS );
                     if ( RET_OK != aAskForName->Execute() )
                         // cancelled by the user
                         return false;

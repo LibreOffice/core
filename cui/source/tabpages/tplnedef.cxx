@@ -246,10 +246,10 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                    SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
-                                                    OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
-                                                    &aWarningBoxImage ));
+        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                      SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
+                                                      OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
+                                                      &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
         aMessDlg->SetButtonText( MESS_BTN_1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( MESS_BTN_2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
@@ -618,10 +618,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         }
         else
         {
-
-            ScopedVclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
-                                ,"DuplicateNameDialog"
-                                ,"cui/ui/queryduplicatedialog.ui"));
+            ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                      ,"DuplicateNameDialog"
+                                                      ,"cui/ui/queryduplicatedialog.ui" );
             aBox->Execute();
         }
     }
@@ -697,9 +696,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                ScopedVclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
-                                   ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui") );
+                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                          ,"DuplicateNameDialog"
+                                                          ,"cui/ui/queryduplicatedialog.ui" );
                 aBox->Execute();
             }
         }
@@ -715,9 +714,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
-                                ,"AskDelLineStyleDialog"
-                                ,"cui/ui/querydeletelinestyledialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
+                                                       ,"AskDelLineStyleDialog"
+                                                       ,"cui/ui/querydeletelinestyledialog.ui" );
 
         if ( aQueryBox->Execute() == RET_YES )
         {

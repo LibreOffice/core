@@ -472,9 +472,9 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
-            ScopedVclPtr<QueryBox> aBox(new QueryBox(
+            ScopedVclPtrInstance<QueryBox> aBox(
                 GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS)));
+                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
             aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
             bHardRecalc = aBox->Execute() == RET_YES;
@@ -689,8 +689,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
-                            ScopedVclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_OK ),
-                                ScGlobal::GetRscString( STR_SHARED_DOC_WARNING ) ) );
+                            ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                ScGlobal::GetRscString( STR_SHARED_DOC_WARNING ) );
                             aBox->SetDefaultCheckBoxText();
                             aBox->Execute();
                             bool bChecked = aBox->GetCheckBoxState();
@@ -896,8 +896,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     }
                                     else
                                     {
-                                        ScopedVclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_OK ),
-                                            ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) ) );
+                                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                            ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
                                         aBox->Execute();
 
                                         SfxBindings* pBindings = GetViewBindings();
@@ -937,8 +937,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
-                        ScopedVclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
-                                ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) ) );
+                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
+                                ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) );
 
                         if( RET_NO == aBox->Execute())
                         {

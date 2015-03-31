@@ -224,11 +224,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
         while ( !bOk )
         {
-            VclPtr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
-                                         aStrTitle,
-                                         aStrLabel,
-                                         aFormatName,
-                                         HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME ));
+            VclPtrInstance<ScStringInputDlg> pDlg( this,
+                                                   aStrTitle,
+                                                   aStrLabel,
+                                                   aFormatName,
+                                                   HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME );
 
             if ( pDlg->Execute() == RET_OK )
             {
@@ -331,11 +331,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         OUString aFormatName = m_pLbFormat->GetSelectEntry();
         OUString aEntry;
 
-        VclPtr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
-                                         aStrRename,
-                                         aStrLabel,
-                                         aFormatName,
-                                         HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME ));
+        VclPtrInstance<ScStringInputDlg> pDlg( this,
+                                               aStrRename,
+                                               aStrLabel,
+                                               aFormatName,
+                                               HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;

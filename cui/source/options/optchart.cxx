@@ -231,8 +231,8 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
     {
         OSL_ENSURE(pColorConfig->GetColorList().size() > 1, "don't delete the last chart color");
 
-        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(pButton, "QueryDeleteChartColorDialog",
-            "cui/ui/querydeletechartcolordialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQuery(pButton, "QueryDeleteChartColorDialog",
+                                                   "cui/ui/querydeletechartcolordialog.ui");
         if (RET_YES == aQuery->Execute())
         {
             pColorConfig->GetColorList().remove( nIndex  );

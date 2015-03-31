@@ -459,8 +459,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //! Link-Dialog muss Default-Parent setzen
         //  "kann keine Zeilen einfuegen"
-        ScopedVclPtr<InfoBox> aBox(new InfoBox( Application::GetDefDialogParent(),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_2 ) ) );
+        ScopedVclPtrInstance<InfoBox> aBox( Application::GetDefDialogParent(),
+                                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_2 ) );
         aBox->Execute();
     }
 

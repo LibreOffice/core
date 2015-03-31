@@ -1673,8 +1673,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (m_pLinguDicsDelPB == pBtn)
     {
-        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDeleteDictionaryDialog",
-            "cui/ui/querydeletedictionarydialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDeleteDictionaryDialog",
+                                                   "cui/ui/querydeletedictionarydialog.ui");
         if (RET_NO == aQuery->Execute())
             return 0;
 

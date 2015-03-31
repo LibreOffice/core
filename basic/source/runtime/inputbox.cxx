@@ -183,8 +183,8 @@ RTLFUNC(InputBox)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        VclPtr<SvRTLInputBox> pDlg(new SvRTLInputBox(Application::GetDefDialogParent(),
-                    rPrompt,aTitle,aDefault,nX,nY));
+        VclPtrInstance<SvRTLInputBox> pDlg(Application::GetDefDialogParent(),
+                                           rPrompt,aTitle,aDefault,nX,nY);
         pDlg->Execute();
         rPar.Get(0)->PutString( pDlg->GetText() );
     }

@@ -1960,8 +1960,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if(!pCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        ScopedVclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
-                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) ) );
+                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
                         bool bEditExisting = aBox->Execute() == RET_YES;
                         if(bEditExisting)
                         {

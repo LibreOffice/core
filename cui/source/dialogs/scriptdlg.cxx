@@ -1498,11 +1498,10 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
         message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
-    VclPtr<MessageDialog> pBox = new MessageDialog(NULL, message, VCL_MESSAGE_WARNING);
+    ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VCL_MESSAGE_WARNING );
     pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
-    pBox.disposeAndClear();
     delete pMessage;
 
     return 0;

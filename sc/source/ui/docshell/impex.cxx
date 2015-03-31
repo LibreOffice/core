@@ -210,8 +210,8 @@ bool ScImportExport::StartPaste()
         ScEditableTester aTester( pDoc, aRange );
         if ( !aTester.IsEditable() )
         {
-            ScopedVclPtr<InfoBox> aInfoBox(new InfoBox(Application::GetDefDialogParent(),
-                                ScGlobal::GetRscString( aTester.GetMessageId() ) ) );
+            ScopedVclPtrInstance<InfoBox> aInfoBox( Application::GetDefDialogParent(),
+                                ScGlobal::GetRscString( aTester.GetMessageId() ) );
             aInfoBox->Execute();
             return false;
         }

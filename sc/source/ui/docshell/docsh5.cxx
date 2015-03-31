@@ -487,8 +487,8 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
     if (bErr)
     {
-        ScopedVclPtr<InfoBox> aBox(new InfoBox( GetActiveDialogParent(),
-                ScGlobal::GetRscString( STR_CONSOLIDATE_ERR1 ) ) );
+        ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
+                ScGlobal::GetRscString( STR_CONSOLIDATE_ERR1 ) );
         aBox->Execute();
         return;
     }
@@ -697,15 +697,15 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
             }
             else
             {
-                ScopedVclPtr<InfoBox> aBox(new InfoBox( GetActiveDialogParent(),
-                    ScGlobal::GetRscString( STR_PROTECTIONERR ) ) );
+                ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
+                    ScGlobal::GetRscString( STR_PROTECTIONERR ) );
                 aBox->Execute();
             }
         }
         else
         {
-            ScopedVclPtr<InfoBox> aBox(new InfoBox(GetActiveDialogParent(),
-                ScGlobal::GetRscString( STR_SCENARIO_NOTFOUND ) ) );
+            ScopedVclPtrInstance<InfoBox> aBox(GetActiveDialogParent(),
+                ScGlobal::GetRscString( STR_SCENARIO_NOTFOUND ) );
             aBox->Execute();
         }
     }

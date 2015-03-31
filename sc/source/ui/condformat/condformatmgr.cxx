@@ -171,8 +171,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     sal_uInt16 nId = 1;
     ScModule* pScMod = SC_MOD();
     pScMod->SetRefDialog( nId, true );
-    VclPtr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                               pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
+    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                         pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE);
     Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {
@@ -217,8 +217,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     sal_uInt16 nId = 1;
     ScModule* pScMod = SC_MOD();
     pScMod->SetRefDialog( nId, true );
-    VclPtr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
-                                               maPos, condformat::dialog::CONDITION));
+    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, NULL, ScRangeList(),
+                                         maPos, condformat::dialog::CONDITION);
     Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {

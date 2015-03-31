@@ -595,9 +595,8 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog(pParent, getResId(nResID),
-                               VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
-
+        ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, getResId(nResID),
+                                                     VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
         bHadWarning = true;
 
         if ( RET_OK == aInfoBox->Execute() )
@@ -636,8 +635,8 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtr<MessageDialog> aInfo(new MessageDialog(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
-                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
+    ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
+                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
     OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
@@ -649,8 +648,8 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(m_pVCLWindow, "InstallForAllDialog",
-                         "desktop/ui/installforalldialog.ui"));
+    ScopedVclPtrInstance<MessageDialog> aQuery(m_pVCLWindow, "InstallForAllDialog",
+                                               "desktop/ui/installforalldialog.ui");
 
     short nRet = aQuery->Execute();
     if (nRet == RET_CANCEL)
@@ -794,8 +793,8 @@ void ExtMgrDialog::checkEntries()
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtr<MessageDialog> aInfo(new MessageDialog(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
-                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
+    ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
+                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
     OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);

@@ -2393,7 +2393,7 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    ScopedVclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
+    ScopedVclPtrInstance<QueryBox> qbox( this, WB_YES_NO, label );
 
     return qbox->Execute();
 }

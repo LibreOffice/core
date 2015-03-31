@@ -1269,8 +1269,8 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            ScopedVclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
+            ScopedVclPtrInstance<QueryBox> aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {
                 //! like above (not editable)
@@ -1421,9 +1421,9 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
         if (!bEmpty)
         {
-            ScopedVclPtr<QueryBox> aBox(new QueryBox(
+            ScopedVclPtrInstance<QueryBox> aBox(
                 rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
 
             if (aBox->Execute() == RET_NO)
             {
@@ -1495,8 +1495,8 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            ScopedVclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
+            ScopedVclPtrInstance<QueryBox> aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {
                 rDPObj = aUndoDPObj;
@@ -1593,8 +1593,8 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
-        ScopedVclPtr<InfoBox> aInfoBox(new InfoBox(rDocShell.GetActiveDialogParent(),
-                    ScGlobal::GetRscString( STR_TARGETNOTFOUND ) ));
+        ScopedVclPtrInstance<InfoBox> aInfoBox( rDocShell.GetActiveDialogParent(),
+                                                ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
         aInfoBox->Execute();
         return;
     }
