@@ -1186,7 +1186,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString( IMPLNAME ),
             bridge_object::Test_Impl_create,
             bridge_object::getSupportedServiceNames() ) );
