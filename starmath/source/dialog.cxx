@@ -1778,7 +1778,7 @@ IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG pListBox )
     sal_Int32 nPos = pFontsSubsetLB->GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        const Subset* pSubset = reinterpret_cast<const Subset*> (pFontsSubsetLB->GetEntryData( nPos ));
+        const Subset* pSubset = static_cast<const Subset*> (pFontsSubsetLB->GetEntryData( nPos ));
         if (pSubset)
         {
             pCharsetDisplay->SelectCharacter( pSubset->GetRangeMin() );

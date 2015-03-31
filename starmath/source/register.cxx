@@ -49,7 +49,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
     {
         // Define variables which are used in following macros.
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
-        Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        Reference< XMultiServiceFactory >    xServiceManager( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
         if( SmXMLImport_getImplementationName().equalsAscii( pImplementationName ))
         {
