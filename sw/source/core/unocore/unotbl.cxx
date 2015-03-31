@@ -4006,44 +4006,31 @@ uno::Sequence<OUString> SwXCellRange::getColumnDescriptions(void)
     throw(uno::RuntimeException, std::exception)
 { return getLabelDescriptions(false); }
 
+void SwXCellRange::setLabelDescriptions(const uno::Sequence<OUString>& rDesc, bool bRow)
+{
+    SolarMutexGuard aGuard;
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    if(!(bRow ? m_bFirstColumnAsLabel : m_bFirstRowAsLabel))
+        return; // if there are no labels we cannot set descriptions
+    sal_uInt32 nLeft, nTop, nRight, nBottom;
+    std::tie(nLeft, nTop, nRight, nBottom) = getLabelCoordinates(bRow);
+    if(!nRight && !nBottom)
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
+    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
+    if(rDesc.getLength() != vCells.size())
+        throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(this));
+    auto pDescIterator(rDesc.begin());
+    for(auto xCell : vCells)
+        uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->setString(*pDescIterator++);
+}
 void SwXCellRange::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
-        throw(uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    const sal_uInt16 nRowCount = getRowCount();
-    if(!m_bFirstColumnAsLabel)
-        return; // if there are no labels we cannot set descriptions
-    const OUString* pArray = rRowDesc.getConstArray();
-    const sal_uInt16 nStart = m_bFirstColumnAsLabel ? 1 : 0;
-    if(!nRowCount || rRowDesc.getLength() + nStart < nRowCount)
-        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-    for(sal_uInt16 i = nStart; i < nRowCount; i++)
-    {
-        uno::Reference<text::XText> xCell(getCellByPosition(0, i), uno::UNO_QUERY_THROW);
-        xCell->setString(pArray[i-nStart]);
-    }
-}
+    throw(uno::RuntimeException, std::exception)
+{ setLabelDescriptions(rRowDesc, true); }
+
 void SwXCellRange::setColumnDescriptions(const uno::Sequence<OUString>& rColumnDesc)
-        throw(uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    const sal_uInt16 nColumnCount = getColumnCount();
-    if(!m_bFirstRowAsLabel)
-        return; // if there are no labels we cannot set descriptions
-    const sal_uInt16 nStart = m_bFirstRowAsLabel ? 1 : 0;
-    if(!nColumnCount || rColumnDesc.getLength() + nStart < nColumnCount)
-        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-    const OUString* pArray = rColumnDesc.getConstArray();
-    for(sal_uInt16 i = nStart; i < nColumnCount; i++)
-    {
-        uno::Reference<text::XText> xCell(getCellByPosition(i, 0), uno::UNO_QUERY_THROW);
-        xCell->setString(pArray[i-nStart]);
-    }
-}
-
-
+    throw(uno::RuntimeException, std::exception)
+{ setLabelDescriptions(rColumnDesc, false); }
 
 void SAL_CALL SwXCellRange::addChartDataChangeEventListener(
         const uno::Reference<chart::XChartDataChangeEventListener> & xListener)

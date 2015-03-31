@@ -467,6 +467,7 @@ class SwXCellRange : public cppu::WeakImplHelper7
     bool m_bFirstColumnAsLabel;
     std::tuple<sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32> getLabelCoordinates(bool bRow);
     css::uno::Sequence<OUString> getLabelDescriptions(bool bRow);
+    void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
