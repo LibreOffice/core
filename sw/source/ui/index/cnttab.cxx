@@ -1478,9 +1478,9 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
-    VclPtr<SwAddStylesDlg_Impl> pDlg(new SwAddStylesDlg_Impl(pButton,
-        static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
-        aStyleArr));
+    VclPtr<SwAddStylesDlg_Impl> pDlg(pButton,
+                                     static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
+                                     aStyleArr);
     pDlg->Execute();
     pDlg.reset();
     ModifyHdl(0);
@@ -1514,8 +1514,8 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
                 return 0;
         }
 
-        VclPtr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
-                m_pAutoMarkPB, sAutoMarkURL, bNew ));
+        VclPtrInstance<SwAutoMarkDlg_Impl> pAutoMarkDlg(
+                m_pAutoMarkPB, sAutoMarkURL, bNew );
 
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )
             sAutoMarkURL = sSaveAutoMarkURL;

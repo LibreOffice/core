@@ -464,7 +464,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
         if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
         {
             //Refresh with virtual device to avoid flickering.
-            VclPtr<VirtualDevice> pVout = new VirtualDevice( *mpOut );
+            VclPtrInstance<VirtualDevice> pVout( *mpOut );
             pVout->SetMapMode( mpOut->GetMapMode() );
             Size aSize( VisArea().SSize() );
             aSize.Width() += 20;
@@ -1207,7 +1207,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
 
         //create virtual device and set.
         const Size aPixSz = GetWin()->PixelToLogic(Size(1,1));
-        VclPtr<VirtualDevice> pVout = new VirtualDevice( *GetWin() );
+        VclPtrInstance<VirtualDevice> pVout( *GetWin() );
         pVout->SetLineColor( GetWin()->GetLineColor() );
         pVout->SetFillColor( GetWin()->GetFillColor() );
         MapMode aMapMode( GetWin()->GetMapMode() );

@@ -335,8 +335,8 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            ScopedVclPtr<WarningBox> aBox(new WarningBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
-                    m_aEndRedliningWarning ));
+            ScopedVclPtrInstance<WarningBox> aBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+                    m_aEndRedliningWarning );
             if (aBox->Execute() != RET_YES)
                 bAlreadyDone = true;
             else

@@ -222,8 +222,8 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
 {
     bool bChanges = false;
-    ScopedVclPtr<DigitalSignaturesDialog> aSignaturesDialog(new DigitalSignaturesDialog(
-        NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature));
+    ScopedVclPtrInstance<DigitalSignaturesDialog> aSignaturesDialog(
+        NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature);
     bool bInit = aSignaturesDialog->Init();
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )

@@ -520,9 +520,8 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             m_pStbStatus->Invalidate();
         else if ( bGraphicLinked )
         {
-            ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, "QueryUnlinkGraphicsDialog",
-                "svx/ui/queryunlinkgraphicsdialog.ui"));
-
+            ScopedVclPtrInstance<MessageDialog> aQBox(this, "QueryUnlinkGraphicsDialog",
+                                                      "svx/ui/queryunlinkgraphicsdialog.ui");
             if (aQBox->Execute() != RET_YES)
             {
                 bPipette = false;

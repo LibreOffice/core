@@ -388,7 +388,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
-                        VclPtr<SfxPrinter> pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                        VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
                         assert (! pNewPrinter->isDisposed() );
                         if( pNewPrinter->IsKnown() )
                         {

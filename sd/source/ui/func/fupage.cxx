@@ -351,11 +351,11 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
                 // notice-masterpage (at the moment)
                 if( ePageKind != PK_NOTES )
                 {
-                    ScopedVclPtr<MessBox> aQuestionBox (new MessBox(
+                    ScopedVclPtrInstance<MessBox> aQuestionBox (
                         pParent,
                         WB_YES_NO | WB_DEF_YES,
                         SD_RESSTR(STR_PAGE_BACKGROUND_TITLE),
-                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) ) );
+                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) );
                     aQuestionBox->SetImage( QueryBox::GetStandardImage() );
                     bSetToAllPages = ( RET_YES == aQuestionBox->Execute() );
                 }

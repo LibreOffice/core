@@ -608,8 +608,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         const SfxFilter* pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&pViewFrm->GetWindow(),
-                                "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui"));
+                            ScopedVclPtrInstance<MessageDialog> aQuery(&pViewFrm->GetWindow(),
+                                                                       "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui");
 
                             if(RET_YES == aQuery->Execute())
                                 bLocalHasName = false;

@@ -1077,8 +1077,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(m_pSubjectED->GetText().isEmpty())
     {
-        ScopedVclPtr<SwSendQueryBox_Impl> aQuery(new SwSendQueryBox_Impl(pButton, "SubjectDialog",
-         "modules/swriter/ui/subjectdialog.ui"));
+        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "SubjectDialog",
+                                                         "modules/swriter/ui/subjectdialog.ui");
         aQuery->SetIsEmptyTextAllowed(true);
         aQuery->SetValue(m_sNoSubjectST);
         if(RET_OK == aQuery->Execute())
@@ -1091,8 +1091,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
-        ScopedVclPtr<SwSendQueryBox_Impl> aQuery(new SwSendQueryBox_Impl(pButton, "AttachNameDialog",
-         "modules/swriter/ui/attachnamedialog.ui"));
+        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "AttachNameDialog",
+                                                         "modules/swriter/ui/attachnamedialog.ui");
         aQuery->SetIsEmptyTextAllowed(false);
         if(RET_OK == aQuery->Execute())
         {

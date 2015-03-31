@@ -158,8 +158,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog(NULL, "JavaDisabledDialog",
-                                    "svt/ui/javadisableddialog.ui"));
+            ScopedVclPtrInstance<MessageDialog> aQueryBox(nullptr , "JavaDisabledDialog",
+                                                          "svt/ui/javadisableddialog.ui");
             nResult = aQueryBox->Execute();
             if ( nResult == RET_YES )
             {

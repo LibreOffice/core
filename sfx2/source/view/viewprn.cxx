@@ -451,8 +451,8 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         return 0;
 
     // Create Dialog
-    VclPtr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<vcl::Window*>(_pSetupParent),
-                                                                  _pViewSh, _pOptions ));
+    VclPtrInstance<SfxPrintOptionsDialog> pDlg( static_cast<vcl::Window*>(_pSetupParent),
+                                                _pViewSh, _pOptions );
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
@@ -820,7 +820,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 nDialogRet = 0;
 
                 // execute PrinterSetupDialog
-                VclPtr<PrinterSetupDialog> pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
+                VclPtrInstance<PrinterSetupDialog> pPrintSetupDlg( GetWindow() );
                 SfxDialogExecutor_Impl* pExecutor = 0;
 
                 if (pImp->m_bHasPrintOptions && HasPrintOptionsPage())

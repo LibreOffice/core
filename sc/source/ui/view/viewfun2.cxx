@@ -1074,10 +1074,10 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bC
     {
         if (!bApi)
         {
-            ScopedVclPtr<MessBox> aBox(new MessBox( GetViewData().GetDialogParent(),
+            ScopedVclPtrInstance<MessBox> aBox( GetViewData().GetDialogParent(),
                             WinBits(WB_YES_NO_CANCEL | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                            ScGlobal::GetRscString( STR_MERGE_NOTEMPTY ) ) );
+                            ScGlobal::GetRscString( STR_MERGE_NOTEMPTY ) );
             sal_uInt16 nRetVal = aBox->Execute();
 
             if ( nRetVal == RET_YES )
@@ -1771,9 +1771,9 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
         }
 
-        ScopedVclPtr<MessBox> aBox(new MessBox( GetViewData().GetDialogParent(),
+        ScopedVclPtrInstance<MessBox> aBox( GetViewData().GetDialogParent(),
                         WinBits(WB_YES_NO | WB_DEF_NO),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ), aMsgStr ) );
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ), aMsgStr );
         sal_uInt16 nRetVal = aBox->Execute();
 
         if ( RET_YES == nRetVal )

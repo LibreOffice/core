@@ -649,8 +649,8 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             return 0;
         }
 
-        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, "QuerySaveLabelDialog",
-            "modules/swriter/ui/querysavelabeldialog.ui"));
+        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QuerySaveLabelDialog",
+                                                   "modules/swriter/ui/querysavelabeldialog.ui");
 
         aQuery->set_primary_text(aQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));

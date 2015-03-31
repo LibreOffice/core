@@ -134,10 +134,8 @@ void InsertionIndicatorOverlay::Create (
 
     // Create virtual devices for bitmap and mask whose bitmaps later be
     // combined to form the BitmapEx of the icon.
-    ScopedVclPtr<VirtualDevice> pContent( new VirtualDevice (
-        *mrSlideSorter.GetContentWindow(),
-        0,
-        0) );
+    ScopedVclPtrInstance<VirtualDevice> pContent(
+        *mrSlideSorter.GetContentWindow(), 0, 0);
     pContent->SetOutputSizePixel(aIconSize);
 
     pContent->SetFillColor();

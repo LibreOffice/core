@@ -1818,11 +1818,11 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         if ( bUsedStyle )
         {
         #if defined UNX
-            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(SfxGetpApp()->GetTopWindow(), aMsg,
-                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance<MessageDialog> aBox(SfxGetpApp()->GetTopWindow(), aMsg,
+                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         #else
-            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(GetWindow(), aMsg,
-                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance<MessageDialog> aBox(GetWindow(), aMsg,
+                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         #endif
             aApproved = aBox->Execute() == RET_YES;
         }

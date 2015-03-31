@@ -998,8 +998,8 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, SVX_RES(nResId),
-                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(nResId),
+                                                          VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 OUString sMessText = aQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
                 aQBox->set_primary_text(sMessText);
@@ -1604,8 +1604,8 @@ namespace svxform
             }
             else if (sIdent == "modelsremove")
             {
-                ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
-                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
+                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 OUString sText = aQBox->get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
                 aQBox->set_primary_text(sText);
@@ -1705,8 +1705,8 @@ namespace svxform
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
-                    ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
-                                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                    ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
+                                                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
                     aQBox->set_primary_text(sMessText);

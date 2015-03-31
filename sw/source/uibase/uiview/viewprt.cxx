@@ -201,8 +201,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
-                ScopedVclPtr<MessageDialog> aBox(new MessageDialog(&GetEditWin(), "PrintMergeDialog",
-                                   "modules/swriter/ui/printmergedialog.ui"));
+                ScopedVclPtrInstance<MessageDialog> aBox(&GetEditWin(), "PrintMergeDialog",
+                                   "modules/swriter/ui/printmergedialog.ui");
                 short nRet = aBox->Execute();
                 if(RET_YES == nRet)
                 {

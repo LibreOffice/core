@@ -503,8 +503,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     else if (sItemIdent == "rename")
     {
         m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
-        ScopedVclPtr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
-                                                                             m_pShortNameEdit->GetText() ));
+        ScopedVclPtrInstance<SwNewGlosNameDlg> pNewNameDlg(this, m_pNameED->GetText(),
+                                                           m_pShortNameEdit->GetText());
         if( RET_OK == pNewNameDlg->Execute() &&
             pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
                                     pNewNameDlg->GetNewShort(),

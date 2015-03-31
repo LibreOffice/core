@@ -138,8 +138,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
                 else
                 {
-                    ScopedVclPtr<WarningBox> aWarningBox(new WarningBox( mpWindow, WinBits( WB_OK ),
-                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) ) );
+                    ScopedVclPtrInstance<WarningBox> aWarningBox( mpWindow, WinBits( WB_OK ),
+                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
                     aWarningBox->Execute();
                 }
             }

@@ -1177,8 +1177,8 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
                 if (iter != m_aDesignList.end())
                 {
-                    ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
-                        VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO));
+                    ScopedVclPtrInstance<MessageDialog> aErrorBox(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
+                        VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO);
                     bRetry = aErrorBox->Execute() == RET_NO;
 
                     if(!bRetry)

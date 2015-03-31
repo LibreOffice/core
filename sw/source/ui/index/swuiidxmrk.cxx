@@ -1248,9 +1248,9 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     OUString sOldId = m_sCreatedEntry[0];
     for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
-    ScopedVclPtr<SwCreateAuthEntryDlg_Impl> aDlg(new SwCreateAuthEntryDlg_Impl(pButton,
+    ScopedVclPtrInstance<SwCreateAuthEntryDlg_Impl> aDlg(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
-                *pSh, bNewEntry, bCreate));
+                *pSh, bNewEntry, bCreate);
     if(bNewEntry)
     {
         aDlg->SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));

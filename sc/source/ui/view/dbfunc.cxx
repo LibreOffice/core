@@ -383,8 +383,8 @@ void ScDBFunc::ToggleAutoFilter()
         }
         else
         {
-            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(GetViewData().GetDialogParent(),
-                                ScGlobal::GetRscString(STR_ERR_AUTOFILTER)));
+            ScopedVclPtrInstance<MessageDialog> aErrorBox(GetViewData().GetDialogParent(),
+                                ScGlobal::GetRscString(STR_ERR_AUTOFILTER));
             aErrorBox->Execute();
         }
     }

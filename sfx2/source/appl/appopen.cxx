@@ -831,9 +831,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 SolarMutexGuard aGuard;
                 vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
 
-                ScopedVclPtr<MessageDialog> aSecurityWarningBox(new MessageDialog(pWindow,
+                ScopedVclPtrInstance<MessageDialog> aSecurityWarningBox(pWindow,
                                                   SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),
-                                                  VCL_MESSAGE_WARNING));
+                                                  VCL_MESSAGE_WARNING);
                 aSecurityWarningBox->SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
                 aSecurityWarningBox->Execute();
                 return;

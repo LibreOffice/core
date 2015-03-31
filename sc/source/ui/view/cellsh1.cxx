@@ -2652,9 +2652,9 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         //  confirm selection if it contains SubTotal cells
 
-                        ScopedVclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(),
+                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(),
                                         WinBits(WB_YES_NO | WB_DEF_YES),
-                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) ) );
+                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
                         if (aBox->Execute() == RET_NO)
                             bOK = false;
                     }

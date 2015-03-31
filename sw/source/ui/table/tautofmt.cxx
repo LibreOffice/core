@@ -315,10 +315,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
     bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
-        VclPtr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
-                                                       aStrTitle,
-                                                       aStrLabel,
-                                                       OUString() ));
+        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrTitle,
+                                               aStrLabel, OUString() );
         if( RET_OK == pDlg->Execute() )
         {
             const OUString aFormatName( pDlg->GetInputString() );
@@ -377,8 +375,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
-    VclPtr<MessBox> pBox(new MessBox( this, WinBits( WB_OK_CANCEL ),
-                                                 aStrDelTitle, aMessage));
+    VclPtrInstance<MessBox> pBox( this, WinBits( WB_OK_CANCEL ),
+                                  aStrDelTitle, aMessage );
 
     if ( pBox->Execute() == RET_OK )
     {
@@ -412,10 +410,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     bool bOk = false;
     while( !bOk )
     {
-        VclPtr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
-                                                       aStrRenameTitle,
-                                                       m_pLbFormat->GetSelectEntry(),
-                                                       OUString() ));
+        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrRenameTitle,
+                                               m_pLbFormat->GetSelectEntry(),
+                                               OUString() );
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;

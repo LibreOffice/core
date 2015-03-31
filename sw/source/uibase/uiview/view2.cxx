@@ -2287,9 +2287,9 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&GetViewFrame()->GetWindow(),
+                ScopedVclPtrInstance<MessageDialog> aQuery(&GetViewFrame()->GetWindow(),
                     "DataSourcesUnavailableDialog",
-                    "modules/swriter/ui/datasourcesunavailabledialog.ui"));
+                    "modules/swriter/ui/datasourcesunavailabledialog.ui");
                 // no cancel allowed
                 if (RET_OK != aQuery->Execute())
                     return;
@@ -2336,9 +2336,9 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                ScopedVclPtr<MessageDialog> aWarning(new MessageDialog(&GetViewFrame()->GetWindow(),
+                ScopedVclPtrInstance<MessageDialog> aWarning(&GetViewFrame()->GetWindow(),
                     "WarnDataSourceDialog",
-                    "modules/swriter/ui/warndatasourcedialog.ui"));
+                    "modules/swriter/ui/warndatasourcedialog.ui");
                 OUString sTmp(aWarning->get_primary_text());
                 aWarning->set_primary_text(sTmp.replaceFirst("%1", sSource));
                 if (RET_OK == aWarning->Execute())

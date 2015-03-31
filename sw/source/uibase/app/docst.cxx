@@ -356,8 +356,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        VclPtr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg( 0,
-                                                    *GetStyleSheetPool()));
+                        VclPtrInstance<SfxNewStyleDlg> pDlg( 0, *GetStyleSheetPool());
                         if(RET_OK == pDlg->Execute())
                         {
                             aParam = pDlg->GetName();
