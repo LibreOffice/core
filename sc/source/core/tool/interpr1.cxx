@@ -1002,7 +1002,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                         sc::CompareFunc(aComp.maCells[0], aComp.maCells[1], aComp.mbIgnoreCase, pOptions), j, k);
                 }
                 else
-                    aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
+                    aRes.mpMat->PutError( errNoValue, j, k);
             }
         }
 
