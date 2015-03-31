@@ -1451,7 +1451,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL passwordcontainer_component_getFactory (
         if (PasswordContainer::impl_getStaticImplementationName().equalsAscii(pImplementationName))
         {
             xFactory = PasswordContainer::impl_createFactory (
-                reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
+                static_cast< XMultiServiceFactory* >(pServiceManager));
         }
         if (xFactory.is())
         {

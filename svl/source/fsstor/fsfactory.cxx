@@ -191,7 +191,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
         if (FSStorageFactory::impl_staticGetImplementationName().equalsAscii(pImplementationName))
         {
             xFactory = cppu::createOneInstanceFactory (
-                reinterpret_cast< lang::XMultiServiceFactory* >(pServiceManager),
+                static_cast< lang::XMultiServiceFactory* >(pServiceManager),
                 FSStorageFactory::impl_staticGetImplementationName(),
                 FSStorageFactory::impl_staticCreateSelfInstance,
                 FSStorageFactory::impl_staticGetSupportedServiceNames() );
