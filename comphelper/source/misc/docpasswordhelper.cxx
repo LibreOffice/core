@@ -341,7 +341,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         rtl_digest_rawMD5 ( hDigest, reinterpret_cast<sal_uInt8*>(aResultKey.getArray()), aResultKey.getLength() );
 
         // Erase KeyData array and leave.
-        memset( pKeyData, 0, sizeof(pKeyData) );
+        rtl_secureZeroMemory (pKeyData, sizeof(pKeyData));
     }
 
     return aResultKey;

@@ -2071,7 +2071,7 @@ static void __rtl_digest_updatePBKDF2 (
         for (k = 0; k < DIGEST_CBLOCK_PBKDF2; k++) T[k] ^= U[k];
     }
 
-    memset (U, 0, DIGEST_CBLOCK_PBKDF2);
+    rtl_secureZeroMemory (U, DIGEST_CBLOCK_PBKDF2);
 }
 
 /*========================================================================
@@ -2124,7 +2124,7 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
 
         /* DK ||= T_(i) */
         memcpy (pKeyData, T, nKeyLen);
-        memset (T, 0, DIGEST_CBLOCK_PBKDF2);
+        rtl_secureZeroMemory (T, DIGEST_CBLOCK_PBKDF2);
     }
 
     memset (&digest, 0, sizeof (digest));

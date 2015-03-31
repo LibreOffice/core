@@ -374,7 +374,7 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (p != 0)
     {
-        memset (p, 0, n);
+        rtl_secureZeroMemory (p, n);
         rtl_freeMemory (p);
     }
 }

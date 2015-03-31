@@ -1314,6 +1314,15 @@ rtl_cache_wsupdate_fini();
 
 #if defined(SAL_UNX)
 
+void SAL_CALL
+rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+{
+    //currently glibc doesn't implement memset_s
+    volatile char *p = reinterpret_cast<volatile char*>(Ptr);
+    while (Bytes--)
+        *p++ = 0;
+}
+
 #include <sys/time.h>
 
 static void *
@@ -1368,6 +1377,12 @@ rtl_cache_wsupdate_fini()
 /* ================================================================= */
 
 #elif defined(SAL_W32)
+
+void SAL_CALL
+rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+{
+    RtlSecureZeroMemory(Ptr, Bytes);
+}
 
 static DWORD WINAPI
 rtl_cache_wsupdate_all (void * arg);

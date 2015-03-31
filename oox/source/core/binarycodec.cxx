@@ -347,8 +347,8 @@ bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnVerifier[ 16 ], const sal_uIn
     bool bResult = memcmp( pnBuffer, pnDigest, sizeof( pnDigest ) ) == 0;
 
     // erase buffer and digest arrays and leave
-    (void)memset( pnBuffer, 0, sizeof( pnBuffer ) );
-    (void)memset( pnDigest, 0, sizeof( pnDigest ) );
+    rtl_secureZeroMemory (pnBuffer, sizeof(pnBuffer));
+    rtl_secureZeroMemory (pnDigest, sizeof(pnDigest));
     return bResult;
 }
 
@@ -379,7 +379,7 @@ bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
         rtl_cipher_init( mhCipher, rtl_Cipher_DirectionDecode, pnKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0 );
 
     // rrase key data array and leave
-    (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
+    rtl_secureZeroMemory (pnKeyData, sizeof(pnKeyData));
     return eResult == rtl_Cipher_E_None;
 }
 
