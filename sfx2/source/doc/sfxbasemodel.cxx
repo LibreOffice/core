@@ -1975,7 +1975,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 SvMemoryStream aMemStm( 1024, 1024 );
                 WriteTransferableObjectDescriptor( aMemStm, aDesc );
-                aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
+                aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
             }
             else
                 throw datatransfer::UnsupportedFlavorException();
@@ -2019,7 +2019,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     xMetaFile->Write( aMemStm );
-                    aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
+                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
             }
@@ -2039,7 +2039,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     xMetaFile->Write( aMemStm );
-                    aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
+                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
             }
@@ -2061,7 +2061,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     if (xStream)
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
                                                         xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
@@ -2097,7 +2097,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     if (xStream)
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
                                                         xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
@@ -2137,7 +2137,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     if (xStream)
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
                                                         xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
@@ -2161,7 +2161,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     if (xStream)
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
                                                         xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }

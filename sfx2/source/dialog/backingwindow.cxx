@@ -673,7 +673,7 @@ struct ImplDelayedDispatch
 
 static sal_IntPtr implDispatchDelayed( void*, void* pArg )
 {
-    struct ImplDelayedDispatch* pDispatch = reinterpret_cast<ImplDelayedDispatch*>(pArg);
+    struct ImplDelayedDispatch* pDispatch = static_cast<ImplDelayedDispatch*>(pArg);
     try
     {
         pDispatch->xDispatch->dispatch( pDispatch->aDispatchURL, pDispatch->aArgs );

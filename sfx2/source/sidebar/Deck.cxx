@@ -172,7 +172,7 @@ bool Deck::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == MouseNotifyEvent::COMMAND)
     {
-        CommandEvent* pCommandEvent = reinterpret_cast<CommandEvent*>(rEvent.GetData());
+        CommandEvent* pCommandEvent = static_cast<CommandEvent*>(rEvent.GetData());
         if (pCommandEvent != NULL)
             switch (pCommandEvent->GetCommand())
             {

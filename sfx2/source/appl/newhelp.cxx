@@ -471,7 +471,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeIndexBox(vcl::Window *
 
 void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(GetEntryData( rUDEvt.GetItemId() ));
+    IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( rUDEvt.GetItemId() ));
     if ( pEntry && pEntry->m_bSubEntry )
     {
         // indent sub entries
@@ -510,11 +510,11 @@ void IndexBox_Impl::SelectExecutableEntry()
     {
         sal_Int32 nOldPos = nPos;
         OUString aEntryText;
-        IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(GetEntryData( nPos ));
+        IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( nPos ));
         sal_Int32 nCount = GetEntryCount();
         while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
         {
-            pEntry = reinterpret_cast<IndexEntry_Impl*>(GetEntryData( ++nPos ));
+            pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( ++nPos ));
             aEntryText = GetEntry( nPos );
         }
 
@@ -697,7 +697,7 @@ void IndexTabPage_Impl::ClearIndex()
 {
     sal_uInt16 nCount = m_pIndexCB->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete reinterpret_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData(i));
+        delete static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData(i));
     m_pIndexCB->Clear();
 }
 
@@ -769,7 +769,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 OUString IndexTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData( m_pIndexCB->GetEntryPos( m_pIndexCB->GetText() ) ));
+    IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData( m_pIndexCB->GetEntryPos( m_pIndexCB->GetText() ) ));
     if ( pEntry )
         aRet = pEntry->m_aURL;
     return aRet;
@@ -975,7 +975,7 @@ void SearchTabPage_Impl::ClearSearchResults()
 {
     sal_uInt16 nCount = m_pResultsLB->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete reinterpret_cast<OUString*>(m_pResultsLB->GetEntryData(i));
+        delete static_cast<OUString*>(m_pResultsLB->GetEntryData(i));
     m_pResultsLB->Clear();
     m_pResultsLB->Update();
 }
@@ -1071,7 +1071,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = reinterpret_cast<OUString*>(m_pResultsLB->GetSelectEntryData());
+    OUString* pData = static_cast<OUString*>(m_pResultsLB->GetSelectEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1149,7 +1149,7 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         OUString aTitle = GetEntry(i);
-        OUString* pURL = reinterpret_cast<OUString*>(GetEntryData(i));
+        OUString* pURL = static_cast<OUString*>(GetEntryData(i));
         aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, sEmpty);
         delete pURL;
     }
@@ -1174,7 +1174,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                 aDlg.SetTitle( GetEntry( nPos ) );
                 if ( aDlg.Execute() == RET_OK )
                 {
-                    OUString* pURL = reinterpret_cast<OUString*>(GetEntryData( nPos ));
+                    OUString* pURL = static_cast<OUString*>(GetEntryData( nPos ));
                     RemoveEntry( nPos );
                     OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
@@ -1298,7 +1298,7 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = reinterpret_cast<OUString*>(m_pBookmarksBox->GetSelectEntryData());
+    OUString* pData = static_cast<OUString*>(m_pBookmarksBox->GetSelectEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1424,7 +1424,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     DELETEZ( pBPage );
 
     for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
-        delete reinterpret_cast<OUString*>(m_pActiveLB->GetEntryData(i));
+        delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
     aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
@@ -1467,7 +1467,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
 
     for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
-        OUString* pFactory = reinterpret_cast<OUString*>(m_pActiveLB->GetEntryData(i));
+        OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
         *pFactory = pFactory->toAsciiLowerCase();
         if ( *pFactory == pIPage->GetFactory() )
         {
@@ -1540,7 +1540,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
-    OUString* pFactory = reinterpret_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
+    OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
     {
         SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );
@@ -1723,7 +1723,7 @@ bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
     bool bValid = false;
     for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
-        OUString* pFactory = reinterpret_cast<OUString*>(m_pActiveLB->GetEntryData(i));
+        OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
         if ( *pFactory == _rFactory )
         {
             bValid = true;
