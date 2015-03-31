@@ -36,10 +36,11 @@ bool isVoidPointer(QualType type) {
 }
 
 class RedundantCast:
-    public RecursiveASTVisitor<RedundantCast>, public loplugin::Plugin
+    public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
 public:
-    explicit RedundantCast(InstantiationData const & data): Plugin(data) {}
+    explicit RedundantCast(InstantiationData const & data): RewritePlugin(data)
+    {}
 
     virtual void run() override {
         if (compiler.getLangOpts().CPlusPlus) {
@@ -48,6 +49,8 @@ public:
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
+
+    bool VisitCXXReinterpretCastExpr(CXXReinterpretCastExpr const * expr);
 
     bool VisitCallExpr(CallExpr const * expr);
 
@@ -159,6 +162,51 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
     return true;
 }
 
+bool RedundantCast::VisitCXXReinterpretCastExpr(
+    CXXReinterpretCastExpr const * expr)
+{
+    if (ignoreLocation(expr)
+        || !expr->getSubExpr()->getType()->isVoidPointerType())
+    {
+        return true;
+    }
+    auto t = expr->getType()->getAs<PointerType>();
+    if (t == nullptr || !t->getPointeeType()->isObjectType()) {
+        return true;
+    }
+    if (rewriter != nullptr) {
+        auto loc = expr->getLocStart();
+        while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+            loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+        }
+        if (compat::isMacroBodyExpansion(compiler, loc)) {
+            auto loc2 = expr->getLocEnd();
+            while (compiler.getSourceManager().isMacroArgExpansion(loc2)) {
+                loc2 = compiler.getSourceManager().getImmediateMacroCallerLoc(
+                    loc2);
+            }
+            if (compat::isMacroBodyExpansion(compiler, loc2)) {
+                //TODO: check loc, loc2 are in same macro body expansion
+                loc = compiler.getSourceManager().getSpellingLoc(loc);
+            }
+        }
+        auto s = compiler.getSourceManager().getCharacterData(loc);
+        auto n = Lexer::MeasureTokenLength(
+            loc, compiler.getSourceManager(), compiler.getLangOpts());
+        std::string tok(s, n);
+        if (tok == "reinterpret_cast" && replaceText(loc, n, "static_cast")) {
+            return true;
+        }
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "reinterpret_cast from %0 to %1 can be simplified to static_cast",
+        expr->getExprLoc())
+        << expr->getSubExprAsWritten()->getType() << expr->getType()
+        << expr->getSourceRange();
+    return true;
+}
+
 bool RedundantCast::VisitCallExpr(CallExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
@@ -229,7 +277,7 @@ bool RedundantCast::visitBinOp(BinaryOperator const * expr) {
     return true;
 }
 
-loplugin::Plugin::Registration<RedundantCast> X("redundantcast");
+loplugin::Plugin::Registration<RedundantCast> X("redundantcast", true);
 
 }
 
