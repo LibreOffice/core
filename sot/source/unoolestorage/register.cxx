@@ -39,7 +39,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sot_component_getFactory(
 
     if ( pServiceManager && aImplName.equals( OLESimpleStorage::impl_staticGetImplementationName() ) )
     {
-        xFactory= ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+        xFactory= ::cppu::createSingleFactory( static_cast< lang::XMultiServiceFactory*>( pServiceManager ),
                                             OLESimpleStorage::impl_staticGetImplementationName(),
                                             OLESimpleStorage::impl_staticCreateSelfInstance,
                                             OLESimpleStorage::impl_staticGetSupportedServiceNames() );
