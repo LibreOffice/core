@@ -50,7 +50,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xmlsecurity_component_getFactory( const sal_
     {
         // CertificateContainer
         xFactory = cppu::createOneInstanceFactory(
-            reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+            static_cast< lang::XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             CertificateContainer::impl_createInstance,
             CertificateContainer::impl_getStaticSupportedServiceNames() );

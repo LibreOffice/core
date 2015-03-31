@@ -49,7 +49,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals(DecryptorImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             DecryptorImpl_createInstance, DecryptorImpl_getSupportedServiceNames() ) );
 
@@ -64,7 +64,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals(EncryptorImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             EncryptorImpl_createInstance, EncryptorImpl_getSupportedServiceNames() ) );
 
@@ -79,7 +79,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals(SignatureCreatorImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SignatureCreatorImpl_createInstance, SignatureCreatorImpl_getSupportedServiceNames() ) );
 
@@ -94,7 +94,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals(SignatureVerifierImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SignatureVerifierImpl_createInstance, SignatureVerifierImpl_getSupportedServiceNames() ) );
 
@@ -109,7 +109,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals(SAXEventKeeperImpl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             SAXEventKeeperImpl_createInstance, SAXEventKeeperImpl_getSupportedServiceNames() ) );
 
@@ -124,7 +124,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals( XMLSignatureTemplateImpl::impl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory = XMLSignatureTemplateImpl::impl_createFactory(
-                reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+                static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
         if (xFactory.is())
         {
@@ -137,7 +137,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     if ( pServiceManager && implName.equals( XMLEncryptionTemplateImpl::impl_getImplementationName()) )
     {
         Reference< XSingleServiceFactory > xFactory = XMLEncryptionTemplateImpl::impl_createFactory(
-                reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+                static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
         if (xFactory.is())
         {
