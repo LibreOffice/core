@@ -324,7 +324,7 @@ inline bool AdapterImpl::coerce_construct(
 static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 {
     OUString const & name =
-        *reinterpret_cast< OUString const * >( &pSource->pType->pTypeName );
+        OUString::unacquired( &pSource->pType->pTypeName );
 
     if ( name == "com.sun.star.reflection.InvocationTargetException" )
     {

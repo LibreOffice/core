@@ -432,7 +432,7 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
                 oid.append( (sal_Unicode)';' );
                 // ;environment[context]
                 oid.append(
-                    *reinterpret_cast< OUString const * >(
+                    OUString::unacquired(
                         &((uno_Environment *) pEnv)->pTypeName ) );
                 oid.append( (sal_Unicode)'[' );
                 oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );

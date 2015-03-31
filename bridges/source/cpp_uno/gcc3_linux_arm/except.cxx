@@ -235,7 +235,7 @@ namespace CPPU_CURRENT_NAMESPACE
 #if OSL_DEBUG_LEVEL > 1
         OString cstr(
             OUStringToOString(
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+                OUString::unacquired( &pUnoExc->pType->pTypeName ),
                 RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
 #endif
@@ -251,7 +251,7 @@ namespace CPPU_CURRENT_NAMESPACE
             {
                 throw RuntimeException(
                     OUString("cannot get typedescription for type ") +
-                    *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+                    OUString::unacquired( &pUnoExc->pType->pTypeName ) );
             }
 
             pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
@@ -281,7 +281,7 @@ namespace CPPU_CURRENT_NAMESPACE
            {
                throw RuntimeException(
                    OUString("no rtti for type ") +
-                   *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+                   OUString::unacquired( &pUnoExc->pType->pTypeName ) );
            }
         }
 

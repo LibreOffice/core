@@ -816,7 +816,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
         handle = get_static_bootstrap_handle();
     }
     OUString expanded( expandMacros( static_cast< Bootstrap_Impl * >( handle ),
-                                     * reinterpret_cast< OUString const * >( macro ),
+                                     OUString::unacquired( macro ),
                                      LOOKUP_MODE_NORMAL, NULL ) );
     rtl_uString_assign( macro, expanded.pData );
 }

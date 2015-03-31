@@ -1957,7 +1957,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
     if (0 == *ppRet)
     {
         // check for sequence
-        OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+        OUString const & name = OUString::unacquired( &pName );
         if (2 < name.getLength() && '[' == name[ 0 ])
         {
             OUString element_name( name.copy( 2 ) );

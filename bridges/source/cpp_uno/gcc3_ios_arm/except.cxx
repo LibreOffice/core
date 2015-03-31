@@ -269,7 +269,7 @@ static void deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-    SAL_INFO( "bridges.ios", "raiseException: " << *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+    SAL_INFO( "bridges.ios", "raiseException: " << OUString::unacquired( &pUnoExc->pType->pTypeName ) );
 
     void * pCppExc;
     std::type_info * rtti;
@@ -283,7 +283,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
         throw RuntimeException(
             OUString("cannot get typedescription for type ") +
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+            OUString::unacquired( &pUnoExc->pType->pTypeName ) );
     }
 
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
@@ -313,7 +313,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
         throw RuntimeException(
             OUString("no rtti for type ") +
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+            OUString::unacquired( &pUnoExc->pType->pTypeName ) );
     }
     }
 
