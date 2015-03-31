@@ -525,7 +525,7 @@ extern "C"
             ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-            xServiceManager( reinterpret_cast<
+            xServiceManager( static_cast<
             ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
             if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals(
