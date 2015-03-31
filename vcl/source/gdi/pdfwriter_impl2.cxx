@@ -1220,9 +1220,8 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
             xResult.clear();
 
         // trash temporary padded cleartext PWDs
-        memset( aPadOPW, 0, sizeof(aPadOPW) );
-        memset( aPadUPW, 0, sizeof(aPadUPW) );
-
+        rtl_secureZeroMemory (aPadOPW, sizeof(aPadOPW));
+        rtl_secureZeroMemory (aPadUPW, sizeof(aPadUPW));
     }
     return xResult;
 }

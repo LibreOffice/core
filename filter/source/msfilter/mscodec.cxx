@@ -373,8 +373,8 @@ bool MSCodec_Std97::VerifyKey (
         result = (memcmp (pBuffer, pDigest, sizeof(pDigest)) == 0);
 
         // Erase Buffer and Digest arrays.
-        (void)memset (pBuffer, 0, sizeof(pBuffer));
-        (void)memset (pDigest, 0, sizeof(pDigest));
+        rtl_secureZeroMemory (pBuffer, sizeof(pBuffer));
+        rtl_secureZeroMemory (pDigest, sizeof(pDigest));
     }
 
     return result;
@@ -412,7 +412,7 @@ bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
         pKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0);
 
     // Erase KeyData array and leave.
-    (void)memset (pKeyData, 0, sizeof(pKeyData));
+    rtl_secureZeroMemory (pKeyData, sizeof(pKeyData));
 
     return (result == rtl_Cipher_E_None);
 }
@@ -532,8 +532,8 @@ void MSCodec_Std97::GetEncryptKey (
         rtl_cipher_encode (
             m_hCipher, pDigest, 16, pSaltDigest, 16);
 
-        (void)memset (pBuffer, 0, sizeof(pBuffer));
-        (void)memset (pDigest, 0, sizeof(pDigest));
+        rtl_secureZeroMemory (pBuffer, sizeof(pBuffer));
+        rtl_secureZeroMemory (pDigest, sizeof(pDigest));
     }
 }
 
