@@ -807,7 +807,7 @@ void ExtensionCmdQueue::Thread::execute()
                     dpExc.Cause.getValueTypeClass() == uno::TypeClass_EXCEPTION)
                 {
                     // notify error cause only:
-                    msg = reinterpret_cast< uno::Exception const * >( dpExc.Cause.getValue() )->Message;
+                    msg = static_cast< uno::Exception const * >( dpExc.Cause.getValue() )->Message;
                 }
                 if (msg.isEmpty()) // fallback for debugging purposes
                     msg = ::comphelper::anyToString(exc);

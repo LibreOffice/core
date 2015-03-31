@@ -274,7 +274,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pIm
         // Define variables which are used in following macros.
         Reference< XSingleServiceFactory > xFactory;
         Reference< XMultiServiceFactory >  xServiceManager(
-            reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
+            static_cast< XMultiServiceFactory* >(pServiceManager));
 
         if (desktop::Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
         {
