@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_53968495",
+        "filename": "sw/source/uibase/app/docsh2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-31T10:37:45Z",
+      "side": 1,
+      "message": "note how there would have been a race here if the configuration property is changed in between calls to SID_MAIL_PREPAREEXPORT and SID_MAIL_EXPORT_FINISHED",
+      "revId": "3311d65f65fc18dc815d5cf06658db61f367f38d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
