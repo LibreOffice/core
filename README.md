@@ -4,9 +4,11 @@ A quick overview of the LibreOffice code structure.
 
 You can develop for LibreOffice in one of two ways, one
 recommended and one much less so. First the somewhat less recommended
-way: it is possible to use the SDK, for which you can read the API
-docs [here](http://api.libreoffice.org/). This re-uses the (extremely
-generic) APIs we provide for macro scripting in StarBasic.
+way: it is possible to use the SDK to develop an extension,
+for which you can read the API docs [here](http://api.libreoffice.org/)
+and [here](http://wiki.services.openoffice.org/wiki/Documentation/DevGuide).
+This re-uses the (extremely generic) UNO APIs that are also used by
+macro scripting in StarBasic.
 
 The best way to add a generally useful feature to LibreOffice
 is to work on the code base however. Overall this way makes it easier
@@ -33,18 +35,18 @@ Module    | Description
 sal/      | this provides a simple System Abstraction Layer
 tools/    | this provides basic internal types: 'Rectangle', 'Color' etc.
 vcl/      | this is the widget toolkit library and one rendering abstraction
-svx/      | graphics related helper code, including much of 'draw' / 'impress'
-sfx2/     | core framework: document model / load/save / signals for actions etc.
-framework | UNO wrappers around the core framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from */uiconfig/ files
+framework | UNO framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from */uiconfig/* files
+sfx2/     | legacy core framework used by Writer/Calc/Draw: document model / load/save / signals for actions etc.
+svx/      | drawing model related helper code, including much of Draw/Impress
 
 Then applications
 
 Module    | Description
 ----------|-------------------------------------------------
 desktop/  | this is where the 'main' for the application lives, init / bootstrap. the name dates back to an ancient StarOffice that also drew a desktop
-sw/       | writer.
-sc/       | calc
-sd/       | draw / impress
+sw/       | Writer
+sc/       | Calc
+sd/       | Draw / Impress
 
 There are several other libraries that are helpful from a graphical perspective:
 
@@ -54,7 +56,7 @@ basebmp/  | enables a VCL compatible rendering API to render to bitmaps, as used
 basegfx/  | algorithms and data-types for graphics as used in the canvas
 canvas/   | new (UNO) canvas rendering model with various backends
 cppcanvas/ | C++ helper classes for using the UNO canvas
-drawinglayer/ | code to render and manage document drawing shapes and break them down into primitives we can render more easily.
+drawinglayer/ | View code to render drawable objects and break them down into primitives we can render more easily.
 
 
 ## Finding out more
