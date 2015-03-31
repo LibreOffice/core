@@ -140,7 +140,8 @@ if (button returned of result) is AbortLabel then
 end if
 *)
 
-set tarCommand to "/usr/bin/tar -C " & quoted form of (choice as string) & " -xjf " & quoted form of sourcedir & "/tarball.tar.bz2"
+-- touch extensions folder to have LO register bundled dictionaries
+set tarCommand to "/usr/bin/tar -C " & quoted form of (choice as string) & " -xjf " & quoted form of sourcedir & "/tarball.tar.bz2 && touch " & quoted form of (choice as string) & "/Contents/Resources/extensions"
 try
 	do shell script tarCommand
 	
