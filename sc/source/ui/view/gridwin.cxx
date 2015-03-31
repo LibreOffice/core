@@ -5838,7 +5838,10 @@ void ScGridWindow::UpdateCursorOverlay()
             Size aOutSize = GetOutputSizePixel();
             bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
         }
-        if ( bMaybeVisible )
+
+        // in the tiled rendering case, don't limit to the screen size
+        bool bIsTiledRendering = pDoc->GetDrawLayer()->isTiledRendering();
+        if (bMaybeVisible || bIsTiledRendering)
         {
             long nSizeXPix;
             long nSizeYPix;
@@ -5847,36 +5850,46 @@ void ScGridWindow::UpdateCursorOverlay()
             if (bLayoutRTL)
                 aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
-            Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1) );
+            if (bIsTiledRendering)
+            {
+                // just forward the area to LOK
+                Rectangle aRect(aScrPos, Size(nSizeXPix, nSizeYPix));
+                aPixelRects.push_back(aRect);
+            }
+            else
+            {
+                // show the cursor as 4 (thin) rectangles
+                Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
 
-            sal_Int32 nScale = GetDPIScaleFactor();
+                sal_Int32 nScale = GetDPIScaleFactor();
 
-            long aCursorWidth = 1 * nScale;
+                long aCursorWidth = 1 * nScale;
 
-            Rectangle aLeft = Rectangle(aRect);
-            aLeft.Top()    -= aCursorWidth;
-            aLeft.Bottom() += aCursorWidth;
-            aLeft.Right()   = aLeft.Left();
-            aLeft.Left()   -= aCursorWidth;
+                Rectangle aLeft = Rectangle(aRect);
+                aLeft.Top()    -= aCursorWidth;
+                aLeft.Bottom() += aCursorWidth;
+                aLeft.Right()   = aLeft.Left();
+                aLeft.Left()   -= aCursorWidth;
 
-            Rectangle aRight = Rectangle(aRect);
-            aRight.Top()    -= aCursorWidth;
-            aRight.Bottom() += aCursorWidth;
-            aRight.Left()    = aRight.Right();
-            aRight.Right()  += aCursorWidth;
+                Rectangle aRight = Rectangle(aRect);
+                aRight.Top()    -= aCursorWidth;
+                aRight.Bottom() += aCursorWidth;
+                aRight.Left()    = aRight.Right();
+                aRight.Right()  += aCursorWidth;
 
-            Rectangle aTop = Rectangle(aRect);
-            aTop.Bottom()  = aTop.Top();
-            aTop.Top()    -= aCursorWidth;
+                Rectangle aTop = Rectangle(aRect);
+                aTop.Bottom()  = aTop.Top();
+                aTop.Top()    -= aCursorWidth;
 
-            Rectangle aBottom = Rectangle(aRect);
-            aBottom.Top()     = aBottom.Bottom();
-            aBottom.Bottom() += aCursorWidth;
+                Rectangle aBottom = Rectangle(aRect);
+                aBottom.Top()     = aBottom.Bottom();
+                aBottom.Bottom() += aCursorWidth;
 
-            aPixelRects.push_back(aLeft);
-            aPixelRects.push_back(aRight);
-            aPixelRects.push_back(aTop);
-            aPixelRects.push_back(aBottom);
+                aPixelRects.push_back(aLeft);
+                aPixelRects.push_back(aRight);
+                aPixelRects.push_back(aTop);
+                aPixelRects.push_back(aBottom);
+            }
         }
     }
 
