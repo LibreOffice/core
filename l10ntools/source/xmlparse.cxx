@@ -960,7 +960,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     else
         m_aErrorInformation.m_sMessage = "XML-File parsed successfully";
 
-    if (!XML_Parse(m_aParser, reinterpret_cast< char * >(p), s, true))
+    if (!XML_Parse(m_aParser, static_cast< char * >(p), s, true))
     {
         m_aErrorInformation.m_eCode = XML_GetErrorCode( m_aParser );
         m_aErrorInformation.m_nLine = XML_GetErrorLineNumber( m_aParser );
