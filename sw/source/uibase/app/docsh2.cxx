@@ -837,7 +837,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
             mpDoc->getIDocumentFieldsAccess().UpdateFlds( NULL, false );
             mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
-            if(officecfg::Office::Common::ExternalMailer::Hidden::get())
+            mbRemovedInvisibleContent
+                = officecfg::Office::Common::ExternalMailer::Hidden::get();
+            if(mbRemovedInvisibleContent)
                 mpDoc->RemoveInvisibleContent();
             if(mpWrtShell)
                 mpWrtShell->EndAllAction();
@@ -848,8 +850,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
         {
                 if(mpWrtShell)
                     mpWrtShell->StartAllAction();
-                //try to undo the removal of invisible content
-                mpDoc->RestoreInvisibleContent();
+                //try to undo any removal of invisible content
+                if(mbRemovedInvisibleContent)
+                    mpDoc->RestoreInvisibleContent();
                 if(mpWrtShell)
                     mpWrtShell->EndAllAction();
         }

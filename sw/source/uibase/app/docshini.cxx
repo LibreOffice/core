@@ -328,7 +328,8 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     mpWrtShell( 0 ),
     mpOLEChildList( 0 ),
     mnUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    bIsATemplate(false)
+    bIsATemplate(false),
+    mbRemovedInvisibleContent(false)
 {
     Init_Impl();
 }
@@ -343,7 +344,8 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     mpWrtShell( 0 ),
     mpOLEChildList( 0 ),
     mnUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    bIsATemplate(false)
+    bIsATemplate(false),
+    mbRemovedInvisibleContent(false)
 {
     Init_Impl();
 }
@@ -358,7 +360,8 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     mpWrtShell( 0 ),
     mpOLEChildList( 0 ),
     mnUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    bIsATemplate(false)
+    bIsATemplate(false),
+    mbRemovedInvisibleContent(false)
 {
     Init_Impl();
 }

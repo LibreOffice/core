@@ -80,6 +80,10 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     sal_Int16               mnUpdateDocMode;    ///< contains the com::sun::star::document::UpdateDocMode
     bool                    bIsATemplate;      ///< prevent nested calls of UpdateFontList
 
+    bool mbRemovedInvisibleContent;
+        ///< whether SID_MAIL_PREPAREEXPORT removed content that
+        ///< SID_MAIL_EXPORT_FINISHED needs to restore
+
     /// Methods for access to doc.
     SAL_DLLPRIVATE void                  AddLink();
     SAL_DLLPRIVATE void                  RemoveLink();
