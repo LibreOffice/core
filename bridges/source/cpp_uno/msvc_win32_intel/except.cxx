@@ -396,7 +396,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
 
     void * pRaiseInfo;
 
-    OUString const & rTypeName = OUString::acquire( &pTypeDescr->pTypeName );
+    OUString const & rTypeName = OUString::unacquired( &pTypeDescr->pTypeName );
     MutexGuard aGuard( s_pInfos->_aMutex );
     t_string2PtrMap::const_iterator const iFind(
         s_pInfos->_allRaiseInfos.find( rTypeName ) );
