@@ -37,31 +37,31 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL lng_component_getFactory(
     void * pRet =
         LngSvcMgr_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     if(!pRet)
         pRet = LinguProps_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     if(!pRet)
         pRet =  DicList_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     if(!pRet)
         pRet =  ConvDicList_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
 
     if(!pRet)
         pRet =  GrammarCheckingIterator_getFactory(
             pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
     return pRet;
 }
