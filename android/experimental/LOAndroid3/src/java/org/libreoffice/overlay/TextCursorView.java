@@ -57,25 +57,23 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     public TextCursorView(Context context) {
         super(context);
-        initialize();
     }
 
     public TextCursorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize();
     }
 
     public TextCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
     }
 
     /**
      * Initialize the selection and cursor view.
      */
-    private void initialize() {
+    public void initialize(LayerView layerView) {
         if (!mInitialized) {
             setOnTouchListener(this);
+            mLayerView = layerView;
 
             mCursorPaint.setColor(Color.BLACK);
             mCursorPaint.setAlpha(0xFF);
@@ -100,15 +98,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * @param position - new position of the cursor
      */
     public void changeCursorPosition(RectF position) {
-        LayerView layerView = LOKitShell.getLayerView();
-        if (layerView == null) {
-            Log.e(LOGTAG, "Can't position cursor because layerView is null");
-            return;
-        }
-
         mCursorPosition = position;
 
-        ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
@@ -286,6 +278,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
             }
         }
         return false;
+    }
+
+    public void setLayerView(LayerView layerView) {
+        this.mLayerView = layerView;
     }
 }
 

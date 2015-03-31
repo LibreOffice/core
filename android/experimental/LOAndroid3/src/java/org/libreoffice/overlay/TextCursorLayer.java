@@ -32,11 +32,13 @@ public class TextCursorLayer extends Layer {
     private float mViewTop;
     private float mViewZoom;
 
-    public TextCursorLayer(Activity context) {
+    public TextCursorLayer(Activity context, LayerView layerView) {
         mCursorView = (TextCursorView) context.findViewById(R.id.text_cursor_view);
         if (mCursorView == null) {
             Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
         }
+        layerView.addLayer(this);
+        mCursorView.initialize(layerView);
     }
 
     /**
