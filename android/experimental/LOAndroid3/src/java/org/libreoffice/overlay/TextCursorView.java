@@ -50,7 +50,6 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private GraphicSelection mGraphicSelection;
 
-    private boolean mGraphicSelectionVisible;
     private boolean mGraphicSelectionMove = false;
 
     private LayerView mLayerView;
@@ -84,8 +83,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mSelectionsVisible = false;
 
             mGraphicSelection = new GraphicSelection();
-
-            mGraphicSelectionVisible = false;
+            mGraphicSelection.setVisible(false);
 
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
 
@@ -170,6 +168,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         if (mCursorVisible) {
             canvas.drawRect(mCursorScaledPosition, mCursorPaint);
         }
@@ -178,7 +177,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                 canvas.drawRect(selection, mSelectionPaint);
             }
         }
-        if (mGraphicSelectionVisible) {
+        if (mGraphicSelection.isVisible()) {
             mGraphicSelection.draw(canvas);
         }
     }
@@ -232,9 +231,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * Show the graphic selection on the view.
      */
     public void showGraphicSelection() {
-        mGraphicSelectionVisible = true;
         mGraphicSelectionMove = false;
         mGraphicSelection.reset();
+        mGraphicSelection.setVisible(true);
         invalidate();
     }
 
@@ -242,7 +241,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * Hide the graphic selection.
      */
     public void hideGraphicSelection() {
-        mGraphicSelectionVisible = false;
+        mGraphicSelection.setVisible(false);
         invalidate();
     }
 
@@ -253,7 +252,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
-                if (mGraphicSelectionVisible) {
+                if (mGraphicSelection.isVisible()) {
                     // Check if inside graphic selection was hit
                     PointF startPosition = new PointF(event.getX(), event.getY());
                     if (mGraphicSelection.contains(startPosition.x, startPosition.y)) {
@@ -266,7 +265,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                 }
             }
             case MotionEvent.ACTION_UP: {
-                if (mGraphicSelectionVisible && mGraphicSelectionMove) {
+                if (mGraphicSelection.isVisible() && mGraphicSelectionMove) {
                     mGraphicSelectionMove = false;
                     mGraphicSelection.dragEnd(new PointF(event.getX(), event.getY()));
                     invalidate();
@@ -274,7 +273,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                 }
             }
             case MotionEvent.ACTION_MOVE: {
-                if (mGraphicSelectionVisible && mGraphicSelectionMove) {
+                if (mGraphicSelection.isVisible() && mGraphicSelectionMove) {
                     mGraphicSelection.dragging(new PointF(event.getX(), event.getY()));
                     invalidate();
                     return true;
