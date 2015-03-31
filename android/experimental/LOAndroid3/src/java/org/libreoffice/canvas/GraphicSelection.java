@@ -34,6 +34,7 @@ public class GraphicSelection implements CanvasElement {
 
     private GraphicSelectionHandle mHandles[] = new GraphicSelectionHandle[8];
     private GraphicSelectionHandle mDragHandle = null;
+    private boolean mTriggerSinglePress = false;
 
     /**
      * Construct the graphic selection.
@@ -131,8 +132,8 @@ public class GraphicSelection implements CanvasElement {
             mType = DragType.MOVE;
             sendGraphicSelectionStart(position);
         }
-
         mStartDragPosition = position;
+        mTriggerSinglePress = true;
     }
 
     /**
@@ -149,6 +150,7 @@ public class GraphicSelection implements CanvasElement {
         } else if (mType == DragType.EXTEND) {
             adaptDrawRectangle(position.x, position.y);
         }
+        mTriggerSinglePress = false;
     }
 
     /**
@@ -171,6 +173,11 @@ public class GraphicSelection implements CanvasElement {
         point.offset(deltaX, deltaY);
 
         sendGraphicSelectionEnd(point);
+
+        if (mTriggerSinglePress && mDragHandle == null) {
+            onSinglePress(point);
+            mTriggerSinglePress = false;
+        }
 
         mDrawRectangle = mScaledRectangle;
         mType = DragType.NONE;
@@ -244,6 +251,11 @@ public class GraphicSelection implements CanvasElement {
             LOKitShell.sendTouchEvent(type, documentPoint);
         }
     }
+
+    private void onSinglePress(PointF screenPosition) {
+        sendGraphicSelection("LongPress", screenPosition);
+    }
+
 
     /**
      * Reset the selection.
