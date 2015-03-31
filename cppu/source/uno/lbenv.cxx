@@ -882,7 +882,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
 static void SAL_CALL unoenv_acquireInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
-    uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(pUnoI_);
+    uno_Interface * pUnoI = static_cast< uno_Interface * >(pUnoI_);
     (*pUnoI->acquire)( pUnoI );
 }
 
@@ -890,7 +890,7 @@ static void SAL_CALL unoenv_acquireInterface(
 static void SAL_CALL unoenv_releaseInterface(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pUnoI_ )
 {
-    uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(pUnoI_);
+    uno_Interface * pUnoI = static_cast< uno_Interface * >(pUnoI_);
     (*pUnoI->release)( pUnoI );
 }
 }

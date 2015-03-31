@@ -146,7 +146,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
 {
     if (p)
     {
-        IdContainer * pId = reinterpret_cast< IdContainer * >( p );
+        IdContainer * pId = static_cast< IdContainer * >( p );
         if (pId->pCurrentContext)
         {
             (*pId->pCurrentContextEnv->releaseInterface)(
@@ -168,7 +168,7 @@ IdContainer * getIdContainer()
     static ThreadKey s_key( delete_IdContainer );
     oslThreadKey aKey = s_key.getThreadKey();
 
-    IdContainer * pId = reinterpret_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
+    IdContainer * pId = static_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
     if (! pId)
     {
         pId = new IdContainer();

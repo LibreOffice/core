@@ -95,7 +95,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
             "exception occurred querying for interface "
                 << OUString(pDestType->pTypeName) << ": ["
                 << OUString(pExc->pType->pTypeName) << "] "
-                << *reinterpret_cast<OUString const *>(pExc->pData));
+                << *static_cast<OUString const *>(pExc->pData));
                     // Message is very first member
         uno_any_destruct( pExc, 0 );
     }

@@ -228,7 +228,7 @@ extern "C" { static void s_pull(va_list * pParam)
 
 static void s_callInto_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
 {
-    cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
+    cppu::Enterable * pEnterable = static_cast<cppu::Enterable *>(pEnv->pReserved);
     if (pEnterable)
         pEnterable->callInto(s_pull, pCallee, pParam);
 
@@ -247,7 +247,7 @@ static void s_callInto(uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
 
 static void s_callOut_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
 {
-    cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
+    cppu::Enterable * pEnterable = static_cast<cppu::Enterable *>(pEnv->pReserved);
     if (pEnterable)
         pEnterable->callOut_v(pCallee, pParam);
 
@@ -336,7 +336,7 @@ extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
         switch(res)
         {
         case -1:
-            pEnterable = reinterpret_cast<cppu::Enterable *>(pCurrEnv->pReserved);
+            pEnterable = static_cast<cppu::Enterable *>(pCurrEnv->pReserved);
             if (pEnterable)
                 pEnterable->leave();
             pCurrEnv->release(pCurrEnv);
@@ -344,7 +344,7 @@ extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
 
         case 1:
             pNextEnv->acquire(pNextEnv);
-            pEnterable = reinterpret_cast<cppu::Enterable *>(pNextEnv->pReserved);
+            pEnterable = static_cast<cppu::Enterable *>(pNextEnv->pReserved);
             if (pEnterable)
                 pEnterable->enter();
             break;
@@ -363,7 +363,7 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
     rtl::OUString typeName(cppu::EnvDcp::getTypeName(pEnv->pTypeName));
     if (typeName == UNO_LB_UNO)
     {
-        cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
+        cppu::Enterable * pEnterable = static_cast<cppu::Enterable *>(pEnv->pReserved);
         if (pEnterable)
             result = pEnterable->isValid(reinterpret_cast<rtl::OUString *>(pReason));
     }

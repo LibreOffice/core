@@ -36,12 +36,12 @@ namespace uno
 
 inline void SAL_CALL cpp_acquire( void * pCppI )
 {
-    reinterpret_cast< XInterface * >( pCppI )->acquire();
+    static_cast< XInterface * >( pCppI )->acquire();
 }
 
 inline void SAL_CALL cpp_release( void * pCppI )
 {
-    reinterpret_cast< XInterface * >( pCppI )->release();
+    static_cast< XInterface * >( pCppI )->release();
 }
 
 inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
@@ -50,11 +50,11 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
     {
         try
         {
-            Any aRet( reinterpret_cast< XInterface * >( pCppI )->queryInterface(
+            Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {
-                XInterface * pRet = reinterpret_cast< XInterface * >( aRet.pReserved );
+                XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
                 aRet.pReserved = 0;
                 return pRet;
             }
