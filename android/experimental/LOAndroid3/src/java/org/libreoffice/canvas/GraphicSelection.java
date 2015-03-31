@@ -230,7 +230,7 @@ public class GraphicSelection implements CanvasElement {
             // Position is in screen coordinates. We need to convert them to
             // document coordinates.
             PointF documentPoint = layerView.getLayerClient().convertViewPointToLayerPoint(screenPosition);
-            LOKitShell.sendTouchEvent("GraphicSelectionEnd", documentPoint);
+            LOKitShell.sendTouchEvent(type, documentPoint);
         }
     }
 
