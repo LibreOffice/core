@@ -43,7 +43,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
     void * pRet = 0;
 
     Reference< XMultiServiceFactory > xSMgr(
-        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+        static_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
 
