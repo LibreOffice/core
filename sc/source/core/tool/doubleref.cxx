@@ -191,7 +191,7 @@ bool lcl_createExcelQuery(
                     if (nIndex < nNewEntries)
                     {
                         pParam->GetEntry(nIndex).nField = aFields[nCol];
-                        pParam->FillInExcelSyntax(rPool, aCellStr, nIndex);
+                        pParam->FillInExcelSyntax(rPool, aCellStr, nIndex, NULL);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             pParam->GetEntry(nIndex).eConnect = SC_AND;
