@@ -899,7 +899,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL evtatt_component_getFactory(
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            static_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString(  IMPLNAME  ),
             ::comp_EventAttacher::EventAttacherImpl_CreateInstance,
             ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() ) );
