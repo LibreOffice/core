@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_b32a782b",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-03-31T16:05:18Z",
+      "side": 1,
+      "message": "Please use consistent data type here. GetDocumentType() really returns DocumentType enum and you\u0027re passing it as a parameter to this method below.\n\nSure, DocumentType is an enum that has only 2 possible values (Impress and Draw), so it looks like using bool will do the trick as well (and it compiles, after all). But I\u0027m pretty certain that this code would trigger one of the compiler plugin warnings ...",
+      "revId": "941582ea7149c576bc84ffe9e66e3ba26e72486d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
