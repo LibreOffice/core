@@ -2711,7 +2711,9 @@ void GraphiteWinLayout::Simplify( bool is_base )
 
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    DBG_ASSERT( mpWinFontEntry[nFallbackLevel], "WinSalGraphics mpWinFontEntry==NULL");
+    if (!mpWinFontEntry[nFallbackLevel]) return nullptr;
+
+    assert(mpWinFontData[nFallbackLevel]);
 
     WinLayout* pWinLayout = NULL;
 
