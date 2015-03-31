@@ -32,9 +32,10 @@
 
 using namespace com::sun::star;
 
-SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj ) :
-    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( false ),
-    bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
+SwOleClient::SwOleClient(SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj)
+    : SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() )
+    , m_IsInDoVerb(false)
+    , m_IsOldCheckForOLEInCaption(pView->GetWrtShell().IsCheckForOLEInCaption())
 {
     SetObject( xObj.GetObject() );
 }
@@ -93,7 +94,7 @@ void SwOleClient::ObjectAreaChanged()
 
 void SwOleClient::ViewChanged()
 {
-    if ( bInDoVerb )
+    if (m_IsInDoVerb)
         return;
 
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
