@@ -388,7 +388,7 @@ void Package::addModifyListener(
     throw (RuntimeException, std::exception)
 {
     check();
-    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+    rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
@@ -397,7 +397,7 @@ void Package::removeModifyListener(
     throw (RuntimeException, std::exception)
 {
     check();
-    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 

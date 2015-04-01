@@ -1468,7 +1468,7 @@ void ExtensionManager::addModifyListener(
     throw (uno::RuntimeException, std::exception)
 {
      check();
-     rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+     rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
@@ -1477,7 +1477,7 @@ void ExtensionManager::removeModifyListener(
     throw (uno::RuntimeException, std::exception)
 {
     check();
-    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void ExtensionManager::check()
