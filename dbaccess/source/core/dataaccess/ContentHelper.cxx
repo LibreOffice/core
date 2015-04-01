@@ -460,13 +460,13 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
             Property( "IsDocument", -1,
-                      getCppuBooleanType(),
+                      cppu::UnoType<bool>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsDocument );
         xRow->appendBoolean(
             Property( "IsFolder", -1,
-                      getCppuBooleanType(),
+                      cppu::UnoType<bool>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsFolder );

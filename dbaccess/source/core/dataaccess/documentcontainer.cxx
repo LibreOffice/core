@@ -98,7 +98,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xO
     ,m_bFormsContainer(_bFormsContainer)
 {
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
+                    &m_pImpl->m_aProps.aTitle, cppu::UnoType<decltype(m_pImpl->m_aProps.aTitle)>::get());
 
     setElementApproval( PContainerApprove( new LocalNameApproval ( _xORB ) ) );
 }

@@ -493,10 +493,10 @@ IMPLEMENT_SERVICE_INFO1(ODocumentDefinition,"com.sun.star.comp.dba.ODocumentDefi
 void ODocumentDefinition::registerProperties()
 {
 #define REGISTER_PROPERTY( name, location ) \
-    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::READONLY, &location, cppu::UnoType<decltype(location)>::get() );
 
 #define REGISTER_PROPERTY_BV( name, location ) \
-    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY, &location, cppu::UnoType<decltype(location)>::get() );
 
     REGISTER_PROPERTY_BV( NAME,            m_pImpl->m_aProps.aTitle            );
     REGISTER_PROPERTY   ( AS_TEMPLATE,     m_pImpl->m_aProps.bAsTemplate       );
@@ -1737,7 +1737,7 @@ void ODocumentDefinition::onCommandPreview(Any& _rImage)
                 DataFlavor aFlavor;
                 aFlavor.MimeType = "image/png";
                 aFlavor.HumanPresentableName = "Portable Network Graphics";
-                aFlavor.DataType = ::getCppuType(static_cast< const Sequence < sal_Int8 >* >(NULL));
+                aFlavor.DataType = cppu::UnoType<Sequence < sal_Int8 >>::get();
 
                 _rImage = xTransfer->getTransferData( aFlavor );
             }

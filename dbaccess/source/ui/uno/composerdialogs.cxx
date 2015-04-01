@@ -59,9 +59,9 @@ namespace dbaui
     {
 
         registerProperty( PROPERTY_QUERYCOMPOSER, PROPERTY_ID_QUERYCOMPOSER, PropertyAttribute::TRANSIENT,
-            &m_xComposer, ::getCppuType( &m_xComposer ) );
+            &m_xComposer, cppu::UnoType<decltype(m_xComposer)>::get() );
         registerProperty( PROPERTY_ROWSET, PROPERTY_ID_ROWSET, PropertyAttribute::TRANSIENT,
-            &m_xRowSet, ::getCppuType( &m_xRowSet ) );
+            &m_xRowSet, cppu::UnoType<decltype(m_xRowSet)>::get() );
     }
 
     ComposerDialog::~ComposerDialog()

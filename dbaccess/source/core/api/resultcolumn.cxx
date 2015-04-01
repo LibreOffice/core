@@ -277,12 +277,12 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             case PROPERTY_ID_ISSIGNED:
             {
                 sal_Bool bVal = sal_False;
-                rValue.setValue(&bVal, getBooleanCppuType());
+                rValue.setValue(&bVal, cppu::UnoType<bool>::get());
             }   break;
             case PROPERTY_ID_ISREADONLY:
             {
                 sal_Bool bVal = sal_True;
-                rValue.setValue(&bVal, getBooleanCppuType());
+                rValue.setValue(&bVal, cppu::UnoType<bool>::get());
             }   break;
             case PROPERTY_ID_SCALE:
             case PROPERTY_ID_PRECISION:

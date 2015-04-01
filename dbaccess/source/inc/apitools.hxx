@@ -288,37 +288,37 @@ public:
     pDesc[nPos++] = ::com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cpputype,
 
 #define DECL_PROP0(varname, type)   \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) 0)
+    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) 0)
 
 #define DECL_PROP0_BOOL(varname)    \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) 0)
+    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) 0)
 
 #define DECL_PROP0_IFACE(varname, iface)    \
-    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) 0)
+    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) 0)
 
 #define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1)
+    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 
 #define DECL_PROP1_BOOL(varname, attrib1)   \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1)
+    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 
 #define DECL_PROP1_IFACE(varname, iface, attrib1)   \
-    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1)
+    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 
 #define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
+    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
+    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
 #define DECL_PROP2_BOOL(varname, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
+    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
+    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 
 #define DECL_PROP3_BOOL(varname, attrib1, attrib2, attrib3) \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
+    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 
 #define END_PROPERTY_SEQUENCE()                             \
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \

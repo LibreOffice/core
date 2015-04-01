@@ -125,7 +125,7 @@ namespace dbaccess
     };
 
 #define REGISTER_PROPERTY( propname, member ) \
-    registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, ::getCppuType( &member ) )
+    registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, cppu::UnoType<decltype(member)>::get() )
 
     DataAccessDescriptor::DataAccessDescriptor( const Reference<XComponentContext> & _rContext )
         :DataAccessDescriptor_MutexBase()

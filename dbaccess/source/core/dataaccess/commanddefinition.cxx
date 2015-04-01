@@ -51,21 +51,21 @@ void OCommandDefinition::registerProperties()
 {
     OCommandDefinition_Impl& rCommandDefinition( getCommandDefinition() );
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_sCommand, ::getCppuType(&rCommandDefinition.m_sCommand));
+                    &rCommandDefinition.m_sCommand, cppu::UnoType<decltype(rCommandDefinition.m_sCommand)>::get());
 
     registerProperty(PROPERTY_ESCAPE_PROCESSING, PROPERTY_ID_ESCAPE_PROCESSING, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_bEscapeProcessing, ::getBooleanCppuType());
+                    &rCommandDefinition.m_bEscapeProcessing, cppu::UnoType<bool>::get());
 
     registerProperty(PROPERTY_UPDATE_TABLENAME, PROPERTY_ID_UPDATE_TABLENAME, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_sUpdateTableName, ::getCppuType(&rCommandDefinition.m_sUpdateTableName));
+                    &rCommandDefinition.m_sUpdateTableName, cppu::UnoType<decltype(rCommandDefinition.m_sUpdateTableName)>::get());
 
     registerProperty(PROPERTY_UPDATE_SCHEMANAME, PROPERTY_ID_UPDATE_SCHEMANAME, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_sUpdateSchemaName, ::getCppuType(&rCommandDefinition.m_sUpdateSchemaName));
+                    &rCommandDefinition.m_sUpdateSchemaName, cppu::UnoType<decltype(rCommandDefinition.m_sUpdateSchemaName)>::get());
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_sUpdateCatalogName, ::getCppuType(&rCommandDefinition.m_sUpdateCatalogName));
+                    &rCommandDefinition.m_sUpdateCatalogName, cppu::UnoType<decltype(rCommandDefinition.m_sUpdateCatalogName)>::get());
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
-                    &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
+                    &rCommandDefinition.m_aLayoutInformation, cppu::UnoType<decltype(rCommandDefinition.m_aLayoutInformation)>::get());
 }
 
 OUString OCommandDefinition::getName() throw( ::com::sun::star::uno::RuntimeException )

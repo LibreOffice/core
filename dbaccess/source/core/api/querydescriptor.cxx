@@ -79,25 +79,25 @@ void OQueryDescriptor::registerProperties()
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
     // a OPropertyStateContainer)
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND|PropertyAttribute::CONSTRAINED,
-                    &m_sElementName, ::getCppuType(&m_sElementName));
+                    &m_sElementName, cppu::UnoType<decltype(m_sElementName)>::get());
 
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
-                    &m_sCommand, ::getCppuType(&m_sCommand));
+                    &m_sCommand, cppu::UnoType<decltype(m_sCommand)>::get());
 
     registerProperty(PROPERTY_ESCAPE_PROCESSING, PROPERTY_ID_ESCAPE_PROCESSING, PropertyAttribute::BOUND,
-                    &m_bEscapeProcessing, ::getBooleanCppuType());
+                    &m_bEscapeProcessing, cppu::UnoType<bool>::get());
 
     registerProperty(PROPERTY_UPDATE_TABLENAME, PROPERTY_ID_UPDATE_TABLENAME, PropertyAttribute::BOUND,
-                    &m_sUpdateTableName, ::getCppuType(&m_sUpdateTableName));
+                    &m_sUpdateTableName, cppu::UnoType<decltype(m_sUpdateTableName)>::get());
 
     registerProperty(PROPERTY_UPDATE_SCHEMANAME, PROPERTY_ID_UPDATE_SCHEMANAME, PropertyAttribute::BOUND,
-                    &m_sUpdateSchemaName, ::getCppuType(&m_sUpdateSchemaName));
+                    &m_sUpdateSchemaName, cppu::UnoType<decltype(m_sUpdateSchemaName)>::get());
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
-                    &m_sUpdateCatalogName, ::getCppuType(&m_sUpdateCatalogName));
+                    &m_sUpdateCatalogName, cppu::UnoType<decltype(m_sUpdateCatalogName)>::get());
 
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
-                    &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
+                    &m_aLayoutInformation, cppu::UnoType<decltype(m_aLayoutInformation)>::get());
 }
 
 Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) throw(RuntimeException, std::exception)

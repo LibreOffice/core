@@ -83,22 +83,22 @@ OColumnControlModel::~OColumnControlModel()
 void OColumnControlModel::registerProperties()
 {
     registerProperty( PROPERTY_ACTIVE_CONNECTION, PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
-        &m_xConnection, ::getCppuType( &m_xConnection ) );
+        &m_xConnection, cppu::UnoType<decltype(m_xConnection)>::get() );
     Any a;
     a <<= m_xColumn;
     registerProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
-            &m_xColumn, ::getCppuType( &m_xColumn ) );
+            &m_xColumn, cppu::UnoType<decltype(m_xColumn)>::get() );
 
     registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
             &m_aTabStop, ::cppu::UnoType<sal_Int16>::get() );
     registerProperty( PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, PropertyAttribute::BOUND,
-            &m_sDefaultControl, ::getCppuType( &m_sDefaultControl ) );
+            &m_sDefaultControl, cppu::UnoType<decltype(m_sDefaultControl)>::get() );
     registerProperty( PROPERTY_ENABLED, PROPERTY_ID_ENABLED, PropertyAttribute::BOUND,
-            &m_bEnable, ::getCppuType( &m_bEnable ) );
+            &m_bEnable, cppu::UnoType<decltype(m_bEnable)>::get() );
     registerProperty( PROPERTY_BORDER, PROPERTY_ID_BORDER, PropertyAttribute::BOUND,
-        &m_nBorder, ::getCppuType( &m_nBorder ) );
+        &m_nBorder, cppu::UnoType<decltype(m_nBorder)>::get() );
     registerProperty( PROPERTY_EDIT_WIDTH, PROPERTY_ID_EDIT_WIDTH, PropertyAttribute::BOUND,
-        &m_nWidth, ::getCppuType( &m_nWidth ) );
+        &m_nWidth, cppu::UnoType<decltype(m_nWidth)>::get() );
 }
 
 // XCloneable

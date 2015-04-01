@@ -50,7 +50,7 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
     registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
         &m_aException, ::cppu::UnoType<SQLException>::get());
     registerProperty( PROPERTY_HELP_URL, PROPERTY_ID_HELP_URL, PropertyAttribute::TRANSIENT,
-        &m_sHelpURL, ::getCppuType( &m_sHelpURL ) );
+        &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get() );
 }
 
 Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException, std::exception)

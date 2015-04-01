@@ -157,7 +157,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             }
             else if ( pArguments->Name == "ColumnProperties" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(cppu::UnoType<Sequence< ::com::sun::star::beans::PropertyValue>>::get());
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
                 if (bCorrectType)
                     aControlProps = *static_cast<Sequence< ::com::sun::star::beans::PropertyValue> const *>(pArguments->Value.getValue());

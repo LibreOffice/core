@@ -108,15 +108,15 @@ void OComponentDefinition::registerProperties()
     ODataSettings::registerPropertiesFor( &rDefinition );
 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY|PropertyAttribute::CONSTRAINED,
-                    &rDefinition.m_aProps.aTitle, ::getCppuType(&rDefinition.m_aProps.aTitle));
+                    &rDefinition.m_aProps.aTitle, cppu::UnoType<decltype(rDefinition.m_aProps.aTitle)>::get());
 
     if ( m_bTable )
     {
         registerProperty(PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, PropertyAttribute::BOUND,
-                        &rDefinition.m_sSchemaName, ::getCppuType(&rDefinition.m_sSchemaName));
+                        &rDefinition.m_sSchemaName, cppu::UnoType<decltype(rDefinition.m_sSchemaName)>::get());
 
         registerProperty(PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, PropertyAttribute::BOUND,
-                        &rDefinition.m_sCatalogName, ::getCppuType(&rDefinition.m_sCatalogName));
+                        &rDefinition.m_sCatalogName, cppu::UnoType<decltype(rDefinition.m_sCatalogName)>::get());
     }
 }
 

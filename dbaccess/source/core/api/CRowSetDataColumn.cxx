@@ -55,7 +55,7 @@ ORowSetDataColumn::ORowSetDataColumn( const Reference < XResultSetMetaData >& _x
     ,m_aDescription(_rDescription)
 {
     OColumnSettings::registerProperties( *this );
-    registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, ::getCppuType( &m_aDescription ) );
+    registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, cppu::UnoType<decltype(m_aDescription)>::get() );
 }
 
 ORowSetDataColumn::~ORowSetDataColumn()

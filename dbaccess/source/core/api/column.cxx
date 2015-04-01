@@ -68,7 +68,7 @@ OColumn::OColumn( const bool _bNameIsReadOnly )
 {
 
     registerProperty( PROPERTY_NAME, PROPERTY_ID_NAME, _bNameIsReadOnly ? PropertyAttribute::READONLY : 0,
-        &m_sName, ::getCppuType( &m_sName ) );
+        &m_sName, cppu::UnoType<decltype(m_sName)>::get() );
 }
 
 OColumn::~OColumn()

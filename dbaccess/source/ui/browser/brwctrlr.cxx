@@ -1023,7 +1023,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
     if ( m_xFormControllerImpl != Source.Source )
     {
         Reference< XEventListener > xAggListener;
-        m_xFormControllerImpl->queryAggregation( ::getCppuType( &xAggListener ) ) >>= xAggListener;
+        m_xFormControllerImpl->queryAggregation( cppu::UnoType<decltype(xAggListener)>::get() ) >>= xAggListener;
         if ( xAggListener.is( ))
             xAggListener->disposing( Source );
     }

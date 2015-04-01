@@ -345,9 +345,9 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     InvalidateAll();
 
     registerProperty( PROPERTY_ACTIVECOMMAND, PROPERTY_ID_ACTIVECOMMAND, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
-        &m_sStatement, ::getCppuType( &m_sStatement ) );
+        &m_sStatement, cppu::UnoType<decltype(m_sStatement)>::get() );
     registerProperty( PROPERTY_ESCAPE_PROCESSING, PROPERTY_ID_ESCAPE_PROCESSING, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
-        &m_bEscapeProcessing, ::getCppuType( &m_bEscapeProcessing ) );
+        &m_bEscapeProcessing, cppu::UnoType<decltype(m_bEscapeProcessing)>::get() );
 }
 
 OQueryController::~OQueryController()

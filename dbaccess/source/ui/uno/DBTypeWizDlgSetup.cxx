@@ -50,10 +50,10 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext 
     ,m_bStartTableWizard(false)
 {
     registerProperty(OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
-        &m_bOpenDatabase, getBooleanCppuType());
+        &m_bOpenDatabase, cppu::UnoType<bool>::get());
 
     registerProperty(OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
-        &m_bStartTableWizard, getBooleanCppuType());
+        &m_bStartTableWizard, cppu::UnoType<bool>::get());
 }
 
 Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw(RuntimeException, std::exception)

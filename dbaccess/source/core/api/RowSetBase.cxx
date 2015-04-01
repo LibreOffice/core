@@ -98,8 +98,8 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
 
     sal_Int32 nInitialRowCountValue = 0;
     sal_Bool bInitialRowCountFinalValue( sal_False );
-    registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, ::getCppuType( &nInitialRowCountValue ), &nInitialRowCountValue );
-    registerPropertyNoMember( PROPERTY_ISROWCOUNTFINAL, PROPERTY_ID_ISROWCOUNTFINAL, nRBT, ::getBooleanCppuType(),                  &bInitialRowCountFinalValue );
+    registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, cppu::UnoType<decltype(nInitialRowCountValue)>::get(), &nInitialRowCountValue );
+    registerPropertyNoMember( PROPERTY_ISROWCOUNTFINAL, PROPERTY_ID_ISROWCOUNTFINAL, nRBT, cppu::UnoType<bool>::get(),                  &bInitialRowCountFinalValue );
 }
 
 ORowSetBase::~ORowSetBase()
@@ -143,7 +143,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
             rValue <<= impl_getRowCount();
             break;
         case PROPERTY_ID_ISROWCOUNTFINAL:
-            rValue.setValue(&m_pCache->m_bRowCountFinal,::getCppuBooleanType());
+            rValue.setValue(&m_pCache->m_bRowCountFinal,cppu::UnoType<bool>::get());
             break;
         default:
             OPropertyStateContainer::getFastPropertyValue(rValue,nHandle);

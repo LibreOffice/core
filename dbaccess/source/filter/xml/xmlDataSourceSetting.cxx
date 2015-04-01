@@ -48,7 +48,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     ,m_bIsList(false)
 {
 
-    m_aPropType = ::getVoidCppuType();
+    m_aPropType = cppu::UnoType<cppu::UnoVoidType>::get();
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -73,14 +73,14 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
-                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = cppu::UnoType<bool>::get();
                         // Not a copy paste error, see comment xmloff/source/forms/propertyimport.cxx lines 244-248
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::cppu::UnoType<OUString>::get();
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::cppu::UnoType<sal_Int32>::get();
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::cppu::UnoType<sal_Int16>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<cppu::UnoVoidType>::get();
                     }
 
                     const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);
