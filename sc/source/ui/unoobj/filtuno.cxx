@@ -22,6 +22,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/tempfile.hxx>
+#include <tools/xzcodec.hxx>
+#include <tools/zcodec.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
@@ -192,10 +195,25 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         INetURLObject aURL( aFileName );
         OUString aPrivDatName(aURL.getName());
         boost::scoped_ptr<SvStream> pInStream;
-        if ( xInputStream.is() )
-            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+        utl::TempFile aTmpFile;
+        aTmpFile.EnableKillingFile(true);
+        SvStream* pDecompressedStream = aTmpFile.GetStream(StreamMode::READ|StreamMode::WRITE);
+        bool bDecompressed(false);
 
-        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        if ( xInputStream.is() )
+        {
+            ZCodec aCodecGZ;
+            XZCodec aCodecXZ;
+            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+            if ( ! ( bDecompressed = aCodecGZ.AttemptDecompression( *pInStream, *pDecompressedStream, false, true ) ) )
+                bDecompressed = aCodecXZ.AttemptDecompression( *pInStream, *pDecompressedStream );
+        }
+        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg;
+        if ( !bDecompressed )
+            pDlg.reset( pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE ) );
+        else
+            pDlg.reset( pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pDecompressedStream, SC_IMPORTFILE ) );
+
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {

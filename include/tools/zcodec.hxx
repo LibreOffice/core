@@ -67,6 +67,7 @@ public:
 
     long            Compress( SvStream& rIStm, SvStream& rOStm );
     long            Decompress( SvStream& rIStm, SvStream& rOStm );
+    bool            AttemptDecompression( SvStream& rIStm, SvStream& rOStm, bool updateCrc = false, bool gzLib = false );
 
     long            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize );
     long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );

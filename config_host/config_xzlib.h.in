@@ -1,0 +1,6 @@
+#ifndef CONFIG_XZLIB_H
+#define CONFIG_XZLIB_H
+
+#define ENABLE_XZLIB 0
+
+#endif

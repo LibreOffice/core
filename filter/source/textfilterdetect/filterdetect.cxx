@@ -146,6 +146,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() ) );
         OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
         aExt = aExt.toAsciiLowerCase();
+        OUString aName = aParser.getName().toAsciiLowerCase();
 
         // Decide which filter to use based on the document service first,
         // then on extension if that's not available.
@@ -153,7 +154,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
-        else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls")
+        else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith("csv.gz") || aName.endsWith("csv.xz"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
         else
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);

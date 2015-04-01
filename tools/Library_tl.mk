@@ -86,16 +86,25 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/stream/vcompat \
     tools/source/string/tenccvt \
     tools/source/zcodec/zcodec \
+    tools/source/xzcodec/xzcodec \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,tl,\
     CustomTarget/tools/string/reversemap \
 ))
 
+ifneq ($(SYSTEM_XZLIB),)
+$(eval $(call gb_Library_use_externals,tl,\
+	boost_headers \
+	zlib \
+	xzlib \
+))
+else
 $(eval $(call gb_Library_use_externals,tl,\
 	boost_headers \
 	zlib \
 ))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,tl,\
