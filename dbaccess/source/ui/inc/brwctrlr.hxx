@@ -274,7 +274,7 @@ namespace dbaui
             // the default implementation does an direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.
             // the default implementation also calls LoadFinished after a synchronous load, so be sure to do the same if you override
-            // this metod and don't call the base class' method
+            // this method and don't call the base class' method
 
         virtual void LoadFinished(bool bWasSynch);
             // called if the loading (the _complete_ loading process) is done (no matter if synchron or asynchron).

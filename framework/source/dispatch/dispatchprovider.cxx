@@ -154,7 +154,7 @@ bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 /**
     @short      helper for queryDispatch()
     @descr      Every member of the frame tree (frame, desktop) must handle such request
-                in another way. So we implement different specialized metods for every one.
+                in another way. So we implement different specialized methods for every one.
 
     @threadsafe yes
  */
