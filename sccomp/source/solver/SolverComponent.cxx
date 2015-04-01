@@ -106,11 +106,11 @@ SolverComponent::SolverComponent() :
     mfResultValue( 0.0 )
 {
     // for XPropertySet implementation:
-    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
-    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
-    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
-    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
-    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
+    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  cppu::UnoType<decltype(mbNonNegative)>::get()  );
+    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      cppu::UnoType<decltype(mbInteger)>::get()      );
+    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      cppu::UnoType<decltype(mnTimeout)>::get()      );
+    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, cppu::UnoType<decltype(mnEpsilonLevel)>::get() );
+    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, cppu::UnoType<decltype(mbLimitBBDepth)>::get() );
 }
 
 SolverComponent::~SolverComponent()
