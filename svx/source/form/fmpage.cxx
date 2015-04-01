@@ -191,7 +191,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
             // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
             INetProtocol aProtocol = aUrl.GetProtocol();
             static const INetProtocol s_aQuickHelpSupported[] =
-                {   INetProtocol::Ftp, INetProtocol::Http, INetProtocol::File, INetProtocol::Mailto, INetProtocol::News,
+                {   INetProtocol::Ftp, INetProtocol::Http, INetProtocol::File, INetProtocol::Mailto,
                     INetProtocol::Https, INetProtocol::Javascript,
                     INetProtocol::Vim, INetProtocol::Ldap
                 };

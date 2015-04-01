@@ -41,8 +41,6 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
 :   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkMailPage", "cui/ui/hyperlinkmailpage.ui",
                               rItemSet )
 {
-    get(m_pRbtMail, "linktyp_mail");
-    get(m_pRbtNews, "linktyp_news");
     get(m_pCbbReceiver, "receiver");
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
     get(m_pBtAdrBook, "adressbook");
@@ -60,12 +58,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
 
     SetExchangeSupport ();
 
-    // set defaults
-    m_pRbtMail->Check ();
-
     // set handlers
-    m_pRbtMail->SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
-    m_pRbtNews->SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
     m_pBtAdrBook->SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
     m_pCbbReceiver->SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
@@ -141,7 +134,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 
     if( aURL.GetProtocol() == INetProtocol::NotValid )
     {
-        aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
+        aURL.SetSmartProtocol( INetProtocol::Mailto );
         aURL.SetSmartURL(aStrURL);
     }
 
@@ -189,18 +182,11 @@ void SvxHyperlinkMailTp::SetInitFocus()
 
 void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 {
-    //if rScheme is empty or unknown the default beaviour is like it where MAIL
-    const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
-
-    bool bMail = !rScheme.startsWith(sNewsScheme);
-
-    //update protocol button selection:
-    m_pRbtMail->Check(bMail);
-    m_pRbtNews->Check(!bMail);
+    const bool bMail = true;
 
     //update target:
     RemoveImproperProtocol(rScheme);
-    m_pCbbReceiver->SetSmartProtocol( GetSmartProtocolFromButtons() );
+    m_pCbbReceiver->SetSmartProtocol( INetProtocol::Mailto );
 
     //show/hide  special fields for MAIL:
     m_pBtAdrBook->Enable(bMail);
@@ -225,35 +211,6 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
             m_pCbbReceiver->SetText ( aStrURL );
         }
     }
-}
-
-OUString SvxHyperlinkMailTp::GetSchemeFromButtons() const
-{
-    if( m_pRbtNews->IsChecked() )
-        return OUString(INET_NEWS_SCHEME);
-    return OUString(INET_MAILTO_SCHEME);
-}
-
-INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
-{
-    if( m_pRbtNews->IsChecked() )
-    {
-        return INetProtocol::News;
-    }
-    return INetProtocol::Mailto;
-}
-
-/*************************************************************************
-|*
-|* Click on radiobutton : Type EMail
-|*
-|************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
-{
-    OUString aScheme = GetSchemeFromButtons();
-    SetScheme( aScheme );
-    return 0L;
 }
 
 /*************************************************************************

@@ -2683,7 +2683,6 @@ void SfxMedium::SetIsRemote_Impl()
         case INetProtocol::Ftp:
         case INetProtocol::Http:
         case INetProtocol::Https:
-        case INetProtocol::News:
         case INetProtocol::Vim:
             pImp->m_bRemote = true;
         break;

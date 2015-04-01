@@ -401,10 +401,6 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
         {
             aStrScheme = INET_MAILTO_SCHEME;
         }
-        else if ( rStrURL.startsWithIgnoreAsciiCase( INET_NEWS_SCHEME ) )
-        {
-            aStrScheme = INET_NEWS_SCHEME;
-        }
     }
     else
         aStrScheme = INetURLObject::GetScheme( aProtocol );

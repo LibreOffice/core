@@ -23,28 +23,23 @@
 
 /*************************************************************************
 |*
-|* Tabpage : Hyperlink - Mail & News
+|* Tabpage : Hyperlink - Mail
 |*
 \************************************************************************/
 
 class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 {
 private:
-    RadioButton         *m_pRbtMail;
-    RadioButton         *m_pRbtNews;
     SvxHyperURLBox      *m_pCbbReceiver;
     PushButton          *m_pBtAdrBook;
     FixedText           *m_pFtSubject;
     Edit                *m_pEdSubject;
 
-    DECL_LINK (Click_SmartProtocol_Impl, void * ); ///< Radiobutton clicked: Type EMAIl or News
     DECL_LINK (ClickAdrBookHdl_Impl  , void * ); ///< Button : Address book
     DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
 
     void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const OUString& aProperScheme);
-    OUString  GetSchemeFromButtons() const;
-    INetProtocol GetSmartProtocolFromButtons() const;
 
     OUString  CreateAbsoluteURL() const;
 

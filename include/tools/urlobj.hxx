@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star { namespace util {
 #define INET_HTTPS_SCHEME "https://"
 #define INET_FILE_SCHEME "file://"
 #define INET_MAILTO_SCHEME "mailto:"
-#define INET_NEWS_SCHEME "news:"
 #define INET_HID_SCHEME "hid:"
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
@@ -72,7 +71,6 @@ enum class INetProtocol
     File,
     Mailto,
     VndSunStarWebdav,
-    News,
     PrivSoffice,
     VndSunStarHelp,
     Https,
@@ -882,7 +880,6 @@ public:
         PART_UNAMBIGUOUS            = 0x08000,
         PART_URIC_NO_SLASH          = 0x10000,
         PART_HTTP_QUERY             = 0x20000, //TODO! unused?
-        PART_NEWS_ARTICLE_LOCALPART = 0x40000
     };
 
     enum EscapeType
