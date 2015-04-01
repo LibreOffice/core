@@ -56,7 +56,7 @@
       <prop oor:name="RemoveHiddenContent" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <desc>Specify wheter hidden content should be removed when sending via email</desc>
+          <desc>Specify whether hidden content should be removed when sending via email</desc>
         </info>
         <value>true</value>
       </prop>
