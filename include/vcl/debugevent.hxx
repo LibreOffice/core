@@ -21,11 +21,11 @@ class VCL_DLLPUBLIC DebugEventInjector : Timer {
   sal_uInt32 mnEventsLeft;
   DebugEventInjector( sal_uInt32 nMaxEvents );
 
-  vcl::Window *ChooseWindow();
-  void InjectTextEvent();
-  void InjectMenuEvent();
-  void InjectEvent();
-  void InjectKeyNavEdit();
+  static vcl::Window *ChooseWindow();
+  static void InjectTextEvent();
+  static void InjectMenuEvent();
+  static void InjectEvent();
+  static void InjectKeyNavEdit();
   virtual void Invoke() SAL_OVERRIDE;
 
   public:

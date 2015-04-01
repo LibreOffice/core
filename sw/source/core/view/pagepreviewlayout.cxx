@@ -558,7 +558,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
     // calculate initial paint offset
     Point aInitialPaintOffset;
     /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
+    if(!AllSettings::GetLayoutRTL()){
         if ( maPaintStartPageOffset != Point( -1, -1 ) )
             aInitialPaintOffset = Point(0,0) - maPaintStartPageOffset;
         else
@@ -616,7 +616,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
                 // first page in 2nd column
                 // --> continue with increased paint offset and next column
                 /// check whether RTL interface or not
-                if(!Application::GetSettings().GetLayoutRTL())
+                if(!AllSettings::GetLayoutRTL())
                     aCurrPaintOffset.X() += mnColWidth;
                 else aCurrPaintOffset.X() -= mnColWidth;
                 ++nCurrCol;
@@ -642,7 +642,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
 
         /// check whether RTL interface or not
-        if(!Application::GetSettings().GetLayoutRTL())
+        if(!AllSettings::GetLayoutRTL())
             aCurrPaintOffset.X() += mnColWidth;
         else aCurrPaintOffset.X() -= mnColWidth;
         ++nCurrCol;

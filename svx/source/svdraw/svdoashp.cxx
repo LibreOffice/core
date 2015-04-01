@@ -372,10 +372,10 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                             }
                         }
 
-                        aDestBitmap.ReleaseAccess(pWriteAccess);
+                        Bitmap::ReleaseAccess(pWriteAccess);
                     }
 
-                    aBitmap.ReleaseAccess(pReadAccess);
+                    Bitmap::ReleaseAccess(pReadAccess);
 
                     if(aBitmapEx.IsTransparent())
                     {

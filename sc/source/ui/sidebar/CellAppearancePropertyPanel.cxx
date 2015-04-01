@@ -326,7 +326,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 if(pBoxItem->GetBottom())
                     mbBottom = true;
 
-                if(!Application::GetSettings().GetLayoutRTL())
+                if(!AllSettings::GetLayoutRTL())
                     mpCellBorderUpdater->UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, maIMGCellBorder, mbVer, mbHor);
                 else
                     mpCellBorderUpdater->UpdateCellBorder(mbTop, mbBottom, mbRight, mbLeft, maIMGCellBorder, mbVer, mbHor);
@@ -369,7 +369,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) || mbBottom)
                     bBottom = true;
 
-                if(!Application::GetSettings().GetLayoutRTL())
+                if(!AllSettings::GetLayoutRTL())
                     mpCellBorderUpdater->UpdateCellBorder(bTop, bBottom, bLeft, bRight, maIMGCellBorder, mbVer, mbHor);
                 else
                     mpCellBorderUpdater->UpdateCellBorder(bTop, bBottom, bRight, bLeft, maIMGCellBorder, mbVer, mbHor);

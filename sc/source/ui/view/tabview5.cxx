@@ -106,7 +106,7 @@ void ScTabView::Init()
         is needed to draw the 3D effect correctly. The base TabBar implementes
         mirroring independent from the GUI direction. Have to set RTL mode
         explicitly because the parent frame window is already RTL disabled. */
-    pTabControl->EnableRTL( Application::GetSettings().GetLayoutRTL() );
+    pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );
 
     InitScrollBar( aHScrollLeft,    MAXCOL+1 );
     InitScrollBar( aHScrollRight,   MAXCOL+1 );

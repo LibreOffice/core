@@ -667,7 +667,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             }
                         }
                     }
-                    aBmp.ReleaseAccess( pAcc );
+                    Bitmap::ReleaseAccess( pAcc );
                     if ( nSye && nSxe &&
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
                             ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
@@ -759,7 +759,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 nCount = pBmp->Height() * pBmp->Width();
                 if ( !nCount )
                     nCount++;
-                aBmp.ReleaseAccess( pBmp );
+                Bitmap::ReleaseAccess( pBmp );
             }
             Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
             pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, false ) );

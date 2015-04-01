@@ -375,7 +375,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             if(pAccess)
             {
-                aBitmap.ReleaseAccess(pAccess);
+                Bitmap::ReleaseAccess(pAccess);
             }
 
             break;

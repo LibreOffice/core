@@ -424,14 +424,14 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
     // release write access of the bitmaps
     if ( mpAcc )
-        mpBmp->ReleaseAccess( mpAcc ), mpAcc = NULL;
+        Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
 
     if ( mpMaskAcc )
     {
         if ( mpAlphaMask )
             mpAlphaMask->ReleaseAccess( mpMaskAcc );
         else if ( mpMaskBmp )
-            mpMaskBmp->ReleaseAccess( mpMaskAcc );
+            Bitmap::ReleaseAccess( mpMaskAcc );
 
         mpMaskAcc = NULL;
     }

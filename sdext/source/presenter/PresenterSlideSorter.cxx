@@ -512,7 +512,7 @@ void SAL_CALL PresenterSlideSorter::mousePressed (const css::awt::MouseEvent& rE
 {
     css::awt::MouseEvent rTemp =rEvent;
     /// check whether RTL interface or not
-    if(Application::GetSettings().GetLayoutRTL()){
+    if(AllSettings::GetLayoutRTL()){
         awt::Rectangle aBox = mxWindow->getPosSize();
         rTemp.X=aBox.Width-rEvent.X;
     }
@@ -525,7 +525,7 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
 {
     css::awt::MouseEvent rTemp =rEvent;
     /// check whether RTL interface or not
-    if(Application::GetSettings().GetLayoutRTL()){
+    if(AllSettings::GetLayoutRTL()){
         awt::Rectangle aBox = mxWindow->getPosSize();
         rTemp.X=aBox.Width-rEvent.X;
     }
@@ -575,7 +575,7 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
     {
         css::awt::MouseEvent rTemp =rEvent;
         /// check whether RTL interface or not
-        if(Application::GetSettings().GetLayoutRTL()){
+        if(AllSettings::GetLayoutRTL()){
             awt::Rectangle aBox = mxWindow->getPosSize();
             rTemp.X=aBox.Width-rEvent.X;
         }
@@ -757,7 +757,7 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
         {
             if (bIsScrollBarNeeded)
                 {
-                    if(Application::GetSettings().GetLayoutRTL())
+                    if(AllSettings::GetLayoutRTL())
                         {
                             mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
                                                                                       rUpperBox.X1,
@@ -897,7 +897,7 @@ void PresenterSlideSorter::PaintPreview (
     }
 
     Reference<rendering::XBitmap> xPreview (GetPreview(nSlideIndex));
-    bool isRTL = Application::GetSettings().GetLayoutRTL();
+    bool isRTL = AllSettings::GetLayoutRTL();
 
     const geometry::RealPoint2D aTopLeft (
                                           mpLayout->GetWindowPosition(
@@ -1269,7 +1269,7 @@ bool PresenterSlideSorter::Layout::IsScrollBarNeeded (const sal_Int32 nSlideCoun
 geometry::RealPoint2D PresenterSlideSorter::Layout::GetLocalPosition(
     const geometry::RealPoint2D& rWindowPoint) const
 {
-    if(Application::GetSettings().GetLayoutRTL())
+    if(AllSettings::GetLayoutRTL())
         {
             return css::geometry::RealPoint2D(
                                               -rWindowPoint.X  + maBoundingBox.X2 + mnHorizontalOffset,
@@ -1286,7 +1286,7 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetLocalPosition(
 geometry::RealPoint2D PresenterSlideSorter::Layout::GetWindowPosition(
     const geometry::RealPoint2D& rLocalPoint) const
 {
-    if(Application::GetSettings().GetLayoutRTL())
+    if(AllSettings::GetLayoutRTL())
         {
             return css::geometry::RealPoint2D(
                                               -rLocalPoint.X + mnHorizontalOffset + maBoundingBox.X2,
@@ -1384,7 +1384,7 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetPoint (
 
 awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSlideIndex) const
 {
-    bool isRTL = Application::GetSettings().GetLayoutRTL();
+    bool isRTL = AllSettings::GetLayoutRTL();
     const geometry::RealPoint2D aWindowPosition(GetWindowPosition(GetPoint(nSlideIndex, isRTL?1:-1, -1)));
     return PresenterGeometryHelper::ConvertRectangle(
                                                      geometry::RealRectangle2D(

@@ -280,7 +280,7 @@ bool Bitmap::HasGreyPalette() const
     if( pIAcc )
     {
         bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPalette();
-        const_cast<Bitmap*>(this)->ReleaseAccess( pIAcc );
+        ReleaseAccess( pIAcc );
     }
 
     return bRet;
@@ -334,7 +334,7 @@ sal_uLong Bitmap::GetChecksum() const
                 mpImpBmp->ImplSetChecksum( nRet = nCrc );
             }
 
-            if (pRAcc) const_cast<Bitmap*>(this)->ReleaseAccess( pRAcc );
+            if (pRAcc) ReleaseAccess( pRAcc );
         }
     }
 
@@ -702,7 +702,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                                 pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nOtherY--, nOtherX ) );
                     }
 
-                    Bitmap::ReleaseAccess( pWriteAcc );
+                    ReleaseAccess( pWriteAcc );
                 }
 
                 aRotatedBmp = aNewBmp;
@@ -772,7 +772,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                         }
                     }
 
-                    Bitmap::ReleaseAccess( pWriteAcc );
+                    ReleaseAccess( pWriteAcc );
                 }
 
                 aRotatedBmp = aNewBmp;
@@ -818,7 +818,7 @@ bool Bitmap::Crop( const Rectangle& rRectPixel )
                     for( long nX = 0, nX2 = nOldX; nX < nNewWidth; nX++, nX2++ )
                         pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nY2, nX2 ) );
 
-                Bitmap::ReleaseAccess( pWriteAcc );
+                ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -899,7 +899,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                     }
 
                     if( pSrcAcc )
-                        Bitmap::ReleaseAccess( pSrcAcc );
+                        ReleaseAccess( pSrcAcc );
 
                     if( pDstAcc )
                         ReleaseAccess( pDstAcc );
@@ -953,7 +953,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         bRet = ( nWidth > 0L ) && ( nHeight > 0L );
                     }
 
-                    Bitmap::ReleaseAccess( pReadAcc );
+                    ReleaseAccess( pReadAcc );
                 }
             }
         }
@@ -1060,7 +1060,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
                         bRet = ( nWidth > 0L ) && ( nHeight > 0L );
                     }
 
-                    Bitmap::ReleaseAccess( pReadAcc );
+                    ReleaseAccess( pReadAcc );
                 }
             }
         }
@@ -1168,7 +1168,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
                         for( nX = 0; nX < nNewWidth; nX++ )
                             pWriteAcc->SetPixel( nY, nX, aColor );
 
-                Bitmap::ReleaseAccess( pWriteAcc );
+                ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -1354,11 +1354,11 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
             }
 
-            const_cast<Bitmap*>(this)->ReleaseAccess( pReadAcc );
+            ReleaseAccess( pReadAcc );
             bRet = true;
         }
 
-        aNewBmp.ReleaseAccess( pWriteAcc );
+        ReleaseAccess( pWriteAcc );
     }
 
     if( bRet )
@@ -1469,7 +1469,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
         //aRegion.ImplEndAddRect();
         //aRegion.SetRegionRectangles(aRectangles);
 
-        const_cast<Bitmap*>(this)->ReleaseAccess( pReadAcc );
+        ReleaseAccess( pReadAcc );
     }
     else
         aRegion = aRect;
@@ -1543,7 +1543,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
         bRet = true;
     }
 
-    Bitmap::ReleaseAccess( pMaskAcc );
+    ReleaseAccess( pMaskAcc );
     ReleaseAccess( pAcc );
 
     return bRet;
@@ -1576,8 +1576,8 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
     }
 
     ReleaseAccess( pAcc );
-    ( (AlphaMask&) rAlpha ).ReleaseAccess( pAlphaAcc );
-    Bitmap::ReleaseAccess( pNewAcc );
+    ReleaseAccess( pAlphaAcc );
+    ReleaseAccess( pNewAcc );
 
     if( bRet )
     {
@@ -1921,7 +1921,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
         bRet = true;
     }
 
-    Bitmap::ReleaseAccess( pMaskAcc );
+    ReleaseAccess( pMaskAcc );
     ReleaseAccess( pAcc );
 
     return bRet;
@@ -1954,7 +1954,7 @@ bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
         bRet = true;
     }
 
-    const_cast<AlphaMask&>(rAlpha).ReleaseAccess( pAlphaAcc );
+    ReleaseAccess( pAlphaAcc );
     ReleaseAccess( pAcc );
 
     return bRet;

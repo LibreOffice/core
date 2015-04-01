@@ -69,7 +69,7 @@ void SidebarDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
         if( bInitial )  // round to entire 15 degrees
             nAngle = ((nAngle + 750) / 1500) * 1500;
 
-        if (Application::GetSettings().GetLayoutRTL())
+        if (AllSettings::GetLayoutRTL())
             nAngle = 18000 - nAngle;
         SetRotation( nAngle, true );
     }

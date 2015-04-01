@@ -274,7 +274,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                             }
                         }
 
-                        aTmpBmp.ReleaseAccess( pAcc );
+                        Bitmap::ReleaseAccess( pAcc );
                     }
                 }
 
@@ -392,9 +392,9 @@ void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
         }
     }
 
-    aBmp.ReleaseAccess( pBmp );
+    Bitmap::ReleaseAccess( pBmp );
     aBmpAlphaMask.ReleaseAccess( pBmpAlphaMask );
-    aGrey.ReleaseAccess( pGrey );
+    Bitmap::ReleaseAccess( pGrey );
     aGreyAlphaMask.ReleaseAccess( pGreyAlphaMask );
 
     maDisabledBmpEx = BitmapEx( aGrey, aGreyAlphaMask );

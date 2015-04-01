@@ -395,7 +395,7 @@ void XclExpImgData::Save( XclExpStream& rStrm )
 
             rStrm.EndRecord();
         }
-        aBmp.ReleaseAccess( pAccess );
+        Bitmap::ReleaseAccess( pAccess );
     }
 }
 

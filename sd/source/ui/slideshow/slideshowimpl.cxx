@@ -827,7 +827,7 @@ bool SlideshowImpl::startPreview(
         else if( mpViewShell )
         {
             Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
-            if (Application::GetSettings().GetLayoutRTL())
+            if (AllSettings::GetLayoutRTL())
             {
                 aContentRect.Left() = aContentRect.Right();
                 aContentRect.Right() += aContentRect.Right();

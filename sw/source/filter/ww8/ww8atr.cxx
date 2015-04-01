@@ -4793,7 +4793,7 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
                     nDirection = rItem.GetValue();
                 }
                 if ( ( nDirection == FRMDIR_HORI_RIGHT_TOP ) ||
-                     ( nDirection == FRMDIR_ENVIRONMENT && Application::GetSettings().GetLayoutRTL() ) )
+                     ( nDirection == FRMDIR_ENVIRONMENT && AllSettings::GetLayoutRTL() ) )
                 {
                     bBiDiSwap = true;
                 }

@@ -298,7 +298,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     sal_Unicode cChar = aFmt.GetBulletChar();
     //const vcl::Font* pFont = aFmt.GetBulletFont();
     //sal_uInt16 nLength = 0;
-    /*if( Application::GetSettings().GetLayoutRTL() )
+    /*if( AllSettings::GetLayoutRTL() )
     {
         nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
         for(sal_uInt16 i = 0; i < nLength; i++)
@@ -354,7 +354,7 @@ bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     sal_Unicode cChar = aFmt.GetBulletChar();
     const vcl::Font* pFont = aFmt.GetBulletFont();
     //sal_uInt16 nLength = 0;
-    /*if( Application::GetSettings().GetLayoutRTL() )
+    /*if( AllSettings::GetLayoutRTL() )
     {
         nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
 
@@ -396,7 +396,7 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 
     sal_Unicode cChar;
     //sal_uInt16 nLength = 0;
-    /*if( Application::GetSettings().GetLayoutRTL() )
+    /*if( AllSettings::GetLayoutRTL() )
     {
         nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
 
@@ -482,7 +482,7 @@ sal_Unicode BulletsTypeMgr::GetBulChar(sal_uInt16 nIndex)
     else
         cChar = pActualBullets[nIndex]->cBulletChar;
 
-    /*if( Application::GetSettings().GetLayoutRTL() )
+    /*if( AllSettings::GetLayoutRTL() )
     {
         nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
 
@@ -1761,7 +1761,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             sal_Unicode cChar = 0;
             if( !pLevelSettings->sBulletChar.isEmpty() )
                 cChar = pLevelSettings->sBulletChar[0];
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
             {
                             if( 0 == i && cChar == BulletsTypeMgr::aDynamicBulletTypes[5] )
                     cChar = BulletsTypeMgr::aDynamicRTLBulletTypes[5];

@@ -242,7 +242,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
                 BitmapColor alpha = maskData->GetColor( y, x );
                 netwm_icon[ pos++ ] = (((( 255 - alpha.GetBlue()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
             }
-        icon.ReleaseAccess( iconData );
+        Bitmap::ReleaseAccess( iconData );
         mask.ReleaseAccess( maskData );
     }
     netwm_icon.resize( pos );
@@ -1902,7 +1902,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
      if( mpParent && ! IsSysChildWindow() )
      {
         // --- RTL --- (mirror window pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
          ::Window aChild;
@@ -2960,7 +2960,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             nEvent = SALEVENT_WHEELMOUSE;
 
             // --- RTL --- (mirror mouse pos)
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 aWheelEvt.mnX = nWidth_-1-aWheelEvt.mnX;
             return CallCallback( nEvent, &aWheelEvt );
         }
@@ -2974,7 +2974,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         )
     {
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aMouseEvt.mnX = nWidth_-1-aMouseEvt.mnX;
         nRet = CallCallback( nEvent, &aMouseEvt );
     }

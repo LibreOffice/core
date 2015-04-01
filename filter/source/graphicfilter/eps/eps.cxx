@@ -572,7 +572,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                     nCount2--;
                 }
             }
-            aTmpBitmap.ReleaseAccess( pAcc );
+            Bitmap::ReleaseAccess( pAcc );
             ImplExecMode( PS_RET );
             ImplWriteLine( "%%EndPreview" );
         }
@@ -2074,7 +2074,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         else
             ImplWriteLine( "pom" );
 
-        aTileBitmap.ReleaseAccess( pAcc );
+        Bitmap::ReleaseAccess( pAcc );
         nHeightLeft -= nHeight;
         if ( nHeightLeft )
         {

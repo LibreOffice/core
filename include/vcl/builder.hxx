@@ -354,7 +354,7 @@ private:
     bool        extractGroup(const OString &id, stringmap &rVec);
     bool        extractModel(const OString &id, stringmap &rVec);
     bool        extractBuffer(const OString &id, stringmap &rVec);
-    bool        extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
+    static bool extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
     bool        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);

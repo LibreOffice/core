@@ -550,7 +550,7 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
         aPtNew.Y() = aPtMM.Y();
 
     // fdo#74751 this fix reverse base point on RTL UI.
-    bool bRTL = Application::GetSettings().GetLayoutRTL();
+    bool bRTL = AllSettings::GetLayoutRTL();
     eNewRP = GetRPFromPoint( aPtNew, bRTL );
 
     eDefRP = eNewRP;
@@ -1087,7 +1087,7 @@ void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
             }
         }
 
-        aBitmap.ReleaseAccess(pRead);
+        Bitmap::ReleaseAccess(pRead);
     }
 }
 

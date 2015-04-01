@@ -830,11 +830,11 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             }
 
             delete pMemStm;
-            aNewBmp.ReleaseAccess(pAcc);
+            Bitmap::ReleaseAccess(pAcc);
 
             if(bAlphaPossible)
             {
-                aNewBmpAlpha.ReleaseAccess(pAccAlpha);
+                Bitmap::ReleaseAccess(pAccAlpha);
 
                 if(!bAlphaUsed)
                 {
@@ -1515,11 +1515,11 @@ bool ImplWriteDIB(
                 bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha, bCompressed);
             }
 
-            const_cast< Bitmap& >(rSource).ReleaseAccess(pAcc);
+            Bitmap::ReleaseAccess(pAcc);
 
             if(pAccAlpha)
             {
-                const_cast< Bitmap* >(pSourceAlpha)->ReleaseAccess(pAccAlpha);
+                Bitmap::ReleaseAccess(pAccAlpha);
             }
         }
 

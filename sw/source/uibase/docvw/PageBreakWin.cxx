@@ -146,7 +146,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
         aOtherColor = rSettings.GetDialogColor( ).getBColor();
     }
 
-    bool bRtl = Application::GetSettings().GetLayoutRTL();
+    bool bRtl = AllSettings::GetLayoutRTL();
 
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 3 );
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),

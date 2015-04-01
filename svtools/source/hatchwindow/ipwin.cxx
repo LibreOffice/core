@@ -211,7 +211,7 @@ Point SvResizeHelper::GetTrackPosPixel( const Rectangle & rRect ) const
     Point aBR = aOuter.BottomRight();
     Point aTR = aOuter.TopRight();
     Point aBL = aOuter.BottomLeft();
-    bool bRTL = Application::GetSettings().GetLayoutRTL();
+    bool bRTL = AllSettings::GetLayoutRTL();
     switch( nGrab )
     {
         case 0:
@@ -276,7 +276,7 @@ Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
         Point aDiff = rTrackPos - aSelPos;
         aTrackRect = aOuter;
         Point aBR = aOuter.BottomRight();
-        bool bRTL = Application::GetSettings().GetLayoutRTL();
+        bool bRTL = AllSettings::GetLayoutRTL();
         switch( nGrab )
         {
             case 0:

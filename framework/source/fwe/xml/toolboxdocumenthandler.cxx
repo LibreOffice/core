@@ -420,7 +420,7 @@ throw(  SAXException, RuntimeException, std::exception )
 
                     //fix for fdo#39370
                     /// check whether RTL interface or not
-                    if(Application::GetSettings().GetLayoutRTL()){
+                    if(AllSettings::GetLayoutRTL()){
                         if (aCommandURL == ".uno:ParaLeftToRight")
                             aCommandURL = ".uno:ParaRightToLeft";
                         else if (aCommandURL == ".uno:ParaRightToLeft")

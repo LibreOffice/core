@@ -46,23 +46,23 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
      * fire the events on the dnd listener container of the specified window
      */
 
-    sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& aFlavorList ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 fireDragExitEvent( vcl::Window *pWindow ) throw(::com::sun::star::uno::RuntimeException);
+    static sal_Int32 fireDragExitEvent( vcl::Window *pWindow ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 fireDropEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext >& xContext,
+    static sal_Int32 fireDropEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >& xSource,
+    static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >& xSource,
         const ::com::sun::star::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction )throw(::com::sun::star::uno::RuntimeException);
 
 public:

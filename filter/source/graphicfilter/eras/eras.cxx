@@ -123,7 +123,7 @@ bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConf
 
         m_rOStm.SetEndian( nOStmOldModus );
 
-        aBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
     }
     else
         mbStatus = false;

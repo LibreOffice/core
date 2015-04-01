@@ -905,7 +905,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     }
 
     if( pParent && ! mpWindowImpl->mbFrame )
-        mbEnableRTL = Application::GetSettings().GetLayoutRTL();
+        mbEnableRTL = AllSettings::GetLayoutRTL();
 
     // test for frame creation
     if ( mpWindowImpl->mbFrame )
@@ -1192,7 +1192,7 @@ void Window::ImplInitWindowData( WindowType nType )
 
     meOutDevType        = OUTDEV_WINDOW;
 
-    mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+    mbEnableRTL         = AllSettings::GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
 
 void Window::getFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize, OutputDevice& rDev )

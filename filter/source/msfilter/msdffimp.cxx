@@ -1205,7 +1205,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                     pAcc->SetPixel( nY, nX, BitmapColor( static_cast< sal_Int8 >( nRed ), static_cast< sal_Int8 >( nGreen ), static_cast< sal_Int8 >( nBlue ) ) );
                 }
             }
-            aBitmap.ReleaseAccess( pAcc );
+            Bitmap::ReleaseAccess( pAcc );
 
             if ( nFix16Angle )
             {

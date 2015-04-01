@@ -2583,7 +2583,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         nRight = nX;
     }
 
-    aBmp.ReleaseAccess( pAcc );
+    Bitmap::ReleaseAccess( pAcc );
 
     if( nTop <= nBottom )
     {

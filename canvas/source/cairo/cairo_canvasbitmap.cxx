@@ -169,7 +169,7 @@ namespace cairocanvas
                         }
                         aMask.ReleaseAccess( pMaskWrite );
                     }
-                    aRGB.ReleaseAccess( pRGBWrite );
+                    ::Bitmap::ReleaseAccess( pRGBWrite );
                 }
 
                 // ignore potential errors above. will get caller a

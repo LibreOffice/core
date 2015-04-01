@@ -40,7 +40,7 @@ XBMReader::~XBMReader()
     delete[] pHexTable;
 
     if( pAcc1 )
-        aBmp1.ReleaseAccess( pAcc1 );
+        Bitmap::ReleaseAccess( pAcc1 );
 }
 
 void XBMReader::InitTable()
@@ -319,7 +319,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
         {
             Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
 
-            aBmp1.ReleaseAccess( pAcc1 ), pAcc1 = NULL;
+            Bitmap::ReleaseAccess( pAcc1 ), pAcc1 = NULL;
             aBlackBmp.Erase( Color( COL_BLACK ) );
             rGraphic = BitmapEx( aBlackBmp, aBmp1 );
             eReadState = XBMREAD_OK;

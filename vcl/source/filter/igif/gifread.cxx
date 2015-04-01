@@ -69,10 +69,10 @@ GIFReader::~GIFReader()
     aImGraphic.SetContext( NULL );
 
     if( pAcc1 )
-        aBmp1.ReleaseAccess( pAcc1 );
+        Bitmap::ReleaseAccess( pAcc1 );
 
     if( pAcc8 )
-        aBmp8.ReleaseAccess( pAcc8 );
+        Bitmap::ReleaseAccess( pAcc8 );
 
     delete[] pSrcBuf;
 }
@@ -544,12 +544,12 @@ void GIFReader::CreateNewBitmaps()
 {
     AnimationBitmap aAnimBmp;
 
-    aBmp8.ReleaseAccess( pAcc8 );
+    Bitmap::ReleaseAccess( pAcc8 );
     pAcc8 = NULL;
 
     if( bGCTransparent )
     {
-        aBmp1.ReleaseAccess( pAcc1 );
+        Bitmap::ReleaseAccess( pAcc1 );
         pAcc1 = NULL;
         aAnimBmp.aBmpEx = BitmapEx( aBmp8, aBmp1 );
     }
@@ -585,11 +585,11 @@ const Graphic& GIFReader::GetIntermediateGraphic()
     {
         Bitmap  aBmp;
 
-        aBmp8.ReleaseAccess( pAcc8 );
+        Bitmap::ReleaseAccess( pAcc8 );
 
         if ( bGCTransparent )
         {
-            aBmp1.ReleaseAccess( pAcc1 );
+            Bitmap::ReleaseAccess( pAcc1 );
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
             pAcc1 = aBmp1.AcquireWriteAccess();

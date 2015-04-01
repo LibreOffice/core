@@ -530,7 +530,7 @@ void AutoFmtPreview::Resize()
 void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
 {
     if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
-        mbRTL = Application::GetSettings().GetLayoutRTL();
+        mbRTL = AllSettings::GetLayoutRTL();
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
 }

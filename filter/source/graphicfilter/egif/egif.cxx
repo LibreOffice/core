@@ -284,7 +284,7 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 
 void GIFWriter::DestroyAccess()
 {
-    aAccBmp.ReleaseAccess( m_pAcc );
+    Bitmap::ReleaseAccess( m_pAcc );
     m_pAcc = NULL;
 }
 

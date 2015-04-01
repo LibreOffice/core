@@ -300,7 +300,7 @@ void AnnotationWindow::InitControls()
     // window control for author and date
     mpMeta = new MultiLineEdit(this,0);
     mpMeta->SetReadOnly();
-    mpMeta->SetRightToLeft(Application::GetSettings().GetLayoutRTL());
+    mpMeta->SetRightToLeft(AllSettings::GetLayoutRTL());
     mpMeta->AlwaysDisableInput(true);
     mpMeta->SetCallHandlersOnInputDisabled(true);
 

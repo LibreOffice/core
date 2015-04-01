@@ -95,7 +95,7 @@ bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
         {
             ImplWriteBody();
         }
-        aBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
     }
     else
         mbStatus = false;

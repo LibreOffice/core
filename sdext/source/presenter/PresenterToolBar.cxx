@@ -793,7 +793,7 @@ void PresenterToolBar::Layout (
 
     /* push front or back ? ... */
     /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
+    if(!AllSettings::GetLayoutRTL()){
         for (iPart=maElementContainer.begin(), nIndex=0; iPart!=iEnd; ++iPart,++nIndex)
         {
             geometry::RealRectangle2D aBoundingBox(
@@ -894,7 +894,7 @@ void PresenterToolBar::LayoutPart (
     ElementContainerPart::const_iterator iBegin (rpPart->begin());
 
     /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
+    if(!AllSettings::GetLayoutRTL()){
         for (iElement=rpPart->begin(); iElement!=iEnd; ++iElement)
         {
             if (iElement->get() == NULL)
@@ -1025,7 +1025,7 @@ void PresenterToolBar::CheckMouseOver (
     const bool bMouseDown)
 {
     css::awt::MouseEvent rTemp =rEvent;
-    if(Application::GetSettings().GetLayoutRTL()){
+    if(AllSettings::GetLayoutRTL()){
         awt::Rectangle aWindowBox = mxWindow->getPosSize();
         rTemp.X=aWindowBox.Width-rTemp.X;
     }
@@ -1582,7 +1582,7 @@ void Button::PaintIcon (
     if (xBitmap.is())
     {
         /// check whether RTL interface or not
-        if(!Application::GetSettings().GetLayoutRTL()){
+        if(!AllSettings::GetLayoutRTL()){
             const sal_Int32 nX (maLocation.X
                 + (maSize.Width-xBitmap->getSize().Width) / 2);
             const sal_Int32 nY (maLocation.Y

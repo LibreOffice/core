@@ -236,7 +236,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         delete[] mpBuffer;
         mpBuffer = NULL;
 
-        aGraphicBmp.ReleaseAccess( mpReadAccess );
+        Bitmap::ReleaseAccess( mpReadAccess );
         mpReadAccess = NULL;
     }
     if ( mxStatusIndicator.is() )

@@ -196,10 +196,10 @@ JPEGReader::~JPEGReader()
         delete[] mpBuffer;
 
     if( mpAcc )
-        maBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
 
     if( mpAcc1 )
-        maBmp1.ReleaseAccess( mpAcc1 );
+        Bitmap::ReleaseAccess( mpAcc1 );
 }
 
 unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
@@ -217,7 +217,7 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
 
     if( mpAcc )
     {
-        maBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
         maBmp = Bitmap();
         mpAcc = NULL;
     }
@@ -295,7 +295,7 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
     // clean up, if no Bitmap buffer can be provided.
     if ( !pBmpBuf )
     {
-        maBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
         maBmp = Bitmap();
         mpAcc = NULL;
     }
@@ -388,7 +388,7 @@ Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLine
     {
         if( mpAcc1 )
         {
-            maBmp1.ReleaseAccess( mpAcc1 );
+            Bitmap::ReleaseAccess( mpAcc1 );
         }
 
         maBmp1 = Bitmap( rBitmap.GetSizePixel(), 1 );
@@ -408,7 +408,7 @@ Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLine
                 mpAcc1->FillRect( Rectangle( Point( 0, mnLastLines ), Size( mpAcc1->Width(), nNewLines ) ) );
             }
 
-            maBmp1.ReleaseAccess( mpAcc1 );
+            Bitmap::ReleaseAccess( mpAcc1 );
             aGraphic = BitmapEx( rBitmap, maBmp1 );
             mpAcc1 = maBmp1.AcquireWriteAccess();
         }
@@ -465,7 +465,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
             mpBuffer = NULL;
         }
 
-        maBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
         mpAcc = NULL;
 
         if( mrStream.GetError() == ERRCODE_IO_PENDING )

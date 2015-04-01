@@ -221,7 +221,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
     Rectangle normRect( rRect );  // rRect is already relative to top-level window
     normRect.SetPos( pW->ScreenToOutputPixel( normRect.TopLeft() ) );
 
-    bool bRTL = Application::GetSettings().GetLayoutRTL();
+    bool bRTL = AllSettings::GetLayoutRTL();
 
     Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );

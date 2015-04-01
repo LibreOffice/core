@@ -1265,7 +1265,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
 
     if( mpParent )
     {
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
         {
             if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
                 nX = mpParent->maGeometry.nWidth - nWidth-1 - nX;

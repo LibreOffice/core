@@ -64,8 +64,8 @@ namespace drawinglayer
                 pWMask->SetPixel(2, 0, aMaskColor);
                 pWMask->SetPixel(2, 2, aMaskColor);
 
-                aContent.ReleaseAccess(pWContent);
-                aMask.ReleaseAccess(pWMask);
+                Bitmap::ReleaseAccess(pWContent);
+                Bitmap::ReleaseAccess(pWMask);
 
                 // create and exchange at aRetVal
                 delete aRetVal.set(new BitmapEx(aContent, aMask));

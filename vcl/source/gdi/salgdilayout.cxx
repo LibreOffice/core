@@ -53,7 +53,7 @@ SalFrameGeometry SalFrame::GetGeometry()
 {
     // mirror frame coordinates at parent
     SalFrame *pParent = GetParent();
-    if( pParent && Application::GetSettings().GetLayoutRTL() )
+    if( pParent && AllSettings::GetLayoutRTL() )
     {
         SalFrameGeometry aGeom = maGeometry;
         int parent_x = aGeom.nX - pParent->maGeometry.nX;
@@ -69,7 +69,7 @@ SalGraphics::SalGraphics()
     m_bAntiAliasB2DDraw(false)
 {
     // read global RTL settings
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         m_nLayout = SAL_LAYOUT_BIDI_RTL;
 }
 

@@ -80,7 +80,7 @@ class CUPSManager : public PrinterInfoManager
 
     virtual void initialize() SAL_OVERRIDE;
 
-    void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
+    static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions );
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
 

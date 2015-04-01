@@ -119,7 +119,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
             pAcc->SetPixel( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );
         }
     }
-    m_aBitmap.ReleaseAccess( pAcc );
+    Bitmap::ReleaseAccess( pAcc );
 }
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )

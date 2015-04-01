@@ -115,7 +115,7 @@ void WrapPropertyPanel::Initialize()
                       ::GetImage( mxFrame, UNO_WRAPIDEAL, false ) );
 
     mpRBNoWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPOFF) );
-    if ( Application::GetSettings().GetLayoutRTL() )
+    if ( AllSettings::GetLayoutRTL() )
     {
         mpRBWrapLeft->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPRIGHT) );
         mpRBWrapRight->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPLEFT) );

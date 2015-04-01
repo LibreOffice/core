@@ -120,7 +120,7 @@ OutputDevice::OutputDevice() :
     mnDrawMode                      = 0;
     mnTextLayoutMode                = TEXT_LAYOUT_DEFAULT;
 
-    if( Application::GetSettings().GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
+    if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
         mnTextLayoutMode            = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
 
     meOutDevType                    = OUTDEV_DONTKNOW;

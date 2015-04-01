@@ -1095,7 +1095,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     ScFilterBoxMode eFilterMode = bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER;
     mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
     // Fix for bug fdo#44925
-    if (Application::GetSettings().GetLayoutRTL() != bLayoutRTL)
+    if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();
 
     nSizeX += 1;

@@ -453,8 +453,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 bRet = true;
             }
 
-            aWorkBmp.ReleaseAccess( pReadAcc );
-            aDstBmp.ReleaseAccess( pWriteAcc );
+            Bitmap::ReleaseAccess( pReadAcc );
+            Bitmap::ReleaseAccess( pWriteAcc );
 
             if( bRet )
                 aRetBmp = aDstBmp;

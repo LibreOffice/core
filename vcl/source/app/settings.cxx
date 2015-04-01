@@ -2821,12 +2821,12 @@ namespace
     }
 }
 
-bool AllSettings::GetLayoutRTL() const
+bool AllSettings::GetLayoutRTL()
 {
     return GetConfigLayoutRTL(false);
 }
 
-bool AllSettings::GetMathLayoutRTL() const
+bool AllSettings::GetMathLayoutRTL()
 {
     return GetConfigLayoutRTL(true);
 }

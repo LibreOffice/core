@@ -1034,7 +1034,7 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
             if( !aClipRgn.IsNull() )
             {
                 // transform clipping region to border window's coordinate system
-                if( IsRTLEnabled() != pBorder->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL() )
+                if( IsRTLEnabled() != pBorder->IsRTLEnabled() && AllSettings::GetLayoutRTL() )
                 {
                     // need to mirror in case border is not RTL but edit is (or vice versa)
 

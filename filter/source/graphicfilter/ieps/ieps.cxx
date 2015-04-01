@@ -697,7 +697,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                 aGraphic = aMtf;
                                 bHasPreview = bRetValue = true;
                             }
-                            aBitmap.ReleaseAccess( pAcc );
+                            Bitmap::ReleaseAccess( pAcc );
                         }
                     }
                 }

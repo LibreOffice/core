@@ -1356,7 +1356,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                     if( pAcc )
                     {
-                        aBitmap.ReleaseAccess( pAcc );
+                        Bitmap::ReleaseAccess( pAcc );
 
                         if ( pMaskAcc )
                         {

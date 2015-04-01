@@ -167,7 +167,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                         ImplWriteTransparent();
                         ImplWriteIDAT();
                     }
-                    aBmp.ReleaseAccess(mpAccess);
+                    Bitmap::ReleaseAccess(mpAccess);
                     mpAccess = NULL;
                 }
                 else
@@ -210,7 +210,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                                 ImplWritepHYs(rBmpEx);
                                 ImplWriteIDAT();
                             }
-                            aMask.ReleaseAccess(mpMaskAccess);
+                            Bitmap::ReleaseAccess(mpMaskAccess);
                             mpMaskAccess = NULL;
                         }
                         else
@@ -218,7 +218,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             mbStatus = false;
                         }
                     }
-                    aBmp.ReleaseAccess(mpAccess);
+                    Bitmap::ReleaseAccess(mpAccess);
                     mpAccess = NULL;
                 }
                 else
@@ -240,7 +240,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
 
                     ImplWriteIDAT();
                 }
-                aBmp.ReleaseAccess(mpAccess);
+                Bitmap::ReleaseAccess(mpAccess);
                 mpAccess = NULL;
             }
             else
