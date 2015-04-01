@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
 #include <tools/config.hxx>
 #include <vcl/msgbox.hxx>
@@ -934,116 +935,18 @@ void SvxSecurityTabPage::Reset( const SfxItemSet* )
 {
 }
 
-class MailerProgramCfg_Impl : public utl::ConfigItem
-{
-    friend class SvxEMailTabPage;
-    // variables
-    OUString sProgram;
-    // readonly states
-    bool bROProgram;
-
-    const Sequence<OUString> GetPropertyNames();
-
-    virtual void    ImplCommit() SAL_OVERRIDE;
-
-public:
-    MailerProgramCfg_Impl();
-    virtual ~MailerProgramCfg_Impl();
-
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
-};
-
-/* -------------------------------------------------------------------------*/
-
-MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
-    utl::ConfigItem("Office.Common/ExternalMailer"),
-    bROProgram(false)
-{
-    const Sequence< OUString > aNames = GetPropertyNames();
-    const Sequence< Any > aValues = GetProperties(aNames);
-    const Sequence< sal_Bool > aROStates = GetReadOnlyStates(aNames);
-    const Any* pValues = aValues.getConstArray();
-    const sal_Bool* pROStates = aROStates.getConstArray();
-    for(sal_Int32 nProp = 0; nProp < aValues.getLength(); nProp++)
-    {
-        if(pValues[nProp].hasValue())
-        {
-            switch(nProp)
-            {
-                case 0 :
-                {
-                    pValues[nProp] >>= sProgram;
-                    bROProgram = pROStates[nProp];
-                }
-                break;
-            }
-        }
-    }
-}
-
-/* -------------------------------------------------------------------------*/
-
-MailerProgramCfg_Impl::~MailerProgramCfg_Impl()
-{
-}
-
-/* -------------------------------------------------------------------------*/
-
-const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
-{
-    Sequence<OUString> aRet(1);
-    OUString* pRet = aRet.getArray();
-    pRet[0] = "Program";
-    return aRet;
-}
-
-/* -------------------------------------------------------------------------*/
-
-void MailerProgramCfg_Impl::ImplCommit()
-{
-    const Sequence< OUString > aOrgNames = GetPropertyNames();
-    sal_Int32 nOrgCount = aOrgNames.getLength();
-
-    Sequence< OUString > aNames(nOrgCount);
-    Sequence< Any > aValues(nOrgCount);
-    sal_Int32 nRealCount = 0;
-
-    for(int nProp = 0; nProp < nOrgCount; nProp++)
-    {
-    switch(nProp)
-    {
-            case  0:
-            {
-                if (!bROProgram)
-                {
-                    aNames[nRealCount] = aOrgNames[nProp];
-                    aValues[nRealCount] <<= sProgram;
-                    ++nRealCount;
-                }
-            }
-            break;
-        }
-    }
-
-    aNames.realloc(nRealCount);
-    aValues.realloc(nRealCount);
-    PutProperties(aNames, aValues);
-}
-
-void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& )
-{
-}
-
-/* -------------------------------------------------------------------------*/
-
 struct SvxEMailTabPage_Impl
 {
     SvxEMailTabPage_Impl():
+        sProgram(officecfg::Office::Common::ExternalMailer::Program::get()),
+        bROProgram(
+            officecfg::Office::Common::ExternalMailer::Program::isReadOnly()),
         bHideContent(
             officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get())
     {}
 
-    MailerProgramCfg_Impl aMailConfig;
+    OUString sProgram;
+    bool bROProgram;
     bool bHideContent;
 };
 
@@ -1078,25 +981,21 @@ SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rA
 
 bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 {
-    bool bMailModified = false;
-    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    if (!pImpl->bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
     {
-        pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
-        bMailModified = true;
+        pImpl->sProgram = m_pMailerURLED->GetText();
+        officecfg::Office::Common::ExternalMailer::Program::set(
+            pImpl->sProgram, batch);
     }
-    if ( bMailModified )
-        pImpl->aMailConfig.Commit();
-
     if (pImpl->bHideContent != m_pSuppressHidden->IsChecked())
     {
         pImpl->bHideContent = m_pSuppressHidden->IsChecked();
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create());
         officecfg::Office::Security::HiddenContent::RemoveHiddenContent::set(
             pImpl->bHideContent, batch);
-        batch->commit();
     }
-
+    batch->commit();
     return false;
 }
 
@@ -1107,13 +1006,13 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
     m_pMailerURLED->Enable(true );
     m_pMailerURLPB->Enable(true );
 
-    if (pImpl->aMailConfig.bROProgram)
+    if (pImpl->bROProgram)
         m_pMailerURLFI->Show();
 
-    m_pMailerURLED->SetText(pImpl->aMailConfig.sProgram);
+    m_pMailerURLED->SetText(pImpl->sProgram);
     m_pMailerURLED->SaveValue();
 
-    m_pMailContainer->Enable(!pImpl->aMailConfig.bROProgram);
+    m_pMailContainer->Enable(!pImpl->bROProgram);
 
     m_pSuppressHidden->Check(pImpl->bHideContent);
 }
@@ -1122,7 +1021,7 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
 IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 {
-    if (m_pMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram)
+    if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
     {
         FileDialogHelper aHelper(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
