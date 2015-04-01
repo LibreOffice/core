@@ -862,8 +862,14 @@ void Window::Invalidate( sal_uInt16 nFlags )
 /// Converts rRectangle from MM100 to twips based on the map mode of rWindow.
 void lcl_toTwips(const Window& rWindow, Rectangle& rRectangle)
 {
-    if (rWindow.GetMapMode().GetMapUnit() == MAP_100TH_MM)
-        rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
+    // When dragging shapes the map mode is disabled.
+    if (rWindow.IsMapModeEnabled())
+    {
+        if (rWindow.GetMapMode().GetMapUnit() == MAP_100TH_MM)
+            rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
+    }
+    else
+        rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_PIXEL, MAP_TWIP);
 }
 
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
