@@ -50,6 +50,8 @@ $(eval $(call gb_Library_use_libraries,swui,\
     comphelper \
     cppu \
     cppuhelper \
+    $(call gb_Helper_optional,DBCONNECTIVITY, \
+        dbtools) \
     editeng \
     i18nlangtag \
     i18nutil \

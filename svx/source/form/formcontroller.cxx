@@ -77,6 +77,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/IParseContext.hxx>
+#include <connectivity/dbtools.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -94,6 +95,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::connectivity;
 using namespace ::connectivity::simple;
+using namespace ::dbtools;
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
@@ -788,12 +790,11 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
         case FM_ATTR_FILTER:
         {
             OUStringBuffer aFilter;
-            OStaticDataAccessTools aStaticTools;
-            Reference<XConnection> xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
+            Reference<XConnection> xConnection(getConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
             {
                 Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, true ) );
+                Reference< XNumberFormatsSupplier> xFormatSupplier( getNumberFormats( xConnection, true ) );
                 Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -2557,8 +2558,7 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XRowSet >  xForm(rEvent.Source, UNO_QUERY);
     // do we have a connected data source
-    OStaticDataAccessTools aStaticTools;
-    if (xForm.is() && aStaticTools.getRowSetConnection(xForm).is())
+    if (xForm.is() && getConnection(xForm).is())
     {
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
         if (xSet.is())
@@ -2567,8 +2567,8 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
             sal_Int32 aVal2 = 0;
             ::cppu::enum2int(aVal2,aVal);
             m_bCycle        = !aVal.hasValue() || aVal2 == TabulatorCycle_RECORDS;
-            m_bCanUpdate    = aStaticTools.canUpdate(xSet);
-            m_bCanInsert    = aStaticTools.canInsert(xSet);
+            m_bCanUpdate    = canUpdate(xSet);
+            m_bCanInsert    = canInsert(xSet);
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
             m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
 
@@ -3054,7 +3054,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // create the composer
     Reference< XRowSet > xForm(m_xModelAsIndex, UNO_QUERY);
-    Reference< XConnection > xConnection(OStaticDataAccessTools().getRowSetConnection(xForm));
+    Reference< XConnection > xConnection(getConnection(xForm));
     if (xForm.is())
     {
         try
@@ -3103,8 +3103,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         ::comphelper::UStringMixEqual aCompare(xMetaData->storesMixedCaseQuotedIdentifiers());
 
         // need to parse criteria localized
-        OStaticDataAccessTools aStaticTools;
-        Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, true));
+        Reference< XNumberFormatsSupplier> xFormatSupplier( getNumberFormats(xConnection, true));
         Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
@@ -3233,8 +3232,7 @@ void FormController::startFiltering()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
-    OStaticDataAccessTools aStaticTools;
-    Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
+    Reference< XConnection >  xConnection( getConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
     if ( !xConnection.is() )
         // nothing to do - can't filter a form which is not connected
         return;
@@ -3256,7 +3254,7 @@ void FormController::startFiltering()
 
     // the control we have to activate after replacement
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
-    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, true);
+    Reference< XNumberFormatsSupplier >  xFormatSupplier = getNumberFormats(xConnection, true);
     Reference< XNumberFormatter >  xFormatter = NumberFormatter::create(m_xComponentContext);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -3911,7 +3909,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             // the request
             ParametersRequest aRequest;
             aRequest.Parameters = aEvent.Parameters;
-            aRequest.Connection = OStaticDataAccessTools().getRowSetConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
+            aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
             OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
             Reference< XInteractionRequest > xParamRequest(pParamRequest);
             // some knittings

@@ -53,6 +53,8 @@ $(eval $(call gb_Library_use_libraries,sw,\
     comphelper \
     cppu \
     cppuhelper \
+    $(call gb_Helper_optional,DBCONNECTIVITY, \
+        dbtools) \
     drawinglayer \
     editeng \
     i18nlangtag \
@@ -766,7 +768,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/dbui/mailmergechildwindow \
     sw/source/uibase/dbui/mailmergehelper \
     sw/source/uibase/dbui/mmconfigitem \
-    sw/source/uibase/dbui/swdbtoolsclient \
     sw/source/uibase/uno/unomailmerge \
 ))
 endif

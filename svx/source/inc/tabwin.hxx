@@ -25,11 +25,17 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <com/sun/star/form/XForm.hpp>
+#include <unotools/sharedunocomponent.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
-#include "svx/dbtoolsclient.hxx"
+#include <connectivity/dbtools.hxx>
 
+
+namespace svxform
+{
+    typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
+}
 
 class FmFieldWin;
 class FmFieldWinListBox
@@ -70,7 +76,6 @@ public:
 class FmFieldWin :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
-                    ,public ::svxform::OStaticDataAccessTools
 {
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;
