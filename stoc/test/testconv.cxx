@@ -520,7 +520,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==CHAR==
     sal_Unicode c = 'A';
-    aVal.setValue( &c, ::getCharCppuType() );
+    aVal.setValue( &c, cppu::UnoType<cppu::UnoCharType>::get() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= OUString("A");
@@ -541,7 +541,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
 
     sal_Bool bTmp = sal_True;
-    aVal.setValue( &bTmp, getBooleanCppuType() );
+    aVal.setValue( &bTmp, cppu::UnoType<bool>::get() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==ZERO STRINGS==
@@ -626,13 +626,13 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
         convertTo( cppu::UnoType<cppu::UnoUnsignedShortType>::get(), rVal, rBlock._toUINT16 );
         convertTo( cppu::UnoType<sal_Int16>::get(), rVal, rBlock._toINT16 );
         convertTo( cppu::UnoType<sal_Int8>::get(), rVal, rBlock._toBYTE );
-        convertTo( ::getBooleanCppuType(), rVal, rBlock._toBOOL );
-        convertTo( ::getCharCppuType(), rVal, rBlock._toChar );
+        convertTo( cppu::UnoType<bool>::get(), rVal, rBlock._toBOOL );
+        convertTo( cppu::UnoType<cppu::UnoCharType>::get(), rVal, rBlock._toChar );
         convertTo( cppu::UnoType<TypeClass>::get(), rVal, rBlock._toTypeClass );
-        convertTo( ::getCppuType( (const Sequence< sal_Int16 > *)0 ), rVal, rBlock._toSeqINT16 );
-        convertTo( ::getCppuType( (const Sequence< Any > *)0 ), rVal, rBlock._toSeqAny );
+        convertTo( cppu::UnoType<Sequence< sal_Int16 >>::get(), rVal, rBlock._toSeqINT16 );
+        convertTo( cppu::UnoType<Sequence< Any >>::get(), rVal, rBlock._toSeqAny );
 
-        convertTo( ::getVoidCppuType(), rVal, sal_True ); // anything converts to void
+        convertTo( cppu::UnoType<cppu::UnoVoidType>::get(), rVal, sal_True ); // anything converts to void
     }
     s_xConverter.clear();
 

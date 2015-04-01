@@ -732,7 +732,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         default:
         {
             sal_Bool bTmp = (toDouble( rVal ) != 0.0);
-            aRet.setValue( &bTmp, getBooleanCppuType() );
+            aRet.setValue( &bTmp, cppu::UnoType<bool>::get() );
         }
         case TypeClass_ENUM:  // exclude enums
             break;
@@ -743,12 +743,12 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             if ( aStr == "0" || aStr.equalsIgnoreAsciiCase( "false" ))
             {
                 sal_Bool bFalse = sal_False;
-                aRet.setValue( &bFalse, getCppuBooleanType() );
+                aRet.setValue( &bFalse, cppu::UnoType<bool>::get() );
             }
             else if ( aStr == "1" || aStr.equalsIgnoreAsciiCase( "true" ))
             {
                 sal_Bool bTrue = sal_True;
-                aRet.setValue( &bTrue, getCppuBooleanType() );
+                aRet.setValue( &bTrue, cppu::UnoType<bool>::get() );
             }
             else
             {
@@ -766,13 +766,13 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         if (aSourceClass==TypeClass_STRING)
         {
             if ((*static_cast<const OUString *>(rVal.getValue())).getLength() == 1)      // single char
-                aRet.setValue( (*static_cast<const OUString *>(rVal.getValue())).getStr(), ::getCharCppuType() );
+                aRet.setValue( (*static_cast<const OUString *>(rVal.getValue())).getStr(), cppu::UnoType<cppu::UnoCharType>::get() );
         }
         else if (aSourceClass!=TypeClass_ENUM &&        // exclude enums, chars
                  aSourceClass!=TypeClass_CHAR)
         {
              sal_Unicode cRet = (sal_Unicode)toHyper( rVal, 0, 0xffff );    // range
-            aRet.setValue( &cRet, ::getCharCppuType() );
+            aRet.setValue( &cRet, cppu::UnoType<cppu::UnoCharType>::get() );
         }
         break;
     }

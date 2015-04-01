@@ -742,7 +742,7 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     {
         Sequence< beans::Property > seq( 1 );
         seq[ 0 ] = beans::Property(
-            "DefaultContext", -1, ::getCppuType( &m_xContext ), 0 );
+            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 );
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 
         MutexGuard aGuard( m_mutex );
@@ -1615,9 +1615,9 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     {
         Sequence< beans::Property > seq( 2 );
         seq[ 0 ] = beans::Property(
-            "DefaultContext", -1, ::getCppuType( &m_xContext ), 0 );
+            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 );
         seq[ 1 ] = beans::Property(
-            "Registry", -1, ::getCppuType( &m_xRegistry ),
+            "Registry", -1, cppu::UnoType<decltype(m_xRegistry)>::get(),
             beans::PropertyAttribute::READONLY );
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 

@@ -1170,7 +1170,7 @@ Reference< XEnumeration > NestedRegistryImpl::createEnumeration(  ) throw (Runti
 
 Type NestedRegistryImpl::getElementType(  ) throw (RuntimeException, std::exception)
 {
-    return getCppuType( &m_localReg );
+    return cppu::UnoType<decltype(m_localReg)>::get();
 }
 
 sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException, std::exception)

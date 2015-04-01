@@ -1361,7 +1361,7 @@ void ImplementationRegistration::initialize(
         OUStringBuffer buf;
         buf.append( "ImplementationRegistration::initialize() invalid first parameter,"
                     "expected " );
-        buf.append( getCppuType( &rLoader ).getTypeName() );
+        buf.append( cppu::UnoType<decltype(rLoader)>::get().getTypeName() );
         buf.append( ", got " );
         buf.append( aArgs.getConstArray()[0].getValueTypeName() );
         throw IllegalArgumentException( buf.makeStringAndClear(),
@@ -1408,7 +1408,7 @@ void ImplementationRegistration::initialize(
             OUStringBuffer buf;
             buf.append( "ImplementationRegistration::initialize() invalid fourth parameter,"
                         "expected " );
-            buf.append( getCppuType( &rReg ).getTypeName() );
+            buf.append( cppu::UnoType<decltype(rReg)>::get().getTypeName() );
             buf.append( ", got " );
             buf.append( aArgs.getConstArray()[3].getValueTypeName() );
             throw IllegalArgumentException( buf.makeStringAndClear(),

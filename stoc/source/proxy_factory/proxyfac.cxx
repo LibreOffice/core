@@ -153,7 +153,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
             "### RuntimeException expected!" );
         Any cpp_exc;
         uno_type_copyAndConvertData(
-            &cpp_exc, exc, ::getCppuType( &cpp_exc ).getTypeLibType(),
+            &cpp_exc, exc, cppu::UnoType<decltype(cpp_exc)>::get().getTypeLibType(),
             m_uno2cpp.get() );
         uno_any_destruct( exc, 0 );
         ::cppu::throwException( cpp_exc );
@@ -257,7 +257,7 @@ static void SAL_CALL binuno_proxy_dispatch(
                 *static_cast< Type const * >( pArgs[ 0 ] );
             Any ret( that->m_root->queryInterface( rType ) );
             uno_type_copyAndConvertData(
-                pReturn, &ret, ::getCppuType( &ret ).getTypeLibType(),
+                pReturn, &ret, cppu::UnoType<decltype(ret)>::get().getTypeLibType(),
                 that->m_root->m_factory->m_cpp2uno.get() );
             *ppException = 0; // no exc
         }
@@ -316,7 +316,7 @@ inline ProxyRoot::ProxyRoot(
 {
     m_factory->m_cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &m_target.m_pUnoI ), xTarget.get(),
-        ::getCppuType( &xTarget ) );
+        cppu::UnoType<decltype(xTarget)>::get() );
     OSL_ENSURE( m_target.is(), "### mapping interface failed!" );
 }
 
@@ -359,7 +359,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                     UnoInterfaceReference root;
                     m_factory->m_cpp2uno.mapInterface(
                         reinterpret_cast< void ** >( &root.m_pUnoI ),
-                        xRoot.get(), ::getCppuType( &xRoot ) );
+                        xRoot.get(), cppu::UnoType<decltype(xRoot)>::get() );
 
                     UnoInterfaceReference proxy(
                         // ref count initially 1:

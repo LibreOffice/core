@@ -215,7 +215,7 @@ static inline void constructRuntimeException(
     RuntimeException exc( rMsg );
     // no conversion needed due to binary compatibility + no convertible type
     ::uno_type_any_construct(
-        pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
+        pExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), 0 );
 }
 
 
@@ -665,7 +665,7 @@ AdapterImpl::AdapterImpl(
 
     // map receiver
     m_pReceiver = static_cast<uno_Interface *>(m_pFactory->m_aCpp2Uno.mapInterface(
-        xReceiver.get(), ::getCppuType( &xReceiver ) ));
+        xReceiver.get(), cppu::UnoType<decltype(xReceiver)>::get() ));
     OSL_ASSERT( 0 != m_pReceiver );
     if (! m_pReceiver)
     {
@@ -699,16 +699,16 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
             xContext ),
         UNO_QUERY_THROW );
     m_pConverter = static_cast<uno_Interface *>(m_aCpp2Uno.mapInterface(
-        xConverter.get(), ::getCppuType( &xConverter ) ));
+        xConverter.get(), cppu::UnoType<decltype(xConverter)>::get() ));
     OSL_ASSERT( 0 != m_pConverter );
 
     // some type info:
     // sequence< any >
-    Type const & rAnySeqType = ::getCppuType( (const Sequence< Any > *)0 );
+    Type const & rAnySeqType = cppu::UnoType<Sequence< Any >>::get();
     rAnySeqType.getDescription( &m_pAnySeqTD );
     // sequence< short >
     const Type & rShortSeqType =
-        ::getCppuType( (const Sequence< sal_Int16 > *)0 );
+        cppu::UnoType<Sequence< sal_Int16 >>::get();
     rShortSeqType.getDescription( &m_pShortSeqTD );
     // script.XInvocation
     typelib_TypeDescription * pTD = 0;
@@ -851,7 +851,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         // map one interface to C++
         uno_Interface * pUnoI = &that->m_pInterfaces[ 0 ];
         m_aUno2Cpp.mapInterface(
-            reinterpret_cast<void **>(&xRet), pUnoI, ::getCppuType( &xRet ) );
+            reinterpret_cast<void **>(&xRet), pUnoI, cppu::UnoType<decltype(xRet)>::get() );
         that->release();
         OSL_ASSERT( xRet.is() );
         if (! xRet.is())

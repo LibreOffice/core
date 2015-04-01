@@ -406,8 +406,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[16] = 16;
 
             rOutParam.realloc( 17 );
-            rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
-            rOutParam[1].setValue( &aChar, ::getCppuCharType() );
+            rOutParam[0].setValue( &aBool, cppu::UnoType<bool>::get() );
+            rOutParam[1].setValue( &aChar, cppu::UnoType<cppu::UnoCharType>::get() );
             rOutParam[2] <<= nByte;
             rOutParam[3] <<= nShort;
             rOutParam[4] <<= nUShort;
@@ -450,8 +450,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[16] = 16;
 
             rOutParam.realloc( 17 );
-            rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
-            rOutParam[1].setValue( &aChar, ::getCppuCharType() );
+            rOutParam[0].setValue( &aBool, cppu::UnoType<bool>::get() );
+            rOutParam[1].setValue( &aChar, cppu::UnoType<cppu::UnoCharType>::get() );
             rOutParam[2] <<= nByte;
             rOutParam[3] <<= nShort;
             rOutParam[4] <<= nUShort;
@@ -494,8 +494,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[16] = 16;
 
             rOutParam.realloc( 17 );
-            rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
-            rOutParam[1].setValue( &aChar, ::getCppuCharType() );
+            rOutParam[0].setValue( &aBool, cppu::UnoType<bool>::get() );
+            rOutParam[1].setValue( &aChar, cppu::UnoType<cppu::UnoCharType>::get() );
             rOutParam[2] <<= nByte;
             rOutParam[3] <<= nShort;
             rOutParam[4] <<= nUShort;
@@ -588,14 +588,14 @@ Any XLB_Invocation::getValue( const OUString & rName )
     if ( rName == "Bool" )
     {
         sal_Bool aBool = _xLBT->getBool();
-        aRet.setValue( &aBool, ::getCppuBooleanType() );
+        aRet.setValue( &aBool, cppu::UnoType<bool>::get() );
     }
     else if ( rName == "Byte" )
         aRet <<= _xLBT->getByte();
     else if ( rName == "Char" )
     {
         sal_Unicode aChar = _xLBT->getChar();
-        aRet.setValue( &aChar, ::getCppuCharType() );
+        aRet.setValue( &aChar, cppu::UnoType<cppu::UnoCharType>::get() );
     }
     else if ( rName == "Short" )
         aRet <<= _xLBT->getShort();
@@ -986,7 +986,7 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
         xMgr->createInstance("com.sun.star.script.Invocation"), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
-    Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
+    Any aOriginal( &xOriginal, cppu::UnoType<decltype(xOriginal)>::get() );
     Reference< XInvocation > xInvok(
         xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_QUERY );
 
