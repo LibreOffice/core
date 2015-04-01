@@ -246,7 +246,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < nOrgCount; nProp++)
     {
         switch(nProp)

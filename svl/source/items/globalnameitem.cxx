@@ -75,7 +75,7 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     com::sun::star::uno::Any aNew;
 
-    try { aNew = xConverter->convertTo( rVal, ::getCppuType((const com::sun::star::uno::Sequence < sal_Int8 >*)0) ); }
+    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<com::sun::star::uno::Sequence < sal_Int8 >>::get() ); }
     catch (com::sun::star::uno::Exception&) {}
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )

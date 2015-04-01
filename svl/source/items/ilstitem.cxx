@@ -75,7 +75,7 @@ bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_u
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
             ( ::com::sun::star::script::Converter::create(::comphelper::getProcessComponentContext()) );
     ::com::sun::star::uno::Any aNew;
-    try { aNew = xConverter->convertTo( rVal, ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int32 >*)0) ); }
+    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int32 >>::get() ); }
     catch (::com::sun::star::uno::Exception&)
     {
         return true;

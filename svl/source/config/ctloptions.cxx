@@ -150,7 +150,7 @@ void SvtCTLOptions_Impl::ImplCommit()
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
-    const uno::Type& rType = ::getBooleanCppuType();
+    const uno::Type& rType = cppu::UnoType<bool>::get();
 
     for ( int nProp = 0; nProp < nOrgCount; nProp++ )
     {

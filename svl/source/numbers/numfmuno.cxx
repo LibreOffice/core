@@ -68,10 +68,10 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
         {OUString(PROPERTYNAME_CURRSYM),  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {OUString(PROPERTYNAME_DECIMALS), 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {OUString(PROPERTYNAME_LEADING),  0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {OUString(PROPERTYNAME_NEGRED),   0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {OUString(PROPERTYNAME_STDFORM),  0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {OUString(PROPERTYNAME_THOUS),    0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {OUString(PROPERTYNAME_USERDEF),  0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_NEGRED),   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_STDFORM),  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_THOUS),    0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_USERDEF),  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {OUString(PROPERTYNAME_CURRABB),  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -82,7 +82,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
-        {OUString(PROPERTYNAME_NOZERO),   0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
+        {OUString(PROPERTYNAME_NOZERO),   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND, 0},
         {OUString(PROPERTYNAME_NULLDATE), 0, cppu::UnoType<util::Date>::get(),  beans::PropertyAttribute::BOUND, 0},
         {OUString(PROPERTYNAME_STDDEC),   0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
         {OUString(PROPERTYNAME_TWODIGIT), 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
@@ -744,12 +744,12 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         {
             //! Pass through SvNumberformat Member bStandard?
             sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-            aRet.setValue( &bStandard, getBooleanCppuType() );
+            aRet.setValue( &bStandard, cppu::UnoType<bool>::get() );
         }
         else if (aPropertyName == PROPERTYNAME_USERDEF)
         {
             sal_Bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
-            aRet.setValue( &bUserDef, getBooleanCppuType() );
+            aRet.setValue( &bUserDef, cppu::UnoType<bool>::get() );
         }
         else if (aPropertyName == PROPERTYNAME_DECIMALS)
         {
@@ -764,12 +764,12 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         else if (aPropertyName == PROPERTYNAME_NEGRED)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet.setValue( &bRed, getBooleanCppuType() );
+            aRet.setValue( &bRed, cppu::UnoType<bool>::get() );
         }
         else if (aPropertyName == PROPERTYNAME_THOUS)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet.setValue( &bThousand, getBooleanCppuType() );
+            aRet.setValue( &bThousand, cppu::UnoType<bool>::get() );
         }
         else if (aPropertyName == PROPERTYNAME_CURRSYM)
         {
@@ -878,17 +878,17 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         pArray[3].Name = PROPERTYNAME_COMMENT;
         pArray[3].Value <<= aComment;
         pArray[4].Name = PROPERTYNAME_STDFORM;
-        pArray[4].Value.setValue( &bStandard, getBooleanCppuType() );
+        pArray[4].Value.setValue( &bStandard, cppu::UnoType<bool>::get() );
         pArray[5].Name = PROPERTYNAME_USERDEF;
-        pArray[5].Value.setValue( &bUserDef, getBooleanCppuType() );
+        pArray[5].Value.setValue( &bUserDef, cppu::UnoType<bool>::get() );
         pArray[6].Name = PROPERTYNAME_DECIMALS;
         pArray[6].Value <<= (sal_Int16)( nDecimals );
         pArray[7].Name = PROPERTYNAME_LEADING;
         pArray[7].Value <<= (sal_Int16)( nLeading );
         pArray[8].Name = PROPERTYNAME_NEGRED;
-        pArray[8].Value.setValue( &bRed, getBooleanCppuType() );
+        pArray[8].Value.setValue( &bRed, cppu::UnoType<bool>::get() );
         pArray[9].Name = PROPERTYNAME_THOUS;
-        pArray[9].Value.setValue( &bThousand, getBooleanCppuType() );
+        pArray[9].Value.setValue( &bThousand, cppu::UnoType<bool>::get() );
         pArray[10].Name = PROPERTYNAME_CURRSYM;
         pArray[10].Value <<= aSymbol;
         pArray[11].Name = PROPERTYNAME_CURREXT;
@@ -1011,7 +1011,7 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
         if (aPropertyName == PROPERTYNAME_NOZERO)
         {
             sal_Bool bNoZero = pFormatter->GetNoZero();
-            aRet.setValue( &bNoZero, getBooleanCppuType() );
+            aRet.setValue( &bNoZero, cppu::UnoType<bool>::get() );
         }
         else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {
