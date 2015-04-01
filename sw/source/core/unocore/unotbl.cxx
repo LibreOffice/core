@@ -4018,7 +4018,7 @@ void SwXCellRange::setLabelDescriptions(const uno::Sequence<OUString>& rDesc, bo
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
     auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
-    if(rDesc.getLength() != (sal_Int32) vCells.size())
+    if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
         throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(this));
     auto pDescIterator(rDesc.begin());
     for(auto xCell : vCells)
