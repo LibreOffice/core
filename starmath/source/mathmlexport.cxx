@@ -1368,17 +1368,17 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                 OUStringBuffer sStrBuf;
                 switch(pFontNode->GetSizeType())
                 {
-                    case FNTSIZ_MULTIPLY:
+                    case FontSizeType::MULTIPLY:
                         ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(aFrac*Fraction(100.00)));
                         sStrBuf.append('%');
                         break;
-                    case FNTSIZ_DIVIDE:
+                    case FontSizeType::DIVIDE:
                         ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(Fraction(100.00)/aFrac));
                         sStrBuf.append('%');
                         break;
-                    case FNTSIZ_ABSOLUT:
+                    case FontSizeType::ABSOLUT:
                         ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(aFrac));
                         sStrBuf.append(
@@ -1395,7 +1395,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().
                                 GetSize().Height());
 
-                            if (pFontNode->GetSizeType() == FNTSIZ_MINUS)
+                            if (pFontNode->GetSizeType() == FontSizeType::MINUS)
                                 aTemp-=aFrac;
                             else
                                 aTemp+=aFrac;

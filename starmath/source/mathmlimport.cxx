@@ -710,13 +710,13 @@ void SmXMLContext_Helper::ApplyAttrs()
             {
                 if (nFontSize < 100.00)
                     pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
-                        FNTSIZ_DIVIDE);
+                        FontSizeType::DIVIDE);
                 else
                     pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
-                        FNTSIZ_MULTIPLY);
+                        FontSizeType::MULTIPLY);
             }
             else
-                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
+                pFontNode->SetSizeParameter(Fraction(nFontSize),FontSizeType::ABSOLUT);
 
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
             rNodeStack.push_front(pFontNode);

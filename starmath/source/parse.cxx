@@ -1925,18 +1925,18 @@ void SmParser::FontSize()
 {
     OSL_ENSURE(m_aCurToken.eType == TSIZE, "Sm : Ooops...");
 
-    sal_uInt16   Type;
+    FontSizeType   Type;
     SmFontNode *pFontNode = new SmFontNode(m_aCurToken);
 
     NextToken();
 
     switch (m_aCurToken.eType)
     {
-        case TNUMBER:   Type = FNTSIZ_ABSOLUT;  break;
-        case TPLUS:     Type = FNTSIZ_PLUS;     break;
-        case TMINUS:    Type = FNTSIZ_MINUS;    break;
-        case TMULTIPLY: Type = FNTSIZ_MULTIPLY; break;
-        case TDIVIDEBY: Type = FNTSIZ_DIVIDE;   break;
+        case TNUMBER:   Type = FontSizeType::ABSOLUT;  break;
+        case TPLUS:     Type = FontSizeType::PLUS;     break;
+        case TMINUS:    Type = FontSizeType::MINUS;    break;
+        case TMULTIPLY: Type = FontSizeType::MULTIPLY; break;
+        case TDIVIDEBY: Type = FontSizeType::DIVIDE;   break;
 
         default:
             delete pFontNode;
@@ -1944,7 +1944,7 @@ void SmParser::FontSize()
             return;
     }
 
-    if (Type != FNTSIZ_ABSOLUT)
+    if (Type != FontSizeType::ABSOLUT)
     {
         NextToken();
         if (m_aCurToken.eType != TNUMBER)
