@@ -272,7 +272,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
 throw ( RuntimeException, std::exception )
 {
-    return( ::getCppuType( (const Sequence< PropertyValue >*)NULL ) );
+    return( cppu::UnoType<Sequence< PropertyValue >>::get() );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()

@@ -180,7 +180,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
         // convert to "Sequence of any"
         css::uno::Sequence < css::uno::Any > aSeq;
         css::uno::Any aNew;
-        try { aNew = m_xConverter->convertTo( aValue, ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) ); }
+        try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<css::uno::Sequence < css::uno::Any >>::get() ); }
         catch (const css::uno::Exception&) {}
 
         aNew >>= aSeq;
@@ -251,7 +251,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
         else
             aArgumentBuffer.appendAscii("\"\"");
     }
-    else if (aValue.getValueType() == getCppuCharType())
+    else if (aValue.getValueType() == cppu::UnoType<cppu::UnoCharType>::get())
     {
         // character variables are recorded as strings, back conversion must be handled in client code
         sal_Unicode nVal = *static_cast<sal_Unicode const *>(aValue.getValue());

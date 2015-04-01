@@ -1127,7 +1127,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((css::uno::Sequence< OUString >*)0);
+        pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND   |
                             css::beans::PropertyAttribute::READONLY;
         ++i;
@@ -1135,7 +1135,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((css::uno::Sequence< OUString >*)0);
+        pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;

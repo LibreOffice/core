@@ -324,7 +324,7 @@ sal_Bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
 css::uno::Type SAL_CALL ModuleManager::getElementType()
     throw(css::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const css::uno::Sequence< css::beans::PropertyValue >*)0);
+    return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
 }
 
 sal_Bool SAL_CALL ModuleManager::hasElements()

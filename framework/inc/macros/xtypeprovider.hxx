@@ -192,51 +192,51 @@ ________________________________________________________________________________
 //  help macros to replace TYPES in getTypes() [see before]
 
 #define PRIVATE_DEFINE_TYPE_1( TYPE1 )                                                                                                          \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE1 >*)NULL )
+    cppu::UnoType<TYPE1>::get()
 
 #define PRIVATE_DEFINE_TYPE_2( TYPE1, TYPE2 )                                                                                                   \
     PRIVATE_DEFINE_TYPE_1( TYPE1 ),                                                                                                             \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE2 >*)NULL )
+    cppu::UnoType<TYPE2>::get()
 
 #define PRIVATE_DEFINE_TYPE_3( TYPE1, TYPE2, TYPE3 )                                                                                            \
     PRIVATE_DEFINE_TYPE_2( TYPE1, TYPE2 ),                                                                                                      \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE3 >*)NULL )
+    cppu::UnoType<TYPE3>::get()
 
 #define PRIVATE_DEFINE_TYPE_4( TYPE1, TYPE2, TYPE3, TYPE4 )                                                                                     \
     PRIVATE_DEFINE_TYPE_3( TYPE1, TYPE2, TYPE3 ),                                                                                               \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE4 >*)NULL )
+    cppu::UnoType<TYPE4>::get()
 
 #define PRIVATE_DEFINE_TYPE_5( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5 )                                                                              \
     PRIVATE_DEFINE_TYPE_4( TYPE1, TYPE2, TYPE3, TYPE4 ),                                                                                        \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE5 >*)NULL )
+    cppu::UnoType<TYPE5>::get()
 
 #define PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 )                                                                       \
     PRIVATE_DEFINE_TYPE_5( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5 ),                                                                                 \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE6 >*)NULL )
+    cppu::UnoType<TYPE6>::get()
 
 #define PRIVATE_DEFINE_TYPE_7( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7 )                                                                \
     PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 ),                                                                          \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE7 >*)NULL )
+    cppu::UnoType<TYPE7>::get()
 
 #define PRIVATE_DEFINE_TYPE_8( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8 )                                                         \
     PRIVATE_DEFINE_TYPE_7( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7 ),                                                                   \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE8 >*)NULL )
+    cppu::UnoType<TYPE8>::get()
 
 #define PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 )                                                  \
     PRIVATE_DEFINE_TYPE_8( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8 ),                                                            \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE9 >*)NULL )
+    cppu::UnoType<TYPE9>::get()
 
 #define PRIVATE_DEFINE_TYPE_10( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10 )                                         \
     PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 ),                                                     \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE10 >*)NULL )
+    cppu::UnoType<TYPE10>::get()
 
 #define PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 )                                 \
     PRIVATE_DEFINE_TYPE_10( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10 ),                                            \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE11 >*)NULL )
+    cppu::UnoType<TYPE11>::get()
 
 #define PRIVATE_DEFINE_TYPE_12( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12 )                         \
     PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ),                                    \
-    ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE12 >*)NULL )
+    cppu::UnoType<TYPE12>::get()
 
 //  private
 //  complete implementation of XTypeProvider

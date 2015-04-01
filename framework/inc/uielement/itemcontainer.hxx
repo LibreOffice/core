@@ -76,7 +76,7 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
-            return ::getCppuType((com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*)0);
+            return cppu::UnoType<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()

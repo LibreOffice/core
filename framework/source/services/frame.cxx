@@ -2666,7 +2666,7 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_ISHIDDEN,
             FRAME_PROPHANDLE_ISHIDDEN,
-            ::getBooleanCppuType(),
+            cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY));
 
     impl_addPropertyInfo(
