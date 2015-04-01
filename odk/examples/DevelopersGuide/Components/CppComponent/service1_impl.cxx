@@ -111,7 +111,7 @@ public:
 Any MyService1Impl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
-    if (type.equals(::cppu::UnoType< Reference< XInterface > >::get()))
+    if (type.equals(::cppu::UnoType<XInterface>::get()))
     {
         // return XInterface interface
         // (resolve ambiguity by casting to lang::XTypeProvider)
@@ -119,21 +119,21 @@ Any MyService1Impl::queryInterface( Type const & type )
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(::cppu::UnoType< Reference< lang::XTypeProvider > >::get()))
+    if (type.equals(::cppu::UnoType<lang::XTypeProvider>::get()))
     {
         // return XInterface interface
         Reference< XInterface > x(
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(::cppu::UnoType< Reference< lang::XServiceInfo > >::get()))
+    if (type.equals(::cppu::UnoType<lang::XServiceInfo>::get()))
     {
         // return XServiceInfo interface
         Reference< lang::XServiceInfo > x(
             static_cast< lang::XServiceInfo * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(::cppu::UnoType< Reference< ::my_module::XSomething > >::get()))
+    if (type.equals(::cppu::UnoType<my_module::XSomething>::get()))
     {
         // return sample interface
         Reference< ::my_module::XSomething > x(
@@ -166,9 +166,9 @@ Sequence< Type > MyService1Impl::getTypes()
     throw (RuntimeException)
 {
     Sequence< Type > seq( 3 );
-    seq[ 0 ] = ::cppu::UnoType< Reference< lang::XTypeProvider > >::get();
-    seq[ 1 ] = ::cppu::UnoType< Reference< lang::XServiceInfo > >::get();
-    seq[ 2 ] = ::cppu::UnoType< Reference< ::my_module::XSomething > >::get();
+    seq[ 0 ] = ::cppu::UnoType<lang::XTypeProvider>::get();
+    seq[ 1 ] = ::cppu::UnoType<lang::XServiceInfo>::get();
+    seq[ 2 ] = ::cppu::UnoType<my_module::XSomething>::get();
     return seq;
 }
 

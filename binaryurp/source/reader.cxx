@@ -215,8 +215,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     css::uno::UnoInterfaceReference cc;
     if (ccMode) {
         css::uno::TypeDescription t(
-            cppu::UnoType< css::uno::Reference< css::uno::XCurrentContext > >::
-            get());
+            cppu::UnoType<css::uno::XCurrentContext>::get());
         cc.set(
             *static_cast< uno_Interface ** >(
                 unmarshal.readValue(t).getValue(t)));

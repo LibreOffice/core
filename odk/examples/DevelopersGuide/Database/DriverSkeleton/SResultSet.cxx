@@ -109,9 +109,9 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
     OTypeCollection aTypes(
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XMultiPropertySet > >::get(),
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XFastPropertySet > >::get(),
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XPropertySet > >::get());
+        ::cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+        ::cppu::UnoType<css::beans::XFastPropertySet>::get(),
+        ::cppu::UnoType<css::beans::XPropertySet>::get());
 
     return concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }

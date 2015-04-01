@@ -90,9 +90,9 @@ Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(Ru
 Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeException, std::exception)
 {
     ::cppu::OTypeCollection aTypes(
-        ::cppu::UnoType< uno::Reference< XMultiPropertySet > >::get(),
-        ::cppu::UnoType< uno::Reference< XFastPropertySet > >::get(),
-        ::cppu::UnoType< uno::Reference< XPropertySet > >::get());
+        ::cppu::UnoType<XMultiPropertySet>::get(),
+        ::cppu::UnoType<XFastPropertySet>::get(),
+        ::cppu::UnoType<XPropertySet>::get());
 
     return concatSequences(aTypes.getTypes(),OStatementCommonBase_Base::getTypes());
 }

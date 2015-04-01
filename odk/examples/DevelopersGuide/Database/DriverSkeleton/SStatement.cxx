@@ -110,9 +110,9 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes(
-        ::cppu::UnoType< Reference< XMultiPropertySet > >::get(),
-        ::cppu::UnoType< Reference< XFastPropertySet > >::get(),
-        ::cppu::UnoType< Reference< XPropertySet > >::get());
+        ::cppu::UnoType<XMultiPropertySet>::get(),
+        ::cppu::UnoType<XFastPropertySet>::get(),
+        ::cppu::UnoType<XPropertySet>::get());
 
     return concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }

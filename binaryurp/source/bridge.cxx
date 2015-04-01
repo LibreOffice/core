@@ -864,8 +864,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
                 " character");
         }
     }
-    css::uno::TypeDescription ifc(
-        cppu::UnoType< css::uno::Reference< css::uno::XInterface > >::get());
+    css::uno::TypeDescription ifc(cppu::UnoType<css::uno::XInterface>::get());
     typelib_TypeDescription * p = ifc.get();
     std::vector< BinaryAny > inArgs;
     inArgs.push_back(

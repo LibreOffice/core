@@ -1598,7 +1598,7 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
                 bSuccess = true;
             }
         }
-        else if ( rType == cppu::UnoType< uno::Reference< drawing::XShape > >::get() )
+        else if ( rType == cppu::UnoType<drawing::XShape>::get() )
         {
             uno::Reference< drawing::XShape > xShape;
             if ( ( rSelection >>= xShape ) && m_aSelection.setSelection( xShape ) )
@@ -1664,7 +1664,7 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
         return; //behave passive if already disposed or suspended
 
     //--add listener
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get(), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
 }
 
         void SAL_CALL ChartController
@@ -1677,14 +1677,14 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
         return; //behave passive if already disposed or suspended
 
     //--remove listener
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get(), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
 }
 
         void ChartController
 ::impl_notifySelectionChangeListeners()
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get() );
+        .getContainer( cppu::UnoType<view::XSelectionChangeListener>::get() );
     if( pIC )
     {
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier(this);

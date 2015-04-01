@@ -1522,7 +1522,7 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             break;
 
         case TypeClass_INTERFACE:
-            if (_rValue.getValueType() == cppu::UnoType<Reference< XInputStream> >::get())
+            if (_rValue.getValueType() == cppu::UnoType<XInputStream>::get())
             {
                 Reference< XInputStream >  xStream;
                 _rValue >>= xStream;
@@ -1629,7 +1629,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case TypeClass_INTERFACE:
-            if (_rValue.getValueType() == cppu::UnoType<Reference< XInputStream> >::get())
+            if (_rValue.getValueType() == cppu::UnoType<XInputStream>::get())
             {
                 Reference< XInputStream >  xStream;
                 _rValue >>= xStream;
