@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_53268417",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2015-04-01T14:13:03Z",
+      "side": 1,
+      "message": "This function is never used... is it me being stupid or that is not normal?",
+      "range": {
+        "startLine": 662,
+        "startChar": 30,
+        "endLine": 662,
+        "endChar": 44
+      },
+      "revId": "8b576460e58e2cdcbeb0c876a9c849b784fd8848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
