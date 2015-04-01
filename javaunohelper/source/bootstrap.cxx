@@ -139,7 +139,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             throw RuntimeException("cannot get mapping C++ <-> Java!" );
         }
 
-        jobject jret = static_cast<jobject>(mapping.mapInterface( xContext.get(), ::getCppuType( &xContext ) ));
+        jobject jret = static_cast<jobject>(mapping.mapInterface( xContext.get(), cppu::UnoType<decltype(xContext)>::get() ));
         jobject jlocal = jni_env->NewLocalRef( jret );
         jni_env->DeleteGlobalRef( jret );
 
