@@ -445,12 +445,12 @@ namespace ucb { namespace ucp { namespace ext
                 i_rTitle );
             xRow->appendBoolean( Property( OUString("IsDocument"),
                           -1,
-                          getCppuBooleanType(),
+                          cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 false );
             xRow->appendBoolean( Property( OUString("IsFolder"),
                           -1,
-                          getCppuBooleanType(),
+                          cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 true );
         }
@@ -554,24 +554,22 @@ namespace ucb { namespace ucp { namespace ext
             CommandInfo(
                 OUString(  "getCommandInfo"  ),
                 -1,
-                getCppuVoidType()
+                cppu::UnoType<cppu::UnoVoidType>::get()
             ),
             CommandInfo(
                 OUString(  "getPropertySetInfo"  ),
                 -1,
-                getCppuVoidType()
+                cppu::UnoType<cppu::UnoVoidType>::get()
             ),
             CommandInfo(
                 OUString(  "getPropertyValues"  ),
                 -1,
-                getCppuType(
-                    static_cast< Sequence< Property > * >( 0 ) )
+                cppu::UnoType<Sequence< Property >>::get()
             ),
             CommandInfo(
                 OUString(  "setPropertyValues"  ),
                 -1,
-                getCppuType(
-                    static_cast< Sequence< PropertyValue > * >( 0 ) )
+                cppu::UnoType<Sequence< PropertyValue >>::get()
             )
 
             // Optional standard commands
@@ -600,13 +598,13 @@ namespace ucb { namespace ucp { namespace ext
             Property(
                 OUString(  "IsDocument"  ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
                 OUString(  "IsFolder"  ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(

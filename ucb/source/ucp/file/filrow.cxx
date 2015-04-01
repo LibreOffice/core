@@ -56,7 +56,7 @@ bool convert( shell* pShell,
             if( rValue.hasValue() )
             {
                 uno::Any aConvertedValue
-                    = xConverter->convertTo( rValue,getCppuType( static_cast< const _type_* >(0) ) );
+                    = xConverter->convertTo( rValue,cppu::UnoType<_type_>::get() );
                 no_success = ! ( aConvertedValue >>= aReturn );
             }
             else

@@ -236,7 +236,7 @@ CommandProcessorInfo::CommandProcessorInfo()
         = ucb::CommandInfo(
             OUString( GETCOMMANDINFO_NAME ), // Name
             GETCOMMANDINFO_HANDLE, // Handle
-            getCppuVoidType() ); // ArgType
+            cppu::UnoType<cppu::UnoVoidType>::get() ); // ArgType
     (*m_pInfo)[ 1 ]
         = ucb::CommandInfo(
             OUString( GLOBALTRANSFER_NAME ), // Name

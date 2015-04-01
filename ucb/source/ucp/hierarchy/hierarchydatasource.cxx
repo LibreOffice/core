@@ -463,7 +463,7 @@ HierarchyDataSource::createInstanceWithArguments(
                 }
                 else if ( aProp.Name == CFGPROPERTY_LAZYWRITE )
                 {
-                    if ( aProp.Value.getValueType() == getCppuBooleanType() )
+                    if ( aProp.Value.getValueType() == cppu::UnoType<bool>::get() )
                     {
                         bHasLazyWriteProp = true;
 

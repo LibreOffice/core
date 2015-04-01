@@ -939,7 +939,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("IsDocument"),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY ),
             rData.bIsDocument );
@@ -947,7 +947,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("IsFolder"),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY ),
             rData.bIsFolder );
@@ -955,8 +955,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("CreatableContentsInfo"),
                 -1,
-                getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             uno::makeAny(
@@ -985,7 +984,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::Property(
                     OUString("Compressed"),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND ),
                 rData.bCompressed );
 
@@ -993,7 +992,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::Property(
                     OUString("Encrypted"),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND ),
                 rData.bEncrypted );
         }
@@ -1006,7 +1005,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::Property(
                     OUString("HasEncryptedEntries"),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
                 rData.bHasEncryptedEntries );

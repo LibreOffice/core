@@ -315,9 +315,9 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
          &&
          ( rType != cppu::UnoType<sal_Int16>::get() )
          &&
-         ( rType != getCppuBooleanType() )
+         ( rType != cppu::UnoType<bool>::get() )
          &&
-         ( rType != getCppuCharType() )
+         ( rType != cppu::UnoType<cppu::UnoCharType>::get() )
          &&
          ( rType != cppu::UnoType<sal_Int8>::get() )
          &&
@@ -452,7 +452,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString::number( nValue );
         aStringType = aTypeShort;
     }
-    else if ( rType == getCppuBooleanType() )
+    else if ( rType == cppu::UnoType<bool>::get() )
     {
         // boolean
         bool bValue = false;
@@ -460,7 +460,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString::boolean( bValue );
         aStringType = aTypeBoolean;
     }
-    else if ( rType == getCppuCharType() )
+    else if ( rType == cppu::UnoType<cppu::UnoCharType>::get() )
     {
         // char
         sal_Unicode cValue = 0;

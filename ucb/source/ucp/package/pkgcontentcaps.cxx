@@ -112,14 +112,14 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::Property(
                     OUString( "IsDocument" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
                     OUString( "IsFolder" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -143,8 +143,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                     OUString(
                         "CreatableContentsInfo" ),
                     -1,
-                    getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -154,7 +153,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::Property(
                     OUString( "HasEncryptedEntries" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 )
@@ -184,14 +183,14 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::Property(
                     OUString( "IsDocument" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
                     OUString( "IsFolder" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -214,8 +213,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                     OUString(
                         "CreatableContentsInfo" ),
                     -1,
-                    getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 )
@@ -249,14 +247,14 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 OUString( "IsDocument" ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
                 OUString( "IsFolder" ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -286,8 +284,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                 OUString(
                     "CreatableContentsInfo" ),
                 -1,
-                getCppuType( static_cast<
-                    const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY
             ),
@@ -297,13 +294,13 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 OUString( "Compressed" ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
             ),
             beans::Property(
                 OUString( "Encrypted" ),
                 -1,
-                getCppuBooleanType(),
+                cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
             )
         };
@@ -336,26 +333,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
                     -1,
-                    getCppuType(
-                        static_cast<
-                            uno::Sequence< beans::Property > * >( 0 ) )
+                    cppu::UnoType<uno::Sequence< beans::Property >>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "setPropertyValues" ),
                     -1,
-                    getCppuType(
-                        static_cast<
-                            uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                    cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
                 ),
 
                 // Optional standard commands
@@ -381,7 +374,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "flush" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 )
             };
 
@@ -403,26 +396,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
                     -1,
-                    getCppuType(
-                        static_cast<
-                            uno::Sequence< beans::Property > * >( 0 ) )
+                    cppu::UnoType<uno::Sequence< beans::Property >>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "setPropertyValues" ),
                     -1,
-                    getCppuType(
-                        static_cast<
-                            uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                    cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
                 ),
 
                 // Optional standard commands
@@ -430,12 +419,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "delete" ),
                     -1,
-                    getCppuBooleanType()
+                    cppu::UnoType<bool>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "insert" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "open" ),
@@ -458,7 +447,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "flush" ),
                     -1,
-                    getCppuVoidType()
+                    cppu::UnoType<cppu::UnoVoidType>::get()
                 )
             };
 
@@ -481,25 +470,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
-                getCppuVoidType()
+                cppu::UnoType<cppu::UnoVoidType>::get()
             ),
             ucb::CommandInfo(
                 OUString( "getPropertySetInfo" ),
                 -1,
-                getCppuVoidType()
+                cppu::UnoType<cppu::UnoVoidType>::get()
             ),
             ucb::CommandInfo(
                 OUString( "getPropertyValues" ),
                 -1,
-                getCppuType(
-                    static_cast< uno::Sequence< beans::Property > * >( 0 ) )
+                cppu::UnoType<uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
                 OUString( "setPropertyValues" ),
                 -1,
-                getCppuType(
-                    static_cast<
-                        uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
             ),
 
             // Optional standard commands
@@ -507,12 +493,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "delete" ),
                 -1,
-                getCppuBooleanType()
+                cppu::UnoType<bool>::get()
             ),
             ucb::CommandInfo(
                 OUString( "insert" ),
                 -1,
-                getCppuVoidType()
+                cppu::UnoType<cppu::UnoVoidType>::get()
             ),
             ucb::CommandInfo(
                 OUString( "open" ),

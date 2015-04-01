@@ -90,7 +90,7 @@ static const com::sun::star::uno::Type& enum_getCppuType()
 
 static const com::sun::star::uno::Type& sal_Bool_getCppuType()
 {
-    return getCppuBooleanType();
+    return cppu::UnoType<bool>::get();
 }
 
 static const com::sun::star::uno::Type& byte_getCppuType()
@@ -100,42 +100,42 @@ static const com::sun::star::uno::Type& byte_getCppuType()
 
 static const com::sun::star::uno::Type& Sequence_CrossReference_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::CrossReference > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence<
+                        com::sun::star::ucb::CrossReference >>::get();
 }
 
 static const com::sun::star::uno::Type& DateTime_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::util::DateTime * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::util::DateTime>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_byte_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence< sal_Int8 > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence< sal_Int8 >>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_DocumentHeaderField_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::DocumentHeaderField > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence<
+                        com::sun::star::ucb::DocumentHeaderField >>::get();
 }
 
 static const com::sun::star::uno::Type& XDataContainer_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Reference<
-            com::sun::star::ucb::XDataContainer > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Reference<
+            com::sun::star::ucb::XDataContainer >>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_RecipientInfo_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::RecipientInfo > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence<
+                        com::sun::star::ucb::RecipientInfo >>::get();
 }
 
 static const com::sun::star::uno::Type& RuleSet_getCppuType()
@@ -145,16 +145,16 @@ static const com::sun::star::uno::Type& RuleSet_getCppuType()
 
 static const com::sun::star::uno::Type& Sequence_SendInfo_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::SendInfo > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence<
+                        com::sun::star::ucb::SendInfo >>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_SendMediaTypes_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::SendMediaTypes > * >( 0 ) );
+    return cppu::UnoType<
+        com::sun::star::uno::Sequence<
+                        com::sun::star::ucb::SendMediaTypes >>::get();
 }
 
 

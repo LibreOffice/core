@@ -342,7 +342,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              CreatableContentsInfo,
                                              -1 ,
-                                             getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                                             cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -352,19 +352,19 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     // Commands
     m_sCommandInfo[0].Name = "getCommandInfo";
     m_sCommandInfo[0].Handle = -1;
-    m_sCommandInfo[0].ArgType = getCppuVoidType();
+    m_sCommandInfo[0].ArgType = cppu::UnoType<cppu::UnoVoidType>::get();
 
     m_sCommandInfo[1].Name = "getPropertySetInfo";
     m_sCommandInfo[1].Handle = -1;
-    m_sCommandInfo[1].ArgType = getCppuVoidType();
+    m_sCommandInfo[1].ArgType = cppu::UnoType<cppu::UnoVoidType>::get();
 
     m_sCommandInfo[2].Name = "getPropertyValues";
     m_sCommandInfo[2].Handle = -1;
-    m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
+    m_sCommandInfo[2].ArgType = cppu::UnoType<uno::Sequence< beans::Property >>::get();
 
     m_sCommandInfo[3].Name = "setPropertyValues";
     m_sCommandInfo[3].Handle = -1;
-    m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
+    m_sCommandInfo[3].ArgType = cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
 
     m_sCommandInfo[4].Name = "open";
     m_sCommandInfo[4].Handle = -1;

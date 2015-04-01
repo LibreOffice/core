@@ -143,10 +143,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionPassword > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionPassword>::get() );
             pCollection = &collection;
         }
     }

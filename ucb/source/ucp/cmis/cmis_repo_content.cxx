@@ -243,16 +243,16 @@ namespace cmis
         static const beans::Property aGenericProperties[] =
         {
             beans::Property( OUString( "IsDocument" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "IsFolder" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "Title" ),
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsReadOnly" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
 
@@ -268,16 +268,16 @@ namespace cmis
             // Required commands
             ucb::CommandInfo
             ( OUString( "getCommandInfo" ),
-              -1, getCppuVoidType() ),
+              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertySetInfo" ),
-              -1, getCppuVoidType() ),
+              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertyValues" ),
-              -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
+              -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
             ( OUString( "setPropertyValues" ),
-              -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
+              -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo

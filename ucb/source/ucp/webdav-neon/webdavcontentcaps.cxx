@@ -89,7 +89,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "IsDocument" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -97,7 +97,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "IsFolder" ),
                     -1,
-                    getCppuBooleanType(),
+                    cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -155,8 +155,8 @@ bool ContentProvider::getProperty(
                     OUString(
                         "CreatableContentsInfo" ),
                     -1,
-                    getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    cppu::UnoType<
+                        uno::Sequence< ucb::ContentInfo >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -221,8 +221,8 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::LOCKDISCOVERY,
                     -1,
-                    getCppuType( static_cast<
-                                    const uno::Sequence< ucb::Lock > * >( 0 ) ),
+                    cppu::UnoType<
+                                    uno::Sequence< ucb::Lock >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -238,17 +238,14 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::SOURCE,
                     -1,
-                    getCppuType( static_cast<
-                                    const uno::Sequence< ucb::Link > * >( 0 ) ),
+                    cppu::UnoType<uno::Sequence< ucb::Link >>::get(),
                     beans::PropertyAttribute::BOUND ) );
 
             m_pProps->insert(
                 beans::Property(
                     DAVProperties::SUPPORTEDLOCK,
                     -1,
-                    getCppuType( static_cast<
-                                    const uno::Sequence<
-                                        ucb::LockEntry > * >( 0 ) ),
+                    cppu::UnoType<uno::Sequence< ucb::LockEntry >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -527,24 +524,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
-                getCppuVoidType() );
+                cppu::UnoType<cppu::UnoVoidType>::get() );
     aCmdInfo[ 1 ] =
             ucb::CommandInfo(
                 OUString( "getPropertySetInfo" ),
                 -1,
-                getCppuVoidType() );
+                cppu::UnoType<cppu::UnoVoidType>::get() );
     aCmdInfo[ 2 ] =
             ucb::CommandInfo(
                 OUString( "getPropertyValues" ),
                 -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::Property > * >( 0 ) ) );
+                cppu::UnoType<uno::Sequence< beans::Property >>::get() );
     aCmdInfo[ 3 ] =
             ucb::CommandInfo(
                 OUString( "setPropertyValues" ),
                 -1,
-                getCppuType( static_cast<
-                    uno::Sequence< beans::PropertyValue > * >( 0 ) ) );
+                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() );
 
 
     // Optional standard commands
@@ -554,7 +549,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "delete" ),
                 -1,
-                getCppuBooleanType() );
+                cppu::UnoType<bool>::get() );
     aCmdInfo[ 5 ] =
             ucb::CommandInfo(
                 OUString( "insert" ),
@@ -637,13 +632,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "lock" ),
                 -1,
-                getCppuVoidType() );
+                cppu::UnoType<cppu::UnoVoidType>::get() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 OUString( "unlock" ),
                 -1,
-                getCppuVoidType() );
+                cppu::UnoType<cppu::UnoVoidType>::get() );
         nPos++;
     }
     return aCmdInfo;

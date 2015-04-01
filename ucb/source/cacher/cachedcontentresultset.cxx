@@ -95,8 +95,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
             {
                 Any aConvAny = xConverter->convertTo(
                     rValue,
-                    getCppuType( static_cast<
-                                 const T * >( 0 ) ) );
+                    cppu::UnoType<T>::get() );
                 m_bLastCachedReadWasNull = !( aConvAny >>= aRet );
             }
             catch (const IllegalArgumentException&)

@@ -1057,14 +1057,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendBoolean(
             beans::Property( OUString("IsDocument"),
                       -1,
-                      getCppuBooleanType(),
+                      cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsDocument() );
         xRow->appendBoolean(
             beans::Property( OUString("IsFolder"),
                       -1,
-                      getCppuBooleanType(),
+                      cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsFolder() );
@@ -1072,7 +1072,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("CreatableContentsInfo"),
                 -1,
-                getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             uno::makeAny( rData.getCreatableContentsInfo() ) );

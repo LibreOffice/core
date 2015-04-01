@@ -1508,10 +1508,10 @@ namespace cmis
         static const beans::Property aGenericProperties[] =
         {
             beans::Property( OUString( "IsDocument" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "IsFolder" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "Title" ),
                 -1, cppu::UnoType<OUString>::get(),
@@ -1523,7 +1523,7 @@ namespace cmis
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsReadOnly" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "DateCreated" ),
                 -1, cppu::UnoType<util::DateTime>::get(),
@@ -1535,25 +1535,25 @@ namespace cmis
                 -1, cppu::UnoType<sal_Int64>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "CreatableContentsInfo" ),
-                -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "MediaType" ),
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "CmisProperties" ),
-                -1, getCppuType( static_cast< const uno::Sequence< document::CmisProperty> * >( 0 ) ),
+                -1, cppu::UnoType<uno::Sequence< document::CmisProperty>>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsVersionable" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "CanCheckOut" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "CanCancelCheckOut" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "CanCheckIn" ),
-                -1, getCppuBooleanType(),
+                -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
 
@@ -1569,21 +1569,21 @@ namespace cmis
             // Required commands
             ucb::CommandInfo
             ( OUString( "getCommandInfo" ),
-              -1, getCppuVoidType() ),
+              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertySetInfo" ),
-              -1, getCppuVoidType() ),
+              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertyValues" ),
-              -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
+              -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
             ( OUString( "setPropertyValues" ),
-              -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
+              -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
             ( OUString( "delete" ),
-              -1, getCppuBooleanType() ),
+              -1, cppu::UnoType<bool>::get() ),
             ucb::CommandInfo
             ( OUString( "insert" ),
               -1, cppu::UnoType<ucb::InsertCommandArgument2>::get() ),
@@ -1592,14 +1592,14 @@ namespace cmis
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
             // Mandatory CMIS-only commands
-            ucb::CommandInfo ( OUString( "checkout" ), -1, getCppuVoidType() ),
-            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( OUString( "checkout" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo ( OUString( "checkIn" ), -1,
                     cppu::UnoType<ucb::TransferInfo>::get() ),
-            ucb::CommandInfo ( OUString( "updateProperties" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( OUString( "updateProperties" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
             ucb::CommandInfo
             ( OUString( "getAllVersions" ),
-              -1, getCppuType( static_cast<uno::Sequence< document::CmisVersion > * >( 0 ) ) ),
+              -1, cppu::UnoType<uno::Sequence< document::CmisVersion >>::get() ),
 
 
             // Folder Only, omitted if not a folder

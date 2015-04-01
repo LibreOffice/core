@@ -1957,7 +1957,7 @@ SRSPropertySetInfo::SRSPropertySetInfo()
 
     maProps[1].Name = "IsRowCountFinal";
     maProps[1].Handle = -1;
-    maProps[1].Type = ::getBooleanCppuType();
+    maProps[1].Type = cppu::UnoType<bool>::get();
     maProps[1].Attributes = -1;
 }
 

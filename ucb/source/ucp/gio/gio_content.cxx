@@ -1256,16 +1256,16 @@ uno::Sequence< beans::Property > Content::getProperties(
     static const beans::Property aGenericProperties[] =
     {
         beans::Property( OUString(  "IsDocument"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "IsFolder"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "Title"  ),
             -1, cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND ),
         beans::Property( OUString(  "IsReadOnly"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "DateCreated"  ),
             -1, cppu::UnoType<util::DateTime>::get(),
@@ -1277,19 +1277,19 @@ uno::Sequence< beans::Property > Content::getProperties(
             -1, cppu::UnoType<sal_Int64>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "IsVolume"  ),
-            -1, getCppuBooleanType(),
+            1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "IsCompactDisc"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "IsRemoveable"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "IsHidden"  ),
-            -1, getCppuBooleanType(),
+            -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( OUString(  "CreatableContentsInfo"  ),
-            -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+            -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
@@ -1304,21 +1304,21 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
         // Required commands
         ucb::CommandInfo
         ( OUString(  "getCommandInfo"  ),
-          -1, getCppuVoidType() ),
+          -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
         ucb::CommandInfo
         ( OUString(  "getPropertySetInfo"  ),
-          -1, getCppuVoidType() ),
+          -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
         ucb::CommandInfo
         ( OUString(  "getPropertyValues"  ),
-          -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
+          -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
         ucb::CommandInfo
         ( OUString(  "setPropertyValues"  ),
-          -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
+          -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
         // Optional standard commands
         ucb::CommandInfo
         ( OUString(  "delete"  ),
-          -1, getCppuBooleanType() ),
+          -1, cppu::UnoType<bool>::get() ),
         ucb::CommandInfo
         ( OUString(  "insert"  ),
           -1, cppu::UnoType<ucb::InsertCommandArgument>::get() ),
