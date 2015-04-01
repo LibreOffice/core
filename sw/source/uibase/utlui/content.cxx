@@ -2220,15 +2220,12 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     }
     else if(bIsConstant)
     {
-        if(!lcl_FindShell(pActiveShell))
-        {
-            if (pActiveShell)
-                EndListening(*pActiveShell->GetView().GetDocShell());
-            pActiveShell = pSh;
-            bIsActive = true;
-            bIsConstant = false;
-            bClear = true;
-        }
+        if (pActiveShell)
+            EndListening(*pActiveShell->GetView().GetDocShell());
+        pActiveShell = pSh;
+        bIsActive = true;
+        bIsConstant = false;
+        bClear = true;
     }
     // Only if it is the active view, the array will be deleted and
     // the screen filled new.
