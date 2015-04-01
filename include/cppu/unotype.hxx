@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#if __cplusplus >= 201103L
+#if defined LIBO_INTERNAL_ONLY
 #include <type_traits>
 #endif
 
@@ -269,7 +269,7 @@ template< typename T > class UnoType {
 public:
     static inline ::com::sun::star::uno::Type const & get() {
         using namespace ::cppu::detail;
-#if __cplusplus >= 201103L
+#if defined LIBO_INTERNAL_ONLY
         typedef typename std::remove_reference<T>::type T1;
             // for certain uses of UnoType<decltype(x)>
 #else
