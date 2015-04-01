@@ -169,7 +169,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
         {
             Any aVal;
             sal_Bool bVal = !m_pCharKerningRB->IsChecked();
-            aVal.setValue(&bVal, ::getBooleanCppuType());
+            aVal.setValue(&bVal, cppu::UnoType<bool>::get());
             pImpl->xPrSet->setPropertyValue(sPunct, aVal);
         }
     }

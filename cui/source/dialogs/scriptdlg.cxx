@@ -1365,7 +1365,7 @@ OUString GetErrorMessage(
 
 OUString GetErrorMessage( const RuntimeException& re )
 {
-    Type t = ::getCppuType( &re );
+    Type t = cppu::UnoType<decltype(re)>::get();
     OUString message = t.getTypeName();
     message += re.Message;
 
@@ -1374,7 +1374,7 @@ OUString GetErrorMessage( const RuntimeException& re )
 
 OUString GetErrorMessage( const Exception& e )
 {
-    Type t = ::getCppuType( &e );
+    Type t = cppu::UnoType<decltype(e)>::get();
     OUString message = t.getTypeName();
     message += e.Message;
 

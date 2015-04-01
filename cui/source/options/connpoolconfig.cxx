@@ -158,7 +158,7 @@ namespace offapp
         if (pEnabled)
         {
             sal_Bool bEnabled = pEnabled->GetValue();
-            aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(&bEnabled, ::getBooleanCppuType()));
+            aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(&bEnabled, cppu::UnoType<bool>::get()));
             bNeedCommit = true;
         }
 
@@ -190,7 +190,7 @@ namespace offapp
 
                 // set the values
                 aThisDriverSettings.setNodeValue(getDriverNameNodeName(), makeAny(sThisDriverName));
-                aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(&aLoop->bEnabled, ::getBooleanCppuType()));
+                aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(&aLoop->bEnabled, cppu::UnoType<bool>::get()));
                 aThisDriverSettings.setNodeValue(getTimeoutNodeName(), makeAny(aLoop->nTimeoutSeconds));
             }
             bNeedCommit = true;
