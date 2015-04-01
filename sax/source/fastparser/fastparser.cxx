@@ -567,7 +567,7 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
                             xDocumentLocator->getSystemId(),
                             xDocumentLocator->getLineNumber() ),
         Reference< XInterface >(),
-        Any( &maSavedException, getCppuType( &maSavedException ) ),
+        Any( &maSavedException, cppu::UnoType<decltype(maSavedException)>::get() ),
         xDocumentLocator->getPublicId(),
         xDocumentLocator->getSystemId(),
         xDocumentLocator->getLineNumber(),

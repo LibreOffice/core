@@ -739,7 +739,7 @@ void SaxExpatParser_Impl::parse( )
             SAXParseException aExcept(
                 getErrorMessage(xmlE , sSystemId, nLine) ,
                 css::uno::Reference< css::uno::XInterface >(),
-                css::uno::Any( &exception , getCppuType( &exception) ),
+                css::uno::Any( &exception , cppu::UnoType<decltype(exception)>::get() ),
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),
                 rDocumentLocator->getLineNumber(),

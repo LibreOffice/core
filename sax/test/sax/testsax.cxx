@@ -630,7 +630,7 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
 
             while(true) {
                 SAXParseException *pEx;
-                if( any.getValueType() == getCppuType( &e ) ) {
+                if( any.getValueType() == cppu::UnoType<decltype(e)>::get() ) {
                     pEx = ( SAXParseException * ) any.getValue();
                     OString o1 = OUStringToOString(pEx->Message, RTL_TEXTENCODING_UTF8 );
                     printf( "%s\n" , o1.getStr()  );
@@ -695,7 +695,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
             Any any;
             any <<= e;
             while(true) {
-                if( any.getValueType() == getCppuType( &e ) ) {
+                if( any.getValueType() == cppu::UnoType<decltype(e)>::get() ) {
                     SAXParseException ex;
                     any >>= ex;
                     OString o = OUStringToOString( ex.Message , RTL_TEXTENCODING_ASCII_US );
