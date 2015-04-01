@@ -12,12 +12,18 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <sdpage.hxx>
 #include <unomodel.hxx>
 
 using namespace css;
@@ -31,10 +37,12 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     void testRegisterCallback();
+    void testPostMouseEvent();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testRegisterCallback);
+    CPPUNIT_TEST(testPostMouseEvent);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -116,6 +124,33 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+}
+
+void SdTiledRenderingTest::testPostMouseEvent()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject->GetObjIdentifier());
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    // Did we manage to go after the first character?
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rEditView.GetSelection().nStartPos);
+
+    vcl::Cursor* pCursor = rEditView.GetCursor();
+    Point aPosition = pCursor->GetPos();
+    aPosition.setX(aPosition.getX() - 1000);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()), 1);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()), 1);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    // The new cursor position must be before the first word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
