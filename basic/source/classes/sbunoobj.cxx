@@ -375,7 +375,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 template< class EXCEPTION >
 OUString implGetExceptionMsg( const EXCEPTION& e )
 {
-    return implGetExceptionMsg( e, ::getCppuType( &e ).getTypeName() );
+    return implGetExceptionMsg( e, cppu::UnoType<decltype(e)>::get().getTypeName() );
 }
 
 void implHandleBasicErrorException( BasicErrorException& e )
@@ -831,7 +831,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 // Deliver the reflection for Sbx types
 Type getUnoTypeForSbxBaseType( SbxDataType eType )
 {
-    Type aRetType = getCppuVoidType();
+    Type aRetType = cppu::UnoType<UnoVoidType>::get();
     switch( eType )
     {
         case SbxNULL:       aRetType = cppu::UnoType<XInterface>::get(); break;
@@ -867,7 +867,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
 // Converting of Sbx to Uno without a know target class for TypeClass_ANY
 Type getUnoTypeForSbxValue( const SbxValue* pVal )
 {
-    Type aRetType = getCppuVoidType();
+    Type aRetType = cppu::UnoType<cppu::UnoVoidType>::get();
     if( !pVal )
         return aRetType;
 
@@ -1433,13 +1433,13 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         case TypeClass_BOOLEAN:
         {
             sal_Bool b = pVar->GetBool();
-            aRetVal.setValue( &b, getBooleanCppuType() );
+            aRetVal.setValue( &b, cppu::UnoType<bool>::get() );
             break;
         }
         case TypeClass_CHAR:
         {
             sal_Unicode c = pVar->GetChar();
-            aRetVal.setValue( &c , getCharCppuType() );
+            aRetVal.setValue( &c , cppu::UnoType<cppu::UnoCharType>::get() );
             break;
         }
         case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;
@@ -3057,7 +3057,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     // get the name of the class of the struct
     OUString aServiceName = rPar.Get(1)->GetOUString();
     Any aArgAsAny = sbxToUnoValue( rPar.Get(2),
-                getCppuType( (Sequence<Any>*)0 ) );
+                cppu::UnoType<Sequence<Any>>::get() );
     Sequence< Any > aArgs;
     aArgAsAny >>= aArgs;
 

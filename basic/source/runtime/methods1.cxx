@@ -2887,7 +2887,7 @@ RTLFUNC(NPV)
     Sequence< Any > aParams( 2 );
     aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
     Any aValues = sbxToUnoValue( rPar.Get(2),
-                getCppuType( (Sequence<double>*)0 ) );
+                cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);
@@ -2961,7 +2961,7 @@ RTLFUNC(MIRR)
 
     Sequence< Any > aParams( 3 );
     Any aValues = sbxToUnoValue( rPar.Get(1),
-                getCppuType( (Sequence<double>*)0 ) );
+                cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);
@@ -2989,7 +2989,7 @@ RTLFUNC(IRR)
     }
     // retrieve non-optional params
     Any aValues = sbxToUnoValue( rPar.Get(1),
-                getCppuType( (Sequence<double>*)0 ) );
+                cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);

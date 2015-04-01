@@ -231,7 +231,7 @@ SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
         const PropertyValue &rPropVal = rPropVals[n];
         rProp.Name = rPropVal.Name;
         rProp.Handle = rPropVal.Handle;
-        rProp.Type = getCppuVoidType();
+        rProp.Type = cppu::UnoType<cppu::UnoVoidType>::get();
         rProp.Attributes = 0;
     }
 }
@@ -286,7 +286,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
     {
         // Set PropertyValues
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
-                getCppuType( (Sequence<PropertyValue>*)0 ) );
+                cppu::UnoType<Sequence<PropertyValue>>::get() );
         Sequence<PropertyValue> const *pArg =
                 static_cast<Sequence<PropertyValue> const *>(aArgAsAny.getValue());
         Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
