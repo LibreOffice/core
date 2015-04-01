@@ -101,16 +101,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     if (rPropertyName == "FieldPositions")
     {
-        uno::Sequence<sal_Int32> ret(maConversionMap.getFieldPositions().size());
-        std::copy(maConversionMap.getFieldPositions().begin(),
-                maConversionMap.getFieldPositions().end(), ret.begin());
+        uno::Sequence<sal_Int32> ret(GetConversionMap().getFieldPositions().size());
+        std::copy(GetConversionMap().getFieldPositions().begin(),
+                GetConversionMap().getFieldPositions().end(), ret.begin());
         return uno::makeAny(ret);
     }
     else if (rPropertyName == "FootnotePositions")
     {
-        uno::Sequence<sal_Int32> ret(maConversionMap.getFootnotePositions().size());
-        std::copy(maConversionMap.getFootnotePositions().begin(),
-                maConversionMap.getFootnotePositions().end(), ret.begin());
+        uno::Sequence<sal_Int32> ret(GetConversionMap().getFootnotePositions().size());
+        std::copy(GetConversionMap().getFootnotePositions().begin(),
+                GetConversionMap().getFootnotePositions().end(), ret.begin());
         return uno::makeAny(ret);
     }
     return uno::Any();
@@ -190,17 +190,17 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
 {
     SolarMutexGuard aGuard;
 
-    if ( mpTxtNode )
+    if (GetTxtNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            mpTxtNode->SetWrongDirty( !bVal );
+            GetTxtNode()->SetWrongDirty( !bVal );
         else if ( text::TextMarkupType::SMARTTAG == nType )
-            mpTxtNode->SetSmartTagDirty( !bVal );
+            GetTxtNode()->SetSmartTagDirty( !bVal );
         else if( text::TextMarkupType::PROOFREADING == nType )
         {
-            mpTxtNode->SetGrammarCheckDirty( !bVal );
+            GetTxtNode()->SetGrammarCheckDirty( !bVal );
             if( bVal )
-                ::finishGrammarCheck( *mpTxtNode );
+                ::finishGrammarCheck( *GetTxtNode() );
         }
     }
 }
@@ -209,14 +209,14 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
 sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if ( mpTxtNode )
+    if (GetTxtNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            return mpTxtNode->IsWrongDirty();
+            return GetTxtNode()->IsWrongDirty();
         else if ( text::TextMarkupType::PROOFREADING == nType )
-            return mpTxtNode->IsGrammarCheckDirty();
+            return GetTxtNode()->IsGrammarCheckDirty();
         else if ( text::TextMarkupType::SMARTTAG == nType )
-            return mpTxtNode->IsSmartTagDirty();
+            return GetTxtNode()->IsSmartTagDirty();
     }
 
     return sal_False;
@@ -226,7 +226,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::R
 sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return 0 == mpTxtNode;
+    return 0 == GetTxtNode();
 }
 
 // text::XFlatParagraph:
@@ -234,10 +234,10 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
     throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!mpTxtNode)
+    if (!GetTxtNode())
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang(nPos, nLen) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTxtNode()->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
@@ -247,10 +247,10 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 {
     SolarMutexGuard aGuard;
 
-    if (!mpTxtNode)
+    if (!GetTxtNode())
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang(nPos, nLen) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTxtNode()->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
@@ -259,18 +259,18 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 {
     SolarMutexGuard aGuard;
 
-    if ( !mpTxtNode )
+    if (!GetTxtNode())
         return;
 
-    SwTxtNode* pOldTxtNode = mpTxtNode;
+    SwTxtNode *const pOldTxtNode = GetTxtNode();
 
-    SwPaM aPaM( *mpTxtNode, nPos, *mpTxtNode, nPos+nLen );
+    SwPaM aPaM( *GetTxtNode(), nPos, *GetTxtNode(), nPos+nLen );
 
-    UnoActionContext aAction( mpTxtNode->GetDoc() );
+    UnoActionContext aAction( GetTxtNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            *GetTxtNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -281,7 +281,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     IDocumentContentOperations* pIDCO = pOldTxtNode->getIDocumentContentOperations();
     pIDCO->ReplaceRange( aPaM, aNewText, false );
 
-    mpTxtNode = 0;
+    ClearTxtNode(); // TODO: is this really needed?
 }
 
 // text::XFlatParagraph:
@@ -289,16 +289,16 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 {
     SolarMutexGuard aGuard;
 
-    if ( !mpTxtNode )
+    if (!GetTxtNode())
         return;
 
-    SwPaM aPaM( *mpTxtNode, nPos, *mpTxtNode, nPos+nLen );
+    SwPaM aPaM( *GetTxtNode(), nPos, *GetTxtNode(), nPos+nLen );
 
-    UnoActionContext aAction( mpTxtNode->GetDoc() );
+    UnoActionContext aAction( GetTxtNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            *GetTxtNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -306,7 +306,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    mpTxtNode = 0;
+    ClearTxtNode(); // TODO: is this really needed?
 }
 
 // text::XFlatParagraph:
@@ -495,7 +495,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if ( !pFlatParagraph )
         return xRet;
 
-    const SwTxtNode* pCurrentNode = pFlatParagraph->getTxtNode();
+    SwTxtNode const*const pCurrentNode = pFlatParagraph->GetTxtNode();
 
     if ( !pCurrentNode )
         return xRet;
@@ -541,7 +541,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if ( !pFlatParagraph )
         return xRet;
 
-    const SwTxtNode* pCurrentNode = pFlatParagraph->getTxtNode();
+    SwTxtNode const*const pCurrentNode = pFlatParagraph->GetTxtNode();
 
     if ( !pCurrentNode )
         return xRet;

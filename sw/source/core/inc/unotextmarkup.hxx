@@ -22,10 +22,11 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+
 #include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/text/XMultiTextMarkup.hpp>
-#include <calbck.hxx>
-#include <modeltoviewhelper.hxx>
+
+#include <unobaseclass.hxx>
 
 #include <map>
 
@@ -38,17 +39,16 @@ namespace com { namespace sun { namespace star { namespace text {
 } } } }
 
 class SwTxtNode;
+class ModelToViewHelper;
 class SfxPoolItem;
 
 /** Implementation of the css::text::XTextMarkup interface
  */
-class SwXTextMarkup:
-    public ::cppu::WeakImplHelper2
-    <
-        ::com::sun::star::text::XTextMarkup,
-        ::com::sun::star::text::XMultiTextMarkup
-    >,
-    public SwClient
+class SwXTextMarkup
+    : public ::cppu::WeakImplHelper2
+        <   ::com::sun::star::text::XTextMarkup
+        ,   ::com::sun::star::text::XMultiTextMarkup
+        >
 {
 public:
     SwXTextMarkup(SwTxtNode *const rTxtNode,
@@ -71,12 +71,13 @@ private:
     SwXTextMarkup( const SwXTextMarkup & ) SAL_DELETED_FUNCTION;
     SwXTextMarkup & operator =( const SwXTextMarkup & ) SAL_DELETED_FUNCTION;
 
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    struct Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwTxtNode* mpTxtNode;
-    const ModelToViewHelper maConversionMap;
+protected:
+    SwTxtNode* GetTxtNode();
+    void ClearTxtNode();
+    const ModelToViewHelper& GetConversionMap();
 };
 
 /** Implementation of the ::com::sun::star::container::XStringKeyMap interface

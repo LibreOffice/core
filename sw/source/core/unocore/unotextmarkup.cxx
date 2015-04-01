@@ -40,16 +40,46 @@
 
 using namespace ::com::sun::star;
 
+struct SwXTextMarkup::Impl
+    : public SwClient
+{
+    SwTxtNode* m_pTxtNode;
+    ModelToViewHelper const m_ConversionMap;
+
+    Impl(SwTxtNode *const pTxtNode, const ModelToViewHelper& rMap)
+        : SwClient(pTxtNode)
+        , m_pTxtNode(pTxtNode)
+        , m_ConversionMap(rMap)
+    {
+    }
+
+    // SwClient
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+};
+
 SwXTextMarkup::SwXTextMarkup(
         SwTxtNode *const pTxtNode, const ModelToViewHelper& rMap)
-    : mpTxtNode(pTxtNode)
-    , maConversionMap(rMap)
+    : m_pImpl(new Impl(pTxtNode, rMap))
 {
-    mpTxtNode->Add(this);
 }
 
 SwXTextMarkup::~SwXTextMarkup()
 {
+}
+
+SwTxtNode* SwXTextMarkup::GetTxtNode()
+{
+    return m_pImpl->m_pTxtNode;
+}
+
+void SwXTextMarkup::ClearTxtNode()
+{
+    m_pImpl->m_pTxtNode = nullptr;
+}
+
+const ModelToViewHelper& SwXTextMarkup::GetConversionMap()
+{
+    return m_pImpl->m_ConversionMap;
 }
 
 uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfoContainer() throw (uno::RuntimeException, std::exception)
@@ -115,7 +145,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
-    if ( !mpTxtNode || nLength <= 0 )
+    if (!m_pImpl->m_pTxtNode || nLength <= 0)
         return;
 
     if ( nType == text::TextMarkupType::SMARTTAG &&
@@ -127,41 +157,41 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     bool bRepaint = false;
     if ( nType == text::TextMarkupType::SPELLCHECK )
     {
-        pWList = mpTxtNode->GetWrong();
+        pWList = m_pImpl->m_pTxtNode->GetWrong();
         if ( !pWList )
         {
             pWList = new SwWrongList( WRONGLIST_SPELL );
-            mpTxtNode->SetWrong( pWList );
+            m_pImpl->m_pTxtNode->SetWrong( pWList );
         }
     }
     else if ( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE )
     {
-        IGrammarContact *pGrammarContact = getGrammarContact( *mpTxtNode );
+        IGrammarContact *pGrammarContact = getGrammarContact(*m_pImpl->m_pTxtNode);
         if( pGrammarContact )
         {
-            pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
+            pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTxtNode, true);
             OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
         }
         else
         {
-            pWList = mpTxtNode->GetGrammarCheck();
+            pWList = m_pImpl->m_pTxtNode->GetGrammarCheck();
             if ( !pWList )
             {
-                mpTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
-                pWList = mpTxtNode->GetGrammarCheck();
+                m_pImpl->m_pTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
+                pWList = m_pImpl->m_pTxtNode->GetGrammarCheck();
             }
         }
-        bRepaint = pWList == mpTxtNode->GetGrammarCheck();
+        bRepaint = pWList == m_pImpl->m_pTxtNode->GetGrammarCheck();
         if( pWList->GetBeginInv() < COMPLETE_STRING )
             static_cast<SwGrammarMarkUp*>(pWList)->ClearGrammarList();
     }
     else if ( nType == text::TextMarkupType::SMARTTAG )
     {
-        pWList = mpTxtNode->GetSmartTags();
+        pWList = m_pImpl->m_pTxtNode->GetSmartTags();
         if ( !pWList )
         {
             pWList = new SwWrongList( WRONGLIST_SMARTTAG );
-            mpTxtNode->SetSmartTags( pWList );
+            m_pImpl->m_pTxtNode->SetSmartTags( pWList );
         }
     }
     else
@@ -171,9 +201,9 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     }
 
     const ModelToViewHelper::ModelPosition aStartPos =
-            maConversionMap.ConvertToModelPosition( nStart );
+        m_pImpl->m_ConversionMap.ConvertToModelPosition( nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
-            maConversionMap.ConvertToModelPosition( nStart + nLength - 1);
+        m_pImpl->m_ConversionMap.ConvertToModelPosition( nStart + nLength - 1);
 
     const bool bStartInField = aStartPos.mbIsField;
     const bool bEndInField   = aEndPos.mbIsField;
@@ -219,8 +249,10 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_Int32 nTmpStart = maConversionMap.ConvertToViewPosition( aStartPos.mnPos );
-            const sal_Int32 nTmpLen = maConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
+            const sal_Int32 nTmpStart =
+                m_pImpl->m_ConversionMap.ConvertToViewPosition(aStartPos.mnPos);
+            const sal_Int32 nTmpLen =
+                m_pImpl->m_ConversionMap.ConvertToViewPosition(aStartPos.mnPos + 1)
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
             {
@@ -258,7 +290,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     }
 
     if( bRepaint )
-        finishGrammarCheck( *mpTxtNode );
+        finishGrammarCheck(*m_pImpl->m_pTxtNode);
 }
 
 static void lcl_commitGrammarMarkUp(
@@ -361,7 +393,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
-    if ( !mpTxtNode )
+    if (!m_pImpl->m_pTxtNode)
         return;
 
     // check for equal length of all sequnces
@@ -395,29 +427,29 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     // get appropriate list to use...
     SwGrammarMarkUp* pWList = 0;
     bool bRepaint = false;
-    IGrammarContact *pGrammarContact = getGrammarContact( *mpTxtNode );
+    IGrammarContact *pGrammarContact = getGrammarContact(*m_pImpl->m_pTxtNode);
     if( pGrammarContact )
     {
-        pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
+        pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTxtNode, true);
         OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
     }
     else
     {
-        pWList = mpTxtNode->GetGrammarCheck();
+        pWList = m_pImpl->m_pTxtNode->GetGrammarCheck();
         if ( !pWList )
         {
-            mpTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
-            pWList = mpTxtNode->GetGrammarCheck();
+            m_pImpl->m_pTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
+            pWList = m_pImpl->m_pTxtNode->GetGrammarCheck();
             pWList->SetInvalid( 0, COMPLETE_STRING );
         }
     }
-    bRepaint = pWList == mpTxtNode->GetGrammarCheck();
+    bRepaint = pWList == m_pImpl->m_pTxtNode->GetGrammarCheck();
 
     bool bAcceptGrammarError = false;
     if( pWList->GetBeginInv() < COMPLETE_STRING )
     {
         const ModelToViewHelper::ModelPosition aSentenceEnd =
-            maConversionMap.ConvertToModelPosition(
+            m_pImpl->m_ConversionMap.ConvertToModelPosition(
                 pMarkups[nSentenceMarkUpIndex].nOffset + pMarkups[nSentenceMarkUpIndex].nLength );
         bAcceptGrammarError = aSentenceEnd.mnPos > pWList->GetBeginInv();
         pWList->ClearGrammarList( aSentenceEnd.mnPos );
@@ -428,7 +460,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         for( i = 0;  i < nLen;  ++i )
         {
             const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-            lcl_commitGrammarMarkUp( maConversionMap, pWList, rDesc.nType,
+            lcl_commitGrammarMarkUp(m_pImpl->m_ConversionMap, pWList, rDesc.nType,
                 rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
         }
     }
@@ -437,23 +469,23 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         bRepaint = false;
         i = nSentenceMarkUpIndex;
         const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-        lcl_commitGrammarMarkUp( maConversionMap, pWList, rDesc.nType,
+        lcl_commitGrammarMarkUp(m_pImpl->m_ConversionMap, pWList, rDesc.nType,
             rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
     }
 
     if( bRepaint )
-        finishGrammarCheck( *mpTxtNode );
+        finishGrammarCheck(*m_pImpl->m_pTxtNode);
 
     return;
 }
 
-void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
+void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
     SolarMutexGuard aGuard;
-    mpTxtNode = 0;
+    m_pTxtNode = 0;
 }
 
 SwXStringKeyMap::SwXStringKeyMap()
