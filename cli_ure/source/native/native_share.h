@@ -62,7 +62,7 @@ inline ::System::Object ^ to_cli(
 
     intptr_t intptr =
         reinterpret_cast< intptr_t >(
-            mapping.mapInterface( x.get(), ::getCppuType( &x ) ) );
+            mapping.mapInterface( x.get(), cppu::UnoType<decltype(x)>::get() ) );
     ::System::Runtime::InteropServices::GCHandle ^ handle = ::System::Runtime::InteropServices::GCHandle::FromIntPtr(::System::IntPtr(intptr));
     ::System::Object ^ ret = handle->Target;
     handle->Free();
@@ -100,7 +100,7 @@ inline void to_uno(
             ERROR: either _WIN64 or _WIN32 must be defined
 #endif
             ),
-        ::getCppuType( pRet ) );
+        cppu::UnoType<T>::get() );
     handle.Free();
     pRet->set( ret, SAL_NO_ACQUIRE /* takeover ownership */ );
 }

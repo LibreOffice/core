@@ -524,7 +524,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
                             System::Object^ pExc = nullptr;
                             m_bridge->call_uno(
                                 info->m_unoI, member_td.get(),
-                                ::getCppuVoidType().getTypeLibType(),
+                                cppu::UnoType<cppu::UnoVoidType>::get().getTypeLibType(),
                                 1, &param, args, nullptr, &pExc);
                             return constructReturnMessage(nullptr, nullptr, NULL,
                                                           callmsg, pExc);
@@ -1098,7 +1098,7 @@ void SAL_CALL cli_proxy_dispatch(
             "[cli_uno bridge error] " + err.m_message,
             css::uno::Reference<
             css::uno::XInterface >() );
-        css::uno::Type const & exc_type = ::getCppuType( & exc);
+        css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0);
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(OUStringToOString(exc.Message,
