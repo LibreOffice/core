@@ -42,46 +42,45 @@ template< typename T>
 class enumrange
 {
 public:
-   class Iterator
-   {
-   public:
-      Iterator( int value ) :
-         m_value( value )
-      { }
+    class Iterator
+    {
+    public:
+        Iterator( int value ) :
+            m_value( value )
+        {
+        }
 
-      T operator*( void ) const
-      {
-         return static_cast<T>(m_value);
-      }
+        T operator*( void ) const
+        {
+            return static_cast<T>(m_value);
+        }
 
-      void operator++( void )
-      {
-         ++m_value;
-      }
+        void operator++( void )
+        {
+            ++m_value;
+        }
 
-      bool operator!=( Iterator rhs )
-      {
-         return m_value != rhs.m_value;
-      }
+        bool operator!=( Iterator rhs )
+        {
+            return m_value != rhs.m_value;
+        }
 
-   private:
-      int m_value;
+    private:
+        int m_value;
    };
-
 };
 
 template< typename T >
 typename enumrange<T>::Iterator begin( enumrange<T> )
 {
-   return typename enumrange<T>::Iterator( (int)0 );
+    return typename enumrange<T>::Iterator( (int)0 );
 }
 
 template< typename T >
 typename enumrange<T>::Iterator end( enumrange<T> )
 {
-   return typename enumrange<T>::Iterator( (static_cast<int>(T::LAST)) + 1 );
+    return typename enumrange<T>::Iterator( (static_cast<int>(T::LAST)) + 1 );
 }
-
 
 }; // namespace o3tl
 
