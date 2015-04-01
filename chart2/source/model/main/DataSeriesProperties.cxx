@@ -41,7 +41,7 @@ void DataSeriesProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AttributedDataPoints",
                   PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
-                  ::getCppuType( reinterpret_cast< const uno::Sequence< sal_Int32 > * >(0)),
+                  cppu::UnoType<uno::Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -55,7 +55,7 @@ void DataSeriesProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "VaryColorsByPoint",
                   PROP_DATASERIES_VARY_COLORS_BY_POINT,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

@@ -105,19 +105,19 @@ void UncachedDataSequence::registerProperties()
                       PROP_NUMBERFORMAT_KEY,
                       0,   // PropertyAttributes
                       & m_nNumberFormatKey,
-                      ::getCppuType( & m_nNumberFormatKey ) );
+                      cppu::UnoType<decltype(m_nNumberFormatKey)>::get() );
 
     registerProperty( "Role",
                       PROP_PROPOSED_ROLE,
                       0,   // PropertyAttributes
                       & m_sRole,
-                      ::getCppuType( & m_sRole ) );
+                      cppu::UnoType<decltype(m_sRole)>::get() );
 
     registerProperty( "CachedXMLRange",
                       PROP_XML_RANGE,
                       0,   // PropertyAttributes
                       & m_aXMLRange,
-                      ::getCppuType( & m_aXMLRange ) );
+                      cppu::UnoType<decltype(m_aXMLRange)>::get() );
 }
 
 Sequence< OUString > UncachedDataSequence::getSupportedServiceNames_Static()
@@ -281,7 +281,7 @@ uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
 uno::Type SAL_CALL UncachedDataSequence::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType( reinterpret_cast< uno::Any * >(0));
+    return cppu::UnoType<uno::Any>::get();
 }
 
 sal_Bool SAL_CALL UncachedDataSequence::hasElements()

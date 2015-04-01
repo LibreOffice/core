@@ -53,7 +53,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Japanese",
                   PROP_CANDLESTICKCHARTTYPE_JAPANESE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -73,13 +73,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ShowFirst",
                   PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ShowHighLow",
                   PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

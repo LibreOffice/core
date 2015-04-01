@@ -162,19 +162,19 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasMainTitle",
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasSubTitle",
                   PROP_DOCUMENT_HAS_SUB_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasLegend",
                   PROP_DOCUMENT_HAS_LEGEND,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -182,13 +182,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "DataSourceLabelsInFirstRow",
                   PROP_DOCUMENT_LABELS_IN_FIRST_ROW,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "DataSourceLabelsInFirstColumn",
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -215,7 +215,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "RefreshAddInAllowed",
                   PROP_DOCUMENT_UPDATE_ADDIN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::TRANSIENT ));
 
@@ -229,13 +229,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "EnableComplexChartTypes",
                   PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
     rOutProperties.push_back(
         Property( "EnableDataTableDialog",
                   PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
 }

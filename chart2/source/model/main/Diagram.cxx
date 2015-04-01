@@ -101,35 +101,35 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "PosSizeExcludeAxes",
                   PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( CHART_UNONAME_SORT_BY_XVALUES,
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ConnectBars",
                   PROP_DIAGRAM_CONNECT_BARS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "GroupBarsPerAxis",
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "IncludeHiddenCells",
                   PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -143,7 +143,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "RightAngledAxes",
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -179,19 +179,19 @@ void lcl_AddPropertiesToVector(
    rOutProperties.push_back(
        Property( "DataTableHBorder",
                PROP_DIAGRAM_DATATABLEHBORDER,
-                 ::getBooleanCppuType(),
+                 cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT ));
    rOutProperties.push_back(
        Property( "DataTableVBorder",
                PROP_DIAGRAM_DATATABLEVBORDER,
-                 ::getBooleanCppuType(),
+                 cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT ));
    rOutProperties.push_back(
        Property( "DataTableOutline",
                PROP_DIAGRAM_DATATABLEOUTLINE,
-                 ::getBooleanCppuType(),
+                 cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
                  | beans::PropertyAttribute::MAYBEDEFAULT ));
    rOutProperties.push_back(

@@ -65,25 +65,25 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Volume",
                   PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Open",
                   PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "LowHigh",
                   PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Japanese",
                   PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

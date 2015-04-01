@@ -1033,11 +1033,11 @@ DummyChart* DummyChart::getRootShape()
 }
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= uno::Reference< xint >(this)
 
 #define QUERY_INTERFACE( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0 ) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         return uno::makeAny(uno::Reference<xint>(this));
 
 uno::Any SAL_CALL DummyXShapes::queryInterface( const uno::Type& rType )

@@ -122,7 +122,7 @@ void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >
             m_aListenerMap.push_back( tListenerMap::value_type( xWeakRef, xListenerToAdd ));
         }
 
-        m_aModifyListeners.addListener( ::getCppuType( &xListenerToAdd ), xListenerToAdd );
+        m_aModifyListeners.addListener( cppu::UnoType<decltype(xListenerToAdd)>::get(), xListenerToAdd );
     }
     catch( const uno::Exception & ex )
     {
@@ -145,7 +145,7 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
             m_aListenerMap.erase( aIt );
         }
 
-        m_aModifyListeners.removeListener( ::getCppuType( &aListener ), xListenerToRemove );
+        m_aModifyListeners.removeListener( cppu::UnoType<decltype(aListener)>::get(), xListenerToRemove );
     }
     catch( const uno::Exception & ex )
     {

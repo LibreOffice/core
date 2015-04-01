@@ -88,7 +88,7 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
         static_cast< XStyleSupplier * >( this ) );
 }
 
-#define LCL_PROP_CPPUTYPE(t) (::getCppuType( reinterpret_cast< const Reference<t> *>(0)))
+#define LCL_PROP_CPPUTYPE(t) (cppu::UnoType<t>::get())
 
 // // ____ XTypeProvider ____
 Sequence< uno::Type > SAL_CALL

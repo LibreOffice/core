@@ -148,28 +148,28 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AutoMax",
                   PROP_AXIS_AUTO_MAX,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoMin",
                   PROP_AXIS_AUTO_MIN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoStepMain",
                   PROP_AXIS_AUTO_STEPMAIN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "AutoStepHelp",
                   PROP_AXIS_AUTO_STEPHELP,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -197,14 +197,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Logarithmic",
                   PROP_AXIS_LOGARITHMIC,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ReverseDirection",
                   PROP_AXIS_REVERSEDIRECTION,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -212,7 +212,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Visible",
                   PROP_AXIS_VISIBLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -238,7 +238,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AutoOrigin",
                   PROP_AXIS_AUTO_ORIGIN,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -267,7 +267,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "DisplayLabels",
                   PROP_AXIS_DISPLAY_LABELS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -281,7 +281,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -308,21 +308,21 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "TextBreak",
                   PROP_AXIS_TEXTBREAK,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TextCanOverlap",
                   PROP_AXIS_CAN_OVERLAP,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "StackedText",
                   PROP_AXIS_STACKEDTEXT,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -345,7 +345,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "DisplayUnits",
                   PROP_AXIS_DISPLAY_UNITS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

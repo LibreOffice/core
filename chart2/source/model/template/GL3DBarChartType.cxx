@@ -63,7 +63,7 @@ struct InfoHelperInitializer
         aRet[0] = beans::Property(
             CHART_UNONAME_ROUNDED_EDGE,
             PROP_GL3DCHARTTYPE_ROUNDED_EDGE,
-            ::getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
         return aRet;

@@ -53,7 +53,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "SwapXAndYAxis",
                   PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }

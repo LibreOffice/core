@@ -131,7 +131,7 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CharUnderlineHasColor",
                   PROP_CHAR_UNDERLINE_HAS_COLOR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharOverline (see awt.FontUnderline)
@@ -153,7 +153,7 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CharOverlineHasColor",
                   PROP_CHAR_OVERLINE_HAS_COLOR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ) );
     // CharWeight (see awt.FontWeight)
@@ -173,7 +173,7 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CharAutoKerning",
                   PROP_CHAR_AUTO_KERNING,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -202,7 +202,7 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CharWordMode",
                   PROP_CHAR_WORD_MODE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharLocale
@@ -216,14 +216,14 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CharShadowed",
                   PROP_CHAR_SHADOWED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharContoured
     rOutProperties.push_back(
         Property( "CharContoured",
                   PROP_CHAR_CONTOURED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharRelief (see text.FontRelief)
@@ -386,7 +386,7 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ParaIsCharacterDistance",
                   PROP_PARA_IS_CHARACTER_DISTANCE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

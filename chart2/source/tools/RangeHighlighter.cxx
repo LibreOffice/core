@@ -305,7 +305,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 
     if( m_nAddedListenerCount == 0 )
         startListening();
-    rBHelper.addListener( ::getCppuType( & xListener ), xListener);
+    rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener);
     ++m_nAddedListenerCount;
 
     //bring the new listener up to the current state
@@ -316,7 +316,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
     throw (uno::RuntimeException, std::exception)
 {
-    rBHelper.removeListener( ::getCppuType( & xListener ), xListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
     --m_nAddedListenerCount;
     if( m_nAddedListenerCount == 0 )
         stopListening();

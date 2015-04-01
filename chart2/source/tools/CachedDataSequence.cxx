@@ -123,13 +123,13 @@ void CachedDataSequence::registerProperties()
                       PROP_NUMBERFORMAT_KEY,
                       0,   // PropertyAttributes
                       & m_nNumberFormatKey,
-                      ::getCppuType( & m_nNumberFormatKey ) );
+                      cppu::UnoType<decltype(m_nNumberFormatKey)>::get() );
 
     registerProperty( "Role",
                       PROP_PROPOSED_ROLE,
                       0,   // PropertyAttributes
                       & m_sRole,
-                      ::getCppuType( & m_sRole ) );
+                      cppu::UnoType<decltype(m_sRole)>::get() );
 }
 
 Sequence< double > CachedDataSequence::Impl_getNumericalData() const

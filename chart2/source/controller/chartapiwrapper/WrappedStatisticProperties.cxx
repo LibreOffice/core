@@ -1006,7 +1006,7 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "MeanValue",
                   PROP_CHART_STATISTIC_MEAN_VALUE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(

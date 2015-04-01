@@ -206,7 +206,7 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
     rOutProperties.push_back(
         Property( "Lines",
                   PROP_CHART_SYMBOL_AND_LINES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

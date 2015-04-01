@@ -44,14 +44,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "OverlapSequence",
                   PROP_BARCHARTTYPE_OVERLAP_SEQUENCE,
-                  ::getCppuType( reinterpret_cast< const Sequence< sal_Int32 > * >(0)),
+                  cppu::UnoType<Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "GapwidthSequence",
                   PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE,
-                  ::getCppuType( reinterpret_cast< const Sequence< sal_Int32 > * >(0)),
+                  cppu::UnoType<Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

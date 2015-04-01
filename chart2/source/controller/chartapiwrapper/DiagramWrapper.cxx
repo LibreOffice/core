@@ -151,7 +151,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AttributedDataPoints",
                   PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS,
-                  ::getCppuType( reinterpret_cast< const uno::Sequence< uno::Sequence< sal_Int32 > > * >(0)),
+                  cppu::UnoType<uno::Sequence< uno::Sequence< sal_Int32 > >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -159,20 +159,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Percent",
                   PROP_DIAGRAM_PERCENT_STACKED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Stacked",
                   PROP_DIAGRAM_STACKED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Dim3D",
                   PROP_DIAGRAM_THREE_D,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -188,13 +188,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Deep",
                   PROP_DIAGRAM_DEEP,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Vertical",
                   PROP_DIAGRAM_VERTICAL,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
@@ -206,7 +206,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StackedBarsConnected",
                   PROP_DIAGRAM_STACKED_BARS_CONNECTED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -220,14 +220,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "GroupBarsPerAxis",
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "IncludeHiddenCells",
                   PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -235,7 +235,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( CHART_UNONAME_SORT_BY_XVALUES,
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -251,7 +251,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "RightAngledAxes",
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -277,31 +277,31 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasXAxis",
                   PROP_DIAGRAM_HAS_X_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasXAxisDescription",
                   PROP_DIAGRAM_HAS_X_AXIS_DESCR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasXAxisTitle",
                   PROP_DIAGRAM_HAS_X_AXIS_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasXAxisGrid",
                   PROP_DIAGRAM_HAS_X_AXIS_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasXAxisHelpGrid",
                   PROP_DIAGRAM_HAS_X_AXIS_HELP_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -309,31 +309,31 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasYAxis",
                   PROP_DIAGRAM_HAS_Y_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasYAxisDescription",
                   PROP_DIAGRAM_HAS_Y_AXIS_DESCR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasYAxisTitle",
                   PROP_DIAGRAM_HAS_Y_AXIS_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasYAxisGrid",
                   PROP_DIAGRAM_HAS_Y_AXIS_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasYAxisHelpGrid",
                   PROP_DIAGRAM_HAS_Y_AXIS_HELP_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -341,31 +341,31 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasZAxis",
                   PROP_DIAGRAM_HAS_Z_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasZAxisDescription",
                   PROP_DIAGRAM_HAS_Z_AXIS_DESCR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasZAxisTitle",
                   PROP_DIAGRAM_HAS_Z_AXIS_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasZAxisGrid",
                   PROP_DIAGRAM_HAS_Z_AXIS_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasZAxisHelpGrid",
                   PROP_DIAGRAM_HAS_Z_AXIS_HELP_GRID,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -373,13 +373,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasSecondaryXAxis",
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasSecondaryXAxisDescription",
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS_DESCR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -387,13 +387,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasSecondaryYAxis",
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasSecondaryYAxisDescription",
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -401,13 +401,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HasSecondaryXAxisTitle",
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "HasSecondaryYAxisTitle",
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -421,25 +421,25 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AutomaticSize",
                   PROP_DIAGRAM_AUTOMATIC_SIZE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "DataTableHBorder",
                 PROP_DIAGRAM_DATATABLEHBORDER,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "DataTableVBorder",
                 PROP_DIAGRAM_DATATABLEVBORDER,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "DataTableOutline",
                 PROP_DIAGRAM_DATATABLEOUTLINE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(

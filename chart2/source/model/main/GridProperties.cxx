@@ -52,7 +52,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Show",
                   PROP_GRID_SHOW,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

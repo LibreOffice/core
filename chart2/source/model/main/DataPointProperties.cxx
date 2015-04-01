@@ -114,7 +114,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBackground",
                   PROP_DATAPOINT_FILL_BACKGROUND,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -218,7 +218,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -273,7 +273,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -324,7 +324,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ShowErrorBox",
                   PROP_DATAPOINT_SHOW_ERROR_BOX,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(

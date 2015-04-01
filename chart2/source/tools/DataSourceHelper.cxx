@@ -418,7 +418,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             else if ( aProperty.Name == "FirstCellAsLabel" )
             {
                 bHasFirstCellAsLabel =
-                    (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
+                    (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(cppu::UnoType<bool>::get()));
             }
             else if ( aProperty.Name == "CellRangeRepresentation" )
             {

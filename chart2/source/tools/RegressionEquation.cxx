@@ -64,14 +64,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ShowEquation",
                   PROP_EQUATION_SHOW,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ShowCorrelationCoefficient",
                   PROP_EQUATION_SHOW_CORRELATION_COEFF,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

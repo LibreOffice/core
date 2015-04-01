@@ -156,7 +156,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StackedText",
                   PROP_TITLE_TEXT_STACKED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

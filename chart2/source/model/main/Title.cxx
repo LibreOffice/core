@@ -114,7 +114,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ParaIsHyphenation",
                   PROP_TITLE_PARA_IS_HYPHENATION,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -127,7 +127,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StackCharacters",
                   PROP_TITLE_TEXT_STACKED,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

@@ -81,7 +81,7 @@ static void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "UseRings",
                   PROP_PIE_TEMPLATE_USE_RINGS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

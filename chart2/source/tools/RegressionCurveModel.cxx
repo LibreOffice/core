@@ -101,7 +101,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ForceIntercept",
                   PROPERTY_FORCE_INTERCEPT,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

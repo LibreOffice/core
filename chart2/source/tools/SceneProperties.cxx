@@ -96,7 +96,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneTwoSidedLighting",
                   PROP_SCENE_TWO_SIDED_LIGHTING,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -138,7 +138,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn1",
                   PROP_SCENE_LIGHT_ON_1,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -160,7 +160,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn2",
                   PROP_SCENE_LIGHT_ON_2,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -182,7 +182,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn3",
                   PROP_SCENE_LIGHT_ON_3,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -204,7 +204,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn4",
                   PROP_SCENE_LIGHT_ON_4,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -226,7 +226,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn5",
                   PROP_SCENE_LIGHT_ON_5,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -248,7 +248,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn6",
                   PROP_SCENE_LIGHT_ON_6,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -270,7 +270,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn7",
                   PROP_SCENE_LIGHT_ON_7,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -292,7 +292,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightOn8",
                   PROP_SCENE_LIGHT_ON_8,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));

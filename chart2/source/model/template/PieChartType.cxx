@@ -52,7 +52,7 @@ static void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "UseRings",
                   PROP_PIECHARTTYPE_USE_RINGS,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(

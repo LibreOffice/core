@@ -121,7 +121,7 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
     rOutProperties.push_back(
         Property( "AutomaticPosition",
                   PROP_CHART_AUTOMATIC_POSITION,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

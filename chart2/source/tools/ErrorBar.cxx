@@ -56,8 +56,8 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
 {
     static const SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
     {
-        {OUString("ShowPositiveError"),0,getBooleanCppuType(), 0, 0},
-        {OUString("ShowNegativeError"),1,getBooleanCppuType(), 0, 0},
+        {OUString("ShowPositiveError"),0,cppu::UnoType<bool>::get(), 0, 0},
+        {OUString("ShowNegativeError"),1,cppu::UnoType<bool>::get(), 0, 0},
         {OUString("PositiveError"),2,cppu::UnoType<double>::get(),0,0},
         {OUString("NegativeError"),3,cppu::UnoType<double>::get(), 0, 0},
         {OUString("PercentageError"),4,cppu::UnoType<double>::get(), 0, 0},

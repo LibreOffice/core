@@ -611,11 +611,11 @@ sal_Int32 XMLFilter::impl_Export(
         // property map for export info set
         comphelper::PropertyMapEntry const aExportInfoMap[] =
         {
-            { OUString("UsePrettyPrinting"), 0, ::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("ExportTableNumberList"), 0, ::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("ExportTableNumberList"), 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 

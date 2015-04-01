@@ -1358,10 +1358,10 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
         "GDIMetaFile",
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     aRet[1] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         "GDIMetaFile",
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
     return aRet;
 }

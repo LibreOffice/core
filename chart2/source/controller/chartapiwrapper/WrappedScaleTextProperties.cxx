@@ -131,7 +131,7 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "ScaleText",
                   PROP_CHART_SCALE_TEXT,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

@@ -191,7 +191,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
     rOutProperties.push_back(
         Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
-                  ::getBooleanCppuType(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

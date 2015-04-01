@@ -689,7 +689,7 @@ uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
         throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< lang::XTypeProvider > xAggTypeProvider;
-    if( (m_xOldModelAgg->queryAggregation( ::getCppuType( & xAggTypeProvider )) >>= xAggTypeProvider)
+    if( (m_xOldModelAgg->queryAggregation( cppu::UnoType<decltype(xAggTypeProvider)>::get()) >>= xAggTypeProvider)
         && xAggTypeProvider.is())
     {
         uno::Sequence< uno::Type > aOwnTypes( impl::ChartModel_Base::getTypes());
@@ -1111,14 +1111,14 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
         {
             datatransfer::DataFlavor aDataFlavor( lcl_aGDIMetaFileMIMEType,
                     "GDIMetaFile",
-                    ::getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
             uno::Any aData( xTransferable->getTransferData( aDataFlavor ) );
             aData >>= aMetafile;
         }
 
         aResult.Flavor.MimeType = lcl_aGDIMetaFileMIMEType;
-        aResult.Flavor.DataType = getCppuType( &aMetafile );
+        aResult.Flavor.DataType = cppu::UnoType<decltype(aMetafile)>::get();
 
         aResult.Data <<= aMetafile;
     }
@@ -1181,7 +1181,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         "GDIMetaFile",
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
     return aRet;
 }
