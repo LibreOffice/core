@@ -146,7 +146,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     comphelper::PropertyMapEntry aInfoMap[] =
     {
         { OUString("UsePrettyPrinting"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("BaseURI"), 0,
               ::cppu::UnoType<OUString>::get(),
@@ -167,7 +167,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     OUString sUsePrettyPrinting("UsePrettyPrinting");
     sal_Bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
     Any aAny;
-    aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
+    aAny.setValue( &bUsePrettyPrinting, cppu::UnoType<bool>::get() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // Set base URI
@@ -344,7 +344,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
     sal_Bool bTrue = sal_True;
-    aAny.setValue( &bTrue, ::getBooleanCppuType() );
+    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
     xSet->setPropertyValue( aTmpPropName, aAny );
 
     // set Base URL

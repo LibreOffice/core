@@ -242,31 +242,31 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { OUString("CustomFontNameSans")               , HANDLE_CUSTOM_FONT_NAME_SANS              ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SANS              },
         { OUString("CustomFontNameSerif")              , HANDLE_CUSTOM_FONT_NAME_SERIF             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SERIF             },
         { OUString("DialogLibraries")                  , HANDLE_DIALOG_LIBRARIES                   ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
-        { OUString("FontFixedIsBold")                  , HANDLE_CUSTOM_FONT_FIXED_WEIGHT           ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FIXED             },
-        { OUString("FontFixedIsItalic")                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FIXED             },
-        { OUString("FontFunctionsIsBold")              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
-        { OUString("FontFunctionsIsItalic")            , HANDLE_FONT_FUNCTIONS_POSTURE             ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
+        { OUString("FontFixedIsBold")                  , HANDLE_CUSTOM_FONT_FIXED_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
+        { OUString("FontFixedIsItalic")                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
+        { OUString("FontFunctionsIsBold")              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
+        { OUString("FontFunctionsIsItalic")            , HANDLE_FONT_FUNCTIONS_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
         { OUString("FontNameFunctions")                , HANDLE_FONT_NAME_FUNCTIONS                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FUNCTION          },
         { OUString("FontNameNumbers")                  , HANDLE_FONT_NAME_NUMBERS                  ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_NUMBER            },
         { OUString("FontNameText")                     , HANDLE_FONT_NAME_TEXT                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_TEXT              },
         { OUString("FontNameVariables")                , HANDLE_FONT_NAME_VARIABLES                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_VARIABLE          },
-        { OUString("FontNumbersIsBold")                , HANDLE_FONT_NUMBERS_WEIGHT                ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
-        { OUString("FontNumbersIsItalic")              , HANDLE_FONT_NUMBERS_POSTURE               ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
-        { OUString("FontSansIsBold")                   , HANDLE_CUSTOM_FONT_SANS_WEIGHT            ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_SANS              },
-        { OUString("FontSansIsItalic")                 , HANDLE_CUSTOM_FONT_SANS_POSTURE           ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_SANS              },
-        { OUString("FontSerifIsBold")                  , HANDLE_CUSTOM_FONT_SERIF_WEIGHT           ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("FontSerifIsItalic")                , HANDLE_CUSTOM_FONT_SERIF_POSTURE          ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("FontTextIsBold")                   , HANDLE_FONT_TEXT_WEIGHT                   ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_TEXT              },
-        { OUString("FontTextIsItalic")                 , HANDLE_FONT_TEXT_POSTURE                  ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_TEXT              },
-        { OUString("FontVariablesIsBold")              , HANDLE_FONT_VARIABLES_WEIGHT              ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
-        { OUString("FontVariablesIsItalic")            , HANDLE_FONT_VARIABLES_POSTURE             ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
+        { OUString("FontNumbersIsBold")                , HANDLE_FONT_NUMBERS_WEIGHT                ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
+        { OUString("FontNumbersIsItalic")              , HANDLE_FONT_NUMBERS_POSTURE               ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
+        { OUString("FontSansIsBold")                   , HANDLE_CUSTOM_FONT_SANS_WEIGHT            ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
+        { OUString("FontSansIsItalic")                 , HANDLE_CUSTOM_FONT_SANS_POSTURE           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
+        { OUString("FontSerifIsBold")                  , HANDLE_CUSTOM_FONT_SERIF_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
+        { OUString("FontSerifIsItalic")                , HANDLE_CUSTOM_FONT_SERIF_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
+        { OUString("FontTextIsBold")                   , HANDLE_FONT_TEXT_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
+        { OUString("FontTextIsItalic")                 , HANDLE_FONT_TEXT_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
+        { OUString("FontVariablesIsBold")              , HANDLE_FONT_VARIABLES_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
+        { OUString("FontVariablesIsItalic")            , HANDLE_FONT_VARIABLES_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
         { OUString("Formula")                          , HANDLE_FORMULA                            ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
-        { OUString("IsScaleAllBrackets")               , HANDLE_IS_SCALE_ALL_BRACKETS              ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  0                     },
-        { OUString("IsTextMode")                       , HANDLE_IS_TEXT_MODE                       ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  0                     },
+        { OUString("IsScaleAllBrackets")               , HANDLE_IS_SCALE_ALL_BRACKETS              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { OUString("IsTextMode")                       , HANDLE_IS_TEXT_MODE                       ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
         { OUString("GreekCharStyle")                   , HANDLE_GREEK_CHAR_STYLE                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("LeftMargin")                       , HANDLE_LEFT_MARGIN                        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LEFTSPACE         },
         { OUString("PrinterName")                      , HANDLE_PRINTER_NAME                       ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
-        { OUString("PrinterSetup")                     , HANDLE_PRINTER_SETUP                      ,  ::getCppuType((const Sequence < sal_Int8 >*)0),                         PROPERTY_NONE,  0                     },
+        { OUString("PrinterSetup")                     , HANDLE_PRINTER_SETUP                      ,  cppu::UnoType<const Sequence < sal_Int8 >>::get(),                         PROPERTY_NONE,  0                     },
         { OUString("RelativeBracketDistance")          , HANDLE_RELATIVE_BRACKET_DISTANCE          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSPACE      },
         { OUString("RelativeBracketExcessSize")        , HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSIZE       },
         { OUString("RelativeFontHeightFunctions")      , HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_FUNCTION          },
@@ -294,14 +294,14 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { OUString("RelativeUpperLimitDistance")       , HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_UPPERLIMIT        },
         { OUString("RightMargin")                      , HANDLE_RIGHT_MARGIN                       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_RIGHTSPACE        },
         { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                      PropertyAttribute::READONLY,  0       },
-        { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PROPERTY_NONE,  0                     },
-        { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PropertyAttribute::READONLY,  0       },
+        { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                PROPERTY_NONE,  0                     },
+        { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                PropertyAttribute::READONLY,  0       },
         { OUString("TopMargin")                        , HANDLE_TOP_MARGIN                         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_TOPSPACE          },
         // #i33095# Security Options
-        { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  0                     },
+        { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
         // #i972#
         { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  ::getCppuType((uno::Sequence< beans::PropertyValue >*)0),       PROPERTY_NONE,  0                     },
+        { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
@@ -476,7 +476,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_POSTURE     :
             case HANDLE_FONT_TEXT_POSTURE        :
             {
-                if((*pValues).getValueType() != ::getBooleanCppuType())
+                if((*pValues).getValueType() != cppu::UnoType<bool>::get())
                     throw IllegalArgumentException();
                 bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
@@ -492,7 +492,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_WEIGHT      :
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
-                if((*pValues).getValueType() != ::getBooleanCppuType())
+                if((*pValues).getValueType() != cppu::UnoType<bool>::get())
                     throw IllegalArgumentException();
                 bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
@@ -683,7 +683,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
-                if ( (*pValues).getValueType() != ::getBooleanCppuType() )
+                if ( (*pValues).getValueType() != cppu::UnoType<bool>::get() )
                     throw IllegalArgumentException();
                 bool bReadonly = false;
                 if ( *pValues >>= bReadonly )
@@ -778,7 +778,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_IS_TEXT_MODE                       :
             {
                 sal_Bool bVal = aFormat.IsTextmode();
-                (*pValue).setValue(&bVal, ::getBooleanCppuType());
+                (*pValue).setValue(&bVal, cppu::UnoType<bool>::get());
             }
             break;
 
@@ -820,7 +820,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
             {
                 sal_Bool bVal = aFormat.IsScaleNormalBrackets();
-                (*pValue).setValue(&bVal, ::getBooleanCppuType());
+                (*pValue).setValue(&bVal, cppu::UnoType<bool>::get());
             }
             break;
             case HANDLE_PRINTER_NAME:

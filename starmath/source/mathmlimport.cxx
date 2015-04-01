@@ -364,7 +364,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         uno::Reference < beans::XPropertySet > xProps( xEventsStream, uno::UNO_QUERY );
         Any aAny = xProps->getPropertyValue( "Encrypted" );
         bool bEncrypted = false;
-        if ( aAny.getValueType() == ::getBooleanCppuType() )
+        if ( aAny.getValueType() == cppu::UnoType<bool>::get() )
             aAny >>= bEncrypted;
 
         // set Base URL
