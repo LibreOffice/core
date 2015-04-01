@@ -69,7 +69,7 @@ ESelection toESelection(const text::TextRangeSelection& rSel)
 }
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         return uno::makeAny(uno::Reference< xint >(this))
 
 const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()

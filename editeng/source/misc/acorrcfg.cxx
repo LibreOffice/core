@@ -243,7 +243,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     sal_Bool bVal;
     const long nFlags = rParent.pAutoCorrect->GetFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -552,7 +552,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     sal_Bool bVal;
     SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)

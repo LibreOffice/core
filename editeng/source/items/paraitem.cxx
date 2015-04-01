@@ -363,7 +363,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_EXPAND_SINGLE    :
         {
             sal_Bool bValue = bOneBlock;
-            rVal.setValue( &bValue, ::getCppuBooleanType() );
+            rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
             break;
         }
         default: ;//prevent warning

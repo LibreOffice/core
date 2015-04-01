@@ -2035,7 +2035,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     ( script::Converter::create(::comphelper::getProcessComponentContext()) );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
-            try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
+            try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < uno::Any >>::get() ); }
             catch (const uno::Exception&) {}
 
             aNew >>= aSeq;
@@ -2834,7 +2834,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(::comphelper::getProcessComponentContext()) );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
-                try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
+                try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < uno::Any >>::get() ); }
                 catch (const uno::Exception&) {}
 
                 if ((aNew >>= aSeq) &&
@@ -2867,7 +2867,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 else
                     return false;
             }
-            else if (rVal.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int16 >*)0) )
+            else if (rVal.getValueType() == cppu::UnoType<css::uno::Sequence < sal_Int16 >>::get() )
             {
                 // serialization for basic macro recording
                 ::com::sun::star::uno::Sequence < sal_Int16 > aSeq;

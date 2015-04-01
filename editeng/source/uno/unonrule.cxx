@@ -130,7 +130,7 @@ Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 Type SAL_CALL SvxUnoNumberingRules::getElementType()
     throw( RuntimeException, std::exception )
 {
-    return ::getCppuType(( const Sequence< beans::PropertyValue >*)0);
+    return cppu::UnoType<Sequence< beans::PropertyValue >>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException, std::exception )

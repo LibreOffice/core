@@ -33,7 +33,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         return uno::makeAny(uno::Reference< xint >(this))
 
 
