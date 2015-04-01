@@ -54,12 +54,12 @@ Any OComponentHelper::queryInterface( Type const & rType ) throw (RuntimeExcepti
 }
 Any OComponentHelper::queryAggregation( Type const & rType ) throw (RuntimeException, std::exception)
 {
-    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    if (rType == cppu::UnoType<lang::XComponent>::get())
     {
         void * p = static_cast< lang::XComponent * >( this );
         return Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (Reference< lang::XTypeProvider > const *)0 ))
+    else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
     {
         void * p = static_cast< lang::XTypeProvider * >( this );
         return Any( &p, rType );
@@ -122,10 +122,10 @@ Sequence< Type > OComponentHelper::getTypes() throw (RuntimeException, std::exce
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< lang::XComponent > *)0 ),
-                ::getCppuType( (const Reference< lang::XTypeProvider > *)0 ),
-                ::getCppuType( (const Reference< XAggregation > *)0 ),
-                ::getCppuType( (const Reference< XWeak > *)0 ) );
+                cppu::UnoType<lang::XComponent>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<XAggregation>::get(),
+                cppu::UnoType<XWeak>::get() );
             s_pTypes = &s_aTypes;
         }
     }
@@ -223,7 +223,7 @@ void OComponentHelper::addEventListener(
     }
     else
     {
-        rBHelper.addListener( ::getCppuType( &rxListener ) , rxListener );
+        rBHelper.addListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
     }
 }
 
@@ -232,7 +232,7 @@ void OComponentHelper::removeEventListener(
     const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.removeListener( ::getCppuType( &rxListener ) , rxListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
 }
 
 }

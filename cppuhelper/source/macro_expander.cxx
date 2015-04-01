@@ -203,7 +203,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
 
     return Reference<lang::XSingleComponentFactory>(
         static_cast<lang::XSingleComponentFactory *>(
-            target2curr.mapInterface(free.get(), ::getCppuType(&free))),
+            target2curr.mapInterface(free.get(), cppu::UnoType<decltype(free)>::get())),
         SAL_NO_ACQUIRE);
 }
 

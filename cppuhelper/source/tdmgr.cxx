@@ -650,7 +650,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
 
     Reference<container::XHierarchicalNameAccess> xTDMgr(
         static_cast<container::XHierarchicalNameAccess *>(
-            curr2target.mapInterface(xTDMgr_c.get(), ::getCppuType(&xTDMgr_c))),
+            curr2target.mapInterface(xTDMgr_c.get(), cppu::UnoType<decltype(xTDMgr_c)>::get())),
         SAL_NO_ACQUIRE);
 
     Reference< lang::XComponent > xComp( xTDMgr, UNO_QUERY );

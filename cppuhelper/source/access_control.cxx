@@ -103,7 +103,7 @@ void AccessControl::checkRuntimePermission(
 {
     __checkPermission(
         m_xController,
-        ::getCppuType( (security::RuntimePermission *)0 ), name.pData, 0 );
+        cppu::UnoType<security::RuntimePermission>::get(), name.pData, 0 );
 }
 
 void AccessControl::checkFilePermission(
@@ -112,7 +112,7 @@ void AccessControl::checkFilePermission(
 {
     __checkPermission(
         m_xController,
-        ::getCppuType( (io::FilePermission *)0 ), url.pData, actions.pData );
+        cppu::UnoType<io::FilePermission>::get(), url.pData, actions.pData );
 }
 
 void AccessControl::checkSocketPermission(
@@ -121,7 +121,7 @@ void AccessControl::checkSocketPermission(
 {
     __checkPermission(
         m_xController,
-        ::getCppuType( (connection::SocketPermission *)0 ), host.pData, actions.pData );
+        cppu::UnoType<connection::SocketPermission>::get(), host.pData, actions.pData );
 }
 
 }

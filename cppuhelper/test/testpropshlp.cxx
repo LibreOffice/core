@@ -51,17 +51,17 @@ static Property * getPropertyTable1()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString("a"), 0, getCppuType( (OUString *)0) ,
+                Property( OUString("a"), 0, cppu::UnoType<OUString>::get() ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //OUString
-                Property( OUString("b"), 1, getCppuCharType( ) ,
+                Property( OUString("b"), 1, cppu::UnoType<cppu::UnoCharType>::get() ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //Char
                 Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get(),
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //sal_Int32
-                Property( OUString("d"), 5, getCppuType( (double*)0)     ,
+                Property( OUString("d"), 5, cppu::UnoType<double>::get()     ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //double
-                Property( OUString("e"), 7, getCppuBooleanType()         ,
+                Property( OUString("e"), 7, cppu::UnoType<bool>::get(),
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //BOOL
-                Property( OUString("f"), 8, getCppuType( (Any*)0)        ,
+                Property( OUString("f"), 8, cppu::UnoType<Any>::get()        ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )  //Any
             };
             pTable = aTable;
@@ -80,17 +80,17 @@ static Property * getPropertyTable2()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 8, cppu::UnoType<Any>::get()   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Any
-                Property( OUString("b"), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, cppu::UnoType<cppu::UnoCharType>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString("a"), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, cppu::UnoType<OUString>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString("d"), 5, getCppuType( (double*)0) ,
+                Property( OUString("d"), 5, cppu::UnoType<double>::get() ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Double
                 Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // sal_Int32
-                Property( OUString("e"), 7, getCppuBooleanType()         ,
+                Property( OUString("e"), 7, cppu::UnoType<bool>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Bool
             };
             pTable = aTable;
@@ -108,11 +108,11 @@ static Property * getPropertyTable3()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString("b"), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, cppu::UnoType<cppu::UnoCharType>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 8, cppu::UnoType<Any>::get()   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // any
-                Property( OUString("a"), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, cppu::UnoType<OUString>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // OUString
             };
             pTable = aTable;
@@ -131,11 +131,11 @@ static Property * getPropertyTable4()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString("a"), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, cppu::UnoType<OUString>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString("b"), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, cppu::UnoType<cppu::UnoCharType>::get(),
                                      PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), // Char
-                Property( OUString("f"), 2, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 2, cppu::UnoType<Any>::get()   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Any
             };
             pTable = aTable;
@@ -407,9 +407,9 @@ Property * getBasicProps()
 
             static Property aBasicProps[PROPERTY_COUNT] =
             {
-                 Property( OUString("BOOL")  , PROPERTY_BOOL , getCppuBooleanType(), PropertyAttribute::READONLY ),
+                 Property( OUString("BOOL")  , PROPERTY_BOOL , cppu::UnoType<bool>::get(), PropertyAttribute::READONLY ),
                  Property( OUString("INT16") , PROPERTY_INT16,
-                                 getCppuType( (sal_Int16*)0 ),  PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
+                                 cppu::UnoType<sal_Int16>::get(),  PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
                  Property( OUString("INT32") , PROPERTY_INT32, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::BOUND ),
                  Property( OUString("TEST")  , 55            , cppu::UnoType<sal_Int32>::get(),  PropertyAttribute::BOUND )
             };
@@ -669,8 +669,8 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             if( b != bBOOL )
             {
 
-                rConvertedValue.setValue( &b , ::getCppuBooleanType()  );
-                rOldValue.setValue( & bBOOL , ::getCppuBooleanType() );
+                rConvertedValue.setValue( &b , cppu::UnoType<bool>::get()  );
+                rOldValue.setValue( & bBOOL , cppu::UnoType<bool>::get() );
                 return sal_True;
             }
             else
@@ -750,7 +750,7 @@ void test_OPropertySetHelper::getFastPropertyValue( Any & rRet, sal_Int32 nHandl
     switch( nHandle )
     {
         case PROPERTY_BOOL:
-            rRet.setValue( &bBOOL , getCppuBooleanType() );
+            rRet.setValue( &bBOOL , cppu::UnoType<bool>::get() );
         break;
 
         case PROPERTY_INT16:
@@ -871,7 +871,7 @@ void test_PropertySetHelper()
                 // Readonly raises a vetoable exception
                 sal_Bool b = sal_True;
                 Any aBool;
-                aBool.setValue( &b , getCppuBooleanType() );
+                aBool.setValue( &b , cppu::UnoType<bool>::get() );
                 xPS->setPropertyValue("BOOL", aBool );
                 OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
@@ -884,7 +884,7 @@ void test_PropertySetHelper()
                 // Readonly raises a vetoable exception
                 sal_Bool b = sal_True;
                 Any aBool;
-                aBool.setValue( &b , getCppuBooleanType() );
+                aBool.setValue( &b , cppu::UnoType<bool>::get() );
                 // BOOL i s0
                 pPS->setFastPropertyValue( PROPERTY_BOOL, aBool );
                 OSL_FAIL( "PropertySetHelper: exception not thrown" );
@@ -898,7 +898,7 @@ void test_PropertySetHelper()
             {
                 sal_Bool b = sal_True;
                 Any aBool;
-                aBool.setValue( &b , getCppuBooleanType() );
+                aBool.setValue( &b , cppu::UnoType<bool>::get() );
                 xPS->setPropertyValue("Does not exist", aBool );
                 OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
@@ -910,7 +910,7 @@ void test_PropertySetHelper()
             {
                 sal_Bool b = sal_True;
                 Any aBool;
-                aBool.setValue( &b , getCppuBooleanType() );
+                aBool.setValue( &b , cppu::UnoType<bool>::get() );
                 pPS->setFastPropertyValue( 3, aBool );
                 OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }

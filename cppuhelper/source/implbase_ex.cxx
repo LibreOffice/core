@@ -313,7 +313,7 @@ Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
     Sequence< Type > types( nTypes +1 );
     Type * pTypes = types.getArray();
     __fillTypes( pTypes, cd );
-    pTypes[ nTypes ] = ::getCppuType( (Reference< XWeak > const *)0 );
+    pTypes[ nTypes ] = cppu::UnoType<XWeak>::get();
     return types;
 }
 
@@ -344,8 +344,8 @@ Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
     Sequence< Type > types( nTypes +2 );
     Type * pTypes = types.getArray();
     __fillTypes( pTypes, cd );
-    pTypes[ nTypes++ ] = ::getCppuType( (Reference< XWeak > const *)0 );
-    pTypes[ nTypes ] = ::getCppuType( (const Reference< XAggregation > *)0 );
+    pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
+    pTypes[ nTypes ] = cppu::UnoType<XAggregation>::get();
     return types;
 }
 
@@ -376,8 +376,8 @@ Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
     Sequence< Type > types( nTypes +2 );
     Type * pTypes = types.getArray();
     __fillTypes( pTypes, cd );
-    pTypes[ nTypes++ ] = ::getCppuType( (Reference< XWeak > const *)0 );
-    pTypes[ nTypes ] = ::getCppuType( (Reference< lang::XComponent > const *)0 );
+    pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
+    pTypes[ nTypes ] = cppu::UnoType<lang::XComponent>::get();
     return types;
 }
 
@@ -408,9 +408,9 @@ Sequence< Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     Sequence< Type > types( nTypes +3 );
     Type * pTypes = types.getArray();
     __fillTypes( pTypes, cd );
-    pTypes[ nTypes++ ] = ::getCppuType( (Reference< XWeak > const *)0 );
-    pTypes[ nTypes++ ] = ::getCppuType( (const Reference< XAggregation > *)0 );
-    pTypes[ nTypes ] = ::getCppuType( (const Reference< lang::XComponent > *)0 );
+    pTypes[ nTypes++ ] = cppu::UnoType<XWeak>::get();
+    pTypes[ nTypes++ ] = cppu::UnoType<XAggregation>::get();
+    pTypes[ nTypes ] = cppu::UnoType<lang::XComponent>::get();
     return types;
 }
 

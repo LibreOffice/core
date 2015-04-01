@@ -320,7 +320,7 @@ protected:
 Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType( (Reference<XUnloadingPreference>*)0))
+    if( rType == cppu::UnoType<XUnloadingPreference>::get() )
     {
         return makeAny(
             Reference< XUnloadingPreference >(
@@ -342,12 +342,12 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Type ar[ 4 ];
-    ar[ 0 ] = ::getCppuType( (const Reference< XSingleServiceFactory > *)0 );
-    ar[ 1 ] = ::getCppuType( (const Reference< XServiceInfo > *)0 );
-    ar[ 2 ] = ::getCppuType( (const Reference< XUnloadingPreference > *)0 );
+    ar[ 0 ] = cppu::UnoType<XSingleServiceFactory>::get();
+    ar[ 1 ] = cppu::UnoType<XServiceInfo>::get();
+    ar[ 2 ] = cppu::UnoType<XUnloadingPreference>::get();
 
     if (m_fptr)
-        ar[ 3 ] = ::getCppuType( (const Reference< XSingleComponentFactory > *)0 );
+        ar[ 3 ] = cppu::UnoType<XSingleComponentFactory>::get();
 
     return Sequence< Type >( ar, m_fptr ? 4 : 3 );
 }
@@ -576,12 +576,9 @@ Sequence< Type > ORegistryFactoryHelper::getTypes() throw (RuntimeException, std
     sal_Int32 pos = types.getLength();
     types.realloc( pos + 3 );
     Type * p = types.getArray();
-    p[ pos++ ] = ::getCppuType(
-        reinterpret_cast< Reference< beans::XMultiPropertySet > const * >(0) );
-    p[ pos++ ] = ::getCppuType(
-        reinterpret_cast< Reference< beans::XFastPropertySet > const * >(0) );
-    p[ pos++ ] = ::getCppuType(
-        reinterpret_cast< Reference< beans::XPropertySet > const * >(0) );
+    p[ pos++ ] = cppu::UnoType<beans::XMultiPropertySet>::get();
+    p[ pos++ ] = cppu::UnoType<beans::XFastPropertySet>::get();
+    p[ pos++ ] = cppu::UnoType<beans::XPropertySet>::get();
     return types;
 }
 
@@ -606,7 +603,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
         beans::Property prop(
             "ImplementationKey" /* name */,
             0 /* handle */,
-            ::getCppuType( &xImplementationKey ),
+            cppu::UnoType<decltype(xImplementationKey)>::get(),
             beans::PropertyAttribute::READONLY |
             beans::PropertyAttribute::OPTIONAL );
         m_property_array_helper.reset(

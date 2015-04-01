@@ -53,7 +53,7 @@ void WeakComponentImplHelperBase::disposing()
 Any WeakComponentImplHelperBase::queryInterface( Type const & rType )
     throw (RuntimeException, std::exception)
 {
-    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    if (rType == cppu::UnoType<lang::XComponent>::get())
     {
         void * p = static_cast< lang::XComponent * >( this );
         return Any( &p, rType );
@@ -146,7 +146,7 @@ void WeakComponentImplHelperBase::addEventListener(
     }
     else
     {
-        rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+        rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
     }
 }
 
@@ -154,7 +154,7 @@ void WeakComponentImplHelperBase::removeEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException, std::exception)
 {
-    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 // WeakAggComponentImplHelperBase
@@ -181,7 +181,7 @@ Any WeakAggComponentImplHelperBase::queryInterface( Type const & rType )
 Any WeakAggComponentImplHelperBase::queryAggregation( Type const & rType )
     throw (RuntimeException, std::exception)
 {
-    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    if (rType == cppu::UnoType<lang::XComponent>::get())
     {
         void * p = static_cast< lang::XComponent * >( this );
         return Any( &p, rType );
@@ -278,7 +278,7 @@ void WeakAggComponentImplHelperBase::addEventListener(
     }
     else
     {
-        rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+        rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
     }
 }
 
@@ -286,7 +286,7 @@ void WeakAggComponentImplHelperBase::removeEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException, std::exception)
 {
-    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 }

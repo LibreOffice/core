@@ -44,15 +44,15 @@ IPropertyArrayHelper::~IPropertyArrayHelper()
 
 inline const ::com::sun::star::uno::Type & getPropertyTypeIdentifier( )
 {
-    return ::getCppuType( (Reference< XPropertyChangeListener > *)0 );
+    return cppu::UnoType<XPropertyChangeListener>::get();
 }
 inline const ::com::sun::star::uno::Type & getPropertiesTypeIdentifier()
 {
-    return ::getCppuType( (Reference< XPropertiesChangeListener > *)0 );
+    return cppu::UnoType<XPropertiesChangeListener>::get();
 }
 inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier()
 {
-    return ::getCppuType( (Reference< XVetoableChangeListener > *)0 );
+    return cppu::UnoType<XVetoableChangeListener>::get();
 }
 
 extern "C" {
@@ -938,7 +938,7 @@ void OPropertySetHelper::addPropertiesChangeListener(
     const Reference < XPropertiesChangeListener > & rListener )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.addListener( getCppuType(&rListener) , rListener );
+    rBHelper.addListener( cppu::UnoType<decltype(rListener)>::get(), rListener );
 }
 
 // XMultiPropertySet
@@ -946,7 +946,7 @@ void OPropertySetHelper::removePropertiesChangeListener(
     const Reference < XPropertiesChangeListener > & rListener )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.removeListener( getCppuType(&rListener) , rListener );
+    rBHelper.removeListener( cppu::UnoType<decltype(rListener)>::get(), rListener );
 }
 
 // XMultiPropertySet

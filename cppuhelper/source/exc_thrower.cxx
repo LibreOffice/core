@@ -49,8 +49,7 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 
     static inline Type const & getCppuType()
     {
-        return ::getCppuType(
-            reinterpret_cast< Reference< XExceptionThrower > const * >(0) );
+        return cppu::UnoType<XExceptionThrower>::get();
     }
 
     // XInterface
@@ -87,9 +86,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
     {
         Type const & rType_demanded =
             *static_cast< Type const * >( pArgs[ 0 ] );
-        if (rType_demanded.equals(
-                ::getCppuType( reinterpret_cast<
-                               Reference< XInterface > const * >(0) ) ) ||
+        if (rType_demanded.equals( cppu::UnoType<XInterface>::get() ) ||
             rType_demanded.equals( ExceptionThrower::getCppuType() ))
         {
             typelib_TypeDescription * pTD = 0;
@@ -122,7 +119,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
         OSL_ASSERT( false );
         RuntimeException exc( "not implemented!" );
         uno_type_any_construct(
-            *ppException, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
+            *ppException, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), 0 );
         break;
     }
     }
@@ -134,8 +131,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
 Any ExceptionThrower::queryInterface( Type const & type )
     throw (RuntimeException, std::exception)
 {
-    if (type.equals( ::getCppuType( reinterpret_cast<
-                                    Reference< XInterface > const * >(0) ) ) ||
+    if (type.equals( cppu::UnoType<XInterface>::get() ) ||
         type.equals( ExceptionThrower::getCppuType() ))
     {
         XExceptionThrower * that = static_cast< XExceptionThrower * >( this );

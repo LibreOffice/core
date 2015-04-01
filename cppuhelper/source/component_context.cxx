@@ -494,7 +494,7 @@ sal_Bool ComponentContext::hasByName( OUString const & name )
 
 Type ComponentContext::getElementType() throw (RuntimeException, std::exception)
 {
-    return ::getVoidCppuType();
+    return cppu::UnoType<cppu::UnoVoidType>::get();
 }
 
 
@@ -850,7 +850,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         xContext = xDelegate;
     }
 
-    *ppContext = pTarget2curr->mapInterface(xContext.get(), ::getCppuType(&xContext));
+    *ppContext = pTarget2curr->mapInterface(xContext.get(), cppu::UnoType<decltype(xContext)>::get());
 }}
 
 Reference< XComponentContext > SAL_CALL createComponentContext(
@@ -875,7 +875,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
                                          curr2source.get());
     }
 
-    void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), ::getCppuType(&xDelegate));
+    void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), cppu::UnoType<decltype(xDelegate)>::get());
     XComponentContext * pXComponentContext = NULL;
     source_env.invoke(s_createComponentContext_v, mapped_entries.get(), nEntries, mapped_delegate, &pXComponentContext, &source2curr);
     mapped_entries.reset();
