@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.net.Uri;
 
+import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
 import org.libreoffice.overlay.TextCursorLayer;
-import org.mozilla.gecko.TextSelection;
-import org.mozilla.gecko.TextSelectionHandle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,12 +18,10 @@ import java.util.List;
 public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final TextCursorLayer mTextCursorLayer;
-    private final TextSelection mTextSelection;
     private OverlayState mState;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mTextCursorLayer = mainActivity.getTextCursorLayer();
-        mTextSelection = mainActivity.getTextSelection();
         mState = OverlayState.NONE;
     }
 
@@ -150,8 +147,8 @@ public class InvalidationHandler implements Document.MessageCallback {
     private synchronized void invalidateCursor(String payload) {
         RectF cursorRectangle = convertPayloadToRectangle(payload);
         if (cursorRectangle != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, cursorRectangle);
             mTextCursorLayer.positionCursor(cursorRectangle);
+            mTextCursorLayer.positionHandle(SelectionHandle.HandleType.MIDDLE, cursorRectangle);
 
             if (mState == OverlayState.TRANSITION || mState == OverlayState.CURSOR) {
                 changeStateTo(OverlayState.CURSOR);
@@ -167,7 +164,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     private synchronized void textSelectionStart(String payload) {
         RectF selectionRect = convertPayloadToRectangle(payload);
         if (selectionRect != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, selectionRect);
+            mTextCursorLayer.positionHandle(SelectionHandle.HandleType.START, selectionRect);
         }
     }
 
@@ -179,7 +176,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     private synchronized void textSelectionEnd(String payload) {
         RectF selectionRect = convertPayloadToRectangle(payload);
         if (selectionRect != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, selectionRect);
+            mTextCursorLayer.positionHandle(SelectionHandle.HandleType.END, selectionRect);
         }
     }
 
@@ -213,11 +210,11 @@ public class InvalidationHandler implements Document.MessageCallback {
         if (payload.equals("true")) {
             mTextCursorLayer.showCursor();
             if (mState != OverlayState.SELECTION) {
-                mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+                mTextCursorLayer.showHandle(SelectionHandle.HandleType.MIDDLE);
             }
         } else if (payload.equals("false")) {
             mTextCursorLayer.hideCursor();
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.hideHandle(SelectionHandle.HandleType.MIDDLE);
         }
     }
 
@@ -296,9 +293,9 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
 
         // Just hide everything
-        mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
-        mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
-        mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+        mTextCursorLayer.hideHandle(SelectionHandle.HandleType.START);
+        mTextCursorLayer.hideHandle(SelectionHandle.HandleType.END);
+        mTextCursorLayer.hideHandle(SelectionHandle.HandleType.MIDDLE);
         mTextCursorLayer.hideSelections();
         mTextCursorLayer.hideCursor();
         mTextCursorLayer.hideGraphicSelection();
@@ -309,8 +306,8 @@ public class InvalidationHandler implements Document.MessageCallback {
      * Handle a transition to OverlayState.SELECTION state.
      */
     private void handleSelectionState(OverlayState previous) {
-        mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
-        mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
+        mTextCursorLayer.showHandle(SelectionHandle.HandleType.START);
+        mTextCursorLayer.showHandle(SelectionHandle.HandleType.END);
         mTextCursorLayer.showSelections();
     }
 
@@ -320,7 +317,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     private void handleCursorState(OverlayState previous) {
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
         if (previous == OverlayState.TRANSITION) {
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.showHandle(SelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.showCursor();
         }
     }
@@ -330,11 +327,11 @@ public class InvalidationHandler implements Document.MessageCallback {
      */
     private void handleTransitionState(OverlayState previous) {
         if (previous == OverlayState.SELECTION) {
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+            mTextCursorLayer.hideHandle(SelectionHandle.HandleType.START);
+            mTextCursorLayer.hideHandle(SelectionHandle.HandleType.END);
             mTextCursorLayer.hideSelections();
         } else if (previous == OverlayState.CURSOR) {
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.hideHandle(SelectionHandle.HandleType.MIDDLE);
         } else if (previous == OverlayState.GRAPHIC_SELECTION) {
             mTextCursorLayer.hideGraphicSelection();
         }

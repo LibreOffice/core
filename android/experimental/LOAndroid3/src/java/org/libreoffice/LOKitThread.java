@@ -5,7 +5,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.KeyEvent;
 
-import org.mozilla.gecko.TextSelectionHandle;
+import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -251,12 +251,12 @@ public class LOKitThread extends Thread {
     /**
      * Request a change of the handle position.
      */
-    private void changeHandlePosition(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
-        if (handleType == TextSelectionHandle.HandleType.MIDDLE) {
+    private void changeHandlePosition(SelectionHandle.HandleType handleType, PointF documentCoordinate) {
+        if (handleType == SelectionHandle.HandleType.MIDDLE) {
             mTileProvider.setTextSelectionReset(documentCoordinate);
-        } else if (handleType == TextSelectionHandle.HandleType.START) {
+        } else if (handleType == SelectionHandle.HandleType.START) {
             mTileProvider.setTextSelectionStart(documentCoordinate);
-        } else if (handleType == TextSelectionHandle.HandleType.END) {
+        } else if (handleType == SelectionHandle.HandleType.END) {
             mTileProvider.setTextSelectionEnd(documentCoordinate);
         }
     }

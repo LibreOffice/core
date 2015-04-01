@@ -9,6 +9,8 @@
 package org.libreoffice.overlay;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,7 +22,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.libreoffice.LOKitShell;
+import org.libreoffice.R;
 import org.libreoffice.canvas.GraphicSelection;
+import org.libreoffice.canvas.SelectionHandle;
+import org.libreoffice.canvas.SelectionHandleEnd;
+import org.libreoffice.canvas.SelectionHandleMiddle;
+import org.libreoffice.canvas.SelectionHandleStart;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.gfx.RectUtils;
@@ -54,6 +61,12 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private LayerView mLayerView;
 
+    private SelectionHandle mHandleMiddle;
+    private SelectionHandle mHandleStart;
+    private SelectionHandle mHandleEnd;
+
+    private SelectionHandle mDragHandle = null;
+
     public TextCursorView(Context context) {
         super(context);
     }
@@ -86,6 +99,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicSelection.setVisible(false);
 
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
+
+            mHandleMiddle = new SelectionHandleMiddle(getContext());
+            mHandleStart = new SelectionHandleStart(getContext());
+            mHandleEnd = new SelectionHandleEnd(getContext());
 
             mInitialized = true;
         }
@@ -140,6 +157,15 @@ public class TextCursorView extends View implements View.OnTouchListener {
         mCursorScaledPosition = convertToScreen(mCursorPosition, x, y, zoom);
         mCursorScaledPosition.right = mCursorScaledPosition.left + CURSOR_WIDTH;
 
+        RectF rect = convertToScreen(mHandleMiddle.mDocumentPosition, x, y, zoom);
+        mHandleMiddle.reposition(rect.left, rect.bottom);
+
+        rect = convertToScreen(mHandleStart.mDocumentPosition, x, y, zoom);
+        mHandleStart.reposition(rect.left, rect.bottom);
+
+        rect = convertToScreen(mHandleEnd.mDocumentPosition, x, y, zoom);
+        mHandleEnd.reposition(rect.left, rect.bottom);
+
         mScaledSelections.clear();
         for (RectF selection : mSelections) {
             RectF scaledSelection = convertToScreen(selection, x, y, zoom);
@@ -148,7 +174,6 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
         RectF scaledGraphicSelection = convertToScreen(mGraphicSelection.mRectangle, x, y, zoom);
         mGraphicSelection.reposition(scaledGraphicSelection);
-
         invalidate();
     }
 
@@ -172,14 +197,18 @@ public class TextCursorView extends View implements View.OnTouchListener {
         if (mCursorVisible) {
             canvas.drawRect(mCursorScaledPosition, mCursorPaint);
         }
+        mHandleMiddle.draw(canvas);
+        mHandleStart.draw(canvas);
+        mHandleEnd.draw(canvas);
+
         if (mSelectionsVisible) {
             for (RectF selection : mScaledSelections) {
                 canvas.drawRect(selection, mSelectionPaint);
             }
         }
-        if (mGraphicSelection.isVisible()) {
-            mGraphicSelection.draw(canvas);
-        }
+
+        mGraphicSelection.draw(canvas);
+
     }
 
     /**
@@ -250,33 +279,51 @@ public class TextCursorView extends View implements View.OnTouchListener {
      */
     @Override
     public boolean onTouch(View view, MotionEvent event) {
+        PointF point = new PointF(event.getX(), event.getY());
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
                 if (mGraphicSelection.isVisible()) {
                     // Check if inside graphic selection was hit
-                    PointF startPosition = new PointF(event.getX(), event.getY());
-                    if (mGraphicSelection.contains(startPosition.x, startPosition.y)) {
+                    if (mGraphicSelection.contains(point.x, point.y)) {
                         mGraphicSelectionMove = true;
-                        mGraphicSelection.dragStart(startPosition);
+                        mGraphicSelection.dragStart(point);
                         invalidate();
                         return true;
                     }
-                    return false;
+                } else {
+                    if (mHandleStart.contains(point.x, point.y)) {
+                        mHandleStart.dragStart(point);
+                        mDragHandle = mHandleStart;
+                        return true;
+                    } else if (mHandleEnd.contains(point.x, point.y)) {
+                        mHandleEnd.dragStart(point);
+                        mDragHandle = mHandleEnd;
+                        return true;
+                    } else if (mHandleMiddle.contains(point.x, point.y)) {
+                        mHandleMiddle.dragStart(point);
+                        mDragHandle = mHandleMiddle;
+                        return true;
+                    }
                 }
             }
             case MotionEvent.ACTION_UP: {
                 if (mGraphicSelection.isVisible() && mGraphicSelectionMove) {
+                    mGraphicSelection.dragEnd(point);
                     mGraphicSelectionMove = false;
-                    mGraphicSelection.dragEnd(new PointF(event.getX(), event.getY()));
                     invalidate();
                     return true;
+                } else if (mDragHandle != null) {
+                    mDragHandle.dragEnd(point);
+                    mDragHandle = null;
                 }
             }
             case MotionEvent.ACTION_MOVE: {
                 if (mGraphicSelection.isVisible() && mGraphicSelectionMove) {
-                    mGraphicSelection.dragging(new PointF(event.getX(), event.getY()));
+                    mGraphicSelection.dragging(point);
                     invalidate();
                     return true;
+                } else if (mDragHandle != null) {
+                    mDragHandle.dragging(point);
                 }
             }
         }
@@ -285,6 +332,36 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     public void setLayerView(LayerView layerView) {
         this.mLayerView = layerView;
+    }
+
+    public void positionHandle(SelectionHandle.HandleType type, RectF position) {
+        SelectionHandle handle = getHandleForType(type);
+        RectUtils.assign(handle.mDocumentPosition, position);
+
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
+        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+    }
+
+    public void hideHandle(SelectionHandle.HandleType type) {
+        SelectionHandle handle = getHandleForType(type);
+        handle.setVisible(false);
+    }
+
+    public void showHandle(SelectionHandle.HandleType type) {
+        SelectionHandle handle = getHandleForType(type);
+        handle.setVisible(true);
+    }
+
+    private SelectionHandle getHandleForType(SelectionHandle.HandleType type) {
+        switch(type) {
+            case START:
+                return mHandleStart;
+            case END:
+                return mHandleEnd;
+            case MIDDLE:
+                return mHandleMiddle;
+        }
+        return null;
     }
 }
 

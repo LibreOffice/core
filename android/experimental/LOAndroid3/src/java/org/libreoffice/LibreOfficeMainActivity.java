@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.libreoffice.overlay.TextCursorLayer;
-import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -52,7 +51,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
-    private TextSelection mTextSelection;
     private TextCursorLayer mTextCursorLayer;
     private File mTempFile = null;
     private LOAbout mAbout;
@@ -161,10 +159,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
-
-        // create and register TextSelection in LayerView
-        mTextSelection = new TextSelection(mAppContext);
-        layerView.addLayer(mTextSelection);
 
         // create TextCursorLayer
         mTextCursorLayer = new TextCursorLayer(mAppContext, layerView);
@@ -332,10 +326,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    public TextSelection getTextSelection() {
-        return mTextSelection;
     }
 
     public TextCursorLayer getTextCursorLayer() {

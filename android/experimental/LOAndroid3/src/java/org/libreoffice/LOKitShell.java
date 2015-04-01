@@ -16,12 +16,10 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 
-import org.mozilla.gecko.TextSelectionHandle;
+import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.LayerView;
-import org.mozilla.gecko.gfx.SubTile;
 
 
 public class LOKitShell {
@@ -151,7 +149,7 @@ public class LOKitShell {
     /**
      * Send change handle position event to LOKitThread.
      */
-    public static void sendChangeHandlePositionEvent(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
+    public static void sendChangeHandlePositionEvent(SelectionHandle.HandleType handleType, PointF documentCoordinate) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_HANDLE_POSITION, handleType, documentCoordinate));
     }
 

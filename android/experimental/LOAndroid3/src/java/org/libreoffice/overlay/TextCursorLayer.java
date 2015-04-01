@@ -14,6 +14,7 @@ import android.util.Log;
 
 import org.libreoffice.LOKitShell;
 import org.libreoffice.R;
+import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;
@@ -144,7 +145,7 @@ public class TextCursorLayer extends Layer {
     }
 
     /**
-     * Hide the graphic selection on the overlay.
+     * Hide the graphic selection.
      */
     public void hideGraphicSelection() {
         LOKitShell.getMainHandler().post(new Runnable() {
@@ -161,6 +162,39 @@ public class TextCursorLayer extends Layer {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 mCursorView.changeGraphicSelection(rectangle);
+            }
+        });
+    }
+
+    /**
+     * Show the handle (of input type) on the overlay.
+     */
+    public void showHandle(final SelectionHandle.HandleType type) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.showHandle(type);
+            }
+        });
+    }
+
+    /**
+     * Hide the handle (of input type).
+     */
+    public void hideHandle(final SelectionHandle.HandleType type) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.hideHandle(type);
+            }
+        });
+    }
+
+    /**
+     * Position the handle (of input type) position to the input rectangle.
+     */
+    public void positionHandle(final SelectionHandle.HandleType type, final RectF rectangle) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.positionHandle(type, rectangle);
             }
         });
     }

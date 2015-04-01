@@ -11,12 +11,9 @@ package org.libreoffice;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 
-import org.mozilla.gecko.TextSelectionHandle;
+import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.SubTile;
 
 /**
  * Events and data that is queued and processed by LOKitThread.
@@ -49,7 +46,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public PointF mDocumentCoordinate;
     public KeyEvent mKeyEvent;
     public RectF mInvalidationRect;
-    public TextSelectionHandle.HandleType mHandleType;
+    public SelectionHandle.HandleType mHandleType;
 
     public LOEvent(int type) {
         mType = type;
@@ -98,7 +95,7 @@ public class LOEvent implements Comparable<LOEvent> {
         mInvalidationRect = rect;
     }
 
-    public LOEvent(int type, TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
+    public LOEvent(int type, SelectionHandle.HandleType handleType, PointF documentCoordinate) {
         mType = type;
         mHandleType = handleType;
         mDocumentCoordinate = documentCoordinate;
