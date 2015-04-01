@@ -278,9 +278,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    mpTxtNode = pOldTxtNode; // setPropertyValue() modifies this. We restore the old state.
-
-    IDocumentContentOperations* pIDCO = mpTxtNode->getIDocumentContentOperations();
+    IDocumentContentOperations* pIDCO = pOldTxtNode->getIDocumentContentOperations();
     pIDCO->ReplaceRange( aPaM, aNewText, false );
 
     mpTxtNode = 0;
