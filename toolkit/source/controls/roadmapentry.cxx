@@ -31,22 +31,22 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
     registerProperty( OUString("Label"), RM_PROPERTY_ID_LABEL,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
-                      & m_sLabel, ::getCppuType( &m_sLabel ) );
+                      & m_sLabel, cppu::UnoType<decltype(m_sLabel)>::get() );
     m_nID = -1;
     registerProperty( OUString("ID"), RM_PROPERTY_ID_ID,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
-                      & m_nID, ::getCppuType( &m_nID ) );
+                      & m_nID, cppu::UnoType<decltype(m_nID)>::get() );
     m_bEnabled = true;
     registerProperty( OUString("Enabled"), RM_PROPERTY_ID_ENABLED,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
-                    & m_bEnabled, ::getCppuType( &m_bEnabled ) );
+                    & m_bEnabled, cppu::UnoType<decltype(m_bEnabled)>::get() );
 
     registerProperty( OUString("Interactive"), RM_PROPERTY_ID_INTERACTIVE,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
-                    & m_bInteractive, ::getCppuType( &m_bInteractive ) );
+                    & m_bInteractive, cppu::UnoType<decltype(m_bInteractive)>::get() );
 
 
 

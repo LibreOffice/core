@@ -92,7 +92,7 @@ IMPL_IMPLEMENTATION_ID( ClassName ) \
         if( !pCollection ) \
         { \
             static ::cppu::OTypeCollection collection( \
-            getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
+            cppu::UnoType<css::lang::XTypeProvider>::get(),
 
 
 

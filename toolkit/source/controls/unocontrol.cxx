@@ -179,7 +179,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExist
 
         // queryInterface ourself, to allow aggregation
         Reference< XControl > xMe;
-        OWeakAggObject::queryInterface( ::getCppuType( &xMe ) ) >>= xMe;
+        OWeakAggObject::queryInterface( cppu::UnoType<decltype(xMe)>::get() ) >>= xMe;
 
         vcl::Window* pParentWindow( NULL );
         {
@@ -1332,7 +1332,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
 
     // query for the XPropertiesChangeListener - our delegator is allowed to overwrite this interface
     Reference< XPropertiesChangeListener > xListener;
-    queryInterface( ::getCppuType( &xListener ) ) >>= xListener;
+    queryInterface( cppu::UnoType<decltype(xListener)>::get() ) >>= xListener;
 
     if( xPropSet.is() )
         xPropSet->removePropertiesChangeListener( xListener );

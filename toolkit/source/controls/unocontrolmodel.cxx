@@ -789,7 +789,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
             if ( maData.find( nPropId ) != maData.end() )
             {
                 const ::com::sun::star::uno::Type* pType = GetPropertyType( nPropId );
-                if ( *pType == ::getBooleanCppuType() )
+                if ( *pType == cppu::UnoType<bool>::get() )
                 {
                     bool b = InStream->readBoolean();
                     aValue <<= b;
