@@ -334,7 +334,7 @@ IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
 
 void ImpVclMEdit::SetAlign( WinBits nWinStyle )
 {
-    bool bRTL = Application::GetSettings().GetLayoutRTL();
+    bool bRTL = AllSettings::GetLayoutRTL();
     mpTextWindow->GetTextEngine()->SetRightToLeft( bRTL );
 
     if ( nWinStyle & WB_CENTER )
@@ -423,7 +423,7 @@ void ImpVclMEdit::Resize()
         Point aTextWindowPos( maTextWindowOffset );
         if ( mpVScrollBar )
         {
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
             {
                 mpVScrollBar->setPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
                 aTextWindowPos.X() += nSBWidth;

@@ -54,7 +54,7 @@ protected:
     basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
 
 public:
-    GlyphCache& getPlatformGlyphCache();
+    static GlyphCache& getPlatformGlyphCache();
     void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
     void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
                         const basegfx::B2IPoint &rDstPoint);

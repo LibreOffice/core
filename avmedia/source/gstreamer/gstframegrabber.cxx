@@ -191,7 +191,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                 }
             }
         }
-        aBmp.ReleaseAccess( pWrite );
+        Bitmap::ReleaseAccess( pWrite );
 
 #ifndef AVMEDIA_GST_0_10
         gst_buffer_unmap( pBuf, &aMapInfo );

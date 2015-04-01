@@ -2051,7 +2051,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     {
         if( m_pParent )
         {
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 nX = m_pParent->maGeometry.nWidth-maGeometry.nWidth-1-nX;
             nX += m_pParent->maGeometry.nX;
             nY += m_pParent->maGeometry.nY;
@@ -3272,7 +3272,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     }
 
     // --- RTL --- (mirror mouse pos)
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     vcl::DeletionListener aDel( pThis );
@@ -3340,7 +3340,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
 
     // --- RTL --- (mirror mouse pos)
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -3398,7 +3398,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     aEvent.mnButton = 0;
 
     // --- RTL --- (mirror mouse pos)
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     vcl::DeletionListener aDel( pThis );

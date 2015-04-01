@@ -50,8 +50,8 @@ class ItemHolder2 : private ItemHolderMutexBase
 
         void impl_addItem(EItem eItem);
         void impl_releaseAllItems();
-        void impl_newItem(TItemInfo& rItem);
-        void impl_deleteItem(TItemInfo& rItem);
+        static void impl_newItem(TItemInfo& rItem);
+        static void impl_deleteItem(TItemInfo& rItem);
 };
 
 #endif // INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_

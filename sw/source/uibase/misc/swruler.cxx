@@ -97,7 +97,7 @@ void SwCommentRuler::DrawCommentControl()
     // TODO Discover why it should be 0 instead of CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET
     aLabelPos.Y() = 0;
     aArrowPos.Y() = CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET;
-    if ( !Application::GetSettings().GetLayoutRTL() )
+    if ( !AllSettings::GetLayoutRTL() )
     {
         // LTR
         if ( bIsCollapsed )

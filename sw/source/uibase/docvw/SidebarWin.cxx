@@ -359,7 +359,7 @@ void SwSidebarWin::InitControls()
     // window controls for author and date
     mpMetadataAuthor = new Edit( this, 0 );
     mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
-    mpMetadataAuthor->EnableRTL(Application::GetSettings().GetLayoutRTL());
+    mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataAuthor->SetReadOnly();
     mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
@@ -378,7 +378,7 @@ void SwSidebarWin::InitControls()
 
     mpMetadataDate = new Edit( this, 0 );
     mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
-    mpMetadataDate->EnableRTL(Application::GetSettings().GetLayoutRTL());
+    mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataDate->SetReadOnly();
     mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);
@@ -760,7 +760,7 @@ void SwSidebarWin::DoResize()
     }
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
 
-    if (!Application::GetSettings().GetLayoutRTL())
+    if (!AllSettings::GetLayoutRTL())
     {
         mpSidebarTxtControl->setPosSizePixel(0, 0, aWidth, aHeight);
         mpVScrollbar->setPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);

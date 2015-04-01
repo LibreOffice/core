@@ -240,7 +240,7 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
             }
         }
 
-        aBitmap.ReleaseAccess(pContent);
+        Bitmap::ReleaseAccess(pContent);
     }
 
     return aBitmap;

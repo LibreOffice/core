@@ -778,7 +778,7 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_MESSAGE("(9,2) incorrect content",
                                pBmpAcc->GetPixel(2,9) == BitmapColor(9));
 
-        aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+        Bitmap::ReleaseAccess(pBmpAcc);
     }
 
     xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
@@ -815,7 +815,7 @@ void CanvasBitmapTest::runTest()
                                pAlphaAcc->GetPixel(2,9) == BitmapColor(253));
 
         aBmp.GetAlpha().ReleaseAccess(pAlphaAcc);
-        aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+        Bitmap::ReleaseAccess(pBmpAcc);
     }
 }
 

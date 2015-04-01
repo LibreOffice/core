@@ -456,7 +456,7 @@ void PresenterNotesView::Layout (void)
                     if (nHeight > nTextBoxHeight)
                         {
                             bShowVerticalScrollbar = true;
-                            if(!Application::GetSettings().GetLayoutRTL())
+                            if(!AllSettings::GetLayoutRTL())
                                 aNewTextBoundingBox.X2 -= mpScrollBar->GetSize();
                             else
                                 aNewTextBoundingBox.X1 += mpScrollBar->GetSize();
@@ -467,7 +467,7 @@ void PresenterNotesView::Layout (void)
                 {
                     OSL_ASSERT(false);
                 }
-            if(Application::GetSettings().GetLayoutRTL())
+            if(AllSettings::GetLayoutRTL())
                 {
                     mpScrollBar->SetVisible(bShowVerticalScrollbar);
                     mpScrollBar->SetPosSize(

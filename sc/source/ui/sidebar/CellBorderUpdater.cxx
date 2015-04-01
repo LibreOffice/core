@@ -104,9 +104,9 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
             }
         }
 
-        aBmp.ReleaseAccess( pBmpAcc );
+        Bitmap::ReleaseAccess( pBmpAcc );
         if( pMskAcc )
-                aMsk.ReleaseAccess( pMskAcc );
+                Bitmap::ReleaseAccess( pMskAcc );
 
         if( aBmpEx.IsAlpha() )
             aBmpEx = BitmapEx( aBmp, AlphaMask( aMsk ) );

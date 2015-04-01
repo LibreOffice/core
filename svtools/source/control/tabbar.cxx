@@ -2287,12 +2287,12 @@ void TabBar::SetMirrored(bool bMirrored)
 
 void TabBar::SetEffectiveRTL( bool bRTL )
 {
-    SetMirrored( bRTL != Application::GetSettings().GetLayoutRTL() );
+    SetMirrored( bRTL != AllSettings::GetLayoutRTL() );
 }
 
 bool TabBar::IsEffectiveRTL() const
 {
-    return IsMirrored() != Application::GetSettings().GetLayoutRTL();
+    return IsMirrored() != AllSettings::GetLayoutRTL();
 }
 
 void TabBar::SetMaxPageWidth( long nMaxWidth )

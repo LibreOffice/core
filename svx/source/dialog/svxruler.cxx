@@ -983,7 +983,7 @@ void SvxRuler::UpdatePage()
     long lPos = 0;
     Point aOwnPos = GetPosPixel();
     Point aEdtWinPos = pEditWin->GetPosPixel();
-    if( Application::GetSettings().GetLayoutRTL() && bHorz )
+    if( AllSettings::GetLayoutRTL() && bHorz )
     {
         //#i73321# in RTL the window and the ruler is not mirrored but the
         // influence of the vertical ruler is inverted

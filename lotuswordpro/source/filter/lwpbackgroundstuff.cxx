@@ -118,7 +118,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     BitmapWriteAccess* pWA = aBmp.AcquireWriteAccess();
     sal_uInt8* pBuf = pWA->GetBuffer();
     memcpy(pBuf, aPttnArray, 32);
-    aBmp.ReleaseAccess(pWA);
+    Bitmap::ReleaseAccess(pWA);
 
     // create XOBitmap object from bitmap object
     XOBitmap aXOBitmap( aBmp );

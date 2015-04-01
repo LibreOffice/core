@@ -36,7 +36,7 @@ ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCursor( CSV_POS_INVALID ),
     mnColCursor( 0 ),
     mnNoRepaint( 0 ),
-    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() )
+    mbAppRTL( !!AllSettings::GetLayoutRTL() )
 {
 }
 

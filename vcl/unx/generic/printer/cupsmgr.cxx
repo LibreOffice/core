@@ -569,7 +569,7 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions )
 {
     rNumOptions = 0;
     *rOptions = NULL;

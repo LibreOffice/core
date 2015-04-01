@@ -5592,7 +5592,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                     }
                                 }
                             }
-                            aBmp.ReleaseAccess( pAcc );
+                            Bitmap::ReleaseAccess( pAcc );
                             sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
                             nRt /= nC;
                             nGn /= nC;

@@ -722,7 +722,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         }
     }
 
-    xBmp->ReleaseAccess( pRAcc );
+    Bitmap::ReleaseAccess( pRAcc );
     xBmp.reset();
     VECT_PROGRESS( pProgress, 100 );
 
@@ -746,7 +746,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
 
     pRAcc = xBmp->AcquireReadAccess();
     std::unique_ptr <ImplVectMap> xMap(ImplExpand( pRAcc, COL_BLACK ));
-    xBmp->ReleaseAccess( pRAcc );
+    Bitmap::ReleaseAccess( pRAcc );
     xBmp.reset();
 
     VECT_PROGRESS( pProgress, 60 );

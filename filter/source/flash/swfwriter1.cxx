@@ -779,7 +779,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
                 aAlpha.ReleaseAccess( pAAcc );
             }
 
-            aBmp.ReleaseAccess( pRAcc );
+            Bitmap::ReleaseAccess( pRAcc );
         }
     }
 }

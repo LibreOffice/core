@@ -70,7 +70,7 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int
             }
         }
     }
-    rBitmap.ReleaseAccess( pReadAccess );
+    Bitmap::ReleaseAccess( pReadAccess );
     rAlpha.ReleaseAccess( pWriteAccess );
 }
 

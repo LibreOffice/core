@@ -568,8 +568,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         }
                     }
 
-                    aPolyMask.ReleaseAccess( pR );
-                    aPaint.ReleaseAccess( pW );
+                    Bitmap::ReleaseAccess( pR );
+                    Bitmap::ReleaseAccess( pW );
 
                     DrawBitmap( aDstRect.TopLeft(), aPaint );
 

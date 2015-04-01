@@ -639,7 +639,7 @@ namespace cairocanvas
                     }
                 }
 
-                aBitmap.ReleaseAccess( pBitmapReadAcc );
+                ::Bitmap::ReleaseAccess( pBitmapReadAcc );
                 if( pAlphaReadAcc )
                     aAlpha.ReleaseAccess( pAlphaReadAcc );
 

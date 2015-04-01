@@ -613,11 +613,11 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                 }
             }
 
-            aOutBmp.ReleaseAccess( pWriteAccess );
+            Bitmap::ReleaseAccess( pWriteAccess );
             bRet = true;
         }
 
-        aBmp.ReleaseAccess( pReadAccess );
+        Bitmap::ReleaseAccess( pReadAccess );
     }
 
     // mask processing
@@ -846,12 +846,12 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                     pMapLY.reset();
 
                     if( pMAcc )
-                        aMsk.ReleaseAccess( pMAcc );
+                        Bitmap::ReleaseAccess( pMAcc );
 
                     bRet = true;
                 }
 
-                aOutMsk.ReleaseAccess( pWriteAccess );
+                Bitmap::ReleaseAccess( pWriteAccess );
             }
 
             if( bRet )

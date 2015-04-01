@@ -304,9 +304,9 @@ public:
 #define BITMAPERROR                                     \
 {                                                       \
     if ( pAcc )                                         \
-        aBitmap.ReleaseAccess( pAcc );                  \
+        Bitmap::ReleaseAccess( pAcc );                  \
     if ( pReadAcc )                                     \
-        aBitmap.ReleaseAccess( pReadAcc );              \
+        Bitmap::ReleaseAccess( pReadAcc );              \
     return 0xffffffff;                                  \
 }
 
@@ -1107,8 +1107,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     else
         BITMAPERROR;
     if ( pReadAcc )
-        aBitmap.ReleaseAccess( pReadAcc );
-    aBitmap.ReleaseAccess( pAcc );
+        Bitmap::ReleaseAccess( pReadAcc );
+    Bitmap::ReleaseAccess( pAcc );
     rBitmap = aBitmap;
     return nDataSize;
 }

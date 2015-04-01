@@ -57,7 +57,7 @@ public:
 
     ::ucbhelper::Content* GetContent();
 
-    void CopyStreamToSubStream( const OUString& aSourceURL,
+    static void CopyStreamToSubStream( const OUString& aSourceURL,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
                                 const OUString& aNewEntryName );
 

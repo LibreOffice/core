@@ -160,11 +160,11 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
     else
         mbStatus = false;
     if ( mpWriteAcc )
-        maBmp.ReleaseAccess( mpWriteAcc );
+        Bitmap::ReleaseAccess( mpWriteAcc );
     if ( mpReadAcc )
-        maBmp.ReleaseAccess( mpReadAcc );
+        Bitmap::ReleaseAccess( mpReadAcc );
     if ( mpMaskWriteAcc )
-        maMaskBmp.ReleaseAccess( mpMaskWriteAcc );
+        Bitmap::ReleaseAccess( mpMaskWriteAcc );
     return mbStatus;
 }
 

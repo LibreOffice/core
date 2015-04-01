@@ -192,12 +192,12 @@ private:
     // decimal separator has to be '.'
     // If bForceFraction==true the string is taken to be the fractional part
     // of 0.1234 without the leading 0. (thus being just "1234").
-    double StringToDouble( const OUString& rStr,
-                           bool bForceFraction = false );
+    static double StringToDouble( const OUString& rStr,
+                                  bool bForceFraction = false );
 
     // Next number/string symbol
-    bool NextNumberStringSymbol( const sal_Unicode*& pStr,
-                                 OUString& rSymbol );
+    static bool NextNumberStringSymbol( const sal_Unicode*& pStr,
+                                        OUString& rSymbol );
 
     // Concatenate ,000,23 blocks
     // in input to 000123
@@ -310,8 +310,8 @@ private:
                  sal_Int32& nPos );
 
     // Get sign of exponent and advance string position
-    short GetESign( const OUString& rString,
-                    sal_Int32& nPos );
+    static short GetESign( const OUString& rString,
+                           sal_Int32& nPos );
 
     // Get next number as array offset
     inline bool GetNextNumber( sal_uInt16& i,

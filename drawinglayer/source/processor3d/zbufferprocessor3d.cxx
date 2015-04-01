@@ -116,7 +116,7 @@ namespace
             }
 
             aAlpha.ReleaseAccess(pAlpha);
-            aContent.ReleaseAccess(pContent);
+            Bitmap::ReleaseAccess(pContent);
 
             aRetval = BitmapEx(aContent, aAlpha);
 

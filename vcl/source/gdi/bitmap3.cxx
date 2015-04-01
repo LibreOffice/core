@@ -380,7 +380,7 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
                 }
             }
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            ReleaseAccess( pWriteAcc );
             bRet = true;
         }
 
@@ -455,7 +455,7 @@ bool Bitmap::ImplMakeMonoDither()
                 }
             }
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            ReleaseAccess( pWriteAcc );
             bRet = true;
         }
 
@@ -561,7 +561,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             pWriteAcc->SetPixelIndex( nY, nX, (pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift );
                 }
 
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -816,7 +816,7 @@ bool Bitmap::ImplConvertGhosted()
             if( pW )
             {
                 pW->CopyBuffer( *pR );
-                aNewBmp.ReleaseAccess( pW );
+                ReleaseAccess( pW );
                 bRet = true;
             }
         }
@@ -842,7 +842,7 @@ bool Bitmap::ImplConvertGhosted()
                     }
                 }
 
-                aNewBmp.ReleaseAccess( pW );
+                ReleaseAccess( pW );
                 bRet = true;
             }
         }
@@ -1114,7 +1114,7 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                     }
 
                     bRet = true;
-                    aNewBmp.ReleaseAccess( pWriteAcc );
+                    ReleaseAccess( pWriteAcc );
                 }
             }
             ReleaseAccess( pReadAcc );
@@ -1220,7 +1220,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
             }
 
             ReleaseAccess( pReadAcc );
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            ReleaseAccess( pWriteAcc );
 
             if( bRet )
             {
@@ -1293,7 +1293,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 }
 
                 ReleaseAccess( pReadAcc );
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                ReleaseAccess( pWriteAcc );
 
                 if( bRet )
                 {
@@ -1440,10 +1440,10 @@ namespace
                     }
                 }
 
-                rTarget.ReleaseAccess(pWriteAcc);
+                Bitmap::ReleaseAccess(pWriteAcc);
             }
 
-            rSource.ReleaseAccess(pReadAcc);
+            Bitmap::ReleaseAccess(pReadAcc);
             delete[] pWeights;
             delete[] pCount;
             delete[] pPixels;
@@ -1539,8 +1539,8 @@ namespace
                 }
             }
 
-            rTarget.ReleaseAccess(pWriteAcc);
-            rSource.ReleaseAccess(pReadAcc);
+            Bitmap::ReleaseAccess(pWriteAcc);
+            Bitmap::ReleaseAccess(pReadAcc);
 
             delete[] pWeights;
             delete[] pCount;
@@ -1738,7 +1738,7 @@ bool Bitmap::ImplDitherMatrix()
     }
 
     ReleaseAccess( pReadAcc );
-    aNewBmp.ReleaseAccess( pWriteAcc );
+    ReleaseAccess( pWriteAcc );
 
     if( bRet )
     {
@@ -1873,7 +1873,7 @@ bool Bitmap::ImplDitherFloyd()
         }
 
         ReleaseAccess( pReadAcc );
-        aNewBmp.ReleaseAccess( pWriteAcc );
+        ReleaseAccess( pWriteAcc );
 
         if( bRet )
         {
@@ -1963,7 +1963,7 @@ bool Bitmap::ImplDitherFloyd16()
     }
 
     ReleaseAccess( pReadAcc );
-    aNewBmp.ReleaseAccess( pWriteAcc );
+    ReleaseAccess( pWriteAcc );
 
     if( bRet )
     {
@@ -2042,7 +2042,7 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
                         pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( pRAcc->GetPixel( nY, nX ) )) );
             }
 
-            aNewBmp.ReleaseAccess( pWAcc );
+            ReleaseAccess( pWAcc );
             bRet = true;
         }
 
@@ -2204,7 +2204,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                 }
             }
 
-            aNewBmp.ReleaseAccess( pWAcc );
+            ReleaseAccess( pWAcc );
             bRet = true;
         }
 
@@ -2294,7 +2294,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
                     pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>( aMap.GetBestPaletteIndex( pRAcc->GetColor( nY, nX ) )) );
 
             rtl_freeMemory( pColBuf );
-            aNewBmp.ReleaseAccess( pWAcc );
+            ReleaseAccess( pWAcc );
             bRet = true;
         }
 
@@ -2648,7 +2648,7 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
             pWriteAcc->SetPixel(nDestY, nDestX, aResultColor);
         }
     }
-    aNewBitmap.ReleaseAccess( pWriteAcc );
+    ReleaseAccess( pWriteAcc );
     return true;
 }
 

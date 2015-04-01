@@ -628,7 +628,7 @@ private:
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
 
         pDispatchFrame->CallCallback( nEvent, &aEvent );
@@ -790,7 +790,7 @@ private:
         aEvent.mbDeltaIsPixel   = TRUE;
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
         aEvent.mnDelta = nDeltaZ;
@@ -846,7 +846,7 @@ private:
         aEvent.mbDeltaIsPixel   = TRUE;
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
         if( dX != 0.0 )
@@ -906,7 +906,7 @@ private:
         aEvent.mbDeltaIsPixel = FALSE;
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
         if( dX != 0.0 )

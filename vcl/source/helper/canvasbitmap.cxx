@@ -424,9 +424,9 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 VclCanvasBitmap::~VclCanvasBitmap()
 {
     if( m_pAlphaAcc )
-        m_aAlpha.ReleaseAccess(m_pAlphaAcc);
+        Bitmap::ReleaseAccess(m_pAlphaAcc);
     if( m_pBmpAcc )
-        m_aBitmap.ReleaseAccess(m_pBmpAcc);
+        Bitmap::ReleaseAccess(m_pBmpAcc);
 }
 
 // XBitmap

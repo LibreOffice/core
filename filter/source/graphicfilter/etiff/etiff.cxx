@@ -224,7 +224,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
                 m_rOStm.WriteUInt16( mnTagCount );
                 m_rOStm.Seek( nCurPos );
 
-                aBmp.ReleaseAccess( mpAcc );
+                Bitmap::ReleaseAccess( mpAcc );
             }
             else
                 mbStatus = false;

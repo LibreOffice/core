@@ -3888,7 +3888,7 @@ void SwPageFrm::PaintDecorators( ) const
                  ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
                    gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
             {
-                bool bRtl = Application::GetSettings().GetLayoutRTL();
+                bool bRtl = AllSettings::GetLayoutRTL();
                 const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
                 if ( bRtl )

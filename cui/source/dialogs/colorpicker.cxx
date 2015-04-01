@@ -518,7 +518,7 @@ void ColorFieldControl::UpdateBitmap()
             break;
         }
 
-        mpBitmap->ReleaseAccess( pWriteAccess );
+        Bitmap::ReleaseAccess( pWriteAccess );
     }
 }
 
@@ -563,7 +563,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         {
             // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
             maColor = pReadAccess->GetPixel( nY, nX );
-            mpBitmap->ReleaseAccess( pReadAccess );
+            Bitmap::ReleaseAccess( pReadAccess );
             pReadAccess = NULL;
         }
     }
@@ -836,7 +836,7 @@ void ColorSliderControl::UpdateBitmap()
             break;
         }
 
-        mpBitmap->ReleaseAccess( pWriteAccess );
+        Bitmap::ReleaseAccess( pWriteAccess );
     }
 }
 

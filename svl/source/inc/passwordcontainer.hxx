@@ -274,9 +274,9 @@ bool createUrlRecord(
     bool bName, // only needed to support empty user names
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler  ) throw(::com::sun::star::uno::RuntimeException);
 
-    OUString GetDefaultMasterPassword();
+    static OUString GetDefaultMasterPassword();
 
-    OUString RequestPasswordFromUser(
+    static OUString RequestPasswordFromUser(
                     ::com::sun::star::task::PasswordRequestMode aRMode,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
@@ -293,10 +293,10 @@ bool createUrlRecord(
                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
+    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
+    static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
 public:

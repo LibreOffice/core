@@ -426,7 +426,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
             (*iter)->setColorModel( pBmpAcc->GetBitCount(),aRGBPal, nRMask, nGMask, nBMask, nAMask );
         }
 
-        aBmp.ReleaseAccess( pBmpAcc );
+        Bitmap::ReleaseAccess( pBmpAcc );
         mbConsInit = true;
     }
 }
@@ -534,8 +534,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                     (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
 
-        aBmp.ReleaseAccess( pBmpAcc );
-        aMask.ReleaseAccess( pMskAcc );
+        Bitmap::ReleaseAccess( pBmpAcc );
+        Bitmap::ReleaseAccess( pMskAcc );
     }
 }
 

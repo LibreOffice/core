@@ -669,7 +669,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
         nSlidePreviewTop = (aBox.Height - aCurrentSlideOuterBox.Height) / 2;
         double Temp=nGap;
         /// check whether RTL interface or not
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
             Temp=aBox.Width - aCurrentSlideOuterBox.Width - nGap;
         SetPanePosSizeAbsolute (
             PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
@@ -690,7 +690,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
             PresenterPaneFactory::msNextSlidePreviewPaneURL));
         double Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
         /// check whether RTL interface or not
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
             Temp=nGap;
         SetPanePosSizeAbsolute (
             PresenterPaneFactory::msNextSlidePreviewPaneURL,
@@ -731,7 +731,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             - aToolBarBox.Y2 + aToolBarBox.Y1 - aNotesViewOuterSize.Height) / 2;
         /// check whether RTL interface or not
         double Temp=aBox.Width - aNotesViewOuterSize.Width - nGap;
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
             Temp=nGap;
         SetPanePosSizeAbsolute (
             PresenterPaneFactory::msNotesPaneURL,
@@ -753,7 +753,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
         /// check whether RTL interface or not
         double Temp=nGap;
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
             Temp=aBox.Width - aCurrentSlideOuterBox.Width - nGap;
         SetPanePosSizeAbsolute (
             PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
@@ -774,7 +774,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             PresenterPaneFactory::msNextSlidePreviewPaneURL));
         /// check whether RTL interface or not
         double Temp=nGap;
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
             Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
         SetPanePosSizeAbsolute (
             PresenterPaneFactory::msNextSlidePreviewPaneURL,

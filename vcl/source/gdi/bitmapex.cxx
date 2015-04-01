@@ -751,7 +751,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                             nTransparency = 0x00;
                         }
 
-                        aTestBitmap.ReleaseAccess(pRead);
+                        Bitmap::ReleaseAccess(pRead);
                     }
                     break;
                 }
@@ -778,7 +778,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                                 }
                             }
 
-                            aTestBitmap.ReleaseAccess(pRead);
+                            Bitmap::ReleaseAccess(pRead);
                         }
                     }
                     break;
@@ -1299,8 +1299,8 @@ BitmapEx createBlendFrame(
                 }
             }
 
-            aContent.ReleaseAccess(xContent);
-            aAlpha.ReleaseAccess(pAlpha);
+            Bitmap::ReleaseAccess(xContent);
+            Bitmap::ReleaseAccess(pAlpha);
 
             pBlendFrameCache->m_aLastResult = BitmapEx(aContent, aAlpha);
         }
@@ -1308,12 +1308,12 @@ BitmapEx createBlendFrame(
         {
             if(xContent)
             {
-                aContent.ReleaseAccess(xContent);
+                Bitmap::ReleaseAccess(xContent);
             }
 
             if(pAlpha)
             {
-                aAlpha.ReleaseAccess(pAlpha);
+                Bitmap::ReleaseAccess(pAlpha);
             }
         }
     }

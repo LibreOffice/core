@@ -746,7 +746,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         {
             ButtonValue aButtonValue = aValue.getTristateVal();
 
-            if( Application::GetSettings().GetLayoutRTL() && aButtonValue == BUTTONVALUE_OFF )
+            if( AllSettings::GetLayoutRTL() && aButtonValue == BUTTONVALUE_OFF )
             {
                 // FIXME: a value of kThemeDisclosureLeft
                 // should draw a theme compliant left disclosure triangle
@@ -784,7 +784,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     case BUTTONVALUE_OFF:
                         // FIXME: this should have drawn a theme compliant disclosure triangle
                         // (see above)
-                        if( Application::GetSettings().GetLayoutRTL() )
+                        if( AllSettings::GetLayoutRTL() )
                         {
                             aInfo.value = kThemeDisclosureLeft;//collapsed, RTL
                         }
@@ -815,7 +815,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTrackInfo.bounds.origin.y     -= 2; // FIXME: magic for shadow
             aTrackInfo.bounds.size.width   -= 2; // FIXME: magic for shadow
             aTrackInfo.attributes           = kThemeTrackHorizontal;
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 aTrackInfo.attributes      |= kThemeTrackRightToLeft;
             aTrackInfo.enableState          = getTrackState( nState );
             // the intro bitmap never gets key anyway; we want to draw that enabled
@@ -972,7 +972,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
             //support for RTL
             //see issue 79748
-            if( Application::GetSettings().GetLayoutRTL() ) {
+            if( AllSettings::GetLayoutRTL() ) {
                 if( aTabItemDrawInfo.position == kHIThemeTabPositionFirst )
                         aTabItemDrawInfo.position = kHIThemeTabPositionLast;
                 else if( aTabItemDrawInfo.position == kHIThemeTabPositionLast )
@@ -1105,7 +1105,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     HIRect buttonRc = ImplGetHIRectFromRectangle(aSpinRect);
 
                     // FIXME: without this fuzz factor there is some unwanted clipping
-                    if( Application::GetSettings().GetLayoutRTL() )
+                    if( AllSettings::GetLayoutRTL() )
                         buttonRc.origin.x -= FOCUS_RING_WIDTH - CLIP_FUZZ;
                     else
                         buttonRc.origin.x += FOCUS_RING_WIDTH + CLIP_FUZZ;

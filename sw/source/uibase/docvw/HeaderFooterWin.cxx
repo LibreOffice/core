@@ -215,7 +215,7 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
     Point aBoxPos( aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
                    aOffset.Y() - nYFooterOff );
 
-    if ( Application::GetSettings().GetLayoutRTL() )
+    if ( AllSettings::GetLayoutRTL() )
     {
         aBoxPos.setX( aOffset.X() + BOX_DISTANCE );
     }

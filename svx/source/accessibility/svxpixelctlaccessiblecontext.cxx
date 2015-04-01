@@ -484,7 +484,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
 {
     long nX = mPoint.X();
     long nY = mPoint.Y();
-    if( Application::GetSettings().GetLayoutRTL())
+    if( AllSettings::GetLayoutRTL())
     {
         nX = (sal_uInt16) mrPixelCtl.GetWidth() - 1 - nX;
     }

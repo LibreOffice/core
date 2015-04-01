@@ -1248,9 +1248,9 @@ namespace
             }
         }
 
-        const_cast<Bitmap&>(rBitmap).ReleaseAccess( pBmp );
-        aGrey.ReleaseAccess( pGrey );
-        aGreyAlphaMask.ReleaseAccess( pGreyAlphaMask );
+        Bitmap::ReleaseAccess( pBmp );
+        Bitmap::ReleaseAccess( pGrey );
+        Bitmap::ReleaseAccess( pGreyAlphaMask );
         return BitmapEx( aGrey, aGreyAlphaMask );
     }
 }
@@ -1427,8 +1427,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             }
         }
 
-        aBmp.ReleaseAccess( pB );
-        aDither.ReleaseAccess( pW );
+        Bitmap::ReleaseAccess( pB );
+        Bitmap::ReleaseAccess( pW );
         res = aDither;
     }
     else
@@ -1451,11 +1451,11 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             }
         }
 
-        aBmp.ReleaseAccess( pB );
+        Bitmap::ReleaseAccess( pB );
         res = aBmp;
     }
 
-    aAlphaBitmap.ReleaseAccess( pAlphaW );
+    Bitmap::ReleaseAccess( pAlphaW );
     mpAlphaVDev->DrawBitmap( aDstRect.TopLeft(), aAlphaBitmap );
     mpAlphaVDev->EnableMapMode( bOldMapMode );
 
@@ -1513,8 +1513,8 @@ Bitmap OutputDevice::BlendBitmap(
             }
         }
 
-        aBmp.ReleaseAccess( pB );
-        aDither.ReleaseAccess( pW );
+        Bitmap::ReleaseAccess( pB );
+        Bitmap::ReleaseAccess( pW );
         res = aDither;
     }
     else
@@ -1576,7 +1576,7 @@ Bitmap OutputDevice::BlendBitmap(
             }
         }
 
-        aBmp.ReleaseAccess( pB );
+        Bitmap::ReleaseAccess( pB );
         res = aBmp;
     }
 

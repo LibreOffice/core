@@ -225,7 +225,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             if( pRA->HasPalette() )
                 aActualColor = pRA->GetBestPaletteColor( aBgColor ).operator Color();
 
-            aBmp.ReleaseAccess(pRA);
+            Bitmap::ReleaseAccess(pRA);
 
             // did we get true white?
             if( aActualColor.GetColorError( aBgColor ) )

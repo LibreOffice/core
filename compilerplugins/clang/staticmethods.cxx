@@ -61,6 +61,9 @@ std::string StaticMethods::getFilename(SourceLocation loc)
     return compiler.getSourceManager().getFilename(spellingLocation);
 }
 
+static bool startsWith(const std::string& rStr, const char* pSubStr) {
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
 
 bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) {
     if (ignoreLocation(pCXXMethodDecl)) {
@@ -109,6 +112,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (aParentName == "osl::OGlobalTimer") {
         return true;
     }
+    // leave the TopLeft() method alone for consistency with the other "corner" methods
+    if (aParentName == "BitmapInfoAccess") {
+        return true;
+    }
     // can't change it because in debug mode it can't be static
     // sal/cpprt/operators_new_delete.cxx
     if (aParentName == "(anonymous namespace)::AllocatorTraits") {
@@ -117,6 +124,13 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     // in this case, the code is taking the address of the member function
     // shell/source/unix/sysshell/recently_used_file_handler.cxx
     if (aParentName == "(anonymous namespace)::recently_used_item") {
+        return true;
+    }
+    // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
+    if (startsWith(getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()), SRCDIR "/include/unotools")) {
+        return true;
+    }
+    if (startsWith(getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()), SRCDIR "/include/svl")) {
         return true;
     }
 

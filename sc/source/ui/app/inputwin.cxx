@@ -1448,7 +1448,7 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
 {
     EnableRTL( false ); // EditEngine can't be used with VCL EnableRTL
 
-    bIsRTL = GetSettings().GetLayoutRTL();
+    bIsRTL = AllSettings::GetLayoutRTL();
 
     //  always use application font, so a font with cjk chars can be installed
     vcl::Font aAppFont = GetFont();
@@ -1994,7 +1994,7 @@ void ScTextWnd::MakeDialogEditView()
 
 void ScTextWnd::ImplInitSettings()
 {
-    bIsRTL = GetSettings().GetLayoutRTL();
+    bIsRTL = AllSettings::GetLayoutRTL();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 

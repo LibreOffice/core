@@ -491,7 +491,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
                 m_pRightMF->SetValue( m_pRightMF->Normalize( nRight ), eUnit );
             }
         }
-        if (Application::GetSettings().GetLayoutRTL())
+        if (AllSettings::GetLayoutRTL())
         {
             m_pExampleWN->SetLeft(nRight);
             m_pExampleWN->SetRight(nLeft);

@@ -505,7 +505,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     DrawRect( aRect );
 
     Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
-    if (Application::GetSettings().GetLayoutRTL())
+    if (AllSettings::GetLayoutRTL())
        aPos.X() = -aPos.X();
     DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
 

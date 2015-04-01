@@ -728,7 +728,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
             }
         }
 
-        aPreviewBmp.ReleaseAccess( pAccess );
+        Bitmap::ReleaseAccess( pAccess );
     }
 
     return aPreviewBmp;

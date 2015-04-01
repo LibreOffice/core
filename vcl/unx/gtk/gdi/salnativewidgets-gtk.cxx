@@ -2518,7 +2518,7 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
             // Draw an edit field for SpinBoxes and ComboBoxes
             Rectangle aEditBoxRect( pixmapRect );
             aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - upBtnRect.GetWidth(), aEditBoxRect.GetHeight() ) );
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 aEditBoxRect.setX( upBtnRect.GetWidth() );
             else
                 aEditBoxRect.setX( 0 );
@@ -2567,7 +2567,7 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
     buttonSize -= buttonSize % 2 - 1; /* force odd */
     buttonRect.SetSize( Size( buttonSize + 2 * gWidgetData[nScreen].gSpinButtonWidget->style->xthickness,
                               buttonRect.GetHeight() ) );
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         buttonRect.setX( aAreaRect.Left() );
     else
         buttonRect.setX( aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()) );
@@ -2583,7 +2583,7 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
     }
     else
     {
-        if( Application::GetSettings().GetLayoutRTL() ) {
+        if( AllSettings::GetLayoutRTL() ) {
             buttonRect.Left()   = buttonRect.Right()+1;
             buttonRect.Right()  = aAreaRect.Right();
         } else {
@@ -2675,7 +2675,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
 
     Rectangle        aEditBoxRect( pixmapRect );
     aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         aEditBoxRect.SetPos( Point( x + buttonRect.GetWidth() , y ) );
 
     #define ARROW_EXTENT        0.7
@@ -2744,7 +2744,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
     if( nPart == PART_BUTTON_DOWN )
     {
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aButtonRect.SetPos( Point( aAreaRect.Left(), aAreaRect.Top() ) );
         else
             aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
@@ -2764,7 +2764,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         Point aEditPos = aAreaRect.TopLeft();
         aEditPos.X() += adjust_x;
         aEditPos.Y() += adjust_y;
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aEditPos.X() += nButtonWidth;
         aButtonRect.SetPos( aEditPos );
     }
@@ -3404,7 +3404,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
                               nState, nStateType );
 
             GtkArrowType eArrow;
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 eArrow = GTK_ARROW_LEFT;
             else
                 eArrow = GTK_ARROW_RIGHT;
@@ -3548,7 +3548,7 @@ bool GtkSalGraphics::NWPaintGTKProgress(
         if( nProgressWidth > 0 )
         {
             // paint progress
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
             {
                 gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
                                pixDrawable,
@@ -3708,7 +3708,7 @@ static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
 
         case PART_SUB_EDIT:
             aPartSize.Width() = aAreaRect.GetWidth() - nButtonAreaWidth - xthickness;
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 aPartPos.X() = aAreaRect.Left() + nButtonAreaWidth;
             else
                 aPartPos.X() = aAreaRect.Left() + xthickness;
@@ -3761,7 +3761,7 @@ static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
         right = pIndicatorSpacing->right;
 
     aIndicatorRect.SetSize( Size( width, height ) );
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         x = aAreaRect.Left() + right;
     else
         x = aAreaRect.Left() + aAreaRect.GetWidth() - width - right - gWidgetData[nScreen].gOptionMenuWidget->style->xthickness;

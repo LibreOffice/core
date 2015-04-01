@@ -51,7 +51,7 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 
     // find the window that is toplevel for this coordinates
     // because those coordinates come from outside, they must be mirrored if RTL layout is active
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( AllSettings::GetLayoutRTL() )
         m_pTopWindow->ImplMirrorFramePos( location );
     vcl::Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 

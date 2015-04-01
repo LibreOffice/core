@@ -54,7 +54,7 @@ XPMReader::XPMReader(SvStream& rStm)
 XPMReader::~XPMReader()
 {
     if( mpAcc )
-        maBmp.ReleaseAccess( mpAcc );
+        Bitmap::ReleaseAccess( mpAcc );
 }
 
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
@@ -181,21 +181,21 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
         {
             if ( mpMaskAcc )
             {
-                maMaskBmp.ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
-                maBmp.ReleaseAccess( mpAcc ), mpAcc = NULL;
+                Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
+                Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
                 rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
             }
             else
             {
-                maBmp.ReleaseAccess( mpAcc ), mpAcc = NULL;
+                Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
                 rGraphic = maBmp;
             }
             eReadState = XPMREAD_OK;
         }
         else
         {
-            if ( mpMaskAcc ) maMaskBmp.ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
-            if ( mpAcc ) maBmp.ReleaseAccess( mpAcc ), mpAcc = NULL;
+            if ( mpMaskAcc ) Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
+            if ( mpAcc ) Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
             eReadState = XPMREAD_ERROR;
         }
     }

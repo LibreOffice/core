@@ -1286,7 +1286,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             // --- RTL --- (mirror window pos)
             RECT aParentRect;
             GetClientRect( ImplGetParentHwnd( mhWnd ), &aParentRect );
-            if( Application::GetSettings().GetLayoutRTL() )
+            if( AllSettings::GetLayoutRTL() )
                 nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
 
             //#110386#, do not transform coordinates for system child windows
@@ -3173,7 +3173,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             UpdateWindow( hWnd );
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
@@ -3263,7 +3263,7 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             aWheelEvt.mnCode |= KEY_MOD2;
 
         // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
 
         nRet = pFrame->CallCallback( SALEVENT_WHEELMOUSE, &aWheelEvt );

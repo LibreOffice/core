@@ -161,7 +161,7 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
                 mbStatus = false;
 
             if ( mpAcc )
-                aBitmap.ReleaseAccess ( mpAcc), mpAcc = NULL;
+                Bitmap::ReleaseAccess ( mpAcc), mpAcc = NULL;
 
             if ( mbStatus )
                 rGraphic = aBitmap;

@@ -1266,7 +1266,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     nWrittenBitmaps++;
     nActBitmapPercent = 0;
     if ( pAcc )
-        aBitmap.ReleaseAccess( pAcc );
+        Bitmap::ReleaseAccess( pAcc );
 }
 
 void PictWriter::WriteOpcode_EndOfFile()

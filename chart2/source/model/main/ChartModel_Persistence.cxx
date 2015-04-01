@@ -411,7 +411,7 @@ void ChartModel::insertDefaultChart()
 
                 setFirstDiagram( xDiagram );
 
-                bool bIsRTL = Application::GetSettings().GetMathLayoutRTL();
+                bool bIsRTL = AllSettings::GetMathLayoutRTL();
                 //reverse x axis for rtl charts
                 if( bIsRTL )
                     AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

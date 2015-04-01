@@ -128,7 +128,7 @@ class INetURLHistory_Impl: private boost::noncopyable
         return (sal_uInt16)(INETHIST_SIZE_LIMIT);
     }
 
-    sal_uInt32 crc32 (OUString const & rData) const
+    static sal_uInt32 crc32 (OUString const & rData)
     {
         return rtl_crc32 (0, rData.getStr(), rData.getLength() * sizeof(sal_Unicode));
     }

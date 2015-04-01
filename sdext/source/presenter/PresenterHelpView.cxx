@@ -315,7 +315,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         sal_Int32 RightX2 = aWindowBox.Width - gnHorizontalGap;
         /* check whether RTL interface or not
            then replace the windowbox position */
-        if(Application::GetSettings().GetLayoutRTL())
+        if(AllSettings::GetLayoutRTL())
         {
             LeftX1 = aWindowBox.Width/2 + gnHorizontalGap;
             LeftX2 = aWindowBox.Width - gnHorizontalGap;
@@ -581,7 +581,7 @@ double LineDescriptorList::Paint(
     {
         double nX;
         /// check whether RTL interface or not
-        if(!Application::GetSettings().GetLayoutRTL())
+        if(!AllSettings::GetLayoutRTL())
         {
             nX = rBBox.X1;
             if ( ! bFlushLeft)

@@ -1005,7 +1005,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         long nProgressWidth = aValue.getNumericVal();
         nProgressWidth *= (aProgressRect.right - aProgressRect.left);
         nProgressWidth /= (rc.right - rc.left);
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( AllSettings::GetLayoutRTL() )
             aProgressRect.left = aProgressRect.right - nProgressWidth;
         else
             aProgressRect.right = aProgressRect.left + nProgressWidth;
@@ -1074,7 +1074,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             if( nPart == PART_ENTIRE_CONTROL )
             {
                 RECT aGutterRC = rc;
-                if( Application::GetSettings().GetLayoutRTL() )
+                if( AllSettings::GetLayoutRTL() )
                 {
                     aGutterRC.right -= aValue.getNumericVal()+1;
                     aGutterRC.left = aGutterRC.right-3;
@@ -1107,7 +1107,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                         const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
                         aBGRect.top    = rMVal.maItemRect.Top();
                         aBGRect.bottom = rMVal.maItemRect.Bottom()+1; // see below in drawNativeControl
-                        if( Application::GetSettings().GetLayoutRTL() )
+                        if( AllSettings::GetLayoutRTL() )
                         {
                             aBGRect.right = rMVal.maItemRect.Right()+1;
                             aBGRect.left = aBGRect.right - (rMVal.getNumericVal()-rMVal.maItemRect.Left());
@@ -1133,7 +1133,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else if( nPart == PART_MENU_SEPARATOR )
             {
                 // adjust for gutter position
-                if( Application::GetSettings().GetLayoutRTL() )
+                if( AllSettings::GetLayoutRTL() )
                     rc.right -= aValue.getNumericVal()+1;
                 else
                     rc.left += aValue.getNumericVal()+1;

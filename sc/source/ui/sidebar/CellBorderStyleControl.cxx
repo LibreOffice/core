@@ -216,7 +216,7 @@ IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox)
             break;
         case TBI_BORDER2_RIGHT:
 
-            if(!Application::GetSettings().GetLayoutRTL())
+            if(!AllSettings::GetLayoutRTL())
             {
                 pRight = &theDefLine;
                 nValidFlags |= FRM_VALID_RIGHT;
