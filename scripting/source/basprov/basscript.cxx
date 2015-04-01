@@ -67,7 +67,7 @@ namespace basprov
         ,m_documentBasicManager( NULL )
         ,m_xDocumentScriptContext()
     {
-        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
+        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, cppu::UnoType<decltype(m_caller)>::get() );
     }
 
 
@@ -81,7 +81,7 @@ namespace basprov
         ,m_xDocumentScriptContext( documentScriptContext )
     {
         StartListening( *m_documentBasicManager );
-        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
+        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, cppu::UnoType<decltype(m_caller)>::get() );
     }
 
 
