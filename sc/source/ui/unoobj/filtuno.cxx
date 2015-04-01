@@ -22,6 +22,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <tools/zcodec.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
@@ -192,10 +193,22 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         INetURLObject aURL( aFileName );
         OUString aPrivDatName(aURL.getName());
         boost::scoped_ptr<SvStream> pInStream;
-        if ( xInputStream.is() )
-            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+        SvMemoryStream aMemStream;
+        bool bDecompressed(false);
 
-        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        if ( xInputStream.is() )
+        {
+            ZCodec aCodec;
+            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+            bDecompressed = aCodec.AttemptDecompression( *pInStream, aMemStream, false, true );
+        }
+        AbstractScImportAsciiDlg* pDlgTemp;
+        if ( !bDecompressed )
+            pDlgTemp = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE);
+        else
+            pDlgTemp = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, &aMemStream, SC_IMPORTFILE);
+
+        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pDlgTemp);
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
