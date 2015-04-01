@@ -481,10 +481,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
 void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
+    DBG_TESTSOLARMUTEX();
+
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
-    SolarMutexGuard aGuard;
     m_pTxtNode = 0;
 }
 
