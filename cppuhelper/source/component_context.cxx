@@ -494,7 +494,7 @@ sal_Bool ComponentContext::hasByName( OUString const & name )
 
 Type ComponentContext::getElementType() throw (RuntimeException, std::exception)
 {
-    return cppu::UnoType<cppu::UnoVoidType>::get();
+    return cppu::UnoType<void>::get();
 }
 
 

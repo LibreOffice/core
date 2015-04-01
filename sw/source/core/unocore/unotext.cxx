@@ -2416,7 +2416,7 @@ throw (uno::RuntimeException, std::exception)
     {
         aRet = SwXText::queryInterface( rType );
     }
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
     {
         aRet = OWeakAggObject::queryAggregation( rType );
     }
@@ -2442,7 +2442,7 @@ SwXBodyText::queryInterface(const uno::Type& rType)
 throw (uno::RuntimeException, std::exception)
 {
     const uno::Any ret = SwXText::queryInterface(rType);
-    return (ret.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    return (ret.getValueType() == cppu::UnoType<void>::get())
         ?   SwXBodyText_Base::queryInterface(rType)
         :   ret;
 }
@@ -2718,7 +2718,7 @@ SwXHeadFootText::queryInterface(const uno::Type& rType)
 throw (uno::RuntimeException, std::exception)
 {
     const uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
-    return (ret.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    return (ret.getValueType() == cppu::UnoType<void>::get())
         ?   SwXText::queryInterface(rType)
         :   ret;
 }

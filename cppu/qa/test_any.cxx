@@ -225,7 +225,7 @@ public:
 
 void Test::testVoid() {
     css::uno::Any a;
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get());
+    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<void>::get());
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);

@@ -1569,10 +1569,10 @@ namespace cmis
             // Required commands
             ucb::CommandInfo
             ( OUString( "getCommandInfo" ),
-              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+              -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertySetInfo" ),
-              -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+              -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
             ( OUString( "getPropertyValues" ),
               -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
@@ -1592,11 +1592,11 @@ namespace cmis
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
             // Mandatory CMIS-only commands
-            ucb::CommandInfo ( OUString( "checkout" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
-            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+            ucb::CommandInfo ( OUString( "checkout" ), -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo ( OUString( "checkIn" ), -1,
                     cppu::UnoType<ucb::TransferInfo>::get() ),
-            ucb::CommandInfo ( OUString( "updateProperties" ), -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+            ucb::CommandInfo ( OUString( "updateProperties" ), -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
             ( OUString( "getAllVersions" ),
               -1, cppu::UnoType<uno::Sequence< document::CmisVersion >>::get() ),

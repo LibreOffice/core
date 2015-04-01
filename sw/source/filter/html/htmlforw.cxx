@@ -844,7 +844,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 }
 
                 aTmp = xPropSet->getPropertyValue( "HScroll" );
-                if( aTmp.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ||
+                if( aTmp.getValueType() == cppu::UnoType<void>::get() ||
                     (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                     !*static_cast<sal_Bool const *>(aTmp.getValue())) )
                 {

@@ -543,7 +543,7 @@ sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
 uno::Type SwXFieldmarkParameters::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
-    return ::cppu::UnoType< ::cppu::UnoVoidType>::get();
+    return ::cppu::UnoType<void>::get();
 }
 
 sal_Bool SwXFieldmarkParameters::hasElements()

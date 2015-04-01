@@ -2320,7 +2320,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             css::uno::Reference<css::reflection::XIdlClass>
                                 xListenerClass(
                                     reflection_->forName(
-                                        cppu::UnoType<cppu::UnoVoidType>::get()
+                                        cppu::UnoType<void>::get()
                                         .getTypeName()));
                             // ALT: Reference<XIdlClass> xListenerClass = Void_getReflection()->getIdlClass();
 

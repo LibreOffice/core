@@ -94,7 +94,7 @@ struct AsciiPropertyValue
     AsciiPropertyValue()
         :DefaultValue( )
         ,AsciiName( NULL )
-        ,ValueType( ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
+        ,ValueType( ::cppu::UnoType<void>::get() )
     {
     }
 

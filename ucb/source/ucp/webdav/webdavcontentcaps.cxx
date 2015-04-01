@@ -499,12 +499,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "getCommandInfo" ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get() );
+                cppu::UnoType<void>::get() );
     aCmdInfo[ 1 ] =
             ucb::CommandInfo(
                 OUString( "getPropertySetInfo" ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get() );
+                cppu::UnoType<void>::get() );
     aCmdInfo[ 2 ] =
             ucb::CommandInfo(
                 OUString( "getPropertyValues" ),
@@ -607,13 +607,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "lock" ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get() );
+                cppu::UnoType<void>::get() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 OUString( "unlock" ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get() );
+                cppu::UnoType<void>::get() );
         nPos++;
     }
     return aCmdInfo;

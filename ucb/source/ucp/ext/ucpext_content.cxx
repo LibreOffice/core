@@ -554,12 +554,12 @@ namespace ucb { namespace ucp { namespace ext
             CommandInfo(
                 OUString(  "getCommandInfo"  ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get()
+                cppu::UnoType<void>::get()
             ),
             CommandInfo(
                 OUString(  "getPropertySetInfo"  ),
                 -1,
-                cppu::UnoType<cppu::UnoVoidType>::get()
+                cppu::UnoType<void>::get()
             ),
             CommandInfo(
                 OUString(  "getPropertyValues"  ),

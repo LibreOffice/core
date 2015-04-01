@@ -1163,7 +1163,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                     FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
                     aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
                 }
-                else if ( rProp.Value.getValueType() != cppu::UnoType<cppu::UnoVoidType>::get() )
+                else if ( rProp.Value.getValueType() != cppu::UnoType<void>::get() )
                     throw IllegalArgumentException();
             }
 

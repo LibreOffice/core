@@ -125,8 +125,7 @@ bool IncomingRequest::execute_throw(
     OSL_ASSERT(
         returnValue != 0 &&
         returnValue->getType().equals(
-            css::uno::TypeDescription(
-                cppu::UnoType< cppu::UnoVoidType >::get())) &&
+            css::uno::TypeDescription(cppu::UnoType<void>::get())) &&
         outArguments != 0 && outArguments->empty());
     bool isExc = false;
     switch (functionId_) {

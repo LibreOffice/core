@@ -406,12 +406,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
@@ -443,12 +443,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
@@ -471,7 +471,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "insert" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 )
 
                 // New commands
@@ -498,12 +498,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
@@ -539,12 +539,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
@@ -567,7 +567,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "insert" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "open" ),
@@ -609,12 +609,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),
@@ -650,12 +650,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "getCommandInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertySetInfo" ),
                     -1,
-                    cppu::UnoType<cppu::UnoVoidType>::get()
+                    cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "getPropertyValues" ),

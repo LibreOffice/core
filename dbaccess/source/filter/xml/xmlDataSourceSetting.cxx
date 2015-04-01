@@ -48,7 +48,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     ,m_bIsList(false)
 {
 
-    m_aPropType = cppu::UnoType<cppu::UnoVoidType>::get();
+    m_aPropType = cppu::UnoType<void>::get();
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -80,7 +80,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::cppu::UnoType<OUString>::get();
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::cppu::UnoType<sal_Int32>::get();
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::cppu::UnoType<sal_Int16>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<cppu::UnoVoidType>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<void>::get();
                     }
 
                     const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);

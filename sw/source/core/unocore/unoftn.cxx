@@ -232,7 +232,7 @@ SwXFootnote::queryInterface(const uno::Type& rType)
 throw (uno::RuntimeException, std::exception)
 {
     const uno::Any ret = SwXFootnote_Base::queryInterface(rType);
-    return (ret.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    return (ret.getValueType() == cppu::UnoType<void>::get())
         ?   SwXText::queryInterface(rType)
         :   ret;
 }

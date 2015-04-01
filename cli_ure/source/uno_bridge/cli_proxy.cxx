@@ -524,7 +524,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
                             System::Object^ pExc = nullptr;
                             m_bridge->call_uno(
                                 info->m_unoI, member_td.get(),
-                                cppu::UnoType<cppu::UnoVoidType>::get().getTypeLibType(),
+                                cppu::UnoType<void>::get().getTypeLibType(),
                                 1, &param, args, nullptr, &pExc);
                             return constructReturnMessage(nullptr, nullptr, NULL,
                                                           callmsg, pExc);

@@ -632,7 +632,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
         convertTo( cppu::UnoType<Sequence< sal_Int16 >>::get(), rVal, rBlock._toSeqINT16 );
         convertTo( cppu::UnoType<Sequence< Any >>::get(), rVal, rBlock._toSeqAny );
 
-        convertTo( cppu::UnoType<cppu::UnoVoidType>::get(), rVal, sal_True ); // anything converts to void
+        convertTo( cppu::UnoType<void>::get(), rVal, sal_True ); // anything converts to void
     }
     s_xConverter.clear();
 

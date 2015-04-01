@@ -872,7 +872,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             }
         }
     }
-    else if ( rValue.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() )
+    else if ( rValue.getValueType() == cppu::UnoType<void>::get() )
     {
         rPam.GetDoc()->DelNumRules(rPam);
     }

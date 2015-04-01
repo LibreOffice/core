@@ -257,7 +257,7 @@ namespace cppu {
    C++ types that are unambiguously derived from one C++ type that represents a
    UNO type.)  In addition to those C++ types that are mappings of UNO types
    (except for sal_uInt16 and sal_Unicode, see below), the following C++ types
-   are appropriate as template arguments: cppu::UnoVoidType, bool,
+   are appropriate as template arguments: void, cppu::UnoVoidType, bool,
    cppu::UnoUnsignedShortType, cppu::UnoCharType, cppu::UnoSequenceType with any
    appropriate template argument (the latter three to unambiguously specify UNO
    types, as the UNO types UNSIGNED SHORT and CHAR map to the same C++ type),
@@ -283,6 +283,10 @@ private:
     ~UnoType() SAL_DELETED_FUNCTION;
     void operator =(UnoType &) SAL_DELETED_FUNCTION;
 };
+
+template<> css::uno::Type inline const & UnoType<void>::get() {
+    return cppu::UnoType<cppu::UnoVoidType>::get();
+}
 
 /**
    A working replacement for getCppuType (see there).

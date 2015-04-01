@@ -231,7 +231,7 @@ SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
         const PropertyValue &rPropVal = rPropVals[n];
         rProp.Name = rPropVal.Name;
         rProp.Handle = rPropVal.Handle;
-        rProp.Type = cppu::UnoType<cppu::UnoVoidType>::get();
+        rProp.Type = cppu::UnoType<void>::get();
         rProp.Attributes = 0;
     }
 }

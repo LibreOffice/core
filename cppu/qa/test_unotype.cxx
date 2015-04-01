@@ -102,6 +102,7 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_VOID, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString("void"), t.getTypeName());
+    CPPUNIT_ASSERT(cppu::UnoType<void>::get() == t);
     t = ::cppu::UnoType< bool >::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_BOOLEAN, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(

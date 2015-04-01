@@ -405,7 +405,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         return DataType::SQLNULL;
 
     if ( m_aProps.getConstArray()[ column - 1 ].Type
-            == cppu::UnoType<cppu::UnoVoidType>::get() )
+            == cppu::UnoType<void>::get() )
     {
         // No type given. Try UCB's Properties Manager...
 

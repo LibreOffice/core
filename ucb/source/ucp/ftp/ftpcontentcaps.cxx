@@ -125,12 +125,12 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
         ucb::CommandInfo(
             OUString( "getCommandInfo" ),
             -1,
-            cppu::UnoType<cppu::UnoVoidType>::get()
+            cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
             OUString( "getPropertySetInfo" ),
             -1,
-            cppu::UnoType<cppu::UnoVoidType>::get()
+            cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
             OUString( "getPropertyValues" ),

@@ -167,12 +167,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ucb::CommandInfo(
             "getCommandInfo",
             -1,
-            cppu::UnoType<cppu::UnoVoidType>::get()
+            cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
             "getPropertySetInfo",
             -1,
-            cppu::UnoType<cppu::UnoVoidType>::get()
+            cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
             "getPropertyValues",

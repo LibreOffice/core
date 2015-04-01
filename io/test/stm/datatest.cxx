@@ -805,8 +805,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue("long").getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ||
-        r2->getPropertyValue("long").getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ) {
+    if( r1->getPropertyValue("long").getValueType() == cppu::UnoType<void>::get() ||
+        r2->getPropertyValue("long").getValueType() == cppu::UnoType<void>::get() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );

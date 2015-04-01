@@ -100,11 +100,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARA
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType()
 {
-    return ::cppu::UnoType< ::cppu::UnoVoidType >::get();
+    return ::cppu::UnoType<void>::get();
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType()
 {
-    return ::cppu::UnoType< ::cppu::UnoVoidType >::get();
+    return ::cppu::UnoType<void>::get();
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType()

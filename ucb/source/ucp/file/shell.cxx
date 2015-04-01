@@ -352,11 +352,11 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     // Commands
     m_sCommandInfo[0].Name = "getCommandInfo";
     m_sCommandInfo[0].Handle = -1;
-    m_sCommandInfo[0].ArgType = cppu::UnoType<cppu::UnoVoidType>::get();
+    m_sCommandInfo[0].ArgType = cppu::UnoType<void>::get();
 
     m_sCommandInfo[1].Name = "getPropertySetInfo";
     m_sCommandInfo[1].Handle = -1;
-    m_sCommandInfo[1].ArgType = cppu::UnoType<cppu::UnoVoidType>::get();
+    m_sCommandInfo[1].ArgType = cppu::UnoType<void>::get();
 
     m_sCommandInfo[2].Name = "getPropertyValues";
     m_sCommandInfo[2].Handle = -1;

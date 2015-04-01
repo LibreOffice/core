@@ -1061,7 +1061,7 @@ OUString SwDocInfoField::Expand() const
             uno::Any aAny;
             if( xSetInfo->hasPropertyByName( aName ) )
                 aAny = xSet->getPropertyValue( aName );
-            if ( aAny.getValueType() != cppu::UnoType<cppu::UnoVoidType>::get() )
+            if ( aAny.getValueType() != cppu::UnoType<void>::get() )
             {
                 // "void" type means that the property has not been inserted until now
                 if ( !IsFixed() )

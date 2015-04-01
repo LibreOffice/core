@@ -882,7 +882,7 @@ uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet = SwXCellBaseClass::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXText::queryInterface(aType);
     return aRet;
 }

@@ -1304,10 +1304,10 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
         // Required commands
         ucb::CommandInfo
         ( OUString(  "getCommandInfo"  ),
-          -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+          -1, cppu::UnoType<void>::get() ),
         ucb::CommandInfo
         ( OUString(  "getPropertySetInfo"  ),
-          -1, cppu::UnoType<cppu::UnoVoidType>::get() ),
+          -1, cppu::UnoType<void>::get() ),
         ucb::CommandInfo
         ( OUString(  "getPropertyValues"  ),
           -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),

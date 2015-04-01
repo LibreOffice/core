@@ -831,7 +831,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 // Deliver the reflection for Sbx types
 Type getUnoTypeForSbxBaseType( SbxDataType eType )
 {
-    Type aRetType = cppu::UnoType<UnoVoidType>::get();
+    Type aRetType = cppu::UnoType<void>::get();
     switch( eType )
     {
         case SbxNULL:       aRetType = cppu::UnoType<XInterface>::get(); break;
@@ -867,7 +867,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
 // Converting of Sbx to Uno without a know target class for TypeClass_ANY
 Type getUnoTypeForSbxValue( const SbxValue* pVal )
 {
-    Type aRetType = cppu::UnoType<cppu::UnoVoidType>::get();
+    Type aRetType = cppu::UnoType<void>::get();
     if( !pVal )
         return aRetType;
 

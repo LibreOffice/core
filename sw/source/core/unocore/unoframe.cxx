@@ -3117,9 +3117,9 @@ void SAL_CALL SwXTextFrame::release(  )throw()
     throw (uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXText::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXTextFrameBaseClass::queryInterface(aType);
     return aRet;
 }
@@ -3401,7 +3401,7 @@ void SAL_CALL SwXTextGraphicObject::release(  )throw()
     throw(uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXTextGraphicObjectBaseClass::queryInterface(aType);
     return aRet;
 }
@@ -3533,7 +3533,7 @@ void SAL_CALL SwXTextEmbeddedObject::release()throw()
     throw( uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);;
-    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
+    if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXTextEmbeddedObjectBaseClass::queryInterface(aType);
     return aRet;
 }

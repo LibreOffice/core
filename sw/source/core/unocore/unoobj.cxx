@@ -477,7 +477,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
 throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentException)
 {
     if (!(rEntry.nFlags & beans::PropertyAttribute::MAYBEVOID) &&
-        (rValue.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get()))
+        (rValue.getValueType() == cppu::UnoType<void>::get()))
     {
         return false;
     }
