@@ -5568,6 +5568,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         if (!pMainMatrix)
                         {
                             SetError( errIllegalParameter);
+                            return 0;
                         }
                         nMainCol1 = 0;
                         nMainRow1 = 0;
