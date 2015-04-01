@@ -277,7 +277,7 @@ SAL_CALL getCharSequenceCppuType()
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCharCppuType();
+        const ::com::sun::star::uno::Type & rElementType = cppu::UnoType<cppu::UnoCharType>::get();
         ::typelib_static_sequence_type_init(
             & s_pType_com_sun_star_uno_Sequence_Char,
             rElementType.getTypeLibType() );

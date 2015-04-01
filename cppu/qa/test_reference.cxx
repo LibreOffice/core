@@ -51,12 +51,12 @@ public:
         throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         Any aInterface;
-        if (_type == getCppuType< Reference< XInterface > >())
+        if (_type == cppu::UnoType<XInterface>::get())
         {
             Reference< XInterface > ref( static_cast< XInterface * >( this ) );
             aInterface.setValue( &ref, _type );
         }
-        else if (_type == getCppuType< Reference< Interface1 > >())
+        else if (_type == cppu::UnoType<Interface1>::get())
         {
             Reference< Interface1 > ref( this );
             aInterface.setValue( &ref, _type );

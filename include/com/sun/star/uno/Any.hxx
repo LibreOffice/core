@@ -68,7 +68,7 @@ inline Any::Any( bool value )
 {
     sal_Bool b = value;
     ::uno_type_any_construct(
-        this, &b, ::getCppuBooleanType().getTypeLibType(),
+        this, &b, cppu::UnoType<bool>::get().getTypeLibType(),
         (uno_AcquireFunc) cpp_acquire );
 }
 
@@ -191,7 +191,7 @@ template<>
 inline Any SAL_CALL makeAny( bool const & value )
 {
     const sal_Bool b = value;
-    return Any( &b, ::getCppuBooleanType() );
+    return Any( &b, cppu::UnoType<bool>::get() );
 }
 
 
@@ -220,7 +220,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 {
     sal_Bool b = value;
     ::uno_type_any_assign(
-        &rAny, &b, ::getCppuBooleanType().getTypeLibType(),
+        &rAny, &b, cppu::UnoType<bool>::get().getTypeLibType(),
         (uno_AcquireFunc) cpp_acquire, (uno_ReleaseFunc) cpp_release );
 }
 
