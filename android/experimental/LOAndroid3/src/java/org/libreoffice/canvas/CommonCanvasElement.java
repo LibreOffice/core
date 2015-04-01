@@ -7,7 +7,7 @@ import android.graphics.Canvas;
  */
 public abstract class CommonCanvasElement implements CanvasElement {
 
-    private boolean mVisible = true;
+    private boolean mVisible = false;
 
     @Override
     public boolean isVisible() {
