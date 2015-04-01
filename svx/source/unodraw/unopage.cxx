@@ -58,7 +58,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 
 #define INTERFACE_TYPE( xint ) \
-    ::getCppuType((const Reference< xint >*)0)
+    cppu::UnoType<xint>::get()
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
@@ -175,7 +175,7 @@ void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Refere
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
+    mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -185,7 +185,7 @@ void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Ref
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
+    mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 // SfxListener

@@ -409,7 +409,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const drawing::PointSequence*)0);
+    return cppu::UnoType<drawing::PointSequence>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )

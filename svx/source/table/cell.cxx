@@ -73,7 +73,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
-//      { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
+//      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
         { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< ::com::sun::star::style::XStyle >::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          cppu::UnoType<com::sun::star::text::WritingMode>::get(),                         0,      0},
         { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<com::sun::star::drawing::TextHorizontalAdjust>::get(),  0,      0}, \
@@ -82,7 +82,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<com::sun::star::drawing::TextVerticalAdjust>::get(),    0,      0},\
-        { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          ::getBooleanCppuType(),        0,      0}, \
+        { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
 
         { OUString("TableBorder"),                  OWN_ATTR_TABLEBORDER,           cppu::UnoType<TableBorder>::get(), 0, 0 }, \
         { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER }, \

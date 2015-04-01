@@ -695,7 +695,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         const uno::Sequence<sal_Int8> aSeq(
             static_cast< const sal_Int8* >(aDestStrm.GetData()),
             aDestStrm.GetEndOfData());
-        aAny.setValue( &aSeq, ::getCppuType((const uno::Sequence< sal_Int8 >*)0) );
+        aAny.setValue( &aSeq, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
     else
     {
@@ -2288,7 +2288,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     basegfx::B2DPolyPolygon aNewPolyPolygon;
 
                     // #123616# be a little bit more flexible regardin gthe data type used
-                    if( rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0))
+                    if( rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get())
                     {
                         // get polygpon data from PointSequenceSequence
                         aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(

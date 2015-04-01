@@ -1376,21 +1376,21 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
                 case GA_DISABLE_SYNC:
                     {
                         sal_Bool bB(sal_False);
-                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,getBooleanCppuType()));
+                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                     }
                     break;
                 case GA_FORCE_SYNC:
                 {
                     Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
                     sal_Bool bB(sal_True);
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,getBooleanCppuType()));
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
                 }
                 break;
                 case GA_ENABLE_SYNC:
                     {
                         sal_Bool bB(sal_True);
-                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,getBooleanCppuType()));
+                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                     }
                     break;
             }
@@ -1398,7 +1398,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
             if (nWhat & GA_DISABLE_ROCTRLR)
             {
                 sal_Bool bB(sal_False);
-                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,getBooleanCppuType()));
+                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
                 Reference< XPropertyState> xModelPropState(xModelSet, UNO_QUERY);
                 if (xModelPropState.is())
                     xModelPropState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
@@ -1408,7 +1408,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
             else if (nWhat & GA_ENABLE_ROCTRLR)
             {
                 sal_Bool bB(sal_True);
-                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,getBooleanCppuType()));
+                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
                 xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, makeAny(sal_Int32(COL_LIGHTRED)));
             }
         }

@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 //-
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= uno::Reference< xint >(this)
 
 //-

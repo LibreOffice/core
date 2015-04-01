@@ -72,7 +72,7 @@ namespace svxform
             PROPERTY_ID_BINDING,
             PropertyAttribute::TRANSIENT,
             &m_xBinding,
-            ::getCppuType( &m_xBinding )
+            cppu::UnoType<decltype(m_xBinding)>::get()
         );
 
         registerProperty(
@@ -80,7 +80,7 @@ namespace svxform
             PROPERTY_ID_FACET_NAME,
             PropertyAttribute::TRANSIENT,
             &m_sFacetName,
-            ::getCppuType( &m_sFacetName )
+            cppu::UnoType<decltype(m_sFacetName)>::get()
         );
 
         registerProperty(
@@ -88,7 +88,7 @@ namespace svxform
             PROPERTY_ID_CONDITION_VALUE,
             PropertyAttribute::TRANSIENT,
             &m_sConditionValue,
-            ::getCppuType( &m_sConditionValue )
+            cppu::UnoType<decltype(m_sConditionValue)>::get()
         );
 
         registerProperty(
@@ -96,7 +96,7 @@ namespace svxform
             PROPERTY_ID_FORM_MODEL,
             PropertyAttribute::TRANSIENT,
             &m_xWorkModel,
-            ::getCppuType( &m_xWorkModel )
+            cppu::UnoType<decltype(m_xWorkModel)>::get()
         );
     }
 

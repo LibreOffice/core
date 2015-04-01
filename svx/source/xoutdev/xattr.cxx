@@ -2043,13 +2043,13 @@ bool XLineStartCenterItem::GetPresentation
 bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
-    rVal.setValue( &bValue, ::getCppuBooleanType()  );
+    rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
     return true;
 }
 
 bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
+    if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
         return false;
 
     SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );
@@ -2094,13 +2094,13 @@ bool XLineEndCenterItem::GetPresentation
 bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
-    rVal.setValue( &bValue, ::getCppuBooleanType()  );
+    rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
     return true;
 }
 
 bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
+    if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
         return false;
 
     SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );

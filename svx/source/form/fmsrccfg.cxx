@@ -147,7 +147,7 @@ namespace svxform
 
     // class FmSearchConfigItem - a config item that stores search parameters
 
-#define TA( c )     &c, getCppuType( &c )
+#define TA( c )     &c, cppu::UnoType<decltype(c)>::get()
 
     FmSearchConfigItem::FmSearchConfigItem()
         :OConfigurationValueContainer( ::comphelper::getProcessComponentContext(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE, 2 )

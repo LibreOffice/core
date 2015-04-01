@@ -185,7 +185,7 @@ namespace svx
             static PropertyMapEntry const s_aDesriptorProperties[] =
             {
                 { OUString("ActiveConnection"),   daConnection,           cppu::UnoType<XConnection>::get(),   PropertyAttribute::TRANSIENT, 0 },
-                { OUString("BookmarkSelection"),  daBookmarkSelection,    ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { OUString("BookmarkSelection"),  daBookmarkSelection,    cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
                 { OUString("Column"),             daColumnObject,         cppu::UnoType<XPropertySet>::get(),  PropertyAttribute::TRANSIENT, 0 },
                 { OUString("ColumnName"),         daColumnName,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("Command"),            daCommand,              ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
@@ -195,9 +195,9 @@ namespace svx
                 { OUString("Cursor"),             daCursor,               cppu::UnoType<XResultSet>::get(),     PropertyAttribute::TRANSIENT, 0 },
                 { OUString("DataSourceName"),     daDataSource,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("DatabaseLocation"),   daDatabaseLocation,     ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("EscapeProcessing"),   daEscapeProcessing,     ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { OUString("EscapeProcessing"),   daEscapeProcessing,     cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
                 { OUString("Filter"),             daFilter,               ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Selection"),          daSelection,            ::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Selection"),          daSelection,            cppu::UnoType<Sequence< Any >>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 

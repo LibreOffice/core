@@ -1237,7 +1237,7 @@ void FmSearchEngine::StartOverSpecial(bool _bSearchForNull)
 
 void FmSearchEngine::InvalidatePreviousLoc()
 {
-    m_aPreviousLocBookmark.setValue(0,getVoidCppuType());
+    m_aPreviousLocBookmark.setValue(0,cppu::UnoType<cppu::UnoVoidType>::get());
     m_iterPreviousLocField = m_arrUsedFields.end();
 }
 

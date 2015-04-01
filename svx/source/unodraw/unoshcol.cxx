@@ -194,13 +194,13 @@ void SvxShapeCollection::dispose()
 // XComponent
 void SAL_CALL SvxShapeCollection::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
+    mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 // XComponent
 void SAL_CALL SvxShapeCollection::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
+    mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 // XShapes

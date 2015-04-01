@@ -599,7 +599,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
     sal_Bool bAbove = !pBox->GetSelectEntryPos();
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {

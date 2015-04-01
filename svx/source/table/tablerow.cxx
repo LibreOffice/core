@@ -334,17 +334,17 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 
             aProperties[1].Name = "OptimalHeight";
             aProperties[1].Handle = Property_OptimalHeight;
-            aProperties[1].Type = ::getBooleanCppuType();
+            aProperties[1].Type = cppu::UnoType<bool>::get();
             aProperties[1].Attributes = 0;
 
             aProperties[2].Name = "IsVisible";
             aProperties[2].Handle = Property_IsVisible;
-            aProperties[2].Type = ::getBooleanCppuType();
+            aProperties[2].Type = cppu::UnoType<bool>::get();
             aProperties[2].Attributes = 0;
 
             aProperties[3].Name = "IsStartOfNewPage";
             aProperties[3].Handle = Property_IsStartOfNewPage;
-            aProperties[3].Type = ::getBooleanCppuType();
+            aProperties[3].Type = cppu::UnoType<bool>::get();
             aProperties[3].Attributes = 0;
 
             aProperties[4].Name = "Size";
@@ -354,7 +354,7 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 
             aProperties[5].Name = "OptimalSize";
             aProperties[5].Handle = Property_OptimalHeight;
-            aProperties[5].Type = ::getBooleanCppuType();
+            aProperties[5].Type = cppu::UnoType<bool>::get();
             aProperties[5].Attributes = 0;
 
             xInfo.set( new FastPropertySetInfo(aProperties) );

@@ -66,7 +66,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
 SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
@@ -1060,7 +1060,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     {
     case OWN_ATTR_VALUE_POLYPOLYGON:
     {
-        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ) )
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get() ) )
         {
             basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( static_cast<drawing::PointSequenceSequence const *>(rValue.getValue())));
             SetPolygon(aNewPolyPolygon);
@@ -1070,7 +1070,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0)))
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get()))
         {
             if( mpObj.is() )
             {
@@ -1087,7 +1087,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGON:
     {
-        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ))
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get() ))
         {
             drawing::PointSequence const * pSequence = static_cast<drawing::PointSequence const *>(rValue.getValue());
 
@@ -1422,7 +1422,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
         if( rValue.getValue() )
         {
-            if( rValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
+            if( rValue.getValueType() == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
             {
                 uno::Sequence<sal_Int8> const * pSeq( static_cast<uno::Sequence<sal_Int8> const *>(rValue.getValue()) );
                 SvMemoryStream  aMemStm;

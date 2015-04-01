@@ -173,7 +173,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPolyPolygonPropertyMap_Impl[] =
     {
-        { OUString("Geometry"), OWN_ATTR_BASE_GEOMETRY, ::getCppuType((const ::com::sun::star::drawing::PointSequenceSequence*)0), 0, 0 },
+        { OUString("Geometry"), OWN_ATTR_BASE_GEOMETRY, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
         FILL_PROPERTIES
@@ -242,7 +242,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        { OUString("IsMirrored"), OWN_ATTR_MIRRORED, ::getCppuBooleanType(), 0, 0},
+        { OUString("IsMirrored"), OWN_ATTR_MIRRORED, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
         { OUString("GraphicStream"), OWN_ATTR_GRAPHIC_STREAM, cppu::UnoType<css::io::XInputStream>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -461,7 +461,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
         { OUString("EmbeddedObjectNoNewClient"),OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT, cppu::UnoType<com::sun::star::embed::XEmbeddedObject>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("OriginalSize"),             OWN_ATTR_OLESIZE            , cppu::UnoType<com::sun::star::awt::Size>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("CLSID"),                    OWN_ATTR_CLSID              , cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString("IsInternal"),               OWN_ATTR_INTERNAL_OLE       , ::getBooleanCppuType() , ::com::sun::star::beans::PropertyAttribute::READONLY,     0},
+        { OUString("IsInternal"),               OWN_ATTR_INTERNAL_OLE       , cppu::UnoType<bool>::get() , ::com::sun::star::beans::PropertyAttribute::READONLY,     0},
         { OUString("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , cppu::UnoType<com::sun::star::awt::Rectangle>::get(), 0, 0},
         { OUString("Aspect"),                   OWN_ATTR_OLE_ASPECT         , cppu::UnoType<sal_Int64>::get(), 0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
@@ -479,17 +479,17 @@ SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
     {
         { OUString("PluginMimeType"),           OWN_ATTR_PLUGIN_MIMETYPE    , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString("PluginURL"),                OWN_ATTR_PLUGIN_URL         , cppu::UnoType<OUString>::get(),    0,  0},
-        { OUString("PluginCommands"),           OWN_ATTR_PLUGIN_COMMANDS    , ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), 0, 0},
+        { OUString("PluginCommands"),           OWN_ATTR_PLUGIN_COMMANDS    , cppu::UnoType<css::uno::Sequence< ::com::sun::star::beans::PropertyValue >>::get(), 0, 0},
         { OUString("Transformation"),           OWN_ATTR_TRANSFORMATION     , cppu::UnoType<com::sun::star::drawing::HomogenMatrix3>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , cppu::UnoType<sal_Int32>::get(),      0,      0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , cppu::UnoType<sal_Int16>::get(),      0,  0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<com::sun::star::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -510,8 +510,8 @@ SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
     {
         { OUString("FrameURL"),                 OWN_ATTR_FRAME_URL          , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString("FrameName"),                OWN_ATTR_FRAME_NAME         , cppu::UnoType<OUString>::get(),    0,  0},
-        { OUString("FrameIsAutoScroll"),        OWN_ATTR_FRAME_ISAUTOSCROLL , ::getBooleanCppuType() , ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("FrameIsBorder"),            OWN_ATTR_FRAME_ISBORDER     , ::getBooleanCppuType() , 0, 0},
+        { OUString("FrameIsAutoScroll"),        OWN_ATTR_FRAME_ISAUTOSCROLL , cppu::UnoType<bool>::get() , ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("FrameIsBorder"),            OWN_ATTR_FRAME_ISBORDER     , cppu::UnoType<bool>::get() , 0, 0},
         { OUString("FrameMarginWidth"),         OWN_ATTR_FRAME_MARGIN_WIDTH , cppu::UnoType<sal_Int32>::get(),      0,      0},
         { OUString("FrameMarginHeight"),        OWN_ATTR_FRAME_MARGIN_HEIGHT, cppu::UnoType<sal_Int32>::get(),      0,      0},
         { OUString("Transformation"),           OWN_ATTR_TRANSFORMATION     , cppu::UnoType<com::sun::star::drawing::HomogenMatrix3>::get(), 0, 0 },
@@ -520,10 +520,10 @@ SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<com::sun::star::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -544,19 +544,19 @@ SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
         { OUString("AppletCodeBase"),           OWN_ATTR_APPLET_CODEBASE    , cppu::UnoType<OUString>::get(), 0, 0},
         { OUString("AppletName"),               OWN_ATTR_APPLET_NAME        , cppu::UnoType<OUString>::get(), 0, 0},
         { OUString("AppletCode"),               OWN_ATTR_APPLET_CODE        , cppu::UnoType<OUString>::get(), 0, 0},
-        { OUString("AppletCommands"),           OWN_ATTR_APPLET_COMMANDS    , ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), 0, 0},
+        { OUString("AppletCommands"),           OWN_ATTR_APPLET_COMMANDS    , cppu::UnoType<css::uno::Sequence< ::com::sun::star::beans::PropertyValue >>::get(), 0, 0},
         { OUString("AppletDocBase"),            OWN_ATTR_APPLET_DOCBASE     , cppu::UnoType<OUString>::get(), 0, 0},
-        { OUString("AppletIsScript"),           OWN_ATTR_APPLET_ISSCRIPT    , ::getBooleanCppuType(), 0, 0 },
+        { OUString("AppletIsScript"),           OWN_ATTR_APPLET_ISSCRIPT    , cppu::UnoType<bool>::get(), 0, 0 },
         { OUString("Transformation"),           OWN_ATTR_TRANSFORMATION     , cppu::UnoType<com::sun::star::drawing::HomogenMatrix3>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , cppu::UnoType<sal_Int32>::get(),      0,      0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , cppu::UnoType<sal_Int16>::get(),      0,  0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<com::sun::star::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -591,7 +591,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString("CharRelief"),                       0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString("CharUnderlineColor"),               0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { OUString("CharKerning"),                      0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
-        { OUString("CharWordMode"),                     0,  ::getBooleanCppuType(),                    0, 0 },
+        { OUString("CharWordMode"),                     0,  cppu::UnoType<bool>::get(),                    0, 0 },
         { OUString(UNO_NAME_EDIT_PARA_ADJUST),          0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString("TextVerticalAdjust"),               0,  cppu::UnoType<TextVerticalAdjust>::get(), MAYBEVOID, 0 },
         { OUString("ControlBackground"),                0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
@@ -599,8 +599,8 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString("ControlBorderColor"),               0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { OUString("ControlSymbolColor"),               0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString("ImageScaleMode"),                   0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString("ControlTextEmphasis"),              0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString("ControlWritingMode"),               0,  cppu::UnoType< sal_Int16 >::get(), 0, 0},
         // the following properties are handled by SvxShape
@@ -617,9 +617,9 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
         // #i112587#
-        { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , ::getBooleanCppuType(),                      0,  0},
-        { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , ::getBooleanCppuType(),                      0,  0},
-        { OUString(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0),  0,  0},
+        { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , cppu::UnoType<bool>::get(),                      0,  0},
+        { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0},
+        { OUString(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    cppu::UnoType<css::uno::Sequence< ::com::sun::star::beans::PropertyValue >>::get(),  0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -637,8 +637,8 @@ SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , cppu::UnoType<OUString>::get(), 0, 0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<com::sun::star::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         // #i68101#
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
@@ -655,15 +655,15 @@ SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
     {
         { OUString("CaptionPoint"),             OWN_ATTR_CAPTION_POINT,     cppu::UnoType<com::sun::star::awt::Point>::get(),   0, 0 },
         { OUString("CaptionType"),              SDRATTR_CAPTIONTYPE,        cppu::UnoType<sal_Int16>::get(), 0, 0},
-        { OUString("CaptionIsFixedAngle"),      SDRATTR_CAPTIONFIXEDANGLE,  ::getBooleanCppuType(), 0, 0},
+        { OUString("CaptionIsFixedAngle"),      SDRATTR_CAPTIONFIXEDANGLE,  cppu::UnoType<bool>::get(), 0, 0},
         { OUString("CaptionAngle"),             SDRATTR_CAPTIONANGLE,       cppu::UnoType<sal_Int32>::get(),    0,  0},
         { OUString("CaptionGap"),               SDRATTR_CAPTIONGAP,         cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
         { OUString("CaptionEscapeDirection"),   SDRATTR_CAPTIONESCDIR,      cppu::UnoType<sal_Int32>::get(),    0,  0},
-        { OUString("CaptionIsEscapeRelative"),  SDRATTR_CAPTIONESCISREL,    ::getBooleanCppuType(), 0, 0},
+        { OUString("CaptionIsEscapeRelative"),  SDRATTR_CAPTIONESCISREL,    cppu::UnoType<bool>::get(), 0, 0},
         { OUString("CaptionEscapeRelative"),    SDRATTR_CAPTIONESCREL,      cppu::UnoType<sal_Int32>::get(),    0,  0},
         { OUString("CaptionEscapeAbsolute"),    SDRATTR_CAPTIONESCABS,      cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
         { OUString("CaptionLineLength"),        SDRATTR_CAPTIONLINELEN,     cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
-        { OUString("CaptionIsFitLineLength"),   SDRATTR_CAPTIONFITLINELEN,  ::getBooleanCppuType(), 0, 0},
+        { OUString("CaptionIsFitLineLength"),   SDRATTR_CAPTIONFITLINELEN,  cppu::UnoType<bool>::get(), 0, 0},
         EDGERADIUS_PROPERTIES
         FILL_PROPERTIES
         LINE_PROPERTIES
@@ -689,7 +689,8 @@ SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
     {
         { OUString("CustomShapeEngine"),            SDRATTR_CUSTOMSHAPE_ENGINE,         cppu::UnoType<OUString>::get(),  0, 0 },
         { OUString("CustomShapeData"),          SDRATTR_CUSTOMSHAPE_DATA,               cppu::UnoType<OUString>::get(),  0, 0 },
-        { OUString("CustomShapeGeometry"),      SDRATTR_CUSTOMSHAPE_GEOMETRY,           ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0),  0, 0 },
+        { OUString("CustomShapeGeometry"),      SDRATTR_CUSTOMSHAPE_GEOMETRY,
+        cppu::UnoType<css::uno::Sequence< ::com::sun::star::beans::PropertyValue >>::get(),  0, 0 },
         { OUString("CustomShapeGraphicURL"),        SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL,    cppu::UnoType<OUString>::get(),  0,  0},
         CUSTOMSHAPE_PROPERTIES
         FILL_PROPERTIES
@@ -723,8 +724,8 @@ SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         { OUString("Mute"), OWN_ATTR_MEDIA_MUTE, cppu::UnoType<sal_Bool>::get(), 0, 0},
         { OUString("VolumeDB"), OWN_ATTR_MEDIA_VOLUMEDB, cppu::UnoType<sal_Int16>::get(), 0, 0},
         { OUString("Zoom"), OWN_ATTR_MEDIA_ZOOM, cppu::UnoType<com::sun::star::media::ZoomLevel>::get(), 0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT, cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         // #i68101#
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
@@ -749,20 +750,20 @@ SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     OWN_ATTR_LDBITMAP, cppu::UnoType<css::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       OWN_ATTR_LDNAME, cppu::UnoType<OUString>::get(),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("Transformation"),               OWN_ATTR_TRANSFORMATION, cppu::UnoType<com::sun::star::drawing::HomogenMatrix3>::get(), 0, 0 },
-        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
-        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT),    OWN_ATTR_BOUNDRECT, cppu::UnoType<com::sun::star::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME, cppu::UnoType<rtl::OUString>::get(),    0,      0},
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
         { OUString("Model"),                        OWN_ATTR_OLEMODEL               , cppu::UnoType<css::table::XTable>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("TableTemplate"),                OWN_ATTR_TABLETEMPLATE          , cppu::UnoType<css::container::XIndexAccess>::get(), 0, 0},
-        { OUString("UseFirstRowStyle"),             OWN_ATTR_TABLETEMPLATE_FIRSTROW, ::getBooleanCppuType(),0, 0},
-        { OUString("UseLastRowStyle"),              OWN_ATTR_TABLETEMPLATE_LASTROW, ::getBooleanCppuType(),0, 0},
-        { OUString("UseFirstColumnStyle"),          OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN, ::getBooleanCppuType(),0, 0},
-        { OUString("UseLastColumnStyle"),           OWN_ATTR_TABLETEMPLATE_LASTCOLUMN, ::getBooleanCppuType(),0, 0},
-        { OUString("UseBandingRowStyle"),           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, ::getBooleanCppuType(),0, 0},
-        { OUString("UseBandingColumnStyle"),        OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS, ::getBooleanCppuType(),0, 0},
+        { OUString("UseFirstRowStyle"),             OWN_ATTR_TABLETEMPLATE_FIRSTROW, cppu::UnoType<bool>::get(),0, 0},
+        { OUString("UseLastRowStyle"),              OWN_ATTR_TABLETEMPLATE_LASTROW, cppu::UnoType<bool>::get(),0, 0},
+        { OUString("UseFirstColumnStyle"),          OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN, cppu::UnoType<bool>::get(),0, 0},
+        { OUString("UseLastColumnStyle"),           OWN_ATTR_TABLETEMPLATE_LASTCOLUMN, cppu::UnoType<bool>::get(),0, 0},
+        { OUString("UseBandingRowStyle"),           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, cppu::UnoType<bool>::get(),0, 0},
+        { OUString("UseBandingColumnStyle"),        OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS, cppu::UnoType<bool>::get(),0, 0},
         { OUString("ReplacementGraphic"),           OWN_ATTR_BITMAP, cppu::UnoType<css::graphic::XGraphic>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -794,7 +795,7 @@ comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPrope
 {
     static comphelper::PropertyMapEntry const aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
-        { OUString("IsFollowingTextFlow"), SID_SW_FOLLOW_TEXT_FLOW, ::getBooleanCppuType(), 0, 0},
+        { OUString("IsFollowingTextFlow"), SID_SW_FOLLOW_TEXT_FLOW, cppu::UnoType<bool>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

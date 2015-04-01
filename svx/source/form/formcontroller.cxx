@@ -878,10 +878,10 @@ void FormController::fillProperties(
     Property* pDesc = _rProps.getArray();
 
     pDesc[nPos++] = Property(FM_PROP_FILTER, FM_ATTR_FILTER,
-                             ::getCppuType((const OUString*)0),
+                             cppu::UnoType<OUString>::get(),
                              PropertyAttribute::READONLY);
     pDesc[nPos++] = Property(FM_PROP_FORM_OPERATIONS, FM_ATTR_FORM_OPERATIONS,
-                             ::getCppuType((const Reference< XFormOperations >*)0),
+                             cppu::UnoType<XFormOperations>::get(),
                              PropertyAttribute::READONLY);
 }
 

@@ -54,7 +54,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
             throw uno::RuntimeException(
                 "CustomShapeGeometry has duplicate property " + rPropVal.Name);
         }
-        if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        if ( rPropVal.Value.getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
         {
             uno::Sequence< beans::PropertyValue > const & rPropSeq = *static_cast<uno::Sequence< beans::PropertyValue > const *>(rPropVal.Value.getValue());
             for ( j = 0; j < rPropSeq.getLength(); j++ )
@@ -90,7 +90,7 @@ com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( co
     com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
-        if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        if ( pSeqAny->getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
         {
             PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
             if ( aHashIter != aPropPairHashMap.end() )
@@ -110,7 +110,7 @@ const com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByNa
     const com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
-        if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        if ( pSeqAny->getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
         {
             PropertyPairHashMap::const_iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
             if ( aHashIter != aPropPairHashMap.end() )
@@ -130,7 +130,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
     if ( pAny )
     {   // property is already available
         sal_Int32 i;
-        if ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        if ( pAny->getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
         {   // old property is a sequence->each entry has to be removed from the HashPairMap
             ::com::sun::star::uno::Sequence < beans::PropertyValue > const & rSecSequence =
                 *static_cast<css::uno::Sequence < beans::PropertyValue > const *>(pAny->getValue());
@@ -142,7 +142,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
             }
         }
         *pAny = rPropVal.Value;
-        if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        if ( rPropVal.Value.getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
         {   // the new property is a sequence->each entry has to be inserted into the HashPairMap
             ::com::sun::star::uno::Sequence < beans::PropertyValue > const & rSecSequence =
                 *static_cast<css::uno::Sequence < beans::PropertyValue > const *>(pAny->getValue());
@@ -196,7 +196,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
 
         if( pSeqAny )
         {
-            if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+            if ( pSeqAny->getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
             {
                 PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropVal.Name ) ) );
                 if ( aHashIter != aPropPairHashMap.end() )
@@ -231,7 +231,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
              com::sun::star::uno::Any* pSeqAny = &aPropSeq[ (*aHashIter).second ].Value;
             if ( pSeqAny )
             {
-                if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+                if ( pSeqAny->getValueType() == cppu::UnoType<css::uno::Sequence < beans::PropertyValue >>::get() )
                 {
                     ::com::sun::star::uno::Sequence < beans::PropertyValue > const & rSecSequence =
                         *static_cast<css::uno::Sequence < beans::PropertyValue > const *>(pSeqAny->getValue());

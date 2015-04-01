@@ -189,17 +189,17 @@
     { OUString("FontWorkAdjust"),           XATTR_FORMTXTADJUST,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
     { OUString("FontWorkDistance"),         XATTR_FORMTXTDISTANCE,      ::cppu::UnoType<sal_Int32>::get(),            0,  SFX_METRIC_ITEM}, \
     { OUString("FontWorkStart"),            XATTR_FORMTXTSTART,         ::cppu::UnoType<sal_Int32>::get(),            0,  SFX_METRIC_ITEM}, \
-    { OUString("FontWorkMirror"),           XATTR_FORMTXTMIRROR,        ::getBooleanCppuType(),                        0,  0}, \
-    { OUString("FontWorkOutline"),          XATTR_FORMTXTOUTLINE,       ::getBooleanCppuType(),                        0,  0}, \
+    { OUString("FontWorkMirror"),           XATTR_FORMTXTMIRROR,        cppu::UnoType<bool>::get(),                        0,  0}, \
+    { OUString("FontWorkOutline"),          XATTR_FORMTXTOUTLINE,       cppu::UnoType<bool>::get(),                        0,  0}, \
     { OUString("FontWorkShadow"),           XATTR_FORMTXTSHADOW,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
     { OUString("FontWorkShadowColor"),      XATTR_FORMTXTSHDWCOLOR,     ::cppu::UnoType<sal_Int32>::get(),            0,  0}, \
     { OUString("FontWorkShadowOffsetX"),    XATTR_FORMTXTSHDWXVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  SFX_METRIC_ITEM}, \
     { OUString("FontWorkShadowOffsetY"),    XATTR_FORMTXTSHDWYVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  SFX_METRIC_ITEM}, \
-    { OUString("FontWorkHideForm"),         XATTR_FORMTXTHIDEFORM,      ::getBooleanCppuType(),                        0,  0}, \
+    { OUString("FontWorkHideForm"),         XATTR_FORMTXTHIDEFORM,      cppu::UnoType<bool>::get(),                        0,  0}, \
     { OUString("FontWorkShadowTransparence"),XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
 
 #define SHADOW_PROPERTIES \
-    { OUString(UNO_NAME_SHADOW),            SDRATTR_SHADOW,             ::getBooleanCppuType(),    0,      0}, \
+    { OUString(UNO_NAME_SHADOW),            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
     { OUString(UNO_NAME_SHADOWCOLOR),       SDRATTR_SHADOWCOLOR,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { OUString(UNO_NAME_SHADOWTRANSPARENCE),SDRATTR_SHADOWTRANSPARENCE, ::cppu::UnoType<sal_Int16>::get(),    0,      0}, \
     { OUString(UNO_NAME_SHADOWXDIST),       SDRATTR_SHADOWXDIST,        ::cppu::UnoType<sal_Int32>::get(),    0,      SFX_METRIC_ITEM}, \
@@ -208,12 +208,12 @@
 #define LINE_PROPERTIES_DEFAULTS\
     { OUString(UNO_NAME_LINECAP),           XATTR_LINECAP,          ::cppu::UnoType<com::sun::star::drawing::LineCap>::get(),     0,     0}, \
     { OUString(UNO_NAME_LINECOLOR),         XATTR_LINECOLOR,        ::cppu::UnoType<sal_Int32>::get() ,           0,     0}, \
-    { OUString(UNO_NAME_LINEENDCENTER),     XATTR_LINEENDCENTER,    ::getBooleanCppuType() ,           0,     0}, \
+    { OUString(UNO_NAME_LINEENDCENTER),     XATTR_LINEENDCENTER,    cppu::UnoType<bool>::get() ,           0,     0}, \
     { OUString(UNO_NAME_LINEENDWIDTH),      XATTR_LINEENDWIDTH,     ::cppu::UnoType<sal_Int32>::get() ,           0,     SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_LINEJOINT),         XATTR_LINEJOINT,        ::cppu::UnoType<com::sun::star::drawing::LineJoint>::get(),     0,     0}, \
-    { OUString(UNO_NAME_LINESTARTCENTER),   XATTR_LINESTARTCENTER,  ::getBooleanCppuType() ,           0,     0}, \
+    { OUString(UNO_NAME_LINESTARTCENTER),   XATTR_LINESTARTCENTER,  cppu::UnoType<bool>::get() ,           0,     0}, \
     { OUString(UNO_NAME_LINESTARTWIDTH),    XATTR_LINESTARTWIDTH,   ::cppu::UnoType<sal_Int32>::get() ,           0,     SFX_METRIC_ITEM}, \
-    { OUString(UNO_NAME_LINESTYLE),         XATTR_LINESTYLE,        ::getCppuType((const ::com::sun::star::drawing::LineStyle*)0) ,        0,     0},  \
+    { OUString(UNO_NAME_LINESTYLE),         XATTR_LINESTYLE,        cppu::UnoType<css::drawing::LineStyle>::get() ,        0,     0},  \
     { OUString(UNO_NAME_LINETRANSPARENCE),  XATTR_LINETRANSPARENCE, ::cppu::UnoType<sal_Int16>::get() ,           0,     0}, \
     { OUString(UNO_NAME_LINEWIDTH),         XATTR_LINEWIDTH,        ::cppu::UnoType<sal_Int32>::get() ,           0,     SFX_METRIC_ITEM},
 
@@ -229,7 +229,7 @@
     { OUString("LineStartName"),            XATTR_LINESTART,        ::cppu::UnoType<OUString>::get(), 0, MID_NAME },
 
 #define FILL_PROPERTIES_BMP \
-    { OUString(UNO_NAME_FILLBMP_LOGICAL_SIZE),      XATTR_FILLBMP_SIZELOG,      ::getBooleanCppuType() ,           0,     0}, \
+    { OUString(UNO_NAME_FILLBMP_LOGICAL_SIZE),      XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get() ,           0,     0}, \
     { OUString(UNO_NAME_FILLBMP_OFFSET_X),          XATTR_FILLBMP_TILEOFFSETX,  ::cppu::UnoType<sal_Int32>::get() ,           0,     0}, \
     { OUString(UNO_NAME_FILLBMP_OFFSET_Y),          XATTR_FILLBMP_TILEOFFSETY,  ::cppu::UnoType<sal_Int32>::get() ,           0,     0}, \
     { OUString(UNO_NAME_FILLBMP_POSITION_OFFSET_X), XATTR_FILLBMP_POSOFFSETX,   ::cppu::UnoType<sal_Int32>::get() ,           0,     0}, \
@@ -237,8 +237,8 @@
     { OUString(UNO_NAME_FILLBMP_RECTANGLE_POINT),   XATTR_FILLBMP_POS,          ::cppu::UnoType<com::sun::star::drawing::RectanglePoint>::get() , 0,     0}, \
     { OUString(UNO_NAME_FILLBMP_SIZE_X),            XATTR_FILLBMP_SIZEX,        ::cppu::UnoType<sal_Int32>::get() ,           0,     SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_FILLBMP_SIZE_Y),            XATTR_FILLBMP_SIZEY,        ::cppu::UnoType<sal_Int32>::get() ,           0,     SFX_METRIC_ITEM},    \
-    { OUString(UNO_NAME_FILLBMP_STRETCH),           XATTR_FILLBMP_STRETCH,      ::getBooleanCppuType() ,           0,     0}, \
-    { OUString(UNO_NAME_FILLBMP_TILE),              XATTR_FILLBMP_TILE,         ::getBooleanCppuType() ,           0,     0},\
+    { OUString(UNO_NAME_FILLBMP_STRETCH),           XATTR_FILLBMP_STRETCH,      cppu::UnoType<bool>::get() ,           0,     0}, \
+    { OUString(UNO_NAME_FILLBMP_TILE),              XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get() ,           0,     0},\
     { OUString(UNO_NAME_FILLBMP_MODE),              OWN_ATTR_FILLBMP_MODE,      ::cppu::UnoType<com::sun::star::drawing::BitmapMode>::get(),            0,     0},
 
 #define FILL_PROPERTIES_DEFAULTS \
@@ -247,8 +247,8 @@
 #define FILL_PROPERTIES \
     FILL_PROPERTIES_BMP \
     FILL_PROPERTIES_DEFAULTS \
-    { OUString(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , ::getBooleanCppuType(),              0,   0}, \
-    { OUString(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0)  ,       0,     MID_BITMAP}, \
+    { OUString(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , cppu::UnoType<bool>::get(),              0,   0}, \
+    { OUString(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , cppu::UnoType<css::awt::XBitmap>::get()  ,       0,     MID_BITMAP}, \
     { OUString(UNO_NAME_FILLBITMAPNAME),           XATTR_FILLBITMAP        , ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLBITMAPURL),            XATTR_FILLBITMAP        , ::cppu::UnoType<OUString>::get(), 0, MID_GRAFURL }, \
     { OUString(UNO_NAME_FILLGRADIENTSTEPCOUNT),    XATTR_GRADIENTSTEPCOUNT , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
@@ -271,15 +271,15 @@
     { OUString(UNO_NAME_TEXT_ANIAMOUNT),        SDRATTR_TEXT_ANIAMOUNT,         ::cppu::UnoType<sal_Int16>::get(),        0,      0}, \
     { OUString(UNO_NAME_TEXT_ANICOUNT),         SDRATTR_TEXT_ANICOUNT,          ::cppu::UnoType<sal_Int16>::get(),        0,      0}, \
     { OUString(UNO_NAME_TEXT_ANIDELAY),         SDRATTR_TEXT_ANIDELAY,          ::cppu::UnoType<sal_Int16>::get(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_ANIDIRECTION),     SDRATTR_TEXT_ANIDIRECTION,      ::getCppuType((const ::com::sun::star::drawing::TextAnimationDirection*)0),    0,      0}, \
-    { OUString(UNO_NAME_TEXT_ANIKIND),          SDRATTR_TEXT_ANIKIND,           ::getCppuType((const ::com::sun::star::drawing::TextAnimationKind*)0), 0,      0}, \
-    { OUString(UNO_NAME_TEXT_ANISTARTINSIDE),   SDRATTR_TEXT_ANISTARTINSIDE,    ::getBooleanCppuType(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_ANISTOPINSIDE),    SDRATTR_TEXT_ANISTOPINSIDE,     ::getBooleanCppuType(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_AUTOGROWHEIGHT),   SDRATTR_TEXT_AUTOGROWHEIGHT,    ::getBooleanCppuType(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_AUTOGROWWIDTH),    SDRATTR_TEXT_AUTOGROWWIDTH,     ::getBooleanCppuType(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_CONTOURFRAME),     SDRATTR_TEXT_CONTOURFRAME,      ::getBooleanCppuType(),        0,      0}, \
-    { OUString(UNO_NAME_TEXT_FITTOSIZE),        SDRATTR_TEXT_FITTOSIZE,         ::getCppuType((const ::com::sun::star::drawing::TextFitToSizeType*)0), 0,      0}, \
-    { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
+    { OUString(UNO_NAME_TEXT_ANIDIRECTION),     SDRATTR_TEXT_ANIDIRECTION,      cppu::UnoType<css::drawing::TextAnimationDirection>::get(),    0,      0}, \
+    { OUString(UNO_NAME_TEXT_ANIKIND),          SDRATTR_TEXT_ANIKIND,           cppu::UnoType<css::drawing::TextAnimationKind>::get(), 0,      0}, \
+    { OUString(UNO_NAME_TEXT_ANISTARTINSIDE),   SDRATTR_TEXT_ANISTARTINSIDE,    cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_ANISTOPINSIDE),    SDRATTR_TEXT_ANISTOPINSIDE,     cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_AUTOGROWHEIGHT),   SDRATTR_TEXT_AUTOGROWHEIGHT,    cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_AUTOGROWWIDTH),    SDRATTR_TEXT_AUTOGROWWIDTH,     cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_CONTOURFRAME),     SDRATTR_TEXT_CONTOURFRAME,      cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_FITTOSIZE),        SDRATTR_TEXT_FITTOSIZE,         cppu::UnoType<css::drawing::TextFitToSizeType>::get(), 0,      0}, \
+    { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<css::drawing::TextHorizontalAdjust>::get(),  0,      0}, \
     { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_TEXT_MAXFRAMEHEIGHT),   SDRATTR_TEXT_MAXFRAMEHEIGHT,    ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
@@ -288,9 +288,9 @@
     { OUString(UNO_NAME_TEXT_MINFRAMEWIDTH),    SDRATTR_TEXT_MINFRAMEWIDTH,     ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-    { OUString(UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING),SDRATTR_TEXT_USEFIXEDCELLHEIGHT,::getBooleanCppuType(),                   0,      0},               \
-    { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
-    { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          ::getBooleanCppuType(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING),SDRATTR_TEXT_USEFIXEDCELLHEIGHT,cppu::UnoType<bool>::get(),                   0,      0},               \
+    { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
+    { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
 
@@ -298,20 +298,20 @@
     SVX_UNOEDIT_NUMBERING_PROPERTIE, \
     TEXT_PROPERTIES_DEFAULTS
 
-//  { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
+//  { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
 
 #define MISC_OBJ_PROPERTIES_NO_SHEAR \
-    { OUString("Transformation"),                   OWN_ATTR_TRANSFORMATION,    ::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
+    { OUString("Transformation"),                   OWN_ATTR_TRANSFORMATION,    cppu::UnoType<css::drawing::HomogenMatrix3>::get(), 0, 0 }, \
     { OUString(UNO_NAME_MISC_OBJ_ZORDER),           OWN_ATTR_ZORDER,            ::cppu::UnoType<sal_Int32>::get(),        0,      0}, \
-    { OUString(UNO_NAME_MISC_OBJ_FRAMERECT),        OWN_ATTR_FRAMERECT,         ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0,  0 }, \
+    { OUString(UNO_NAME_MISC_OBJ_FRAMERECT),        OWN_ATTR_FRAMERECT,         cppu::UnoType<css::awt::Rectangle>::get(), 0,  0 }, \
     { OUString(UNO_NAME_MISC_OBJ_ROTATEANGLE),      SDRATTR_ROTATEANGLE,        ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
-    { OUString(UNO_NAME_BITMAP),                    OWN_ATTR_BITMAP,            ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
-    { OUString(UNO_NAME_OLE2_METAFILE),             OWN_ATTR_METAFILE,          ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
-    { OUString("IsFontwork"),                       OWN_ATTR_ISFONTWORK,        ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
-    { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT),        OWN_ATTR_BOUNDRECT,         ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+    { OUString(UNO_NAME_BITMAP),                    OWN_ATTR_BITMAP,            cppu::UnoType<css::awt::XBitmap>::get(),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
+    { OUString(UNO_NAME_OLE2_METAFILE),             OWN_ATTR_METAFILE,          cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
+    { OUString("IsFontwork"),                       OWN_ATTR_ISFONTWORK,        cppu::UnoType<bool>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
+    { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT),        OWN_ATTR_BOUNDRECT,         cppu::UnoType<css::awt::Rectangle>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 #define MISC_OBJ_PROPERTIES \
-    { OUString(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0),  0,  0}, \
+    { OUString(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    cppu::UnoType<css::uno::Sequence< ::com::sun::star::beans::PropertyValue >>::get(),  0,  0}, \
     MISC_OBJ_PROPERTIES_NO_SHEAR \
     { OUString(UNO_NAME_MISC_OBJ_SHEARANGLE),       SDRATTR_SHEARANGLE,         ::cppu::UnoType<sal_Int32>::get(),        0,  0},
 
@@ -319,11 +319,11 @@
 #define SHAPE_DESCRIPTOR_PROPERTIES \
     { OUString(UNO_NAME_MISC_OBJ_LAYERID),      SDRATTR_LAYERID                 , ::cppu::UnoType<sal_Int16>::get(),          0,  0}, \
     { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),    SDRATTR_LAYERNAME               , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , ::getBooleanCppuType(),                      0,  0}, \
+    { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0}, \
     { OUString(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , ::getBooleanCppuType(),                      0,  0}, \
-    { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , ::getBooleanCppuType(),                      0,  0}, \
-    { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , ::getBooleanCppuType(),                      0,  0},\
+    { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , cppu::UnoType<bool>::get(),                      0,  0}, \
+    { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0}, \
+    { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0},\
     { OUString("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     { OUString("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     /* #i68101# */ \
@@ -332,7 +332,7 @@
 
 #define LINKTARGET_PROPERTIES \
     { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , ::cppu::UnoType<OUString>::get(),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
-    { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP               , ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+    { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP               , cppu::UnoType<css::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 
 #define CONNECTOR_PROPERTIES \
@@ -347,22 +347,22 @@
     { OUString(UNO_NAME_EDGELINE1DELTA),    SDRATTR_EDGELINE1DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_EDGELINE2DELTA),    SDRATTR_EDGELINE2DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_EDGELINE3DELTA),    SDRATTR_EDGELINE3DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     SFX_METRIC_ITEM}, \
-    { OUString("StartShape"),               OWN_ATTR_EDGE_START_OBJ,    ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >*)0),        ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { OUString("StartShape"),               OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { OUString("StartGluePointIndex"),      OWN_ATTR_GLUEID_HEAD,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
     { OUString("StartPosition"),            OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<com::sun::star::awt::Point>::get(),     0,   0}, \
-    { OUString("EndShape"),                 OWN_ATTR_EDGE_END_OBJ,      ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>*)0),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { OUString("EndShape"),                 OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { OUString("EndPosition"),              OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<com::sun::star::awt::Point>::get(),     0,   0},\
     { OUString("EndGluePointIndex"),        OWN_ATTR_GLUEID_TAIL,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
 \
-    { OUString("EdgeStartConnection"),      OWN_ATTR_EDGE_START_OBJ,    ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >*)0),        ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { OUString("EdgeStartConnection"),      OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { OUString("EdgeStartPoint"),           OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<com::sun::star::awt::Point>::get(),     ::com::sun::star::beans::PropertyAttribute::READONLY,    0}, \
-    { OUString("EdgeEndConnection"),        OWN_ATTR_EDGE_END_OBJ,      ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>*)0),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { OUString("EdgeEndConnection"),        OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { OUString("EdgeEndPoint"),             OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<com::sun::star::awt::Point>::get(),     ::com::sun::star::beans::PropertyAttribute::READONLY,    0}, \
 \
     { OUString(UNO_NAME_POLYPOLYGONBEZIER), OWN_ATTR_EDGE_POLYPOLYGONBEZIER,    ::cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get(),       0,  0},
 
 #define SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS \
-    { OUString(UNO_NAME_MEASUREBELOWREFEDGE),       SDRATTR_MEASUREBELOWREFEDGE,        ::getBooleanCppuType(),        0,  0}, \
+    { OUString(UNO_NAME_MEASUREBELOWREFEDGE),       SDRATTR_MEASUREBELOWREFEDGE,        cppu::UnoType<bool>::get(),        0,  0}, \
     { OUString(UNO_NAME_MEASUREFORMATSTRING),       SDRATTR_MEASUREFORMATSTRING,        ::cppu::UnoType<OUString>::get(),      0,  0}, \
     { OUString(UNO_NAME_MEASUREHELPLINE1LEN),       SDRATTR_MEASUREHELPLINE1LEN,        ::cppu::UnoType<sal_Int32>::get(),        0,  SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_MEASUREHELPLINE2LEN),       SDRATTR_MEASUREHELPLINE2LEN,        ::cppu::UnoType<sal_Int32>::get(),        0,  SFX_METRIC_ITEM}, \
@@ -372,14 +372,14 @@
     { OUString(UNO_NAME_MEASURELINEDIST),           SDRATTR_MEASURELINEDIST,            ::cppu::UnoType<sal_Int32>::get(),        0,  SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_MEASUREOVERHANG),           SDRATTR_MEASUREOVERHANG,            ::cppu::UnoType<sal_Int32>::get(),        0,  SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_MEASUREUNIT),               SDRATTR_MEASUREUNIT,                ::cppu::UnoType<sal_Int32>::get(),    0,  0},\
-    { OUString(UNO_NAME_MEASURESHOWUNIT),           SDRATTR_MEASURESHOWUNIT,            ::getBooleanCppuType(),        0,  0}, \
-    { OUString(UNO_NAME_MEASURETEXTAUTOANGLE),      SDRATTR_MEASURETEXTAUTOANGLE,       ::getBooleanCppuType(),        0,  0}, \
+    { OUString(UNO_NAME_MEASURESHOWUNIT),           SDRATTR_MEASURESHOWUNIT,            cppu::UnoType<bool>::get(),        0,  0}, \
+    { OUString(UNO_NAME_MEASURETEXTAUTOANGLE),      SDRATTR_MEASURETEXTAUTOANGLE,       cppu::UnoType<bool>::get(),        0,  0}, \
     { OUString(UNO_NAME_MEASURETEXTAUTOANGLEVIEW),  SDRATTR_MEASURETEXTAUTOANGLEVIEW,   ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
     { OUString(UNO_NAME_MEASURETEXTFIXEDANGLE),     SDRATTR_MEASURETEXTFIXEDANGLE,      ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
     { OUString(UNO_NAME_MEASURETEXTHPOS),           SDRATTR_MEASURETEXTHPOS,            ::cppu::UnoType<com::sun::star::drawing::MeasureTextHorzPos>::get(),    0,  0}, \
-    { OUString(UNO_NAME_MEASURETEXTISFIXEDANGLE),   SDRATTR_MEASURETEXTISFIXEDANGLE,    ::getBooleanCppuType(),        0,  0}, \
-    { OUString(UNO_NAME_MEASURETEXTROTA90),         SDRATTR_MEASURETEXTROTA90,          ::getBooleanCppuType(),        0,  0}, \
-    { OUString(UNO_NAME_MEASURETEXTUPSIDEDOWN),     SDRATTR_MEASURETEXTUPSIDEDOWN,      ::getBooleanCppuType(),        0,  0}, \
+    { OUString(UNO_NAME_MEASURETEXTISFIXEDANGLE),   SDRATTR_MEASURETEXTISFIXEDANGLE,    cppu::UnoType<bool>::get(),        0,  0}, \
+    { OUString(UNO_NAME_MEASURETEXTROTA90),         SDRATTR_MEASURETEXTROTA90,          cppu::UnoType<bool>::get(),        0,  0}, \
+    { OUString(UNO_NAME_MEASURETEXTUPSIDEDOWN),     SDRATTR_MEASURETEXTUPSIDEDOWN,      cppu::UnoType<bool>::get(),        0,  0}, \
     { OUString(UNO_NAME_MEASURETEXTVPOS),           SDRATTR_MEASURETEXTVPOS,            ::cppu::UnoType<com::sun::star::drawing::MeasureTextVertPos>::get(),    0,  0}, \
     { OUString("MeasureDecimalPlaces"),             SDRATTR_MEASUREDECIMALPLACES,       ::cppu::UnoType<sal_Int16>::get(),        0,  0},
 
@@ -410,7 +410,7 @@
     { OUString(UNO_NAME_GRAPHIC_RED),           SDRATTR_GRAFRED             , ::cppu::UnoType<sal_Int16>::get(),          0,   0}, \
     { OUString(UNO_NAME_GRAPHIC_GREEN),         SDRATTR_GRAFGREEN           , ::cppu::UnoType<sal_Int16>::get(),          0,   0}, \
     { OUString(UNO_NAME_GRAPHIC_BLUE),          SDRATTR_GRAFBLUE            , ::cppu::UnoType<sal_Int16>::get(),          0,   0}, \
-    { OUString(UNO_NAME_GRAPHIC_GAMMA),         SDRATTR_GRAFGAMMA           , ::getCppuType((const double*)0),     0,   0}, \
+    { OUString(UNO_NAME_GRAPHIC_GAMMA),         SDRATTR_GRAFGAMMA           , cppu::UnoType<double>::get(),     0,   0}, \
     { OUString(UNO_NAME_GRAPHIC_TRANSPARENCY),  SDRATTR_GRAFTRANSPARENCE    , ::cppu::UnoType<sal_Int16>::get(),          0,   0}, \
     { OUString(UNO_NAME_GRAPHIC_COLOR_MODE),    SDRATTR_GRAFMODE            , ::cppu::UnoType<com::sun::star::drawing::ColorMode>::get(),       0,   0},
 
@@ -420,8 +420,8 @@
     { OUString(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , ::cppu::UnoType<OUString>::get(), 0, 0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , ::cppu::UnoType<OUString>::get(), 0, 0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
-    { OUString(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
-    { OUString(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
+    { OUString(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , cppu::UnoType<css::awt::XBitmap>::get()  ,    0,     0},    \
+    { OUString(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , cppu::UnoType<css::graphic::XGraphic>::get()  ,   0,     0},
 
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \
@@ -444,18 +444,18 @@
     { OUString(UNO_NAME_3D_SCENE_LIGHTDIRECTION_6), SDRATTR_3DSCENE_LIGHTDIRECTION_6   , ::cppu::UnoType<com::sun::star::drawing::Direction3D>::get(),  0,  0}, \
     { OUString(UNO_NAME_3D_SCENE_LIGHTDIRECTION_7), SDRATTR_3DSCENE_LIGHTDIRECTION_7   , ::cppu::UnoType<com::sun::star::drawing::Direction3D>::get(),  0,  0}, \
     { OUString(UNO_NAME_3D_SCENE_LIGHTDIRECTION_8), SDRATTR_3DSCENE_LIGHTDIRECTION_8   , ::cppu::UnoType<com::sun::star::drawing::Direction3D>::get(),  0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_1),        SDRATTR_3DSCENE_LIGHTON_1          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_2),        SDRATTR_3DSCENE_LIGHTON_2          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_3),        SDRATTR_3DSCENE_LIGHTON_3          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_4),        SDRATTR_3DSCENE_LIGHTON_4          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_5),        SDRATTR_3DSCENE_LIGHTON_5          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_6),        SDRATTR_3DSCENE_LIGHTON_6          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_7),        SDRATTR_3DSCENE_LIGHTON_7          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_LIGHTON_8),        SDRATTR_3DSCENE_LIGHTON_8          , ::getBooleanCppuType(),   0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_PERSPECTIVE),      SDRATTR_3DSCENE_PERSPECTIVE    , ::getCppuType((const ::com::sun::star::drawing::ProjectionMode*)0),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_1),        SDRATTR_3DSCENE_LIGHTON_1          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_2),        SDRATTR_3DSCENE_LIGHTON_2          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_3),        SDRATTR_3DSCENE_LIGHTON_3          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_4),        SDRATTR_3DSCENE_LIGHTON_4          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_5),        SDRATTR_3DSCENE_LIGHTON_5          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_6),        SDRATTR_3DSCENE_LIGHTON_6          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_7),        SDRATTR_3DSCENE_LIGHTON_7          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_LIGHTON_8),        SDRATTR_3DSCENE_LIGHTON_8          , cppu::UnoType<bool>::get(),   0,  0}, \
+    { OUString(UNO_NAME_3D_SCENE_PERSPECTIVE),      SDRATTR_3DSCENE_PERSPECTIVE    , cppu::UnoType<css::drawing::ProjectionMode>::get(),   0,  0}, \
     { OUString(UNO_NAME_3D_SCENE_SHADOW_SLANT),     SDRATTR_3DSCENE_SHADOW_SLANT   , ::cppu::UnoType<sal_Int16>::get(),   0,  0}, \
     { OUString(UNO_NAME_3D_SCENE_SHADE_MODE),       SDRATTR_3DSCENE_SHADE_MODE     , ::cppu::UnoType<com::sun::star::drawing::ShadeMode>::get(),    0,  0}, \
-    { OUString(UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING),SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, ::getBooleanCppuType(),   0,  0},
+    { OUString(UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING),SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, cppu::UnoType<bool>::get(),   0,  0},
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES \
     SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \
@@ -465,41 +465,41 @@
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)
 #define MISC_3D_OBJ_PROPERTIES \
-    { OUString(UNO_NAME_3D_DOUBLE_SIDED)             ,SDRATTR_3DOBJ_DOUBLE_SIDED            , ::getBooleanCppuType(), 0, 0}, \
+    { OUString(UNO_NAME_3D_DOUBLE_SIDED)             ,SDRATTR_3DOBJ_DOUBLE_SIDED            , cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_MAT_COLOR)                ,SDRATTR_3DOBJ_MAT_COLOR               , ::cppu::UnoType<sal_Int32>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_MAT_EMISSION)             ,SDRATTR_3DOBJ_MAT_EMISSION            , ::cppu::UnoType<sal_Int32>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_MAT_SPECULAR)             ,SDRATTR_3DOBJ_MAT_SPECULAR            , ::cppu::UnoType<sal_Int32>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_MAT_SPECULAR_INTENSITY)   ,SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY  , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_NORMALS_INVERT)           ,SDRATTR_3DOBJ_NORMALS_INVERT          , ::getBooleanCppuType(), 0, 0}, \
+    { OUString(UNO_NAME_3D_NORMALS_INVERT)           ,SDRATTR_3DOBJ_NORMALS_INVERT          , cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_NORMALS_KIND)             ,SDRATTR_3DOBJ_NORMALS_KIND            , ::cppu::UnoType<com::sun::star::drawing::NormalsKind>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_SHADOW_3D)                ,SDRATTR_3DOBJ_SHADOW_3D               , ::getBooleanCppuType(), 0, 0}, \
-    { OUString(UNO_NAME_3D_TEXTURE_FILTER)           ,SDRATTR_3DOBJ_TEXTURE_FILTER          , ::getBooleanCppuType(), 0, 0}, \
+    { OUString(UNO_NAME_3D_SHADOW_3D)                ,SDRATTR_3DOBJ_SHADOW_3D               , cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_3D_TEXTURE_FILTER)           ,SDRATTR_3DOBJ_TEXTURE_FILTER          , cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_TEXTURE_KIND)             ,SDRATTR_3DOBJ_TEXTURE_KIND            , ::cppu::UnoType<com::sun::star::drawing::TextureKind>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_TEXTURE_MODE)             ,SDRATTR_3DOBJ_TEXTURE_MODE            , ::cppu::UnoType<com::sun::star::drawing::TextureMode>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_TEXTURE_PROJ_X)           ,SDRATTR_3DOBJ_TEXTURE_PROJ_X          , ::cppu::UnoType<com::sun::star::drawing::TextureProjectionMode>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_TEXTURE_PROJ_Y)           ,SDRATTR_3DOBJ_TEXTURE_PROJ_Y          , ::cppu::UnoType<com::sun::star::drawing::TextureProjectionMode>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_REDUCED_LINE_GEOMETRY)    ,SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY   , ::getBooleanCppuType(), 0, 0},
+    { OUString(UNO_NAME_3D_REDUCED_LINE_GEOMETRY)    ,SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY   , cppu::UnoType<bool>::get(), 0, 0},
 
 #define SPECIAL_3DCUBEOBJECT_PROPERTIES \
     { OUString(UNO_NAME_3D_TRANSFORM_MATRIX) ,OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX    , ::cppu::UnoType<com::sun::star::drawing::HomogenMatrix>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_POS)              ,OWN_ATTR_3D_VALUE_POSITION            , ::getCppuType((const ::com::sun::star::drawing::Position3D*)0), 0, 0}, \
+    { OUString(UNO_NAME_3D_POS)              ,OWN_ATTR_3D_VALUE_POSITION            , cppu::UnoType<css::drawing::Position3D>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_SIZE)             ,OWN_ATTR_3D_VALUE_SIZE                , ::cppu::UnoType<com::sun::star::drawing::Direction3D>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_POS_IS_CENTER)    ,OWN_ATTR_3D_VALUE_POS_IS_CENTER       , ::getBooleanCppuType(), 0, 0},
+    { OUString(UNO_NAME_3D_POS_IS_CENTER)    ,OWN_ATTR_3D_VALUE_POS_IS_CENTER       , cppu::UnoType<bool>::get(), 0, 0},
 
 #define SPECIAL_3DSPHEREOBJECT_PROPERTIES \
     { OUString(UNO_NAME_3D_TRANSFORM_MATRIX) ,OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX    , ::cppu::UnoType<com::sun::star::drawing::HomogenMatrix>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_POS)              ,OWN_ATTR_3D_VALUE_POSITION            , ::getCppuType((const ::com::sun::star::drawing::Position3D*)0), 0, 0}, \
+    { OUString(UNO_NAME_3D_POS)              ,OWN_ATTR_3D_VALUE_POSITION            , cppu::UnoType<css::drawing::Position3D>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_SIZE)             ,OWN_ATTR_3D_VALUE_SIZE                , ::cppu::UnoType<com::sun::star::drawing::Direction3D>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_HORZ_SEGS)        ,SDRATTR_3DOBJ_HORZ_SEGS, ::cppu::UnoType<sal_Int32>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_VERT_SEGS)        ,SDRATTR_3DOBJ_VERT_SEGS, ::cppu::UnoType<sal_Int32>::get(), 0, 0},
 
 // #107245# New 3D properties which are possible for lathe and extrude 3d objects
 #define SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES \
-    { OUString(UNO_NAME_3D_SMOOTH_NORMALS)   , SDRATTR_3DOBJ_SMOOTH_NORMALS,    ::getBooleanCppuType(), 0, 0}, \
-    { OUString(UNO_NAME_3D_SMOOTH_LIDS)      , SDRATTR_3DOBJ_SMOOTH_LIDS,       ::getBooleanCppuType(), 0, 0}, \
-    { OUString(UNO_NAME_3D_CHARACTER_MODE)   , SDRATTR_3DOBJ_CHARACTER_MODE,    ::getBooleanCppuType(), 0, 0}, \
-    { OUString(UNO_NAME_3D_CLOSE_FRONT)      , SDRATTR_3DOBJ_CLOSE_FRONT,       ::getBooleanCppuType(), 0, 0}, \
-    { OUString(UNO_NAME_3D_CLOSE_BACK)       , SDRATTR_3DOBJ_CLOSE_BACK,        ::getBooleanCppuType(), 0, 0},
+    { OUString(UNO_NAME_3D_SMOOTH_NORMALS)   , SDRATTR_3DOBJ_SMOOTH_NORMALS,    cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_3D_SMOOTH_LIDS)      , SDRATTR_3DOBJ_SMOOTH_LIDS,       cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_3D_CHARACTER_MODE)   , SDRATTR_3DOBJ_CHARACTER_MODE,    cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_3D_CLOSE_FRONT)      , SDRATTR_3DOBJ_CLOSE_FRONT,       cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_3D_CLOSE_BACK)       , SDRATTR_3DOBJ_CLOSE_BACK,        cppu::UnoType<bool>::get(), 0, 0},
 
 #define SPECIAL_3DLATHEOBJECT_PROPERTIES \
     { OUString(UNO_NAME_3D_TRANSFORM_MATRIX) ,OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX,::cppu::UnoType<com::sun::star::drawing::HomogenMatrix>::get(), 0, 0}, \
@@ -520,13 +520,13 @@
     { OUString(UNO_NAME_3D_POLYPOLYGON3D)    ,OWN_ATTR_3D_VALUE_POLYPOLYGON3D   , ::cppu::UnoType<com::sun::star::drawing::PolyPolygonShape3D>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_NORMALSPOLYGON3D) ,OWN_ATTR_3D_VALUE_NORMALSPOLYGON3D, ::cppu::UnoType<com::sun::star::drawing::PolyPolygonShape3D>::get(), 0, 0}, \
     { OUString(UNO_NAME_3D_TEXTUREPOLYGON3D) ,OWN_ATTR_3D_VALUE_TEXTUREPOLYGON3D, ::cppu::UnoType<com::sun::star::drawing::PolyPolygonShape3D>::get(), 0, 0}, \
-    { OUString(UNO_NAME_3D_LINEONLY)         ,OWN_ATTR_3D_VALUE_LINEONLY        , ::getBooleanCppuType(), 0, 0},
+    { OUString(UNO_NAME_3D_LINEONLY)         ,OWN_ATTR_3D_VALUE_LINEONLY        , cppu::UnoType<bool>::get(), 0, 0},
 
 #define SPECIAL_3DBACKSCALE_PROPERTIES \
     { OUString(UNO_NAME_3D_BACKSCALE)        ,SDRATTR_3DOBJ_BACKSCALE           , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
 
 #define CUSTOMSHAPE_PROPERTIES \
-    { OUString(UNO_NAME_CUSTOMSHAPE_ADJUSTMENT),SDRATTR_CUSTOMSHAPE_ADJUSTMENT,         ::getCppuType((::com::sun::star::uno::Sequence<sal_Int32>*)0), 0, 0}, \
+    { OUString(UNO_NAME_CUSTOMSHAPE_ADJUSTMENT),SDRATTR_CUSTOMSHAPE_ADJUSTMENT,         cppu::UnoType<css::uno::Sequence<sal_Int32>>::get(), 0, 0}, \
 
 #endif
 

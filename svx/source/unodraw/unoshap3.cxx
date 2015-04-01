@@ -53,7 +53,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 #define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const Reference< xint >*)0) ) \
+    if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
