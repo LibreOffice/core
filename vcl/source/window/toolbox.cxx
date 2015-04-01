@@ -1615,6 +1615,9 @@ void ToolBox::dispose()
 
 ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 {
+    if (!mpData)
+        return NULL;
+
     std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
     {
