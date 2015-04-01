@@ -17,12 +17,10 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
-
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
-
 
 import java.nio.ByteBuffer;
 

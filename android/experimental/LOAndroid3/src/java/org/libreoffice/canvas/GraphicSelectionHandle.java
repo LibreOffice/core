@@ -109,7 +109,7 @@ public class GraphicSelectionHandle extends CommonCanvasElement {
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
-    public boolean contains(float x, float y) {
+    public boolean onHitTest(float x, float y) {
         return mHitRect.contains(x, y);
     }
 

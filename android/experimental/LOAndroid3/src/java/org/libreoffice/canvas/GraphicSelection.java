@@ -88,7 +88,7 @@ public class GraphicSelection extends CommonCanvasElement {
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
-    public boolean contains(float x, float y) {
+    public boolean onHitTest(float x, float y) {
         // Check if handle was hit
         for (GraphicSelectionHandle handle : mHandles) {
             if (handle.contains(x, y)) {

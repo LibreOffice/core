@@ -25,14 +25,6 @@ public interface CanvasElement {
     void draw(Canvas canvas);
 
     /**
-     * Called inside draw if the element is visible. Override this method to
-     * draw the element on the canvas.
-     *
-     * @param canvas - the canvas
-     */
-    void onDraw(Canvas canvas);
-
-    /**
      * Hit test - returns true if the object has been hit
      * @param x - x coordinate of the
      * @param y - y coordinate of the
