@@ -176,7 +176,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName
 ::com::sun::star::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Sequence<beans::PropertyValue> *)0);
+    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )

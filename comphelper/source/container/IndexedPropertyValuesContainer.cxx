@@ -205,7 +205,7 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
 ::com::sun::star::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Sequence<beans::PropertyValue> *)0);
+    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )

@@ -54,7 +54,7 @@ namespace comphelper
             m_xProxyAggregate = xFactory->createProxy( _rxComponent );
         }
         if ( m_xProxyAggregate.is() )
-            m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
+            m_xProxyAggregate->queryAggregation( cppu::UnoType<decltype(m_xProxyTypeAccess)>::get() ) >>= m_xProxyTypeAccess;
 
         // aggregate the proxy
         osl_atomic_increment( &_rRefCount );
