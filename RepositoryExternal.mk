@@ -392,6 +392,24 @@ endef
 
 endif
 
+ifneq ($(SYSTEM_XZLIB),)
+
+define gb_LinkTarget__use_xzlib
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_XZLIB \
+)
+$(call gb_LinkTarget_add_libs,$(1),-llzma)
+
+endef
+
+# nothing on system
+define gb_LinkTarget__use_xzlib_x64
+
+endef
+
+gb_ExternalProject__use_xzlib :=
+endif # SYSTEM_XZLIB
+
 ifneq ($(SYSTEM_ZLIB),)
 
 define gb_LinkTarget__use_zlib

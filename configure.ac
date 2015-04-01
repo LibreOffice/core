@@ -1589,6 +1589,11 @@ AC_ARG_WITH(system-zlib,
         [Use zlib already on system.]),,
     [with_system_zlib=auto])
 
+AC_ARG_WITH(system-xzlib,
+    AS_HELP_STRING([--with-system-xzlib],
+        [Use xzlib already on system.]),,
+    [with_system_xzlib=no])
+
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
@@ -7412,6 +7417,42 @@ AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
 
 dnl ===================================================================
+dnl Check for system xzlib
+dnl ===================================================================
+if test "$with_system_xzlib" = "auto"; then
+    case "$_os" in
+    WINNT)
+        with_system_xzlib="$with_system_libs"
+        ;;
+    *)
+        with_system_xzlib=yes
+        ;;
+    esac
+fi
+
+dnl we want to use libo_CHECK_SYSTEM_MODULE here too, but OS X is too stupid
+dnl and has no pkg-config for it at least on some tinderboxes,
+dnl so leaving that out for now
+dnl libo_CHECK_SYSTEM_MODULE([xzlib],[XZLIB],[xzlib])
+AC_MSG_CHECKING([which xzlib to use])
+if test "$with_system_xzlib" = "yes"; then
+    AC_MSG_RESULT([external])
+    ENABLE_XZLIB="TRUE"
+    AC_CHECK_HEADER(lzma.h, [],
+        [AC_MSG_ERROR(lzma.h not found. install lzma)], [])
+    AC_CHECK_LIB(lzma, [ XZLIB=-llzma ],
+        [AC_MSG_ERROR(xzlib not found or functional)], [])
+    AC_DEFINE(ENABLE_XZLIB)
+    SYSTEM_XZLIB=TRUE
+else
+    SYSTEM_XZLIB=
+    ENABLE_XZLIB="FALSE"
+fi
+
+AC_SUBST(ENABLE_XZLIB)
+AC_SUBST(SYSTEM_XZLIB)
+
+dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
 if test "$with_jpeg_turbo" = "auto"; then
@@ -12962,6 +13003,7 @@ AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
+AC_CONFIG_HEADERS([config_host/config_xzlib.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then

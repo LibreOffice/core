@@ -24,6 +24,9 @@
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <unotools/tempfile.hxx>
+#include <tools/xzcodec.hxx>
+#include <tools/zcodec.hxx>
 
 #include "global.hxx"
 #include "scerrors.hxx"
@@ -1261,14 +1264,25 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
 
 bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 {
-    if (!pExtOptions)
-        return Text2Doc( rStrm );
+    utl::TempFile aTmpFile;
+    aTmpFile.EnableKillingFile(true);
+    SvStream* pDecompressedStream = aTmpFile.GetStream(StreamMode::READ|StreamMode::WRITE);
+    SvStream* pTargetStream = &rStrm;
+    ZCodec aCodecGZ;
+    XZCodec aCodecXZ;
+    if (aCodecGZ.AttemptDecompression(rStrm, *pDecompressedStream, false, true))
+        pTargetStream = pDecompressedStream;
+    else if (aCodecXZ.AttemptDecompression(rStrm, *pDecompressedStream))
+        pTargetStream = pDecompressedStream;
 
-    sal_uInt64 const nOldPos = rStrm.Tell();
-    sal_uInt64 const nRemaining = rStrm.remainingSize();
+    if (!pExtOptions)
+        return Text2Doc( *pTargetStream );
+
+    sal_uInt64 const nOldPos = pTargetStream->Tell();
+    sal_uInt64 const nRemaining = pTargetStream->remainingSize();
     boost::scoped_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining ));
-    rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
+    pTargetStream->StartReadingUnicodeText( pTargetStream->GetStreamCharSet() );
 
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
@@ -1314,8 +1328,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     while(--nSkipLines>0)
     {
-        aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); // content is ignored
-        if ( rStrm.IsEof() )
+        aLine = ReadCsvLine(*pTargetStream, !bFixed, rSeps, cStr); // content is ignored
+        if ( pTargetStream->IsEof() )
             break;
     }
 
@@ -1330,15 +1344,15 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     bool bQuotedAsText = pExtOptions && pExtOptions->IsQuotedAsText();
 
-    sal_uLong nOriginalStreamPos = rStrm.Tell();
+    sal_uLong nOriginalStreamPos = pTargetStream->Tell();
 
     ScDocumentImport aDocImport(*pDoc);
     do
     {
         for( ;; )
         {
-            aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr);
-            if ( rStrm.IsEof() && aLine.isEmpty() )
+            aLine = ReadCsvLine(*pTargetStream, !bFixed, rSeps, cStr);
+            if ( pTargetStream->IsEof() && aLine.isEmpty() )
                 break;
 
             EmbeddedNullTreatment( aLine);
@@ -1429,7 +1443,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             {
                 if (bMultiLine && !bRangeIsDetermined && pDocSh)
                     pDocSh->AdjustRowHeight( nRow, nRow, nTab);
-                xProgress->SetStateOnPercent( rStrm.Tell() - nOldPos );
+                xProgress->SetStateOnPercent( pTargetStream->Tell() - nOldPos );
             }
             ++nRow;
             if ( nRow > MAXROW )
@@ -1459,7 +1473,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 }
             }
 
-            rStrm.Seek( nOriginalStreamPos );
+            pTargetStream->Seek( nOriginalStreamPos );
             nRow = nStartRow;
             if (!StartPaste())
             {
