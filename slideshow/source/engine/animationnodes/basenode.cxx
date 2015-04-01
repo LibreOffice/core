@@ -683,12 +683,12 @@ void BaseNode::showState() const
     const AnimationNode::NodeState eNodeState( getState() );
 
     if( eNodeState == AnimationNode::INVALID )
-        VERBOSE_TRACE( "Node state: n0x%X [label=\"%s\",style=filled,"
+        VERBOSE_TRACE( "Node state: n%p [label=\"%s\",style=filled,"
                        "fillcolor=\"0.5,0.2,0.5\"]",
                        (const char*)this+debugGetCurrentOffset(),
                        getDescription() );
     else
-        VERBOSE_TRACE( "Node state: n0x%X [label=\"%s\",style=filled,"
+        VERBOSE_TRACE( "Node state: n%p [label=\"%s\",style=filled,"
                        "fillcolor=\"%f,1.0,1.0\"]",
                        (const char*)this+debugGetCurrentOffset(),
                        getDescription(),
@@ -726,7 +726,7 @@ void BaseNode::showState() const
                     OUStringToOString( aName,
                                               RTL_TEXTENCODING_ASCII_US ) );
 
-                VERBOSE_TRACE( "Node info: n0x%X, name \"%s\"",
+                VERBOSE_TRACE( "Node info: n%p, name \"%s\"",
                                (const char*)this+debugGetCurrentOffset(),
                                rAsciiName.getStr() );
             }

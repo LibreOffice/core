@@ -186,7 +186,7 @@ void BaseContainerNode::showState() const
         BaseNodeSharedPtr pNode =
             boost::dynamic_pointer_cast<BaseNode>(maChildren[i]);
         VERBOSE_TRACE(
-            "Node connection: n0x%X -> n0x%X",
+            "Node connection: n%p -> n%p",
             (const char*)this+debugGetCurrentOffset(),
             (const char*)pNode.get()+debugGetCurrentOffset() );
         pNode->showState();
