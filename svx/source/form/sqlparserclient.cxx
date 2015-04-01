@@ -20,25 +20,19 @@
 #include "sqlparserclient.hxx"
 #include "svx/ParseContext.hxx"
 
+#include <connectivity/dbtools.hxx>
+
+using namespace ::dbtools;
 
 namespace svxform
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
     {
         m_xContext = rxContext;
-    }
-
-    bool OSQLParserClient::ensureLoaded() const
-    {
-        if ( !ODbtoolsClient::ensureLoaded() )
-            return false;
-         m_xParser = getFactory()->createSQLParser(m_xContext,getParseContext());
-        return m_xParser.is();
+        m_xParser = createSQLParser(m_xContext, getParseContext());
     }
 
 

@@ -19,9 +19,9 @@
 
 #ifndef INCLUDED_SVX_DBCHARSETHELPER_HXX
 #define INCLUDED_SVX_DBCHARSETHELPER_HXX
-#include <svx/svxdllapi.h>
-#include <svx/dbtoolsclient.hxx>
 
+#include <svx/svxdllapi.h>
+#include <connectivity/virtualdbtools.hxx>
 
 namespace svxform
 {
@@ -30,22 +30,17 @@ namespace svxform
 
     //= ODataAccessCharsetHelper
 
-    class SVX_DLLPUBLIC ODataAccessCharsetHelper : public ODbtoolsClient
+    class SVX_DLLPUBLIC ODataAccessCharsetHelper
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;
-
-    protected:
-        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     public:
         ODataAccessCharsetHelper( );
 
         inline sal_Int32    getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
         {
-            if ( ensureLoaded() )
-                return m_xCharsetHelper->getSupportedTextEncodings( _rEncs );
-            return 0;
+            return m_xCharsetHelper->getSupportedTextEncodings( _rEncs );
         }
     };
 

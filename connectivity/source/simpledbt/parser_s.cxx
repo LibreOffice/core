@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/virtualdbtools.hxx>
-#include "parser_s.hxx"
+#include <simpledbt/parser_s.hxx>
 #include "parsenode_s.hxx"
 
 using namespace ::com::sun::star::uno;

@@ -1803,9 +1803,8 @@ OUString DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::X
 
     if ( !rpFormatter.get() )
     {
-        DBToolsObjectFactory aFactory;
-        rpFormatter = aFactory.createFormattedColumnValue(
-            m_xContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
+        rpFormatter = ::std::unique_ptr< FormattedColumnValue> (
+            new FormattedColumnValue(m_xContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) ) );
         OSL_ENSURE( rpFormatter.get(), "DbPatternField::Init: no value formatter!" );
     }
     else

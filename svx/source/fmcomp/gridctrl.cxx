@@ -21,7 +21,6 @@
 #include "fmhelp.hrc"
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
-#include "svx/dbtoolsclient.hxx"
 #include "svx/fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 #include <connectivity/dbtools.hxx>

@@ -268,6 +268,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
 using namespace ::svxform;
 using namespace ::svx;
+using namespace ::dbtools;
 
 
 //= helper
@@ -1627,7 +1628,7 @@ bool FmXFormShell::GetY2KState(sal_uInt16& n)
     Reference< XRowSet> xDB(xForm, UNO_QUERY);
     DBG_ASSERT(xDB.is(), "FmXFormShell::GetY2KState : current form has no dbform-interface !");
 
-    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(OStaticDataAccessTools().getRowSetConnection(xDB), false));
+    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getConnection(xDB), false));
     if (xSupplier.is())
     {
         Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1658,7 +1659,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     Reference< XRowSet > xActiveRowSet( xActiveForm, UNO_QUERY );
     if ( xActiveRowSet.is() )
     {
-        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xActiveRowSet ), false ) );
+        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xActiveRowSet ), false ) );
         if (xSupplier.is())
         {
             Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1698,7 +1699,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
         Reference< XRowSet> xElementAsRowSet( xCurrentElement, UNO_QUERY );
         if ( xElementAsRowSet.is() )
         {
-            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xElementAsRowSet ), false ) );
+            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xElementAsRowSet ), false ) );
             if (!xSupplier.is())
                 continue;
 
@@ -2106,7 +2107,7 @@ void FmXFormShell::startListening()
         return;
 
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
-    if (xDatabaseForm.is() && getRowSetConnection(xDatabaseForm).is())
+    if (xDatabaseForm.is() && getConnection(xDatabaseForm).is())
     {
         Reference< XPropertySet> xActiveFormSet(m_xActiveForm, UNO_QUERY);
         if (xActiveFormSet.is())
@@ -3826,7 +3827,7 @@ namespace
         try
         {
             Reference< XConnection > xConn;
-            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
+            if ( isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
                 return true;
 
             // is there already a active connection
