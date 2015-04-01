@@ -129,7 +129,7 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path, com::sun::star::uno::Any const & value) const
+    OUString const & path, com::sun::star::uno::Any const & value)
 {
     assert(batch.get() != 0);
     batch->setPropertyValue(path, value);
@@ -145,7 +145,7 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
 
 void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path, com::sun::star::uno::Any const & value) const
+    OUString const & path, com::sun::star::uno::Any const & value)
 {
     assert(batch.get() != 0);
     batch->setPropertyValue(path, value);
@@ -165,7 +165,7 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
 css::uno::Reference< css::container::XHierarchicalNameReplace >
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path) const
+    OUString const & path)
 {
     assert(batch.get() != 0);
     return batch->getGroup(path);
@@ -185,7 +185,7 @@ comphelper::detail::ConfigurationWrapper::getSetReadOnly(
 css::uno::Reference< css::container::XNameContainer >
 comphelper::detail::ConfigurationWrapper::getSetReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path) const
+    OUString const & path)
 {
     assert(batch.get() != 0);
     return batch->getSet(path);

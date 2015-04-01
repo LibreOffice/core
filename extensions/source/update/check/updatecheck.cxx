@@ -254,7 +254,7 @@ protected:
 private:
 
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
-    inline bool hasInternetConnection() const
+    static inline bool hasInternetConnection()
     {
 #ifdef WNT
         return WNT_hasInternetConnection();

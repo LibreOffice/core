@@ -242,7 +242,7 @@ class PageCache_Impl :
     size_t       m_nHit;
     size_t       m_nMissed;
 
-    inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
+    static inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
     {
         return ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
     }

@@ -135,11 +135,11 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 
     private:
         /** Check if LDAP is configured */
-        bool readLdapConfiguration(
+        static bool readLdapConfiguration(
             uno::Reference<uno::XComponentContext> const & context,
             LdapDefinition * definition, OUString * loggedOnUser);
 
-        bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
+        static bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
                                 const OUString& aLdapSetting,
                                 OUString& aServerParameter);
 

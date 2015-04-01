@@ -24,12 +24,12 @@ typedef std::pair<std::string, std::string> PathFilePair;
 
 
 struct IncludesCollection {
-    private:
+private:
     DirMap allIncludes;
-    PathFilePair split_path(const std::string& filePath);
+    static PathFilePair split_path(const std::string& filePath);
     void add_to_collection(const std::string& dirPath);
 
-    public:
+public:
     bool exists(std::string filePath);
 };
 

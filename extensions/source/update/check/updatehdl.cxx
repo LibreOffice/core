@@ -607,7 +607,7 @@ void UpdateHandler::updateState( UpdateState eState )
 
 
 OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle >& rBundle,
-                                         sal_Int32 nResourceId ) const
+                                         sal_Int32 nResourceId )
 {
     OUString sString;
     OUString sKey = "string:" + OUString::number( nResourceId );

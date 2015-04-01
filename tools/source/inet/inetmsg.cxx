@@ -605,7 +605,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 }
 
 INetMIMEMessage *INetMIMEMessage::CreateMessage (
-    const INetMIMEMessage& rMsg) const
+    const INetMIMEMessage& rMsg)
 {
     return new INetMIMEMessage (rMsg);
 }

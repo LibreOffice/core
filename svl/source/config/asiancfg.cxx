@@ -82,7 +82,7 @@ bool SvxAsianConfig::IsKerningWesternTextOnly() const {
 
 void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
     officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::set(
-        value, impl_->batch, impl_->context);
+        value, impl_->batch);
 }
 
 sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
@@ -93,7 +93,7 @@ sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
 
 void SvxAsianConfig::SetCharDistanceCompression(sal_Int16 value) {
     officecfg::Office::Common::AsianLayout::CompressCharacterDistance::set(
-        value, impl_->batch, impl_->context);
+        value, impl_->batch);
 }
 
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
@@ -138,7 +138,7 @@ void SvxAsianConfig::SetStartEndChars(
     assert((startChars == 0) == (endChars == 0));
     css::uno::Reference< css::container::XNameContainer > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
-            impl_->batch, impl_->context));
+            impl_->batch));
     OUString name(toString(locale));
     if (startChars == 0) {
         try {

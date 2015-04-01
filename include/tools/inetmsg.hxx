@@ -251,8 +251,8 @@ public:
 
     bool HeaderParsed() const { return bHeaderParsed; }
 
-    INetMIMEMessage* CreateMessage (
-        const INetMIMEMessage& rMsg) const;
+    static INetMIMEMessage* CreateMessage (
+        const INetMIMEMessage& rMsg);
 
     // Header fields.
 

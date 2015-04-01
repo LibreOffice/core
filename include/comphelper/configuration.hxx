@@ -95,36 +95,34 @@ public:
 
     com::sun::star::uno::Any getPropertyValue(OUString const & path) const;
 
-    void setPropertyValue(
+    static void setPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, com::sun::star::uno::Any const & value)
-        const;
+        OUString const & path, com::sun::star::uno::Any const & value);
 
     com::sun::star::uno::Any getLocalizedPropertyValue(
         OUString const & path) const;
 
-    void setLocalizedPropertyValue(
+    static void setLocalizedPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, com::sun::star::uno::Any const & value)
-        const;
+        OUString const & path, com::sun::star::uno::Any const & value);
 
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     getGroupReadOnly(OUString const & path) const;
 
-    com::sun::star::uno::Reference<
+    static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
     getGroupReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path) const;
+        OUString const & path);
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
     getSetReadOnly(OUString const & path) const;
 
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
+    static com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
     getSetReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path) const;
+        OUString const & path);
 
     std::shared_ptr< ConfigurationChanges > createChanges() const;
 
@@ -208,11 +206,9 @@ template< typename T, typename U > struct ConfigurationProperty
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
-        std::shared_ptr< ConfigurationChanges > const & batch,
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+        std::shared_ptr< ConfigurationChanges > const & batch)
     {
-        detail::ConfigurationWrapper::get(context).setPropertyValue(
+        comphelper::detail::ConfigurationWrapper::setPropertyValue(
             batch, T::path(), detail::Convert< U >::toAny(value));
     }
 
@@ -256,11 +252,9 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
-        std::shared_ptr< ConfigurationChanges > const & batch,
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+        std::shared_ptr< ConfigurationChanges > const & batch)
     {
-        detail::ConfigurationWrapper::get(context).setLocalizedPropertyValue(
+        comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
             batch, T::path(), detail::Convert< U >::toAny(value));
     }
 
@@ -292,11 +286,9 @@ template< typename T > struct ConfigurationGroup {
     /// modifications via the given changes batch.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
-    get(std::shared_ptr< ConfigurationChanges > const & batch,
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+    get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
-        return detail::ConfigurationWrapper::get(context).getGroupReadWrite(
+        return comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
             batch, T::path());
     }
 
@@ -328,11 +320,9 @@ template< typename T > struct ConfigurationSet {
     /// modifications via the given changes batch.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
-    get(std::shared_ptr< ConfigurationChanges > const & batch,
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+    get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
-        return detail::ConfigurationWrapper::get(context).getSetReadWrite(
+        return comphelper::detail::ConfigurationWrapper::getSetReadWrite(
             batch, T::path());
     }
 

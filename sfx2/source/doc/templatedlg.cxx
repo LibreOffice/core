@@ -1672,8 +1672,8 @@ void SfxTemplateManagerDlg::syncRepositories() const
             aNames[i] = maRepositories[i]->maTitle;
         }
 
-        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch, pContext);
-        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
+        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch);
+        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch);
         batch->commit();
     }
 }

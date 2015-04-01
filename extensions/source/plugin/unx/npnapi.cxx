@@ -103,7 +103,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     delete [] stream->url;
     delete stream;
     // returns NPError
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     delete pMes;
     return aRet;
 }
@@ -141,7 +141,7 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
         return NPERR_GENERIC_ERROR;
 
     // returns NPError
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     SAL_WARN_IF(aRet, "extensions.plugin", "geturl returns " << aRet);
     delete pMes;
     return aRet;
@@ -168,7 +168,7 @@ static NPError l_NPN_GetURLNotify( NPP instance, const char* url, const char* ta
         return NPERR_GENERIC_ERROR;
 
     // returns NPError
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     delete pMes;
     return aRet;
 }
@@ -192,7 +192,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
         return NPERR_GENERIC_ERROR;
 
     // returns a new NPStream and an error
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     if( ! aRet )
     {
         NPStream* pStream = new NPStream;
@@ -229,7 +229,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     delete pMes;
     return aRet;
 }
@@ -252,7 +252,7 @@ static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window,
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     delete pMes;
     return aRet;
 }
@@ -293,7 +293,7 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
         return NPERR_GENERIC_ERROR;
     }
 
-    NPError aRet = pConnector->GetNPError( pMes );
+    NPError aRet = PluginConnector::GetNPError( pMes );
     delete [] pArray;
     delete pMes;
     return aRet;
