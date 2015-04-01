@@ -32,8 +32,8 @@
 
 
 
-#define CPPU_TYPE( T )      getCppuType( static_cast< T * >( 0 ) )
-#define CPPU_TYPE_REF( T )  CPPU_TYPE( com::sun::star::uno::Reference< T > )
+#define CPPU_TYPE( T )      cppu::UnoType<T>::get()
+#define CPPU_TYPE_REF( T )  CPPU_TYPE( T )
 
 // XTypeProvider impl. internals
 

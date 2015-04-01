@@ -226,7 +226,7 @@ class PropertyValues : public PropertyValuesVector {};
     GETVALUE_IMPL_TYPE( _type_,                                               \
                         _type_name_,                                          \
                         _member_name_,                                        \
-                        getCppuType( static_cast< const _type_ * >( 0 ) ) )
+                        cppu::UnoType<_type_>::get() )
 
 #define SETVALUE_IMPL( _prop_name_, _type_name_, _member_name_, _value_ )     \
                                                                               \
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL_TYPE(
-            bool, BOOLEAN_VALUE_SET, bBoolean, getCppuBooleanType() );
+            bool, BOOLEAN_VALUE_SET, bBoolean, cppu::UnoType<bool>::get() );
 }
 
 

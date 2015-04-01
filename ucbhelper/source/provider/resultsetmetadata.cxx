@@ -405,7 +405,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         return DataType::SQLNULL;
 
     if ( m_aProps.getConstArray()[ column - 1 ].Type
-            == getCppuVoidType() )
+            == cppu::UnoType<cppu::UnoVoidType>::get() )
     {
         // No type given. Try UCB's Properties Manager...
 
@@ -458,7 +458,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
 
     if ( rType == cppu::UnoType<OUString>::get() )
         nType = DataType::VARCHAR;  // XRow::getString
-    else if ( rType == getCppuBooleanType() )
+    else if ( rType == cppu::UnoType<bool>::get() )
         nType = DataType::BIT;      // XRow::getBoolean
     else if ( rType == cppu::UnoType<sal_Int32>::get() )
         nType = DataType::INTEGER;  // XRow::getInt
@@ -472,7 +472,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         nType = DataType::REAL;     // XRow::getFloat
     else if ( rType == cppu::UnoType<double>::get() )
         nType = DataType::DOUBLE;   // XRow::getDouble
-    else if ( rType == getCppuType( static_cast< const Sequence< sal_Int8 > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<Sequence<sal_Int8>>::get() )
         nType = DataType::VARBINARY;// XRow::getBytes
     else if ( rType == cppu::UnoType<Date>::get() )
         nType = DataType::DATE;     // XRow::getDate

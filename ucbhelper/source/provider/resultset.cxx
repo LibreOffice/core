@@ -51,7 +51,7 @@ static const uno::Type& sal_Int32_getCppuType()
 
 static const uno::Type& sal_Bool_getCppuType()
 {
-    return getCppuBooleanType();
+    return cppu::UnoType<bool>::get();
 }
 
 static const PropertyInfo aPropertyTable[] =
