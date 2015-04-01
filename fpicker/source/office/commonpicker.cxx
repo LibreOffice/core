@@ -58,13 +58,13 @@ namespace svt
         registerProperty(
             OUString( "HelpURL" ), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
-            &m_sHelpURL, ::getCppuType( &m_sHelpURL )
+            &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get()
         );
 
         registerProperty(
             OUString( "Window" ), PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
-            &m_xWindow, ::getCppuType( &m_xWindow )
+            &m_xWindow, cppu::UnoType<decltype(m_xWindow)>::get()
         );
     }
 

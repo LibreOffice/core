@@ -99,7 +99,7 @@ void SAL_CALL CFilePicker::addFilePickerListener(const uno::Reference<XFilePicke
             static_cast< XFilePicker2* >( this ) );
 
     if ( !rBHelper.bInDispose && !rBHelper.bDisposed )
-        rBHelper.aLC.addInterface( getCppuType( &xListener ), xListener );
+        rBHelper.aLC.addInterface(cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
@@ -114,7 +114,7 @@ void SAL_CALL CFilePicker::removeFilePickerListener(const uno::Reference<XFilePi
             "object is already disposed",
             static_cast< XFilePicker2* >( this ) );
 
-    rBHelper.aLC.removeInterface( getCppuType( &xListener ), xListener );
+    rBHelper.aLC.removeInterface(cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 

@@ -81,7 +81,7 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
         throw IllegalArgumentException(
             "unsupported image format", 0, 1);
 
-    if (aImage.hasValue() && (aImage.getValueType() != getCppuType((Sequence<sal_Int8>*)0)))
+    if (aImage.hasValue() && (aImage.getValueType() != cppu::UnoType<Sequence<sal_Int8>>::get()))
         throw IllegalArgumentException(
             "invalid image data", 0, 2);
 

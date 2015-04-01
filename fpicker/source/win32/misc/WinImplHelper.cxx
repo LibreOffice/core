@@ -166,7 +166,7 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     OSL_ASSERT( IsWindow( hwnd ) );
 
     if ( !aItemList.hasValue( ) ||
-         aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
+         aItemList.getValueType( ) != cppu::UnoType<Sequence<OUString>>::get() )
          throw IllegalArgumentException(
             "invalid value type or any has no value",
             rXInterface,
