@@ -616,7 +616,23 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
         }
     }
 
-    // TODO: only fail if actual parsing fails?
+    if (aStack.size() != 1) {
+        SAL_WARN("sc.units", "Wrong number of units on stack, should be 1, actual number: " << aStack.size());
+        return false;
+    } else if (aStack.top().type != StackItemType::UNITS) {
+        SAL_WARN("sc.units", "End of verification: item on stack does not contain units");
+        return false;
+    }
+
+    OUString sUnitString;
+    ScAddress aAddress;
+
+    UtUnit aHeaderUnit = findHeaderUnitForCell(rFormulaAddress, pDoc, sUnitString, aAddress);
+    UtUnit aResultUnit = boost::get< UtUnit>(aStack.top().item);
+
+    if (aHeaderUnit.isValid() && aHeaderUnit != aResultUnit) {
+        return false;
+    }
 
     return true;
 }
