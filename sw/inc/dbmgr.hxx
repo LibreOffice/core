@@ -73,7 +73,6 @@ class SfxProgress;
 class ListBox;
 class Button;
 class SvNumberFormatter;
-class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
 class SwCalc;
@@ -185,8 +184,6 @@ class AbstractMailMergeDlg;
 class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
-
-    static SwDbtoolsClient* pDbtoolsClient;
 
     OUString            sEMailAddrFld;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
@@ -371,10 +368,6 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
                                                          const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
-
-    static SwDbtoolsClient&    GetDbtoolsClient();
-    /// has to be called from _FinitUI()
-    static void                RemoveDbtoolsClient();
 
     /** try to get the data source from the given connection through the XChild interface.
         If this is not possible, the data source will be created through its name.
