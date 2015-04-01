@@ -60,6 +60,9 @@
 /AUTHORS
 /MAINTAINERS
 
+# make id
+/ID
+
 # make tags
 
 /tags
