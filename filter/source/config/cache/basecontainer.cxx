@@ -384,7 +384,7 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
 {
     // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...
-    return ::getCppuType(static_cast< css::uno::Sequence< css::beans::PropertyValue >* >(NULL));
+    return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
 }
 
 

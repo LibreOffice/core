@@ -1854,7 +1854,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
             }
         }
     }
-    else if ( rAny.getValueType() == ::getCppuType( ( const ::com::sun::star::drawing::PointSequenceSequence* ) 0 ) )
+    else if ( rAny.getValueType() == cppu::UnoType<css::drawing::PointSequenceSequence>::get() )
     {
         ::com::sun::star::drawing::PointSequenceSequence const * pSourcePolyPolygon
             = static_cast<css::drawing::PointSequenceSequence const *>(rAny.getValue());
@@ -1892,7 +1892,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
             }
         }
     }
-    else if ( rAny.getValueType() == ::getCppuType( ( const ::com::sun::star::drawing::PointSequence* ) 0 ) )
+    else if ( rAny.getValueType() == cppu::UnoType<css::drawing::PointSequence>::get() )
     {
         ::com::sun::star::drawing::PointSequence const * pInnerSequence =
             static_cast<css::drawing::PointSequence const *>(rAny.getValue());
@@ -1917,7 +1917,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
             }
         }
     }
-    else if ( rAny.getValueType() == ::getCppuType( ( const uno::Sequence< beans::PropertyValue >* ) 0 ) )
+    else if ( rAny.getValueType() == cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() )
     {
         uno::Sequence< beans::PropertyValue > const * pGeometrySeq =
             static_cast<uno::Sequence< beans::PropertyValue > const *>(rAny.getValue());
