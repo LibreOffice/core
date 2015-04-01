@@ -1240,7 +1240,7 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         ( (bFileToFile && INET_PROT_FILE == aTargetUrl.GetProtocol()) ||
           (!bFileToFile && INET_PROT_FILE != aTargetUrl.GetProtocol() &&
                            INET_PROT_FTP <= aTargetUrl.GetProtocol() &&
-                           INET_PROT_NEWS >= aTargetUrl.GetProtocol()) ) )
+                           INET_PROT_JAVASCRIPT >= aTargetUrl.GetProtocol()) ) )
     {
         if( pFileNameMap )
         {

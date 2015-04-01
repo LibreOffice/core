@@ -60,11 +60,11 @@ String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
 {
-    Text [ en-US ] = "Mail & News" ;
+    Text [ en-US ] = "Mail" ;
 };
 String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
 {
-    Text [ en-US ] = "This is where you create a hyperlink to an e-mail address or newsgroup." ;
+    Text [ en-US ] = "This is where you create a hyperlink to an e-mail address." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP

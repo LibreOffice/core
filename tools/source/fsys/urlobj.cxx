@@ -114,13 +114,6 @@ using namespace css;
    segment = *(pchar / ";")
 
 
-   ; RFC 1738, RFC 2396, RFC 2732
-   news-url = "NEWS:" grouppart
-   grouppart = "*" / group / article
-   group = alpha *(alphanum / "+" / "-" / "." / "_")
-   article = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "?" / "_" / "~") "@" host
-
-
    ; private
    private-url = "PRIVATE:" path ["?" *uric]
    path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
@@ -344,8 +337,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, true },
         { "vnd.sun.star.webdav", "vnd.sun.star.webdav://", 80, true, false,
           false, false, true, true, true, true },
-        { "news", "news:", 0, false, false, false, false, false, false, false,
-          false },
+        { "", "", 0, false, false, false, false, true, true, true, false }, // Placeholder for removed 6: NEWS
         { "private", "private:", 0, false, false, false, false, false,
           false, false, true },
         { "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
@@ -442,107 +434,106 @@ enum
     PP = INetURLObject::PART_UNAMBIGUOUS,
     PQ = INetURLObject::PART_URIC_NO_SLASH,
     PR = INetURLObject::PART_HTTP_QUERY,
-    PS = INetURLObject::PART_NEWS_ARTICLE_LOCALPART
 };
 
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                              PP,
-/* ! */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* ! */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
 /* " */                                     PM+PN   +PP,
 /* # */                                     PM,
-/* $ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* $ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
 /* % */                                     PM,
-/* & */ PA      +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR+PS,
-/* ' */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* ( */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* ) */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* * */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* + */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR+PS,
-/* , */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR+PS,
-/* - */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* . */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* / */         +PD      +PG+PH+PI+PJ+PK   +PM+PN+PO         +PS,
-/* 0 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 1 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 2 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 3 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 4 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 5 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 6 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 7 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 8 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 9 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* : */         +PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR+PS,
-/* ; */ PA         +PE+PF+PG+PH+PI+PJ+PK   +PM         +PQ+PR+PS,
+/* & */ PA      +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR,
+/* ' */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* ( */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* ) */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* * */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* + */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
+/* , */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR,
+/* - */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* . */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* / */         +PD      +PG+PH+PI+PJ+PK   +PM+PN+PO,
+/* 0 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 1 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 2 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 3 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 4 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 5 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 6 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 7 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 8 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 9 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* : */         +PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
+/* ; */ PA         +PE+PF+PG+PH+PI+PJ+PK   +PM         +PQ+PR,
 /* < */                        +PI         +PM+PN   +PP,
-/* = */ PA      +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR+PS,
+/* = */ PA      +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR,
 /* > */                        +PI         +PM+PN   +PP,
-/* ? */                  +PG               +PM   +PO   +PQ   +PS,
+/* ? */                  +PG               +PM   +PO   +PQ,
 /* @ */         +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* A */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* B */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* C */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* D */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* E */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* F */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* G */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* H */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* I */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* J */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* K */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* L */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* M */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* N */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* O */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* P */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* R */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* S */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* T */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* U */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* V */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* W */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* X */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* A */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* B */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* C */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* D */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* E */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* F */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* G */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* H */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* I */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* J */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* K */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* L */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* M */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* N */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* O */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* P */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* R */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* S */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* T */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* U */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* V */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* W */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* X */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
 /* [ */                   PG               +PM+PN+PO,
 /* \ */                                    +PM+PN   +PP,
 /* ] */                   PG               +PM+PN+PO,
 /* ^ */                                     PM+PN   +PP,
-/* _ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* _ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
 /* ` */                                     PM+PN   +PP,
-/* a */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* b */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* c */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* d */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* e */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* f */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* g */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* h */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* i */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* j */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* k */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* l */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* m */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* n */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* o */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* p */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* r */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* s */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* t */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* u */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* v */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* w */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* x */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* a */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* b */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* c */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* d */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* e */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* f */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* g */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* h */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* i */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* j */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* k */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* l */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* m */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* n */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* o */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* p */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* r */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* s */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* t */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* u */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* v */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* w */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* x */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
 /* { */                                     PM+PN   +PP,
 /* | */                                    +PM+PN   +PP,
 /* } */                                     PM+PN   +PP,
-/* ~ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ   +PS,
+/* ~ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -2136,7 +2127,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "macro:", "staroffice.macro:", INET_PROT_MACRO,
               PrefixInfo::INTERNAL },
             { "mailto:", 0, INET_PROT_MAILTO, PrefixInfo::OFFICIAL },
-            { "news:", 0, INET_PROT_NEWS, PrefixInfo::OFFICIAL },
             { "out:", "staroffice.out:", INET_PROT_OUT,
               PrefixInfo::INTERNAL },
             { "private:", "staroffice.private:", INET_PROT_PRIV_SOFFICE,
@@ -3038,73 +3028,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INET_PROT_NEWS:
-            if (pPos == pEnd || *pPos == nQueryDelimiter
-                || *pPos == nFragmentDelimiter)
-                return false;
-
-            // Match <"*">:
-            if (*pPos == '*'
-                && (pEnd - pPos == 1 || pPos[1] == nQueryDelimiter
-                    || pPos[1] == nFragmentDelimiter))
-            {
-                ++pPos;
-                aTheSynPath.append('*');
-                break;
-            }
-
-            // Match <group>:
-            if (rtl::isAsciiAlpha(*pPos))
-            {
-                for (sal_Unicode const * p = pPos + 1;; ++p)
-                {
-                    if (p == pEnd || *p == nQueryDelimiter
-                        || *p == nFragmentDelimiter)
-                    {
-                        aTheSynPath.setLength(0);
-                        aTheSynPath.append(pPos, p - pPos);
-                        pPos = p;
-                        goto done;
-                    }
-                    else if (!rtl::isAsciiAlphanumeric(*p) && *p != '+'
-                             && *p != '-' && *p != '.' && *p != '_')
-                    {
-                        break;
-                    }
-                }
-            }
-
-            // Match <article>:
-            for (;;)
-            {
-                if (pPos == pEnd || *pPos == nQueryDelimiter
-                    || *pPos == nFragmentDelimiter)
-                    return false;
-                if (*pPos == '@')
-                    break;
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, '%',
-                                             eMechanism, eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_NEWS_ARTICLE_LOCALPART, '%', eCharset, true);
-            }
-            if (aTheSynPath.isEmpty())
-                return false;
-            ++pPos;
-            aTheSynPath.append('@');
-            {
-                sal_Unicode const * p = pPos;
-                while (p < pEnd && *pPos != nQueryDelimiter
-                       && *pPos != nFragmentDelimiter)
-                    ++p;
-                OUString aCanonic;
-                if (!parseHost(pPos, p, aCanonic))
-                    return false;
-                aTheSynPath.append(aCanonic);
-            }
-
-        done:
-            break;
 
         case INET_PROT_PRIV_SOFFICE:
         case INET_PROT_SLOT:

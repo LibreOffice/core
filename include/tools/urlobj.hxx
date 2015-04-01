@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star { namespace util {
 #define INET_HTTPS_SCHEME "https://"
 #define INET_FILE_SCHEME "file://"
 #define INET_MAILTO_SCHEME "mailto:"
-#define INET_NEWS_SCHEME "news:"
 #define INET_HID_SCHEME "hid:"
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
@@ -72,7 +71,6 @@ enum INetProtocol
     INET_PROT_FILE = 3,
     INET_PROT_MAILTO = 4,
     INET_PROT_VND_SUN_STAR_WEBDAV = 5,
-    INET_PROT_NEWS = 6,
     INET_PROT_PRIV_SOFFICE = 7,
     INET_PROT_PRIVATE = INET_PROT_PRIV_SOFFICE, // obsolete
     INET_PROT_VND_SUN_STAR_HELP = 8,
@@ -883,7 +881,6 @@ public:
         PART_UNAMBIGUOUS            = 0x08000,
         PART_URIC_NO_SLASH          = 0x10000,
         PART_HTTP_QUERY             = 0x20000, //TODO! unused?
-        PART_NEWS_ARTICLE_LOCALPART = 0x40000
     };
 
     enum EscapeType
