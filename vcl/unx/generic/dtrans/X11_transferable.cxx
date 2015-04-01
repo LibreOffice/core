@@ -92,7 +92,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
 sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException, std::exception)
 {
-    if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
+    if( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
     {
         if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( "text/plain;charset=utf-16" ) &&
             aFlavor.DataType == cppu::UnoType<OUString>::get() )

@@ -618,10 +618,10 @@ bool SelectionManager::convertData(
             if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "charset=utf-16" )
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
-                aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
+                aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
         }
         else
-            aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
+            aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
         if( xTransferable->isDataFlavorSupported( aFlavor ) )
         {
@@ -633,7 +633,7 @@ bool SelectionManager::convertData(
                 rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
                 bSuccess = true;
             }
-            else if( aValue.getValueType() == getCppuType( (Sequence< sal_Int8 >*)0 ) )
+            else if( aValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 aValue >>= rData;
                 bSuccess = true;
@@ -1317,7 +1317,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             {
                 int nFormat;
                 pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection, nFormat );
-                pFlavors->DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
+                pFlavors->DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
                 sal_Int32 nIndex = 0;
                 if( pFlavors->MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
                 {

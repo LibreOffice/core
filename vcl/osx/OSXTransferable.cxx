@@ -39,7 +39,7 @@ namespace // private
     {
       size_t len = aFlavor.MimeType.getLength();
       Type dtype = aFlavor.DataType;
-      return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == cppu::UnoType<OUString>::get())));
+      return ((len > 0) && ((dtype == cppu::UnoType<Sequence<sal_Int8>>::get()) || (dtype == cppu::UnoType<OUString>::get())));
     }
 
 } // namespace private

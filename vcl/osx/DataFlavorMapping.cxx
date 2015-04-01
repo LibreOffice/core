@@ -53,7 +53,7 @@ namespace // private
   {
     size_t len = aFlavor.MimeType.getLength();
     Type dtype = aFlavor.DataType;
-    return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == cppu::UnoType<OUString>::get())));
+    return ((len > 0) && ((dtype == cppu::UnoType<Sequence<sal_Int8>>::get()) || (dtype == cppu::UnoType<OUString>::get())));
   }
 
   OUString NSStringToOUString( const NSString* cfString)
@@ -132,7 +132,7 @@ namespace // private
 
   inline bool isByteSequenceType(const Type& theType)
   {
-    return (theType == getCppuType((Sequence<sal_Int8>*)0));
+    return (theType == cppu::UnoType<Sequence<sal_Int8>>::get());
   }
 
   inline bool isOUStringType(const Type& theType)
@@ -486,7 +486,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
         {
           oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
           oOOFlavor.HumanPresentableName = OUString::createFromAscii(flavorMap[i].HumanPresentableName);
-          oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? cppu::UnoType<OUString>::get() : getCppuType((Sequence<sal_Int8>*)0);
+          oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? cppu::UnoType<OUString>::get() : cppu::UnoType<Sequence<sal_Int8>>::get();
           return oOOFlavor;
         }
     } // for
@@ -498,7 +498,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
     {
         oOOFlavor.MimeType = aTryFlavor;
         oOOFlavor.HumanPresentableName.clear();
-        oOOFlavor.DataType = getCppuType((Sequence<sal_Int8>*)0);
+        oOOFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
     }
 
     return oOOFlavor;

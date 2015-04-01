@@ -375,13 +375,13 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
 void SAL_CALL DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
     throw(RuntimeException, std::exception)
 {
-    rBHelper.addListener(::getCppuType(&dtl), dtl);
+    rBHelper.addListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
 void SAL_CALL DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
     throw(RuntimeException, std::exception)
 {
-    rBHelper.removeListener(::getCppuType(&dtl), dtl);
+    rBHelper.removeListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
 sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException, std::exception)
