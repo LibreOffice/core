@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_d31134b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-01T13:33:11Z",
+      "side": 1,
+      "message": "Btw, the IDs starting with I... are Change-IDs you see in commit messages, identifiers of changes within gerrit. The \"real\" git commit IDs are the ones you get when browsing git log, prefixed with \"commit ...\".",
+      "revId": "bc08a5217b39806edc1a89a4c5d580ebed790a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
