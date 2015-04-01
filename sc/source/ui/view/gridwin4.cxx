@@ -634,7 +634,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
 
-    if (!bIsTiledRendering)
     {
         // init redraw
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
@@ -649,13 +648,16 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             {
                 // #i74769# Use new BeginDrawLayers() interface
                 vcl::Region aDrawingRegion(aDrawingRectLogic);
-                pTargetPaintWindow = pDrawView->BeginDrawLayers(this, aDrawingRegion);
+                pTargetPaintWindow = pDrawView->BeginDrawLayers(pContentDev, aDrawingRegion);
                 OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
-                // #i74769# get target device from SdrPaintWindow, this may be the prerender
-                // device now, too.
-                pContentDev = &(pTargetPaintWindow->GetTargetOutputDevice());
-                aOutputData.SetContentDevice( pContentDev );
+                if (!bIsTiledRendering)
+                {
+                    // #i74769# get target device from SdrPaintWindow, this may be the prerender
+                    // device now, too.
+                    pContentDev = &(pTargetPaintWindow->GetTargetOutputDevice());
+                    aOutputData.SetContentDevice(pContentDev);
+                }
             }
 
             pContentDev->SetMapMode(aCurrentMapMode);
@@ -845,7 +847,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    if (!bIsTiledRendering)
     {
         // end redraw
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();

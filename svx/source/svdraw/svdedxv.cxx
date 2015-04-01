@@ -328,7 +328,15 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);
     Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
-    aBlankRect.Intersection(rRect);
+
+    // in the tiled rendering case, the setup is incomplete, and we very
+    // easily get an empty rRect on input - that will cause that everything is
+    // clipped; happens in case of editing text inside a shape in Calc.
+    // FIXME would be better to complete the setup so that we don't get an
+    // empty rRect here
+    if (!GetModel()->isTiledRendering() || !rRect.IsEmpty())
+        aBlankRect.Intersection(rRect);
+
     rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
     rOutlView.Paint(aBlankRect, &rTargetDevice);
 
