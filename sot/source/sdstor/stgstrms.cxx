@@ -73,7 +73,7 @@ sal_Int32 StgFAT::GetNextPage( sal_Int32 nPg )
     if( nPg >= 0 )
     {
       rtl::Reference< StgPage > pPg = GetPhysPage( nPg << 2 );
-      nPg = pPg.is() ? rStrm.GetIo().GetFromPage( pPg, nOffset >> 2 ) : STG_EOF;
+      nPg = pPg.is() ? StgCache::GetFromPage( pPg, nOffset >> 2 ) : STG_EOF;
     }
     return nPg;
 }
@@ -103,7 +103,7 @@ sal_Int32 StgFAT::FindBlock( sal_Int32& nPgs )
             if( !pPg.is() )
                 return STG_EOF;
         }
-        sal_Int32 nCur = rStrm.GetIo().GetFromPage( pPg, nEntry );
+        sal_Int32 nCur = StgCache::GetFromPage( pPg, nEntry );
         if( nCur == STG_FREE )
         {
             // count the size of this area
@@ -291,7 +291,7 @@ bool StgFAT::FreePages( sal_Int32 nStart, bool bAll )
         rtl::Reference< StgPage > pPg = GetPhysPage( nStart << 2 );
         if( !pPg.is() )
             return false;
-        nStart = rStrm.GetIo().GetFromPage( pPg, nOffset >> 2 );
+        nStart = StgCache::GetFromPage( pPg, nOffset >> 2 );
         // The first released page is either set to EOF or FREE
         rStrm.GetIo().SetToPage( pPg, nOffset >> 2, bAll ? STG_FREE : STG_EOF );
         bAll = true;
@@ -644,13 +644,13 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
             pMaster = rIo.Get( nFAT, true );
             if ( pMaster.is() )
             {
-                nFAT = rIo.GetFromPage( pMaster, nMasterCount );
+                nFAT = StgCache::GetFromPage( pMaster, nMasterCount );
                 pOldPage = pMaster;
             }
         }
     }
     if( pMaster.is() )
-        return rIo.GetFromPage( pMaster, nOff );
+        return StgCache::GetFromPage( pMaster, nOff );
     rIo.SetError( SVSTREAM_GENERALERROR );
     return STG_EOF;
 }
@@ -686,7 +686,7 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
             }
             pMaster = rIo.Get( nFAT, true );
             if ( pMaster.is() )
-                nFAT = rIo.GetFromPage( pMaster, nMasterCount );
+                nFAT = StgCache::GetFromPage( pMaster, nMasterCount );
         }
         if( pMaster.is() )
             rIo.SetToPage( pMaster, nOff, nNewPage );
@@ -789,7 +789,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
                     }
                     rtl::Reference< StgPage > pPage = rIo.Get( nFAT, true );
                     if( !pPage.is() ) return false;
-                    nFAT = rIo.GetFromPage( pPage, (nPageSize >> 2 ) - 1 );
+                    nFAT = StgCache::GetFromPage( pPage, (nPageSize >> 2 ) - 1 );
                 }
 
             nOld++;

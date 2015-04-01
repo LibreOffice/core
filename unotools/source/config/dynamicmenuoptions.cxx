@@ -229,9 +229,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
 
-        void impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
-                                                    Sequence< OUString >& lDestination ,
-                                              const OUString&             sSetNode     );
+        static void impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
+                                                     Sequence< OUString >& lDestination ,
+                                                     const OUString&             sSetNode     );
 
     //  private member
 

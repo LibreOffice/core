@@ -106,7 +106,7 @@ namespace utl
 
         // access helper
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
-        bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const;
+        static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
 
         OUString getImplName() const { return m_aImplName; }
 
@@ -554,7 +554,7 @@ OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 
     OUString sBuildVersion;
     // read BuildVersion from version.ini (versionrc)
-    data().getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
+    utl::Bootstrap::Impl::getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
     return sBuildVersion;
 }
 
@@ -564,7 +564,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 
     OUString sBuildId;
     // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
-    if ( !data().getVersionValue( csBuildIdItem, sBuildId, _sDefault ) ||
+    if ( !utl::Bootstrap::Impl::getVersionValue( csBuildIdItem, sBuildId, _sDefault ) ||
          sBuildId.isEmpty() )
          // read buildid from bootstrap.ini (bootstraprc)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
@@ -734,7 +734,7 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
     return sResult;
 }
 
-bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const
+bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault)
 {
     // try to open version.ini (versionrc)
     OUString uri;

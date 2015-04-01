@@ -294,8 +294,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
 
-        void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
-                                             Sequence< OUString >& lDestination );
+        static void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
+                                              Sequence< OUString >& lDestination );
 
     //  private member
 

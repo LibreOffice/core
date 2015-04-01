@@ -177,7 +177,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
             pPage = rIo.Get( nPhysPage, true );
         }
 
-        pFat[ nPage ] = rIo.GetFromPage( pPage, short( nPage % nFatPageSize ) );
+        pFat[ nPage ] = StgCache::GetFromPage( pPage, short( nPage % nFatPageSize ) );
         pFree[ nPage ] = true;
     }
 }

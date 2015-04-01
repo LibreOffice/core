@@ -160,11 +160,11 @@ class PolicyReader
     inline void back( sal_Unicode c )
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) const
+    static inline bool isWhiteSpace( sal_Unicode c )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace();
 
-    inline bool isCharToken( sal_Unicode c ) const
+    static inline bool isCharToken( sal_Unicode c )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:

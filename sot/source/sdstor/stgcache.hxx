@@ -87,7 +87,7 @@ public:
     // two routines for accessing FAT pages
     // Assume that the data is a FAT page and get/put FAT data.
     void  SetToPage   ( const rtl::Reference< StgPage >& rPage, short nOff, sal_Int32 nVal );
-    inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff );
+    static inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff );
     void  SetDirty    ( const rtl::Reference< StgPage > &rPage );
     bool  SetSize( sal_Int32 nPages );
     rtl::Reference< StgPage > Find( sal_Int32 );                 // find a cached page
