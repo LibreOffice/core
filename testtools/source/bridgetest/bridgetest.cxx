@@ -69,7 +69,7 @@ using namespace test::testtools::bridgetest;
 
 namespace bridge_test
 {
-template< class T>
+template<typename T, typename U = T>
 Sequence<T> cloneSequence(const Sequence<T>& val);
 
 
@@ -270,12 +270,12 @@ static bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData
 
     Any a;
     {
-        a.setValue( &(data.Bool) , getCppuBooleanType() );
+        a.setValue( &(data.Bool) , cppu::UnoType<bool>::get() );
         OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
     {
-        a.setValue( &(data.Char) , getCppuCharType() );
+        a.setValue( &(data.Char) , cppu::UnoType<cppu::UnoCharType>::get() );
         OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
@@ -381,7 +381,7 @@ static bool performTest(
             0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
             TestEnum_LOLA, STRING_TEST_CONSTANT, xI,
-            Any(&xI, getCppuType((Reference< XInterface > const *) 0)));
+            Any(&xI, cppu::UnoType<XInterface>::get()));
         bRet &= check(aData.Any == xI, "### unexpected any!");
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
         aData.Sequence.realloc(2);
@@ -393,7 +393,7 @@ static bool performTest(
             (TestElement &) aSetData, aData.Bool, aData.Char, aData.Byte,
             aData.Short, aData.UShort, aData.Long, aData.ULong, aData.Hyper,
             aData.UHyper, aData.Float, aData.Double, aData.Enum, aData.String,
-            xI, Any(&xI, getCppuType((Reference< XInterface > const *) 0)));
+            xI, Any(&xI, cppu::UnoType<XInterface>::get()));
         aSetData.Sequence.realloc(2);
         aSetData.Sequence[0] = *(TestElement const *) &aSetData;
         // aSetData.Sequence[1] is empty
@@ -659,9 +659,9 @@ static bool performTest(
         sal_Bool _aBool = true;
         sal_Int32 _aInt = 0xBABEBABE;
         float _aFloat = 3.14f;
-        Any _any1(&_aBool, getCppuBooleanType());
-        Any _any2(&_aInt, getCppuType((sal_Int32 *) 0));
-        Any _any3(&_aFloat, getCppuType((float *) 0));
+        Any _any1(&_aBool, cppu::UnoType<bool>::get());
+        Any _any2(&_aInt, cppu::UnoType<sal_Int32>::get());
+        Any _any3(&_aFloat, cppu::UnoType<float>::get());
         Any _arAny[] = { _any1, _any2, _any3 };
         Reference< XInterface > _arObj[3];
         _arObj[0] = new OWeakObject();
@@ -674,19 +674,19 @@ static bool performTest(
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
             TestEnum_LOLA, STRING_TEST_CONSTANT, _arObj[0],
-            Any(&_arObj[0], getCppuType((Reference< XInterface > const *) 0)));
+            Any(&_arObj[0], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[1], true, 'A', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
             TestEnum_TWO, STRING_TEST_CONSTANT, _arObj[1],
-            Any(&_arObj[1], getCppuType((Reference< XInterface > const *) 0)));
+            Any(&_arObj[1], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[2], true, 'B', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
             TestEnum_CHECK, STRING_TEST_CONSTANT, _arObj[2],
-            Any(&_arObj[2], getCppuType((Reference< XInterface > const *) 0)));
+            Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {
             Sequence<sal_Bool> arBool(_arBool, 3);
             Sequence<sal_Unicode> arChar( _arChar, 3);
@@ -759,10 +759,10 @@ static bool performTest(
                 xBT2->setSequenceStruct(arStruct));
             bRet &= check(seqStructRet == arStruct, "sequence test");
             Sequence< sal_Bool > arBoolTemp(cloneSequence(arBool));
-            Sequence< sal_Unicode > arCharTemp(cloneSequence(arChar));
+            Sequence< sal_Unicode > arCharTemp(cloneSequence<sal_Unicode, cppu::UnoCharType>(arChar));
             Sequence< sal_Int8 > arByteTemp(cloneSequence(arByte));
             Sequence< sal_Int16 > arShortTemp(cloneSequence(arShort));
-            Sequence< sal_uInt16 > arUShortTemp(cloneSequence(arUShort));
+            Sequence< sal_uInt16 > arUShortTemp(cloneSequence<sal_uInt16, cppu::UnoUnsignedShortType>(arUShort));
             Sequence< sal_Int32 > arLongTemp(cloneSequence(arLong));
             Sequence< sal_uInt32 > arULongTemp(cloneSequence(arULong));
             Sequence< sal_Int64 > arHyperTemp(cloneSequence(arHyper));
@@ -1071,10 +1071,10 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
     return retSeq;
 }
 
-template< class T>
+template<typename T, typename U>
 Sequence<T> cloneSequence(const Sequence<T>& val)
 {
-    Sequence<T> seq( cloneSequence(val.get(), getCppuType(&val)), SAL_NO_ACQUIRE);
+    Sequence<T> seq( cloneSequence(val.get(), cppu::UnoType<cppu::UnoSequenceType<U>>::get()), SAL_NO_ACQUIRE);
     return seq;
 }
 
@@ -1115,7 +1115,7 @@ inline bool makeSurrogate(
     }
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
-        rOriginal.get(), ::getCppuType( &rOriginal ) );
+        rOriginal.get(), cppu::UnoType<decltype(rOriginal)>::get() );
     if (! unoI.is())
     {
         throw RuntimeException(
@@ -1123,7 +1123,7 @@ inline bool makeSurrogate(
     }
     uno2cpp.mapInterface(
         reinterpret_cast< void ** >( &rOut ),
-        unoI.get(), ::getCppuType( &rOriginal ) );
+        unoI.get(), cppu::UnoType<decltype(rOriginal)>::get() );
     if (! rOut.is())
     {
         throw RuntimeException(

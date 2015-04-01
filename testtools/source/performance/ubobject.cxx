@@ -77,20 +77,20 @@ public:
     {
         // execution time remains appr. constant any time
         Any aRet;
-        if (aType == ::getCppuType( (const Reference< XInterface > *)0 ))
+        if (aType == cppu::UnoType<XInterface>::get())
         {
             void * p = (XInterface *)(XPerformanceTest *)this;
-            aRet.setValue( &p, ::getCppuType( (const Reference< XInterface > *)0 ) );
+            aRet.setValue( &p, cppu::UnoType<XInterface>::get() );
         }
-        if (aType == ::getCppuType( (const Reference< XPerformanceTest > *)0 ))
+        if (aType == cppu::UnoType<XPerformanceTest>::get())
         {
             void * p = (XPerformanceTest *)this;
-            aRet.setValue( &p, ::getCppuType( (const Reference< XPerformanceTest > *)0 ) );
+            aRet.setValue( &p, cppu::UnoType<XPerformanceTest>::get() );
         }
         if (! aRet.hasValue())
         {
             void * p = (XPerformanceTest *)this;
-            Any aDummy( &p, ::getCppuType( (const Reference< XPerformanceTest > *)0 ) );
+            Any aDummy( &p, cppu::UnoType<XPerformanceTest>::get() );
         }
         return aRet;
     }

@@ -219,9 +219,9 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                         if (aCurrent2Env.is() && aEnv2Current.is())
                         {
                             void * pSMgr = aCurrent2Env.mapInterface(
-                                xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
+                                xSF.get(), cppu::UnoType<XMultiServiceFactory>::get() );
                             void * pKey = aCurrent2Env.mapInterface(
-                                xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
+                                xKey.get(), cppu::UnoType<XRegistryKey>::get() );
 
                             void * pSSF = (*((component_getFactoryFunc)pSym))(
                                 aImplName.getStr(), pSMgr, pKey );
@@ -235,7 +235,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                             {
                                 aEnv2Current.mapInterface(
                                     reinterpret_cast< void ** >( &xRet ),
-                                    pSSF, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
+                                    pSSF, cppu::UnoType<XSingleServiceFactory>::get() );
                                 (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSSF );
                             }
                         }
@@ -277,9 +277,9 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                     uno_Interface * pUComponentFactory = 0;
 
                     uno_Interface * pUSFactory = (uno_Interface *)aCpp2Uno.mapInterface(
-                        xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
+                        xSF.get(), cppu::UnoType<XMultiServiceFactory>::get() );
                     uno_Interface * pUKey = (uno_Interface *)aCpp2Uno.mapInterface(
-                        xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
+                        xKey.get(), cppu::UnoType<XRegistryKey>::get() );
 
                     pUComponentFactory = (*((CreateComponentFactoryFunc)pSym))(
                         rImplName.getStr(), pUSFactory, pUKey );
@@ -293,7 +293,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                     {
                         XSingleServiceFactory * pXFactory =
                             (XSingleServiceFactory *)aUno2Cpp.mapInterface(
-                                pUComponentFactory, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
+                                pUComponentFactory, cppu::UnoType<XSingleServiceFactory>::get() );
                         (*pUComponentFactory->release)( pUComponentFactory );
 
                         if (pXFactory)
@@ -385,7 +385,7 @@ static void createInstance( Reference< T > & rxOut,
         buf.append( "service instance \"" );
         buf.append( rServiceName );
         buf.append( "\" does not support demanded interface \"" );
-        const Type & rType = ::getCppuType( (const Reference< T > *)0 );
+        const Type & rType = cppu::UnoType<T>::get();
         buf.append( rType.getTypeName() );
         buf.append( "\"!" );
         throw RuntimeException( buf.makeStringAndClear() );
@@ -563,8 +563,8 @@ static void benchmark(
     sal_Int64 i;
     sal_uInt32 tStart, tEnd;
 
-    const Type & rKnownType = ::getCppuType( (const Reference< XPerformanceTest > *)0 );
-    const Type & rUnKnownType = ::getCppuType( (const Reference< XSet > *)0 );
+    const Type & rKnownType = cppu::UnoType<XPerformanceTest>::get();
+    const Type & rUnKnownType = cppu::UnoType<XSet>::get();
 
     ComplexTypes aDummyStruct;
 
@@ -1057,7 +1057,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             Reference< XInterface > xMapped;
             Reference< XInterface > xDirect( getDirect() );
             aMapping.mapInterface( reinterpret_cast< void ** >( &xMapped ), xDirect.get(),
-                                   ::getCppuType( &xDirect ) );
+                                   cppu::UnoType<decltype(xDirect)>::get() );
             if (! xMapped.is())
                 throw RuntimeException("mapping object failed!" );
 
