@@ -350,7 +350,7 @@ public:
 
 #define PROPERTY_FLAGS( NAME, TYPE, FLAG ) com::sun::star::beans::Property( \
     OUString( #NAME, sizeof( #NAME ) - 1, RTL_TEXTENCODING_ASCII_US ), \
-    HANDLE_##NAME, getCppuType( static_cast< TYPE* >( NULL ) ), FLAG )
+    HANDLE_##NAME, cppu::UnoType<TYPE>::get(), FLAG )
 #define PROPERTY( NAME, TYPE )      PROPERTY_FLAGS( NAME, TYPE, com::sun::star::beans::PropertyAttribute::BOUND )
 #define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, com::sun::star::beans::PropertyAttribute::BOUND | com::sun::star::beans::PropertyAttribute::READONLY )
 

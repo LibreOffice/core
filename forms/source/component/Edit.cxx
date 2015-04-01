@@ -197,7 +197,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
 
     // Not for multiline edits
     Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
-    if ((aTmp.getValueType().equals(::getBooleanCppuType())) && getBOOL(aTmp))
+    if ((aTmp.getValueType().equals(cppu::UnoType<bool>::get())) && getBOOL(aTmp))
         return;
 
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);

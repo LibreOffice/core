@@ -74,12 +74,12 @@ namespace xforms
 
     void OXSDDataType::registerProperties()
     {
-        registerProperty( PROPERTY_NAME,            PROPERTY_ID_NAME,           BOUND, &m_sName,    ::getCppuType( &m_sName ) );
-        registerProperty( PROPERTY_XSD_WHITESPACE,  PROPERTY_ID_XSD_WHITESPACE, BOUND, &m_nWST,     ::getCppuType( &m_nWST ) );
-        registerProperty( PROPERTY_XSD_PATTERN,     PROPERTY_ID_XSD_PATTERN,    BOUND, &m_sPattern, ::getCppuType( &m_sPattern ) );
+        registerProperty( PROPERTY_NAME,            PROPERTY_ID_NAME,           BOUND, &m_sName,    cppu::UnoType<decltype(m_sName)>::get() );
+        registerProperty( PROPERTY_XSD_WHITESPACE,  PROPERTY_ID_XSD_WHITESPACE, BOUND, &m_nWST,     cppu::UnoType<cppu::UnoUnsignedShortType>::get() );
+        registerProperty( PROPERTY_XSD_PATTERN,     PROPERTY_ID_XSD_PATTERN,    BOUND, &m_sPattern, cppu::UnoType<decltype(m_sPattern)>::get() );
 
-        registerProperty( PROPERTY_XSD_IS_BASIC,    PROPERTY_ID_XSD_IS_BASIC,   READONLY, &m_bIsBasic,      ::getCppuType( &m_bIsBasic ) );
-        registerProperty( PROPERTY_XSD_TYPE_CLASS,  PROPERTY_ID_XSD_TYPE_CLASS, READONLY, &m_nTypeClass,    ::getCppuType( &m_nTypeClass ) );
+        registerProperty( PROPERTY_XSD_IS_BASIC,    PROPERTY_ID_XSD_IS_BASIC,   READONLY, &m_bIsBasic,      cppu::UnoType<decltype(m_bIsBasic)>::get() );
+        registerProperty( PROPERTY_XSD_TYPE_CLASS,  PROPERTY_ID_XSD_TYPE_CLASS, READONLY, &m_nTypeClass,    cppu::UnoType<decltype(m_nTypeClass)>::get() );
     }
 
 

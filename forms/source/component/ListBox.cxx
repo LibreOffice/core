@@ -359,7 +359,7 @@ namespace frm
         break;
 #endif
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast< Sequence<sal_Int16>*>(0))),
+            DBG_ASSERT(_rValue.getValueType().equals(cppu::UnoType<Sequence<sal_Int16>>::get()),
                 "OListBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aDefaultSelectSeq;
 
@@ -1660,11 +1660,11 @@ namespace frm
     Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
         Sequence< Type > aTypes(6);
-        aTypes[0] = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
+        aTypes[0] = cppu::UnoType<Sequence< Any >>::get();
         aTypes[1] = cppu::UnoType<Any>::get();
-        aTypes[2] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
+        aTypes[2] = cppu::UnoType<Sequence< sal_Int32 >>::get();
         aTypes[3] = cppu::UnoType<sal_Int32>::get();
-        aTypes[4] = ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
+        aTypes[4] = cppu::UnoType<Sequence< OUString >>::get();
         aTypes[5] = cppu::UnoType<OUString>::get();
         return aTypes;
     }

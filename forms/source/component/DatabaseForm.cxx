@@ -1647,7 +1647,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAllowDelete);
             break;
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aDynamicControlBorder, ::getBooleanCppuType() );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aDynamicControlBorder, cppu::UnoType<bool>::get() );
             break;
         case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorFocus, cppu::UnoType<sal_Int32>::get() );

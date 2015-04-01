@@ -52,7 +52,7 @@ Convert::Convert()
     init();
 }
 
-#define ADD_ENTRY(XCONVERT,TYPE) XCONVERT->maMap[ getCppuType( static_cast<TYPE*>( NULL ) ) ] = Convert_t( &lcl_toXSD_##TYPE, &lcl_toAny_##TYPE )
+#define ADD_ENTRY(XCONVERT,TYPE) XCONVERT->maMap[ cppu::UnoType<TYPE>::get() ] = Convert_t( &lcl_toXSD_##TYPE, &lcl_toAny_##TYPE )
 
 namespace
 {

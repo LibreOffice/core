@@ -154,7 +154,7 @@ namespace xforms
 
 #define REGISTER_VOID_PROP( prop, memberAny, type ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, ::com::sun::star::beans::PropertyAttribute::BOUND | ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, \
-        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
+        &memberAny, cppu::UnoType<type>::get() );
 
     class OValueLimitedType_Base : public OXSDDataType
     {

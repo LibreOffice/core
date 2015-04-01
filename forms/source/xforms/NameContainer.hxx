@@ -100,7 +100,7 @@ public:
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
-        return getCppuType( static_cast<T*>( NULL ) );
+        return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()

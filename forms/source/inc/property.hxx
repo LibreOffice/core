@@ -103,15 +103,15 @@ public:
 
 
 #define DECL_PROP_IMPL(varname, type) \
-    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< type* >(0)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
 
 
 #define DECL_BOOL_PROP_IMPL(varname) \
-    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<bool>::get(),
 
 
 #define DECL_IFACE_PROP_IMPL(varname, type) \
-    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< com::sun::star::uno::Reference< type >* >(0)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
 
 
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
@@ -202,24 +202,24 @@ public:
 
 #define REGISTER_PROP_1( prop, member, attrib1 ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1, \
-        &member, ::getCppuType( &member ) );
+        &member, cppu::UnoType<decltype(member)>::get() );
 
 #define REGISTER_PROP_2( prop, member, attrib1, attrib2 ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
-        &member, ::getCppuType( &member ) );
+        &member, cppu::UnoType<decltype(member)>::get() );
 
 #define REGISTER_PROP_3( prop, member, attrib1, attrib2, attrib3 ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2 | PropertyAttribute::attrib3, \
-        &member, ::getCppuType( &member ) );
+        &member, cppu::UnoType<decltype(member)>::get() );
 
 
 #define REGISTER_VOID_PROP_1( prop, memberAny, type, attrib1 ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1, \
-        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
+        &memberAny, cppu::UnoType<type>::get() );
 
 #define REGISTER_VOID_PROP_2( prop, memberAny, type, attrib1, attrib2 ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
-        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
+        &memberAny, cppu::UnoType<type>::get() );
 
 
 }

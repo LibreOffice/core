@@ -273,7 +273,7 @@ namespace frm
         case PROPERTY_ID_FONT:
         {
             Any aWorkAroundGccLimitation = makeAny( m_aFont );
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, aWorkAroundGccLimitation, ::getCppuType( &m_aFont ) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, aWorkAroundGccLimitation, cppu::UnoType<decltype(m_aFont)>::get() );
         }
         break;
 

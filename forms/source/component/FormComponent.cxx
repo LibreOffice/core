@@ -1003,7 +1003,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             _rValue >>= m_aTag;
             break;
         case PROPERTY_ID_TABINDEX:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const sal_Int16*)NULL),
+            DBG_ASSERT(_rValue.getValueType() == cppu::UnoType<sal_Int16>::get(),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_nTabIndex;
             break;
@@ -1038,7 +1038,7 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
         DECL_PROP1      (TAG,         OUString,  BOUND);
         DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
         DECL_PROP1      (CONTROL_TYPE_IN_MSO,sal_Int16,     BOUND);
-        DECL_PROP1      (OBJ_ID_IN_MSO,sal_uInt16,      BOUND);
+        DECL_PROP1      (OBJ_ID_IN_MSO,cppu::UnoUnsignedShortType,      BOUND);
     END_DESCRIBE_PROPERTIES()
 }
 

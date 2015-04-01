@@ -160,7 +160,7 @@ public:
     virtual Type_t SAL_CALL getElementType()
         throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
     {
-        return getCppuType( static_cast<T*>( NULL ) );
+        return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()

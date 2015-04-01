@@ -57,7 +57,7 @@ Sequence<Type> OFileControlModel::_getTypes()
 
         Sequence<Type> aOwnTypes(1);
         Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((Reference<XReset>*)NULL);
+        pOwnTypes[0] = cppu::UnoType<XReset>::get();
 
         aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
     }

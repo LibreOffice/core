@@ -530,7 +530,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bPrintable);
             break;
         case PROPERTY_ID_TABSTOP:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTabStop, ::getBooleanCppuType());
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTabStop, cppu::UnoType<bool>::get());
             break;
         case PROPERTY_ID_HASNAVIGATION:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bNavigation);

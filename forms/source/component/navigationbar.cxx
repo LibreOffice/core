@@ -42,7 +42,7 @@ namespace frm
 
 #define REGISTER_VOID_PROP( prop, memberAny, type ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
-        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
+        &memberAny, cppu::UnoType<type>::get() );
 
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
