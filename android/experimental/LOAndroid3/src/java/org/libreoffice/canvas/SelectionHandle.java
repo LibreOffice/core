@@ -1,52 +1,29 @@
 package org.libreoffice.canvas;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.RectF;
-import android.util.Log;
 
 import org.libreoffice.LOKitShell;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
-public abstract class SelectionHandle extends CommonCanvasElement {
+/**
+ * Selection handle is a common class for "start", "middle" and "end" types
+ * of selection handles.
+ */
+public abstract class SelectionHandle extends BitmapHandle {
     private static final long MINIMUM_HANDLE_UPDATE_TIME = 50 * 1000000;
 
-    public final RectF mDocumentPosition;
-    protected final Bitmap mBitmap;
-    protected final RectF mScreenPosition;
     private final PointF mDragStartPoint = new PointF();
     private long mLastTime = 0;
     private final PointF mDragDocumentPosition = new PointF();
 
     public SelectionHandle(Bitmap bitmap) {
-        mBitmap = bitmap;
-        mScreenPosition = new RectF(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
-        mDocumentPosition = new RectF();
+        super(bitmap);
     }
 
-    protected static Bitmap getBitmapForDrawable(Context context, int drawableId) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        return BitmapFactory.decodeResource(context.getResources(), drawableId, options);
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
-        canvas.drawBitmap(mBitmap, mScreenPosition.left, mScreenPosition.top, null);
-    }
-
-    @Override
-    public boolean onHitTest(float x, float y) {
-        return mScreenPosition.contains(x, y);
-    }
-
-    public void reposition(float x, float y) {
-        mScreenPosition.offsetTo(x, y);
-    }
-
+    /**
+     * Start of a touch and drag action on the handle.
+     */
     public void dragStart(PointF point) {
         mDragStartPoint.x = point.x;
         mDragStartPoint.y = point.y;
@@ -54,19 +31,27 @@ public abstract class SelectionHandle extends CommonCanvasElement {
         mDragDocumentPosition.y = mDocumentPosition.top;
     }
 
+    /**
+     * End of a touch and drag action on the handle.
+     */
     public void dragEnd(PointF point) {
-        //move(point.x, point.y);
     }
 
+    /**
+     * Handle has been dragged.
+     */
     public void dragging(PointF point) {
         long currentTime = System.nanoTime();
         if (currentTime - mLastTime > MINIMUM_HANDLE_UPDATE_TIME) {
             mLastTime = currentTime;
-            move(point.x, point.y);
+            signalHandleMove(point.x, point.y);
         }
     }
 
-    private void move(float newX, float newY) {
+    /**
+     * Signal to move the handle to a new position to LO.
+     */
+    private void signalHandleMove(float newX, float newY) {
         ImmutableViewportMetrics viewportMetrics = LOKitShell.getLayerView().getLayerClient().getViewportMetrics();
         float zoom = viewportMetrics.zoomFactor;
 
