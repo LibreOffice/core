@@ -630,12 +630,12 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("IsLayerMode",
             PROPERTY_LAYERMODE,
-            ::getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("IsMasterPageMode",
             PROPERTY_MASTERPAGEMODE,
-            ::getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("ActiveLayer",

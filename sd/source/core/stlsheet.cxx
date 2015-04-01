@@ -79,7 +79,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         { OUString("Family"),                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
         { OUString("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
         { OUString("DisplayName"),            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
-        { OUString("Hidden"),                 WID_STYLE_HIDDEN,       ::getCppuType((bool*)0),       0,     0},
+        { OUString("Hidden"),                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
@@ -787,13 +787,13 @@ void SAL_CALL SdStyleSheet::addEventListener( const Reference< XEventListener >&
     }
     else
     {
-        mrBHelper.addListener( ::getCppuType( &xListener ), xListener );
+        mrBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
     }
 }
 
 void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener >& xListener  ) throw (RuntimeException, std::exception)
 {
-    mrBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+    mrBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 // XModifyBroadcaster

@@ -390,7 +390,7 @@ sal_Int32 ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue( "Encrypted" );
 
-        bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+        bool bEncrypted = aAny.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<sal_Bool const *>(aAny.getValue());
 
         Reference <io::XInputStream> xInputStream = xStream->getInputStream();
@@ -515,7 +515,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
               ::cppu::UnoType<OUString>::get(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("OrganizerMode"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -865,7 +865,7 @@ bool SdXMLFilter::Export()
             { OUString("ProgressRange"),   0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("UsePrettyPrinting"),0, ::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("UsePrettyPrinting"),0, cppu::UnoType<bool>::get(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
             { OUString("PageLayoutNames"), 0, ::cppu::UnoType<OUString>::get(),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
             { OUString("BaseURI"), 0,
@@ -878,10 +878,10 @@ bool SdXMLFilter::Export()
                   ::cppu::UnoType<OUString>::get(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StyleNames"), 0,
-                  ::getCppuType( (Sequence<OUString>*)0 ),
+                  cppu::UnoType<Sequence<OUString>>::get(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StyleFamilies"), 0,
-                  ::getCppuType( (Sequence<sal_Int32>*)0 ),
+                  cppu::UnoType<Sequence<sal_Int32>>::get(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },

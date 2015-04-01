@@ -190,14 +190,14 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { OUString(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,            ::cppu::UnoType<awt::Rectangle>::get(),                                0, 0},
         { OUString(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,            ::cppu::UnoType<sal_Int16>::get(),                                     beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,          cppu::UnoType<i18n::XForbiddenCharacters>::get(), beans::PropertyAttribute::READONLY, 0},
-        { OUString(sUNO_Prop_AutomContFocus),       WID_MODEL_CONTFOCUS,          ::getBooleanCppuType(),                                                 0, 0},
-        { OUString(sUNO_Prop_ApplyFrmDsgnMode),     WID_MODEL_DSGNMODE,           ::getBooleanCppuType(),                                                 0, 0},
+        { OUString(sUNO_Prop_AutomContFocus),       WID_MODEL_CONTFOCUS,          cppu::UnoType<bool>::get(),                                                 0, 0},
+        { OUString(sUNO_Prop_ApplyFrmDsgnMode),     WID_MODEL_DSGNMODE,           cppu::UnoType<bool>::get(),                                                 0, 0},
         { OUString("BasicLibraries"),               WID_MODEL_BASICLIBS,          cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
         { OUString("DialogLibraries"),              WID_MODEL_DIALOGLIBS,         cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,         ::cppu::UnoType<OUString>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
-        { OUString("Fonts"),                        WID_MODEL_FONTS,              ::getCppuType((uno::Sequence<uno::Any>*)0),                     beans::PropertyAttribute::READONLY, 0},
-        { OUString(sUNO_Prop_InteropGrabBag),       WID_MODEL_INTEROPGRABBAG,     ::getCppuType((uno::Sequence< beans::PropertyValue >*)0),       0, 0},
+        { OUString("Fonts"),                        WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
+        { OUString(sUNO_Prop_InteropGrabBag),       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );

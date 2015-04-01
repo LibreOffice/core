@@ -118,23 +118,23 @@ using ::com::sun::star::drawing::XShape;
         { OUString(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        cppu::UnoType<drawing::XShape>::get(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        ::cppu::UnoType<OUString>::get(),                        0, 0},\
         { OUString(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         ::getBooleanCppuType(),                                   0, 0},\
-        { OUString(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         ::getBooleanCppuType(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         cppu::UnoType<bool>::get(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         cppu::UnoType<bool>::get(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          ::cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { OUString(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  ::getBooleanCppuType(),                                   0, 0},\
-        { OUString(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       ::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
-        { OUString(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   ::getBooleanCppuType(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  cppu::UnoType<bool>::get(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       cppu::UnoType<bool>::get(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
+        { OUString(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   cppu::UnoType<bool>::get(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     ::cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
-        { OUString(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        ::getBooleanCppuType(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        cppu::UnoType<bool>::get(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(UNO_NAME_OBJ_STYLE),         WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
         { OUString(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       ::cppu::UnoType<OUString>::get(),                        0, 0},\
-        { OUString(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         ::getBooleanCppuType(),                                   0, 0},\
+        { OUString(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         cppu::UnoType<bool>::get(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_SPEED),         WID_SPEED,           ::cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
         { OUString(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      ::cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
         { OUString(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(UNO_NAME_OBJ_VERB),          WID_VERB,            ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString("IsAnimation"),              WID_ISANIMATION,     ::getBooleanCppuType(),                                   0, 0},\
+        { OUString("IsAnimation"),              WID_ISANIMATION,     cppu::UnoType<bool>::get(),                                   0, 0},\
         { OUString("NavigationOrder"),          WID_NAVORDER,        ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString("PlaceholderText"),          WID_PLACEHOLDERTEXT, ::cppu::UnoType<OUString>::get(),                        0, 0},\
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -1698,7 +1698,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
 uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
     throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const uno::Sequence< beans::PropertyValue >*)0);
+    return cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  ) throw(uno::RuntimeException, std::exception)
