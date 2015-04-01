@@ -376,7 +376,11 @@ inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type any
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Any * )
 {
     return ::cppu::UnoType< ::com::sun::star::uno::Any >::get();

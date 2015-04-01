@@ -210,28 +210,48 @@ public:
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type "type"
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * );
 
 /** Gets the meta type of IDL type void.
     @return type of IDL type void
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType();
 /** Gets the meta type of IDL type void.
 
     @return type of IDL type void
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType();
 
 /** Gets the meta type of IDL type boolean.
 
     @return type of IDL type boolean
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType();
 /** Gets the meta type of IDL type boolean.
 
     @return type of IDL type boolean
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType();
 /** Gets the meta type of IDL type boolean.
 
@@ -241,7 +261,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType();
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type boolean
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * );
 /** Gets the meta type of IDL type boolean.
 
@@ -251,19 +275,31 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool 
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type boolean
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
     bool const * );
 
 /** Gets the meta type of IDL type char.
 
     @return type of IDL type char
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType();
 /** Gets the meta type of IDL type char.
 
     @return type of IDL type char
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType();
 
 /** Gets the meta type of IDL type byte.
@@ -274,7 +310,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType();
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type byte
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * );
 
 /** Gets the meta type of IDL type string.
@@ -285,7 +325,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type string
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * );
 
 /** Gets the meta type of IDL type short.
@@ -296,7 +340,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OU
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type short
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * );
 
 /** Gets the meta type of IDL type unsigned short.
@@ -307,7 +355,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type unsigned short
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * );
 
 /** Gets the meta type of IDL type long.
@@ -318,7 +370,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt1
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type long
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * );
 
 /** Gets the meta type of IDL type unsigned long.
@@ -329,7 +385,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type unsigned long
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * );
 
 /** Gets the meta type of IDL type hyper.
@@ -340,7 +400,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt3
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type hyper
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * );
 
 /** Gets the meta type of IDL type unsigned hyper.
@@ -351,7 +415,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type unsigned hyper
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * );
 
 /** Gets the meta type of IDL type float.
@@ -362,7 +430,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt6
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type float
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * );
 
 /** Gets the meta type of IDL type double.
@@ -373,7 +445,11 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * )
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL type double
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * );
 
 /** Gets the meta type of an IDL type.
@@ -394,7 +470,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * 
 
     @since UDK 3.2.0
 */
-template< typename T > inline const ::com::sun::star::uno::Type & SAL_CALL
+template< typename T > SAL_DEPRECATED("use cppu::UnoType")
+inline const ::com::sun::star::uno::Type & SAL_CALL
 getCppuType();
 
 /** Gets the meta type of IDL type char.
@@ -408,7 +485,8 @@ getCppuType();
 
     @since UDK 3.2.0
 */
-template<> inline const ::com::sun::star::uno::Type & SAL_CALL
+template<> SAL_DEPRECATED("use cppu::UnoType")
+inline const ::com::sun::star::uno::Type & SAL_CALL
 getCppuType< sal_Unicode >();
 
 #endif

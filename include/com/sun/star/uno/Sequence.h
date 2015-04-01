@@ -281,8 +281,11 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 
     @tparam E element type of sequence
     @return type of IDL sequence
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
-template< class E >
+template< class E > SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * );
 
@@ -295,8 +298,11 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * );
     @tparam E element type of sequence
     @param rElementType element type of sequence
     @return type of IDL sequence
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
-template< class E >
+template< class E > SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType );
 
@@ -306,7 +312,11 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
     The dummy parameter is just a typed pointer for function signature.
 
     @return type of IDL sequence< char >
+
+    @deprecated
+    Use cppu::UnoType instead.
 */
+SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType();
 

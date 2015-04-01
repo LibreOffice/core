@@ -357,7 +357,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
         }
     }
     dumpTemplateHead(out);
-    out << ("inline ::css::uno::Type const & SAL_CALL"
+    out << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
             " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, name_);
     dumpTemplateParameters(out);
@@ -560,7 +560,7 @@ void CppuType::dumpHFileContent(
     }
     out << "\n";
     dumpTemplateHead(out);
-    out << "inline ::css::uno::Type const & SAL_CALL getCppuType(";
+    out << "SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, name_, true);
     dumpTemplateParameters(out);
     out << " *);\n\n#endif\n";
@@ -569,7 +569,7 @@ void CppuType::dumpHFileContent(
 void CppuType::dumpGetCppuType(FileStream & out) {
     if (name_ == "com.sun.star.uno.XInterface") {
         out << indent()
-            << ("inline ::css::uno::Type const & SAL_CALL"
+            << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
         out << " *) {\n";
@@ -581,7 +581,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
         out << indent() << "}\n";
     } else if (name_ == "com.sun.star.uno.Exception") {
         out << indent()
-            << ("inline ::css::uno::Type const & SAL_CALL"
+            << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
         out << " *) {\n";
@@ -1110,9 +1110,9 @@ void InterfaceType::dumpHxxFile(
         << codemaker::cpp::scopedCppName(u2b(name_))
         << "::static_type(SAL_UNUSED_PARAMETER void *) {\n";
     inc();
-    out << indent() << "return ::getCppuType(static_cast< ";
-    dumpType(out, name_);
-    out << " * >(0));\n";
+    out << indent() << "return ::cppu::UnoType< ";
+    dumpType(out, name_, false, false, true);
+    out << " >::get();\n";
     dec();
     out << "}\n\n#endif // "<< headerDefine << "\n";
 }
