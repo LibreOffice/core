@@ -31,7 +31,7 @@ inline void extract_throw( T * p, ::com::sun::star::uno::Any const & a )
     if (! (a >>= *p))
     {
         throw ::com::sun::star::uno::RuntimeException(
-            "expected " + ::getCppuType( p ).getTypeName(),
+            "expected " + cppu::UnoType<T>::get().getTypeName(),
             ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface>() );
     }
