@@ -57,7 +57,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     ,m_pContainer(_pContainer)
     ,m_bIsList(false)
 {
-    m_aPropType = ::getVoidCppuType();
+    m_aPropType = cppu::UnoType<cppu::UnoVoidType>::get();
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     OSL_ENSURE(m_xControl.is(),"Control is NULL!");
@@ -84,7 +84,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
-                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = cppu::UnoType<bool>::get();
                         // Not a copy paste error, see comment xmloff/source/forms/propertyimport.cxx lines 244-248
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = cppu::UnoType<double>::get();
@@ -93,7 +93,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = cppu::UnoType<sal_Int16>::get();
                         s_aTypeNameMap[GetXMLToken( XML_DATE)]      = cppu::UnoType<com::sun::star::util::Date>::get();
                         s_aTypeNameMap[GetXMLToken( XML_TIME)]      = cppu::UnoType<com::sun::star::util::Time>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<cppu::UnoVoidType>::get();
                     }
 
                     const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);

@@ -311,7 +311,7 @@ OStyle::OStyle()
     registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nTransparent);
 
     registerPropertyNoMember(PROPERTY_BACKGRAPHICLOCATION,  ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), &eGraphicLocation);
-    registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,  ++i,nBound,::getBooleanCppuType() ,&bTrue);
+    registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,  ++i,nBound,cppu::UnoType<bool>::get() ,&bTrue);
     registerPropertyNoMember(SC_UNO_PAGE_BORDERDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_BOTTBORDER,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_BOTTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
@@ -321,15 +321,15 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFFILT,  ++i,nBound, cppu::UnoType<OUString>::get(), &sEmpty);
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFLOC,   ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), &eGraphicLocation);
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFURL,   ++i,nBound, cppu::UnoType<OUString>::get(), &sEmpty);
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKTRAN, ++i,nBound,::getBooleanCppuType() ,&bTrue);
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKTRAN, ++i,nBound,cppu::UnoType<bool>::get() ,&bTrue);
     registerPropertyNoMember(SC_UNO_PAGE_FTRBODYDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_FTRBRDDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_FTRBOTTBOR,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_FTRBOTTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_FTRHEIGHT,   ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
-    registerPropertyNoMember(SC_UNO_PAGE_FTRDYNAMIC,  ++i,nBound,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(SC_UNO_PAGE_FTRON,       ++i,nBound,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(SC_UNO_PAGE_FTRSHARED,   ++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_FTRDYNAMIC,  ++i,nBound,cppu::UnoType<bool>::get() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_FTRON,       ++i,nBound,cppu::UnoType<bool>::get() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_FTRSHARED,   ++i,nBound,cppu::UnoType<bool>::get() ,&bFalse);
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBOR,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTMAR,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
@@ -344,15 +344,15 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFFILT,  ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), &sEmpty);
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFLOC,   ++i,nBound|nMayBeVoid, cppu::UnoType<style::GraphicLocation>::get(), &eGraphicLocation);
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFURL,   ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), &sEmpty);
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKTRAN, ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bTrue);
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKTRAN, ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get() ,&bTrue);
     registerPropertyNoMember(SC_UNO_PAGE_HDRBODYDIST, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_HDRBRDDIST,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_HDRBOTTBOR,  ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_HDRBOTTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_HDRHEIGHT,   ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
-    registerPropertyNoMember(SC_UNO_PAGE_HDRDYNAMIC,  ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(SC_UNO_PAGE_HDRON,       ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(SC_UNO_PAGE_HDRSHARED,   ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_HDRDYNAMIC,  ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_HDRON,       ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get() ,&bFalse);
+    registerPropertyNoMember(SC_UNO_PAGE_HDRSHARED,   ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get() ,&bFalse);
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBOR,  ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTMAR,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
@@ -364,7 +364,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBDIS,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), &nZero);
 
     registerProperty(PROPERTY_HEIGHT,       ++i,nBound,&m_aSize.Height,     ::cppu::UnoType<sal_Int32>::get() );
-    registerPropertyNoMember(PROPERTY_ISLANDSCAPE,                  ++i,nBound,         ::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(PROPERTY_ISLANDSCAPE,                  ++i,nBound,         cppu::UnoType<bool>::get() ,&bFalse);
     registerPropertyNoMember(SC_UNO_PAGE_LEFTBORDER,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), &eBorderLine);
     registerPropertyNoMember(SC_UNO_PAGE_LEFTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), &nZero);
     registerPropertyNoMember(PROPERTY_LEFTMARGIN,   ++i,beans::PropertyAttribute::BOUND,        ::cppu::UnoType<sal_Int32>::get(), &nMargin);
@@ -389,7 +389,7 @@ OStyle::OStyle()
     registerProperty(PROPERTY_WIDTH,        ++i,nBound,&m_aSize.Width, cppu::UnoType<sal_Int32>::get() );
     registerPropertyNoMember("PrinterName",               ++i,nBound, cppu::UnoType<OUString>::get(), &sEmpty);
     uno::Sequence<sal_Int8> aSe;
-    registerPropertyNoMember("PrinterSetup",              ++i,nBound,::getCppuType((const uno::Sequence<sal_Int8>*)0),&aSe);
+    registerPropertyNoMember("PrinterSetup",              ++i,nBound,cppu::UnoType<uno::Sequence<sal_Int8>>::get(),&aSe);
 
 
 }
@@ -1754,7 +1754,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
         xStream->closeInput();
         aResult.Data <<= aSeq;
         aResult.Flavor.MimeType = sMimeType;
-        aResult.Flavor.DataType = ::getCppuType( &aSeq );
+        aResult.Flavor.DataType = cppu::UnoType<decltype(aSeq)>::get();
     }
 
     return aResult;
@@ -2713,7 +2713,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 
     aRet[0] = datatransfer::DataFlavor( OUString("image/png"),
         OUString("PNG"),
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
     return aRet;
 }
