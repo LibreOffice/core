@@ -57,9 +57,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_aContext(_rxContext)
 {
     registerProperty(OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
-        &m_sTitle, getCppuType(&m_sTitle));
+        &m_sTitle, cppu::UnoType<decltype(m_sTitle)>::get());
     registerProperty(OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
-        &m_xParent, getCppuType(&m_xParent));
+        &m_xParent, cppu::UnoType<decltype(m_xParent)>::get());
 }
 
 

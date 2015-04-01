@@ -259,7 +259,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     aLock.clear();
 
     bool bStatusUpdate( false );
-    rBHelper.addListener( ::getCppuType( &xControl ), xControl );
+    rBHelper.addListener( cppu::UnoType<decltype(xControl)>::get(), xControl );
 
     aLock.reset();
     if ( aURL.Complete.startsWith( m_aBaseURL ) )
@@ -283,7 +283,7 @@ void SAL_CALL PopupMenuControllerBase::removeStatusListener(
     const URL& /*aURL*/ )
 throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    rBHelper.removeListener( ::getCppuType( &xControl ), xControl );
+    rBHelper.removeListener( cppu::UnoType<decltype(xControl)>::get(), xControl );
 }
 
 OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )

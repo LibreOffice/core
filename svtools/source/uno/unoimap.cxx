@@ -136,8 +136,8 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
-                { OUString("Polygon"),     HANDLE_POLYGON,     ::getCppuType((const PointSequence*)0),    0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
+                { OUString("Polygon"),     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
@@ -152,7 +152,7 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
                 { OUString("Center"),      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
                 { OUString("Radius"),      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -170,7 +170,7 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
                 { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
                 { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),            0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
                 { OUString("Boundary"),    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };

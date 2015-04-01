@@ -136,7 +136,7 @@ sal_Bool SvBaseEventDescriptor::hasByName(
 Type SvBaseEventDescriptor::getElementType()
     throw(RuntimeException, std::exception)
 {
-    return ::getCppuType((Sequence<PropertyValue> *)0);
+    return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
 sal_Bool SvBaseEventDescriptor::hasElements()

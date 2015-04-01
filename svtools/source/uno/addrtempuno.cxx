@@ -83,7 +83,7 @@ namespace {
         :OGenericUnoDialog(_rxORB)
     {
         registerProperty(OUString(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
-            &m_aAliases, getCppuType(&m_aAliases));
+            &m_aAliases, cppu::UnoType<decltype(m_aAliases)>::get());
     }
 
 

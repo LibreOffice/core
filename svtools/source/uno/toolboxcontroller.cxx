@@ -67,7 +67,7 @@ ToolboxController::ToolboxController(
     registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
-        &m_bSupportVisible, getCppuType(&m_bSupportVisible));
+        &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
 
     try
     {
@@ -89,7 +89,7 @@ ToolboxController::ToolboxController() :
     registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
-        &m_bSupportVisible, getCppuType(&m_bSupportVisible));
+        &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
 }
 
 ToolboxController::~ToolboxController()

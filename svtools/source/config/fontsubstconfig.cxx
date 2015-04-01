@@ -103,7 +103,7 @@ void SvtFontSubstConfig::ImplCommit()
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = cReplacement;
     Sequence<Any> aValues(1);
-    aValues.getArray()[0].setValue(&bIsEnabled, ::getBooleanCppuType());
+    aValues.getArray()[0].setValue(&bIsEnabled, cppu::UnoType<bool>::get());
     PutProperties(aNames, aValues);
 
     OUString sNode(cFontPairs);
@@ -120,7 +120,7 @@ void SvtFontSubstConfig::ImplCommit()
         const OUString sAlways(cAlways);
         const OUString sOnScreenOnly(cOnScreenOnly);
 
-        const uno::Type& rBoolType = ::getBooleanCppuType();
+        const uno::Type& rBoolType = cppu::UnoType<bool>::get();
         for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
         {
             OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
