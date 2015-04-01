@@ -213,12 +213,12 @@ DlgEditor::DlgEditor (
     // set clipboard data flavors
     m_ClipboardDataFlavors[0].MimeType =             "application/vnd.sun.xml.dialog" ;
     m_ClipboardDataFlavors[0].HumanPresentableName = "Dialog 6.0" ;
-    m_ClipboardDataFlavors[0].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavors[0].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     m_ClipboardDataFlavorsResource[0] =                      m_ClipboardDataFlavors[0];
     m_ClipboardDataFlavorsResource[1].MimeType =             "application/vnd.sun.xml.dialogwithresource" ;
     m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
-    m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavorsResource[1].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aMarkIdle.SetPriority(SchedulerPriority::LOW);
     aMarkIdle.SetIdleHdl( LINK( this, DlgEditor, MarkTimeout ) );

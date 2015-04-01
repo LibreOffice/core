@@ -48,7 +48,7 @@ Controller::Controller (Shell* pViewShell)
     registerProperty(
         sPropertyIconId, nPropertyIconId,
         PropertyAttribute::READONLY,
-        &m_nIconId, getCppuType(&m_nIconId)
+        &m_nIconId, cppu::UnoType<decltype(m_nIconId)>::get()
     );
 }
 

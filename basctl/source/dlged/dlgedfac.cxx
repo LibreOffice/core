@@ -117,7 +117,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     if (xPSet.is())
                     {
                         sal_Bool bB = true;
-                        xPSet->setPropertyValue( DLGED_PROP_DROPDOWN, uno::Any(&bB,::getBooleanCppuType()));
+                        xPSet->setPropertyValue( DLGED_PROP_DROPDOWN, uno::Any(&bB,cppu::UnoType<bool>::get()));
                     }
                  }
                  catch(...)
