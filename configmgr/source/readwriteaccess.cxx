@@ -104,6 +104,19 @@ private:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return getRoot()->getPendingChanges(); }
 
+    css::beans::Property SAL_CALL getPropertyByHierarchicalName(
+        OUString const & aHierarchicalName)
+        throw (
+            css::beans::UnknownPropertyException, css::uno::RuntimeException,
+            std::exception)
+        SAL_OVERRIDE
+    { return getRoot()->getPropertyByHierarchicalName(aHierarchicalName); }
+
+    sal_Bool SAL_CALL hasPropertyByHierarchicalName(
+        OUString const & aHierarchicalName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return getRoot()->hasPropertyByHierarchicalName(aHierarchicalName); }
+
     rtl::Reference< RootAccess > getRoot();
 
     css::uno::Reference< css::uno::XComponentContext > context_;

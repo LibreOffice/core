@@ -12,6 +12,7 @@
 #include <cassert>
 #include <memory>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
@@ -116,10 +117,20 @@ comphelper::detail::ConfigurationWrapper::get(
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context),
-    access_(css::configuration::ReadOnlyAccess::create(context, "*"))
+    access_(css::configuration::ReadWriteAccess::create(context, "*"))
 {}
 
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
+
+bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
+    const
+{
+css::beans::Property SB(access_->getPropertyByHierarchicalName(path));
+    return
+        (access_->getPropertyByHierarchicalName(path).Attributes
+         & css::beans::PropertyAttribute::READONLY)
+        != 0;
+}
 
 css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
     OUString const & path) const

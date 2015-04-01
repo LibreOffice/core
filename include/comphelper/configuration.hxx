@@ -93,6 +93,8 @@ public:
 
     SAL_DLLPRIVATE ~ConfigurationWrapper();
 
+    bool isReadOnly(OUString const & path) const;
+
     com::sun::star::uno::Any getPropertyValue(OUString const & path) const;
 
     void setPropertyValue(
@@ -136,7 +138,11 @@ private:
         context_;
 
     com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess > access_;
+        com::sun::star::configuration::XReadWriteAccess > access_;
+        // should really be an css.configuration.ReadOnlyAccess (with added
+        // css.beans.XHierarchicalPropertySetInfo), but then
+        // configmgr::Access::asProperty() would report all properties as
+        // READONLY, so isReadOnly() would not work
 };
 
 /// @internal
@@ -187,6 +193,15 @@ private:
 /// each given configuration property.
 template< typename T, typename U > struct ConfigurationProperty
 {
+    /// Get the read-only status of the given (non-localized) configuration
+    /// property.
+    static bool isReadOnly(
+        css::uno::Reference<css::uno::XComponentContext> const & context
+            = comphelper::getProcessComponentContext())
+    {
+        return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
+    }
+
     /// Get the value of the given (non-localized) configuration property.
     ///
     /// For nillable properties, U is of type boost::optional<U'>.
@@ -231,6 +246,14 @@ private:
 /// to access each given localized configuration property.
 template< typename T, typename U > struct ConfigurationLocalizedProperty
 {
+    /// Get the read-only status of the given localized configuration property.
+    static bool isReadOnly(
+        css::uno::Reference<css::uno::XComponentContext> const & context
+            = comphelper::getProcessComponentContext())
+    {
+        return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
+    }
+
     /// Get the value of the given localized configuration property, for the
     /// locale currently set at the
     /// com.sun.star.configuration.theDefaultProvider.
