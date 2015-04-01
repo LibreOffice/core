@@ -97,4 +97,15 @@ public final class RectUtils {
                 && FloatUtils.fuzzyEquals(a.right, b.right)
                 && FloatUtils.fuzzyEquals(a.bottom, b.bottom);
     }
+
+    /**
+     * Assign rectangle values from source to target.
+     */
+    public static void assign(final RectF target, final RectF source)
+    {
+        target.left = source.left;
+        target.top = source.top;
+        target.right = source.right;
+        target.bottom = source.bottom;
+    }
 }
