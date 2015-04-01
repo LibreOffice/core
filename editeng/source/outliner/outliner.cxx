@@ -1749,7 +1749,6 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
                             const Color& rOverlineColor,
                             const Color& rTextLineColor)
 {
-
     if(aDrawPortionHdl.IsSet())
     {
         DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, pWrongSpellVector,

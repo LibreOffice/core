@@ -3811,7 +3811,6 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             pTarget->SetMapMode( aOldMapMode );
         }
 
-
         pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
     }
     else
@@ -3856,7 +3855,6 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
 
         pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
     }
-
 }
 
 void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )

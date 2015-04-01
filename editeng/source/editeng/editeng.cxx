@@ -235,7 +235,6 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 
 void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
 {
-
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
         EditDbg::ShowEditEngineData( this, false );
