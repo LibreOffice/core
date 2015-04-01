@@ -74,7 +74,7 @@
 
 #define HAVE_FEATURE_SCRIPTING 0
 
-/* MULTIUSER_ENVIRONMENT - Wheter running on a "normal" multi-user
+/* MULTIUSER_ENVIRONMENT - Whether running on a "normal" multi-user
  * desktop (or server) OS
  *
  * Non-MULTIUSER implies that the OS makes sure that only one

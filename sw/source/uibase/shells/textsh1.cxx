@@ -1115,7 +1115,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             //If the current paragraph has bullet call the function to
             //increase or decrease the bullet level.
-            //Why could I know wheter a paragraph has bullet or not by checking the below conditions?
+            //Why could I know whether a paragraph has bullet or not by checking the below conditions?
             //Please refer to the "case KEY_TAB:" section in SwEditWin::KeyInput(..) :
             //      if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
             //                  !rSh.HasReadonlySel() )

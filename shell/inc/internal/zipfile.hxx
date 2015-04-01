@@ -63,7 +63,7 @@ public:
     static bool IsZipFile(void *stream);
 
 
-    /** Returns wheter the version of the specified zip file may be uncompressed with the
+    /** Returns whether the version of the specified zip file may be uncompressed with the
           currently used zlib version or not
 
     @precond    The given parameter must be a string with length > 0

@@ -217,7 +217,7 @@ protected:
     void getFuncDescForInvoke(const OUString & sFuncName,
                               const Sequence<Any> & seqArgs, FUNCDESC** pFuncDesc);
 
-    // Finds out wheter the wrapped IDispatch is an JScript Object. This is is
+    // Finds out whether the wrapped IDispatch is an JScript Object. This is is
     // done by
     // asking for the property "_environment". If it has the value "JScript"
     // (case insensitive) then the IDispatch is considered a JScript object.

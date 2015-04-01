@@ -305,7 +305,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // With the help of type information the kind of parameter can be exactly determined
 // and an appropriate conversion can be chosen. A problem arises if a method expects
 // an Any. Then the type info does not tell what the type of the value, that is kept
-// by the any, should be. In this situation the decision wheter the param is a
+// by the any, should be. In this situation the decision whether the param is a
 // sequence or an object is made upon the fact if the object has a property "0"
 // ( see function "isJScriptArray"). Since this is unsafe it is recommended to use
 // the JScript value objects within a JScript script on such an occasion.
