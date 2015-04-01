@@ -84,12 +84,14 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <osl/mutex.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include <algorithm>
 
 using namespace ::comphelper;
 using namespace ::svx;
 using namespace ::svxform;
+using namespace ::dbtools;
 
     using namespace ::com::sun::star;
     using ::com::sun::star::uno::Exception;
@@ -692,7 +694,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 
                 // only database forms are to be activated
                 Reference< XRowSet >  xForm(xController->getModel(), UNO_QUERY);
-                if ( !xForm.is() || !OStaticDataAccessTools().getRowSetConnection( xForm ).is() )
+                if ( !xForm.is() || !getConnection( xForm ).is() )
                     continue;
 
                 Reference< XPropertySet > xFormSet( xForm, UNO_QUERY );
@@ -1152,11 +1154,11 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         // obtain the data source
         if ( !xDataSource.is() )
-            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, comphelper::getProcessComponentContext() );
+            xDataSource = getDataSource( sDataSource, comphelper::getProcessComponentContext() );
 
         // and the connection, if necessary
         if ( !xConnection.is() )
-            xConnection.reset( OStaticDataAccessTools().getConnection_withFeedback(
+            xConnection.reset( getConnection_withFeedback(
                 sDataSource,
                 OUString(),
                 OUString(),
@@ -1184,7 +1186,6 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         return NULL;
     }
 
-    OStaticDataAccessTools aDBATools;
     Reference< XComponent > xKeepFieldsAlive;
     // go
     try
@@ -1192,7 +1193,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         // determine the table/query field which we should create a control for
         Reference< XPropertySet >   xField;
 
-        Reference< XNameAccess >    xFields = aDBATools.getFieldsByCommandDescriptor(
+        Reference< XNameAccess >    xFields = getFieldsByCommandDescriptor(
             xConnection, nCommandType, sCommand, xKeepFieldsAlive );
 
         if (xFields.is() && xFields->hasByName(sFieldName))
@@ -1200,7 +1201,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if ( !xField.is() )
             return NULL;
 
-        Reference< XNumberFormatsSupplier > xSupplier( aDBATools.getNumberFormats( xConnection, false ), UNO_SET_THROW );
+        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, false ), UNO_SET_THROW );
         Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
 
         OUString sLabelPostfix;

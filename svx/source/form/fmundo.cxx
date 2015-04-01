@@ -24,7 +24,6 @@
 #include <sal/macros.h>
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
-#include "svx/dbtoolsclient.hxx"
 #include "svx/svditer.hxx"
 #include "fmobj.hxx"
 #include "fmprop.hrc"
@@ -42,6 +41,7 @@
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 
 #include "svx/fmtools.hxx"
 #include <svl/macitem.hxx>
@@ -54,6 +54,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
+#include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -65,7 +66,9 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::form::binding;
+using namespace ::com::sun::star::sdbc;
 using namespace ::svxform;
+using namespace ::dbtools;
 
 
 #include <com/sun/star/script/XScriptListener.hpp>
@@ -945,11 +948,14 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
         Reference< XForm > xForm( _rxElement, UNO_QUERY );
         Reference< XPropertySet > xFormProperties( xForm, UNO_QUERY );
         if ( xFormProperties.is() )
-            if ( !::svxform::OStaticDataAccessTools().isEmbeddedInDatabase( _rxElement ) )
+        {
+            Reference< XConnection > xDummy;
+            if ( !isEmbeddedInDatabase( _rxElement, xDummy ) )
                 // (if there is a connection in the context of the component, setting
                 // a new connection would be vetoed, anyway)
                 // #i34196#
                 xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
+        }
     }
 
     Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );

@@ -19,7 +19,6 @@
 
 
 #include "fmdocumentclassification.hxx"
-#include "svx/dbtoolsclient.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

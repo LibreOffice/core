@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "charset_s.hxx"
+#include "simpledbt/charset_s.hxx"
 
 
 namespace connectivity

@@ -28,7 +28,6 @@
 #include "formcontrolfactory.hxx"
 #include "svx/svditer.hxx"
 #include "svx/fmresids.hrc"
-#include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -49,6 +48,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
+#include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -63,6 +63,7 @@ using ::com::sun::star::container::XMap;
 using ::com::sun::star::container::EnumerableMap;
 using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
+using namespace ::dbtools;
 
 
 FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
@@ -575,7 +576,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             Reference< XConnection > xFormConnection;
             xFormProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xFormConnection;
             if ( !xFormConnection.is() )
-                OStaticDataAccessTools().isEmbeddedInDatabase( xFormProps, xFormConnection );
+                isEmbeddedInDatabase( xFormProps, xFormConnection );
             if (xFormConnection.is())
             {
                 Reference< XChild > xConnAsChild(xFormConnection, UNO_QUERY);
