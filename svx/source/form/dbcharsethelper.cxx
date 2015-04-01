@@ -19,21 +19,16 @@
 
 #include "svx/dbcharsethelper.hxx"
 
+#include <connectivity/dbtools.hxx>
+
+using namespace ::dbtools;
 
 namespace svxform
 {
 
     ODataAccessCharsetHelper::ODataAccessCharsetHelper( )
     {
-    }
-
-
-    bool ODataAccessCharsetHelper::ensureLoaded() const
-    {
-        if ( !ODbtoolsClient::ensureLoaded() )
-            return false;
-         m_xCharsetHelper = getFactory()->createCharsetHelper( );
-        return m_xCharsetHelper.is();
+        m_xCharsetHelper = createCharsetHelper();
     }
 
 

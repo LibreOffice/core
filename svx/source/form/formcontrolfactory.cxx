@@ -18,7 +18,6 @@
  */
 
 
-#include "svx/dbtoolsclient.hxx"
 #include "formcontrolfactory.hxx"
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
@@ -46,9 +45,11 @@
 #include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
+#include <connectivity/dbtools.hxx>
 
 #include <set>
 
+using namespace ::dbtools;
 
 namespace svxform
 {
@@ -212,7 +213,7 @@ namespace svxform
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
-                    xDsProperties.set(OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext ), css::uno::UNO_QUERY);
+                    xDsProperties.set(getDataSource( sDataSourceName, _rContext ), css::uno::UNO_QUERY);
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue("Info") >>= aInfo;
             }
@@ -573,7 +574,7 @@ namespace svxform
                 }
                 else
                 {
-                    nFormatKey = OStaticDataAccessTools().getDefaultNumberFormat(
+                    nFormatKey = getDefaultNumberFormat(
                         _rxDatabaseField,
                         Reference< XNumberFormatTypes >( _rxNumberFormats, UNO_QUERY ),
                         SvtSysLocale().GetLanguageTag().getLocale()

@@ -25,10 +25,11 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <com/sun/star/form/XForm.hpp>
+#include <unotools/sharedunocomponent.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
-#include "svx/dbtoolsclient.hxx"
+#include <connectivity/dbtools.hxx>
 
 
 class FmFieldWin;
@@ -70,12 +71,11 @@ public:
 class FmFieldWin :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
-                    ,public ::svxform::OStaticDataAccessTools
 {
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;
     FmFieldWinData*    pData;
-    ::svxform::SharedConnection
+    ::dbtools::SharedConnection
                        m_aConnection;
     OUString    m_aDatabaseName,
                        m_aObjectName;
@@ -102,7 +102,7 @@ public:
     void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
 
     const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
-    ::svxform::SharedConnection GetConnection() const { return m_aConnection; }
+    ::dbtools::SharedConnection GetConnection() const { return m_aConnection; }
     const OUString&      GetObjectName() const { return m_aObjectName; }
     sal_Int32                   GetObjectType() const { return m_nObjectType; }
 

@@ -55,7 +55,6 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <unotools/configitem.hxx>
-#include "svx/dbtoolsclient.hxx"
 #include "formcontrolling.hxx"
 #include "fmdocumentclassification.hxx"
 
@@ -146,7 +145,6 @@ class FmFormView;
 class FmFormObj;
 class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
-                                    ,public ::svxform::OStaticDataAccessTools
                                     ,public ::svx::IControllerFeatureInvalidation
 {
     friend class FmFormView;

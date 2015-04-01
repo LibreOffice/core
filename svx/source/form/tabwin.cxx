@@ -36,7 +36,6 @@
 #include "fmhelp.hrc"
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
-#include "svx/dbtoolsclient.hxx"
 #include <svx/fmpage.hxx>
 
 #include "fmpgeimp.hxx"
@@ -70,6 +69,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star;
 using namespace ::svxform;
 using namespace ::svx;
+using namespace ::dbtools;
 
 namespace {
 
@@ -322,9 +322,8 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
         // get the connection of the form
-        OStaticDataAccessTools aTools;
         m_aConnection.reset(
-            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), true ),
+            connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), true ),
             SharedConnection::NoTakeOwnership
         );
         // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)
