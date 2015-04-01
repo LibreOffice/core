@@ -156,7 +156,7 @@ void printPropertySet(
         else if ( ( a >>= ival ) )
         {
             OSL_TRACE("%s: Got property: %s = %d",
-                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
+                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), ival);
         }
         else
         {
