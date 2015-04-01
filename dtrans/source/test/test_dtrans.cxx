@@ -193,7 +193,7 @@ StringTransferable::StringTransferable( ) :
 
     //df.MimeType = L"text/plain; charset=windows1252";
     df.MimeType = "text/html";
-    df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
+    df.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     m_seqDFlv[0] = df;
 }

@@ -49,7 +49,7 @@ using namespace com::sun::star::lang;
 const Type       CPPUTYPE_SALINT32   = cppu::UnoType<sal_Int32>::get();
 const Type       CPPUTYPE_SALINT8    = cppu::UnoType<sal_Int8>::get();
 const Type       CPPUTYPE_OUSTRING   = cppu::UnoType<OUString>::get();
-const Type       CPPUTYPE_SEQSALINT8 = getCppuType((Sequence< sal_Int8>*)0);
+const Type       CPPUTYPE_SEQSALINT8 = cppu::UnoType<Sequence< sal_Int8>>::get();
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 
 const OUString TEXT_PLAIN_CHARSET   ("text/plain;charset=");

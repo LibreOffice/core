@@ -261,13 +261,13 @@ Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (Ru
 void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
         throw(RuntimeException)
 {
-    rBHelper.addListener( ::getCppuType( &dtl ), dtl );
+    rBHelper.addListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
 void SAL_CALL DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
         throw(RuntimeException)
 {
-    rBHelper.removeListener( ::getCppuType( &dtl ), dtl );
+    rBHelper.removeListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
 sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException)

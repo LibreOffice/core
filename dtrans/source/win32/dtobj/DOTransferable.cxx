@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
+    const Type CPPUTYPE_SEQINT8  = cppu::UnoType<Sequence< sal_Int8 >>::get();
     const Type CPPUTYPE_OUSTRING = cppu::UnoType<OUString>::get();
 
     inline

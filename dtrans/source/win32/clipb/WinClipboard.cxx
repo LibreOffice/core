@@ -158,7 +158,7 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
-    rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
+    rBHelper.aLC.addInterface( cppu::UnoType<decltype(listener)>::get(), listener );
 }
 
 // getName
@@ -176,7 +176,7 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
-    rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
+    rBHelper.aLC.removeInterface( cppu::UnoType<decltype(listener)>::get(), listener );
 }
 
 // getName

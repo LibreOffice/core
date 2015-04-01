@@ -33,7 +33,7 @@ SourceContext::SourceContext( DragSource* pSource,
 #if OSL_DEBUG_LEVEL > 1
     if( listener.is())
 #endif
-    rBHelper.addListener( ::getCppuType( &listener ), listener );
+    rBHelper.addListener( cppu::UnoType<decltype(listener)>::get(), listener );
 }
 
 SourceContext::~SourceContext()

@@ -38,14 +38,14 @@
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
 #define MODULE_PRIVATE
-#define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )
+#define CPPUTYPE_SEQSALINT8       cppu::UnoType<Sequence< sal_Int8 >>::get()
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            cppu::UnoType<OUString>::get()
 #define CPPUTYPE_SALINT32         cppu::UnoType<sal_Int32>::get()
 #define EMPTY_OUSTR               OUString()
 
 const OUString Windows_FormatName ("windows_formatname");
-const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
+const com::sun::star::uno::Type CppuType_ByteSequence = cppu::UnoType<com::sun::star::uno::Sequence<sal_Int8>>::get();
 const com::sun::star::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
 // namespace directives
