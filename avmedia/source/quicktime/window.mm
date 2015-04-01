@@ -168,73 +168,73 @@ void SAL_CALL Window::setFocus(  )
 void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 // XComponent
@@ -247,13 +247,13 @@ void SAL_CALL Window::dispose(  )
 void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.addInterface( getCppuType( &xListener ), xListener );
+    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
-    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 // XServiceInfo
