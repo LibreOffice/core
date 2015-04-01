@@ -1837,6 +1837,19 @@ public:
     ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
 
     Impl() : m_Listeners(m_Mutex) { }
+
+    // note: lock mutex before calling this to avoid concurrent update
+    std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
+    {
+        sal_uInt16 const nRowCount(rThis.getRowCount());
+        sal_uInt16 const nColCount(rThis.getColumnCount());
+        if (!nRowCount || !nColCount)
+        {
+            throw uno::RuntimeException("Table too complex",
+                    static_cast<cppu::OWeakObject*>(&rThis));
+        }
+        return std::make_pair(nRowCount, nColCount);
+    }
 };
 
 class SwTableProperties_Impl
@@ -2398,7 +2411,10 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XCellRangeData> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<sheet::XCellRangeData> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     return xAllRange->getDataArray();
 }
 
@@ -2406,7 +2422,10 @@ void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< uno
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XCellRangeData> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<sheet::XCellRangeData> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     return xAllRange->setDataArray(rArray);
 }
 
@@ -2414,7 +2433,10 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
     return xAllRange->getData();
 }
@@ -2475,7 +2497,10 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions(void)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
     return xAllRange->getRowDescriptions();
 }
@@ -2484,7 +2509,10 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
     xAllRange->setRowDescriptions(rRowDesc);
 }
@@ -2493,7 +2521,10 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions(void)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
     return xAllRange->getColumnDescriptions();
 }
@@ -2502,7 +2533,10 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart::XChartDataArray> xAllRange(getCellRangeByPosition(0, 0, getColumnCount()-1, getRowCount()-1), uno::UNO_QUERY);
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
     return xAllRange->setColumnDescriptions(rColumnDesc);
 }
