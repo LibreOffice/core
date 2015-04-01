@@ -504,7 +504,7 @@ throw(uno::RuntimeException)
         // fallback to standard get value implementation used before this helper was created
         m_rPropSet.getPropertyValue(rEntry, rSet, rAny);
 
-        if(rEntry.aType == ::getCppuType((const sal_Int16*)0) && rEntry.aType != rAny.getValueType())
+        if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && rEntry.aType != rAny.getValueType())
         {
             // since the sfx uInt16 item now exports a sal_Int32, we may have to fix this here
             sal_Int32 nValue(0);
@@ -898,7 +898,7 @@ bool ::sw::GetDefaultTextContentValue(
         {   uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
-            rAny.setValue(&aTypes, ::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0));
+            rAny.setValue(&aTypes, cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get());
         }
         break;
         default:

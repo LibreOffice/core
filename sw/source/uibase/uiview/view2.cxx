@@ -346,12 +346,12 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     try
     {
-        Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
+        Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
 
         xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
             ListboxControlActions::ADD_ITEMS , aTemplates );
 
-        Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
+        Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
         xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
             ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
     }

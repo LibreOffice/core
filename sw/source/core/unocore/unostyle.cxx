@@ -342,7 +342,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         for(int i = 0; i < nCount; i++)
         {
             const uno::Any* pVal = &pArray[i].Value;
-            if( pVal->getValueType() == ::getBooleanCppuType() )
+            if( pVal->getValueType() == cppu::UnoType<bool>::get() )
             {
                 const OUString sName = pArray[i].Name;
                 bool bVal = *static_cast<sal_Bool const *>(pVal->getValue());
@@ -4693,7 +4693,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
         if(bTakeCareOfDrawingLayerFillStyle)
         {
-            if(pEntry->aType == ::getCppuType((const sal_Int16*)0) && pEntry->aType != aTarget.getValueType())
+            if(pEntry->aType == cppu::UnoType<sal_Int16>::get() && pEntry->aType != aTarget.getValueType())
             {
                 // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
                 sal_Int32 nValue = 0;

@@ -709,7 +709,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             }
             else if(rPropertyName == UNO_NAME_IS_EXPRESSION)
             {
-                if(rValue.getValueType() != ::getBooleanCppuType())
+                if(rValue.getValueType() != cppu::UnoType<bool>::get())
                     throw lang::IllegalArgumentException();
                 rValue >>= m_pImpl->m_bParam1;
             }
@@ -2300,7 +2300,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         if (pBool)
         {
-            if( rValue.getValueType() == getCppuBooleanType() )
+            if( rValue.getValueType() == cppu::UnoType<bool>::get() )
                 *pBool = *static_cast<sal_Bool const *>(rValue.getValue());
             else
                 throw lang::IllegalArgumentException();
@@ -2341,7 +2341,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AS_CHARACTER;
-            aRet.setValue(&aTypes, ::getCppuType(static_cast<uno::Sequence<text::TextContentAnchorType>*>(0)));
+            aRet.setValue(&aTypes, cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get());
         }
         break;
 

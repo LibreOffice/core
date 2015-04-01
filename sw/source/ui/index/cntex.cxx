@@ -224,7 +224,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     OUString* pArr = aStyles.getArray();
                     for(sal_Int32 nStyle = 0; nStyle < nStyles; nStyle++)
                         pArr[nStyle] = sLevel.getToken(nStyle, TOX_STYLE_DELIMITER);
-                    uno::Any aAny(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
+                    uno::Any aAny(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
                     xAcc->replaceByIndex(i, aAny);
                 }
             }
@@ -373,7 +373,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;
                     aFormatAccess >>= xFormatAccess;
-                    uno::Any aLevelProp(&aSequPropVals, ::getCppuType((uno::Sequence<beans::PropertyValues>*)0));
+                    uno::Any aLevelProp(&aSequPropVals, cppu::UnoType<uno::Sequence<beans::PropertyValues>>::get());
                     xFormatAccess->replaceByIndex(nCurrLevel, aLevelProp);
                 }
             }

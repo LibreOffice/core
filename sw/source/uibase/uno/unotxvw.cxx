@@ -569,7 +569,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
         pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
         sal_Bool bVal = !rAttr.GetPosition();
-        pValues[4].Value.setValue(&bVal, ::getBooleanCppuType());
+        pValues[4].Value.setValue(&bVal, cppu::UnoType<bool>::get());
     }
     return aRet;
 }

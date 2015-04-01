@@ -722,7 +722,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     else
     {
         aRet[0].HumanPresentableName = m_aName;
-        aRet[0].DataType = getCppuType((uno::Sequence<sal_Int8>*)0);
+        aRet[0].DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
     }
     return aRet;
 }

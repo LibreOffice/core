@@ -1121,7 +1121,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             }
             else if(sName == "IsLandscape")
             {
-                bException =  (::getBooleanCppuType() != rVal.getValueType());
+                bException =  (cppu::UnoType<bool>::get() != rVal.getValueType());
                 aData.SetLandscape(*static_cast<sal_Bool const *>(rVal.getValue()));
             }
             else
@@ -1163,7 +1163,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                     FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
                     aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
                 }
-                else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
+                else if ( rProp.Value.getValueType() != cppu::UnoType<cppu::UnoVoidType>::get() )
                     throw IllegalArgumentException();
             }
 
@@ -1178,7 +1178,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // Collate-Property
             else if ( rProp.Name == UNO_NAME_COLLATE )
             {
-                if ( rProp.Value.getValueType() == ::getBooleanCppuType())
+                if ( rProp.Value.getValueType() == cppu::UnoType<bool>::get())
 
                     aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
                 else
@@ -1188,7 +1188,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // Sort-Property
             else if ( rProp.Name == UNO_NAME_SORT )
             {
-                if ( rProp.Value.getValueType() == ::getBooleanCppuType() )
+                if ( rProp.Value.getValueType() == cppu::UnoType<bool>::get() )
                     aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
                 else
                     throw IllegalArgumentException();

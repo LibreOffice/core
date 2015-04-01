@@ -2734,7 +2734,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             true);
         pStyles[i] = aString;
     }
-    uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
+    uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
     return aRet;
 }
 
@@ -2742,7 +2742,7 @@ uno::Type SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getElementType()
 throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Sequence<OUString>*)0);
+    return cppu::UnoType<uno::Sequence<OUString>>::get();
 }
 
 sal_Bool SAL_CALL
@@ -3254,7 +3254,7 @@ uno::Type SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getElementType()
 throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Sequence< beans::PropertyValues >*)0);
+    return cppu::UnoType<uno::Sequence< beans::PropertyValues >>::get();
 }
 
 sal_Bool SAL_CALL

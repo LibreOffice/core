@@ -551,7 +551,7 @@ void SwXMLImport::startDocument()
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
-                    if( aAny.getValueType() == ::getBooleanCppuType() &&
+                    if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
                         *static_cast<const sal_Bool*>(aAny.getValue()) )
                         bOverwrite = true;
                 }
@@ -575,7 +575,7 @@ void SwXMLImport::startDocument()
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
             aAny = xImportInfo->getPropertyValue(sAutoTextMode);
-            if( aAny.getValueType() == ::getBooleanCppuType() &&
+            if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<const sal_Bool*>(aAny.getValue()) )
                     setBlockMode();
         }
@@ -585,7 +585,7 @@ void SwXMLImport::startDocument()
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
             aAny = xImportInfo->getPropertyValue(sOrganizerMode);
-            if( aAny.getValueType() == ::getBooleanCppuType() &&
+            if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<const sal_Bool*>(aAny.getValue()) )
                     setOrganizerMode();
         }

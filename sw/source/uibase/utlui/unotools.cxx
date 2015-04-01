@@ -145,7 +145,7 @@ void SwOneExampleFrame::CreateControl()
         pValues[2].Name = "Referer";
         pValues[2].Value <<= OUString("private:user");
         uno::Any aArgs;
-        aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
+        aArgs.setValue(&aSeq, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get());
 
         xPrSet->setPropertyValue( "LoaderArguments", aArgs );
         //save and set readonly???

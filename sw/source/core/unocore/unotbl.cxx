@@ -676,7 +676,7 @@ static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pB
         }
     }
     if(!bError)
-        rRet.setValue(&aColSeq, ::getCppuType((uno::Sequence< text::TableColumnSeparator>*)0));
+        rRet.setValue(&aColSeq, cppu::UnoType<uno::Sequence< text::TableColumnSeparator>>::get());
 
 }
 
@@ -882,7 +882,7 @@ uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet = SwXCellBaseClass::queryInterface(aType);
-    if(aRet.getValueType() == ::getCppuVoidType())
+    if(aRet.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
         aRet = SwXText::queryInterface(aType);
     return aRet;
 }

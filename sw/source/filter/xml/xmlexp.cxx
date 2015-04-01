@@ -125,7 +125,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                         sAutoTextMode ) )
             {
                 Any aAny = rInfoSet->getPropertyValue(sAutoTextMode);
-                if( aAny.getValueType() == ::getBooleanCppuType() &&
+                if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
                     *static_cast<const sal_Bool*>(aAny.getValue()) )
                     setBlockMode();
             }

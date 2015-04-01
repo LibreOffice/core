@@ -342,7 +342,7 @@ sal_Int32 ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue("Encrypted");
 
-        bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+        bool bEncrypted = aAny.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<sal_Bool const *>(aAny.getValue());
 
         uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
@@ -558,13 +558,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
               cppu::UnoType<container::XNameContainer>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("RecordChanges"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("ShowChanges"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("RedlineProtectionKey"), 0,
-              ::getCppuType((Sequence<sal_Int8>*)0),
+              cppu::UnoType<Sequence<sal_Int8>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("PrivateData"), 0,
               cppu::UnoType<XInterface>::get(),
@@ -580,26 +580,26 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // properties for insert modes
         { OUString("StyleInsertModeFamilies"), 0,
-              ::getCppuType((Sequence<OUString>*)0),
+              cppu::UnoType<Sequence<OUString>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StyleInsertModeOverwrite"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("TextInsertModeRange"), 0,
               cppu::UnoType<text::XTextRange>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("AutoTextMode"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("OrganizerMode"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
         { OUString("ShapePositionInHoriL2R"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         { OUString("BuildId"), 0,
@@ -613,7 +613,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         //       documents in StarOffice 5.2 binary file format this property
         //       will be true.
         { OUString("TextDocInOOoFileFormat"), 0,
-              ::getBooleanCppuType(),
+              cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },

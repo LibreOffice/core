@@ -496,7 +496,7 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
         break;
         case MID_RUBY_ABOVE:
         {
-            const uno::Type& rType = ::getBooleanCppuType();
+            const uno::Type& rType = cppu::UnoType<bool>::get();
             if(rVal.hasValue() && rVal.getValueType() == rType)
             {
                 bool bAbove = *static_cast<sal_Bool const *>(rVal.getValue());

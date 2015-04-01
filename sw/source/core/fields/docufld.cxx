@@ -1061,7 +1061,7 @@ OUString SwDocInfoField::Expand() const
             uno::Any aAny;
             if( xSetInfo->hasPropertyByName( aName ) )
                 aAny = xSet->getPropertyValue( aName );
-            if ( aAny.getValueType() != ::getVoidCppuType() )
+            if ( aAny.getValueType() != cppu::UnoType<cppu::UnoVoidType>::get() )
             {
                 // "void" type means that the property has not been inserted until now
                 if ( !IsFixed() )
@@ -1192,7 +1192,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_DOUBLE:
         {
             double fVal = GetValue();
-            rAny.setValue(&fVal, ::getCppuType(&fVal));
+            rAny.setValue(&fVal, cppu::UnoType<decltype(fVal)>::get());
         }
         break;
     case FIELD_PROP_PAR3:

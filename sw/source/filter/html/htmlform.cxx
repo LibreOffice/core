@@ -630,7 +630,7 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue("FontPitch", aTmp );
 
     float fVal(10.);
-    aTmp.setValue( &fVal, ::getCppuType(&fVal ));
+    aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
     rPropSet->setPropertyValue("FontHeight", aTmp );
 }
 
@@ -1002,7 +1002,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             float fVal = static_cast< float >(
                 (static_cast<const SvxFontHeightItem *>(pItem)->GetHeight()) / 20.0 );
-            aTmp.setValue( &fVal, ::getCppuType(&fVal));
+            aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1049,7 +1049,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             float fVal = VCLUnoHelper::ConvertFontWeight(
                     static_cast<const SvxWeightItem *>(pItem)->GetWeight() );
-            aTmp.setValue( &fVal, ::getCppuType(&fVal));
+            aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -2405,14 +2405,14 @@ void SwHTMLParser::EndSelect()
             pValues[i] = sText;
         }
 
-        Any aAny( &aList, ::getCppuType((uno::Sequence<OUString>*)0) );
+        Any aAny( &aList, cppu::UnoType<uno::Sequence<OUString>>::get() );
 
         rPropSet->setPropertyValue("StringItemList", aAny );
 
         aAny <<= ListSourceType_VALUELIST;
         rPropSet->setPropertyValue("ListSourceType", aAny );
 
-        aAny.setValue( &aValueList, ::getCppuType((uno::Sequence<OUString>*)0) );
+        aAny.setValue( &aValueList, cppu::UnoType<uno::Sequence<OUString>>::get() );
 
         rPropSet->setPropertyValue("ListSource", aAny );
 
@@ -2431,7 +2431,7 @@ void SwHTMLParser::EndSelect()
             pSels[i] = (sal_Int16)pFormImpl->GetSelectedList()[i];
         }
         aAny.setValue( &aSelList,
-                       ::getCppuType((uno::Sequence<sal_Int16>*)0) );
+                       cppu::UnoType<uno::Sequence<sal_Int16>>::get() );
 
         rPropSet->setPropertyValue("DefaultSelection", aAny );
 

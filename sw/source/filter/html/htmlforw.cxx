@@ -790,7 +790,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             rHTMLWrt.OutNewLine( true );
         eTag = TAG_SELECT;
         aTmp = xPropSet->getPropertyValue( "Dropdown" );
-        if( aTmp.getValueType() == ::getBooleanCppuType() &&
+        if( aTmp.getValueType() == cppu::UnoType<bool>::get() &&
             !*static_cast<sal_Bool const *>(aTmp.getValue()) )
         {
             Size aSz( 0, 0 );
@@ -804,7 +804,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             }
 
             aTmp = xPropSet->getPropertyValue( "MultiSelection" );
-            if( aTmp.getValueType() == ::getBooleanCppuType() &&
+            if( aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<sal_Bool const *>(aTmp.getValue()) )
             {
                 sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_multiple);
@@ -822,7 +822,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
             {
                 aTmp = xPropSet->getPropertyValue( sMultiLine );
-                bMultiLine = aTmp.getValueType() == ::getBooleanCppuType() &&
+                bMultiLine = aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                              *static_cast<sal_Bool const *>(aTmp.getValue());
             }
 
@@ -844,14 +844,14 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 }
 
                 aTmp = xPropSet->getPropertyValue( "HScroll" );
-                if( aTmp.getValueType() == ::getVoidCppuType() ||
-                    (aTmp.getValueType() == ::getBooleanCppuType() &&
+                if( aTmp.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ||
+                    (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                     !*static_cast<sal_Bool const *>(aTmp.getValue())) )
                 {
                     const sal_Char *pWrapStr = 0;
                     aTmp = xPropSet->getPropertyValue( "HardLineBreaks" );
                     pWrapStr =
-                        (aTmp.getValueType() == ::getBooleanCppuType() &&
+                        (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                         *static_cast<sal_Bool const *>(aTmp.getValue())) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                                      : OOO_STRING_SVTOOLS_HTML_WW_soft;
                     sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_wrap) + "=\"" +
@@ -945,7 +945,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
 
     aTmp = xPropSet->getPropertyValue("Enabled");
-    if( aTmp.getValueType() == ::getBooleanCppuType() &&
+    if( aTmp.getValueType() == cppu::UnoType<bool>::get() &&
         !*static_cast<sal_Bool const *>(aTmp.getValue()) )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_disabled);
@@ -1152,7 +1152,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     if( TAG_SELECT == eTag )
     {
         aTmp = xPropSet->getPropertyValue( "StringItemList" );
-        if( aTmp.getValueType() == ::getCppuType((uno::Sequence<OUString>*)0) )
+        if( aTmp.getValueType() == cppu::UnoType<uno::Sequence<OUString>>::get() )
         {
             rHTMLWrt.IncIndentLevel(); // der Inhalt von Select darf
                                        // eingerueckt werden
@@ -1164,7 +1164,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             sal_Int32 nValCnt = 0;
             aTmp = xPropSet->getPropertyValue( "ListSource" );
             uno::Sequence<OUString> aValList;
-            if( aTmp.getValueType() == ::getCppuType((uno::Sequence<OUString>*)0) )
+            if( aTmp.getValueType() == cppu::UnoType<uno::Sequence<OUString>>::get() )
             {
                 aValList = *static_cast<uno::Sequence<OUString> const *>(aTmp.getValue());
                 nValCnt = aValList.getLength();
@@ -1176,7 +1176,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;
             uno::Sequence<sal_Int16> aSelList;
-            if( aSelTmp.getValueType() ==::getCppuType((uno::Sequence<sal_Int16>*)0))
+            if( aSelTmp.getValueType() ==cppu::UnoType<uno::Sequence<sal_Int16>>::get())
             {
                 aSelList = *static_cast<uno::Sequence<sal_Int16> const *>(aSelTmp.getValue());
                 nSelCnt = aSelList.getLength();

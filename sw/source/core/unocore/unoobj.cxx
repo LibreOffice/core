@@ -477,7 +477,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
 throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentException)
 {
     if (!(rEntry.nFlags & beans::PropertyAttribute::MAYBEVOID) &&
-        (rValue.getValueType() == ::getCppuVoidType()))
+        (rValue.getValueType() == cppu::UnoType<cppu::UnoVoidType>::get()))
     {
         return false;
     }
@@ -2142,8 +2142,8 @@ SwXTextCursor::getPropertySetInfo() throw (uno::RuntimeException, std::exception
     {
         static SfxItemPropertyMapEntry const aCrsrExtMap_Impl[] =
         {
-            { OUString(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
-            { OUString(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
+            { OUString(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+            { OUString(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
@@ -2728,7 +2728,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         // old and new sortdescriptor
         if ( rPropName == "IsSortInTable" )
         {
-            if (aValue.getValueType() == ::getBooleanCppuType())
+            if (aValue.getValueType() == cppu::UnoType<bool>::get())
             {
                 rSortOpt.bTable = *static_cast<sal_Bool const *>(aValue.getValue());
             }
@@ -2835,7 +2835,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[13];
             nIndex = nIndex - '0';
-            if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
+            if (aValue.getValueType() == cppu::UnoType<bool>::get() && nIndex < 3)
             {
                 bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 aKeys[nIndex]->bIsNumeric = bTemp;
@@ -2852,7 +2852,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[15];
             nIndex -= '0';
-            if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
+            if (aValue.getValueType() == cppu::UnoType<bool>::get() && nIndex < 3)
             {
                 bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 aKeys[nIndex]->eSortOrder = (bTemp)
@@ -2867,7 +2867,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         else if ( rPropName == "IsSortColumns" )
         {
             bNewSortdescriptor = true;
-            if (aValue.getValueType() == ::getBooleanCppuType())
+            if (aValue.getValueType() == cppu::UnoType<bool>::get())
             {
                 bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
