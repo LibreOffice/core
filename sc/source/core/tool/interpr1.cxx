@@ -1500,8 +1500,7 @@ void ScInterpreter::ScNeg()
                     PushIllegalArgument();
                 else
                 {
-                    svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
-                    pMat->NegOp(aString, *pResMat);
+                    pMat->NegOp( *pResMat);
                     PushMatrix( pResMat );
                 }
             }
@@ -1545,8 +1544,7 @@ void ScInterpreter::ScNot()
                     PushIllegalArgument();
                 else
                 {
-                    svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
-                    pMat->NotOp(aString, *pResMat);
+                    pMat->NotOp( *pResMat);
                     PushMatrix( pResMat );
                 }
             }

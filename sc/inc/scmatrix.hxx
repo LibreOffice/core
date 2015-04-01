@@ -387,13 +387,13 @@ public:
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero = true ) const;
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
 
-    void NotOp(svl::SharedString aString, ScMatrix& rMat);
-    void NegOp(svl::SharedString aString, ScMatrix& rMat);
-    void AddOp(svl::SharedString aString, double fVal, ScMatrix& rMat);
-    void SubOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
-    void MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat);
-    void DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
-    void PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
+    void NotOp(ScMatrix& rMat);
+    void NegOp(ScMatrix& rMat);
+    void AddOp(double fVal, ScMatrix& rMat);
+    void SubOp(bool bFlag, double fVal, ScMatrix& rMat);
+    void MulOp(double fVal, ScMatrix& rMat);
+    void DivOp(bool bFlag, double fVal, ScMatrix& rMat);
+    void PowOp(bool bFlag, double fVal, ScMatrix& rMat);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 

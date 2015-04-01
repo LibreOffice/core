@@ -2050,7 +2050,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
 
-                MatrixIteratorWrapper<block_type, T, typename T::string_value_type> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                 ++pos.first;
             }
@@ -2523,22 +2523,25 @@ struct COp {};
 template <typename T>
 struct COp<T, svl::SharedString>
 {
-    svl::SharedString operator()(char, T /*aOp*/, const svl::SharedString& aString) const
+    svl::SharedString operator()(char, T /*aOp*/, const svl::SharedString& rString) const
     {
-        return aString;
+        return rString;
     }
 };
 
 template <typename T>
 struct COp<T, double>
 {
-    double operator()(char, T aOp, const svl::SharedString& /*aString*/) const
+    double operator()(char, T aOp, const svl::SharedString& /*rString*/) const
     {
         return aOp(double{}, double{});
     }
 };
 
-template<typename TOp, typename TEmptyRes=svl::SharedString, typename TRet=double>
+/** A template for operations where operands are supposed to be numeric.
+    A non-numeric operand leads to an errNoValue DoubleError.
+ */
+template<typename TOp, typename TEmptyRes=double, typename TRet=double>
 struct MatOp
 {
 private:
@@ -2552,9 +2555,9 @@ public:
     typedef TRet number_value_type;
     typedef svl::SharedString string_value_type;
 
-    MatOp(TOp aOp, svl::SharedString aString, double fVal=0.0):
+    MatOp( TOp aOp, double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):
         maOp(aOp),
-        maString(aString),
+        maString(rString),
         mfVal(fVal)
     { }
 
@@ -2568,9 +2571,9 @@ public:
         return maOp((double)bVal, mfVal);
     }
 
-    svl::SharedString operator()(const svl::SharedString&) const
+    double operator()(const svl::SharedString&) const
     {
-        return maString;
+        return CreateDoubleError( errNoValue);
     }
 
     TEmptyRes operator()(char) const
@@ -2586,78 +2589,78 @@ public:
 
 }
 
-void ScMatrix::NotOp(svl::SharedString aString, ScMatrix& rMat)
+void ScMatrix::NotOp( ScMatrix& rMat)
 {
     auto not_ = [](double a, double){return double(a == 0.0);};
-    matop::MatOp<decltype(not_), double> aOp(not_, aString);
+    matop::MatOp<decltype(not_), double> aOp(not_);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::NegOp(svl::SharedString aString, ScMatrix& rMat)
+void ScMatrix::NegOp( ScMatrix& rMat)
 {
     auto neg_ = [](double a, double){return -a;};
-    matop::MatOp<decltype(neg_), double> aOp(neg_, aString);
+    matop::MatOp<decltype(neg_), double> aOp(neg_);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::AddOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
+void ScMatrix::AddOp( double fVal, ScMatrix& rMat)
 {
     auto add_ = [](double a, double b){return a + b;};
-    matop::MatOp<decltype(add_)> aOp(add_, aString, fVal);
+    matop::MatOp<decltype(add_)> aOp(add_, fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::SubOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+void ScMatrix::SubOp( bool bFlag, double fVal, ScMatrix& rMat)
 {
     if (bFlag)
     {
         auto sub_ = [](double a, double b){return b - a;};
-        matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
+        matop::MatOp<decltype(sub_)> aOp(sub_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto sub_ = [](double a, double b){return a - b;};
-        matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
+        matop::MatOp<decltype(sub_)> aOp(sub_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
 
-void ScMatrix::MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
+void ScMatrix::MulOp( double fVal, ScMatrix& rMat)
 {
     auto mul_ = [](double a, double b){return a * b;};
-    matop::MatOp<decltype(mul_)> aOp(mul_, aString, fVal);
+    matop::MatOp<decltype(mul_)> aOp(mul_, fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
-void ScMatrix::DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+void ScMatrix::DivOp( bool bFlag, double fVal, ScMatrix& rMat)
 {
     if (bFlag)
     {
         auto div_ = [](double a, double b){return sc::div(b, a);};
-        matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
+        matop::MatOp<decltype(div_)> aOp(div_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto div_ = [](double a, double b){return sc::div(a, b);};
-        matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
+        matop::MatOp<decltype(div_)> aOp(div_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
 
-void ScMatrix::PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
 {
     if (bFlag)
     {
         auto pow_ = [](double a, double b){return pow(b, a);};
-        matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
+        matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto pow_ = [](double a, double b){return pow(a, b);};
-        matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
+        matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
