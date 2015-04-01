@@ -192,27 +192,27 @@ struct OleComponentNative_Impl {
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ),
             OUString( "Windows Enhanced Metafile" ),
-            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
             OUString( "Windows Metafile" ),
-            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
             OUString( "Bitmap" ),
-            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
             OUString( "image/png" ),
             OUString( "PNG" ),
-            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
             OUString( "GDIMetafile" ),
-            getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 
     void AddSupportedFormat( const FORMATETC& aFormatEtc );
@@ -283,7 +283,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
     sal_Bool bAnyIsReady = sal_False;
 
     // try to convert data from Medium format to specified Flavor format
-    if ( aFlavor.DataType == getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) )
+    if ( aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
     {
         // first the GDI-metafile must be generated
 
@@ -356,7 +356,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
             for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
                  if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
                   && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
-                  && aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
+                  && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
             {
                 bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf.get(), nBufSize, aFormat, aResult );
                 break;

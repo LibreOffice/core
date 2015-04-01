@@ -57,7 +57,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
         aVisualRepr.Flavor = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
             OUString( "Bitmap" ),
-            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
     else
     {
@@ -65,7 +65,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
         aVisualRepr.Flavor = datatransfer::DataFlavor(
             OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
             OUString( "Windows Metafile" ),
-            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 
     sal_Int32 nStreamLength = (sal_Int32)xSeekable->getLength();
@@ -358,7 +358,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
             datatransfer::DataFlavor aDataFlavor(
                     OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
                     OUString( "Windows Metafile" ),
-                    ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
             aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
             aVisualRepr.Flavor = aDataFlavor;

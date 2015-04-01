@@ -253,7 +253,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                     datatransfer::DataFlavor aFlavor(
                         OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
                         OUString( "Image WMF" ),
-                        getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) );
+                        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
                     aObjectInfo.Options.realloc( 2 );
                     aObjectInfo.Options[0].Name = "Icon";
