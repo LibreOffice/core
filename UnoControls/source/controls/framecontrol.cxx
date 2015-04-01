@@ -501,7 +501,7 @@ const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
     {
         Property( PROPERTYNAME_COMPONENTURL, PROPERTYHANDLE_COMPONENTURL, cppu::UnoType<OUString>::get(), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
         Property( PROPERTYNAME_FRAME, PROPERTYHANDLE_FRAME, cppu::UnoType<XFrame>::get(), PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
-        Property( PROPERTYNAME_LOADERARGUMENTS, PROPERTYHANDLE_LOADERARGUMENTS, ::getCppuType((const Sequence< PropertyValue >*)0), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
+        Property( PROPERTYNAME_LOADERARGUMENTS, PROPERTYHANDLE_LOADERARGUMENTS, cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
     };
 
     static const Sequence< Property > seqPropertys( pPropertys, PROPERTY_COUNT );

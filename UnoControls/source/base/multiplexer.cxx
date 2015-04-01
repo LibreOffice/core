@@ -35,7 +35,7 @@ namespace unocontrols{
 #define MULTIPLEX( INTERFACE, METHOD, EVENTTYP, EVENT )                                                                             \
                                                                                                                                     \
     /* First get all interfaces from container with right type.*/                                                                   \
-    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( ::getCppuType((const Reference< INTERFACE >*)0) );  \
+    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( cppu::UnoType<INTERFACE>::get() );  \
     /* Do the follow only, if elements in container exist.*/                                                                        \
     if( pContainer != NULL )                                                                                                        \
     {                                                                                                                               \
