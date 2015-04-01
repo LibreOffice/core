@@ -791,7 +791,7 @@ void SvtLoadOptions_Impl::ImplCommit()
     Sequence< OUString > aNames(1);
     aNames[0] = cUserDefinedSettings;
     Sequence< Any > aValues( 1 );
-    aValues[0].setValue(&bLoadUserDefinedSettings, ::getBooleanCppuType());
+    aValues[0].setValue(&bLoadUserDefinedSettings, cppu::UnoType<bool>::get());
     PutProperties( aNames, aValues );
 }
 

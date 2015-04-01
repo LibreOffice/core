@@ -101,7 +101,7 @@ void    SvtAppFilterOptions_Impl::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     pValues[0].setValue(&bLoadVBA, rType);
     pValues[1].setValue(&bSaveVBA, rType);
 
@@ -386,7 +386,7 @@ void SvtFilterOptions::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_uLong nFlag = lcl_GetFlag(nProp);

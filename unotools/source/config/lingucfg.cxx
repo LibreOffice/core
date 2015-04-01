@@ -672,7 +672,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
 
     bool bRet = false;
-    const uno::Type &rBOOL     = ::getBooleanCppuType();
+    const uno::Type &rBOOL     = cppu::UnoType<bool>::get();
     const uno::Type &rINT16    = cppu::UnoType<sal_Int16>::get();
     const uno::Type &rINT32    = cppu::UnoType<sal_Int32>::get();
 

@@ -298,7 +298,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     for( nSourceCounter=0; nSourceCounter<nSourceSize; ++nSourceCounter )
     {
         // If item a special localized one ... split it and insert his parts to output lists ...
-        if( lInValues[nSourceCounter].getValueType() == ::getCppuType( (const Sequence< PropertyValue >*)NULL ) )
+        if( lInValues[nSourceCounter].getValueType() == cppu::UnoType<Sequence<PropertyValue>>::get() )
         {
             lInValues[nSourceCounter] >>= lProperties;
             nPropertiesSize = lProperties.getLength();

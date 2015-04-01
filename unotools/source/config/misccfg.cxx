@@ -161,7 +161,7 @@ void SfxMiscCfg::ImplCommit()
     Sequence<Any> aValues(rNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
+    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < rNames.getLength(); nProp++)
     {
         switch(nProp)
