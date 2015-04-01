@@ -489,7 +489,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         if( append )
         {
             OUString value;
-            tc->convertTo( args[i].Value, getCppuType( &value) ) >>= value;
+            tc->convertTo( args[i].Value, cppu::UnoType<decltype(value)>::get() ) >>= value;
             char *v = strdup(OUStringToOString(value, enc).getStr());
             values.push_back ( v );
         }
@@ -529,7 +529,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         throw IllegalArgumentException( buf.makeStringAndClear() , *this, 0 );
     }
 
-    tc->convertTo( aArguments[1], getCppuType( &args ) ) >>= args;
+    tc->convertTo( aArguments[1], cppu::UnoType<decltype(args)>::get() ) >>= args;
 
     OString o;
     int nColon = url.indexOf( ':' );

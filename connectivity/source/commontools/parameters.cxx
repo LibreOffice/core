@@ -78,7 +78,7 @@ namespace dbtools
         m_xComponent        = _rxComponent;
         m_xAggregatedRowSet = _rxComponentAggregate;
         if ( m_xAggregatedRowSet.is() )
-            m_xAggregatedRowSet->queryAggregation( ::getCppuType( &m_xInnerParamUpdate ) ) >>= m_xInnerParamUpdate;
+            m_xAggregatedRowSet->queryAggregation( cppu::UnoType<decltype(m_xInnerParamUpdate)>::get() ) >>= m_xInnerParamUpdate;
         OSL_ENSURE( m_xComponent.get().is() && m_xInnerParamUpdate.is(), "ParameterManager::initialize: invalid arguments!" );
         if ( !m_xComponent.get().is() || !m_xInnerParamUpdate.is() )
             return;
@@ -508,7 +508,7 @@ namespace dbtools
             // an additional restriction (which we created ourself)
             // So we need to update all information about our inner parameter columns
             Reference< XPropertySet > xDirectRowSetProps;
-            m_xAggregatedRowSet->queryAggregation( ::getCppuType( &xDirectRowSetProps ) ) >>= xDirectRowSetProps;
+            m_xAggregatedRowSet->queryAggregation( cppu::UnoType<decltype(xDirectRowSetProps)>::get() ) >>= xDirectRowSetProps;
             OSL_VERIFY( initializeComposerByComponent( xDirectRowSetProps ) );
             collectInnerParameters( true );
         }

@@ -84,7 +84,7 @@ void Table::construct()
                          PROPERTY_ID_PRIVILEGES,
                          PropertyAttribute::READONLY,
                          &m_nPrivileges,
-                         ::getCppuType(&m_nPrivileges));
+                         cppu::UnoType<decltype(m_nPrivileges)>::get());
     }
 }
 //----- OTableHelper ---------------------------------------------------------

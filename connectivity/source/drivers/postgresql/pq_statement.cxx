@@ -125,7 +125,7 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
                         ::cppu::UnoType<OUString>::get() , 0 ),
                     Property(
                         OUString("EscapeProcessing"), 1,
-                        ::getBooleanCppuType() , 0 ),
+                        cppu::UnoType<bool>::get() , 0 ),
                     Property(
                         OUString("FetchDirection"), 2,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),

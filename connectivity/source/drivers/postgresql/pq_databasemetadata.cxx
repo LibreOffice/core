@@ -2455,7 +2455,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
                 result[R_TABLE_NAME] = makeAny(currentTable);
                 result[R_INDEX_NAME] = makeAny(currentIndexName);
                 result[R_NON_UNIQUE] =
-                    Any( &isNonUnique, getBooleanCppuType() );
+                    Any( &isNonUnique, cppu::UnoType<bool>::get() );
                 result[R_TYPE] = makeAny( indexType );
                 result[R_COLUMN_NAME] = makeAny( rowColumn->getString(2) );
                 sal_Int32 nPos = ((sal_Int32)pos+1); // MSVC++ nonsense

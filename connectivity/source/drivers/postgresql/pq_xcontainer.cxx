@@ -286,14 +286,14 @@ void Container::addRefreshListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.addListener( getCppuType(&l) , l );
+    rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeRefreshListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.removeListener( getCppuType(&l) , l );
+    rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::disposing()
@@ -439,14 +439,14 @@ void Container::addContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.addListener( getCppuType(&l) , l );
+    rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    rBHelper.removeListener( getCppuType(&l) , l );
+    rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 

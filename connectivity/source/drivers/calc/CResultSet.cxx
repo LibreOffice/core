@@ -40,7 +40,7 @@ OCalcResultSet::OCalcResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(true)
 {
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                cppu::UnoType<bool>::get());
 }
 
 OUString SAL_CALL OCalcResultSet::getImplementationName(  ) throw ( RuntimeException, std::exception)

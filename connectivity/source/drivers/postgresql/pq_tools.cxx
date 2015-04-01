@@ -1202,7 +1202,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_SEQUENCE:
-            if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+            if (_rValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
             {
                 _rxParameters->setBytes(_nColumnIndex, *static_cast<Sequence<sal_Int8> const *>(_rValue.getValue()));
             }

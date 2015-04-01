@@ -56,7 +56,7 @@ OMySQLColumn::OMySQLColumn( bool    _bCase)
 void OMySQLColumn::construct()
 {
     m_sAutoIncrement = "auto_increment";
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, cppu::UnoType<decltype(m_sAutoIncrement)>::get());
 }
 
 ::cppu::IPropertyArrayHelper* OMySQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const

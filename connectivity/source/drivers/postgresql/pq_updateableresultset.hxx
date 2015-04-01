@@ -101,9 +101,9 @@ protected:
         m_props[ BASERESULTSET_FETCH_DIRECTION ] = com::sun::star::uno::makeAny(
             com::sun::star::sdbc::FetchDirection::UNKNOWN);
         // No escape processing for now
-        m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = com::sun::star::uno::Any( &b, getBooleanCppuType() );
+        m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = com::sun::star::uno::Any( &b, cppu::UnoType<bool>::get() );
         // Bookmarks not implemented for now
-        m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = com::sun::star::uno::Any( &b, getBooleanCppuType() );
+        m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = com::sun::star::uno::Any( &b, cppu::UnoType<bool>::get() );
         m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = com::sun::star::uno::makeAny(
             com::sun::star::sdbc::ResultSetConcurrency::UPDATABLE );
         m_props[ BASERESULTSET_RESULT_SET_TYPE ] = com::sun::star::uno::makeAny(

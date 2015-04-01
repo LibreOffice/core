@@ -483,7 +483,7 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),
-        PROPERTY_ID_ESCAPEPROCESSING, ::getBooleanCppuType(), 0);
+        PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
@@ -499,7 +499,7 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_USEBOOKMARKS),
-        PROPERTY_ID_USEBOOKMARKS, ::getBooleanCppuType(), 0);
+        PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }

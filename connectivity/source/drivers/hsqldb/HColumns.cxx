@@ -56,7 +56,7 @@ OHSQLColumn::OHSQLColumn(   bool    _bCase)
 void OHSQLColumn::construct()
 {
     m_sAutoIncrement = "IDENTITY";
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, cppu::UnoType<decltype(m_sAutoIncrement)>::get());
 }
 
 ::cppu::IPropertyArrayHelper* OHSQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const

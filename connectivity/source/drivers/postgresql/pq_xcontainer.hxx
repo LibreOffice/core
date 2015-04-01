@@ -81,8 +81,8 @@ public:
 
     virtual com::sun::star::uno::Type getType() const SAL_OVERRIDE
     {
-        return getCppuType(
-            (com::sun::star::uno::Reference< com::sun::star::util::XRefreshListener > *)0 );
+        return cppu::UnoType<
+            com::sun::star::util::XRefreshListener>::get();
     }
 };
 

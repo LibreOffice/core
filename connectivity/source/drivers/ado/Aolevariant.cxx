@@ -725,13 +725,13 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
         case VT_BSTR:
         {
             OUString b(reinterpret_cast<const sal_Unicode*>(bstrVal));
-            aValue.setValue( &b, getCppuType( &b));
+            aValue.setValue( &b, cppu::UnoType<decltype(b)>::get());
             break;
         }
         case VT_BOOL:
         {
             sal_Bool b= boolVal == VARIANT_TRUE;
-            aValue.setValue( &b, getCppuType( &b));
+            aValue.setValue( &b, cppu::UnoType<decltype(b)>::get());
             break;
         }
         case VT_I1:

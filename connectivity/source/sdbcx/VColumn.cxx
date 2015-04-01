@@ -157,19 +157,19 @@ void OColumn::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),        PROPERTY_ID_TYPENAME,           nAttrib, &m_TypeName,        ::getCppuType(&m_TypeName));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,        nAttrib, &m_Description,     ::getCppuType(&m_Description));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),    PROPERTY_ID_DEFAULTVALUE,       nAttrib, &m_DefaultValue,    ::getCppuType(&m_DefaultValue));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),       PROPERTY_ID_PRECISION,          nAttrib, &m_Precision,       ::getCppuType(&m_Precision));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,               nAttrib, &m_Type,            ::getCppuType(&m_Type));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),           PROPERTY_ID_SCALE,              nAttrib, &m_Scale,           ::getCppuType(&m_Scale));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),      PROPERTY_ID_ISNULLABLE,         nAttrib, &m_IsNullable,      ::getCppuType(&m_IsNullable));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT), PROPERTY_ID_ISAUTOINCREMENT,    nAttrib, &m_IsAutoIncrement, ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISROWVERSION),    PROPERTY_ID_ISROWVERSION,       nAttrib, &m_IsRowVersion,    ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY),      PROPERTY_ID_ISCURRENCY,         nAttrib, &m_IsCurrency,      ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,        nAttrib, &m_CatalogName,     ::getCppuType(&m_CatalogName));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME,         nAttrib, &m_SchemaName,      ::getCppuType(&m_SchemaName));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),       PROPERTY_ID_TABLENAME,          nAttrib, &m_TableName,       ::getCppuType(&m_TableName));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),        PROPERTY_ID_TYPENAME,           nAttrib, &m_TypeName,        cppu::UnoType<decltype(m_TypeName)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,        nAttrib, &m_Description,     cppu::UnoType<decltype(m_Description)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),    PROPERTY_ID_DEFAULTVALUE,       nAttrib, &m_DefaultValue,    cppu::UnoType<decltype(m_DefaultValue)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),       PROPERTY_ID_PRECISION,          nAttrib, &m_Precision,       cppu::UnoType<decltype(m_Precision)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,               nAttrib, &m_Type,            cppu::UnoType<decltype(m_Type)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),           PROPERTY_ID_SCALE,              nAttrib, &m_Scale,           cppu::UnoType<decltype(m_Scale)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),      PROPERTY_ID_ISNULLABLE,         nAttrib, &m_IsNullable,      cppu::UnoType<decltype(m_IsNullable)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT), PROPERTY_ID_ISAUTOINCREMENT,    nAttrib, &m_IsAutoIncrement, cppu::UnoType<bool>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISROWVERSION),    PROPERTY_ID_ISROWVERSION,       nAttrib, &m_IsRowVersion,    cppu::UnoType<bool>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY),      PROPERTY_ID_ISCURRENCY,         nAttrib, &m_IsCurrency,      cppu::UnoType<bool>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,        nAttrib, &m_CatalogName,     cppu::UnoType<decltype(m_CatalogName)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME,         nAttrib, &m_SchemaName,      cppu::UnoType<decltype(m_SchemaName)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),       PROPERTY_ID_TABLENAME,          nAttrib, &m_TableName,       cppu::UnoType<decltype(m_TableName)>::get());
 }
 
 void OColumn::disposing(void)

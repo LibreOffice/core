@@ -96,7 +96,7 @@ void OHSQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
-        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
+        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  cppu::UnoType<decltype(m_nPrivileges)>::get());
 }
 
 ::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const

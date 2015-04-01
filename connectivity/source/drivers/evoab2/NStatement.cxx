@@ -74,7 +74,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
         id, \
         0, \
         &member, \
-        ::getCppuType( &member ) \
+        cppu::UnoType<decltype(member)>::get() \
     );
 
     REGISTER_PROP( PROPERTY_ID_CURSORNAME, m_aCursorName );

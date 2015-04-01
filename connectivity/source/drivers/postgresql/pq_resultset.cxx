@@ -99,9 +99,9 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
     m_props[ BASERESULTSET_FETCH_DIRECTION ] = makeAny(
         com::sun::star::sdbc::FetchDirection::UNKNOWN);
     // No escape processing for now
-    m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = Any( &b, getBooleanCppuType() );
+    m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = Any( &b, cppu::UnoType<bool>::get() );
     // Bookmarks not implemented for now
-    m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = Any( &b, getBooleanCppuType() );
+    m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = Any( &b, cppu::UnoType<bool>::get() );
     m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = makeAny(
         com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY );
     m_props[ BASERESULTSET_RESULT_SET_TYPE ] = makeAny(

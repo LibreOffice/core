@@ -159,11 +159,11 @@ void Indexes::refresh()
             sal_Bool isClusterd = row->getBoolean( C_IS_CLUSTERED );
             Reference< com::sun::star::beans::XPropertySet > prop = pIndex;
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_UNIQUE, Any( &isUnique, getBooleanCppuType() ) );
+                st.IS_UNIQUE, Any( &isUnique, cppu::UnoType<bool>::get() ) );
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_PRIMARY_KEY_INDEX, Any( &isPrimary, getBooleanCppuType() ) );
+                st.IS_PRIMARY_KEY_INDEX, Any( &isPrimary, cppu::UnoType<bool>::get() ) );
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_CLUSTERED, Any( &isClusterd, getBooleanCppuType() ) );
+                st.IS_CLUSTERED, Any( &isClusterd, cppu::UnoType<bool>::get() ) );
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.NAME, makeAny( currentIndexName ) );
 

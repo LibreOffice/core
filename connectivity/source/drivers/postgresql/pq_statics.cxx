@@ -199,8 +199,8 @@ Statics & getStatics()
 
             Type tString = cppu::UnoType<OUString>::get();
             Type tInt = cppu::UnoType<sal_Int32>::get();
-            Type tBool = getBooleanCppuType();
-            Type tStringSequence = getCppuType( (com::sun::star::uno::Sequence< OUString > *) 0);
+            Type tBool = cppu::UnoType<bool>::get();
+            Type tStringSequence = cppu::UnoType<com::sun::star::uno::Sequence< OUString >>::get();
 
             // Table props set
             ImplementationStatics &ist = statics.refl.table;

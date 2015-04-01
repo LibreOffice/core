@@ -635,7 +635,7 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
             id, \
             PropertyAttribute::READONLY, \
             &member, \
-            ::getCppuType( &member ) \
+            cppu::UnoType<decltype(member)>::get() \
         );
 
     REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );

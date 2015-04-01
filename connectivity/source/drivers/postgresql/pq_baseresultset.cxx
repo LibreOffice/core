@@ -107,7 +107,7 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                         ::cppu::UnoType<OUString>::get() , 0 ),
                     Property(
                         OUString("EscapeProcessing"), 1,
-                        ::getBooleanCppuType() , 0 ),
+                        cppu::UnoType<bool>::get() , 0 ),
                     Property(
                         OUString("FetchDirection"), 2,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
@@ -116,7 +116,7 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
                         OUString("IsBookmarkable"), 4,
-                        ::getBooleanCppuType() , 0 ),
+                        cppu::UnoType<bool>::get() , 0 ),
                     Property(
                         OUString("ResultSetConcurrency"), 5,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
@@ -430,7 +430,7 @@ sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     sal_Int8 b = 0;
-    convertTo( getValue( columnIndex ), getCppuType( &b )) >>= b;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(b)>::get()) >>= b;
     return b;
 }
 
@@ -442,7 +442,7 @@ sal_Int16 BaseResultSet::getShort( sal_Int32 columnIndex )
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     sal_Int16 i = 0;
-    convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
 }
 
@@ -453,7 +453,7 @@ OUString BaseResultSet::getString( sal_Int32 columnIndex ) throw (SQLException, 
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     OUString ret;
-    convertTo( getValue(  columnIndex ), getCppuType( &ret ) ) >>= ret;
+    convertTo( getValue(  columnIndex ), cppu::UnoType<decltype(ret)>::get() ) >>= ret;
 //     printf( "BaseResultSet::getString() %s\n" , OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ).getStr() );
     return ret;
 }
@@ -466,7 +466,7 @@ sal_Int32 BaseResultSet::getInt( sal_Int32 columnIndex )
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     sal_Int32 i = 0;
-    convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
 }
 
@@ -478,7 +478,7 @@ sal_Int64 BaseResultSet::getLong( sal_Int32 columnIndex )
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     sal_Int64 i = 0;
-    convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(i)>::get()) >>= i;
     return i;
 }
 
@@ -490,7 +490,7 @@ float BaseResultSet::getFloat( sal_Int32 columnIndex )
     checkColumnIndex( columnIndex );
     checkRowIndex( true /* must be on row */ );
     float f = 0.;
-    convertTo( getValue( columnIndex ), getCppuType( &f )) >>= f;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(f)>::get()) >>= f;
     return f;
 }
 
@@ -501,7 +501,7 @@ double BaseResultSet::getDouble( sal_Int32 columnIndex )
     checkClosed();
     checkColumnIndex( columnIndex );
     double d = 0.;
-    convertTo( getValue( columnIndex ), getCppuType( &d )) >>= d;
+    convertTo( getValue( columnIndex ), cppu::UnoType<decltype(d)>::get()) >>= d;
     return d;
 }
 

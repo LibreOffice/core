@@ -170,12 +170,12 @@ OParseColumn::~OParseColumn()
 
 void OParseColumn::construct()
 {
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION),                PROPERTY_ID_FUNCTION,               0,  &m_bFunction,               ::getCppuType(&m_bFunction));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AGGREGATEFUNCTION),       PROPERTY_ID_AGGREGATEFUNCTION,      0,  &m_bAggregateFunction,      ::getCppuType(&m_bAggregateFunction));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME),                PROPERTY_ID_REALNAME,               0,  &m_aRealName,               ::getCppuType(&m_aRealName));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DBASEPRECISIONCHANGED),   PROPERTY_ID_DBASEPRECISIONCHANGED,  0,  &m_bDbasePrecisionChanged,  ::getCppuType(&m_bDbasePrecisionChanged));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSEARCHABLE),            PROPERTY_ID_ISSEARCHABLE,           0,  &m_bIsSearchable,           ::getCppuType(&m_bIsSearchable));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL),                   PROPERTY_ID_LABEL,                  0,  &m_sLabel,                  ::getCppuType(&m_sLabel));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION),                PROPERTY_ID_FUNCTION,               0,  &m_bFunction,               cppu::UnoType<decltype(m_bFunction)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AGGREGATEFUNCTION),       PROPERTY_ID_AGGREGATEFUNCTION,      0,  &m_bAggregateFunction,      cppu::UnoType<decltype(m_bAggregateFunction)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME),                PROPERTY_ID_REALNAME,               0,  &m_aRealName,               cppu::UnoType<decltype(m_aRealName)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DBASEPRECISIONCHANGED),   PROPERTY_ID_DBASEPRECISIONCHANGED,  0,  &m_bDbasePrecisionChanged,  cppu::UnoType<decltype(m_bDbasePrecisionChanged)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSEARCHABLE),            PROPERTY_ID_ISSEARCHABLE,           0,  &m_bIsSearchable,           cppu::UnoType<decltype(m_bIsSearchable)>::get());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL),                   PROPERTY_ID_LABEL,                  0,  &m_sLabel,                  cppu::UnoType<decltype(m_sLabel)>::get());
 }
 
 ::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper() const
@@ -247,7 +247,7 @@ OOrderColumn::~OOrderColumn()
 void OOrderColumn::construct()
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,
-        PropertyAttribute::READONLY,  const_cast< bool* >( &m_bAscending ),    ::getCppuType( &m_bAscending ) );
+        PropertyAttribute::READONLY,  const_cast< bool* >( &m_bAscending ),    cppu::UnoType<decltype(m_bAscending)>::get() );
 }
 
 ::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper() const

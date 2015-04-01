@@ -83,7 +83,7 @@ namespace pq_sdbc_driver
 static Any isCurrency( const OUString & typeName )
 {
     sal_Bool b = typeName.equalsIgnoreAsciiCase("money");
-    return Any( &b, getBooleanCppuType() );
+    return Any( &b, cppu::UnoType<bool>::get() );
 }
 
 // static sal_Bool isAutoIncrement8( const OUString & typeName )
@@ -108,7 +108,7 @@ static Any isAutoIncrement( const OUString & defaultValue )
 //     {
 //         b = b || typeName.equalsIgnoreAsciiCaseAscii( serials[i] );
 //     }
-    return Any ( &ret, getBooleanCppuType() );
+    return Any ( &ret, cppu::UnoType<bool>::get() );
 }
 
 Columns::Columns(
