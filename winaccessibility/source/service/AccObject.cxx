@@ -440,7 +440,7 @@ void  AccObject::SetValue( Any pAny )
         pAny >>= strValue ;
 
     }
-    else if(pAny.getValueType() == getCppuType( (Sequence< ::rtl::OUString > *)0 ) )
+    else if(pAny.getValueType() == cppu::UnoType<Sequence< ::rtl::OUString >>::get())
     {
         Sequence< ::rtl::OUString > val;
         if (pAny >>= val)

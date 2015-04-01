@@ -417,7 +417,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         }
 
         // Assign to Any object.
-        rAny.setValue(&seqTabStop, getCppuType((Sequence< ::com::sun::star::style::TabStop >*)0));
+        rAny.setValue(&seqTabStop, cppu::UnoType<Sequence< ::com::sun::star::style::TabStop >>::get());
     }
     else if(ouName.equals(L"ParaLineSpacing") )
     {

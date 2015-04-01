@@ -2805,7 +2805,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         }
     case TypeClass_SEQUENCE:
         {
-            if(pAny.getValueType() == getCppuType( (Sequence< ::rtl::OUString > *)0 ) )
+            if(pAny.getValueType() == cppu::UnoType<Sequence< ::rtl::OUString >>::get())
             {
                 Sequence < ::rtl::OUString > val;
                 pAny >>= val;
@@ -2820,7 +2820,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 }
                 wcscpy(pChar, pString.getStr());
             }
-            else if (pAny.getValueType() == getCppuType( (Sequence< ::com::sun::star::style::TabStop >* )0 ) )
+            else if (pAny.getValueType() == cppu::UnoType<Sequence< ::com::sun::star::style::TabStop >>::get())
             {
                 Sequence < ::com::sun::star::style::TabStop > val;
                 pAny >>= val;
