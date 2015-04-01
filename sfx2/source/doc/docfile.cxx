@@ -2686,9 +2686,7 @@ void SfxMedium::SetIsRemote_Impl()
         case INET_PROT_FTP:
         case INET_PROT_HTTP:
         case INET_PROT_HTTPS:
-        case INET_PROT_POP3:
         case INET_PROT_NEWS:
-        case INET_PROT_IMAP:
         case INET_PROT_VIM:
             pImp->m_bRemote = true;
         break;

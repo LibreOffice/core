@@ -192,7 +192,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
             INetProtocol aProtocol = aUrl.GetProtocol();
             static const INetProtocol s_aQuickHelpSupported[] =
                 {   INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
-                    INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
+                    INET_PROT_HTTPS, INET_PROT_JAVASCRIPT,
                     INET_PROT_VIM, INET_PROT_LDAP
                 };
             for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)

@@ -80,8 +80,6 @@ enum INetProtocol
     INET_PROT_SLOT = 10,
     INET_PROT_MACRO = 11,
     INET_PROT_JAVASCRIPT = 12,
-    INET_PROT_IMAP = 13,
-    INET_PROT_POP3 = 14,
     INET_PROT_DATA = 15,
     INET_PROT_CID = 16,
     INET_PROT_OUT = 17,
@@ -869,7 +867,6 @@ public:
     enum Part
     {
         PART_USER_PASSWORD          = 0x00001,
-        PART_IMAP_ACHAR             = 0x00002,
         PART_VIM                    = 0x00004,
         PART_FPATH                  = 0x00008,
         PART_AUTHORITY              = 0x00010,
