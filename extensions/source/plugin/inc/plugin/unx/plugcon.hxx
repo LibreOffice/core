@@ -136,7 +136,7 @@ protected:
     std::vector<NPStream*>              m_aNPWrapStreams;
     std::vector<ConnectorInstance*>     m_aInstances;
 
-    sal_uLong   FillBuffer( char*&, const char*, sal_uLong, va_list );
+    static sal_uLong   FillBuffer( char*&, const char*, sal_uLong, va_list );
 public:
     PluginConnector( int nSocket );
     virtual ~PluginConnector();
@@ -155,7 +155,7 @@ public:
 
     std::vector<NPStream*>& getStreamList() { return m_aNPWrapStreams; }
 
-    NPError GetNPError( MediatorMessage* pMes )
+    static NPError GetNPError( MediatorMessage* pMes )
     {
         NPError* pErr = static_cast<NPError*>(pMes->GetBytes());
         NPError aErr = *pErr;
