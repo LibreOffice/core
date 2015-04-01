@@ -45,11 +45,7 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
         args.push_back(aValue);
     }
 
-    if (rExtraArgs.getLength() > 0)
-    {
-        for (int i = 0; i < rExtraArgs.getLength(); i++)
-            args.push_back(rExtraArgs[i]);
-    }
+    args.insert(args.end(), rExtraArgs.begin(), rExtraArgs.end());
 
     uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, comphelper::containerToSequence(args));
     OUString sMessage = "loading failed: " + rURL;
