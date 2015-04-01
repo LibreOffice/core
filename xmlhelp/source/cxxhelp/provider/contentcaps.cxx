@@ -56,28 +56,28 @@ uno::Sequence< beans::Property > Content::getProperties(
         beans::Property(
             "IsReadOnly",
             -1,
-            getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
             "IsErrorDocument",
             -1,
-            getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
             "IsDocument",
             -1,
-            getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
             "IsFolder",
             -1,
-            getCppuBooleanType(),
+            cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
@@ -108,35 +108,35 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 "KeywordList",
                 -1,
-                getCppuType( static_cast< const uno::Sequence< OUString >* >( 0 ) ),
+                cppu::UnoType<uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
                 "KeywordRef",
                 -1,
-                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
                 "KeywordTitleForRef",
                 -1,
-                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
                 "KeywordAnchorForRef",
                 -1,
-                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
                 "SearchScopes",
                 -1,
-                getCppuType( static_cast< const uno::Sequence< OUString >* >( 0 ) ),
+                cppu::UnoType<uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
     }
 
@@ -167,22 +167,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ucb::CommandInfo(
             "getCommandInfo",
             -1,
-            getCppuVoidType()
+            cppu::UnoType<cppu::UnoVoidType>::get()
         ),
         ucb::CommandInfo(
             "getPropertySetInfo",
             -1,
-            getCppuVoidType()
+            cppu::UnoType<cppu::UnoVoidType>::get()
         ),
         ucb::CommandInfo(
             "getPropertyValues",
             -1,
-            getCppuType( static_cast< uno::Sequence< beans::Property > * >( 0 ) )
+            cppu::UnoType<uno::Sequence< beans::Property >>::get()
         ),
         ucb::CommandInfo(
             "setPropertyValues",
             -1,
-            getCppuType( static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
+            cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
         ),
         ucb::CommandInfo(
             "open",

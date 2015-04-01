@@ -79,7 +79,7 @@ namespace treeview {
         getElementType(  )
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         {
-            return getCppuVoidType();
+            return cppu::UnoType<cppu::UnoVoidType>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
