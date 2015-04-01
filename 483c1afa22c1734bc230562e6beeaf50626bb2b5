@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_b3eb58b0",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-01T09:42:52Z",
+      "side": 1,
+      "message": "I removed the default value for pIndexOrder too avoid confusion/compiler errors.\nI don\u0027t use default values for bAllowText on purpose: I think it make the calls more clear.",
+      "revId": "483c1afa22c1734bc230562e6beeaf50626bb2b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_73ce205c",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-01T09:42:52Z",
+      "side": 1,
+      "message": "AFAICS functionally identical, but easier to read.",
+      "revId": "483c1afa22c1734bc230562e6beeaf50626bb2b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_53d1a4fa",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3747,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-01T09:42:52Z",
+      "side": 1,
+      "message": "The extra code is entered only when the pMat element is not a value, so for value-elements there is no performance loss.\nFor empty elements there is some performance loss, but only for checking bAllowText.",
+      "revId": "483c1afa22c1734bc230562e6beeaf50626bb2b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
