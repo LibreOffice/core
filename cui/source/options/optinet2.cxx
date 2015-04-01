@@ -942,12 +942,15 @@ struct SvxEMailTabPage_Impl
         bROProgram(
             officecfg::Office::Common::ExternalMailer::Program::isReadOnly()),
         bHideContent(
-            officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get())
+            officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get()),
+        bROHideContent(
+            officecfg::Office::Security::HiddenContent::RemoveHiddenContent::isReadOnly())
     {}
 
     OUString sProgram;
     bool bROProgram;
     bool bHideContent;
+    bool bROHideContent;
 };
 
 SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
@@ -958,6 +961,8 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pMailerURLFI, "lockemail");
     get(m_pMailerURLED, "url");
     get(m_pMailerURLPB, "browse");
+    get(m_pSuppressHiddenContainer, "suppressHiddenCont");
+    get(m_pSuppressHiddenFI, "lockSuppressHidden");
     get(m_pSuppressHidden, "suppressHidden");
     m_sDefaultFilterName = get<FixedText>("browsetitle")->GetText();
     m_pMailerURLPB->SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
@@ -989,7 +994,8 @@ bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::ExternalMailer::Program::set(
             pImpl->sProgram, batch);
     }
-    if (pImpl->bHideContent != m_pSuppressHidden->IsChecked())
+    if (!pImpl->bROHideContent
+        && pImpl->bHideContent != m_pSuppressHidden->IsChecked())
     {
         pImpl->bHideContent = m_pSuppressHidden->IsChecked();
         officecfg::Office::Security::HiddenContent::RemoveHiddenContent::set(
@@ -1014,7 +1020,12 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
     m_pMailContainer->Enable(!pImpl->bROProgram);
 
+    if (pImpl->bROHideContent)
+        m_pSuppressHiddenFI->Show();
+
     m_pSuppressHidden->Check(pImpl->bHideContent);
+
+    m_pSuppressHiddenContainer->Enable(!pImpl->bROHideContent);
 }
 
 /* -------------------------------------------------------------------------*/
