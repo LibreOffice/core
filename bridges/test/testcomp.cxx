@@ -122,20 +122,20 @@ public:
     {
         // execution time remains appr. constant any time
         Any aRet;
-        if (aType == ::getCppuType( (const Reference< XInterface > *)0 ))
+        if (aType == cppu::UnoType<XInterface>::get())
         {
             void * p = (XInterface *)(XPerformanceTest *)this;
-            aRet.setValue( &p, ::getCppuType( (const Reference< XInterface > *)0 ) );
+            aRet.setValue( &p, cppu::UnoType<XInterface>::get() );
         }
-        if (aType == ::getCppuType( (const Reference< XPerformanceTest > *)0 ))
+        if (aType == cppu::UnoType<XPerformanceTest>::get())
         {
             void * p = (XPerformanceTest *)this;
-            aRet.setValue( &p, ::getCppuType( (const Reference< XPerformanceTest > *)0 ) );
+            aRet.setValue( &p, cppu::UnoType<XPerformanceTest>::get() );
         }
         if (! aRet.hasValue())
         {
             void * p = (XPerformanceTest *)this;
-            Any aDummy( &p, ::getCppuType( (const Reference< XPerformanceTest > *)0 ) );
+            Any aDummy( &p, cppu::UnoType<XPerformanceTest>::get() );
         }
         return aRet;
     }
@@ -615,8 +615,7 @@ void testAllTypes( const Reference < XCallMe > & rRCallMe )
 
 void testRemote( const Reference< XInterface > &rRemote )
 {
-    char a;
-      getCppuType( (sal_Int8*)&a );
+    cppu::UnoType<sal_Int8>::get();
 
     Reference< XTestFactory > rRFact( rRemote , UNO_QUERY );
     if( ! rRFact.is() )

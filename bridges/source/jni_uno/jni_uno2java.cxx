@@ -794,7 +794,7 @@ void SAL_CALL UNO_proxy_dispatch(
             buf.makeStringAndClear(),
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
-        ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
+        ::com::sun::star::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
         SAL_INFO("bridges", exc.Message);
     }
@@ -805,7 +805,7 @@ void SAL_CALL UNO_proxy_dispatch(
             "[jni_uno bridge error] attaching current thread to java failed!",
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
-        ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
+        ::com::sun::star::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
         SAL_WARN("bridges", exc.Message);
     }

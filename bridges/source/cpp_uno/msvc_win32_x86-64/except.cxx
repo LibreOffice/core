@@ -937,7 +937,7 @@ int mscx_filterCppException(
                     RuntimeException exc( buf.makeStringAndClear() );
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
-                        ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
+                        cppu::UnoType<decltype(exc)>::get().getTypeLibType(), pCpp2Uno );
                 }
                 else
                 {
@@ -957,7 +957,7 @@ int mscx_filterCppException(
     RuntimeException exc( "[mscx_uno bridge error] unexpected "
                   "C++ exception occurred!" );
     uno_type_any_constructAndConvert(
-        pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
+        pUnoExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), pCpp2Uno );
     return EXCEPTION_EXECUTE_HANDLER;
 }
 

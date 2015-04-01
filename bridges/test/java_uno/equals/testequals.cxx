@@ -130,16 +130,9 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     throw (css::uno::Exception)
 {
     // Make types known:
-    getCppuType(
-        static_cast<
-        css::uno::Reference< test::java_uno::equals::XBase > const * >(0));
-    getCppuType(
-        static_cast<
-        css::uno::Reference< test::java_uno::equals::XDerived > const * >(0));
-    getCppuType(
-        static_cast<
-        css::uno::Reference< test::java_uno::equals::XTestInterface > const * >(
-            0));
+    cppu::UnoType<test::java_uno::equals::XBase>::get();
+    cppu::UnoType<test::java_uno::equals::XDerived>::get();
+    cppu::UnoType<test::java_uno::equals::XTestInterface>::get();
 
     return static_cast< cppu::OWeakObject * >(new Service(rContext));
 }

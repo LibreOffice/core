@@ -485,13 +485,11 @@ JNI_info::JNI_info(
       m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
             css::uno::TypeDescription(
-                ::getCppuType(
-                    (css::uno::Reference< css::uno::XInterface > const *)0 ) )
+                cppu::UnoType<css::uno::XInterface>::get())
             .get())->ppMembers[ 0 ] ) ),
-      m_Exception_type( ::getCppuType( (css::uno::Exception const *)0 ) ),
-      m_RuntimeException_type(
-          ::getCppuType( (css::uno::RuntimeException const *)0 ) ),
-      m_void_type( ::getCppuVoidType() ),
+      m_Exception_type(cppu::UnoType<css::uno::Exception>::get()),
+      m_RuntimeException_type(cppu::UnoType<css::uno::RuntimeException>::get()),
+      m_void_type(cppu::UnoType<cppu::UnoVoidType>::get()),
       m_XInterface_type_info( 0 )
 {
     JNI_context jni( this, jni_env, class_loader ); // !no proper jni_info!
@@ -864,8 +862,7 @@ JNI_info::JNI_info(
     try
     {
         css::uno::TypeDescription XInterface_td(
-            ::getCppuType(
-                (css::uno::Reference< css::uno::XInterface > const *)0 ) );
+            cppu::UnoType<css::uno::XInterface>::get());
         // coverity [ctor_dtor_leak]
         m_XInterface_type_info =
             new JNI_interface_type_info( jni, XInterface_td.get() );

@@ -412,7 +412,7 @@ void unoInterfaceProxyDispatch(
             {
                 RuntimeException aExc( "Too many parameters!" );
 
-                Type const & rExcType = ::getCppuType( &aExc );
+                Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
                 ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
             }
         }
@@ -422,7 +422,7 @@ void unoInterfaceProxyDispatch(
     {
         RuntimeException aExc( "Illegal member type description!" );
 
-        Type const & rExcType = ::getCppuType( &aExc );
+        Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // Binary identical null reference (whatever that comment means...)
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
     }

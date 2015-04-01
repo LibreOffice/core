@@ -260,7 +260,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     if (! header)
     {
         RuntimeException aRE( "no exception header!" );
-        Type const & rType = ::getCppuType( &aRE );
+        Type const & rType = cppu::UnoType<decltype(aRE)>::get();
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
         SAL_WARN("bridges", aRE.Message);
         return;
@@ -276,7 +276,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     if (0 == pExcTypeDescr)
     {
         RuntimeException aRE( OUString("exception type not found: ") + unoName );
-        Type const & rType = ::getCppuType( &aRE );
+        Type const & rType = cppu::UnoType<decltype(aRE)>::get();
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
         SAL_WARN("bridges", aRE.Message);
     }

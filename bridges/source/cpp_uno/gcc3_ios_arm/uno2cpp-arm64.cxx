@@ -542,7 +542,7 @@ void unoInterfaceProxyDispatch(
             OUString("illegal member type description!"),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
-        Type const & rExcType = ::getCppuType( &aExc );
+        Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
     }

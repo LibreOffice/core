@@ -56,8 +56,8 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_cr
     SAL_THROW_EXTERN_C()
 {
     // publish some idl types
-    ::getCppuType( (Reference< XTransport > const *)0 );
-    ::getCppuType( (Reference< ::test::java_uno::anytest::DerivedInterface > const *)0 );
+    cppu::UnoType< XTransport >::get();
+    cppu::UnoType<test::java_uno::anytest::DerivedInterface>::get();
 
     Reference< XTransport > xRet( new Transport() );
 
@@ -87,7 +87,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_cr
     // map interface
     Mapping mapping( cpp_env.get(), java_env.get() );
     OSL_ASSERT( mapping.is() );
-    jobject jo_global = (jobject)mapping.mapInterface( xRet.get(), ::getCppuType( &xRet ) );
+    jobject jo_global = (jobject)mapping.mapInterface( xRet.get(), cppu::UnoType<decltype(xRet)>::get() );
     OSL_ASSERT( 0 != jo_global );
 
     // return
