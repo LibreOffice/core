@@ -1953,7 +1953,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
     {
         if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 TransferableObjectDescriptor aDesc;
 
@@ -1982,7 +1982,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 try
                 {
@@ -2007,7 +2007,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
 
                 std::shared_ptr<GDIMetaFile> xMetaFile =
@@ -2028,7 +2028,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
@@ -2048,7 +2048,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
@@ -2083,7 +2083,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
@@ -2123,7 +2123,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
@@ -2147,7 +2147,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "image/png" )
         {
-            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
@@ -2192,41 +2192,41 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
     aFlavorSeq[0].MimeType =
         "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
     aFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
-    aFlavorSeq[0].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[0].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[1].MimeType =
         "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"";
     aFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
-    aFlavorSeq[1].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[1].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[2].MimeType =
         "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ;
     aFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
-    aFlavorSeq[2].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[2].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[3].MimeType =
         "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
     aFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
-    aFlavorSeq[3].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[3].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[4].MimeType =
         "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
     aFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
-    aFlavorSeq[4].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[4].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[5].MimeType =
         "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
     aFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
-    aFlavorSeq[5].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[5].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[6].MimeType =
         "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
     aFlavorSeq[6].HumanPresentableName = "Bitmap";
-    aFlavorSeq[6].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[6].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aFlavorSeq[7].MimeType = "image/png";
     aFlavorSeq[7].HumanPresentableName = "PNG";
-    aFlavorSeq[7].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    aFlavorSeq[7].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     if ( nSuppFlavors == 10 )
     {
@@ -2256,17 +2256,17 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
 
     if ( aFlavor.MimeType == "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
@@ -2274,7 +2274,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
@@ -2282,22 +2282,22 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
     else if ( aFlavor.MimeType == "image/png" )
     {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return sal_True;
     }
 
@@ -3701,7 +3701,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
     datatransfer::DataFlavor aDataFlavor(
             OUString("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
             OUString("GDIMetaFile"),
-            ::getCppuType( (const Sequence< sal_Int8 >*) NULL ) );
+            cppu::UnoType<Sequence< sal_Int8 >>::get() );
 
     embed::VisualRepresentation aVisualRepresentation;
     aVisualRepresentation.Data = getTransferData( aDataFlavor );

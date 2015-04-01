@@ -111,7 +111,7 @@ throw( RuntimeException, std::exception )
         m_eState = SfxItemState::DEFAULT;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
-        if ( pType == ::getBooleanCppuType() )
+        if ( pType == cppu::UnoType<bool>::get() )
         {
             bool bTemp = false;
             rEvent.State >>= bTemp ;

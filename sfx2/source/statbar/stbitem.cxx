@@ -257,12 +257,12 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 eState = SfxItemState::DEFAULT;
                 uno::Type pType = rEvent.State.getValueType();
 
-                if ( pType == ::getVoidCppuType() )
+                if ( pType == cppu::UnoType<cppu::UnoVoidType>::get() )
                 {
                     pItem = new SfxVoidItem( nSlotID );
                     eState = SfxItemState::UNKNOWN;
                 }
-                else if ( pType == ::getBooleanCppuType() )
+                else if ( pType == cppu::UnoType<bool>::get() )
                 {
                     bool bTemp = false;
                     rEvent.State >>= bTemp ;

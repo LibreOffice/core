@@ -163,7 +163,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno
 
 uno::Type SAL_CALL SfxEvents_Impl::getElementType() throw ( uno::RuntimeException, std::exception )
 {
-    uno::Type aElementType = ::getCppuType( (const uno::Sequence < beans::PropertyValue > *)0 );
+    uno::Type aElementType = cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get();
     return aElementType;
 }
 

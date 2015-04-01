@@ -96,15 +96,15 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
             bool b = true;
             uno::Sequence <beans::PropertyValue> aArgs( 4 );
             aArgs[0].Name = "Preview";
-            aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
+            aArgs[0].Value.setValue( &b, cppu::UnoType<bool>::get() );
             aArgs[1].Name = "ReadOnly";
-            aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
+            aArgs[1].Value.setValue( &b, cppu::UnoType<bool>::get() );
             aArgs[2].Name = "AsTemplate";    // prevents getting an empty URL with getURL()!
             aArgs[3].Name = "InteractionHandler";
             aArgs[3].Value <<= xInteractionHandler;
 
             b = false;
-            aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
+            aArgs[2].Value.setValue( &b, cppu::UnoType<bool>::get() );
             xDisp->dispatch( aURL, aArgs );
         }
     }

@@ -1942,7 +1942,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                     ::com::sun::star::uno::Any aAny = pBind->GetStatus().State;
                     ::com::sun::star::uno::Type pType = aAny.getValueType();
 
-                    if ( pType == ::getBooleanCppuType() )
+                    if ( pType == cppu::UnoType<bool>::get() )
                     {
                         bool bTemp = false;
                         aAny >>= bTemp ;

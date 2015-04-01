@@ -831,7 +831,7 @@ css::uno::Type Theme::GetCppuType (const PropertyType eType)
             return cppu::UnoType<sal_uInt32>::get();
 
         case PT_Paint:
-            return getCppuVoidType();
+            return cppu::UnoType<cppu::UnoVoidType>::get();
 
         case PT_Integer:
             return cppu::UnoType<sal_Int32>::get();
@@ -844,7 +844,7 @@ css::uno::Type Theme::GetCppuType (const PropertyType eType)
 
         case PT_Invalid:
         default:
-            return getCppuVoidType();
+            return cppu::UnoType<cppu::UnoVoidType>::get();
     }
 }
 
