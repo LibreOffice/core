@@ -21,6 +21,11 @@
 #define INCLUDED_CPPU_UNOTYPE_HXX
 
 #include <sal/config.h>
+
+#if __cplusplus >= 201103L
+#include <type_traits>
+#endif
+
 #include <sal/types.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -264,7 +269,13 @@ template< typename T > class UnoType {
 public:
     static inline ::com::sun::star::uno::Type const & get() {
         using namespace ::cppu::detail;
-        return cppu_detail_getUnoType(static_cast< T * >(0));
+#if __cplusplus >= 201103L
+        typedef typename std::remove_reference<T>::type T1;
+            // for certain uses of UnoType<decltype(x)>
+#else
+        typedef T T1;
+#endif
+        return cppu_detail_getUnoType(static_cast< T1 * >(0));
     }
 
 private:
