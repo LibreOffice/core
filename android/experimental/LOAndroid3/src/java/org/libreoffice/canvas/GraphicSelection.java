@@ -256,6 +256,13 @@ public class GraphicSelection extends CommonCanvasElement {
         sendGraphicSelection("LongPress", screenPosition);
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        for (GraphicSelectionHandle handle: mHandles) {
+            handle.setVisible(visible);
+        }
+    }
 
     /**
      * Reset the selection.
