@@ -776,7 +776,7 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, ::cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
-        PROPERTY_ID_ISBOOKMARKABLE, ::getBooleanCppuType(), PropertyAttribute::READONLY);
+        PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
