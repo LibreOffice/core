@@ -757,7 +757,7 @@ class EnhWMFReader : public WinMtf
 
     bool        ReadHeader();
                     // reads and converts the rectangle
-    Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
+    static Rectangle ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
     EnhWMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL);

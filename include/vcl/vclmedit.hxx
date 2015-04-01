@@ -51,7 +51,7 @@ protected:
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     using Control::ImplInitSettings;
     void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    WinBits         ImplInitStyle( WinBits nStyle );
+    static WinBits  ImplInitStyle( WinBits nStyle );
 
     ExtTextEngine*  GetTextEngine() const;
     ExtTextView*    GetTextView() const;

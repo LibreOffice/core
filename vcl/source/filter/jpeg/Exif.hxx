@@ -69,7 +69,7 @@ private:
         sal_uInt32 offset;
     };
 
-    Orientation convertToOrientation(sal_Int32 value);
+    static Orientation convertToOrientation(sal_Int32 value);
 
 public :
     Exif();

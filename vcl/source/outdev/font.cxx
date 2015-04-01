@@ -2000,7 +2000,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         if( !mpGraphics->GetGlyphBoundRect( aGlyphId, aRectangle ) )
             continue;
 
-        if( !rSalLayout.IsSpacingGlyph( aGlyphId ) )
+        if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
         {
             Point aAdjPoint = aOffset;
             aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;

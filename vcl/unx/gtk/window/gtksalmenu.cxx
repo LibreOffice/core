@@ -496,8 +496,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
     {
-        vcl::MenuInvalidator aInvalidator;
-        aInvalidator.GetMenuInvalidateListeners()->addListener(*getRefreshLinkInstance());
+        vcl::MenuInvalidator::GetMenuInvalidateListeners()->addListener(*getRefreshLinkInstance());
     }
 
     assert(mbMenuBar);

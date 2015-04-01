@@ -63,8 +63,8 @@ public:
     PIXBYTE GetRed() const     { return mpPixel[0]; }
     PIXBYTE GetGreen() const   { return mpPixel[1]; }
     PIXBYTE GetBlue() const    { return mpPixel[2]; }
-    PIXBYTE GetAlpha() const   { return 0; }
-    void SetAlpha( PIXBYTE ) const {}
+    static PIXBYTE GetAlpha()  { return 0; }
+    static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
     {
@@ -83,8 +83,8 @@ public:
     PIXBYTE GetRed() const      { return mpPixel[2]; }
     PIXBYTE GetGreen() const    { return mpPixel[1]; }
     PIXBYTE GetBlue() const     { return mpPixel[0]; }
-    PIXBYTE GetAlpha() const    { return 0; }
-    void SetAlpha( PIXBYTE ) const  {}
+    static PIXBYTE GetAlpha()   { return 0; }
+    static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
     {
@@ -184,8 +184,8 @@ public:
     PIXBYTE GetRed() const          { return (mpPixel[0] & 0xF8U); }
     PIXBYTE GetGreen() const        { return (mpPixel[0]<<5U) | ((mpPixel[1]>>3U)&28U); }
     PIXBYTE GetBlue() const         { return (mpPixel[1]<<3U); }
-    PIXBYTE GetAlpha() const        { return 0; }
-    void SetAlpha( PIXBYTE ) const  {}
+    static PIXBYTE GetAlpha()       { return 0; }
+    static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
     {
@@ -204,8 +204,8 @@ public:
     PIXBYTE GetRed() const          { return (mpPixel[1] & 0xF8U); }
     PIXBYTE GetGreen() const        { return (mpPixel[1]<<5U) | ((mpPixel[0]>>3U)&28U); }
     PIXBYTE GetBlue() const         { return (mpPixel[0]<<3U); }
-    PIXBYTE GetAlpha() const        { return 0; }
-    void SetAlpha( PIXBYTE ) const  {}
+    static PIXBYTE GetAlpha()       { return 0; }
+    static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
     {
@@ -221,7 +221,7 @@ public:
     void    operator++()                    { mpPixel += 1; }
     PIXBYTE GetAlpha() const                { return mpPixel[0]; }
     void    SetAlpha( PIXBYTE a ) const     { mpPixel[0] = a; }
-    void    SetColor( PIXBYTE, PIXBYTE, PIXBYTE ) const {}
+    static void SetColor( PIXBYTE, PIXBYTE, PIXBYTE ) {}
 };
 
 // TODO: for some reason many Alpha maps are BMP_FORMAT_8BIT_PAL

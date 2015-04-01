@@ -61,9 +61,9 @@ class VCL_PLUGIN_PUBLIC FontCache
     void read();
     void clearCache();
 
-    void copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const;
-    bool equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight ) const;
-    PrintFontManager::PrintFont* clonePrintFont( const PrintFontManager::PrintFont* pFont ) const;
+    static void copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo );
+    static bool equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight );
+    static PrintFontManager::PrintFont* clonePrintFont( const PrintFontManager::PrintFont* pFont );
 
     void createCacheDir( int nDirID );
 public:

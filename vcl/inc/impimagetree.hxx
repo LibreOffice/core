@@ -107,7 +107,7 @@ private:
 
         Must not be cyclic :-)  The last theme in the chain returns an empty string.
     */
-    OUString fallbackStyle(const OUString &style);
+    static OUString fallbackStyle(const OUString &style);
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;

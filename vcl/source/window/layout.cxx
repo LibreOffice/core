@@ -905,7 +905,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
     return B;
 }
 
-bool VclGrid::isNullGrid(const array_type &A) const
+bool VclGrid::isNullGrid(const array_type &A)
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
@@ -915,7 +915,7 @@ bool VclGrid::isNullGrid(const array_type &A) const
     return false;
 }
 
-void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights) const
+void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights)
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];

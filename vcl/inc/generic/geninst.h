@@ -110,7 +110,7 @@ public:
     static int  FetchFontSubstitutionFlags();
 
 protected:
-    void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
+    static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
                                   SalPrinterQueueInfo* pQueueInfo,
                                   ImplJobSetup* pSetupData );
 };

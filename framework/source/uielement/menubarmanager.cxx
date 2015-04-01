@@ -391,8 +391,7 @@ throw ( RuntimeException, std::exception )
 
     SolarMutexGuard aSolarGuard;
     {
-        vcl::MenuInvalidator aInvalidator;
-        aInvalidator.Invalidated();
+        vcl::MenuInvalidator::Invalidated();
     }
     {
         if ( m_bDisposed )

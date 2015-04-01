@@ -100,7 +100,7 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
                     pAcc->SetPixel( nY, nX, aReplace );
     }
 
-    ( (Bitmap&) rMask ).ReleaseAccess( pMaskAcc );
+    Bitmap::ReleaseAccess( pMaskAcc );
     ReleaseAccess( pAcc );
 
     return bRet;

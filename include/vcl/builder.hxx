@@ -366,9 +366,9 @@ private:
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
-    void        collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    void        collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    void        collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap);
 
     void        insertMenuObject(
                    PopupMenu *pParent,
@@ -397,7 +397,7 @@ private:
     PackingData get_window_packing_data(const vcl::Window *pWindow) const;
     void        set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition);
 
-    vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
+    static vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
     void        set_response(const OString& sID, short nResponse);

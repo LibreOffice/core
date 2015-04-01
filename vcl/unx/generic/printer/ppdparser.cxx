@@ -1410,7 +1410,7 @@ OUString PPDParser::getDefaultInputSlot() const
 
 void PPDParser::getResolutionFromString(
                                         const OUString& rString,
-                                        int& rXRes, int& rYRes ) const
+                                        int& rXRes, int& rYRes )
 {
     sal_Int32 nDPIPos;
 
@@ -1855,7 +1855,7 @@ int PPDContext::getRenderResolution() const
         {
             const PPDValue* pValue = getValue( pKey );
             if( pValue )
-                m_pParser->getResolutionFromString( pValue->m_aOption, nDPIx, nDPIy );
+                PPDParser::getResolutionFromString( pValue->m_aOption, nDPIx, nDPIy );
             else
                 m_pParser->getDefaultResolution( nDPIx, nDPIy );
         }

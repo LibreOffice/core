@@ -234,7 +234,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             delete[] pColm;
             delete[] pRows;
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            Bitmap::ReleaseAccess( pWriteAcc );
 
             bRet = true;
         }
@@ -363,7 +363,7 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
             delete[] pColm;
             delete[] pRows;
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            Bitmap::ReleaseAccess( pWriteAcc );
 
             bRet = true;
         }
@@ -489,7 +489,7 @@ bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
 
                 delete[] pHMap;
                 delete[] pVMap;
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                Bitmap::ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -601,7 +601,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
 
                 delete[] pHMap;
                 delete[] pVMap;
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                Bitmap::ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -735,7 +735,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
                 }
             }
 
-            aNewBmp.ReleaseAccess( pWriteAcc );
+            Bitmap::ReleaseAccess( pWriteAcc );
             bRet = true;
         }
 
@@ -899,7 +899,7 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
 
         if( pNewBmp )
         {
-            pNewBmp->ReleaseAccess( pWriteAcc );
+            Bitmap::ReleaseAccess( pWriteAcc );
 
             if( bRet )
             {

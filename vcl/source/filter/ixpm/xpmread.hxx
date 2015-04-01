@@ -84,14 +84,14 @@ private:
     sal_uLong               mnParaSize;
     sal_uInt8*              mpPara;
 
-    bool                ImplGetString( void );
-    bool                ImplGetColor( sal_uLong );
-    bool                ImplGetScanLine( sal_uLong );
-    bool                ImplGetColSub( sal_uInt8* );
-    bool                ImplGetColKey( sal_uInt8 );
-    void                ImplGetRGBHex( sal_uInt8*, sal_uLong );
-    bool                ImplGetPara( sal_uLong numb );
-    bool                ImplCompare( sal_uInt8 const *, sal_uInt8 const *, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    bool                    ImplGetString( void );
+    bool                    ImplGetColor( sal_uLong );
+    bool                    ImplGetScanLine( sal_uLong );
+    bool                    ImplGetColSub( sal_uInt8* );
+    bool                    ImplGetColKey( sal_uInt8 );
+    void                    ImplGetRGBHex( sal_uInt8*, sal_uLong );
+    bool                    ImplGetPara( sal_uLong numb );
+    static bool             ImplCompare( sal_uInt8 const *, sal_uInt8 const *, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
     sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:

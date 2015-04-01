@@ -252,14 +252,9 @@ void FontCfgWrapper::release()
 
 namespace
 {
-    class localizedsorter
-    {
-        public:
-            localizedsorter() {};
-            FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag);
-    };
+    static FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag);
 
-    FcChar8* localizedsorter::bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag)
+    FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag)
     {
         FcChar8* candidate = elements.begin()->second;
         /* FIXME-BCP47: once fontconfig supports language tags this
@@ -359,7 +354,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
                 osl_getProcessLocale(&pLoc);
                 m_pLanguageTag = new LanguageTag(*pLoc);
             }
-            *element = localizedsorter().bestname(lang_and_elements, *m_pLanguageTag);
+            *element = bestname(lang_and_elements, *m_pLanguageTag);
 
             //if this element is a fontname, map the other names to this best-name
             if (rtl_str_compare(elementtype, FC_FAMILY) == 0)
@@ -1171,7 +1166,7 @@ public:
 };
 
 ImplFontOptions* PrintFontManager::getFontOptions(
-    const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*)) const
+    const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*))
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 

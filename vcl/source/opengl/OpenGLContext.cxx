@@ -1480,7 +1480,7 @@ bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
         if( pFramebuffer )
             pFramebuffer->Bind();
         else
-            mpCurrentFramebuffer->Unbind();
+            OpenGLFramebuffer::Unbind();
         mpCurrentFramebuffer = pFramebuffer;
     }
 

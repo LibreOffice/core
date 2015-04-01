@@ -318,7 +318,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 
         pFramebuffer = pContext->AcquireFramebuffer( *this );
         glReadPixels( maRect.Left(), mpImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
-        pContext->ReleaseFramebuffer( pFramebuffer );
+        OpenGLContext::ReleaseFramebuffer( pFramebuffer );
         CHECK_GL_ERROR();
     }
 

@@ -702,7 +702,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                                 pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nOtherY--, nOtherX ) );
                     }
 
-                    aNewBmp.ReleaseAccess( pWriteAcc );
+                    Bitmap::ReleaseAccess( pWriteAcc );
                 }
 
                 aRotatedBmp = aNewBmp;
@@ -772,7 +772,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                         }
                     }
 
-                    aNewBmp.ReleaseAccess( pWriteAcc );
+                    Bitmap::ReleaseAccess( pWriteAcc );
                 }
 
                 aRotatedBmp = aNewBmp;
@@ -818,7 +818,7 @@ bool Bitmap::Crop( const Rectangle& rRectPixel )
                     for( long nX = 0, nX2 = nOldX; nX < nNewWidth; nX++, nX2++ )
                         pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nY2, nX2 ) );
 
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                Bitmap::ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -899,7 +899,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                     }
 
                     if( pSrcAcc )
-                        pSrc->ReleaseAccess( pSrcAcc );
+                        Bitmap::ReleaseAccess( pSrcAcc );
 
                     if( pDstAcc )
                         ReleaseAccess( pDstAcc );
@@ -953,7 +953,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         bRet = ( nWidth > 0L ) && ( nHeight > 0L );
                     }
 
-                    pSrc->ReleaseAccess( pReadAcc );
+                    Bitmap::ReleaseAccess( pReadAcc );
                 }
             }
         }
@@ -1060,7 +1060,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
                         bRet = ( nWidth > 0L ) && ( nHeight > 0L );
                     }
 
-                    pSrc->ReleaseAccess( pReadAcc );
+                    Bitmap::ReleaseAccess( pReadAcc );
                 }
             }
         }
@@ -1168,7 +1168,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
                         for( nX = 0; nX < nNewWidth; nX++ )
                             pWriteAcc->SetPixel( nY, nX, aColor );
 
-                aNewBmp.ReleaseAccess( pWriteAcc );
+                Bitmap::ReleaseAccess( pWriteAcc );
                 bRet = true;
             }
 
@@ -1543,7 +1543,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
         bRet = true;
     }
 
-    ( (Bitmap&) rMask ).ReleaseAccess( pMaskAcc );
+    Bitmap::ReleaseAccess( pMaskAcc );
     ReleaseAccess( pAcc );
 
     return bRet;
@@ -1577,7 +1577,7 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 
     ReleaseAccess( pAcc );
     ( (AlphaMask&) rAlpha ).ReleaseAccess( pAlphaAcc );
-    aNewBmp.ReleaseAccess( pNewAcc );
+    Bitmap::ReleaseAccess( pNewAcc );
 
     if( bRet )
     {
@@ -1921,7 +1921,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
         bRet = true;
     }
 
-    ( (Bitmap&) rMask ).ReleaseAccess( pMaskAcc );
+    Bitmap::ReleaseAccess( pMaskAcc );
     ReleaseAccess( pAcc );
 
     return bRet;

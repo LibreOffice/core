@@ -475,7 +475,7 @@ void FontCache::read()
 /*
  *  FontCache::copyPrintFont
  */
-void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const
+void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo )
 {
     if( pFrom->m_eType != pTo->m_eType )
         return;
@@ -519,7 +519,7 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
 /*
  *  FontCache::equalsPrintFont
  */
-bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight ) const
+bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight )
 {
     if( pLeft->m_eType != pRight->m_eType )
         return false;
@@ -580,7 +580,7 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
 /*
  *  FontCache::clonePrintFont
  */
-PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::PrintFont* pOldFont ) const
+PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::PrintFont* pOldFont )
 {
     PrintFontManager::PrintFont* pFont = NULL;
     switch( pOldFont->m_eType )

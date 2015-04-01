@@ -217,9 +217,9 @@ class ImplBorderWindowView
 public:
     virtual                 ~ImplBorderWindowView();
 
-    virtual bool        MouseMove( const MouseEvent& rMEvt );
-    virtual bool        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual bool        Tracking( const TrackingEvent& rTEvt );
+    virtual bool            MouseMove( const MouseEvent& rMEvt );
+    virtual bool            MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool            Tracking( const TrackingEvent& rTEvt );
     virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
@@ -229,13 +229,13 @@ public:
     virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev = NULL, const Point* pOffset = NULL ) = 0;
     virtual Rectangle       GetMenuRect() const;
 
-    void                    ImplInitTitle( ImplBorderFrameData* pData );
-    sal_uInt16              ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
-    bool                ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    bool                ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    bool                ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
-    OUString                ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
-    long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
+    static void             ImplInitTitle( ImplBorderFrameData* pData );
+    static sal_uInt16       ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
+    static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    bool                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    bool                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
+    static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
+    static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
 
 class ImplNoBorderWindowView : public ImplBorderWindowView

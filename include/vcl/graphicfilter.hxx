@@ -259,7 +259,7 @@ public:
     OUString        GetImportFormatTypeName( sal_uInt16 nFormat );
     OUString        GetImportFormatMediaType( sal_uInt16 nFormat );
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
-    OUString        GetImportOSFileType( sal_uInt16 nFormat );
+    static OUString GetImportOSFileType( sal_uInt16 nFormat );
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     bool            IsImportPixelFormat( sal_uInt16 nFormat );
 
@@ -273,7 +273,7 @@ public:
     OUString        GetExportFormatTypeName( sal_uInt16 nFormat );
     OUString        GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString        GetExportFormatShortName( sal_uInt16 nFormat );
-    OUString        GetExportOSFileType( sal_uInt16 nFormat );
+    static OUString GetExportOSFileType( sal_uInt16 nFormat );
     OUString        GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 

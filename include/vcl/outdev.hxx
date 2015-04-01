@@ -912,7 +912,7 @@ public:
                                           MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
                                           ::vcl::ITextLayout* _pTextLayout = NULL );
 
-    void                        ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
+    static void                 ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
 

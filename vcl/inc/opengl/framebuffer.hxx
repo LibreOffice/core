@@ -32,7 +32,7 @@ public:
     int     GetHeight() const { return mnHeight; };
 
     void    Bind();
-    void    Unbind();
+    static void Unbind();
 
     bool    IsFree() const;
     bool    IsAttached( const OpenGLTexture& rTexture ) const;

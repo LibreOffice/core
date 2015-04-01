@@ -194,10 +194,10 @@ private:
     osl::File*      mpPageHeader;
     osl::File*      mpPageBody;
 
-    void            TranslateCoordinates (sal_Int32 &rXOut, sal_Int32 &rYOut,
+    static void     TranslateCoordinates (sal_Int32 &rXOut, sal_Int32 &rYOut,
                                           sal_Int32 nXIn, sal_Int32 nYIn )
     { rXOut = nXIn; rYOut = nYIn; }
-    void            TranslateCoordinates (Point& rOut, const Point& rIn)
+    static void     TranslateCoordinates (Point& rOut, const Point& rIn)
     { rOut = rIn; }
 
     /* text/font related data, for a type1 font it has to be checked

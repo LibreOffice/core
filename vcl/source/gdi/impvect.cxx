@@ -1059,7 +1059,7 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
     return true;
 }
 
-bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
+bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX )
 {
     if( pMap->IsDone( nY - 1L, nX ) )
         return true;

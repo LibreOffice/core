@@ -78,10 +78,10 @@ private:
     bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
-    void            AddNotdef (char_map_t &rCharMap);
-    void            AddNotdef (glyph_map_t &rGlyphMap);
-    unsigned char       GetAnsiMapping (sal_Unicode nUnicodeChar);
-    unsigned char       GetSymbolMapping (sal_Unicode nUnicodeChar);
+    static void     AddNotdef (char_map_t &rCharMap);
+    static void     AddNotdef (glyph_map_t &rGlyphMap);
+    static unsigned char  GetAnsiMapping (sal_Unicode nUnicodeChar);
+    static unsigned char  GetSymbolMapping (sal_Unicode nUnicodeChar);
 
     void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                                   const sal_Unicode* pStr, sal_Int16 nLen);

@@ -977,7 +977,7 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
     return aIds;
 }
 
-OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
+OUString PrintFontManager::convertTrueTypeName( void* pRecord )
 {
     NameRecord* pNameRecord = static_cast<NameRecord*>(pRecord);
     OUString aValue;
@@ -1120,7 +1120,7 @@ namespace
     }
 }
 
-void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OUString >& rNames ) const
+void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OUString >& rNames )
 {
     OUString aFamily;
 
@@ -1618,7 +1618,7 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
     return nRet;
 }
 
-FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily ) const
+FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
 {
     typedef struct {
         const char*  mpName;

@@ -807,7 +807,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     return bRet;
 }
 
-bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
+bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 {
     bool bRet = false;
     if( nGlyph & GF_ISCHAR )
@@ -1674,7 +1674,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
         // disable glyph-injection for glyph-fallback SalLayout iteration
-        mpLayouts[n]->DisableGlyphInjection( true );
+        SalLayout::DisableGlyphInjection( true );
 
         // remove unused parts of component
         if( n > 0 )
@@ -1933,7 +1933,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     // reenable glyph-injection
     for( n = 0; n < mnLevel; ++n )
-        mpLayouts[n]->DisableGlyphInjection( false );
+        SalLayout::DisableGlyphInjection( false );
 }
 
 void MultiSalLayout::InitFont() const

@@ -380,7 +380,7 @@ private:
     typedef boost::multi_array<ExtendedGridEntry, 2> ext_array_type;
 
     array_type assembleGrid() const;
-    bool isNullGrid(const array_type& A) const;
+    static bool isNullGrid(const array_type& A);
 public:
     struct Value
     {
@@ -389,7 +389,7 @@ public:
         Value() : m_nValue(0), m_bExpand(false) {}
     };
 private:
-    void calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights) const;
+    static void calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights);
 
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const SAL_OVERRIDE;

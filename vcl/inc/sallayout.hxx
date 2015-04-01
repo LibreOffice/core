@@ -190,7 +190,7 @@ public:
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    bool    IsSpacingGlyph( sal_GlyphId ) const;
+    static bool     IsSpacingGlyph( sal_GlyphId );
 
     // reference counting
     void            Release() const;

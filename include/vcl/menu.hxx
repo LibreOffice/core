@@ -385,8 +385,8 @@ namespace vcl
     {
         public:
             MenuInvalidator();
-            VclEventListeners2* GetMenuInvalidateListeners();
-            void Invalidated();
+            static VclEventListeners2* GetMenuInvalidateListeners();
+            static void Invalidated();
     };
 }
 

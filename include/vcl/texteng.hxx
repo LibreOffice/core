@@ -201,7 +201,7 @@ protected:
     long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
     sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
-    void                ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
+    static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
     sal_uLong           CalcTextHeight();

@@ -62,7 +62,7 @@ public:
     void Move(long nHorzMove, long nVertMove);
     void Scale(double fScaleX, double fScaleY);
     void InsertBands(long nTop, long nBottom);
-    bool InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition);
+    static bool InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition);
     void Union(long nLeft, long nTop, long nRight, long nBottom);
     void Intersect(long nLeft, long nTop, long nRight, long nBottom);
     void Union(const RegionBand& rSource);

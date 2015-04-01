@@ -128,7 +128,7 @@ protected:
     bool ReleaseContext();
 
     // retrieve the default context for offscreen rendering
-    OpenGLContext* GetDefaultContext();
+    static OpenGLContext* GetDefaultContext();
 
     // create a new context for window rendering
     virtual OpenGLContext* CreateWinContext() = 0;

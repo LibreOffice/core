@@ -242,7 +242,7 @@ public:
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
     // values in dpi
-    void            getResolutionFromString( const OUString&, int&, int& ) const;
+    static void     getResolutionFromString( const OUString&, int&, int& );
     // helper function
 
     int             getDuplexTypes() const

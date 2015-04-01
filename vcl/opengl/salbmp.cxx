@@ -460,7 +460,7 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
-OpenGLContext* OpenGLSalBitmap::GetBitmapContext() const
+OpenGLContext* OpenGLSalBitmap::GetBitmapContext()
 {
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
@@ -608,7 +608,7 @@ bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceC
     pProgram->DrawTexture( maTexture );
     pProgram->Clean();
 
-    mpContext->ReleaseFramebuffer( pFramebuffer );
+    OpenGLContext::ReleaseFramebuffer( pFramebuffer );
     maTexture = aNewTex;
 
     CHECK_GL_ERROR();

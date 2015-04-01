@@ -943,7 +943,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
     return aHelpStr;
 }
 
-long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const
+long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData )
 {
     // title is not visible therefore no width
     if ( !pData->mnTitleHeight )

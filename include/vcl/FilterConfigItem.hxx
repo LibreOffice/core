@@ -40,9 +40,9 @@ class VCL_DLLPUBLIC FilterConfigItem
 
     bool    bModified;
 
-    bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
-                        const OUString& rPropName,
+    static bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
+                            const OUString& rPropName,
                             bool bTestPropertyAvailability );
 
     void     ImpInitTree( const OUString& rTree );

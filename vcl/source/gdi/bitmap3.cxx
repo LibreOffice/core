@@ -2447,12 +2447,12 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
 
 bool Bitmap::Vectorize( tools::PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
 {
-    return ImplVectorizer().ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
+    return ImplVectorizer::ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
 }
 
 bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
-    return ImplVectorizer().ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
+    return ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
 }
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,

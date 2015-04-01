@@ -216,7 +216,7 @@ public:
         return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
     }
 
-    inline double   SincFilter(double x) const
+    static inline double SincFilter(double x)
     {
         if (x == 0.0)
         {

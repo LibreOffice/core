@@ -9135,7 +9135,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                     break;
 
-                if( !rLayout.IsSpacingGlyph( aGlyphId ) )
+                if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
                 {
                     if( !nWidth )
                         aStartPt = aPos;
@@ -9235,7 +9235,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                 break;
 
-            if( !rLayout.IsSpacingGlyph( aGlyphId ) )
+            if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
             {
                 Point aAdjOffset = aOffset;
                 aAdjOffset.X() += (nAdvance - nEmphWidth) / 2;

@@ -103,7 +103,7 @@ public:
     long            GetResult() const;
 private:
     bool            ImplStartExecuteModal();
-    void            ImplEndExecuteModal();
+    static void     ImplEndExecuteModal();
 public:
 
     // Dialog::Execute replacement API

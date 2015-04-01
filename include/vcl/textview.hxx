@@ -182,9 +182,9 @@ public:
     TextPaM             CursorWordRight( const TextPaM& rPaM );
     TextPaM             CursorStartOfLine( const TextPaM& rPaM );
     TextPaM             CursorEndOfLine( const TextPaM& rPaM );
-    TextPaM             CursorStartOfParagraph( const TextPaM& rPaM );
+    static TextPaM      CursorStartOfParagraph( const TextPaM& rPaM );
     TextPaM             CursorEndOfParagraph( const TextPaM& rPaM );
-    TextPaM             CursorStartOfDoc();
+    static TextPaM      CursorStartOfDoc();
     TextPaM             CursorEndOfDoc();
 
     /**

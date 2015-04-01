@@ -477,8 +477,7 @@ ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, in
     aInfo.m_eWeight = rFontAttributes.GetWeight();
     aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
-    const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
-    return rPFM.getFontOptions(aInfo, nSize, cairosubcallback);
+    return psp::PrintFontManager::getFontOptions(aInfo, nSize, cairosubcallback);
 }
 
 void

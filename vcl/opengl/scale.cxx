@@ -69,7 +69,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     maTexture.SetFilter( nOldFilter );
     pProgram->Clean();
 
-    mpContext->ReleaseFramebuffer( pFramebuffer );
+    OpenGLContext::ReleaseFramebuffer( pFramebuffer );
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
@@ -156,7 +156,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
         pProgram->Clean();
 
         maTexture = aScratchTex;
-        mpContext->ReleaseFramebuffer( pFramebuffer );
+        OpenGLContext::ReleaseFramebuffer( pFramebuffer );
     }
 
     // vertical scaling in final texture
@@ -178,7 +178,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
         pProgram->Clean();
 
         maTexture = aScratchTex;
-        mpContext->ReleaseFramebuffer( pFramebuffer );
+        OpenGLContext::ReleaseFramebuffer( pFramebuffer );
     }
 
     mnWidth = nNewWidth;
@@ -252,7 +252,7 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
     pProgram->Clean();
 
     maTexture = aScratchTex;
-    mpContext->ReleaseFramebuffer( pFramebuffer );
+    OpenGLContext::ReleaseFramebuffer( pFramebuffer );
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;

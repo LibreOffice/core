@@ -272,8 +272,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     OString getFontFile( PrintFont* pFont ) const;
 
     bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
-    OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
-    void analyzeTrueTypeFamilyName( void* pTTFont, std::list< OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
+    static OUString convertTrueTypeName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
+    static void analyzeTrueTypeFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
     // finds the font id for the nFaceIndex face in this font file
     // There may be multiple font ids for TrueType collections
@@ -287,7 +287,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         return findFontFileID(nDirID, rFile, 0) != 0;
     }
 
-    FontFamily matchFamilyName( const OUString& rFamily ) const;
+    static FontFamily matchFamilyName( const OUString& rFamily );
 
     PrintFont* getFont( fontID nID ) const
     {
@@ -305,11 +305,11 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     called from <code>initialize()</code>
     */
-    void initFontconfig();
+    static void initFontconfig();
     void countFontconfigFonts( std::unordered_map<OString, int, OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
-    void deinitFontconfig();
+    static void deinitFontconfig();
 
     /* register an application specific font directory for libfontconfig
 
@@ -321,7 +321,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     true if libfontconfig accepted the directory
     false else (e.g. no libfontconfig found)
     */
-    bool addFontconfigDir(const OString& rDirectory);
+    static bool addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
     std::vector<OString> m_aCurrentRequests;
@@ -528,7 +528,7 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
-    ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
+    static ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*));
 
     bool Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
 

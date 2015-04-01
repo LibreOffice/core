@@ -33,20 +33,20 @@ class ImplVectorizer
 {
 private:
 
-    ImplVectMap*    ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    void            ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
-    bool            ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    bool            ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const;
-    void            ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
+    static ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
+    static void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
+    static bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
+    static bool     ImplIsUp( ImplVectMap* pMap, long nY, long nX );
+    static void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 
 public:
 
                     ImplVectorizer();
                     ~ImplVectorizer();
 
-    bool            ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
+    static bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                                    sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
-    bool            ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
+    static bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
                                    sal_uLong nFlags, const Link* pProgress );
 };
 
