@@ -150,7 +150,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
 
         if (xInstance.is())
         {
-            Any usrAny(&xInstance, getCppuType( & xInstance));
+            Any usrAny(&xInstance, cppu::UnoType<decltype(xInstance)>::get());
 
             sal_uInt8 arId[16];
             rtl_getGlobalProcessId( arId );
@@ -282,7 +282,7 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
 
     if (m_xInst.is())
     {
-        Any usrAny(&m_xInst, getCppuType( &m_xInst));
+        Any usrAny(&m_xInst, cppu::UnoType<decltype(m_xInst)>::get());
         sal_uInt8 arId[16];
         rtl_getGlobalProcessId( arId);
         Any oleAny = m_bridgeSupplier->createBridge(usrAny,

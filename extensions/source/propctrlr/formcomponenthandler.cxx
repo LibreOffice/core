@@ -151,7 +151,7 @@ namespace pcr
         ,m_bHaveCommand( false )
         ,m_nClassId( 0 )
     {
-        registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,::getCppuType(&m_xRowSet));
+        registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,cppu::UnoType<decltype(m_xRowSet)>::get());
     }
 
 

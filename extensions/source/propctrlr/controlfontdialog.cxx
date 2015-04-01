@@ -51,7 +51,7 @@ namespace pcr
     {
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
-            &m_xControlModel, ::getCppuType(&m_xControlModel));
+            &m_xControlModel, cppu::UnoType<decltype(m_xControlModel)>::get());
     }
 
 

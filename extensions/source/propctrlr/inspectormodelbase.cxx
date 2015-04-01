@@ -102,25 +102,25 @@ namespace pcr
             OUString( "HasHelpSection" ),
             MODEL_PROPERTY_ID_HAS_HELP_SECTION,
             PropertyAttribute::READONLY,
-            &m_bHasHelpSection, ::getCppuType( &m_bHasHelpSection )
+            &m_bHasHelpSection, cppu::UnoType<decltype(m_bHasHelpSection)>::get()
         );
         registerProperty(
             OUString( "MinHelpTextLines" ),
             MODEL_PROPERTY_ID_MIN_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
-            &m_nMinHelpTextLines, ::getCppuType( &m_nMinHelpTextLines )
+            &m_nMinHelpTextLines, cppu::UnoType<decltype(m_nMinHelpTextLines)>::get()
         );
         registerProperty(
             OUString( "MaxHelpTextLines" ),
             MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
-            &m_nMaxHelpTextLines, ::getCppuType( &m_nMaxHelpTextLines )
+            &m_nMaxHelpTextLines, cppu::UnoType<decltype(m_nMaxHelpTextLines)>::get()
         );
         registerProperty(
             OUString( "IsReadOnly" ),
             MODEL_PROPERTY_ID_IS_READ_ONLY,
             PropertyAttribute::BOUND,
-            &m_bIsReadOnly, ::getCppuType( &m_bIsReadOnly )
+            &m_bIsReadOnly, cppu::UnoType<decltype(m_bIsReadOnly)>::get()
         );
     }
 

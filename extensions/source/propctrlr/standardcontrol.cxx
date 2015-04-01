@@ -1411,7 +1411,7 @@ namespace pcr
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
             return ::cppu::UnoType<OUString>::get();
-        return ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
+        return cppu::UnoType<Sequence< OUString >>::get();
     }
 
 

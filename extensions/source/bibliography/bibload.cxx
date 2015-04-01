@@ -483,7 +483,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
                         pValues[nEntry].Name = sColName;
                         pValues[nEntry].Value <<= lcl_AddProperty(xColumns, pMapping, sColName);
                     }
-                    aRet.setValue(&aPropSequ, ::getCppuType((Sequence<PropertyValue>*)0));
+                    aRet.setValue(&aPropSequ, cppu::UnoType<Sequence<PropertyValue>>::get());
 
                     break;
                 }
@@ -564,7 +564,7 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
 
 Type  BibliographyLoader::getElementType(void) throw ( RuntimeException, std::exception )
 {
-    return ::getCppuType((Sequence<PropertyValue>*)0);
+    return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
 sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException, std::exception )
@@ -579,7 +579,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =
     {
-        { OUString("BibliographyDataFieldNames"), 0, ::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
+        { OUString("BibliographyDataFieldNames"), 0, cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static Reference< XPropertySetInfo >  xRet =
@@ -644,7 +644,7 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
             pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
             pArray[i].Value <<= (sal_Int16) i;
         }
-        aRet.setValue(&aSeq, ::getCppuType((Sequence<PropertyValue>*)0));
+        aRet.setValue(&aSeq, cppu::UnoType<Sequence<PropertyValue>>::get());
     }
     else
         throw UnknownPropertyException();

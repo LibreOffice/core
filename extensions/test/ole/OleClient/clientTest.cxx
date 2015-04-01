@@ -646,7 +646,7 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
     //  in and out parameter
 
     sal_Bool aBool = sal_True;
-    inBool.setValue(&aBool, getCppuBooleanType());
+    inBool.setValue(&aBool, cppu::UnoType<bool>::get());
     inv->invoke(OUString(L"inBool"), Sequence< Any > ( &inBool, 1), seqIndices, seqOut);
     seqIndices.realloc(0);
     seqOut.realloc(0);

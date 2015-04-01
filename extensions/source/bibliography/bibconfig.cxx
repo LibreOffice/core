@@ -235,7 +235,7 @@ void    BibConfig::ImplCommit()
             case  5: pValues[nProp] <<= sQueryText;  break;
             case  6: pValues[nProp] <<= sQueryField;  break;
             case  7:
-                pValues[nProp].setValue(&bShowColumnAssignmentWarning, ::getBooleanCppuType());
+                pValues[nProp].setValue(&bShowColumnAssignmentWarning, cppu::UnoType<bool>::get());
             break;
         }
     }

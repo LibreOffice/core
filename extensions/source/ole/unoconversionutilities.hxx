@@ -412,7 +412,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                 if( pArg->vt == VT_DISPATCH &&  isJScriptArray( pArg))
                 {
                     dispatchExObject2Sequence( pArg, rAny,
-                                               getCppuType((Sequence<Any>*) 0));
+                                               cppu::UnoType<Sequence<Any>>::get());
                 }
                 else if (pArg->vt == VT_DECIMAL)
                 {
@@ -1475,7 +1475,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 VARTYPE oleTypeFlags = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
 
                 Sequence<Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
-                rAny.setValue( &unoSeq, getCppuType( &unoSeq));
+                rAny.setValue( &unoSeq, cppu::UnoType<decltype(unoSeq)>::get());
             }
             else
             {
@@ -1517,7 +1517,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 case VT_BSTR:
                 {
                     OUString b(reinterpret_cast<const sal_Unicode*>(var.bstrVal));
-                    rAny.setValue( &b, getCppuType( &b));
+                    rAny.setValue( &b, cppu::UnoType<decltype(b)>::get());
                     break;
                 }
                 case VT_UNKNOWN:
@@ -1562,7 +1562,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 case VT_BOOL:
                 {
                     sal_Bool b= var.boolVal == VARIANT_TRUE;
-                    rAny.setValue( &b, getCppuType( &b));
+                    rAny.setValue( &b, cppu::UnoType<decltype(b)>::get());
                     break;
                 }
                 case VT_I1:
@@ -1834,7 +1834,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     params[0] <<= (sal_uInt32) spUnknown.p;
 #endif
     sal_Bool bDisp = pVar->vt == VT_DISPATCH ? sal_True : sal_False;
-    params[1].setValue( & bDisp, getBooleanCppuType());
+    params[1].setValue( & bDisp, cppu::UnoType<bool>::get());
     params[2] <<= seqTypes;
 
     xInit->initialize( Sequence<Any>( params, 3));
@@ -2138,7 +2138,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
             Sequence<Any> element = createOleArrayWrapperOfDim(pArray, dimCount,
                 actDim - 1, index, type, getElementTypeOfSequence(unotype));
 
-            pUnoArray[index[actDim - 1] - lBound].setValue(&element, getCppuType(&element));
+            pUnoArray[index[actDim - 1] - lBound].setValue(&element, cppu::UnoType<decltype(element)>::get());
         }
         else
         {
@@ -2337,7 +2337,7 @@ Sequence<Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUn
         {
             // we exspect an array( SafeArray or IDispatch) of Strings.
             Any anyNames;
-            variantToAny( &var, anyNames, getCppuType( (Sequence<Any>*) 0));
+            variantToAny( &var, anyNames, cppu::UnoType<Sequence<Any>>::get());
             Sequence<Any> seqAny;
             if( anyNames >>= seqAny)
             {

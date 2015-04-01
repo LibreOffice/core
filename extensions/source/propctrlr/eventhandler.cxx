@@ -446,7 +446,7 @@ namespace pcr
 
     Type SAL_CALL EventHolder::getElementType(  ) throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< Sequence< PropertyValue >* >( NULL ) );
+        return cppu::UnoType<Sequence< PropertyValue >>::get();
     }
 
     sal_Bool SAL_CALL EventHolder::hasElements(  ) throw (RuntimeException, std::exception)

@@ -51,11 +51,11 @@ namespace pcr
     {
         registerProperty( PROPERTY_CONTROLCONTEXT, OWN_PROPERTY_ID_CONTROLCONTEXT,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
-            &m_xControlContext, ::getCppuType( &m_xControlContext ) );
+            &m_xControlContext, cppu::UnoType<decltype(m_xControlContext)>::get() );
 
         registerProperty( PROPERTY_TABBINGMODEL, OWN_PROPERTY_ID_TABBINGMODEL,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
-            &m_xTabbingModel, ::getCppuType( &m_xTabbingModel ) );
+            &m_xTabbingModel, cppu::UnoType<decltype(m_xTabbingModel)>::get() );
     }
 
 

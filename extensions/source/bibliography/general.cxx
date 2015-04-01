@@ -150,7 +150,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                 uno::Sequence<sal_Int16> aSelSeq(1);
                 sal_Int16* pArr = aSelSeq.getArray();
                 pArr[0] = TYPE_COUNT;
-                aSel.setValue(&aSelSeq, ::getCppuType((Sequence<sal_Int16>*)0));
+                aSel.setValue(&aSelSeq, cppu::UnoType<Sequence<sal_Int16>>::get());
                 xPropSet->setPropertyValue("SelectedItems", aSel);
             }
         }
@@ -467,7 +467,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                     for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
                         pListSourceArr[i] = OUString::number(i);
-                    aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<OUString>*)0));
+                    aAny.setValue(&aListSource, cppu::UnoType<uno::Sequence<OUString>>::get());
 
                     xPropSet->setPropertyValue("ListSource", aAny);
 
@@ -478,12 +478,12 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     // empty string if an invalid value no values is set
                     pValuesArr[TYPE_COUNT].clear();
 
-                    aAny.setValue(&aValues, ::getCppuType((uno::Sequence<OUString>*)0));
+                    aAny.setValue(&aValues, cppu::UnoType<uno::Sequence<OUString>>::get());
 
                     xPropSet->setPropertyValue("StringItemList", aAny);
 
                     sal_Bool bTrue = sal_True;
-                    aAny.setValue( &bTrue, ::getBooleanCppuType() );
+                    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( "Dropdown", aAny );
 
                     aControlName = "com.sun.star.form.control.ListBox";

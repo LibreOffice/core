@@ -49,7 +49,7 @@ namespace abp
         :OGenericUnoDialog(_rxORB)
     {
         registerProperty( OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
-            &m_sDataSourceName, ::getCppuType( &m_sDataSourceName ) );
+            &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
     }
 
 

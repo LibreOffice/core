@@ -122,7 +122,7 @@ bool checkOutArgs(const Sequence<Any> & outArgs,
     //iterate over all parameters. i represents the parameter index
     for (int i = 0; i < values.getLength(); i++)
     {
-        if (values[i].getValueType() == getVoidCppuType())
+        if (values[i].getValueType() == cppu::UnoType<cppu::UnoVoidType>::get())
             continue;
         //out parameter
         //Based on the parameter index find the correspondent out value

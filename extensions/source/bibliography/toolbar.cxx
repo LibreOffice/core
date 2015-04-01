@@ -64,7 +64,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         ::com::sun::star::uno::Any aState=rEvt.State;
-        if(aState.getValueType()==::getBooleanCppuType())
+        if(aState.getValueType()==cppu::UnoType<bool>::get())
         {
             bool bChecked= *static_cast<sal_Bool const *>(aState.getValue());
             pToolBar->CheckItem(nIndex, bChecked);
@@ -91,7 +91,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
-        if(aState.getValueType() == ::getCppuType((Sequence<OUString>*)0))
+        if(aState.getValueType() == cppu::UnoType<Sequence<OUString>>::get())
         {
             pToolBar->UpdateSourceList(false);
             pToolBar->ClearSourceList();
@@ -130,7 +130,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
-        if(aState.getValueType()==::getCppuType((Sequence<OUString>*)0))
+        if(aState.getValueType()==cppu::UnoType<Sequence<OUString>>::get())
         {
             pToolBar->ClearFilterMenu();
 

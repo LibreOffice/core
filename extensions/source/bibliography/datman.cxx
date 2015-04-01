@@ -674,7 +674,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             {
                 OUString sFormatKey("FormatKey");
                 xCurrentCol->setPropertyValue(sFormatKey, xField->getPropertyValue(sFormatKey));
-                Any aFormatted(&bFormattedIsNumeric, ::getBooleanCppuType());
+                Any aFormatted(&bFormattedIsNumeric, cppu::UnoType<bool>::get());
                 xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
             }
             Any aColName = makeAny( *pFields );
