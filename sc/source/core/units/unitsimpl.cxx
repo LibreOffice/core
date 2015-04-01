@@ -85,95 +85,6 @@ UnitsImpl::~UnitsImpl() {
     // (i.e. if udunits can't handle being used across threads)?
 }
 
-UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpCode& rOpCode) {
-    UtUnit pOut;
-
-    auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(rOpCode);
-
-    // TODO: sc/source/core/tool/parclass.cxx has a mapping of opcodes to possible operands, which we
-    // should probably be using in practice.
-
-    if (nOpCode >= SC_OPCODE_START_UN_OP &&
-        nOpCode < SC_OPCODE_STOP_UN_OP) {
-
-        if (!(rUnitStack.size() >= 1)) {
-            SAL_WARN("sc.units", "no units on stack for unary operation");
-            return { UnitsStatus::UNITS_INVALID, boost::none };
-        }
-
-        UtUnit pUnit = rUnitStack.top();
-        rUnitStack.pop();
-
-        switch (rOpCode) {
-        case ocNot:
-            if (!pUnit.isDimensionless()) {
-                return { UnitsStatus::UNITS_INVALID, boost::none };
-            }
-            // We just keep the same unit (in this case no unit) so can
-            // fall through.
-        case ocNeg:
-            // fall through -- same as OcNegSub
-            // It seems the difference is that ocNeg: 'NEG(value)', and ocNegSub: '-value' when
-            // in human readable form.
-        case ocNegSub:
-            // do nothing: since we're just negating the value which doesn't
-            // affect units in any way, we just return the current unit.
-            pOut = pUnit;
-            break;
-        default:
-            // Only the above 3 opcodes are in the range we have tested for previously
-            // (...START_UN_OP to ...STOP_UN_OP).
-            assert(false);
-        }
-    } else if (nOpCode >= SC_OPCODE_START_BIN_OP &&
-        nOpCode < SC_OPCODE_STOP_BIN_OP) {
-
-        if (!(rUnitStack.size() >= 2)) {
-            SAL_WARN("sc.units", "less than two units on stack when attempting binary operation");
-            // TODO: what should we be telling the user in this case? Can this even happen (i.e.
-            // should we just be asserting here?)
-            return { UnitsStatus::UNITS_INVALID, boost::none };
-        }
-
-        UtUnit pSecondUnit = rUnitStack.top();
-        rUnitStack.pop();
-        UtUnit pFirstUnit = rUnitStack.top();
-        rUnitStack.pop();
-
-        switch (rOpCode) {
-        case ocAdd:
-            // Adding and subtracting both require the same units on both sides
-            // hence we can just fall through / use the same logic.
-        case ocSub:
-            if (pFirstUnit == pSecondUnit) {
-                // The two units are identical, hence we can return either.
-                pOut = pFirstUnit;
-                SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
-            } else {
-                return { UnitsStatus::UNITS_INVALID, boost::none };
-                // TODO: notify/link UI.
-            }
-            break;
-        case ocMul:
-            pOut = pFirstUnit * pSecondUnit;
-            break;
-        case ocDiv:
-            pOut = pFirstUnit / pSecondUnit;
-            break;
-        default:
-            SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
-            assert(false);
-        }
-
-    } else {
-        SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
-        return { UnitsStatus::UNITS_UNKNOWN, boost::none };
-    }
-    // TODO: else if unary, or no params, or ...
-    // TODO: implement further sensible opcode handling
-    return { UnitsStatus::UNITS_VALID, pOut };
-}
-
 class RangeListIterator {
 private:
     const ScRangeList mRangeList;
@@ -190,9 +101,14 @@ public:
         mIt(pDoc, ScRange()),
         nCurrentIndex(0)
     {
-        if (rRangeList.size() > 0) {
-            mIt = ScCellIterator(pDoc, *rRangeList[0]);
-            mIt.first();
+    }
+
+    bool first() {
+        if (mRangeList.size() > 0) {
+            mIt = ScCellIterator(mpDoc, *mRangeList[0]);
+            return mIt.first();
+        } else {
+            return false;
         }
     }
 
@@ -217,37 +133,197 @@ public:
     }
 };
 
-UnitsResult UnitsImpl::getOutputUnitForDoubleRefOpcode(const OpCode& rOpCode, const ScRangeList& rRangeList, ScDocument* pDoc) {
-    RangeListIterator aIt(pDoc, rRangeList);
+UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc) {
+    const OpCode aOpCode = pToken->GetOpCode();
+    auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(aOpCode);
 
-    switch (rOpCode) {
-    case ocSum:
-    case ocMin:
-    case ocMax:
-    case ocAverage:
-    {
-        UtUnit aFirstUnit = getUnitForCell(aIt.GetPos(), pDoc);
+    UtUnit pOut;
+    // TODO: sc/source/core/tool/parclass.cxx has a mapping of opcodes to possible operands, which we
+    // should probably be using in practice.
 
-        while (aIt.next()) {
-            UtUnit aCurrentUnit = getUnitForCell(aIt.GetPos(), pDoc);
-            if (aFirstUnit != aCurrentUnit) {
+    if (nOpCode >= SC_OPCODE_START_UN_OP &&
+        nOpCode < SC_OPCODE_STOP_UN_OP) {
+
+        if (rStack.size() == 0) {
+            SAL_WARN("sc.units", "Single item opcode failed (no stack items, or range used)");
+            return { UnitsStatus::UNITS_INVALID, boost::none };
+        } else if (rStack.top().type != StackItemType::UNITS) {
+            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+        }
+
+        UtUnit pUnit = boost::get<UtUnit>(rStack.top().item);//rStack.top().item.get< UtUnit >();
+        rStack.pop();
+
+        switch (aOpCode) {
+        case ocNot:
+            if (!pUnit.isDimensionless()) {
                 return { UnitsStatus::UNITS_INVALID, boost::none };
             }
+            // We just keep the same unit (in this case no unit) so can
+            // fall through.
+        case ocNeg:
+            // fall through -- same as OcNegSub
+            // It seems the difference is that ocNeg: 'NEG(value)', and ocNegSub: '-value' when
+            // in human readable form.
+        case ocNegSub:
+            // do nothing: since we're just negating the value which doesn't
+            // affect units in any way, we just return the current unit.
+            pOut = pUnit;
+            break;
+        default:
+            // Only the above 3 opcodes are in the range we have tested for previously
+            // (...START_UN_OP to ...STOP_UN_OP).
+            assert(false);
+        }
+    } else if (nOpCode >= SC_OPCODE_START_BIN_OP &&
+        nOpCode < SC_OPCODE_STOP_BIN_OP) {
+
+        if (rStack.size() < 2) {
+            SAL_WARN("sc.units", "less than two items on stack when attempting binary operation");
+            return { UnitsStatus::UNITS_INVALID, boost::none };
         }
 
-        return { UnitsStatus::UNITS_VALID, aFirstUnit };
-    }
-    case ocProduct:
-    {
-        UtUnit aUnit = getUnitForCell(aIt.GetPos(), pDoc);
-        while (aIt.next()) {
-            aUnit *= getUnitForCell(aIt.GetPos(), pDoc);
+        if (rStack.top().type != StackItemType::UNITS) {
+            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
-        return { UnitsStatus::UNITS_VALID, aUnit };
-    }
-    default:
+        UtUnit pSecondUnit = boost::get<UtUnit>(rStack.top().item);
+        rStack.pop();
+
+        if (rStack.top().type != StackItemType::UNITS) {
+            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+        }
+        UtUnit pFirstUnit = boost::get<UtUnit>(rStack.top().item);
+        rStack.pop();
+
+        switch (aOpCode) {
+        case ocAdd:
+            // Adding and subtracting both require the same units on both sides
+            // hence we can just fall through / use the same logic.
+        case ocSub:
+            if (pFirstUnit == pSecondUnit) {
+                // The two units are identical, hence we can return either.
+                pOut = pFirstUnit;
+                SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
+            } else {
+                return { UnitsStatus::UNITS_INVALID, boost::none };
+                // TODO: notify/link UI.
+            }
+            break;
+        case ocMul:
+            pOut = pFirstUnit * pSecondUnit;
+            break;
+        case ocDiv:
+            pOut = pFirstUnit / pSecondUnit;
+            break;
+        default:
+            SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
+            assert(false);
+        }
+    } else if (nOpCode >= SC_OPCODE_START_2_PAR &&
+               nOpCode < SC_OPCODE_STOP_2_PAR) {
+        sal_uInt8 nParams = pToken->GetByte();
+
+        assert(nParams <= rStack.size());
+
+        // If there are no input parameters then the output unit is undefined.
+        // (In practice this would probably be nonsensical, but isn't a unit
+        //  error per-se.)
+        if (nParams == 0) {
+            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+        }
+
+        // This is still quite an ugly solution, even better would maybe be to have
+        // a StackUnitIterator which iterates all the appropriate units given a number of stack items
+        // to iterate over?
+        ScRangeList aRangeList;
+        stack< UtUnit > aUnitsStack;
+
+        for ( ; nParams > 0; nParams--) {
+            switch (rStack.top().type) {
+            case StackItemType::UNITS:
+            {
+                aUnitsStack.push(boost::get< UtUnit >(rStack.top().item));
+                break;
+            }
+            case StackItemType::RANGE:
+            {
+                aRangeList.Append(boost::get< ScRange >(rStack.top().item));
+                break;
+            }
+            }
+
+            rStack.pop();
+        }
+
+        RangeListIterator aIt(pDoc, aRangeList);
+
+        switch (aOpCode) {
+        case ocSum:
+        case ocMin:
+        case ocMax:
+        case ocAverage:
+        {
+            boost::optional< UtUnit > aFirstUnit;
+
+            while (aUnitsStack.size() > 0) {
+                if (!aFirstUnit) {
+                    aFirstUnit = aUnitsStack.top();
+                } else {
+                    UtUnit aCurrentUnit(aUnitsStack.top());
+                    if (aFirstUnit.get() != aCurrentUnit) {
+                        return { UnitsStatus::UNITS_INVALID, boost::none };
+                    }
+                }
+                rStack.pop();
+            }
+
+            if (aIt.first()) {
+                do {
+                    if (!aFirstUnit) {
+                        aFirstUnit = getUnitForCell(aIt.GetPos(), pDoc);
+                    } else {
+                        UtUnit aCurrentUnit = getUnitForCell(aIt.GetPos(), pDoc);
+                        if (aFirstUnit.get() != aCurrentUnit) {
+                            return { UnitsStatus::UNITS_INVALID, boost::none };
+                        }
+                    }
+                } while (aIt.next());
+
+            }
+
+            return { UnitsStatus::UNITS_VALID, aFirstUnit };
+        }
+        case ocProduct:
+        {
+            // To avoid having to detect when we get the first unit (i.e. to avoid
+            // the play with the optinal< UtUnit > as above), we just start with
+            // the dimensionless Unit 1 and multiply from there.
+            // This can also be avoided if we implement a combined Unit and Range
+            // Iterator (see above for more info).
+            UtUnit aUnit;
+            UtUnit::createUnit("", aUnit, mpUnitSystem);
+
+            while (aUnitsStack.size() > 0) {
+                aUnit *= aUnitsStack.top();
+                aUnitsStack.pop();
+            }
+
+            if (aIt.first()) {
+                do {
+                    aUnit *= getUnitForCell(aIt.GetPos(), pDoc);
+                } while (aIt.next());
+            }
+
+            return { UnitsStatus::UNITS_VALID, aUnit };
+        }
+        default:
+            return { UnitsStatus::UNITS_UNKNOWN, boost::none };
+        }
+    } else {
+        SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
         return { UnitsStatus::UNITS_UNKNOWN, boost::none };
     }
+    return { UnitsStatus::UNITS_VALID, pOut };
 }
 
 OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
@@ -469,62 +545,42 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
     pArray->Dump();
 #endif
 
-    stack< UtUnit > aUnitStack;
+    stack< StackItem > aStack;
 
     for (FormulaToken* pToken = pArray->FirstRPN(); pToken != 0; pToken = pArray->NextRPN()) {
         switch (pToken->GetType()) {
         case formula::svSingleRef:
         {
-            UtUnit pUnit(getUnitForRef(pToken, rFormulaAddress, pDoc));
+            UtUnit aUnit(getUnitForRef(pToken, rFormulaAddress, pDoc));
 
-            if (!pUnit.isValid()) {
+            if (!aUnit.isValid()) {
                 SAL_INFO("sc.units", "no unit returned for scSingleRef, ut_status: " << getUTStatus());
 
                 // This only happens in case of parsing (or system) errors.
                 // However maybe we should be returning "unverified" for
                 // unparseable formulas?
                 // (or even have a "can't be verified" state too?)
-                // see below for more.
+                // see below for more.x
                 return false;
             }
 
-            aUnitStack.push(pUnit);
+            aStack.push( { StackItemType::UNITS, aUnit } );
             break;
         }
         case formula::svDoubleRef:
         {
             ScComplexRefData* pDoubleRef = pToken->GetDoubleRef();
-            ScRangeList aRangeList(pDoubleRef->toAbs(rFormulaAddress));
+            ScRange aRange = pDoubleRef->toAbs(rFormulaAddress);
+            aStack.push( { StackItemType::RANGE, aRange } );
 
-            // Functions operating on DoubleRefs seem to have a variable number of input
-            // arguments (which will all preceed the opcode in the TokenArray), hence
-            // we read all the ranges in first before operating on them.
-            // The appropriate handling of the opcode depends on the specific opcode
-            // (i.e. identical units needed for sum, but not for multiplication), hence
-            // we need to handle that opcode here as opposed to as part of the usual flow
-            // (where we would simply push the units onto the stack).
-            pToken = pArray->NextRPN();
-            while (pToken->GetType() == formula::svDoubleRef) {
-                pDoubleRef = pToken->GetDoubleRef();
-                aRangeList.Append(pDoubleRef->toAbs(rFormulaAddress));
-                pToken = pArray->NextRPN();
-            }
-
-            if (!pToken) {
-                // It's possible to have DoubleRef as the last token, e.g the simplest
-                // example being "=A1:B1" - in this case the formula can't be evaluated
-                // anyways, so giving up on unit verification is the most sensible option.
-                // (I.e. the formula ends up spewing out #VALUE to the end-user - there's
-                // no point in doing any verification here.)
-                return true;
-            }
-
-            UnitsResult aResult(getOutputUnitForDoubleRefOpcode(pToken->GetOpCode(), aRangeList, pDoc));
-
+            break;
+        }
+        case formula::svByte:
+        {
+            UnitsResult aResult = getOutputUnitsForOpCode(aStack, pToken, pDoc);
 
             switch (aResult.status) {
             case UnitsStatus::UNITS_INVALID:
-                SAL_INFO("sc.units", "svDoubleRef opcode unit error detected");
                 return false;
             case UnitsStatus::UNITS_UNKNOWN:
                 // Unsupported hence we stop processing.
@@ -532,22 +588,8 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             case UnitsStatus::UNITS_VALID:
                 assert(aResult.units); // ensure that we have the optional unit
                 assert(aResult.units->isValid());
-                aUnitStack.push(aResult.units.get());
+                aStack.push( { StackItemType::UNITS, aResult.units.get() } );
                 break;
-            }
-
-            break;
-        }
-        case formula::svByte:
-        {
-            UtUnit pOut = getOutputUnitsForOpCode(aUnitStack, pToken->GetOpCode());
-
-            // A null unit indicates either invalid units and/or other erronous input
-            // i.e. is an indication that getOutputUnitsForOpCode failed.
-            if (pOut.isValid()) {
-                aUnitStack.push(pOut);
-            } else {
-                return false;
             }
 
             break;
@@ -561,7 +603,8 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             UtUnit::createUnit("", aScale, mpUnitSystem); // Get the dimensionless unit 1
             aScale = aScale*(pToken->GetDouble());
 
-            aUnitStack.push(aScale);
+            aStack.push( { StackItemType::UNITS, aScale } );
+
             break;
         }
         default:
