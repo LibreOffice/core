@@ -54,7 +54,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/rulritem.hxx>
-#include <swdbtoolsclient.hxx>
 #include <tabledlg.hxx>
 #include <fmtclds.hxx>
 #include <tabcol.hxx>
@@ -76,6 +75,7 @@
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 #include <crsskip.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include <dbui.hrc>
 
@@ -94,6 +94,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <swuiexp.hxx>
 
+using namespace ::dbtools;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -318,7 +319,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                     }
                     else
                     {
-                        pNew->nDBNumFmt = SwDBManager::GetDbtoolsClient().getDefaultNumberFormat(xCol,
+                        pNew->nDBNumFmt = getDefaultNumberFormat(xCol,
                                 xDocNumberFormatTypes, LanguageTag( rSh.GetCurLang() ).getLocale());
                     }
 

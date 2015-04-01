@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/d
 
 $(eval $(call gb_Library_set_include,dbtools,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 

@@ -20,20 +20,15 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 #define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
-#include "svx/dbtoolsclient.hxx"
 #include "svx/ParseContext.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <connectivity/virtualdbtools.hxx>
 
 namespace svxform
 {
-
-
-
     //= OSQLParserClient
 
-    class SVX_DLLPUBLIC OSQLParserClient : public ODbtoolsClient
-                            ,public ::svxform::OParseContextClient
+    class SVX_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
     {
     private:
 
@@ -45,7 +40,6 @@ namespace svxform
     protected:
         OSQLParserClient(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     protected:
         inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
@@ -55,10 +49,7 @@ namespace svxform
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
             ) const
         {
-            ::rtl::Reference< ::connectivity::simple::ISQLParseNode > xReturn;
-            if ( ensureLoaded() )
-                xReturn = m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
-            return xReturn;
+            return m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
         }
     };
 

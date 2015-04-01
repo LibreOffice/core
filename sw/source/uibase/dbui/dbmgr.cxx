@@ -48,7 +48,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <dbconfig.hxx>
-#include <swdbtoolsclient.hxx>
 #include <pagedesc.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/tempfile.hxx>
@@ -110,6 +109,8 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
@@ -144,6 +145,7 @@
 
 using namespace ::osl;
 using namespace ::svx;
+using namespace ::dbtools;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -1692,7 +1694,7 @@ sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
             OSL_FAIL("no FormatKey property found");
         }
         if(bUseDefault)
-            nRet = SwDBManager::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
+            nRet = getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
 }
@@ -1749,7 +1751,7 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     try
     {
-        Reference<XCompletedConnection> xComplConnection(SwDBManager::GetDbtoolsClient().getDataSource(rDataSource, xContext),UNO_QUERY);
+        Reference<XCompletedConnection> xComplConnection(getDataSource(rDataSource, xContext),UNO_QUERY);
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
@@ -1857,8 +1859,7 @@ OUString SwDBManager::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 
             try
             {
-                SwDbtoolsClient& aClient = SwDBManager::GetDbtoolsClient();
-                sRet = aClient.getFormattedValue(
+                sRet = DBTypeConversion::getFormattedValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
@@ -2835,7 +2836,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     if(xChild.is())
         xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
-        xSource = SwDBManager::GetDbtoolsClient().getDataSource(sDataSource, xContext);
+        xSource = getDataSource(sDataSource, xContext);
     uno::Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2866,21 +2867,6 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     }
 }
 
-SwDbtoolsClient* SwDBManager::pDbtoolsClient = NULL;
-
-SwDbtoolsClient& SwDBManager::GetDbtoolsClient()
-{
-    if ( !pDbtoolsClient )
-        pDbtoolsClient = new SwDbtoolsClient;
-    return *pDbtoolsClient;
-}
-
-void SwDBManager::RemoveDbtoolsClient()
-{
-    delete pDbtoolsClient;
-    pDbtoolsClient = 0;
-}
-
 uno::Reference<XDataSource> SwDBManager::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const OUString& _sDataSourceName)
 {
     uno::Reference<XDataSource> xSource;
@@ -2890,7 +2876,7 @@ uno::Reference<XDataSource> SwDBManager::getDataSourceAsParent(const uno::Refere
         if ( xChild.is() )
             xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
         if ( !xSource.is() )
-            xSource = SwDBManager::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
+            xSource = getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
     catch(const Exception&)
     {

@@ -20,10 +20,10 @@
 
 #include <connectivity/virtualdbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
+#include "simpledbt/parser_s.hxx"
+#include "simpledbt/charset_s.hxx"
 #include "dbtfactory.hxx"
-#include "parser_s.hxx"
 #include "staticdbtools_s.hxx"
-#include "charset_s.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

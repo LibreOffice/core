@@ -27,6 +27,7 @@
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <svx/txenctab.hxx>
+#include <unotools/sharedunocomponent.hxx>
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include <svx/dbcharsethelper.hxx>

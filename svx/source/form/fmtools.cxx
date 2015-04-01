@@ -21,7 +21,6 @@
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
-#include "svx/dbtoolsclient.hxx"
 #include "svx/fmglob.hxx"
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -96,7 +95,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::form;
 using namespace ::svxform;
-using namespace ::connectivity::simple;
 
 
 namespace
