@@ -2563,8 +2563,8 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
 {
     (void)pButton;
 
-    VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog( nullptr,
-            GetSaveInData()->GetEntries(), NULL, true );
+    VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
+        nullptr, GetSaveInData()->GetEntries(), nullptr, true );
 
     if ( pDialog->Execute() == RET_OK )
     {

@@ -924,7 +924,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bool bContinue = true;
                             if ( HasName() )
                             {
-                                ScopedVclPtrInstance<QueryBox> aBox(new QueryBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                ScopedVclPtrInstance<QueryBox> aBox(
+                                    GetActiveDialogParent(),
+                                    WinBits( WB_YES_NO | WB_DEF_YES ),
                                     ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) );
                                 if ( aBox->Execute() == RET_NO )
                                 {
@@ -1021,7 +1023,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     }
                                     else
                                     {
-                                        ScopedVclPtrInstance<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                        ScopedVclPtrInstance<WarningBox> aBox(
+                                            GetActiveDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_YES ),
                                             ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
                                         if ( aBox->Execute() == RET_YES )
                                         {

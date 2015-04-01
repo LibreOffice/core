@@ -1110,9 +1110,7 @@ bool Outliner::ShowWrapArroundDialog (void)
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
         ScopedVclPtrInstance<QueryBox> aQuestionBox (
-            NULL,
-            WB_YES_NO | WB_DEF_YES,
-            SD_RESSTR(nStringId));
+            nullptr, WB_YES_NO | WB_DEF_YES, SD_RESSTR(nStringId));
         aQuestionBox->SetImage (QueryBox::GetStandardImage());
         sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
         bDoWrapArround = (nBoxResult == RET_YES);
@@ -1157,8 +1155,8 @@ void Outliner::PrepareSpellCheck (void)
     {
         mbError = true;
         mbEndOfSearch = true;
-        ScopedVclPtrInstance<MessageDialog> aErrorBox (nullptr
-                                                       SD_RESSTR(STR_NOLANGUAGE));
+        ScopedVclPtrInstance<MessageDialog> aErrorBox (
+            nullptr, SD_RESSTR(STR_NOLANGUAGE));
         ShowModalMessageBox (*aErrorBox.get());
     }
     else if (eState != EE_SPELL_OK)

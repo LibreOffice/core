@@ -223,7 +223,8 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
 {
     bool bChanges = false;
     ScopedVclPtrInstance<DigitalSignaturesDialog> aSignaturesDialog(
-        NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature);
+        nullptr, mxCtx, eMode, bReadOnly, m_sODFVersion,
+        m_bHasDocumentSignature);
     bool bInit = aSignaturesDialog->Init();
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )

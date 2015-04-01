@@ -1478,11 +1478,11 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
-    VclPtr<SwAddStylesDlg_Impl> pDlg(pButton,
-                                     static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
-                                     aStyleArr);
+    ScopedVclPtrInstance<SwAddStylesDlg_Impl> pDlg(
+        pButton, static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
+        aStyleArr);
     pDlg->Execute();
-    pDlg.reset();
+    pDlg.disposeAndClear();
     ModifyHdl(0);
     return 0;
 }

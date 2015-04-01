@@ -119,7 +119,7 @@ throw (RuntimeException, std::exception)
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(0);
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
             aPasswdDlg->SetMinLen(0);
             if (!aPasswdDlg->Execute())
                 return false;

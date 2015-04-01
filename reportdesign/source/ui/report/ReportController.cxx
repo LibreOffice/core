@@ -2480,9 +2480,10 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         }
 
         {   // want the dialog to be destroyed before our set
-            ScopedVclPtr<ORptPageDialog> aDlg(getView(), pDescriptor.get(),_xSection.is()
-                ? OUString("BackgroundDialog")
-                : OUString("PageDialog"));
+            ScopedVclPtrInstance<ORptPageDialog> aDlg(
+                getView(), pDescriptor.get(),_xSection.is()
+                           ? OUString("BackgroundDialog")
+                           : OUString("PageDialog"));
             if (RET_OK == aDlg->Execute())
             {
 

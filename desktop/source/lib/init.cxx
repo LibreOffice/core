@@ -606,7 +606,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 #ifndef IOS
     InitSvpForLibreOfficeKit();
 
-    ScopedVclPtrInstance< VirtualDevice > pDevice(0, Size(1, 1), (sal_uInt16)32) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),

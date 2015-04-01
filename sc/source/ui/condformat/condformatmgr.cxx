@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     sal_uInt16 nId = 1;
     ScModule* pScMod = SC_MOD();
     pScMod->SetRefDialog( nId, true );
-    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, NULL, ScRangeList(),
+    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, nullptr, ScRangeList(),
                                          maPos, condformat::dialog::CONDITION);
     Show(false, 0);
     if(pDlg->Execute() == RET_OK)
