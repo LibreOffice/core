@@ -7440,8 +7440,13 @@ else
         AC_MSG_RESULT([internal, jpeg-turbo])
         BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
         AC_CHECK_PROGS(NASM, [nasm nasmw yasm])
-        if test -z "$NASM" -a "$build_os" = "cygwin" -a -x "/opt/lo/bin/nasm"; then
-            NASM="/opt/lo/bin/nasm"
+
+        if test -z "$NASM" -a "$build_os" = "cygwin"; then
+            if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/nasm"; then
+                NASM="$LODE_HOME/opt/bin/nasm"
+            elif -x "/opt/lo/bin/nasm"; then
+                NASM="/opt/lo/bin/nasm"
+            fi
         fi
         if test -z "$NASM"; then
 cat << _EOS
