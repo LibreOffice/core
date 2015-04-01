@@ -56,8 +56,8 @@ const SfxItemPropertySet* getDateTimePropertySet()
     static const SfxItemPropertyMapEntry aMapContent[] =
     {
         { OUString(SC_UNONAME_DATETIME), 0, cppu::UnoType<util::DateTime>::get(), 0, 0 },
-        { OUString(SC_UNONAME_ISFIXED),  0, getBooleanCppuType(),                  0, 0 },
-        { OUString(SC_UNONAME_ISDATE),   0, getBooleanCppuType(),                  0, 0 },
+        { OUString(SC_UNONAME_ISFIXED),  0, cppu::UnoType<bool>::get(),                  0, 0 },
+        { OUString(SC_UNONAME_ISDATE),   0, cppu::UnoType<bool>::get(),                  0, 0 },
         { OUString(SC_UNONAME_NUMFMT),   0, cppu::UnoType<sal_Int32>::get(),      0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -80,7 +80,7 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
     static const SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_ANCTYPE),  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_ANCTYPES), 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_ANCTYPES), 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_REPR),     0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNONAME_TARGET),   0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNONAME_TEXTWRAP), 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
@@ -96,7 +96,7 @@ const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
     static const SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_ANCTYPE),  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_ANCTYPES), 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_ANCTYPES), 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_TEXTWRAP), 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -109,7 +109,7 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
     static const SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_ANCTYPE),  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_ANCTYPES), 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_ANCTYPES), 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_FILEFORM), 0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         {OUString(SC_UNONAME_TEXTWRAP), 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }

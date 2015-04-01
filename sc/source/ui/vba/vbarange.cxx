@@ -1539,13 +1539,13 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFi
             // with a better test than this
             if ( aValue.getValueTypeName().indexOf('[') ==  aValue.getValueTypeName().lastIndexOf('[') )
             {
-                aConverted = xConverter->convertTo( aValue, getCppuType((uno::Sequence< uno::Any >*)0) );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
                 Dim1ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
             else
             {
-                aConverted = xConverter->convertTo( aValue, getCppuType((uno::Sequence< uno::Sequence< uno::Any > >*)0) );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Sequence< uno::Any > >>::get() );
                 Dim2ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
@@ -1969,7 +1969,7 @@ ScVbaRange::getFormulaArray() throw (uno::RuntimeException, std::exception)
             aSingleValueOrMatrix <<= aTmpSeq[ 0 ][ 0 ];
     }
     else
-        aSingleValueOrMatrix = xConverter->convertTo( uno::makeAny( aTmpSeq ) , getCppuType((uno::Sequence< uno::Sequence< uno::Any > >*)0)  ) ;
+        aSingleValueOrMatrix = xConverter->convertTo( uno::makeAny( aTmpSeq ) , cppu::UnoType<uno::Sequence< uno::Sequence< uno::Any > >>::get()  ) ;
     return aSingleValueOrMatrix;
 }
 

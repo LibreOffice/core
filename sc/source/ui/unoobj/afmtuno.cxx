@@ -68,12 +68,12 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 {
     static const SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
-        { OUString(SC_UNONAME_INCBACK),  0,  ::getBooleanCppuType(),    0, 0 },
-        { OUString(SC_UNONAME_INCBORD),  0,  ::getBooleanCppuType(),    0, 0 },
-        { OUString(SC_UNONAME_INCFONT),  0,  ::getBooleanCppuType(),    0, 0 },
-        { OUString(SC_UNONAME_INCJUST),  0,  ::getBooleanCppuType(),    0, 0 },
-        { OUString(SC_UNONAME_INCNUM),   0,  ::getBooleanCppuType(),    0, 0 },
-        { OUString(SC_UNONAME_INCWIDTH), 0,  ::getBooleanCppuType(),    0, 0 },
+        { OUString(SC_UNONAME_INCBACK),  0,  cppu::UnoType<bool>::get(),    0, 0 },
+        { OUString(SC_UNONAME_INCBORD),  0,  cppu::UnoType<bool>::get(),    0, 0 },
+        { OUString(SC_UNONAME_INCFONT),  0,  cppu::UnoType<bool>::get(),    0, 0 },
+        { OUString(SC_UNONAME_INCJUST),  0,  cppu::UnoType<bool>::get(),    0, 0 },
+        { OUString(SC_UNONAME_INCNUM),   0,  cppu::UnoType<bool>::get(),    0, 0 },
+        { OUString(SC_UNONAME_INCWIDTH), 0,  cppu::UnoType<bool>::get(),    0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aAutoFormatMap_Impl;
@@ -88,8 +88,8 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
     {
         {OUString(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,        ::cppu::UnoType<sal_Int32>::get(),        0, MID_BACK_COLOR },
         {OUString(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,        ::cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        {OUString(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,      ::getBooleanCppuType(),                    0, 0 },
-        {OUString(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,   ::getBooleanCppuType(),                    0, MID_CROSSED_OUT },
+        {OUString(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,      cppu::UnoType<bool>::get(),                    0, 0 },
+        {OUString(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,   cppu::UnoType<bool>::get(),                    0, MID_CROSSED_OUT },
         {OUString(SC_UNONAME_CFONT),    ATTR_FONT,              ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
         {OUString(SC_UNONAME_CFCHARS),  ATTR_FONT,              ::cppu::UnoType<sal_Int16>::get(),              0, MID_FONT_CHAR_SET },
         {OUString(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,          ::cppu::UnoType<sal_Int16>::get(),              0, MID_FONT_CHAR_SET },
@@ -113,7 +113,7 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
         {OUString(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,      ::cppu::UnoType<awt::FontSlant>::get(),         0, MID_POSTURE },
         {OUString(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,  ::cppu::UnoType<awt::FontSlant>::get(),         0, MID_POSTURE },
         {OUString(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,  ::cppu::UnoType<awt::FontSlant>::get(),         0, MID_POSTURE },
-        {OUString(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED,     ::getBooleanCppuType(),                    0, 0 },
+        {OUString(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED,     cppu::UnoType<bool>::get(),                    0, 0 },
         {OUString(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD,     ::cppu::UnoType<table::TableBorder>::get(),     0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2,     ::cppu::UnoType<table::TableBorder2>::get(),     0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,    ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE },
@@ -122,8 +122,8 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
         {OUString(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,   ::cppu::UnoType<float>::get(),                  0, MID_WEIGHT },
         {OUString(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,       ::cppu::UnoType<table::CellHoriJustify>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
-        {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,        ::getBooleanCppuType(),                    0, MID_GRAPHIC_TRANSPARENT },
-        {OUString(SC_UNONAME_WRAP),     ATTR_LINEBREAK,         ::getBooleanCppuType(),                    0, 0 },
+        {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,        cppu::UnoType<bool>::get(),                    0, MID_GRAPHIC_TRANSPARENT },
+        {OUString(SC_UNONAME_WRAP),     ATTR_LINEBREAK,         cppu::UnoType<bool>::get(),                    0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,           ::cppu::UnoType<table::CellOrientation>::get(),   0, 0 },
         {OUString(SC_UNONAME_PBMARGIN), ATTR_MARGIN,            ::cppu::UnoType<sal_Int32>::get(),        0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,            ::cppu::UnoType<sal_Int32>::get(),        0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },

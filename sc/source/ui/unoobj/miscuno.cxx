@@ -165,7 +165,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, bool bValue )
 {
     sal_Bool bTemp = bValue ? 1 : 0;
-    rAny.setValue( &bTemp, getBooleanCppuType() );
+    rAny.setValue( &bTemp, cppu::UnoType<bool>::get() );
 }
 
 void ScUnoHelpFunctions::SetOptionalPropertyValue(

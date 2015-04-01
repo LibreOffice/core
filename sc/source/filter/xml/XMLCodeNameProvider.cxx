@@ -138,7 +138,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
 uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
     throw (uno::RuntimeException, std::exception)
 {
-    return getCppuType(static_cast<uno::Sequence<beans::PropertyValue>*>(0));
+    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()

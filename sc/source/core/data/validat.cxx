@@ -241,7 +241,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     // The contents of the cell get reset if the script returns false
     bool bTmp = false;
     if ( eRet == ERRCODE_NONE &&
-             aRet.getValueType() == getCppuBooleanType() &&
+             aRet.getValueType() == cppu::UnoType<bool>::get() &&
              ( aRet >>= bTmp ) &&
              !bTmp )
     {

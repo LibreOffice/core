@@ -67,7 +67,7 @@ const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
         {OUString("StyleName"), StyleName, cppu::UnoType<OUString>::get(), 0, 0},
         {OUString("Formula1"), Formula1, cppu::UnoType<OUString>::get(), 0, 0},
         {OUString("Formula2"), Formula2, cppu::UnoType<OUString>::get(), 0, 0},
-        {OUString("Operator"), Operator, getCppuType(&sheet::ConditionFormatOperator::EQUAL), 0, 0 },
+        {OUString("Operator"), Operator, cppu::UnoType<decltype(sheet::ConditionFormatOperator::EQUAL)>::get(), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aConditionEntryPropertyMap_Impl;
@@ -118,7 +118,7 @@ const SfxItemPropertyMapEntry* getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
-        {OUString("ColorScaleEntries"), ColorScaleEntries, getCppuType((uno::Sequence< sheet::XColorScaleEntry >*)0), 0, 0 },
+        {OUString("ColorScaleEntries"), ColorScaleEntries, cppu::UnoType<uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aColorScalePropertyMap_Impl;
@@ -156,14 +156,14 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
 {
     static const SfxItemPropertyMapEntry aDataBarPropertyMap_Impl[] =
     {
-        {OUString("AxisPosition"), AxisPosition, getCppuType(&sheet::DataBarAxis::AXIS_AUTOMATIC), 0, 0 },
-        {OUString("UseGradient"), UseGradient, getBooleanCppuType(), 0, 0 },
-        {OUString("UseNegativeColor"), UseNegativeColor, getBooleanCppuType(), 0, 0 },
-        {OUString("ShowValue"), DataBar_ShowValue, getBooleanCppuType(), 0, 0 },
+        {OUString("AxisPosition"), AxisPosition, cppu::UnoType<decltype(sheet::DataBarAxis::AXIS_AUTOMATIC)>::get(), 0, 0 },
+        {OUString("UseGradient"), UseGradient, cppu::UnoType<bool>::get(), 0, 0 },
+        {OUString("UseNegativeColor"), UseNegativeColor, cppu::UnoType<bool>::get(), 0, 0 },
+        {OUString("ShowValue"), DataBar_ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
         {OUString("Color"), DataBar_Color, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {OUString("AxisColor"), AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {OUString("NegativeColor"), NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {OUString("DataBarEntries"), DataBarEntries, getCppuType((uno::Sequence< sheet::XDataBarEntry >*)0), 0, 0 },
+        {OUString("DataBarEntries"), DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aDataBarPropertyMap_Impl;
@@ -211,10 +211,10 @@ const SfxItemPropertyMapEntry* getIconSetPropSet()
 {
     static const SfxItemPropertyMapEntry aIconSetPropertyMap_Impl[] =
     {
-        {OUString("Icons"), Icons, getCppuType(&sheet::IconSetType::ICONSET_3SYMBOLS), 0, 0 },
-        {OUString("Reverse"), Reverse, getBooleanCppuType(), 0, 0 },
-        {OUString("ShowValue"), ShowValue, getBooleanCppuType(), 0, 0 },
-        {OUString("IconSetEntries"), IconSetEntries, getCppuType((uno::Sequence< sheet::XIconSetEntry >*)0), 0, 0 },
+        {OUString("Icons"), Icons, cppu::UnoType<decltype(sheet::IconSetType::ICONSET_3SYMBOLS)>::get(), 0, 0 },
+        {OUString("Reverse"), Reverse, cppu::UnoType<bool>::get(), 0, 0 },
+        {OUString("ShowValue"), ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
+        {OUString("IconSetEntries"), IconSetEntries, cppu::UnoType<uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aIconSetPropertyMap_Impl;

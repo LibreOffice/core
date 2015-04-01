@@ -452,7 +452,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
     registerPropertyNoMember( OUString( "RelatedCellRanges" ),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
-        ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
+        cppu::UnoType<decltype(aInitialPropValue)>::get(), &aInitialPropValue );
 }
 
 ScChartObj::~ScChartObj()

@@ -93,7 +93,7 @@ static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 
 static void lcl_SetBoolInAny( uno::Any& rAny, bool bValue )
 {
-    rAny.setValue( &bValue, getBooleanCppuType() );
+    rAny.setValue( &bValue, cppu::UnoType<bool>::get() );
 }
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
@@ -1121,11 +1121,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 
     static const SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
-        { OUString(SC_UNO_DP_COLGRAND), 0,  getBooleanCppuType(),              0, 0 },
+        { OUString(SC_UNO_DP_COLGRAND), 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { OUString(SC_UNO_DP_DATADESC), 0,  cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::READONLY, 0 },
-        { OUString(SC_UNO_DP_IGNOREEMPTY), 0,  getBooleanCppuType(),              0, 0 },     // for sheet data only
-        { OUString(SC_UNO_DP_REPEATEMPTY), 0,  getBooleanCppuType(),              0, 0 },     // for sheet data only
-        { OUString(SC_UNO_DP_ROWGRAND), 0,  getBooleanCppuType(),              0, 0 },
+        { OUString(SC_UNO_DP_IGNOREEMPTY), 0,  cppu::UnoType<bool>::get(),              0, 0 },     // for sheet data only
+        { OUString(SC_UNO_DP_REPEATEMPTY), 0,  cppu::UnoType<bool>::get(),              0, 0 },     // for sheet data only
+        { OUString(SC_UNO_DP_ROWGRAND), 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { OUString(SC_UNO_DP_ROWFIELDCOUNT),    0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
         { OUString(SC_UNO_DP_COLUMNFIELDCOUNT), 0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
         { OUString(SC_UNO_DP_DATAFIELDCOUNT),   0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
@@ -1493,10 +1493,10 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 
     static const SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
-        { OUString(SC_UNO_DP_FILTER),   0,  getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
+        { OUString(SC_UNO_DP_FILTER),   0,  cppu::UnoType<uno::Sequence<sheet::TableFilterField>>::get(), 0, 0 },
         { OUString(SC_UNO_DP_FLAGS),    0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_FUNCTION), 0,  cppu::UnoType<sheet::GeneralFunction>::get(),   0, 0 },
-        { OUString(SC_UNO_DP_ISDATALAYOUT), 0,  getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
+        { OUString(SC_UNO_DP_ISDATALAYOUT), 0,  cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_NUMBERFO), 0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_ORIENTATION), 0,  cppu::UnoType<sheet::DataPilotFieldOrientation>::get(), 0, 0 },
         { OUString(SC_UNO_DP_ORIGINAL), 0,  cppu::UnoType<container::XNamed>::get(), beans::PropertyAttribute::READONLY, 0 },
@@ -1506,7 +1506,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         { OUString(SC_UNO_DP_USEDHIERARCHY), 0,  cppu::UnoType<sal_Int32>::get(),                0, 0 },
         { OUString(SC_UNO_DP_LAYOUTNAME), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(SC_UNO_DP_FIELD_SUBTOTALNAME), 0, cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString(SC_UNO_DP_HAS_HIDDEN_MEMBER), 0, getBooleanCppuType(), 0, 0 },
+        { OUString(SC_UNO_DP_HAS_HIDDEN_MEMBER), 0, cppu::UnoType<bool>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2194,10 +2194,10 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         //TODO: change type of AutoShow/Layout/Sorting to API struct when available
         { OUString(SC_UNO_DP_AUTOSHOW), 0,  cppu::UnoType<sheet::DataPilotFieldAutoShowInfo>::get(),     0, 0 },
         { OUString(SC_UNO_DP_LAYOUT),   0,  cppu::UnoType<sheet::DataPilotFieldLayoutInfo>::get(),       0, 0 },
-        { OUString(SC_UNO_DP_SHOWEMPTY), 0, getBooleanCppuType(),                                   0, 0 },
-        { OUString(SC_UNO_DP_REPEATITEMLABELS), 0, getBooleanCppuType(),                                   0, 0 },
+        { OUString(SC_UNO_DP_SHOWEMPTY), 0, cppu::UnoType<bool>::get(),                                   0, 0 },
+        { OUString(SC_UNO_DP_REPEATITEMLABELS), 0, cppu::UnoType<bool>::get(),                                   0, 0 },
         { OUString(SC_UNO_DP_SORTING),  0,  cppu::UnoType<sheet::DataPilotFieldSortInfo>::get(),         0, 0 },
-        { OUString(SC_UNO_DP_SUBTOTAL), 0,  getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
+        { OUString(SC_UNO_DP_SUBTOTAL), 0,  cppu::UnoType<uno::Sequence<sheet::GeneralFunction>>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2642,9 +2642,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 
     static const SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
-        { OUString(SC_UNO_DP_ISVISIBLE), 0,  getBooleanCppuType(),              0, 0 },
+        { OUString(SC_UNO_DP_ISVISIBLE), 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { OUString(SC_UNO_DP_POSITION), 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { OUString(SC_UNO_DP_SHOWDETAILS), 0,  getBooleanCppuType(),              0, 0 },
+        { OUString(SC_UNO_DP_SHOWDETAILS), 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { OUString(SC_UNO_DP_LAYOUTNAME), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

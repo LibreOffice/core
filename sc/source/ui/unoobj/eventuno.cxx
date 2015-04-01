@@ -170,7 +170,7 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName ) throw(uno
 uno::Type SAL_CALL ScSheetEventsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Sequence<beans::PropertyValue>*)0);
+    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL ScSheetEventsObj::hasElements() throw(uno::RuntimeException, std::exception)

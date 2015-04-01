@@ -63,7 +63,7 @@ static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xPro
 {
     //TODO: move to ScUnoHelpFunctions?
 
-    xProp->setPropertyValue( rName, uno::Any( &bValue, getBooleanCppuType() ) );
+    xProp->setPropertyValue( rName, uno::Any( &bValue, cppu::UnoType<bool>::get() ) );
 }
 
 ScDPSaveMember::ScDPSaveMember(const OUString& rName) :

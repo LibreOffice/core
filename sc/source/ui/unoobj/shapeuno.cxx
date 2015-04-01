@@ -1458,7 +1458,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        return ::getCppuType((const uno::Sequence< beans::PropertyValue >*)0);
+        return cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE

@@ -80,7 +80,7 @@ public:
 
     /** Convert a sequence of mixed elements to ScMatrix.
 
-        Precondition: rAny.getValueType().equals( getCppuType( (uno::Sequence< uno::Sequence< uno::Any > > *)0))
+        Precondition: rAny.getValueType().equals( cppu::UnoType< uno::Sequence< uno::Sequence< uno::Any > > >::get() )
 
         @returns a new'd ScMatrix as ScMatrixRef, NULL if rAny couldn't be read
         as type Sequence<Sequence<Any>>

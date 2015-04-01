@@ -695,10 +695,10 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
                 OUString sName = xClass->getName();
                 return (
-                    IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<sal_Int32> >*)0) ) ||
-                    IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<double> >*)0) ) ||
-                    IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<OUString> >*)0) ) ||
-                    IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ) );
+                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<uno::Any> >>::get() ) );
             }
     }
 }
@@ -722,16 +722,16 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     //TODO: XIdlClass needs getType() method!
     OUString sName = xClass->getName();
 
-    if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<sal_Int32> >*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ))
         return SC_ADDINARG_INTEGER_ARRAY;
 
-    if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<double> >*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ))
         return SC_ADDINARG_DOUBLE_ARRAY;
 
-    if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<OUString> >*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ))
         return SC_ADDINARG_STRING_ARRAY;
 
-    if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<uno::Any> >>::get() ))
         return SC_ADDINARG_MIXED_ARRAY;
 
     if (IsTypeName( sName, cppu::UnoType<uno::Any>::get()))
@@ -743,7 +743,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if (IsTypeName( sName, cppu::UnoType<beans::XPropertySet>::get()))
         return SC_ADDINARG_CALLER;
 
-    if (IsTypeName( sName, getCppuType((uno::Sequence<uno::Any>*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<uno::Sequence<uno::Any>>::get() ))
         return SC_ADDINARG_VARARGS;
 
     return SC_ADDINARG_NONE;
@@ -1558,7 +1558,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             break;
 
         default:
-            if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int32> > *)0 ) ) )
+            if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) )
             {
                 const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = NULL;
 
@@ -1600,7 +1600,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<double> > *)0 ) ) )
+            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) )
             {
                 const uno::Sequence< uno::Sequence<double> >* pRowSeq = NULL;
 
@@ -1642,7 +1642,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<OUString> > *)0 ) ) )
+            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) )
             {
                 const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = NULL;
 
@@ -1688,7 +1688,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<uno::Any> > *)0 ) ) )
+            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<uno::Any> >>::get() ) )
             {
                 xMatrix = ScSequenceToMatrix::CreateMixedMatrix( rNewRes );
             }

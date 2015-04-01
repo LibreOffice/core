@@ -441,7 +441,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
     {
         uno::Reference< script::XTypeConverter > xConverter = getTypeConverter(mxContext);
         uno::Any aConverted;
-        aConverted = xConverter->convertTo( Index, getCppuType((uno::Sequence< uno::Any >*)0) );
+        aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
         SheetMap mSheets;
         uno::Sequence< uno::Any > sIndices;
         aConverted >>= sIndices;

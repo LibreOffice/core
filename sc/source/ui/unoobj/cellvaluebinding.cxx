@@ -61,7 +61,7 @@ namespace calc
             OUString( "BoundCell" ),
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
-            ::getCppuType( &aInitialPropValue ),
+            cppu::UnoType<decltype(aInitialPropValue)>::get(),
             &aInitialPropValue
         );
 

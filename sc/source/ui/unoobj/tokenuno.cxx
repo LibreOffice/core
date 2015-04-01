@@ -48,11 +48,11 @@ static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
     static const SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
-        {OUString(SC_UNO_COMPILEFAP),           0,  getBooleanCppuType(),                   0, 0 },
-        {OUString(SC_UNO_COMPILEENGLISH),       0,  getBooleanCppuType(),                   0, 0 },
-        {OUString(SC_UNO_IGNORELEADING),        0,  getBooleanCppuType(),                   0, 0 },
-        {OUString(SC_UNO_FORMULACONVENTION),    0,  getCppuType(&sheet::AddressConvention::UNSPECIFIED), 0, 0 },
-        {OUString(SC_UNO_OPCODEMAP),            0,  getCppuType((uno::Sequence< sheet::FormulaOpCodeMapEntry >*)0), 0, 0 },
+        {OUString(SC_UNO_COMPILEFAP),           0,  cppu::UnoType<bool>::get(),                   0, 0 },
+        {OUString(SC_UNO_COMPILEENGLISH),       0,  cppu::UnoType<bool>::get(),                   0, 0 },
+        {OUString(SC_UNO_IGNORELEADING),        0,  cppu::UnoType<bool>::get(),                   0, 0 },
+        {OUString(SC_UNO_FORMULACONVENTION),    0,  cppu::UnoType<decltype(sheet::AddressConvention::UNSPECIFIED)>::get(), 0, 0 },
+        {OUString(SC_UNO_OPCODEMAP),            0,  cppu::UnoType<uno::Sequence< sheet::FormulaOpCodeMapEntry >>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aFormulaParserMap_Impl;

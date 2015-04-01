@@ -74,14 +74,14 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     { OSL_FAIL("not implemented"); }
 
 #define SC_QUERYINTERFACE(x)    \
-    if (rType == getCppuType((const uno::Reference<x>*)0))  \
+    if (rType == cppu::UnoType<x>::get())  \
     { return uno::makeAny(uno::Reference<x>(this)); }
 
 // SC_QUERY_MULTIPLE( XElementAccess, XIndexAccess ):
 //  use if interface is used several times in one class
 
 #define SC_QUERY_MULTIPLE(x,y)  \
-    if (rType == getCppuType((const uno::Reference<x>*)0))  \
+    if (rType == cppu::UnoType<x>::get())  \
     { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
 
 class ScIndexEnumeration : public cppu::WeakImplHelper2<

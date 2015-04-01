@@ -57,7 +57,7 @@ namespace calc
             OUString( "CellRange" ),
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
-            ::getCppuType( &aInitialPropValue ),
+            cppu::UnoType<decltype(aInitialPropValue)>::get(),
             &aInitialPropValue
         );
     }
