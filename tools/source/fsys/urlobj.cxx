@@ -152,18 +152,6 @@ using namespace css;
    javascript-url = "JAVASCRIPT:" *uric
 
 
-   ; private (see RFC 2192)
-   imap-url = "IMAP://" user [";AUTH=" auth] "@" hostport "/" segment *("/" segment) ["/;UID=" nz_number]
-   user = 1*{RFC 2060 <CHAR8> using (escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "=" / "_" / "~")}
-   auth = {RFC 2060 <atom> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "+" / "," / "-" / "." / "=" / "_" / "~")}
-   segment = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / "=" / "@" / "_" / "~")
-   nz_number = {RFC 2060 <nz_number> using *DIGIT}
-
-
-   ; private
-   pop3-url = "POP3://" login ["/" ["<" *uric ">"]]
-
-
    ; RFC 2397
    data-url = "DATA:" [mediatype] [";BASE64"] "," *uric
    mediatype = [type "/" subtype] *(";" attribute "=" value)
@@ -385,12 +373,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "javascript", "javascript:", 0, false, false, false, false, false,
             false, false, false},
         SchemeInfo{
-            "imap", "imap://", 143, true, true, true, false, true, true, true,
-            false},
-        SchemeInfo{
-            "pop3", "pop3://", 110, true, true, false, true, true, true, false,
-            false},
-        SchemeInfo{
             "data", "data:", 0, false, false, false, false, false, false, false,
             false},
         SchemeInfo{
@@ -469,7 +451,6 @@ namespace unnamed_tools_urlobj {
 enum
 {
     PA = INetURLObject::PART_USER_PASSWORD,
-    PB = INetURLObject::PART_IMAP_ACHAR,
     PC = INetURLObject::PART_VIM,
     PD = INetURLObject::PART_FPATH,
     PE = INetURLObject::PART_AUTHORITY,
@@ -493,100 +474,100 @@ static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                              PP,
-/* ! */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* ! */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* " */                                     PM+PN   +PP,
 /* # */                                     PM,
-/* $ */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* $ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* % */                                     PM,
-/* & */ PA+PB   +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR+PS,
-/* ' */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* ( */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* ) */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* * */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* + */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR+PS,
-/* , */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR+PS,
-/* - */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* . */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* & */ PA      +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR+PS,
+/* ' */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* ( */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* ) */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* * */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* + */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR+PS,
+/* , */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR+PS,
+/* - */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* . */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* / */         +PD      +PG+PH+PI+PJ+PK   +PM+PN+PO         +PS,
-/* 0 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 1 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 2 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 3 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 4 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 5 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 6 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 7 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 8 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* 9 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 0 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 1 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 2 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 3 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 4 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 5 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 6 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 7 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 8 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* 9 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* : */         +PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR+PS,
 /* ; */ PA         +PE+PF+PG+PH+PI+PJ+PK   +PM         +PQ+PR+PS,
 /* < */                        +PI         +PM+PN   +PP,
-/* = */ PA+PB   +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR+PS,
+/* = */ PA      +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR+PS,
 /* > */                        +PI         +PM+PN   +PP,
 /* ? */                  +PG               +PM   +PO   +PQ   +PS,
 /* @ */         +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* A */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* B */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* C */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* D */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* E */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* F */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* G */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* H */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* I */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* J */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* K */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* L */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* M */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* N */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* O */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* P */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Q */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* R */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* S */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* T */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* U */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* V */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* W */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* X */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Y */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* Z */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* A */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* B */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* C */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* D */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* E */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* F */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* G */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* H */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* I */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* J */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* K */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* L */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* M */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* N */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* O */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* P */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* Q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* R */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* S */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* T */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* U */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* V */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* W */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* X */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* Y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* Z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* [ */                   PG               +PM+PN+PO,
 /* \ */                                    +PM+PN   +PP,
 /* ] */                   PG               +PM+PN+PO,
 /* ^ */                                     PM+PN   +PP,
-/* _ */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* _ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* ` */                                     PM+PN   +PP,
-/* a */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* b */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* c */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* d */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* e */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* f */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* g */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* h */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* i */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* j */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* k */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* l */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* m */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* n */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* o */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* p */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* q */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* r */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* s */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* t */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* u */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* v */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* w */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* x */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* y */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
-/* z */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* a */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* b */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* c */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* d */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* e */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* f */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* g */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* h */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* i */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* j */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* k */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* l */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* m */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* n */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* o */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* p */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* r */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* s */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* t */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* u */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* v */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* w */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* x */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
+/* z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS,
 /* { */                                     PM+PN   +PP,
 /* | */                                    +PM+PN   +PP,
 /* } */                                     PM+PN   +PP,
-/* ~ */ PA+PB   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ   +PS,
+/* ~ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ   +PS,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -1290,9 +1271,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
         if (pUserInfoBegin)
         {
-            Part ePart = m_eScheme == INetProtocol::Imap ?
-                             PART_IMAP_ACHAR :
-                         m_eScheme == INetProtocol::Vim ?
+            Part ePart = m_eScheme == INetProtocol::Vim ?
                              PART_VIM :
                              PART_USER_PASSWORD;
             bool bSupportsPassword = getSchemeInfo().m_bPassword;
@@ -2177,7 +2156,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
               PrefixInfo::INTERNAL },
             { "http:", 0, INetProtocol::Http, PrefixInfo::OFFICIAL },
             { "https:", 0, INetProtocol::Https, PrefixInfo::OFFICIAL },
-            { "imap:", 0, INetProtocol::Imap, PrefixInfo::OFFICIAL },
             { "javascript:", 0, INetProtocol::Javascript, PrefixInfo::OFFICIAL },
             { "ldap:", 0, INetProtocol::Ldap, PrefixInfo::OFFICIAL },
             { "macro:", "staroffice.macro:", INetProtocol::Macro,
@@ -2185,8 +2163,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "mailto:", 0, INetProtocol::Mailto, PrefixInfo::OFFICIAL },
             { "news:", 0, INetProtocol::News, PrefixInfo::OFFICIAL },
             { "out:", "staroffice.out:", INetProtocol::Out,
-              PrefixInfo::INTERNAL },
-            { "pop3:", "staroffice.pop3:", INetProtocol::Pop3,
               PrefixInfo::INTERNAL },
             { "private:", "staroffice.private:", INetProtocol::PrivSoffice,
               PrefixInfo::INTERNAL },
@@ -2218,8 +2194,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "staroffice.macro:", "macro:", INetProtocol::Macro,
               PrefixInfo::EXTERNAL },
             { "staroffice.out:", "out:", INetProtocol::Out,
-              PrefixInfo::EXTERNAL },
-            { "staroffice.pop3:", "pop3:", INetProtocol::Pop3,
               PrefixInfo::EXTERNAL },
             { "staroffice.private:", "private:", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
@@ -2328,16 +2302,13 @@ bool INetURLObject::setUser(OUString const & rTheUser,
                             rtl_TextEncoding eCharset)
 {
     if (
-         !getSchemeInfo().m_bUser ||
-         (m_eScheme == INetProtocol::Imap && rTheUser.isEmpty())
+         !getSchemeInfo().m_bUser
        )
     {
         return false;
     }
 
     OUString aNewUser(encodeText(rTheUser, bOctets,
-                                  m_eScheme == INetProtocol::Imap ?
-                                      PART_IMAP_ACHAR :
                                   m_eScheme == INetProtocol::Vim ?
                                       PART_VIM :
                                       PART_USER_PASSWORD,
@@ -2999,7 +2970,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             return false;
 
         case INetProtocol::Ftp:
-        case INetProtocol::Imap:
             if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
                 return false;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
@@ -3159,19 +3129,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
 
         done:
-            break;
-
-        case INetProtocol::Pop3:
-            while (pPos < pEnd && *pPos != nFragmentDelimiter)
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
-                                             eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_MESSAGE_ID_PATH, '%', eCharset,
-                           true);
-            }
             break;
 
         case INetProtocol::PrivSoffice:
@@ -4090,17 +4047,10 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         bool bUserInfo = false;
         if (getSchemeInfo().m_bUser)
         {
-            if (m_eScheme == INetProtocol::Imap && rTheUser.isEmpty())
-            {
-                setInvalid();
-                return false;
-            }
             if (!rTheUser.isEmpty())
             {
                 m_aUser.set(m_aAbsURIRef,
                             encodeText(rTheUser, false,
-                                       m_eScheme == INetProtocol::Imap ?
-                                           PART_IMAP_ACHAR :
                                        m_eScheme == INetProtocol::Vim ?
                                            PART_VIM :
                                            PART_USER_PASSWORD,
@@ -4910,16 +4860,9 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
     }
 }
 
-OUString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
-                                  rtl_TextEncoding eCharset) const
+OUString INetURLObject::GetMsgId(DecodeMechanism,
+                                 rtl_TextEncoding) const
 {
-    if (m_eScheme != INetProtocol::Pop3)
-        return OUString();
-    sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
-    sal_Unicode const * pEnd = p + m_aPath.getLength();
-    for (; p < pEnd; ++p)
-        if (*p == '<')
-            return decode(p, pEnd, getEscapePrefix(), eMechanism, eCharset);
     return OUString();
 }
 

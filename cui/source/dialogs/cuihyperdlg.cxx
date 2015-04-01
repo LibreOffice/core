@@ -310,8 +310,6 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
             break;
         case INetProtocol::File :
-        case INetProtocol::Pop3 :
-        case INetProtocol::Imap :
             nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             break;
         case INetProtocol::Mailto :

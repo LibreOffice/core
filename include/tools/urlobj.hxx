@@ -79,8 +79,6 @@ enum class INetProtocol
     Slot,
     Macro,
     Javascript,
-    Imap,
-    Pop3,
     Data,
     Cid,
     Out,
@@ -868,7 +866,6 @@ public:
     enum Part
     {
         PART_USER_PASSWORD          = 0x00001,
-        PART_IMAP_ACHAR             = 0x00002,
         PART_VIM                    = 0x00004,
         PART_FPATH                  = 0x00008,
         PART_AUTHORITY              = 0x00010,
