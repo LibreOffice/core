@@ -1131,7 +1131,7 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
 {
-    get(m_pMailContainer, "OptEmailPage");
+    get(m_pMailContainer, "program");
     get(m_pMailerURLFI, "lockemail");
     get(m_pMailerURLED, "url");
     get(m_pMailerURLPB, "browse");
