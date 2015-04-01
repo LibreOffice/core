@@ -240,10 +240,10 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
-    sal_Int64 toHyper(
+    static sal_Int64 toHyper(
         const Any& rAny, sal_Int64 min = SAL_INT64_MIN, sal_uInt64 max = SAL_UINT64_MAX )
         throw( CannotConvertException );
-    double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX ) const
+    static double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX )
         throw( CannotConvertException );
 
 public:
@@ -404,7 +404,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
 }
 
 
-double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) const
+double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
     throw( CannotConvertException )
 {
     double fRet;

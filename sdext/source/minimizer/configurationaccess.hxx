@@ -120,7 +120,7 @@ class ConfigurationAccess
         void LoadStrings();
         void LoadConfiguration();
         css::uno::Reference< css::uno::XInterface > OpenConfiguration( bool bReadOnly );
-        css::uno::Reference< css::uno::XInterface > GetConfigurationNode(
+        static css::uno::Reference< css::uno::XInterface > GetConfigurationNode(
             const css::uno::Reference< css::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 

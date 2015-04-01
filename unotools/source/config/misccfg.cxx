@@ -44,7 +44,7 @@ private:
     bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
-    const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
     virtual void            ImplCommit() SAL_OVERRIDE;

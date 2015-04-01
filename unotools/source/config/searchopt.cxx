@@ -53,7 +53,7 @@ protected:
     bool            Load();
     bool            Save();
 
-    Sequence< OUString >    GetPropertyNames() const;
+    static Sequence< OUString >    GetPropertyNames();
 
 public:
     SvtSearchOptions_Impl();
@@ -116,7 +116,7 @@ void SvtSearchOptions_Impl::SetModified( bool bVal )
     }
 }
 
-Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
+Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
 {
     static const char* aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
     {

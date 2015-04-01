@@ -293,15 +293,15 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
         //  public interface
 
-        bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
+        bool            IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
-        OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
-        OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
-        OUString GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
-        bool        IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
+        OUString        GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString        GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
+        static OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   );
+        OUString        GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
+        bool            IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
         sal_Int32       GetFactoryIcon            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        static bool ClassifyFactoryByName     ( const OUString&              sName      ,
+        static bool     ClassifyFactoryByName     ( const OUString&              sName      ,
                                                           SvtModuleOptions::EFactory&   eFactory   );
         void            SetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ,
                                                     const OUString&              sTemplate  );
@@ -589,7 +589,7 @@ OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EF
     return sFile;
 }
 
-OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory )
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
     //            But it's good to plan further possibilities!
@@ -965,7 +965,7 @@ OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
+    return SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( eFactory );
 }
 
 OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const

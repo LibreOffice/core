@@ -219,7 +219,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
         sal_Int32*& rpPropertyConceptArray,
         sal_Int32 iNextIndex
     );
-    void checkInterfaceArraySize( Sequence< Reference<XInterface> >& rSeq, Reference<XInterface>*& rpInterfaceArray,
+    static void checkInterfaceArraySize( Sequence< Reference<XInterface> >& rSeq, Reference<XInterface>*& rpInterfaceArray,
         sal_Int32 iNextIndex );
 
 public:
@@ -1845,7 +1845,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
 
                         // Field merken
-                        pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1,
+                        IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
                                                           pInterfaces1, rPropCount );
                         pInterfaces1[ rPropCount ] = xField;
 
@@ -2010,7 +2010,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
 
                             // get-Methode merken
-                            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1,
+                            IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
                                                               pInterfaces1, rPropCount );
                             pInterfaces1[ rPropCount ] = rxMethod_i;
 
@@ -2071,7 +2071,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                     rProp.Attributes &= ~READONLY;
 
                                     // set-Methode merken
-                                    pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2,
+                                    IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq2,
                                                                       pInterfaces2, rPropCount );
                                     pInterfaces2[ rPropCount ] = rxMethod_k;
                                 }
@@ -2228,7 +2228,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
 
                             // set-Methode merken
-                            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2,
+                            IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq2,
                                                               pInterfaces2, rPropCount );
                             pInterfaces2[ rPropCount ] = rxMethod_i;
 
@@ -2449,7 +2449,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
 
             // Field merken
-            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1,
+            IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
                 pInterfaces1, rPropCount );
             pInterfaces1[ rPropCount ] = xField;
 
