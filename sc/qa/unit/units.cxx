@@ -291,7 +291,6 @@ void UnitsTest::testUnitVerification() {
 
     // SUM("cm"&"kg") - multiple ranges
     address.IncRow();
-    // TODO: by default / when testing: separator is...?
     mpDoc->SetFormula(address, "=SUM(A1:A3,B1:B3)");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
@@ -321,6 +320,23 @@ void UnitsTest::testUnitVerification() {
     // PRODUCT("cm/","s")+"kg"
     address.IncRow();
     mpDoc->SetFormula(address, "=PRODUCT(C1:D1)+B1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test that multiple arguments of mixed types work too
+    // Adding multiple cells from one column is ok
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1,A2:A3)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // But mixing the columns fails because of mixed units
+    // (This test is primarily to ensure that we can handle arbitrary numbers
+    //  of arguments.)
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1,A2:A3,B1:B3,C1,C2,C3)");
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
     CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));

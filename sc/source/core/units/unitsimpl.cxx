@@ -274,7 +274,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const
                         return { UnitsStatus::UNITS_INVALID, boost::none };
                     }
                 }
-                rStack.pop();
+                aUnitsStack.pop();
             }
 
             if (aIt.first()) {
