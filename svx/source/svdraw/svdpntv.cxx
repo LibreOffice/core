@@ -957,7 +957,8 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
             aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
             Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
 
-            if (aRect.IsOver(aOutRect))
+            // In case of tiled rendering we want to get all invalidations, so visual area is not interesting.
+            if (aRect.IsOver(aOutRect) || GetModel()->isTiledRendering())
             {
                 InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aRect);
             }
