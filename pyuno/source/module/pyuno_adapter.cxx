@@ -314,7 +314,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo,  "except  uno->py[0x" ,
-                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,cppu::UnoType<decltype(e)>::get() );
         }
         throw;
     }
@@ -324,7 +324,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,cppu::UnoType<decltype(e)>::get() );
         }
         throw;
     }
@@ -334,7 +334,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,cppu::UnoType<decltype(e)>::get() );
         }
         throw;
     }

@@ -154,7 +154,7 @@ PyObject* PyUNO_callable_call(
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
-                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+                          me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
@@ -163,7 +163,7 @@ PyObject* PyUNO_callable_call(
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
-                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+                          me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
@@ -172,7 +172,7 @@ PyObject* PyUNO_callable_call(
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
-                          me->members->methodName, &e, getCppuType(&e).getTypeLibType());
+                          me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }

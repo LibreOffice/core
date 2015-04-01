@@ -524,7 +524,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         {
             Reference< XTypeConverter > tc = getImpl()->cargo->xTypeConverter;
             Reference< XSingleServiceFactory > ssf = getImpl()->cargo->xInvocation;
-            tc->convertTo (a, ::getCppuType (&s)) >>= s;
+            tc->convertTo (a, cppu::UnoType<decltype(s)>::get()) >>= s;
             PyRef tuple( PyTuple_New (s.getLength()), SAL_NO_ACQUIRE, NOT_NULL);
             int i=0;
             try
@@ -642,12 +642,12 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         if( o == Py_True )
         {
             sal_Bool b = sal_True;
-            a = Any( &b, getBooleanCppuType() );
+            a = Any( &b, cppu::UnoType<bool>::get() );
         }
         else if ( o == Py_False )
         {
             sal_Bool b = sal_False;
-            a = Any( &b, getBooleanCppuType() );
+            a = Any( &b, cppu::UnoType<bool>::get() );
         }
         else
         {
@@ -676,12 +676,12 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         if(o == Py_True)
         {
             sal_Bool b = sal_True;
-            a = Any(&b, getBooleanCppuType());
+            a = Any(&b, cppu::UnoType<bool>::get());
         }
         else if(o == Py_False)
         {
             sal_Bool b = sal_False;
-            a = Any(&b, getBooleanCppuType());
+            a = Any(&b, cppu::UnoType<bool>::get());
         }
         else
         {
@@ -794,7 +794,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else if( PyObject_IsInstance( o, getCharClass( runtime ).get() ) )
         {
             sal_Unicode c = PyChar2Unicode( o );
-            a.setValue( &c, getCharCppuType( ));
+            a.setValue( &c, cppu::UnoType<cppu::UnoCharType>::get());
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {
