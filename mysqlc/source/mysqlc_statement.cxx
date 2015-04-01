@@ -311,7 +311,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     pProperties[nPos++] = Property("CursorName", PROPERTY_ID_CURSORNAME, cppu::UnoType<rtl::OUString>::get(), 0);
-    pProperties[nPos++] = Property("EscapeProcessing", PROPERTY_ID_ESCAPEPROCESSING, ::getBooleanCppuType(), 0);
+    pProperties[nPos++] = Property("EscapeProcessing", PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0);
     pProperties[nPos++] = Property("FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("MaxFieldSize", PROPERTY_ID_MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get(), 0);
@@ -319,7 +319,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
     pProperties[nPos++] = Property("QueryTimeOut", PROPERTY_ID_QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("ResultSetConcurrency", PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("ResultSetType", PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = Property("UseBookmarks", PROPERTY_ID_USEBOOKMARKS, ::getBooleanCppuType(), 0);
+    pProperties[nPos++] = Property("UseBookmarks", PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }

@@ -1108,7 +1108,7 @@ IPropertyArrayHelper * OResultSet::createArrayHelper() const
     pProperties[nPos++] = Property("FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property("IsBookmarkable",
-        PROPERTY_ID_ISBOOKMARKABLE, ::getBooleanCppuType(), PropertyAttribute::READONLY);
+        PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
     pProperties[nPos++] = Property("ResultSetConcurrency",
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
     pProperties[nPos++] = Property("ResultSetType",
