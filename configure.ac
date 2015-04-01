@@ -2723,6 +2723,15 @@ AC_MSG_CHECKING([whether to enable export file validation])
 if test "$with_export_validation" = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+    AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
+    if test -z "$ODFVALIDATOR"; then
+        AC_MSG_ERROR([odfvalidator is not found in PATH, but required by --with-export-validation])
+    fi
+    AC_CHECK_PROGS(OFFICEOTRON, officeotron)
+    if test -z "$OFFICEOTRON"; then
+        AC_MSG_ERROR([officeotron is not found in PATH, but required by --with-export-validation])
+    fi
 else
     AC_MSG_RESULT([no])
 fi
