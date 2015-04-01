@@ -75,7 +75,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 {
                     // Don't share headers any longer
                     bShared = false;
-                    aAny.setValue( &bShared, ::getBooleanCppuType() );
+                    aAny.setValue( &bShared, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
                 }
             }
@@ -89,7 +89,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 {
                     // Don't share first/right headers any longer
                     bSharedFirst = false;
-                    aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
+                    aAny.setValue( &bSharedFirst, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sShareContentFirst, aAny );
                 }
             }
@@ -137,7 +137,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                 {
                     // Switch header on
                     bOn = sal_True;
-                    aAny.setValue( &bOn, ::getBooleanCppuType() );
+                    aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sOn, aAny );
 
                     // The content has not to be removed, because the header
@@ -151,7 +151,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                 if( !bShared )
                 {
                     bShared = sal_True;
-                    aAny.setValue( &bShared, ::getBooleanCppuType() );
+                    aAny.setValue( &bShared, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
                 }
 
@@ -206,7 +206,7 @@ void XMLTextHeaderFooterContext::EndElement()
         // switch it off.
         sal_Bool bOn = sal_False;
         Any aAny;
-        aAny.setValue( &bOn, ::getBooleanCppuType() );
+        aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sOn, aAny );
     }
 }

@@ -215,7 +215,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     {
         Any aAny;
         sal_Bool bTmp = bAutoUpdate;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sIsAutoUpdate, aAny );
     }
 

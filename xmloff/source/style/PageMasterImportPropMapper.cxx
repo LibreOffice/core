@@ -315,28 +315,28 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     {
         sal_Bool bValue(sal_False);
         uno::Any aAny;
-        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        aAny.setValue( &bValue, cppu::UnoType<bool>::get() );
         xHeaderDynamic.reset(new XMLPropertyState(pHeaderHeight->mnIndex + 2, aAny));
     }
     if (pHeaderMinHeight)
     {
         sal_Bool bValue(sal_True);
         uno::Any aAny;
-        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        aAny.setValue( &bValue, cppu::UnoType<bool>::get() );
         xHeaderDynamic.reset(new XMLPropertyState(pHeaderMinHeight->mnIndex + 1, aAny));
     }
     if (pFooterHeight)
     {
         sal_Bool bValue(sal_False);
         uno::Any aAny;
-        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        aAny.setValue( &bValue, cppu::UnoType<bool>::get() );
         xFooterDynamic.reset(new XMLPropertyState(pFooterHeight->mnIndex + 2, aAny));
     }
     if (pFooterMinHeight)
     {
         sal_Bool bValue(sal_True);
         uno::Any aAny;
-        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        aAny.setValue( &bValue, cppu::UnoType<bool>::get() );
         xFooterDynamic.reset(new XMLPropertyState(pFooterMinHeight->mnIndex + 1, aAny));
     }
 

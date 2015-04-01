@@ -148,7 +148,7 @@ void XMLSectionSourceDDEImportContext::StartElement(
         aValues[2] <<= sItem;
         aNames[2] = sDdeCommandElement;
 
-        aValues[3].setValue(&bAutomaticUpdate, ::getBooleanCppuType());
+        aValues[3].setValue(&bAutomaticUpdate, cppu::UnoType<bool>::get());
         aNames[3] = sIsAutomaticUpdate;
 
         Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,

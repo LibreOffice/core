@@ -1115,7 +1115,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         {
             Any aAny;
             sal_Bool bTmp = bConsecutive;
-            aAny.setValue( &bTmp, ::getBooleanCppuType() );
+            aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
             xPropSet->setPropertyValue( sIsContinuousNumbering, aAny );
         }
     }

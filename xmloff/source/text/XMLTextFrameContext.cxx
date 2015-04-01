@@ -334,7 +334,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
         {
-            aAny.setValue( &bPixelWidth, ::getBooleanCppuType() );
+            aAny.setValue( &bPixelWidth, cppu::UnoType<bool>::get() );
             xPropSet->setPropertyValue( sIsPixelContour, aAny );
         }
 
@@ -342,7 +342,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
-            aAny.setValue( &bAuto, ::getBooleanCppuType() );
+            aAny.setValue( &bAuto, cppu::UnoType<bool>::get() );
             xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
         }
     }
@@ -673,7 +673,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     if( bSyncWidth || nWidth > 0 )
     {
         sal_Bool bTmp = bSyncWidth;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
     }
     if( xPropSetInfo->hasPropertyByName( sWidthType ) &&
@@ -699,7 +699,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     if( bSyncHeight || nHeight > 0 )
     {
         sal_Bool bTmp = bSyncHeight;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
     }
     if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
@@ -1305,7 +1305,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 
     if (xPropSetInfo->hasPropertyByName(s_ServerMap))
     {
-        aAny.setValue( &bMap, ::getBooleanCppuType() );
+        aAny.setValue( &bMap, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue(s_ServerMap, aAny);
     }
 }

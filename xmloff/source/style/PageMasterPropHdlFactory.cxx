@@ -138,7 +138,7 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
 
             //UUUU
             case XML_SW_TYPE_FILLSTYLE:
-                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const FillStyle*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, cppu::UnoType<FillStyle>::get() );
                 break;
             case XML_SW_TYPE_FILLBITMAPSIZE:
                 pHdl = new XMLFillBitmapSizePropertyHandler();
@@ -147,10 +147,10 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLBitmapLogicalSizePropertyHandler();
                 break;
             case XML_SW_TYPE_BITMAP_REFPOINT:
-                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const RectanglePoint*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, cppu::UnoType<RectanglePoint>::get() );
                 break;
             case XML_SW_TYPE_BITMAP_MODE:
-                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const BitmapMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, cppu::UnoType<BitmapMode>::get() );
                 break;
             case XML_SW_TYPE_BITMAPREPOFFSETX:
             case XML_SW_TYPE_BITMAPREPOFFSETY:

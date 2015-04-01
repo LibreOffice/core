@@ -391,7 +391,7 @@ namespace xmloff
     //= helper
 #ifdef DBG_UTIL
     #define DBG_CHECK_PROPERTY(name, type)  \
-        dbg_implCheckProperty(name, &::getCppuType(static_cast< type* >(NULL)))
+        dbg_implCheckProperty(name, &cppu::UnoType<type>::get())
 
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)    \
         dbg_implCheckProperty(name, NULL)

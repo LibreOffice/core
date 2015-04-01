@@ -234,12 +234,12 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
 
 Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 {
-    Type aUnoType( ::getVoidCppuType() );
+    Type aUnoType( cppu::UnoType<cppu::UnoVoidType>::get() );
 
     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
     if ( s_aTypeNameMap.empty() )
     {
-        s_aTypeNameMap[ token::GetXMLToken( token::XML_BOOLEAN ) ] = ::getBooleanCppuType();
+        s_aTypeNameMap[ token::GetXMLToken( token::XML_BOOLEAN ) ] = cppu::UnoType<bool>::get();
         // Not a copy paste error, quotation from:
         // http://nabble.documentfoundation.org/Question-unoType-for-getXmlToken-dbaccess-reportdesign-module-tp4109071p4109116.html
         // all numeric types (including the UNO double)
@@ -247,7 +247,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
         // C++ type "float" to "double" makes absolute sense
         s_aTypeNameMap[ token::GetXMLToken( token::XML_FLOAT )   ] = ::cppu::UnoType<double>::get();
         s_aTypeNameMap[ token::GetXMLToken( token::XML_STRING )  ] = ::cppu::UnoType<OUString>::get();
-        s_aTypeNameMap[ token::GetXMLToken( token::XML_VOID )    ] = ::getVoidCppuType();
+        s_aTypeNameMap[ token::GetXMLToken( token::XML_VOID )    ] = cppu::UnoType<cppu::UnoVoidType>::get();
     }
 
     const std::map< OUString, css::uno::Type >::iterator aTypePos = s_aTypeNameMap.find( _rType );

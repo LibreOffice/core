@@ -1135,7 +1135,7 @@ namespace xmloff
         if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
-                ::getCppuType( &m_nImagePosition ),
+                cppu::UnoType<decltype(m_nImagePosition)>::get(),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
             ) >>= m_nImagePosition );
             m_bHaveImagePosition = true;
@@ -1145,7 +1145,7 @@ namespace xmloff
         if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
-                ::getCppuType( &m_nImageAlign ),
+                cppu::UnoType<decltype(m_nImageAlign)>::get(),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
             ) >>= m_nImageAlign );
             return true;

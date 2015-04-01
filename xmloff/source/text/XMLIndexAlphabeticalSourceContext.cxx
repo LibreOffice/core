@@ -203,28 +203,28 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
     }
 
-    aAny.setValue(&bSeparators, ::getBooleanCppuType());
+    aAny.setValue(&bSeparators, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, aAny);
 
-    aAny.setValue(&bCombineEntries, ::getBooleanCppuType());
+    aAny.setValue(&bCombineEntries, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseCombinedEntries, aAny);
 
-    aAny.setValue(&bCaseSensitive, ::getBooleanCppuType());
+    aAny.setValue(&bCaseSensitive, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sIsCaseSensitive, aAny);
 
-    aAny.setValue(&bEntry, ::getBooleanCppuType());
+    aAny.setValue(&bEntry, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, aAny);
 
-    aAny.setValue(&bUpperCase, ::getBooleanCppuType());
+    aAny.setValue(&bUpperCase, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseUpperCase, aAny);
 
-    aAny.setValue(&bCombineDash, ::getBooleanCppuType());
+    aAny.setValue(&bCombineDash, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseDash, aAny);
 
-    aAny.setValue(&bCombinePP, ::getBooleanCppuType());
+    aAny.setValue(&bCombinePP, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUsePP, aAny);
 
-    aAny.setValue(&bCommaSeparated, ::getBooleanCppuType());
+    aAny.setValue(&bCommaSeparated, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
 
 

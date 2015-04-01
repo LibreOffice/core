@@ -256,16 +256,16 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
                 xLineNumbering->setPropertyValue(sSeparatorInterval, aAny);
             }
 
-            aAny.setValue(&bNumberLines, ::getBooleanCppuType());
+            aAny.setValue(&bNumberLines, cppu::UnoType<bool>::get());
             xLineNumbering->setPropertyValue(sIsOn, aAny);
 
-            aAny.setValue(&bCountEmptyLines, ::getBooleanCppuType());
+            aAny.setValue(&bCountEmptyLines, cppu::UnoType<bool>::get());
             xLineNumbering->setPropertyValue(sCountEmptyLines, aAny);
 
-            aAny.setValue(&bCountInFloatingFrames, ::getBooleanCppuType());
+            aAny.setValue(&bCountInFloatingFrames, cppu::UnoType<bool>::get());
             xLineNumbering->setPropertyValue(sCountLinesInFrames, aAny);
 
-            aAny.setValue(&bRestartNumbering, ::getBooleanCppuType());
+            aAny.setValue(&bRestartNumbering, cppu::UnoType<bool>::get());
             xLineNumbering->setPropertyValue(sRestartAtEachPage, aAny);
 
             sal_Int16 nNumType = NumberingType::ARABIC;

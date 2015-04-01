@@ -133,13 +133,13 @@ void XMLSectionFootnoteConfigImport::StartElement(
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
 
-    aAny.setValue( &bNumOwn, ::getBooleanCppuType() );
+    aAny.setValue( &bNumOwn, cppu::UnoType<bool>::get() );
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
     XMLPropertyState aNumOwn( nIndex, aAny );
     rProperties.push_back( aNumOwn );
 
-    aAny.setValue( &bNumRestart, ::getBooleanCppuType() );
+    aAny.setValue( &bNumRestart, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_RESTART : CTF_SECTION_FOOTNOTE_NUM_RESTART );
     XMLPropertyState aNumRestart( nIndex, aAny );
@@ -174,7 +174,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
     XMLPropertyState aSuffixState( nIndex, aAny );
     rProperties.push_back( aSuffixState );
 
-    aAny.setValue( &bEnd, ::getBooleanCppuType() );
+    aAny.setValue( &bEnd, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
     XMLPropertyState aEndState( nIndex, aAny );

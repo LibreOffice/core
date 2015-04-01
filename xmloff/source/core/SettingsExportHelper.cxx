@@ -130,13 +130,13 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         default:
         {
             uno::Type aType = aAny.getValueType();
-            if (aType.equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ) )
+            if (aType.equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ) )
             {
                 uno::Sequence< beans::PropertyValue> aProps;
                 aAny >>= aProps;
                 exportSequencePropertyValue(aProps, rName);
             }
-            else if( aType.equals(getCppuType( (uno::Sequence<sal_Int8> *)0 ) ) )
+            else if( aType.equals(cppu::UnoType<uno::Sequence<sal_Int8>>::get() ) )
             {
                 uno::Sequence< sal_Int8 > aProps;
                 aAny >>= aProps;
@@ -166,7 +166,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
             {
                 exportForbiddenCharacters( aAny, rName );
             }
-            else if( aType.equals(getCppuType( (uno::Sequence<formula::SymbolDescriptor> *)0 ) ) )
+            else if( aType.equals(cppu::UnoType<uno::Sequence<formula::SymbolDescriptor>>::get() ) )
             {
                 uno::Sequence< formula::SymbolDescriptor > aProps;
                 aAny >>= aProps;
@@ -382,7 +382,7 @@ void XMLSettingsExportHelper::exportNameAccess(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    DBG_ASSERT(aNamed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
+    DBG_ASSERT(aNamed->getElementType().equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ),
                 "wrong NameAccess" );
     if(aNamed->hasElements())
     {
@@ -400,7 +400,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    DBG_ASSERT(rIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
+    DBG_ASSERT(rIndexed->getElementType().equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ),
                 "wrong IndexAccess" );
     OUString sEmpty;
     if (rIndexed->hasElements())

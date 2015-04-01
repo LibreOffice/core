@@ -221,10 +221,10 @@ void XMLIndexSourceBaseContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bRelativeTabs, ::getBooleanCppuType());
+    aAny.setValue(&bRelativeTabs, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, aAny);
 
-    aAny.setValue(&bChapterIndex, ::getBooleanCppuType());
+    aAny.setValue(&bChapterIndex, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
 }
 

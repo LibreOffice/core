@@ -234,7 +234,7 @@ namespace xmloff
     {
         OUStringBuffer aDefault;
         ::sax::Converter::convertBool(aDefault, _bAttributeDefault);
-        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, ::getBooleanCppuType(), aDefault.makeStringAndClear());
+        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, cppu::UnoType<bool>::get(), aDefault.makeStringAndClear());
         aAssignment.bInverseSemantics = _bInverseSemantics;
     }
 

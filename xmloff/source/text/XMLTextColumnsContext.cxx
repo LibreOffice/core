@@ -450,7 +450,7 @@ void XMLTextColumnsContext::EndElement( )
         Any aAny;
         sal_Bool bOn = pColumnSep != 0;
 
-        aAny.setValue( &bOn, ::getBooleanCppuType() );
+        aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sSeparatorLineIsOn, aAny );
 
         if( pColumnSep )

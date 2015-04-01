@@ -116,7 +116,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
 
     aProp.maValue <<= aFormat;
 
-    aWholeWordProp.maValue.setValue( &bWholeWord, ::getBooleanCppuType() );
+    aWholeWordProp.maValue.setValue( &bWholeWord, cppu::UnoType<bool>::get() );
 }
 
 XMLTextDropCapImportContext::XMLTextDropCapImportContext(

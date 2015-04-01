@@ -341,7 +341,7 @@ bool XMLOpaquePropHdl_Impl::importXML(
         bRet = false;
 
     if( bRet )
-        rValue.setValue( &bVal, ::getBooleanCppuType() );
+        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
 
     return bRet;
 }
@@ -391,7 +391,7 @@ bool XMLContourModePropHdl_Impl::importXML(
         bRet = false;
 
     if( bRet )
-        rValue.setValue( &bVal, ::getBooleanCppuType() );
+        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
 
     return bRet;
 }
@@ -444,7 +444,7 @@ bool XMLParagraphOnlyPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, ::getBooleanCppuType() );
+        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
 
     return bRet;
 }
@@ -570,7 +570,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, ::getBooleanCppuType() );
+        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
 
     return bRet;
 }
@@ -747,7 +747,7 @@ bool XMLHoriMirrorPropHdl_Impl::importXML(
     if( bRet )
     {
         sal_Bool bTmp = nHoriMirror != 0;
-        rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        rValue.setValue( &bTmp, cppu::UnoType<bool>::get() );
     }
 
     return bRet;
@@ -813,7 +813,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, ::getBooleanCppuType() );
+        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
 
     return bRet;
 }
@@ -1088,7 +1088,7 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     sal_Bool bValue = (rStrImpValue == sValue );
-    rValue.setValue( &bValue, ::getBooleanCppuType() );
+    rValue.setValue( &bValue, cppu::UnoType<bool>::get() );
 
     return true;
 }

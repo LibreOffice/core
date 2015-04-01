@@ -244,7 +244,7 @@ void XMLIndexTOCContext::StartElement(
         }
 
         Any aAny;
-        aAny.setValue( &bProtected, ::getBooleanCppuType() );
+        aAny.setValue( &bProtected, cppu::UnoType<bool>::get() );
         xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
 
         if (!sIndexName.isEmpty())

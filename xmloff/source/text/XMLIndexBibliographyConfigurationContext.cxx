@@ -209,7 +209,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
             PropertyValue aSortValue;
             aSortValue.Name = sIsSortAscending;
-            aAny.setValue(&bSort, ::getBooleanCppuType());
+            aAny.setValue(&bSort, cppu::UnoType<bool>::get());
             aSortValue.Value = aAny;
             aKey[1] = aSortValue;
 
@@ -260,10 +260,10 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                 aAny <<= sPrefix;
                 xPropSet->setPropertyValue(sBracketBefore, aAny);
 
-                aAny.setValue(&bNumberedEntries, ::getBooleanCppuType());
+                aAny.setValue(&bNumberedEntries, cppu::UnoType<bool>::get());
                 xPropSet->setPropertyValue(sIsNumberEntries, aAny);
 
-                aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
+                aAny.setValue(&bSortByPosition, cppu::UnoType<bool>::get());
                 xPropSet->setPropertyValue(sIsSortByPosition, aAny);
 
                 if( !maLanguageTagODF.isEmpty() )

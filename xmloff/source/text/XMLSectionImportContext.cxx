@@ -170,7 +170,7 @@ void XMLSectionImportContext::StartElement(
                 if (! bIsIndexHeader)
                 {
                     Any aAny;
-                    aAny.setValue( &bIsVisible, ::getBooleanCppuType() );
+                    aAny.setValue( &bIsVisible, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sIsVisible, aAny );
 
                     // #97450# hidden sections must be hidden on reload
@@ -179,7 +179,7 @@ void XMLSectionImportContext::StartElement(
                     if( bIsCurrentlyVisibleOK )
                     {
                         aAny.setValue( &bIsCurrentlyVisible,
-                                       ::getBooleanCppuType() );
+                                       cppu::UnoType<bool>::get() );
                         xPropSet->setPropertyValue( sIsCurrentlyVisible, aAny);
                     }
 
@@ -201,7 +201,7 @@ void XMLSectionImportContext::StartElement(
 
                 // protection
                 Any aAny;
-                aAny.setValue( &bProtect, ::getBooleanCppuType() );
+                aAny.setValue( &bProtect, cppu::UnoType<bool>::get() );
                 xPropSet->setPropertyValue( sIsProtected, aAny );
 
                 // insert marker, <paragraph>, marker; then insert

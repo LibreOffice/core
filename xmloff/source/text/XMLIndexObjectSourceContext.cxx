@@ -132,19 +132,19 @@ void XMLIndexObjectSourceContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bUseCalc, ::getBooleanCppuType());
+    aAny.setValue(&bUseCalc, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromStarCalc, aAny);
 
-    aAny.setValue(&bUseChart, ::getBooleanCppuType());
+    aAny.setValue(&bUseChart, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromStarChart, aAny);
 
-    aAny.setValue(&bUseDraw, ::getBooleanCppuType());
+    aAny.setValue(&bUseDraw, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, aAny);
 
-    aAny.setValue(&bUseMath, ::getBooleanCppuType());
+    aAny.setValue(&bUseMath, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromStarMath, aAny);
 
-    aAny.setValue(&bUseOtherObjects, ::getBooleanCppuType());
+    aAny.setValue(&bUseOtherObjects, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromOtherEmbeddedObjects, aAny);
 
     XMLIndexSourceBaseContext::EndElement();

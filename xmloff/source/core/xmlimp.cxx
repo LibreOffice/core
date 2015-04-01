@@ -1503,7 +1503,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sRepeat);
-                    if (aAny.getValueType() == getBooleanCppuType())
+                    if (aAny.getValueType() == cppu::UnoType<bool>::get())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else {
                         SAL_WARN( "xmloff.core", "why is it no boolean?" );

@@ -248,7 +248,7 @@ void XMLVarFieldImportContext::PrepareField(
     {
         Any aAny;
         sal_Bool bTmp = ! (bDisplayNone && bDisplayOK);
-        aAny.setValue( &bTmp, ::getBooleanCppuType());
+        aAny.setValue( &bTmp, cppu::UnoType<bool>::get());
         xPropertySet->setPropertyValue(sPropertyIsVisible, aAny);
     }
 
@@ -266,7 +266,7 @@ void XMLVarFieldImportContext::PrepareField(
     {
         Any aAny;
         sal_Bool bTmp = bDisplayFormula && bDisplayOK;
-        aAny.setValue( &bTmp, ::getBooleanCppuType());
+        aAny.setValue( &bTmp, cppu::UnoType<bool>::get());
         xPropertySet->setPropertyValue(sPropertyIsDisplayFormula, aAny);
     }
 
@@ -513,7 +513,7 @@ void XMLVariableInputFieldImportContext::PrepareField(
     // set type (input field)
     Any aAny;
     sal_Bool bTrue = sal_True;
-    aAny.setValue( &bTrue, ::getBooleanCppuType() );
+    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
     xPropertySet->setPropertyValue(sPropertyIsInput, aAny);
 
     // set type
@@ -743,7 +743,7 @@ void XMLTableFormulaImportContext::PrepareField(
     Any aAny;
 
     // set 'show formula' and presentation
-    aAny.setValue( &bIsShowFormula, ::getBooleanCppuType() );
+    aAny.setValue( &bIsShowFormula, cppu::UnoType<bool>::get() );
     xPropertySet->setPropertyValue( sPropertyIsShowFormula, aAny );
 
     aAny <<= GetContent();
@@ -924,7 +924,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
             case VarTypeUserField:
             {
                 sal_Bool bTmp = !aValueHelper.IsStringValue();
-                aAny.setValue(&bTmp, ::getBooleanCppuType());
+                aAny.setValue(&bTmp, cppu::UnoType<bool>::get());
                 xFieldMaster->setPropertyValue(sPropertyIsExpression, aAny);
                 aValueHelper.PrepareField(xFieldMaster);
                 break;
@@ -1185,7 +1185,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
                         // prepare field: format from database?
                         sal_Bool bTmp = !aValueHelper.IsFormatOK();
-                        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+                        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
                         xField->setPropertyValue(sPropertyDatabaseFormat,aAny);
 
                         // value, value-type and format done by value helper
@@ -1194,7 +1194,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         // visibility
                         if( bDisplayOK )
                         {
-                            aAny.setValue( &bDisplay, ::getBooleanCppuType() );
+                            aAny.setValue( &bDisplay, cppu::UnoType<bool>::get() );
                             xField->setPropertyValue(sPropertyIsVisible, aAny);
                         }
 
@@ -1435,7 +1435,7 @@ void XMLValueImportHelper::PrepareField(
                 hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
             sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            aAny.setValue( &bIsFixedLanguage, ::getBooleanCppuType() );
+            aAny.setValue( &bIsFixedLanguage, cppu::UnoType<bool>::get() );
             xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
         }
     }

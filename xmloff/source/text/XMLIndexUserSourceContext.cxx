@@ -156,25 +156,25 @@ void XMLIndexUserSourceContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bUseObjects, ::getBooleanCppuType());
+    aAny.setValue(&bUseObjects, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromEmbeddedObjects, aAny);
 
-    aAny.setValue(&bUseGraphic, ::getBooleanCppuType());
+    aAny.setValue(&bUseGraphic, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromGraphicObjects, aAny);
 
-    aAny.setValue(&bUseLevelFromSource, ::getBooleanCppuType());
+    aAny.setValue(&bUseLevelFromSource, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sUseLevelFromSource, aAny);
 
-    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
+    aAny.setValue(&bUseMarks, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
 
-    aAny.setValue(&bUseTables, ::getBooleanCppuType());
+    aAny.setValue(&bUseTables, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromTables, aAny);
 
-    aAny.setValue(&bUseFrames, ::getBooleanCppuType());
+    aAny.setValue(&bUseFrames, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromTextFrames, aAny);
 
-    aAny.setValue(&bUseLevelParagraphStyles, ::getBooleanCppuType());
+    aAny.setValue(&bUseLevelParagraphStyles, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
 
     if( !sIndexName.isEmpty() )
