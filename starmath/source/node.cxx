@@ -164,7 +164,7 @@ void SmNode::SetFont(const SmFace &rFace)
 }
 
 
-void SmNode::SetFontSize(const Fraction &rSize, sal_uInt16 nType)
+void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
     //! 'rSize' is in units of pts
 {
     Size  aFntSize;
@@ -179,23 +179,23 @@ void SmNode::SetFontSize(const Fraction &rSize, sal_uInt16 nType)
         aFntSize.Width() = 0;
         switch(nType)
         {
-            case FNTSIZ_ABSOLUT:
+            case FontSizeType::ABSOLUT:
                 aFntSize.Height() = nHeight;
                 break;
 
-            case FNTSIZ_PLUS:
+            case FontSizeType::PLUS:
                 aFntSize.Height() += nHeight;
                 break;
 
-            case FNTSIZ_MINUS:
+            case FontSizeType::MINUS:
                 aFntSize.Height() -= nHeight;
                 break;
 
-            case FNTSIZ_MULTIPLY:
+            case FontSizeType::MULTIPLY:
                 aFntSize.Height()   = (long) (Fraction(aFntSize.Height()) * rSize);
                 break;
 
-            case FNTSIZ_DIVIDE:
+            case FontSizeType::DIVIDE:
                 if (rSize != Fraction(0L))
                     aFntSize.Height()   = (long) (Fraction(aFntSize.Height()) / rSize);
                 break;
@@ -2038,19 +2038,19 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
                 rText += "size ";
                 switch (nSizeType)
                 {
-                    case FNTSIZ_PLUS:
+                    case FontSizeType::PLUS:
                         rText += "+";
                         break;
-                    case FNTSIZ_MINUS:
+                    case FontSizeType::MINUS:
                         rText += "-";
                         break;
-                    case FNTSIZ_MULTIPLY:
+                    case FontSizeType::MULTIPLY:
                         rText += "*";
                         break;
-                    case FNTSIZ_DIVIDE:
+                    case FontSizeType::DIVIDE:
                         rText += "/";
                         break;
-                    case FNTSIZ_ABSOLUT:
+                    case FontSizeType::ABSOLUT:
                     default:
                         break;
                 }
@@ -2205,7 +2205,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmFontNode::SetSizeParameter(const Fraction& rValue, sal_uInt16 Type)
+void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType Type)
 {
     nSizeType = Type;
     aFontSize = rValue;

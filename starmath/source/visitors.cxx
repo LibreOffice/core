@@ -2113,19 +2113,19 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                 Append( "size " );
                 switch ( pNode->GetSizeType( ) )
                 {
-                    case FNTSIZ_PLUS:
+                    case FontSizeType::PLUS:
                         Append( "+" );
                         break;
-                    case FNTSIZ_MINUS:
+                    case FontSizeType::MINUS:
                         Append( "-" );
                         break;
-                    case FNTSIZ_MULTIPLY:
+                    case FontSizeType::MULTIPLY:
                         Append( "*" );
                         break;
-                    case FNTSIZ_DIVIDE:
+                    case FontSizeType::DIVIDE:
                         Append( "/" );
                         break;
-                    case FNTSIZ_ABSOLUT:
+                    case FontSizeType::ABSOLUT:
                     default:
                         break;
                 }

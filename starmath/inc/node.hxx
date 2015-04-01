@@ -36,11 +36,13 @@
 #define ATTR_ITALIC     0x0002
 
 
-#define FNTSIZ_ABSOLUT  1
-#define FNTSIZ_PLUS     2
-#define FNTSIZ_MINUS    3
-#define FNTSIZ_MULTIPLY 4
-#define FNTSIZ_DIVIDE   5
+enum class FontSizeType {
+  ABSOLUT  = 1,
+  PLUS     = 2,
+  MINUS    = 3,
+  MULTIPLY = 4,
+  DIVIDE   = 5
+};
 
 // flags to interdict respective status changes
 #define FLG_FONT        0x0001
@@ -143,7 +145,7 @@ public:
                   SmFace & GetFont()       { return aFace; };
 
             void SetFont(const SmFace &rFace);
-            void SetFontSize(const Fraction &rRelSize, sal_uInt16 nType);
+            void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
             void SetSize(const Fraction &rScale);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
@@ -1247,20 +1249,20 @@ public:
  */
 class SmFontNode : public SmStructureNode
 {
-    sal_uInt16      nSizeType;
+    FontSizeType nSizeType;
     Fraction    aFontSize;
 
 public:
     SmFontNode(const SmToken &rNodeToken)
     :   SmStructureNode(NFONT, rNodeToken)
     {
-        nSizeType = FNTSIZ_MULTIPLY;
+        nSizeType = FontSizeType::MULTIPLY;
         aFontSize = Fraction(1L);
     }
 
-    void SetSizeParameter(const Fraction &rValue, sal_uInt16 nType);
+    void SetSizeParameter(const Fraction &rValue, FontSizeType nType);
     const Fraction & GetSizeParameter() const {return aFontSize;}
-    const sal_uInt16& GetSizeType() const {return nSizeType;}
+    const FontSizeType& GetSizeType() const {return nSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) SAL_OVERRIDE;
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat) SAL_OVERRIDE;
