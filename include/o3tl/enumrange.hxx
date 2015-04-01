@@ -51,7 +51,7 @@ public:
 
       T operator*( void ) const
       {
-         return (T)m_value;
+         return static_cast<T>(m_value);
       }
 
       void operator++( void )
@@ -79,7 +79,7 @@ typename enumrange<T>::Iterator begin( enumrange<T> )
 template< typename T >
 typename enumrange<T>::Iterator end( enumrange<T> )
 {
-   return typename enumrange<T>::Iterator( ((int)T::LAST) + 1 );
+   return typename enumrange<T>::Iterator( (static_cast<int>(T::LAST)) + 1 );
 }
 
 
