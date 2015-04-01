@@ -805,8 +805,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue("long").getValueType() == getCppuVoidType() ||
-        r2->getPropertyValue("long").getValueType() == getCppuVoidType() ) {
+    if( r1->getPropertyValue("long").getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ||
+        r2->getPropertyValue("long").getValueType() == cppu::UnoType<cppu::UnoVoidType>::get() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );
@@ -947,7 +947,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         rProp->setPropertyValue("double", any );
 
         sal_Bool b = sal_True;
-        any.setValue( &b , getCppuBooleanType() );
+        any.setValue( &b , cppu::UnoType<bool>::get() );
         rProp->setPropertyValue("bool", any );
 
         sal_Int8 by = 120;
@@ -955,7 +955,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         rProp->setPropertyValue("byte", any );
 
         sal_Unicode c = 'h';
-        any.setValue( &c , getCppuCharType() );
+        any.setValue( &c , cppu::UnoType<cppu::UnoCharType>::get() );
         rProp->setPropertyValue("char", any );
 
         OUString str( "hi du !"  );
@@ -1006,7 +1006,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             rProp->setPropertyValue("double", any );
 
             sal_Bool b = sal_True;
-            any.setValue( &b , getCppuBooleanType() );
+            any.setValue( &b , cppu::UnoType<bool>::get() );
             rProp->setPropertyValue("bool", any );
 
             sal_Int8 by = 120;
@@ -1014,7 +1014,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             rProp->setPropertyValue("byte", any );
 
             sal_Unicode c = 'h';
-            any.setValue( &c , getCppuCharType() );
+            any.setValue( &c , cppu::UnoType<cppu::UnoCharType>::get() );
             rProp->setPropertyValue("char", any );
 
             OUString str( "hi du !"  );
