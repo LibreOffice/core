@@ -1575,7 +1575,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
 
 Type OutlineNumbering::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return ::getCppuType((Sequence<PropertyValue>*)0);
+    return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
 sal_Bool OutlineNumbering::hasElements(  ) throw(RuntimeException, std::exception)
