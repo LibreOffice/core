@@ -340,7 +340,7 @@ typelib_TypeClass cpp_vtable_call(
                 case 0: // queryInterface() opt
                 {
                     typelib_TypeDescription * pTD = 0;
-                    TYPELIB_DANGER_GET( &pTD, reinterpret_cast<Type *>( gpreg[2] )->getTypeLibType() );
+                    TYPELIB_DANGER_GET( &pTD, static_cast<Type *>( gpreg[2] )->getTypeLibType() );
                     if ( pTD )
                     {
                         XInterface * pInterface = 0;
@@ -352,7 +352,7 @@ typelib_TypeClass cpp_vtable_call(
 
                         if ( pInterface )
                         {
-                            ::uno_any_construct( reinterpret_cast<uno_Any *>( gpreg[0] ),
+                            ::uno_any_construct( static_cast<uno_Any *>( gpreg[0] ),
                                                  &pInterface, pTD, cpp_acquire );
 
                             pInterface->release();
