@@ -35,7 +35,7 @@ OUString GetOUString( CFStringRef rStr )
     const UniChar* pConstStr = CFStringGetCharactersPtr( rStr );
     if( pConstStr )
         return OUString( pConstStr, nLength );
-    UniChar* pStr = reinterpret_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
+    UniChar* pStr = static_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
     CFRange aRange = { 0, nLength };
     CFStringGetCharacters( rStr, aRange, pStr );
     OUString aRet( pStr, nLength );

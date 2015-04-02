@@ -78,7 +78,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics = new AquaSalGraphics();
 
     const int nWidth = 100, nHeight = 100;
-    maContextMemory.reset( reinterpret_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
+    maContextMemory.reset( static_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
                            boost::bind( rtl_freeMemory, _1 ) );
 
     if( maContextMemory )
@@ -193,7 +193,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         io_pSetupData->meOrientation = mePageOrientation;
 
         io_pSetupData->mnPaperBin = 0;
-        io_pSetupData->mpDriverData = reinterpret_cast<sal_uInt8*>(rtl_allocateMemory( 4 ));
+        io_pSetupData->mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( 4 ));
         io_pSetupData->mnDriverDataLen = 4;
     }
     else
@@ -550,7 +550,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_b
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
 
-    CGContextRef rContext = reinterpret_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
+    CGContextRef rContext = static_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
 
     SetupPrinterGraphics( rContext );
 
