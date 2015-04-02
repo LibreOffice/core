@@ -943,7 +943,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
     Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
-    // page break zoom
+    // page break zoom, and aLogicMode in ScViewData
     pViewData->SetZoom(aFracX, aFracY, true);
 
     double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
