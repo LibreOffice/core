@@ -302,6 +302,61 @@ void ScConditionalFormatTest::testDataBarProperties()
         testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_AUTO,
                 "", sheet::DataBarEntryType::DATABAR_MAX);
     }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(1);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testAxisPosition(xPropSet, sheet::DataBarAxis::AXIS_AUTOMATIC);
+        testShowValue(xPropSet, true);
+        testUseGradient(xPropSet, true);
+        testPositiveColor(xPropSet, COL_LIGHTBLUE);
+        testNegativeColor(xPropSet, COL_LIGHTRED);
+        testAxisColor(xPropSet, COL_BLACK);
+        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_MIN,
+                "90", sheet::DataBarEntryType::DATABAR_PERCENTILE);
+    }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(2);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testAxisPosition(xPropSet, sheet::DataBarAxis::AXIS_AUTOMATIC);
+        testShowValue(xPropSet, true);
+        testUseGradient(xPropSet, true);
+        testPositiveColor(xPropSet, COL_LIGHTBLUE);
+        testNegativeColor(xPropSet, COL_LIGHTRED);
+        testAxisColor(xPropSet, COL_BLACK);
+        testDataBarEntries(xPropSet, "2", sheet::DataBarEntryType::DATABAR_VALUE,
+                "80", sheet::DataBarEntryType::DATABAR_PERCENT);
+    }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(3);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testAxisPosition(xPropSet, sheet::DataBarAxis::AXIS_AUTOMATIC);
+        testShowValue(xPropSet, true);
+        testUseGradient(xPropSet, true);
+        testPositiveColor(xPropSet, COL_LIGHTBLUE);
+        testNegativeColor(xPropSet, COL_LIGHTRED);
+        testAxisColor(xPropSet, COL_BLACK);
+        /*
+         * TODO: implement FORMULA
+        testDataBarEntries(xPropSet, "=A1", sheet::DataBarEntryType::DATABAR_FORMULA,
+                "", sheet::DataBarEntryType::DATABAR_AUTO);
+                */
+    }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(4);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testAxisPosition(xPropSet, sheet::DataBarAxis::AXIS_MIDDLE);
+        testShowValue(xPropSet, true);
+        testUseGradient(xPropSet, false);
+        testPositiveColor(xPropSet, sal_uInt32(10092390));
+        testNegativeColor(xPropSet, sal_uInt32(52428));
+        testAxisColor(xPropSet, sal_uInt32(16777113));
+        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_AUTO,
+                "", sheet::DataBarEntryType::DATABAR_AUTO);
+    }
 }
 
 void ScConditionalFormatTest::testColorScaleProperties()
