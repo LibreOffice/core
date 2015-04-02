@@ -2082,7 +2082,8 @@ public:
                 if (maOp.useFunctionForEmpty())
                 {
                     std::vector<char> aVec(node.size);
-                    MatrixIteratorWrapper<std::vector<char>, T, typename T::empty_value_type> aFunc(aVec.begin(), aVec.end(), maOp);
+                    MatrixIteratorWrapper<std::vector<char>, T, typename T::number_value_type>
+                        aFunc(aVec.begin(), aVec.end(), maOp);
                     pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                 }
             }
@@ -2543,7 +2544,7 @@ struct COp {};
 template <typename T>
 struct COp<T, svl::SharedString>
 {
-    svl::SharedString operator()(char, T /*aOp*/, const svl::SharedString& rString) const
+    svl::SharedString operator()(char, T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
     {
         return rString;
     }
@@ -2552,14 +2553,17 @@ struct COp<T, svl::SharedString>
 template <typename T>
 struct COp<T, double>
 {
-    double operator()(char, T aOp, const svl::SharedString& /*rString*/) const
+    double operator()(char, T aOp, double a, double b, const svl::SharedString& /*rString*/) const
     {
-        return aOp(double{}, double{});
+        return aOp( a, b);
     }
 };
 
 /** A template for operations where operands are supposed to be numeric.
-    A non-numeric operand leads to an errNoValue DoubleError.
+    A non-numeric (string) operand leads to an errNoValue DoubleError.
+    An empty operand evaluates to 0.
+    XXX: semantically TEmptyRes and types other than number_value_type are
+    unused, but this template could serve as a basis for future enhancements.
  */
 template<typename TOp, typename TEmptyRes=double, typename TRet=double>
 struct MatOp
@@ -2598,7 +2602,7 @@ public:
 
     TEmptyRes operator()(char) const
     {
-        return maCOp(char{}, maOp, maString);
+        return maCOp(char{}, maOp, 0, mfVal, maString);
     }
 
     bool useFunctionForEmpty() const
