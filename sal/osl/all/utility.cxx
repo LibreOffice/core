@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/lok.hxx>
 #include <osl/time.h>
 
 /*
@@ -46,22 +45,6 @@ public:
 
 static OGlobalTimer aGlobalTimer;
 
-namespace LibreOfficeKit
-{
-
-static bool bActive(false);
-
-void setActive()
-{
-    bActive = true;
-}
-
-bool isActive()
-{
-    return bActive;
-}
-
-} // namespace LibreOfficeKit
 } // namespace osl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

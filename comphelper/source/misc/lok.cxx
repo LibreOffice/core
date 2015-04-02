@@ -7,28 +7,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_LOK_HXX
-#define INCLUDED_OSL_LOK_HXX
+#include <comphelper/lok.hxx>
 
-#ifdef LIBO_INTERNAL_ONLY
-
-#include <sal/saldllapi.h>
-
-namespace osl
+namespace comphelper
 {
 
 namespace LibreOfficeKit
 {
 
-SAL_DLLPUBLIC void setActive();
+static bool bActive(false);
 
-SAL_DLLPUBLIC bool isActive();
-
+void setActive()
+{
+    bActive = true;
 }
+
+bool isActive()
+{
+    return bActive;
 }
 
-#endif // LIBO_INTERNAL_ONLY
+} // namespace LibreOfficeKit
 
-#endif // INCLUDED_OSL_LOK_HXX
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

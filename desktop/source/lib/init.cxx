@@ -22,13 +22,13 @@
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
-#include <osl/lok.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -853,7 +853,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
     if (bInitialized)
         return 1;
 
-    osl::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setActive();
 
     OUString aAppPath;
     if (pAppPath)

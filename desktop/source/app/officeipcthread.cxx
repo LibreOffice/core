@@ -26,7 +26,6 @@
 #include "dispatchwatcher.hxx"
 #include <boost/scoped_ptr.hpp>
 #include <stdio.h>
-#include <osl/lok.hxx>
 #include <osl/process.h>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
@@ -40,6 +39,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
@@ -467,7 +467,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     // from LibreOfficeKit's lo_initialize() I am not completely sure, but that code, and this, is
     // such horrible crack that I don't want to change it too much.
 
-    if (osl::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // Setting nPipeMode to PIPEMODE_CREATED causes the trivial path to be taken below, starting
         // the listeing thread. (Which will immediately finish, see the execute() function, but what
@@ -707,7 +707,7 @@ void OfficeIPCThread::execute()
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 #ifndef ANDROID
-    if (osl::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive())
         return;
 #endif
 
