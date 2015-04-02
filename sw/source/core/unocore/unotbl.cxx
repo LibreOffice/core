@@ -3268,24 +3268,18 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 }
 
 OUString SAL_CALL SwXTextTable::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXTextTable");
-}
+    { return OUString("SwXTextTable"); }
 
 sal_Bool SwXTextTable::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames(void) throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(4);
-    OUString* pArr = aRet.getArray();
-    pArr[0] = "com.sun.star.document.LinkTarget";
-    pArr[1] = "com.sun.star.text.TextTable";
-    pArr[2] = "com.sun.star.text.TextContent";
-    pArr[3] = "com.sun.star.text.TextSortable";
-    return aRet;
+    return {
+        "com.sun.star.document.LinkTarget",
+        "com.sun.star.text.TextTable",
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.TextSortable" };
 }
 
 namespace
