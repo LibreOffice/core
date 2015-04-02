@@ -18,6 +18,7 @@
  */
 
 #include <list>
+#include <array>
 #include <utility>
 #include <vector>
 #include <algorithm>
@@ -1061,21 +1062,12 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if(rPropertyName == "FRMDirection")
     {
         SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-        sal_Int32 nNum = aValue.get<sal_Int32>();
-        SAL_INFO("sw.uno", "FRMDirection val " << nNum);
-        switch (nNum)
+        try
         {
-            case 0:
-                eDir = FRMDIR_HORI_LEFT_TOP;
-                break;
-            case 1:
-                eDir = FRMDIR_HORI_RIGHT_TOP;
-                break;
-            case 2:
-                eDir = FRMDIR_VERT_TOP_RIGHT;
-                break;
-            default:
-                OSL_FAIL("unknown direction code, maybe it's a bitfield");
+            const std::array<SvxFrameDirection, 3> vDirs = { FRMDIR_HORI_LEFT_TOP,  FRMDIR_HORI_RIGHT_TOP, FRMDIR_VERT_TOP_RIGHT };
+            eDir = vDirs.at(aValue.get<sal_Int32>());
+        } catch(std::out_of_range) {
+            SAL_WARN("sw.uno", "unknown direction code, maybe it's a bitfield");
         }
         SvxFrameDirectionItem aItem(eDir, RES_FRAMEDIR);
         pBox->GetFrmFmt()->SetFmtAttr(aItem);
