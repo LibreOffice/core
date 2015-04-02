@@ -2000,6 +2000,31 @@ public:
     }
 };
 
+namespace {
+
+MatrixImplType::position_type increment_position(const MatrixImplType::position_type& pos, size_t n)
+{
+    MatrixImplType::position_type ret = pos;
+    do
+    {
+        if (ret.second + n < ret.first->size)
+        {
+            ret.second += n;
+            break;
+        }
+        else
+        {
+            n -= (ret.first->size - ret.second);
+            ++ret.first;
+            ret.second = 0;
+        }
+    }
+    while (n > 0);
+    return ret;
+}
+
+}
+
 template<typename T>
 struct MatrixOpWrapper
 {
@@ -2028,7 +2053,6 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos,aFunc.begin(), aFunc.end());
-                ++pos.first;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -2040,7 +2064,6 @@ public:
 
                 MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
-                ++pos.first;
             }
             break;
             case mdds::mtm::element_string:
@@ -2052,7 +2075,6 @@ public:
 
                 MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
-                ++pos.first;
             }
             break;
             case mdds::mtm::element_empty:
@@ -2062,15 +2084,13 @@ public:
                     std::vector<char> aVec(node.size);
                     MatrixIteratorWrapper<std::vector<char>, T, typename T::empty_value_type> aFunc(aVec.begin(), aVec.end(), maOp);
                     pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
-                    ++pos.first;
                 }
-                else
-                    pos.second += node.size;
             }
             break;
             default:
                 ;
         }
+        pos = increment_position(pos, node.size);
     }
 };
 
