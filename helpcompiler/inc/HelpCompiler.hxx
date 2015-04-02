@@ -246,7 +246,7 @@ public:
                 const std::string &entryName, const Hashtable &bytesToAdd);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
-    void tagBasicCodeExamples(xmlDocPtr doc);
+    static void tagBasicCodeExamples(xmlDocPtr doc);
     xmlDocPtr compactXhpForJar(xmlDocPtr doc);
     void saveXhpForJar(xmlDocPtr doc, const fs::path &filePath);
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);

@@ -460,7 +460,7 @@ void SvIdlDataBase::Write(const OString& rText)
 void SvIdlDataBase::WriteError( const OString& rErrWrn,
                                 const OString& rFileName,
                                 const OString& rErrorText,
-                                sal_uLong nRow, sal_uLong nColumn ) const
+                                sal_uLong nRow, sal_uLong nColumn )
 {
     // error treatment
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",

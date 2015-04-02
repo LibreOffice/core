@@ -217,7 +217,7 @@ int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword
 
     PDFReader aParser;
     int nRet = 0;
-    PDFEntry* pEntry = aParser.read( pInFile );
+    PDFEntry* pEntry = pdfparse::PDFReader::read( pInFile );
     if( pEntry )
     {
         PDFFile* pPDFFile = dynamic_cast<PDFFile*>(pEntry);

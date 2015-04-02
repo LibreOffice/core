@@ -131,7 +131,7 @@ void StdTabControllerModel::ImplGetControlModels( ::com::sun::star::uno::Referen
     }
 }
 
-void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) const
+void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls )
 {
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > * pRefs = Controls.getConstArray();
     sal_uInt32 nControls = Controls.getLength();
@@ -145,7 +145,7 @@ void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rLis
     }
 }
 
-sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList ) const
+sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList )
 {
     for ( size_t n = rList.size(); n; )
     {

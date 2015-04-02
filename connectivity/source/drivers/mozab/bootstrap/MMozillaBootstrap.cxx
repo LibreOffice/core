@@ -133,7 +133,7 @@ OUString SAL_CALL MozillaBootstrap::getProfilePath( ::com::sun::star::mozilla::M
 }
 sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return m_ProfileAccess->isProfileLocked(product,profileName);
+    return ProfileAccess::isProfileLocked(product,profileName);
 }
 sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

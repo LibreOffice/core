@@ -110,12 +110,12 @@ PDFEntry::~PDFEntry()
 {
 }
 
-EmitImplData* PDFEntry::getEmitData( EmitContext& rContext ) const
+EmitImplData* PDFEntry::getEmitData( EmitContext& rContext )
 {
     return rContext.m_pImplData;
 }
 
-void PDFEntry::setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData ) const
+void PDFEntry::setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData )
 {
     if( rContext.m_pImplData && rContext.m_pImplData != pNewEmitData )
         delete rContext.m_pImplData;

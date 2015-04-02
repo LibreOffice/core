@@ -34,7 +34,7 @@ struct EmitImplData;
 struct PDFContainer;
 class EmitContext
 {
-    public:
+public:
     virtual bool write( const void* pBuf, unsigned int nLen ) = 0;
     virtual unsigned int getCurPos() = 0;
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) = 0;
@@ -48,7 +48,7 @@ class EmitContext
     // set this to decrypt the PDF file
     bool m_bDecrypt;
 
-    private:
+private:
     friend struct PDFEntry;
     EmitImplData* m_pImplData;
 };
@@ -61,9 +61,9 @@ struct PDFEntry
     virtual bool emit( EmitContext& rWriteContext ) const = 0;
     virtual PDFEntry* clone() const = 0;
 
-    protected:
-    EmitImplData* getEmitData( EmitContext& rContext ) const;
-    void setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData ) const;
+protected:
+    static EmitImplData* getEmitData( EmitContext& rContext );
+    static void setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData );
 };
 
 struct PDFComment : public PDFEntry
@@ -226,10 +226,10 @@ struct PDFTrailer : public PDFContainer
 struct PDFFileImplData;
 struct PDFFile : public PDFContainer
 {
-    private:
+private:
     mutable PDFFileImplData*    m_pData;
     PDFFileImplData*            impl_getData() const;
-    public:
+public:
     unsigned int        m_nMajor;           // PDF major
     unsigned int        m_nMinor;           // PDF minor
 
@@ -275,7 +275,7 @@ struct PDFObject : public PDFContainer
     // writes only the contained stream, deflated if necessary
     bool writeStream( EmitContext& rContext, const PDFFile* pPDFFile ) const;
 
-    private:
+private:
     // returns true if stream is deflated
     // fills *ppStream and *pBytes with start of stream and count of bytes
     // memory returned in *ppStream must be freed with rtl_freeMemory afterwards
@@ -293,13 +293,13 @@ struct PDFPart : public PDFContainer
 
 class PDFReader
 {
-    public:
+public:
     PDFReader() {}
     ~PDFReader() {}
 
-    PDFEntry* read( const char* pFileName );
+    static PDFEntry* read( const char* pFileName );
 #ifdef WIN32
-    PDFEntry* read( const char* pBuffer, unsigned int nLen );
+    static PDFEntry* read( const char* pBuffer, unsigned int nLen );
 #endif
 };
 

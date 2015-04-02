@@ -79,21 +79,21 @@ class SvMetaClass : public SvMetaType
     SvBOOL                      aAutomation;
     SvMetaClassRef              xAutomationInterface;
 
-    bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
+    bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
-    void                WriteSlotStubs( const OString& rShellName,
+    static void             WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,
                                         SvStream & rOutStm );
-    sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
+    static sal_uInt16       WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
                                             SvStream & rOutStm );
-    sal_uInt16              WriteSlots( const OString& rShellName, sal_uInt16 nCount,
+    static sal_uInt16       WriteSlots( const OString& rShellName, sal_uInt16 nCount,
                                     SvSlotElementList & rSlotList,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
-    void                InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
+    void                    InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                                     SvMetaClassList & rClassList,
                                     const OString& rPrefix, SvIdlDataBase& rBase );
 

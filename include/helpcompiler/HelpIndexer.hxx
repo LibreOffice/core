@@ -81,7 +81,7 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
 	 */
-        lucene::util::Reader *helpFileReader(OUString const & path);
+        static lucene::util::Reader *helpFileReader(OUString const & path);
 };
 
 #endif

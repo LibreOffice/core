@@ -945,7 +945,7 @@ static bool checkEncryption( const OUString&                               i_rPa
     aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
 
     pdfparse::PDFReader aParser;
-    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( aParser.read( aPDFFile.getStr() ));
+    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
     if( pEntry )
     {
         pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());

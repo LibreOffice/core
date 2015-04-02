@@ -49,7 +49,7 @@ namespace xmlscript
         OUString m_aLocalName;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes > m_xAttributes;
 
-        bool getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
+        static bool getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             sal_Int32 nUid );
 

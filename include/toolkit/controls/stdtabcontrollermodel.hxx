@@ -94,8 +94,8 @@ protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }
     sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
     void                    ImplGetControlModels( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
-    void                    ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) const;
-    sal_uInt32              ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList ) const;
+    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls );
+    static sal_uInt32       ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
 
 public:
                             StdTabControllerModel();

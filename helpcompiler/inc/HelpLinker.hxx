@@ -90,7 +90,7 @@ private:
     bool m_bCreateIndex;
     void initIndexerPreProcessor();
     void link() throw(HelpProcessingException, BasicCodeTagger::TaggerException);
-    void addBookmark( FILE* pFile_DBHelp, std::string thishid,
+    static void addBookmark( FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
 };
