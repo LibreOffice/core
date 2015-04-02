@@ -1306,81 +1306,78 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
            std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt());
+    SwTable* pTable = SwTable::FindTable( pFmt );
+    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
+    if(pLn)
     {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
-        if(pLn)
+        // Check for a specific property
+        if  ( rPropertyName == "TableRedlineParams" )
         {
-            // Check for a specific property
-            if  ( rPropertyName == "TableRedlineParams" )
+            // Get the table row properties
+            uno::Sequence< beans::PropertyValue > tableRowProperties;
+            tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+            comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
+            OUString sRedlineType;
+            uno::Any sRedlineTypeValue;
+            sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
+            if( sRedlineTypeValue >>= sRedlineType )
             {
-                // Get the table row properties
-                uno::Sequence< beans::PropertyValue > tableRowProperties;
-                tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
-                comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
-                OUString sRedlineType;
-                uno::Any sRedlineTypeValue;
-                sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
-                if( sRedlineTypeValue >>= sRedlineType )
-                {
-                    // Create a 'Table Row Redline' object
-                    SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
-                }
-                else
-                {
-                    throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
-                }
+                // Create a 'Table Row Redline' object
+                SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
             }
             else
             {
-                const SfxItemPropertySimpleEntry* pEntry =
-                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
-                SwDoc* pDoc = pFmt->GetDoc();
-                if (!pEntry)
-                    throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-                if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                    throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
+            }
+        }
+        else
+        {
+            const SfxItemPropertySimpleEntry* pEntry =
+                m_pPropSet->getPropertyMap().getByName(rPropertyName);
+            SwDoc* pDoc = pFmt->GetDoc();
+            if (!pEntry)
+                throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-                switch(pEntry->nWID)
+            switch(pEntry->nWID)
+            {
+                case FN_UNO_ROW_HEIGHT:
+                case FN_UNO_ROW_AUTO_HEIGHT:
                 {
-                    case FN_UNO_ROW_HEIGHT:
-                    case FN_UNO_ROW_AUTO_HEIGHT:
+                    SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
+                    if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
-                        SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
-                        if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
-                        {
-                            bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
-                            aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
-                        }
-                        else
-                        {
-                            sal_Int32 nHeight = 0;
-                            aValue >>= nHeight;
-                             Size aSz(aFrmSize.GetSize());
-                            aSz.Height() = convertMm100ToTwip(nHeight);
-                            aFrmSize.SetSize(aSz);
-                        }
-                        pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
+                        bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
+                        aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
                     }
-                    break;
+                    else
+                    {
+                        sal_Int32 nHeight = 0;
+                        aValue >>= nHeight;
+                         Size aSz(aFrmSize.GetSize());
+                        aSz.Height() = convertMm100ToTwip(nHeight);
+                        aFrmSize.SetSize(aSz);
+                    }
+                    pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
+                }
+                break;
 
-                    case FN_UNO_TABLE_COLUMN_SEPARATORS:
-                    {
-                        UnoActionContext aContext(pDoc);
-                        SwTable* pTable2 = SwTable::FindTable( pFmt );
-                        lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], true, pDoc);
-                    }
-                    break;
+                case FN_UNO_TABLE_COLUMN_SEPARATORS:
+                {
+                    UnoActionContext aContext(pDoc);
+                    SwTable* pTable2 = SwTable::FindTable( pFmt );
+                    lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], true, pDoc);
+                }
+                break;
 
-                    default:
-                    {
-                        SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
-                        SwAttrSet aSet(pLnFmt->GetAttrSet());
-                        m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
-                        pDoc->SetAttr(aSet, *pLnFmt);
-                    }
+                default:
+                {
+                    SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
+                    SwAttrSet aSet(pLnFmt->GetAttrSet());
+                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    pDoc->SetAttr(aSet, *pLnFmt);
                 }
             }
         }
