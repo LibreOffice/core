@@ -290,7 +290,7 @@ void SwSelPaintRects::Show()
         SwRects::clear();
         FillRects();
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+#if HAVE_FEATURE_DESKTOP
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
@@ -338,6 +338,9 @@ void SwSelPaintRects::Show()
             }
         }
 
+        HighlightInputFld();
+#endif
+
         // Tiled editing does not expose the draw and writer cursor, it just
         // talks about "the" cursor at the moment. As long as that's true,
         // don't say anything about the Writer cursor till a draw object is
@@ -378,9 +381,6 @@ void SwSelPaintRects::Show()
             OString sRect = ss.str().c_str();
             GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
         }
-
-        HighlightInputFld();
-#endif
     }
 }
 
