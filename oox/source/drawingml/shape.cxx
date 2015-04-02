@@ -416,6 +416,23 @@ Reference< XShape > Shape::createAndInsert(
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
 
+    // tdf#90403 PowerPoint ignores a:ext cx and cy values of p:xfrm, and uses real table width and height
+    if ( mpTablePropertiesPtr.get() && rServiceName == "com.sun.star.drawing.TableShape" )
+    {
+        maSize.Width = 0;
+        for( std::vector< sal_Int32 >::const_iterator aTableColIter(mpTablePropertiesPtr->getTableGrid().begin());
+             aTableColIter != mpTablePropertiesPtr->getTableGrid().end(); aTableColIter++ )
+        {
+            maSize.Width += *aTableColIter;
+        }
+        maSize.Height = 0;
+        for( std::vector< ::oox::drawingml::table::TableRow >::const_iterator aTableRowIter(mpTablePropertiesPtr->getTableRows().begin());
+             aTableRowIter != mpTablePropertiesPtr->getTableRows().end(); aTableRowIter++ )
+        {
+            maSize.Height += (*aTableRowIter).getHeight();
+        }
+    }
+
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
     OUString aServiceName;

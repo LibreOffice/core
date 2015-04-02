@@ -194,6 +194,7 @@ void SdFiltersTest::testDocumentLayout()
         { "n593612.pptx", "xml/n593612_", -1 },
         { "fdo71434.pptx", "xml/fdo71434_", -1 },
         { "n902652.pptx", "xml/n902652_", -1 },
+        { "tdf90403.pptx", "xml/tdf90403_", -1 },
         // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX }, // Example
     };
 
