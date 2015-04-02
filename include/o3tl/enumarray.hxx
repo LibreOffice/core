@@ -21,7 +21,6 @@
 #define INCLUDED_O3TL_ENUMARRAY_HXX
 
 #include <sal/config.h>
-#include <initializer_list>
 #include <iterator>
 
 namespace o3tl {
@@ -52,35 +51,27 @@ public:
 
     static const size_type max_index = static_cast<size_type>(E::LAST);
 
-    /** Create an enumarray with the given elements.
-
-        @param init an initializer_list
-    */
-    enumarray(std::initializer_list<V> init)
-    { std::copy(init.begin(), init.end(), std::begin(values)); }
-
-    enumarray() {}
-
     const V operator[](E index) const
     {
         assert(index>=static_cast<E>(0) && index<=E::LAST);
-        return values[static_cast<size_type>(index)];
+        return detail_values[static_cast<size_type>(index)];
     }
 
     V& operator[](E index)
     {
         assert(index>=static_cast<E>(0) && index<=E::LAST);
-        return values[static_cast<size_type>(index)];
+        return detail_values[static_cast<size_type>(index)];
     }
 
     void fill(V val)
-    { for (size_type i=0; i<=max_index; ++i) values[i] = val; }
+    { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
 
     size_type size() const { return max_index + 1; }
     iterator  begin()      { return iterator(this, 0); }
     iterator  end()        { return iterator(this, size()); }
-private:
-    V values[max_index + 1];
+
+//private:
+    V detail_values[max_index + 1];
 };
 
 
