@@ -678,11 +678,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_STATUS_DOCPOS:
                 {
-                    OUString aStr = ScGlobal::GetRscString( STR_TABLE ) +
-                                    " "   + OUString::number( nTab + 1 ) +
-                                    " / " + OUString::number( nTabCount );
-                    rSet.Put( SfxStringItem( nWhich, aStr ) );
-                }
+                    OUString aStr = ScGlobal::GetRscString( STR_TABLE_COUNT );
+
+                    aStr = aStr.replaceFirst("%1", OUString::number( nTab + 1  ) );
+                    aStr = aStr.replaceFirst("%2", OUString::number( nTabCount ) );
+
+                    rSet.Put( SfxStringItem( nWhich, aStr ) );                }
                 break;
 
             case SID_ROWCOL_SELCOUNT:
