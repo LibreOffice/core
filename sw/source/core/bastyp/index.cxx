@@ -81,6 +81,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     assert(m_pIndexReg == rIdx.m_pIndexReg);
     if (!m_pIndexReg)
     {
+        m_nIndex = 0;
         return *this; // no IndexReg => no list to sort into; m_nIndex is 0
     }
     SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);

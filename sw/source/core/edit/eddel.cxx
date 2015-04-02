@@ -99,6 +99,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
             pNewPam->Start()->nNode = pNewPam->Start()->nNode.GetNode().FindTableNode()->GetIndex();
+            pNewPam->Start()->nContent.Assign(nullptr, 0);
             pPam = pNewPam.get();
         }
         // delete everything
