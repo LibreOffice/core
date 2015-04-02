@@ -64,7 +64,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_aqua_component_getFactory(
                 aSNS.getArray( )[0] = FILE_PICKER_SERVICE_NAME;
 
                 xFactory = createSingleFactory(
-                    reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+                    static_cast< XMultiServiceFactory* > ( pSrvManager ),
                     OUString::createFromAscii( pImplName ),
                     createFileInstance,
                     aSNS );
@@ -75,7 +75,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_aqua_component_getFactory(
                 aSNS.getArray( )[0] = FOLDER_PICKER_SERVICE_NAME;
 
                 xFactory = createSingleFactory(
-                    reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+                    static_cast< XMultiServiceFactory* > ( pSrvManager ),
                     OUString::createFromAscii( pImplName ),
                     createFolderInstance,
                     aSNS );
