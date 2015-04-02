@@ -3798,7 +3798,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
     ScAddress aTopPos = aPos;
     aTopPos.SetRow(mxGroup->mpTopCell->aPos.Row());
     ScGroupTokenConverter aConverter(aCode, *pDocument, *this, mxGroup->mpTopCell->aPos);
-    if (!aConverter.convert(*pCode))
+    std::vector<ScTokenArray*> aLoopControl;
+    if (!aConverter.convert(*pCode, aLoopControl))
     {
         SAL_INFO("sc.opencl", "conversion of group " << this << " failed, disabling");
         mxGroup->meCalcState = sc::GroupCalcDisabled;
