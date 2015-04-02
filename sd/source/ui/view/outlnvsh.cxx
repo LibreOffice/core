@@ -248,6 +248,11 @@ void OutlineViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     {
         pOlView->Paint(rRect, pWin);
     }
+
+    if(HasCurrentFunction())
+    {
+        GetCurrentFunction()->Paint(rRect, pWin);
+    }
 }
 
 void OutlineViewShell::ArrangeGUIElements ()
@@ -509,7 +514,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 {
                     pOlView->InsertData( aDataHelper,
                                          GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
-                                         nAction, false, SotClipboardFormatId::STRING);
+                                         nAction, false, FORMAT_STRING);
                 }
             }
 
@@ -711,9 +716,9 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
     if ( pDataHelper )
     {
         bPastePossible = ( pDataHelper->GetFormatCount() != 0 &&
-                            ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||
-                              pDataHelper->HasFormat( SotClipboardFormatId::RTF ) ||
-                              pDataHelper->HasFormat( SotClipboardFormatId::HTML ) ) );
+                            ( pDataHelper->HasFormat( FORMAT_STRING ) ||
+                              pDataHelper->HasFormat( FORMAT_RTF ) ||
+                              pDataHelper->HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
@@ -785,9 +790,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     else
     {
         // Enable color view?
-        EEControlBits nCntrl = rOutl.GetControlWord();
+        sal_uLong nCntrl = rOutl.GetControlWord();
         bool bNoColor = false;
-        if (nCntrl & EEControlBits::NOCOLORS)
+        if (nCntrl & EE_CNTRL_NOCOLORS)
             bNoColor = true;
 
         rSet.Put( SfxBoolItem( SID_COLORVIEW, bNoColor ) );
@@ -896,9 +901,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             // get initial state
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             bPastePossible = ( aDataHelper.GetFormatCount() != 0 &&
-                                ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
-                                  aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ||
-                                  aDataHelper.HasFormat( SotClipboardFormatId::HTML ) ) );
+                                ( aDataHelper.HasFormat( FORMAT_STRING ) ||
+                                  aDataHelper.HasFormat( FORMAT_RTF ) ||
+                                  aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
         }
 
         if( !bPastePossible )
@@ -1093,6 +1098,7 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     pOutlinerView->Scroll(-nDelta, 0);
     pOutlinerView->ShowCursor(false);
 
+    pOlView->InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -1115,6 +1121,8 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
     pOutlinerView->ShowCursor(false);
+
+    pOlView->InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -1231,12 +1239,12 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 
     rOutl.SetFlatMode( pView->IsNoAttribs() );
 
-    EEControlBits nCntrl = rOutl.GetControlWord();
+    sal_uLong nCntrl = rOutl.GetControlWord();
 
     if ( pView->IsNoColors() )
-        rOutl.SetControlWord(nCntrl | EEControlBits::NOCOLORS);
+        rOutl.SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);
     else
-        rOutl.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
+        rOutl.SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
 
     sal_uInt16 nPage = mpFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
@@ -1250,9 +1258,9 @@ void OutlineViewShell::WriteFrameViewData()
 {
     ::Outliner& rOutl = pOlView->GetOutliner();
 
-    EEControlBits nCntrl = rOutl.GetControlWord();
+    sal_uLong nCntrl = rOutl.GetControlWord();
     bool bNoColor = false;
-    if (nCntrl & EEControlBits::NOCOLORS)
+    if (nCntrl & EE_CNTRL_NOCOLORS)
         bNoColor = true;
     mpFrameView->SetNoColors(bNoColor);
     mpFrameView->SetNoAttribs( rOutl.IsFlatMode() );
@@ -1276,13 +1284,13 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     {
         sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
-        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
+        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
 
         // limit area
-        SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
-        nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
-        nZoomValues &= ~SvxZoomEnableFlags::WHOLEPAGE;
-        nZoomValues &= ~SvxZoomEnableFlags::PAGEWIDTH;
+        sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
+        nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+        nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
+        nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
 
         pZoomItem->SetValueSet( nZoomValues );
         rSet.Put( *pZoomItem );
@@ -1347,11 +1355,10 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
 
-        aPageStr = SD_RESSTR(STR_SD_PAGE);
-        aPageStr += " ";
-        aPageStr += OUString::number( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
-        aPageStr += " / ";
-        aPageStr += OUString::number( nPageCount );
+        aPageStr = SD_RESSTR(STR_SD_PAGE_COUNT);
+
+        aPageStr = aPageStr.replaceFirst("%1", OUString::number((sal_Int32)(nPos + 1)));
+        aPageStr = aPageStr.replaceFirst("%2", OUString::number(nPageCount));
 
         aLayoutStr = pPage->GetLayoutName();
         sal_Int32 nIndex = aLayoutStr.indexOf(SD_LT_SEPARATOR);

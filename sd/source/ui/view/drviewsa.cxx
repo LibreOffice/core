@@ -585,18 +585,18 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )
-                pZoomItem.reset(new SvxZoomItem( SvxZoomType::WHOLEPAGE, nZoom ));
+                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom ));
             else
-                pZoomItem.reset(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
+                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
 
             // constrain area
-            SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
+            sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
                 // || ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 ) )
             {
-                nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
+                nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
 
             pZoomItem->SetValueSet( nZoomValues );
@@ -700,17 +700,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         sal_Int32 nPageCount = sal_Int32(GetDoc()->GetSdPageCount(mePageKind));
         sal_Int32 nActivePageCount = sal_Int32(GetDoc()->GetActiveSdPageCount());
         // Always show the slide/page number.
-        OUString aOUString = SD_RESSTR(STR_SD_PAGE);
-        aOUString += " ";
-        aOUString += OUString::number( maTabControl.GetCurPageId() );
-        aOUString += " / " ;
-        aOUString += OUString::number( nPageCount );
-        if (nPageCount != nActivePageCount)
-        {
-            aOUString += " (";
-            aOUString += OUString::number( nActivePageCount );
-            aOUString += ")";
-        }
+
+        OUString aOUString = (nPageCount == nActivePageCount) ? SD_RESSTR(STR_SD_PAGE_COUNT) : SD_RESSTR(STR_SD_PAGE_COUNT_CUSTOM);
+
+        aOUString = aOUString.replaceFirst("%1", OUString::number(maTabControl.GetCurPageId()));
+        aOUString = aOUString.replaceFirst("%2", OUString::number(nPageCount));
+        if(nPageCount != nActivePageCount)
+            aOUString = aOUString.replaceFirst("%3", OUString::number(nActivePageCount));
 
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on

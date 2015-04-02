@@ -695,10 +695,9 @@
 #define STR_UNDO_CONDFORMAT             531
 #define STR_UNDO_FORMULA_TO_VALUE       532
 
-#define STR_UNQUOTED_STRING             533
-#define STR_ENTER_VALUE                 534
+#define STR_TABLE_COUNT                 533
 
-#define SC_GLOBSTR_STR_COUNT            535     /**< the count of permanently resident strings */
+#define SC_GLOBSTR_STR_COUNT            534     /**< the count of permanently resident strings */
 
 #endif
 
