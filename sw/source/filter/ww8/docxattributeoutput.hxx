@@ -850,7 +850,7 @@ private:
     };
     std::list< PostponedDrawing >* m_postponedVMLDrawing;
     std::list< PostponedDrawing >* m_postponedDMLDrawing;
-    std::list< PostponedDrawing >* m_postponedCustomShape;
+    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;
 
     struct PostponedOLE
     {

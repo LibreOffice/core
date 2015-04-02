@@ -448,8 +448,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     {
         comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_bStartedParaSdt, false);
 
-        assert(!m_postponedCustomShape);
-        m_postponedCustomShape = new std::list< PostponedDrawing >;
+        assert(!m_pPostponedCustomShape);
+        m_pPostponedCustomShape.reset(new std::list<PostponedDrawing>());
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
         {
             m_bParagraphFrameOpen = true;
@@ -521,14 +521,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 aFramePrTextbox.push_back(pFramePr);
             }
         }
-        if (!m_postponedCustomShape->empty())
+        if (!m_pPostponedCustomShape->empty())
         {
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
             WritePostponedCustomShape();
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
-        delete m_postponedCustomShape;
-        m_postponedCustomShape = NULL;
+        m_pPostponedCustomShape.reset(0);
 
         m_aFramesOfParagraph.clear();
     }
@@ -4739,12 +4738,12 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
 
 void DocxAttributeOutput::WritePostponedCustomShape()
 {
-    if(m_postponedCustomShape == NULL)
+    if (!m_pPostponedCustomShape)
         return;
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::list< PostponedDrawing >::iterator it = m_postponedCustomShape->begin();
-         it != m_postponedCustomShape->end();
+    for( std::list< PostponedDrawing >::iterator it = m_pPostponedCustomShape->begin();
+         it != m_pPostponedCustomShape->end();
          ++it )
     {
         if ( IsAlternateContentChoiceOpen() )
@@ -4753,8 +4752,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
-    delete m_postponedCustomShape;
-    m_postponedCustomShape = NULL;
+    m_pPostponedCustomShape.reset(0);
 }
 
 void DocxAttributeOutput::WritePostponedDMLDrawing()
@@ -4838,7 +4836,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
                                 if( m_rExport.SdrExporter().IsDrawingOpen() )
-                                    m_postponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
+                                    m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                                 else
                                     m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrmFmt(), m_anchorId++);
                             }
@@ -4851,9 +4849,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         // IsAlternateContentChoiceOpen() : check is to ensure that only one object is getting added. Without this check, plus one obejct gets added
                         // m_bParagraphFrameOpen : Check if the frame is open.
                         else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
-                        {
-                            m_postponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
-                        }
+                            m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                         else
                         {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
@@ -8297,7 +8293,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
-      m_postponedCustomShape(NULL),
       m_postponedOLE( NULL ),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
