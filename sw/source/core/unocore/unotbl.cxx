@@ -3134,24 +3134,16 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXTextTable::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXTextTable::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXTextTable::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXTextTable::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 OUString SwXTextTable::getName(void) throw( uno::RuntimeException, std::exception )
 {
