@@ -871,7 +871,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     SearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = 0x00000001;
     SearchOpt.searchString = "other";
-    SearchOpt.replaceString = "";
+    SearchOpt.replaceString.clear();
     SearchOpt.changedChars = 0;
     SearchOpt.deletedChars = 0;
     SearchOpt.insertedChars = 0;
