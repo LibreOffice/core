@@ -994,7 +994,7 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
                 aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
         }
         else
-            aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_PIXEL, MAP_TWIP);
+            aRectangle = PixelToLogic(aRectangle, MapMode(MAP_TWIP));
         sRectangle = aRectangle.toString();
     }
 
