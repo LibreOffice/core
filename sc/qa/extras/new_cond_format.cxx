@@ -15,6 +15,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/DataBarAxis.hpp>
+#include <com/sun/star/sheet/XDataBarEntry.hpp>
+#include <com/sun/star/sheet/DataBarEntryType.hpp>
 #include <unonames.hxx>
 
 using namespace css;
@@ -227,6 +229,45 @@ void testAxisColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
 }
 
+void testDataBarEntryValue(uno::Reference<sheet::XDataBarEntry> xEntry,
+        const OUString& rExpectedValue, sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case sheet::DataBarEntryType::DATABAR_VALUE:
+        case sheet::DataBarEntryType::DATABAR_PERCENT:
+        case sheet::DataBarEntryType::DATABAR_PERCENTILE:
+        case sheet::DataBarEntryType::DATABAR_FORMULA:
+        {
+            OUString aString = xEntry->getFormula();
+            CPPUNIT_ASSERT_EQUAL(rExpectedValue, aString);
+        }
+        break;
+        default:
+        break;
+    }
+}
+
+void testDataBarEntries(uno::Reference<beans::XPropertySet> xPropSet,
+        const OUString& rExpectedMinString, sal_Int32 nExpectedMinType,
+        const OUString& rExpectedMaxString, sal_Int32 nExpectedMaxType)
+{
+    uno::Any aAny = xPropSet->getPropertyValue("DataBarEntries");
+    uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
+    CPPUNIT_ASSERT(aAny >>= aEntries);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEntries.getLength());
+
+    sal_Int32 nMinType = aEntries[0]->getType();
+    CPPUNIT_ASSERT_EQUAL(nExpectedMinType, nMinType);
+
+    sal_Int32 nMaxType = aEntries[1]->getType();
+    CPPUNIT_ASSERT_EQUAL(nExpectedMaxType, nMaxType);
+
+    testDataBarEntryValue(aEntries[0], rExpectedMinString, nMinType);
+    testDataBarEntryValue(aEntries[1], rExpectedMaxString, nMaxType);
+}
+
 }
 
 void ScConditionalFormatTest::testDataBarProperties()
@@ -258,6 +299,8 @@ void ScConditionalFormatTest::testDataBarProperties()
         testPositiveColor(xPropSet, COL_LIGHTBLUE);
         testNegativeColor(xPropSet, COL_LIGHTRED);
         testAxisColor(xPropSet, COL_BLACK);
+        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_AUTO,
+                "", sheet::DataBarEntryType::DATABAR_MAX);
     }
 }
 
