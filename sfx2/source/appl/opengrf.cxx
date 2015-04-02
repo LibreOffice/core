@@ -126,7 +126,7 @@ short SvxOpenGraphicDialog::Execute()
             sal_uInt16  nFound = USHRT_MAX;
 
             // non-local?
-            if ( INET_PROT_FILE != aObj.GetProtocol() )
+            if ( INetProtocol::FILE != aObj.GetProtocol() )
             {
                 SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
                 aMed.Download();

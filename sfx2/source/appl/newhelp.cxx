@@ -2900,7 +2900,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
                                         bool         bSuccess)
 {
     INetURLObject aObj( sURL );
-    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+    if ( aObj.GetProtocol() == INetProtocol::VND_SUN_STAR_HELP )
         SetFactory( aObj.GetHost() );
     if ( IsWait() )
         LeaveWait();
@@ -3042,7 +3042,7 @@ void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
 {
     INetURLObject aObj( rURL );
-    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+    if ( aObj.GetProtocol() == INetProtocol::VND_SUN_STAR_HELP )
         SetFactory( aObj.GetHost() );
 }
 

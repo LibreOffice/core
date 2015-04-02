@@ -988,12 +988,12 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // determine name
     INetURLObject aURL(aFile);
     OUString aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
-    if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIV_SOFFICE )
+    if ( aName.isEmpty() || aURL.GetProtocol() == INetProtocol::PRIV_SOFFICE )
         aName = SfxResId( STR_NONAME ).toString();
     m_pNameED->SetText( aName );
 
     // determine context symbol
-    aURL.SetSmartProtocol( INET_PROT_FILE );
+    aURL.SetSmartProtocol( INetProtocol::FILE );
     aURL.SetSmartURL( aFactory);
     const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     Image aImage = SvFileInformationManager::GetImage( aURL, true );
@@ -1009,7 +1009,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine size and type
     OUString aSizeText( m_aUnknownSize );
-    if ( aURL.GetProtocol() == INET_PROT_FILE )
+    if ( aURL.GetProtocol() == INetProtocol::FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
     m_pShowSizeFT->SetText( aSizeText );
 
@@ -1020,7 +1020,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine location
     aURL.SetSmartURL( aFile);
-    if ( aURL.GetProtocol() == INET_PROT_FILE )
+    if ( aURL.GetProtocol() == INetProtocol::FILE )
     {
         INetURLObject aPath( aURL );
         aPath.setFinalSlash();
@@ -1030,7 +1030,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
         m_pFileValFt->SetText( aText );
     }
-    else if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
+    else if ( aURL.GetProtocol() != INetProtocol::PRIV_SOFFICE )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
@@ -1136,9 +1136,9 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
         OUString aFile( rInfoItem.GetValue() );
 
         INetURLObject aURL;
-        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartProtocol( INetProtocol::FILE );
         aURL.SetSmartURL( aFile);
-        if ( INET_PROT_PRIV_SOFFICE != aURL.GetProtocol() )
+        if ( INetProtocol::PRIV_SOFFICE != aURL.GetProtocol() )
         {
             OUString aLastName( aURL.GetLastName() );
             if ( !aLastName.isEmpty() )

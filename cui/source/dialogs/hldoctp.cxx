@@ -39,7 +39,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     mbMarkWndOpen   ( false )
 {
     get(m_pCbbPath, "path");
-    m_pCbbPath->SetSmartProtocol(INET_PROT_FILE);
+    m_pCbbPath->SetSmartProtocol(INetProtocol::FILE);
     get(m_pBtFileopen, "fileopen");
     m_pBtFileopen->SetModeImage(Image(CUI_RES(RID_SVXBMP_FILEOPEN)));
     get(m_pEdTarget, "target");
@@ -113,7 +113,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
     if ( aStrPath != aEmptyStr )
     {
         INetURLObject aURL( aStrPath );
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )    // maybe the path is already a valid
+        if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )    // maybe the path is already a valid
             aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
         else
             utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
@@ -341,7 +341,7 @@ void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 
 SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( const OUString& rStrPath )
 {
-    INetURLObject aURL( rStrPath, INET_PROT_FILE );
+    INetURLObject aURL( rStrPath, INetProtocol::FILE );
 
     if( aURL.HasError() )
         return Type_Invalid;

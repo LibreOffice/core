@@ -1542,7 +1542,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     // 2. Open the file ourselves
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
                              INetURLObject::NO_DECODE ), StreamMode::READ );
-    if( INET_PROT_FILE == aTmpObj.GetProtocol() )
+    if( INetProtocol::FILE == aTmpObj.GetProtocol() )
         pMed->Download(); // Touch the medium (download it)
 
     const SfxFilter* pSfxFlt = 0;

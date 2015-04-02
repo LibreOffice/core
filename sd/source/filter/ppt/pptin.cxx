@@ -397,7 +397,7 @@ bool ImplSdPPTImport::Import()
                                             break;
 
                                         // Convert '\\' notation to 'smb://'
-                                        INetURLObject aUrl( pHyperlink->aTarget, INET_PROT_FILE );
+                                        INetURLObject aUrl( pHyperlink->aTarget, INetProtocol::FILE );
                                         pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
 
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress, VT_EMPTY ) )
@@ -2065,7 +2065,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                                 OUString aBaseURL = pDocShell->GetMedium()->GetBaseURL();
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
-                                if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+                                if( INetProtocol::NOT_VALID == aURL.GetProtocol() )
                                     utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, aBookmarkURL );
                                 if( aBookmarkURL.isEmpty() )
                                     aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );

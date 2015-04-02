@@ -2432,7 +2432,7 @@ namespace pcr
             }
             // additional info about what happened
             INetURLObject aParser( sDataSourceName );
-            if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
+            if ( aParser.GetProtocol() != INetProtocol::NOT_VALID )
                 sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
             OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).toString().replaceAll("$name$", sDataSourceName));
             SQLContext aContext;
@@ -2845,7 +2845,7 @@ namespace pcr
         OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
         INetURLObject aParser( sURL );
-        if ( INET_PROT_FILE == aParser.GetProtocol() )
+        if ( INetProtocol::FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
             aFileDlg.SetDisplayDirectory( sURL );
@@ -2900,7 +2900,7 @@ namespace pcr
         OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
         INetURLObject aParser( sDataSource );
-        if ( INET_PROT_FILE == aParser.GetProtocol() )
+        if ( INetProtocol::FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
             aFileDlg.SetDisplayDirectory( sDataSource );

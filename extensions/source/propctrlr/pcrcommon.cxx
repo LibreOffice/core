@@ -39,7 +39,7 @@ namespace pcr
     OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
+        if ( aHID.GetProtocol() == INetProtocol::HID )
               return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
         else
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
@@ -51,7 +51,7 @@ namespace pcr
         OUStringBuffer aBuffer;
         OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         INetURLObject aHID( aTmp );
-        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+        if ( aHID.GetProtocol() == INetProtocol::NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();

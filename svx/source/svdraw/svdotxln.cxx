@@ -171,7 +171,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
         try
         {
             INetURLObject aURL( pData->aFileName );
-            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
             ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue("DateModified") );
@@ -210,7 +210,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
     INetURLObject   aFileURL( rFileName );
     bool            bRet = false;
 
-    if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if( aFileURL.GetProtocol() == INetProtocol::NOT_VALID )
     {
         OUString aFileURLStr;
 
@@ -220,7 +220,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
             aFileURL.SetSmartURL( rFileName );
     }
 
-    DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aFileURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
     boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 

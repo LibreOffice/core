@@ -314,7 +314,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
         sPath = aPathOpt.GetWorkPath();
     }
     INetURLObject aURL(sPath);
-    if(aURL.GetProtocol() == INET_PROT_FILE)
+    if(aURL.GetProtocol() == INetProtocol::FILE)
         m_pPathED->SetText(aURL.PathToFileName());
     else
         m_pPathED->SetText(aURL.GetFull());
@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
     if( xFP->execute() == RET_OK )
     {
         INetURLObject aURL(xFP->getDirectory());
-        if(aURL.GetProtocol() == INET_PROT_FILE)
+        if(aURL.GetProtocol() == INetProtocol::FILE)
             m_pPathED->SetText(aURL.PathToFileName());
         else
             m_pPathED->SetText(aURL.GetFull());

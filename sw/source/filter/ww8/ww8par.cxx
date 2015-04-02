@@ -4743,7 +4743,7 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
     {
         INetURLObject aObj;
         aObj.SetURL( sTemplatePathOrURL );
-        bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+        bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
         OUString aURL;
         if ( bIsURL )
             aURL = sTemplatePathOrURL;
@@ -4828,7 +4828,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     {
         INetURLObject aObj;
         aObj.SetURL( sGlobalTemplates[ i ] );
-        bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+        bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
         OUString aURL;
         if ( bIsURL )
                 aURL = sGlobalTemplates[ i ];

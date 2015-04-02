@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 
         OUString aFileName = aTemplates.GetPath( m_pRegionLb->GetSelectEntryPos(), nEntry-1);
         INetURLObject aTestObj( aFileName );
-        if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
+        if( aTestObj.GetProtocol() == INetProtocol::NOT_VALID )
         {
             // temp. fix until Templates are managed by UCB compatible service
             // does NOT work with locally cached components !

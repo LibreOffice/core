@@ -221,7 +221,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         rtl::OUString   aMenuTitle;
         INetURLObject   aURL( (*m_pRecentFilesItems)[i].aURL );
         
-        if ( aURL.GetProtocol() == INET_PROT_FILE )
+        if ( aURL.GetProtocol() == INetProtocol::FILE )
         {
             // Do handle file URL differently => convert it to a system
             // path and abbreviate it with a special function:

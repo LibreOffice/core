@@ -587,7 +587,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         pLibs->aBasicLibPath = *pLibPath;
     }
     OUString aStorName( rStorage.GetName() );
-    maStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
+    maStorageName = INetURLObject(aStorName, INetProtocol::FILE).GetMainURL( INetURLObject::NO_DECODE );
 
 
     // If there is no Manager Stream, no further actions are necessary
@@ -831,7 +831,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         return;
     }
 
-    maStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
+    maStorageName = INetURLObject(aStorName, INetProtocol::FILE).GetMainURL( INetURLObject::NO_DECODE );
     // #i13114 removed, DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     OUString aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
@@ -839,7 +839,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
     if ( !rBaseURL.isEmpty() )
     {
         INetURLObject aObj( rBaseURL );
-        if ( aObj.GetProtocol() == INET_PROT_FILE )
+        if ( aObj.GetProtocol() == INetProtocol::FILE )
         {
             aRealStorageName = aObj.PathToFileName();
         }
@@ -875,7 +875,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         // Always try relative first if there are two stands on disk
         if ( !pInfo->GetRelStorageName().isEmpty() && pInfo->GetRelStorageName() != szImbedded )
         {
-            INetURLObject aObj( aRealStorageName, INET_PROT_FILE );
+            INetURLObject aObj( aRealStorageName, INetProtocol::FILE );
             aObj.removeSegment();
             bool bWasAbsolute = false;
             aObj = aObj.smartRel2Abs( pInfo->GetRelStorageName(), bWasAbsolute );
@@ -946,7 +946,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     if ( !aLibs.isEmpty() )
     {
         OUString aCurStorageName( aStorName );
-        INetURLObject aCurStorage( aCurStorageName, INET_PROT_FILE );
+        INetURLObject aCurStorage( aCurStorageName, INetProtocol::FILE );
         sal_Int32 nLibs = comphelper::string::getTokenCount(aLibs, LIB_SEP);
         for ( sal_Int32 nLib = 0; nLib < nLibs; nLib++ )
         {
@@ -956,7 +956,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP ) );
             OUString aLibAbsStorageName( aLibInfo.getToken( 1, LIBINFO_SEP ) );
             OUString aLibRelStorageName( aLibInfo.getToken( 2, LIBINFO_SEP ) );
-            INetURLObject aLibAbsStorage( aLibAbsStorageName, INET_PROT_FILE );
+            INetURLObject aLibAbsStorage( aLibAbsStorageName, INetProtocol::FILE );
 
             INetURLObject aLibRelStorage( aStorName );
             aLibRelStorage.removeSegment();
@@ -1056,10 +1056,10 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
         OUString aStorName( pCurStorage->GetName() );
         // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-        INetURLObject aCurStorageEntry(aStorName, INET_PROT_FILE);
+        INetURLObject aCurStorageEntry(aStorName, INetProtocol::FILE);
         // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
-        INetURLObject aStorageEntry(aStorageName, INET_PROT_FILE);
+        INetURLObject aStorageEntry(aStorageName, INetProtocol::FILE);
         // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
         if ( aCurStorageEntry == aStorageEntry )
@@ -1235,7 +1235,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( !aStorName.isEmpty(), "No Storage Name!" );
 
-    OUString aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
+    OUString aStorageName = INetURLObject(aStorName, INetProtocol::FILE).GetMainURL( INetURLObject::NO_DECODE );
     DBG_ASSERT(!aStorageName.isEmpty(), "Bad storage name");
 
     OUString aNewLibName( rLibName );

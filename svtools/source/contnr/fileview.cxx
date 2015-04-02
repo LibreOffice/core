@@ -1607,7 +1607,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
-    DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+    DBG_ASSERT( aFolderObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid URL!" );
 
     // prepare name translation
     SetActualFolder( aFolderObj );

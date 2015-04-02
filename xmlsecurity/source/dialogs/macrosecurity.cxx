@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         aNewObj.removeFinalSlash();
 
         // then the new path also an URL else system path
-        OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
+        OUString aSystemFileURL = ( aNewObj.GetProtocol() != INetProtocol::NOT_VALID ) ?
             aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
         OUString aNewPathStr(aSystemFileURL);

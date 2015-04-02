@@ -64,7 +64,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
     if ( bIsValidURL )
     {
         aURLObject.SetURL( rPath );
-        if ( aURLObject.GetProtocol() == INET_PROT_NOT_VALID )      // test if the source is already a valid url
+        if ( aURLObject.GetProtocol() == INetProtocol::NOT_VALID )      // test if the source is already a valid url
         {                                                           // if not we have to create a url from a physical file name
             bool wasAbs;
             INetURLObject base(rBase);
@@ -73,7 +73,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
                 rPath, wasAbs, true, INetURLObject::ENCODE_ALL,
                 RTL_TEXTENCODING_UTF8, true);
         }
-        bIsValidURL = aURLObject.GetProtocol() != INET_PROT_NOT_VALID;
+        bIsValidURL = aURLObject.GetProtocol() != INetProtocol::NOT_VALID;
         if ( bIsValidURL )
         {
             OUString aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, false ) );
@@ -103,7 +103,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
     get(m_pRbtEditNow, "editnow");
     get(m_pRbtEditLater, "editlater");
     get(m_pCbbPath, "path");
-    m_pCbbPath->SetSmartProtocol(INET_PROT_FILE);
+    m_pCbbPath->SetSmartProtocol(INetProtocol::FILE);
     get(m_pBtCreate, "create");
     m_pBtCreate->SetModeImage(Image(CUI_RES(RID_SVXBMP_NEWDOC)));
     get(m_pLbDocTypes, "types");
@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
     {
         sal_Char const  sSlash[] = "/";
 
-        INetURLObject   aURL( aStrURL, INET_PROT_FILE );
+        INetURLObject   aURL( aStrURL, INetProtocol::FILE );
         OUString        aStrName;
         if( bHandleFileName )
             aStrName = bZeroPath? aTempStrURL : OUString(aURL.getName());
@@ -442,7 +442,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
             aNewURL.setExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 
-        if( aNewURL.GetProtocol() == INET_PROT_FILE )
+        if( aNewURL.GetProtocol() == INetProtocol::FILE )
         {
             utl::LocalFileHelper::ConvertURLToSystemPath( aNewURL.GetMainURL( INetURLObject::NO_DECODE ), aStrTmp );
         }

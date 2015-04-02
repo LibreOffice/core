@@ -811,7 +811,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
     if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
         aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
 
-    if( !aStr.isEmpty() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if( !aStr.isEmpty() && aURL.GetProtocol() == INetProtocol::NOT_VALID )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
 
     // get adjusted file name

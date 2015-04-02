@@ -359,7 +359,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
             ::utl::UCBContentHelper::Kill( m_aName );
 
         INetURLObject aObj( m_aName );
-        if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+        if ( aObj.GetProtocol() == INetProtocol::NOT_VALID )
         {
             OUString aURL;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aName, aURL );
@@ -565,7 +565,7 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
 {
     OUString aName( rFileName );
     INetURLObject aObj( aName );
-    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    if ( aObj.GetProtocol() == INetProtocol::NOT_VALID )
     {
         OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );

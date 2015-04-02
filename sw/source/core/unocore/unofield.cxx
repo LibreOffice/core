@@ -886,7 +886,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                                         // a non-empty string.
                 INetURLObject aObj;
                 aObj.SetURL( aDataSource );
-                bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
                 if (bIsURL && rPropertyName == UNO_NAME_DATA_BASE_URL)
                     pStr = &aDataSource;        // DataBaseURL
                 else if (!bIsURL && rPropertyName == UNO_NAME_DATA_BASE_NAME)
@@ -925,7 +925,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                      // only one of these properties returns a non-empty string.
                     INetURLObject aObj;
                     aObj.SetURL(m_pImpl->m_sParam5); // SetSmartURL
-                    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
                     if (bIsURL && rPropertyName == UNO_NAME_DATA_BASE_URL)
                         aRet <<= m_pImpl->m_sParam5; // DataBaseURL
                     else if ( rPropertyName == UNO_NAME_DATA_BASE_NAME)

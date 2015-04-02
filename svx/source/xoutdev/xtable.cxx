@@ -227,7 +227,7 @@ bool XPropertyList::Load()
 
         INetURLObject aURL( maPath );
 
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        if( INetProtocol::NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
             return false;
@@ -258,7 +258,7 @@ bool XPropertyList::Save()
 {
     INetURLObject aURL( maPath );
 
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    if( INetProtocol::NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
         return false;

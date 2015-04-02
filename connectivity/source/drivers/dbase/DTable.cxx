@@ -628,7 +628,7 @@ OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName 
         while(xDir->next())
         {
             sName = xRow->getString(1);
-            aURL.SetSmartProtocol(INET_PROT_FILE);
+            aURL.SetSmartProtocol(INetProtocol::FILE);
             OUString sUrl = _pConnection->getURL() +  s_sSeparator + sName;
             aURL.SetSmartURL( sUrl );
 
@@ -1038,7 +1038,7 @@ bool ODbaseTable::CreateImpl()
     }
 
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
+    aURL.SetSmartProtocol(INetProtocol::FILE);
     OUString aName = getEntry(m_pConnection, m_Name);
     if(aName.isEmpty())
     {
@@ -2523,7 +2523,7 @@ OUString ODbaseTable::createTempFile()
         getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE, *this);
 
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
+    aURL.SetSmartProtocol(INetProtocol::FILE);
     aURL.SetURL(aTempFile.GetURL());
 
     OUString sNewName(aURL.getName().copy(0, aURL.getName().getLength() - sExt.getLength()));

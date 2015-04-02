@@ -44,7 +44,7 @@ static_assert((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == 
 OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
 {
     INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
+    aURLObj.SetSmartProtocol( INetProtocol::FILE );
     aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
     OUString aTmp( aURLObj.GetBase() );
     aTmp += " ";

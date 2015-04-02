@@ -44,7 +44,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     get(m_pRbtMail, "linktyp_mail");
     get(m_pRbtNews, "linktyp_news");
     get(m_pCbbReceiver, "receiver");
-    m_pCbbReceiver->SetSmartProtocol(INET_PROT_MAILTO);
+    m_pCbbReceiver->SetSmartProtocol(INetProtocol::MAILTO);
     get(m_pBtAdrBook, "adressbook");
     m_pBtAdrBook->SetModeImage(Image(CUI_RES(RID_SVXBMP_ADRESSBOOK)));
     get(m_pFtSubject, "subject_label");
@@ -139,14 +139,14 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     OUString aStrURL = m_pCbbReceiver->GetText();
     INetURLObject aURL(aStrURL);
 
-    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
     {
         aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
         aURL.SetSmartURL(aStrURL);
     }
 
     // subject for EMail-url
-    if( aURL.GetProtocol() == INET_PROT_MAILTO )
+    if( aURL.GetProtocol() == INetProtocol::MAILTO )
     {
         if ( m_pEdSubject->GetText() != OUString(aEmptyStr) )
         {
@@ -156,7 +156,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
         }
     }
 
-    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+    if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
     else //#105788# always create a URL even if it is not valid
         return aStrURL;
@@ -238,9 +238,9 @@ INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
 {
     if( m_pRbtNews->IsChecked() )
     {
-        return INET_PROT_NEWS;
+        return INetProtocol::NEWS;
     }
-    return INET_PROT_MAILTO;
+    return INetProtocol::MAILTO;
 }
 
 /*************************************************************************

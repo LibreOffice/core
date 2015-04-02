@@ -219,7 +219,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
     }
 
     // file link or URL
-    if (eProtocol == INET_PROT_FILE || (eProtocol == INET_PROT_NOT_VALID && rUrl[0] != '#'))
+    if (eProtocol == INetProtocol::FILE || (eProtocol == INetProtocol::NOT_VALID && rUrl[0] != '#'))
     {
         sal_uInt16 nLevel;
         bool bRel;
@@ -242,7 +242,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         tmpStrm.WriteUInt16( 0x0003 );
         SwWW8Writer::WriteString16(tmpStrm, aFileName, false);
     }
-    else if( eProtocol != INET_PROT_NOT_VALID )
+    else if( eProtocol != INetProtocol::NOT_VALID )
     {
         tmpStrm.Write( maGuidUrlMoniker,sizeof(maGuidUrlMoniker) );
             SwWW8Writer::WriteLong(tmpStrm, 2*(rUrl.getLength()+1));

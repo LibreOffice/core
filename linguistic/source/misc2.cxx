@@ -140,7 +140,7 @@ OUString  GetWritableDictionaryURL( const OUString &rDicName )
 
     // build URL to use for a new (persistent) dictionary
     INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
+    aURLObj.SetSmartProtocol( INetProtocol::FILE );
     aURLObj.SetSmartURL( aDirName );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
     aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );

@@ -249,7 +249,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
     {
         INetURLObject aObj;
         aObj.SetURL( rFilename );
-        bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+        bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
         if ( bIsURL )
             sFileUrl = rFilename;
         else

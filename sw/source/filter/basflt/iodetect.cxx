@@ -158,7 +158,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         // package storage or OLEStorage based format
         SotStorageRef xStg;
         INetURLObject aObj;
-        aObj.SetSmartProtocol( INET_PROT_FILE );
+        aObj.SetSmartProtocol( INetProtocol::FILE );
         aObj.SetSmartURL( rFileName );
         SfxMedium aMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ);
 

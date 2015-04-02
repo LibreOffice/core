@@ -273,7 +273,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 {
                     // get URL
                     INetURLObject aURL;
-                    aURL.SetSmartProtocol( INET_PROT_FILE );
+                    aURL.SetSmartProtocol( INetProtocol::FILE );
                     if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
                     {
                         // create a plugin object

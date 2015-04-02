@@ -662,7 +662,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
             sal_Int32 nProtocolLen = nEndPos - nSttWdPos + 1;
             if (nIndex + nProtocolLen <= rTxt.getLength())
             {
-                if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INET_PROT_NOT_VALID)
+                if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INetProtocol::NOT_VALID)
                     return false;
             }
 
@@ -854,7 +854,7 @@ bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     sal_Int32 nProtocolLen = pDelim - pWordStt + 1;
     if (nIndex + nProtocolLen <= rTxt.getLength())
     {
-        if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INET_PROT_NOT_VALID)
+        if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INetProtocol::NOT_VALID)
             return false; // already ok
     }
 

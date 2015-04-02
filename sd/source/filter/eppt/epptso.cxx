@@ -1131,9 +1131,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             OUString aFile( pFieldEntry->aFieldUrl );
                             OUString aTarget( pFieldEntry->aFieldUrl );
                             INetURLObject aUrl( pFieldEntry->aFieldUrl );
-                            if ( INET_PROT_FILE == aUrl.GetProtocol() )
+                            if ( INetProtocol::FILE == aUrl.GetProtocol() )
                                 aFile = aUrl.PathToFileName();
-                            else if ( INET_PROT_SMB == aUrl.GetProtocol() )
+                            else if ( INetProtocol::SMB == aUrl.GetProtocol() )
                             {
                                 // Convert smb notation to '\\' and skip the 'smb:' part
                                 aFile = aUrl.GetMainURL(INetURLObject::NO_DECODE).copy(4);
@@ -1968,7 +1968,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
                 INetURLObject aUrl( *static_cast<OUString const *>(mAny.getValue()) );
-                if ( INET_PROT_FILE == aUrl.GetProtocol() )
+                if ( INetProtocol::FILE == aUrl.GetProtocol() )
                 {
                     aFile = aUrl.PathToFileName();
                     nAction = 2;
@@ -2016,7 +2016,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
                     OUString aBookmarkFile( aBookmark );
                     INetURLObject aUrl( aBookmark );
-                    if ( INET_PROT_FILE == aUrl.GetProtocol() )
+                    if ( INetProtocol::FILE == aUrl.GetProtocol() )
                         aBookmarkFile = aUrl.PathToFileName();
                     nHyperLinkID = ImplInsertBookmarkURL( aBookmark, (sal_uInt32)(2 | ( 1U << 31 )), aBookmarkFile, aBookmark, "", "" );
                 }

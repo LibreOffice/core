@@ -210,7 +210,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
     XPropertyListRef pList = GetList();
 

@@ -404,7 +404,7 @@ void SAL_CALL OApplicationController::disposing()
                             OUString());
 
                     // add to recent document list
-                    if ( aURL.GetProtocol() == INET_PROT_FILE )
+                    if ( aURL.GetProtocol() == INetProtocol::FILE )
                         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                                                               (pFilter) ? pFilter->GetMimeType() : OUString(),
                                                               (pFilter) ? pFilter->GetServiceName() : OUString() );

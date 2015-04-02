@@ -64,43 +64,43 @@ enum
 };
 
 // Schemes:
-enum INetProtocol
+enum class INetProtocol
 {
-    INET_PROT_NOT_VALID = 0,
-    INET_PROT_FTP = 1,
-    INET_PROT_HTTP = 2,
-    INET_PROT_FILE = 3,
-    INET_PROT_MAILTO = 4,
-    INET_PROT_VND_SUN_STAR_WEBDAV = 5,
-    INET_PROT_NEWS = 6,
-    INET_PROT_PRIV_SOFFICE = 7,
-    INET_PROT_VND_SUN_STAR_HELP = 8,
-    INET_PROT_HTTPS = 9,
-    INET_PROT_SLOT = 10,
-    INET_PROT_MACRO = 11,
-    INET_PROT_JAVASCRIPT = 12,
-    INET_PROT_IMAP = 13,
-    INET_PROT_POP3 = 14,
-    INET_PROT_DATA = 15,
-    INET_PROT_CID = 16,
-    INET_PROT_OUT = 17,
-    INET_PROT_VND_SUN_STAR_HIER = 18,
-    INET_PROT_VIM = 19,
-    INET_PROT_UNO = 20,
-    INET_PROT_COMPONENT = 21,
-    INET_PROT_VND_SUN_STAR_PKG = 22,
-    INET_PROT_LDAP = 23,
-    INET_PROT_DB = 24,
-    INET_PROT_VND_SUN_STAR_CMD = 25,
-    INET_PROT_TELNET = 26,
-    INET_PROT_VND_SUN_STAR_EXPAND = 27,
-    INET_PROT_VND_SUN_STAR_TDOC = 28,
-    INET_PROT_GENERIC = 29,
-    INET_PROT_SMB = 30,
-    INET_PROT_HID = 31,
-    INET_PROT_SFTP = 32,
-    INET_PROT_CMIS = 33,
-    INET_PROT_END = 34
+    NOT_VALID,
+    FTP,
+    HTTP,
+    FILE,
+    MAILTO,
+    VND_SUN_STAR_WEBDAV,
+    NEWS,
+    PRIV_SOFFICE,
+    VND_SUN_STAR_HELP,
+    HTTPS,
+    SLOT,
+    MACRO,
+    JAVASCRIPT,
+    IMAP,
+    POP3,
+    DATA,
+    CID,
+    OUT,
+    VND_SUN_STAR_HIER,
+    VIM,
+    UNO,
+    COMPONENT,
+    VND_SUN_STAR_PKG,
+    LDAP,
+    DB,
+    VND_SUN_STAR_CMD,
+    TELNET,
+    VND_SUN_STAR_EXPAND,
+    VND_SUN_STAR_TDOC,
+    GENERIC,
+    SMB,
+    HID,
+    SFTP,
+    CMIS,
+    LAST = CMIS
 };
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED INetURLObject
@@ -182,9 +182,9 @@ public:
     // General Structure:
 
     inline INetURLObject():
-        m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(INET_PROT_HTTP) {}
+        m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP) {}
 
-    inline bool HasError() const { return m_eScheme == INET_PROT_NOT_VALID; }
+    inline bool HasError() const { return m_eScheme == INetProtocol::NOT_VALID; }
 
     inline OUString GetMainURL(DecodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset
@@ -1234,7 +1234,7 @@ private:
     // Coding:
 
     static inline sal_Char getEscapePrefix(INetProtocol eTheScheme)
-    { return eTheScheme == INET_PROT_VIM ? '=' : '%'; }
+    { return eTheScheme == INetProtocol::VIM ? '=' : '%'; }
 
     inline sal_Char getEscapePrefix() const
     { return getEscapePrefix(m_eScheme); }
@@ -1299,7 +1299,7 @@ inline OUString INetURLObject::decode(SubString const & rSubString,
 inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
-    m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(INET_PROT_HTTP)
+    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP)
 {
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
                  FSysStyle(0));
@@ -1318,7 +1318,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset,
                                     FSysStyle eStyle):
-    m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(eTheSmartScheme)
+    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(eTheSmartScheme)
 {
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true, eStyle);
 }
@@ -1456,7 +1456,7 @@ inline bool INetURLObject::SetMark(OUString const & rTheFragment,
 
 inline INetURLObject::INetURLObject(OUString const & rFSysPath,
                                     FSysStyle eStyle):
-    m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(INET_PROT_HTTP)
+    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP)
 {
     setFSysPath(rFSysPath, eStyle);
 }

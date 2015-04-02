@@ -579,15 +579,15 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
 
         sal_uInt16 nFilter = GRFILTER_FORMAT_DONTKNOW;
 
-        if ( aURLObj.HasError() || INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+        if ( aURLObj.HasError() || INetProtocol::NOT_VALID == aURLObj.GetProtocol() )
         {
-            aURLObj.SetSmartProtocol( INET_PROT_FILE );
+            aURLObj.SetSmartProtocol( INetProtocol::FILE );
             aURLObj.SetSmartURL( sImgUrl );
         }
 
         sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
         // remote?
-        if ( INET_PROT_FILE != aURLObj.GetProtocol() )
+        if ( INetProtocol::FILE != aURLObj.GetProtocol() )
         {
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
 

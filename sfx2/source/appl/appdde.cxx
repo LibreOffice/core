@@ -84,7 +84,7 @@ namespace
 
         sal_Bool bRet = sal_False;
         INetURLObject aObj( rContent );
-        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+        DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid URL!" );
 
         try
         {

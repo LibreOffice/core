@@ -555,7 +555,7 @@ bool SvFileObject::IsDataComplete() const
         {
             INetURLObject aUrl( sFileNm );
             if( aUrl.HasError() ||
-                INET_PROT_NOT_VALID == aUrl.GetProtocol() )
+                INetProtocol::NOT_VALID == aUrl.GetProtocol() )
                 bRet = true;
         }
     }

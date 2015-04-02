@@ -2500,7 +2500,7 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 
         // first, make the URL absolute
         INetURLObject aURL;
-        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartProtocol( INetProtocol::FILE );
         aURL.SetSmartURL( sFile );
         sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -2594,7 +2594,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                     // first, make the URL absolute
                     INetURLObject aURL;
-                    aURL.SetSmartProtocol( INET_PROT_FILE );
+                    aURL.SetSmartProtocol( INetProtocol::FILE );
                     aURL.SetSmartURL( sFile );
                     sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 

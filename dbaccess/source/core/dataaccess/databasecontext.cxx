@@ -313,7 +313,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _
 Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rName,const OUString& _sURL)
 {
     INetURLObject aURL( _sURL );
-    if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if ( aURL.GetProtocol() == INetProtocol::NOT_VALID )
         throw NoSuchElementException( _rName, *this );
 
     try

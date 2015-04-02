@@ -72,13 +72,13 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
 
     m_aFileName = aDSN;
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
+    aURL.SetSmartProtocol(INetProtocol::FILE);
     {
         SvtPathOptions aPathOptions;
         m_aFileName = aPathOptions.SubstituteVariable(m_aFileName);
     }
     aURL.SetSmartURL(m_aFileName);
-    if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if ( aURL.GetProtocol() == INetProtocol::NOT_VALID )
     {
         //  don't pass invalid URL to loadComponentFromURL
         throw SQLException();

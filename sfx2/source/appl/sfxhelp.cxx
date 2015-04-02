@@ -549,7 +549,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     switch ( nProtocol )
     {
-        case INET_PROT_VND_SUN_STAR_HELP:
+        case INetProtocol::VND_SUN_STAR_HELP:
             // already a vnd.sun.star.help URL -> nothing to do
             aHelpURL = rURL;
             break;

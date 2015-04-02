@@ -63,10 +63,10 @@ public:
     */
     bool QueryProtocol (INetProtocol eProto) const
     {
-        return ((eProto == INET_PROT_FILE ) ||
-                (eProto == INET_PROT_FTP  ) ||
-                (eProto == INET_PROT_HTTP ) ||
-                (eProto == INET_PROT_HTTPS)    );
+        return ((eProto == INetProtocol::FILE ) ||
+                (eProto == INetProtocol::FTP  ) ||
+                (eProto == INetProtocol::HTTP ) ||
+                (eProto == INetProtocol::HTTPS)    );
     }
 
     /** QueryUrl.

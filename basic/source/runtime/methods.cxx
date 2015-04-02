@@ -628,7 +628,7 @@ RTLFUNC(MkDir)
             // In vba if the full path is not specified then
             // folder is created relative to the curdir
             INetURLObject aURLObj( getFullPath( aPath ) );
-            if ( aURLObj.GetProtocol() != INET_PROT_FILE )
+            if ( aURLObj.GetProtocol() != INetProtocol::FILE )
             {
                 SbxArrayRef pPar = new SbxArray();
                 SbxVariableRef pResult = new SbxVariable();

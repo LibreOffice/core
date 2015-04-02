@@ -51,7 +51,7 @@ public:
 
     static const size_type max_index = static_cast<size_type>(E::LAST);
 
-    const V operator[](E index) const
+    const V& operator[](E index) const
     {
         assert(index>=static_cast<E>(0) && index<=E::LAST);
         return detail_values[static_cast<size_type>(index)];

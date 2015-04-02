@@ -85,7 +85,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) 
     OUString aOptions;
 
     INetURLObject aObj( rName );
-    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    if ( aObj.GetProtocol() == INetProtocol::NOT_VALID )
     {
         OUString aBaseURL = GetURLBox()->GetBaseURL();
         aName = SvtURLBox::ParseSmart( rName, aBaseURL, SvtPathOptions().GetWorkPath() );
@@ -247,7 +247,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             OUString aRep( pURL->GetValue() );
             INetURLObject aURL( aRep );
             INetProtocol eProt = aURL.GetProtocol();
-            if ( eProt == INET_PROT_FILE )
+            if ( eProt == INetProtocol::FILE )
             {
                 pURLBox->SetText( aURL.PathToFileName() );
             }

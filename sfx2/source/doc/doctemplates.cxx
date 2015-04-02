@@ -570,7 +570,7 @@ void SfxDocTplService_Impl::getDirList()
 
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartProtocol( INetProtocol::FILE );
         aURL.SetURL( aDirs.getToken( i, C_DELIM ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -2907,7 +2907,7 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
 void SfxURLRelocator_Impl::implExpandURL( OUString& io_url )
 {
     const INetURLObject aParser( io_url );
-    if ( aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_EXPAND )
+    if ( aParser.GetProtocol() != INetProtocol::VND_SUN_STAR_EXPAND )
         return;
 
     io_url = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );

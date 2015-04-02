@@ -140,14 +140,14 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
         aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
 
         // If INetURLObject knows this protocol let it parse
-        if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INET_PROT_NOT_VALID )
+        if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NOT_VALID )
         {
             // Initialize parser with given URL.
             INetURLObject aParser( aURL.Complete );
 
             // Get all information about this URL.
             INetProtocol eINetProt = aParser.GetProtocol();
-            if ( eINetProt == INET_PROT_NOT_VALID )
+            if ( eINetProt == INetProtocol::NOT_VALID )
             {
                 return sal_False;
             }
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     {
         // Minmal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
         // in framework!
-        if ( INetURLObject::CompareProtocolScheme( sSmartProtocol ) == INET_PROT_NOT_VALID )
+        if ( INetURLObject::CompareProtocolScheme( sSmartProtocol ) == INetProtocol::NOT_VALID )
         {
             // Try to extract the protocol
             sal_Int32 nIndex = aURL.Complete.indexOf( ':' );
@@ -211,7 +211,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
 
                 // If INetURLObject knows this protocol something is wrong as detected before =>
                 // give up and return false!
-                if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INET_PROT_NOT_VALID )
+                if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NOT_VALID )
                     return sal_False;
                 else
                     aURL.Protocol = aProtocol;
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
     // Initialize parser.
     INetURLObject aParser;
 
-    if ( INetURLObject::CompareProtocolScheme( aURL.Protocol ) != INET_PROT_NOT_VALID )
+    if ( INetURLObject::CompareProtocolScheme( aURL.Protocol ) != INetProtocol::NOT_VALID )
     {
         OUStringBuffer aCompletePath( aURL.Path );
 

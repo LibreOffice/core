@@ -932,9 +932,9 @@ namespace
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
 #if HAVE_FEATURE_MACOSX_SANDBOX
-        return eProt == INET_PROT_SFTP;
+        return eProt == INetProtocol::SFTP;
 #else
-        return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
+        return eProt == INetProtocol::FILE || eProt == INetProtocol::SFTP;
 #endif
     }
 }
@@ -2420,7 +2420,7 @@ void SfxMedium::Init_Impl()
     {
         INetURLObject aUrl( pImp->m_aLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
-        if ( eProt == INET_PROT_NOT_VALID )
+        if ( eProt == INetProtocol::NOT_VALID )
         {
             SAL_WARN( "sfx.doc", "Unknown protocol!" );
         }
@@ -2683,13 +2683,13 @@ void SfxMedium::SetIsRemote_Impl()
     INetURLObject aObj( GetName() );
     switch( aObj.GetProtocol() )
     {
-        case INET_PROT_FTP:
-        case INET_PROT_HTTP:
-        case INET_PROT_HTTPS:
-        case INET_PROT_POP3:
-        case INET_PROT_NEWS:
-        case INET_PROT_IMAP:
-        case INET_PROT_VIM:
+        case INetProtocol::FTP:
+        case INetProtocol::HTTP:
+        case INetProtocol::HTTPS:
+        case INetProtocol::POP3:
+        case INetProtocol::NEWS:
+        case INetProtocol::IMAP:
+        case INetProtocol::VIM:
             pImp->m_bRemote = true;
         break;
         default:

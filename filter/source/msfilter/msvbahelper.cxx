@@ -80,7 +80,7 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     INetURLObject aObj;
     aObj.SetURL( sMacroURLOrPath );
-    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
     OUString aURL;
     if ( bIsURL )
         aURL = sMacroURLOrPath;
@@ -398,7 +398,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
             {
                 INetURLObject aObj;
                 aObj.SetURL( sCreatedFrom );
-                bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
                 OUString aURL;
                 if ( bIsURL )
                     aURL = sCreatedFrom;

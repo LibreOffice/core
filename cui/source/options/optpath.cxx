@@ -150,7 +150,7 @@ OUString Convert_Impl( const OUString& rValue )
     {
         OUString aValue = rValue.getToken( i, cDelim );
         INetURLObject aObj( aValue );
-        if ( aObj.GetProtocol() == INET_PROT_FILE )
+        if ( aObj.GetProtocol() == INetProtocol::FILE )
             aReturn += aObj.PathToFileName();
         else if ( ::utl::LocalFileHelper::IsFileContent( aValue ) )
             aReturn += aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
@@ -482,7 +482,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
     // old path is an URL?
     INetURLObject aObj( sWritable );
-    bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+    bool bURL = ( aObj.GetProtocol() != INetProtocol::NOT_VALID );
     OUString aPathStr( _rFolder );
     INetURLObject aNewObj( aPathStr );
     aNewObj.removeFinalSlash();
@@ -607,7 +607,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
             Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             xFolderPicker = FolderPicker::create(xContext);;
 
-            INetURLObject aURL( sWritable, INET_PROT_FILE );
+            INetURLObject aURL( sWritable, INetProtocol::FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
             Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );

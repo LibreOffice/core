@@ -523,7 +523,7 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
 {
     OUString aName( rFileName );
     INetURLObject aObj( aName );
-    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    if ( aObj.GetProtocol() == INetProtocol::NOT_VALID )
     {
         OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );

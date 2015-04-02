@@ -270,7 +270,7 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) thr
     OUString aURL;
     INetURLObject aObj;
     aObj.SetURL( sTemplate );
-    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
     if ( bIsURL )
         aURL = sTemplate;
     else

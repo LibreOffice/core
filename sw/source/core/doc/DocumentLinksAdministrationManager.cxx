@@ -77,8 +77,8 @@ namespace
                     rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
 
                     INetURLObject aURL( sFName );
-                    if( INET_PROT_FILE == aURL.GetProtocol() ||
-                        INET_PROT_CID == aURL.GetProtocol() )
+                    if( INetProtocol::FILE == aURL.GetProtocol() ||
+                        INetProtocol::CID == aURL.GetProtocol() )
                         return pLnk;
             }
         }

@@ -1008,7 +1008,7 @@ OUString SvxExtFileField::GetFormatted() const
 
     INetURLObject aURLObj( aFile );
 
-    if( INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+    if( INetProtocol::NOT_VALID == aURLObj.GetProtocol() )
     {
         // invalid? try to interpret string as system file name
         OUString aURLStr;
@@ -1020,12 +1020,12 @@ OUString SvxExtFileField::GetFormatted() const
 
     // #92009# Be somewhat liberate when trying to
     // get formatted content out of the FileField
-    if( INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+    if( INetProtocol::NOT_VALID == aURLObj.GetProtocol() )
     {
         // still not valid? Then output as is
         aString = aFile;
     }
-    else if( INET_PROT_FILE == aURLObj.GetProtocol() )
+    else if( INetProtocol::FILE == aURLObj.GetProtocol() )
     {
         switch( eFormat )
         {

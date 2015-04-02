@@ -209,7 +209,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
     OUString aURL;
     INetURLObject aObj;
     aObj.SetURL( rFileName );
-    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
     if ( bIsURL )
         aURL = rFileName;
     else

@@ -1865,7 +1865,7 @@ OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::c
 
         const INetURLObject protocolCheck( url );
         const INetProtocol protocol = protocolCheck.GetProtocol();
-        if ( protocol == INET_PROT_NOT_VALID )
+        if ( protocol == INetProtocol::NOT_VALID )
         {
             OUString testAbsoluteURL;
             if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )

@@ -136,7 +136,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
         OUString aFileName = aDSN;
         INetURLObject aURL;
-        aURL.SetSmartProtocol(INET_PROT_FILE);
+        aURL.SetSmartProtocol(INetProtocol::FILE);
         {
             SvtPathOptions aPathOptions;
             aFileName = aPathOptions.SubstituteVariable(aFileName);

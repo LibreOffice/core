@@ -1245,7 +1245,7 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const OUString& i_rDocumentURL
         )
     {
         INetURLObject aURL( i_rDocumentURL );
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
         {
             m_sName = i_rDocumentURL;
             // TODO: our data source must broadcast the change of the Name property

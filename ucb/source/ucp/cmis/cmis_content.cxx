@@ -1183,7 +1183,7 @@ namespace cmis
     {
         // If the source isn't on the same CMIS repository, then simply copy
         INetURLObject aSourceUrl( rTransferInfo.SourceURL );
-        if ( aSourceUrl.GetProtocol() != INET_PROT_CMIS )
+        if ( aSourceUrl.GetProtocol() != INetProtocol::CMIS )
         {
             OUString sSrcBindingUrl = URL( rTransferInfo.SourceURL ).getBindingUrl( );
             if ( sSrcBindingUrl != m_aURL.getBindingUrl( ) )

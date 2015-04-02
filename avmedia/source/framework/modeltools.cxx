@@ -90,7 +90,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     // If *.dae file is not in the local file system, then copy it to a temp folder for the conversion
     OUString sInput = rSourceURL;
     const INetURLObject aSourceURLObj(rSourceURL);
-    if( aSourceURLObj.GetProtocol() != INET_PROT_FILE )
+    if( aSourceURLObj.GetProtocol() != INetProtocol::FILE )
     {
         try
         {

@@ -218,7 +218,7 @@ bool SvxXMLXTableExportComponent::save(
     sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
     INetURLObject aURLObj( rURL );
-    bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
+    bool bToStorage = aURLObj.GetProtocol() == INetProtocol::NOT_VALID; // a relative path
 
     bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<OUString>::get();
 

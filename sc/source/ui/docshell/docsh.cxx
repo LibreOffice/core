@@ -2327,7 +2327,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             eError = eERR_OK;
         }
 
-        INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
+        INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::FILE );
         if ( bHasMemo )
             aTmpFile.setExtension(OUString("dbt"));
         if ( eError != eERR_OK )
@@ -2344,7 +2344,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             {
                 const SfxStringItem* pNameItem =
                     static_cast<const SfxStringItem*>( rMed.GetItemSet()->GetItem( SID_FILE_NAME ) );
-                INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
+                INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::FILE );
                 aDbtFile.setExtension(OUString("dbt"));
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                     bRet = false;

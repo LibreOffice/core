@@ -210,13 +210,13 @@ namespace
                     // So we have to check if the file name denotes a folder or a file.
                     // For performance reasons, we do this for file urls only
                     INetURLObject aURL( aNewFile );
-                    if ( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+                    if ( INetProtocol::NOT_VALID == aURL.GetProtocol() )
                     {
                         OUString sURL;
                         if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aNewFile, sURL ) )
                             aURL = INetURLObject( sURL );
                     }
-                    if ( INET_PROT_FILE == aURL.GetProtocol() )
+                    if ( INetProtocol::FILE == aURL.GetProtocol() )
                     {
                         try
                         {
@@ -277,7 +277,7 @@ namespace
 
     static OUString lcl_ensureFinalSlash( const OUString& _rDir )
     {
-        INetURLObject aWorkPathObj( _rDir, INET_PROT_FILE );
+        INetURLObject aWorkPathObj( _rDir, INetProtocol::FILE );
         aWorkPathObj.setFinalSlash();
         return  aWorkPathObj.GetMainURL( INetURLObject::NO_DECODE );
     }
@@ -916,7 +916,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
     {
         INetURLObject aFileObject( aFileName );
-        if ( ( aFileObject.GetProtocol() == INET_PROT_NOT_VALID ) && !aFileName.isEmpty() )
+        if ( ( aFileObject.GetProtocol() == INetProtocol::NOT_VALID ) && !aFileName.isEmpty() )
         {
             OUString sCompleted = SvtURLBox::ParseSmart( aFileName, pThis->_pFileView->GetViewURL(), SvtPathOptions().GetWorkPath() );
             if ( !sCompleted.isEmpty() )
@@ -1073,7 +1073,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         {
             // do an existence check herein, again
 
-            if ( INET_PROT_FILE == aFileObj.GetProtocol( ) )
+            if ( INetProtocol::FILE == aFileObj.GetProtocol( ) )
             {
                 bool bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
@@ -1082,7 +1082,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     OUString sError( SVT_RESSTR( RID_FILEOPEN_NOTEXISTENTFILE ) );
 
                     OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-                    if ( INET_PROT_FILE == aFileObj.GetProtocol() )
+                    if ( INetProtocol::FILE == aFileObj.GetProtocol() )
                     {   // if it's a file URL, transform the URL into system notation
                         OUString sURL( sInvalidFile );
                         OUString sSystem;
@@ -1394,7 +1394,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 
     {
         OUString sText;
-        DBG_ASSERT( INET_PROT_NOT_VALID != aObj.GetProtocol(), "SvtFileDialog::UpdateControls: Invalid URL!" );
+        DBG_ASSERT( INetProtocol::NOT_VALID != aObj.GetProtocol(), "SvtFileDialog::UpdateControls: Invalid URL!" );
 
         if ( aObj.getSegmentCount() )
         {
@@ -1402,7 +1402,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
             if ( !sText.isEmpty() )
             {
                 // no Fsys path for server file system ( only UCB has mountpoints! )
-                if ( INET_PROT_FILE != aObj.GetProtocol() )
+                if ( INetProtocol::FILE != aObj.GetProtocol() )
                     sText = rURL.copy( INetURLObject::GetScheme( aObj.GetProtocol() ).getLength() );
             }
 
@@ -1449,7 +1449,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
         INetURLObject aObj( pUserData->maURL );
         if ( FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType )
         {
-            if ( aObj.GetProtocol() == INET_PROT_FILE )
+            if ( aObj.GetProtocol() == INetProtocol::FILE )
             {
                 if ( !pUserData->mbIsFolder )
                     aObj.removeSegment();
@@ -1524,7 +1524,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
     {
         // additional check: the parent folder should not be prohibited
         INetURLObject aCurrentFolder( sCurrentFolder );
-        DBG_ASSERT( INET_PROT_NOT_VALID != aCurrentFolder.GetProtocol(),
+        DBG_ASSERT( INetProtocol::NOT_VALID != aCurrentFolder.GetProtocol(),
             "SvtFileDialog::OpenDoneHdl_Impl: invalid current URL!" );
 
         aCurrentFolder.removeSegment();
@@ -1719,7 +1719,7 @@ short SvtFileDialog::Execute()
     if ( RET_OK == nResult )
     {
         INetURLObject aURL( _aPath );
-        if ( aURL.GetProtocol() == INET_PROT_FILE )
+        if ( aURL.GetProtocol() == INetProtocol::FILE )
         {
             // remember the selected directory only for file URLs not for virtual folders
             sal_Int32 nLevel = aURL.getSegmentCount();
@@ -2004,7 +2004,7 @@ short SvtFileDialog::PrepareExecute()
     }
 
     INetURLObject aObj = aFolderURL;
-    if ( aObj.GetProtocol() == INET_PROT_FILE )
+    if ( aObj.GetProtocol() == INetProtocol::FILE )
     {
         // set folder as current directory
         aObj.setFinalSlash();
@@ -2076,7 +2076,7 @@ void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
 
 {
     INetURLObject aObj( rStdDir );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid protocol!" );
+    DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid protocol!" );
     aObj.setFinalSlash();
     _pImp->SetStandardDir( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 }
@@ -2269,7 +2269,7 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
         // use question mark as wildcard only for files
         INetProtocol eProt = INetURLObject::CompareProtocolScheme( rPath );
 
-        if ( INET_PROT_NOT_VALID != eProt && INET_PROT_FILE != eProt )
+        if ( INetProtocol::NOT_VALID != eProt && INetProtocol::FILE != eProt )
             nQuestionMarkPos = -1;
 
         nWildCardPos = std::min( nWildCardPos, nQuestionMarkPos );

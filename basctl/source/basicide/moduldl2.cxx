@@ -1269,7 +1269,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
     if( aPath.isEmpty() )
         aPath = SvtPathOptions().GetWorkPath();
 
-    // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
+    // INetURLObject aURL(m_sSavePath, INetProtocol::FILE);
     xFolderPicker->setDisplayDirectory( aPath );
     short nRet = xFolderPicker->execute();
     if( nRet == RET_OK )

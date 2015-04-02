@@ -137,7 +137,7 @@ GalleryBrowser1::GalleryBrowser1(
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     // disable creation of new themes if a writable directory is not available
-    if( mpGallery->GetUserURL().GetProtocol() == INET_PROT_NOT_VALID )
+    if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NOT_VALID )
         maNewTheme.Disable();
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );

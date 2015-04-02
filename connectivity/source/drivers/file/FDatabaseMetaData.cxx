@@ -220,7 +220,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     while(xResultSet->next())
     {
         aName = xRow->getString(1);
-        aURL.SetSmartProtocol(INET_PROT_FILE);
+        aURL.SetSmartProtocol(INetProtocol::FILE);
         OUString sUrl = m_pConnection->getURL() + "/" + aName;
         aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();

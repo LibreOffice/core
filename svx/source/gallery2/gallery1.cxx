@@ -67,7 +67,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         bThemeNameFromResource  ( _bThemeNameFromResource )
 {
     INetURLObject aURL( rBaseURL );
-    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
     if (bCreateUniqueURL)
     {
@@ -226,8 +226,8 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
     else
         aRelURL = INetURLObject( rMultiPath );
 
-    DBG_ASSERT( aUserURL.GetProtocol() != INET_PROT_NOT_VALID, "no writable Gallery user directory available" );
-    DBG_ASSERT( aRelURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aUserURL.GetProtocol() != INetProtocol::NOT_VALID, "no writable Gallery user directory available" );
+    DBG_ASSERT( aRelURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 }
 
 void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadOnly )
@@ -245,7 +245,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
 #if defined(MACOSX) && HAVE_FEATURE_READONLY_INSTALLSET
-        if( rBaseURL.GetProtocol() == INET_PROT_FILE )
+        if( rBaseURL.GetProtocol() == INetProtocol::FILE )
         {
             const char *appBundle = [[[NSBundle mainBundle] bundlePath] UTF8String];
             OUString path = rBaseURL.GetURLPath();
@@ -509,7 +509,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
 {
     bool bRet = false;
 
-    if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
+    if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INetProtocol::NOT_VALID ) )
     {
         INetURLObject aURL( GetUserURL() );
         aURL.Append( rThemeName );
@@ -616,7 +616,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
         {
             INetURLObject aURL = pThemeEntry->GetThmURL();
 
-            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
             if( FileExists( aURL ) )
             {

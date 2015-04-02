@@ -163,7 +163,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
             INetURLObject   aURL( pLineEndList->GetPath() );
 
             aURL.Append( pLineEndList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
             *pPageType = 0; // 3
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
 
     if( !pLineEndList->GetName().isEmpty() )
     {

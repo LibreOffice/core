@@ -489,9 +489,9 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
         {
             // For File URLs we transfer the file name and not a URL, because Netscape does it like that
             INetURLObject aURL;
-            aURL.SetSmartProtocol(INET_PROT_FILE);
+            aURL.SetSmartProtocol(INetProtocol::FILE);
             aURL.SetSmartURL(aValue);
-            if( INET_PROT_FILE == aURL.GetProtocol() )
+            if( INetProtocol::FILE == aURL.GetProtocol() )
                 aValue = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
         }
         Encode( aName );
@@ -1035,9 +1035,9 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
     {
         // We can only process File URLs yet
         INetURLObject aURL;
-        aURL.SetSmartProtocol(INET_PROT_FILE);
+        aURL.SetSmartProtocol(INetProtocol::FILE);
         aURL.SetSmartURL(rFileName);
-        if( INET_PROT_FILE == aURL.GetProtocol() )
+        if( INetProtocol::FILE == aURL.GetProtocol() )
         {
             aFileName = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
             pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, StreamMode::READ);

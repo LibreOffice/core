@@ -163,7 +163,7 @@ namespace svt
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
-        DBG_ASSERT( INET_PROT_NOT_VALID != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
+        DBG_ASSERT( INetProtocol::NOT_VALID != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
         m_sLocalName = m_aURL.getName();
         implResetDate();
     }
@@ -562,9 +562,9 @@ namespace svt
     OUString TemplateFolderCacheImpl::implParseSmart( const OUString& _rPath )
     {
         INetURLObject aParser;
-        aParser.SetSmartProtocol( INET_PROT_FILE );
+        aParser.SetSmartProtocol( INetProtocol::FILE );
         aParser.SetURL( _rPath, INetURLObject::WAS_ENCODED );
-        if ( INET_PROT_NOT_VALID == aParser.GetProtocol() )
+        if ( INetProtocol::NOT_VALID == aParser.GetProtocol() )
         {
             OUString sURL;
             LocalFileHelper::ConvertPhysicalNameToURL( _rPath, sURL );
@@ -752,7 +752,7 @@ namespace svt
         // get the storage directory
         OUString sStorageURL = implParseSmart( SvtPathOptions().GetStoragePath() );
         INetURLObject aStorageURL( sStorageURL );
-        if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
+        if ( INetProtocol::NOT_VALID == aStorageURL.GetProtocol() )
         {
             OSL_FAIL( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
             return false;

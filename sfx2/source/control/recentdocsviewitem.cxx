@@ -41,7 +41,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
 
-    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    if( aURLObj.GetProtocol() == INetProtocol::FILE )
         m_sHelpText = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
     if( m_sHelpText.isEmpty() )
         m_sHelpText = aURLObj.GetURLNoPass();
@@ -50,7 +50,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
 
     BitmapEx aThumbnail(rThumbnail);
-    if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INET_PROT_FILE)
+    if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INetProtocol::FILE)
         aThumbnail = ThumbnailView::readThumbnail(rURL);
 
     if (aThumbnail.IsEmpty())

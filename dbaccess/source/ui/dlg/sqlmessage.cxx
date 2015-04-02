@@ -595,7 +595,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 
         OUString aTmp;
         INetURLObject aHID( m_sHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
+        if ( aHID.GetProtocol() == INetProtocol::HID )
               aTmp = aHID.GetURLPath();
         else
             aTmp = m_sHelpURL;

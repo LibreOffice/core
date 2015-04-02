@@ -381,7 +381,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
     std::set< PDFWriter::ErrorCode > aErrors;
 
-    if( aURL.GetProtocol() != INET_PROT_FILE )
+    if( aURL.GetProtocol() != INetProtocol::FILE )
     {
         OUString aTmp;
 
@@ -389,7 +389,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aURL = INetURLObject(aTmp);
     }
 
-    if( aURL.GetProtocol() == INET_PROT_FILE )
+    if( aURL.GetProtocol() == INetProtocol::FILE )
     {
         Reference< XRenderable > xRenderable( mxSrcDoc, UNO_QUERY );
 

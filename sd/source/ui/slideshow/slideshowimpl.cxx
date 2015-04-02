@@ -1594,7 +1594,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
                 false, INetURLObject::WAS_ENCODED,
                 INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-        if( INET_PROT_FILE == aURL.GetProtocol() )
+        if( INetProtocol::FILE == aURL.GetProtocol() )
         {
             SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aBrowsing( SID_BROWSE, true );

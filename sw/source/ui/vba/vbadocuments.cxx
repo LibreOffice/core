@@ -132,7 +132,7 @@ SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConvers
     OUString aURL;
     INetURLObject aObj;
     aObj.SetURL( Filename );
-    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
     if ( bIsURL )
         aURL = Filename;
     else

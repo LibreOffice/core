@@ -1318,7 +1318,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =
         css::ui::dialogs::FolderPicker::create( m_pCore->getComponentContext() );
 
-    INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
+    INetURLObject aURL(m_sSavePath, INetProtocol::FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));
     short nRet = xFolderPicker->execute();
     if (nRet == css::ui::dialogs::ExecutableDialogResults::OK)

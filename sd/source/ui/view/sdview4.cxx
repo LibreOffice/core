@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
         INetURLObject   aURL( aCurrentDropFile );
         bool            bOK = false;
 
-        if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+        if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
         {
             OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aCurrentDropFile, aURLStr );

@@ -392,7 +392,7 @@ namespace svx
         if ( !_sDataSourceNameOrLocation.isEmpty() )
         {
             INetURLObject aURL(_sDataSourceNameOrLocation);
-            (*this)[ (( aURL.GetProtocol() == INET_PROT_FILE ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;
+            (*this)[ (( aURL.GetProtocol() == INetProtocol::FILE ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;
         }
         else
             (*this)[ daDataSource ] <<= OUString();

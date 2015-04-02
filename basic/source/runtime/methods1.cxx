@@ -1644,7 +1644,7 @@ RTLFUNC(ConvertToUrl)
     if ( rPar.Count() == 2 )
     {
         OUString aStr = rPar.Get(1)->GetOUString();
-        INetURLObject aURLObj( aStr, INET_PROT_FILE );
+        INetURLObject aURLObj( aStr, INetProtocol::FILE );
         OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         if( aFileURL.isEmpty() )
         {

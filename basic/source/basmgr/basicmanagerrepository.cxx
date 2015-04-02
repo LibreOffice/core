@@ -288,7 +288,7 @@ namespace basic
         // The first dir in the path as destination:
         OUString aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
-        DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
+        DBG_ASSERT(aAppBasic.GetProtocol() != INetProtocol::NOT_VALID,
             OString("Invalid URL: \"" +
                     OUStringToOString(aAppBasicDir, osl_getThreadTextEncoding()) +
                     "\"").getStr());

@@ -161,7 +161,7 @@ void SwJavaEditDialog::CheckTravel()
             if(!sURL.isEmpty())
             {
                 INetURLObject aINetURL(sURL);
-                if(INET_PROT_FILE == aINetURL.GetProtocol())
+                if(INetProtocol::FILE == aINetURL.GetProtocol())
                     sURL = aINetURL.PathToFileName();
             }
             m_pUrlED->SetText(sURL);
@@ -267,7 +267,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl)
         if ( !sFileName.isEmpty() )
         {
             INetURLObject aINetURL( sFileName );
-            if ( INET_PROT_FILE == aINetURL.GetProtocol() )
+            if ( INetProtocol::FILE == aINetURL.GetProtocol() )
                 sFileName = aINetURL.PathToFileName();
         }
         m_pUrlED->SetText( sFileName );

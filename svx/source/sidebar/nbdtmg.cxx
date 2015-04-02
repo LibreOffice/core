@@ -561,7 +561,7 @@ void GraphyicBulletsTypeMgr::Init()
     {
         OUString sGrfNm = aGrfNames[i];
         INetURLObject aObj(sGrfNm);
-        if(aObj.GetProtocol() == INET_PROT_FILE)
+        if(aObj.GetProtocol() == INetProtocol::FILE)
             sGrfNm = aObj.PathToFileName();
 
         GrfBulDataRelation* pEntry = new GrfBulDataRelation(eNBType::GRAPHICBULLETS);

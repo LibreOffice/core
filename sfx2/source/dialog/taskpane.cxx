@@ -401,7 +401,7 @@ namespace sfx2
     static OString lcl_getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
+        if ( aHID.GetProtocol() == INetProtocol::HID )
             return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
         else
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );

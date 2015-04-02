@@ -356,7 +356,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
     OUString aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     sal_uInt16 nImage = IMG_FILE;
 
-    if ( rObject.GetProtocol() == INET_PROT_PRIV_SOFFICE )
+    if ( rObject.GetProtocol() == INetProtocol::PRIV_SOFFICE )
     {
         OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         OUString aType = aURLPath.getToken( 0, '/' );
@@ -534,7 +534,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     {
         if ( !bDetected )
         {
-            if ( rObject.GetProtocol() == INET_PROT_PRIV_SOFFICE )
+            if ( rObject.GetProtocol() == INetProtocol::PRIV_SOFFICE )
             {
                 OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
                 OUString aType = aURLPath.getToken( 0, '/' );

@@ -131,7 +131,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     if(  target.isEmpty() )
     {
         INetURLObject aURL;
-        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartProtocol( INetProtocol::FILE );
         aURL.SetSmartURL( url );
 
         OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);

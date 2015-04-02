@@ -999,14 +999,14 @@ bool SvtSecurityOptions::isSecureMacroUri(
     OUString const & uri, OUString const & referer) const
 {
     switch (INetURLObject(uri).GetProtocol()) {
-    case INET_PROT_MACRO:
+    case INetProtocol::MACRO:
         if (uri.startsWithIgnoreAsciiCase("macro:///")) {
             // Denotes an App-BASIC macro (see SfxMacroLoader::loadMacro), which
             // is considered safe:
             return true;
         }
         // fall through
-    case INET_PROT_SLOT:
+    case INetProtocol::SLOT:
         return referer.equalsIgnoreAsciiCase("private:user")
             || isTrustedLocationUri(referer);
     default:

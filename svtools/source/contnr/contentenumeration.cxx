@@ -244,7 +244,7 @@ namespace svt
                             pData->maSize = xRow->getLong( ROW_SIZE );
 
                             if ( bHasTargetURL &&
-                                INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                                INetURLObject( aContentURL ).GetProtocol() == INetProtocol::VND_SUN_STAR_HIER )
                             {
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment, comphelper::getProcessComponentContext() );
                                 try
