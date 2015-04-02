@@ -984,7 +984,12 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
     if (!pRectangle)
         sRectangle = "EMPTY";
     else
-        sRectangle = pRectangle->toString();
+    {
+        Rectangle aRectangle(*pRectangle);
+        if (!IsMapModeEnabled())
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_PIXEL, MAP_TWIP);
+        sRectangle = aRectangle.toString();
+    }
 
     pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
