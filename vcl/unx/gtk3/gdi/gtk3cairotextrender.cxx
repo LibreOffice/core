@@ -16,7 +16,7 @@ GtkCairoTextRender::GtkCairoTextRender(GtkSalGraphics& rParent)
 
 GlyphCache& GtkCairoTextRender::getPlatformGlyphCache()
 {
-    return mrParent.getPlatformGlyphCache();
+    return SvpSalGraphics::getPlatformGlyphCache();
 }
 
 cairo_t* GtkCairoTextRender::getCairoContext()
