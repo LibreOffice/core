@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_3355081d",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-02T14:16:16Z",
+      "side": 1,
+      "message": "Nitpick:\nPlease follow our convention to use p... prefix for pointers, so this should be pTargetStream instead.\n\na... prefix is used with instances of an object.",
+      "revId": "bf449b1cd9b32167c858fdfb0b54ed813b2b30d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_f33550f7",
+        "filename": "sc/source/ui/unoobj/filtuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-02T14:16:16Z",
+      "side": 1,
+      "message": "Rather than using a temporary raw pointer, why not directly use pDlg.reset(...) with the factory return?",
+      "revId": "bf449b1cd9b32167c858fdfb0b54ed813b2b30d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
