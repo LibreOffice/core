@@ -1388,44 +1388,41 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt());
+    SwTable* pTable = SwTable::FindTable( pFmt );
+    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
+    if(pLn)
     {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
-        if(pLn)
+        const SfxItemPropertySimpleEntry* pEntry =
+                                m_pPropSet->getPropertyMap().getByName(rPropertyName);
+        if (!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        switch(pEntry->nWID)
         {
-            const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
-            if (!pEntry)
-                throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-            switch(pEntry->nWID)
+            case FN_UNO_ROW_HEIGHT:
+            case FN_UNO_ROW_AUTO_HEIGHT:
             {
-                case FN_UNO_ROW_HEIGHT:
-                case FN_UNO_ROW_AUTO_HEIGHT:
+                const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
+                if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                 {
-                    const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
-                    if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
-                    {
-                        aRet <<= ATT_VAR_SIZE == rSize.GetHeightSizeType();
-                    }
-                    else
-                        aRet <<= (sal_Int32)(convertTwipToMm100(rSize.GetSize().Height()));
+                    aRet <<= ATT_VAR_SIZE == rSize.GetHeightSizeType();
                 }
-                break;
+                else
+                    aRet <<= (sal_Int32)(convertTwipToMm100(rSize.GetSize().Height()));
+            }
+            break;
 
-                case FN_UNO_TABLE_COLUMN_SEPARATORS:
-                {
-                    lcl_GetTblSeparators(aRet, pTable, pLine->GetTabBoxes()[0], true);
-                }
-                break;
+            case FN_UNO_TABLE_COLUMN_SEPARATORS:
+            {
+                lcl_GetTblSeparators(aRet, pTable, pLine->GetTabBoxes()[0], true);
+            }
+            break;
 
-                default:
-                {
-                    const SwAttrSet& rSet = pLn->GetFrmFmt()->GetAttrSet();
-                    m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
-                }
+            default:
+            {
+                const SwAttrSet& rSet = pLn->GetFrmFmt()->GetAttrSet();
+                m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
             }
         }
     }
