@@ -242,6 +242,7 @@ public:
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
     void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
+    void PutError( sal_uInt16 nErrorCode, SCSIZE nIndex );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
     sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
@@ -485,6 +486,13 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
 
 void ScMatrixImpl::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
 {
+    maMat.set(nR, nC, CreateDoubleError(nErrorCode));
+}
+
+void ScMatrixImpl::PutError( sal_uInt16 nErrorCode, SCSIZE nIndex )
+{
+    SCSIZE nC, nR;
+    CalcPosition(nIndex, nC, nR);
     maMat.set(nR, nC, CreateDoubleError(nErrorCode));
 }
 
@@ -1871,34 +1879,11 @@ void ScMatrixImpl::AddValues( const ScMatrixImpl& rMat )
     }
 }
 
-namespace Op {
-
-template<typename T>
-struct return_type
-{
-    typedef T type;
-};
-
-template<>
-struct return_type<bool>
-{
-    typedef double type;
-};
-
-template<>
-struct return_type<char>
-{
-    typedef svl::SharedString type;
-};
-
-}
-
 template<typename T, typename U>
 struct wrapped_iterator
 {
     typedef ::std::bidirectional_iterator_tag iterator_category;
-    typedef typename T::const_iterator::value_type old_value_type;
-    typedef typename Op::return_type<old_value_type>::type value_type;
+    typedef double value_type;
     typedef value_type* pointer;
     typedef value_type& reference;
     typedef typename T::const_iterator::difference_type difference_type;
@@ -2294,6 +2279,11 @@ void ScMatrix::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
     pImpl->PutError(nErrorCode, nC, nR);
 }
 
+void ScMatrix::PutError( sal_uInt16 nErrorCode, SCSIZE nIndex )
+{
+    pImpl->PutError(nErrorCode, nIndex);
+}
+
 void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutBoolean(bVal, nC, nR);
@@ -2536,13 +2526,13 @@ struct AddOp
 {
 private:
     double mnVal;
-    svl::SharedString maString;
+    double mnError;
 
 public:
 
-    AddOp(double nVal, svl::SharedString aString):
+    AddOp(double nVal):
         mnVal(nVal),
-        maString(aString)
+        mnError( CreateDoubleError( errNoValue))
     {
     }
 
@@ -2556,14 +2546,14 @@ public:
         return mnVal + (double)bVal;
     }
 
-    svl::SharedString operator()(const svl::SharedString&) const
+    double operator()(const svl::SharedString&) const
     {
-        return maString;
+        return mnError;
     }
 
-    svl::SharedString operator()(char) const
+    double operator()(char) const
     {
-        return maString;
+        return mnVal;   // mnVal + 0.0
     }
 
     bool useFunctionForEmpty() const
@@ -2576,13 +2566,13 @@ struct SubOp
 {
 private:
     double mnVal;
-    svl::SharedString maString;
+    double mnError;
 
 public:
 
-    SubOp(double nVal, svl::SharedString aString):
+    SubOp(double nVal):
         mnVal(nVal),
-        maString(aString)
+        mnError( CreateDoubleError( errNoValue))
     {
     }
 
@@ -2596,14 +2586,14 @@ public:
         return mnVal - (double)bVal;
     }
 
-    svl::SharedString operator()(const svl::SharedString&) const
+    double operator()(const svl::SharedString&) const
     {
-        return maString;
+        return mnError;
     }
 
-    svl::SharedString operator()(char) const
+    double operator()(char) const
     {
-        return maString;
+        return mnVal;   // mnVal - 0.0
     }
 
     bool useFunctionForEmpty() const
@@ -2614,16 +2604,16 @@ public:
 
 }
 
-void ScMatrix::SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat)
+void ScMatrix::SubAddOp(bool bSub, double fVal, ScMatrix& rMat)
 {
     if(bSub)
     {
-        SubOp aOp(fVal, aString);
+        SubOp aOp(fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        AddOp aOp(fVal, aString);
+        AddOp aOp(fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }

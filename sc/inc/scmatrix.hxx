@@ -264,6 +264,7 @@ public:
     /// Jump sal_False without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
     void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
+    void PutError( sal_uInt16 nErrorCode, SCSIZE nIndex );
     void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
 
     void FillDouble( double fVal,
@@ -388,7 +389,7 @@ public:
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero = true ) const;
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
 
-    void SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat);
+    void SubAddOp(bool bSub, double fVal, ScMatrix& rMat);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 
