@@ -16,12 +16,6 @@ It uses OpenGL ES 2 for rendering of the document tiles which are gathered from
 LibreOffice using LOK. The application contains the LibreOffice core in one shared
 library: liblo-native-code.so, which is bundled together with the application.
 
-TiledRendering
-**************
-
-Tiled rendering is a technique that splits the document to bitmaps of same size
-(typically 256x256) which are fetched on demand.
-
 Architecture and Threading
 **************************
 
@@ -38,6 +32,121 @@ The application implements editing support using 4 threads:
 4. A native thread created by LibreOfficeKit (we call it the soffice thread), where
    LibreOffice itself runs. It receives calls from LOKitThread, and may emit callback
    events as necessary.
+
+LOKitThread
+***********
+
+LOKitThread (org.libreoffice.LOKitThread) communicates with LO via JNI (this can
+be done only for one thread) and processes events (defined in org.libreoffice.LOEvent)
+triggered from UI.
+
+Application Overview
+********************
+
+LibreOfficeMainActivity (org.libreoffice.LibreOfficeMainActivity) is the entry point
+of the application - everything starts up and tears down from here (onCreate, onResume,
+onPause, onStart, onStop, onDestroy).
+
+Document view
+-------------
+
+From here on one of the most interesting pieces are the classes around document view,
+which includes listening to touch events, recalculating the viewport, tiled handling
+and rendering the layers to the document.
+
+Viewport - the viewport is the currently visible part of the document. It is defined
+           by view rectangle and zoom.
+
+Layers - document view is rendered using many layers. Such layers are: document
+         background, scroll handles, and also the document tiles.
+
+Document view classes
+---------------------
+
+- LayerView (org.mozilla.gecko.gfx.LayerView) is the document view of the application.
+  It uses the SurfaceView (android.view.SurfaceView) as the main surface to draw on
+  using OpenGL ES 2.
+
+- GLController (org.mozilla.gecko.gfx.GLController) - holder of the OpenGL context.
+
+- RenderControllerThread (org.mozilla.gecko.gfx.RenderControllerThread) executes the
+  rendering requests through LayerRenderer.
+
+- LayerRenderer (org.mozilla.gecko.gfx.LayerRenderer) renders all the layers.
+
+- GeckoLayerClient (org.mozilla.gecko.gfx.GeckoLayerClient) is the middle man of the
+  application, which connects all the bits together. It is the document view layer
+  holder so the any management (including tiled rendering) usually go through this
+  class. It listenes to draw requests and viewport changes from PanZoomController
+  (see "Touch events").
+
+Touch events, scrolling and zooming
+-----------------------------------
+
+The main class that handles the touch event, scrolling and zooming is JavaPanZoomController
+org.mozilla.gecko.gfx.JavaPanZoomController (implementation of PanZoomController interface).
+When the user performs a touch action, the document view needs to change, which means the
+viewport changes. JavaPanZoomController changes the viewport and signals the change through
+PanZoomTarget (org.mozilla.gecko.gfx.PanZoomTarget).
+
+TiledRendering
+--------------
+
+Tiled rendering is a technique that splits the document to bitmaps of same size (typically
+256x256) which are fetched on demand.
+
+In the application the ComposedTileLayer (org.mozilla.gecko.gfx.ComposedTileLayer) is the
+layer responsible for tracking and managing the tiles. Tiles are in this case also layers
+(sub layers?) implemented in SubTile (org.mozilla.gecko.gfx.SubTile), where each one is
+responsible for one tile bitmap (actually OpenGL texture once it has been uploaded).
+
+When the viewport changes, the request for tile rechecking is send to LOKitThread (see
+LOKitThread#tileReevaluationRequest), where the tiles are rechecked, add and removed if
+necessary.
+
+CompositeTileLayer is actually an abstract class, which has two implementations. One is
+DynamicTileLayer (org.mozilla.gecko.gfx.DynamicTileLayer), which is used for main tile
+view of the document, and FixedZoomTileLayer (org.mozilla.gecko.gfx.FixedZoomTileLayer),
+which just renders the tiles at a fixed zoom level. This is then used as a background
+low resolution layer.
+
+Tile invalidation
+-----------------
+
+Tile can change in LibreOffice when user changes the content (adds, removes text or changes
+the properties). In this case, an invalidation rectangle is signaled from LibreOffice, which
+includes a rectangle that needs to be invalidated. In this case LOKitThread gets this request
+via callback, and rechecks all tiles if they need to be invalidated. For more details see
+LOKitThread#tileInvalidation).
+
+Editing
+*******
+
+For editing there are 2 coarse tasks that the LibreOffice app must do:
+1. send input events to LibreOffice core (keyboard, touch and mouse)
+2. listen to messages (provided via callback) from LibreOffice core and react accordingly
+
+In most cases when an input event happens and is send to the LO core, then a message from
+LO core follows. For example: when the user writes to the keyboard, key event is sent and
+a invalidation requst from LO core follows. When user touches an image, a mouse event is
+sent, and a "new graphic selection" message from LO core follows.
+
+All keyboard and touch events are send to LOKitThread as LOEvents. In LOKitThread they are
+processed and send to LibreOffice core. The touch events originate in JavaPanZoomController,
+the keyboard events in LOKitInputConnectionHandler (org.libreoffice.LOKitInputConnectionHandler),
+however there are other parts too - depending on the need.
+
+InvalidationHandler (org.libreoffice.InvalidationHandler) is the class that is responsible
+to process messages from LibreOffice core and to track the state.
+
+Overlay
+*******
+
+Overlay elements like cursor and selections aren't drawn by the LO core, instead the core
+only provides data (cursor position, selection rectangles) and the app needs to draw them.
+TextCursorView (org.libreoffice.overlay.TextCursorView) and TextCursorLayer
+(org.libreoffice.overlay.TextCursorLayer) are the classes that provide the overlay over the
+document, where selections and the cursor is drawn.
 
 Android-specific notes
 **********************
