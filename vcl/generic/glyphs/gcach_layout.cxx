@@ -399,7 +399,9 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             aScriptSubRuns.push_back(aRun);
 
             nCurrentPos = nEndRunPos;
-            aScriptRun.next();
+            bool bHasMore = aScriptRun.next();
+            if (!bHasMore)
+                break;
         }
 
         // RTL subruns should be reversed to ensure that final glyph order is
