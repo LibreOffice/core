@@ -987,7 +987,13 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
     else
     {
         Rectangle aRectangle(*pRectangle);
-        if (!IsMapModeEnabled())
+        // When dragging shapes the map mode is disabled.
+        if (IsMapModeEnabled())
+        {
+            if (GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+        }
+        else
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_PIXEL, MAP_TWIP);
         sRectangle = aRectangle.toString();
     }

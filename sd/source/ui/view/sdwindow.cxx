@@ -1003,7 +1003,12 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
     if (!pRectangle)
         sRectangle = "EMPTY";
     else
-        sRectangle = pRectangle->toString();
+    {
+        Rectangle aRectangle(*pRectangle);
+        if (GetMapMode().GetMapUnit() == MAP_100TH_MM)
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+        sRectangle = aRectangle.toString();
+    }
     mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 

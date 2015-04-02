@@ -859,13 +859,6 @@ void Window::Invalidate( sal_uInt16 nFlags )
     LogicInvalidate(0);
 }
 
-/// Converts rRectangle from MM100 to twips based on the map mode of rWindow.
-void lcl_toTwips(const Window& rWindow, Rectangle& rRectangle)
-{
-    if (rWindow.GetMapMode().GetMapUnit() == MAP_100TH_MM)
-        rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
-}
-
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
 
@@ -879,7 +872,6 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         vcl::Region aRegion( aRect );
         ImplInvalidate( &aRegion, nFlags );
         Rectangle aLogicRectangle(rRect);
-        lcl_toTwips(*this, aLogicRectangle);
         LogicInvalidate(&aLogicRectangle);
     }
 }
@@ -902,7 +894,6 @@ void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
         {
             ImplInvalidate( &aRegion, nFlags );
             Rectangle aLogicRectangle = rRegion.GetBoundRect();
-            lcl_toTwips(*this, aLogicRectangle);
             LogicInvalidate(&aLogicRectangle);
         }
     }
