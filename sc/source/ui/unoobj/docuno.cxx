@@ -21,6 +21,7 @@
 
 #include "scitems.hxx"
 #include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -569,10 +570,11 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
+    ScDrawView* pDrawView = pViewData->GetScDrawView();
 
     if (pInputHandler && pInputHandler->IsInputMode())
     {
-        // forwarding to editeng - we are editing a cell content
+        // forwarding to editeng - we are editing the cell content
         EditView* pTableView = pInputHandler->GetTableView();
         assert(pTableView);
 
@@ -593,12 +595,33 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
                 break;
         }
     }
+    else if (pDrawView && pDrawView->IsTextEdit())
+    {
+        // forwarding to editeng - we are editing the text in shape
+        OutlinerView* pOutlinerView = pDrawView->GetTextEditOutlinerView();
+        EditView& rEditView = pOutlinerView->GetEditView();
+
+        Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+        switch (nType)
+        {
+            case LOK_SETTEXTSELECTION_START:
+                rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+                break;
+            case LOK_SETTEXTSELECTION_END:
+                rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+                break;
+            case LOK_SETTEXTSELECTION_RESET:
+                rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+                break;
+            default:
+                assert(false);
+                break;
+        }
+    }
     else
     {
-        // There seems to be no clear way of getting the grid window for this
-        // particular document, hence we need to hope we get the right window.
+        // just updating the cell selection
         ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-
         if (!pGridWindow)
             return;
 
