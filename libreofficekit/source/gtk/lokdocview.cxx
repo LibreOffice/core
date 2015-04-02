@@ -11,6 +11,7 @@
 #include <math.h>
 #include <string.h>
 #include <vector>
+#include <string>
 
 #include <gdk/gdkkeysyms.h>
 
@@ -102,6 +103,17 @@ struct LOKDocView_Impl
     bool m_bInDragGraphicHandles[8];
     ///@}
 
+    /// Callback data, allocated in lok_docview_callback_worker(), released in lok_docview_callback().
+    struct CallbackData
+    {
+        int m_nType;
+        std::string m_aPayload;
+        LOKDocView* m_pDocView;
+
+        CallbackData(int nType, const std::string& rPayload, LOKDocView* pDocView);
+    };
+
+
     LOKDocView_Impl(LOKDocView* pDocView);
     ~LOKDocView_Impl();
     /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
@@ -160,7 +172,16 @@ struct LOKDocView_Impl
     static GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
     static std::vector<GdkRectangle> payloadToRectangles(const char* pPayload);
+    /// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
+    static const char* callbackTypeToString(int nType);
 };
+
+LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPayload, LOKDocView* pDocView)
+    : m_nType(nType),
+    m_aPayload(rPayload),
+    m_pDocView(pDocView)
+{
+}
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     : m_pDocView(pDocView),
@@ -807,6 +828,32 @@ std::vector<GdkRectangle> LOKDocView_Impl::payloadToRectangles(const char* pPayl
     return aRet;
 }
 
+/// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
+const char* LOKDocView_Impl::callbackTypeToString(int nType)
+{
+    switch (nType)
+    {
+    case LOK_CALLBACK_INVALIDATE_TILES:
+        return "LOK_CALLBACK_INVALIDATE_TILES";
+    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        return "LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR";
+    case LOK_CALLBACK_TEXT_SELECTION:
+        return "LOK_CALLBACK_TEXT_SELECTION";
+    case LOK_CALLBACK_TEXT_SELECTION_START:
+        return "LOK_CALLBACK_TEXT_SELECTION_START";
+    case LOK_CALLBACK_TEXT_SELECTION_END:
+        return "LOK_CALLBACK_TEXT_SELECTION_END";
+    case LOK_CALLBACK_CURSOR_VISIBLE:
+        return "LOK_CALLBACK_CURSOR_VISIBLE";
+    case LOK_CALLBACK_GRAPHIC_SELECTION:
+        return "LOK_CALLBACK_GRAPHIC_SELECTION";
+    case LOK_CALLBACK_HYPERLINK_CLICKED:
+        return "LOK_CALLBACK_HYPERLINK_CLICKED";
+    }
+    return 0;
+}
+
+
 enum
 {
     EDIT_CHANGED,
@@ -886,52 +933,19 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
-/// Callback data, allocated in lok_docview_callback_worker(), released in lok_docview_callback().
-typedef struct
-{
-    int m_nType;
-    char* m_pPayload;
-    LOKDocView* m_pDocView;
-}
-LOKDocViewCallbackData;
-
-static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
-{
-    switch (nType)
-    {
-    case LOK_CALLBACK_INVALIDATE_TILES:
-        return "LOK_CALLBACK_INVALIDATE_TILES";
-    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        return "LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR";
-    case LOK_CALLBACK_TEXT_SELECTION:
-        return "LOK_CALLBACK_TEXT_SELECTION";
-    case LOK_CALLBACK_TEXT_SELECTION_START:
-        return "LOK_CALLBACK_TEXT_SELECTION_START";
-    case LOK_CALLBACK_TEXT_SELECTION_END:
-        return "LOK_CALLBACK_TEXT_SELECTION_END";
-    case LOK_CALLBACK_CURSOR_VISIBLE:
-        return "LOK_CALLBACK_CURSOR_VISIBLE";
-    case LOK_CALLBACK_GRAPHIC_SELECTION:
-        return "LOK_CALLBACK_GRAPHIC_SELECTION";
-    case LOK_CALLBACK_HYPERLINK_CLICKED:
-        return "LOK_CALLBACK_HYPERLINK_CLICKED";
-    }
-    return 0;
-}
-
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
 #if GLIB_CHECK_VERSION(2,28,0) // we need g_list_free_full()
-    LOKDocViewCallbackData* pCallback = static_cast<LOKDocViewCallbackData*>(pData);
+    LOKDocView_Impl::CallbackData* pCallback = static_cast<LOKDocView_Impl::CallbackData*>(pData);
 
     switch (pCallback->m_nType)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
-        if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
+        if (pCallback->m_aPayload != "EMPTY")
         {
-            GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
+            GdkRectangle aRectangle = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
             pCallback->m_pDocView->m_pImpl->renderDocument(&aRectangle);
         }
         else
@@ -940,7 +954,7 @@ static gboolean lok_docview_callback(gpointer pData)
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
-        pCallback->m_pDocView->m_pImpl->m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aVisibleCursor = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         pCallback->m_pDocView->m_pImpl->m_bCursorOverlayVisible = true;
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->m_pImpl->m_pEventBox));
     }
@@ -948,7 +962,7 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         LOKDocView* pDocView = pCallback->m_pDocView;
-        pDocView->m_pImpl->m_aTextSelectionRectangles = LOKDocView_Impl::payloadToRectangles(pCallback->m_pPayload);
+        pDocView->m_pImpl->m_aTextSelectionRectangles = LOKDocView_Impl::payloadToRectangles(pCallback->m_aPayload.c_str());
 
         // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
         if (pDocView->m_pImpl->m_aTextSelectionRectangles.empty())
@@ -965,23 +979,23 @@ static gboolean lok_docview_callback(gpointer pData)
     break;
     case LOK_CALLBACK_TEXT_SELECTION_START:
     {
-        pCallback->m_pDocView->m_pImpl->m_aTextSelectionStart = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aTextSelectionStart = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION_END:
     {
-        pCallback->m_pDocView->m_pImpl->m_aTextSelectionEnd = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_pImpl->m_aTextSelectionEnd = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
     }
     break;
     case LOK_CALLBACK_CURSOR_VISIBLE:
     {
-        pCallback->m_pDocView->m_pImpl->m_bCursorVisible = strcmp(pCallback->m_pPayload, "true") == 0;
+        pCallback->m_pDocView->m_pImpl->m_bCursorVisible = pCallback->m_aPayload == "true";
     }
     break;
     case LOK_CALLBACK_GRAPHIC_SELECTION:
     {
-        if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
-            pCallback->m_pDocView->m_pImpl->m_aGraphicSelection = LOKDocView_Impl::payloadToRectangle(pCallback->m_pPayload);
+        if (pCallback->m_aPayload != "EMPTY")
+            pCallback->m_pDocView->m_pImpl->m_aGraphicSelection = LOKDocView_Impl::payloadToRectangle(pCallback->m_aPayload.c_str());
         else
             memset(&pCallback->m_pDocView->m_pImpl->m_aGraphicSelection, 0, sizeof(pCallback->m_pDocView->m_pImpl->m_aGraphicSelection));
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->m_pImpl->m_pEventBox));
@@ -990,7 +1004,7 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_HYPERLINK_CLICKED:
     {
         GError* pError = NULL;
-        gtk_show_uri(NULL, pCallback->m_pPayload, GDK_CURRENT_TIME, &pError);
+        gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
     }
     break;
     default:
@@ -998,8 +1012,7 @@ static gboolean lok_docview_callback(gpointer pData)
         break;
     }
 
-    g_free(pCallback->m_pPayload);
-    g_free(pCallback);
+    delete pCallback;
 #endif
     return G_SOURCE_REMOVE;
 }
@@ -1009,11 +1022,8 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
 {
     LOKDocView* pDocView = static_cast<LOKDocView*>(pData);
 
-    LOKDocViewCallbackData* pCallback = g_new0(LOKDocViewCallbackData, 1);
-    pCallback->m_nType = nType;
-    pCallback->m_pPayload = g_strdup(pPayload);
-    pCallback->m_pDocView = pDocView;
-    g_info("lok_docview_callback_worker: %s, '%s'", lcl_LibreOfficeKitCallbackTypeToString(nType), pPayload);
+    LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload, pDocView);
+    g_info("lok_docview_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(lok_docview_callback, pCallback);
 #else
