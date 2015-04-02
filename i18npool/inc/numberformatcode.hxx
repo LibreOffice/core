@@ -62,9 +62,9 @@ private:
 
     void setupLocale( const ::com::sun::star::lang::Locale& rLocale );
     void getFormats( const ::com::sun::star::lang::Locale& rLocale );
-    OUString mapElementTypeShortToString(sal_Int16 formatType);
-    sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
-    OUString mapElementUsageShortToString(sal_Int16 formatUsage);
+    static OUString mapElementTypeShortToString(sal_Int16 formatType);
+    static sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
+    static OUString mapElementUsageShortToString(sal_Int16 formatUsage);
     sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
     void createLocaleDataObject();
 };

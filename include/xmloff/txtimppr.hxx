@@ -29,12 +29,12 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyM
     sal_Int32 nSizeTypeIndex;
     sal_Int32 nWidthTypeIndex;
 
-    void FontFinished(
+    static void FontFinished(
                 XMLPropertyState *pFontFamilyNameState,
                 XMLPropertyState *pFontStyleNameState,
                 XMLPropertyState *pFontFamilyState,
                 XMLPropertyState *pFontPitchState,
-                XMLPropertyState *pFontCharsetState ) const;
+                XMLPropertyState *pFontCharsetState );
 
     void FontDefaultsCheck(
                 XMLPropertyState*pFontFamilyName,

@@ -211,7 +211,7 @@ bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno
     return bRet;
 }
 
-void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePos, style::GraphicLocation eVert ) const
+void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePos, style::GraphicLocation eVert )
 {
     switch( ePos )
     {
@@ -245,7 +245,7 @@ void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePo
     }
 }
 
-void XMLBackGraphicPositionPropHdl::MergeXMLHoriPos( style::GraphicLocation& ePos, style::GraphicLocation eHori ) const
+void XMLBackGraphicPositionPropHdl::MergeXMLHoriPos( style::GraphicLocation& ePos, style::GraphicLocation eHori )
 {
     DBG_ASSERT( style::GraphicLocation_LEFT_MIDDLE==eHori || style::GraphicLocation_MIDDLE_MIDDLE==eHori || style::GraphicLocation_RIGHT_MIDDLE==eHori,
                 "lcl_frmitems_MergeXMLHoriPos: vertical pos must be middle" );

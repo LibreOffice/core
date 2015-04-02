@@ -28,7 +28,7 @@ class XMLFormPropOASISTransformerContext :
     bool m_bIsList;
     bool m_bIsListValue;
 
-    ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
+    static ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
 
 public:
     TYPEINFO_OVERRIDE();

@@ -60,12 +60,12 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 
     addChaffWhenEncryptedStorage();
 
-    sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_DC );
+    sal_uInt16 nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_DC );
 
     AddAttribute( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex( nPos ),
                              _GetNamespaceMap().GetNameByIndex ( nPos ) );
 
-    nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_FRAMEWORK );
+    nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_FRAMEWORK );
     AddAttribute( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex( nPos ),
                              _GetNamespaceMap().GetNameByIndex ( nPos ) );
 

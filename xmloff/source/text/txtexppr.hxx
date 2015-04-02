@@ -42,10 +42,10 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
                 XMLPropertyState *pFontFamilyState,
                 XMLPropertyState *pFontPitchState,
                 XMLPropertyState *pFontCharsetState ) const;
-    void ContextFontHeightFilter(
+    static void ContextFontHeightFilter(
                 XMLPropertyState* pCharHeightState,
                 XMLPropertyState* pCharPropHeightState,
-                XMLPropertyState* pCharDiffHeightState ) const;
+                XMLPropertyState* pCharDiffHeightState );
 
 protected:
 //  SvXMLUnitConverter& mrUnitConverter;

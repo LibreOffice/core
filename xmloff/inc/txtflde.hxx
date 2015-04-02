@@ -399,7 +399,7 @@ protected:
             ::com::sun::star::beans::XPropertySetInfo > & rPropertySetInfo );
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
-    ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
+    static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
     GetMasterPropertySet(const ::com::sun::star::uno::Reference <
                          ::com::sun::star::text::XTextField > & rTextField);
 

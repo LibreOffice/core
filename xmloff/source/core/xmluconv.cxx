@@ -683,7 +683,7 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
 }
 
 void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
-                               sal_Int16 nType ) const
+                               sal_Int16 nType )
 {
     enum XMLTokenEnum eSync = XML_TOKEN_INVALID;
     switch( nType )

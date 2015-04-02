@@ -63,21 +63,21 @@ private:
     sal_Int32 SAL_CALL
     impl_getColumnCount();
 
-    void SAL_CALL
+    static void SAL_CALL
     impl_getCurrentContentIdentifierString(
             com::sun::star::uno::Any& rAny
             , com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentAccess > xContentAccess )
             throw ( com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL
+    static void SAL_CALL
     impl_getCurrentContentIdentifier(
             com::sun::star::uno::Any& rAny
             , com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentAccess > xContentAccess )
             throw ( com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL
+    static void SAL_CALL
     impl_getCurrentContent(
             com::sun::star::uno::Any& rAny
             , com::sun::star::uno::Reference<

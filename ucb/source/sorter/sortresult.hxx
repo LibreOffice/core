@@ -136,28 +136,28 @@ class SortedResultSet: public cppu::WeakImplHelper8 <
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
     SimpleList          maO2S;          // maps the original Entries to the sorted ones
     SimpleList          maModList;      // keeps track of modified entries
-    sal_IntPtr                mnLastSort;     // index of the last sorted entry;
-    sal_IntPtr                mnCurEntry;     // index of the current entry
-    sal_IntPtr                mnCount;        // total count of the elements
-    bool            mbIsCopy;
+    sal_IntPtr          mnLastSort;     // index of the last sorted entry;
+    sal_IntPtr          mnCurEntry;     // index of the current entry
+    sal_IntPtr          mnCount;        // total count of the elements
+    bool                mbIsCopy;
 
 
 private:
 
-    sal_IntPtr                FindPos( SortListData *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd )
+    sal_IntPtr          FindPos( SortListData *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
-    sal_IntPtr                Compare( SortListData *pOne,
+    sal_IntPtr          Compare( SortListData *pOne,
                                  SortListData *pTwo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
     void                BuildSortInfo( css::uno::Reference< css::sdbc::XResultSet > aResult,
                                        const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                        const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
-    sal_IntPtr                CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
+    static sal_IntPtr   CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
                                      css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
                                      sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
                                      SortInfo* pSortInfo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
-    sal_IntPtr                CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
+    sal_IntPtr          CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
                                      css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
                                      sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );

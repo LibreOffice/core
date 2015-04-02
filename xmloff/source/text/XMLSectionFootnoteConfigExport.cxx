@@ -168,7 +168,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
                                  sBuf.makeStringAndClear());
 
             // and letter sync, if applicable
-            rExport.GetMM100UnitConverter().convertNumLetterSync(
+            SvXMLUnitConverter::convertNumLetterSync(
                 sBuf, nNumberingType );
             if (!sBuf.isEmpty())
             {

@@ -251,7 +251,7 @@ public:
     friend class FilterAllListenerImpl;
 
 private:
-    Reference<XEventListener> attachListenerForTarget(
+    static Reference<XEventListener> attachListenerForTarget(
         const Reference<XIntrospectionAccess>& xAccess,
         const Reference<XInvocationAdapterFactory2>& xInvocationAdapterFactory,
         const Reference<XAllListener>& xAllListener,

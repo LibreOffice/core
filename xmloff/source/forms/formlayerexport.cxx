@@ -92,9 +92,9 @@ namespace xmloff
         m_pImpl->exportXForms();
     }
 
-    bool OFormLayerXMLExport::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
+    bool OFormLayerXMLExport::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage )
     {
-        return m_pImpl->pageContainsForms( _rxDrawPage );
+        return OFormLayerXMLExport_Impl::pageContainsForms( _rxDrawPage );
     }
 
     bool OFormLayerXMLExport::documentContainsXForms() const

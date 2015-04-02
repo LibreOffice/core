@@ -1674,7 +1674,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else
     {
         // the child is a drawing shape
-        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+        pContext = XMLShapeImportHelper::CreateFrameChildContext(
                                     &m_xImplContext, p_nPrefix, rLocalName, xAttrList );
     }
 

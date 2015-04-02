@@ -329,7 +329,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         GetExport().GetMM100UnitConverter().convertNumFormat( sTmp, eType );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                        sTmp.makeStringAndClear() );
-        GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp, eType );
+        SvXMLUnitConverter::convertNumLetterSync( sTmp, eType );
         if( !sTmp.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_NUM_LETTER_SYNC,

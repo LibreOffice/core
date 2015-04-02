@@ -123,10 +123,10 @@ public:
     Sequence< Any > convertValueSequence( XMLTokenEnum eAttributeName, const OUString& rValue );
 
     Any convertTarget( const OUString& rValue );
-    Any convertPath( const OUString& rValue );
+    static Any convertPath( const OUString& rValue );
     Any convertTiming( const OUString& rValue );
-    Sequence< double > convertKeyTimes( const OUString& rValue );
-    Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
+    static Sequence< double > convertKeyTimes( const OUString& rValue );
+    static Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
 
     const OUString mastrHSL;
 };
@@ -993,7 +993,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             case ANA_KeyTimes:
             {
                 if( xAnimate.is() )
-                    xAnimate->setKeyTimes( mpHelper->convertKeyTimes( rValue ) );
+                    xAnimate->setKeyTimes( AnimationsImportHelperImpl::convertKeyTimes( rValue ) );
             }
             break;
 
@@ -1046,7 +1046,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             case ANA_KeySplines:
             {
                 if( xAnimate.is() )
-                    xAnimate->setTimeFilter( mpHelper->convertTimeFilter( rValue ) );
+                    xAnimate->setTimeFilter( AnimationsImportHelperImpl::convertTimeFilter( rValue ) );
             }
             break;
 
@@ -1054,7 +1054,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             {
                 Reference< XAnimateMotion > xAnimateMotion( mxNode, UNO_QUERY );
                 if( xAnimateMotion.is() )
-                    xAnimateMotion->setPath( mpHelper->convertPath( rValue ) );
+                    xAnimateMotion->setPath( AnimationsImportHelperImpl::convertPath( rValue ) );
             }
             break;
 

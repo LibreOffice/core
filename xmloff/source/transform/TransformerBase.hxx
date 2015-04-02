@@ -166,7 +166,7 @@ public:
         matching token in its lower 16 bits.  The value is converted to the
         token that is given in the upper 16 bits of the matching parameter.
      */
-    bool RenameAttributeValue( OUString& rOutAttributeValue,
+    static bool RenameAttributeValue( OUString& rOutAttributeValue,
                                    sal_Int32 nParam1,
                                    sal_Int32 nParam2,
                                    sal_Int32 nParam3 );

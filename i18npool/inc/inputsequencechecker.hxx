@@ -72,7 +72,7 @@ private :
 
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
         throw (com::sun::star::uno::RuntimeException);
-    sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
+    static sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 
 } } } }

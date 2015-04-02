@@ -141,7 +141,7 @@ void XMLLineNumberingExport::Export()
             rExport.GetMM100UnitConverter().convertNumFormat( sNumPosBuf, nFormat );
             rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                  sNumPosBuf.makeStringAndClear());
-            rExport.GetMM100UnitConverter().convertNumLetterSync( sNumPosBuf, nFormat );
+            SvXMLUnitConverter::convertNumLetterSync( sNumPosBuf, nFormat );
             if( !sNumPosBuf.isEmpty() )
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE,

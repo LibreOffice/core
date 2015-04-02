@@ -200,7 +200,7 @@ bool XMLPMPropHdl_NumLetterSync::importXML(
 bool XMLPMPropHdl_NumLetterSync::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool        bRet = false;
     sal_Int16   nNumType = sal_Int16();
@@ -208,7 +208,7 @@ bool XMLPMPropHdl_NumLetterSync::exportXML(
     if( rValue >>= nNumType )
     {
         OUStringBuffer aBuffer( 5 );
-        rUnitConverter.convertNumLetterSync( aBuffer, nNumType );
+        SvXMLUnitConverter::convertNumLetterSync( aBuffer, nNumType );
         rStrExpValue = aBuffer.makeStringAndClear();
         bRet = !rStrExpValue.isEmpty();
     }

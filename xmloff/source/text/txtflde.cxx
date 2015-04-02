@@ -2596,8 +2596,7 @@ void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
         GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                       sTmp.makeStringAndClear() );
         // and letter sync, if applicable
-        GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp,
-                                                              nNumberingType );
+        SvXMLUnitConverter::convertNumLetterSync( sTmp, nNumberingType );
 
         if (!sTmp.isEmpty())
         {

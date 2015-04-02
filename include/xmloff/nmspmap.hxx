@@ -136,7 +136,7 @@ public:
 
 /* deprecated */ bool AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
                      const OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
-/* deprecated */ sal_uInt16 GetIndexByKey( sal_uInt16 nKey ) const;
+/* deprecated */ static sal_uInt16 GetIndexByKey( sal_uInt16 nKey );
 /* deprecated */ sal_uInt16 GetIndexByPrefix( const OUString& rPrefix ) const;
 /* deprecated */ sal_uInt16 GetFirstIndex() const;
 /* deprecated */ sal_uInt16 GetNextIndex( sal_uInt16 nOldIdx ) const;

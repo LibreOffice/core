@@ -136,7 +136,7 @@ private:
     sal_Unicode                 cDecimalSep;
 
     /// Get corresponding KParseTokens flag for a character
-    sal_Int32 getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos );
+    static sal_Int32 getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos );
 
     /// Access parser table flags.
     UPT_FLAG_TYPE getFlags( const sal_Unicode* aStr, sal_Int32 nPos );
@@ -171,7 +171,7 @@ private:
     bool setupInternational( const com::sun::star::lang::Locale& rLocale );
 
     /// Implementation of getCharacterType() for one single character
-    sal_Int32 SAL_CALL getCharType( const OUString& Text, sal_Int32 *nPos, sal_Int32 increment);
+    static sal_Int32 SAL_CALL getCharType( const OUString& Text, sal_Int32 *nPos, sal_Int32 increment);
 
 };
 

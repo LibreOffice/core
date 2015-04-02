@@ -320,22 +320,22 @@ bool FormCellBindingHelper::isCellBindingAllowed( const Reference< XModel >& _rx
     );
 }
 
-bool FormCellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding ) const
+bool FormCellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding )
 {
     return doesComponentSupport( _rxBinding.get(), SERVICE_CELLVALUEBINDING );
 }
 
-bool FormCellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding ) const
+bool FormCellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding )
 {
     return doesComponentSupport( _rxBinding.get(), SERVICE_LISTINDEXCELLBINDING );
 }
 
-bool FormCellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource ) const
+bool FormCellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource )
 {
     return doesComponentSupport( _rxSource.get(), SERVICE_CELLRANGELISTSOURCE );
 }
 
-bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
+bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService )
 {
     Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
     bool bDoes = xSI.is() && xSI->supportsService( _rService );

@@ -364,7 +364,7 @@ sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 
 // All methods after this are deprecated...
 
-sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey ) const
+sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey )
 {
     return nKey;
 }

@@ -1222,14 +1222,14 @@ bool XMLNumber8OneBasedHdl::exportXML(
 class XMLTextPropertyHandlerFactory_Impl
 {
 public:
-    const XMLPropertyHandler *GetPropertyHandler( sal_Int32 nType ) const;
+    static const XMLPropertyHandler *GetPropertyHandler( sal_Int32 nType );
 
     XMLTextPropertyHandlerFactory_Impl();
     ~XMLTextPropertyHandlerFactory_Impl();
 };
 
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
-    ( sal_Int32 nType ) const
+    ( sal_Int32 nType )
 {
     const XMLPropertyHandler* pHdl = 0;
     switch( nType )
@@ -1459,7 +1459,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory::GetPropertyHandler(
 
     if( !pHdl )
     {
-        const XMLPropertyHandler *pNewHdl = pImpl->GetPropertyHandler( nType );
+        const XMLPropertyHandler *pNewHdl = XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler( nType );
 
         if( pNewHdl )
             PutHdlCache( nType, pNewHdl );

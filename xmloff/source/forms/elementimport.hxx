@@ -238,7 +238,7 @@ namespace xmloff
         void setElementType(OControlElement::ElementType _eType) { m_eElementType = _eType; }
 
     protected:
-        void implTranslateValueProperty(
+        static void implTranslateValueProperty(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
 

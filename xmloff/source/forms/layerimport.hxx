@@ -144,7 +144,7 @@ namespace xmloff
 
         /** creates an import context for the office:forms element
         */
-        SvXMLImportContext* createOfficeFormsContext(
+        static SvXMLImportContext* createOfficeFormsContext(
             SvXMLImport& _rImport,
             sal_uInt16 _nPrefix,
             const OUString& _rLocalName);

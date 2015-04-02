@@ -195,7 +195,7 @@ void XMLSettingsExportHelper::exportBool(const bool bValue, const OUString& rNam
     m_rContext.EndElement( false );
 }
 
-void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const OUString& rName) const
+void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const OUString& rName)
 {
     (void) nValue; (void) rName;
     OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"

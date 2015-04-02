@@ -513,9 +513,9 @@ public:
     void exportAudio( const Reference< XAudio >& xAudio );
     void exportCommand( const Reference< XCommand >& xCommand );
 
-    Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget ) const;
+    static Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget );
 
-    void convertPath( OUStringBuffer& sTmp, const Any& rPath ) const;
+    static void convertPath( OUStringBuffer& sTmp, const Any& rPath );
     void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
     void convertTiming( OUStringBuffer& sTmp, const Any& rTiming ) const;
     void convertSource( OUStringBuffer& sTmp, const Any& rSource ) const;
@@ -1412,7 +1412,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
     }
 }
 
-Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const ParagraphTarget* pTarget ) const
+Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const ParagraphTarget* pTarget )
 {
     if( pTarget ) try
     {
@@ -1437,7 +1437,7 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     return xRef;
 }
 
-void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath ) const
+void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath )
 {
     OUString aStr;
     rPath >>= aStr;

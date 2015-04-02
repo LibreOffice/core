@@ -217,7 +217,7 @@ namespace xmloff
 
         /** determines whether the given page contains logical forms
         */
-        bool pageContainsForms( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage ) const;
+        static bool pageContainsForms( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage );
 
         /** determines whether the given page contains XForm instances
         */
@@ -232,7 +232,7 @@ namespace xmloff
         void exportAutoStyles();
 
     protected:
-        bool impl_isFormPageContainingForms(
+        static bool impl_isFormPageContainingForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms);
 

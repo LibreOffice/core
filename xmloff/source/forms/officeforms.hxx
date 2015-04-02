@@ -69,9 +69,9 @@ namespace xmloff
         ~OFormsRootExport();
 
     private:
-        void addModelAttributes(SvXMLExport& _rExp);
+        static void addModelAttributes(SvXMLExport& _rExp);
 
-        void implExportBool(
+        static void implExportBool(
             SvXMLExport& _rExp,
             OfficeFormsAttributes _eAttribute,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,

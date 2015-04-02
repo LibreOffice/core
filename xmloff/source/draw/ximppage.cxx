@@ -249,7 +249,7 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPre
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_FORMS ) )
     {
         if( GetImport().IsFormsSupported() )
-            pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
+            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
     }
     else if( ((nPrefix == XML_NAMESPACE_OFFICE) || (nPrefix == XML_NAMESPACE_OFFICE_EXT)) && IsXMLToken( rLocalName, XML_ANNOTATION ) )
     {

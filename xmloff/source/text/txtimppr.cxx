@@ -148,7 +148,7 @@ void XMLTextImportPropertyMapper::FontFinished(
     XMLPropertyState *pFontStyleNameState,
     XMLPropertyState *pFontFamilyState,
     XMLPropertyState *pFontPitchState,
-    XMLPropertyState *pFontCharsetState ) const
+    XMLPropertyState *pFontCharsetState )
 {
     if( pFontFamilyNameState && pFontFamilyNameState->mnIndex != -1 )
     {

@@ -142,7 +142,7 @@ namespace xmloff
 
         /** determines whether the given page contains logical forms
         */
-        bool pageContainsForms( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage ) const;
+        static bool pageContainsForms( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage );
 
         /** determines whether the given page contains XForm instances
         */

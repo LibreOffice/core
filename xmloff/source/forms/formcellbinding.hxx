@@ -161,22 +161,22 @@ namespace xmloff
 
         /** checks whether a given binding is a spreadsheet cell binding
         */
-        bool            isCellBinding(
+        static bool     isCellBinding(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
-                        ) const;
+                        );
 
         /** checks whether a given binding is a spreadsheet cell binding, exchanging
             integer values
         */
-        bool            isCellIntegerBinding(
+        static bool     isCellIntegerBinding(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
-                        ) const;
+                        );
 
         /** checks whether a given list source is a spreadsheet cell list source
         */
-        bool            isCellRangeListSource(
+        static bool    isCellRangeListSource(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
-                        ) const;
+                        );
 
     protected:
         /** creates an address object from a string representation of a cell address
@@ -209,10 +209,10 @@ namespace xmloff
 
         /** checkes whether a given component supports a given servive
         */
-        bool            doesComponentSupport(
+        static bool     doesComponentSupport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
                             const OUString& _rService
-                        ) const;
+                        );
 
         /** uses the document (it's factory interface, respectively) to create a component instance
             @param _rService

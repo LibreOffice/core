@@ -64,11 +64,11 @@ protected:
     static const sal_Int32 LeapYear[];
 
 private:
-    double NewMoon(sal_Int32 n);
-    void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
-    void ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
-    void getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
-    double getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
+    static double NewMoon(sal_Int32 n);
+    static void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
+    static void ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
+    static void getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
+    static double getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
 };
 
 } } } }

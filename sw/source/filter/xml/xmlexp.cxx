@@ -462,7 +462,7 @@ void SwXMLExport::_ExportContent()
                 xPage, GetFormExport() );
 
             // #i36597#
-            if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
+            if ( xmloff::OFormLayerXMLExport::pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
 

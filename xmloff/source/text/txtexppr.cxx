@@ -284,7 +284,7 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
 void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
     XMLPropertyState* pCharHeightState,
     XMLPropertyState* pCharPropHeightState,
-    XMLPropertyState* pCharDiffHeightState ) const
+    XMLPropertyState* pCharDiffHeightState )
 {
     if( pCharPropHeightState )
     {

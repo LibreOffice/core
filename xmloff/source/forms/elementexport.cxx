@@ -1735,7 +1735,7 @@ namespace xmloff
         {
             FormCellBindingHelper aHelper( m_xProps, NULL );
             {
-                if ( aHelper.isCellBinding( aHelper.getCurrentBinding( ) ) )
+                if ( FormCellBindingHelper::isCellBinding( aHelper.getCurrentBinding( ) ) )
                 {
                     m_nIncludeBindings |= BA_LINKED_CELL;
                     if ( m_nClassId == FormComponentType::LISTBOX )
@@ -1745,7 +1745,7 @@ namespace xmloff
 
             // is it a list-like control which uses a calc cell range as list source?
             {
-                if ( aHelper.isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
+                if ( FormCellBindingHelper::isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
                     m_nIncludeBindings |= BA_LIST_CELL_RANGE;
             }
         }
@@ -1786,7 +1786,7 @@ namespace xmloff
 
                 if ( _bIncludeListLinkageType )
                 {
-                    sal_Int16 nLinkageType = aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0;
+                    sal_Int16 nLinkageType = FormCellBindingHelper::isCellIntegerBinding( xBinding ) ? 1 : 0;
 
                     OUStringBuffer sBuffer;
                     SvXMLUnitConverter::convertEnum(

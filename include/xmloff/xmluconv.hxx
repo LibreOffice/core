@@ -207,8 +207,8 @@ public:
     /** convert NumberingType to num-forat and num-letter-sync values */
     void convertNumFormat( OUStringBuffer& rBuffer,
                            sal_Int16 nType ) const;
-    void convertNumLetterSync( OUStringBuffer& rBuffer,
-                                  sal_Int16 nType ) const;
+    static void convertNumLetterSync( OUStringBuffer& rBuffer,
+                                  sal_Int16 nType );
 
     static void convertPropertySet(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps,
                         const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& aProperties);

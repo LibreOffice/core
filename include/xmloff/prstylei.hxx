@@ -78,10 +78,10 @@ protected:
     bool translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames();
 
     //UUUU provider for often used sets
-    const OldFillStyleDefinitionSet& getStandardSet();
-    const OldFillStyleDefinitionSet& getHeaderSet();
-    const OldFillStyleDefinitionSet& getFooterSet();
-    const OldFillStyleDefinitionSet& getParaSet();
+    static const OldFillStyleDefinitionSet& getStandardSet();
+    static const OldFillStyleDefinitionSet& getHeaderSet();
+    static const OldFillStyleDefinitionSet& getFooterSet();
+    static const OldFillStyleDefinitionSet& getParaSet();
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

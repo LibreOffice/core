@@ -165,9 +165,9 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    ::com::sun::star::awt::Size getPageSize(
+    static ::com::sun::star::awt::Size getPageSize(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc ) const;
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -3520,7 +3520,7 @@ void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape, bool
         addSize( xShape->getSize(), bIsOOoNamespace );
 }
 
-awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc ) const
+awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )
 {
     awt::Size aSize( 8000, 7000 );
     uno::Reference< embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );

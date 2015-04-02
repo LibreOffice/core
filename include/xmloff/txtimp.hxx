@@ -375,7 +375,7 @@ private:
     /// ugly, but implementation of this is in XMLPropertyBackpatcher.cxx
     struct BackpatcherImpl;
     std::shared_ptr<BackpatcherImpl> m_xBackpatcherImpl;
-    std::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
+    static std::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
 
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(

@@ -280,7 +280,7 @@ protected:
             ::com::sun::star::text::XDocumentIndex > & rIndex) const;
 
     /// map service name to section type
-    enum SectionTypeEnum MapSectionType(const OUString& rSectionName);
+    static enum SectionTypeEnum MapSectionType(const OUString& rSectionName);
 
     /**
      * Export the index element start (for all index types).

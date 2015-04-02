@@ -179,7 +179,7 @@ protected:
 
     /// force an update of the field's value
     /// call update on optional XUptadeable interface; (disable Fixed property)
-    void ForceUpdate(
+    static void ForceUpdate(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropertySet);
 };
