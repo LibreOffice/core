@@ -238,6 +238,16 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pCo
 MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 {
     ScDocument* pDoc = pViewData->GetDocument();
+
+    // FIXME this shouldn't be necessary once we change the entire Calc to
+    // work in the logic coordinates (ideally 100ths of mm - so that it is
+    // the same as editeng and drawinglayer), and get rid of all the
+    // SetMapMode's and other unneccessary fun we have with pixels
+    if (pDoc->GetDrawLayer()->isTiledRendering())
+    {
+        return pViewData->GetLogicMode();
+    }
+
     SCTAB nTab = pViewData->GetTabNo();
     bool bNegativePage = pDoc->IsNegativePage( nTab );
 

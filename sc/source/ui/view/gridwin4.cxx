@@ -595,10 +595,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     MapMode aDrawMode = GetDrawMapMode();
     if (bIsTiledRendering)
     {
-        // FIXME this shouldn't be necessary once we change this to work in the
-        // logic coordinates instead of in pixels (and get rid of all the
-        // SetMapMode()'s)
-        aDrawMode = pViewData->GetLogicMode(eWhich);
+        // FIXME this shouldn't be necessary once we change the entire Calc to
+        // work in the logic coordinates (ideally 100ths of mm - so that it is
+        // the same as editeng and drawinglayer), and get rid of all the
+        // SetMapMode's and other unneccessary fun we have with pixels
+        // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
         aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
     }
     Rectangle aDrawingRectLogic;
