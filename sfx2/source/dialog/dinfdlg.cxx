@@ -988,7 +988,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // determine name
     INetURLObject aURL(aFile);
     OUString aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
-    if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIVATE )
+    if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIV_SOFFICE )
         aName = SfxResId( STR_NONAME ).toString();
     m_pNameED->SetText( aName );
 
@@ -1030,7 +1030,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
         m_pFileValFt->SetText( aText );
     }
-    else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
+    else if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
