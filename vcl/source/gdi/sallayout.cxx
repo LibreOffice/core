@@ -1250,19 +1250,20 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
     // initialize result array
-    long nXPos = -1;
-    int i;
-    for( i = 0; i < nMaxIndex; ++i )
-        pCaretXArray[ i ] = nXPos;
+    for (int i = 0; i < nMaxIndex; ++i)
+        pCaretXArray[i] = -1;
 
     // calculate caret positions using glyph array
     for( GlyphVector::const_iterator pG = m_GlyphItems.begin(), pGEnd = m_GlyphItems.end(); pG != pGEnd; ++pG )
     {
-        nXPos = pG->maLinearPos.X();
+        long nXPos = pG->maLinearPos.X();
         long nXRight = nXPos + pG->mnOrigWidth;
         int n = pG->mnCharPos;
         int nCurrIdx = 2 * (n - mnMinCharPos);
-        if( !pG->IsRTLGlyph() )
+        // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
+        if (!pG->IsClusterStart() && pCaretXArray[nCurrIdx] != -1)
+            continue;
+        if (!pG->IsRTLGlyph())
         {
             // normal positions for LTR case
             pCaretXArray[ nCurrIdx ]   = nXPos;
