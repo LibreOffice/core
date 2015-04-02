@@ -190,7 +190,7 @@ struct DataBarEntryTypeApiMap
 
 DataBarEntryTypeApiMap aDataBarEntryTypeMap[] =
 {
-    { COLORSCALE_AUTO, sheet::DataBarEntryType::DATABAR_MAX },
+    { COLORSCALE_AUTO, sheet::DataBarEntryType::DATABAR_AUTO },
     { COLORSCALE_MIN, sheet::DataBarEntryType::DATABAR_MIN },
     { COLORSCALE_MAX, sheet::DataBarEntryType::DATABAR_MAX },
     { COLORSCALE_VALUE, sheet::DataBarEntryType::DATABAR_VALUE },
