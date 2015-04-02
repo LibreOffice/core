@@ -564,8 +564,9 @@ SvStream* SfxMedium::GetOutStream()
         {
             // On windows we try to re-use XOutStream from xStream if that exists;
             // because opening new SvFileStream in this situation may fail with ERROR_SHARING_VIOLATION
-            #ifdef WNT
-            if (pImp->xStream.is())
+            // TODO: this is a horrible hack that should probably be removed,
+            // somebody needs to investigate this more thoroughly...
+            if (getenv("SFX_MEDIUM_REUSE_STREAM") && pImp->xStream.is())
             {
                 assert(pImp->xStream->getOutputStream().is()); // need that...
                 pImp->m_pOutStream = utl::UcbStreamHelper::CreateStream(
@@ -573,15 +574,11 @@ SvStream* SfxMedium::GetOutStream()
             }
             else
             {
-                pImp->m_pOutStream = new SvFileStream(
-                        pImp->m_aName, STREAM_STD_READWRITE);
-            }
             // On Unix don't try to re-use XOutStream from xStream if that exists;
             // it causes fdo#59022 (fails opening files via SMB on Linux)
-            #else
-            pImp->m_pOutStream = new SvFileStream(
-                        pImp->m_aName, STREAM_STD_READWRITE);
-            #endif
+                pImp->m_pOutStream = new SvFileStream(
+                            pImp->m_aName, STREAM_STD_READWRITE);
+            }
             CloseStorage();
         }
     }
