@@ -37,6 +37,8 @@ private:
 
     Edit* mpEdMin;
     Edit* mpEdMax;
+    Edit* mpLenMin;
+    Edit* mpLenMax;
 
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
@@ -46,6 +48,7 @@ private:
 
     DECL_LINK(OkBtnHdl, void*);
     DECL_LINK(TypeSelectHdl, void*);
+    DECL_LINK(PosSelectHdl, void*);
 
     void Init();
 
@@ -58,3 +61,4 @@ public:
 #endif // INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
