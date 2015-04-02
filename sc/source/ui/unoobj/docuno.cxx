@@ -575,6 +575,9 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
     ScDrawView* pDrawView = pViewData->GetScDrawView();
 
+    // update the aLogicMode in ScViewData to something predictable
+    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
+
     if (pInputHandler && pInputHandler->IsInputMode())
     {
         // forwarding to editeng - we are editing the cell content
@@ -641,6 +644,9 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     // particular document, hence we need to hope we get the right window.
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    // update the aLogicMode in ScViewData to something predictable
+    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
 
     int nPixelX = nX * pViewData->GetPPTX();
     int nPixelY = nY * pViewData->GetPPTY();
