@@ -621,20 +621,10 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
     bool bAll = ( tabs.empty() );
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
-    Fraction aFrac20( 1,5 );
-    Fraction aFrac400( 4,1 );
 
-    Fraction aValidX = rNewX;
-    if (aValidX<aFrac20)
-        aValidX = aFrac20;
-    if (aValidX>aFrac400)
-        aValidX = aFrac400;
-
-    Fraction aValidY = rNewY;
-    if (aValidY<aFrac20)
-        aValidY = aFrac20;
-    if (aValidY>aFrac400)
-        aValidY = aFrac400;
+    // sanity check - we shouldn't need something this low / big
+    assert(rNewX > Fraction(1, 100) && rNewX < Fraction(100, 1));
+    assert(rNewY > Fraction(1, 100) && rNewY < Fraction(100, 1));
 
     if ( bAll )
     {
@@ -644,25 +634,25 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
             {
                 if ( bPagebreak )
                 {
-                    maTabData[i]->aPageZoomX = aValidX;
-                    maTabData[i]->aPageZoomY = aValidY;
+                    maTabData[i]->aPageZoomX = rNewX;
+                    maTabData[i]->aPageZoomY = rNewY;
                 }
                 else
                 {
-                    maTabData[i]->aZoomX = aValidX;
-                    maTabData[i]->aZoomY = aValidY;
+                    maTabData[i]->aZoomX = rNewX;
+                    maTabData[i]->aZoomY = rNewY;
                 }
             }
         }
         if ( bPagebreak )
         {
-            aDefPageZoomX = aValidX;
-            aDefPageZoomY = aValidY;
+            aDefPageZoomX = rNewX;
+            aDefPageZoomY = rNewY;
         }
         else
         {
-            aDefZoomX = aValidX;
-            aDefZoomY = aValidY;
+            aDefZoomX = rNewX;
+            aDefZoomY = rNewY;
         }
     }
     else
@@ -676,13 +666,13 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
             {
                 if ( bPagebreak )
                 {
-                    maTabData[i]->aPageZoomX = aValidX;
-                    maTabData[i]->aPageZoomY = aValidY;
+                    maTabData[i]->aPageZoomX = rNewX;
+                    maTabData[i]->aPageZoomY = rNewY;
                 }
                 else
                 {
-                    maTabData[i]->aZoomX = aValidX;
-                    maTabData[i]->aZoomY = aValidY;
+                    maTabData[i]->aZoomX = rNewX;
+                    maTabData[i]->aZoomY = rNewY;
                 }
             }
         }
