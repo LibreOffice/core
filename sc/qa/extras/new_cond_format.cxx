@@ -17,6 +17,8 @@
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/XDataBarEntry.hpp>
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
+#include <com/sun/star/sheet/ColorScaleEntryType.hpp>
+#include <com/sun/star/sheet/XColorScaleEntry.hpp>
 #include <unonames.hxx>
 
 using namespace css;
@@ -359,6 +361,51 @@ void ScConditionalFormatTest::testDataBarProperties()
     }
 }
 
+namespace {
+
+void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> xEntry,
+        sal_Int32 nType, const OUString& rString, sal_uInt32 nColor)
+{
+    CPPUNIT_ASSERT_EQUAL(nType, xEntry->getType());
+    CPPUNIT_ASSERT_EQUAL(nColor, sal_uInt32(xEntry->getColor()));
+    switch (nType)
+    {
+        case sheet::ColorScaleEntryType::COLORSCALE_VALUE:
+        case sheet::ColorScaleEntryType::COLORSCALE_PERCENT:
+        case sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE:
+        // case sheet::ColorScaleEntryType::COLORSCALE_FORMULA:
+        {
+            CPPUNIT_ASSERT_EQUAL(rString, xEntry->getFormula());
+        }
+        break;
+        default:
+        break;
+    }
+}
+
+void testColorScaleEntries(uno::Reference<beans::XPropertySet> xPropSet, sal_Int32 nEntries,
+        sal_Int32 nMinType, const OUString& rMinString, sal_uInt32 nMinColor,
+        sal_Int32 nMediumType, const OUString& rMediumString, sal_uInt32 nMediumColor,
+        sal_Int32 nMaxType, const OUString& rMaxString, sal_uInt32 nMaxColor)
+{
+    uno::Any aAny = xPropSet->getPropertyValue("ColorScaleEntries");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
+    CPPUNIT_ASSERT(aAny >>= aEntries);
+
+    CPPUNIT_ASSERT_EQUAL(nEntries, aEntries.getLength());
+    testColorScaleEntry(aEntries[0], nMinType, rMinString, nMinColor);
+    size_t nMaxEntry = 1;
+    if (nEntries == 3)
+    {
+        nMaxEntry = 2;
+        testColorScaleEntry(aEntries[1], nMediumType, rMediumString, nMediumColor);
+    }
+    testColorScaleEntry(aEntries[nMaxEntry], nMaxType, rMaxString, nMaxColor);
+}
+
+}
+
 void ScConditionalFormatTest::testColorScaleProperties()
 {
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
@@ -376,6 +423,32 @@ void ScConditionalFormatTest::testColorScaleProperties()
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
+
+    uno::Reference<beans::XPropertySet> xPropSet;
+    {
+        uno::Any aAny = xCondFormat->getByIndex(0);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_MIN, "", sal_uInt32(16777113),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "50", sal_uInt32(16737792),
+                sheet::ColorScaleEntryType::COLORSCALE_MAX, "", sal_uInt32(16724787));
+    }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(1);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_VALUE, "0", sal_uInt32(16711680),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "50", sal_uInt32(10092390),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENT, "90", sal_uInt32(255));
+    }
+    {
+        uno::Any aAny = xCondFormat->getByIndex(2);
+        CPPUNIT_ASSERT(aAny.hasValue());
+        CPPUNIT_ASSERT(aAny >>= xPropSet);
+        testColorScaleEntries(xPropSet, 2, sheet::ColorScaleEntryType::COLORSCALE_FORMULA, "=A1", COL_WHITE,
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "not used", sal_uInt32(1),
+                sheet::ColorScaleEntryType::COLORSCALE_VALUE, "10", COL_BLACK);
+    }
 }
 
 void ScConditionalFormatTest::setUp()
