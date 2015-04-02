@@ -178,30 +178,6 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SfxFilterFlags::TEMPLATEPATH );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
