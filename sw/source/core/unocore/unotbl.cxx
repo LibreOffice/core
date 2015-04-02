@@ -2108,9 +2108,7 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
 uno::Reference<table::XCell> SwXTextTable::getCellByName(const OUString& sCellName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(!pFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable(pFmt);
     SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox(sCellName));
     if(!pBox)
@@ -2136,9 +2134,7 @@ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(cons
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(!pFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     uno::Reference<text::XTextTableCursor> xRet;
     SwTable* pTable = SwTable::FindTable(pFmt);
     SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox(sCellName));
@@ -2230,18 +2226,14 @@ uno::Reference<text::XTextRange>  SwXTextTable::getAnchor(void)
         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(!pFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     return new SwXTextRange(*pFmt);
 }
 
 void SwXTextTable::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(!pFmt)
-        throw uno::RuntimeException();
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable(pFmt);
     SwSelBoxes aSelBoxes;
     for(auto& rBox : pTable->GetTabSortBoxes() )
@@ -2345,31 +2337,24 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
-    SwFrmFmt* pFmt(GetFrmFmt());
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        if(!pTable->IsTblComplex())
-        {
-            sal_Int32 nPos = 0;
-            const OUString sTLName(sRange.getToken(0, ':', nPos));
-            const OUString sBRName(sRange.getToken(0, ':', nPos));
-            if(sTLName.isEmpty() || sBRName.isEmpty())
-                throw uno::RuntimeException();
-            SwRangeDescriptor aDesc;
-            aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-            sw_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
-            sw_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFmt), static_cast<cppu::OWeakObject*>(this));
+    sal_Int32 nPos = 0;
+    const OUString sTLName(sRange.getToken(0, ':', nPos));
+    const OUString sBRName(sRange.getToken(0, ':', nPos));
+    if(sTLName.isEmpty() || sBRName.isEmpty())
+        throw uno::RuntimeException();
+    SwRangeDescriptor aDesc;
+    aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
+    sw_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+    sw_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
 
-            // we should normalize the range now (e.g. A5:C1 will become A1:C5)
-            // since (depending on what is done later) it will be troublesome
-            // elsewhere when the cursor in the implementation does not
-            // point to the top-left and bottom-right cells
-            aDesc.Normalize();
-            return GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
-        }
-    }
-    throw uno::RuntimeException();
+    // we should normalize the range now (e.g. A5:C1 will become A1:C5)
+    // since (depending on what is done later) it will be troublesome
+    // elsewhere when the cursor in the implementation does not
+    // point to the top-left and bottom-right cells
+    aDesc.Normalize();
+    return GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
 }
 
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
@@ -2573,32 +2558,24 @@ void SwXTextTable::autoFormat(const OUString& sAutoFmtName)
            std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        if(!pTable->IsTblComplex())
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFmt), static_cast<cppu::OWeakObject*>(this));
+    SwTableAutoFmtTbl aAutoFmtTbl;
+    aAutoFmtTbl.Load();
+    for (size_t i = aAutoFmtTbl.size(); i;)
+        if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
         {
-            SwTableAutoFmtTbl aAutoFmtTbl;
-            aAutoFmtTbl.Load();
-            for (size_t i = aAutoFmtTbl.size(); i;)
-                if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
-                {
-                    SwSelBoxes aBoxes;
-                    const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-                    for (size_t n = 0; n < rTBoxes.size(); ++n)
-                    {
-                        SwTableBox* pBox = rTBoxes[ n ];
-                        aBoxes.insert( pBox );
-                    }
-                    UnoActionContext aContext( pFmt->GetDoc() );
-                    pFmt->GetDoc()->SetTableAutoFmt( aBoxes, aAutoFmtTbl[i] );
-                    break;
-                }
+            SwSelBoxes aBoxes;
+            const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
+            for (size_t n = 0; n < rTBoxes.size(); ++n)
+            {
+                SwTableBox* pBox = rTBoxes[ n ];
+                aBoxes.insert( pBox );
+            }
+            UnoActionContext aContext( pFmt->GetDoc() );
+            pFmt->GetDoc()->SetTableAutoFmt( aBoxes, aAutoFmtTbl[i] );
+            break;
         }
-    }
-    else
-        throw uno::RuntimeException();
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextTable::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
@@ -3622,24 +3599,16 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXCellRange::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXCellRange::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXCellRange::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
 void SwXCellRange::GetDataSequence(
         uno::Sequence< uno::Any >   *pAnySeq,   //-> first pointer != 0 is used
