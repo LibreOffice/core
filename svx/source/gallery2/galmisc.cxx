@@ -190,7 +190,7 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 
     aReduced = aReduced.getToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
 
-    if( INetProtocol::PRIV_SOFFICE != rURL.GetProtocol() )
+    if( INetProtocol::PrivSoffice != rURL.GetProtocol() )
     {
         sal_Unicode     aDelimiter;
         const OUString  aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
@@ -226,7 +226,7 @@ OUString GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 {
     OUString aRet;
 
-    if( rSvDrawObjURL.GetProtocol() == INetProtocol::PRIV_SOFFICE &&
+    if( rSvDrawObjURL.GetProtocol() == INetProtocol::PrivSoffice &&
         comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ), '/') == 3 )
     {
         aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).getToken( 2, '/' );
@@ -239,7 +239,7 @@ bool FileExists( const INetURLObject& rURL )
 {
     bool bRet = false;
 
-    if( rURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if( rURL.GetProtocol() != INetProtocol::NotValid )
     {
         try
         {
@@ -585,7 +585,7 @@ void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceA
 {
     INetURLObject aURL;
 
-    if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INetProtocol::NOT_VALID ) )
+    if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INetProtocol::NotValid ) )
     {
         mpTheme->SetDragging( true );
         mpTheme->SetDragPos( mnObjectPos );

@@ -59,7 +59,7 @@ protected:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::FILE );
+    SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::File );
 
 };
 

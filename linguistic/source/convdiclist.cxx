@@ -71,7 +71,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
     OUString aFullDicName = OUString(rDicName) + CONV_DIC_DOT_EXT;
 
     INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INetProtocol::FILE );
+    aURLObj.SetSmartProtocol( INetProtocol::File );
     aURLObj.SetSmartURL( rDirectoryURL );
     aURLObj.Append( aFullDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "invalid URL");
@@ -276,8 +276,8 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     OUString aName( xDel->getName() );
     OUString aDicMainURL( GetConvDicMainURL( aName, GetDictionaryWriteablePath() ) );
     INetURLObject aObj( aDicMainURL );
-    DBG_ASSERT( aObj.GetProtocol() == INetProtocol::FILE, "+HangulHanjaOptionsDialog::OkHdl(): non-file URLs cannot be deleted" );
-    if( aObj.GetProtocol() == INetProtocol::FILE )
+    DBG_ASSERT( aObj.GetProtocol() == INetProtocol::File, "+HangulHanjaOptionsDialog::OkHdl(): non-file URLs cannot be deleted" );
+    if( aObj.GetProtocol() == INetProtocol::File )
     {
         try
         {

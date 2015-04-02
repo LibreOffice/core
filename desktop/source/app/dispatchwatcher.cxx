@@ -395,7 +395,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         else
         {
             INetURLObject aObj( aName );
-            if ( aObj.GetProtocol() == INetProtocol::PRIV_SOFFICE )
+            if ( aObj.GetProtocol() == INetProtocol::PrivSoffice )
                 aTarget = "_default";
 
             // Set "AsTemplate" argument according to request type

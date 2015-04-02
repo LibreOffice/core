@@ -305,17 +305,17 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
     switch ( eProtocolTyp )
     {
-        case INetProtocol::HTTP :
-        case INetProtocol::FTP :
+        case INetProtocol::Http :
+        case INetProtocol::Ftp :
             nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
             break;
-        case INetProtocol::FILE :
-        case INetProtocol::POP3 :
-        case INetProtocol::IMAP :
+        case INetProtocol::File :
+        case INetProtocol::Pop3 :
+        case INetProtocol::Imap :
             nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             break;
-        case INetProtocol::MAILTO :
-        case INetProtocol::NEWS :
+        case INetProtocol::Mailto :
+        case INetProtocol::News :
             nPageId = RID_SVXPAGE_HYPERLINK_MAIL;
             break;
         default :
@@ -323,7 +323,7 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             else
             {
-                eProtocolTyp = INetProtocol::NOT_VALID;
+                eProtocolTyp = INetProtocol::NotValid;
                 nPageId = GetCurPageId();
             }
             break;

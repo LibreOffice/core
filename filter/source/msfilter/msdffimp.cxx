@@ -3944,7 +3944,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aValidURL ) )
                         aAbsURL = INetURLObject( aValidURL );
                 }
-                if( aAbsURL.GetProtocol() != INetProtocol::NOT_VALID )
+                if( aAbsURL.GetProtocol() != INetProtocol::NotValid )
                 {
                     GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
                     aLinkFilterName = rGrfFilter.GetImportFormatName(

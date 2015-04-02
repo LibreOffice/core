@@ -1616,7 +1616,7 @@ bool AssistentDlgImpl::IsOwnFormat( const OUString& rPath )
     INetURLObject   aURL( rPath );
     OUString        aExt( aURL.GetFileExtension() );
 
-    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     return !aExt.equalsIgnoreAsciiCase( "ppt" );
 }

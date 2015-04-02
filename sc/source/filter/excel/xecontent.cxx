@@ -349,7 +349,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INetProtocol::FILE || eProtocol == INetProtocol::SMB )
+    if( eProtocol == INetProtocol::File || eProtocol == INetProtocol::Smb )
     {
         sal_uInt16 nLevel;
         bool bRel;
@@ -357,7 +357,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
          * encoded for OOXML? */
         OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot, false ) );
 
-        if( eProtocol == INetProtocol::SMB )
+        if( eProtocol == INetProtocol::Smb )
         {
             // #n382718# (and #n261623#) Convert smb notation to '\\'
             aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -392,7 +392,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         // ms2007 does, ms2010 is more tolerant )
         msTarget = "file:///" + msTarget;
     }
-    else if( eProtocol != INetProtocol::NOT_VALID )
+    else if( eProtocol != INetProtocol::NotValid )
     {
         XclExpString aUrl( aUrlObj.GetURLNoMark(), EXC_STR_FORCEUNICODE, 255 );
         aXclStrm    << XclTools::maGuidUrlMoniker

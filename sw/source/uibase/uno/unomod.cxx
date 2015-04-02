@@ -729,7 +729,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                     throw IllegalArgumentException();
 
                 INetURLObject aHID( sHelpURL );
-                if ( aHID.GetProtocol() == INetProtocol::HID )
+                if ( aHID.GetProtocol() == INetProtocol::Hid )
                       pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
                     throw IllegalArgumentException ();

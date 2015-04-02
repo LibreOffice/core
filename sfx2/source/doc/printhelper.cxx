@@ -638,7 +638,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             OUString      sPath        ;
             OUString      sURL  (sTemp);
             INetURLObject aCheck(sURL );
-            if (aCheck.GetProtocol()==INetProtocol::NOT_VALID)
+            if (aCheck.GetProtocol()==INetProtocol::NotValid)
             {
                 // OK - it's not a valid URL. But may it's a simple
                 // system path directly. It will be supported for historical

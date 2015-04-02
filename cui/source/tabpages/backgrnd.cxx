@@ -1340,7 +1340,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
             m_pFtUnlinked->Hide();
             INetURLObject aObj( aBgdGraphicPath );
             OUString aFilePath;
-            if ( aObj.GetProtocol() == INetProtocol::FILE )
+            if ( aObj.GetProtocol() == INetProtocol::File )
                 aFilePath = aObj.getFSysPath( INetURLObject::FSYS_DETECT );
             else
                 aFilePath = aBgdGraphicPath;
@@ -1745,7 +1745,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         {
 #ifdef DBG_UTIL
             INetURLObject aObj( aStrLink );
-            DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid URL!" );
+            DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
 #endif
             aBgdGraphicPath = aStrLink;
             m_pBtnLink->Check( true );

@@ -1081,7 +1081,7 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
     }
     OUString sName = _rsDatabaseName;
     INetURLObject aURL(sName);
-    if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if ( aURL.GetProtocol() != INetProtocol::NotValid )
         sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
     return sName;
 }

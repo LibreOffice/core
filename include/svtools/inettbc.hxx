@@ -59,9 +59,9 @@ protected:
     virtual bool                    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-                                    SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NOT_VALID, bool bSetDefaultHelpID = true );
-                                    SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NOT_VALID, bool bSetDefaultHelpID = true );
-                                    SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart = INetProtocol::NOT_VALID, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     virtual ~SvtURLBox();
 
     void                            SetBaseURL( const OUString& rURL );

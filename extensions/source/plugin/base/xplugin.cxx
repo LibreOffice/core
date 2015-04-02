@@ -1051,7 +1051,7 @@ void PluginInputStream::load()
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
     INetURLObject aUrl;
-    aUrl.SetSmartProtocol( INetProtocol::FILE );
+    aUrl.SetSmartProtocol( INetProtocol::File );
     aUrl.SetSmartURL(
         OUString( getStream().url,
                   strlen( getStream().url ),

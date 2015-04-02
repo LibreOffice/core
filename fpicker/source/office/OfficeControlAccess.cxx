@@ -182,7 +182,7 @@ namespace svt
     {
         OUString sHelpID( sHelpURL );
         INetURLObject aHID( sHelpURL );
-        if ( aHID.GetProtocol() == INetProtocol::HID )
+        if ( aHID.GetProtocol() == INetProtocol::Hid )
               sHelpID = aHID.GetURLPath();
 
         // URLs should always be UTF8 encoded and escaped
@@ -205,7 +205,7 @@ namespace svt
         OUString sHelpURL;
         OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
         INetURLObject aHID( aTmp );
-        if ( aHID.GetProtocol() == INetProtocol::NOT_VALID )
+        if ( aHID.GetProtocol() == INetProtocol::NotValid )
             sHelpURL = INET_HID_SCHEME;
         sHelpURL += aTmp;
         return sHelpURL;

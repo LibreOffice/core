@@ -127,7 +127,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
         bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "XOutBitmap::WriteGraphic(...): invalid URL" );
+        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
         // calculate correct file name
         if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
@@ -364,7 +364,7 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
-    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
+    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC );
     SvStream*   pOStm = aMedium.GetOutStream();

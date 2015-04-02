@@ -299,7 +299,7 @@ OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
     OUString sExpanded( rPath );
 
     const INetURLObject aParser( rPath );
-    if ( aParser.GetProtocol() == INetProtocol::VND_SUN_STAR_EXPAND )
+    if ( aParser.GetProtocol() == INetProtocol::VndSunStarExpand )
         sExpanded = m_xMacroExpander->expandMacros( aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
 
     return sExpanded;
@@ -795,7 +795,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
                 }
-                if ( aObj.GetProtocol() == INetProtocol::VND_SUN_STAR_EXPAND )
+                if ( aObj.GetProtocol() == INetProtocol::VndSunStarExpand )
                 {
                     Reference< XMacroExpander > xMacroExpander = theMacroExpander::get( ::comphelper::getProcessComponentContext() );
                     const OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );

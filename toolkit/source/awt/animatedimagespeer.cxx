@@ -110,7 +110,7 @@ namespace toolkit
         OUString lcl_getHighContrastURL( OUString const& i_imageURL )
         {
             INetURLObject aURL( i_imageURL );
-            if ( aURL.GetProtocol() != INetProtocol::PRIV_SOFFICE )
+            if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
             {
                 OSL_VERIFY( aURL.insertName( OUString( "hicontrast" ), false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::NO_DECODE );

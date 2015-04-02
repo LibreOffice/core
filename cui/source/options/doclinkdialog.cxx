@@ -121,7 +121,7 @@ namespace svx
             return 0L;
         } // if (!bFileExists)
         INetURLObject aURL( sURL );
-        if ( aURL.GetProtocol() != INetProtocol::FILE )
+        if ( aURL.GetProtocol() != INetProtocol::File )
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
@@ -176,7 +176,7 @@ namespace svx
         {   // default the name to the base of the chosen URL
             INetURLObject aParser;
 
-            aParser.SetSmartProtocol(INetProtocol::FILE);
+            aParser.SetSmartProtocol(INetProtocol::File);
             aParser.SetSmartURL(aFileDlg.GetPath());
 
             m_pName->SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET));

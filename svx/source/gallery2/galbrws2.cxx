@@ -239,7 +239,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     INetURLObject    aURL;
 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
-    const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NOT_VALID );
+    const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
 
     maPopupMenu.EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
 
@@ -668,7 +668,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
         const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
 
-        const bool  bValidURL = ( aURL.GetProtocol() != INetProtocol::NOT_VALID );
+        const bool  bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
         bool        bPreview = bValidURL;
         bool        bDelete = false;
         bool        bTitle = false;

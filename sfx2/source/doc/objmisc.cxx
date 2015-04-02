@@ -860,7 +860,7 @@ OUString SfxObjectShell::GetTitle
     if ( pMed && ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
     {
         // If a specific title was given at open:
-        // important for URLs: use INetProtocol::FILE for which the set title is not
+        // important for URLs: use INetProtocol::File for which the set title is not
         // considered. (See below, analysis of aTitleMap_Impl)
         SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE, false );
         if ( pNameItem )
@@ -891,7 +891,7 @@ OUString SfxObjectShell::GetTitle
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
-        if( !pMed || aURL.GetProtocol() == INetProtocol::FILE )
+        if( !pMed || aURL.GetProtocol() == INetProtocol::File )
             nRemote = 0;
         else
             nRemote = 1;
@@ -899,7 +899,7 @@ OUString SfxObjectShell::GetTitle
     }
 
     // Local file?
-    if ( aURL.GetProtocol() == INetProtocol::FILE )
+    if ( aURL.GetProtocol() == INetProtocol::File )
     {
         OUString aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
         if ( nMaxLength == SFX_TITLE_FULLNAME )

@@ -339,7 +339,7 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
     const INetURLObject aURL( rURL );
     bool                bRet = false;
 
-    if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if( aURL.GetProtocol() != INetProtocol::NotValid )
     {
         if( bDeep || pPreferredSizePixel )
         {

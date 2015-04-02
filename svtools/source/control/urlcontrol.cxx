@@ -27,7 +27,7 @@ namespace svt
 {
     //= OFileURLControl
     OFileURLControl::OFileURLControl(vcl::Window* _pParent, WinBits nStyle)
-        : SvtURLBox(_pParent, nStyle, INetProtocol::FILE)
+        : SvtURLBox(_pParent, nStyle, INetProtocol::File)
     {
         DisableHistory();
     }

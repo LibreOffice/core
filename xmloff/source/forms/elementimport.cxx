@@ -2061,7 +2061,7 @@ namespace xmloff
                 OUString sValue = _xAttrList->getValueByIndex( i );
 
                 INetURLObject aURL(sValue);
-                if ( aURL.GetProtocol() == INetProtocol::FILE )
+                if ( aURL.GetProtocol() == INetProtocol::File )
                     _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sValue));
                 else
                     _xElement->setPropertyValue(PROPERTY_URL,makeAny(sValue)); // the url is the "sdbc:" string

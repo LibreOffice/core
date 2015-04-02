@@ -104,7 +104,7 @@ namespace
     sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, const OUString& rFullFileName, rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
-        aURL.SetSmartProtocol( INetProtocol::FILE );
+        aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetSmartURL( rFullFileName );
         _rTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
                 INetURLObject::DECODE_UNAMBIGUOUS );
@@ -794,7 +794,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     return ERRCODE_IO_GENERAL;
 #else
     // remove the file so the dBase driver doesn't find an invalid file
-    INetURLObject aDeleteObj( rFullFileName, INetProtocol::FILE );
+    INetURLObject aDeleteObj( rFullFileName, INetProtocol::File );
     KillFile( aDeleteObj );
 
     sal_uLong nErr = eERR_OK;

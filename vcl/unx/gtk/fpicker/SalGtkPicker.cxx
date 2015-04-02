@@ -51,7 +51,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
         RTL_TEXTENCODING_UTF8 );
 
     INetURLObject aURL(sURL);
-    if (INetProtocol::FILE == aURL.GetProtocol())
+    if (INetProtocol::File == aURL.GetProtocol())
     {
         // all the URLs are handled by office in UTF-8
         // so the Gnome FP related URLs should be converted accordingly
@@ -81,7 +81,7 @@ OString SalGtkPicker::unicodetouri(const OUString &rURL)
     // so the Gnome FP related URLs should be converted accordingly
     OString sURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
     INetURLObject aURL(rURL);
-    if (INetProtocol::FILE == aURL.GetProtocol())
+    if (INetProtocol::File == aURL.GetProtocol())
     {
         OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(rURL);
 

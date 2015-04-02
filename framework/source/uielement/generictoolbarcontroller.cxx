@@ -55,7 +55,7 @@ static bool isEnumCommand( const OUString& rCommand )
 {
     INetURLObject aURL( rCommand );
 
-    if (( aURL.GetProtocol() == INetProtocol::UNO ) &&
+    if (( aURL.GetProtocol() == INetProtocol::Uno ) &&
         ( aURL.GetURLPath().indexOf( '.' ) != -1))
         return true;
 
@@ -79,7 +79,7 @@ static OUString getMasterCommand( const OUString& rCommand )
 {
     OUString aMasterCommand( rCommand );
     INetURLObject aURL( rCommand );
-    if ( aURL.GetProtocol() == INetProtocol::UNO )
+    if ( aURL.GetProtocol() == INetProtocol::Uno )
     {
         sal_Int32 nIndex = aURL.GetURLPath().indexOf( '.' );
         if ( nIndex )

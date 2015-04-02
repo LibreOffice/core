@@ -236,7 +236,7 @@ void FileControl::ImplBrowseFile( )
             {
                 OUString aNewText = aPathSeq[0];
                 INetURLObject aObj( aNewText );
-                if ( aObj.GetProtocol() == INetProtocol::FILE )
+                if ( aObj.GetProtocol() == INetProtocol::File )
                     aNewText = aObj.PathToFileName();
                 SetText( aNewText );
                 maEdit.GetModifyHdl().Call( &maEdit );

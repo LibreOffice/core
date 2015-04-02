@@ -449,7 +449,7 @@ void SvxIMapDlg::DoOpen()
     if( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 
         if( pIStm )
@@ -516,7 +516,7 @@ bool SvxIMapDlg::DoSave()
 
         INetURLObject aURL( aDlg.GetPath() );
 
-        if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+        if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
             OSL_FAIL( "invalid URL" );
         }

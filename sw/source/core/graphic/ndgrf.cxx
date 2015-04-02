@@ -127,7 +127,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     if( IsLinkedFile() )
     {
         INetURLObject aUrl( rGrfName );
-        if( INetProtocol::FILE == aUrl.GetProtocol() &&
+        if( INetProtocol::File == aUrl.GetProtocol() &&
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
             // file exists, so create connection without an update

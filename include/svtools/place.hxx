@@ -33,7 +33,7 @@ public:
     OUString& GetName( ) { return msName; }
     OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
     INetURLObject& GetUrlObject( ) { return maUrl; }
-    bool  IsLocal( ) { return maUrl.GetProtocol() == INetProtocol::FILE; }
+    bool  IsLocal( ) { return maUrl.GetProtocol() == INetProtocol::File; }
     bool  IsEditable( ) { return mbEditable; }
 };
 

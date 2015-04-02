@@ -2116,7 +2116,7 @@ namespace xmloff
             if ( !m_bCreateConnectionResourceElement )
             {
                 INetURLObject aURL(sPropValue);
-                m_bCreateConnectionResourceElement = ( aURL.GetProtocol() == INetProtocol::FILE );
+                m_bCreateConnectionResourceElement = ( aURL.GetProtocol() == INetProtocol::File );
                 if ( !m_bCreateConnectionResourceElement )
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getFormAttributeNamespace(faDatasource),

@@ -35,7 +35,7 @@ namespace svt
         if ( _eInputNotation == N_URL )
         {
             INetURLObject aParser( _rUrlOrPath );
-            if ( aParser.GetProtocol() == INetProtocol::FILE )
+            if ( aParser.GetProtocol() == INetProtocol::File )
                 implInitWithURLNotation( _rUrlOrPath );
             else
                 m_sSystem = m_sFileURL = _rUrlOrPath;
@@ -56,7 +56,7 @@ namespace svt
             if ( !_rSystemPath.isEmpty() )
             {
                 INetURLObject aSmartParser;
-                aSmartParser.SetSmartProtocol( INetProtocol::FILE );
+                aSmartParser.SetSmartProtocol( INetProtocol::File );
                 if ( aSmartParser.SetSmartURL( _rSystemPath ) )
                 {
                     m_sFileURL = aSmartParser.GetMainURL( INetURLObject::NO_DECODE );
@@ -84,12 +84,12 @@ namespace svt
         INetURLObject aParser( _rUrlOrPath );
         switch ( aParser.GetProtocol() )
         {
-            case INetProtocol::FILE:
+            case INetProtocol::File:
                 // file URL
                 bSuccess = implInitWithURLNotation( _rUrlOrPath );
                 break;
 
-            case INetProtocol::NOT_VALID:
+            case INetProtocol::NotValid:
                 // assume system notation
                 bSuccess = implInitWithSystemNotation( _rUrlOrPath );
                 break;

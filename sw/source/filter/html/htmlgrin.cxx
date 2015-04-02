@@ -466,7 +466,7 @@ IMAGE_SETEVENT:
 
     Graphic aGraphic;
     INetURLObject aGraphicURL( sGrfNm );
-    if( aGraphicURL.GetProtocol() == INetProtocol::DATA )
+    if( aGraphicURL.GetProtocol() == INetProtocol::Data )
     {
         std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
         if (pStream)

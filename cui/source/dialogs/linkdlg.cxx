@@ -361,7 +361,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
             SvBaseLink* pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
             pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
             INetURLObject aUrl(sFile);
-            if(aUrl.GetProtocol() == INetProtocol::FILE)
+            if(aUrl.GetProtocol() == INetProtocol::File)
             {
                 OUString sOldPath(aUrl.PathToFileName());
                 sal_Int32 nLen = aUrl.GetName().getLength();
@@ -386,7 +386,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                         continue;
                     pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
                     INetURLObject aUrl_(sFile);
-                    INetURLObject aUrl2(aPath, INetProtocol::FILE);
+                    INetURLObject aUrl2(aPath, INetProtocol::File);
                     aUrl2.insertName( aUrl_.getName() );
                     OUString sNewLinkName;
                     MakeLnkName( sNewLinkName, 0 ,
@@ -639,7 +639,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
     long nWidthPixel = m_pTbLinks->GetLogicTab( 2 ) - m_pTbLinks->GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
     OUString aTxt = m_pTbLinks->GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
-    INetURLObject aPath( sFileNm, INetProtocol::FILE );
+    INetURLObject aPath( sFileNm, INetProtocol::File );
     OUString aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
 

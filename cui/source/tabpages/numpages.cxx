@@ -799,7 +799,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
         m_pExamplesVS->InsertItem( i + 1, i);
 
         INetURLObject aObj(*it);
-        if(aObj.GetProtocol() == INetProtocol::FILE)
+        if(aObj.GetProtocol() == INetProtocol::File)
             *it = aObj.PathToFileName();
 
         m_pExamplesVS->SetItemText( i + 1, *it );
@@ -1978,7 +1978,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
             {
                 sGrfName = *it;
                 INetURLObject aObj(sGrfName);
-                if(aObj.GetProtocol() == INetProtocol::FILE)
+                if(aObj.GetProtocol() == INetProtocol::File)
                     sGrfName = aObj.PathToFileName();
 
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))

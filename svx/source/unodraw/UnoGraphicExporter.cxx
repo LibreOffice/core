@@ -1059,7 +1059,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             else
             {
                 INetURLObject aURLObject( aSettings.maURL.Complete );
-                DBG_ASSERT( aURLObject.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+                DBG_ASSERT( aURLObject.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
                 nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, rFilter, nFilter, &aSettings.maFilterData );
             }

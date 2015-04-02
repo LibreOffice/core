@@ -121,7 +121,7 @@ bool GalleryExplorer::InsertURL( const OUString& rThemeName, const OUString& rUR
         if( pTheme )
         {
             INetURLObject aURL( rURL );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
             bRet = pTheme->InsertURL( aURL );
             pGal->ReleaseTheme( pTheme, aListener );
         }

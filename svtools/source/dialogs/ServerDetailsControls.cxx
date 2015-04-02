@@ -225,7 +225,7 @@ INetURLObject SmbDetailsContainer::getUrl( )
 
 bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
 {
-    bool bSuccess =  rUrl.GetProtocol() == INetProtocol::SMB;
+    bool bSuccess =  rUrl.GetProtocol() == INetProtocol::Smb;
 
     if ( bSuccess )
     {
@@ -324,7 +324,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
 
 bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 {
-    bool bSuccess =  rUrl.GetProtocol() == INetProtocol::CMIS;
+    bool bSuccess =  rUrl.GetProtocol() == INetProtocol::Cmis;
 
     if ( bSuccess )
     {

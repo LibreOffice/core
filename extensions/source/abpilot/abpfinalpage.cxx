@@ -87,7 +87,7 @@ namespace abp
         AddressSettings& rSettings = getSettings();
 
         INetURLObject aURL( rSettings.sDataSourceName );
-        if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+        if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
             OUString sPath = SvtPathOptions().GetWorkPath();
             sPath += "/";
@@ -102,7 +102,7 @@ namespace abp
 
             aURL.SetURL(sPath);
         }
-        OSL_ENSURE( aURL.GetProtocol() != INetProtocol::NOT_VALID ,"No valid file name!");
+        OSL_ENSURE( aURL.GetProtocol() != INetProtocol::NotValid ,"No valid file name!");
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::NO_DECODE );
         m_pLocationController->setURL( rSettings.sDataSourceName );
         OUString sName = aURL.getName( );

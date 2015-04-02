@@ -562,7 +562,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         INetURLObject   aDashURL( pDashList->GetPath() );
 
         aDashURL.Append( pDashList->GetName() );
-        DBG_ASSERT( aDashURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aDashURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // LineEnd list
         if( ( *pnLineEndListState & CT_MODIFIED ) || ( *pnLineEndListState & CT_CHANGED ) )
         {
@@ -601,7 +601,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         INetURLObject aLineURL( pLineEndList->GetPath() );
 
         aLineURL.Append( pLineEndList->GetName() );
-        DBG_ASSERT( aLineURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aLineURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // Evaluate if another TabPage set another fill type
         if( m_pLbLineStyle->GetSelectEntryPos() != 0 )
         {

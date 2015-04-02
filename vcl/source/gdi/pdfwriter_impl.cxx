@@ -4504,7 +4504,7 @@ we check in the following sequence:
             // check if the protocol is a known one, or if there is no protocol at all (on target only)
             // if there is no protocol, make the target relative to the current document directory
             // getting the needed URL information from the current document path
-            if( eTargetProtocol == INetProtocol::NOT_VALID )
+            if( eTargetProtocol == INetProtocol::NotValid )
             {
                 if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.startsWith("\\\\\\\\"))
                 {
@@ -4571,7 +4571,7 @@ we check in the following sequence:
                 bool bSetRelative = false;
                 bool bFileSpec = false;
                 //check if relative file link is requested and if the protocol is 'file://'
-                if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INetProtocol::FILE )
+                if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INetProtocol::File )
                     bSetRelative = true;
 
                 OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
@@ -4593,7 +4593,7 @@ we check in the following sequence:
                         // the one that normally have fragments (but I may be wrong...)
                         // and will force the use of URI when the protocol is not file:
                         if( (!aFragment.isEmpty() && !bTargetHasPDFExtension) ||
-                                        eTargetProtocol != INetProtocol::FILE )
+                                        eTargetProtocol != INetProtocol::File )
                         {
                             aLine.append( "/URI/URI" );
                         }

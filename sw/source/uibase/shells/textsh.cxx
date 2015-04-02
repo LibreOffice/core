@@ -251,7 +251,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
 
             INetURLObject url;
-            url.SetSmartProtocol( INetProtocol::FILE );
+            url.SetSmartProtocol( INetProtocol::File );
 
             if ( url.SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
             {

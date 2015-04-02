@@ -187,7 +187,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             INetURLObject   aURL( pHatchingList->GetPath() );
 
             aURL.Append( pHatchingList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
             if ( aURL.getBase().getLength() > 18 )
             {
@@ -745,7 +745,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     if( !pHatchingList->GetName().isEmpty() )
     {

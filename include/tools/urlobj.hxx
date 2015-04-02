@@ -66,41 +66,41 @@ enum
 // Schemes:
 enum class INetProtocol
 {
-    NOT_VALID,
-    FTP,
-    HTTP,
-    FILE,
-    MAILTO,
-    VND_SUN_STAR_WEBDAV,
-    NEWS,
-    PRIV_SOFFICE,
-    VND_SUN_STAR_HELP,
-    HTTPS,
-    SLOT,
-    MACRO,
-    JAVASCRIPT,
-    IMAP,
-    POP3,
-    DATA,
-    CID,
-    OUT,
-    VND_SUN_STAR_HIER,
-    VIM,
-    UNO,
-    COMPONENT,
-    VND_SUN_STAR_PKG,
-    LDAP,
-    DB,
-    VND_SUN_STAR_CMD,
-    TELNET,
-    VND_SUN_STAR_EXPAND,
-    VND_SUN_STAR_TDOC,
-    GENERIC,
-    SMB,
-    HID,
-    SFTP,
-    CMIS,
-    LAST = CMIS
+    NotValid,
+    Ftp,
+    Http,
+    File,
+    Mailto,
+    VndSunStarWebdav,
+    News,
+    PrivSoffice,
+    VndSunStarHelp,
+    Https,
+    Slot,
+    Macro,
+    Javascript,
+    Imap,
+    Pop3,
+    Data,
+    Cid,
+    Out,
+    VndSunStarHier,
+    Vim,
+    Uno,
+    Component,
+    VndSunStarPkg,
+    Ldap,
+    Db,
+    VndSunStarCmd,
+    Telnet,
+    VndSunStarExpand,
+    VndSunStarTdoc,
+    Generic,
+    Smb,
+    Hid,
+    Sftp,
+    Cmis,
+    LAST = Cmis
 };
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED INetURLObject
@@ -182,9 +182,9 @@ public:
     // General Structure:
 
     inline INetURLObject():
-        m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP) {}
+        m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http) {}
 
-    inline bool HasError() const { return m_eScheme == INetProtocol::NOT_VALID; }
+    inline bool HasError() const { return m_eScheme == INetProtocol::NotValid; }
 
     inline OUString GetMainURL(DecodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset
@@ -1234,7 +1234,7 @@ private:
     // Coding:
 
     static inline sal_Char getEscapePrefix(INetProtocol eTheScheme)
-    { return eTheScheme == INetProtocol::VIM ? '=' : '%'; }
+    { return eTheScheme == INetProtocol::Vim ? '=' : '%'; }
 
     inline sal_Char getEscapePrefix() const
     { return getEscapePrefix(m_eScheme); }
@@ -1299,7 +1299,7 @@ inline OUString INetURLObject::decode(SubString const & rSubString,
 inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
-    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP)
+    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
 {
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
                  FSysStyle(0));
@@ -1318,7 +1318,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset,
                                     FSysStyle eStyle):
-    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(eTheSmartScheme)
+    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(eTheSmartScheme)
 {
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true, eStyle);
 }
@@ -1456,7 +1456,7 @@ inline bool INetURLObject::SetMark(OUString const & rTheFragment,
 
 inline INetURLObject::INetURLObject(OUString const & rFSysPath,
                                     FSysStyle eStyle):
-    m_eScheme(INetProtocol::NOT_VALID), m_eSmartScheme(INetProtocol::HTTP)
+    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
 {
     setFSysPath(rFSysPath, eStyle);
 }

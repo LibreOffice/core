@@ -584,7 +584,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 {
     INetURLObject   aURL( rFileName );
 
-    if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+    if( aURL.GetProtocol() == INetProtocol::NotValid )
     {
         OUString aURLStr;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aURLStr );

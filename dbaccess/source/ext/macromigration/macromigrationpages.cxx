@@ -119,7 +119,7 @@ namespace dbmm
             // get the document's current URL
             Reference< XModel > xDocument( getDialog().getDocument(), UNO_QUERY_THROW );
             INetURLObject aURLParser( xDocument->getURL() );
-            OSL_ENSURE( aURLParser.GetProtocol() != INetProtocol::NOT_VALID, "SaveDBDocPage::initializePage: illegal document URL!" );
+            OSL_ENSURE( aURLParser.GetProtocol() != INetProtocol::NotValid, "SaveDBDocPage::initializePage: illegal document URL!" );
 
             OUStringBuffer aBaseName( aURLParser.getBase() );
             aBaseName.appendAscii( ".backup" );

@@ -1519,7 +1519,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             if ( Value >>= aURL )
             {
                 INetURLObject aHelpURL( aURL );
-                if ( aHelpURL.GetProtocol() == INetProtocol::HID )
+                if ( aHelpURL.GetProtocol() == INetProtocol::Hid )
                     pWindow->SetHelpId( OUStringToOString( aHelpURL.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
                     pWindow->SetHelpId( OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );

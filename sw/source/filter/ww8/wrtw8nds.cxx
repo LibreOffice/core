@@ -877,7 +877,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
     }
     else
     {
-        INetURLObject aURL( rUrl, INetProtocol::NOT_VALID );
+        INetURLObject aURL( rUrl, INetProtocol::NotValid );
         sURL = aURL.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS );
         sMark = aURL.GetMark( INetURLObject::DECODE_UNAMBIGUOUS );
     }
@@ -993,7 +993,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nFlag );
 
     INetProtocol eProto = aURL.GetProtocol();
-    if ( eProto == INetProtocol::FILE || eProto == INetProtocol::SMB )
+    if ( eProto == INetProtocol::File || eProto == INetProtocol::Smb )
     {
         // version 1 (for a document)
 
@@ -1011,7 +1011,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
         // save the links to files as relative
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
-        if ( eProto == INetProtocol::FILE && sURL.startsWith( "/" ) )
+        if ( eProto == INetProtocol::File && sURL.startsWith( "/" ) )
             sURL = aURL.PathToFileName();
 
         // special case for the absolute windows names
@@ -1028,7 +1028,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
         // n#261623 convert smb notation to '\\'
         const char pSmb[] = "smb://";
-        if ( eProto == INetProtocol::SMB && sURL.startsWith( pSmb ) )
+        if ( eProto == INetProtocol::Smb && sURL.startsWith( pSmb ) )
         {
             sURL = sURL.copy( sizeof(pSmb)-3 ).replaceAll( "/", "\\" );
         }
@@ -1044,7 +1044,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
         SwWW8Writer::WriteShort( *m_rWW8Export.pDataStrm, 3 );
         SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sURL, false );
     }
-    else if ( eProto != INetProtocol::NOT_VALID )
+    else if ( eProto != INetProtocol::NotValid )
     {
         // version 2 (simple url)
         // an write some data to the data stream, but dont ask

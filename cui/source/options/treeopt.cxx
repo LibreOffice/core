@@ -830,7 +830,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                                                 : pLastPageSaver->m_sLastPageURL_Tools;
         }
 
-        bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INetProtocol::FILE );
+        bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INetProtocol::File );
 
         SvTreeListEntry* pTemp = pTreeLB->First();
         while( !pEntry && pTemp )

@@ -295,7 +295,7 @@ short SvInsertOleDlg::Execute()
         {
             aFileName = GetFilePath();
             INetURLObject aURL;
-            aURL.SetSmartProtocol( INetProtocol::FILE );
+            aURL.SetSmartProtocol( INetProtocol::File );
             aURL.SetSmartURL( aFileName );
             aFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
             bool bLink = IsLinked();
@@ -433,7 +433,7 @@ short SvInsertPlugInDialog::Execute()
         OUString aURL = GetPlugInFile();
 
         // URL can be a valid and absolute URL or a system file name
-        m_pURL->SetSmartProtocol( INetProtocol::FILE );
+        m_pURL->SetSmartProtocol( INetProtocol::File );
         if ( aURL.isEmpty() || m_pURL->SetSmartURL( aURL ) )
         {
             // create a plugin object
@@ -618,7 +618,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         {
             // URL can be a valid and absolute URL or a system file name
             INetURLObject aObj;
-            aObj.SetSmartProtocol( INetProtocol::FILE );
+            aObj.SetSmartProtocol( INetProtocol::File );
             if ( aObj.SetSmartURL( m_pEDURL->GetText() ) )
                 aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }

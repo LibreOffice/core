@@ -463,7 +463,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     INetURLObject aUrl( rFileName );
     INetProtocol eProt = aUrl.GetProtocol();
-    if ( eProt == INetProtocol::NOT_VALID )         // invalid URL?
+    if ( eProt == INetProtocol::NotValid )         // invalid URL?
         return false;                           // abort without creating a medium
 
     //  Filter-Detection

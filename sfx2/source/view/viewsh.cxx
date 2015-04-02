@@ -670,7 +670,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OUString aLocation = xStorable->getLocation();
                 INetURLObject aFileObj( aLocation );
 
-                bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PRIV_SOFFICE );
+                bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PrivSoffice );
                 bool bHasLocation = !aLocation.isEmpty() && !bPrivateProtocol;
 
                 css::uno::Reference< css::container::XContainerQuery > xContainerQuery(

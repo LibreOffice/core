@@ -278,7 +278,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         OUString aURL;
         INetURLObject aObj;
     aObj.SetURL( rFileName );
-    bool bIsURL = aObj.GetProtocol() != INetProtocol::NOT_VALID;
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
     if ( bIsURL )
         aURL = rFileName;
     else

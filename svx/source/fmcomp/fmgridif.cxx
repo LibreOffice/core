@@ -1897,7 +1897,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
         OUString sHelpURL;
         OSL_VERIFY( Value >>= sHelpURL );
         INetURLObject aHID( sHelpURL );
-        if ( aHID.GetProtocol() == INetProtocol::HID )
+        if ( aHID.GetProtocol() == INetProtocol::Hid )
             sHelpURL = aHID.GetURLPath();
         pGrid->SetHelpId( OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }

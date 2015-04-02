@@ -203,7 +203,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             INetURLObject   aURL( pGradientList->GetPath() );
 
             aURL.Append( pGradientList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
             if ( aURL.getBase().getLength() > 18 )
             {
@@ -712,7 +712,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     if( !pGradientList->GetName().isEmpty() )
     {

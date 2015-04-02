@@ -612,7 +612,7 @@ namespace dbaui
             ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv, comphelper::getProcessComponentContext());
 
             OUString sContentType;
-            if ( INetProtocol::FILE == eProtocol )
+            if ( INetProtocol::File == eProtocol )
             {
                 sContentType = "application/vnd.sun.staroffice.fsys-folder";
                 // the file UCP currently does not support the ContentType property

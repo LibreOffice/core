@@ -248,7 +248,7 @@ sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
 {
     sal_Int64 nSize = 0;
     INetURLObject aObj( rContent );
-    DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid URL!" );
+    DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );

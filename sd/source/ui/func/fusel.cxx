@@ -1380,7 +1380,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                                                 URIHelper::GetMaybeFileHdl(), true, false,
                                                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-                   if( INetProtocol::FILE == aURL.GetProtocol() )
+                   if( INetProtocol::File == aURL.GetProtocol() )
                    {
                         SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         SfxBoolItem aBrowsing( SID_BROWSE, true );

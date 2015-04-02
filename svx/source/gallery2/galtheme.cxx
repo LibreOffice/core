@@ -201,7 +201,7 @@ void GalleryTheme::ImplWrite()
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
 
-        DBG_ASSERT( aPathURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aPathURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
         if( FileExists( aPathURL ) || CreateDir( aPathURL ) )
         {
@@ -293,7 +293,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
         if( SGA_OBJ_SVDRAW == eObjKind )
         {
             OUString aFileName( "gallery/svdraw/dd" );
-            aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INetProtocol::PRIV_SOFFICE );
+            aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INetProtocol::PrivSoffice );
 
             bExists = false;
 
@@ -614,8 +614,8 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         INetURLObject   aInURL( GetSdgURL() );
         INetURLObject   aTmpURL( aTmp.GetURL() );
 
-        DBG_ASSERT( aInURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
-        DBG_ASSERT( aTmpURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aInURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+        DBG_ASSERT( aTmpURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
         boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
         boost::scoped_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
@@ -691,7 +691,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
 GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly )
 {
-    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     GalleryThemeEntry*  pRet = NULL;
 
@@ -1211,7 +1211,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                 const OUString  aFile( aFileList.GetFile( i ) );
                 INetURLObject   aURL( aFile );
 
-                if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+                if( aURL.GetProtocol() == INetProtocol::NotValid )
                 {
                     OUString aLocalURL;
 
@@ -1219,7 +1219,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                         aURL = INetURLObject( aLocalURL );
                 }
 
-                if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+                if( aURL.GetProtocol() != INetProtocol::NotValid )
                     bRet = InsertFileOrDirURL( aURL, nInsertPos );
             }
         }
@@ -1459,7 +1459,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 if( SGA_OBJ_SVDRAW == pObj->eObjKind )
                 {
                     OUString aDummyURL( "gallery/svdraw/" );
-                    pObj->aURL = INetURLObject( aDummyURL += aFileName, INetProtocol::PRIV_SOFFICE );
+                    pObj->aURL = INetURLObject( aDummyURL += aFileName, INetProtocol::PrivSoffice );
                 }
                 else
                 {
@@ -1467,7 +1467,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                     pObj->aURL = INetURLObject( aFileName );
 
-                    if( ( pObj->aURL.GetProtocol() == INetProtocol::NOT_VALID ) &&
+                    if( ( pObj->aURL.GetProtocol() == INetProtocol::NotValid ) &&
                         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aLocalURL ) )
                     {
                         pObj->aURL = INetURLObject( aLocalURL );

@@ -335,7 +335,7 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
 {
     switch (rUrl.GetProtocol())
     {
-        case INetProtocol::FILE:
+        case INetProtocol::File:
             if (!INetURLObject::IsCaseSensitive())
             {
                 OUString aPath (rUrl.GetURLPath(INetURLObject::NO_DECODE).toAsciiLowerCase());
@@ -343,19 +343,19 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
             }
             break;
 
-        case INetProtocol::FTP:
+        case INetProtocol::Ftp:
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_FTP_PORT);
             break;
 
-        case INetProtocol::HTTP:
+        case INetProtocol::Http:
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTP_PORT);
             if (!rUrl.HasURLPath())
                 rUrl.SetURLPath("/");
             break;
 
-        case INetProtocol::HTTPS:
+        case INetProtocol::Https:
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTPS_PORT);
             if (!rUrl.HasURLPath())

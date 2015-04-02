@@ -76,7 +76,7 @@ Image SAL_CALL GetImage(
         xModel = xController->getModel();
 
     OUString aCommandURL( aURL );
-    if ( nProtocol == INetProtocol::SLOT )
+    if ( nProtocol == INetProtocol::Slot )
     {
         sal_uInt16 nId = ( sal_uInt16 ) aURL.copy(5).toInt32();
         const SfxSlot* pSlot = 0;
@@ -192,7 +192,7 @@ Image SAL_CALL GetImage(
 
             if ( !!aImage )
                 return aImage;
-            else if ( nProtocol != INetProtocol::UNO && nProtocol != INetProtocol::SLOT )
+            else if ( nProtocol != INetProtocol::Uno && nProtocol != INetProtocol::Slot )
                 return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
         }
     }

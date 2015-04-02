@@ -242,7 +242,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
     if( pMedium )
     {
         const INetURLObject& rURL = pMedium->GetURLObject();
-        if ( rURL.GetProtocol() == INetProtocol::VND_SUN_STAR_HELP )
+        if ( rURL.GetProtocol() == INetProtocol::VndSunStarHelp )
             return false;
     }
 

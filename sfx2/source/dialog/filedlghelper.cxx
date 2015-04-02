@@ -607,7 +607,7 @@ void FileDialogHelper_Impl::updateVersions()
     {
         INetURLObject aObj( aPathSeq[0] );
 
-        if ( ( aObj.GetProtocol() == INetProtocol::FILE ) &&
+        if ( ( aObj.GetProtocol() == INetProtocol::File ) &&
             ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) )
         {
             try
@@ -757,9 +757,9 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     INetURLObject aURLObj( rURL );
 
-    if ( aURLObj.HasError() || INetProtocol::NOT_VALID == aURLObj.GetProtocol() )
+    if ( aURLObj.HasError() || INetProtocol::NotValid == aURLObj.GetProtocol() )
     {
-        aURLObj.SetSmartProtocol( INetProtocol::FILE );
+        aURLObj.SetSmartProtocol( INetProtocol::File );
         aURLObj.SetSmartURL( rURL );
     }
 
@@ -767,7 +767,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
     // non-local?
-    if ( INetProtocol::FILE != aURLObj.GetProtocol() )
+    if ( INetProtocol::File != aURLObj.GetProtocol() )
     {
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ );
 
@@ -1144,7 +1144,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
         {
             while ( *_pControlId )
             {
-                DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NOT_VALID, "Wrong HelpId!" );
+                DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
                 OUString sId( sHelpIdPrefix );
                 sId += OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
@@ -1567,7 +1567,7 @@ void FileDialogHelper_Impl::verifyPath()
         return;
     }
     INetURLObject url(maPath);
-    if (url.GetProtocol() != INetProtocol::FILE
+    if (url.GetProtocol() != INetProtocol::File
         || url.getName(0, true, INetURLObject::DECODE_WITH_CHARSET) != "tmp")
     {
         return;
@@ -1923,7 +1923,7 @@ void FileDialogHelper_Impl::saveConfig()
 
             INetURLObject aObj( getPath() );
 
-            if ( aObj.GetProtocol() == INetProtocol::FILE )
+            if ( aObj.GetProtocol() == INetProtocol::File )
                 SetToken( aUserData, 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
             OUString aFilter = getFilter();

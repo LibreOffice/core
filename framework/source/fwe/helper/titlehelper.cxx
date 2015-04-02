@@ -618,7 +618,7 @@ OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
     INetURLObject   aURL (sURL);
     OUString sTitle;
 
-    if (aURL.GetProtocol() == INetProtocol::FILE)
+    if (aURL.GetProtocol() == INetProtocol::File)
     {
         if (aURL.HasMark())
             aURL = INetURLObject(aURL.GetURLNoMark());

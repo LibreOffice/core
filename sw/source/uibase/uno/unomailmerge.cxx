@@ -703,7 +703,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     case MailMergeType::MAIL:
         {
             INetURLObject aURLObj;
-            aURLObj.SetSmartProtocol( INetProtocol::FILE );
+            aURLObj.SetSmartProtocol( INetProtocol::File );
 
             if (!aCurDocumentURL.isEmpty())
             {

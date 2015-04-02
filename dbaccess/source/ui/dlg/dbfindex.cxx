@@ -268,7 +268,7 @@ void ODbaseIndexDialog::Init()
 
     // if the string does not contain a path, cut the string
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INetProtocol::FILE);
+    aURL.SetSmartProtocol(INetProtocol::File);
     {
         SvtPathOptions aPathOptions;
         m_aDSN = aPathOptions.SubstituteVariable(m_aDSN);
@@ -300,7 +300,7 @@ void ODbaseIndexDialog::Init()
 
     const OUString *pBegin = aFolderContent.getConstArray();
     const OUString *pEnd   = pBegin + aFolderContent.getLength();
-    aURL.SetSmartProtocol(INetProtocol::FILE);
+    aURL.SetSmartProtocol(INetProtocol::File);
     for(;pBegin != pEnd;++pBegin)
     {
         OUString aName;
@@ -408,7 +408,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 {
     // open INF file
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INetProtocol::FILE);
+    aURL.SetSmartProtocol(INetProtocol::File);
     OUString aDsn = rDSN;
     {
         SvtPathOptions aPathOptions;

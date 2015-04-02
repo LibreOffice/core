@@ -408,7 +408,7 @@ bool utl::UCBContentHelper::IsSubPath(
         INetURLObject tmp;
         do {
             if (candidate == folder
-                || (candidate.GetProtocol() == INetProtocol::FILE
+                || (candidate.GetProtocol() == INetProtocol::File
                     && candidateLower == folderLower
                     && (getCasePreservingUrl(candidate)
                         == getCasePreservingUrl(folder))))

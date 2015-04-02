@@ -43,7 +43,7 @@ SvxHyperURLBox::SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart )
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHyperURLBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
-    return new SvxHyperURLBox(pParent, INetProtocol::HTTP);
+    return new SvxHyperURLBox(pParent, INetProtocol::Http);
 }
 
 sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
@@ -383,7 +383,7 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
     // #77696#
     // our new INetUrlObject now has the ability
     // to detect if an Url is valid or not :-(
-    if ( aProtocol == INetProtocol::NOT_VALID )
+    if ( aProtocol == INetProtocol::NotValid )
     {
         if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTP_SCHEME ) )
         {
@@ -474,10 +474,10 @@ OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
 
     switch(aURLObj.GetProtocol())
     {
-        case INetProtocol::FILE:
+        case INetProtocol::File:
             utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL );
             break;
-        case INetProtocol::FTP :
+        case INetProtocol::Ftp :
             {
                 //remove password from name
                 INetURLObject   aTmpURL(aURLObj);

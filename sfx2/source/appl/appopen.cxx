@@ -531,7 +531,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         SfxStringItem aTarget( SID_TARGETNAME, "_default" );
         if ( !aTemplateFileName.isEmpty() )
         {
-            DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NOT_VALID, "Illegal URL!" );
+            DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
 
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
@@ -826,7 +826,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             SvtExtendedSecurityOptions aExtendedSecurityOptions;
             SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtendedSecurityOptions.GetOpenHyperlinkMode();
 
-            if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INetProtocol::VND_SUN_STAR_HELP )
+            if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INetProtocol::VndSunStarHelp )
             {
                 SolarMutexGuard aGuard;
                 vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
@@ -845,15 +845,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
-                if ( aINetProtocol == INetProtocol::MAILTO )
+                if ( aINetProtocol == INetProtocol::Mailto )
                 {
                     // don't dispatch mailto hyperlink to desktop dispatcher
                     rReq.RemoveItem( SID_TARGETNAME );
                     rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_self") ) );
                 }
-                else if ( aINetProtocol == INetProtocol::FTP ||
-                     aINetProtocol == INetProtocol::HTTP ||
-                     aINetProtocol == INetProtocol::HTTPS )
+                else if ( aINetProtocol == INetProtocol::Ftp ||
+                     aINetProtocol == INetProtocol::Http ||
+                     aINetProtocol == INetProtocol::Https )
                 {
                     sfx2::openUriExternally(aURL.Complete, true);
                     return;

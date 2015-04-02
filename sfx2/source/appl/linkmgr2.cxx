@@ -563,7 +563,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
     OUString sRet;
     INetURLObject aURL( rTopic );
-    if( INetProtocol::NOT_VALID == aURL.GetProtocol() )
+    if( INetProtocol::NotValid == aURL.GetProtocol() )
         utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rBaseURL, sRet );
     if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
@@ -657,8 +657,8 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
         aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );
-        if( INetProtocol::NOT_VALID != eOld ||
-            INetProtocol::HTTP != aURL.GetProtocol() )
+        if( INetProtocol::NotValid != eOld ||
+            INetProtocol::Http != aURL.GetProtocol() )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
             SfxBoolItem aMinimized(SID_MINIMIZED, true);

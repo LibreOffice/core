@@ -468,7 +468,7 @@ OUString OFlatTable::getEntry()
         while(xDir->next())
         {
             sName = xRow->getString(1);
-            aURL.SetSmartProtocol(INetProtocol::FILE);
+            aURL.SetSmartProtocol(INetProtocol::File);
             OUString sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
             aURL.SetSmartURL( sUrl );
 

@@ -485,8 +485,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     {
                         // get URL
                         OUString aStrURL(aPluginFileDialog.GetPath());
-                        INetURLObject aURL( aStrURL, INetProtocol::FILE );
-                        if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+                        INetURLObject aURL( aStrURL, INetProtocol::File );
+                        if( aURL.GetProtocol() != INetProtocol::NotValid )
                         {
                             // create a plugin object
                             xObj = mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName );

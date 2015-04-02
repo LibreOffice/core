@@ -236,7 +236,7 @@ void GalleryPreview::StartDrag( sal_Int8, const Point& )
 
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
-    if( rURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if( rURL.GetProtocol() != INetProtocol::NotValid )
     {
         ::avmedia::MediaFloater* pFloater = avmedia::getMediaFloater();
 

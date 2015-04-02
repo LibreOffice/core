@@ -351,7 +351,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
     sal_Int32 nMatchLen = aMatchName.getLength();
 
     INetURLObject aFolderObj( rURL );
-    DBG_ASSERT( aFolderObj.GetProtocol() != INetProtocol::NOT_VALID, "Invalid URL!" );
+    DBG_ASSERT( aFolderObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
 
     try
     {
@@ -494,7 +494,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             aTemp += aTextURL;
 
             INetURLObject aTmp( aTemp );
-            if ( !aTmp.HasError() && aTmp.GetProtocol() != INetProtocol::NOT_VALID )
+            if ( !aTmp.HasError() && aTmp.GetProtocol() != INetProtocol::NotValid )
                 aMatch = aTmp.GetMainURL( INetURLObject::NO_DECODE );
         }
         else
@@ -537,7 +537,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
                 // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
                 // Remove it as a workaround
                 aTmp.removeFinalSlash();
-            if ( !aTmp.HasError() && aTmp.GetProtocol() != INetProtocol::NOT_VALID )
+            if ( !aTmp.HasError() && aTmp.GetProtocol() != INetProtocol::NotValid )
                 aMatch = aTmp.GetMainURL( INetURLObject::NO_DECODE );
         }
     }
@@ -587,12 +587,12 @@ void SvtMatchContext_Impl::doExecute()
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
     // ( or if this is not set with the protocol of a predefined base URL )
-    if( eProt == INetProtocol::NOT_VALID || eProt == eSmartProt || (eSmartProt == INetProtocol::NOT_VALID && eProt == eBaseProt) )
+    if( eProt == INetProtocol::NotValid || eProt == eSmartProt || (eSmartProt == INetProtocol::NotValid && eProt == eBaseProt) )
     {
         // not stopped yet ?
         if( schedule() )
         {
-            if ( eProt == INetProtocol::NOT_VALID )
+            if ( eProt == INetProtocol::NotValid )
                 aMatch = SvtURLBox::ParseSmart( aText, aBaseURL, aWorkDir );
             else
                 aMatch = aText;
@@ -607,7 +607,7 @@ void SvtMatchContext_Impl::doExecute()
                 // SvtMatchContext_Impl::Stop does not guarantee a speedy
                 // return:
                 if ( !aMainURL.isEmpty()
-                     && aURLObject.GetProtocol() == INetProtocol::FILE )
+                     && aURLObject.GetProtocol() == INetProtocol::File )
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     bool folder = false;
@@ -691,7 +691,7 @@ void SvtMatchContext_Impl::doExecute()
                         aURLObject.removeSegment();
 
                     // scan directory and insert all matches
-                    ReadFolder( aURLObject.GetMainURL( INetURLObject::NO_DECODE ), aMatch, eProt == INetProtocol::NOT_VALID );
+                    ReadFolder( aURLObject.GetMainURL( INetURLObject::NO_DECODE ), aMatch, eProt == INetProtocol::NotValid );
                 }
             }
         }
@@ -706,7 +706,7 @@ void SvtMatchContext_Impl::doExecute()
     INetURLObject aCurObj;
     OUString aEmpty, aCurString, aCurMainURL;
     INetURLObject aObj;
-    aObj.SetSmartProtocol( eSmartProt == INetProtocol::NOT_VALID ? INetProtocol::HTTP : eSmartProt );
+    aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
     for( ;; )
     {
         for(std::vector<OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
@@ -715,19 +715,19 @@ void SvtMatchContext_Impl::doExecute()
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
 
-            if( eProt != INetProtocol::NOT_VALID && aCurObj.GetProtocol() != eProt )
+            if( eProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eProt )
                 continue;
 
-            if( eSmartProt != INetProtocol::NOT_VALID && aCurObj.GetProtocol() != eSmartProt )
+            if( eSmartProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eSmartProt )
                 continue;
 
             switch( aCurObj.GetProtocol() )
             {
-                case INetProtocol::HTTP:
-                case INetProtocol::HTTPS:
-                case INetProtocol::FTP:
+                case INetProtocol::Http:
+                case INetProtocol::Https:
+                case INetProtocol::Ftp:
                 {
-                    if( eProt == INetProtocol::NOT_VALID && !bFull )
+                    if( eProt == INetProtocol::NotValid && !bFull )
                     {
                         aObj.SetSmartURL( aText );
                         if( aObj.GetURLPath().getLength() > 1 )
@@ -735,7 +735,7 @@ void SvtMatchContext_Impl::doExecute()
                     }
 
                     aCurString = aCurMainURL;
-                    if( eProt == INetProtocol::NOT_VALID )
+                    if( eProt == INetProtocol::NotValid )
                     {
                         // try if text matches the scheme
                         OUString aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
@@ -771,7 +771,7 @@ void SvtMatchContext_Impl::doExecute()
                         }
 
                         OUString aURL( aMatch );
-                        if( eProt == INetProtocol::NOT_VALID )
+                        if( eProt == INetProtocol::NotValid )
                             aMatch = aMatch.copy( INetURLObject::GetScheme( aCurObj.GetProtocol() ).getLength() );
 
                         if( aText.getLength() < aMatch.getLength() )
@@ -868,7 +868,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtURLBox(vcl::Window 
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                        WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
-    SvtURLBox* pListBox = new SvtURLBox(pParent, nWinBits, INetProtocol::NOT_VALID, false);
+    SvtURLBox* pListBox = new SvtURLBox(pParent, nWinBits, INetProtocol::NotValid, false);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -966,7 +966,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                     seqPropertySet[nProperty].Value >>= sURL;
                     aCurObj.SetURL( sURL );
 
-                    if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NOT_VALID ) )
+                    if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
                     {
                         if( aCurObj.GetProtocol() != eSmartProtocol )
                             break;
@@ -1209,7 +1209,7 @@ OUString SvtURLBox::GetURL()
     {
         // no autocompletion for wildcards
         INetURLObject aTempObj;
-        if ( eSmartProtocol != INetProtocol::NOT_VALID )
+        if ( eSmartProtocol != INetProtocol::NotValid )
             aTempObj.SetSmartProtocol( eSmartProtocol );
         if ( aTempObj.SetSmartURL( aText ) )
             return aTempObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1217,7 +1217,7 @@ OUString SvtURLBox::GetURL()
             return aText;
     }
 
-    if ( aObj.GetProtocol() == INetProtocol::NOT_VALID )
+    if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
         OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
         aObj.SetURL(aName);

@@ -1089,7 +1089,7 @@ namespace
     bool getDataSourceDisplayName_isURL( const OUString& _rDS, OUString& _rDisplayName, OUString& _rUniqueId )
     {
         INetURLObject aURL( _rDS );
-        if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+        if ( aURL.GetProtocol() != INetProtocol::NotValid )
         {
             _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
             _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
@@ -3653,7 +3653,7 @@ OUString SbaTableQueryBrowser::getPrivateTitle() const
         OUString sName = m_pTreeView->getListBox().GetEntryText(m_pCurrentlyDisplayed);
         sTitle = GetEntryText( pConnection );
         INetURLObject aURL(sTitle);
-        if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+        if ( aURL.GetProtocol() != INetProtocol::NotValid )
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
         if ( !sName.isEmpty() )
         {

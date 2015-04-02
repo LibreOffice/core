@@ -44,7 +44,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     get(m_pRbtLinktypInternet, "linktyp_internet");
     get(m_pRbtLinktypFTP, "linktyp_ftp");
     get(m_pCbbTarget, "target");
-    m_pCbbTarget->SetSmartProtocol(INetProtocol::HTTP);
+    m_pCbbTarget->SetSmartProtocol(INetProtocol::Http);
     get(m_pBtBrowse, "browse");
     m_pBtBrowse->SetModeImage(Image(CUI_RES (RID_SVXBMP_BROWSE)));
     get(m_pFtLogin, "login_label");
@@ -111,7 +111,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 
     // set URL-field
     // Show the scheme, #72740
-    if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if ( aURL.GetProtocol() != INetProtocol::NotValid )
         m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
         m_pCbbTarget->SetText(rStrURL); // #77696#
@@ -165,17 +165,17 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 
     INetURLObject aURL(aStrURL);
 
-    if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+    if( aURL.GetProtocol() == INetProtocol::NotValid )
     {
         aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
         aURL.SetSmartURL(aStrURL);
     }
 
     // username and password for ftp-url
-    if( aURL.GetProtocol() == INetProtocol::FTP && !m_pEdLogin->GetText().isEmpty() )
+    if( aURL.GetProtocol() == INetProtocol::Ftp && !m_pEdLogin->GetText().isEmpty() )
         aURL.SetUserAndPass ( m_pEdLogin->GetText(), m_pEdPassword->GetText() );
 
-    if ( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+    if ( aURL.GetProtocol() != INetProtocol::NotValid )
         return aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     else //#105788# always create a URL even if it is not valid
         return aStrURL;
@@ -321,9 +321,9 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 {
     if( m_pRbtLinktypFTP->IsChecked() )
     {
-        return INetProtocol::FTP;
+        return INetProtocol::Ftp;
     }
-    return INetProtocol::HTTP;
+    return INetProtocol::Http;
 }
 
 /*************************************************************************

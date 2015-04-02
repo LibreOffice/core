@@ -1176,7 +1176,7 @@ void SdPageObjsTLB::DoDrag()
     if( mpDropNavWin )
     {
         ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
-        OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::FILE ).GetMainURL( INetURLObject::NO_DECODE );
+        OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File ).GetMainURL( INetURLObject::NO_DECODE );
         NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
 
         aURL += "#" + GetSelectEntry();

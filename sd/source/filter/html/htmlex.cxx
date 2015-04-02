@@ -607,7 +607,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     // we come up with a destination...
 
     INetURLObject aINetURLObj( maPath );
-    DBG_ASSERT( aINetURLObj.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aINetURLObj.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
     maIndex = aINetURLObj.GetLastName();
@@ -3031,7 +3031,7 @@ OUString HtmlExport::InsertSound( const OUString& rSoundFile )
     INetURLObject   aURL( rSoundFile );
     OUString aSoundFileName = aURL.getName();
 
-    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     OUString aStr("<embed src=\"" + aSoundFileName +
         "\" hidden=\"true\" autostart=\"true\">");
@@ -3203,13 +3203,13 @@ sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
     {
         INetURLObject aURL( rURL );
 
-        if( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+        if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
             OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rURL, aURLStr );
             aURL = INetURLObject( aURLStr );
         }
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 

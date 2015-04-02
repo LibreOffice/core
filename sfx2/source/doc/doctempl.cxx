@@ -1186,7 +1186,7 @@ bool SfxDocumentTemplates::GetLogicNames
 
     INetURLObject aFullPath;
 
-    aFullPath.SetSmartProtocol( INetProtocol::FILE );
+    aFullPath.SetSmartProtocol( INetProtocol::File );
     aFullPath.SetURL( rPath );
     OUString aPath( aFullPath.GetMainURL( INetURLObject::NO_DECODE ) );
 

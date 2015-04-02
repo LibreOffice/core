@@ -707,7 +707,7 @@ void AssignmentPersistentData::ImplCommit()
     {
         OUString sName = m_pImpl->pConfigData->getDatasourceName();
         INetURLObject aURL( sName );
-        if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+        if( aURL.GetProtocol() != INetProtocol::NotValid )
         {
             OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             sName = aFileNotation.get(OFileNotation::N_SYSTEM);
@@ -828,7 +828,7 @@ void AssignmentPersistentData::ImplCommit()
 
                 // get the data source the user has chosen and let it build a connection
                 INetURLObject aURL( sSelectedDS );
-                if ( aURL.GetProtocol() != INetProtocol::NOT_VALID || m_xDatabaseContext->hasByName(sSelectedDS) )
+                if ( aURL.GetProtocol() != INetProtocol::NotValid || m_xDatabaseContext->hasByName(sSelectedDS) )
                     m_xDatabaseContext->getByName( sSelectedDS ) >>= xDS;
             }
             else
@@ -1198,7 +1198,7 @@ void AssignmentPersistentData::ImplCommit()
                     xProp->getPropertyValue("DataSourceName") >>= sName;
 
                     INetURLObject aURL( sName );
-                    if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+                    if( aURL.GetProtocol() != INetProtocol::NotValid )
                     {
                         OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         sName = aFileNotation.get(OFileNotation::N_SYSTEM);

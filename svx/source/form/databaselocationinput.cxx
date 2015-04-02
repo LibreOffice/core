@@ -243,7 +243,7 @@ namespace svx
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
             INetURLObject aURL( aFileDlg.GetPath() );
-            if( aURL.GetProtocol() != INetProtocol::NOT_VALID )
+            if( aURL.GetProtocol() != INetProtocol::NotValid )
             {
                 ::svt::OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                 m_rLocationInput.SetText( aFileNotation.get( ::svt::OFileNotation::N_SYSTEM ) );

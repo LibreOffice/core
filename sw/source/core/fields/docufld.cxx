@@ -422,7 +422,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFmt) const
         {
             case FF_PATH:
                 {
-                    if( INetProtocol::FILE == rURLObj.GetProtocol() )
+                    if( INetProtocol::File == rURLObj.GetProtocol() )
                     {
                         INetURLObject aTemp(rURLObj);
                         aTemp.removeSegment();
@@ -452,7 +452,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFmt) const
                 break;
 
             default:
-                if( INetProtocol::FILE == rURLObj.GetProtocol() )
+                if( INetProtocol::File == rURLObj.GetProtocol() )
                     aRet = rURLObj.GetFull();
                 else
                     aRet = URIHelper::removePassword(

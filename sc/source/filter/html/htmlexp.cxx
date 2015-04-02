@@ -1236,11 +1236,11 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
-    if( INetProtocol::FILE == aFileUrl.GetProtocol() &&
-        ( (bFileToFile && INetProtocol::FILE == aTargetUrl.GetProtocol()) ||
-          (!bFileToFile && INetProtocol::FILE != aTargetUrl.GetProtocol() &&
-                           INetProtocol::FTP <= aTargetUrl.GetProtocol() &&
-                           INetProtocol::NEWS >= aTargetUrl.GetProtocol()) ) )
+    if( INetProtocol::File == aFileUrl.GetProtocol() &&
+        ( (bFileToFile && INetProtocol::File == aTargetUrl.GetProtocol()) ||
+          (!bFileToFile && INetProtocol::File != aTargetUrl.GetProtocol() &&
+                           INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
+                           INetProtocol::News >= aTargetUrl.GetProtocol()) ) )
     {
         if( pFileNameMap )
         {
@@ -1304,7 +1304,7 @@ void ScHTMLExport::MakeCIdURL( OUString& rURL )
         return;
 
     INetURLObject aURLObj( rURL );
-    if( INetProtocol::FILE != aURLObj.GetProtocol() )
+    if( INetProtocol::File != aURLObj.GetProtocol() )
         return;
 
     OUString aLastName( aURLObj.GetLastName().toAsciiLowerCase() );

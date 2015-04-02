@@ -1282,7 +1282,7 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
-    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INetProtocol::NOT_VALID" );
+    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NotValid, "GraphicFilter::CanImportGraphic() : ProtType == INetProtocol::NotValid" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
@@ -1312,7 +1312,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
                                      sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags )
 {
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
-    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NOT_VALID" );
+    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NotValid, "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
@@ -1804,7 +1804,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 #else
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
-    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INetProtocol::NOT_VALID" );
+    DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NotValid, "GraphicFilter::ExportGraphic() : ProtType == INetProtocol::NotValid" );
     bool bAlreadyExists = DirEntryExists( rPath );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -2254,12 +2254,12 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     INetURLObject aURL( rPath );
     if ( aURL.HasError() )
     {
-        aURL.SetSmartProtocol( INetProtocol::FILE );
+        aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetSmartURL( rPath );
     }
 
     SvStream* pStream = NULL;
-    if ( INetProtocol::FILE != aURL.GetProtocol() )
+    if ( INetProtocol::File != aURL.GetProtocol() )
     {
         pStream = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
     }

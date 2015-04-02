@@ -96,7 +96,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     OUString   aTipHelpText;
     OUString   aAccessibleName = aPickEntry.toString();
 
-    if ( aURL.GetProtocol() == INetProtocol::FILE )
+    if ( aURL.GetProtocol() == INetProtocol::File )
     {
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
@@ -172,7 +172,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     // Help not in History
     INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
-    if ( aURL.GetProtocol() == INetProtocol::VND_SUN_STAR_HELP )
+    if ( aURL.GetProtocol() == INetProtocol::VndSunStarHelp )
         return;
 
     if ( !pMed->IsUpdatePickList() )
@@ -226,7 +226,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             OUString(),
             aThumbnail);
 
-    if ( aURL.GetProtocol() == INetProtocol::FILE )
+    if ( aURL.GetProtocol() == INetProtocol::File )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                                                                  (pFilter) ? pFilter->GetMimeType() : OUString(),
                                                                  (pFilter) ? pFilter->GetServiceName() : OUString() );

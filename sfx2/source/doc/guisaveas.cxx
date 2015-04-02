@@ -1280,7 +1280,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::FILE,
+                INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::File,
                         INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;
@@ -1618,7 +1618,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
         OUString aFileName;
         aFileNameIter->second >>= aFileName;
         aURL.SetURL( aFileName );
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "Illegal URL!" );
+        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
 
         ::comphelper::SequenceAsHashMap::const_iterator aIter =
                                 aModelData.GetMediaDescr().find( sFilterNameString );

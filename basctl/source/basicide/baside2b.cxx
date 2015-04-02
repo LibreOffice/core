@@ -292,7 +292,7 @@ OUString EditorWindow::GetWordAtCursor()
             {
                 OUString aURL( URIHelper::FindFirstURLInText( aText, nStart, nEnd, aClass ) );
                 INetURLObject aURLObj( aURL );
-                if ( aURLObj.GetProtocol() == INetProtocol::VND_SUN_STAR_HELP
+                if ( aURLObj.GetProtocol() == INetProtocol::VndSunStarHelp
                      && nSelStart >= nStart && nSelStart <= nEnd && nSelEnd >= nStart && nSelEnd <= nEnd )
                 {
                     aWord = aURL;

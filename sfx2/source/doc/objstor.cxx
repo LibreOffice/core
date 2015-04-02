@@ -2108,7 +2108,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
 {
     INetURLObject aUrl( pMedium->GetOrigURL() );
 
-    if ( aUrl.GetProtocol() == INetProtocol::FILE )
+    if ( aUrl.GetProtocol() == INetProtocol::File )
     {
         const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
         Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
@@ -2644,7 +2644,7 @@ bool SfxObjectShell::CommonSaveAs_Impl
         }
     }
 
-    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NOT_VALID, "Illegal URL!" );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
     DBG_ASSERT( aParams->Count() != 0, "Incorrect Parameter");
 
     SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, false );

@@ -567,7 +567,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 OUString   aMenuTitle;
                 INetURLObject   aURL( aURLString );
 
-                if ( aURL.GetProtocol() == INetProtocol::FILE )
+                if ( aURL.GetProtocol() == INetProtocol::File )
                 {
                     // Do handle file URL differently => convert it to a system
                     // path and abbreviate it with a special function:

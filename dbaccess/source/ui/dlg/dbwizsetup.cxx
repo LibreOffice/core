@@ -815,7 +815,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             m_aDocURL = INetURLObject(aFileDlg.GetPath());
 
-            if( m_aDocURL.GetProtocol() != INetProtocol::NOT_VALID )
+            if( m_aDocURL.GetProtocol() != INetProtocol::NotValid )
             {
                 OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
                 if ( ::utl::UCBContentHelper::IsDocument(sFileName) )

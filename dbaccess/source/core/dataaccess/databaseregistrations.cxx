@@ -239,7 +239,7 @@ namespace dbaccess
             throw IllegalArgumentException( OUString(), *this, 2 );
 
         INetURLObject aURL( _rLocation );
-        if ( aURL.GetProtocol() == INetProtocol::NOT_VALID )
+        if ( aURL.GetProtocol() == INetProtocol::NotValid )
             throw IllegalArgumentException( OUString(), *this, 2 );
     }
 

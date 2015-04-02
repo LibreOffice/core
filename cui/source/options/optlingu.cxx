@@ -1676,9 +1676,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                         {
                             OUString sURL = xStor->getLocation();
                             INetURLObject aObj(sURL);
-                            DBG_ASSERT( aObj.GetProtocol() == INetProtocol::FILE,
+                            DBG_ASSERT( aObj.GetProtocol() == INetProtocol::File,
                                     "non-file URLs cannot be deleted" );
-                            if ( aObj.GetProtocol() == INetProtocol::FILE )
+                            if ( aObj.GetProtocol() == INetProtocol::File )
                             {
                                 KillFile_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                             }

@@ -310,7 +310,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             OUString aLocation = xStorable->getLocation();
             INetURLObject aFileObj( aLocation );
 
-            bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PRIV_SOFFICE );
+            bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PrivSoffice );
 
             bHasLocation =  !aLocation.isEmpty() && !bPrivateProtocol;
             OSL_ASSERT( !bPrivateProtocol );

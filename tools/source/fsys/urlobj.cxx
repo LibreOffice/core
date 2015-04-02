@@ -599,7 +599,7 @@ inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
 void INetURLObject::setInvalid()
 {
     m_aAbsURIRef.setLength(0);
-    m_eScheme = INetProtocol::NOT_VALID;
+    m_eScheme = INetProtocol::NotValid;
     m_aScheme.clear();
     m_aUser.clear();
     m_aAuth.clear();
@@ -629,7 +629,7 @@ std::unique_ptr<SvMemoryStream> memoryStream(
 
 std::unique_ptr<SvMemoryStream> INetURLObject::getData()
 {
-    if( GetProtocol() != INetProtocol::DATA )
+    if( GetProtocol() != INetProtocol::Data )
     {
         return nullptr;
     }
@@ -806,7 +806,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 && p1[1] == ':'
                 && (pEnd - p1 == 2 || p1[2] == '/' || p1[2] == '\\'))
             {
-                m_eScheme = INetProtocol::FILE; // 8th, 9th
+                m_eScheme = INetProtocol::File; // 8th, 9th
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
@@ -815,11 +815,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 p1 += 2;
                 if ((scanDomain(p1, pEnd) > 0 || scanIPv6reference(p1, pEnd))
                     && (p1 == pEnd || *p1 == '/'))
-                    m_eScheme = INetProtocol::FILE; // 5th
+                    m_eScheme = INetProtocol::File; // 5th
             }
             else if (p1 != pEnd && *p1 == '/')
             {
-                m_eScheme = INetProtocol::FILE; // 6th
+                m_eScheme = INetProtocol::File; // 6th
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
@@ -839,7 +839,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     (scanDomain(p1, pe) > 0 && p1 == pe)
                    )
                 {
-                    m_eScheme = INetProtocol::FILE; // 7th
+                    m_eScheme = INetProtocol::File; // 7th
                     eMechanism = ENCODE_ALL;
                     nFragmentDelimiter = 0x80000000;
                 }
@@ -853,7 +853,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     ++pDomainEnd;
                     if (scanDomain(pDomainEnd, pEnd) > 0
                         && pDomainEnd == pEnd)
-                        m_eScheme = INetProtocol::MAILTO; // 2nd
+                        m_eScheme = INetProtocol::Mailto; // 2nd
                 }
                 else if (nLabels >= 3
                          && (pDomainEnd == pEnd || *pDomainEnd == '/'))
@@ -863,34 +863,34 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                           && (p1[1] == 't' || p1[1] == 'T')
                           && (p1[2] == 'p' || p1[2] == 'P')
                           && p1[3] == '.' ?
-                              INetProtocol::FTP : INetProtocol::HTTP; // 3rd, 4th
+                              INetProtocol::Ftp : INetProtocol::Http; // 3rd, 4th
             }
         }
 
         OUString aSynScheme;
-        if (m_eScheme == INetProtocol::NOT_VALID) {
+        if (m_eScheme == INetProtocol::NotValid) {
             sal_Unicode const * p1 = pPos;
             aSynScheme = parseScheme(&p1, pEnd, nFragmentDelimiter);
             if (!aSynScheme.isEmpty())
             {
-                m_eScheme = INetProtocol::GENERIC;
+                m_eScheme = INetProtocol::Generic;
                 pPos = p1;
             }
         }
 
-        if (bSmart && m_eScheme == INetProtocol::NOT_VALID && pPos != pEnd
+        if (bSmart && m_eScheme == INetProtocol::NotValid && pPos != pEnd
             && *pPos != nFragmentDelimiter)
         {
             m_eScheme = m_eSmartScheme;
         }
 
-        if (m_eScheme == INetProtocol::NOT_VALID)
+        if (m_eScheme == INetProtocol::NotValid)
         {
             setInvalid();
             return false;
         }
 
-        if (m_eScheme != INetProtocol::GENERIC) {
+        if (m_eScheme != INetProtocol::Generic) {
             aSynScheme = OUString::createFromAscii(getSchemeInfo().m_pScheme);
         }
         m_aScheme.set(aSynAbsURIRef, aSynScheme, aSynAbsURIRef.getLength());
@@ -914,7 +914,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
         switch (m_eScheme)
         {
-            case INetProtocol::VND_SUN_STAR_HELP:
+            case INetProtocol::VndSunStarHelp:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -942,7 +942,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 break;
             }
 
-            case INetProtocol::VND_SUN_STAR_HIER:
+            case INetProtocol::VndSunStarHier:
             {
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                 {
@@ -983,8 +983,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 break;
             }
 
-            case INetProtocol::VND_SUN_STAR_PKG:
-            case INetProtocol::CMIS:
+            case INetProtocol::VndSunStarPkg:
+            case INetProtocol::Cmis:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -1048,7 +1048,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 break;
             }
 
-            case INetProtocol::FILE:
+            case INetProtocol::File:
                 if (bSmart)
                 {
                     // The first of the following seven productions that
@@ -1230,14 +1230,14 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 }
             default:
             {
-                // For INetProtocol::FILE, allow an empty authority ("//") to be
+                // For INetProtocol::File, allow an empty authority ("//") to be
                 // missing if the following path starts with an explicit "/"
                 // (Java is notorious in generating such file URLs, so be
                 // liberal here):
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     pPos += 2;
                 else if (!bSmart
-                         && !(m_eScheme == INetProtocol::FILE
+                         && !(m_eScheme == INetProtocol::File
                               && pPos != pEnd && *pPos == '/'))
                 {
                     setInvalid();
@@ -1290,9 +1290,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
         if (pUserInfoBegin)
         {
-            Part ePart = m_eScheme == INetProtocol::IMAP ?
+            Part ePart = m_eScheme == INetProtocol::Imap ?
                              PART_IMAP_ACHAR :
-                         m_eScheme == INetProtocol::VIM ?
+                         m_eScheme == INetProtocol::Vim ?
                              PART_VIM :
                              PART_USER_PASSWORD;
             bool bSupportsPassword = getSchemeInfo().m_bPassword;
@@ -1392,7 +1392,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             bool bNetBiosName = false;
             switch (m_eScheme)
             {
-                case INetProtocol::FILE:
+                case INetProtocol::File:
                     // If the host equals "LOCALHOST" (unencoded and ignoring
                     // case), turn it into an empty host:
                     if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
@@ -1401,8 +1401,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     bNetBiosName = true;
                     break;
 
-                case INetProtocol::LDAP:
-                case INetProtocol::SMB:
+                case INetProtocol::Ldap:
+                case INetProtocol::Smb:
                     if (pHostPortBegin == pPort && pPort != pHostPortEnd)
                     {
                         setInvalid();
@@ -1496,20 +1496,20 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     // At this point references of type "\\server\paths" have
     // been converted to file:://server/path".
 #ifdef LINUX
-    if (m_eScheme==INetProtocol::FILE && !m_aHost.isEmpty()) {
+    if (m_eScheme==INetProtocol::File && !m_aHost.isEmpty()) {
         // Change "file:://server/path" URIs to "smb:://server/path" on
         // Linux
         // Leave "file::path" URIs unchanged.
-        changeScheme(INetProtocol::SMB);
+        changeScheme(INetProtocol::Smb);
     }
 #endif
 
 #ifdef WIN
-    if (m_eScheme==INetProtocol::SMB) {
+    if (m_eScheme==INetProtocol::Smb) {
         // Change "smb://server/path" URIs to "file://server/path"
         // URIs on Windows, since Windows doesn't understand the
         // SMB scheme.
-        changeScheme(INetProtocol::FILE);
+        changeScheme(INetProtocol::File);
     }
 #endif
 
@@ -1620,7 +1620,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         // When the base URL is a file URL, accept relative file system paths
         // using "\" or ":" as delimiter (and ignoring URI conventions for "%"
         // and "#"), as well as relative URIs using "/" as delimiter:
-        if (m_eScheme == INetProtocol::FILE)
+        if (m_eScheme == INetProtocol::File)
             switch (guessFSysStyleByCounting(p, pEnd, eStyle))
             {
                 case FSYS_UNX:
@@ -1681,7 +1681,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     OUStringBuffer aSynAbsURIRef;
     // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
-    if (m_eScheme != INetProtocol::GENERIC)
+    if (m_eScheme != INetProtocol::Generic)
     {
         aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
     }
@@ -2029,7 +2029,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // If the two URLs are DOS file URLs starting with different volumes
     // (e.g., file:///a:/... and file:///b:/...), the subject is not made
     // relative (it could be, but some people do not like that):
-    if (m_eScheme == INetProtocol::FILE
+    if (m_eScheme == INetProtocol::File
         && nMatch <= 1
         && hasDosVolume(eStyle)
         && aSubject.hasDosVolume(eStyle)) //TODO! ok to use eStyle for these?
@@ -2163,95 +2163,95 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
 {
     static PrefixInfo const aMap[]
         = { // dummy entry at front needed, because pLast may point here:
-            { 0, 0, INetProtocol::NOT_VALID, PrefixInfo::INTERNAL },
-            { ".component:", "staroffice.component:", INetProtocol::COMPONENT,
+            { 0, 0, INetProtocol::NotValid, PrefixInfo::INTERNAL },
+            { ".component:", "staroffice.component:", INetProtocol::Component,
               PrefixInfo::INTERNAL },
-            { ".uno:", "staroffice.uno:", INetProtocol::UNO,
+            { ".uno:", "staroffice.uno:", INetProtocol::Uno,
               PrefixInfo::INTERNAL },
-            { "cid:", 0, INetProtocol::CID, PrefixInfo::OFFICIAL },
-            { "data:", 0, INetProtocol::DATA, PrefixInfo::OFFICIAL },
-            { "db:", "staroffice.db:", INetProtocol::DB, PrefixInfo::INTERNAL },
-            { "file:", 0, INetProtocol::FILE, PrefixInfo::OFFICIAL },
-            { "ftp:", 0, INetProtocol::FTP, PrefixInfo::OFFICIAL },
-            { "hid:", "staroffice.hid:", INetProtocol::HID,
+            { "cid:", 0, INetProtocol::Cid, PrefixInfo::OFFICIAL },
+            { "data:", 0, INetProtocol::Data, PrefixInfo::OFFICIAL },
+            { "db:", "staroffice.db:", INetProtocol::Db, PrefixInfo::INTERNAL },
+            { "file:", 0, INetProtocol::File, PrefixInfo::OFFICIAL },
+            { "ftp:", 0, INetProtocol::Ftp, PrefixInfo::OFFICIAL },
+            { "hid:", "staroffice.hid:", INetProtocol::Hid,
               PrefixInfo::INTERNAL },
-            { "http:", 0, INetProtocol::HTTP, PrefixInfo::OFFICIAL },
-            { "https:", 0, INetProtocol::HTTPS, PrefixInfo::OFFICIAL },
-            { "imap:", 0, INetProtocol::IMAP, PrefixInfo::OFFICIAL },
-            { "javascript:", 0, INetProtocol::JAVASCRIPT, PrefixInfo::OFFICIAL },
-            { "ldap:", 0, INetProtocol::LDAP, PrefixInfo::OFFICIAL },
-            { "macro:", "staroffice.macro:", INetProtocol::MACRO,
+            { "http:", 0, INetProtocol::Http, PrefixInfo::OFFICIAL },
+            { "https:", 0, INetProtocol::Https, PrefixInfo::OFFICIAL },
+            { "imap:", 0, INetProtocol::Imap, PrefixInfo::OFFICIAL },
+            { "javascript:", 0, INetProtocol::Javascript, PrefixInfo::OFFICIAL },
+            { "ldap:", 0, INetProtocol::Ldap, PrefixInfo::OFFICIAL },
+            { "macro:", "staroffice.macro:", INetProtocol::Macro,
               PrefixInfo::INTERNAL },
-            { "mailto:", 0, INetProtocol::MAILTO, PrefixInfo::OFFICIAL },
-            { "news:", 0, INetProtocol::NEWS, PrefixInfo::OFFICIAL },
-            { "out:", "staroffice.out:", INetProtocol::OUT,
+            { "mailto:", 0, INetProtocol::Mailto, PrefixInfo::OFFICIAL },
+            { "news:", 0, INetProtocol::News, PrefixInfo::OFFICIAL },
+            { "out:", "staroffice.out:", INetProtocol::Out,
               PrefixInfo::INTERNAL },
-            { "pop3:", "staroffice.pop3:", INetProtocol::POP3,
+            { "pop3:", "staroffice.pop3:", INetProtocol::Pop3,
               PrefixInfo::INTERNAL },
-            { "private:", "staroffice.private:", INetProtocol::PRIV_SOFFICE,
+            { "private:", "staroffice.private:", INetProtocol::PrivSoffice,
               PrefixInfo::INTERNAL },
             { "private:factory/", "staroffice.factory:",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::INTERNAL },
-            { "private:helpid/", "staroffice.helpid:", INetProtocol::PRIV_SOFFICE,
+              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
+            { "private:helpid/", "staroffice.helpid:", INetProtocol::PrivSoffice,
               PrefixInfo::INTERNAL },
-            { "private:java/", "staroffice.java:", INetProtocol::PRIV_SOFFICE,
+            { "private:java/", "staroffice.java:", INetProtocol::PrivSoffice,
               PrefixInfo::INTERNAL },
             { "private:searchfolder:", "staroffice.searchfolder:",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::INTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
             { "private:trashcan:", "staroffice.trashcan:",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::INTERNAL },
-            { "sftp:", 0, INetProtocol::SFTP, PrefixInfo::OFFICIAL },
-            { "slot:", "staroffice.slot:", INetProtocol::SLOT,
+              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
+            { "sftp:", 0, INetProtocol::Sftp, PrefixInfo::OFFICIAL },
+            { "slot:", "staroffice.slot:", INetProtocol::Slot,
               PrefixInfo::INTERNAL },
-            { "smb:", 0, INetProtocol::SMB, PrefixInfo::OFFICIAL },
-            { "staroffice.component:", ".component:", INetProtocol::COMPONENT,
+            { "smb:", 0, INetProtocol::Smb, PrefixInfo::OFFICIAL },
+            { "staroffice.component:", ".component:", INetProtocol::Component,
               PrefixInfo::EXTERNAL },
-            { "staroffice.db:", "db:", INetProtocol::DB, PrefixInfo::EXTERNAL },
+            { "staroffice.db:", "db:", INetProtocol::Db, PrefixInfo::EXTERNAL },
             { "staroffice.factory:", "private:factory/",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::EXTERNAL },
-            { "staroffice.helpid:", "private:helpid/", INetProtocol::PRIV_SOFFICE,
+              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+            { "staroffice.helpid:", "private:helpid/", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
-            { "staroffice.hid:", "hid:", INetProtocol::HID,
+            { "staroffice.hid:", "hid:", INetProtocol::Hid,
               PrefixInfo::EXTERNAL },
-            { "staroffice.java:", "private:java/", INetProtocol::PRIV_SOFFICE,
+            { "staroffice.java:", "private:java/", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
-            { "staroffice.macro:", "macro:", INetProtocol::MACRO,
+            { "staroffice.macro:", "macro:", INetProtocol::Macro,
               PrefixInfo::EXTERNAL },
-            { "staroffice.out:", "out:", INetProtocol::OUT,
+            { "staroffice.out:", "out:", INetProtocol::Out,
               PrefixInfo::EXTERNAL },
-            { "staroffice.pop3:", "pop3:", INetProtocol::POP3,
+            { "staroffice.pop3:", "pop3:", INetProtocol::Pop3,
               PrefixInfo::EXTERNAL },
-            { "staroffice.private:", "private:", INetProtocol::PRIV_SOFFICE,
+            { "staroffice.private:", "private:", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
             { "staroffice.searchfolder:", "private:searchfolder:",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::EXTERNAL },
-            { "staroffice.slot:", "slot:", INetProtocol::SLOT,
+              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+            { "staroffice.slot:", "slot:", INetProtocol::Slot,
               PrefixInfo::EXTERNAL },
             { "staroffice.trashcan:", "private:trashcan:",
-              INetProtocol::PRIV_SOFFICE, PrefixInfo::EXTERNAL },
-            { "staroffice.uno:", ".uno:", INetProtocol::UNO,
+              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+            { "staroffice.uno:", ".uno:", INetProtocol::Uno,
               PrefixInfo::EXTERNAL },
-            { "staroffice.vim:", "vim:", INetProtocol::VIM,
+            { "staroffice.vim:", "vim:", INetProtocol::Vim,
               PrefixInfo::EXTERNAL },
-            { "staroffice:", "private:", INetProtocol::PRIV_SOFFICE,
+            { "staroffice:", "private:", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
-            { "telnet:", 0, INetProtocol::TELNET, PrefixInfo::OFFICIAL },
-            { "vim:", "staroffice.vim:", INetProtocol::VIM,
+            { "telnet:", 0, INetProtocol::Telnet, PrefixInfo::OFFICIAL },
+            { "vim:", "staroffice.vim:", INetProtocol::Vim,
               PrefixInfo::INTERNAL },
-            { "vnd.libreoffice.cmis:", 0, INetProtocol::CMIS, PrefixInfo::INTERNAL },
-            { "vnd.sun.star.cmd:", 0, INetProtocol::VND_SUN_STAR_CMD,
+            { "vnd.libreoffice.cmis:", 0, INetProtocol::Cmis, PrefixInfo::INTERNAL },
+            { "vnd.sun.star.cmd:", 0, INetProtocol::VndSunStarCmd,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.expand:", 0, INetProtocol::VND_SUN_STAR_EXPAND,
+            { "vnd.sun.star.expand:", 0, INetProtocol::VndSunStarExpand,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.help:", 0, INetProtocol::VND_SUN_STAR_HELP,
+            { "vnd.sun.star.help:", 0, INetProtocol::VndSunStarHelp,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.hier:", 0, INetProtocol::VND_SUN_STAR_HIER,
+            { "vnd.sun.star.hier:", 0, INetProtocol::VndSunStarHier,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.pkg:", 0, INetProtocol::VND_SUN_STAR_PKG,
+            { "vnd.sun.star.pkg:", 0, INetProtocol::VndSunStarPkg,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.tdoc:", 0, INetProtocol::VND_SUN_STAR_TDOC,
+            { "vnd.sun.star.tdoc:", 0, INetProtocol::VndSunStarTdoc,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.webdav:", 0, INetProtocol::VND_SUN_STAR_WEBDAV,
+            { "vnd.sun.star.webdav:", 0, INetProtocol::VndSunStarWebdav,
               PrefixInfo::OFFICIAL } };
     /* This list needs to be sorted, or you'll introduce serious bugs */
 
@@ -2329,16 +2329,16 @@ bool INetURLObject::setUser(OUString const & rTheUser,
 {
     if (
          !getSchemeInfo().m_bUser ||
-         (m_eScheme == INetProtocol::IMAP && rTheUser.isEmpty())
+         (m_eScheme == INetProtocol::Imap && rTheUser.isEmpty())
        )
     {
         return false;
     }
 
     OUString aNewUser(encodeText(rTheUser, bOctets,
-                                  m_eScheme == INetProtocol::IMAP ?
+                                  m_eScheme == INetProtocol::Imap ?
                                       PART_IMAP_ACHAR :
-                                  m_eScheme == INetProtocol::VIM ?
+                                  m_eScheme == INetProtocol::Vim ?
                                       PART_VIM :
                                       PART_USER_PASSWORD,
                                   getEscapePrefix(), eMechanism, eCharset,
@@ -2398,7 +2398,7 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
     if (!getSchemeInfo().m_bPassword)
         return false;
     OUString aNewAuth(encodeText(rThePassword, bOctets,
-                                  m_eScheme == INetProtocol::VIM ?
+                                  m_eScheme == INetProtocol::Vim ?
                                       PART_VIM : PART_USER_PASSWORD,
                                   getEscapePrefix(), eMechanism, eCharset,
                                   false));
@@ -2942,7 +2942,7 @@ bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
     bool bNetBiosName = false;
     switch (m_eScheme)
     {
-        case INetProtocol::FILE:
+        case INetProtocol::File:
             {
                 OUString sTemp(aSynHost.toString());
                 if (sTemp.equalsIgnoreAsciiCase("localhost"))
@@ -2952,7 +2952,7 @@ bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
                 bNetBiosName = true;
             }
             break;
-        case INetProtocol::LDAP:
+        case INetProtocol::Ldap:
             if (aSynHost.isEmpty() && m_aPort.isPresent())
                 return false;
             break;
@@ -2995,11 +2995,11 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
     switch (eScheme)
     {
-        case INetProtocol::NOT_VALID:
+        case INetProtocol::NotValid:
             return false;
 
-        case INetProtocol::FTP:
-        case INetProtocol::IMAP:
+        case INetProtocol::Ftp:
+        case INetProtocol::Imap:
             if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
                 return false;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
@@ -3015,11 +3015,11 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 aTheSynPath.append('/');
             break;
 
-        case INetProtocol::HTTP:
-        case INetProtocol::VND_SUN_STAR_WEBDAV:
-        case INetProtocol::HTTPS:
-        case INetProtocol::SMB:
-        case INetProtocol::CMIS:
+        case INetProtocol::Http:
+        case INetProtocol::VndSunStarWebdav:
+        case INetProtocol::Https:
+        case INetProtocol::Smb:
+        case INetProtocol::Cmis:
             if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
                 return false;
             while (pPos < pEnd && *pPos != nQueryDelimiter
@@ -3036,7 +3036,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 aTheSynPath.append('/');
             break;
 
-        case INetProtocol::FILE:
+        case INetProtocol::File:
         {
             if (bSkippedInitialSlash)
                 aTheSynPath.append('/');
@@ -3080,7 +3080,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
         }
 
-        case INetProtocol::MAILTO:
+        case INetProtocol::Mailto:
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
             {
@@ -3093,7 +3093,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::NEWS:
+        case INetProtocol::News:
             if (pPos == pEnd || *pPos == nQueryDelimiter
                 || *pPos == nFragmentDelimiter)
                 return false;
@@ -3161,7 +3161,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         done:
             break;
 
-        case INetProtocol::POP3:
+        case INetProtocol::Pop3:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3174,13 +3174,13 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::PRIV_SOFFICE:
-        case INetProtocol::SLOT:
-        case INetProtocol::HID:
-        case INetProtocol::MACRO:
-        case INetProtocol::UNO:
-        case INetProtocol::COMPONENT:
-        case INetProtocol::LDAP:
+        case INetProtocol::PrivSoffice:
+        case INetProtocol::Slot:
+        case INetProtocol::Hid:
+        case INetProtocol::Macro:
+        case INetProtocol::Uno:
+        case INetProtocol::Component:
+        case INetProtocol::Ldap:
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
             {
@@ -3194,7 +3194,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::VND_SUN_STAR_HELP:
+        case INetProtocol::VndSunStarHelp:
             if (pPos == pEnd
                 || *pPos == nQueryDelimiter
                 || *pPos == nFragmentDelimiter)
@@ -3216,10 +3216,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::JAVASCRIPT:
-        case INetProtocol::DATA:
-        case INetProtocol::CID:
-        case INetProtocol::DB:
+        case INetProtocol::Javascript:
+        case INetProtocol::Data:
+        case INetProtocol::Cid:
+        case INetProtocol::Db:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3231,7 +3231,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::OUT:
+        case INetProtocol::Out:
             if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '~')
                 return false;
             aTheSynPath.append("/~");
@@ -3246,8 +3246,8 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::VND_SUN_STAR_HIER:
-        case INetProtocol::VND_SUN_STAR_PKG:
+        case INetProtocol::VndSunStarHier:
+        case INetProtocol::VndSunStarPkg:
             if (pPos < pEnd && *pPos != '/'
                 && *pPos != nQueryDelimiter && *pPos != nFragmentDelimiter)
                 return false;
@@ -3268,7 +3268,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 aTheSynPath.append('/');
             break;
 
-        case INetProtocol::VIM:
+        case INetProtocol::Vim:
         {
             sal_Unicode const * pPathEnd = pPos;
             while (pPathEnd < pEnd && *pPathEnd != nFragmentDelimiter)
@@ -3372,8 +3372,8 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
         }
 
-        case INetProtocol::VND_SUN_STAR_CMD:
-        case INetProtocol::VND_SUN_STAR_EXPAND:
+        case INetProtocol::VndSunStarCmd:
+        case INetProtocol::VndSunStarExpand:
         {
             if (pPos == pEnd || *pPos == nFragmentDelimiter)
                 return false;
@@ -3391,7 +3391,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
         }
 
-        case INetProtocol::TELNET:
+        case INetProtocol::Telnet:
             if (pPos < pEnd)
             {
                 if (*pPos != '/' || pEnd - pPos > 1)
@@ -3401,7 +3401,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             aTheSynPath.append('/');
             break;
 
-        case INetProtocol::VND_SUN_STAR_TDOC:
+        case INetProtocol::VndSunStarTdoc:
             if (pPos == pEnd || *pPos != '/')
                 return false;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
@@ -3418,8 +3418,8 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
 
-        case INetProtocol::GENERIC:
-        case INetProtocol::SFTP:
+        case INetProtocol::Generic:
+        case INetProtocol::Sftp:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3460,7 +3460,7 @@ bool INetURLObject::setPath(OUString const & rThePath, bool bOctets,
 }
 
 bool INetURLObject::checkHierarchical() const {
-    if (m_eScheme == INetProtocol::VND_SUN_STAR_EXPAND) {
+    if (m_eScheme == INetProtocol::VndSunStarExpand) {
         OSL_FAIL(
             "INetURLObject::checkHierarchical vnd.sun.star.expand");
         return true;
@@ -3793,7 +3793,7 @@ INetURLObject::getAbbreviated(
     OUStringBuffer aBuffer;
     // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
-    if (m_eScheme != INetProtocol::GENERIC)
+    if (m_eScheme != INetProtocol::Generic)
     {
         aBuffer.appendAscii(getSchemeInfo().m_pScheme);
     }
@@ -3973,7 +3973,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
 {
     if (m_eScheme != rObject.m_eScheme)
         return false;
-    if (m_eScheme == INetProtocol::NOT_VALID)
+    if (m_eScheme == INetProtocol::NotValid)
         return m_aAbsURIRef.toString() == rObject.m_aAbsURIRef.toString();
     if ((m_aScheme.compare(
              rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef)
@@ -3991,7 +3991,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     OUString aPath2(rObject.GetURLPath(NO_DECODE));
     switch (m_eScheme)
     {
-        case INetProtocol::FILE:
+        case INetProtocol::File:
         {
             // If the URL paths of two file URLs only differ in that one has a
             // final '/' and the other has not, take the two paths as
@@ -4079,7 +4079,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
 {
     setInvalid();
     m_eScheme = eTheScheme;
-    if (HasError() || m_eScheme == INetProtocol::GENERIC)
+    if (HasError() || m_eScheme == INetProtocol::Generic)
         return false;
     m_aAbsURIRef.setLength(0);
     m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
@@ -4090,7 +4090,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         bool bUserInfo = false;
         if (getSchemeInfo().m_bUser)
         {
-            if (m_eScheme == INetProtocol::IMAP && rTheUser.isEmpty())
+            if (m_eScheme == INetProtocol::Imap && rTheUser.isEmpty())
             {
                 setInvalid();
                 return false;
@@ -4099,9 +4099,9 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 m_aUser.set(m_aAbsURIRef,
                             encodeText(rTheUser, false,
-                                       m_eScheme == INetProtocol::IMAP ?
+                                       m_eScheme == INetProtocol::Imap ?
                                            PART_IMAP_ACHAR :
-                                       m_eScheme == INetProtocol::VIM ?
+                                       m_eScheme == INetProtocol::Vim ?
                                            PART_VIM :
                                            PART_USER_PASSWORD,
                                        getEscapePrefix(), eMechanism,
@@ -4122,7 +4122,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 m_aAbsURIRef.append(':');
                 m_aAuth.set(m_aAbsURIRef,
                             encodeText(rThePassword, false,
-                                       m_eScheme == INetProtocol::VIM ?
+                                       m_eScheme == INetProtocol::Vim ?
                                            PART_VIM : PART_USER_PASSWORD,
                                        getEscapePrefix(), eMechanism,
                                        eCharset, false),
@@ -4143,7 +4143,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             bool bNetBiosName = false;
             switch (m_eScheme)
             {
-                case INetProtocol::FILE:
+                case INetProtocol::File:
                     {
                         OUString sTemp(aSynHost.toString());
                         if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
@@ -4154,7 +4154,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     }
                     break;
 
-                case INetProtocol::LDAP:
+                case INetProtocol::Ldap:
                     if (aSynHost.isEmpty() && nThePort != 0)
                     {
                         setInvalid();
@@ -4270,7 +4270,7 @@ INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
 {
     sal_Unicode const * p = rTheAbsURIRef.getStr();
     PrefixInfo const * pPrefix = getPrefix(p, p + rTheAbsURIRef.getLength());
-    return pPrefix ? pPrefix->m_eScheme : INetProtocol::NOT_VALID;
+    return pPrefix ? pPrefix->m_eScheme : INetProtocol::NotValid;
 }
 
 OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
@@ -4818,7 +4818,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
 OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                                      sal_Unicode * pDelimiter) const
 {
-    if (m_eScheme != INetProtocol::FILE)
+    if (m_eScheme != INetProtocol::File)
         return OUString();
 
     if ((eStyle & FSYS_VOS ? 1 : 0)
@@ -4913,7 +4913,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
 OUString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset) const
 {
-    if (m_eScheme != INetProtocol::POP3)
+    if (m_eScheme != INetProtocol::Pop3)
         return OUString();
     sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pEnd = p + m_aPath.getLength();
@@ -5289,7 +5289,7 @@ bool INetURLObject::CutLastName()
 
 OUString INetURLObject::PathToFileName() const
 {
-    if (m_eScheme != INetProtocol::FILE)
+    if (m_eScheme != INetProtocol::File)
         return OUString();
     OUString aSystemPath;
     if (osl::FileBase::getSystemPathFromFileURL(

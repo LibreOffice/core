@@ -1495,7 +1495,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 {
                     INetURLObject aURLObj( aURL );
 
-                    if( aURLObj.GetProtocol() == INetProtocol::NOT_VALID )
+                    if( aURLObj.GetProtocol() == INetProtocol::NotValid )
                     {
                         OUString aValidURL;
 
@@ -1503,7 +1503,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                             aURLObj = INetURLObject( aValidURL );
                     }
 
-                    if( aURLObj.GetProtocol() != INetProtocol::NOT_VALID )
+                    if( aURLObj.GetProtocol() != INetProtocol::NotValid )
                     {
                         GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
                         aFilterName = rGrfFilter.GetImportFormatName( rGrfFilter.GetImportFormatNumberForShortName( aURLObj.getExtension() ) );

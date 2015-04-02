@@ -228,7 +228,7 @@ void SAL_CALL GalleryTheme::update(  )
 
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
-            if( ( aURL.GetProtocol() != INetProtocol::NOT_VALID ) && mpTheme->InsertURL( aURL, nIndex ) )
+            if( ( aURL.GetProtocol() != INetProtocol::NotValid ) && mpTheme->InsertURL( aURL, nIndex ) )
             {
                 const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( aURL );
 

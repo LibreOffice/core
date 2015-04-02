@@ -145,7 +145,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
             while( xResultSet->next() && schedule() )
             {
                 INetURLObject   aFoundURL( xContentAccess->queryContentIdentifierString() );
-                DBG_ASSERT( aFoundURL.GetProtocol() != INetProtocol::NOT_VALID, "invalid URL" );
+                DBG_ASSERT( aFoundURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
                 bool bFolder = xRow->getBoolean( 1 ); // property "IsFolder"
                 if ( xRow->wasNull() )
