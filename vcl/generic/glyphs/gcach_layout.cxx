@@ -439,7 +439,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             }
         }
 
-        while (nCurrentPos < nBidiEndRunPos)
+        while (nCurrentPos < nBidiEndRunPos && k < pTextLayout->runs.size())
         {
             int32_t nMinRunPos = nCurrentPos;
             int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
