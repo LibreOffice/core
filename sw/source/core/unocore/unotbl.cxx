@@ -1855,6 +1855,8 @@ public:
 
     void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
     bool GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
+    template<typename Tpoolitem>
+    inline void AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember);
 
     void ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
@@ -1871,6 +1873,25 @@ void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMember
 bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
     { return aAnyMap.FillValue( nWhichId, nMemberId, rpAny ); }
 
+template<typename Tpoolitem>
+void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember)
+{
+    std::list< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
+    for(sal_uInt16 nMember : vMember)
+    {
+        const uno::Any* pAny = nullptr;
+        GetProperty(nWhich, nMember, pAny);
+        if(pAny)
+            vMemberAndAny.push_back(std::make_pair(nMember, pAny));
+    }
+    if(!vMemberAndAny.empty())
+    {
+        Tpoolitem aItem = aItemFactory();
+        for(auto& aMemberAndAny : vMemberAndAny)
+            aItem.PutValue(*aMemberAndAny.second, aMemberAndAny.first);
+        rSet.Put(aItem);
+    }
+}
 void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 {
     SfxItemSet aSet(rDoc.GetAttrPool(),
@@ -1892,32 +1913,12 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         const_cast<SwTable&>(rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
     }
 
-    const uno::Any* pBackColor   = 0;
-    GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pBackColor );
-    const uno::Any* pBackTrans  = 0;
-    GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pBackTrans );
-    const uno::Any* pGrLoc      = 0;
-    GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc    );
-    const uno::Any* pGrURL      = 0;
-    GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
-    const uno::Any* pGrFilter   = 0;
-    GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
-
-    if(pBackColor||pBackTrans||pGrURL||pGrFilter||pGrLoc)
-    {
-        SvxBrushItem aBrush(rFrmFmt.makeBackgroundBrushItem());
-        if(pBackColor)
-            aBrush.PutValue(*pBackColor, MID_BACK_COLOR);
-        if(pBackTrans)
-            aBrush.PutValue(*pBackTrans, MID_GRAPHIC_TRANSPARENT);
-        if(pGrURL)
-            aBrush.PutValue(*pGrURL, MID_GRAPHIC_URL);
-        if(pGrFilter)
-            aBrush.PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
-        if(pGrLoc)
-            aBrush.PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
-        aSet.Put(aBrush);
-    }
+    AddItemToSet<SvxBrushItem>(aSet, [rFrmFmt]() { return rFrmFmt.makeBackgroundBrushItem(); }, RES_BACKGROUND, {
+        MID_BACK_COLOR,
+        MID_GRAPHIC_TRANSPARENT,
+        MID_GRAPHIC_POSITION,
+        MID_GRAPHIC_URL,
+        MID_GRAPHIC_FILTER });
 
     bool bPutBreak = true;
     const uno::Any* pPage;
@@ -1942,27 +1943,17 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
         }
     }
-    const uno::Any* pBreak;
-    if(bPutBreak && GetProperty(RES_BREAK, 0, pBreak))
-    {
-        SvxFmtBreakItem aBreak(rFrmFmt.GetBreak());
-        aBreak.PutValue(*pBreak, 0);
-        aSet.Put(aBreak);
-    }
+
+    if(bPutBreak)
+        AddItemToSet<SvxFmtBreakItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetBreak(); }, RES_BREAK, {0});
     const uno::Any* pShadow;
     if(GetProperty(RES_SHADOW, 0, pShadow))
     {
         SvxShadowItem aShd(rFrmFmt.GetShadow());
-        aShd.PutValue(*pShadow, CONVERT_TWIPS);
+        aShd.PutValue(*pShadow, CONVERT_TWIPS); // putting to CONVERT_TWIPS, but getting from 0?
         aSet.Put(aShd);
     }
-    const uno::Any* pKeep;
-    if(GetProperty(RES_KEEP, 0, pKeep))
-    {
-        SvxFmtKeepItem aKeep( rFrmFmt.GetKeep() );
-        aKeep.PutValue(*pKeep, 0);
-        aSet.Put(aKeep);
-    }
+    AddItemToSet<SvxFmtKeepItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetKeep(); }, RES_KEEP, {0});
 
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
@@ -1997,32 +1988,12 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             aSz.SetWidth(MINLAY);
         aSet.Put(aSz);
     }
-    const uno::Any* pL(nullptr);
-    GetProperty(RES_LR_SPACE, MID_L_MARGIN|CONVERT_TWIPS, pL);
-    const uno::Any* pR(nullptr);
-    GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR);
-    if(pL||pR)
-    {
-        SvxLRSpaceItem aLR(rFrmFmt.GetLRSpace());
-        if(pL)
-            aLR.PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
-        if(pR)
-            aLR.PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
-        aSet.Put(aLR);
-    }
-    const uno::Any* pU(nullptr);
-    GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pU);
-    const uno::Any* pLo(nullptr);
-    GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pLo);
-    if(pU||pLo)
-    {
-        SvxULSpaceItem aUL(rFrmFmt.GetULSpace());
-        if(pU)
-            aUL.PutValue(*pU, MID_UP_MARGIN|CONVERT_TWIPS);
-        if(pLo)
-            aUL.PutValue(*pLo, MID_LO_MARGIN|CONVERT_TWIPS);
-        aSet.Put(aUL);
-    }
+    AddItemToSet<SvxLRSpaceItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetLRSpace(); }, RES_LR_SPACE, {
+        MID_L_MARGIN|CONVERT_TWIPS,
+        MID_R_MARGIN|CONVERT_TWIPS });
+    AddItemToSet<SvxULSpaceItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetULSpace(); }, RES_UL_SPACE, {
+        MID_UP_MARGIN|CONVERT_TWIPS,
+        MID_LO_MARGIN|CONVERT_TWIPS });
     const::uno::Any* pSplit(nullptr);
     if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit))
     {
