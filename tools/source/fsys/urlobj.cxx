@@ -226,9 +226,6 @@ using namespace css;
    uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
 
 
-   uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
-
-
    ; RFC 1738
    telnet-url = "TELNET://" login ["/"]
 
