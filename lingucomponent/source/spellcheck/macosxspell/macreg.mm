@@ -38,7 +38,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL MacOSXSpell_component_getFactory(
     void * pRet = NULL;
     pRet = MacSpellChecker_getFactory(
         pImplName,
-        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+        static_cast< XMultiServiceFactory * >( pServiceManager ),
         pRegistryKey );
 
     return pRet;
