@@ -39,6 +39,20 @@ service DataBar
     [property, optional] com::sun::star::util::Color NegativeColor;
 
     [property] sequence<XDataBarEntry> DataBarEntries;
+
+    /**
+      * Mimimum databar length in percent of cell width.
+      *
+      * Allowed values are [0, 100) but smaller than MaximumLength.
+      */
+    [property] double MinimumLength;
+
+    /**
+      * Maximum databar length in percent of cell width.
+      *
+      * Allowed values are (0, 1000) but larger than MinimumLength.
+      */
+    [property] double MaximumLength;
 };
 
 

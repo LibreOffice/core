@@ -149,7 +149,9 @@ enum DataBarProperties
     DataBar_Color,
     AxisColor,
     NegativeColor,
-    DataBarEntries
+    DataBarEntries,
+    MinimumLength,
+    MaximumLength
 };
 
 const SfxItemPropertyMapEntry* getDataBarPropSet()
@@ -164,6 +166,8 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
         {OUString("AxisColor"), AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {OUString("NegativeColor"), NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {OUString("DataBarEntries"), DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
+        {OUString("MinimumLength"), MinimumLength, cppu::UnoType<double>::get(), 0, 0 },
+        {OUString("MaximumLength"), MaximumLength, cppu::UnoType<double>::get(), 0, 0 },
         {OUString(), 0, css::uno::Type(), 0, 0}
     };
     return aDataBarPropertyMap_Impl;
@@ -1265,6 +1269,26 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             }
             else
                 throw lang::IllegalArgumentException();
+        }
+        break;
+        case MinimumLength:
+        {
+            double nLength = 0;
+            if ((aValue >>= nLength) && nLength < 100 && nLength >= 0)
+            {
+                getCoreObject()->GetDataBarData()->mnMinLength = nLength;
+            }
+            else throw lang::IllegalArgumentException();
+        }
+        break;
+        case MaximumLength:
+        {
+            double nLength = 0;
+            if ((aValue >>= nLength) && nLength <= 100 && nLength > 0)
+            {
+                getCoreObject()->GetDataBarData()->mnMaxLength = nLength;
+            }
+            else throw lang::IllegalArgumentException();
         }
         break;
     }
