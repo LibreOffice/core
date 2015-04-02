@@ -1088,24 +1088,16 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     {
         auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
         if(!pEntry)
-        {
-            beans::UnknownPropertyException aEx;
-            aEx.Message = rPropertyName;
-            throw(aEx);
-        }
-        if(pEntry->nWID == FN_UNO_CELL_ROW_SPAN)
-        {
-            sal_Int32 nRowSpan = 0;
-            if(aValue >>= nRowSpan)
-                pBox->setRowSpan(nRowSpan);
-        }
-        else
+            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nWID != FN_UNO_CELL_ROW_SPAN)
         {
             SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
             SwAttrSet aSet(pBoxFmt->GetAttrSet());
             m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
             pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
         }
+        else if(aValue.isExtractableTo(cppu::UnoType<sal_Int32>::get()))
+            pBox->setRowSpan(aValue.get<sal_Int32>());
     }
 }
 
