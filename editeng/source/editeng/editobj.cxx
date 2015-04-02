@@ -970,8 +970,11 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
         itAttr = std::find_if(itAttr, aAttrs.end(), FindByParagraph(nPara));
         if (itAttr == aAttrs.end())
+        {
             // This should never happen. There is a logic error somewhere...
+            assert(false);
             return;
+        }
 
         for (size_t i = 0; i < rC.aAttribs.size(); ++i)
         {
@@ -986,8 +989,11 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             // Find the container whose start position matches.
             itCurAttr = std::find_if(itCurAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
             if (itCurAttr == aAttrs.end())
+            {
                 // This should never happen. There is a logic error somewhere...
+                assert(false);
                 return;
+            }
 
             for (; itCurAttr != aAttrs.end() && itCurAttr->mnParagraph == nPara && itCurAttr->mnEnd <= nEnd; ++itCurAttr)
             {
