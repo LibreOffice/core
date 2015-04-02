@@ -1246,18 +1246,24 @@ OUString SdrView::GetStatusText()
         // A little imperfection:
         // At the end of a line of any multi-line paragraph, we display the
         // position of the next line of the same paragraph, if there is one.
-        sal_uInt16 nParaLine=0;
-        sal_uIntPtr nParaLineAnz=pTextEditOutliner->GetLineCount(aSel.nEndPara);
-        bool bBrk=false;
-        while (!bBrk) {
-            sal_uInt16 nLen=pTextEditOutliner->GetLineLen(aSel.nEndPara,nParaLine);
-            bool bLastLine=(nParaLine==nParaLineAnz-1);
-            if (nCol>nLen || (!bLastLine && nCol==nLen)) {
-                nCol-=nLen;
+        sal_uInt16 nParaLine = 0;
+        sal_uIntPtr nParaLineCount = pTextEditOutliner->GetLineCount(aSel.nEndPara);
+        bool bBrk = false;
+        while (!bBrk)
+        {
+            sal_uInt16 nLen = pTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
+            bool bLastLine = (nParaLine == nParaLineCount - 1);
+            if (nCol>nLen || (!bLastLine && nCol == nLen))
+            {
+                nCol -= nLen;
                 nLin++;
                 nParaLine++;
-            } else bBrk=true;
-            if (nLen==0) bBrk=true; // to be sure
+            }
+            else
+                bBrk = true;
+
+            if (nLen == 0)
+                bBrk = true; // to be sure
         }
 
         aStr = aStr.replaceFirst("%1", OUString::number(nPar + 1));
