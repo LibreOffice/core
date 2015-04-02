@@ -3307,27 +3307,21 @@ sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& 
 TYPEINIT1(SwXCellRange, SwClient);
 
 OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXCellRange");
-}
+    { return OUString("SwXCellRange"); }
 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.CellRange";
-    pArray[1] = "com.sun.star.style.CharacterProperties";
-    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
-    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
-    pArray[4] = "com.sun.star.style.ParagraphProperties";
-    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
-    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
-    return aRet;
+    return {
+        "com.sun.star.text.CellRange",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.style.CharacterPropertiesAsian",
+        "com.sun.star.style.CharacterPropertiesComplex",
+        "com.sun.star.style.ParagraphProperties",
+        "com.sun.star.style.ParagraphPropertiesAsian",
+        "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
 SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
