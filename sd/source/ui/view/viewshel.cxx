@@ -554,12 +554,12 @@ void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)
     {
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
         MouseButtonDown(aClickEvent, 0);
-        MouseEvent aMoveEvent(Point(rPosition.getX() + FuPoor::DRGLOG + 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseEvent aMoveEvent(Point(rPosition.getX(), rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
         MouseMove(aMoveEvent, 0);
     }
     else
     {
-        MouseEvent aMoveEvent(Point(rPosition.getX() - FuPoor::DRGLOG - 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseEvent aMoveEvent(Point(rPosition.getX(), rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
         MouseMove(aMoveEvent, 0);
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
         MouseButtonUp(aClickEvent, 0);
