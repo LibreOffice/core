@@ -1499,8 +1499,7 @@ void ScInterpreter::ScNeg()
                             if ( pMat->IsValueOrEmpty(i,j) )
                                 pResMat->PutDouble( -pMat->GetDouble(i,j), i, j );
                             else
-                                pResMat->PutString(
-                                    mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
+                                pResMat->PutError( errNoValue, i, j);
                         }
                     }
                     PushMatrix( pResMat );
@@ -1553,8 +1552,7 @@ void ScInterpreter::ScNot()
                             if ( pMat->IsValueOrEmpty(i,j) )
                                 pResMat->PutDouble( double(pMat->GetDouble(i,j) == 0.0), i, j );
                             else
-                                pResMat->PutString(
-                                    mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
+                                pResMat->PutError( errNoValue, i, j);
                         }
                     }
                     PushMatrix( pResMat );

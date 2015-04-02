@@ -1284,14 +1284,13 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat = GetNewMat(nC, nR, true);
         if (pResMat)
         {
-            svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
             if (bFlag || !_bSub )
             {
-                pMat->SubAddOp(_bSub, fVal, aString, *pResMat);
+                pMat->SubAddOp(_bSub, fVal, *pResMat);
             }
             else
             {
-                pMat->SubAddOp(false, -fVal, aString, *pResMat);
+                pMat->SubAddOp(false, -fVal, *pResMat);
             }
             PushMatrix(pResMat);
         }
@@ -1475,7 +1474,7 @@ void ScInterpreter::ScMul()
                 if (pMat->IsValue(i))
                     pResMat->PutDouble(pMat->GetDouble(i)*fVal, i);
                 else
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                    pResMat->PutError( errNoValue, i);
             PushMatrix(pResMat);
         }
         else
@@ -1554,14 +1553,14 @@ void ScInterpreter::ScDiv()
                     if (pMat->IsValue(i))
                         pResMat->PutDouble( div( fVal, pMat->GetDouble(i)), i);
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                        pResMat->PutError( errNoValue, i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble( div( pMat->GetDouble(i), fVal), i);
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                        pResMat->PutError( errNoValue, i);
             }
             PushMatrix(pResMat);
         }
@@ -1633,14 +1632,14 @@ void ScInterpreter::ScPow()
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                        pResMat->PutError( errNoValue, i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                        pResMat->PutError( errNoValue, i);
             }
             PushMatrix(pResMat);
         }
