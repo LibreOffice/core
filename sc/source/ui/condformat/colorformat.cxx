@@ -77,6 +77,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     get( mpLbAxisCol, "axis_colour" );
     get( mpEdMin, "min_value" );
     get( mpEdMax, "max_value" );
+    get( mpLenMin, "min_length" );
+    get( mpLenMax, "max_length" );
 
     maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
 
@@ -103,9 +105,12 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     ::SetType(rData.mpUpperLimit.get(), *mpLbTypeMax);
     SetValue(rData.mpLowerLimit.get(), *mpEdMin);
     SetValue(rData.mpUpperLimit.get(), *mpEdMax);
+    mpLenMin->SetText(OUString::number(rData.mnMinLength));
+    mpLenMax->SetText(OUString::number(rData.mnMaxLength));
     mpLbAxisCol->SelectEntry(rData.maAxisColor);
 
     TypeSelectHdl(NULL);
+    PosSelectHdl(NULL);
 }
 
 void ScDataBarSettingsDlg::Init()
@@ -150,6 +155,7 @@ void ScDataBarSettingsDlg::Init()
 
     mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
     mpLbTypeMax->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mpLbAxisPos->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, PosSelectHdl ) );
 
 }
 
@@ -171,6 +177,18 @@ void GetAxesPosition(ScDataBarFormatData* pData, const ListBox* rLbox)
     }
 }
 
+void SetBarLength(ScDataBarFormatData* pData, OUString minStr, OUString maxStr, SvNumberFormatter* mpNumberFormatter)
+{
+    double nMinValue = 0;
+    sal_uInt32 nIndex = 0;
+    (void)mpNumberFormatter->IsNumberFormat(minStr, nIndex, nMinValue);
+    nIndex = 0;
+    double nMaxValue = 0;
+    (void)mpNumberFormatter->IsNumberFormat(maxStr, nIndex, nMaxValue);
+    pData->mnMinLength = nMinValue;
+    pData->mnMaxLength = nMaxValue;
+}
+
 }
 
 ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
@@ -186,6 +204,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     ::GetType(*mpLbTypeMin, *mpEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
     ::GetType(*mpLbTypeMax, *mpEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
     GetAxesPosition(pData, mpLbAxisPos);
+    SetBarLength(pData, mpLenMin->GetText(), mpLenMax->GetText(), mpNumberFormatter);
 
     return pData;
 }
@@ -200,7 +219,19 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     sal_Int32 nSelectMax = mpLbTypeMax->GetSelectEntryPos();
     if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
-
+    if(!bWarn) // databar length checks
+    {
+        OUString aMinString = mpLenMin->GetText();
+        OUString aMaxString = mpLenMax->GetText();
+        double nMinValue = 0;
+        sal_uInt32 nIndex = 0;
+        (void)mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
+        nIndex = 0;
+        double nMaxValue = 0;
+        (void)mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMaxValue);
+        if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue || nMaxValue > 100 || nMinValue < 0)
+            bWarn = true;
+    }
     if(!bWarn && mpLbTypeMin->GetSelectEntryPos() == mpLbTypeMax->GetSelectEntryPos())
     {
 
@@ -266,4 +297,26 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     return 0;
 }
 
+IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl )
+{
+    sal_Int32 axisPos = mpLbAxisPos->GetSelectEntryPos();
+    if(axisPos != 2) // disable if axis vertical position is anything other than none
+    {
+        mpLenMin->Disable();
+        mpLenMax->Disable();
+    }
+    else
+    {
+        mpLenMin->Enable();
+        mpLenMax->Enable();
+        if(mpLenMin->GetText().isEmpty())
+        {
+            mpLenMin->SetText(OUString::number(0));
+            mpLenMax->SetText(OUString::number(100));
+        }
+    }
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
