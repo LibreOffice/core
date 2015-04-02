@@ -1306,7 +1306,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
            std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt());
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable( pFmt );
     SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
     if(pLn)
@@ -1388,7 +1388,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt());
+    SwFrmFmt* pFmt = lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable( pFmt );
     SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
     if(pLn)
