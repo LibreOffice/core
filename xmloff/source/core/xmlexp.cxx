@@ -428,7 +428,7 @@ void SvXMLExport::_InitCtor()
 // Shapes in Writer cannot be named via context menu (#i51726#)
 void SvXMLExport::_DetermineModelType()
 {
-    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
+    meModelType = SvtModuleOptions::EFactory::UNKNOWN_FACTORY;
 
     if ( mxModel.is() )
     {
@@ -2397,7 +2397,7 @@ void SvXMLExport::DisposingModel()
 {
     mxModel.clear();
     // Shapes in Writer cannot be named via context menu (#i51726#)
-    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
+    meModelType = SvtModuleOptions::EFactory::UNKNOWN_FACTORY;
     mxEventListener.clear();
 }
 

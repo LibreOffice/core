@@ -2948,7 +2948,7 @@ void Frame::implts_setIconOnWindow()
             if( xModel.is() )
             {
                 SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(xModel);
-                if (eFactory != SvtModuleOptions::E_UNKNOWN_FACTORY)
+                if (eFactory != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
                     nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
             }
         }

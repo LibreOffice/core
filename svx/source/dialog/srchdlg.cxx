@@ -630,7 +630,7 @@ namespace
 {
     SvtModuleOptions::EFactory getModule(SfxBindings& rBindings)
     {
-        SvtModuleOptions::EFactory eFactory(SvtModuleOptions::E_UNKNOWN_FACTORY);
+        SvtModuleOptions::EFactory eFactory(SvtModuleOptions::EFactory::UNKNOWN_FACTORY);
         try
         {
             const uno::Reference< frame::XFrame > xFrame =
@@ -655,12 +655,12 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
     SvtCJKOptions aCJKOptions;
     SvtCTLOptions aCTLOptions;
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
-    bool bDrawApp = eFactory == SvtModuleOptions::E_DRAW;
+    bool bDrawApp = eFactory == SvtModuleOptions::EFactory::DRAW;
     bool bWriterApp =
-        eFactory == SvtModuleOptions::E_WRITER ||
-        eFactory == SvtModuleOptions::E_WRITERWEB ||
-        eFactory == SvtModuleOptions::E_WRITERGLOBAL;
-    bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
+        eFactory == SvtModuleOptions::EFactory::WRITER ||
+        eFactory == SvtModuleOptions::EFactory::WRITERWEB ||
+        eFactory == SvtModuleOptions::EFactory::WRITERGLOBAL;
+    bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
     m_pLayoutBtn->Show(!bDrawApp);
     m_pNotesBtn->Show(bWriterApp);
@@ -1803,10 +1803,10 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     {
         SvtModuleOptions::EFactory eFactory = getModule(rBindings);
         bool bWriterApp =
-            eFactory == SvtModuleOptions::E_WRITER ||
-            eFactory == SvtModuleOptions::E_WRITERWEB ||
-            eFactory == SvtModuleOptions::E_WRITERGLOBAL;
-        bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
+            eFactory == SvtModuleOptions::EFactory::WRITER ||
+            eFactory == SvtModuleOptions::EFactory::WRITERWEB ||
+            eFactory == SvtModuleOptions::EFactory::WRITERGLOBAL;
+        bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
         if (bWriterApp)
             m_pLayoutBtn->SetText(aLayoutWriterStr);
@@ -1931,10 +1931,10 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 {
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bWriterApp =
-        eFactory == SvtModuleOptions::E_WRITER ||
-        eFactory == SvtModuleOptions::E_WRITERWEB ||
-        eFactory == SvtModuleOptions::E_WRITERGLOBAL;
-    bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
+        eFactory == SvtModuleOptions::EFactory::WRITER ||
+        eFactory == SvtModuleOptions::EFactory::WRITERWEB ||
+        eFactory == SvtModuleOptions::EFactory::WRITERGLOBAL;
+    bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
     if (bCalcApp)
         m_pLayoutBtn->SetText( aLayoutCalcStr );

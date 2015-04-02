@@ -204,12 +204,12 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
     // Interpret given name as Service- and ShortName!
     SvtModuleOptions aOpt;
     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByServiceName(rName);
-    if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFactory == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         eFactory = SvtModuleOptions::ClassifyFactoryByShortName(rName);
 
     // could not classify factory by its service nor by its short name.
     // Must be an unknown factory! => return NULL
-    if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFactory == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         return NULL;
 
     // For the following code we need some additional information.

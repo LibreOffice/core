@@ -301,9 +301,9 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 void SfxObjectFactory::SetStandardTemplate( const OUString& rServiceName, const OUString& rTemplate )
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
-    if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFac == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
-    if (eFac != SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFac != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
     {
         SetSystemTemplate( rServiceName, rTemplate );
         SvtModuleOptions().SetFactoryStandardTemplate(eFac, rTemplate);
@@ -313,11 +313,11 @@ void SfxObjectFactory::SetStandardTemplate( const OUString& rServiceName, const 
 OUString SfxObjectFactory::GetStandardTemplate( const OUString& rServiceName )
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
-    if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFac == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
 
     OUString sTemplate;
-    if (eFac != SvtModuleOptions::E_UNKNOWN_FACTORY)
+    if (eFac != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         sTemplate = SvtModuleOptions().GetFactoryStandardTemplate(eFac);
 
     return sTemplate;

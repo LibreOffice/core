@@ -1716,7 +1716,7 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
     {
         if ( ! SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).isEmpty() )
         {
-            SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+            SvtModuleOptions::EFactory eFac = SvtModuleOptions::EFactory::WRITER;
             SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );
             aList.push_back(aModOpt.GetFactoryEmptyDocumentURL(eFac));
         }

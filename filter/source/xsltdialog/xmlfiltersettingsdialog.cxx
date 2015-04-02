@@ -29,6 +29,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
+#include <o3tl/enumrange.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "svtools/treelistentry.hxx"
@@ -187,16 +188,14 @@ void XMLFilterSettingsDialog::updateStates()
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pSelectedEntry->GetUserData());
         bIsReadonly = pInfo->mbReadonly;
 
-        sal_Int32 nFact = SvtModuleOptions::E_WRITER;
-        while(nFact <= SvtModuleOptions::E_BASIC)
+        for( auto nFact : o3tl::enumrange<SvtModuleOptions::EFactory>())
         {
-            OUString sDefault = maModuleOpt.GetFactoryDefaultFilter((SvtModuleOptions::EFactory)nFact);
+            OUString sDefault = maModuleOpt.GetFactoryDefaultFilter(nFact);
             if( sDefault == pInfo->maFilterName )
             {
                 bIsDefault = true;
                 break;
             }
-            ++nFact;
         }
     }
     m_pPBEdit->Enable( bHasSelection && !bMultiSelection && !bIsReadonly);

@@ -421,7 +421,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     {
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext) );
 
-        OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
+        OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::DATABASE);
         bCreateNew = sFactoryName.match(_rURL);
 
         Reference< XDocumentDataSource > xDocumentDataSource;

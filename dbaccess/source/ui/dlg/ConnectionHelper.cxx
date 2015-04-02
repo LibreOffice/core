@@ -220,7 +220,7 @@ namespace dbaui
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     0,
-                    aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
+                    aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::CALC)
                     ,SfxFilterFlags::IMPORT);
                 askForFileName(aFileDlg);
             }

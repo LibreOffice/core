@@ -852,23 +852,23 @@ void OfficeIPCThread::execute()
                     if ( aCmdLineArgs->HasModuleParam() && !bDocRequestSent )
                     {
                         SvtModuleOptions aOpt;
-                        SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
+                        SvtModuleOptions::EFactory eFactory = SvtModuleOptions::EFactory::WRITER;
                         if ( aCmdLineArgs->IsWriter() )
-                            eFactory = SvtModuleOptions::E_WRITER;
+                            eFactory = SvtModuleOptions::EFactory::WRITER;
                         else if ( aCmdLineArgs->IsCalc() )
-                            eFactory = SvtModuleOptions::E_CALC;
+                            eFactory = SvtModuleOptions::EFactory::CALC;
                         else if ( aCmdLineArgs->IsDraw() )
-                            eFactory = SvtModuleOptions::E_DRAW;
+                            eFactory = SvtModuleOptions::EFactory::DRAW;
                         else if ( aCmdLineArgs->IsImpress() )
-                            eFactory = SvtModuleOptions::E_IMPRESS;
+                            eFactory = SvtModuleOptions::EFactory::IMPRESS;
                         else if ( aCmdLineArgs->IsBase() )
-                            eFactory = SvtModuleOptions::E_DATABASE;
+                            eFactory = SvtModuleOptions::EFactory::DATABASE;
                         else if ( aCmdLineArgs->IsMath() )
-                            eFactory = SvtModuleOptions::E_MATH;
+                            eFactory = SvtModuleOptions::EFactory::MATH;
                         else if ( aCmdLineArgs->IsGlobal() )
-                            eFactory = SvtModuleOptions::E_WRITERGLOBAL;
+                            eFactory = SvtModuleOptions::EFactory::WRITERGLOBAL;
                         else if ( aCmdLineArgs->IsWeb() )
-                            eFactory = SvtModuleOptions::E_WRITERWEB;
+                            eFactory = SvtModuleOptions::EFactory::WRITERWEB;
 
                         if ( !pRequest->aOpenList.empty() )
                             pRequest->aModule = aOpt.GetFactoryName( eFactory );
@@ -928,13 +928,13 @@ void OfficeIPCThread::execute()
 
                         // Support command line parameters to start a module (as preselection)
                         if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
+                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::WRITER );
                         else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
+                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::CALC );
                         else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
+                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::IMPRESS );
                         else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
                     }
 
                     ImplPostProcessDocumentsEvent( pRequest );

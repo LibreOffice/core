@@ -67,8 +67,8 @@ public:
     { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
 
     size_type size() const { return max_index + 1; }
-    iterator  begin()      { return iterator(this, 0); }
-    iterator  end()        { return iterator(this, size()); }
+    iterator  begin()      { return iterator(*this, 0); }
+    iterator  end()        { return iterator(*this, size()); }
 
 //private:
     V detail_values[max_index + 1];
@@ -89,6 +89,7 @@ public:
     value_type &operator*()  { return m_buf[static_cast<key_type>(m_pos)]; }
     value_type *operator->() { return &(operator*()); }
     self_type  &operator++() { ++m_pos; return *this; }
+    bool        operator!=(const self_type& other) { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
 };
 
 }; // namespace o3tl

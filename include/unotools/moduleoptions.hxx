@@ -68,21 +68,21 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
             If you change these enum ... don't forget to change reading/writing and order of configuration values too!
             See "SvtModuleOptions_Impl::impl_GetSetNames()" and his ctor for further information.
          */
-        enum EFactory
+        enum class EFactory
         {
-            E_UNKNOWN_FACTORY = -1,
-            E_WRITER        =  0,
-            E_WRITERWEB     =  1,
-            E_WRITERGLOBAL  =  2,
-            E_CALC          =  3,
-            E_DRAW          =  4,
-            E_IMPRESS       =  5,
-            E_MATH          =  6,
-            E_CHART         =  7,
-            E_STARTMODULE   =  8,
-            E_DATABASE      =  9,
-            E_BASIC         = 10
-
+            UNKNOWN_FACTORY = -1,
+            WRITER        =  0,
+            WRITERWEB     =  1,
+            WRITERGLOBAL  =  2,
+            CALC          =  3,
+            DRAW          =  4,
+            IMPRESS       =  5,
+            MATH          =  6,
+            CHART         =  7,
+            STARTMODULE   =  8,
+            DATABASE      =  9,
+            BASIC         = 10,
+            LAST = BASIC
         };
 
     public:

@@ -580,7 +580,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
     // does not support document events
-    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
+    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) ) try
     {
         presentation::ClickAction eAction = presentation::ClickAction_NONE;
         xSet->getPropertyValue("OnClick") >>= eAction;
@@ -649,9 +649,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
              any names for shapes, except for group shapes.
     */
     {
-        if ( ( GetExport().GetModelType() != SvtModuleOptions::E_WRITER &&
-               GetExport().GetModelType() != SvtModuleOptions::E_WRITERWEB &&
-               GetExport().GetModelType() != SvtModuleOptions::E_WRITERGLOBAL ) ||
+        if ( ( GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITER &&
+               GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERWEB &&
+               GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERGLOBAL ) ||
              !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
              aShapeInfo.meShapeType == XmlShapeTypeDrawGroupShape ||
              ( aShapeInfo.meShapeType == XmlShapeTypeDrawCustomShape &&
