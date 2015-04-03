@@ -783,7 +783,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if ( *pStt < rAnnotationEndPos && rAnnotationEndPos <= *pEnd )
                         {
                             bSavePos = true;
-                            bSaveOtherPos = true;
+                            bSaveOtherPos = pBkmk->IsExpanded(); //tdf#90138, only save the other pos if there is one
                         }
                     }
                 }
