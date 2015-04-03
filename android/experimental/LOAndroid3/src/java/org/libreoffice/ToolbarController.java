@@ -28,7 +28,7 @@ public class ToolbarController {
      * Change the toolbar to edit mode.
      */
     void switchToEditMode() {
-        // Insure the change is done on UI thread
+        // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -44,7 +44,7 @@ public class ToolbarController {
      * Change the toolbar to view mode.
      */
     void switchToViewMode() {
-        // Insure the change is done on UI thread
+        // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {

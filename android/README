@@ -77,7 +77,7 @@ Document view classes
 - GeckoLayerClient (org.mozilla.gecko.gfx.GeckoLayerClient) is the middle man of the
   application, which connects all the bits together. It is the document view layer
   holder so the any management (including tiled rendering) usually go through this
-  class. It listenes to draw requests and viewport changes from PanZoomController
+  class. It listens to draw requests and viewport changes from PanZoomController
   (see "Touch events").
 
 Touch events, scrolling and zooming
@@ -128,7 +128,7 @@ For editing there are 2 coarse tasks that the LibreOffice app must do:
 
 In most cases when an input event happens and is send to the LO core, then a message from
 LO core follows. For example: when the user writes to the keyboard, key event is sent and
-a invalidation requst from LO core follows. When user touches an image, a mouse event is
+a invalidation request from LO core follows. When user touches an image, a mouse event is
 sent, and a "new graphic selection" message from LO core follows.
 
 All keyboard and touch events are send to LOKitThread as LOEvents. In LOKitThread they are
@@ -220,7 +220,7 @@ ERROR: Could not extract package's data directory. Are you sure that
         (gdb) python sys.path.insert(0, "/master/solenv/gdb")
         (gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
 
-* Debuggint the Java part
+* Debugging the Java part
 
 At the moment the code is not organized in a way that would make Eclipse or
 Android Studio happy as-is, so the quickest way is to use the jdb command-line
