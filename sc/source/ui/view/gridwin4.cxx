@@ -1554,23 +1554,35 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
     SCCOL nPosX = pViewData->GetPosX( eHWhich );
     SCROW nPosY = pViewData->GetPosY( eVWhich );
+    // is the selection visible at all?
     if (nTestX2 < nPosX || nTestY2 < nPosY)
-        return;                                         // unsichtbar
+        return;
     SCCOL nRealX1 = nX1;
     if (nX1 < nPosX)
         nX1 = nPosX;
     if (nY1 < nPosY)
         nY1 = nPosY;
 
-    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-    if (nXRight > MAXCOL) nXRight = MAXCOL;
-    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-    if (nYBottom > MAXROW) nYBottom = MAXROW;
+    if (!pDoc->GetDrawLayer()->isTiledRendering())
+    {
+        // limit the selection to only what is visible on the screen
+        SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+        if (nXRight > MAXCOL)
+            nXRight = MAXCOL;
 
-    if (nX1 > nXRight || nY1 > nYBottom)
-        return;                                         // unsichtbar
-    if (nX2 > nXRight) nX2 = nXRight;
-    if (nY2 > nYBottom) nY2 = nYBottom;
+        SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+        if (nYBottom > MAXROW)
+            nYBottom = MAXROW;
+
+        // is the selection visible at all?
+        if (nX1 > nXRight || nY1 > nYBottom)
+            return;
+
+        if (nX2 > nXRight)
+            nX2 = nXRight;
+        if (nY2 > nYBottom)
+            nY2 = nYBottom;
+    }
 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();

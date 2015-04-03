@@ -1513,13 +1513,14 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     sal_uInt16 nTSize;
+    bool bIsTiledRendering = GetDocument()->GetDrawLayer()->isTiledRendering();
 
     SCCOL   nPosX = GetPosX(eWhichX);
     SCCOL   nX;
 
     long nScrPosX=0;
     if (nWhereX >= nPosX)
-        for (nX=nPosX; nX<nWhereX && (bAllowNeg || nScrPosX<=aScrSize.Width()); nX++)
+        for (nX = nPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
         {
             if ( nX > MAXCOL )
                 nScrPosX = 65535;
@@ -1550,7 +1551,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
     long nScrPosY=0;
     if (nWhereY >= nPosY)
-        for (nY=nPosY; nY<nWhereY && (bAllowNeg || nScrPosY<=aScrSize.Height()); nY++)
+        for (nY = nPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
         {
             if ( nY > MAXROW )
                 nScrPosY = 65535;
@@ -1591,8 +1592,14 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
     }
 
-    if (nScrPosX > 32767) nScrPosX=32767;
-    if (nScrPosY > 32767) nScrPosY=32767;
+    if (!bIsTiledRendering)
+    {
+        if (nScrPosX > 32767)
+            nScrPosX = 32767;
+        if (nScrPosY > 32767)
+            nScrPosY = 32767;
+    }
+
     return Point( nScrPosX, nScrPosY );
 }
 
