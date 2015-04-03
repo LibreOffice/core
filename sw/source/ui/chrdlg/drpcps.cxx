@@ -270,8 +270,8 @@ void SwDropCapsPict::UpdatePaintSettings( void )
         if (!mpPage->m_pTemplateBox->GetSelectEntryPos())
         {
             // query the Font at paragraph's beginning
-            mpPage->rSh.SttCrsrMove();
             mpPage->rSh.Push();
+            mpPage->rSh.SttCrsrMove();
             mpPage->rSh.ClearMark();
             SwWhichPara pSwuifnParaCurr = GetfnParaCurr();
             SwPosPara pSwuifnParaStart = GetfnParaStart();
@@ -285,8 +285,8 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             // CTL
             GetFontSettings( *mpPage, maCTLFont, RES_CHRATR_CTL_FONT );
 
-            mpPage->rSh.Pop(false);
             mpPage->rSh.EndCrsrMove();
+            mpPage->rSh.Pop(false);
         }
         else
         {
