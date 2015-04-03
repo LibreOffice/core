@@ -96,9 +96,8 @@ public:
     ScDocShell* getDocShell();
 
     // XConditionalFormat
-    virtual void SAL_CALL addEntry(const uno::Reference<sheet::XConditionEntry>& xEntry)
-                                throw(::com::sun::star::uno::RuntimeException,
-                                      std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL createEntry(const sal_Int32 nType, const sal_Int32 nPos)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeByIndex(const sal_Int32 nIndex)
                                 throw(::com::sun::star::uno::RuntimeException,
