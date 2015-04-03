@@ -6,6 +6,47 @@ this is where a lot of wht work would happen to move to the canvas. (what does t
 svdraw
 transparent gradient stuff.
 
+== SdrObject ==
+
+The shapes you can see in LibreOffice (like rectangle, etc.) are SdrObjects.
+They are declared as a hierarchy:
+
+SdrObject <- SdrAttrObj <- E3dObject <- E3dCompoundObject <- E3dCubeObj
+    ^ ^ ^             ^            ^              | | ^ ^
+    | | |             |            |              | | | +--- E3dExtrudeObj
+    | | |             |            |              | | +----- E3dLatheObj
+    | | |             |            |              | +------- E3dPolygonObj
+    | | |             |            |              +--------- E3dSphereObj
+    | | |             |            +--- E3dScene...
+    | | |             |
+    | | |             +--- SdrTextObj <- SdrObjCustomShape...
+    | | |                   ^ ^ ^ ^ ^
+    | | |                   | | | | +--- SdrEdgeObj...
+    | | |                   | | | +----- SdrMeasureObj...
+    | | |                   | | +------- SdrPathObj...
+    | | |                   | +--------- SdrRectObj...
+    | | |                   +----------- SdrTableObj...
+    | | +--- SdrObjGroup...
+    | + ---- SdrPageObj...
+    +------- SdrVirtObj...
+
+The above is incomplete of course.
+
+Associated are the SdrPaintView's - they have quite a deep chain of
+inheritance, where each new class adds a bit of functionality:
+
+SdrPaintView <- SdrSnapView <- SdrMarkView <- SdrEditView <- SdrPolyEditView
+                                                                   ^
+  +----------------------------------------------------------------+
+  |
+  SdrGlueEditView <- SdrObjEditView <- SdrExchangeView <- SdrDragView
+                                                                   ^
+  +----------------------------------------------------------------+
+  |
+  SdrCreateView <- SdrView
+
+From SdrView on, it is not flat, but a real hierarchy again.
+
 == Drawing Layer / SdrObject(s) ==
 
 See drawinglayer/README for general information about drawinglayer.
