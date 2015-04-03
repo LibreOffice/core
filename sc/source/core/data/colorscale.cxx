@@ -1359,7 +1359,7 @@ void ScIconSetFormat::EnsureSize()
     {
         if (aIconSetMap[i].eType == eType)
         {
-            size_t nElements = aIconSetMap[i].nElements;
+            // size_t nElements = aIconSetMap[i].nElements;
             // TODO: implement
             break;
         }
