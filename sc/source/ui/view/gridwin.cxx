@@ -1837,6 +1837,17 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         //  TestMouse schon oben passiert
     }
 
+    // In the tiled rendering case, select shapes
+    if (rMEvt.IsLeft() && pViewData->GetDocument()->GetDrawLayer()->isTiledRendering())
+    {
+        if ( !bCrossPointer && DrawMouseButtonDown(rMEvt) )
+        {
+            return;
+        }
+
+        pViewData->GetViewShell()->SetDrawShell( false );
+    }
+
     Point aPos = rMEvt.GetPosPixel();
     SCsCOL nPosX;
     SCsROW nPosY;
@@ -1916,6 +1927,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
         else
             nMouseStatus = SC_GM_TABDOWN;
+
+        // In the tiled rendering case, fake mouse status to double click
+        if ( nMouseStatus == SC_GM_TABDOWN && pDoc->GetDrawLayer()->isTiledRendering() )
+            nMouseStatus = SC_GM_DBLDOWN;
     }
 
             //      Links in Edit-Zellen
@@ -2200,9 +2215,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
-            //      double click (only left button)
-
-    bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
+    // In the tiled rendering case, change double click to single click (only left button)
+    bool bDouble = ( pDoc->GetDrawLayer()->isTiledRendering() && rMEvt.IsLeft() ) || ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
     if ( bDouble && !bRefMode && nMouseStatus == SC_GM_DBLDOWN && !pScMod->IsRefDialogOpen() )
     {
         //  data pilot table
@@ -2751,7 +2765,10 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
         MouseEvent aUpEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(),
                             rMEvt.GetMode(), nButtonDown, rMEvt.GetModifier() );
-        MouseButtonUp( aUpEvt );
+
+        // In the tiled rendering case, do not spawn fake mouse up
+        if (!pViewData->GetDocument()->GetDrawLayer()->isTiledRendering())
+            MouseButtonUp( aUpEvt );
     }
     else
         MouseMove( rMEvt );
