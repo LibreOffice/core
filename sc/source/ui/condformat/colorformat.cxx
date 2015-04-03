@@ -185,7 +185,7 @@ void GetAxesPosition(ScDataBarFormatData* pData, const ListBox* rLbox)
     }
 }
 
-void SetBarLength(ScDataBarFormatData* pData, OUString minStr, OUString maxStr, SvNumberFormatter* mpNumberFormatter)
+void SetBarLength(ScDataBarFormatData* pData, const OUString& minStr, const OUString& maxStr, SvNumberFormatter* mpNumberFormatter)
 {
     double nMinValue = 0;
     sal_uInt32 nIndex = 0;
