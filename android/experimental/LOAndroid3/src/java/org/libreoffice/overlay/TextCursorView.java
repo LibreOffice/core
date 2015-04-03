@@ -336,6 +336,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     public void positionHandle(SelectionHandle.HandleType type, RectF position) {
         SelectionHandle handle = getHandleForType(type);
+        if (RectUtils.fuzzyEquals(handle.mDocumentPosition, position)) {
+            return;
+        }
+
         RectUtils.assign(handle.mDocumentPosition, position);
 
         ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
@@ -345,11 +349,13 @@ public class TextCursorView extends View implements View.OnTouchListener {
     public void hideHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
         handle.setVisible(false);
+        invalidate();
     }
 
     public void showHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
         handle.setVisible(true);
+        invalidate();
     }
 
     private SelectionHandle getHandleForType(SelectionHandle.HandleType type) {
