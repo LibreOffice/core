@@ -124,10 +124,12 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             if ( pList != NULL )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent, m_bIsDropDownBox);
+#if defined WNT
                 if (m_bIsDropDownBox)
                 {
                     NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
                 }
+#endif
             }
             break;
         }
@@ -179,8 +181,10 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
+#if defined WNT
                     if (m_bIsDropDownBox || ( !m_bIsDropDownBox && m_aBoxType==COMBOBOX))
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
+#endif
                 }
             }
             break;
@@ -545,7 +549,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
         ListBox* pListBox = static_cast< ListBox* >( GetWindow() );
         if (pListBox != NULL && pListBox->GetEntryCount() > 0)
         {
-                nSelectedEntryCount = pListBox->GetSelectEntryCount();
+            nSelectedEntryCount = pListBox->GetSelectEntryCount();
             if ( nSelectedEntryCount == 0)
                 rStateSet.AddState(AccessibleStateType::INDETERMINATE);
         }
