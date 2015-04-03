@@ -195,7 +195,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         return UNDO_EMPTY;
     }
 
-    SwUndoId const eUndoId( (0 == i_eUndoId) ? UNDO_START : i_eUndoId );
+    SwUndoId const eUndoId( (i_eUndoId == UNDO_EMPTY) ? UNDO_START : i_eUndoId );
 
     OSL_ASSERT(UNDO_END != eUndoId);
     OUString comment( (UNDO_START == eUndoId)
@@ -220,7 +220,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
         return UNDO_EMPTY;
     }
 
-    SwUndoId const eUndoId( ((0 == i_eUndoId) || (UNDO_START == i_eUndoId))
+    SwUndoId const eUndoId( ((i_eUndoId == UNDO_EMPTY) || (UNDO_START == i_eUndoId))
             ? UNDO_END : i_eUndoId );
     OSL_ENSURE(!((UNDO_END == eUndoId) && pRewriter),
                 "EndUndo(): no Undo ID, but rewriter given?");
