@@ -147,6 +147,7 @@ public:
     */
     void SetUseDropScroll (bool bUseDropScroll);
     void DropScroll (const Point& rMousePos);
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 protected:
     ::sd::Window* mpShareWin;
     Point maWinPos;
@@ -171,7 +172,6 @@ protected:
     virtual void Resize() SAL_OVERRIDE;
     virtual void PrePaint() SAL_OVERRIDE;
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;

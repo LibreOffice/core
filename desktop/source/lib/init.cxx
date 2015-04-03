@@ -688,23 +688,16 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     pDoc->registerCallback(pCallback, pData);
 }
 
-static void doc_postKeyEvent(LibreOfficeKitDocument* /*pThis*/, int nType, int nCharCode, int nKeyCode)
+static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
-#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-    if (SalFrame *pFocus = GetSvpFocusFrameForLibreOfficeKit())
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
     {
-        KeyEvent aEvent(nCharCode, nKeyCode, 0);
-        switch (nType)
-        {
-        case LOK_KEYEVENT_KEYINPUT:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, GetSalFrameWindowForLibreOfficeKit(pFocus), &aEvent);
-            break;
-        case LOK_KEYEVENT_KEYUP:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, GetSalFrameWindowForLibreOfficeKit(pFocus), &aEvent);
-            break;
-        }
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
     }
-#endif
+
+    pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pCommand)

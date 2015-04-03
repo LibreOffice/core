@@ -101,6 +101,13 @@ public:
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) = 0;
 
     /**
+     * Posts a keyboard event on the document.
+     *
+     * @see lok::Document::postKeyEvent().
+     */
+    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) = 0;
+
+    /**
      * Posts a mouse event on the document.
      *
      * @see lok::Document::postMouseEvent().

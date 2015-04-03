@@ -189,7 +189,6 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
     virtual void    PrePaint() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
 
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
@@ -218,6 +217,7 @@ protected:
     bool    IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly, bool& bPageAnchored ) const;
 public:
 
+    virtual void    KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
     bool            IsDrawSelMode();

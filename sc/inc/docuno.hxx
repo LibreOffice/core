@@ -394,6 +394,9 @@ public:
     /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
 
+    /// @see vcl::ITiledRenderable::postKeyEvent().
+    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) SAL_OVERRIDE;
+
     /// @see vcl::ITiledRenderable::postMouseEvent().
     virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
 

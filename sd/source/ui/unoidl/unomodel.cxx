@@ -2378,6 +2378,34 @@ void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void
     mpDoc->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
+void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    sd::Window* pWindow = pViewShell->GetActiveWindow();
+    if (!pWindow)
+        return;
+
+    KeyEvent aEvent(nCharCode, nKeyCode, 0);
+
+    switch (nType)
+    {
+    case LOK_KEYEVENT_KEYINPUT:
+        pWindow->KeyInput(aEvent);
+        break;
+    case LOK_KEYEVENT_KEYUP:
+        pWindow->KeyUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
 {
     SolarMutexGuard aGuard;

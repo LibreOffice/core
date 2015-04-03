@@ -3183,6 +3183,27 @@ void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* p
     pViewShell->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
+void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+{
+    SolarMutexGuard aGuard;
+
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aEvent(nCharCode, nKeyCode, 0);
+
+    switch (nType)
+    {
+    case LOK_KEYEVENT_KEYINPUT:
+        rEditWin.KeyInput(aEvent);
+        break;
+    case LOK_KEYEVENT_KEYUP:
+        rEditWin.KeyUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
 {
     SolarMutexGuard aGuard;

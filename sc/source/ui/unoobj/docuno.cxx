@@ -528,6 +528,34 @@ void ScModelObj::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
     pDocShell->GetDocument().GetDrawLayer()->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
+void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+{
+    SolarMutexGuard aGuard;
+
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    if (!pGridWindow)
+        return;
+
+    KeyEvent aEvent(nCharCode, nKeyCode, 0);
+
+    switch (nType)
+    {
+    case LOK_KEYEVENT_KEYINPUT:
+        pGridWindow->KeyInput(aEvent);
+        break;
+    case LOK_KEYEVENT_KEYUP:
+        pGridWindow->KeyUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
 {
     SolarMutexGuard aGuard;

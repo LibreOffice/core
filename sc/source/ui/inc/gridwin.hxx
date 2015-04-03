@@ -287,7 +287,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 protected:
     virtual void    PrePaint() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 
@@ -304,6 +303,7 @@ public:
     ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow();
 
+    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     // #i70788# flush and get overlay
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
     void flushOverlayManager();
