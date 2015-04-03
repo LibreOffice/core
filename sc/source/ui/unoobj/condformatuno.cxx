@@ -328,16 +328,35 @@ void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     }
 }
 
-sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCellRanges >& /*xRanges*/)
+sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCellRanges >& xRanges)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    /*
-    ScCondFormatObj* pFormatObj = ScCondFormatObj::getImplementation(xCondFormat);
-    ScConditionalFormat* pFormat = pFormatObj->getCoreObject();
-    mpFormatList->InsertNew(pFormat);
-    */
-    return 0;
+    if (!mpDocShell)
+        throw lang::IllegalArgumentException();
+
+    if (!xRanges.is())
+        throw lang::IllegalArgumentException();
+
+    uno::Sequence<table::CellRangeAddress> aRanges =
+        xRanges->getRangeAddresses();
+
+    ScRangeList aCoreRange;
+    for (sal_Int32 i = 0, n = aRanges.getLength(); i < n; ++i)
+    {
+        ScRange aRange;
+        ScUnoConversion::FillScRange(aRange, aRanges[i]);
+        aCoreRange.Join(aRange);
+    }
+
+    if (aCoreRange.empty())
+        throw lang::IllegalArgumentException();
+
+    SCTAB nTab = aCoreRange[0]->aStart.Tab();
+
+    ScConditionalFormat* pNewFormat = new ScConditionalFormat(0, &mpDocShell->GetDocument());
+    pNewFormat->SetRange(aCoreRange);
+    return mpDocShell->GetDocument().AddCondFormat(pNewFormat, nTab);
 }
 
 void ScCondFormatsObj::removeByID(const sal_Int32 nID)
