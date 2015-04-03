@@ -261,20 +261,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="showlocation">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="xalign">0</property>
-        <property name="wrap">True</property>
-        <property name="max_width_chars">56</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="label7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -407,6 +393,17 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
         <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="showlocation">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="editable">False</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
       </packing>
     </child>
     <child>
