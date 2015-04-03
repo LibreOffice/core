@@ -205,7 +205,7 @@ void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& sTextOfSele
 }
 
 
-void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
 {
     uno::Any aOldValue, aNewValue;
 
@@ -261,22 +261,18 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
 
     if (m_aBoxType == COMBOBOX)
     {
-        if (b_IsDropDownList)
+        //VCLXAccessibleDropDownComboBox
+        //when in list is dropped down, xText = NULL
+        if (bHasDropDownList && m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
         {
-            //VCLXAccessibleDropDownComboBox
-            //when in list is dropped down, xText = NULL
-            if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
+            if ( aNewValue.hasValue() || aOldValue.hasValue() )
             {
-                if ( aNewValue.hasValue() || aOldValue.hasValue() )
-                {
-                    NotifyAccessibleEvent(
-                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                        aOldValue,
-                        aNewValue );
+                NotifyAccessibleEvent(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    aOldValue,
+                    aNewValue );
 
-                    NotifyListItem(aNewValue);
-
-                }
+                NotifyListItem(aNewValue);
             }
         }
         else
@@ -287,34 +283,14 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
     }
     else if (m_aBoxType == LISTBOX)
     {
-        if (b_IsDropDownList)
+        if ( aNewValue.hasValue() || aOldValue.hasValue() )
         {
-            //VCLXAccessibleDropdownListBox
-            //when in list is dropped down, xText = NULL
-            if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
-            {
-                if ( aNewValue.hasValue() || aOldValue.hasValue() )
-                {
-                    NotifyAccessibleEvent(
-                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                        aOldValue,
-                        aNewValue );
+            NotifyAccessibleEvent(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    aOldValue,
+                    aNewValue );
 
-                    NotifyListItem(aNewValue);
-                }
-            }
-        }
-        else
-        {
-            if ( aNewValue.hasValue() || aOldValue.hasValue() )
-            {
-                NotifyAccessibleEvent(
-                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                        aOldValue,
-                        aNewValue );
-
-                NotifyListItem(aNewValue);
-            }
+            NotifyListItem(aNewValue);
         }
     }
 }
