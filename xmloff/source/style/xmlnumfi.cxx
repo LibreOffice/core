@@ -114,16 +114,17 @@ struct SvXMLNumberInfo
     sal_Int32   nNumerDigits;
     sal_Int32   nDenomDigits;
     sal_Int32   nFracDenominator;
+    sal_Int32   nMinDecimalDigits;
     bool        bGrouping;
     bool        bDecReplace;
-    bool        bVarDecimals;
     double      fDisplayFactor;
     SvXMLEmbeddedElementArr aEmbeddedElements;
 
     SvXMLNumberInfo()
     {
-        nDecimals = nInteger = nExpDigits = nExpInterval = nNumerDigits = nDenomDigits = nFracDenominator = -1;
-        bGrouping = bDecReplace = bVarDecimals = false;
+        nDecimals = nInteger = nExpDigits = nExpInterval = nNumerDigits = nDenomDigits =
+            nFracDenominator = nMinDecimalDigits = -1;
+        bGrouping = bDecReplace = false;
         fDisplayFactor = 1.0;
     }
 };
@@ -271,6 +272,7 @@ enum SvXMLStyleAttrTokens
 enum SvXMLStyleElemAttrTokens
 {
     XML_TOK_ELEM_ATTR_DECIMAL_PLACES,
+    XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS,
     XML_TOK_ELEM_ATTR_GROUPING,
     XML_TOK_ELEM_ATTR_DISPLAY_FACTOR,
@@ -567,6 +569,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
         {
             //  attributes for an element within a style
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
+            { XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,      XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS   },
             { XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,      XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
             { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
             { XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR,          XML_TOK_ELEM_ATTR_DISPLAY_FACTOR       },
@@ -920,6 +923,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     LanguageTagODF aLanguageTagODF;
     sal_Int32 nAttrVal;
     bool bAttrBool(false);
+    bool bVarDecimals = false;
     sal_uInt16 nAttrEnum;
     double fAttrDouble;
 
@@ -940,6 +944,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nDecimals = std::min<sal_Int32>(nAttrVal, MAX_SECOND_DIGITS);
                 break;
+            case XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nMinDecimalDigits = nAttrVal;
+                break;
             case XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nInteger = nAttrVal;
@@ -956,7 +964,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if ( !sValue.isEmpty() )
                     aNumInfo.bDecReplace = true;    // only a default string is supported
                 else
-                    aNumInfo.bVarDecimals = true;   // empty replacement string: variable decimals
+                    bVarDecimals = true;   // empty replacement string: variable decimals
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
@@ -1002,6 +1010,13 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 sCalendar = sValue;
                 break;
         }
+    }
+    if ( aNumInfo.nMinDecimalDigits == -1)
+    {
+        if ( bVarDecimals )
+            aNumInfo.nMinDecimalDigits = 0;
+        else
+            aNumInfo.nMinDecimalDigits = aNumInfo.nDecimals;
     }
 
     if ( !aLanguageTagODF.isEmpty() )
@@ -1788,7 +1803,9 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     }
 
     sal_uInt16 nGenPrec = nPrec;
-    if ( rInfo.bDecReplace || rInfo.bVarDecimals )
+    if ( rInfo.nMinDecimalDigits >= 0 )
+        nGenPrec = rInfo.nMinDecimalDigits;
+    if ( rInfo.bDecReplace )
         nGenPrec = 0;               // generate format without decimals...
 
     bool bGrouping = rInfo.bGrouping;
@@ -1881,13 +1898,14 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     aFormatCode.append( aNumStr.makeStringAndClear() );
 
-    if ( ( rInfo.bDecReplace || rInfo.bVarDecimals ) && nPrec )     // add decimal replacement (dashes)
+    if ( ( rInfo.bDecReplace || rInfo.nMinDecimalDigits < rInfo.nDecimals ) && nPrec )     // add decimal replacement (dashes)
     {
         //  add dashes for explicit decimal replacement, # for variable decimals
         sal_Unicode cAdd = rInfo.bDecReplace ? '-' : '#';
 
-        aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
-        for ( sal_uInt16 i=0; i<nPrec; i++)
+        if ( rInfo.nMinDecimalDigits == 0 )
+            aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+        for ( sal_uInt16 i=rInfo.nMinDecimalDigits; i<nPrec; i++)
             aFormatCode.append( cAdd );
     }
 

@@ -3247,6 +3247,7 @@ namespace xmloff { namespace token {
         XML_EXTERNALDATA,
 
         XML_EXPONENT_INTERVAL,
+        XML_MIN_DECIMAL_DIGITS,
 
         XML_TOKEN_END
     };
