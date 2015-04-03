@@ -52,13 +52,13 @@ namespace oox { namespace drawingml { class DrawingML; } }
 
 struct FieldInfos
 {
-    const SwField*    pField;
+    std::shared_ptr<const SwField> pField;
     const ::sw::mark::IFieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
     bool        bClose;
     OUString    sCmd;
-    FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
+    FieldInfos() : pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
 enum DocxColBreakStatus

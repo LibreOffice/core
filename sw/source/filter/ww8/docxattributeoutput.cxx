@@ -1031,8 +1031,6 @@ void DocxAttributeOutput::EndRun()
             // Unknown fields should be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
             {
-                if (pIt->pField)
-                    delete pIt->pField;
                 pIt = m_Fields.erase( pIt );
                 continue;
             }
@@ -1071,8 +1069,6 @@ void DocxAttributeOutput::EndRun()
                 // If fields begin before hyperlink then
                 // it should end before hyperlink close
                 EndField_Impl( m_Fields.back( ) );
-                if (m_Fields.back().pField)
-                    delete m_Fields.back().pField;
                 m_Fields.pop_back();
             }
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
@@ -1093,8 +1089,6 @@ void DocxAttributeOutput::EndRun()
 
             // Remove the field if no end needs to be written
             if ( !pIt->bClose ) {
-                if (pIt->pField)
-                    delete pIt->pField;
                 pIt = m_Fields.erase( pIt );
                 continue;
             }
@@ -1225,8 +1219,6 @@ void DocxAttributeOutput::EndRun()
                 // If fields begin after hyperlink start then
                 // it should end before hyperlink close
                 EndField_Impl( m_Fields.back( ) );
-                if (m_Fields.back().pField)
-                    delete m_Fields.back().pField;
                 m_Fields.pop_back();
             }
 
@@ -1241,8 +1233,6 @@ void DocxAttributeOutput::EndRun()
         while ( m_Fields.begin() != m_Fields.end() )
         {
             EndField_Impl( m_Fields.front( ) );
-            if (m_Fields.front().pField)
-                delete m_Fields.front().pField;
             m_Fields.erase( m_Fields.begin( ) );
         }
 }
@@ -1405,7 +1395,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
                     WriteFFData(  rInfos );
                 if ( rInfos.pField )
                 {
-                    const SwDropDownField& rFld2 = *static_cast<const SwDropDownField*>(rInfos.pField);
+                    const SwDropDownField& rFld2 = *static_cast<const SwDropDownField*>(rInfos.pField.get());
                     uno::Sequence<OUString> aItems =
                         rFld2.GetItemSequence();
                     GetExport().DoComboBox(rFld2.GetName(),
@@ -6552,7 +6542,7 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
 {
     struct FieldInfos infos;
     if (pFld)
-        infos.pField = pFld->CopyField();
+        infos.pField.reset(pFld->CopyField());
     infos.sCmd = rFldCmd;
     infos.eType = eType;
     infos.bClose = WRITEFIELD_CLOSE & nMode;
