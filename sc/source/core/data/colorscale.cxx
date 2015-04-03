@@ -517,6 +517,14 @@ size_t ScColorScaleFormat::size() const
     return maColorScales.size();
 }
 
+void ScColorScaleFormat::EnsureSize()
+{
+    if (maColorScales.size() < 2)
+    {
+        // TODO: create 2 valid entries
+    }
+}
+
 ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc):
     ScColorFormat(pDoc)
 {
@@ -760,6 +768,18 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     return pInfo;
 }
 
+void ScDataBarFormat::EnsureSize()
+{
+    if (!mpFormatData->mpLowerLimit)
+    {
+        // TODO: implement
+    }
+    if (!mpFormatData->mpUpperLimit)
+    {
+        // TODO: implement
+    }
+}
+
 ScIconSetFormat::ScIconSetFormat(ScDocument* pDoc):
     ScColorFormat(pDoc),
     mpFormatData(new ScIconSetFormatData)
@@ -945,30 +965,35 @@ double ScIconSetFormat::CalcValue(double nMin, double nMax, ScIconSetFormat::con
     return itr->GetValue();
 }
 
+namespace {
+
+ScIconSetMap aIconSetMap[] = {
+    { "3Arrows", IconSet_3Arrows, 3 },
+    { "3ArrowsGray", IconSet_3ArrowsGray, 3 },
+    { "3Flags", IconSet_3Flags, 3 },
+    { "3TrafficLights1", IconSet_3TrafficLights1, 3 },
+    { "3TrafficLights2", IconSet_3TrafficLights2, 3 },
+    { "3Signs", IconSet_3Signs, 3 },
+    { "3Symbols", IconSet_3Symbols, 3 },
+    { "3Symbols2", IconSet_3Symbols2, 3 },
+//    { "3Smilies", IconSet_3Smilies, 3 },
+//    { "3ColorSmilies", IconSet_3ColorSmilies, 3 },
+    { "4Arrows", IconSet_4Arrows, 4 },
+    { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
+    { "4RedToBlack", IconSet_4RedToBlack, 4 },
+    { "4Rating", IconSet_4Rating, 4 },
+    { "4TrafficLights", IconSet_4TrafficLights, 4 },
+    { "5Arrows", IconSet_5Arrows, 5 },
+    { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
+    { "5Rating", IconSet_5Ratings, 5 },
+    { "5Quarters", IconSet_5Quarters, 5 },
+    { NULL, IconSet_3Arrows, 0 }
+};
+
+}
+
 ScIconSetMap* ScIconSetFormat::getIconSetMap()
 {
-
-    static ScIconSetMap aIconSetMap[] = {
-        { "3Arrows", IconSet_3Arrows, 3 },
-        { "3ArrowsGray", IconSet_3ArrowsGray, 3 },
-        { "3Flags", IconSet_3Flags, 3 },
-        { "3TrafficLights1", IconSet_3TrafficLights1, 3 },
-        { "3TrafficLights2", IconSet_3TrafficLights2, 3 },
-        { "3Signs", IconSet_3Signs, 3 },
-        { "3Symbols", IconSet_3Symbols, 3 },
-        { "3Symbols2", IconSet_3Symbols2, 3 },
-        { "4Arrows", IconSet_4Arrows, 4 },
-        { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
-        { "4RedToBlack", IconSet_4RedToBlack, 4 },
-        { "4Rating", IconSet_4Rating, 4 },
-        { "4TrafficLights", IconSet_4TrafficLights, 4 },
-        { "5Arrows", IconSet_5Arrows, 5 },
-        { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
-        { "5Rating", IconSet_5Ratings, 5 },
-        { "5Quarters", IconSet_5Quarters, 5 },
-        { NULL, IconSet_3Arrows, 0 }
-    };
-
     return aIconSetMap;
 }
 
@@ -1104,6 +1129,20 @@ BitmapEx& ScIconSetFormat::getBitmap( ScIconSetType eType, sal_Int32 nIndex )
     assert(itrNew.second);
 
     return itrNew.first->second;
+}
+
+void ScIconSetFormat::EnsureSize()
+{
+    ScIconSetType eType = mpFormatData->eIconSetType;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetMap); ++i)
+    {
+        if (aIconSetMap[i].eType == eType)
+        {
+            size_t nElements = aIconSetMap[i].nElements;
+            // TODO: implement
+            break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

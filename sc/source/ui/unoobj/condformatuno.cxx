@@ -466,9 +466,43 @@ ScDocShell* ScCondFormatObj::getDocShell()
     return mpDocShell;
 }
 
-void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*xEntry*/)
+void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
     throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    ScConditionalFormat* pFormat = getCoreObject();
+    if (nPos > sal_Int32(pFormat->size()))
+        throw lang::IllegalArgumentException();
+
+    ScFormatEntry* pNewEntry = NULL;
+    ScDocument* pDoc = &mpDocShell->GetDocument();
+    switch (nType)
+    {
+        case sheet::ConditionEntryType::CONDITION:
+            pNewEntry = new ScCondFormatEntry(SC_COND_EQUAL, "", "",
+                    pDoc, pFormat->GetRange().GetTopLeftCorner(), "");
+        break;
+        case sheet::ConditionEntryType::COLORSCALE:
+            pNewEntry = new ScColorScaleFormat(pDoc);
+            static_cast<ScColorScaleFormat*>(pNewEntry)->EnsureSize();
+        break;
+        case sheet::ConditionEntryType::DATABAR:
+            pNewEntry = new ScDataBarFormat(pDoc);
+            static_cast<ScDataBarFormat*>(pNewEntry)->EnsureSize();
+        break;
+        case sheet::ConditionEntryType::ICONSET:
+            pNewEntry = new ScIconSetFormat(pDoc);
+            static_cast<ScIconSetFormat*>(pNewEntry)->EnsureSize();
+        break;
+        case sheet::ConditionEntryType::DATE:
+            pNewEntry = new ScCondDateFormatEntry(pDoc);
+        break;
+        default:
+            SAL_WARN("sc", "unknown conditional format type");
+            throw lang::IllegalArgumentException();
+    }
+
+    pFormat->AddEntry(pNewEntry);
 }
 
 void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)

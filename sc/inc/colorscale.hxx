@@ -254,6 +254,12 @@ public:
     ScColorScaleEntry* GetEntry(size_t nPos);
 
     size_t size() const;
+
+    /**
+     * Makes sure that the maColorScales contain at least 2 entries.
+     * Should be called when it is not sure that the format is valid.
+     */
+    void EnsureSize();
 };
 
 class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
@@ -275,6 +281,12 @@ public:
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     virtual condformat::ScFormatEntryType GetType() const;
+
+    /**
+     * Makes sure that the mpFormatData does not contain valid entries.
+     * Should be called when it is not sure that the format is valid.
+     */
+    void EnsureSize();
 
 private:
     double getMin(double nMin, double nMax) const;
@@ -331,6 +343,12 @@ public:
     const_iterator end() const;
 
     size_t size() const;
+
+    /**
+     * Makes sure that the mpFormatData does not contain valid entries.
+     * Should be called when it is not sure that the format is valid.
+     */
+    void EnsureSize();
 
 private:
 
