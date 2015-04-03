@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_b6f7c6f4",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3324,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-03T01:58:25Z",
+      "side": 1,
+      "message": "Do you have a test document that shows this issue. At least I could not reproduce it. I have added a number of test cases into ucalc for this change also covering references pointing to the sheet before the deleted.",
+      "parentUuid": "3a29b11f_1136bb03",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a29b11f_b13a67e6",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_56dd126f",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-03T01:58:25Z",
+      "side": 1,
+      "message": "That seems to be a different problem. I think we lost the support for that during the refactoring as the changed cells are not transferred to the undo document.",
+      "parentUuid": "3a29b11f_b13a67e6",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a29b11f_9122cbb8",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2015-03-30T14:36:55Z",
       "side": 1,
       "message": "The update is correct, but Undo does not undo.",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_76da8e7a",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3338,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-03T01:58:25Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "3a29b11f_9122cbb8",
       "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
