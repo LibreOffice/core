@@ -62,11 +62,11 @@ private:
     SAL_DLLPRIVATE void FinishTextElement_Impl(bool bUseExtensionNS = false);
 
     SAL_DLLPRIVATE void WriteColorElement_Impl( const Color& rColor );
-    SAL_DLLPRIVATE void WriteNumberElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
-                                        const OUString& rDashStr, bool bVarDecimals,
+    SAL_DLLPRIVATE void WriteNumberElement_Impl( sal_Int32 nDecimals, sal_Int32 nMinDecimals,
+                                        sal_Int32 nInteger, const OUString& rDashStr,
                                         bool bGrouping, sal_Int32 nTrailingThousands,
                                         const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries );
-    SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
+    SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger,
                                         bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, bool bGrouping,
                                         sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator );

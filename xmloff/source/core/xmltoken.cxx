@@ -3249,6 +3249,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "exponent-interval",               XML_EXPONENT_INTERVAL ),
         TOKEN( "exponent-sign",                   XML_EXPONENT_SIGN ),
+        TOKEN( "min-decimal-digits",              XML_MIN_DECIMAL_DIGITS ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
