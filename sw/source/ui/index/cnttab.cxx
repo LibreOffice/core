@@ -824,15 +824,16 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     get(m_pLanguageLB, "lang");
     get(m_pSortAlgorithmLB, "keytype");
 
-    //Default mode is arranged to be the tallest mode
-    //of alphabetical index, lock that height in now
-    Size aPrefSize(get_preferred_size());
-    set_height_request(aPrefSize.Height());
-
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
     m_pLanguageLB->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
                                  false, false, false );
+
+    //Default mode is arranged to be the tallest mode
+    //of alphabetical index, lock that height in now
+    LanguageHdl(0); //fill sort algorithm list
+    Size aPrefSize(get_preferred_size());
+    set_height_request(aPrefSize.Height());
 
     sAddStyleContent = m_pAddStylesCB->GetText();
 
