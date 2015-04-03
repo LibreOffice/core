@@ -113,6 +113,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * @param position - new position of the cursor
      */
     public void changeCursorPosition(RectF position) {
+        if (RectUtils.fuzzyEquals(mCursorPosition, position)) {
+            return;
+        }
         mCursorPosition = position;
 
         ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
@@ -141,6 +144,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * @param rectangle - new graphic selection rectangle
      */
     public void changeGraphicSelection(RectF rectangle) {
+        if (RectUtils.fuzzyEquals(mGraphicSelection.mRectangle, rectangle)) {
+            return;
+        }
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
             Log.e(LOGTAG, "Can't position selections because layerView is null");
@@ -228,50 +234,62 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * Show the cursor on the view.
      */
     public void showCursor() {
-        mCursorVisible = true;
-        invalidate();
+        if (!mCursorVisible) {
+            mCursorVisible = true;
+            invalidate();
+        }
     }
 
     /**
      * Hide the cursor.
      */
     public void hideCursor() {
-        mCursorVisible = false;
-        invalidate();
+        if (mCursorVisible) {
+            mCursorVisible = false;
+            invalidate();
+        }
     }
 
     /**
      * Show text selection rectangles.
      */
     public void showSelections() {
-        mSelectionsVisible = true;
-        invalidate();
+        if (!mSelectionsVisible) {
+            mSelectionsVisible = true;
+            invalidate();
+        }
     }
 
     /**
      * Hide text selection rectangles.
      */
     public void hideSelections() {
-        mSelectionsVisible = false;
-        invalidate();
+        if (mSelectionsVisible) {
+            mSelectionsVisible = false;
+            invalidate();
+        }
     }
 
     /**
      * Show the graphic selection on the view.
      */
     public void showGraphicSelection() {
-        mGraphicSelectionMove = false;
-        mGraphicSelection.reset();
-        mGraphicSelection.setVisible(true);
-        invalidate();
+        if (!mGraphicSelection.isVisible()) {
+            mGraphicSelectionMove = false;
+            mGraphicSelection.reset();
+            mGraphicSelection.setVisible(true);
+            invalidate();
+        }
     }
 
     /**
      * Hide the graphic selection.
      */
     public void hideGraphicSelection() {
-        mGraphicSelection.setVisible(false);
-        invalidate();
+        if (mGraphicSelection.isVisible()) {
+            mGraphicSelection.setVisible(false);
+            invalidate();
+        }
     }
 
     /**
@@ -348,14 +366,18 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     public void hideHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
-        handle.setVisible(false);
-        invalidate();
+        if (handle.isVisible()) {
+            handle.setVisible(false);
+            invalidate();
+        }
     }
 
     public void showHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
-        handle.setVisible(true);
-        invalidate();
+        if (!handle.isVisible()) {
+            handle.setVisible(true);
+            invalidate();
+        }
     }
 
     private SelectionHandle getHandleForType(SelectionHandle.HandleType type) {
