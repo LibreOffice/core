@@ -37,7 +37,6 @@
 #include <cstdio>
 #endif
 
-#define FONTCACHEFILE "/user/psprint/pspfontcache"
 #define CACHE_MAGIC "LibreOffice PspFontCacheFile format 6"
 
 using namespace std;
@@ -54,7 +53,7 @@ FontCache::FontCache()
     m_aCacheFile = getOfficePath( UserPath );
     if( !m_aCacheFile.isEmpty() )
     {
-        m_aCacheFile += FONTCACHEFILE;
+        m_aCacheFile += "/user/psprint/pspfontcache";
         read();
     }
 }
