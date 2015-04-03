@@ -48,12 +48,20 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
     }
 }
 
-void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
+OUString convertNumberToString(double nVal, ScDocument* pDoc)
+{
+    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    OUString aText;
+    pNumberFormatter->GetInputLineString(nVal, 0, aText);
+    return aText;
+}
+
+void SetValue( ScDocument* pDoc, ScColorScaleEntry* pEntry, Edit& aEdit)
 {
     if(pEntry->GetType() == COLORSCALE_FORMULA)
         aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
     else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
-        aEdit.SetText(OUString::number(pEntry->GetValue()));
+        aEdit.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
     else
         aEdit.Disable();
 }
@@ -103,10 +111,10 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     }
     ::SetType(rData.mpLowerLimit.get(), *mpLbTypeMin);
     ::SetType(rData.mpUpperLimit.get(), *mpLbTypeMax);
-    SetValue(rData.mpLowerLimit.get(), *mpEdMin);
-    SetValue(rData.mpUpperLimit.get(), *mpEdMax);
-    mpLenMin->SetText(OUString::number(rData.mnMinLength));
-    mpLenMax->SetText(OUString::number(rData.mnMaxLength));
+    SetValue(mpDoc, rData.mpLowerLimit.get(), *mpEdMin);
+    SetValue(mpDoc, rData.mpUpperLimit.get(), *mpEdMax);
+    mpLenMin->SetText(convertNumberToString(rData.mnMinLength, mpDoc));
+    mpLenMax->SetText(convertNumberToString(rData.mnMaxLength, mpDoc));
     mpLbAxisCol->SelectEntry(rData.maAxisColor);
 
     TypeSelectHdl(NULL);
