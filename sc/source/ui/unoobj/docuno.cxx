@@ -480,9 +480,8 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     //if (pGridWindow->GetOutputSizePixel() != aTileSize)
     //    pGridWindow->SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
     // so instead for now, set the viewport size to document size
-    const MapMode aMapTwip(MAP_TWIP);
     Size aDocSize = getDocumentSize();
-    pGridWindow->SetOutputSizePixel(pGridWindow->LogicToPixel(aDocSize, aMapTwip));
+    pGridWindow->SetOutputSizePixel(Size(aDocSize.Width() * pViewData->GetPPTX(), aDocSize.Height() * pViewData->GetPPTY()));
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
