@@ -962,6 +962,10 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
             uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
             if (aValue >>= aEntries)
             {
+                if (aEntries.getLength() < 2)
+                    throw lang::IllegalArgumentException();
+
+                // TODO: we need to make sure that there are enough entries
                 size_t n = size_t(aEntries.getLength());
                 for (size_t i = 0; i < n; ++i)
                 {
@@ -1663,6 +1667,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
                 throw lang::IllegalArgumentException();
             }
 
+            // TODO: we need to make sure that there are enough entries
             getCoreObject()->GetIconSetData()->eIconSetType = eType;
         }
         break;
@@ -1671,6 +1676,8 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
             uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
             if (aValue >>= aEntries)
             {
+                // TODO: we need to check that the number of entries
+                // corresponds to the icon type
                 sal_Int32 nLength = aEntries.getLength();
                 for (size_t i = 0; i < size_t(nLength); ++i)
                 {
