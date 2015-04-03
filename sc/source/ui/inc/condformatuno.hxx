@@ -62,10 +62,8 @@ public:
     static ScCondFormatsObj* getImplementation( uno::Reference< com::sun::star::sheet::XConditionalFormats > xCondFormat );
 
     // XConditionalFormats
-    virtual SAL_CALL sal_Int32 addByRange( const uno::Reference< sheet::XConditionalFormat >& xCondFormat,
-            const uno::Reference<sheet::XSheetCellRanges>& xRanges)
-                                throw(::com::sun::star::uno::RuntimeException,
-                                      std::exception) SAL_OVERRIDE;
+    virtual SAL_CALL sal_Int32 createByRange(const uno::Reference<sheet::XSheetCellRanges>& xRanges)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual SAL_CALL void removeByID( const sal_Int32 nID )
                                 throw(::com::sun::star::uno::RuntimeException,

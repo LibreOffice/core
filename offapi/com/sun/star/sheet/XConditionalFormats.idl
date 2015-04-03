@@ -22,7 +22,7 @@ interface XConditionalFormats : com::sun::star::uno::XInterface
      * adds a conditional format to the existing list
      * returns the id of the inserted conditional format
      */
-    long addByRange( [in] com::sun::star::sheet::XConditionalFormat conditionalFormat, [in] com::sun::star::sheet::XSheetCellRanges range);
+    long createByRange( [in] com::sun::star::sheet::XSheetCellRanges range);
 
     void removeByID( [in] long ID);
 
