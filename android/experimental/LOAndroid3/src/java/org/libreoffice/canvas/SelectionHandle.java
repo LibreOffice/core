@@ -14,8 +14,8 @@ public abstract class SelectionHandle extends BitmapHandle {
     private static final long MINIMUM_HANDLE_UPDATE_TIME = 50 * 1000000;
 
     private final PointF mDragStartPoint = new PointF();
-    private long mLastTime = 0;
     private final PointF mDragDocumentPosition = new PointF();
+    private long mLastTime = 0;
 
     public SelectionHandle(Bitmap bitmap) {
         super(bitmap);

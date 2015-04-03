@@ -127,15 +127,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * @param selectionRects - list of text selection rectangles
      */
     public void changeSelections(List<RectF> selectionRects) {
-        LayerView layerView = LOKitShell.getLayerView();
-        if (layerView == null) {
-            Log.e(LOGTAG, "Can't position selections because layerView is null");
-            return;
-        }
-
         mSelections = selectionRects;
 
-        ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
@@ -147,15 +141,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         if (RectUtils.fuzzyEquals(mGraphicSelection.mRectangle, rectangle)) {
             return;
         }
-        LayerView layerView = LOKitShell.getLayerView();
-        if (layerView == null) {
-            Log.e(LOGTAG, "Can't position selections because layerView is null");
-            return;
-        }
 
         mGraphicSelection.mRectangle = rectangle;
 
-        ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
@@ -346,10 +335,6 @@ public class TextCursorView extends View implements View.OnTouchListener {
             }
         }
         return false;
-    }
-
-    public void setLayerView(LayerView layerView) {
-        this.mLayerView = layerView;
     }
 
     public void positionHandle(SelectionHandle.HandleType type, RectF position) {
