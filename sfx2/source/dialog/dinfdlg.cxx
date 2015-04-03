@@ -753,12 +753,11 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
 {
     get(m_pBmp, "icon");
     get(m_pNameED, "nameed");
-//FIXME    m_pNameED->SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
     get(m_pChangePassBtn, "changepass");
 
     get(m_pShowTypeFT, "showtype");
     get(m_pReadOnlyCB, "readonlycb");
-    get(m_pFileValFt, "showlocation");
+    get(m_pFileValEd, "showlocation");
     get(m_pShowSizeFT, "showsize");
     m_aUnknownSize = m_pShowSizeFT->GetText();
     m_pShowSizeFT->SetText(OUString());
@@ -1072,10 +1071,10 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
         aPath.removeFinalSlash();
         OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
-        m_pFileValFt->SetText( aText );
+        m_pFileValEd->SetText( aText );
     }
     else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
-        m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
+        m_pFileValEd->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
     bool m_bUseUserData = rInfoItem.IsUseUserData();
