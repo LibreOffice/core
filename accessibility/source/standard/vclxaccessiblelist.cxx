@@ -258,56 +258,63 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
             }
         }
     }
-    if (m_aBoxType == COMBOBOX && b_IsDropDownList)
+
+    if (m_aBoxType == COMBOBOX)
     {
-        //VCLXAccessibleDropDownComboBox
-        //when in list is dropped down, xText = NULL
-        if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
+        if (b_IsDropDownList)
+        {
+            //VCLXAccessibleDropDownComboBox
+            //when in list is dropped down, xText = NULL
+            if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
+            {
+                if ( aNewValue.hasValue() || aOldValue.hasValue() )
+                {
+                    NotifyAccessibleEvent(
+                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                        aOldValue,
+                        aNewValue );
+
+                    NotifyListItem(aNewValue);
+
+                }
+            }
+        }
+        else
+        {
+            //VCLXAccessibleComboBox
+            NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any() );
+        }
+    }
+    else if (m_aBoxType == LISTBOX)
+    {
+        if (b_IsDropDownList)
+        {
+            //VCLXAccessibleDropdownListBox
+            //when in list is dropped down, xText = NULL
+            if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
+            {
+                if ( aNewValue.hasValue() || aOldValue.hasValue() )
+                {
+                    NotifyAccessibleEvent(
+                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                        aOldValue,
+                        aNewValue );
+
+                    NotifyListItem(aNewValue);
+                }
+            }
+        }
+        else
         {
             if ( aNewValue.hasValue() || aOldValue.hasValue() )
             {
                 NotifyAccessibleEvent(
-                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                    aOldValue,
-                    aNewValue );
-
-                NotifyListItem(aNewValue);
-
-            }
-        }
-    }
-    else if (m_aBoxType == COMBOBOX && !b_IsDropDownList)
-    {
-        //VCLXAccessibleComboBox
-        NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any() );
-    }
-    else if (m_aBoxType == LISTBOX && b_IsDropDownList)
-    {
-        //VCLXAccessibleDropdownListBox
-        //when in list is dropped down, xText = NULL
-        if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
-        {
-            if ( aNewValue.hasValue() || aOldValue.hasValue() )
-            {
-                NotifyAccessibleEvent(
-                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                    aOldValue,
-                    aNewValue );
+                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                        aOldValue,
+                        aNewValue );
 
                 NotifyListItem(aNewValue);
             }
-        }
-    }
-    else if (m_aBoxType == LISTBOX && !b_IsDropDownList)
-    {
-        if ( aNewValue.hasValue() || aOldValue.hasValue() )
-        {
-            NotifyAccessibleEvent(
-                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                    aOldValue,
-                    aNewValue );
-
-            NotifyListItem(aNewValue);
         }
     }
 }
