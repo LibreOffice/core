@@ -332,13 +332,9 @@ void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     }
 }
 
-sal_Int32 ScCondFormatsObj::addByRange(const uno::Reference< sheet::XConditionalFormat >& xCondFormat,
-        const uno::Reference< sheet::XSheetCellRanges >& /*xRanges*/)
+sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCellRanges >& /*xRanges*/)
     throw(uno::RuntimeException, std::exception)
 {
-    if (!xCondFormat.is())
-        return 0;
-
     SolarMutexGuard aGuard;
     /*
     ScCondFormatObj* pFormatObj = ScCondFormatObj::getImplementation(xCondFormat);
