@@ -113,9 +113,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VCLEVENT_DROPDOWN_SELECT:
         case VCLEVENT_LISTBOX_SELECT:
         case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
-
         {
-                // Forward the call to the list child.
+            // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             if ( pList == NULL )
             {
@@ -125,14 +124,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             if ( pList != NULL )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent, m_bIsDropDownBox);
-                if(m_bIsDropDownBox)
+                if (m_bIsDropDownBox)
                 {
                     NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
-                    Any aOldValue;
-                    Any aNewValue;
-                    aOldValue <<= AccessibleStateType::INDETERMINATE;
-                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
-
                 }
             }
             break;
@@ -187,12 +181,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     pList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
                     if (m_bIsDropDownBox || ( !m_bIsDropDownBox && m_aBoxType==COMBOBOX))
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
-
-                    Any aOldValue;
-                    Any aNewValue;
-                    aOldValue <<= AccessibleStateType::INDETERMINATE;
-                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
-
                 }
             }
             break;
