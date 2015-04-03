@@ -632,8 +632,17 @@ sal_uInt16 SwDocShell::Edit(
     sal_uInt16 nRet = nMask;
     bool bModified = m_pDoc->getIDocumentState().IsModified();
 
+    SwUndoId nNewStyleUndoId(UNDO_EMPTY);
+
     if( bNew )
     {
+        if (!bBasic)
+        {
+            // start undo action in order to get only one undo action for the
+            // UI new style + change style operations
+            m_pWrtShell->StartUndo();
+        }
+
         if( SFXSTYLEBIT_ALL != nMask && SFXSTYLEBIT_ALL_VISIBLE != nMask && SFXSTYLEBIT_USED != nMask )
             nMask |= SFXSTYLEBIT_USERDEF;
         else
@@ -720,6 +729,13 @@ sal_uInt16 SwDocShell::Edit(
             }
             break;
         }
+
+        if (!bBasic)
+        {
+            //Get the undo id for the type of style that was created in order to re-use that comment for the grouped
+            //create style + change style operations
+            m_pWrtShell->GetLastUndoInfo(0, &nNewStyleUndoId);
+        }
     }
     else
     {
@@ -784,11 +800,23 @@ sal_uInt16 SwDocShell::Edit(
         ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
 
-        if (RET_OK == pDlg->Execute())
+        short nDlgRet = pDlg->Execute();
+
+        if (RET_OK == nDlgRet)
         {
             aApplyStyleHelper.apply();
         }
-        else
+
+        if (bNew)
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, xTmp->GetName());
+            //Group the create style and change style operations together under the
+            //one "create style" comment
+            m_pWrtShell->EndUndo(nNewStyleUndoId, &aRewriter);
+        }
+
+        if (RET_OK != nDlgRet)
         {
             if( bNew )
             {
