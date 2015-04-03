@@ -823,13 +823,15 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     rDoc.UpdateNumRule();
 }
 
-void SwDoc::SetNumRule( const SwPaM& rPam,
+OUString SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
                         const OUString& sContinuedListId,
                         bool bSetItem,
                         const bool bResetIndentAttrs )
 {
+    OUString sListId;
+
     SwUndoInsNum * pUndo = NULL;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -863,7 +865,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        OUString sListId;
         if ( bCreateNewList )
         {
             if ( bNewNumRuleCreated )
@@ -942,8 +943,9 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     }
 
     SetModified();
-}
 
+    return sListId;
+}
 
 void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 {
