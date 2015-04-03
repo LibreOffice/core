@@ -243,7 +243,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     // work in the logic coordinates (ideally 100ths of mm - so that it is
     // the same as editeng and drawinglayer), and get rid of all the
     // SetMapMode's and other unneccessary fun we have with pixels
-    if (pDoc->GetDrawLayer()->isTiledRendering())
+    if (pDoc && pDoc->GetDrawLayer() && pDoc->GetDrawLayer()->isTiledRendering())
     {
         return pViewData->GetLogicMode();
     }
