@@ -685,13 +685,13 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
         {
             MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             pGridWindow->MouseButtonDown(aClickEvent);
-            MouseEvent aMoveEvent(Point(nPixelX + 1, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            MouseEvent aMoveEvent(Point(nPixelX, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
             pGridWindow->MouseMove(aMoveEvent);
         }
         break;
     case LOK_SETGRAPHICSELECTION_END:
         {
-            MouseEvent aMoveEvent(Point(nPixelX - 1, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            MouseEvent aMoveEvent(Point(nPixelX, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
             pGridWindow->MouseMove(aMoveEvent);
             MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             pGridWindow->MouseButtonUp(aClickEvent);
