@@ -556,8 +556,8 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 //  numbers
 
 void SvXMLNumFmtExport::WriteNumberElement_Impl(
-                            sal_Int32 nDecimals, sal_Int32 nInteger,
-                            const OUString& rDashStr, bool bVarDecimals,
+                            sal_Int32 nDecimals, sal_Int32 nMinDecimals,
+                            sal_Int32 nInteger, const OUString& rDashStr,
                             bool bGrouping, sal_Int32 nTrailingThousands,
                             const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
@@ -570,6 +570,12 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                               OUString::number( nDecimals ) );
     }
 
+    if ( nMinDecimals >= 0 )   // negative = automatic
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,
+                              OUString::number( nMinDecimals ) );
+    }
+
     //  integer digits
     if ( nInteger >= 0 )    // negative = automatic
     {
@@ -578,9 +584,9 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     }
 
     //  decimal replacement (dashes) or variable decimals (#)
-    if ( !rDashStr.isEmpty() || bVarDecimals )
+    if ( !rDashStr.isEmpty() ||  nMinDecimals < nDecimals )
     {
-        //  variable decimals means an empty replacement string
+        // full variable decimals means an empty replacement string
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,
                               rDashStr );
     }
@@ -633,7 +639,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 }
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
-                            sal_Int32 nDecimals, sal_Int32 nInteger,
+                            sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger,
                             bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign )
 {
     FinishTextElement_Impl();
@@ -643,6 +649,12 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,
                               OUString::number( nDecimals ) );
+    }
+
+    if ( nMinDecimals >= 0 )   // negative = automatic
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,
+                              OUString::number( nMinDecimals ) );
     }
 
     //  integer digits
@@ -1154,7 +1166,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
-        WriteNumberElement_Impl( -1, 1, OUString(), false, false, 0, aEmbeddedEntries );
+        WriteNumberElement_Impl( -1, -1, 1, OUString(), false, 0, aEmbeddedEntries );
         bAnyContent = true;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
@@ -1168,7 +1180,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         //  first loop to collect attributes
 
         bool bDecDashes  = false;
-        bool bVarDecimals = false;
         bool bExpFound   = false;
         bool bCurrFound  = false;
         bool bInInteger  = true;
@@ -1176,6 +1187,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Int32 nExpDigits = 0;
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
+        sal_Int32 nMinDecimals = nPrecision;
         OUString sCurrExt;
         OUString aCalendar;
         sal_uInt16 nPos = 0;
@@ -1195,11 +1207,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         nExpDigits += pElemStr->getLength();
                     else if ( !bDecDashes && pElemStr && (*pElemStr)[0] == '-' )
                         bDecDashes = true;
-                    else if ( !bVarDecimals && !bInInteger && pElemStr && (*pElemStr)[0] == '#' )
+                    else if ( !bInInteger && pElemStr )
                     {
-                        //  If the decimal digits string starts with a '#', variable
-                        //  decimals is assumed (for 0.###, but not 0.0##).
-                        bVarDecimals = true;
+                        for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 && (*pElemStr)[i] == '#'; i-- )
+                        {
+                            nMinDecimals --;
+                        }
                     }
                     if ( bInInteger && pElemStr )
                         nIntegerSymbols += pElemStr->getLength();
@@ -1352,7 +1365,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_KEY_GENERAL :
-                        WriteNumberElement_Impl( -1, 1, OUString(), false, false, 0, aEmbeddedEntries );
+                        WriteNumberElement_Impl( -1, -1, 1, OUString(), false, 0, aEmbeddedEntries );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
@@ -1419,8 +1432,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     if (bDecDashes && nPrecision > 0)
                                         comphelper::string::padToLength(sDashStr, nPrecision, '-');
 
-                                    WriteNumberElement_Impl(nDecimals, nInteger, sDashStr.makeStringAndClear(),
-                                        bVarDecimals, bThousand, nTrailingThousands, aEmbeddedEntries);
+                                    WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, sDashStr.makeStringAndClear(),
+                                        bThousand, nTrailingThousands, aEmbeddedEntries);
                                     bAnyContent = true;
                                 }
                                 break;
@@ -1428,7 +1441,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
-                                WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits, nIntegerSymbols, bExpSign );
+                                WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, bThousand, nExpDigits, nIntegerSymbols, bExpSign );
                                 bAnyContent = true;
                                 break;
                             case css::util::NumberFormat::FRACTION:
