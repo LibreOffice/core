@@ -185,7 +185,7 @@ private:
     PushButton*                 m_pChangePassBtn;
 
     SelectableFixedText*        m_pShowTypeFT;
-    FixedText*                  m_pFileValFt;
+    Edit*                       m_pFileValEd;
     SelectableFixedText*        m_pShowSizeFT;
 
     SelectableFixedText*        m_pCreateValFt;
