@@ -1438,10 +1438,12 @@ public:
      Parameters <bCreateNewList> and <sContinuedListId>:
       <bCreateNewList> indicates, if a new list is created by applying the given list style.
       If <bCreateNewList> equals false, <sContinuedListId> may contain the
-      list Id of a list, which has to be continued by applying the given list style */
-    void SetNumRule( const SwPaM&,
+      list Id of a list, which has to be continued by applying the given list style
+
+     Returns the set ListId if bSetItem is true */
+    OUString SetNumRule( const SwPaM&,
                      const SwNumRule&,
-                     const bool bCreateNewList,
+                     bool bCreateNewList,
                      const OUString& sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
