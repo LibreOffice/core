@@ -70,9 +70,6 @@ public class TextCursorLayer extends Layer {
     public void showCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mViewLeft = 0.0f;
-                mViewTop = 0.0f;
-                mViewZoom = 0.0f;
                 mCursorView.showCursor();
             }
         });
