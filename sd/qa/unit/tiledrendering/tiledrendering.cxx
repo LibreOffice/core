@@ -38,11 +38,13 @@ public:
 
     void testRegisterCallback();
     void testPostMouseEvent();
+    void testSetTextSelection();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostMouseEvent);
+    CPPUNIT_TEST(testSetTextSelection);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -109,16 +111,16 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SdTiledRenderingTest::testRegisterCallback()
 {
-    // Tests sd::Window::LogicInvalidate().
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
 
-    // Append a character to the empty title shape.
-    vcl::KeyCode aKeyCode(0, 0);
-    KeyEvent aKeyEvent(static_cast<sal_Unicode>('x'), aKeyCode, 0);
-    pViewShell->KeyInput(aKeyEvent, 0);
-    mxComponent->dispose();
+    // Start text edit of the empty title shape.
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
@@ -151,6 +153,34 @@ void SdTiledRenderingTest::testPostMouseEvent()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
+}
+
+void SdTiledRenderingTest::testSetTextSelection()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString("Aaa bbb.");
+    // Create a selection on the second word.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    ESelection aWordSelection(0, 4, 0, 7);
+    rEditView.SetSelection(aWordSelection);
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
+
+    // Now use setTextSelection() to move the end of the selection 1000 twips right.
+    vcl::Cursor* pCursor = rEditView.GetCursor();
+    Point aEnd = pCursor->GetPos();
+    aEnd.setX(aEnd.getX() + 1000);
+    pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
+    // The new selection must include the ending dot, too -- but not the first word.
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
