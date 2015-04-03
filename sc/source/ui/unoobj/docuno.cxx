@@ -473,9 +473,16 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     // update the size of the area we are painting
-    Size aTileSize(nOutputWidth, nOutputHeight);
-    if (pGridWindow->GetOutputSizePixel() != aTileSize)
-        pGridWindow->SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+    // FIXME we want to use only the minimal necessary size, like the
+    // following; but for the moment there is too many problems with that and
+    // interaction with editeng used for the cell editing
+    //Size aTileSize(nOutputWidth, nOutputHeight);
+    //if (pGridWindow->GetOutputSizePixel() != aTileSize)
+    //    pGridWindow->SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+    // so instead for now, set the viewport size to document size
+    const MapMode aMapTwip(MAP_TWIP);
+    Size aDocSize = getDocumentSize();
+    pGridWindow->SetOutputSizePixel(pGridWindow->LogicToPixel(aDocSize, aMapTwip));
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
