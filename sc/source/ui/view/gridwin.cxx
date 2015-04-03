@@ -5775,6 +5775,7 @@ void ScGridWindow::UpdateCursorOverlay()
         (pViewData->GetMarkData().IsMarked() || pViewData->GetMarkData().IsMultiMarked() ||
          pViewData->GetViewShell()->GetScDrawView()->IsMarking() ||
          pViewData->GetViewShell()->GetScDrawView()->IsTextEdit() ||
+         pViewData->GetViewShell()->GetScDrawView()->GetDragStat().IsShown() ||
          pViewData->HasEditView(eWhich)))
     {
         return;
