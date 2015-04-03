@@ -731,8 +731,8 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
 }
 
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
-                                 const bool bCreateNewList,
-                                 const OUString& sContinuedListId,
+                                 bool bCreateNewList,
+                                 const OUString& rContinuedListId,
                                  const bool bResetIndentAttrs )
 {
     StartAllAction();
@@ -744,19 +744,29 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
+        OUString sContinuedListId(rContinuedListId);
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
         {
             aRangeArr.SetPam( n, aPam );
-            GetDoc()->SetNumRule( aPam, rRule,
+            OUString sListId = GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
                                   true, bResetIndentAttrs );
+
+            //tdf#87548 On creating a new list for a multi-selection only
+            //create a single new list for the multi-selection, not one per selection
+            if (bCreateNewList)
+            {
+                sContinuedListId = sListId;
+                bCreateNewList = false;
+            }
+
             GetDoc()->SetCounted( aPam, true );
         }
     }
     else
     {
         GetDoc()->SetNumRule( *pCrsr, rRule,
-                              bCreateNewList, sContinuedListId,
+                              bCreateNewList, rContinuedListId,
                               true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
     }
