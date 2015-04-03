@@ -187,7 +187,7 @@ private:
 
     SelectableFixedText*        m_pShowTypeFT;
     CheckBox*                   m_pReadOnlyCB;
-    FixedText*                  m_pFileValFt;
+    Edit*                       m_pFileValEd;
     SelectableFixedText*        m_pShowSizeFT;
 
     SelectableFixedText*        m_pCreateValFt;
