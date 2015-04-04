@@ -412,13 +412,13 @@ Reference< XShape > Shape::createAndInsert(
     {
         maSize.Width = 0;
         for( std::vector< sal_Int32 >::const_iterator aTableColIter(mpTablePropertiesPtr->getTableGrid().begin());
-             aTableColIter != mpTablePropertiesPtr->getTableGrid().end(); aTableColIter++ )
+             aTableColIter != mpTablePropertiesPtr->getTableGrid().end(); ++aTableColIter )
         {
             maSize.Width += *aTableColIter;
         }
         maSize.Height = 0;
         for( std::vector< ::oox::drawingml::table::TableRow >::const_iterator aTableRowIter(mpTablePropertiesPtr->getTableRows().begin());
-             aTableRowIter != mpTablePropertiesPtr->getTableRows().end(); aTableRowIter++ )
+             aTableRowIter != mpTablePropertiesPtr->getTableRows().end(); ++aTableRowIter )
         {
             maSize.Height += (*aTableRowIter).getHeight();
         }
