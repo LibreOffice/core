@@ -272,6 +272,26 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     return pEntry;
 }
 
+namespace {
+
+bool containsOnlyColumnLabel(Edit* pEdit, ScTokenArray* pArr)
+{
+    formula::FormulaToken* token = pArr->First();
+    formula::StackVar t = token->GetType();
+    OpCode op = token->GetOpCode();
+    if( ( op == ocColRowName ) ||
+        ( ( op == ocBad ) && ( t == formula::svString ) )
+      )
+    {
+        pEdit->SetControlBackground(COL_YELLOW);
+        return true;
+    }
+
+    return false;
+}
+
+}
+
 IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
 {
     OUString aFormula = pEdit->GetText();
@@ -295,14 +315,27 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     }
 
     // Recognized col/row name or string token, warn the user
-    formula::FormulaToken* token = ta->First();
-    formula::StackVar t = token->GetType();
-    OpCode op = token->GetOpCode();
-    if( ( op == ocColRowName ) ||
-        ( ( op == ocBad ) && ( t == formula::svString ) )
-      )
+    bool bContainsColumnLabel = containsOnlyColumnLabel(pEdit, ta.get());;
+    if (!bContainsColumnLabel)
     {
-        pEdit->SetControlBackground(COL_YELLOW);
+        ScCompiler aComp2( mpDoc, maPos );
+        aComp2.SetGrammar( mpDoc->GetGrammar() );
+        if (&maEdVal1 == pEdit)
+        {
+            OUString aFormula2 = maEdVal2.GetText();
+            boost::scoped_ptr<ScTokenArray> pArr2(aComp2.CompileString(aFormula2));
+            bContainsColumnLabel = containsOnlyColumnLabel(&maEdVal2, pArr2.get());
+        }
+        else
+        {
+            OUString aFormula1 = maEdVal1.GetText();
+            boost::scoped_ptr<ScTokenArray> pArr1(aComp2.CompileString(aFormula1));
+            bContainsColumnLabel = containsOnlyColumnLabel(&maEdVal1, pArr1.get());
+        }
+    }
+
+    if (bContainsColumnLabel)
+    {
         maFtVal.SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
         return 0;
     }

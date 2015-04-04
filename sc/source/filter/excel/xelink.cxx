@@ -63,7 +63,7 @@ private:
         @descr  Derived classes should overwrite this function to write their data. */
     virtual void        WriteAddData( XclExpStream& rStrm );
 
-private:
+protected:
     OUString            maName;         /// Calc name (title) of the external name.
     XclExpStringRef     mxName;         /// Excel name (title) of the external name.
     sal_uInt16          mnFlags;        /// Flags for record export.
@@ -104,6 +104,8 @@ public:
     explicit            XclExpExtName( const XclExpRoot& rRoot, const XclExpSupbook& rSupbook, const OUString& rName,
                                        const ScExternalRefCache::TokenArrayRef& rArray );
 
+    virtual void SaveXml(XclExpXmlStream& rStrm) SAL_OVERRIDE;
+
 private:
     /** Writes additional record contents. */
     virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
@@ -134,6 +136,8 @@ public:
 
     /** Writes the EXTERNNAME record list. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+
+    virtual void SaveXml(XclExpXmlStream& rStrm) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpExtNameBase >   XclExpExtNameList;
@@ -1045,6 +1049,19 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
     rStrm << static_cast<sal_uInt16>(2) << EXC_TOKID_ERR << EXC_ERR_REF;
 }
 
+void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
+{
+    sax_fastparser::FSHelperPtr pExternalLink = rStrm.GetCurrentStream();
+
+    pExternalLink->startElement(XML_definedName,
+            XML_name, XclXmlUtils::ToOString(maName).getStr(),
+            XML_refersTo, NULL,
+            XML_sheetId, NULL,
+            FSEND);
+
+    pExternalLink->endElement(XML_definedName);
+}
+
 // List of external names =====================================================
 
 XclExpExtNameBuffer::XclExpExtNameBuffer( const XclExpRoot& rRoot ) :
@@ -1096,6 +1113,11 @@ sal_uInt16 XclExpExtNameBuffer::InsertExtName( const XclExpSupbook& rSupbook,
 void XclExpExtNameBuffer::Save( XclExpStream& rStrm )
 {
     maNameList.Save( rStrm );
+}
+
+void XclExpExtNameBuffer::SaveXml(XclExpXmlStream& rStrm)
+{
+    maNameList.SaveXml(rStrm);
 }
 
 sal_uInt16 XclExpExtNameBuffer::GetIndex( const OUString& rName ) const
