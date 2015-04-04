@@ -527,8 +527,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                             else
                                 pFtnBoss->RemoveFtn( this, pFtn );
                             bRemove = bRemove || !bEndDoc;
-                            OSL_ENSURE( bEndn ? !SwFtnBossFrm::FindFtn( this, pFtn ) :
-                                    !SwFtnBossFrm::FindFtn( this, pFtn ),
+                            OSL_ENSURE( !SwFtnBossFrm::FindFtn( this, pFtn ),
                             "SwTxtFrm::RemoveFtn: can't get off that footnote" );
                         }
                     }
