@@ -1199,8 +1199,7 @@ SmNode * SmBinVerNode::GetLeftMost()
 }
 
 
-/**************************************************************************/
-
+namespace {
 
 /// @return value of the determinant formed by the two points
 double Det(const Point &rHeading1, const Point &rHeading2)
@@ -1266,6 +1265,7 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
     return nRes;
 }
 
+}
 
 
 SmBinDiagonalNode::SmBinDiagonalNode(const SmToken &rNodeToken)
