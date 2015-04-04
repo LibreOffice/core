@@ -26,21 +26,8 @@
 
 namespace connectivity
 {
-    namespace file
-    {
-        class OConnection;
-    }
     namespace dbase
     {
-        class OFILEAnalyzer : public file::OSQLAnalyzer
-        {
-        public:
-            OFILEAnalyzer(file::OConnection* _pConnection) : file::OSQLAnalyzer(_pConnection){}
-            virtual file::OOperandAttr* createOperandAttr(sal_Int32 _nPos,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL) SAL_OVERRIDE;
-        };
-
         // Attributes from a result row
         class OFILEOperandAttr : public file::OOperandAttr
         {

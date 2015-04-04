@@ -33,14 +33,6 @@ using namespace ::com::sun::star::container;
 
 TYPEINIT1(OFILEOperandAttr, OOperandAttr);
 
-OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
-                                               const Reference< XPropertySet>& _xCol,
-                                               const Reference< XNameAccess>& _xIndexes)
-{
-    return new OFILEOperandAttr((sal_uInt16)_nPos,_xCol,_xIndexes);
-}
-
-
 OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
                                    const Reference< XPropertySet>& _xColumn,
                                    const Reference< XNameAccess>& _xIndexes)
