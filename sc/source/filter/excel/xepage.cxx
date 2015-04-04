@@ -405,9 +405,14 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
                     static_cast< sal_uInt16 >( GetXclMaxPos().Col() ) ).SaveXml( rStrm );
     XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks,
                     static_cast< sal_uInt16 >( GetXclMaxPos().Row() ) ).SaveXml( rStrm );
+}
 
+XclExpImgData* XclExpPageSettings::getGraphicExport()
+{
     if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
-        XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).SaveXml( rStrm );
+        return new XclExpImgData( *pGraphic, EXC_ID8_IMGDATA );
+
+    return NULL;
 }
 
 XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :

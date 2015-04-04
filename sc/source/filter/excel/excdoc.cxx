@@ -673,6 +673,10 @@ void ExcTable::FillAsTableXml()
     // all MSODRAWING and OBJ stuff of this sheet goes here
     aRecList.AppendRecord( GetObjectManager().ProcessDrawing( GetSdrPage( mnScTab ) ) );
 
+    XclExpImgData* pImgData = xPageSett->getGraphicExport();
+    if (pImgData)
+        aRecList.AppendRecord(std::shared_ptr<XclExpRecordBase>(pImgData));
+
     aRecList.AppendRecord( xExtLst );
 }
 

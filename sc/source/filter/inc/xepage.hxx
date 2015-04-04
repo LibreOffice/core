@@ -24,6 +24,8 @@
 #include "xlpage.hxx"
 #include "xeroot.hxx"
 
+class XclExpImgData;
+
 // Page settings records ======================================================
 
 // Header/footer --------------------------------------------------------------
@@ -99,6 +101,8 @@ public:
     /** Writes all page settings records to the stream. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
+    XclExpImgData* getGraphicExport();
 
 private:
     XclPageData         maData;         /// Page settings data.
