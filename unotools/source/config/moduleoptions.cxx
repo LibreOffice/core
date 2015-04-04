@@ -79,10 +79,11 @@
 #define FACTORYNAME_MATH                    "com.sun.star.formula.FormulaProperties"
 #define FACTORYNAME_CHART                   "com.sun.star.chart2.ChartDocument"
 #define FACTORYNAME_DATABASE                "com.sun.star.sdb.OfficeDatabaseDocument"
+#define FACTORYNAME_DATABASEFORM            "com.sun.star.sdb.FormDesign"
 #define FACTORYNAME_STARTMODULE             "com.sun.star.frame.StartModule"
 #define FACTORYNAME_BASIC                   "com.sun.star.script.BasicIDE"
 
-#define FACTORYCOUNT                        11
+#define FACTORYCOUNT                        12
 
 /*-************************************************************************************************************
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
@@ -781,7 +782,7 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
     if( !bState )
     {
         eFactory = SvtModuleOptions::E_DATABASE;
-        bState   = ( sName == FACTORYNAME_DATABASE );
+        bState   = (( sName == FACTORYNAME_DATABASE ) || ( sName == FACTORYNAME_DATABASEFORM ));
     }
     // no else!
     if( !bState )
@@ -1140,7 +1141,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
         return E_MATH;
     if (sName == FACTORYNAME_CHART)
         return E_CHART;
-    if (sName == FACTORYNAME_DATABASE)
+    if ((sName == FACTORYNAME_DATABASE) || (sName == FACTORYNAME_DATABASEFORM))
         return E_DATABASE;
     if (sName == FACTORYNAME_STARTMODULE)
         return E_STARTMODULE;
