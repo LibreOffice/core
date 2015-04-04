@@ -2296,7 +2296,7 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 
 void SmDynIntegralSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
-    long nFactor = 12L;
+    static const long nFactor = 12L;
 
     // The new height equals (1 + nFactor) * oldHeight
     // nFactor was chosen for keeping the integral sign from becoming too "fat".
