@@ -1389,19 +1389,18 @@ void XclExpXct::Save( XclExpStream& rStrm )
 void XclExpXct::SaveXml( XclExpXmlStream& rStrm )
 {
     XclExpCrnList aCrnRecs;
-    if (!BuildCrnList( aCrnRecs))
-    {
-        SAL_WARN("sc", "generating invalid OOXML files: sheetDataSet without sheetData child element");
-        return;
-    }
 
     sax_fastparser::FSHelperPtr pFS = rStrm.GetCurrentStream();
 
+    bool bValid = BuildCrnList( aCrnRecs);
     pFS->startElement( XML_sheetData,
-            XML_sheetId,    OString::number( mnSBTab).getStr(),
+            XML_sheetId, OString::number( mnSBTab).getStr(),
             FSEND);
-    // row elements
-    aCrnRecs.SaveXml( rStrm );
+    if (bValid)
+    {
+        // row elements
+        aCrnRecs.SaveXml( rStrm );
+    }
     pFS->endElement( XML_sheetData);
 }
 
