@@ -36,34 +36,61 @@ OUString DocInfoHelper::GetGeneratorString()
     // version is <product_versions>_<product_extension>$<platform>
 
     // plain product name
-    OUString aValue( utl::ConfigManager::getProductName() );
+    OUString aValue( GetApplicationString() );
     if ( !aValue.isEmpty() )
     {
         aResult.append( aValue.replace( ' ', '_' ) );
         aResult.append( '/' );
+    }
 
-        aValue = utl::ConfigManager::getProductVersion();
+    aValue = GetVersionString();
+    if ( !aValue.isEmpty() )
+    {
+        aResult.append( aValue.replace( ' ', '_' ) );
+    }
+
+    return aResult.makeStringAndClear();
+}
+
+
+
+
+OUString DocInfoHelper::GetApplicationString()
+{
+    // plain product name
+    OUString aValue( utl::ConfigManager::getProductName() );
+
+    return aValue;
+}
+
+
+OUString DocInfoHelper::GetVersionString()
+{
+    OUStringBuffer aResult;
+
+    // version is <product_versions>_<product_extension>$<platform>
+    OUString aValue( "" );
+    aValue = utl::ConfigManager::getProductVersion();
+    if ( !aValue.isEmpty() )
+    {
+        aResult.append( aValue.replace( ' ', '_' ) );
+
+        aValue = utl::ConfigManager::getProductExtension();
         if ( !aValue.isEmpty() )
         {
             aResult.append( aValue.replace( ' ', '_' ) );
-
-            aValue = utl::ConfigManager::getProductExtension();
-            if ( !aValue.isEmpty() )
-            {
-                aResult.append( aValue.replace( ' ', '_' ) );
-            }
         }
-
-        OUString os( "$_OS" );
-        OUString arch( "$_ARCH" );
-        ::rtl::Bootstrap::expandMacros(os);
-        ::rtl::Bootstrap::expandMacros(arch);
-        aResult.append( '$' );
-        aResult.append( os );
-        aResult.append( '_' );
-        aResult.append( arch );
-        aResult.append( ' ' );
     }
+
+    OUString os( "$_OS" );
+    OUString arch( "$_ARCH" );
+    ::rtl::Bootstrap::expandMacros(os);
+    ::rtl::Bootstrap::expandMacros(arch);
+    aResult.append( '$' );
+    aResult.append( os );
+    aResult.append( '_' );
+    aResult.append( arch );
+    aResult.append( ' ' );
 
     // second product: LibreOffice_project/<build_information>
     // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
@@ -96,6 +123,7 @@ OUString DocInfoHelper::GetGeneratorString()
 
     return aResult.makeStringAndClear();
 }
+
 
 } // end of namespace utl
 
