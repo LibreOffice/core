@@ -166,7 +166,6 @@ apitest::XTextContent::testGetAnchor()
 apitest::XTextField::testGetPresentation()
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
-chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&)
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const

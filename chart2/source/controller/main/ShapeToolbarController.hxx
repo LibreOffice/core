@@ -68,8 +68,6 @@ public:
     // needed by registration
     static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XInitialization

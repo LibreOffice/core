@@ -63,11 +63,6 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (u
     return getSupportedServiceNames_Static();
 }
 
-Reference< uno::XInterface > ShapeToolbarController::create( const Reference< uno::XComponentContext >& xContext )
-{
-    return * new ShapeToolbarController( xContext );
-}
-
 ShapeToolbarController::ShapeToolbarController( const Reference< uno::XComponentContext >& xContext )
     :m_pToolbarController( NULL )
     ,m_nToolBoxId( 1 )
