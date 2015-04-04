@@ -168,6 +168,10 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
 {
     LineProperties& rLP = rShape.getLineProperties();
+    // no fill has the same effect as no border so skip it
+    if (rLP.maLineFill.moFillType.get() == XML_noFill)
+        return;
+
     if (rLP.moLineWidth.has())
     {
         sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.get());
