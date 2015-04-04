@@ -796,13 +796,9 @@ bool SVGFilter::implExportDocument()
 
     aAttr += OUString::number(nDocWidth) + " " + OUString::number(nDocHeight);
 
-    msClipPathId = "presentation_clip_path";
-    OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
-
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", "xMidYMid" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", "evenodd" );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
 
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::number( 28.222 ) );
@@ -819,6 +815,7 @@ bool SVGFilter::implExportDocument()
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "ClipPathGroup" );
         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
         {
+            msClipPathId = "presentation_clip_path";
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", msClipPathId );
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
             SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
