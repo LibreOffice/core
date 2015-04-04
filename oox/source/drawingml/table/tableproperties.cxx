@@ -143,12 +143,11 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
     pTableStyle->getLastCol().getTextBoldStyle() = textBoldStyle;
 }
 
- bool CreateTableStyle(TableStyle* &pTableStyle , const OUString& styleId)
+TableStyle* CreateTableStyle(const OUString& styleId)
 {
-    bool createdTblStyle = false;
+    TableStyle* pTableStyle = NULL;
     if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accenat 1
         pTableStyle = new TableStyle();
-        createdTblStyle = true;
         //first row style
         //fill color and type
         oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
@@ -185,7 +184,6 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
     else if (styleId == "{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}")         //Medium Style 2 Accent 2
     {
         pTableStyle = new TableStyle();
-        createdTblStyle = true;
         oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
         pFstRowFillProperties->moFillType.set(XML_solidFill);
         pFstRowFillProperties->maFillColor.setSchemeClr(XML_accent2);
@@ -217,11 +215,10 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
     else if (styleId == "{C4B1156A-380E-4F78-BDF5-A606A8083BF9}")         //Medium Style 4 Accent 4
     {
         pTableStyle = new TableStyle();
-        createdTblStyle = true;
         SetTableStyleProperties(pTableStyle, XML_accent4, XML_dk1, XML_accent4);
     }
 
-    return createdTblStyle;
+    return pTableStyle;
 }
 
 const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, bool &isCreateTabStyle )
@@ -246,9 +243,10 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
             ++aIter;
         }
         //if the pptx just has table style id, but no table style content, we will create the table style ourselves
-        if ( !pTableStyle )
+        if (!pTableStyle)
         {
-            isCreateTabStyle = CreateTableStyle(pTableStyle , aStyleId);
+            pTableStyle = CreateTableStyle(aStyleId);
+            isCreateTabStyle = (pTableStyle != NULL);
         }
     }
 
