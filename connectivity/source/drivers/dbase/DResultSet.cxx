@@ -24,7 +24,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexIter.hxx"
-#include "dbase/DCode.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include "resource/dbase_res.hrc"

@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,dbase,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,dbase,\
-	connectivity/source/drivers/dbase/DCode \
 	connectivity/source/drivers/dbase/DResultSet \
 	connectivity/source/drivers/dbase/DStatement \
 	connectivity/source/drivers/dbase/DPreparedStatement \
