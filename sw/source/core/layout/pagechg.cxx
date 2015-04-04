@@ -768,7 +768,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 void AdjustSizeChgNotify( SwRootFrm *pRoot )
 {
     const bool bOld = pRoot->IsSuperfluous();
-    pRoot->bCheckSuperfluous = false;
+    pRoot->mbCheckSuperfluous = false;
     if ( pRoot->GetCurrShell() )
     {
         for(SwViewShell& rSh : pRoot->GetCurrShell()->GetRingContainer())
@@ -781,12 +781,12 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
             }
         }
     }
-    pRoot->bCheckSuperfluous = bOld;
+    pRoot->mbCheckSuperfluous = bOld;
 }
 
 inline void SetLastPage( SwPageFrm *pPage )
 {
-    static_cast<SwRootFrm*>(pPage->GetUpper())->pLastPage = pPage;
+    static_cast<SwRootFrm*>(pPage->GetUpper())->mpLastPage = pPage;
 }
 
 void SwPageFrm::Cut()
@@ -1298,7 +1298,7 @@ void SwRootFrm::RemoveSuperfluous()
 
     if ( !IsSuperfluous() )
         return;
-    bCheckSuperfluous = false;
+    mbCheckSuperfluous = false;
 
     SwPageFrm *pPage = GetLastPage();
     long nDocPos = LONG_MAX;
@@ -1384,7 +1384,7 @@ void SwRootFrm::AssertFlyPages()
 {
     if ( !IsAssertFlyPages() )
         return;
-    bAssertFlyPages = false;
+    mbAssertFlyPages = false;
 
     SwDoc *pDoc = GetFmt()->GetDoc();
     const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
@@ -1520,7 +1520,7 @@ void SwRootFrm::MakeAll()
 
 void SwRootFrm::ImplInvalidateBrowseWidth()
 {
-    bBrowseWidthValid = false;
+    mbBrowseWidthValid = false;
     SwFrm *pPg = Lower();
     while ( pPg )
     {
@@ -1546,9 +1546,9 @@ void SwRootFrm::ImplCalcBrowseWidth()
     if ( !pFrm )
         return;
 
-    bBrowseWidthValid = true;
+    mbBrowseWidthValid = true;
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    nBrowseWidth = pSh
+    mnBrowseWidth = pSh
                     ? MINLAY + 2 * pSh->GetOut()->
                                 PixelToLogic( pSh->GetBrowseBorder() ).Width()
                     : 5000;
@@ -1585,7 +1585,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                     default:
                         break;
                 }
-                nBrowseWidth = std::max( nBrowseWidth, nWidth );
+                mnBrowseWidth = std::max( mnBrowseWidth, nWidth );
             }
         }
         else if ( pFrm->GetDrawObjs() )
@@ -1643,7 +1643,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     default:    /* do nothing */;
                 }
-                nBrowseWidth = std::max( nBrowseWidth, nWidth );
+                mnBrowseWidth = std::max( mnBrowseWidth, nWidth );
             }
         }
         pFrm = pFrm->FindNextCnt();

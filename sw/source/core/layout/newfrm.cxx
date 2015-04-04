@@ -39,9 +39,9 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>
 
-SwLayVout     *SwRootFrm::pVout = 0;
-bool           SwRootFrm::bInPaint = false;
-bool           SwRootFrm::bNoVirDev = false;
+SwLayVout     *SwRootFrm::mpVout = 0;
+bool           SwRootFrm::mbInPaint = false;
+bool           SwRootFrm::mbNoVirDev = false;
 
 SwCache *SwFrm::mpCache = 0;
 
@@ -345,7 +345,7 @@ TYPEINIT1(SwCntntFrm,SwFrm);    //rtti for SwCntntFrm
 
 void _FrmInit()
 {
-    SwRootFrm::pVout = new SwLayVout();
+    SwRootFrm::mpVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100
 #ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
@@ -365,7 +365,7 @@ void _FrmFinit()
             OSL_ENSURE( !pObj, "Who didn't deregister?");
         }
 #endif
-    delete SwRootFrm::pVout;
+    delete SwRootFrm::mpVout;
     delete SwFrm::GetCachePtr();
 }
 
@@ -379,9 +379,9 @@ CurrShell::CurrShell( SwViewShell *pNew )
     pRoot = pNew->GetLayout();
     if ( pRoot )
     {
-        pPrev = pRoot->pCurrShell;
-        pRoot->pCurrShell = pNew;
-        pRoot->pCurrShells->insert( this );
+        pPrev = pRoot->mpCurrShell;
+        pRoot->mpCurrShell = pNew;
+        pRoot->mpCurrShells->insert( this );
     }
     else
         pPrev = 0;
@@ -391,13 +391,13 @@ CurrShell::~CurrShell()
 {
     if ( pRoot )
     {
-        pRoot->pCurrShells->erase( this );
+        pRoot->mpCurrShells->erase( this );
         if ( pPrev )
-            pRoot->pCurrShell = pPrev;
-        if ( pRoot->pCurrShells->empty() && pRoot->pWaitingCurrShell )
+            pRoot->mpCurrShell = pPrev;
+        if ( pRoot->mpCurrShells->empty() && pRoot->mpWaitingCurrShell )
         {
-            pRoot->pCurrShell = pRoot->pWaitingCurrShell;
-            pRoot->pWaitingCurrShell = 0;
+            pRoot->mpCurrShell = pRoot->mpWaitingCurrShell;
+            pRoot->mpWaitingCurrShell = 0;
         }
     }
 }
@@ -405,34 +405,34 @@ CurrShell::~CurrShell()
 void SetShell( SwViewShell *pSh )
 {
     SwRootFrm *pRoot = pSh->GetLayout();
-    if ( pRoot->pCurrShells->empty() )
-        pRoot->pCurrShell = pSh;
+    if ( pRoot->mpCurrShells->empty() )
+        pRoot->mpCurrShell = pSh;
     else
-        pRoot->pWaitingCurrShell = pSh;
+        pRoot->mpWaitingCurrShell = pSh;
 }
 
 void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 {
     // Activate some shell if possible
-    if ( pCurrShell == pSh )
+    if ( mpCurrShell == pSh )
     {
-        pCurrShell = nullptr;
+        mpCurrShell = nullptr;
         for(SwViewShell& rShell : pSh->GetRingContainer())
         {
             if(&rShell != pSh)
             {
-                pCurrShell = &rShell;
+                mpCurrShell = &rShell;
                 break;
             }
         }
     }
 
     // Doesn't matter anymore
-    if ( pWaitingCurrShell == pSh )
-        pWaitingCurrShell = 0;
+    if ( mpWaitingCurrShell == pSh )
+        mpWaitingCurrShell = 0;
 
     // Remove references
-    for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
+    for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
     {
         CurrShell *pC = *it;
         if (pC->pPrev == pSh)
@@ -442,7 +442,7 @@ void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 
 void InitCurrShells( SwRootFrm *pRoot )
 {
-    pRoot->pCurrShells = new SwCurrShells;
+    pRoot->mpCurrShells = new SwCurrShells;
 }
 
 /*
@@ -459,25 +459,25 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
-    bCheckSuperfluous( false ),
-    bIdleFormat( true ),
-    bBrowseWidthValid( false ),
-    bTurboAllowed( true ),
-    bAssertFlyPages( true ),
-    bIsVirtPageNum( false ),
-    bIsNewLayout( true ),
-    bCallbackActionEnabled ( false ),
-    bLayoutFreezed ( false ),
-    nBrowseWidth( MM50*4 ), //2cm minimum
-    pTurbo( 0 ),
-    pLastPage( 0 ),
-    pCurrShell( pSh ),
-    pWaitingCurrShell( 0 ),
-    pCurrShells(NULL),
-    pDrawPage( 0 ),
-    pDestroy( 0 ),
-    nPhyPageNums( 0 ),
-    nAccessibleShells( 0 )
+    mbCheckSuperfluous( false ),
+    mbIdleFormat( true ),
+    mbBrowseWidthValid( false ),
+    mbTurboAllowed( true ),
+    mbAssertFlyPages( true ),
+    mbIsVirtPageNum( false ),
+    mbIsNewLayout( true ),
+    mbCallbackActionEnabled ( false ),
+    mbLayoutFreezed ( false ),
+    mnBrowseWidth( MM50*4 ), //2cm minimum
+    mpTurbo( 0 ),
+    mpLastPage( 0 ),
+    mpCurrShell( pSh ),
+    mpWaitingCurrShell( 0 ),
+    mpCurrShells(NULL),
+    mpDrawPage( 0 ),
+    mpDestroy( 0 ),
+    mnPhyPageNums( 0 ),
+    mnAccessibleShells( 0 )
 {
     mnFrmType = FRM_ROOT;
     setRootFrm( this );
@@ -494,15 +494,15 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pTimerAccess->StopIdling();
     // For creating the Flys by MakeFrms()
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
-    bCallbackActionEnabled = false; // needs to be set to true before leaving!
+    mbCallbackActionEnabled = false; // needs to be set to true before leaving!
 
     SwDrawModel* pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
         // Disable "multiple layout"
-        pDrawPage = pMd->GetPage(0);
+        mpDrawPage = pMd->GetPage(0);
 
-        pDrawPage->SetSize( Frm().SSize() );
+        mpDrawPage->SetSize( Frm().SSize() );
     }
 
     // Initialize the layout: create pages, link content with Cntnt etc.
@@ -526,7 +526,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)
-            bIsVirtPageNum = true;
+            mbIsVirtPageNum = true;
     }
     else if ( pNode )
     {
@@ -535,10 +535,10 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)
-            bIsVirtPageNum = true;
+            mbIsVirtPageNum = true;
     }
     else
-        bIsVirtPageNum = false;
+        mbIsVirtPageNum = false;
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
     const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
@@ -555,18 +555,18 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
     //Remove masters that haven't been replaced yet from the list.
-    RemoveMasterObjs( pDrawPage );
+    RemoveMasterObjs( mpDrawPage );
     if( pSettingAccess->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         pFieldsAccess->UpdateRefFlds( NULL );
     //b6433357: Update page fields after loading
-    if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )
+    if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
         pFieldsAccess->UpdatePageFlds( &aMsgHnt );
     }
 
     pTimerAccess->StartIdling();
-    bCallbackActionEnabled = true;
+    mbCallbackActionEnabled = true;
 
     SwViewShell *pViewSh  = GetCurrShell();
     if (pViewSh)
@@ -575,8 +575,8 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
 
 SwRootFrm::~SwRootFrm()
 {
-    bTurboAllowed = false;
-    pTurbo = 0;
+    mbTurboAllowed = false;
+    mpTurbo = 0;
     // fdo#39510 crash on document close with footnotes
     // Object ownership in writer and esp. in layout are a mess: Before the
     // document/layout split SwDoc and SwRootFrm were essentially one object
@@ -597,18 +597,18 @@ SwRootFrm::~SwRootFrm()
         pDoc->DelFrmFmt( pRegisteredInNonConst );
         pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
-    delete pDestroy;
-    pDestroy = 0;
+    delete mpDestroy;
+    mpDestroy = 0;
 
     // Remove references
-    for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
+    for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
         (*it)->pRoot = 0;
 
-    delete pCurrShells;
-    pCurrShells = 0;
+    delete mpCurrShells;
+    mpCurrShells = 0;
 
     // Some accessible shells are left => problems on second SwFrm::Destroy call
-    assert(0 == nAccessibleShells);
+    assert(0 == mnAccessibleShells);
 
     // manually call base classes Destroy because it could call stuff
     // that accesses members of this

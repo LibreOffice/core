@@ -2539,18 +2539,18 @@ void SwSectionFrm::CalcFtnCntnt()
  */
 void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 {
-    if( !pDestroy )
-        pDestroy = new SwDestroyList;
-    pDestroy->insert( pDel );
+    if( !mpDestroy )
+        mpDestroy = new SwDestroyList;
+    mpDestroy->insert( pDel );
 }
 
 void SwRootFrm::_DeleteEmptySct()
 {
-    OSL_ENSURE( pDestroy, "Keine Liste, keine Kekse" );
-    while( !pDestroy->empty() )
+    OSL_ENSURE( mpDestroy, "Keine Liste, keine Kekse" );
+    while( !mpDestroy->empty() )
     {
-        SwSectionFrm* pSect = *pDestroy->begin();
-        pDestroy->erase( pDestroy->begin() );
+        SwSectionFrm* pSect = *mpDestroy->begin();
+        mpDestroy->erase( mpDestroy->begin() );
         OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrm" );
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
@@ -2578,14 +2578,14 @@ void SwRootFrm::_DeleteEmptySct()
 
 void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
 {
-    OSL_ENSURE( pDestroy, "Where's my list?" );
-    pDestroy->erase( pSct );
+    OSL_ENSURE( mpDestroy, "Where's my list?" );
+    mpDestroy->erase( pSct );
 }
 
 #ifdef DBG_UTIL
 bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {
-    return pDestroy && pDestroy->find( pSct ) != pDestroy->end();
+    return mpDestroy && mpDestroy->find( pSct ) != mpDestroy->end();
 }
 #endif
 
