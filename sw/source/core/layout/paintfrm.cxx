@@ -3161,7 +3161,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
     bool bResetRootPaint = false;
-    SwViewShell *pSh = pCurrShell;
+    SwViewShell *pSh = mpCurrShell;
 
     if ( pSh->GetWin() )
     {
@@ -3169,14 +3169,14 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         {
             return;
         }
-        if ( SwRootFrm::bInPaint )
+        if ( SwRootFrm::mbInPaint )
         {
             SwPaintQueue::Add( pSh, rRect );
             return;
         }
     }
     else
-        SwRootFrm::bInPaint = bResetRootPaint = true;
+        SwRootFrm::mbInPaint = bResetRootPaint = true;
 
     SwSavePaintStatics *pStatics = 0;
     if ( gProp.pSGlobalShell )
@@ -3326,7 +3326,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     // 2nd parameter is no longer <const> and will be set to the
                     // rectangle the virtual output device is calculated from <aPaintRect>,
                     // if the virtual output is used.
-                    pVout->Enter( pSh, aPaintRect, !bNoVirDev );
+                    mpVout->Enter( pSh, aPaintRect, !mbNoVirDev );
 
                     // OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
                     // Thus, all objects overlapping on pixel level with the unadjusted
@@ -3335,7 +3335,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 }
 
                 // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
-                pVout->SetOrgRect( aPaintRect );
+                mpVout->SetOrgRect( aPaintRect );
 
                 // OD 29.08.2002 #102450#
                 // determine background color of page for <PaintLayer> method
@@ -3407,7 +3407,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     pPage->RefreshExtraData( aPaintRect );
 
                 DELETEZ(gProp.pBLines);
-                pVout->Leave();
+                mpVout->Leave();
 
                 // #i68597#
                 // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
@@ -3496,7 +3496,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     DELETEZ( gProp.pSLines );
 
     if ( bResetRootPaint )
-        SwRootFrm::bInPaint = false;
+        SwRootFrm::mbInPaint = false;
     if ( pStatics )
         delete pStatics;
     else

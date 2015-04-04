@@ -56,12 +56,12 @@ class SwRootFrm: public SwLayoutFrm
     // Needs to disable the Superfluous temporarily
     friend void AdjustSizeChgNotify( SwRootFrm *pRoot );
 
-    // Maintains the pLastPage (Cut() and Paste() of SwPageFrm
+    // Maintains the mpLastPage (Cut() and Paste() of SwPageFrm
     friend inline void SetLastPage( SwPageFrm* );
 
     // For creating and destroying of the virtual output device manager
-    friend void _FrmInit(); // Creates pVout
-    friend void _FrmFinit(); // Destroys pVout
+    friend void _FrmInit(); // Creates mpVout
+    friend void _FrmFinit(); // Destroys mpVout
 
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
                                     // the rectangle is extended to the top/bottom/left/right
@@ -74,70 +74,70 @@ class SwRootFrm: public SwLayoutFrm
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
-    static SwLayVout     *pVout;
-    static bool           bInPaint; // Protection against double Paints
-    static bool           bNoVirDev;// No virt. Device for SystemPaints
+    static SwLayVout     *mpVout;
+    static bool           mbInPaint; // Protection against double Paints
+    static bool           mbNoVirDev;// No virt. Device for SystemPaints
 
-    bool    bCheckSuperfluous   :1; // Search for empty Pages?
-    bool    bIdleFormat         :1; // Trigger Idle Formatter?
-    bool    bBrowseWidthValid   :1; // Is nBrowseWidth valid?
-    bool    bTurboAllowed       :1;
-    bool    bAssertFlyPages     :1; // Insert more Pages for Flys if needed?
-    bool    bIsVirtPageNum      :1; // Do we have a virtual pagenumber?
-    bool    bIsNewLayout        :1; // Layout loaded or newly created
-    bool    bCallbackActionEnabled:1; // No Action in Notification desired
+    bool    mbCheckSuperfluous   :1; // Search for empty Pages?
+    bool    mbIdleFormat         :1; // Trigger Idle Formatter?
+    bool    mbBrowseWidthValid   :1; // Is mnBrowseWidth valid?
+    bool    mbTurboAllowed       :1;
+    bool    mbAssertFlyPages     :1; // Insert more Pages for Flys if needed?
+    bool    mbIsVirtPageNum      :1; // Do we have a virtual pagenumber?
+    bool    mbIsNewLayout        :1; // Layout loaded or newly created
+    bool    mbCallbackActionEnabled:1; // No Action in Notification desired
                                       // @see dcontact.cxx, ::Changed()
-    bool    bLayoutFreezed;
+    bool    mbLayoutFreezed;
 
     /**
      * For BrowseMode
-     * nBrowseWidth is the outer margin of the object most to the right.
+     * mnBrowseWidth is the outer margin of the object most to the right.
      * The page's right edge should not be smaller than this value.
      */
-    long    nBrowseWidth;
+    long    mnBrowseWidth;
 
-    /// If we only have to format one CntntFrm, its in pTurbo
-    const SwCntntFrm *pTurbo;
+    /// If we only have to format one CntntFrm, its in mpTurbo
+    const SwCntntFrm *mpTurbo;
 
     /// We should not need to always struggle to find the last page, so store it here
-    SwPageFrm *pLastPage;
+    SwPageFrm *mpLastPage;
 
     /** [ Comment from the original StarOffice checkin ]:
      * The root takes care of the shell access. Via the document
      * it should be possible to get at the root frame, and thus always
      * have access to the shell.
-     * the pointer pCurrShell is the pointer to any of the shells for
+     * the pointer mpCurrShell is the pointer to any of the shells for
      * the document.
      * Because sometimes it matters which shell is used, it is necessary to
      * know the active shell.
-     * this is approximated by setting the pointer pCurrShell when a
+     * this is approximated by setting the pointer mpCurrShell when a
      * shell gets the focus (FEShell). Acditionally the pointer will be
      * set temporarily by SwCurrShell typically via  SET_CURR_SHELL
      * The macro and class can be found in the SwViewShell. These object can
      * be created nested (also for different kinds of Shells). They are
-     * collected into the Array pCurrShells.
+     * collected into the Array mpCurrShells.
      * Furthermore it can happen that a shell is activated while a curshell
-     * object is still 'active'. This one will be entered into pWaitingCurrShell
+     * object is still 'active'. This one will be entered into mpWaitingCurrShell
      * and will be activated by the last d'tor of CurrShell.
      * One other problem is the destruction of a shell while it is active.
-     * The pointer pCurrShell is then reset to an arbitrary other shell.
+     * The pointer mpCurrShell is then reset to an arbitrary other shell.
      * If at the time of the destruction of a shell, which is still referneced
      * by a curshell object, that will be cleaned up as well.
      */
     friend class CurrShell;
     friend void SetShell( SwViewShell *pSh );
     friend void InitCurrShells( SwRootFrm *pRoot );
-    SwViewShell *pCurrShell;
-    SwViewShell *pWaitingCurrShell;
-    SwCurrShells *pCurrShells;
+    SwViewShell *mpCurrShell;
+    SwViewShell *mpWaitingCurrShell;
+    SwCurrShells *mpCurrShells;
 
     /// One Page per DrawModel per Document; is always the size of the Root
-    SdrPage *pDrawPage;
+    SdrPage *mpDrawPage;
 
-    SwDestroyList* pDestroy;
+    SwDestroyList* mpDestroy;
 
-    sal_uInt16  nPhyPageNums; /// Page count
-    sal_uInt16 nAccessibleShells; // Number of accessible shells
+    sal_uInt16  mnPhyPageNums; /// Page count
+    sal_uInt16 mnAccessibleShells; // Number of accessible shells
 
     void ImplCalcBrowseWidth();
     void ImplInvalidateBrowseWidth();
@@ -170,7 +170,7 @@ public:
     virtual ~SwRootFrm();
     void Init(SwFrmFmt*);
 
-    SwViewShell *GetCurrShell() const { return pCurrShell; }
+    SwViewShell *GetCurrShell() const { return mpCurrShell; }
     void DeRegisterShell( SwViewShell *pSh );
 
     /**
@@ -190,9 +190,9 @@ public:
     void UnoRemoveAllActions();
     void UnoRestoreAllActions();
 
-    const SdrPage* GetDrawPage() const { return pDrawPage; }
-          SdrPage* GetDrawPage()       { return pDrawPage; }
-          void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
+    const SdrPage* GetDrawPage() const { return mpDrawPage; }
+          SdrPage* GetDrawPage()       { return mpDrawPage; }
+          void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
     virtual bool  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
@@ -214,16 +214,16 @@ public:
 
     void SetIdleFlags()
     {
-        bIdleFormat = true;
+        mbIdleFormat = true;
 
-        SwViewShell* lcl_pCurrShell = GetCurrShell();
+        SwViewShell* pCurrShell = GetCurrShell();
         // May be NULL if called from SfxBaseModel::dispose
         // (this happens in the build test 'rtfexport').
-        if (lcl_pCurrShell != NULL)
-            lcl_pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
+        if (pCurrShell != NULL)
+            pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
     }
-    bool IsIdleFormat()  const { return bIdleFormat; }
-    void ResetIdleFormat()     { bIdleFormat = false; }
+    bool IsIdleFormat()  const { return mbIdleFormat; }
+    void ResetIdleFormat()     { mbIdleFormat = false; }
 
     bool IsNeedGrammarCheck() const         { return mbNeedGrammarCheck; }
     void SetNeedGrammarCheck( bool bVal )
@@ -232,18 +232,18 @@ public:
 
         if ( bVal )
         {
-            SwViewShell* lcl_pCurrShell = GetCurrShell();
+            SwViewShell* pCurrShell = GetCurrShell();
             // May be NULL if called from SfxBaseModel::dispose
             // (this happens in the build test 'rtfexport').
-            if (lcl_pCurrShell != NULL)
-                lcl_pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
+            if (pCurrShell != NULL)
+                pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
         }
     }
 
     /// Makes sure that all requested page-bound Flys find a Page
-    void SetAssertFlyPages() { bAssertFlyPages = true; }
+    void SetAssertFlyPages() { mbAssertFlyPages = true; }
     void AssertFlyPages();
-    bool IsAssertFlyPages()  { return bAssertFlyPages; }
+    bool IsAssertFlyPages()  { return mbAssertFlyPages; }
 
     /**
      * Makes sure that, starting from the passed Page, all page-bound Frames
@@ -262,8 +262,8 @@ public:
     void InvalidateAllObjPos();
 
     /// Remove superfluous Pages
-    void SetSuperfluous()      { bCheckSuperfluous = true; }
-    bool IsSuperfluous() const { return bCheckSuperfluous; }
+    void SetSuperfluous()      { mbCheckSuperfluous = true; }
+    bool IsSuperfluous() const { return mbCheckSuperfluous; }
     void RemoveSuperfluous();
 
     /**
@@ -273,10 +273,10 @@ public:
     sal_uInt16  GetCurrPage( const SwPaM* ) const;
     sal_uInt16  SetCurrPage( SwCursor*, sal_uInt16 nPageNum );
     Point   GetPagePos( sal_uInt16 nPageNum ) const;
-    sal_uInt16  GetPageNum() const      { return nPhyPageNums; }
-    void    DecrPhyPageNums()       { --nPhyPageNums; }
-    void    IncrPhyPageNums()       { ++nPhyPageNums; }
-    bool    IsVirtPageNum() const   { return bIsVirtPageNum; }
+    sal_uInt16  GetPageNum() const      { return mnPhyPageNums; }
+    void    DecrPhyPageNums()       { --mnPhyPageNums; }
+    void    IncrPhyPageNums()       { ++mnPhyPageNums; }
+    bool    IsVirtPageNum() const   { return mbIsVirtPageNum; }
     inline  void SetVirtPageNum( const bool bOf ) const;
     bool    IsDummyPage( sal_uInt16 nPageNum ) const;
 
@@ -299,12 +299,12 @@ public:
      */
     bool MakeTblCrsrs( SwTableCursor& );
 
-    void DisallowTurbo()  const { const_cast<SwRootFrm*>(this)->bTurboAllowed = false; }
-    void ResetTurboFlag() const { const_cast<SwRootFrm*>(this)->bTurboAllowed = true; }
-    bool IsTurboAllowed() const { return bTurboAllowed; }
-    void SetTurbo( const SwCntntFrm *pCntnt ) { pTurbo = pCntnt; }
-    void ResetTurbo() { pTurbo = 0; }
-    const SwCntntFrm *GetTurbo() { return pTurbo; }
+    void DisallowTurbo()  const { const_cast<SwRootFrm*>(this)->mbTurboAllowed = false; }
+    void ResetTurboFlag() const { const_cast<SwRootFrm*>(this)->mbTurboAllowed = true; }
+    bool IsTurboAllowed() const { return mbTurboAllowed; }
+    void SetTurbo( const SwCntntFrm *pCntnt ) { mpTurbo = pCntnt; }
+    void ResetTurbo() { mpTurbo = 0; }
+    const SwCntntFrm *GetTurbo() { return mpTurbo; }
 
     /// Update the footernumbers of all Pages
     void UpdateFtnNums(); // Only for page by page numnbering!
@@ -314,37 +314,37 @@ public:
                      bool bEndNotes = false );
     void CheckFtnPageDescs( bool bEndNote );
 
-    const SwPageFrm *GetLastPage() const { return pLastPage; }
-          SwPageFrm *GetLastPage()       { return pLastPage; }
+    const SwPageFrm *GetLastPage() const { return mpLastPage; }
+          SwPageFrm *GetLastPage()       { return mpLastPage; }
 
-    static bool IsInPaint() { return bInPaint; }
+    static bool IsInPaint() { return mbInPaint; }
 
-    static void SetNoVirDev( const bool bNew ) { bNoVirDev = bNew; }
+    static void SetNoVirDev( const bool bNew ) { mbNoVirDev = bNew; }
 
     inline long GetBrowseWidth() const;
-    void SetBrowseWidth( long n ) { bBrowseWidthValid = true; nBrowseWidth = n;}
+    void SetBrowseWidth( long n ) { mbBrowseWidthValid = true; mnBrowseWidth = n;}
     inline void InvalidateBrowseWidth();
 
-    bool IsNewLayout() const { return bIsNewLayout; }
-    void ResetNewLayout()    { bIsNewLayout = false;}
+    bool IsNewLayout() const { return mbIsNewLayout; }
+    void ResetNewLayout()    { mbIsNewLayout = false;}
 
     /**
      * Empty SwSectionFrms are registered here for deletion and
      * destroyed later on or deregistered.
      */
     void InsertEmptySct( SwSectionFrm* pDel );
-    void DeleteEmptySct() { if( pDestroy ) _DeleteEmptySct(); }
-    void RemoveFromList( SwSectionFrm* pSct ) { if( pDestroy ) _RemoveFromList( pSct ); }
+    void DeleteEmptySct() { if( mpDestroy ) _DeleteEmptySct(); }
+    void RemoveFromList( SwSectionFrm* pSct ) { if( mpDestroy ) _RemoveFromList( pSct ); }
 #ifdef DBG_UTIL
     bool IsInDelList( SwSectionFrm* pSct ) const;
 #endif
 
-    void SetCallbackActionEnabled( bool b ) { bCallbackActionEnabled = b; }
-    bool IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
+    void SetCallbackActionEnabled( bool b ) { mbCallbackActionEnabled = b; }
+    bool IsCallbackActionEnabled() const    { return mbCallbackActionEnabled; }
 
-    bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
-    void AddAccessibleShell() { ++nAccessibleShells; }
-    void RemoveAccessibleShell() { --nAccessibleShells; }
+    bool IsAnyShellAccessible() const { return mnAccessibleShells > 0; }
+    void AddAccessibleShell() { ++mnAccessibleShells; }
+    void RemoveAccessibleShell() { --mnAccessibleShells; }
 
     /**
      * Get page frame by phyiscal page number
@@ -365,26 +365,26 @@ public:
     const SwRect& GetPagesArea() const { return maPagesArea; }
     void SetSidebarChanged() { mbSidebarChanged = true; }
 
-    bool IsLayoutFreezed() const { return bLayoutFreezed; }
-    void FreezeLayout( bool freeze ) { bLayoutFreezed = freeze; }
+    bool IsLayoutFreezed() const { return mbLayoutFreezed; }
+    void FreezeLayout( bool freeze ) { mbLayoutFreezed = freeze; }
 };
 
 inline long SwRootFrm::GetBrowseWidth() const
 {
-    if ( !bBrowseWidthValid )
+    if ( !mbBrowseWidthValid )
         const_cast<SwRootFrm*>(this)->ImplCalcBrowseWidth();
-    return nBrowseWidth;
+    return mnBrowseWidth;
 }
 
 inline void SwRootFrm::InvalidateBrowseWidth()
 {
-    if ( bBrowseWidthValid )
+    if ( mbBrowseWidthValid )
         ImplInvalidateBrowseWidth();
 }
 
 inline  void SwRootFrm::SetVirtPageNum( const bool bOf) const
 {
-    const_cast<SwRootFrm*>(this)->bIsVirtPageNum = bOf;
+    const_cast<SwRootFrm*>(this)->mbIsVirtPageNum = bOf;
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX

@@ -54,9 +54,9 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
 
 bool SwRootFrm::FlushVout()
 {
-    if( SwRootFrm::pVout->IsFlushable() )
+    if( SwRootFrm::mpVout->IsFlushable() )
     {
-        SwRootFrm::pVout->_Flush();
+        SwRootFrm::mpVout->_Flush();
         return true;
     }
     return false;
@@ -64,8 +64,8 @@ bool SwRootFrm::FlushVout()
 
 bool SwRootFrm::HasSameRect( const SwRect& rRect )
 {
-    if( SwRootFrm::pVout->IsFlushable() )
-        return ( rRect == SwRootFrm::pVout->GetOrgRect() );
+    if( SwRootFrm::mpVout->IsFlushable() )
+        return ( rRect == SwRootFrm::mpVout->GetOrgRect() );
     return false;
 }
 
