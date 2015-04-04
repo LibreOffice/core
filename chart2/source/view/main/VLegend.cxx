@@ -390,7 +390,7 @@ awt::Size lcl_placeLegendEntries(
             nSumHeight += aRowHeights[nR];
         sal_Int32 nRemainingSpace = rAvailableSpace.Height - nSumHeight;
 
-        if( nRemainingSpace<0 )
+        if( nRemainingSpace < -100 ) // 1mm tolerance for OOXML interop tdf#90404
         {
             //remove entries that are too big
             for( sal_Int32 nR=nNumberOfRows; nR--; )
@@ -418,7 +418,7 @@ awt::Size lcl_placeLegendEntries(
             }
             nNumberOfRows = static_cast<sal_Int32>(aRowHeights.size());
         }
-        if( nRemainingSpace > 0 )
+        if( nRemainingSpace >= -100 ) // 1mm tolerance for OOXML interop tdf#90404
         {
             sal_Int32 nNormalSpacingHeight = 2*nYPadding+(nNumberOfRows-1)*nYOffset;
             if( nRemainingSpace < nNormalSpacingHeight )
