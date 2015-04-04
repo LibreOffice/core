@@ -41,29 +41,44 @@ OUString DocInfoHelper::GetGeneratorString()
     {
         aResult.append( aValue.replace( ' ', '_' ) );
         aResult.append( '/' );
+    }
 
-        aValue = utl::ConfigManager::getProductVersion();
+    aValue = GetVersionString();
+    if ( !aValue.isEmpty() )
+    {
+        aResult.append( aValue );
+    }
+
+    return aResult.makeStringAndClear();
+}
+
+
+OUString DocInfoHelper::GetVersionString()
+{
+    OUStringBuffer aResult;
+
+    // version is <product_versions>_<product_extension>$<platform>
+    OUString aValue( utl::ConfigManager::getProductVersion() );
+    if ( !aValue.isEmpty() )
+    {
+        aResult.append( aValue.replace( ' ', '_' ) );
+
+        aValue = utl::ConfigManager::getProductExtension();
         if ( !aValue.isEmpty() )
         {
             aResult.append( aValue.replace( ' ', '_' ) );
-
-            aValue = utl::ConfigManager::getProductExtension();
-            if ( !aValue.isEmpty() )
-            {
-                aResult.append( aValue.replace( ' ', '_' ) );
-            }
         }
-
-        OUString os( "$_OS" );
-        OUString arch( "$_ARCH" );
-        ::rtl::Bootstrap::expandMacros(os);
-        ::rtl::Bootstrap::expandMacros(arch);
-        aResult.append( '$' );
-        aResult.append( os );
-        aResult.append( '_' );
-        aResult.append( arch );
-        aResult.append( ' ' );
     }
+
+    OUString os( "$_OS" );
+    OUString arch( "$_ARCH" );
+    ::rtl::Bootstrap::expandMacros(os);
+    ::rtl::Bootstrap::expandMacros(arch);
+    aResult.append( '$' );
+    aResult.append( os );
+    aResult.append( '_' );
+    aResult.append( arch );
+    aResult.append( ' ' );
 
     // second product: LibreOffice_project/<build_information>
     // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
@@ -96,6 +111,7 @@ OUString DocInfoHelper::GetGeneratorString()
 
     return aResult.makeStringAndClear();
 }
+
 
 } // end of namespace utl
 
