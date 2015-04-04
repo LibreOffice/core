@@ -129,6 +129,8 @@ private:
     short                   nFixedCategory;
 
     OUString sAutomaticEntry;
+    OUString sThousandSeparator;
+    OUString sEngineeringNotation;
 
     vcl::Window*                 pLastActivWindow;
 
@@ -137,6 +139,7 @@ private:
     void    FillFormatListBox_Impl( std::vector<OUString>& rEntries );
     void    UpdateOptions_Impl( bool bCheckCatChange );
     void    UpdateFormatListBox_Impl( sal_uInt16 bCat, bool bUpdateEdit );
+    void    UpdateThousandEngineeringText();
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );

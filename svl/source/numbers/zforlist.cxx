@@ -2617,8 +2617,11 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString.append('#');
         else
         {
-            sString.append('#');
-            sString.append(rThSep);
+            if (eType != css::util::NumberFormat::SCIENTIFIC)
+            {  // for scientific, bThousand is used for Engineering notation
+                sString.append('#');
+                sString.append(rThSep);
+            }
             padToLength(sString, sString.getLength() + nDigitsInFirstGroup, '#');
         }
     }
@@ -2636,10 +2639,11 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         if (bThousand && nAnzLeading < nDigitsInFirstGroup + 1)
         {
             for (i = nAnzLeading; i < nDigitsInFirstGroup + 1; i++)
-            {
-                if (bThousand && i % nDigitsInFirstGroup == 0)
+            {   // for scientific, bThousand is used for Engineering notation
+                if (bThousand && i % nDigitsInFirstGroup == 0 && eType != css::util::NumberFormat::SCIENTIFIC)
                     sString.insert(0, rThSep);
-                sString.insert(0, '#');
+                if ( eType != css::util::NumberFormat::SCIENTIFIC || i < nDigitsInFirstGroup )
+                    sString.insert(0, '#');
             }
         }
     }

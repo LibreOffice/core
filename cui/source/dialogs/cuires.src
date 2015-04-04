@@ -60,6 +60,16 @@ String RID_SVXSTR_AUTO_ENTRY
     Text [ en-US ] = "Automatic";
 };
 
+String RID_SVXSTR_THOUSAND_SEP
+{
+    Text [ en-US ] = "Thousands separator";
+};
+
+String RID_SVXSTR_ENGINEERING
+{
+    Text [ en-US ] = "Engineering notation";
+};
+
 String RID_SVXSTR_EDIT_GRAPHIC
 {
     Text [ en-US ] = "Link" ;
