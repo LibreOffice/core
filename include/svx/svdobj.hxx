@@ -208,11 +208,6 @@ public:
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
     sal_uInt32 GetInventor() const { return nInventor;}
     sal_uInt16 GetId() const { return nIdentifier;}
-
-    SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
 // all geometrical data of an arbitrary object for use in undo/redo

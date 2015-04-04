@@ -46,6 +46,18 @@
   if(_def_pProgress&&_def_pProgress->IsSet())      \
       (_def_pProgress->Call(reinterpret_cast<void*>(_def_nVal)));
 
+class ImplVectMap;
+class ImplChain;
+
+namespace ImplVectorizer
+{
+    ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
+    void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
+    bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
+    bool     ImplIsUp( ImplVectMap* pMap, long nY, long nX );
+    void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
+}
+
 struct ChainMove { long nDX; long nDY; };
 
 static const ChainMove aImplMove[ 8 ] =   {
@@ -619,15 +631,9 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
     aNewArr2.ImplCreatePoly( maPoly );
 }
 
-ImplVectorizer::ImplVectorizer()
-{
-}
+namespace ImplVectorizer {
 
-ImplVectorizer::~ImplVectorizer()
-{
-}
-
-bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
+bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                                     sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
     bool bRet = false;
@@ -729,7 +735,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
     return bRet;
 }
 
-bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
+bool ImplVectorize( const Bitmap& rMonoBmp,
                                     tools::PolyPolygon& rPolyPoly,
                                     sal_uLong nFlags, const Link* pProgress )
 {
@@ -823,7 +829,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
     return bRet;
 }
 
-void ImplVectorizer::ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
+void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 {
     if( rPolyPoly.Count() > VECT_POLY_MAX )
     {
@@ -855,7 +861,7 @@ void ImplVectorizer::ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
     }
 }
 
-ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
+ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
 {
     ImplVectMap* pMap = NULL;
 
@@ -942,7 +948,7 @@ ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& r
     return pMap;
 }
 
-void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags )
+void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags )
 {
     const long nWidth = pMap->Width(), nHeight= pMap->Height();
 
@@ -1009,7 +1015,7 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPoly
     }
 }
 
-bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
+bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
 {
     long                nActX = rStartPt.X();
     long                nActY = rStartPt.Y();
@@ -1059,7 +1065,7 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
     return true;
 }
 
-bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX )
+bool ImplIsUp( ImplVectMap* pMap, long nY, long nX )
 {
     if( pMap->IsDone( nY - 1L, nX ) )
         return true;
@@ -1069,6 +1075,8 @@ bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX )
         return true;
     else
         return false;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -165,13 +165,6 @@ public:
         EventSharedPtr const& pEvent,
         const bool bSkipTriggersNextEffect);
 
-    /** Registes an event that is fired when the current effects(s)
-        are rewound, .e.g. when the right mouse button is pressed.
-        Then, all registered events are fired and removed from this
-        queue.
-    */
-    void registerRewindEffectEvent( EventSharedPtr const& rEvent );
-
     /** Register an event that is fired to show the next event
 
         For every next effect event, only one of the events
@@ -266,7 +259,6 @@ private:
     ::boost::shared_ptr<ShapeClickEventHandler>     mpShapeClickEventHandler;
     ::boost::shared_ptr<ClickEventHandler>          mpClickEventHandler;
     ::boost::shared_ptr<SkipEffectEventHandler>     mpSkipEffectEventHandler;
-    ::boost::shared_ptr<RewindEffectEventHandler>   mpRewindEffectEventHandler;
     ::boost::shared_ptr<ShapeClickEventHandler>     mpShapeDoubleClickEventHandler;
     ::boost::shared_ptr<ClickEventHandler>          mpDoubleClickEventHandler;
     ::boost::shared_ptr<MouseEnterHandler>          mpMouseEnterHandler;

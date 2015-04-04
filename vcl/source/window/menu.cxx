@@ -3154,21 +3154,18 @@ ImplMenuDelData::~ImplMenuDelData()
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
 
-namespace vcl
-{
-    MenuInvalidator::MenuInvalidator() {};
-
+namespace vcl { namespace MenuInvalidator {
     static VclEventListeners2* pMenuInvalidateListeners = NULL;
-    VclEventListeners2* MenuInvalidator::GetMenuInvalidateListeners()
+    VclEventListeners2* GetMenuInvalidateListeners()
     {
         if(!pMenuInvalidateListeners)
             pMenuInvalidateListeners = new VclEventListeners2();
         return pMenuInvalidateListeners;
     }
-    void MenuInvalidator::Invalidated()
+    void Invalidated()
     {
         VclSimpleEvent aEvent(0);
         GetMenuInvalidateListeners()->callListeners(&aEvent);
     };
-}
+} }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

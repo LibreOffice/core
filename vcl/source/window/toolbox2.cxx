@@ -1022,18 +1022,6 @@ Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
         return Rectangle();
 }
 
-Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
-{
-    if ( mbCalc || mbFormat )
-        const_cast<ToolBox*>(this)->ImplFormat();
-
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos < mpData->m_aItems.size() )
-        return mpData->m_aItems[nPos].maContentSize;
-    else
-        return Size();
-}
-
 bool ToolBox::ImplHasExternalMenubutton()
 {
     // check if the borderwindow (i.e. the decoration) provides the menu button

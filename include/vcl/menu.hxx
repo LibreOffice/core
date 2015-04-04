@@ -381,12 +381,10 @@ public:
 
 namespace vcl
 {
-    class VCL_DLLPUBLIC MenuInvalidator
+    namespace MenuInvalidator
     {
-        public:
-            MenuInvalidator();
-            static VclEventListeners2* GetMenuInvalidateListeners();
-            static void Invalidated();
+        VCL_DLLPUBLIC VclEventListeners2* GetMenuInvalidateListeners();
+        VCL_DLLPUBLIC void Invalidated();
     };
 }
 

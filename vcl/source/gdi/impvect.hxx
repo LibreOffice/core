@@ -24,30 +24,12 @@
 #include <vcl/gdimtf.hxx>
 
 // - Vectorizer -
-
-class BitmapReadAccess;
-class ImplChain;
-class ImplVectMap;
-
-class ImplVectorizer
+namespace ImplVectorizer
 {
-private:
-
-    static ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    static void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
-    static bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    static bool     ImplIsUp( ImplVectMap* pMap, long nY, long nX );
-    static void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
-
-public:
-
-                    ImplVectorizer();
-                    ~ImplVectorizer();
-
-    static bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                   sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
-    static bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
-                                   sal_uLong nFlags, const Link* pProgress );
+    bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
+                            sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
+    bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
+                            sal_uLong nFlags, const Link* pProgress );
 };
 
 #endif

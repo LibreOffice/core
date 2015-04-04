@@ -572,7 +572,6 @@ UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
       mpAudioStoppedEventHandler(),
       mpClickEventHandler(),
       mpSkipEffectEventHandler(),
-      mpRewindEffectEventHandler(),
       mpDoubleClickEventHandler(),
       mpMouseEnterHandler(),
       mpMouseLeaveHandler(),
@@ -625,10 +624,6 @@ void UserEventQueue::clear()
         mrMultiplexer.removeClickHandler( mpSkipEffectEventHandler );
         mrMultiplexer.removeNextEffectHandler( mpSkipEffectEventHandler );
         mpSkipEffectEventHandler.reset();
-    }
-    if(mpRewindEffectEventHandler) {
-        mrMultiplexer.removeClickHandler( mpRewindEffectEventHandler );
-        mpRewindEffectEventHandler.reset();
     }
     if( mpShapeDoubleClickEventHandler ) {
         mrMultiplexer.removeDoubleClickHandler( mpShapeDoubleClickEventHandler );
@@ -780,15 +775,6 @@ void UserEventQueue::registerSkipEffectEvent(
     }
     mpSkipEffectEventHandler->setSkipTriggersNextEffect(bSkipTriggersNextEffect);
     mpSkipEffectEventHandler->addEvent( pEvent );
-}
-
-void UserEventQueue::registerRewindEffectEvent( EventSharedPtr const& pEvent )
-{
-    registerEvent( mpRewindEffectEventHandler,
-                   pEvent,
-                   boost::bind( &EventMultiplexer::addClickHandler,
-                                boost::ref(mrMultiplexer), _1,
-                                -1.0 /* prio below default */ ) );
 }
 
 void UserEventQueue::registerShapeDoubleClickEvent(

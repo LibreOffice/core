@@ -1642,41 +1642,6 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
         return bFound ? SFX_SLOT_FILTER_DISABLED : SFX_SLOT_FILTER_ENABLED;
 }
 
-bool SfxDispatcher::_TryIntercept_Impl
-(
-    sal_uInt16      nSlot,    // Slot-Id to search for
-    SfxSlotServer&  rServer,  // <SfxSlotServer>-Instance to fill
-    bool            bSelf
-)
-{
-    // Maybe the parent is also belongs to a component
-    SfxDispatcher *pParent = xImp->pParent;
-    sal_uInt16 nLevels = xImp->aStack.size();
-    while ( pParent && pParent->xImp->pFrame )
-    {
-        nLevels = nLevels + pParent->xImp->aStack.size();
-        pParent = pParent->xImp->pParent;
-    }
-
-    if ( bSelf )
-    {
-        // Query the ComponentViewShell
-        Flush();
-        SfxShell *pObjShell = GetShell(0);
-        SfxInterface *pIFace = pObjShell->GetInterface();
-        const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
-
-        if ( pSlot )
-        {
-            rServer.SetSlot(pSlot);
-            rServer.SetShellLevel(0);
-            return true;
-        }
-    }
-
-    return false;
-}
-
 /** This helper method searches for the <Slot-Server> which currently serves
     the nSlot. As the result, rServe is filled accordingly.
 

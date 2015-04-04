@@ -92,9 +92,7 @@ friend class SfxBindings;
 friend class SfxStateCache;
 friend class SfxPopupMenuManager;
 friend class SfxHelp;
-                        // For bindings: Finding the Message;
-                        // level for re-access
-    SAL_DLLPRIVATE bool _TryIntercept_Impl( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
+
     bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
     bool                _FillState( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );

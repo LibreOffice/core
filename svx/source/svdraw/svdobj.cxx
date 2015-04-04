@@ -177,52 +177,6 @@ SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
 
 SdrObjUserData::~SdrObjUserData() {}
 
-
-
-SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
-{
-    if(pObj)
-    {
-        if(rRec.pPageView)
-        {
-            return SdrObjectPrimitiveHit(*pObj, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
-        }
-    }
-
-    return 0;
-}
-
-Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
-{
-    return Pointer(POINTER_REFHAND);
-}
-
-void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRect*/, const SdrObjMacroHitRec& /*rRec*/, const SdrObject* pObj) const
-{
-    if(!pObj)
-        return;
-
-    const RasterOp eRop(rOut.GetRasterOp());
-    const basegfx::B2DPolyPolygon aPolyPolygon(pObj->TakeXorPoly());
-    const sal_uInt32 nCount(aPolyPolygon.count());
-
-    rOut.SetLineColor(COL_BLACK);
-    rOut.SetFillColor();
-    rOut.SetRasterOp(ROP_INVERT);
-
-    for(sal_uInt32 a(0); a < nCount; a++)
-    {
-        rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
-    }
-
-    rOut.SetRasterOp(eRop);
-}
-
-OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
-{
-    return OUString();
-}
-
 SdrObjGeoData::SdrObjGeoData():
     pGPL(NULL),
     bMovProt(false),
