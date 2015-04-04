@@ -1390,7 +1390,10 @@ void XclExpXct::SaveXml( XclExpXmlStream& rStrm )
 {
     XclExpCrnList aCrnRecs;
     if (!BuildCrnList( aCrnRecs))
+    {
+        SAL_WARN("sc", "generating invalid OOXML files: sheetDataSet without sheetData child element");
         return;
+    }
 
     sax_fastparser::FSHelperPtr pFS = rStrm.GetCurrentStream();
 
