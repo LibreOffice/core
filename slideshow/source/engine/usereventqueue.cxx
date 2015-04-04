@@ -286,26 +286,6 @@ private:
     bool mbSkipTriggersNextEffect;
 };
 
-class RewindEffectEventHandler : public MouseEventHandler_,
-                                 public EventContainer
-{
-public:
-    RewindEffectEventHandler( EventQueue & rEventQueue )
-        : EventContainer(), mrEventQueue(rEventQueue) {}
-
-private:
-    virtual bool handleMouseReleased( awt::MouseEvent const& evt ) SAL_OVERRIDE
-    {
-        if(evt.Buttons != awt::MouseButton::RIGHT)
-            return false;
-
-        return fireAllEvents( maEvents, mrEventQueue );
-    }
-
-private:
-    EventQueue & mrEventQueue;
-};
-
 /** Base class to share some common code between
     ShapeClickEventHandler and MouseMoveHandler
 
