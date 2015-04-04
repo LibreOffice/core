@@ -1683,14 +1683,20 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     }
 
-    if (!maXctList.IsEmpty() || mxExtNameBfr)
+    if (mxExtNameBfr)
+    {
+        pExternalLink->startElement(XML_definedNames, FSEND);
+        // externalName elements
+        WriteExtNameBufferXml( rStrm );
+        pExternalLink->endElement(XML_definedNames);
+    }
+
+    if (!maXctList.IsEmpty())
     {
         pExternalLink->startElement( XML_sheetDataSet, FSEND);
 
         // sheetData elements
         maXctList.SaveXml( rStrm );
-        // externalName elements
-        WriteExtNameBufferXml( rStrm );
 
         pExternalLink->endElement( XML_sheetDataSet);
 
