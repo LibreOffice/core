@@ -47,7 +47,6 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
             virtual bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex) SAL_OVERRIDE;
-            file::OSQLAnalyzer* createAnalyzer();
         public:
             DECLARE_SERVICE_INFO();
 

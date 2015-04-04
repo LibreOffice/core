@@ -213,11 +213,6 @@ void SAL_CALL ODbaseResultSet::release() throw()
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OSQLAnalyzer* ODbaseResultSet::createAnalyzer()
-{
-    return new OFILEAnalyzer(m_pTable->getConnection());
-}
-
 sal_Int32 ODbaseResultSet::getCurrentFilePos() const
 {
     return m_pTable->getFilePos();
