@@ -210,7 +210,7 @@ public:
     ScDPSaveMember* GetExistingMemberByName(const OUString& rName);
 
     /**
-     * Get a member object by its name.  If one doesn't exist, creat a new
+     * Get a member object by its name.  If one doesn't exist, create a new
      * object and return it.  This class manages the life cycle of all member
      * objects belonging to it, so <i>don't delete the returned instance.</i>
      *

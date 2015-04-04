@@ -363,7 +363,7 @@ public:
         csConnectorSocket( )
     {
         m_id = getIdentifier( );
-        //t_print("# successfully creat this client thread %d!\n",  m_id );
+        //t_print("# successfully create this client thread %d!\n",  m_id );
     }
 
     ~ClientSocketThread( )
@@ -434,7 +434,7 @@ public:
     ServerSocketThread( )
     {
         m_id = getIdentifier( );
-        //t_print("# successfully creat this server thread %d!\n",  m_id );
+        //t_print("# successfully create this server thread %d!\n",  m_id );
     }
 
     ~ServerSocketThread( )
@@ -552,7 +552,7 @@ public:
         csConnectorSocket( )
     {
         m_id = getIdentifier( );
-        //t_print("# successfully creat this client thread %d!\n",  m_id );
+        //t_print("# successfully create this client thread %d!\n",  m_id );
         m_aValues.createBuffer(_nBufferSize, 0);
     }
 
@@ -625,7 +625,7 @@ public:
     WriteSocketThread(sal_Int32 _nBufferSize, int _nValue )
     {
         m_id = getIdentifier( );
-        //t_print("# successfully creat this server thread %d!\n",  m_id );
+        //t_print("# successfully create this server thread %d!\n",  m_id );
 
         m_aValues.createBuffer(_nBufferSize, _nValue);
     }

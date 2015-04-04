@@ -29,7 +29,7 @@ namespace connectivity
 {
     class OTableHelper;
     class OColumnsHelperImpl;
-    /** contains generell column handling to creat default columns and default sql statements.
+    /** contains generell column handling to create default columns and default sql statements.
     */
     class OOO_DLLPUBLIC_DBTOOLS OColumnsHelper : public sdbcx::OCollection
     {

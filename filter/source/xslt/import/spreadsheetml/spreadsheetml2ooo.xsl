@@ -1134,7 +1134,7 @@
 							</xsl:choose>
 						</xsl:with-param>
 					</xsl:call-template>
-					<!-- creat style:map for other sub number formats -->
+					<!-- create style:map for other sub number formats -->
 					<xsl:if test="$current-unit = 0 and $total-unit &gt; 1">
 						<xsl:variable name="style-condition1">
 							<xsl:call-template name="get-number-format-condition">

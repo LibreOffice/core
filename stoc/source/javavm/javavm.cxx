@@ -1415,7 +1415,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
             OUString sHttpProxyPort("http.proxyPort");
             OUString sHttpNonProxyHosts("http.nonProxyHosts");
 
-            // creat Java Properties as JNI strings
+            // create Java Properties as JNI strings
             jstring jsFtpProxyHost= pJNIEnv->NewString( sFtpProxyHost.getStr(), sFtpProxyHost.getLength());
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", 0);
             jstring jsFtpProxyPort= pJNIEnv->NewString( sFtpProxyPort.getStr(), sFtpProxyPort.getLength());

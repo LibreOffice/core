@@ -36,7 +36,7 @@ uno::Reference< media::XPlayer > SAL_CALL OGLManager::createPlayer( const OUStri
     else
     {
         delete pPlayer;
-        SAL_WARN("avmedia.opengl", "Can't creat player for OpenGL model: " + rURL);
+        SAL_WARN("avmedia.opengl", "Can't create player for OpenGL model: " + rURL);
         return uno::Reference< media::XPlayer >();
     }
 }

@@ -2077,7 +2077,7 @@ namespace osl_FileStatus
                 fd = remove( strLinkFileName.getStr() );
             CPPUNIT_ASSERT_MESSAGE( "in deleting link file",  fd == 0 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for getLinkTargetURL function: Solaris version, creat a file, and a link file link to it, get its LinkTargetURL and compare",
+            CPPUNIT_ASSERT_MESSAGE( "test for getLinkTargetURL function: Solaris version, create a file, and a link file link to it, get its LinkTargetURL and compare",
                                     compareFileName( aFileURL, aTypeURL ) );
         }
 #else

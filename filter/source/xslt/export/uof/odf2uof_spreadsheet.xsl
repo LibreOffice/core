@@ -379,7 +379,7 @@
 				<xsl:attribute name="uof:locID">s0026</xsl:attribute>
 				<表:标签前景色 uof:locID="s0027">#000000</表:标签前景色>
 				<表:标签背景色 uof:locID="s0028">#ffffff</表:标签背景色>
-				<xsl:call-template name="creat-page-setting">
+				<xsl:call-template name="create-page-setting">
 					<xsl:with-param name="master-page" select="/*/office:master-styles/style:master-page"/>
 					<xsl:with-param name="page-master-style" select="/*/office:automatic-styles/style:page-layout/style:page-layout-properties"/>
 				</xsl:call-template>
@@ -5186,7 +5186,7 @@
 	</xsl:template>
 	<!--Redoffice comment end liliang-->
 	<!--chenjh add 20050624-->
-	<xsl:template name="creat-page-setting">
+	<xsl:template name="create-page-setting">
 		<xsl:param name="master-page"/>
 		<xsl:param name="page-master-style"/>
 		<xsl:element name="表:页面设置">

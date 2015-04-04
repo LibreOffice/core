@@ -119,7 +119,7 @@ public class TestHelper {
                     xInTemp.closeInput();
                     Message ( "Read directly from tempfile successfully." );
                 } else {
-                    Error ( "Cannot creat input stream from URL." );
+                    Error ( "Cannot create input stream from URL." );
                 }
             }
         }

@@ -182,7 +182,7 @@ public:
             m_aCondition.reset();
             t_print("#init ServerSocketThread\n");
             m_id = getIdentifier( );
-            //t_print("# successfully creat this ServerSocketThread %d!\n",  m_id );
+            //t_print("# successfully create this ServerSocketThread %d!\n",  m_id );
         }
 
     ~ServerSocketThread( )
@@ -243,7 +243,7 @@ public:
             m_csConnectorSocket( )
         {
             m_id = getIdentifier( );
-            //t_print("# successfully creat this client thread %d!\n",  m_id );
+            //t_print("# successfully create this client thread %d!\n",  m_id );
         }
 
     ~ClientSocketThread( )
@@ -374,7 +374,7 @@ public:
             t_print("#init ReadSocketThread\n");
             m_id = getIdentifier( );
 
-            //t_print("# successfully creat this client thread %d!\n",  m_id );
+            //t_print("# successfully create this client thread %d!\n",  m_id );
             m_aValues.createBuffer(_nBufferSize, 0);
         }
 
@@ -470,7 +470,7 @@ public:
 
             t_print("#init WriteSocketThread\n");
             m_id = getIdentifier( );
-            //t_print("# successfully creat this server thread %d!\n",  m_id );
+            //t_print("# successfully create this server thread %d!\n",  m_id );
 
             m_aValues.createBuffer(_nBufferSize, _nValue);
         }
@@ -723,7 +723,7 @@ namespace osl_StreamSocket
                 m_saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT9 ),
                 m_csConnectorSocket( )
             {
-                //t_print("# successfully creat this SendClientThread %d!\n",  m_id );
+                //t_print("# successfully create this SendClientThread %d!\n",  m_id );
             }
 
         ~SendClientThread( )
@@ -987,7 +987,7 @@ namespace osl_StreamSocket
                 }
 
                 m_id = getIdentifier( );
-                //t_print("# successfully creat this client thread %d!\n",  m_id );
+                //t_print("# successfully create this client thread %d!\n",  m_id );
             }
 
         void setAddr(rtl::OString const& _sAddr)
