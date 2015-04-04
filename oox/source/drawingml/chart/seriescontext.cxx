@@ -36,13 +36,12 @@ using ::oox::core::ContextHandlerRef;
 namespace {
 
 ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
-        sal_Int32 nElement, const AttributeList& rAttribs, DataLabelModelBase& orModel )
+        sal_Int32 nElement, const AttributeList& rAttribs, DataLabelModelBase& orModel, bool bMSO2007 )
 {
     if( rContext.isRootElement() ) switch( nElement )
     {
         case C_TOKEN( delete ):
-            // default is 'false', not 'true' as specified
-            orModel.mbDeleted = rAttribs.getBool( XML_val, false );
+            orModel.mbDeleted = rAttribs.getBool( XML_val, bMSO2007 ? false : true );
             return 0;
         case C_TOKEN( dLblPos ):
             orModel.monLabelPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
@@ -108,7 +107,8 @@ ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const A
         case C_TOKEN( tx ):
             return new TextContext( *this, mrModel.mxText.create() );
     }
-    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
+    bool bMSO2007 = getFilter().isMSO2007Document();
+    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007 );
 }
 
 void DataLabelContext::onCharacters( const OUString& rChars )
@@ -138,7 +138,8 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
             mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, false );
             return 0;
     }
-    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
+    bool bMSO2007 = getFilter().isMSO2007Document();
+    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007 );
 }
 
 void DataLabelsContext::onCharacters( const OUString& rChars )
