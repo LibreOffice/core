@@ -58,11 +58,6 @@ protected:
     bool readAll();
     void add( OString const & key, OString const & value );
     void flush();
-
-#ifndef DISABLE_BDB2PMAP
-    bool importFromBDB( void);
-    OUString m_MapFileName;
-#endif
 };
 
 }
