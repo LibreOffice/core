@@ -144,7 +144,7 @@ ScUndoAnchorData::~ScUndoAnchorData()
 void ScUndoAnchorData::Undo()
 {
     // Trigger Object Change
-    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
     {
         SdrHint aHint(*pObj);
         pObj->GetModel()->Broadcast(aHint);
@@ -164,13 +164,12 @@ void ScUndoAnchorData::Redo()
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab);
 
     // Trigger Object Change
-    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
     {
         SdrHint aHint(*pObj);
         pObj->GetModel()->Broadcast(aHint);
     }
 }
-
 
 ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
     nTab( nTabNo )
