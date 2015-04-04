@@ -948,7 +948,7 @@ SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
     // otherwise: Src Charset from argument for aName
     // Src Charset from filter for aVal ( Text )
 
-    if ( IsTOCBookmark() )
+    if ( IsTOCBookmark() && ! rNa.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()) )
     {
         maName = IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix();
         maName += rNa;
