@@ -2598,12 +2598,15 @@ void writeLabelProperties(
     {
         pFS->startElement(FSNS(XML_c, XML_spPr), FSEND);
         pFS->startElement(FSNS(XML_a, XML_ln), XML_w, IS(convertHmmToEmu(nLabelBorderWidth)), FSEND);
-        pFS->startElement(FSNS(XML_a, XML_solidFill), FSEND);
+        if (nLabelBorderColor != -1)
+        {
+            pFS->startElement(FSNS(XML_a, XML_solidFill), FSEND);
 
-        OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
-        pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr.getStr(), FSEND);
+            OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
+            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr.getStr(), FSEND);
 
-        pFS->endElement(FSNS(XML_a, XML_solidFill));
+            pFS->endElement(FSNS(XML_a, XML_solidFill));
+        }
         pFS->endElement(FSNS(XML_a, XML_ln));
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
