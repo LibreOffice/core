@@ -63,6 +63,10 @@ namespace
     const size_t NB_PRODUCTS = 3;
     const size_t NB_CANDIDATES = 4;
 
+    // The order (index) of entries in DefaultProductDir and
+    // ProductRootEnvironmentVariable *must* match the constants
+    // (minus 1) in offapi/com/sun/star/mozilla/MozillaProductType.idl
+    // DO NOT CHANGE THE ORDER; ADD ONLY TO THE END
     static const char* DefaultProductDir[NB_PRODUCTS][NB_CANDIDATES] =
     {
     #if defined(XP_WIN)

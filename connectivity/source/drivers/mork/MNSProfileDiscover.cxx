@@ -46,11 +46,12 @@ namespace connectivity
 
         sal_Int32 ProfileAccess::LoadProductsInfo()
         {
-            //load SeaMonkey 2 profiles to m_ProductProfileList
-            sal_Int32 count = LoadXPToolkitProfiles(MozillaProductType_Mozilla);
-
+            //tdf#39279: LO should search Thunderbird first then Seamonkey and finally Firefox
             //load thunderbird profiles to m_ProductProfileList
-            count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
+            sal_Int32 count = LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
+
+            //load SeaMonkey 2 profiles to m_ProductProfileList
+            count += LoadXPToolkitProfiles(MozillaProductType_Mozilla);
 
             //load firefox profiles to m_ProductProfileList
             //firefox profile does not containt address book, but maybe others need them
