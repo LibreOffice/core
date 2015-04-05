@@ -88,7 +88,7 @@ def resourceForAttribute(nsNode, attrNode):
             break
 
     if not len(resourceName):
-        if len(attrNode.getElementsByTagName("text") + [i for i in attrNode.getElementsByTagName("data") if i.getAttribute("type") in ("base64Binary", "string")]):
+        if len([i for i in attrNode.getElementsByTagName("data") if i.getAttribute("type") in ("base64Binary", "string")]):
             resourceName = "String"
         elif len([i for i in attrNode.getElementsByTagName("data") if i.getAttribute("type") == "boolean"]):
             resourceName = "Boolean"
