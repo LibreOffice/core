@@ -3623,7 +3623,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
         const OUString aStr(m_pLevelLB->GetEntry(nLevPos).getToken(0, aDeliStart)
-            + " " + OUString(aDeliStart)
+            + OUString(aDeliStart)
             + m_pParaLayLB->GetSelectEntry()
             + OUString(aDeliEnd));
 
