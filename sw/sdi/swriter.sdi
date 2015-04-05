@@ -2877,7 +2877,7 @@ SfxBoolItem GoToStartOfDoc FN_START_OF_DOCUMENT
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
+    GroupId = GID_NAVIGATOR;
 ]
 
 SfxBoolItem GoToStartOfLine FN_START_OF_LINE
