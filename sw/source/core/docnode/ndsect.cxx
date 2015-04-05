@@ -1393,23 +1393,21 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 
     const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
 
-    sal_uInt16 nNum = 0;
-    sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
+    SwSectionFmts::size_type nNum = 0;
+    const SwSectionFmts::size_type nFlagSize = ( mpSectionFmtTbl->size() / 8 ) + 2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    sal_uInt16 n;
-
-    for( n = 0; n < mpSectionFmtTbl->size(); ++n )
+    for( auto pFmt : *mpSectionFmtTbl )
     {
-        const SwSectionNode *const pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( false );
+        const SwSectionNode *const pSectNd = pFmt->GetSectionNode( false );
         if( pSectNd != nullptr )
         {
             const OUString rNm = pSectNd->GetSection().GetSectionName();
             if (rNm.startsWith( aName ))
             {
                 // Calculate the Number and reset the Flag
-                nNum = static_cast<sal_uInt16>(rNm.copy( aName.getLength() ).toInt32());
+                nNum = rNm.copy( aName.getLength() ).toInt32();
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -1422,7 +1420,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
     {
         // Flagged all Numbers accordingly, so get the right Number
         nNum = mpSectionFmtTbl->size();
-        for( n = 0; n < nFlagSize; ++n )
+        for( SwSectionFmts::size_type n = 0; n < nFlagSize; ++n )
         {
             auto nTmp = pSetFlags[ n ];
             if( nTmp != 0xFF )
