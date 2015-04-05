@@ -1290,7 +1290,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFmtFld->GetField()));
             const OUString sName = GetSequenceName()
-                + OUString( cSequenceMarkSeparator )
+                + OUStringLiteral1<cSequenceMarkSeparator>()
                 + OUString::number( rSeqField.GetSeqNumber() );
             SwTOXPara * pNew = new SwTOXPara( rTxtNode, nsSwTOXElement::TOX_SEQUENCE, 1, sName );
             // set indexes if the number or the reference text are to be displayed
