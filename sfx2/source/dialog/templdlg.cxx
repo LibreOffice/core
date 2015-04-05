@@ -268,7 +268,7 @@ PopupMenu* SfxActionListBox::CreateContextMenu( void )
 SfxTemplatePanelControl::SfxTemplatePanelControl (
     SfxBindings* pBindings,
     vcl::Window* pParentWindow)
-    : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER) ),
+    : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER)),
       pImpl(new SfxTemplateDialog_Impl(pBindings, this)),
       mpBindings(pBindings)
 {
@@ -281,7 +281,6 @@ SfxTemplatePanelControl::SfxTemplatePanelControl (
 
 SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
 {
-    delete pImpl;
 }
 
 void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
@@ -1013,8 +1012,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
             pTreeBox->SetDragDropMode(SV_DRAGDROP_NONE);
         while(pStyle)
         {
-            StyleTree_Impl* pNew =
-                new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
+            StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
             aArr.push_back(pNew);
             pStyle = pStyleSheetPool->Next();
         }
