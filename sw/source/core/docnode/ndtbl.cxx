@@ -3868,13 +3868,12 @@ OUString SwDoc::GetUniqueTblName() const
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     const OUString aName( aId );
 
-    size_t nNum, nTmp, nFlagSize = ( mpTblFrmFmtTbl->size() / 8 ) + 2;
-    size_t n;
+    const size_t nFlagSize = ( mpTblFrmFmtTbl->size() / 8 ) + 2;
 
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < mpTblFrmFmtTbl->size(); ++n )
+    for( size_t n = 0; n < mpTblFrmFmtTbl->size(); ++n )
     {
         const SwFrmFmt* pFmt = (*mpTblFrmFmtTbl)[ n ];
         if( !pFmt->IsDefault() && IsUsed( *pFmt )  &&
@@ -3882,23 +3881,29 @@ OUString SwDoc::GetUniqueTblName() const
         {
             // Get number and set the Flag
             const sal_Int32 nNmLen = aName.getLength();
-            nNum = static_cast<sal_uInt16>(pFmt->GetName().copy( nNmLen ).toInt32());
+            size_t nNum = pFmt->GetName().copy( nNmLen ).toInt32();
             if( nNum-- && nNum < mpTblFrmFmtTbl->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // All numbers are flagged properly, thus calculate the right number
-    nNum = mpTblFrmFmtTbl->size();
-    for( n = 0; n < nFlagSize; ++n )
-        if( 0xff != ( nTmp = pSetFlags[ n ] ))
+    size_t nNum = mpTblFrmFmtTbl->size();
+    for( size_t n = 0; n < nFlagSize; ++n )
+    {
+        auto nTmp = pSetFlags[ n ];
+        if( nTmp != 0xFF )
         {
             // Calculate the number
             nNum = n * 8;
             while( nTmp & 1 )
-                ++nNum, nTmp >>= 1;
+            {
+                ++nNum;
+                nTmp >>= 1;
+            }
             break;
         }
+    }
 
     delete [] pSetFlags;
     return aName + OUString::number( ++nNum );
