@@ -5913,11 +5913,9 @@ void ScGridWindow::UpdateCursorOverlay()
             mpOOCursors->append(*pOverlay);
 
             // notify the LibreOfficeKit too, but only if there's no
-            // selection yet (either cell selection, or graphic object),
-            // to avoid setting the LOK selection twice
+            // selection yet, to avoid setting the LOK selection twice
             // (once for the cell only, and then for the selection)
-            if (!pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked() &&
-                !pViewData->GetViewShell()->GetScDrawView()->IsMarking())
+            if (!pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked())
             {
                 updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
             }
