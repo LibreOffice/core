@@ -92,13 +92,9 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 
-
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
 
-#ifndef DELETEZ
-#define DELETEZ(p) (delete (p), (p)=NULL)
-#endif
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
@@ -2028,7 +2024,7 @@ throw ( Exception, RuntimeException, std::exception)
 
 // XComponent
 void SAL_CALL SvxStyleToolBoxControl::dispose()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SfxToolBoxControl::dispose();
 
@@ -2047,7 +2043,8 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
             m_xBoundItems[i].clear();
             pBoundItems[i] = 0;
         }
-        DELETEZ( pFamilyState[i] );
+        delete pFamilyState[i];
+        pFamilyState[i] = NULL;
     }
     pStyleSheetPool = NULL;
     pImpl.reset();
@@ -2269,7 +2266,8 @@ void SvxStyleToolBoxControl::Update()
 void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
-    DELETEZ( pFamilyState[nIdx] );
+    delete pFamilyState[nIdx];
+    pFamilyState[nIdx] = NULL;
 
     if ( pItem )
         pFamilyState[nIdx] = new SfxTemplateItem( *pItem );
