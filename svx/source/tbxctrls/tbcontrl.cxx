@@ -1987,9 +1987,9 @@ static const char* StyleSlotToStyleCommand[MAX_FAMILIES] =
 SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :   SfxToolBoxControl   ( nSlotId, nId, rTbx ),
+        pImpl               ( new Impl ),
         pStyleSheetPool     ( NULL ),
-        nActFamily          ( 0xffff ),
-        pImpl               ( new Impl )
+        nActFamily          ( 0xffff )
 {
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
@@ -2001,7 +2001,6 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
 
 SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
-    delete pImpl;
 }
 
 void SAL_CALL SvxStyleToolBoxControl::initialize( const Sequence< Any >& aArguments )
@@ -2051,7 +2050,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         DELETEZ( pFamilyState[i] );
     }
     pStyleSheetPool = NULL;
-    DELETEZ( pImpl );
+    pImpl.reset();
 }
 
 void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exception)
