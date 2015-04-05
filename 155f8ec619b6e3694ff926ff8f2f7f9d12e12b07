@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_b6d586ba",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "Why have you changed this file?",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_96d08acb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "Could you use a more descriptive first line?",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_56dbd2ed",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5918,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "Why have you changed this?",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_364bb6b2",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "Could you use a more generic name, like testUndoCharAttribute?",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_d6c60216",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "This checks if a local SfxItemSet contains a RES_CHRATR_WEIGHT item with value true. Which it does, because you inserted it on the previous line. But it does not have anything to do with the document.",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_f6cbfe1c",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 1,
+      "message": "Of course this checks true, because you just removed the item again on the previous line.",
+      "revId": "155f8ec619b6e3694ff926ff8f2f7f9d12e12b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

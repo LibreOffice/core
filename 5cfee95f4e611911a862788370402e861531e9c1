@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_76d84ef0",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 0,
+      "message": "Why have you removed this line?",
+      "revId": "5cfee95f4e611911a862788370402e861531e9c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_76512e62",
+        "filename": "sw/Module_sw.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T06:33:15Z",
+      "side": 0,
+      "message": "Why have you removed this line?",
+      "revId": "5cfee95f4e611911a862788370402e861531e9c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
