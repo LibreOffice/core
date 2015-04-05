@@ -169,7 +169,7 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 // Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
-const sal_Unicode cSequenceMarkSeparator = '!';
+const char cSequenceMarkSeparator = '!';
 
 #define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
 
