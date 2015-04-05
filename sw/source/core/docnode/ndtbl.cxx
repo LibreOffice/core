@@ -765,12 +765,12 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
         SwTableBoxFmt *pBoxF = 0;
         SwTableLines& rLines = rNdTbl.GetTabLines();
-        sal_uInt16 nRows = rLines.size();
-        for( sal_uInt16 n = 0; n < nRows; ++n )
+        const SwTableLines::size_type nRows = rLines.size();
+        for( SwTableLines::size_type n = 0; n < nRows; ++n )
         {
             SwTableBoxes& rBoxes = rLines[ n ]->GetTabBoxes();
-            sal_uInt16 nCols = rBoxes.size();
-            for( sal_uInt16 i = 0; i < nCols; ++i )
+            const SwTableBoxes::size_type nCols = rBoxes.size();
+            for( SwTableBoxes::size_type i = 0; i < nCols; ++i )
             {
                 SwTableBox* pBox = rBoxes[ i ];
                 bool bChgSz = false;
@@ -1641,9 +1641,9 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
     const SwFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFlyArr.size(); ++n )
+    for( auto pFly : rFlyArr )
     {
-        SwFrmFmt *const pFmt = (SwFrmFmt*)rFlyArr[n];
+        SwFrmFmt *const pFmt = (SwFrmFmt*)pFly;
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
         if (pAPos &&
@@ -2920,10 +2920,10 @@ void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 {
     const SwTableBox* pRet = 0;
-    sal_uInt16 n;
 
     if( !aPosArr.empty() )
     {
+        std::vector<sal_uInt16>::size_type n;
         for( n = 0; n < aPosArr.size(); ++n )
             if( aPosArr[ n ] == nWidth )
                 break;
@@ -2947,7 +2947,7 @@ bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 {
     if( !aPosArr.empty() )
     {
-        size_t n;
+        std::vector<sal_uInt16>::size_type n;
         for( n = 0; n < aPosArr.size(); ++n )
         {
             if( aPosArr[ n ] == nOffset )
@@ -2998,7 +2998,7 @@ bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 
 void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
 {
-    sal_uInt16 nLen = pBox->GetTabLines().size();
+    auto nLen = pBox->GetTabLines().size();
     if( nLen )
     {
         // Continue with the actual Line
@@ -3016,7 +3016,7 @@ void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara 
 
 void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
 {
-    sal_uInt16 nLen = pBox->GetTabLines().size();
+    auto nLen = pBox->GetTabLines().size();
     if( nLen )
     {
         // Continue with the actual Line
@@ -3251,12 +3251,12 @@ static bool lcl_ChgTblSize( SwTable& rTbl )
     aTblMaxSz.SetWidth( 0 );
 
     SwTableLines& rLns = rTbl.GetTabLines();
-    for( sal_uInt16 nLns = 0; nLns < rLns.size(); ++nLns )
+    for( auto pLn : rLns )
     {
         SwTwips nMaxLnWidth = 0;
-        SwTableBoxes& rBoxes = rLns[ nLns ]->GetTabBoxes();
-        for( sal_uInt16 nBox = 0; nBox < rBoxes.size(); ++nBox )
-            nMaxLnWidth += rBoxes[nBox]->GetFrmFmt()->GetFrmSize().GetWidth();
+        SwTableBoxes& rBoxes = pLn->GetTabBoxes();
+        for( auto pBox : rBoxes )
+            nMaxLnWidth += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
 
         if( nMaxLnWidth > aTblMaxSz.GetWidth() )
             aTblMaxSz.SetWidth( nMaxLnWidth );
@@ -3396,13 +3396,13 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         SwChartDataProvider *pPCD = rTbl.GetFrmFmt()->getIDocumentChartDataProviderAccess()->GetChartDataProvider();
         if( pPCD )
         {
-            for (sal_uInt16 k = nLinePos;  k < rTbl.GetTabLines().size();  ++k)
+            for (SwTableLines::size_type k = nLinePos;  k < rTbl.GetTabLines().size(); ++k)
             {
-                sal_uInt16 nLineIdx = (rTbl.GetTabLines().size() - 1) - k + nLinePos;
-                sal_uInt16 nBoxCnt = rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes().size();
-                for (sal_uInt16 j = 0;  j < nBoxCnt;  ++j)
+                const SwTableLines::size_type nLineIdx = (rTbl.GetTabLines().size() - 1) - k + nLinePos;
+                const SwTableBoxes::size_type nBoxCnt = rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes().size();
+                for (SwTableBoxes::size_type j = 0;  j < nBoxCnt;  ++j)
                 {
-                    sal_uInt16 nIdx = nBoxCnt - 1 - j;
+                    const SwTableBoxes::size_type nIdx = nBoxCnt - 1 - j;
                     pPCD->DeleteBox( &rTbl, *rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes()[nIdx] );
                 }
             }
@@ -3560,7 +3560,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     }
 
     // Move the Lines and Boxes
-    sal_uInt16 nOldSize = rTbl.GetTabLines().size();
+    SwTableLines::size_type nOldSize = rTbl.GetTabLines().size();
     rTbl.GetTabLines().insert( rTbl.GetTabLines().begin() + nOldSize,
                                rDelTbl.GetTabLines().begin(), rDelTbl.GetTabLines().end() );
     rDelTbl.GetTabLines().clear();
@@ -3739,11 +3739,10 @@ bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
 
     _SetAFmtTabPara aPara( rNew );
     _FndLines& rFLns = pFndBox->GetLines();
-    _FndLine* pLine;
 
-    for( sal_uInt16 n = 0; n < rFLns.size(); ++n )
+    for( _FndLines::size_type n = 0; n < rFLns.size(); ++n )
     {
-        pLine = &rFLns[n];
+        _FndLine* pLine = &rFLns[n];
 
         // Set Upper to 0 (thus simulate BaseLine)
         _FndBox* pSaveBox = pLine->GetUpper();
@@ -4484,7 +4483,7 @@ bool SwDoc::UnProtectTbls( const SwPaM& rPam )
     SwFrmFmts& rFmts = *GetTblFrmFmts();
     SwTable* pTbl;
     const SwTableNode* pTblNd;
-    for( sal_uInt16 n = rFmts.size(); n ; )
+    for( auto n = rFmts.size(); n ; )
         if( 0 != (pTbl = SwTable::FindTable( rFmts[ --n ] )) &&
             0 != (pTblNd = pTbl->GetTableNode() ) &&
             pTblNd->GetNodes().IsDocNodes() )
