@@ -44,7 +44,6 @@ documentation for that file. The schema has two parts:
           <ref name="attribute-element"/>
           <ref name="data-element"/>
           <ref name="ref-element"/>
-          <ref name="text-element"/>
         </choice>
       </oneOrMore>
     </element>
@@ -56,7 +55,7 @@ documentation for that file. The schema has two parts:
   Example:
 
   <attribute name="name">
-    <text/>
+    <data type="string"/>
   </attribute>
   -->
   <define name="attribute-element">
@@ -68,7 +67,6 @@ documentation for that file. The schema has two parts:
         <choice>
           <ref name="data-element"/>
           <ref name="ref-element"/>
-          <ref name="text-element"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -81,16 +79,6 @@ documentation for that file. The schema has two parts:
   <define name="data-element">
     <element name="data" ns="http://relaxng.org/ns/structure/1.0">
       <attribute name="type"/>
-    </element>
-  </define>
-
-  <!--
-  Describes that the data used inside the parent (element or attribute) is a
-  string. It is just a short-hand for <data type="string"/>.
-  -->
-  <define name="text-element">
-    <element name="text" ns="http://relaxng.org/ns/structure/1.0">
-      <empty/>
     </element>
   </define>
 
@@ -120,7 +108,6 @@ documentation for that file. The schema has two parts:
           <ref name="data-element"/>
           <ref name="element-element"/>
           <ref name="ref-element"/>
-          <ref name="text-element"/>
           <ref name="value-element"/>
         </choice>
       </oneOrMore>
