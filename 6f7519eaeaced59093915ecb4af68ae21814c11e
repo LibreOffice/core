@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_f699be20",
+        "filename": "icon-themes/breeze/mapping",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-05T09:16:44Z",
+      "side": 1,
+      "message": "Please do not mix in unrelated changes.",
+      "revId": "6f7519eaeaced59093915ecb4af68ae21814c11e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
