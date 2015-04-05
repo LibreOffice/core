@@ -25,7 +25,7 @@
 
 String STR_SVT_FILEVIEW_COLUMN_TITLE
 {
-    Text [ en-US ] = "Title";
+    Text [ en-US ] = "Name";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_SIZE
