@@ -784,58 +784,51 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
 // TreeListBox for content indicator
 
-SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId) :
-        SvTreeListBox( pParent, rResId ),
-
-        sSpace(OUString("                    ")),
-
-        sRemoveIdx(SW_RES(ST_REMOVE_INDEX)),
-        sUpdateIdx(SW_RES(ST_UPDATE)),
-        sUnprotTbl(SW_RES(ST_REMOVE_TBL_PROTECTION)),
-        sRename(SW_RES(ST_RENAME)),
-        sReadonlyIdx(SW_RES(ST_READONLY_IDX)),
-        sInvisible(SW_RES(ST_INVISIBLE)),
-
-    sPostItShow(SW_RES(ST_POSTIT_SHOW)),
-    sPostItHide(SW_RES(ST_POSTIT_HIDE)),
-    sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
-
-        pHiddenShell(0),
-    pActiveShell(0),
-    pConfig(SW_MOD()->GetNavigationConfig()),
-
-        nActiveBlock(0),
-    nHiddenBlock(0),
-
-        nRootType(USHRT_MAX),
-        nLastSelType(USHRT_MAX),
-        nOutlineLevel(MAXLEVEL),
-
-        bIsActive(true),
-        bIsConstant(false),
-        bIsHidden(false),
-        bDocChgdInDragging(false),
-        bIsInternalDrag(false),
-        bIsRoot(false),
-        bIsIdleClear(false),
-        bIsLastReadOnly(false),
-        bIsOutlineMoveable(true),
-        bViewHasChanged(false),
-        bIsImageListInitialized(false),
-        m_bActiveDocModified(false),
-        bIsKeySpace(false)
+SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
+    : SvTreeListBox(pParent, rResId)
+    , sSpace(OUString("                    "))
+    , sRemoveIdx(SW_RES(ST_REMOVE_INDEX))
+    , sUpdateIdx(SW_RES(ST_UPDATE))
+    , sUnprotTbl(SW_RES(ST_REMOVE_TBL_PROTECTION))
+    , sRename(SW_RES(ST_RENAME))
+    , sReadonlyIdx(SW_RES(ST_READONLY_IDX))
+    , sInvisible(SW_RES(ST_INVISIBLE))
+    , sPostItShow(SW_RES(ST_POSTIT_SHOW))
+    , sPostItHide(SW_RES(ST_POSTIT_HIDE))
+    , sPostItDelete(SW_RES(ST_POSTIT_DELETE))
+    , pHiddenShell(0)
+    , pActiveShell(0)
+    , pConfig(SW_MOD()->GetNavigationConfig())
+    , nActiveBlock(0)
+    , nHiddenBlock(0)
+    , nRootType(USHRT_MAX)
+    , nLastSelType(USHRT_MAX)
+    , nOutlineLevel(MAXLEVEL)
+    , bIsActive(true)
+    , bIsConstant(false)
+    , bIsHidden(false)
+    , bDocChgdInDragging(false)
+    , bIsInternalDrag(false)
+    , bIsRoot(false)
+    , bIsIdleClear(false)
+    , bIsLastReadOnly(false)
+    , bIsOutlineMoveable(true)
+    , bViewHasChanged(false)
+    , bIsImageListInitialized(false)
+    , m_bActiveDocModified(false)
+    , bIsKeySpace(false)
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
-    for( sal_uInt16 i = 0; i < CONTENT_TYPE_MAX; i++)
+    for (sal_uInt16 i = 0; i < CONTENT_TYPE_MAX; i++)
     {
         aActiveContentArr[i]    = 0;
         aHiddenContentArr[i]    = 0;
     }
-    for( sal_uInt16 i = 0; i < CONTEXT_COUNT; i++  )
+    for (sal_uInt16 i = 0; i < CONTEXT_COUNT; i++)
     {
         aContextStrings[i] = SW_RESSTR(i+ST_CONTEXT_FIRST);
     }
