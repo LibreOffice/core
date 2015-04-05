@@ -77,3 +77,7 @@ cmd/sc_tablesort.png cmd/sc_datasort.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
 
+# calc insert page breaks
+cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
+cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
+

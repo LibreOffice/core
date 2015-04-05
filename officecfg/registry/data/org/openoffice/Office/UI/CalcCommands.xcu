@@ -59,6 +59,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Split</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ClearArrowDependents" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -67,10 +70,13 @@
       </node>
       <node oor:name=".uno:FreezePanes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Freeze Window</value>
+          <value xml:lang="en-US">~Freeze Panes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Freeze</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowErrors" oor:op="replace">
@@ -990,6 +996,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Row Break</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:AddPrintArea" oor:op="replace">

@@ -535,3 +535,8 @@ cmd/tr/sc_underlinedouble.png cmd/sc_underlinedouble.png
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
+
+# calc insert page breaks
+cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
+cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
+

@@ -32,6 +32,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
@@ -62,12 +64,12 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ConditionalFormatDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ColorScaleFormatDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DataBarFormatDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:IconSetFormatDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorScaleFormatDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataBarFormatDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:IconSetFormatDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

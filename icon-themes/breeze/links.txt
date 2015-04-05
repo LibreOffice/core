@@ -100,3 +100,8 @@ database/linked_text_table.png cmd/sc_dataimport.png
 
 # track changes
 cmd/lc_trackchangesbar.png cmd/lc_trackchanges.png
+
+# calc insert page breaks
+cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
+cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
+
