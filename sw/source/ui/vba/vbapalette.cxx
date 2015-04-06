@@ -18,7 +18,7 @@
  */
 
 #include "vbapalette.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/word/WdColor.hpp>
 #include <ooo/vba/word/WdColorIndex.hpp>
@@ -49,7 +49,7 @@ WdColor::wdColorGray50,           // 15
 WdColor::wdColorGray25,           // 16
 };
 
-typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 
 class DefaultPalette : public XIndexAccess_BASE
 {

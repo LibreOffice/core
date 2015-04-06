@@ -24,15 +24,14 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <list>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 class SwView;
 
-class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
+class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,
     ::com::sun::star::lang::XEventListener,
@@ -94,7 +93,7 @@ struct StatusStruct_Impl
     ::com::sun::star::util::URL                                                 aURL;
 };
 typedef std::list< StatusStruct_Impl > StatusListenerList;
-class SwXDispatch : public cppu::WeakImplHelper2
+class SwXDispatch : public cppu::WeakImplHelper
 <
     ::com::sun::star::frame::XDispatch,
     ::com::sun::star::view::XSelectionChangeListener

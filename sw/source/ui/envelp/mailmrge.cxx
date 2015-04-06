@@ -56,7 +56,7 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unomid.h>
 
@@ -83,7 +83,7 @@ struct SwMailMergeDlg_Impl
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
 
-class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper1
+class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper
 <
     view::XSelectionChangeListener
 >

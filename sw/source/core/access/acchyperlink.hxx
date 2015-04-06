@@ -22,14 +22,14 @@
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <rtl/ref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <fmtinfmt.hxx>
 
 class SwAccessibleParagraph;
 class SwTxtAttr;
 
 class SwAccessibleHyperlink :
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
         ::com::sun::star::accessibility::XAccessibleHyperlink >
 {
     friend class SwAccessibleParagraph;

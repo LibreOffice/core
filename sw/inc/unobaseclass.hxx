@@ -23,13 +23,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SfxPoolItem;
 class SwClient;
 class SwDoc;
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XEnumeration
 >

@@ -30,7 +30,7 @@ namespace com{ namespace sun{ namespace star{
         }
 }}}
 typedef
-cppu::WeakImplHelper3
+cppu::WeakImplHelper
 <
     ::com::sun::star::container::XIndexAccess,
     ::com::sun::star::container::XEnumerationAccess,

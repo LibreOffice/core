@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbadocumentproperties.hxx"
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -632,14 +631,14 @@ SwVbaBuiltInDocumentProperty::getServiceNames()
     }
     return aServiceNames;
 }
-typedef ::cppu::WeakImplHelper3< com::sun::star::container::XIndexAccess
+typedef ::cppu::WeakImplHelper< com::sun::star::container::XIndexAccess
         ,com::sun::star::container::XNameAccess
         ,com::sun::star::container::XEnumerationAccess
         > PropertiesImpl_BASE;
 
 typedef std::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
-typedef ::cppu::WeakImplHelper1< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
 class DocPropEnumeration : public DocPropEnumeration_BASE
 {
     DocProps mDocProps;

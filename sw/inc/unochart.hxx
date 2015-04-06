@@ -42,10 +42,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <tools/link.hxx>
@@ -94,7 +91,7 @@ public:
     void Disconnect();
 };
 
-typedef cppu::WeakImplHelper4
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::chart2::data::XDataProvider,
     ::com::sun::star::chart2::data::XRangeXMLConversion,
@@ -207,7 +204,7 @@ public:
     void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, bool bBehind );
 };
 
-typedef cppu::WeakImplHelper2
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::chart2::data::XDataSource,
     ::com::sun::star::lang::XServiceInfo
@@ -237,7 +234,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef cppu::WeakImplHelper10
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::chart2::data::XDataSequence,
     ::com::sun::star::chart2::data::XTextualDataSequence,
@@ -355,7 +352,7 @@ public:
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
 };
 
-typedef cppu::WeakImplHelper4
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::chart2::data::XLabeledDataSequence2,
     ::com::sun::star::lang::XServiceInfo,

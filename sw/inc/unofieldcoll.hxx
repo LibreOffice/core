@@ -28,7 +28,7 @@
 
 class SwFieldType;
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::container::XNameAccess
 ,   ::com::sun::star::lang::XServiceInfo
 > SwXTextFieldMasters_Base;
@@ -74,7 +74,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper3
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::container::XEnumerationAccess
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::util::XRefreshable

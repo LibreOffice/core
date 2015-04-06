@@ -25,10 +25,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
 #include "swdllapi.h"
@@ -260,7 +257,7 @@ public:
 };
 
 typedef
-cppu::WeakImplHelper3
+cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNameAccess,
     ::com::sun::star::container::XIndexAccess,
@@ -297,7 +294,7 @@ public:
 };
 
 typedef
-cppu::WeakImplHelper4
+cppu::WeakImplHelper
 <
     ::com::sun::star::container::XEnumerationAccess,
     ::com::sun::star::container::XNameAccess,
@@ -438,7 +435,7 @@ class SwXBookmarks : public SwCollectionBaseClass,
 
 };
 
-class SwXNumberingRulesCollection : public cppu::WeakImplHelper1
+class SwXNumberingRulesCollection : public cppu::WeakImplHelper
 <
     ::com::sun::star::container::XIndexAccess
 >,
@@ -460,7 +457,7 @@ public:
 };
 
 typedef
-cppu::WeakImplHelper2
+cppu::WeakImplHelper
 <
     ::com::sun::star::container::XIndexAccess,
     ::com::sun::star::lang::XServiceInfo

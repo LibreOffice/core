@@ -35,8 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/implbase8.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svl/itemprop.hxx>
 
@@ -78,7 +77,7 @@ enum SwTextPortionType
     PORTION_ANNOTATION_END
 };
 
-class SwXTextPortion : public cppu::WeakImplHelper8
+class SwXTextPortion : public cppu::WeakImplHelper
 <
     ::com::sun::star::beans::XTolerantMultiPropertySet,
     ::com::sun::star::beans::XMultiPropertySet,
@@ -244,7 +243,7 @@ public:
 };
 
 class SwXTextPortionEnumeration
-    : public ::cppu::WeakImplHelper3
+    : public ::cppu::WeakImplHelper
         < ::com::sun::star::container::XEnumeration
         , ::com::sun::star::lang::XServiceInfo
         , ::com::sun::star::lang::XUnoTunnel

@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <calbck.hxx>
 
@@ -51,7 +51,7 @@ class IStyleAccess;
 class SfxItemSet;
 typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
-class SwXStyleFamilies :  public cppu::WeakImplHelper4
+class SwXStyleFamilies :  public cppu::WeakImplHelper
 <
     ::com::sun::star::container::XIndexAccess,
     ::com::sun::star::container::XNameAccess,
@@ -98,7 +98,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-class SwXStyleFamily : public cppu::WeakImplHelper4
+class SwXStyleFamily : public cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::lang::XServiceInfo,
@@ -152,7 +152,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-class SwXStyle : public cppu::WeakImplHelper7
+class SwXStyle : public cppu::WeakImplHelper
 <
     ::com::sun::star::style::XStyle,
     ::com::sun::star::beans::XPropertySet,
@@ -323,7 +323,7 @@ public:
 
 // access to all automatic style families
 class SwXAutoStyles :
-    public cppu::WeakImplHelper1< ::com::sun::star::style::XAutoStyles >,
+    public cppu::WeakImplHelper< ::com::sun::star::style::XAutoStyles >,
     public SwUnoCollection
 {
     SwDocShell *pDocShell;
@@ -352,7 +352,7 @@ public:
 };
 
 // access to a family of automatic styles (character or paragraph or ...)
-class SwXAutoStyleFamily : public cppu::WeakImplHelper1< com::sun::star::style::XAutoStyleFamily >,
+class SwXAutoStyleFamily : public cppu::WeakImplHelper< com::sun::star::style::XAutoStyleFamily >,
     public SwClient
 {
     SwDocShell *pDocShell;
@@ -377,7 +377,7 @@ public:
 
 };
 
-class SwXAutoStylesEnumerator : public cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >,
+class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration >,
     public SwClient
 {
     SwAutoStylesEnumImpl *pImpl;
@@ -393,7 +393,7 @@ protected:
 };
 
 // an automatic style
-class SwXAutoStyle : public cppu::WeakImplHelper3
+class SwXAutoStyle : public cppu::WeakImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::beans::XPropertyState,

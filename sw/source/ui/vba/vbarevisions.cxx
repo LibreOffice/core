@@ -18,15 +18,15 @@
  */
 #include "vbarevisions.hxx"
 #include "vbarevision.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > RevisionEnumeration_BASE;
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > RevisionCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< container::XEnumeration > RevisionEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > RevisionCollectionHelper_BASE;
 typedef std::vector< uno::Reference< beans::XPropertySet > > RevisionMap;
 
 class RedlinesEnumeration : public RevisionEnumeration_BASE

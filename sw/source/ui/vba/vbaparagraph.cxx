@@ -21,6 +21,7 @@
 #include <tools/diagnose_ex.h>
 #include "vbarange.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -72,7 +73,7 @@ SwVbaParagraph::getServiceNames()
     return aServiceNames;
 }
 
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > ParagraphCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > ParagraphCollectionHelper_BASE;
 
 class ParagraphCollectionHelper : public ParagraphCollectionHelper_BASE
 {

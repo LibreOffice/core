@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
 class SfxItemPropertySet;
@@ -34,7 +34,7 @@ namespace com{namespace sun{namespace star{namespace util{
     struct SearchOptions;
 }}}}
 
-class SwXTextSearch : public cppu::WeakImplHelper3
+class SwXTextSearch : public cppu::WeakImplHelper
 <
     ::com::sun::star::util::XPropertyReplace,
     ::com::sun::star::lang::XServiceInfo,

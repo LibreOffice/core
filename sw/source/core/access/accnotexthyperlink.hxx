@@ -21,7 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <fmtinfmt.hxx>
 #include <frame.hxx>
 #include <layfrm.hxx>
@@ -29,7 +29,7 @@
 #include "accnotextframe.hxx"
 
 class SwAccessibleNoTextHyperlink :
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
         ::com::sun::star::accessibility::XAccessibleHyperlink >
 {
     friend class SwAccessibleNoTextFrame;

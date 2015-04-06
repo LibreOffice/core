@@ -28,6 +28,7 @@
 #include <comphelper/string.hxx>
 #include <ooo/vba/word/WdFieldType.hpp>
 #include <swtypes.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -226,8 +227,8 @@ static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xPare
     return uno::makeAny( xField );
 }
 
-typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > FieldEnumeration_BASE;
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > FieldCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< css::container::XEnumeration > FieldEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > FieldCollectionHelper_BASE;
 
 class FieldEnumeration : public FieldEnumeration_BASE
 {

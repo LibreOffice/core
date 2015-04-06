@@ -23,12 +23,13 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include "wordvbahelper.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > SectionEnumeration_BASE;
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > SectionCollectionHelper_Base;
+typedef ::cppu::WeakImplHelper< container::XEnumeration > SectionEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > SectionCollectionHelper_Base;
 typedef std::vector< uno::Reference< beans::XPropertySet > > XSectionVec;
 
 class SectionEnumeration : public SectionEnumeration_BASE
