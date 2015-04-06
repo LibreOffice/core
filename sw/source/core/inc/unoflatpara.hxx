@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFLATPARA_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOFLATPARA_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -44,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace text {
 class SwTxtNode;
 class SwDoc;
 
-typedef ::cppu::ImplInheritanceHelper3
+typedef ::cppu::ImplInheritanceHelper
 <   SwXTextMarkup
 ,   css::beans::XPropertySet
 ,   css::text::XFlatParagraph
@@ -141,7 +140,7 @@ private:
 };
 
 class SwXFlatParagraphIterator:
-    public ::cppu::WeakImplHelper1
+    public ::cppu::WeakImplHelper
     <
         css::text::XFlatParagraphIterator
     >,

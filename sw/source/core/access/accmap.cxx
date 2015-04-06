@@ -59,7 +59,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <pagepreviewlayout.hxx>
 #include <dcontact.hxx>
 #include <svx/unoapi.hxx>
@@ -118,7 +118,7 @@ public:
 };
 
 class SwDrawModellListener_Impl : public SfxListener,
-    public ::cppu::WeakImplHelper1< document::XEventBroadcaster >
+    public ::cppu::WeakImplHelper< document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::cppu::OInterfaceContainerHelper maEventListeners;

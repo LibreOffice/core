@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XJobManager.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
@@ -34,7 +34,7 @@ class CancelJobsThread;
 class TerminateOfficeThread;
 class SwPauseThreadStarting;
 
-class FinalThreadManager : public ::cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
+class FinalThreadManager : public ::cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
                                                            com::sun::star::util::XJobManager,
                                                            com::sun::star::frame::XTerminateListener2 >
 {

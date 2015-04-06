@@ -20,11 +20,12 @@
 #include "vbatableofcontents.hxx"
 #include "vbarange.hxx"
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > TableOfContentsCollectionHelper_Base;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > TableOfContentsCollectionHelper_Base;
 typedef std::vector< uno::Reference< text::XDocumentIndex > > XTocVec;
 
 class TablesOfContentsEnumWrapper : public EnumerationHelper_BASE

@@ -32,7 +32,7 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svx/dbaexchange.hxx>
 
 #include <dbmgr.hxx>
@@ -70,7 +70,7 @@ struct SwConnectionData
 
 typedef boost::ptr_vector<SwConnectionData> SwConnectionArr;
 
-class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
+class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
 {
     Reference< XDatabaseContext > xDBContext;
     SwConnectionArr aConnections;

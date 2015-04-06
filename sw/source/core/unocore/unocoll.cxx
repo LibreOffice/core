@@ -83,6 +83,7 @@
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -93,7 +94,7 @@ using namespace ::com::sun::star::lang;
 
 #if HAVE_FEATURE_SCRIPTING
 
-class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
+class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeNameQuery >
 {
     SwDocShell* mpDocShell;
     OUString msThisDocumentCodeName;
@@ -176,7 +177,7 @@ public:
 
 typedef std::unordered_map< OUString, OUString, OUStringHash > StringHashMap;
 
-class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
+class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
     StringHashMap mTemplateToProject;
 public:
@@ -238,7 +239,7 @@ public:
 
 };
 
-class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
+class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
     SwDocShell* mpDocShell;
 public:

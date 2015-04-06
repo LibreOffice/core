@@ -21,14 +21,14 @@
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_CANCELLABLEJOB_HXX
 
 #include <sal/config.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <rtl/ref.hxx>
 
 class ObservableThread;
 
-class CancellableJob : public ::cppu::WeakImplHelper1<com::sun::star::util::XCancellable>
+class CancellableJob : public ::cppu::WeakImplHelper<com::sun::star::util::XCancellable>
 {
 public:
     explicit CancellableJob( const ::rtl::Reference< ObservableThread >& rThread );

@@ -117,6 +117,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/textenc.h>
+#include <cppuhelper/implbase.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -201,7 +202,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
 }
 }
 
-class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
+class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper
 < lang::XEventListener >
 {
 private:

@@ -24,7 +24,7 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -206,7 +206,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
 }
 
 class SwSrcEditWindow::ChangesListener:
-    public cppu::WeakImplHelper1< css::beans::XPropertiesChangeListener >
+    public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
     ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}

@@ -21,11 +21,12 @@
 #include "wordvbahelper.hxx"
 #include "vbatablehelper.hxx"
 #include "vbarow.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > CellCollectionHelper_Base;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > CellCollectionHelper_Base;
 
 class CellsEnumWrapper : public EnumerationHelper_BASE
 {

@@ -30,8 +30,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XRedline.hpp>
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <pam.hxx>
 #include <unobaseclass.hxx>
@@ -70,7 +69,7 @@ namespace sw {
 
 } // namespace sw
 
-typedef ::cppu::WeakImplHelper8
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
@@ -258,7 +257,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper3
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XIndexAccess

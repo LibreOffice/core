@@ -41,6 +41,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
@@ -359,7 +360,7 @@ const uno::Reference< script::XEventAttacherManager >&
 }
 
 class SwHTMLImageWatcher :
-    public cppu::WeakImplHelper2< awt::XImageConsumer, XEventListener >
+    public cppu::WeakImplHelper< awt::XImageConsumer, XEventListener >
 {
     uno::Reference< drawing::XShape >       xShape;     // das control
     uno::Reference< XImageProducerSupplier >    xSrc;

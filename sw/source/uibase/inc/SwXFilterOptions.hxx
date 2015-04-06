@@ -25,13 +25,13 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
-class SwXFilterOptions : public ::cppu::WeakImplHelper5<
+class SwXFilterOptions : public ::cppu::WeakImplHelper<
                             ::com::sun::star::beans::XPropertyAccess,
                             ::com::sun::star::ui::dialogs::XExecutableDialog,
                             ::com::sun::star::document::XImporter,

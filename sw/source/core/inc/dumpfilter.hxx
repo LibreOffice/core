@@ -14,7 +14,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace sw {
 
@@ -22,7 +22,7 @@ namespace sw {
         document as XML. This filter should be mostly be used for testing
         purpose.
       */
-    class LayoutDumpFilter : public cppu::WeakImplHelper4
+    class LayoutDumpFilter : public cppu::WeakImplHelper
                              <
                                com::sun::star::document::XFilter,
                                com::sun::star::document::XExporter,

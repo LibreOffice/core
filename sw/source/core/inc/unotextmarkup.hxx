@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/text/XMultiTextMarkup.hpp>
@@ -45,7 +44,7 @@ class SfxPoolItem;
 /** Implementation of the css::text::XTextMarkup interface
  */
 class SwXTextMarkup
-    : public ::cppu::WeakImplHelper2
+    : public ::cppu::WeakImplHelper
         <   ::com::sun::star::text::XTextMarkup
         ,   ::com::sun::star::text::XMultiTextMarkup
         >
@@ -83,7 +82,7 @@ protected:
 /** Implementation of the ::com::sun::star::container::XStringKeyMap interface
  */
 class SwXStringKeyMap:
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         ::com::sun::star::container::XStringKeyMap>
 {
 public:

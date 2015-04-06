@@ -27,8 +27,7 @@
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -40,7 +39,7 @@ class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
 
-typedef ::cppu::ImplInheritanceHelper6
+typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -193,7 +192,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper4
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet

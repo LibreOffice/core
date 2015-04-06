@@ -28,9 +28,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-#include <cppuhelper/implbase2.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <hintids.hxx>
 #include <sfx2/docfile.hxx>
@@ -87,7 +86,7 @@ public:
 
 SwOLELRUCache* pOLELRU_Cache = 0;
 
-class SwOLEListener_Impl : public ::cppu::WeakImplHelper1< embed::XStateChangeListener >
+class SwOLEListener_Impl : public ::cppu::WeakImplHelper< embed::XStateChangeListener >
 {
     SwOLEObj* mpObj;
 public:

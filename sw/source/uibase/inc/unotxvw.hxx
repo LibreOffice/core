@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include "calbck.hxx"
 #include "TextCursorHelper.hxx"
@@ -157,7 +157,7 @@ public:
     SfxObjectShellLock      BuildTmpSelectionDoc();
 };
 
-typedef cppu::WeakImplHelper8<
+typedef cppu::WeakImplHelper<
                             ::com::sun::star::text::XTextViewCursor,
                             ::com::sun::star::lang::XServiceInfo,
                             ::com::sun::star::text::XPageCursor,

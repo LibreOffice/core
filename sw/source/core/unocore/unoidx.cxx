@@ -60,6 +60,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
 
@@ -178,7 +179,7 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
     }
 }
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   lang::XServiceInfo
 ,   container::XIndexReplace
 > SwXDocumentIndexStyleAccess_Base;
@@ -223,7 +224,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   lang::XServiceInfo
 ,   container::XIndexReplace
 > SwXDocumentIndexTokenAccess_Base;

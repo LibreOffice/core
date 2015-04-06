@@ -32,11 +32,7 @@
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/table/XAutoFormattable.hpp>
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase7.hxx>
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <comphelper/uno3.hxx>
@@ -57,7 +53,7 @@ class SwChartDataProvider;
 class SwFrmFmt;
 
 typedef
-cppu::WeakImplHelper4
+cppu::WeakImplHelper
 <
     ::com::sun::star::table::XCell,
     ::com::sun::star::lang::XServiceInfo,
@@ -158,7 +154,7 @@ public:
     SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
-class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper2
+class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -205,7 +201,7 @@ public:
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
 };
 
-typedef cppu::WeakImplHelper3<
+typedef cppu::WeakImplHelper<
                                 ::com::sun::star::text::XTextTableCursor,
                                 ::com::sun::star::lang::XServiceInfo,
                                 ::com::sun::star::beans::XPropertySet
@@ -293,7 +289,7 @@ struct SwRangeDescriptor
 };
 
 class SwTableProperties_Impl;
-class SwXTextTable : public cppu::WeakImplHelper10
+class SwXTextTable : public cppu::WeakImplHelper
 <
     ::com::sun::star::text::XTextTable,
     ::com::sun::star::lang::XServiceInfo,
@@ -442,7 +438,7 @@ public:
     SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
-class SwXCellRange : public cppu::WeakImplHelper7
+class SwXCellRange : public cppu::WeakImplHelper
 <
     ::com::sun::star::table::XCellRange,
     ::com::sun::star::lang::XServiceInfo,
@@ -557,7 +553,7 @@ public:
 
 };
 
-class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper2
+class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper
 <
     ::com::sun::star::table::XTableRows,
     ::com::sun::star::lang::XServiceInfo
@@ -599,7 +595,7 @@ public:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
-class SwXTableColumns : public cppu::WeakImplHelper2
+class SwXTableColumns : public cppu::WeakImplHelper
 <
     ::com::sun::star::table::XTableColumns,
     ::com::sun::star::lang::XServiceInfo

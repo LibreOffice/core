@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UNOMAILMERGE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOMAILMERGE_HXX
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/configitem.hxx>
 
@@ -63,7 +63,7 @@ class SwDBManager;
 class MailMergeExecuteFinalizer;
 
 class SwXMailMerge :
-    public cppu::WeakImplHelper6
+    public cppu::WeakImplHelper
     <
         com::sun::star::task::XJob,
         com::sun::star::util::XCancellable,

@@ -59,7 +59,7 @@ public:
 };
 
 typedef
-cppu::WeakImplHelper1
+cppu::WeakImplHelper
 <
     ::com::sun::star::container::XEnumerationAccess
 >

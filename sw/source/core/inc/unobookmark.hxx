@@ -27,7 +27,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -36,7 +36,7 @@
 
 class SwDoc;
 
-typedef ::cppu::ImplInheritanceHelper5
+typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -191,7 +191,7 @@ public:
 };
 
 class SwXFieldmarkParameters
-    : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer>
+    : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameContainer>
     , private SwClient
 {
     public:

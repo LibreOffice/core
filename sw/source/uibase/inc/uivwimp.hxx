@@ -27,7 +27,7 @@
 #include <sfx2/objsh.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 class SwXTextView;
@@ -45,7 +45,7 @@ namespace com{ namespace sun{ namespace star {
     }
 }}}
 
-class SwScannerEventListener : public ::cppu::WeakImplHelper1<
+class SwScannerEventListener : public ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XEventListener >
 {
     SwView* pView;
@@ -63,7 +63,7 @@ public:
 };
 
 // Clipboard EventListener
-class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
+class SwClipboardChangeListener : public ::cppu::WeakImplHelper<
     ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
     SwView* pView;
