@@ -51,16 +51,14 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
     {
         if(!bUsed)
             return nSize;
-        else
+
+        sal_uInt16 nUsed = 0;
+        for ( sal_uInt16 i = 0; i < nSize; i++ )
         {
-            sal_uInt16 nUsed = 0;
-            for ( sal_uInt16 i = 0; i < nSize; i++ )
-            {
-                if(IsUsed(*(*pFldTypes)[i]))
-                    nUsed++;
-            }
-            return nUsed;
+            if(IsUsed(*(*pFldTypes)[i]))
+                nUsed++;
         }
+        return nUsed;
     }
 
     // all types with the same ResId
@@ -84,20 +82,18 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bU
     {
         if(!bUsed)
             return (*pFldTypes)[nFld];
-        else
+
+        sal_uInt16 i, nUsed = 0;
+        for ( i = 0; i < nSize; i++ )
         {
-            sal_uInt16 i, nUsed = 0;
-            for ( i = 0; i < nSize; i++ )
+            if(IsUsed(*(*pFldTypes)[i]))
             {
-                if(IsUsed(*(*pFldTypes)[i]))
-                {
-                    if(nUsed == nFld)
-                        break;
-                    nUsed++;
-                }
+                if(nUsed == nFld)
+                    break;
+                nUsed++;
             }
-            return i < nSize ? (*pFldTypes)[i] : 0;
         }
+        return i < nSize ? (*pFldTypes)[i] : 0;
     }
 
     sal_uInt16 nIdx = 0;
