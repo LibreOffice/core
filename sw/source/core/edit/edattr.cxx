@@ -421,9 +421,9 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = mpDoc->GetFtnIdxs();
-    for ( sal_uInt16 i = 0; i < rIdxs.size(); ++i )
+    for ( auto pIdx : rIdxs )
     {
-        const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
+        const SwFmtFtn &rFtn = pIdx->GetFtn();
         if ( bEndNotes == rFtn.IsEndNote() )
             return true;
     }
