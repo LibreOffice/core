@@ -343,9 +343,9 @@ bool SwAutoFormat::HasObjects( const SwNode& rNd )
     // like borders, DrawObjects, ...
     bool bRet = false;
     const SwFrmFmts& rFmts = *m_pDoc->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( auto pFrmFmt : rFmts )
     {
-        const SwFmtAnchor& rAnchor = rFmts[ n ]->GetAnchor();
+        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
         if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
             rAnchor.GetCntntAnchor() &&
             &rAnchor.GetCntntAnchor()->nNode.GetNode() == &rNd )

@@ -759,11 +759,9 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFmtCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().size() > 1 )
             {
-                for ( sal_uInt16 i = 0; i < rCol.GetColumns().size(); ++i )
+                for ( const auto &rC : rCol.GetColumns() )
                 {
-                    nMin += rCol.GetColumns()[i].GetLeft() +
-                            rCol.GetColumns()[i].GetRight() +
-                            MINFLY;
+                    nMin += rC.GetLeft() + rC.GetRight() + MINFLY;
                 }
                 nMin -= MINFLY;
             }
