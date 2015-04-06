@@ -72,7 +72,8 @@ SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
-    if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )
+    if( (nPrefix == XML_NAMESPACE_TEXT ||
+                nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, m_rText );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

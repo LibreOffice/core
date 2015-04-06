@@ -689,7 +689,8 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
         mbReadText = false;//don't apply text from <text:p>
     }
     // <text:p> element - read text (and range from text:id old version)
-    else if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )
+    else if( (nPrefix == XML_NAMESPACE_TEXT ||
+                nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
     }

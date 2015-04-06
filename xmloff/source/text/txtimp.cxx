@@ -80,6 +80,7 @@ using namespace ::com::sun::star::ucb;
 static const SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_P,                XML_TOK_TEXT_P              },
+    { XML_NAMESPACE_LO_EXT, XML_P,                XML_TOK_TEXT_P              },
     { XML_NAMESPACE_TEXT, XML_H,                XML_TOK_TEXT_H              },
     { XML_NAMESPACE_TEXT, XML_LIST,             XML_TOK_TEXT_LIST           },
     { XML_NAMESPACE_DRAW, XML_FRAME,            XML_TOK_TEXT_FRAME_PAGE     },

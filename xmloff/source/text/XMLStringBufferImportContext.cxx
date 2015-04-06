@@ -62,7 +62,8 @@ void XMLStringBufferImportContext::Characters(
 void XMLStringBufferImportContext::EndElement()
 {
     // add return for paragraph elements
-    if ( (XML_NAMESPACE_TEXT == GetPrefix()) &&
+    if ( (XML_NAMESPACE_TEXT == GetPrefix() ||
+                XML_NAMESPACE_LO_EXT == GetPrefix()) &&
          (IsXMLToken(GetLocalName(), XML_P))    )
     {
         rTextBuffer.append(sal_Unicode(0x0a));

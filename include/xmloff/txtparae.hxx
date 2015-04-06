@@ -61,7 +61,14 @@ namespace xmloff
 {
     class OFormLayerXMLExport;
     class BoundFrameSets;
+
 }
+
+enum class TextPNS
+{
+    ODF,
+    EXTENSION
+};
 
 class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 {
@@ -282,14 +289,14 @@ protected:
     void exportText(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
-        bool bAutoStyles, bool bProgress, bool bExportParagraph );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
 
     void exportText(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
-        bool bAutoStyles, bool bProgress, bool bExportParagraph );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
 
     bool exportTextContentEnumeration(
         const ::com::sun::star::uno::Reference <
@@ -301,13 +308,16 @@ protected:
         bool bExportParagraph = true,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0,
-        bool bExportLevels = true );
+        bool bExportLevels = true,
+        TextPNS eExtensionNS = TextPNS::ODF);
     void exportParagraph(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress,
         bool bExportParagraph,
-        MultiPropertySetHelper& rPropSetHelper);
+        MultiPropertySetHelper& rPropSetHelper,
+        TextPNS eExtensionNS = TextPNS::ODF);
+
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
@@ -568,7 +578,8 @@ public:
     // This method exports the given OUString
     void exportText(
         const OUString& rText,
-        bool& rPrevCharWasSpace );
+        bool& rPrevCharWasSpace,
+        TextPNS eExtensionNS = TextPNS::ODF);
 
     // This method collects all automatic styles for the given XText
     void collectTextAutoStyles(
@@ -610,9 +621,9 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
         bool bIsProgress = false,
-        bool bExportParagraph = true)
+        bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF)
     {
-        exportText( rText, false, bIsProgress, bExportParagraph );
+        exportText( rText, false, bIsProgress, bExportParagraph, eExtensionNS );
     }
 
     void exportText(
@@ -621,9 +632,10 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
         bool bIsProgress = false,
-        bool bExportParagraph = true)
+        bool bExportParagraph = true,
+        TextPNS eExtensionNS = TextPNS::ODF)
     {
-        exportText( rText, rBaseSection, false, bIsProgress, bExportParagraph );
+        exportText( rText, rBaseSection, false, bIsProgress, bExportParagraph, eExtensionNS );
     }
 
     void exportFramesBoundToPage( bool bIsProgress = false )
