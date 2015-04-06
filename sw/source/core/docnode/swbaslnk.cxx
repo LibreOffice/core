@@ -226,7 +226,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             bInNotifyLinks = true;
 
             const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
-            for( sal_uInt16 n = rLnks.size(); n; )
+            for( auto n = rLnks.size(); n; )
             {
                 ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&

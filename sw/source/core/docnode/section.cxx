@@ -601,7 +601,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
-    for( sal_uInt16 n = rLnks.size(); n; )
+    for( auto n = rLnks.size(); n; )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
@@ -1116,7 +1116,7 @@ static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
-    for ( sal_uInt16 n = rLnks.size(); n > 0; )
+    for ( auto n = rLnks.size(); n > 0; )
     {
         SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
         if ( pSectLnk && pSectLnk != pOwnLink &&
@@ -1148,7 +1148,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     aValue <<= sName; // Arbitrary name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
-    for( sal_uInt16 n = rLnks.size(); n; )
+    for( auto n = rLnks.size(); n; )
     {
         SwBaseLink* pBLink;
 
@@ -1459,7 +1459,7 @@ void SwIntrnlSectRefLink::Closed()
         // Advise says goodbye: mark the Section as not protected
         // and change the Flag
         const SwSectionFmts& rFmts = pDoc->GetSections();
-        for( sal_uInt16 n = rFmts.size(); n; )
+        for( auto n = rFmts.size(); n; )
             if( rFmts[ --n ] == &rSectFmt )
             {
                 SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
