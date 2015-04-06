@@ -195,14 +195,6 @@ void OFormSubmitResetThread::processEvent(
 
 //= ODatabaseForm
 
-
-
-Reference< XInterface > SAL_CALL ODatabaseForm::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-{
-    return *( new ODatabaseForm( comphelper::getComponentContext(_rxFactory) ) );
-}
-
-
 Sequence<sal_Int8> SAL_CALL ODatabaseForm::getImplementationId() throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
