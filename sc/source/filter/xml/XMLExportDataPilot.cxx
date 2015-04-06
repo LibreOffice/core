@@ -860,7 +860,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                 case sheet::DataImportMode_TABLE :
                 {
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, pImpSource->aDBName);
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, pImpSource->aObject);
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_TABLE_NAME, pImpSource->aObject);
                     SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, true, true);
                     rExport.CheckAttrList();
                 }

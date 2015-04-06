@@ -262,7 +262,7 @@ private:
             {
                 if (!sDatabaseName.isEmpty())
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, aParam.aStatement);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_TABLE_NAME, aParam.aStatement);
                 SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, true, true);
                 if (!sConRes.isEmpty())
                 {
