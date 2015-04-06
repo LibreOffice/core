@@ -545,16 +545,36 @@ double SAL_CALL AnalysisAddIn::getXirr(
     // Newton's method - try to find a fResultRate, so that lcl_sca_XirrResult() returns 0.
     double fNewRate, fRateEps, fResultValue;
     sal_Int32 nIter = 0;
-    bool bContLoop;
+    sal_Int32 nIterScan = 0;
+    bool bContLoop = false;
+    bool bResultRateScanEnd = false;
+
+    // First the inner while-loop will be executed using the default Value fResultRate
+    // or the user guessed fResultRate if those do not deliver a solution for the
+    // Newton's method then the range from -0.99 to +0.99 will be scanned with a
+    // step size of 0.01 to find fResultRate's value which can deliver a solution
     do
     {
-        fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
-        fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
-        fRateEps = fabs( fNewRate - fResultRate );
-        fResultRate = fNewRate;
-        bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);
+        if (nIterScan >=1)
+            fResultRate = -0.99 + (nIterScan -1)* 0.01;
+        do
+        {
+            fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
+            fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
+            fRateEps = fabs( fNewRate - fResultRate );
+            fResultRate = fNewRate;
+            bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);
+        }
+        while( bContLoop && (++nIter < nMaxIter) );
+        nIter = 0;
+        if (  ::rtl::math::isNan(fResultRate)  || ::rtl::math::isInf(fResultRate)
+            ||::rtl::math::isNan(fResultValue) || ::rtl::math::isInf(fResultValue))
+            bContLoop = true;
+
+        ++nIterScan;
+        bResultRateScanEnd = (nIterScan >= 200);
     }
-    while( bContLoop && (++nIter < nMaxIter) );
+    while(bContLoop && !bResultRateScanEnd);
 
     if( bContLoop )
         THROW_IAE;
