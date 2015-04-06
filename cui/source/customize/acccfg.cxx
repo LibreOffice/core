@@ -60,7 +60,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -70,13 +69,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-
 // namespaces
 
-using namespace com::sun::star;
-
-
-
+using namespace css;
 
 static const char MODULEPROP_SHORTNAME  [] = "ooSetupFactoryShortName";
 static const char MODULEPROP_UINAME     [] = "ooSetupFactoryUIName";
@@ -87,526 +82,529 @@ static const char FOLDERNAME_UICONFIG   [] = "Configurations2";
 static const char MEDIATYPE_PROPNAME    [] = "MediaType";
 static const char MEDIATYPE_UICONFIG    [] = "application/vnd.sun.xml.ui.configuration";
 
-
 static const sal_uInt16 KEYCODE_ARRAY[] =
 {
-    KEY_F1       ,
-    KEY_F2       ,
-    KEY_F3       ,
-    KEY_F4       ,
-    KEY_F5       ,
-    KEY_F6       ,
-    KEY_F7       ,
-    KEY_F8       ,
-    KEY_F9       ,
-    KEY_F10      ,
-    KEY_F11      ,
-    KEY_F12      ,
-    KEY_F13      ,
-    KEY_F14      ,
-    KEY_F15      ,
-    KEY_F16      ,
+    KEY_F1,
+    KEY_F2,
+    KEY_F3,
+    KEY_F4,
+    KEY_F5,
+    KEY_F6,
+    KEY_F7,
+    KEY_F8,
+    KEY_F9,
+    KEY_F10,
+    KEY_F11,
+    KEY_F12,
+    KEY_F13,
+    KEY_F14,
+    KEY_F15,
+    KEY_F16,
 
-    KEY_DOWN     ,
-    KEY_UP       ,
-    KEY_LEFT     ,
-    KEY_RIGHT    ,
-    KEY_HOME     ,
-    KEY_END      ,
-    KEY_PAGEUP   ,
-    KEY_PAGEDOWN ,
-    KEY_RETURN   ,
-    KEY_ESCAPE   ,
+    KEY_DOWN,
+    KEY_UP,
+    KEY_LEFT,
+    KEY_RIGHT,
+    KEY_HOME,
+    KEY_END,
+    KEY_PAGEUP,
+    KEY_PAGEDOWN,
+    KEY_RETURN,
+    KEY_ESCAPE,
     KEY_BACKSPACE,
-    KEY_INSERT   ,
-    KEY_DELETE   ,
+    KEY_INSERT,
+    KEY_DELETE,
 
-    KEY_OPEN        ,
-    KEY_CUT         ,
-    KEY_COPY        ,
-    KEY_PASTE       ,
-    KEY_UNDO        ,
-    KEY_REPEAT      ,
-    KEY_FIND        ,
-    KEY_PROPERTIES  ,
-    KEY_FRONT       ,
-    KEY_CONTEXTMENU ,
-    KEY_MENU        ,
-    KEY_HELP        ,
+    KEY_OPEN,
+    KEY_CUT,
+    KEY_COPY,
+    KEY_PASTE,
+    KEY_UNDO,
+    KEY_REPEAT,
+    KEY_FIND,
+    KEY_PROPERTIES,
+    KEY_FRONT,
+    KEY_CONTEXTMENU,
+    KEY_MENU,
+    KEY_HELP,
 
-    KEY_F1        | KEY_SHIFT,
-    KEY_F2        | KEY_SHIFT,
-    KEY_F3        | KEY_SHIFT,
-    KEY_F4        | KEY_SHIFT,
-    KEY_F5        | KEY_SHIFT,
-    KEY_F6        | KEY_SHIFT,
-    KEY_F7        | KEY_SHIFT,
-    KEY_F8        | KEY_SHIFT,
-    KEY_F9        | KEY_SHIFT,
-    KEY_F10       | KEY_SHIFT,
-    KEY_F11       | KEY_SHIFT,
-    KEY_F12       | KEY_SHIFT,
-    KEY_F13       | KEY_SHIFT,
-    KEY_F14       | KEY_SHIFT,
-    KEY_F15       | KEY_SHIFT,
-    KEY_F16       | KEY_SHIFT,
+    KEY_SHIFT | KEY_F1,
+    KEY_SHIFT | KEY_F2,
+    KEY_SHIFT | KEY_F3,
+    KEY_SHIFT | KEY_F4,
+    KEY_SHIFT | KEY_F5,
+    KEY_SHIFT | KEY_F6,
+    KEY_SHIFT | KEY_F7,
+    KEY_SHIFT | KEY_F8,
+    KEY_SHIFT | KEY_F9,
+    KEY_SHIFT | KEY_F10,
+    KEY_SHIFT | KEY_F11,
+    KEY_SHIFT | KEY_F12,
+    KEY_SHIFT | KEY_F13,
+    KEY_SHIFT | KEY_F14,
+    KEY_SHIFT | KEY_F15,
+    KEY_SHIFT | KEY_F16,
 
-    KEY_DOWN      | KEY_SHIFT,
-    KEY_UP        | KEY_SHIFT,
-    KEY_LEFT      | KEY_SHIFT,
-    KEY_RIGHT     | KEY_SHIFT,
-    KEY_HOME      | KEY_SHIFT,
-    KEY_END       | KEY_SHIFT,
-    KEY_PAGEUP    | KEY_SHIFT,
-    KEY_PAGEDOWN  | KEY_SHIFT,
-    KEY_RETURN    | KEY_SHIFT,
-    KEY_SPACE     | KEY_SHIFT,
-    KEY_ESCAPE    | KEY_SHIFT,
-    KEY_BACKSPACE | KEY_SHIFT,
-    KEY_INSERT    | KEY_SHIFT,
-    KEY_DELETE    | KEY_SHIFT,
+    KEY_SHIFT | KEY_DOWN,
+    KEY_SHIFT | KEY_UP,
+    KEY_SHIFT | KEY_LEFT,
+    KEY_SHIFT | KEY_RIGHT,
+    KEY_SHIFT | KEY_HOME,
+    KEY_SHIFT | KEY_END,
+    KEY_SHIFT | KEY_PAGEUP,
+    KEY_SHIFT | KEY_PAGEDOWN,
+    KEY_SHIFT | KEY_RETURN,
+    KEY_SHIFT | KEY_SPACE,
+    KEY_SHIFT | KEY_ESCAPE,
+    KEY_SHIFT | KEY_BACKSPACE,
+    KEY_SHIFT | KEY_INSERT,
+    KEY_SHIFT | KEY_DELETE,
 
-    KEY_0         | KEY_MOD1 ,
-    KEY_1         | KEY_MOD1 ,
-    KEY_2         | KEY_MOD1 ,
-    KEY_3         | KEY_MOD1 ,
-    KEY_4         | KEY_MOD1 ,
-    KEY_5         | KEY_MOD1 ,
-    KEY_6         | KEY_MOD1 ,
-    KEY_7         | KEY_MOD1 ,
-    KEY_8         | KEY_MOD1 ,
-    KEY_9         | KEY_MOD1 ,
-    KEY_A         | KEY_MOD1 ,
-    KEY_B         | KEY_MOD1 ,
-    KEY_C         | KEY_MOD1 ,
-    KEY_D         | KEY_MOD1 ,
-    KEY_E         | KEY_MOD1 ,
-    KEY_F         | KEY_MOD1 ,
-    KEY_G         | KEY_MOD1 ,
-    KEY_H         | KEY_MOD1 ,
-    KEY_I         | KEY_MOD1 ,
-    KEY_J         | KEY_MOD1 ,
-    KEY_K         | KEY_MOD1 ,
-    KEY_L         | KEY_MOD1 ,
-    KEY_M         | KEY_MOD1 ,
-    KEY_N         | KEY_MOD1 ,
-    KEY_O         | KEY_MOD1 ,
-    KEY_P         | KEY_MOD1 ,
-    KEY_Q         | KEY_MOD1 ,
-    KEY_R         | KEY_MOD1 ,
-    KEY_S         | KEY_MOD1 ,
-    KEY_T         | KEY_MOD1 ,
-    KEY_U         | KEY_MOD1 ,
-    KEY_V         | KEY_MOD1 ,
-    KEY_W         | KEY_MOD1 ,
-    KEY_X         | KEY_MOD1 ,
-    KEY_Y         | KEY_MOD1 ,
-    KEY_Z         | KEY_MOD1 ,
-    KEY_SEMICOLON    | KEY_MOD1 ,
-    KEY_QUOTERIGHT   | KEY_MOD1 ,
-    KEY_BRACKETLEFT  | KEY_MOD1 ,
-    KEY_BRACKETRIGHT | KEY_MOD1,
-    KEY_POINT    | KEY_MOD1 ,
+    KEY_MOD1 | KEY_0,
+    KEY_MOD1 | KEY_1,
+    KEY_MOD1 | KEY_2,
+    KEY_MOD1 | KEY_3,
+    KEY_MOD1 | KEY_4,
+    KEY_MOD1 | KEY_5,
+    KEY_MOD1 | KEY_6,
+    KEY_MOD1 | KEY_7,
+    KEY_MOD1 | KEY_8,
+    KEY_MOD1 | KEY_9,
+    KEY_MOD1 | KEY_A,
+    KEY_MOD1 | KEY_B,
+    KEY_MOD1 | KEY_C,
+    KEY_MOD1 | KEY_D,
+    KEY_MOD1 | KEY_E,
+    KEY_MOD1 | KEY_F,
+    KEY_MOD1 | KEY_G,
+    KEY_MOD1 | KEY_H,
+    KEY_MOD1 | KEY_I,
+    KEY_MOD1 | KEY_J,
+    KEY_MOD1 | KEY_K,
+    KEY_MOD1 | KEY_L,
+    KEY_MOD1 | KEY_M,
+    KEY_MOD1 | KEY_N,
+    KEY_MOD1 | KEY_O,
+    KEY_MOD1 | KEY_P,
+    KEY_MOD1 | KEY_Q,
+    KEY_MOD1 | KEY_R,
+    KEY_MOD1 | KEY_S,
+    KEY_MOD1 | KEY_T,
+    KEY_MOD1 | KEY_U,
+    KEY_MOD1 | KEY_V,
+    KEY_MOD1 | KEY_W,
+    KEY_MOD1 | KEY_X,
+    KEY_MOD1 | KEY_Y,
+    KEY_MOD1 | KEY_Z,
+    KEY_MOD1 | KEY_SEMICOLON,
+    KEY_MOD1 | KEY_QUOTERIGHT,
+    KEY_MOD1 | KEY_BRACKETLEFT,
+    KEY_MOD1 | KEY_BRACKETRIGHT,
+    KEY_MOD1 | KEY_POINT,
 
-    KEY_F1        | KEY_MOD1 ,
-    KEY_F2        | KEY_MOD1 ,
-    KEY_F3        | KEY_MOD1 ,
-    KEY_F4        | KEY_MOD1 ,
-    KEY_F5        | KEY_MOD1 ,
-    KEY_F6        | KEY_MOD1 ,
-    KEY_F7        | KEY_MOD1 ,
-    KEY_F8        | KEY_MOD1 ,
-    KEY_F9        | KEY_MOD1 ,
-    KEY_F10       | KEY_MOD1 ,
-    KEY_F11       | KEY_MOD1 ,
-    KEY_F12       | KEY_MOD1 ,
-    KEY_F13       | KEY_MOD1 ,
-    KEY_F14       | KEY_MOD1 ,
-    KEY_F15       | KEY_MOD1 ,
-    KEY_F16       | KEY_MOD1 ,
+    KEY_MOD1 | KEY_F1,
+    KEY_MOD1 | KEY_F2,
+    KEY_MOD1 | KEY_F3,
+    KEY_MOD1 | KEY_F4,
+    KEY_MOD1 | KEY_F5,
+    KEY_MOD1 | KEY_F6,
+    KEY_MOD1 | KEY_F7,
+    KEY_MOD1 | KEY_F8,
+    KEY_MOD1 | KEY_F9,
+    KEY_MOD1 | KEY_F10,
+    KEY_MOD1 | KEY_F11,
+    KEY_MOD1 | KEY_F12,
+    KEY_MOD1 | KEY_F13,
+    KEY_MOD1 | KEY_F14,
+    KEY_MOD1 | KEY_F15,
+    KEY_MOD1 | KEY_F16,
 
-    KEY_DOWN      | KEY_MOD1 ,
-    KEY_UP        | KEY_MOD1 ,
-    KEY_LEFT      | KEY_MOD1 ,
-    KEY_RIGHT     | KEY_MOD1 ,
-    KEY_HOME      | KEY_MOD1 ,
-    KEY_END       | KEY_MOD1 ,
-    KEY_PAGEUP    | KEY_MOD1 ,
-    KEY_PAGEDOWN  | KEY_MOD1 ,
-    KEY_RETURN    | KEY_MOD1 ,
-    KEY_SPACE     | KEY_MOD1 ,
-    KEY_BACKSPACE | KEY_MOD1 ,
-    KEY_INSERT    | KEY_MOD1 ,
-    KEY_DELETE    | KEY_MOD1 ,
+    KEY_MOD1 | KEY_DOWN,
+    KEY_MOD1 | KEY_UP,
+    KEY_MOD1 | KEY_LEFT,
+    KEY_MOD1 | KEY_RIGHT,
+    KEY_MOD1 | KEY_HOME,
+    KEY_MOD1 | KEY_END,
+    KEY_MOD1 | KEY_PAGEUP,
+    KEY_MOD1 | KEY_PAGEDOWN,
+    KEY_MOD1 | KEY_RETURN,
+    KEY_MOD1 | KEY_SPACE,
+    KEY_MOD1 | KEY_BACKSPACE,
+    KEY_MOD1 | KEY_INSERT,
+    KEY_MOD1 | KEY_DELETE,
 
-    KEY_ADD       | KEY_MOD1 ,
-    KEY_SUBTRACT  | KEY_MOD1 ,
-    KEY_MULTIPLY  | KEY_MOD1 ,
-    KEY_DIVIDE    | KEY_MOD1 ,
+    KEY_MOD1 | KEY_ADD,
+    KEY_MOD1 | KEY_SUBTRACT,
+    KEY_MOD1 | KEY_MULTIPLY,
+    KEY_MOD1 | KEY_DIVIDE,
 
-    KEY_0         | KEY_SHIFT | KEY_MOD1,
-    KEY_1         | KEY_SHIFT | KEY_MOD1,
-    KEY_2         | KEY_SHIFT | KEY_MOD1,
-    KEY_3         | KEY_SHIFT | KEY_MOD1,
-    KEY_4         | KEY_SHIFT | KEY_MOD1,
-    KEY_5         | KEY_SHIFT | KEY_MOD1,
-    KEY_6         | KEY_SHIFT | KEY_MOD1,
-    KEY_7         | KEY_SHIFT | KEY_MOD1,
-    KEY_8         | KEY_SHIFT | KEY_MOD1,
-    KEY_9         | KEY_SHIFT | KEY_MOD1,
-    KEY_A         | KEY_SHIFT | KEY_MOD1,
-    KEY_B         | KEY_SHIFT | KEY_MOD1,
-    KEY_C         | KEY_SHIFT | KEY_MOD1,
-    KEY_D         | KEY_SHIFT | KEY_MOD1,
-    KEY_E         | KEY_SHIFT | KEY_MOD1,
-    KEY_F         | KEY_SHIFT | KEY_MOD1,
-    KEY_G         | KEY_SHIFT | KEY_MOD1,
-    KEY_H         | KEY_SHIFT | KEY_MOD1,
-    KEY_I         | KEY_SHIFT | KEY_MOD1,
-    KEY_J         | KEY_SHIFT | KEY_MOD1,
-    KEY_K         | KEY_SHIFT | KEY_MOD1,
-    KEY_L         | KEY_SHIFT | KEY_MOD1,
-    KEY_M         | KEY_SHIFT | KEY_MOD1,
-    KEY_N         | KEY_SHIFT | KEY_MOD1,
-    KEY_O         | KEY_SHIFT | KEY_MOD1,
-    KEY_P         | KEY_SHIFT | KEY_MOD1,
-    KEY_Q         | KEY_SHIFT | KEY_MOD1,
-    KEY_R         | KEY_SHIFT | KEY_MOD1,
-    KEY_S         | KEY_SHIFT | KEY_MOD1,
-    KEY_T         | KEY_SHIFT | KEY_MOD1,
-    KEY_U         | KEY_SHIFT | KEY_MOD1,
-    KEY_V         | KEY_SHIFT | KEY_MOD1,
-    KEY_W         | KEY_SHIFT | KEY_MOD1,
-    KEY_X         | KEY_SHIFT | KEY_MOD1,
-    KEY_Y         | KEY_SHIFT | KEY_MOD1,
-    KEY_Z         | KEY_SHIFT | KEY_MOD1,
-    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD1 ,
-    KEY_QUOTERIGHT   | KEY_SHIFT | KEY_MOD1 ,
-    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD1 ,
-    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD1,
-    KEY_POINT    | KEY_SHIFT | KEY_MOD1,
+    KEY_SHIFT | KEY_MOD1 | KEY_0,
+    KEY_SHIFT | KEY_MOD1 | KEY_1,
+    KEY_SHIFT | KEY_MOD1 | KEY_2,
+    KEY_SHIFT | KEY_MOD1 | KEY_3,
+    KEY_SHIFT | KEY_MOD1 | KEY_4,
+    KEY_SHIFT | KEY_MOD1 | KEY_5,
+    KEY_SHIFT | KEY_MOD1 | KEY_6,
+    KEY_SHIFT | KEY_MOD1 | KEY_7,
+    KEY_SHIFT | KEY_MOD1 | KEY_8,
+    KEY_SHIFT | KEY_MOD1 | KEY_9,
+    KEY_SHIFT | KEY_MOD1 | KEY_A,
+    KEY_SHIFT | KEY_MOD1 | KEY_B,
+    KEY_SHIFT | KEY_MOD1 | KEY_C,
+    KEY_SHIFT | KEY_MOD1 | KEY_D,
+    KEY_SHIFT | KEY_MOD1 | KEY_E,
+    KEY_SHIFT | KEY_MOD1 | KEY_F,
+    KEY_SHIFT | KEY_MOD1 | KEY_G,
+    KEY_SHIFT | KEY_MOD1 | KEY_H,
+    KEY_SHIFT | KEY_MOD1 | KEY_I,
+    KEY_SHIFT | KEY_MOD1 | KEY_J,
+    KEY_SHIFT | KEY_MOD1 | KEY_K,
+    KEY_SHIFT | KEY_MOD1 | KEY_L,
+    KEY_SHIFT | KEY_MOD1 | KEY_M,
+    KEY_SHIFT | KEY_MOD1 | KEY_N,
+    KEY_SHIFT | KEY_MOD1 | KEY_O,
+    KEY_SHIFT | KEY_MOD1 | KEY_P,
+    KEY_SHIFT | KEY_MOD1 | KEY_Q,
+    KEY_SHIFT | KEY_MOD1 | KEY_R,
+    KEY_SHIFT | KEY_MOD1 | KEY_S,
+    KEY_SHIFT | KEY_MOD1 | KEY_T,
+    KEY_SHIFT | KEY_MOD1 | KEY_U,
+    KEY_SHIFT | KEY_MOD1 | KEY_V,
+    KEY_SHIFT | KEY_MOD1 | KEY_W,
+    KEY_SHIFT | KEY_MOD1 | KEY_X,
+    KEY_SHIFT | KEY_MOD1 | KEY_Y,
+    KEY_SHIFT | KEY_MOD1 | KEY_Z,
+    KEY_SHIFT | KEY_MOD1 | KEY_SEMICOLON,
+    KEY_SHIFT | KEY_MOD1 | KEY_QUOTERIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_BRACKETLEFT,
+    KEY_SHIFT | KEY_MOD1 | KEY_BRACKETRIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_POINT,
 
-    KEY_F1        | KEY_SHIFT | KEY_MOD1,
-    KEY_F2        | KEY_SHIFT | KEY_MOD1,
-    KEY_F3        | KEY_SHIFT | KEY_MOD1,
-    KEY_F4        | KEY_SHIFT | KEY_MOD1,
-    KEY_F5        | KEY_SHIFT | KEY_MOD1,
-    KEY_F6        | KEY_SHIFT | KEY_MOD1,
-    KEY_F7        | KEY_SHIFT | KEY_MOD1,
-    KEY_F8        | KEY_SHIFT | KEY_MOD1,
-    KEY_F9        | KEY_SHIFT | KEY_MOD1,
-    KEY_F10       | KEY_SHIFT | KEY_MOD1,
-    KEY_F11       | KEY_SHIFT | KEY_MOD1,
-    KEY_F12       | KEY_SHIFT | KEY_MOD1,
-    KEY_F13       | KEY_SHIFT | KEY_MOD1,
-    KEY_F14       | KEY_SHIFT | KEY_MOD1,
-    KEY_F15       | KEY_SHIFT | KEY_MOD1,
-    KEY_F16       | KEY_SHIFT | KEY_MOD1,
+    KEY_SHIFT | KEY_MOD1 | KEY_F1,
+    KEY_SHIFT | KEY_MOD1 | KEY_F2,
+    KEY_SHIFT | KEY_MOD1 | KEY_F3,
+    KEY_SHIFT | KEY_MOD1 | KEY_F4,
+    KEY_SHIFT | KEY_MOD1 | KEY_F5,
+    KEY_SHIFT | KEY_MOD1 | KEY_F6,
+    KEY_SHIFT | KEY_MOD1 | KEY_F7,
+    KEY_SHIFT | KEY_MOD1 | KEY_F8,
+    KEY_SHIFT | KEY_MOD1 | KEY_F9,
+    KEY_SHIFT | KEY_MOD1 | KEY_F10,
+    KEY_SHIFT | KEY_MOD1 | KEY_F11,
+    KEY_SHIFT | KEY_MOD1 | KEY_F12,
+    KEY_SHIFT | KEY_MOD1 | KEY_F13,
+    KEY_SHIFT | KEY_MOD1 | KEY_F14,
+    KEY_SHIFT | KEY_MOD1 | KEY_F15,
+    KEY_SHIFT | KEY_MOD1 | KEY_F16,
 
-    KEY_DOWN      | KEY_SHIFT | KEY_MOD1,
-    KEY_UP        | KEY_SHIFT | KEY_MOD1,
-    KEY_LEFT      | KEY_SHIFT | KEY_MOD1,
-    KEY_RIGHT     | KEY_SHIFT | KEY_MOD1,
-    KEY_HOME      | KEY_SHIFT | KEY_MOD1,
-    KEY_END       | KEY_SHIFT | KEY_MOD1,
-    KEY_PAGEUP    | KEY_SHIFT | KEY_MOD1,
-    KEY_PAGEDOWN  | KEY_SHIFT | KEY_MOD1,
-    KEY_RETURN    | KEY_SHIFT | KEY_MOD1,
-    KEY_SPACE     | KEY_SHIFT | KEY_MOD1,
-    KEY_BACKSPACE | KEY_SHIFT | KEY_MOD1,
-    KEY_INSERT    | KEY_SHIFT | KEY_MOD1,
-    KEY_DELETE    | KEY_SHIFT | KEY_MOD1,
+    KEY_SHIFT | KEY_MOD1 | KEY_DOWN,
+    KEY_SHIFT | KEY_MOD1 | KEY_UP,
+    KEY_SHIFT | KEY_MOD1 | KEY_LEFT,
+    KEY_SHIFT | KEY_MOD1 | KEY_RIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_HOME,
+    KEY_SHIFT | KEY_MOD1 | KEY_END,
+    KEY_SHIFT | KEY_MOD1 | KEY_PAGEUP,
+    KEY_SHIFT | KEY_MOD1 | KEY_PAGEDOWN,
+    KEY_SHIFT | KEY_MOD1 | KEY_RETURN,
+    KEY_SHIFT | KEY_MOD1 | KEY_ESCAPE,
+    KEY_SHIFT | KEY_MOD1 | KEY_BACKSPACE,
+    KEY_SHIFT | KEY_MOD1 | KEY_INSERT,
+    KEY_SHIFT | KEY_MOD1 | KEY_DELETE,
 
-    KEY_0         | KEY_MOD2 ,
-    KEY_1         | KEY_MOD2 ,
-    KEY_2         | KEY_MOD2 ,
-    KEY_3         | KEY_MOD2 ,
-    KEY_4         | KEY_MOD2 ,
-    KEY_5         | KEY_MOD2 ,
-    KEY_6         | KEY_MOD2 ,
-    KEY_7         | KEY_MOD2 ,
-    KEY_8         | KEY_MOD2 ,
-    KEY_9         | KEY_MOD2 ,
-    KEY_A         | KEY_MOD2 ,
-    KEY_B         | KEY_MOD2 ,
-    KEY_C         | KEY_MOD2 ,
-    KEY_D         | KEY_MOD2 ,
-    KEY_E         | KEY_MOD2 ,
-    KEY_F         | KEY_MOD2 ,
-    KEY_G         | KEY_MOD2 ,
-    KEY_H         | KEY_MOD2 ,
-    KEY_I         | KEY_MOD2 ,
-    KEY_J         | KEY_MOD2 ,
-    KEY_K         | KEY_MOD2 ,
-    KEY_L         | KEY_MOD2 ,
-    KEY_M         | KEY_MOD2 ,
-    KEY_N         | KEY_MOD2 ,
-    KEY_O         | KEY_MOD2 ,
-    KEY_P         | KEY_MOD2 ,
-    KEY_Q         | KEY_MOD2 ,
-    KEY_R         | KEY_MOD2 ,
-    KEY_S         | KEY_MOD2 ,
-    KEY_T         | KEY_MOD2 ,
-    KEY_U         | KEY_MOD2 ,
-    KEY_V         | KEY_MOD2 ,
-    KEY_W         | KEY_MOD2 ,
-    KEY_X         | KEY_MOD2 ,
-    KEY_Y         | KEY_MOD2 ,
-    KEY_Z         | KEY_MOD2 ,
-    KEY_SEMICOLON    | KEY_MOD2 ,
-    KEY_QUOTERIGHT   | KEY_MOD2 ,
-    KEY_BRACKETLEFT  | KEY_MOD2 ,
-    KEY_BRACKETRIGHT | KEY_MOD2,
-    KEY_POINT    | KEY_MOD2 ,
+    KEY_MOD2 | KEY_0,
+    KEY_MOD2 | KEY_1,
+    KEY_MOD2 | KEY_2,
+    KEY_MOD2 | KEY_3,
+    KEY_MOD2 | KEY_4,
+    KEY_MOD2 | KEY_5,
+    KEY_MOD2 | KEY_6,
+    KEY_MOD2 | KEY_7,
+    KEY_MOD2 | KEY_8,
+    KEY_MOD2 | KEY_9,
+    KEY_MOD2 | KEY_A,
+    KEY_MOD2 | KEY_B,
+    KEY_MOD2 | KEY_C,
+    KEY_MOD2 | KEY_D,
+    KEY_MOD2 | KEY_E,
+    KEY_MOD2 | KEY_F,
+    KEY_MOD2 | KEY_G,
+    KEY_MOD2 | KEY_H,
+    KEY_MOD2 | KEY_I,
+    KEY_MOD2 | KEY_J,
+    KEY_MOD2 | KEY_K,
+    KEY_MOD2 | KEY_L,
+    KEY_MOD2 | KEY_M,
+    KEY_MOD2 | KEY_N,
+    KEY_MOD2 | KEY_O,
+    KEY_MOD2 | KEY_P,
+    KEY_MOD2 | KEY_Q,
+    KEY_MOD2 | KEY_R,
+    KEY_MOD2 | KEY_S,
+    KEY_MOD2 | KEY_T,
+    KEY_MOD2 | KEY_U,
+    KEY_MOD2 | KEY_V,
+    KEY_MOD2 | KEY_W,
+    KEY_MOD2 | KEY_X,
+    KEY_MOD2 | KEY_Y,
+    KEY_MOD2 | KEY_Z,
+    KEY_MOD2 | KEY_SEMICOLON,
+    KEY_MOD2 | KEY_QUOTERIGHT,
+    KEY_MOD2 | KEY_BRACKETLEFT,
+    KEY_MOD2 | KEY_BRACKETRIGHT,
+    KEY_MOD2 | KEY_POINT,
 
-    KEY_F1        | KEY_MOD2 ,
-    KEY_F2        | KEY_MOD2 ,
-    KEY_F3        | KEY_MOD2 ,
-    KEY_F4        | KEY_MOD2 ,
-    KEY_F5        | KEY_MOD2 ,
-    KEY_F6        | KEY_MOD2 ,
-    KEY_F7        | KEY_MOD2 ,
-    KEY_F8        | KEY_MOD2 ,
-    KEY_F9        | KEY_MOD2 ,
-    KEY_F10       | KEY_MOD2 ,
-    KEY_F11       | KEY_MOD2 ,
-    KEY_F12       | KEY_MOD2 ,
-    KEY_F13       | KEY_MOD2 ,
-    KEY_F14       | KEY_MOD2 ,
-    KEY_F15       | KEY_MOD2 ,
-    KEY_F16       | KEY_MOD2 ,
+    KEY_MOD2 | KEY_F1,
+    KEY_MOD2 | KEY_F2,
+    KEY_MOD2 | KEY_F3,
+    KEY_MOD2 | KEY_F4,
+    KEY_MOD2 | KEY_F5,
+    KEY_MOD2 | KEY_F6,
+    KEY_MOD2 | KEY_F7,
+    KEY_MOD2 | KEY_F8,
+    KEY_MOD2 | KEY_F9,
+    KEY_MOD2 | KEY_F10,
+    KEY_MOD2 | KEY_F11,
+    KEY_MOD2 | KEY_F12,
+    KEY_MOD2 | KEY_F13,
+    KEY_MOD2 | KEY_F14,
+    KEY_MOD2 | KEY_F15,
+    KEY_MOD2 | KEY_F16,
 
-    KEY_DOWN      | KEY_MOD2 ,
-    KEY_UP        | KEY_MOD2 ,
-    KEY_LEFT      | KEY_MOD2 ,
-    KEY_RIGHT     | KEY_MOD2 ,
-    KEY_HOME      | KEY_MOD2 ,
-    KEY_END       | KEY_MOD2 ,
-    KEY_PAGEUP    | KEY_MOD2 ,
-    KEY_PAGEDOWN  | KEY_MOD2 ,
-    KEY_RETURN    | KEY_MOD2 ,
-    KEY_SPACE     | KEY_MOD2 ,
-    KEY_BACKSPACE | KEY_MOD2 ,
-    KEY_INSERT    | KEY_MOD2 ,
-    KEY_DELETE    | KEY_MOD2 ,
+    KEY_MOD2 | KEY_DOWN,
+    KEY_MOD2 | KEY_UP,
+    KEY_MOD2 | KEY_LEFT,
+    KEY_MOD2 | KEY_RIGHT,
+    KEY_MOD2 | KEY_HOME,
+    KEY_MOD2 | KEY_END,
+    KEY_MOD2 | KEY_PAGEUP,
+    KEY_MOD2 | KEY_PAGEDOWN,
+    KEY_MOD2 | KEY_RETURN,
+    KEY_MOD2 | KEY_SPACE,
+    KEY_MOD2 | KEY_BACKSPACE,
+    KEY_MOD2 | KEY_INSERT,
+    KEY_MOD2 | KEY_DELETE,
 
-    KEY_0         | KEY_SHIFT | KEY_MOD2,
-    KEY_1         | KEY_SHIFT | KEY_MOD2,
-    KEY_2         | KEY_SHIFT | KEY_MOD2,
-    KEY_3         | KEY_SHIFT | KEY_MOD2,
-    KEY_4         | KEY_SHIFT | KEY_MOD2,
-    KEY_5         | KEY_SHIFT | KEY_MOD2,
-    KEY_6         | KEY_SHIFT | KEY_MOD2,
-    KEY_7         | KEY_SHIFT | KEY_MOD2,
-    KEY_8         | KEY_SHIFT | KEY_MOD2,
-    KEY_9         | KEY_SHIFT | KEY_MOD2,
-    KEY_A         | KEY_SHIFT | KEY_MOD2,
-    KEY_B         | KEY_SHIFT | KEY_MOD2,
-    KEY_C         | KEY_SHIFT | KEY_MOD2,
-    KEY_D         | KEY_SHIFT | KEY_MOD2,
-    KEY_E         | KEY_SHIFT | KEY_MOD2,
-    KEY_F         | KEY_SHIFT | KEY_MOD2,
-    KEY_G         | KEY_SHIFT | KEY_MOD2,
-    KEY_H         | KEY_SHIFT | KEY_MOD2,
-    KEY_I         | KEY_SHIFT | KEY_MOD2,
-    KEY_J         | KEY_SHIFT | KEY_MOD2,
-    KEY_K         | KEY_SHIFT | KEY_MOD2,
-    KEY_L         | KEY_SHIFT | KEY_MOD2,
-    KEY_M         | KEY_SHIFT | KEY_MOD2,
-    KEY_N         | KEY_SHIFT | KEY_MOD2,
-    KEY_O         | KEY_SHIFT | KEY_MOD2,
-    KEY_P         | KEY_SHIFT | KEY_MOD2,
-    KEY_Q         | KEY_SHIFT | KEY_MOD2,
-    KEY_R         | KEY_SHIFT | KEY_MOD2,
-    KEY_S         | KEY_SHIFT | KEY_MOD2,
-    KEY_T         | KEY_SHIFT | KEY_MOD2,
-    KEY_U         | KEY_SHIFT | KEY_MOD2,
-    KEY_V         | KEY_SHIFT | KEY_MOD2,
-    KEY_W         | KEY_SHIFT | KEY_MOD2,
-    KEY_X         | KEY_SHIFT | KEY_MOD2,
-    KEY_Y         | KEY_SHIFT | KEY_MOD2,
-    KEY_Z         | KEY_SHIFT | KEY_MOD2,
-    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD2 ,
-    KEY_QUOTERIGHT   | KEY_SHIFT | KEY_MOD2 ,
-    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD2 ,
-    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD2,
-    KEY_POINT    | KEY_SHIFT | KEY_MOD2,
+    KEY_SHIFT | KEY_MOD2 | KEY_0,
+    KEY_SHIFT | KEY_MOD2 | KEY_1,
+    KEY_SHIFT | KEY_MOD2 | KEY_2,
+    KEY_SHIFT | KEY_MOD2 | KEY_3,
+    KEY_SHIFT | KEY_MOD2 | KEY_4,
+    KEY_SHIFT | KEY_MOD2 | KEY_5,
+    KEY_SHIFT | KEY_MOD2 | KEY_6,
+    KEY_SHIFT | KEY_MOD2 | KEY_7,
+    KEY_SHIFT | KEY_MOD2 | KEY_8,
+    KEY_SHIFT | KEY_MOD2 | KEY_9,
+    KEY_SHIFT | KEY_MOD2 | KEY_A,
+    KEY_SHIFT | KEY_MOD2 | KEY_B,
+    KEY_SHIFT | KEY_MOD2 | KEY_C,
+    KEY_SHIFT | KEY_MOD2 | KEY_D,
+    KEY_SHIFT | KEY_MOD2 | KEY_E,
+    KEY_SHIFT | KEY_MOD2 | KEY_F,
+    KEY_SHIFT | KEY_MOD2 | KEY_G,
+    KEY_SHIFT | KEY_MOD2 | KEY_H,
+    KEY_SHIFT | KEY_MOD2 | KEY_I,
+    KEY_SHIFT | KEY_MOD2 | KEY_J,
+    KEY_SHIFT | KEY_MOD2 | KEY_K,
+    KEY_SHIFT | KEY_MOD2 | KEY_L,
+    KEY_SHIFT | KEY_MOD2 | KEY_M,
+    KEY_SHIFT | KEY_MOD2 | KEY_N,
+    KEY_SHIFT | KEY_MOD2 | KEY_O,
+    KEY_SHIFT | KEY_MOD2 | KEY_P,
+    KEY_SHIFT | KEY_MOD2 | KEY_Q,
+    KEY_SHIFT | KEY_MOD2 | KEY_R,
+    KEY_SHIFT | KEY_MOD2 | KEY_S,
+    KEY_SHIFT | KEY_MOD2 | KEY_T,
+    KEY_SHIFT | KEY_MOD2 | KEY_U,
+    KEY_SHIFT | KEY_MOD2 | KEY_V,
+    KEY_SHIFT | KEY_MOD2 | KEY_W,
+    KEY_SHIFT | KEY_MOD2 | KEY_X,
+    KEY_SHIFT | KEY_MOD2 | KEY_Y,
+    KEY_SHIFT | KEY_MOD2 | KEY_Z,
+    KEY_SHIFT | KEY_MOD2 | KEY_SEMICOLON,
+    KEY_SHIFT | KEY_MOD2 | KEY_QUOTERIGHT,
+    KEY_SHIFT | KEY_MOD2 | KEY_BRACKETLEFT,
+    KEY_SHIFT | KEY_MOD2 | KEY_BRACKETRIGHT,
+    KEY_SHIFT | KEY_MOD2 | KEY_POINT,
 
-    KEY_F1        | KEY_SHIFT | KEY_MOD2,
-    KEY_F2        | KEY_SHIFT | KEY_MOD2,
-    KEY_F3        | KEY_SHIFT | KEY_MOD2,
-    KEY_F4        | KEY_SHIFT | KEY_MOD2,
-    KEY_F5        | KEY_SHIFT | KEY_MOD2,
-    KEY_F6        | KEY_SHIFT | KEY_MOD2,
-    KEY_F7        | KEY_SHIFT | KEY_MOD2,
-    KEY_F8        | KEY_SHIFT | KEY_MOD2,
-    KEY_F9        | KEY_SHIFT | KEY_MOD2,
-    KEY_F10       | KEY_SHIFT | KEY_MOD2,
-    KEY_F11       | KEY_SHIFT | KEY_MOD2,
-    KEY_F12       | KEY_SHIFT | KEY_MOD2,
-    KEY_F13       | KEY_SHIFT | KEY_MOD2,
-    KEY_F14       | KEY_SHIFT | KEY_MOD2,
-    KEY_F15       | KEY_SHIFT | KEY_MOD2,
-    KEY_F16       | KEY_SHIFT | KEY_MOD2,
+    KEY_SHIFT | KEY_MOD2 | KEY_F1,
+    KEY_SHIFT | KEY_MOD2 | KEY_F2,
+    KEY_SHIFT | KEY_MOD2 | KEY_F3,
+    KEY_SHIFT | KEY_MOD2 | KEY_F4,
+    KEY_SHIFT | KEY_MOD2 | KEY_F5,
+    KEY_SHIFT | KEY_MOD2 | KEY_F6,
+    KEY_SHIFT | KEY_MOD2 | KEY_F7,
+    KEY_SHIFT | KEY_MOD2 | KEY_F8,
+    KEY_SHIFT | KEY_MOD2 | KEY_F9,
+    KEY_SHIFT | KEY_MOD2 | KEY_F10,
+    KEY_SHIFT | KEY_MOD2 | KEY_F11,
+    KEY_SHIFT | KEY_MOD2 | KEY_F12,
+    KEY_SHIFT | KEY_MOD2 | KEY_F13,
+    KEY_SHIFT | KEY_MOD2 | KEY_F14,
+    KEY_SHIFT | KEY_MOD2 | KEY_F15,
+    KEY_SHIFT | KEY_MOD2 | KEY_F16,
 
-    KEY_DOWN      | KEY_SHIFT | KEY_MOD2,
-    KEY_UP        | KEY_SHIFT | KEY_MOD2,
-    KEY_LEFT      | KEY_SHIFT | KEY_MOD2,
-    KEY_RIGHT     | KEY_SHIFT | KEY_MOD2,
-    KEY_HOME      | KEY_SHIFT | KEY_MOD2,
-    KEY_END       | KEY_SHIFT | KEY_MOD2,
-    KEY_PAGEUP    | KEY_SHIFT | KEY_MOD2,
-    KEY_PAGEDOWN  | KEY_SHIFT | KEY_MOD2,
-    KEY_RETURN    | KEY_SHIFT | KEY_MOD2,
-    KEY_SPACE     | KEY_SHIFT | KEY_MOD2,
-    KEY_BACKSPACE | KEY_SHIFT | KEY_MOD2,
-    KEY_INSERT    | KEY_SHIFT | KEY_MOD2,
-    KEY_DELETE    | KEY_SHIFT | KEY_MOD2,
+    KEY_SHIFT | KEY_MOD2 | KEY_DOWN,
+    KEY_SHIFT | KEY_MOD2 | KEY_UP,
+    KEY_SHIFT | KEY_MOD2 | KEY_LEFT,
+    KEY_SHIFT | KEY_MOD2 | KEY_RIGHT,
+    KEY_SHIFT | KEY_MOD2 | KEY_HOME,
+    KEY_SHIFT | KEY_MOD2 | KEY_END,
+    KEY_SHIFT | KEY_MOD2 | KEY_PAGEUP,
+    KEY_SHIFT | KEY_MOD2 | KEY_PAGEDOWN,
+    KEY_SHIFT | KEY_MOD2 | KEY_RETURN,
+    KEY_SHIFT | KEY_MOD2 | KEY_ESCAPE,
+    KEY_SHIFT | KEY_MOD2 | KEY_BACKSPACE,
+    KEY_SHIFT | KEY_MOD2 | KEY_INSERT,
+    KEY_SHIFT | KEY_MOD2 | KEY_DELETE,
 
-    KEY_0         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_1         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_2         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_3         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_4         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_5         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_6         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_7         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_8         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_9         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_A         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_B         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_C         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_D         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_E         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_G         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_H         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_I         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_J         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_K         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_L         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_M         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_N         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_O         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_P         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_Q         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_R         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_S         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_T         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_U         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_V         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_W         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_X         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_Y         | KEY_MOD1 | KEY_MOD2 ,
-    KEY_Z         | KEY_MOD1 | KEY_MOD2 ,
+    KEY_MOD1 | KEY_MOD2 | KEY_0,
+    KEY_MOD1 | KEY_MOD2 | KEY_1,
+    KEY_MOD1 | KEY_MOD2 | KEY_2,
+    KEY_MOD1 | KEY_MOD2 | KEY_3,
+    KEY_MOD1 | KEY_MOD2 | KEY_4,
+    KEY_MOD1 | KEY_MOD2 | KEY_5,
+    KEY_MOD1 | KEY_MOD2 | KEY_6,
+    KEY_MOD1 | KEY_MOD2 | KEY_7,
+    KEY_MOD1 | KEY_MOD2 | KEY_8,
+    KEY_MOD1 | KEY_MOD2 | KEY_9,
+    KEY_MOD1 | KEY_MOD2 | KEY_A,
+    KEY_MOD1 | KEY_MOD2 | KEY_B,
+    KEY_MOD1 | KEY_MOD2 | KEY_C,
+    KEY_MOD1 | KEY_MOD2 | KEY_D,
+    KEY_MOD1 | KEY_MOD2 | KEY_E,
+    KEY_MOD1 | KEY_MOD2 | KEY_F,
+    KEY_MOD1 | KEY_MOD2 | KEY_G,
+    KEY_MOD1 | KEY_MOD2 | KEY_H,
+    KEY_MOD1 | KEY_MOD2 | KEY_I,
+    KEY_MOD1 | KEY_MOD2 | KEY_J,
+    KEY_MOD1 | KEY_MOD2 | KEY_K,
+    KEY_MOD1 | KEY_MOD2 | KEY_L,
+    KEY_MOD1 | KEY_MOD2 | KEY_M,
+    KEY_MOD1 | KEY_MOD2 | KEY_N,
+    KEY_MOD1 | KEY_MOD2 | KEY_O,
+    KEY_MOD1 | KEY_MOD2 | KEY_P,
+    KEY_MOD1 | KEY_MOD2 | KEY_Q,
+    KEY_MOD1 | KEY_MOD2 | KEY_R,
+    KEY_MOD1 | KEY_MOD2 | KEY_S,
+    KEY_MOD1 | KEY_MOD2 | KEY_T,
+    KEY_MOD1 | KEY_MOD2 | KEY_U,
+    KEY_MOD1 | KEY_MOD2 | KEY_V,
+    KEY_MOD1 | KEY_MOD2 | KEY_W,
+    KEY_MOD1 | KEY_MOD2 | KEY_X,
+    KEY_MOD1 | KEY_MOD2 | KEY_Y,
+    KEY_MOD1 | KEY_MOD2 | KEY_Z,
+    KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
+    KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
+    KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
+    KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
+    KEY_MOD1 | KEY_MOD2 | KEY_POINT,
 
-    KEY_F1        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F2        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F3        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F4        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F5        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F6        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F7        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F8        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F9        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F10       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F11       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F12       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F13       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F14       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F15       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F16       | KEY_MOD1 | KEY_MOD2 ,
+    KEY_MOD1 | KEY_MOD2 | KEY_F1,
+    KEY_MOD1 | KEY_MOD2 | KEY_F2,
+    KEY_MOD1 | KEY_MOD2 | KEY_F3,
+    KEY_MOD1 | KEY_MOD2 | KEY_F4,
+    KEY_MOD1 | KEY_MOD2 | KEY_F5,
+    KEY_MOD1 | KEY_MOD2 | KEY_F6,
+    KEY_MOD1 | KEY_MOD2 | KEY_F7,
+    KEY_MOD1 | KEY_MOD2 | KEY_F8,
+    KEY_MOD1 | KEY_MOD2 | KEY_F9,
+    KEY_MOD1 | KEY_MOD2 | KEY_F10,
+    KEY_MOD1 | KEY_MOD2 | KEY_F11,
+    KEY_MOD1 | KEY_MOD2 | KEY_F12,
+    KEY_MOD1 | KEY_MOD2 | KEY_F13,
+    KEY_MOD1 | KEY_MOD2 | KEY_F14,
+    KEY_MOD1 | KEY_MOD2 | KEY_F15,
+    KEY_MOD1 | KEY_MOD2 | KEY_F16,
 
-    KEY_DOWN      | KEY_MOD1 | KEY_MOD2 ,
-    KEY_UP        | KEY_MOD1 | KEY_MOD2 ,
-    KEY_LEFT      | KEY_MOD1 | KEY_MOD2 ,
-    KEY_RIGHT     | KEY_MOD1 | KEY_MOD2 ,
-    KEY_HOME      | KEY_MOD1 | KEY_MOD2 ,
-    KEY_END       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_PAGEUP    | KEY_MOD1 | KEY_MOD2 ,
-    KEY_PAGEDOWN  | KEY_MOD1 | KEY_MOD2 ,
-    KEY_RETURN    | KEY_MOD1 | KEY_MOD2 ,
-    KEY_SPACE     | KEY_MOD1 | KEY_MOD2 ,
-    KEY_BACKSPACE | KEY_MOD1 | KEY_MOD2 ,
-    KEY_INSERT    | KEY_MOD1 | KEY_MOD2 ,
-    KEY_DELETE    | KEY_MOD1 | KEY_MOD2 ,
+    KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
+    KEY_MOD1 | KEY_MOD2 | KEY_UP,
+    KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
+    KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
+    KEY_MOD1 | KEY_MOD2 | KEY_HOME,
+    KEY_MOD1 | KEY_MOD2 | KEY_END,
+    KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
+    KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
+    KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
+    KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
+    KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
+    KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
+    KEY_MOD1 | KEY_MOD2 | KEY_DELETE,
 
-    KEY_0         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_1         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_2         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_3         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_4         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_5         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_6         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_7         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_8         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_9         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_A         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_B         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_C         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_D         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_E         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_G         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_H         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_I         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_J         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_K         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_L         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_M         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_N         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_O         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_P         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_Q         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_R         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_S         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_T         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_U         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_V         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_W         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_X         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_Y         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_Z         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_QUOTERIGHT   | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_POINT    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_0,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_1,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_2,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_3,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_4,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_5,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_6,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_7,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_8,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_9,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_A,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_B,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_C,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_D,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_E,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_G,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_H,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_I,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_J,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_K,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_L,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_M,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_N,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_O,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_P,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Q,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_R,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_S,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_T,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_U,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_V,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_W,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_X,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Y,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Z,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_POINT,
 
-    KEY_F1        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F2        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F3        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F4        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F5        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F6        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F7        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F8        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F9        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F10       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F11       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F12       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F13       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F14       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F15       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F16       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F1,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F2,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F3,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F4,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F5,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F6,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F7,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F8,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F9,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F10,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F11,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F12,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F13,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F14,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F15,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F16,
 
-    KEY_DOWN      | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_UP        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_LEFT      | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_RIGHT     | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_HOME      | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_END       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_PAGEUP    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_PAGEDOWN  | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_RETURN    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_SPACE     | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_BACKSPACE | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_INSERT    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_UP,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_HOME,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_END,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
+    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DELETE
 };
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
-
 
 // seems to be needed to layout the list box, which shows all
 // assignable shortcuts
@@ -620,10 +618,8 @@ static long AccCfgTabs[] =
 
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
-    public:
-    SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
-                                   sal_uInt16       nFlags,
-                             const OUString&      sText );
+public:
+    SfxAccCfgLBoxString_Impl(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText);
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
@@ -632,17 +628,12 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 };
 
 
-SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
-                                                         sal_uInt16       nFlags,
-                                                   const OUString&      sText )
-        : SvLBoxString(pEntry, nFlags, sText)
-{
-}
-
+SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText)
+    : SvLBoxString(pEntry, nFlags, sText)
+{}
 
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
-{
-}
+{}
 
 void SfxAccCfgLBoxString_Impl::Paint(
     const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
@@ -672,7 +663,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxAccCfgTabListBox(vc
     return new SfxAccCfgTabListBox_Impl(pParent, nWinBits);
 }
 
-
 void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
                                          const OUString& rText,
                                          const Image& rImage1,
@@ -681,7 +671,6 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
 {
     SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
 }
-
 
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
@@ -710,12 +699,11 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
             {
                 sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
                 sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
-                if (
-                    (nCode1 == nCode2) &&
-                    (nMod1  == nMod2 )
-                   )
+
+                if ((nCode1 == nCode2) &&
+                    (nMod1  == nMod2 ))
                 {
-                    Select     (pEntry);
+                    Select(pEntry);
                     MakeVisible(pEntry);
                     return;
                 }
@@ -727,7 +715,6 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
     // no - handle it as normal dialog input
     SvTabListBox::KeyInput(aKey);
 }
-
 
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", &aSet)
@@ -770,7 +757,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
 
     aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
-// install handler functions
+    // install handler functions
     m_pChangeButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
     m_pRemoveButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
     m_pEntriesBox->SetSelectHdl ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
@@ -811,7 +798,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     m_pKeyBox->SetStyle(m_pKeyBox->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
-
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
     // free memory - remove all dynamic user data
@@ -839,7 +825,6 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     delete m_pFileDlg;
 }
 
-
 void SfxAcceleratorConfigPage::InitAccCfg()
 {
     // already initialized ?
@@ -849,24 +834,24 @@ void SfxAcceleratorConfigPage::InitAccCfg()
     try
     {
         // no - initialize this instance
-        m_xContext = ::comphelper::getProcessComponentContext();
+        m_xContext = comphelper::getProcessComponentContext();
 
-        m_xUICmdDescription = css::frame::theUICommandDescription::get(m_xContext);
+        m_xUICmdDescription = frame::theUICommandDescription::get(m_xContext);
 
         // get the current active frame, which should be our "parent"
         // for this session
         m_xFrame = GetFrame();
         if ( !m_xFrame.is() )
         {
-            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( m_xContext );
             m_xFrame = xDesktop->getActiveFrame();
         }
 
         // identify module
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-                 css::frame::ModuleManager::create(m_xContext);
+        uno::Reference<frame::XModuleManager2> xModuleManager =
+                 frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
-        ::comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
+        comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
         m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, OUString());
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , OUString());
 
@@ -875,24 +860,29 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         // get module accelerator configuration
 
-        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(m_xContext) );
-        css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
+        uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
+            ui::theModuleUIConfigurationManagerSupplier::get(m_xContext));
+        uno::Reference<ui::XUIConfigurationManager> xUICfgManager =
+            xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = xUICfgManager->getShortCutManager();
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        { m_xContext.clear(); }
+    catch(const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch(const uno::Exception&)
+    {
+        m_xContext.clear();
+    }
 }
-
 
 /** Initialize text columns with own class to enable custom painting
     This is needed as we have to paint disabled entries by ourself. No support for that in the
     original SvTabListBox!
   */
-void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
-                                                 const OUString&      sCol1 ,
-                                                 const OUString&      sCol2 )
+void SfxAcceleratorConfigPage::CreateCustomItems(SvTreeListEntry* pEntry,
+                                                 const OUString& sCol1 ,
+                                                 const OUString& sCol2)
 {
     SfxAccCfgLBoxString_Impl* pStringItem = new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol1);
     pEntry->ReplaceItem(pStringItem, 1);
@@ -902,15 +892,15 @@ void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
 }
 
 
-void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
+void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
 {
     if (!xAccMgr.is())
         return;
 
     if (!m_bStylesInfoInitialized)
     {
-        css::uno::Reference< css::frame::XController > xController;
-        css::uno::Reference< css::frame::XModel > xModel;
+        uno::Reference<frame::XController> xController;
+        uno::Reference<frame::XModel> xModel;
         if (m_xFrame.is())
             xController = m_xFrame->getController();
         if (xController.is())
@@ -925,10 +915,10 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
-    sal_Int32 c1       = KEYCODE_ARRAY_SIZE;
-    sal_Int32 i1       = 0;
+    sal_Int32 c1 = KEYCODE_ARRAY_SIZE;
+    sal_Int32 i1  = 0;
     sal_Int32 nListPos = 0;
-    for (i1=0; i1<c1; ++i1)
+    for (i1 = 0; i1 < c1; ++i1)
     {
         vcl::KeyCode aKey = KEYCODE_ARRAY[i1];
         OUString sKey = aKey.GetName();
@@ -940,17 +930,17 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     }
 
     // Assign all commands to its shortcuts - reading the accelerator config.
-    css::uno::Sequence< css::awt::KeyEvent > lKeys = xAccMgr->getAllKeyEvents();
-    sal_Int32                                c2    = lKeys.getLength();
-    sal_Int32                                i2    = 0;
-    sal_uInt16                                   nCol  = m_pEntriesBox->TabCount()-1;
+    uno::Sequence<awt::KeyEvent> lKeys = xAccMgr->getAllKeyEvents();
+    sal_Int32 c2 = lKeys.getLength();
+    sal_Int32 i2 = 0;
+    sal_uInt16 nCol = m_pEntriesBox->TabCount()-1;
 
     for (i2=0; i2<c2; ++i2)
     {
-        const css::awt::KeyEvent& aAWTKey  = lKeys[i2];
+        const awt::KeyEvent& aAWTKey  = lKeys[i2];
               OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               OUString     sLabel   = GetLabel4Command(sCommand);
-              vcl::KeyCode aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+              vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
               sal_uLong    nPos     = MapKeyCodeToPos(aKeyCode);
 
         if (nPos == TREELIST_ENTRY_NOTFOUND)
@@ -959,35 +949,34 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
-        TAccInfo*    pEntry   = static_cast<TAccInfo*>(pLBEntry->GetUserData());
+        TAccInfo* pEntry = static_cast<TAccInfo*>(pLBEntry->GetUserData());
 
         pEntry->m_bIsConfigurable = true;
-        pEntry->m_sCommand        = sCommand;
+        pEntry->m_sCommand = sCommand;
         CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), sLabel);
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
     sal_uLong c3 = Application::GetReservedKeyCodeCount();
     sal_uLong i3 = 0;
-    for (i3=0; i3<c3; ++i3)
+    for (i3 = 0; i3 < c3; ++i3)
     {
         const vcl::KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-              sal_uLong nPos = MapKeyCodeToPos(*pKeyCode);
+        sal_uLong nPos = MapKeyCodeToPos(*pKeyCode);
 
         if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
-        TAccInfo*    pEntry   = static_cast<TAccInfo*>(pLBEntry->GetUserData());
+        TAccInfo* pEntry = static_cast<TAccInfo*>(pLBEntry->GetUserData());
 
         pEntry->m_bIsConfigurable = false;
         CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), OUString());
     }
 }
 
-
-void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
+void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
 {
     if (!xAccMgr.is())
         return;
@@ -998,14 +987,14 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
     {
-        TAccInfo*          pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
-        OUString    sCommand  ;
-        css::awt::KeyEvent aAWTKey   ;
+        TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
+        OUString sCommand;
+        awt::KeyEvent aAWTKey;
 
         if (pUserData)
         {
             sCommand = pUserData->m_sCommand;
-            aAWTKey  = ::svt::AcceleratorExecute::st_VCLKey2AWTKey(pUserData->m_aKey);
+            aAWTKey  = svt::AcceleratorExecute::st_VCLKey2AWTKey(pUserData->m_aKey);
         }
 
         try
@@ -1015,21 +1004,22 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
             else
                 xAccMgr->removeKeyEvent(aAWTKey);
         }
-        catch(const css::uno::RuntimeException&)
-            { throw; }
-        catch(const css::uno::Exception&)
-            {}
+        catch(const uno::RuntimeException&)
+        {
+            throw;
+        }
+        catch(const uno::Exception&)
+        {
+        }
 
         pEntry = m_pEntriesBox->Next(pEntry);
     }
 }
 
-
 void SfxAcceleratorConfigPage::ResetConfig()
 {
     m_pEntriesBox->Clear();
 }
-
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
 {
@@ -1038,17 +1028,15 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 {
-    css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
+    uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
     if (xReset.is())
         xReset->reset();
 
@@ -1062,13 +1050,12 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
-    sal_uLong    nPos        = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
-    TAccInfo* pEntry      = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
-    OUString    sNewCommand = m_pFunctionBox->GetCurCommand();
-    OUString    sLabel      = m_pFunctionBox->GetCurLabel();
+    sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
+    OUString sNewCommand = m_pFunctionBox->GetCurCommand();
+    OUString sLabel = m_pFunctionBox->GetCurLabel();
     if (sLabel.isEmpty())
         sLabel = GetLabel4Command(sNewCommand);
 
@@ -1080,11 +1067,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
-    sal_uLong    nPos   = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
     TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
 
     // remove function name from selected entry
@@ -1096,15 +1082,14 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     return 0;
 }
 
-
 IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 {
     // disable help
     Help::ShowBalloon( this, Point(), OUString() );
     if (pListBox == m_pEntriesBox)
     {
-        sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
-        TAccInfo*       pEntry              = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
+        sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+        TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
         OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
         m_pRemoveButton->Enable( false );
@@ -1129,11 +1114,11 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         m_pChangeButton->Enable( false );
 
         // #i36994 First selected can return zero!
-        SvTreeListEntry*    pLBEntry = m_pEntriesBox->FirstSelected();
+        SvTreeListEntry* pLBEntry = m_pEntriesBox->FirstSelected();
         if ( pLBEntry != 0 )
         {
-            sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( pLBEntry );
-            TAccInfo*       pEntry              = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
+            sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( pLBEntry );
+            TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
             OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
@@ -1151,7 +1136,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 TAccInfo* pUserData = static_cast<TAccInfo*>(pIt->GetUserData());
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
-                    TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
+                    TAccInfo* pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
                     SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, true, TREELIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( false );
@@ -1164,8 +1149,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         // goto selected "key" entry of the key box
         SvTreeListEntry* pE2 = 0;
-        TAccInfo*    pU2 = 0;
-        sal_uLong       nP2 = TREELIST_ENTRY_NOTFOUND;
+        TAccInfo* pU2 = 0;
+        sal_uLong nP2 = TREELIST_ENTRY_NOTFOUND;
         SvTreeListEntry* pE3 = 0;
 
         pE2 = m_pKeyBox->FirstSelected();
@@ -1185,10 +1170,9 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 {
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
+    uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 
     if (m_pOfficeButton->IsChecked())
         m_xAct = m_xGlobal;
@@ -1233,9 +1217,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 
     GetTabDialog()->EnterWait();
 
-    css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< css::ui::XUIConfigurationManager >  xCfgMgr     ;
-    css::uno::Reference< css::embed::XStorage >              xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
+    uno::Reference<frame::XModel> xDoc;
+    uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
+    uno::Reference<embed::XStorage> xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
 
     try
     {
@@ -1244,32 +1228,32 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
         if (xDoc.is())
         {
             // Get ui config manager. There should always be one at the model.
-            css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XUIConfigurationManagerSupplier> xCfgSupplier(xDoc, uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
             // dont forget to release the storage afterwards!
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
-            css::uno::Sequence< css::uno::Any >                     lArgs(2);
+            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+            uno::Sequence<uno::Any> lArgs(2);
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::READ;
 
-            xRootStorage = css::uno::Reference< css::embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::embed::XStorage > xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::READ);
+            xRootStorage = uno::Reference<embed::XStorage>(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
+            uno::Reference<embed::XStorage> xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
             if (xUIConfig.is())
             {
-                css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
+                uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
                 xCfgMgr2->setStorage(xUIConfig);
-                xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
+                xCfgMgr.set(xCfgMgr2, uno::UNO_QUERY_THROW);
             }
         }
 
         if (xCfgMgr.is())
         {
             // open the configuration and update our UI
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XAcceleratorConfiguration> xTempAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
 
             m_pEntriesBox->SetUpdateMode(false);
             ResetConfig();
@@ -1284,19 +1268,21 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
         // We are the owner of it.
         if (xRootStorage.is())
         {
-            css::uno::Reference< css::lang::XComponent > xComponent;
-            xComponent = css::uno::Reference< css::lang::XComponent >(xCfgMgr, css::uno::UNO_QUERY);
+            uno::Reference<lang::XComponent> xComponent;
+            xComponent = uno::Reference<css::lang::XComponent>(xCfgMgr, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
-            xComponent = css::uno::Reference< css::lang::XComponent >(xRootStorage, css::uno::UNO_QUERY);
+            xComponent = uno::Reference<css::lang::XComponent>(xRootStorage, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch(const uno::Exception&)
+    {}
 
     GetTabDialog()->LeaveWait();
 
@@ -1317,9 +1303,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 
     GetTabDialog()->EnterWait();
 
-    css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< css::ui::XUIConfigurationManager >  xCfgMgr     ;
-    css::uno::Reference< css::embed::XStorage >              xRootStorage;
+    uno::Reference<frame::XModel> xDoc;
+    uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
+    uno::Reference<embed::XStorage> xRootStorage;
 
     try
     {
@@ -1328,37 +1314,37 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
         if (xDoc.is())
         {
             // get config manager, force creation if there was none before
-            css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XUIConfigurationManagerSupplier> xCfgSupplier(xDoc, uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
-            css::uno::Sequence< css::uno::Any >                     lArgs(2);
+            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+            uno::Sequence<uno::Any> lArgs(2);
             lArgs[0] <<= sCfgName;
-            lArgs[1] <<= css::embed::ElementModes::WRITE;
+            lArgs[1] <<= embed::ElementModes::WRITE;
 
-            xRootStorage = css::uno::Reference< css::embed::XStorage >(
+            xRootStorage = uno::Reference<embed::XStorage>(
                                 xStorageFactory->createInstanceWithArguments(lArgs),
-                                css::uno::UNO_QUERY_THROW);
+                                uno::UNO_QUERY_THROW);
 
-            css::uno::Reference< css::embed::XStorage > xUIConfig(
-                                xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::WRITE),
-                                css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::beans::XPropertySet > xUIConfigProps(
+            uno::Reference<embed::XStorage> xUIConfig(
+                                xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
+                                uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xUIConfigProps(
                                 xUIConfig,
-                                css::uno::UNO_QUERY_THROW);
+                                uno::UNO_QUERY_THROW);
 
             // set the correct media type if the storage was new created
             OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
             if (sMediaType.isEmpty())
-                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(OUString(MEDIATYPE_UICONFIG)));
+                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::makeAny(OUString(MEDIATYPE_UICONFIG)));
 
-            css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
+            uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
             xCfgMgr2->setStorage(xUIConfig);
-            xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
+            xCfgMgr.set( xCfgMgr2, uno::UNO_QUERY_THROW );
         }
 
         if (xCfgMgr.is())
@@ -1367,37 +1353,39 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
             // which are set currently at the UI !
             // Dont copy the m_xAct content to it ... because m_xAct will be updated
             // from the UI on pressing the button "OK" only. And inbetween it's not up to date !
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
             Apply(xTargetAccMgr);
 
             // commit (order is important!)
-            css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit2(xCfgMgr      , css::uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XUIConfigurationPersistence> xCommit1(xTargetAccMgr, uno::UNO_QUERY_THROW);
+            uno::Reference<ui::XUIConfigurationPersistence> xCommit2(xCfgMgr      , uno::UNO_QUERY_THROW);
             xCommit1->store();
             xCommit2->store();
 
             if (xRootStorage.is())
             {
                 // Commit root storage
-                css::uno::Reference< css::embed::XTransactedObject > xCommit3(xRootStorage, css::uno::UNO_QUERY_THROW);
+                uno::Reference<embed::XTransactedObject> xCommit3(xRootStorage, uno::UNO_QUERY_THROW);
                 xCommit3->commit();
             }
         }
 
         if (xRootStorage.is())
         {
-            css::uno::Reference< css::lang::XComponent > xComponent(xCfgMgr, css::uno::UNO_QUERY);
+            uno::Reference<lang::XComponent> xComponent(xCfgMgr, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
-            xComponent.set(xRootStorage, css::uno::UNO_QUERY);
+            xComponent.set(xRootStorage, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch(const uno::Exception&)
+    {}
 
     GetTabDialog()->LeaveWait();
 
@@ -1408,8 +1396,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& rTitle )
 {
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
-                              : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+    short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
+                              : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
     if ( m_pFileDlg )
         delete m_pFileDlg;
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
@@ -1432,10 +1420,14 @@ bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet* )
     {
         m_xAct->store();
     }
-    catch(const css::uno::RuntimeException&)
-        { throw;  }
-    catch(const css::uno::Exception&)
-        { return false; }
+    catch(const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch(const uno::Exception&)
+    {
+        return false;
+    }
 
     return true;
 }
@@ -1485,9 +1477,9 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
 
 sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) const
 {
-    sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
+    sal_uInt16 nCode1 = aKey.GetCode() + aKey.GetModifier();
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
-    sal_uLong       i      = 0;
+    sal_uLong i = 0;
 
     while (pEntry)
     {
@@ -1511,7 +1503,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     try
     {
         // check global command configuration first
-        css::uno::Reference< css::container::XNameAccess > xModuleConf;
+        uno::Reference<container::XNameAccess> xModuleConf;
         m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
         if (xModuleConf.is())
         {
@@ -1521,10 +1513,12 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
                 return sLabel;
         }
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch(const uno::Exception&)
+    {}
 
     // may be it's a style URL .. they must be handled special
     SfxStyleInfo_Impl aStyle;
@@ -1538,9 +1532,9 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     return sCommand;
 }
 
-css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
+uno::Reference<frame::XModel> SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
 {
-    return css::uno::Reference< css::frame::XModel >();
+    return uno::Reference<frame::XModel>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
