@@ -666,7 +666,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 
     const SwTxtNode* pTxtNd;
     const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
-    for( sal_uInt16 n = pFmts->size(); 1 < n; )
+    for( auto n = pFmts->size(); 1 < n; )
     {
         SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
         for( SwTxtINetFmt* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
@@ -733,7 +733,7 @@ void SwEditShell::SetNumberingRestart()
     Push();
     // iterate over all text contents - body, frames, header, footer, footnote text
     SwPaM* pCrsr = GetCrsr();
-    for(sal_uInt16 i = 0; i < 2; i++)
+    for(int i = 0; i < 2; i++)
     {
         if(!i)
             MakeFindRange(DOCPOS_START, DOCPOS_END, pCrsr); // body content
