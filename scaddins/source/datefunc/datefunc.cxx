@@ -35,15 +35,58 @@ using namespace ::com::sun::star;
 
 #define STR_FROM_ANSI( s )      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
 
-ScaStringList::~ScaStringList()
+
+static const sal_Char*  pLang[] = { "de", "en" };
+static const sal_Char*  pCoun[] = { "DE", "US" };
+static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
+
+
+inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr ) :
+    Resource( ResId( nResId, rResMgr ) ),
+    aStr( ResId( nStrId, rResMgr ) )
 {
-    for( OUString* pStr = First(); pStr; pStr = Next() )
-        delete pStr;
+    FreeResource();
 }
 
-ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
-    ResId( nId, rResMgr )
+inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
+    Resource( ResId( nResId, rResMgr ) ),
+    aStrArray( ResId( nArrayId, rResMgr ) )
 {
+    FreeResource();
+}
+
+
+ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr, int RID_DEFFUNCTION_NAMES ) :
+    aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
+    nUINameID( rBaseData.nUINameID ),
+    nDescrID( rBaseData.nDescrID ),
+    nCompListID( rBaseData.nCompListID ),
+    nParamCount( rBaseData.nParamCount ),
+    eCat( rBaseData.eCat ),
+    bDouble( rBaseData.bDouble ),
+    bWithOpt( rBaseData.bWithOpt )
+{
+    ScaResStringArrLoader aArrLoader( RID_DEFFUNCTION_NAMES, nCompListID, rResMgr );
+    const ResStringArray& rArr = aArrLoader.GetStringArray();
+
+    for( sal_uInt16 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
+        aCompList.push_back( rArr.GetString( nIndex ) );
+}
+
+sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
+{
+    if( !bWithOpt )
+        nParam++;
+    return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
+}
+
+
+
+ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
+    Resource( rResId )
+{
+    rRet = ResId(nIndex, rResMgr).toString();
+    FreeResource();
 }
 
 #define UNIQUE              false   // function name does not exist in Calc
@@ -54,8 +97,7 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 #define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
     { "get" #FuncName, DATE_FUNCNAME_##FuncName, DATE_FUNCDESC_##FuncName, DATE_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
 
-const ScaFuncDataBase pFuncDataArr[] =
-{
+const std::vector<ScaFuncDataBase> pFuncDataArr = {
     FUNCDATA( DiffWeeks,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
     FUNCDATA( DiffMonths,   3, ScaCat_DateTime, UNIQUE, INTPAR ),
     FUNCDATA( DiffYears,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
@@ -68,74 +110,13 @@ const ScaFuncDataBase pFuncDataArr[] =
 
 #undef FUNCDATA
 
-ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
-    aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
-    nUINameID( rBaseData.nUINameID ),
-    nDescrID( rBaseData.nDescrID ),
-    nCompListID( rBaseData.nCompListID ),
-    nParamCount( rBaseData.nParamCount ),
-    eCat( rBaseData.eCat ),
-    bDouble( rBaseData.bDouble ),
-    bWithOpt( rBaseData.bWithOpt )
-{
-    ScaResStringArrLoader aArrLoader( RID_DATE_DEFFUNCTION_NAMES, nCompListID, rResMgr );
-    const ResStringArray& rArr = aArrLoader.GetStringArray();
-
-    for( sal_uInt16 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
-        aCompList.Append( rArr.GetString( nIndex ) );
+std::vector<ScaFuncData>* InitScaFuncDataList( ResMgr& rResMgr, std::vector<ScaFuncData>* init, const std::vector<ScaFuncDataBase>& pFuncData){
+    for( sal_uInt16 nIndex = 0; nIndex < pFuncData.size(); nIndex++ )
+        init->push_back( ScaFuncData( pFuncData.at( nIndex ), rResMgr, RID_DATE_DEFFUNCTION_NAMES) );
+    return init;
 }
 
-ScaFuncData::~ScaFuncData()
-{
-}
-
-sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
-{
-    if( !bWithOpt )
-        nParam++;
-    return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
-}
-
-
-ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
-    nLast( 0xFFFFFFFF )
-{
-    for( sal_uInt16 nIndex = 0; nIndex < SAL_N_ELEMENTS(pFuncDataArr); nIndex++ )
-        Append( new ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) );
-}
-
-ScaFuncDataList::~ScaFuncDataList()
-{
-    for( ScaFuncData* pFData = First(); pFData; pFData = Next() )
-        delete pFData;
-}
-
-const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) const
-{
-    if( aLastName == rProgrammaticName )
-        return Get( nLast );
-
-    for( sal_uInt32 nIndex = 0; nIndex < Count(); nIndex++ )
-    {
-        const ScaFuncData* pCurr = Get( nIndex );
-        if( pCurr->Is( rProgrammaticName ) )
-        {
-            const_cast< ScaFuncDataList* >( this )->aLastName = rProgrammaticName;
-            const_cast< ScaFuncDataList* >( this )->nLast = nIndex;
-            return pCurr;
-        }
-    }
-    return NULL;
-}
-
-ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
-    Resource( rResId )
-{
-    rRet = ScaResId(nIndex, rResMgr).toString();
-    FreeResource();
-}
-
-//  entry points for service registration / instantiation
+// entry points for service registration / instantiation
 uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
@@ -169,25 +150,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 }
 
 }   // extern C
-
-//  "normal" service implementation
-ScaDateAddIn::ScaDateAddIn() :
-    pDefLocales( NULL ),
-    pResMgr( NULL ),
-    pFuncDataList( NULL )
-{
-}
-
-ScaDateAddIn::~ScaDateAddIn()
-{
-    delete pFuncDataList;
-    delete pResMgr;
-    delete[] pDefLocales;
-}
-
-static const sal_Char*  pLang[] = { "de", "en" };
-static const sal_Char*  pCoun[] = { "DE", "US" };
-static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaDateAddIn::InitDefLocales()
 {
@@ -225,7 +187,7 @@ void ScaDateAddIn::InitData()
     pResMgr = ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc));
     delete pFuncDataList;
 
-    pFuncDataList = pResMgr ? new ScaFuncDataList( *pResMgr ) : NULL;
+    pFuncDataList = pResMgr ? InitScaFuncDataList( *pResMgr, new std::vector<ScaFuncData>, pFuncDataArr ) : NULL;
 
     if( pDefLocales )
     {
@@ -243,8 +205,8 @@ OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex 
 {
     OUString aRet;
 
-    ScaResPublisher aResPubl( ScaResId( RID_DATE_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
-    ScaResId aResId( nResId, GetResMgr() );
+    ScaResPublisher aResPubl( ResId( RID_DATE_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
+    ResId aResId( nResId, GetResMgr() );
     aResId.SetRT( RSC_RESOURCE );
 
     if( aResPubl.IsAvailableRes( aResId ) )
@@ -313,18 +275,18 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) th
 OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
-
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
-    {
-        aRet = GetDisplFuncStr( pFData->GetUINameID() );
-        if( pFData->IsDouble() )
+    try {
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
+        aRet = GetDisplFuncStr( pFData.GetUINameID() );
+        if( pFData.IsDouble() )
             aRet += STR_FROM_ANSI( "_ADD" );
     }
-    else
-    {
-        aRet = STR_FROM_ANSI( "UNKNOWNFUNC_" );
-        aRet += aProgrammaticName;
+    catch (const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+            aRet = STR_FROM_ANSI( "UNKNOWNFUNC_" );
+            aRet += aProgrammaticName;
+        }
+        else throw s;
     }
 
     return aRet;
@@ -332,76 +294,89 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
 
 OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
-    OUString aRet;
-
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
-        aRet = GetFuncDescrStr( pFData->GetDescrID(), 1 );
-
-    return aRet;
+    try{
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
+        return GetFuncDescrStr( pFData.GetDescrID(), 1 );
+    }
+    catch (const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+                return OUString();
+        }
+        else throw s;
+        return OUString(); //surpress warning
+    }
 }
 
 OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
         const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
 {
-    OUString aRet;
-
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData && (nArgument <= 0xFFFF) )
-    {
-        sal_uInt16 nStr = pFData->GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
-        if( nStr )
-            aRet = GetFuncDescrStr( pFData->GetDescrID(), nStr );
-        else
-            aRet = STR_FROM_ANSI( "internal" );
+    try{
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
+        if(nArgument <= 0xFFFF)
+        {
+            sal_uInt16 nStr = pFData.GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
+            if( nStr )
+                return GetFuncDescrStr( pFData.GetDescrID(), nStr );
+            else
+                return STR_FROM_ANSI( "internal" );
+        }
     }
-
-    return aRet;
+    catch (const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+                return OUString();
+        }
+        else throw s;
+    }
+    return OUString(); //surpress warning
 }
 
 OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
         const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
 {
-    OUString aRet;
-
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData && (nArgument <= 0xFFFF) )
-    {
-        sal_uInt16 nStr = pFData->GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
-        if( nStr )
-            aRet = GetFuncDescrStr( pFData->GetDescrID(), nStr + 1 );
-        else
-            aRet = STR_FROM_ANSI( "for internal use only" );
+    try{
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
+        if( nArgument <= 0xFFFF )
+        {
+            sal_uInt16 nStr = pFData.GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
+            if( nStr )
+                return GetFuncDescrStr( pFData.GetDescrID(), nStr + 1 );
+            else
+                return STR_FROM_ANSI( "for internal use only" );
+        }
     }
-
-    return aRet;
+    catch (const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+                return OUString();
+        }
+        else throw s;
+    }
+    return OUString(); //surpress warning
 }
 
 OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
-    OUString aRet;
-
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
-    {
-        switch( pFData->GetCategory() )
+    try{
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
+        switch( pFData.GetCategory() )
         {
-            case ScaCat_DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
-            case ScaCat_Text:       aRet = STR_FROM_ANSI( "Text" );         break;
-            case ScaCat_Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
-            case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
-            case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
-            case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
+            case ScaCat_DateTime:   return STR_FROM_ANSI( "Date&Time" );    break;
+            case ScaCat_Text:       return STR_FROM_ANSI( "Text" );         break;
+            case ScaCat_Finance:    return STR_FROM_ANSI( "Financial" );    break;
+            case ScaCat_Inf:        return STR_FROM_ANSI( "Information" );  break;
+            case ScaCat_Math:       return STR_FROM_ANSI( "Mathematical" ); break;
+            case ScaCat_Tech:       return STR_FROM_ANSI( "Technical" );    break;
             // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             default:
-                break;
+                return STR_FROM_ANSI( "Add-In" );   break;
         }
     }
-
-    if( aRet.isEmpty() )
-        aRet = STR_FROM_ANSI( "Add-In" );
-    return aRet;
+    catch(const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+            return STR_FROM_ANSI( "Add-In" );
+        }
+        else throw s;
+    }
 }
 
 OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
@@ -414,22 +389,45 @@ OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( !pFData )
-        return uno::Sequence< sheet::LocalizedName >( 0 );
+    try {
+        const ScaFuncData pFData = Get(pFuncDataList, aProgrammaticName );
 
-    const ScaStringList& rStrList = pFData->GetCompNameList();
-    sal_uInt32 nCount = rStrList.Count();
+        const std::vector<OUString>& rStrList = pFData.GetCompNameList();
+        sal_uInt32 nCount = rStrList.size();
 
-    uno::Sequence< sheet::LocalizedName > aRet( nCount );
-    sheet::LocalizedName* pArray = aRet.getArray();
+        uno::Sequence< sheet::LocalizedName > aRet( nCount );
+        sheet::LocalizedName* pArray = aRet.getArray();
 
-    for( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )
-        pArray[ nIndex ] = sheet::LocalizedName( GetLocale( nIndex ), *rStrList.Get( nIndex ) );
+        for( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )
+            pArray[ nIndex ] = sheet::LocalizedName( GetLocale( nIndex ), rStrList.at( nIndex ) );
 
-    return aRet;
+        return aRet;
+    }
+    catch (const char* s){
+        if (strcmp(s, "UNKNOWNFUNC")){
+            return uno::Sequence< sheet::LocalizedName >( 0 );
+        }
+        else throw s;
+    }
 }
 
+//  "normal" service implementation
+ScaDateAddIn::ScaDateAddIn() :
+    pDefLocales( NULL ),
+    pResMgr( NULL ),
+    pFuncDataList( NULL )
+{
+}
+
+ScaDateAddIn::~ScaDateAddIn()
+{
+    delete pFuncDataList;
+    delete pResMgr;
+    delete[] pDefLocales;
+}
+
+// actual function implementation starts here
+// auxiliary input handling functions
 namespace {
 
 // auxiliary functions

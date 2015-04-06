@@ -78,9 +78,6 @@
 // underruns, accuracy, etc
 
 
-namespace sca {
-namespace pricing {
-
 namespace bs {
 
 
@@ -938,9 +935,6 @@ double prob_in_money(double S, double vol, double mu,
 }
 
 } // namespace bs
-
-} // namespace pricing
-} // namespace sca
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

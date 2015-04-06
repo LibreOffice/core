@@ -17,9 +17,6 @@
 // options prices and greeks in the Black-Scholes model
 // also known as TV (theoretical value)
 
-namespace sca {
-namespace pricing {
-
 namespace bs {
 
 namespace types {
@@ -139,10 +136,6 @@ double prob_in_money(double S, double vol, double mu,
 
 
 } // namespace bs
-
-} // namespace pricing
-} // namespace sca
-
 
 #endif
 
