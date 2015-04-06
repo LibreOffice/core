@@ -2319,19 +2319,16 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
                 m_bEmptyLine = false;
                 const OUString sEndClrStr( DelTrailingBlanks(sClrStr) );
-                const sal_Int32 nLen = sEndClrStr.getLength();
+                const sal_Unicode cLast = sEndClrStr[sEndClrStr.getLength() - 1];
 
                 // not, then check if headline
-                if( ':' == sEndClrStr[ nLen - 1 ] )
+                if( ':' == cLast )
                 {
-                    {
-                        BuildHeadLine( 2 );
-                        m_eStat = READ_NEXT_PARA;
-                        break;
-                    }
+                    BuildHeadLine( 2 );
+                    m_eStat = READ_NEXT_PARA;
+                    break;
                 }
-                else if( 256 <= sEndClrStr[ nLen-1 ] ||
-                         !strchr( ",.;", sEndClrStr[ nLen-1 ]) )
+                else if( 256 <= cLast || !strchr( ",.;", cLast ) )
                 {
                     if( bNxtEmpty || bNxtAlpha
                         || ( pNxtNd && IsEnumericChar( *pNxtNd ))
