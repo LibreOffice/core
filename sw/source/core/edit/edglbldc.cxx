@@ -51,12 +51,12 @@ bool SwEditShell::IsGlblDocSaveLinks() const
     return getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS);
 }
 
-sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
+void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 {
     rArr.DeleteAndDestroyAll();
 
     if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        return 0;
+        return;
 
     // then all linked areas on the topmost level
     SwDoc* pMyDoc = GetDoc();
@@ -131,7 +131,6 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                     pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 );
         rArr.insert( pNew );
     }
-    return rArr.size();
 }
 
 bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,

@@ -869,7 +869,7 @@ public:
     bool IsGlobalDoc() const;
     void SetGlblDocSaveLinks( bool bFlag = true );
     bool IsGlblDocSaveLinks() const;
-    sal_uInt16 GetGlobalDocContent( SwGlblDocContents& rArr ) const;
+    void GetGlobalDocContent( SwGlblDocContents& rArr ) const;
     bool InsertGlobalDocContent( const SwGlblDocContent& rPos,
                                  SwSectionData & rNew );
     bool InsertGlobalDocContent( const SwGlblDocContent& rPos,
