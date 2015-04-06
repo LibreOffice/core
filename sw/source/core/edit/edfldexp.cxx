@@ -38,20 +38,17 @@ using namespace com::sun::star;
 bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
     uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
-    for(sal_uInt16 i = 0; i < nSize; ++i)
+    for(const auto pFldType : *pFldTypes)
     {
-        SwFieldType& rFldType = *((*pFldTypes)[i]);
-        sal_uInt16 nWhich = rFldType.Which();
-        if(IsUsed(rFldType))
+        if(IsUsed(*pFldType))
         {
-            switch(nWhich)
+            switch(pFldType->Which())
             {
                 case RES_DBFLD:
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
                     SwFmtFld* pFmtFld = aIter.First();
                     while(pFmtFld)
                     {

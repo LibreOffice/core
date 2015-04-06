@@ -45,17 +45,16 @@
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
 
     if(nResId == USHRT_MAX)
     {
         if(!bUsed)
-            return nSize;
+            return static_cast<sal_uInt16>(pFldTypes->size());
 
         sal_uInt16 nUsed = 0;
-        for ( sal_uInt16 i = 0; i < nSize; i++ )
+        for ( const auto pFldType : *pFldTypes )
         {
-            if(IsUsed(*(*pFldTypes)[i]))
+            if(IsUsed(*pFldType))
                 nUsed++;
         }
         return nUsed;
@@ -63,10 +62,10 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 
     // all types with the same ResId
     sal_uInt16 nIdx  = 0;
-    for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // same ResId -> increment index
-        SwFieldType& rFldType = *((*pFldTypes)[i]);
-        if(rFldType.Which() == nResId)
+    for(const auto pFldType : *pFldTypes)
+    {
+        // same ResId -> increment index
+        if(pFldType->Which() == nResId)
             nIdx++;
     }
     return nIdx;
@@ -76,30 +75,29 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
 
-    if(nResId == USHRT_MAX && nFld < nSize)
+    if(nResId == USHRT_MAX && nFld < pFldTypes->size())
     {
         if(!bUsed)
             return (*pFldTypes)[nFld];
 
-        sal_uInt16 i, nUsed = 0;
-        for ( i = 0; i < nSize; i++ )
+        SwFldTypes::size_type nUsed = 0;
+        for ( const auto pFldType : *pFldTypes )
         {
-            if(IsUsed(*(*pFldTypes)[i]))
+            if(IsUsed(*pFldType))
             {
                 if(nUsed == nFld)
-                    break;
+                    return pFldType;
                 nUsed++;
             }
         }
-        return i < nSize ? (*pFldTypes)[i] : 0;
+        return nullptr;
     }
 
     sal_uInt16 nIdx = 0;
-    for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // same ResId -> increment index
-        SwFieldType* pFldType = (*pFldTypes)[i];
+    for(const auto pFldType : *pFldTypes)
+    {
+        // same ResId -> increment index
         if(pFldType->Which() == nResId)
         {
             if (!bUsed || IsUsed(*pFldType))
@@ -129,12 +127,11 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
     }
 
     const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
     sal_uInt16 nIdx = 0;
-    for( sal_uInt16 i = 0; i < nSize; ++i )
+    const SwFldTypes::size_type nSize = pFldTypes->size();
+    for( SwFldTypes::size_type i; i < nSize; ++i )
         // Gleiche ResId -> Index erhoehen
-        if( (*pFldTypes)[i]->Which() == nResId &&
-            nIdx++ == nFld )
+        if( (*pFldTypes)[i]->Which() == nResId && nIdx++ == nFld )
         {
             GetDoc()->getIDocumentFieldsAccess().RemoveFldType( i );
             return;
@@ -145,12 +142,12 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 {
     const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
+    const SwFldTypes::size_type nSize = pFldTypes->size();
     const CharClass& rCC = GetAppCharClass();
 
     OUString aTmp( rCC.lowercase( rStr ));
 
-    for(sal_uInt16 i = 0; i < nSize; ++i)
+    for(SwFldTypes::size_type i = 0; i < nSize; ++i)
     {
         // same ResId -> increment index
         SwFieldType* pFldType = (*pFldTypes)[i];
@@ -434,21 +431,18 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->size();
-    for(sal_uInt16 i = 0; i < nSize; ++i)
+    for(const auto pFldType : *pFldTypes)
     {
-        SwFieldType& rFldType = *((*pFldTypes)[i]);
-        sal_uInt16 nWhich = rFldType.Which();
-        if(IsUsed(rFldType))
+        if(IsUsed(*pFldType))
         {
-            switch(nWhich)
+            switch(pFldType->Which())
             {
                 case RES_DBFLD:
                 case RES_DBNEXTSETFLD:
                 case RES_DBNUMSETFLD:
                 case RES_DBSETNUMBERFLD:
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
                     SwFmtFld* pFld = aIter.First();
                     while(pFld)
                     {
