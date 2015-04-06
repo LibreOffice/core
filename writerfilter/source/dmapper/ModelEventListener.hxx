@@ -20,14 +20,14 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MODELEVENTLISTENER_HXX
 
 #include <com/sun/star/document/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace writerfilter {
 namespace dmapper{
 
 
 class ModelEventListener :
-    public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener >
+    public cppu::WeakImplHelper< ::com::sun::star::document::XEventListener >
 {
     bool m_bIndexes;
     bool m_bControls;

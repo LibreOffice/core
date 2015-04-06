@@ -83,9 +83,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
     mpParserState->incContextCount();
 }
 
-OOXMLFastContextHandler::OOXMLFastContextHandler
-(OOXMLFastContextHandler * pContext)
-: cppu::WeakImplHelper1<com::sun::star::xml::sax::XFastContextHandler>(),
+OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pContext)
+: cppu::WeakImplHelper<xml::sax::XFastContextHandler>(),
   mpParent(pContext),
   mId(0),
   mnDefine(0),
