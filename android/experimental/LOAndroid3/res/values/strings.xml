@@ -37,6 +37,7 @@
     <string name="action_bold">Bold</string>
     <string name="action_underline">Underline</string>
     <string name="action_italic">Italic</string>
+    <string name="action_strikeout">Strike Out</string>
     <string name="action_keyboard">Show keyboard</string>
     <string name="action_save">Save</string>
 

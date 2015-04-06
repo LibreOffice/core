@@ -16,6 +16,12 @@
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
+    <item android:id="@+id/action_strikeout"
+          android:title="@string/action_strikeout"
+          android:icon="@drawable/action_strikeout"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+
     <item android:id="@+id/action_underline"
           android:title="@string/action_underline"
           android:icon="@drawable/action_underline"

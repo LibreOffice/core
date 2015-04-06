@@ -85,6 +85,9 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
             case R.id.action_underline:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Underline"));
                 return true;
+            case R.id.action_strikeout:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:StrikeOut"));
+                return true;
             case R.id.action_keyboard:
                 showSoftKeyboard();
                 break;
@@ -92,7 +95,8 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                 mAbout.showAbout();
                 return true;
             case R.id.action_save:
-                Toast.makeText(this, "saving the document...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Saving the document...", Toast.LENGTH_SHORT).show();
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
                 return true;
             case R.id.action_parts:
                 mDrawerLayout.openDrawer(mDrawerList);
