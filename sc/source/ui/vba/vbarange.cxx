@@ -3557,17 +3557,18 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exc
     // around  ScTabView::MoveCursorArea(), thats the bit that calcutes
     // where the cursor should go )
     // Main problem with this method is the ultra hacky attempt to preserve
-    // the ActiveCell, there should be no need to go to these extreems
+    // the ActiveCell, there should be no need to go to these extremes
 
-    // Save ActiveCell pos ( to restore later )
+    // Save ActiveSheet/ActiveCell pos ( to restore later )
     uno::Any aDft;
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > sActiveSheet = xApplication->getActiveSheet();
     OUString sActiveCell = xApplication->getActiveCell()->Address(aDft, aDft, aDft, aDft, aDft );
 
     // position current cell upper left of this range
     Cells( uno::makeAny( (sal_Int32) 1 ), uno::makeAny( (sal_Int32) 1 ) )->Select();
 
-        uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
+    uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
 
     SfxViewFrame* pViewFrame = excel::getViewFrame( xModel );
     if ( pViewFrame )
@@ -3607,14 +3608,14 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exc
     // result is the ActiveCell
     OUString sMoved =    xApplication->getActiveCell()->Address(aDft, aDft, aDft, aDft, aDft );
 
-    // restore old ActiveCell
     uno::Any aVoid;
-
-    uno::Reference< excel::XRange > xOldActiveCell( xApplication->getActiveSheet()->Range( uno::makeAny( sActiveCell ), aVoid ), uno::UNO_QUERY_THROW );
-    xOldActiveCell->Select();
-
     uno::Reference< excel::XRange > resultCell;
     resultCell.set( xApplication->getActiveSheet()->Range( uno::makeAny( sMoved ), aVoid ), uno::UNO_QUERY_THROW );
+
+    // restore old ActiveCell
+    uno::Reference< excel::XRange > xOldActiveCell( sActiveSheet->Range( uno::makeAny( sActiveCell ), aVoid ), uno::UNO_QUERY_THROW );
+    xOldActiveCell->Select();
+
 
     // return result
     return resultCell;
