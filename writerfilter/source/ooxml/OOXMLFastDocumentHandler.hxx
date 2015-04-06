@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
@@ -34,9 +34,7 @@ namespace ooxml
 
 class OOXMLFastContextHandler;
 
-class OOXMLFastDocumentHandler:
-    public ::cppu::WeakImplHelper1<
-        css::xml::sax::XFastDocumentHandler>
+class OOXMLFastDocumentHandler : public cppu::WeakImplHelper<css::xml::sax::XFastDocumentHandler>
 {
 public:
     OOXMLFastDocumentHandler(
