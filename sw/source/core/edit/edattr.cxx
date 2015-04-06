@@ -543,15 +543,17 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
 
 static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
 {
-    sal_uInt16 nRet;
-       switch( nType )
+    switch( nType )
     {
-    case ::com::sun::star::i18n::ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
-    case ::com::sun::star::i18n::ScriptType::ASIAN:     nRet = SCRIPTTYPE_ASIAN;    break;
-    case ::com::sun::star::i18n::ScriptType::COMPLEX:   nRet = SCRIPTTYPE_COMPLEX;  break;
-    default: nRet = 0;
+        case ::com::sun::star::i18n::ScriptType::LATIN:
+            return SCRIPTTYPE_LATIN;
+        case ::com::sun::star::i18n::ScriptType::ASIAN:
+            return SCRIPTTYPE_ASIAN;
+        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+            return SCRIPTTYPE_COMPLEX;
+        default:
+            return 0;
     }
-    return nRet;
 }
 
 static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
