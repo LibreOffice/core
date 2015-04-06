@@ -57,25 +57,19 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
     }
     rBlks.SetBaseURL( sBase );
 
-    sal_uInt16 nRet;
-
     if( pOnlyTxt )
-        nRet = rBlks.PutText( rShortName, rName, *pOnlyTxt );
-    else
+        return rBlks.PutText( rShortName, rName, *pOnlyTxt );
+
+    rBlks.ClearDoc();
+    if( rBlks.BeginPutDoc( rShortName, rName ) )
     {
-        rBlks.ClearDoc();
-        if( rBlks.BeginPutDoc( rShortName, rName ) )
-        {
-            rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
-            _CopySelToDoc( pGDoc );
-            rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)0 );
-            nRet = rBlks.PutDoc();
-        }
-        else
-            nRet = (sal_uInt16) -1;
+        rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
+        _CopySelToDoc( pGDoc );
+        rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)0 );
+        return rBlks.PutDoc();
     }
 
-    return nRet;
+    return USHRT_MAX;
 }
 
 sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
