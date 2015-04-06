@@ -137,7 +137,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     {
         // Move order: from front to back, so that new entries are added at
         // first position, thus, deletion position stays the same
-        sal_uInt16 nDiff = rDelPos.GetIndex() < rInsPos.GetIndex() ? 0 : 1;
+        const sal_uLong nDiff = rDelPos.GetIndex() < rInsPos.GetIndex() ? 0 : 1;
 
         for( sal_uLong n = rDelPos.GetIndex(); nSz; n += nDiff, --nSz )
         {
@@ -443,11 +443,11 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             return false;
     }
 
-    sal_uInt16 nLevel = 0; // level counter
     sal_uLong nInsPos = 0; // counter for tmp array
 
     // array as a stack, storing all StartOfSelections
     SwSttNdPtrs aSttNdStack;
+    SwSttNdPtrs::size_type nLevel = 0; // level counter
 
     // set start index
     SwNodeIndex  aIdx( aIndex );
@@ -458,7 +458,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     SwNodeRange aOrigInsPos( aIdx, -1, aIdx ); // original insertion position
 
     // call DelFrms/MakeFrms for the upmost SectionNode
-    sal_uInt16 nSectNdCnt = 0;
+    int nSectNdCnt = 0;
     bool bSaveNewFrms = bNewFrms;
 
     // continue until everything has been moved
@@ -1072,7 +1072,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
  */
 void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 {
-    sal_uInt16 nLevel = 0; // level counter
+    int nLevel = 0; // level counter
     SwNode * pAktNode;
 
     sal_uLong nCnt = Count() - rIndex.GetIndex() - 1;
@@ -1729,7 +1729,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
     SwNodeIndex aInsPos( rIndex );
     SwNodeIndex aOrigInsPos( rIndex, -1 ); // original insertion position
-    sal_uInt16 nLevel = 0;                 // level counter
+    int nLevel = 0;                        // level counter
 
     for( sal_uLong nNodeCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
             nNodeCnt > 0; --nNodeCnt )
