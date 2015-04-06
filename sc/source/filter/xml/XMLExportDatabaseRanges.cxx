@@ -504,7 +504,8 @@ private:
             OUString aAddrStr;
             ScRangeStringConverter::GetStringFromRange(
                 aAddrStr, aAdvSource, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
+            if (!aAddrStr.isEmpty())
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
         }
 
         if (!aParam.bDuplicate)
