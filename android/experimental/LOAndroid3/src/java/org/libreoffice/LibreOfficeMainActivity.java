@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.libreoffice.overlay.TextCursorLayer;
 import org.mozilla.gecko.ZoomConstraints;
@@ -89,6 +90,9 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                 break;
             case R.id.action_about:
                 mAbout.showAbout();
+                return true;
+            case R.id.action_save:
+                Toast.makeText(this, "saving the document...", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_parts:
                 mDrawerLayout.openDrawer(mDrawerList);

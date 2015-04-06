@@ -28,11 +28,15 @@
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
-    <item android:id="@+id/action_about"
-        android:title="@string/action_about"
+    <item android:id="@+id/action_save"
+        android:title="@string/action_save"
         android:orderInCategory="100" />
 
     <item android:id="@+id/action_parts"
           android:title="@string/action_parts"
           android:orderInCategory="100" />
+
+    <item android:id="@+id/action_about"
+        android:title="@string/action_about"
+        android:orderInCategory="100" />
 </menu>
