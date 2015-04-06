@@ -169,7 +169,7 @@ class SwAutoFormat
     sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
 
     OUString DelLeadingBlanks(const OUString& rStr) const;
-    OUString& DelTrailingBlanks( OUString& rStr ) const;
+    OUString DelTrailingBlanks( const OUString& rStr ) const;
     sal_Int32 GetLeadingBlanks( const OUString& rStr ) const;
     sal_Int32 GetTrailingBlanks( const OUString& rStr ) const;
 
@@ -671,7 +671,7 @@ OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr ) const
     return rStr;
 }
 
-OUString& SwAutoFormat::DelTrailingBlanks( OUString& rStr ) const
+OUString SwAutoFormat::DelTrailingBlanks( const OUString& rStr ) const
 {
     sal_Int32 nL = rStr.getLength(), n = nL;
     if( !nL )
@@ -680,7 +680,7 @@ OUString& SwAutoFormat::DelTrailingBlanks( OUString& rStr ) const
     while( --n && IsSpace( rStr[ n ] )  )
         ;
     if( n+1 != nL ) // no Spaces
-        rStr = rStr.copy( 0, n+1 );
+        return rStr.copy( 0, n+1 );
     return rStr;
 }
 
@@ -2303,7 +2303,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( !bReplaceStyles )
                     break;
 
-                OUString sClrStr( DelLeadingBlanks(m_pCurTxtNd->GetTxt()) );
+                const OUString sClrStr( DelLeadingBlanks(m_pCurTxtNd->GetTxt()) );
 
                 if( sClrStr.isEmpty() )
                 {
@@ -2318,8 +2318,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     break;
 
                 m_bEmptyLine = false;
-                OUString sEndClrStr( sClrStr );
-                sal_Int32 nLen = DelTrailingBlanks( sEndClrStr ).getLength();
+                const OUString sEndClrStr( DelTrailingBlanks(sClrStr) );
+                const sal_Int32 nLen = sEndClrStr.getLength();
 
                 // not, then check if headline
                 if( ':' == sEndClrStr[ nLen - 1 ] )
