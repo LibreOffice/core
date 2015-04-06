@@ -29,9 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/objsh.hxx>
 
@@ -45,7 +43,7 @@ class SwFmt;
 class SwFlyFrmFmt;
 
 class BaseFrameProperties_Impl;
-class SwXFrame : public cppu::WeakImplHelper6
+class SwXFrame : public cppu::WeakImplHelper
 <
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::beans::XPropertySet,
@@ -158,7 +156,7 @@ public:
     static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject(SwFlyFrmFmt &rFmt);
 };
 
-typedef cppu::WeakImplHelper3
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::text::XTextFrame,
     ::com::sun::star::container::XEnumerationAccess,
@@ -241,7 +239,7 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 };
 
-typedef cppu::WeakImplHelper2
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::text::XTextContent,
     ::com::sun::star::document::XEventsSupplier
@@ -292,7 +290,7 @@ public:
 };
 
 class SwOLENode;
-typedef cppu::WeakImplHelper3
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::text::XTextContent,
     ::com::sun::star::document::XEmbeddedObjectSupplier2,
@@ -351,7 +349,7 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 };
 
-class SwXOLEListener : public cppu::WeakImplHelper1
+class SwXOLEListener : public cppu::WeakImplHelper
 <
     ::com::sun::star::util::XModifyListener
 >,

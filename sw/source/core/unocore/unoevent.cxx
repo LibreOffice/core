@@ -39,7 +39,6 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::PropertyValue;
-using ::cppu::WeakImplHelper2;
 
 // tables of allowed events for specific objects
 

@@ -28,7 +28,7 @@
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <vcl/scrbar.hxx>
@@ -136,7 +136,7 @@ public:
 };
 
 class SW_DLLPUBLIC SwAuthenticator :
-    public cppu::WeakImplHelper1< ::com::sun::star::mail::XAuthenticator>
+    public cppu::WeakImplHelper< ::com::sun::star::mail::XAuthenticator>
 {
     OUString m_aUserName;
     OUString m_aPassword;
@@ -156,7 +156,7 @@ public:
 };
 
 class SW_DLLPUBLIC SwConnectionContext :
-    public cppu::WeakImplHelper1< ::com::sun::star::uno::XCurrentContext >
+    public cppu::WeakImplHelper< ::com::sun::star::uno::XCurrentContext >
 {
     OUString     m_sMailServer;
     sal_Int16           m_nPort;

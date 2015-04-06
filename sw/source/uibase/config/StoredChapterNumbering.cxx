@@ -9,7 +9,7 @@
 
 #include <uinums.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -42,7 +42,7 @@ using namespace ::xmloff::token;
 namespace sw {
 
 class StoredChapterNumberingRules
-    : public ::cppu::WeakImplHelper2<container::XNamed,container::XIndexReplace>
+    : public ::cppu::WeakImplHelper<container::XNamed,container::XIndexReplace>
 {
 private:
     // TODO in case this ever becomes accessible via api need a invalidate

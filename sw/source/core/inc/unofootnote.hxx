@@ -27,7 +27,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unotext.hxx>
 
@@ -35,7 +35,7 @@ class SwDoc;
 class SwModify;
 class SwFmtFtn;
 
-typedef ::cppu::WeakImplHelper5
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet

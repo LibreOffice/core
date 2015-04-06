@@ -22,11 +22,12 @@
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include "wordvbahelper.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > FramesEnumeration_Base;
+typedef ::cppu::WeakImplHelper< container::XEnumeration > FramesEnumeration_Base;
 class FramesEnumeration : public FramesEnumeration_Base
 {
 private:

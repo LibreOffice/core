@@ -26,9 +26,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unobaseclass.hxx>
 
@@ -39,7 +37,7 @@ class SwField;
 class SwSetExpField;
 class SwTextAPIObject;
 
-typedef ::cppu::WeakImplHelper4
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::lang::XUnoTunnel
@@ -151,7 +149,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper5
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::text::XDependentTextField
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
@@ -288,7 +286,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::container::XEnumeration
 ,   ::com::sun::star::lang::XServiceInfo
 > SwXFieldEnumeration_Base;

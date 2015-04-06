@@ -25,7 +25,7 @@
 #include <ooo/vba/word/WdBookmarkSortBy.hpp>
 #include "vbarange.hxx"
 #include "wordvbahelper.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -46,7 +46,7 @@ public:
 };
 
 // Bookmarks use case-insensitive name lookup in MS Word.
-typedef ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess > BookmarkCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess > BookmarkCollectionHelper_BASE;
 class BookmarkCollectionHelper : public BookmarkCollectionHelper_BASE
 {
 private:

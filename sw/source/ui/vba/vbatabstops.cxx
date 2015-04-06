@@ -21,6 +21,7 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <ooo/vba/word/WdTabLeader.hpp>
 #include <ooo/vba/word/WdTabAlignment.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -37,7 +38,7 @@ static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaP
     xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
 }
 
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;
 
 class TabStopsEnumWrapper : public EnumerationHelper_BASE
 {

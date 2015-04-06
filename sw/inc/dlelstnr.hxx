@@ -25,7 +25,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
     properties) were made.
 */
 class SwLinguServiceEventListener :
-    public cppu::WeakImplHelper2
+    public cppu::WeakImplHelper
     <
         com::sun::star::linguistic2::XLinguServiceEventListener,
         com::sun::star::frame::XTerminateListener

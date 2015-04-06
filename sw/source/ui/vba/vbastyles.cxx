@@ -18,7 +18,7 @@
  */
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -157,7 +157,7 @@ static const MSOStyleNameTable aMSOStyleNameTable[] =
     { 0, 0, 0 }
 };
 
-typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
 
 class StyleCollectionHelper : public StyleCollectionHelper_BASE
 {

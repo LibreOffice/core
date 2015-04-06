@@ -31,9 +31,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/unoevent.hxx>
 class SwTextBlocks;
 class SwGlossaries;
@@ -51,7 +49,7 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
     SAL_CALL SwXAutoTextContainer_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & ) throw ( ::com::sun::star::uno::Exception );
 
-class SwXAutoTextContainer : public cppu::WeakImplHelper2
+class SwXAutoTextContainer : public cppu::WeakImplHelper
 <
     ::com::sun::star::text::XAutoTextContainer2,
     ::com::sun::star::lang::XServiceInfo
@@ -89,7 +87,7 @@ public:
 
 };
 
-class SwXAutoTextGroup : public cppu::WeakImplHelper6
+class SwXAutoTextGroup : public cppu::WeakImplHelper
 <
     ::com::sun::star::text::XAutoTextGroup,
     ::com::sun::star::beans::XPropertySet,
@@ -157,7 +155,7 @@ public:
 
 class SwXAutoTextEntry
         :public SfxListener
-        ,public cppu::WeakImplHelper5
+        ,public cppu::WeakImplHelper
         <
             ::com::sun::star::text::XAutoTextEntry,
             ::com::sun::star::lang::XServiceInfo,

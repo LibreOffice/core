@@ -18,12 +18,13 @@
  */
 #include "vbapanes.hxx"
 #include "vbapane.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 // I assume there is only one pane in Writer
-typedef ::cppu::WeakImplHelper1<container::XIndexAccess > PanesIndexAccess_Base;
+typedef ::cppu::WeakImplHelper<container::XIndexAccess > PanesIndexAccess_Base;
 class PanesIndexAccess : public PanesIndexAccess_Base
 {
 private:

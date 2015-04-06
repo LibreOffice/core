@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include <unotext.hxx>
@@ -108,7 +109,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XEnumerationAccess
 > SwXHeadFootText_Base;

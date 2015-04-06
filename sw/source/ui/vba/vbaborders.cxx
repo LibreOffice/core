@@ -21,7 +21,7 @@
 #include <ooo/vba/word/WdBorderType.hpp>
 #include <ooo/vba/word/WdLineStyle.hpp>
 #include <sal/macros.h>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangeBorders_Base;
+typedef ::cppu::WeakImplHelper<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Word iterates over the

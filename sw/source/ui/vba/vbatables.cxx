@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace css;
@@ -58,8 +59,8 @@ static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTab
     return false;
 }
 
-typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > EnumBase;
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XNameAccess > TableCollectionHelper_Base;
+typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumBase;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XNameAccess > TableCollectionHelper_Base;
 typedef std::vector< uno::Reference< text::XTextTable > > XTextTableVec;
 
 class TableCollectionHelper : public TableCollectionHelper_Base

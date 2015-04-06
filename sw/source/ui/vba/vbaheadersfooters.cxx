@@ -19,12 +19,13 @@
 #include "vbaheadersfooters.hxx"
 #include "vbaheaderfooter.hxx"
 #include <ooo/vba/word/WdHeaderFooterIndex.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 // I assume there is only one headersfooters in Writer
-typedef ::cppu::WeakImplHelper1<container::XIndexAccess > HeadersFootersIndexAccess_Base;
+typedef ::cppu::WeakImplHelper<container::XIndexAccess > HeadersFootersIndexAccess_Base;
 class HeadersFootersIndexAccess : public HeadersFootersIndexAccess_Base
 {
 private:

@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 namespace vcl { class Window; }
@@ -44,7 +44,7 @@ namespace accessibility {
 const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
 
 class SwAccessibleContext :
-    public ::cppu::WeakImplHelper5<
+    public ::cppu::WeakImplHelper<
                 ::com::sun::star::accessibility::XAccessible,
                 ::com::sun::star::accessibility::XAccessibleContext,
                 ::com::sun::star::accessibility::XAccessibleComponent,

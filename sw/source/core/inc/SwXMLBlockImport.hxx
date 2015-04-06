@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace css::xml::sax;
 using namespace xmloff::token;
@@ -93,7 +94,7 @@ enum SwXMLTextBlockToken : sal_Int32
 };
 
 class SwXMLTextBlockTokenHandler : public
-        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >,
+        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
         public sax_fastparser::FastTokenHandlerBase
 {
 public:
@@ -122,7 +123,7 @@ enum SwXMLBlockListToken : sal_Int32
 };
 
 class SwXMLBlockListTokenHandler : public
-        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >,
+        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
         public sax_fastparser::FastTokenHandlerBase
 {
 public:

@@ -49,6 +49,7 @@
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <swevent.hxx>
 #include <unomailmerge.hxx>
 #include <swdll.hxx>
@@ -184,7 +185,7 @@ static bool LoadFromURL_impl(
 
 namespace
 {
-    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >,
+    class DelayedFileDeletion : public ::cppu::WeakImplHelper< util::XCloseListener >,
                                 private boost::noncopyable
     {
     protected:
