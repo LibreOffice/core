@@ -524,11 +524,6 @@ bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
     return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
 }
 
-void OGenericUnoController::InvalidateFeature(const OUString& _rURLPath, const Reference< XStatusListener > & _xListener, bool _bForceBroadcast)
-{
-    ImplInvalidateFeature( m_aSupportedFeatures[ _rURLPath ].nFeatureId, _xListener, _bForceBroadcast );
-}
-
 void OGenericUnoController::InvalidateFeature_Impl()
 {
 #ifdef DBG_UTIL

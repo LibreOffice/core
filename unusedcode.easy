@@ -179,7 +179,6 @@ dbaccess::StorageInputStream::close()
 dbaui::OConnectionLineAccess::contains(com::sun::star::awt::Point const&)
 dbaui::OConnectionLineAccess::isEditable() const
 dbaui::OConnectionLineAccess::isShowing()
-dbaui::OGenericUnoController::InvalidateFeature(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> const&, bool)
 dbaui::OJoinDesignViewAccess::isEditable() const
 dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
 dbaui::OQueryViewSwitch::setReadOnly(bool)

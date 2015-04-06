@@ -412,10 +412,9 @@ namespace dbaui
         // shows a error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);
 
-        // if xListener is NULL the change will be forwarded to all listeners to the given ::com::sun::star::util::URL
-        // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
-        // if there is an ::com::sun::star::util::URL translation for the id ('handle') the preceding InvalidateFeature is used.
+        // if there is an ::com::sun::star::util::URL translation for the id
+        // ('handle') then if if xListener is NULL the change will be forwarded
+        // to all listeners to the given ::com::sun::star::util::URL
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
         void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
