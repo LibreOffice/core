@@ -570,6 +570,7 @@ namespace xmloff { namespace token {
         TOKEN( "database-source-query",           XML_DATABASE_SOURCE_QUERY ),
         TOKEN( "database-source-sql",             XML_DATABASE_SOURCE_SQL ),
         TOKEN( "database-source-table",           XML_DATABASE_SOURCE_TABLE ),
+        TOKEN( "database-table-name",             XML_DATABASE_TABLE_NAME ),
         TOKEN( "date",                            XML_DATE ),
         TOKEN( "date-is",                         XML_DATE_IS ),
         TOKEN( "date-adjust",                     XML_DATE_ADJUST ),
