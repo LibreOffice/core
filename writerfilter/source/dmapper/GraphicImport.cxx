@@ -44,7 +44,7 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/string.hxx>
@@ -72,7 +72,7 @@ namespace dmapper
 using namespace std;
 using namespace css;
 
-class XInputStreamHelper : public cppu::WeakImplHelper1<io::XInputStream>
+class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
 {
     const sal_uInt8* m_pBuffer;
     const sal_Int32  m_nLength;

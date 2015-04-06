@@ -26,7 +26,7 @@
 #include <set>
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase.hxx"
 #include "com/sun/star/xml/sax/XFastContextHandler.hpp"
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySetImpl.hxx"
@@ -42,7 +42,7 @@ namespace ooxml
 {
 
 
-class OOXMLFastContextHandler: public ::cppu::WeakImplHelper1<css::xml::sax::XFastContextHandler>
+class OOXMLFastContextHandler: public ::cppu::WeakImplHelper<css::xml::sax::XFastContextHandler>
 {
 public:
     typedef std::shared_ptr<OOXMLFastContextHandler> Pointer_t;
