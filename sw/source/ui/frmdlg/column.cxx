@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     {
         const SwSection* pCurrSection = rWrtShell.GetCurrSection();
         const SwSectionFmt* pFmt = pCurrSection->GetFmt();
-        const sal_uInt16 nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
+        const size_t nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
         SwSectionData aData(*pCurrSection);
         rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
     }

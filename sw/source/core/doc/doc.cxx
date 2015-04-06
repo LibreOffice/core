@@ -1378,7 +1378,7 @@ bool SwDoc::RemoveInvisibleContent()
                 SwSectionData aSectionData( *pSect );
                 aSectionData.SetCondition( OUString() );
                 aSectionData.SetHidden( false );
-                UpdateSection( static_cast<sal_uInt16>(n), aSectionData );
+                UpdateSection( n, aSectionData );
             }
         }
 

@@ -99,10 +99,10 @@ public:
         this->erase( begin() + aStartIdx, begin() + aEndIdx);
     }
 
-    sal_uInt16 GetPos(Value const& p) const
+    size_t GetPos(Value const& p) const
     {
         const_iterator const it = std::find(begin(), end(), p);
-        return it == end() ? USHRT_MAX : it - begin();
+        return it == end() ? SIZE_MAX : it - begin();
     }
 
     bool Contains(Value const& p) const
@@ -126,7 +126,7 @@ public:
     virtual Value GetFmt(size_t idx) const SAL_OVERRIDE
         { return std::vector<Value>::operator[](idx); }
 
-    inline sal_uInt16 GetPos(const SwFmt *p) const
+    inline size_t GetPos(const SwFmt *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
     inline bool Contains(const SwFmt *p) const {
         Value p2 = dynamic_cast<Value>(const_cast<SwFmt*>(p));

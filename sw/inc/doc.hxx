@@ -1375,7 +1375,7 @@ public:
     const SwSectionFmts& GetSections() const { return *mpSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
     void DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes = false );
-    void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
+    void UpdateSection(size_t const nSect, SwSectionData &,
             SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
     OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
 

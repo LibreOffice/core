@@ -73,8 +73,8 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
 {
     if( !pNewFmt )
     {
-        const sal_uInt16 nCount = rSh.GetSectionFmtCount();
-        for(sal_uInt16 i=0;i<nCount;i++)
+        const size_t nCount = rSh.GetSectionFmtCount();
+        for (size_t i = 0; i<nCount; i++)
         {
             SectionType eTmpType;
             const SwSectionFmt* pFmt = &rSh.GetSectionFmt(i);
@@ -142,7 +142,7 @@ private:
     SwFmtNoBalancedColumns  m_Balance;
     SvxFrameDirectionItem   m_FrmDirItem;
     SvxLRSpaceItem          m_LRSpaceItem;
-    sal_uInt16                  m_nArrPos;
+    size_t                  m_nArrPos;
     // shows, if maybe textcontent is in the region
     bool                    m_bContent  : 1;
     // for multiselection, mark at first, then work with TreeListBox!
@@ -150,7 +150,7 @@ private:
     uno::Sequence<sal_Int8> m_TempPasswd;
 
 public:
-    SectRepr(sal_uInt16 nPos, SwSection& rSect);
+    SectRepr(size_t nPos, SwSection& rSect);
 
     bool    operator< (const SectRepr& rSectRef) const
             { return m_nArrPos <  rSectRef.GetArrPos(); }
@@ -164,7 +164,7 @@ public:
     SvxFrameDirectionItem&  GetFrmDir()         { return m_FrmDirItem; }
     SvxLRSpaceItem&         GetLRSpace()        { return m_LRSpaceItem; }
 
-    sal_uInt16              GetArrPos() const { return m_nArrPos; }
+    size_t              GetArrPos() const { return m_nArrPos; }
     OUString            GetFile() const;
     OUString            GetSubRegion() const;
     void                SetFile(OUString const& rFile);
@@ -182,7 +182,7 @@ public:
         { m_TempPasswd = rPasswd; }
 };
 
-SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
+SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     : m_SectionData( rSect )
     , m_Brush( RES_BACKGROUND )
     , m_FrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
@@ -443,8 +443,8 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
     SvTreeListEntry* pSelEntry = 0;
     if (!pFmt)
     {
-        const sal_uInt16 nCount=rSh.GetSectionFmtCount();
-        for ( sal_uInt16 n=0; n < nCount; n++ )
+        const size_t nCount=rSh.GetSectionFmtCount();
+        for ( size_t n = 0; n < nCount; n++ )
         {
             SectionType eTmpType;
             if( !( pFmt = &rSh.GetSectionFmt(n))->GetParent() &&
@@ -503,15 +503,15 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
     }
 }
 
-sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
+size_t SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 {
-    const sal_uInt16 nCount=rSh.GetSectionFmtCount();
-    for (sal_uInt16 i=0;i<nCount;i++)
-        if (pFmt==&rSh.GetSectionFmt(i))
+    const size_t nCount=rSh.GetSectionFmtCount();
+    for ( size_t i = 0; i < nCount; i++ )
+        if ( pFmt == &rSh.GetSectionFmt(i) )
             return i;
 
     OSL_FAIL("SectionFormat not on the list" );
-    return USHRT_MAX;
+    return SIZE_MAX;
 }
 
 SwEditRegionDlg::~SwEditRegionDlg( )
@@ -784,8 +784,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
         {
             pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
         }
-        sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
-        if( USHRT_MAX != nNewPos )
+        size_t nNewPos = rDocFmts.GetPos(pFmt);
+        if ( SIZE_MAX != nNewPos )
         {
             boost::scoped_ptr<SfxItemSet> pSet(pFmt->GetAttrSet().Clone( false ));
             if( pFmt->GetCol() != pRepr->GetCol() )
@@ -819,8 +819,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     for (SectReprArr::reverse_iterator aI = aSectReprArr.rbegin(), aEnd = aSectReprArr.rend(); aI != aEnd; ++aI)
     {
         SwSectionFmt* pFmt = aOrigArray[ aI->GetArrPos() ];
-        const sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
-        if( USHRT_MAX != nNewPos )
+        const size_t nNewPos = rDocFmts.GetPos( pFmt );
+        if( SIZE_MAX != nNewPos )
             rSh.DelSectionFmt( nNewPos );
     }
 

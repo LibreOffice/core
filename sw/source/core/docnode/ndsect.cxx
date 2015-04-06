@@ -606,8 +606,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
     getIDocumentState().SetModified();
 }
 
-void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
-        SfxItemSet const*const pAttr, bool const bPreventLinkUpdate)
+void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
+        SfxItemSet const*const pAttr, bool const bPreventLinkUpdate )
 {
     SwSectionFmt* pFmt = (*mpSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();

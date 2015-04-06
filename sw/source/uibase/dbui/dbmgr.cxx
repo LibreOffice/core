@@ -782,8 +782,8 @@ static void lcl_CopyFollowPageDesc(
 static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 {
     //reset all links of the sections of synchronized labels
-    sal_uInt16 nSections = rWorkShell.GetSectionFmtCount();
-    for( sal_uInt16 nSection = 0; nSection < nSections; ++nSection )
+    size_t nSections = rWorkShell.GetSectionFmtCount();
+    for (size_t nSection = 0; nSection < nSections; ++nSection)
     {
         SwSectionData aSectionData( *rWorkShell.GetSectionFmt( nSection ).GetSection() );
         if( aSectionData.GetType() == FILE_LINK_SECTION )
