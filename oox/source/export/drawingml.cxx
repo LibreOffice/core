@@ -1644,6 +1644,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     OUString aGraphicURL;
     sal_Int16 nBulletRelSize = 0;
     sal_Int16 nStartWith = 1;
+    sal_Int32 nBulletColor = 0;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1667,6 +1668,10 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                     bSDot = true;
                 else if( *static_cast<OUString const *>(pValue) == ")")
                     bPBehind = true;
+            }
+            else if(aPropName == "BulletColor")
+            {
+                nBulletColor = *( (sal_Int32*)pValue );
             }
             else if ( aPropName == "BulletChar" )
             {
@@ -1726,6 +1731,13 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     }
     else
     {
+        if(nBulletColor)
+        {
+               mpFS->startElementNS( XML_a, XML_buClr, FSEND );
+               WriteColor( nBulletColor );
+               mpFS->endElementNS( XML_a, XML_buClr );
+        }
+
         if( nBulletRelSize && nBulletRelSize != 100 )
             mpFS->singleElementNS( XML_a, XML_buSzPct,
                                    XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );

@@ -99,6 +99,7 @@ public:
     void testCellLeftAndRightMargin();
     void testRightToLeftParaghraph();
     void testTableCellBorder();
+    void testBulletColor();
 
 #if !defined WNT
     void testBnc822341();
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testCellLeftAndRightMargin);
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTableCellBorder);
+    CPPUNIT_TEST(testBulletColor);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
@@ -878,6 +880,33 @@ void SdExportTest::testRightToLeftParaghraph()
 
     xDocShRef->DoClose();
 }
+
+void SdExportTest::testBulletColor()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bulletColor.pptx"), PPTX );
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+}
+
 #if !defined WNT
 
 void SdExportTest::testBnc822341()
