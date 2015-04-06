@@ -863,8 +863,8 @@ sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
     {
         if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTxtFrm() )
         {
-            sal_Int32 nActPos = bActPos && aStart == rPtIdx ?
-                pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;
+            const sal_Int32 nActPos = bActPos && aStart == rPtIdx ?
+                pPam->GetPoint()->nContent.GetIndex() : COMPLETE_STRING;
             nRet = nRet + static_cast<SwTxtFrm*>(pCntFrm)->GetLineCount( nActPos );
         }
     }
