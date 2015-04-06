@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_d904f3c7",
+        "filename": "scaddins/source/datefunc/datefunc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T21:49:25Z",
+      "side": 1,
+      "message": "Please leave the * with the variable type and not with the variable name. Have a look at the surrounding code to see how it is used already.",
+      "revId": "ce87ef713483392ed109d7f977473fea008b2a7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_3969678c",
+        "filename": "scaddins/source/datefunc/datefunc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T21:49:25Z",
+      "side": 1,
+      "message": "Where did you get the idea to throw a const char*?",
+      "revId": "ce87ef713483392ed109d7f977473fea008b2a7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
