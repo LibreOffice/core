@@ -61,9 +61,8 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // then all linked areas on the topmost level
     SwDoc* pMyDoc = GetDoc();
     const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
-    sal_uInt16 n;
 
-    for( n = rSectFmts.size(); n; )
+    for( auto n = rSectFmts.size(); n; )
     {
         const SwSection* pSect = rSectFmts[ --n ]->GetGlobalDocSection();
         if( pSect )
@@ -90,7 +89,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // and finally add the dummies (other text)
     SwNode* pNd;
     sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
-    for( n = 0; n < rArr.size(); ++n )
+    for( SwGlblDocContents::size_type n = 0; n < rArr.size(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
         // Search from StartPos until rNew.DocPos for a content node.
