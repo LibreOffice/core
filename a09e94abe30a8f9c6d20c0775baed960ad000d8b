@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_99251b5e",
+        "filename": "scaddins/source/pricing/black_scholes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 0,
+      "message": "Why do you remove these namespaces?",
+      "revId": "a09e94abe30a8f9c6d20c0775baed960ad000d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

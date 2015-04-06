@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_390087aa",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 1,
+      "message": "should be pInit instead of init",
+      "revId": "211eb628cb055ee6cf6af97aafb92273b61b6154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_b913370d",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 1,
+      "message": "We are using the { on the next line.",
+      "revId": "211eb628cb055ee6cf6af97aafb92273b61b6154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_59f9c3c7",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 1,
+      "message": "throwing a const char* is a really bad idea.",
+      "revId": "211eb628cb055ee6cf6af97aafb92273b61b6154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_79f6ffd8",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 1,
+      "message": "it should be throw; and not throw s; for rethrowing the same exception.",
+      "revId": "211eb628cb055ee6cf6af97aafb92273b61b6154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_19034bba",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-04-06T22:01:25Z",
+      "side": 1,
+      "message": "{ style and throwing const char*",
+      "revId": "211eb628cb055ee6cf6af97aafb92273b61b6154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
