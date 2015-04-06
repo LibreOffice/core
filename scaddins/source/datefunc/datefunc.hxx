@@ -23,6 +23,7 @@
 #define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
 #include <string.h>
+#include <vector>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -35,62 +36,8 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-
-
-#include "../scaList.hxx"
-
-
-class ScaStringList : protected ScaList
-{
-public:
-    inline                      ScaStringList() : ScaList() {};
-    virtual                     ~ScaStringList();
-
-                                using ScaList::Count;
-
-    inline const OUString* Get( sal_uInt32 nIndex ) const;
-
-    inline OUString*     First();
-    inline OUString*     Next();
-
-    using ScaList::Append;
-    inline void                 Append( OUString* pNew );
-    inline void                 Append( const OUString& rNew );
-};
-
-
-inline const OUString* ScaStringList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const OUString* >( ScaList::GetObject( nIndex ) );
-}
-
-inline OUString* ScaStringList::First()
-{
-    return static_cast< OUString* >( ScaList::First() );
-}
-
-inline OUString* ScaStringList::Next()
-{
-    return static_cast< OUString* >( ScaList::Next() );
-}
-
-inline void ScaStringList::Append( OUString* pNew )
-{
-    ScaList::Append( pNew );
-}
-
-inline void ScaStringList::Append( const OUString& rNew )
-{
-    ScaList::Append( new OUString( rNew ) );
-}
-
-
-class ScaResId : public ResId
-{
-public:
-                                ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
-};
-
+css::uno::Reference< css::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 class ScaResStringLoader : public Resource
 {
@@ -104,15 +51,6 @@ public:
 
 };
 
-
-inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStr( ScaResId( nStrId, rResMgr ) )
-{
-    FreeResource();
-}
-
-
 class ScaResStringArrLoader : public Resource
 {
 private:
@@ -124,18 +62,10 @@ public:
     inline const ResStringArray& GetStringArray() const { return aStrArray; }
 };
 
-inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStrArray( ScaResId( nArrayId, rResMgr ) )
-{
-    FreeResource();
-}
-
-
 class ScaResPublisher : public Resource
 {
 public:
-    inline                      ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
+    inline                      ScaResPublisher( const ResId& rResId ) : Resource( rResId ) {}
 
     inline bool             IsAvailableRes( const ResId& rResId ) const
                                     { return Resource::IsAvailableRes( rResId ); }
@@ -170,182 +100,152 @@ struct ScaFuncDataBase
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
-    bool                    bDouble;            // name already exist in Calc
-    bool                    bWithOpt;           // first parameter is internal
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 };
 
 class ScaFuncData
 {
 private:
-    OUString             aIntName;           // internal name (get***)
+    OUString                    aIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // num of parameters
-    ScaStringList               aCompList;          // list of all valid names
+    std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
-    bool                    bDouble;            // name already exist in Calc
-    bool                    bWithOpt;           // first parameter is internal
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 
 public:
-                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
-    virtual                     ~ScaFuncData();
+                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr, int RID_DEFFUNCTION_NAMES);
+    virtual                     ~ScaFuncData()  = default;
 
     inline sal_uInt16           GetUINameID() const     { return nUINameID; }
     inline sal_uInt16           GetDescrID() const      { return nDescrID; }
     inline ScaCategory          GetCategory() const     { return eCat; }
-    inline bool             IsDouble() const        { return bDouble; }
-    inline bool             HasIntParam() const     { return bWithOpt; }
+    inline bool                 IsDouble() const        { return bDouble; }
+    inline bool                 HasIntParam() const     { return bWithOpt; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline bool             Is( const OUString& rCompare ) const
+    inline bool                 Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
-    inline const ScaStringList& GetCompNameList() const { return aCompList; }
+    inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
+std::vector<ScaFuncData> *InitScaFuncDataList(ResMgr& rResMgr, std::vector<ScaFuncData> *init);
 
-class ScaFuncDataList : private ScaList
+const ScaFuncData Get( const std::vector<ScaFuncData>* SFDList, const OUString& rProgrammaticName )
 {
-    OUString             aLastName;
-    sal_uInt32                  nLast;
-
-public:
-                                ScaFuncDataList( ResMgr& rResMgr );
-    virtual                     ~ScaFuncDataList();
-
-                                using ScaList::Count;
-
-    inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
-    inline ScaFuncData*         First();
-    inline ScaFuncData*         Next();
-
-    using ScaList::Append;
-    inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
-};
-
-
-inline const ScaFuncData* ScaFuncDataList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const ScaFuncData* >( ScaList::GetObject( nIndex ) );
+    for( const ScaFuncData pCurr:(*SFDList ))
+    {
+        if( pCurr.Is( rProgrammaticName ) ) return pCurr;
+    }
+    throw "UNKNOWNFUNC";
 }
 
-inline ScaFuncData* ScaFuncDataList::First()
-{
-    return static_cast< ScaFuncData* >( ScaList::First() );
-}
-
-inline ScaFuncData* ScaFuncDataList::Next()
-{
-    return static_cast< ScaFuncData* >( ScaList::Next() );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-
-
-// THE AddIn class for date functions
+// AddIn class for date functions
 
 class ScaDateAddIn : public ::cppu::WeakImplHelper6<
-                                ::com::sun::star::sheet::XAddIn,
-                                ::com::sun::star::sheet::XCompatibilityNames,
-                                ::com::sun::star::sheet::addin::XDateFunctions,
-                                ::com::sun::star::sheet::addin::XMiscFunctions,
-                                ::com::sun::star::lang::XServiceName,
-                                ::com::sun::star::lang::XServiceInfo >
+                                css::sheet::XAddIn,
+                                css::sheet::XCompatibilityNames,
+                                css::sheet::addin::XDateFunctions,
+                                css::sheet::addin::XMiscFunctions,
+                                css::lang::XServiceName,
+                                css::lang::XServiceInfo >
 {
 private:
-    ::com::sun::star::lang::Locale  aFuncLoc;
-    ::com::sun::star::lang::Locale* pDefLocales;
-    ResMgr*                     pResMgr;
-    ScaFuncDataList*            pFuncDataList;
+    css::lang::Locale      aFuncLoc;
+    css::lang::Locale*     pDefLocales;
+    ResMgr*                             pResMgr;
+    std::vector<ScaFuncData>*           pFuncDataList;
 
 
     void                        InitDefLocales();
-    const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nIndex );
-    ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException );
+    const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
+    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException );
     void                        InitData();
 
-    OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException );
-    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( css::uno::RuntimeException );
+    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
 
 public:
                                 ScaDateAddIn();
     virtual                     ~ScaDateAddIn();
 
     static OUString      getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
                                 // XCompatibilityNames
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::lang::Locale SAL_CALL getLocale() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
                                 // XServiceName
-    virtual OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //  methods from own interfaces start here
 
                                 // XDateFunctions
     virtual sal_Int32 SAL_CALL  getDiffWeeks(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getDiffMonths(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getDiffYears(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getIsLeapYear(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getDaysInMonth(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getDaysInYear(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL  getWeeksInYear(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
                                 // XMiscFunctions
     virtual OUString SAL_CALL getRot13(
                                     const OUString& aSrcText )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX

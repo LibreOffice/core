@@ -27,8 +27,8 @@
 #ifndef INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
 #define INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
 
-
 #include <string.h>
+#include <vector>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -40,63 +40,11 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-#include "../scaList.hxx"
 
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
 
-namespace sca {
-namespace pricing {
-
-class ScaStringList : protected ScaList
-{
-public:
-    inline                      ScaStringList() : ScaList() {};
-    virtual                     ~ScaStringList();
-
-                                using ScaList::Count;
-
-    inline const OUString* Get( sal_uInt32 nIndex ) const;
-
-    inline OUString*     First();
-    inline OUString*     Next();
-
-    using ScaList::Append;
-    inline void                 Append( OUString* pNew );
-    inline void                 Append( const OUString& rNew );
-};
-
-
-inline const OUString* ScaStringList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const OUString* >( ScaList::GetObject( nIndex ) );
-}
-
-inline OUString* ScaStringList::First()
-{
-    return static_cast< OUString* >( ScaList::First() );
-}
-
-inline OUString* ScaStringList::Next()
-{
-    return static_cast< OUString* >( ScaList::Next() );
-}
-
-inline void ScaStringList::Append( OUString* pNew )
-{
-    ScaList::Append( pNew );
-}
-
-inline void ScaStringList::Append( const OUString& rNew )
-{
-    ScaList::Append( new OUString( rNew ) );
-}
-
-
-class ScaResId : public ResId
-{
-public:
-                                ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
-};
+css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
 class ScaResStringLoader : public Resource
@@ -111,15 +59,6 @@ public:
 
 };
 
-
-inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStr( ScaResId( nStrId, rResMgr ) )
-{
-    FreeResource();
-}
-
-
 class ScaResStringArrLoader : public Resource
 {
 private:
@@ -131,18 +70,10 @@ public:
     inline const ResStringArray& GetStringArray() const { return aStrArray; }
 };
 
-inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStrArray( ScaResId( nArrayId, rResMgr ) )
-{
-    FreeResource();
-}
-
-
 class ScaResPublisher : public Resource
 {
 public:
-    inline                      ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
+    inline                      ScaResPublisher( const ResId& rResId ) : Resource( rResId ) {}
 
     inline bool             IsAvailableRes( const ResId& rResId ) const
                                     { return Resource::IsAvailableRes( rResId ); }
@@ -177,87 +108,56 @@ struct ScaFuncDataBase
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
-    bool                    bDouble;            // name already exist in Calc
-    bool                    bWithOpt;           // first parameter is internal
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 };
 
 class ScaFuncData
 {
 private:
-    OUString             aIntName;           // internal name (get***)
+    OUString                    aIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // num of parameters
-    ScaStringList               aCompList;          // list of all valid names
+    std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
-    bool                    bDouble;            // name already exist in Calc
-    bool                    bWithOpt;           // first parameter is internal
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 
 public:
-                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
-    virtual                     ~ScaFuncData();
+                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr, int RID_DEFFUNCTION_NAMES);
+    virtual                     ~ScaFuncData()  = default;
 
     inline sal_uInt16           GetUINameID() const     { return nUINameID; }
     inline sal_uInt16           GetDescrID() const      { return nDescrID; }
     inline ScaCategory          GetCategory() const     { return eCat; }
-    inline bool             IsDouble() const        { return bDouble; }
-    inline bool             HasIntParam() const     { return bWithOpt; }
+    inline bool                 IsDouble() const        { return bDouble; }
+    inline bool                 HasIntParam() const     { return bWithOpt; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline bool             Is( const OUString& rCompare ) const
+    inline bool                 Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
-    inline const ScaStringList& GetCompNameList() const { return aCompList; }
+    inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
+std::vector<ScaFuncData> *InitScaFuncDataList(ResMgr& rResMgr, std::vector<ScaFuncData> *init);
 
-class ScaFuncDataList : private ScaList
+const ScaFuncData Get( const std::vector<ScaFuncData>* SFDList, const OUString& rProgrammaticName )
 {
-    OUString             aLastName;
-    sal_uInt32                  nLast;
-
-public:
-                                ScaFuncDataList( ResMgr& rResMgr );
-    virtual                     ~ScaFuncDataList();
-
-                                using ScaList::Count;
-
-    inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
-    inline ScaFuncData*         First();
-    inline ScaFuncData*         Next();
-
-    using ScaList::Append;
-    inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
-};
-
-
-inline const ScaFuncData* ScaFuncDataList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const ScaFuncData* >( ScaList::GetObject( nIndex ) );
+    for( const ScaFuncData pCurr:(*SFDList ))
+    {
+        if( pCurr.Is( rProgrammaticName ) ) return pCurr;
+    }
+    throw "UNKNOWNFUNC";
 }
-
-inline ScaFuncData* ScaFuncDataList::First()
-{
-    return static_cast< ScaFuncData* >( ScaList::First() );
-}
-
-inline ScaFuncData* ScaFuncDataList::Next()
-{
-    return static_cast< ScaFuncData* >( ScaList::Next() );
-}
-
-} // namespace pricing
-} // namespace sca
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
 // AddIn class for pricing functions
 
-class ScaPricingAddIn : public ::cppu::WeakImplHelper5<
+class ScaPricingAddIn : //public Scaddin,
+                        public ::cppu::WeakImplHelper5<
                                 css::sheet::XAddIn,
                                 css::sheet::XCompatibilityNames,
                                 css::sheet::addin::XPricingFunctions,
@@ -265,10 +165,10 @@ class ScaPricingAddIn : public ::cppu::WeakImplHelper5<
                                 css::lang::XServiceInfo >
 {
 private:
-    css::lang::Locale  aFuncLoc;
-    css::lang::Locale* pDefLocales;
+    css::lang::Locale           aFuncLoc;
+    css::lang::Locale*          pDefLocales;
     ResMgr*                     pResMgr;
-    sca::pricing::ScaFuncDataList*            pFuncDataList;
+    std::vector<ScaFuncData>*   pFuncDataList;
 
 
     void                        InitDefLocales();
