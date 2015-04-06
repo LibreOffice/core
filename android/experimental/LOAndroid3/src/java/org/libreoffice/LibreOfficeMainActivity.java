@@ -78,6 +78,12 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
             case R.id.action_bold:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
                 return true;
+            case R.id.action_italic:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Italic"));
+                return true;
+            case R.id.action_underline:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Underline"));
+                return true;
             case R.id.action_keyboard:
                 showSoftKeyboard();
                 break;

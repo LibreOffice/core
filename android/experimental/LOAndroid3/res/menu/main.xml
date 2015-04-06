@@ -6,7 +6,19 @@
 
     <item android:id="@+id/action_bold"
           android:title="@string/action_bold"
-          android:icon="@drawable/ic_format_bold_grey600_24dp"
+          android:icon="@drawable/action_bold"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+
+    <item android:id="@+id/action_italic"
+          android:title="@string/action_italic"
+          android:icon="@drawable/action_italic"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+
+    <item android:id="@+id/action_underline"
+          android:title="@string/action_underline"
+          android:icon="@drawable/action_underline"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
