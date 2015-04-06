@@ -121,6 +121,27 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
 
+namespace {
+
+bool supportsText(XmlShapeType eShapeType)
+{
+        return eShapeType != XmlShapeTypePresChartShape &&
+        eShapeType != XmlShapeTypePresOLE2Shape &&
+        eShapeType != XmlShapeTypeDrawSheetShape &&
+        eShapeType != XmlShapeTypePresSheetShape &&
+        eShapeType != XmlShapeTypeDraw3DSceneObject &&
+        eShapeType != XmlShapeTypeDraw3DCubeObject &&
+        eShapeType != XmlShapeTypeDraw3DSphereObject &&
+        eShapeType != XmlShapeTypeDraw3DLatheObject &&
+        eShapeType != XmlShapeTypeDraw3DExtrudeObject &&
+        eShapeType != XmlShapeTypeDrawPageShape &&
+        eShapeType != XmlShapeTypePresPageShape &&
+        eShapeType != XmlShapeTypeDrawGroupShape;
+
+}
+
+}
+
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   mrExport( rExp ),
@@ -267,18 +288,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // #i118485# enabled XmlShapeTypeDrawChartShape and XmlShapeTypeDrawOLE2Shape
     // to have text
     const bool bObjSupportsText =
-        aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
-        aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawSheetShape &&
-        aShapeInfo.meShapeType != XmlShapeTypePresSheetShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DSceneObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DCubeObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DSphereObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DLatheObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDraw3DExtrudeObject &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape &&
-        aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawGroupShape;
+        supportsText(aShapeInfo.meShapeType);
 
     const bool bObjSupportsStyle =
         aShapeInfo.meShapeType != XmlShapeTypeDrawGroupShape;
@@ -2790,7 +2800,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 if( !sClassId.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
 
-                if(eShapeType != XmlShapeTypePresChartShape && eShapeType != XmlShapeTypeDrawChartShape)
+                if(supportsText(eShapeType))
                 {
                     // #i118485# Add text export, the draw OLE shape allows text now
                     // fdo#58571 chart objects don't allow text:p
