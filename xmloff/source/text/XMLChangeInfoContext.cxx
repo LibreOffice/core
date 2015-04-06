@@ -73,7 +73,8 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
             pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                             rLocalName, sDateTimeBuffer);
     }
-    else if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+    else if ( ( XML_NAMESPACE_TEXT == nPrefix ||
+                XML_NAMESPACE_LO_EXT == nPrefix ) &&
          IsXMLToken( rLocalName, XML_P )       )
     {
         pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,

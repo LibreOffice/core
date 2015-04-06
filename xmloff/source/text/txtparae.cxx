@@ -1651,7 +1651,8 @@ void XMLTextParagraphExport::exportText(
         const Reference < XText > & rText,
         bool bAutoStyles,
         bool bIsProgress,
-        bool bExportParagraph )
+        bool bExportParagraph,
+        TextPNS eExtensionNS)
 {
     if( bAutoStyles )
         GetExport().GetShapeExport(); // make sure the graphics styles family
@@ -1702,7 +1703,7 @@ void XMLTextParagraphExport::exportText(
     if( !bAutoStyles && (pRedlineExport != NULL) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bIsProgress, bExportParagraph, 0, bExportLevels );
+                                  bIsProgress, bExportParagraph, 0, bExportLevels, eExtensionNS );
     if( !bAutoStyles && (pRedlineExport != NULL) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
@@ -1712,7 +1713,8 @@ void XMLTextParagraphExport::exportText(
         const Reference < XTextSection > & rBaseSection,
         bool bAutoStyles,
         bool bIsProgress,
-        bool bExportParagraph )
+        bool bExportParagraph,
+        TextPNS /*eExtensionNS*/)
 {
     if( bAutoStyles )
         GetExport().GetShapeExport(); // make sure the graphics styles family
@@ -1745,7 +1747,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
         bool bIsProgress,
         bool bExportParagraph,
         const Reference < XPropertySet > *pRangePropSet,
-        bool bExportLevels )
+        bool bExportLevels, TextPNS eExtensionNS )
 {
     DBG_ASSERT( rContEnum.is(), "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
@@ -1829,7 +1831,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
             }
             else
                 exportParagraph( xTxtCntnt, bAutoStyles, bIsProgress,
-                                 bExportParagraph, aPropSetHelper );
+                                 bExportParagraph, aPropSetHelper, eExtensionNS );
             bHasContent = true;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
@@ -1907,7 +1909,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
 void XMLTextParagraphExport::exportParagraph(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool bIsProgress, bool bExportParagraph,
-        MultiPropertySetHelper& rPropSetHelper)
+        MultiPropertySetHelper& rPropSetHelper, TextPNS eExtensionNS)
 {
     sal_Int16 nOutlineLevel = -1;
 
@@ -2153,7 +2155,7 @@ void XMLTextParagraphExport::exportParagraph(
         bool bPrevCharIsSpace = true;
         enum XMLTokenEnum eElem =
             0 < nOutlineLevel ? XML_H : XML_P;
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
+        SvXMLElementExport aElem( GetExport(), eExtensionNS == TextPNS::EXTENSION ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_TEXT, eElem,
                                   true, false );
         if( bHasContentEnum )
             bPrevCharIsSpace = !exportTextContentEnumeration(
@@ -3401,7 +3403,7 @@ void XMLTextParagraphExport::exportTextRange(
 }
 
 void XMLTextParagraphExport::exportText( const OUString& rText,
-                                           bool& rPrevCharIsSpace )
+                                           bool& rPrevCharIsSpace, TextPNS /*eExtensionNS*/ )
 {
     sal_Int32 nExpStartPos = 0;
     sal_Int32 nEndPos = rText.getLength();

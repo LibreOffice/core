@@ -1492,14 +1492,14 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
     return bIsEmpty;
 }
 
-void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xShape )
+void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xShape, TextPNS eExtensionNS )
 {
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
     if( xText.is() )
     {
         uno::Reference< container::XEnumerationAccess > xEnumAccess( xShape, uno::UNO_QUERY );
         if( xEnumAccess.is() && xEnumAccess->hasElements() )
-            mrExport.GetTextParagraphExport()->exportText( xText );
+            mrExport.GetTextParagraphExport()->exportText( xText, false, true, eExtensionNS );
     }
 }
 
@@ -2804,7 +2804,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     // #i118485# Add text export, the draw OLE shape allows text now
                     // fdo#58571 chart objects don't allow text:p
-                    ImpExportText( xShape );
+                    ImpExportText( xShape, TextPNS::EXTENSION );
                 }
 
                 if(!bExportEmbedded)

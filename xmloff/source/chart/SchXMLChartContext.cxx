@@ -1213,7 +1213,8 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    if( nPrefix == XML_NAMESPACE_TEXT &&
+    if( (nPrefix == XML_NAMESPACE_TEXT ||
+                nPrefix == XML_NAMESPACE_LO_EXT) &&
         IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, mrTitle );
