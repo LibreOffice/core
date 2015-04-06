@@ -3046,12 +3046,12 @@ void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
         }
         else
         {
-sal_uInt16 aTableSplitBoxSetRange[] = {
-    RES_LR_SPACE,       RES_UL_SPACE,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_PROTECT,        RES_PROTECT,
-    RES_VERT_ORIENT,    RES_VERT_ORIENT,
-    0 };
+            sal_uInt16 aTableSplitBoxSetRange[] = {
+                RES_LR_SPACE,       RES_UL_SPACE,
+                RES_BACKGROUND,     RES_SHADOW,
+                RES_PROTECT,        RES_PROTECT,
+                RES_VERT_ORIENT,    RES_VERT_ORIENT,
+                0 };
 
             SfxItemSet aTmpSet( pFmt->GetDoc()->GetAttrPool(),
                                 aTableSplitBoxSetRange );
