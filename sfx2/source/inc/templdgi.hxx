@@ -46,9 +46,9 @@ class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
 class SfxDockingWindow;
 
-namespace com { namespace sun { namespace star { namespace frame { class XModuleManager2; } } } }
-
-// class DropListBox_Impl ------------------------------------------------
+namespace com { namespace sun { namespace star { namespace frame {
+    class XModuleManager2;
+}}}}
 
 class DropListBox_Impl : public SvTreeListBox
 {
@@ -300,7 +300,6 @@ public:
     DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
     virtual ~DropToolBox_Impl();
 };
-// class SfxTemplateDialog_Impl ------------------------------------------
 
 class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
 {
