@@ -348,7 +348,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         SwFrm* pNxt;
         SwLayoutFrm* pUp;
         if( (pNd = rNds[nStt])->IsCntntNode() )
-            for( sal_uInt16 n = 0; n < pUpperFrms->size(); )
+            for( std::vector<SwFrm*>::size_type n = 0; n < pUpperFrms->size(); )
             {
                 pNxt = (*pUpperFrms)[n++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
@@ -363,7 +363,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                 (*pUpperFrms)[n-2] = pNew;
             }
         else if( pNd->IsTableNode() )
-            for( sal_uInt16 x = 0; x < pUpperFrms->size(); )
+            for( std::vector<SwFrm*>::size_type x = 0; x < pUpperFrms->size(); )
             {
                 pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
@@ -382,7 +382,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         else if( pNd->IsSectionNode() )
         {
             nStt = pNd->EndOfSectionIndex();
-            for( sal_uInt16 x = 0; x < pUpperFrms->size(); )
+            for( std::vector<SwFrm*>::size_type x = 0; x < pUpperFrms->size(); )
             {
                 pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
@@ -396,7 +396,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         }
         bFirst = false;
     }
-    for( sal_uInt16 x = 0; x < pUpperFrms->size(); ++x )
+    for( std::vector<SwFrm*>::size_type x = 0; x < pUpperFrms->size(); ++x )
     {
         SwFrm* pTmp = (*pUpperFrms)[++x];
         if( pTmp->IsFtnFrm() )
