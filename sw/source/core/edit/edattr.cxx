@@ -54,10 +54,9 @@
 
 // if selection is bigger as max nodes or more than max selections
 // => no attributes
-const sal_uInt16& getMaxLookup()
+static inline sal_uInt16 getMaxLookup()
 {
-    static const sal_uInt16 nMaxLookup = 1000;
-    return nMaxLookup;
+    return 1000;
 }
 
 bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
