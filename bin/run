@@ -29,7 +29,7 @@ if uname | grep -i CYGWIN >/dev/null; then
     echo "setting search path to: ${PATH}"
     echo "execing: ${exedir}/$1"
 
-    exec ${LO_TRACE} "${exedir}"/$@
+    exec ${LO_TRACE} "${exedir}/$@"
 
 elif [ $(uname) = Darwin ]; then
 
@@ -51,7 +51,7 @@ elif [ $(uname) = Darwin ]; then
     echo "setting search path to: ${DYLD_LIBRARY_PATH}"
     echo "execing: ${exedir}/$1"
 
-    exec ${LO_TRACE} "${exedir}"/$@
+    exec ${LO_TRACE} "${exedir}/$@"
 
 else
 
@@ -73,7 +73,7 @@ else
     echo "setting search path to: ${LD_LIBRARY_PATH}"
     echo "execing: ${exedir}/$1"
 
-    exec ${LO_TRACE} "${exedir}"/$@
+    exec ${LO_TRACE} "${exedir}/$@"
 
 fi
 
