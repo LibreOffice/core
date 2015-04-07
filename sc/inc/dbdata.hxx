@@ -53,6 +53,7 @@ private:
     SCROW           nEndRow;
     bool            bByRow;
     bool            bHasHeader;
+    bool            bHasTotals;
     bool            bDoSize;
     bool            bKeepFmt;
     bool            bStripData;
@@ -97,6 +98,8 @@ public:
     void        SetByRow(bool bByR)             { bByRow = bByR; }
     bool        HasHeader() const               { return bHasHeader; }
     void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
+    bool        HasTotals() const               { return bHasTotals; }
+    void        SetTotals(bool bTotals)         { bHasTotals = bTotals; }
     void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
     sal_uInt16  GetIndex() const                { return nIndex; }
     bool        IsDoSize() const                { return bDoSize; }

@@ -65,6 +65,7 @@ ScDBData::ScDBData( const OUString& rName,
     nEndRow     (nRow2),
     bByRow      (bByR),
     bHasHeader  (bHasH),
+    bHasTotals  (false),
     bDoSize     (false),
     bKeepFmt    (false),
     bStripData  (false),
@@ -92,6 +93,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     nEndRow             (rData.nEndRow),
     bByRow              (rData.bByRow),
     bHasHeader          (rData.bHasHeader),
+    bHasTotals          (rData.bHasTotals),
     bDoSize             (rData.bDoSize),
     bKeepFmt            (rData.bKeepFmt),
     bStripData          (rData.bStripData),
@@ -119,6 +121,7 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     nEndRow             (rData.nEndRow),
     bByRow              (rData.bByRow),
     bHasHeader          (rData.bHasHeader),
+    bHasTotals          (rData.bHasTotals),
     bDoSize             (rData.bDoSize),
     bKeepFmt            (rData.bKeepFmt),
     bStripData          (rData.bStripData),
@@ -148,6 +151,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nEndRow             = rData.nEndRow;
     bByRow              = rData.bByRow;
     bHasHeader          = rData.bHasHeader;
+    bHasTotals          = rData.bHasTotals;
     bDoSize             = rData.bDoSize;
     bKeepFmt            = rData.bKeepFmt;
     bStripData          = rData.bStripData;
@@ -328,6 +332,7 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
     rSortParam.nRow2 = nEndRow;
     rSortParam.bByRow = bByRow;
     rSortParam.bHasHeader = bHasHeader;
+    /* TODO: add Totals to ScSortParam? */
 }
 
 void ScDBData::SetSortParam( const ScSortParam& rSortParam )
@@ -346,6 +351,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
     rQueryParam.nTab  = nTable;
     rQueryParam.bByRow = bByRow;
     rQueryParam.bHasHeader = bHasHeader;
+    /* TODO: add Totals to ScQueryParam? */
 }
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
