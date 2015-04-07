@@ -100,8 +100,8 @@ public:
     virtual         ~SvLBoxString();
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*) SAL_OVERRIDE;
-    OUString   GetText() const { return maText; }
-    OUString GetExtendText() const { return OUString(); }
+    OUString        GetText() const { return maText; }
+    static OUString GetExtendText() { return OUString(); }
     void            SetText( const OUString& rText ) { maText = rText; }
 
     virtual void Paint(

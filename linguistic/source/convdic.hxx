@@ -102,7 +102,7 @@ protected:
     ConvDic(const ConvDic &);
     ConvDic & operator = (const ConvDic &);
 
-    ConvMap::iterator   GetEntry( ConvMap &rMap, const OUString &rFirstText, const OUString &rSecondText );
+    static ConvMap::iterator GetEntry( ConvMap &rMap, const OUString &rFirstText, const OUString &rSecondText );
     void    Load();
     void    Save();
 

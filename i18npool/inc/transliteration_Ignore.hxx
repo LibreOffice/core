@@ -57,7 +57,7 @@ public:
         throw(com::sun::star::uno::RuntimeException,
             com::sun::star::i18n::MultipleCharsOutputException, std::exception) SAL_OVERRIDE;
 
-        com::sun::star::uno::Sequence< OUString > SAL_CALL
+        static com::sun::star::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 )
         throw(com::sun::star::uno::RuntimeException);
 

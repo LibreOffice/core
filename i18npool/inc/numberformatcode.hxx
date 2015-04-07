@@ -65,7 +65,7 @@ private:
     static OUString mapElementTypeShortToString(sal_Int16 formatType);
     static sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);
-    sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
+    static sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
     void createLocaleDataObject();
 };
 

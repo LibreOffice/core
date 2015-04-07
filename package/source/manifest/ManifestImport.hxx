@@ -117,7 +117,7 @@ protected:
     OUString PushNameAndNamespaces( const OUString& aName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
                                            StringHashMap& o_aConvertedAttribs );
-    OUString ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces );
+    static OUString ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces );
     OUString ConvertName( const OUString& aName );
 
 public:

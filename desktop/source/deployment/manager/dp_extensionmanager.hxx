@@ -233,7 +233,7 @@ private:
     bool isUserDisabled(OUString const & identifier,
                         OUString const & filename);
 
-    bool isUserDisabled(
+    static bool isUserDisabled(
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(
@@ -243,7 +243,7 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
-    void activateExtension(
+    static void activateExtension(
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
         bool bUserDisabled, bool bStartup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
