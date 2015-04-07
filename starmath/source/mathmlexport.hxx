@@ -44,7 +44,7 @@ class SmXMLExportWrapper
     bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 public:
-    SmXMLExportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
+    explicit SmXMLExportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef), bFlat(true) {}
 
     bool Export(SfxMedium &rMedium);

@@ -18,7 +18,7 @@
 class SmWordExportBase
 {
 public:
-    SmWordExportBase( const SmNode* pIn );
+    explicit SmWordExportBase( const SmNode* pIn );
     virtual ~SmWordExportBase();
 protected:
     void HandleNode( const SmNode* pNode, int nLevel );

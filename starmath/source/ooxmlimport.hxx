@@ -19,7 +19,7 @@
 class SmOoxmlImport
 {
 public:
-    SmOoxmlImport( oox::formulaimport::XmlStream& stream );
+    explicit SmOoxmlImport( oox::formulaimport::XmlStream& stream );
     OUString ConvertToStarMath();
 private:
     OUString handleStream();

@@ -80,7 +80,7 @@ protected:
     OUString        GetAccessibleText_Impl();
 
 public:
-    SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
+    explicit SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
     virtual ~SmGraphicAccessible();
 
     SmGraphicWindow *   GetWin()    { return pWin; }
@@ -167,7 +167,7 @@ class SmViewForwarder :
     SmViewForwarder & operator = ( const SmViewForwarder & ) SAL_DELETED_FUNCTION;
 
 public:
-                        SmViewForwarder( SmEditAccessible &rAcc );
+    explicit SmViewForwarder( SmEditAccessible &rAcc );
     virtual             ~SmViewForwarder();
 
     virtual bool        IsValid() const SAL_OVERRIDE;
@@ -255,7 +255,7 @@ class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
     SmEditViewForwarder & operator = ( const SmEditViewForwarder & ) SAL_DELETED_FUNCTION;
 
 public:
-                        SmEditViewForwarder( SmEditAccessible& rAcc );
+    explicit SmEditViewForwarder( SmEditAccessible& rAcc );
     virtual             ~SmEditViewForwarder();
 
     virtual bool        IsValid() const SAL_OVERRIDE;
@@ -322,7 +322,7 @@ class SmEditAccessible :
     SmEditAccessible & operator = ( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
 
 public:
-    SmEditAccessible( SmEditWindow *pEditWin );
+    explicit SmEditAccessible( SmEditWindow *pEditWin );
     virtual ~SmEditAccessible();
 
     ::accessibility::AccessibleTextHelper *   GetTextHelper() { return pTextHelper; }

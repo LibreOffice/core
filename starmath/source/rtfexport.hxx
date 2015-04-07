@@ -20,7 +20,7 @@
 class SmRtfExport : public SmWordExportBase
 {
 public:
-    SmRtfExport(const SmNode* pIn);
+    explicit SmRtfExport(const SmNode* pIn);
     bool ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
 private:
     virtual void HandleVerticalStack(const SmNode* pNode, int nLevel) SAL_OVERRIDE;

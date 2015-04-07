@@ -50,7 +50,7 @@ struct SmFontFormat
     sal_Int16       nItalic;
 
     SmFontFormat();
-    SmFontFormat( const vcl::Font &rFont );
+    explicit SmFontFormat( const vcl::Font &rFont );
 
     const vcl::Font GetFont() const;
     bool            operator == ( const SmFontFormat &rFntFmt ) const;
