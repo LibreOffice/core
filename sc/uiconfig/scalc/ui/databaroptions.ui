@@ -322,7 +322,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkGrid" id="grid3">
+                      <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -406,14 +406,13 @@
               </packing>
             </child>
             <child>
-
               <object class="GtkFrame" id="frame4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment3">
+                  <object class="GtkAlignment" id="alignment4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
@@ -427,13 +426,13 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label10">
+                          <object class="GtkLabel" id="label12">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Minimum bar length (%):</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">minLength</property>
+                            <property name="mnemonic_widget">min_length</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -441,13 +440,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label11">
+                          <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Maximum bar length (%):</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">maxLength</property>
+                            <property name="mnemonic_widget">max_length</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -481,7 +480,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="label12">
+                  <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Bar lengths</property>
@@ -491,7 +490,6 @@
                   </object>
                 </child>
               </object>
-
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
