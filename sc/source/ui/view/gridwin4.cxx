@@ -971,15 +971,18 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
             -fTilePosXPixel, -fTilePosYPixel, nStartCol, nStartRow, nEndCol, nEndRow,
             fPPTX, fPPTY);
 
-    // create a temporary SdrPaintWindow to avoid warnings
-    SdrPaintWindow aTemporaryPaintWindow(*pViewData->GetScDrawView(), rDevice);
-    SdrPageView* pSdrPageView = pViewData->GetScDrawView()->GetSdrPageView();
-    pSdrPageView->AddPaintWindowToPageView(aTemporaryPaintWindow);
+    // setup the SdrPage so that drawinglayer works correctly
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    boost::scoped_ptr<FmFormView> pDrawView;
+    if (pModel)
+    {
+        pDrawView.reset(new FmFormView(pModel, &rDevice));
+        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+        aOutputData.SetDrawView( pDrawView.get() );
+    }
 
     // draw the content
     DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
-
-    pSdrPageView->RemovePaintWindowFromPageView(aTemporaryPaintWindow);
 }
 
 void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
