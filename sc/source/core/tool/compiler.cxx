@@ -4800,7 +4800,10 @@ bool ScCompiler::HandleTableRef()
                 break;
             case ScTableRefToken::HEADERS:
                 {
-                    aRange.aEnd.SetRow( aRange.aStart.Row());
+                    if (pDBData->HasHeader())
+                        aRange.aEnd.SetRow( aRange.aStart.Row());
+                    else
+                        bAddRange = false;
                     bForwardToClose = true;
                 }
                 break;
@@ -4808,9 +4811,11 @@ bool ScCompiler::HandleTableRef()
                 {
                     if (pDBData->HasHeader())
                         aRange.aStart.IncRow();
-                    /* TODO: this assumes totals to be present, they need to
-                     * be implemented at the table. */
-                    if (aRange.aEnd.Row() - aRange.aStart.Row() >= 1)
+                }
+                // fallthru
+            case ScTableRefToken::HEADERS_DATA:
+                {
+                    if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
                     {
@@ -4823,14 +4828,31 @@ bool ScCompiler::HandleTableRef()
                 break;
             case ScTableRefToken::TOTALS:
                 {
-                    aRange.aStart.SetRow( aRange.aEnd.Row());
+                    if (pDBData->HasTotals())
+                        aRange.aStart.SetRow( aRange.aEnd.Row());
+                    else
+                        bAddRange = false;
                     bForwardToClose = true;
                 }
                 break;
-            default:
-                /* TODO: implement all other cases. */
+            case ScTableRefToken::DATA_TOTALS:
+                {
+                    if (pDBData->HasHeader())
+                        aRange.aStart.IncRow();
+                    if (aRange.aEnd.Row() < aRange.aStart.Row())
+                    {
+                        /* TODO: add RefData with deleted rows to generate
+                         * #REF! error? */
+                        bAddRange = false;
+                    }
+                    bForwardToClose = true;
+                }
+                break;
+            case ScTableRefToken::THIS_ROW:
+                /* TODO: implement this. */
                 SetError(errUnknownToken);
                 bAddRange = false;
+                break;
         }
         if (bAddRange)
         {
