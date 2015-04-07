@@ -111,7 +111,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
         OUString const * pEventName = static_cast<OUString const *>(pE->GetUserData());
         delete pEventName;
         pE->SetUserData((void*)0);
-        pE = rListBox.NextSibling( pE );
+        pE = SvTreeListBox::NextSibling( pE );
     }
 }
 

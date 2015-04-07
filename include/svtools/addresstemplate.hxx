@@ -113,7 +113,7 @@ namespace svt
 
         // implementations
         void    implScrollFields(sal_Int32 _nPos, bool _bAdjustFocus, bool _bAdjustScrollbar);
-        void    implSelectField(ListBox* _pBox, const OUString& _rText);
+        static void implSelectField(ListBox* _pBox, const OUString& _rText);
 
         void    initalizeListBox(ListBox* _pList);
         void    resetTables();

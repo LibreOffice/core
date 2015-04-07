@@ -143,7 +143,7 @@ public:
     virtual             ~SvLBoxItem();
     virtual sal_uInt16 GetType() const = 0;
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const;
+    static const Size&  GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
@@ -348,8 +348,8 @@ public:
     SvTreeListEntry*    Last() const { return pModel->Last(); }
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
-    SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
+    static SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry );
+    static SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry );
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
@@ -456,7 +456,7 @@ public:
     void            SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
     sal_Int8        GetDragOptions() const { return nDragOptions; }
 
-    SvTreeListBox*         GetSourceView() const;
+    static SvTreeListBox*    GetSourceView();
 
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
@@ -632,8 +632,8 @@ public:
     void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
-    const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry ) const;
-    const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry ) const;
+    static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
+    static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
     void            SetCheckButtonHdl( const Link& rLink )  { aCheckButtonHdl=rLink; }
     Link            GetCheckButtonHdl() const { return aCheckButtonHdl; }

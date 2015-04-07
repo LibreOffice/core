@@ -91,8 +91,8 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl )
         return 0;
 
     SvTreeListEntry *pEntry = mpList->FirstSelected();
-    OUString aTabStr = mpList->GetEntryText(pEntry, 0);
-    OUString aPosStr = mpList->GetEntryText(pEntry, 1);
+    OUString aTabStr = SvTabListBox::GetEntryText(pEntry, 0);
+    OUString aPosStr = SvTabListBox::GetEntryText(pEntry, 1);
 
     SCTAB nTab = -1;
     if (!mpDoc->GetTable(aTabStr, nTab))

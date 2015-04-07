@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if(pSelect)
     {
-        const OUString sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        const OUString sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
         if (sCommand.isEmpty())
             return 0;
 
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
                         xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
                 uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
                 xRowProperties->setPropertyValue("DataSourceName",
-                        makeAny(m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1)));
+                        makeAny(SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1)));
                 xRowProperties->setPropertyValue("Command", makeAny(sCommand));
                 xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
                 xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
@@ -473,7 +473,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
     AddressUserData_Impl* pUserData = 0;
     if(pSelect)
     {
-        const OUString sTable(pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1));
+        const OUString sTable(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1));
         if(sTable.isEmpty())
         {
             pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
@@ -503,12 +503,12 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
         else
         {
             //otherwise set the selected db-data
-            pThis->m_aDBData.sDataSource = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
-            pThis->m_aDBData.sCommand = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+            pThis->m_aDBData.sDataSource = SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1);
+            pThis->m_aDBData.sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
             pThis->m_pOK->Enable(true);
         }
-        if(pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1) == pThis->m_sConnecting)
+        if(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1) == pThis->m_sConnecting)
            pThis->m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
     }
     pThis->m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
@@ -531,7 +531,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
         uno::Reference<XCompletedConnection> xComplConnection;
         if(!pUserData->xConnection.is())
         {
-            m_aDBData.sDataSource = m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
+            m_aDBData.sDataSource = SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1);
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
             pUserData->xSource = uno::Reference<XDataSource>(xComplConnection, UNO_QUERY);
 
@@ -563,7 +563,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             {
                 //now call the table select dialog - if more than one table exists
                 boost::scoped_ptr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
-                const OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+                const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
                 if(RET_OK == pDlg->Execute())
@@ -604,7 +604,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             else
                 m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
         }
-        const OUString sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        const OUString sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
         m_pOK->Enable(pSelect && !sCommand.isEmpty());
         m_pFilterPB->Enable( pUserData->xConnection.is() && !sCommand.isEmpty() );
         m_pTablePB->Enable( pUserData->nTableAndQueryCount > 1 );
@@ -625,7 +625,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         //only call the table select dialog if tables have not been searched for or there
         //are more than 1
-        const OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
             DetectTablesAndQueries(pSelect, (pButton != 0) || sTable.isEmpty());

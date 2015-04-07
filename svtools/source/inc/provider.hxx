@@ -53,12 +53,12 @@ protected:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadGraphicObject( const OUString& rResourceURL ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadResource( const OUString& rResourceURL ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rBitmap ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL ) const;
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadGraphicObject( const OUString& rResourceURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadResource( const OUString& rResourceURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rBitmap );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
 };
 
 }

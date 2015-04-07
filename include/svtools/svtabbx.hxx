@@ -94,7 +94,7 @@ public:
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
-    OUString         GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
+    static OUString  GetEntryText( SvTreeListEntry*, sal_uInt16 nCol );
     OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
     void             SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol=0xffff);
@@ -143,7 +143,7 @@ public:
     virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
-    bool            IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
+    static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL ) SAL_OVERRIDE;

@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
     //the entry image indicates whether the path is write protected
     Image aEntryImage;
     if(pEntry)
-        aEntryImage = pPathBox->GetCollapsedEntryBmp( pEntry );
+        aEntryImage = SvTreeListBox::GetCollapsedEntryBmp( pEntry );
     bool bEnable = !aEntryImage;
     while ( pEntry && ( nSelCount < 2 ) )
     {
@@ -542,7 +542,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
         sWritable = pPathImpl->sWritablePath;
     }
 
-    if(pEntry && !(!((OptHeaderTabListBox*)pPathBox)->GetCollapsedEntryBmp(pEntry)))
+    if(pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
         return 0;
 
     if ( IsMultiPath_Impl( nPos ) )
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
             sPath += sWritable;
             pMultiDlg->SetPath( sPath );
 
-            OUString sPathName = pPathBox->GetEntryText( pEntry, 0 );
+            OUString sPathName = SvTabListBox::GetEntryText( pEntry, 0 );
             OUString sNewTitle( pImpl->m_sMultiPathDlg );
             sNewTitle = sNewTitle.replaceFirst( VAR_ONE, sPathName );
             pMultiDlg->SetTitle( sNewTitle );

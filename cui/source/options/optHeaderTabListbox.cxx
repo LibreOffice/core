@@ -46,7 +46,7 @@ void OptLBoxString_Impl::Paint(
     vcl::Font aOldFont( rDev.GetFont() );
     vcl::Font aFont( aOldFont );
     //detect readonly state by asking for a valid Image
-    if(pEntry && !(!static_cast<OptHeaderTabListBox&>(rDev).GetCollapsedEntryBmp(pEntry)))
+    if(pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
         aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
     rDev.SetFont( aFont );
     rDev.DrawText( rPos, GetText() );

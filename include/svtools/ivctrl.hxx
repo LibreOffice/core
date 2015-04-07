@@ -242,12 +242,12 @@ protected:
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    void                DrawEntryImage(
+    static void         DrawEntryImage(
                             SvxIconChoiceCtrlEntry* pEntry,
                             const Point& rPos,
                             OutputDevice& rDev );
 
-    OUString            GetEntryText(
+    static OUString      GetEntryText(
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bInplaceEdit );
 

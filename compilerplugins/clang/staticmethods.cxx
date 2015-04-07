@@ -133,8 +133,13 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (startsWith(getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()), SRCDIR "/include/svl")) {
         return true;
     }
-    // another one of those classes that has static data and some kind of weird reference-counting trick in it's constructor
-    if (aParentName == "LinguOptions") {
+    // classes that have static data and some kind of weird reference-counting trick in it's constructor
+    if (aParentName == "LinguOptions" || aParentName == "svtools::EditableExtendedColorConfig"
+        || aParentName == "svtools::ExtendedColorConfig" || aParentName == "SvtMiscOptions"
+        || aParentName == "SvtAccessibilityOptions" || aParentName == "svtools::ColorConfig"
+        || aParentName == "SvtOptionsDrawinglayer" || aParentName == "SvtMenuOptions"
+        || aParentName == "SvtToolPanelOptions" || aParentName == "SvtSlideSorterBarOptions")
+    {
         return true;
     }
 
