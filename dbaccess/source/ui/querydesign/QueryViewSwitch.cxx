@@ -64,16 +64,6 @@ void OQueryViewSwitch::initialize()
     m_pDesignView->initialize();
 }
 
-void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
-{
-    m_pTextView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
-    m_pDesignView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
-
-    // just for completeness: there is no space left, we occupied it all ...
-    _rPlayground.SetPos( _rPlayground.BottomRight() );
-    _rPlayground.SetSize( Size( 0, 0 ) );
-}
-
 bool OQueryViewSwitch::checkStatement()
 {
     if(m_pTextView->IsVisible())
@@ -86,14 +76,6 @@ OUString OQueryViewSwitch::getStatement()
     if(m_pTextView->IsVisible())
         return m_pTextView->getStatement();
     return m_pDesignView->getStatement();
-}
-
-void OQueryViewSwitch::setReadOnly(bool _bReadOnly)
-{
-    if(m_pTextView->IsVisible())
-        m_pTextView->setReadOnly(_bReadOnly);
-    else
-        m_pDesignView->setReadOnly(_bReadOnly);
 }
 
 void OQueryViewSwitch::clear()

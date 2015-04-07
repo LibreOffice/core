@@ -180,7 +180,6 @@ dbaui::OConnectionLineAccess::contains(com::sun::star::awt::Point const&)
 dbaui::OConnectionLineAccess::isEditable() const
 dbaui::OConnectionLineAccess::isShowing()
 dbaui::OJoinDesignViewAccess::isEditable() const
-dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
 dbaui::OQueryViewSwitch::setReadOnly(bool)
 dbaui::OTableRowView::SetUpdatable(bool)
 dbaui::OTableWindowAccess::isEditable() const

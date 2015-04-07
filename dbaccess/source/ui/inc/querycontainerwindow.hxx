@@ -77,8 +77,6 @@ namespace dbaui
         void     setSlotEnabled( sal_Int32 _nSlotId, bool _bEnable )    { m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
         void     setNoneVisbleRow(sal_Int32 _nRows)                         { m_pViewSwitch->setNoneVisbleRow( _nRows); }
 
-        void setReadOnly( bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
-
         bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
         OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }

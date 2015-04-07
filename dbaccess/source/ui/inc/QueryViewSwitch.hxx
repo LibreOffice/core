@@ -49,8 +49,6 @@ namespace dbaui
         void paste();
         // clears the whole query
         void clear();
-        // set the view readonly or not
-        void setReadOnly(bool _bReadOnly);
         // check if the statement is correct when not returning false
         bool checkStatement();
         // set the statement for representation
@@ -83,9 +81,6 @@ namespace dbaui
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
-    protected:
-        // return the Rectangle where I can paint myself
-        void resizeDocumentView(Rectangle& rRect);
 
     private:
         void    impl_forceSQLView();
