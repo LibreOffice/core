@@ -933,7 +933,9 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_HYPERLINK_CLICKED:
     {
         GError* pError = NULL;
+#if GTK_CHECK_VERSION(2,14,0)
         gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
+#endif
     }
     break;
     default:
