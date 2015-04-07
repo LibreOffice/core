@@ -3497,7 +3497,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     }
 
     sal_Unicode cInsert = '\x0';
-    bool bRet = false;
+    bool bParaMark = false;
 
     if ( 0xc != nWCharVal )
         bFirstParaOfPage = false;
@@ -3516,7 +3516,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0xe:
             // if there is only one column word treats a column break like a pagebreak.
             if (maSectionManager.CurrentSectionColCount() < 2)
-                bRet = HandlePageBreakChar();
+                bParaMark = HandlePageBreakChar();
             else if (!nInTable)
             {
                 // Always insert a txtnode for a column break, e.g. ##
@@ -3528,7 +3528,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0x7:
             bNewParaEnd = true;
-            TabCellEnd();       // Table cell end (query flags!)
+            if (pPlcxMan->GetPapPLCF()->Where() == nCpOfs+nPosCp+1)
+                TabCellEnd();       // Table cell/row end
+            else
+                bParaMark = true;
             break;
         case 0xf:
             if( !bSpec )        // "Satellite"
@@ -3555,7 +3558,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             cInsert = '\xa';    // Hard NewLine
             break;
         case 0xc:
-            bRet = HandlePageBreakChar();
+            bParaMark = HandlePageBreakChar();
             break;
         case 0x1e:              // Non-breaking hyphen
             rDoc.getIDocumentContentOperations().InsertString( *pPaM, OUString(CHAR_HARDHYPHEN) );
@@ -3625,7 +3628,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 Read_GrafLayer( nPosCp );
             break;
         case 0xd:
-            bNewParaEnd = bRet = true;
+            bNewParaEnd = bParaMark = true;
             if (nInTable > 1)
             {
                 /*
@@ -3647,13 +3650,13 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     if (nData & 0x2) // Might be how it works
                     {
                         TabCellEnd();
-                        bRet = false;
+                        bParaMark = false;
                     }
                 }
                 else if (bWasTabCellEnd)
                 {
                     TabCellEnd();
-                    bRet = false;
+                    bParaMark = false;
                 }
             }
 
@@ -3679,7 +3682,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     }
     if (!maApos.back()) // a para end in apo doesn't count
         bWasParaEnd = bNewParaEnd;
-    return bRet;
+    return bParaMark;
 }
 
 void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
