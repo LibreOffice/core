@@ -1913,7 +1913,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         const_cast<SwTable&>(rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
     }
 
-    AddItemToSet<SvxBrushItem>(aSet, [rFrmFmt]() { return rFrmFmt.makeBackgroundBrushItem(); }, RES_BACKGROUND, {
+    AddItemToSet<SvxBrushItem>(aSet, [&rFrmFmt]() { return rFrmFmt.makeBackgroundBrushItem(); }, RES_BACKGROUND, {
         MID_BACK_COLOR,
         MID_GRAPHIC_TRANSPARENT,
         MID_GRAPHIC_POSITION,
@@ -1945,7 +1945,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     }
 
     if(bPutBreak)
-        AddItemToSet<SvxFmtBreakItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetBreak(); }, RES_BREAK, {0});
+        AddItemToSet<SvxFmtBreakItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetBreak(); }, RES_BREAK, {0});
     const uno::Any* pShadow;
     if(GetProperty(RES_SHADOW, 0, pShadow))
     {
@@ -1953,7 +1953,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aShd.PutValue(*pShadow, CONVERT_TWIPS); // putting to CONVERT_TWIPS, but getting from 0?
         aSet.Put(aShd);
     }
-    AddItemToSet<SvxFmtKeepItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetKeep(); }, RES_KEEP, {0});
+    AddItemToSet<SvxFmtKeepItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetKeep(); }, RES_KEEP, {0});
 
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
@@ -1988,10 +1988,10 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             aSz.SetWidth(MINLAY);
         aSet.Put(aSz);
     }
-    AddItemToSet<SvxLRSpaceItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetLRSpace(); }, RES_LR_SPACE, {
+    AddItemToSet<SvxLRSpaceItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetLRSpace(); }, RES_LR_SPACE, {
         MID_L_MARGIN|CONVERT_TWIPS,
         MID_R_MARGIN|CONVERT_TWIPS });
-    AddItemToSet<SvxULSpaceItem>(aSet, [rFrmFmt]() { return rFrmFmt.GetULSpace(); }, RES_UL_SPACE, {
+    AddItemToSet<SvxULSpaceItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetULSpace(); }, RES_UL_SPACE, {
         MID_UP_MARGIN|CONVERT_TWIPS,
         MID_LO_MARGIN|CONVERT_TWIPS });
     const::uno::Any* pSplit(nullptr);
