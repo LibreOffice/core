@@ -3029,6 +3029,8 @@ void SwFlyFrmFmt::MakeFrms()
                     break;
                 }
                 pFrm->AppendFly( pFly );
+                pFly->GetFmt()->SetObjTitle(GetObjTitle());
+                pFly->GetFmt()->SetObjDescription(GetObjDescription());
                 SwPageFrm *pPage = pFly->FindPageFrm();
                 if( pPage )
                     ::RegistFlys( pPage, pFly );
@@ -3080,6 +3082,7 @@ void SwFlyFrmFmt::SetObjTitle( const OUString& rTitle, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();
     OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::SetObjTitle(..)> - missing <SdrObject> instance" );
+    msTitle = rTitle;
     if ( !pMasterObject )
     {
         return;
@@ -3104,16 +3107,19 @@ OUString SwFlyFrmFmt::GetObjTitle() const
     OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::GetObjTitle(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
-        return OUString();
+        return msTitle;
     }
-
-    return pMasterObject->GetTitle();
+    if (!pMasterObject->GetTitle().isEmpty())
+        return pMasterObject->GetTitle();
+    else
+        return msTitle;
 }
 
 void SwFlyFrmFmt::SetObjDescription( const OUString& rDescription, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();
     OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::SetDescription(..)> - missing <SdrObject> instance" );
+    msDesc = rDescription;
     if ( !pMasterObject )
     {
         return;
@@ -3138,10 +3144,12 @@ OUString SwFlyFrmFmt::GetObjDescription() const
     OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::GetDescription(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
-        return OUString();
+        return msDesc;
     }
-
-    return pMasterObject->GetDescription();
+    if (!pMasterObject->GetDescription().isEmpty())
+        return pMasterObject->GetDescription();
+    else
+        return msDesc;
 }
 
 /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
