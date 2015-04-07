@@ -1,8 +1,8 @@
 --- misc/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
 +++ build/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
-@@ -2,7 +2,7 @@
- /* Contributed to the OpenSSL Project 2004
-  * by Richard Levitte (richard@levitte.org)
+@@ -3,7 +3,7 @@
+  * Contributed to the OpenSSL Project 2004 by Richard Levitte
+  * (richard@levitte.org)
   */
 -/* Copyright (c) 2004 Kungliga Tekniska Högskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
@@ -11,9 +11,9 @@
   *
 --- misc/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
 +++ build/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
-@@ -2,7 +2,7 @@
- /* Contributed to the OpenSSL Project 2004
-  * by Richard Levitte (richard@levitte.org)
+@@ -3,7 +3,7 @@
+  * Contributed to the OpenSSL Project 2004 by Richard Levitte
+  * (richard@levitte.org)
   */
 -/* Copyright (c) 2004 Kungliga Tekniska Högskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
@@ -45,7 +45,7 @@
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
 --- misc/openssl-0.9.8v/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
 +++ build/openssl-0.9.8v/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
-@@ -128,7 +128,7 @@
+@@ -163,7 +163,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
  
@@ -54,7 +54,7 @@
  $mkdir="-mkdir" unless defined $mkdir;
  
  ($ssl,$crypto)=("ssl","crypto");
-@@ -290,6 +290,11 @@
+@@ -343,6 +343,11 @@
  	chop;
  
  	($key,$val)=/^([^=]+)=(.*)/;
@@ -66,7 +66,7 @@
  	if ($key eq "RELATIVE_DIRECTORY")
  		{
  		if ($lib ne "")
-@@ -529,7 +529,7 @@
+@@ -469,7 +474,7 @@
  # Set your compiler options
  PLATFORM=$platform
  CC=$bin_dir${cc}
@@ -75,27 +75,27 @@
  APP_CFLAG=$app_cflag
  LIB_CFLAG=$lib_cflag
  SHLIB_CFLAG=$shl_cflag
-@@ -544,7 +544,7 @@
+@@ -484,7 +489,7 @@
  
  LINK=$link
  LFLAGS=$lflags
 -RSC=$rsc
 +RSC=$rsc \$(SOLARINC)
  
- # The output directory for everything intersting
+ # The output directory for everything interesting
  OUT_D=$out_dir
-@@ -730,7 +735,7 @@
+@@ -665,7 +670,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
    /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
--  #define CFLAGS "$cc $cflags"
-+  #define CFLAGS "$cflags"
+-  #define CFLAGS "compiler: $cc $cflags"
++  #define CFLAGS "compiler: $cflags"
    #define PLATFORM "$platform"
  EOF
  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
 --- misc/openssl-0.9.8v/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
 +++ build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
-@@ -32,7 +32,7 @@
+@@ -30,7 +30,7 @@
  my $ff = "";
  
  # C compiler stuff
@@ -104,29 +104,31 @@
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
-@@ -103,22 +103,22 @@
+@@ -114,7 +114,7 @@
      }
  
-     $cc='$(CC)';
+     $cc=($ENV{CC} or "cl");
 -    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
 +    $base_cflags=' -W3 -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
      $base_cflags.=" $wcecdefs";
      $base_cflags.=' -I$(WCECOMPAT)/include'		if (defined($ENV{'WCECOMPAT'}));
      $base_cflags.=' -I$(PORTSDK_LIBPATH)/../../include'	if (defined($ENV{'PORTSDK_LIBPATH'}));
--    $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
--    $dbg_cflags=' /MC /Od -DDEBUG -D_DEBUG';
-+    $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
-+    $dbg_cflags=' -MC -Od -DDEBUG -D_DEBUG';
+@@ -123,20 +123,21 @@
+     } else {
+ 	$base_cflags.=' /MC';
+     }
+-    $opt_cflags=' /O1i';	# optimize for space, but with intrinsics...
+-    $dbg_cflags=' /Od -DDEBUG -D_DEBUG';
++    $opt_cflags=' -O1i';   # optimize for space, but with intrinsics...
++    $dbg_cflags=' -Od -DDEBUG -D_DEBUG';
++
      $lflags="/nologo /opt:ref $wcelflag";
      }
  else	# Win32
      {
--    $base_cflags= " $mf_cflag";
-+    $base_cflags= " $mf_cflag";
+     $base_cflags= " $mf_cflag";
 -    my $f = $shlib || $fips ?' /MD':' /MT';
--    $lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 +    my $f = $shlib || $fips ? (($ENV{MSVC_USE_DEBUG_RUNTIME} eq "TRUE") ? ' -MDd' : ' -MD' ):' -MT';
-+    $lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
      $ff = "/fixed";
 -    $opt_cflags=$f.' /Ox /O2 /Ob2';
 -    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
@@ -134,8 +136,12 @@
 +    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';
      $lflags="/nologo /subsystem:console /opt:ref";
      }
+-$lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
++$lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
  $mlflags='';
-@@ -138,7 +138,7 @@
+ 
+ $out_def ="out32";	$out_def.="dll"			if ($shlib);
+@@ -161,7 +162,7 @@
  
  $obj='.obj';
  $asm_suffix='.asm';
@@ -148,8 +154,8 @@
 +++ build/openssl-0.9.8v/ms/uplink.c
 @@ -1,5 +1,6 @@
  #if (defined(_WIN64) || defined(_WIN32_WCE)) && !defined(UNICODE)
- #define UNICODE
-+#define _CRT_NON_CONFORMING_SWPRINTFS
+ # define UNICODE
++# define _CRT_NON_CONFORMING_SWPRINTFS
  #endif
  #if defined(UNICODE) && !defined(_UNICODE)
- #define _UNICODE
+ # define _UNICODE

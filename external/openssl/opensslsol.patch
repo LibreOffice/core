@@ -1,81 +1,33 @@
 --- misc/openssl-0.9.8v/Configure	Mon Nov  9 15:14:26 2009
 +++ build/openssl-0.9.8v/Configure	Fri Mar 26 16:01:32 2010
-@@ -212,8 +212,8 @@
- "solaris64-x86_64-gcc","gcc:-m64 -O3 -Wall -DL_ENDIAN -DMD32_REG_T=int::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-fPIC:-m64 -shared -static-libgcc:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+@@ -228,8 +228,8 @@
+ "solaris64-x86_64-gcc","gcc:-m64 -O3 -Wall -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:solaris-shared:-fPIC:-m64 -shared -static-libgcc:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/64",
   
  #### Solaris x86 with Sun C setups
--"solaris-x86-cc","cc:-fast -O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
--"solaris64-x86_64-cc","cc:-fast -xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+"solaris-x86-cc","cc:-O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-+"solaris64-x86_64-cc","cc:-xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK BF_PTR2 DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"solaris-x86-cc","cc:-fast -xarch=generic -O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"solaris64-x86_64-cc","cc:-fast -xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/64",
++"solaris-x86-cc","cc:-xarch=generic -O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"solaris64-x86_64-cc","cc:-xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK BF_PTR2 DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/64",
  
  #### SPARC Solaris with GNU C setups
  "solaris-sparcv7-gcc","gcc:-O3 -fomit-frame-pointer -Wall -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 --- misc/openssl-0.9.8v/Makefile.shared	Wed Sep 17 17:56:40 2008
 +++ build/openssl-0.9.8v/Makefile.shared	Fri Mar 26 16:04:41 2010
-@@ -93,7 +93,7 @@
+@@ -95,7 +95,7 @@
      LDCMD="$${LDCMD:-$(CC)}"; LDFLAGS="$${LDFLAGS:-$(CFLAGS)}"; \
-     LIBPATH=`for x in $$LIBDEPS; do if echo $$x | grep '^ *-L' > /dev/null 2>&1; then echo $$x | sed -e 's/^ *-L//'; fi; done | uniq`; \
+     LIBPATH=`for x in $$LIBDEPS; do echo $$x; done | sed -e 's/^ *-L//;t' -e d | uniq`; \
      LIBPATH=`echo $$LIBPATH | sed -e 's/ /:/g'`; \
 -    LD_LIBRARY_PATH=$$LIBPATH:$$LD_LIBRARY_PATH \
 +    LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \
      $${LDCMD} $${LDFLAGS} -o $${APPNAME:=$(APPNAME)} $(OBJECTS) $${LIBDEPS} )
  
  LINK_SO=	\
-@@ -103,7 +103,7 @@
+@@ -105,7 +105,7 @@
      SHAREDFLAGS="$${SHAREDFLAGS:-$(CFLAGS) $(SHARED_LDFLAGS)}"; \
-     LIBPATH=`for x in $$LIBDEPS; do if echo $$x | grep '^ *-L' > /dev/null 2>&1; then echo $$x | sed -e 's/^ *-L//'; fi; done | uniq`; \
+     LIBPATH=`for x in $$LIBDEPS; do echo $$x; done | sed -e 's/^ *-L//;t' -e d | uniq`; \
      LIBPATH=`echo $$LIBPATH | sed -e 's/ /:/g'`; \
 -    LD_LIBRARY_PATH=$$LIBPATH:$$LD_LIBRARY_PATH \
 +    LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \
      $${SHAREDCMD} $${SHAREDFLAGS} \
  	-o $$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX \
  	$$ALLSYMSFLAGS $$SHOBJECTS $$NOALLSYMSFLAGS $$LIBDEPS \
---- misc/openssl-0.9.8v/config	Tue Mar  9 18:08:24 2010
-+++ build/openssl-0.9.8v/config	Fri Mar 26 16:07:55 2010
-@@ -399,28 +399,25 @@
- # this is where the translation occurs into SSLeay terms
- # ---------------------------------------------------------------------------
- 
--GCCVER=`(gcc -dumpversion) 2>/dev/null`
--if [ "$GCCVER" != "" ]; then
--  # then strip off whatever prefix egcs prepends the number with...
--  # Hopefully, this will work for any future prefixes as well.
--  GCCVER=`echo $GCCVER | LC_ALL=C sed 's/^[a-zA-Z]*\-//'`
--  # Since gcc 3.1 gcc --version behaviour has changed.  gcc -dumpversion
--  # does give us what we want though, so we use that.  We just just the
--  # major and minor version numbers.
--  # peak single digit before and after first dot, e.g. 2.95.1 gives 29
--  GCCVER=`echo $GCCVER | sed 's/\([0-9]\)\.\([0-9]\).*/\1\2/'`
-+if [ -z "$CC" ];then
-+  GCCVER=`(gcc -dumpversion) 2>/dev/null`
-+ if [ "$GCCVER" != "" ]; then
-+   CC=gcc
-+    # then strip off whatever prefix egcs prepends the number with...
-+    # Hopefully, this will work for any future prefixes as well.
-+    GCCVER=`echo $GCCVER | LC_ALL=C sed 's/^[a-zA-Z]*\-//'`
-+    # Since gcc 3.1 gcc --version behaviour has changed.  gcc -dumpversion
-+    # does give us what we want though, so we use that.  We just just the
-+    # major and minor version numbers.
-+    # peak single digit before and after first dot, e.g. 2.95.1 gives 29
-+    GCCVER=`echo $GCCVER | sed 's/\([0-9]\)\.\([0-9]\).*/\1\2/'`
-+ else
-+   CC=cc
-+ fi
-+else
-+    CC=`echo $CC | sed 's/^[^ ]*\/\(..\).*/\1/'`
- fi
- 
--# Only set CC if not supplied already
--if [ -z "$CC" ]; then
--# figure out if gcc is available and if so we use it otherwise
--# we fallback to whatever cc does on the system
--  if [ "$GCCVER" != "" ]; then
--    CC=gcc
--  else
--    CC=cc
--  fi
--fi
- GCCVER=${GCCVER:-0}
- if [ "$SYSTEM" = "HP-UX" ];then
-   # By default gcc is a ILP32 compiler (with long long == 64).
