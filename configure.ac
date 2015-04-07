@@ -2034,7 +2034,7 @@ AC_ARG_WITH(windows-sdk,
          combinations are supported. The intent is that this option should not
          be needed.])
     [
-                          Usage:     --with-windows-sdk=7.1(A)/8.0(A)/8.1(A)>
+                          Usage:     --with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)>
     ],
 ,)
 
