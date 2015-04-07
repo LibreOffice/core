@@ -59,7 +59,7 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Mround,           UNIQUE,     STDPAR,     2,          FDCat_Math ),
     FUNCDATA( Sqrtpi,           UNIQUE,     STDPAR,     1,          FDCat_Math ),
     FUNCDATA( Randbetween,      UNIQUE,     STDPAR,     2,          FDCat_Math ),
-    FUNCDATA( Gcd,              DOUBLE,     INTPAR,     1,          FDCat_Math ),
+    FUNCDATA( Gcd,              UNIQUE,     INTPAR,     1,          FDCat_Math ),
     FUNCDATA( Lcm,              DOUBLE,     INTPAR,     1,          FDCat_Math ),
     FUNCDATA( Besseli,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
     FUNCDATA( Besselj,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),

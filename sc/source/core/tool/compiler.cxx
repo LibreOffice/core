@@ -2484,7 +2484,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     {
         // ODFF names that are not written in the current mapping but to be
         // recognized. New names will be written in a future relase, then
-        // exchange (!) with the names in
+        // exchanged(!) with the names in
         // formula/source/core/resource/core_resource.src to be able to still
         // read the old names as well.
         struct FunctionName
@@ -2501,6 +2501,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
             { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
             { "COM.MICROSOFT.F.DIST", ocFDist_LT }, // fdo#40835, -> FDIST -> COM.MICROSOFT.F.DIST
+            { "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD", ocGCD }, // tdf#69701, GCD_ADD -> GCD
             // Renamed new names, prepare to read future names:
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };

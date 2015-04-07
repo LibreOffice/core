@@ -45,7 +45,6 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "MROUND", "MROUND", false, "com.sun.star.sheet.addin.Analysis.getMround", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND" },
     { "SQRTPI", "SQRTPI", false, "com.sun.star.sheet.addin.Analysis.getSqrtpi", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI" },
     { "RANDBETWEEN", "RANDBETWEEN", false, "com.sun.star.sheet.addin.Analysis.getRandbetween", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN" },
-    { "GCD", "GCD_ADD", true, "com.sun.star.sheet.addin.Analysis.getGcd", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD" },
     { "LCM", "LCM_ADD", true, "com.sun.star.sheet.addin.Analysis.getLcm", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM" },
     { "BESSELI", "BESSELI", false, "com.sun.star.sheet.addin.Analysis.getBesseli", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELI" },
     { "BESSELJ", "BESSELJ", false, "com.sun.star.sheet.addin.Analysis.getBesselj", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELJ" },
