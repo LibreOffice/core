@@ -5782,21 +5782,12 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 void ScGridWindow::UpdateCursorOverlay()
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    bool bIsTiledRendering = pDoc->GetDrawLayer()->isTiledRendering();
 
-    // in the tiled rendering case, exit early if we are not supposed to draw
-    // the cell cursor:
-    // - there is a selection (either cell selection, or graphic object)
-    // - the user is typing inside a shape or so
-    if (bIsTiledRendering &&
-        (pViewData->GetMarkData().IsMarked() || pViewData->GetMarkData().IsMultiMarked() ||
-         pViewData->GetViewShell()->GetScDrawView()->IsMarking() ||
-         pViewData->GetViewShell()->GetScDrawView()->IsTextEdit() ||
-         pViewData->GetViewShell()->GetScDrawView()->GetDragStat().IsShown() ||
-         pViewData->HasEditView(eWhich)))
-    {
+    // never show the cell cursor when the tiled rendering is going on; either
+    // we want to show the editeng selection, or the cell selection, but not
+    // the cell cursor by itself
+    if (pDoc->GetDrawLayer()->isTiledRendering())
         return;
-    }
 
     MapMode aDrawMode = GetDrawMapMode();
     MapMode aOldMode = GetMapMode();
@@ -5873,7 +5864,7 @@ void ScGridWindow::UpdateCursorOverlay()
         }
 
         // in the tiled rendering case, don't limit to the screen size
-        if (bMaybeVisible || bIsTiledRendering)
+        if (bMaybeVisible)
         {
             long nSizeXPix;
             long nSizeYPix;
@@ -5882,46 +5873,37 @@ void ScGridWindow::UpdateCursorOverlay()
             if (bLayoutRTL)
                 aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
-            if (bIsTiledRendering)
-            {
-                // just forward the area to LOK
-                Rectangle aRect(aScrPos, Size(nSizeXPix, nSizeYPix));
-                aPixelRects.push_back(aRect);
-            }
-            else
-            {
-                // show the cursor as 4 (thin) rectangles
-                Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
+            // show the cursor as 4 (thin) rectangles
+            Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
 
-                sal_Int32 nScale = GetDPIScaleFactor();
+            sal_Int32 nScale = GetDPIScaleFactor();
 
-                long aCursorWidth = 1 * nScale;
+            long aCursorWidth = 1 * nScale;
 
-                Rectangle aLeft = Rectangle(aRect);
-                aLeft.Top()    -= aCursorWidth;
-                aLeft.Bottom() += aCursorWidth;
-                aLeft.Right()   = aLeft.Left();
-                aLeft.Left()   -= aCursorWidth;
+            Rectangle aLeft = Rectangle(aRect);
+            aLeft.Top()    -= aCursorWidth;
+            aLeft.Bottom() += aCursorWidth;
+            aLeft.Right()   = aLeft.Left();
+            aLeft.Left()   -= aCursorWidth;
 
-                Rectangle aRight = Rectangle(aRect);
-                aRight.Top()    -= aCursorWidth;
-                aRight.Bottom() += aCursorWidth;
-                aRight.Left()    = aRight.Right();
-                aRight.Right()  += aCursorWidth;
+            Rectangle aRight = Rectangle(aRect);
+            aRight.Top()    -= aCursorWidth;
+            aRight.Bottom() += aCursorWidth;
+            aRight.Left()    = aRight.Right();
+            aRight.Right()  += aCursorWidth;
 
-                Rectangle aTop = Rectangle(aRect);
-                aTop.Bottom()  = aTop.Top();
-                aTop.Top()    -= aCursorWidth;
+            Rectangle aTop = Rectangle(aRect);
+            aTop.Bottom()  = aTop.Top();
+            aTop.Top()    -= aCursorWidth;
 
-                Rectangle aBottom = Rectangle(aRect);
-                aBottom.Top()     = aBottom.Bottom();
-                aBottom.Bottom() += aCursorWidth;
+            Rectangle aBottom = Rectangle(aRect);
+            aBottom.Top()     = aBottom.Bottom();
+            aBottom.Bottom() += aCursorWidth;
 
-                aPixelRects.push_back(aLeft);
-                aPixelRects.push_back(aRight);
-                aPixelRects.push_back(aTop);
-                aPixelRects.push_back(aBottom);
-            }
+            aPixelRects.push_back(aLeft);
+            aPixelRects.push_back(aRight);
+            aPixelRects.push_back(aTop);
+            aPixelRects.push_back(aBottom);
         }
     }
 
