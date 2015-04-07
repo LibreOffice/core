@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_5995433e",
+        "filename": "scaddins/source/scaList.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-07T07:13:40Z",
+      "side": 1,
+      "message": "You still do not understand... The goal is to _remove_ ScaList and derived classes (unless they do some non-trivial processing; then they should just be reimplemented to use std container internally), not to factor it out to a separate header.\n\nE.g., ScaStringList should be replaced by std::vector\u003crtl::OUString\u003e.",
+      "revId": "a09e94abe30a8f9c6d20c0775baed960ad000d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
