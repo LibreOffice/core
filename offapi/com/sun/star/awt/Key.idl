@@ -363,6 +363,7 @@ published constants Key
     const short SEMICOLON = 1317;
 
 
+    /** @since LibreOffice 4.3 **/
     const short QUOTERIGHT = 1318;
 
 
