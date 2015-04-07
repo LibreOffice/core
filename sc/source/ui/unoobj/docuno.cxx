@@ -612,6 +612,8 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     // update the aLogicMode in ScViewData to something predictable
     pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
 
+    bool bHandled = false;
+
     if (pInputHandler && pInputHandler->IsInputMode())
     {
         // forwarding to editeng - we are editing the cell content
@@ -619,20 +621,32 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         assert(pTableView);
 
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-        switch (nType)
+
+        if (!pTableView->GetOutputArea().IsInside(aPoint))
         {
-            case LOK_SETTEXTSELECTION_START:
-                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
-                break;
-            case LOK_SETTEXTSELECTION_END:
-                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
-                break;
-            case LOK_SETTEXTSELECTION_RESET:
-                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
-                break;
-            default:
-                assert(false);
-                break;
+            // if the handle does not stay in the editeng area, we want to turn
+            // the selection into the cell selection
+            pViewShell->UpdateInputLine();
+            pViewShell->UpdateInputHandler();
+        }
+        else
+        {
+            switch (nType)
+            {
+                case LOK_SETTEXTSELECTION_START:
+                    pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+                    break;
+                case LOK_SETTEXTSELECTION_END:
+                    pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+                    break;
+                case LOK_SETTEXTSELECTION_RESET:
+                    pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
+            bHandled = true;
         }
     }
     else if (pDrawView && pDrawView->IsTextEdit())
@@ -657,10 +671,12 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
                 assert(false);
                 break;
         }
+        bHandled = true;
     }
-    else
+
+    if (!bHandled)
     {
-        // just updating the cell selection
+        // just update the cell selection
         ScGridWindow* pGridWindow = pViewData->GetActiveWin();
         if (!pGridWindow)
             return;
