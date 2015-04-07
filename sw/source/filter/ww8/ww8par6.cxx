@@ -2430,6 +2430,32 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
     return bRet;
 }
 
+//In auto-width word frames negative after-indent values are ignored
+void SwWW8ImplReader::StripNegativeAfterIndent(SwFrmFmt *pFlyFmt) const
+{
+    const SwNodeIndex* pSttNd = pFlyFmt->GetCntnt().GetCntntIdx();
+    if (!pSttNd)
+        return;
+
+    SwNodeIndex aIdx(*pSttNd, 1);
+    SwNodeIndex aEnd(*pSttNd->GetNode().EndOfSectionNode());
+    while (aIdx < aEnd)
+    {
+        SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
+        if (pNd)
+        {
+            const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
+            if (rLR.GetRight() < 0)
+            {
+                SvxLRSpaceItem aLR(rLR);
+                aLR.SetRight(0);
+                pNd->SetAttr(aLR);
+            }
+        }
+        ++aIdx;
+    }
+}
+
 void SwWW8ImplReader::StopApo()
 {
     OSL_ENSURE(pWFlyPara, "no pWFlyPara to close");

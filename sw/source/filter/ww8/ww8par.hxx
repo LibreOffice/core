@@ -1488,6 +1488,7 @@ private:
     bool IsDropCap();
     bool IsListOrDropcap() { return (!pAktItemSet  || bDropCap); };
 
+    //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
     bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem = 0);
@@ -1495,6 +1496,7 @@ private:
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
         const WW8_TablePos *pTabPos);
+    void StripNegativeAfterIndent(SwFrmFmt *pFlyFmt) const;
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);

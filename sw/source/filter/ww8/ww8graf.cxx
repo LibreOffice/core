@@ -2905,7 +2905,10 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
 
             aSave.Restore( this );
+
+            StripNegativeAfterIndent(pRetFrmFmt);
         }
+
     }
     return pRetFrmFmt;
 }
