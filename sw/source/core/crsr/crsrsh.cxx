@@ -3022,7 +3022,8 @@ void SwCrsrShell::SetReadOnlyAvailable( bool bFlag )
 bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
 {
     bool bRet = false;
-    if ( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
+    // If protected area is to be ignored, then selections are never read-only.
+    if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView()) && !GetViewOptions()->IsIgnoreProtectedArea())
     {
         if ( m_pTblCrsr != NULL )
         {

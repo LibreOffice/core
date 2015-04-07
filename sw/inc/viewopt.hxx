@@ -69,6 +69,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
 #define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
 #define VIEWOPT_CORE2_PRINTING          0x00000020L
+#define VIEWOPT_CORE2_IGNORE_PROT       0x00000040L
 
 #define VIEWOPT_2_H_RULER           0x00000400L
 #define VIEWOPT_2_VSCROLLBAR        0x00000800L
@@ -103,7 +104,7 @@ namespace svtools{ class ColorConfig;}
 // Implementation in core/text/txtpaint.cxx.
 extern void SyncVout( const OutputDevice *pOut );
 
-class SwViewOption
+class SW_DLLPUBLIC SwViewOption
 {
     static Color    aDocColor;  // color of document boundaries
     static Color    aDocBoundColor;  // color of document boundaries
@@ -341,6 +342,16 @@ public:
 
     inline void SetCursorInProtectedArea(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
+
+    bool IsIgnoreProtectedArea() const
+    {
+        return (nCore2Options & VIEWOPT_CORE2_IGNORE_PROT) != 0;
+    }
+
+    void SetIgnoreProtectedArea(bool bSet)
+    {
+        bSet ? (nCore2Options |= VIEWOPT_CORE2_IGNORE_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_IGNORE_PROT);
+    }
 
     inline bool IsPDFExport() const
         {return (nCore2Options & VIEWOPT_CORE2_PDF_EXPORT) != 0; }

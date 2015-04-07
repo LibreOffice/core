@@ -458,9 +458,10 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
     {
         "DirectCursor/UseDirectCursor", // 0
         "DirectCursor/Insert",          // 1
-        "Option/ProtectedArea"          // 2
+        "Option/ProtectedArea",         // 2
+        "Option/IgnoreProtectedArea"    // 3
     };
-    const int nCount = 3;
+    const int nCount = SAL_N_ELEMENTS(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -493,6 +494,7 @@ void SwCursorConfig::ImplCommit()
             case  0: pValues[nProp] <<= rParent.IsShadowCursor(); break;//  "DirectCursor/UseDirectCursor",
             case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Insert",
             case  2: pValues[nProp] <<= rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
+            case  3: pValues[nProp] <<= rParent.IsIgnoreProtectedArea(); break; // "Option/IgnoreProtectedArea"
         }
     }
     PutProperties(aNames, aValues);
@@ -522,6 +524,7 @@ void SwCursorConfig::Load()
                     case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
                     case  1: rParent.SetShdwCrsrFillMode((sal_uInt8)nSet); break;//  "DirectCursor/Insert",
                     case  2: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
+                    case  3: rParent.SetIgnoreProtectedArea(bSet); break; // "Option/IgnoreProtectedArea"
                 }
             }
         }
