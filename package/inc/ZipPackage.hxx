@@ -161,7 +161,7 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
+    static com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId()
         throw(::com::sun::star::uno::RuntimeException);
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )

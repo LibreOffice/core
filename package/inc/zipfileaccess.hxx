@@ -59,9 +59,9 @@ public:
 
     virtual ~OZipFileAccess();
 
-    ::com::sun::star::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
+    static ::com::sun::star::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
 
-    bool StringGoodForPattern_Impl( const OUString& aString,
+    static bool StringGoodForPattern_Impl( const OUString& aString,
                                         const ::com::sun::star::uno::Sequence< OUString >& aPattern );
 
     static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();

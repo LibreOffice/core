@@ -995,7 +995,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
                                   bool bLicenseMissing )
 {
     long         nPos = 0;
-    PackageState eState = m_pManager->getPackageState( xPackage );
+    PackageState eState = TheExtensionManager::getPackageState( xPackage );
     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
@@ -1054,7 +1054,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
     {
         if ( (*iIndex)->m_xPackage == xPackage )
         {
-            PackageState eState = m_pManager->getPackageState( xPackage );
+            PackageState eState = TheExtensionManager::getPackageState( xPackage );
             (*iIndex)->m_bHasOptions = m_pManager->supportsOptions( xPackage );
             (*iIndex)->m_eState = eState;
             (*iIndex)->m_sTitle = xPackage->getDisplayName();

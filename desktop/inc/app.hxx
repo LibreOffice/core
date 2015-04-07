@@ -89,7 +89,7 @@ class Desktop : public Application
         static ResMgr*          GetDesktopResManager();
         static CommandLineArgs& GetCommandLineArgs();
 
-        void                    HandleBootstrapErrors(
+        static void             HandleBootstrapErrors(
                                     BootstrapError nError, OUString const & aMessage );
         void                    SetBootstrapError(
                                     BootstrapError nError, OUString const & aMessage )
@@ -127,21 +127,21 @@ class Desktop : public Application
     private:
         void                    RegisterServices(
                                     css::uno::Reference< css::uno::XComponentContext > const & context);
-        void                    DeregisterServices();
+        static void             DeregisterServices();
 
-        void                    CreateTemporaryDirectory();
-        void                    RemoveTemporaryDirectory();
+        static void             CreateTemporaryDirectory();
+        static void             RemoveTemporaryDirectory();
 
         bool                    InitializeInstallation( const OUString& rAppFilename );
-        bool                    InitializeConfiguration();
-        void                    FlushConfiguration();
-        bool                    InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        static bool             InitializeConfiguration();
+        static void             FlushConfiguration();
+        static bool             InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
+        static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
         void                    StartSetup( const OUString& aParameters );
 
         // Create a error message depending on bootstrap failure code and an optional file url
-        OUString                CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+        static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
         static void             PreloadModuleData( const CommandLineArgs& );
@@ -151,7 +151,7 @@ class Desktop : public Application
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
-        void                    EnableOleAutomation();
+        static void             EnableOleAutomation();
                                 DECL_LINK( ImplInitFilterHdl, ConvertData* );
         DECL_LINK( AsyncInitFirstRun, void* );
         /** checks if the office is run the first time
@@ -161,7 +161,7 @@ class Desktop : public Application
         void                    CheckFirstRun( );
 
         /// does initializations which are necessary for the first run of the office
-        void                    DoFirstRunInitializations();
+        static void             DoFirstRunInitializations();
 
         static void             ShowBackingComponent(Desktop * progress);
 
