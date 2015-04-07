@@ -38,7 +38,7 @@ struct HtmlOptions_Impl;
 class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {
     HtmlOptions_Impl*pImp;
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     void Load( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
     void CallListeners();
 

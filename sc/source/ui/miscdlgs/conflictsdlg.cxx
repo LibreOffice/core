@@ -520,7 +520,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
             {
                 m_pLbConflicts->Select( pEntry );
             }
-            pEntry = m_pLbConflicts->NextSibling( pEntry );
+            pEntry = SvTreeListBox::NextSibling( pEntry );
         }
     }
 }
@@ -634,7 +634,7 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     while ( pRootEntry )
     {
         SetConflictAction( pRootEntry, eConflictAction );
-        pRootEntry = m_pLbConflicts->NextSibling( pRootEntry );
+        pRootEntry = SvTreeListBox::NextSibling( pRootEntry );
     }
     m_pLbConflicts->SetUpdateMode( false );
     m_pLbConflicts->Clear();

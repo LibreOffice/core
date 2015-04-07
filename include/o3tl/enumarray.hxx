@@ -66,7 +66,7 @@ public:
     void fill(V val)
     { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
 
-    static size_type size() const { return max_index + 1; }
+    static size_type size() { return max_index + 1; }
     iterator  begin()      { return iterator(*this, 0); }
     iterator  end()        { return iterator(*this, size()); }
 

@@ -908,7 +908,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
                 // because of the repositioning we have to start at the beginning again
                 bRestart = true;
                 pParent = m_pTree->GetParent(pEntry);
-                m_pTree->GetModel()->Move(pChild, pParent, m_pTree->GetModel()->GetRelPos(pEntry));
+                m_pTree->GetModel()->Move(pChild, pParent, SvTreeList::GetRelPos(pEntry));
             }
             pRemove = pEntry;
         }

@@ -110,7 +110,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
             ++nCheckedChildren;
         ++nChildrenOverall;
 
-        pChildLoop = GetModel()->NextSibling(pChildLoop);
+        pChildLoop = SvTreeList::NextSibling(pChildLoop);
     }
 
     if (pChildLoop)
@@ -124,7 +124,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);
-            pChildLoop = GetModel()->NextSibling(pChildLoop);
+            pChildLoop = SvTreeList::NextSibling(pChildLoop);
         }
     }
     else
@@ -153,7 +153,7 @@ void OMarkableTreeListBox::CheckButtons()
     while (pEntry)
     {
         implDetermineState(pEntry);
-        pEntry = GetModel()->NextSibling(pEntry);
+        pEntry = SvTreeList::NextSibling(pEntry);
     }
 }
 
@@ -170,7 +170,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
     {
         SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
-        SvTreeListEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
+        SvTreeListEntry* pSiblingEntry = SvTreeList::NextSibling(_pEntry);
         while(pChildEntry && pChildEntry != pSiblingEntry)
         {
             SetCheckButtonState(pChildEntry, eState);
@@ -185,7 +185,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
         if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
         {
             SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
-            SvTreeListEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);
+            SvTreeListEntry* pSiblingEntry = SvTreeList::NextSibling(pEntry);
             while(pChildEntry && pChildEntry != pSiblingEntry)
             {
                 SetCheckButtonState(pChildEntry,eState);

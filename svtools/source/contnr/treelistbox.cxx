@@ -347,7 +347,7 @@ const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntr
     return pViewData->maSize;
 }
 
-const Size& SvLBoxItem::GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
+const Size& SvLBoxItem::GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
 {
     const SvViewDataItem* pIData = pData->GetItem(nItemPos);
     return pIData->maSize;
@@ -607,7 +607,7 @@ TriState SvTreeListBox::NotifyMoving(
     {
         // case 1
         rpNewParent = GetParent( pTarget );
-        rNewChildPos = pModel->GetRelPos( pTarget ) + 1;
+        rNewChildPos = SvTreeList::GetRelPos( pTarget ) + 1;
         rNewChildPos += nCurEntrySelPos;
         nCurEntrySelPos++;
     }
@@ -638,14 +638,14 @@ SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
     return pModel->FirstChild(pParent);
 }
 
-SvTreeListEntry* SvTreeListBox::NextSibling( SvTreeListEntry* pEntry ) const
+SvTreeListEntry* SvTreeListBox::NextSibling( SvTreeListEntry* pEntry )
 {
-    return pModel->NextSibling(pEntry);
+    return SvTreeList::NextSibling(pEntry);
 }
 
-SvTreeListEntry* SvTreeListBox::PrevSibling( SvTreeListEntry* pEntry ) const
+SvTreeListEntry* SvTreeListBox::PrevSibling( SvTreeListEntry* pEntry )
 {
-    return pModel->PrevSibling(pEntry);
+    return SvTreeList::PrevSibling(pEntry);
 }
 
 // return: all entries copied
@@ -786,7 +786,7 @@ void SvTreeListBox::RemoveSelection()
         pModel->Remove(*it);
 }
 
-SvTreeListBox* SvTreeListBox::GetSourceView() const
+SvTreeListBox* SvTreeListBox::GetSourceView()
 {
     return pDDSource;
 }
@@ -1784,7 +1784,7 @@ OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
     return pItem->GetText();
 }
 
-const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry) const
+const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
 {
     DBG_ASSERT(pEntry,"Entry?");
     const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
@@ -1792,7 +1792,7 @@ const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry) c
     return pItem->GetBitmap2( );
 }
 
-const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry ) const
+const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Entry?");
     const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
@@ -2007,7 +2007,7 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
         if(!pItem)
             return SV_BUTTON_TRISTATE;
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
-        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+        eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
     return eState;
 }
@@ -2307,8 +2307,7 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
     SvViewDataEntry* pViewData = GetViewDataEntry( pEntry );
     while( nCur < nCount )
     {
-        SvLBoxItem* pItem = pEntry->GetItem( nCur );
-        short nHeight = (short)(pItem->GetSize( pViewData, nCur ).Height());
+        short nHeight = (short)(SvLBoxItem::GetSize( pViewData, nCur ).Height());
         if( nHeight > nHeightMax )
             nHeightMax = nHeight;
         nCur++;
@@ -2936,7 +2935,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
         SvLBoxItem* pItem = nCurItem < nItemCount ? pEntry->GetItem(nCurItem) : 0;
 
         sal_uInt16 nFlags = pTab->nFlags;
-        Size aSize( pItem->GetSize( pViewDataEntry, nCurItem ));
+        Size aSize( SvLBoxItem::GetSize( pViewDataEntry, nCurItem ));
         long nTabPos = GetTabPos( pEntry, pTab );
 
         long nNextTabPos;

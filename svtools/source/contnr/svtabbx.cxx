@@ -250,7 +250,7 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
     return GetEntryText( pEntry, 0xffff );
 }
 
-OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     OUString aResult;
@@ -547,7 +547,7 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 
 
 
-bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>( pEntry->GetItem( nCol + 1 ) );
@@ -555,7 +555,7 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
     if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
-        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+        eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
     return ( eState == SV_BUTTON_CHECKED );

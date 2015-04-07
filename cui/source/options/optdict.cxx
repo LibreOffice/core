@@ -389,7 +389,7 @@ sal_uLong SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
         DBG_ASSERT( pEntry, "NULL pointer");
         OUString aNormEntry( getNormDicEntry_Impl( rDicWord ) );
         sal_Int32 nCmpRes = pCollator->
-            compareString( aNormEntry, getNormDicEntry_Impl( pWordsLB->GetEntryText(pEntry, 0) ) );
+            compareString( aNormEntry, getNormDicEntry_Impl( SvTabListBox::GetEntryText(pEntry, 0) ) );
         if (nCmpRes < 0)
             break;
     }
@@ -405,7 +405,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 
     if ( pEntry != NULL && nLBPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        OUString sTmpShort(pWordsLB->GetEntryText(pEntry, 0));
+        OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
 
         Reference< XDictionary >  xDic = aDics.getConstArray()[ nLBPos ];
         if (xDic->remove( sTmpShort ))  // sal_True on success
@@ -556,12 +556,12 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         if(!bFirstSelect)
         {
             SvTreeListEntry* pEntry = pBox->FirstSelected();
-            OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
+            OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
             // without this the curser is always at the beginning of a word, if the text
             // is set over the ModifyHdl, although you're editing there at the moment
             if(pWordED->GetText() != sTmpShort)
                 pWordED->SetText(sTmpShort);
-            pReplaceED->SetText(pBox->GetEntryText(pEntry, 1));
+            pReplaceED->SetText(SvTabListBox::GetEntryText(pEntry, 1));
         }
         else
             bFirstSelect = false;
@@ -616,7 +616,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                     aRplcText = aReplaceStr;
 
                 if (_pEntry) // entry selected in pWordsLB ie action = modify entry
-                    xDic->remove( pWordsLB->GetEntryText( _pEntry, 0 ) );
+                    xDic->remove( SvTabListBox::GetEntryText( _pEntry, 0 ) );
                 // if remove has failed the following add should fail too
                 // and thus a warning message should be triggered...
 
@@ -696,7 +696,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
             for(sal_uLong i = 0; i < pWordsLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = pWordsLB->GetEntry( i );
-                OUString aTestStr( pWordsLB->GetEntryText(pEntry, 0) );
+                OUString aTestStr( SvTabListBox::GetEntryText(pEntry, 0) );
                 eCmpRes = cmpDicEntry_Impl( rEntry, aTestStr );
                 if(CDE_DIFFERENT != eCmpRes)
                 {
@@ -705,7 +705,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                     bDoNothing=true;
                     pWordsLB->SetCurEntry(pEntry);
                     bDoNothing=false;
-                    pReplaceED->SetText(pWordsLB->GetEntryText(pEntry, 1));
+                    pReplaceED->SetText(SvTabListBox::GetEntryText(pEntry, 1));
 
                     if (CDE_SIMILAR == eCmpRes)
                     {
@@ -753,8 +753,8 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
         SvTreeListEntry* pFirstSel = pWordsLB->FirstSelected();
         if (pFirstSel)  // a pWordsLB entry is selected
         {
-            aWordText    = pWordsLB->GetEntryText( pFirstSel, 0 );
-            aReplaceText = pWordsLB->GetEntryText( pFirstSel, 1 );
+            aWordText    = SvTabListBox::GetEntryText( pFirstSel, 0 );
+            aReplaceText = SvTabListBox::GetEntryText( pFirstSel, 1 );
 
             aNewReplaceText = sModify;
             bEnableDelete = true;

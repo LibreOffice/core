@@ -1535,7 +1535,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 
     SvTreeListEntry* pEntry=pTheView->First();
-    SvTreeListEntry* pNextEntry = (pEntry ? pTheView->NextSibling(pEntry) : NULL);
+    SvTreeListEntry* pNextEntry = (pEntry ? SvTreeListBox::NextSibling(pEntry) : NULL);
     SvTreeListEntry* pLastEntry=NULL;
     while(pEntry!=NULL)
     {

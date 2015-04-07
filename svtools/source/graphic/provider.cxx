@@ -102,7 +102,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
@@ -121,7 +121,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( co
     return xRet;
 }
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
@@ -144,7 +144,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
 
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
@@ -165,7 +165,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
@@ -195,7 +195,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
 
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm )
 {
     uno::Reference< ::graphic::XGraphic > xRet;
     uno::Sequence< sal_Int8 > aBmpSeq( xBtm->getDIB() );
@@ -229,7 +229,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;

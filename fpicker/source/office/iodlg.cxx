@@ -1369,7 +1369,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
     SvTreeListEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( nCount && pEntry )
-        _aPath = _pFileView->GetURL( pEntry );
+        _aPath = SvtFileView::GetURL( pEntry );
 
     // notify interested parties
     long nRet;
@@ -1471,7 +1471,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
         {
             if ( !pUserData->mbIsFolder )
             {
-                OUString aName = pBox->GetEntryText( pEntry, 0 );
+                OUString aName = SvTabListBox::GetEntryText( pEntry, 0 );
                 _pImp->_pEdFileName->SetText( aName );
                 _pImp->_pEdFileName->SetSelection( Selection( 0, aName.getLength() ) );
                 _aPath = pUserData->maURL;
@@ -2248,7 +2248,7 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
     {
         while ( pEntry )
         {
-            aList.push_back(_pFileView->GetURL(pEntry));
+            aList.push_back(SvtFileView::GetURL(pEntry));
             pEntry = _pFileView->NextSelected( pEntry );
         }
     }

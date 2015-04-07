@@ -1440,7 +1440,7 @@ TriState SdPageObjsTLB::NotifyMoving(
         else
         {
             rpNewParent = GetParent(pDestination);
-            rNewChildPos = pModel->GetRelPos(pDestination) + 1;
+            rNewChildPos = SvTreeList::GetRelPos(pDestination) + 1;
             rNewChildPos += nCurEntrySelPos;
             nCurEntrySelPos++;
         }

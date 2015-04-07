@@ -102,7 +102,7 @@ OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITransla
     OUString aResult;
     SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
-        aResult = OUString( rRoleListBox.GetEntryText( pEntry,
+        aResult = OUString( SvTabListBox::GetEntryText( pEntry,
                                                        bUITranslated ? 1 : 0 ));
     return aResult;
 }
@@ -112,7 +112,7 @@ OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
     OUString aResult;
     SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
-        aResult = OUString( rRoleListBox.GetEntryText( pEntry, 2 ));
+        aResult = OUString( SvTabListBox::GetEntryText( pEntry, 2 ));
     return aResult;
 }
 

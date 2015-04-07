@@ -100,12 +100,12 @@ class SVT_DLLPUBLIC SvTreeList
     SvTreeListEntry*        PrevSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
-    bool                Select( SvListView*,SvTreeListEntry* pEntry, bool bSelect=true );
+    static bool         Select( SvListView*,SvTreeListEntry* pEntry, bool bSelect=true );
     void                SelectAll( SvListView*, bool bSelect ); // Does not call Select Handler
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
-    void                Expand( SvListView*,SvTreeListEntry* pParent );
-    void                Collapse( SvListView*,SvTreeListEntry* pParent );
+    static void         Expand( SvListView*,SvTreeListEntry* pParent );
+    static void         Collapse( SvListView*,SvTreeListEntry* pParent );
 
     SVT_DLLPRIVATE void SetAbsolutePositions();
 
@@ -166,9 +166,9 @@ public:
     SvTreeListEntry*    Last() const;
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
-    SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    LastSibling( SvTreeListEntry* pEntry ) const;
+    static SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry );
+    static SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry );
+    static SvTreeListEntry*    LastSibling( SvTreeListEntry* pEntry );
 
     sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
     sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )
@@ -206,7 +206,7 @@ public:
         GetChildIterators(SvTreeListEntry* pParent);
 
     sal_uLong GetAbsPos( const SvTreeListEntry* pEntry ) const;
-    sal_uLong GetRelPos( const SvTreeListEntry* pChild ) const;
+    static sal_uLong GetRelPos( const SvTreeListEntry* pChild );
 
     sal_uLong GetChildCount( const SvTreeListEntry* pParent ) const;
     sal_uInt16 GetDepth( const SvTreeListEntry* pEntry ) const;
@@ -225,7 +225,7 @@ public:
     { return aCloneLink; }
 
     SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
-    SvTreeListEntry*    CreateEntry() const; // To create Entries
+    static SvTreeListEntry* CreateEntry(); // To create Entries
 
     sal_uInt16          GetRefCount() const { return nRefCount; }
     void                SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }
@@ -265,13 +265,13 @@ protected:
     SvTreeList* pModel;
 
     void                ExpandListEntry( SvTreeListEntry* pParent )
-    { pModel->Expand((SvListView*)this,pParent); }
+    { SvTreeList::Expand((SvListView*)this,pParent); }
 
     void                CollapseListEntry( SvTreeListEntry* pParent )
-    { pModel->Collapse((SvListView*)this,pParent); }
+    { SvTreeList::Collapse((SvListView*)this,pParent); }
 
     bool                SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
-    { return pModel->Select((SvListView*)this,pEntry,bSelect); }
+    { return SvTreeList::Select((SvListView*)this,pEntry,bSelect); }
 
 public:
                         SvListView();   // Sets the Model to 0

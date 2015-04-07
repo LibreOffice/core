@@ -161,7 +161,7 @@ private:
 
                         void GetGraphicSource();
                         bool GetGraphicStream();
-                        Bitmap GetGraphicBitmap( SvStream& rStream );
+                        static Bitmap GetGraphicBitmap( SvStream& rStream );
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                             GetFilterData( bool bUpdateConfig );
 

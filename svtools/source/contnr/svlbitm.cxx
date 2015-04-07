@@ -111,7 +111,7 @@ void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry, SvItemState
     eState = ConvertToButtonState( nItemFlags );
 }
 
-SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags ) const
+SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags )
 {
     nItemFlags &= (SvItemStateFlags::UNCHECKED |
                    SvItemStateFlags::CHECKED |
@@ -342,7 +342,7 @@ void SvLBoxButton::Paint(
     const SvTreeListEntry* /*pEntry*/)
 {
     SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage
-        ? SvBmp::STATICIMAGE : pData->GetIndex( nItemFlags );
+        ? SvBmp::STATICIMAGE : SvLBoxButtonData::GetIndex( nItemFlags );
     sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 

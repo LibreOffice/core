@@ -75,11 +75,11 @@ namespace svt
         }
 
         /// returns the index of the current state in given path, or -1
-        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
+        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
         /// returns the index of the current state in the path with the given id, or -1
         sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
         /// returns the index of the first state in which the two given paths differ
-        sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
+        static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
     };
 
 
@@ -250,7 +250,7 @@ namespace svt
         Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
         if ( aActivePathPos != m_pImpl->aPaths.end() )
         {
-            if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
+            if ( RoadmapWizardImpl::getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
             {
                 OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
                 return;
@@ -271,7 +271,7 @@ namespace svt
             "RoadmapWizard::implUpdateRoadmap: there is no such path!" );
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
 
-        sal_Int32 nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), rActivePath );
+        sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
         if (nCurrentStatePathIndex < 0)
             return;
 
@@ -289,7 +289,7 @@ namespace svt
                     // it's the path we are just activating -> no need to check anything
                     continue;
                 // the index from which on both paths differ
-                sal_Int32 nDivergenceIndex = m_pImpl->getFirstDifferentIndex( rActivePath, aPathPos->second );
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, aPathPos->second );
                 if ( nDivergenceIndex <= nCurrentStatePathIndex )
                     // they differ in an index which we have already left behind us
                     // -> this is no conflict anymore
@@ -379,7 +379,7 @@ namespace svt
 
         Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
         if ( aActivePathPos != m_pImpl->aPaths.end() )
-            nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( _nCurrentState, aActivePathPos->second );
+            nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( _nCurrentState, aActivePathPos->second );
 
         DBG_ASSERT( nCurrentStatePathIndex != -1, "RoadmapWizard::determineNextState: ehm - how can we travel if there is no (valid) active path?" );
         if ( nCurrentStatePathIndex == -1 )
@@ -408,7 +408,7 @@ namespace svt
         {
             // check how many paths are still allowed
             const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
-            sal_Int32 nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), rActivePath );
+            sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
 
             size_t nPossiblePaths(0);
             for (   Paths::const_iterator aPathPos = m_pImpl->aPaths.begin();
@@ -417,7 +417,7 @@ namespace svt
                 )
             {
                 // the index from which on both paths differ
-                sal_Int32 nDivergenceIndex = m_pImpl->getFirstDifferentIndex( rActivePath, aPathPos->second );
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, aPathPos->second );
 
                 if ( nDivergenceIndex > nCurrentStatePathIndex )
                     // this path is still a possible path

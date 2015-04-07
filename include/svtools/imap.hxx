@@ -53,15 +53,15 @@ protected:
     sal_uLong           ImpReadNCSA( SvStream& rOStm, const OUString& rBaseURL );
 
     void                ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL );
-    Point               ImpReadCERNCoords( const char** ppStr );
-    long                ImpReadCERNRadius( const char** ppStr );
-    OUString            ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL );
+    static Point        ImpReadCERNCoords( const char** ppStr );
+    static long         ImpReadCERNRadius( const char** ppStr );
+    static OUString     ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL );
 
     void                ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL );
-    OUString            ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL );
-    Point               ImpReadNCSACoords( const char** ppStr );
+    static OUString     ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL );
+    static Point        ImpReadNCSACoords( const char** ppStr );
 
-    sal_uLong           ImpDetectFormat( SvStream& rIStm );
+    static sal_uLong    ImpDetectFormat( SvStream& rIStm );
 
 public:
 

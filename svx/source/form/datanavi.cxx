@@ -2904,10 +2904,10 @@ namespace svxform
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
             SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
             aDlg.SetNamespace(
                 sPrefix,
-                m_pNamespacesList->GetEntryText( pEntry, 1 ) );
+                SvTabListBox::GetEntryText( pEntry, 1 ) );
             if ( aDlg.Execute() == RET_OK )
             {
                 // if a prefix was changed, mark the old prefix as 'removed'
@@ -2922,7 +2922,7 @@ namespace svxform
         {
             SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
             m_aRemovedList.push_back( sPrefix );
             m_pNamespacesList->GetModel()->Remove( pEntry );
         }
@@ -2949,8 +2949,8 @@ namespace svxform
             for( i = 0; i < nEntryCount; ++i )
             {
                 SvTreeListEntry* pEntry = m_pNamespacesList->GetEntry(i);
-                OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
-                OUString sURL( m_pNamespacesList->GetEntryText( pEntry, 1 ) );
+                OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
+                OUString sURL( SvTabListBox::GetEntryText( pEntry, 1 ) );
 
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                     m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
