@@ -127,7 +127,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr );
+        SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
         //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -148,7 +148,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr );
+    SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -235,7 +235,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
         if( pDsigCtx == NULL )
         {
-            pSecEnv->destroyKeysManager( pMngr );
+            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             //throw XMLSignatureException() ;
             clearErrorRecorder();
             return aTemplate;
@@ -250,7 +250,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         {
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
             xmlSecDSigCtxDestroy( pDsigCtx ) ;
-            pSecEnv->destroyKeysManager( pMngr );
+            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             break;
         }
         else
@@ -258,7 +258,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         }
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr );
+        SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
     }
 
 

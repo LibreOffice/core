@@ -36,8 +36,7 @@ namespace fileaccess {
 
         // This implementation has to be reworked
     public:
-        FileContentIdentifier( shell* pMyShell,
-                               const OUString& aUnqPath,
+        FileContentIdentifier( const OUString& aUnqPath,
                                bool IsNormalized = true );
 
         virtual ~FileContentIdentifier();
@@ -81,7 +80,6 @@ namespace fileaccess {
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        shell* m_pMyShell;
         OUString m_aContentId;              // The URL string
         OUString m_aNormalizedId;           // The somehow normalized string
         OUString m_aProviderScheme;

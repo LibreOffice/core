@@ -28,20 +28,18 @@ using namespace com::sun::star::ucb;
 
 
 FileContentIdentifier::FileContentIdentifier(
-    shell* pMyShell,
     const OUString& aUnqPath,
     bool IsNormalized )
-    : m_pMyShell( pMyShell )
 {
     if( IsNormalized )
     {
-        m_pMyShell->getUrlFromUnq( aUnqPath,m_aContentId );
+        fileaccess::shell::getUrlFromUnq( aUnqPath,m_aContentId );
         m_aNormalizedId = aUnqPath;
         shell::getScheme( m_aProviderScheme );
     }
     else
     {
-        m_pMyShell->getUnqFromUrl( aUnqPath,m_aNormalizedId );
+        fileaccess::shell::getUnqFromUrl( aUnqPath,m_aNormalizedId );
         m_aContentId = aUnqPath;
         shell::getScheme( m_aProviderScheme );
     }

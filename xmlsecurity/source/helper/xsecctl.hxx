@@ -358,7 +358,7 @@ private:
     /*
      * For signature generation
      */
-    OUString createId();
+    static OUString createId();
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
         InternalSignatureInformation& signatureInfo );
@@ -413,7 +413,7 @@ public:
     SignatureInformation    getSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations   getSignatureInformations() const;
 
-    void exportSignature(
+    static void exportSignature(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler,
         const SignatureInformation& signatureInfo );

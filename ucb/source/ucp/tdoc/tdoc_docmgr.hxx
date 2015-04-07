@@ -138,8 +138,7 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
         queryStorage( const OUString & rDocId );
 
-        OUString
-        queryDocumentId(
+        static OUString queryDocumentId(
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 
@@ -155,18 +154,15 @@ namespace tdoc_ucp {
     private:
         void buildDocumentsList();
 
-        bool
-        isOfficeDocument(
+        bool isOfficeDocument(
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XInterface > & xDoc );
 
-        bool
-        isDocumentPreview(
+        static bool isDocumentPreview(
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 
-        bool
-        isWithoutOrInTopLevelFrame(
+        static bool isWithoutOrInTopLevelFrame(
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 
@@ -175,8 +171,7 @@ namespace tdoc_ucp {
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 
-        bool
-        isHelpDocument(
+        static bool isHelpDocument(
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 

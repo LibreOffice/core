@@ -372,10 +372,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl)
     uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
     size_t nInfos = maCurrentSignatureInformations.size();
     for( size_t n = 0 ; n < nInfos ; ++n )
-        maSignatureHelper.ExportSignature(
+        XMLSignatureHelper::ExportSignature(
         xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
-    maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+    XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
 
     // If stream was not provided, we are responsible for committing it....
     if ( !mxSignatureStream.is() )
@@ -467,13 +467,13 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
             uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
             size_t nInfos = maCurrentSignatureInformations.size();
             for ( size_t n = 0; n < nInfos; n++ )
-                maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
+                XMLSignatureHelper::ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
             maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
 
             // That's it...
-            maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+            XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
 
             maSignatureHelper.EndMission();
 
@@ -530,9 +530,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
             uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
             size_t nInfos = maCurrentSignatureInformations.size();
             for( size_t n = 0 ; n < nInfos ; ++n )
-                maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
+                XMLSignatureHelper::ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
-            maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+            XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
 
             mbSignaturesChanged = true;
 

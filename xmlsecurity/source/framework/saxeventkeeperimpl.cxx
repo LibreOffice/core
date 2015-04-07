@@ -401,7 +401,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
 }
 
 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
-    SAXEventKeeperImpl::collectChildWorkingElement(BufferNode* pBufferNode) const
+    SAXEventKeeperImpl::collectChildWorkingElement(BufferNode* pBufferNode)
 /****** SAXEventKeeperImpl/collectChildWorkingElement ************************
  *
  *   NAME
@@ -599,7 +599,7 @@ void SAXEventKeeperImpl::smashBufferNode(
 }
 
 BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
-    BufferNode* pStartBufferNode) const
+    BufferNode* pStartBufferNode)
 /****** SAXEventKeeperImpl/findNextBlockingBufferNode ************************
  *
  *   NAME
@@ -643,7 +643,7 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
     return pNext;
 }
 
-void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode) const
+void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode)
 /****** SAXEventKeeperImpl/diffuse *******************************************
  *
  *   NAME
