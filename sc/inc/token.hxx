@@ -222,9 +222,7 @@ public:
         TOTALS   =   8,
         THIS_ROW =  16,
         HEADERS_DATA = HEADERS | DATA,
-        DATA_TOTALS = DATA | TOTALS,
-        HEADERS_DATA_TOTALS = HEADERS | DATA | TOTALS,
-        ALL_COLUMN = HEADERS_DATA_TOTALS | ALL  // semantically the same, but just a [#All] item
+        DATA_TOTALS = DATA | TOTALS
     };
 
     ScTableRefToken( sal_uInt16 nIndex, Item eItem );
