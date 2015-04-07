@@ -79,7 +79,6 @@ enum class INetProtocol
     Javascript,
     Data,
     Cid,
-    Out,
     VndSunStarHier,
     Uno,
     Component,

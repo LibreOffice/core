@@ -159,11 +159,6 @@ using namespace css;
 
 
    ; private
-   out-url = "OUT:///~" name ["/" *uric]
-   name = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "?" / "@" / "_" / "~"
-
-
-   ; private
    vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" ["//"reg_name] *("/" *pchar)
    reg_name = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
@@ -362,9 +357,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             false},
         SchemeInfo{
             "cid", "cid:", 0, false, false, false, false, false, false, false,
-            false},
-        SchemeInfo{
-            "out", "out://", 0, true, false, false, false, false, false, false,
             false},
         SchemeInfo{
             "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
@@ -2109,8 +2101,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "macro:", "staroffice.macro:", INetProtocol::Macro,
               PrefixInfo::INTERNAL },
             { "mailto:", 0, INetProtocol::Mailto, PrefixInfo::OFFICIAL },
-            { "out:", "staroffice.out:", INetProtocol::Out,
-              PrefixInfo::INTERNAL },
             { "private:", "staroffice.private:", INetProtocol::PrivSoffice,
               PrefixInfo::INTERNAL },
             { "private:factory/", "staroffice.factory:",
@@ -2139,8 +2129,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "staroffice.java:", "private:java/", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
             { "staroffice.macro:", "macro:", INetProtocol::Macro,
-              PrefixInfo::EXTERNAL },
-            { "staroffice.out:", "out:", INetProtocol::Out,
               PrefixInfo::EXTERNAL },
             { "staroffice.private:", "private:", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
@@ -3040,20 +3028,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::Data:
         case INetProtocol::Cid:
         case INetProtocol::Db:
-            while (pPos < pEnd && *pPos != nFragmentDelimiter)
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
-                                             eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, eCharset, true);
-            }
-            break;
-
-        case INetProtocol::Out:
-            if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '~')
-                return false;
-            aTheSynPath.append("/~");
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
