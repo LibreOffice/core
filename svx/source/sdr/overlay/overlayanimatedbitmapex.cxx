@@ -63,7 +63,7 @@ namespace sdr
             const basegfx::B2DPoint& rBasePos,
             const BitmapEx& rBitmapEx1,
             const BitmapEx& rBitmapEx2,
-            sal_uInt32 nBlinkTime,
+            sal_uInt64 nBlinkTime,
             sal_uInt16 nCenX1,
             sal_uInt16 nCenY1,
             sal_uInt16 nCenX2,
@@ -75,16 +75,13 @@ namespace sdr
             maBitmapEx2(rBitmapEx2),
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),
             mnCenterX2(nCenX2), mnCenterY2(nCenY2),
-            mnBlinkTime(nBlinkTime),
+            mnBlinkTime(impCheckBlinkTimeValueRange(nBlinkTime)),
             mfShearX(fShearX),
             mfRotation(fRotation),
             mbOverlayState(false)
         {
             // set AllowsAnimation flag to mark this object as animation capable
             mbAllowsAnimation = true;
-
-            // #i53216# check blink time value range
-            mnBlinkTime = impCheckBlinkTimeValueRange(mnBlinkTime);
         }
 
         OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()

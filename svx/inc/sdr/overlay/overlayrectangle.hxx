@@ -56,7 +56,7 @@ namespace sdr
                 double fDiscreteGrow,
                 double fDiscreteShrink,
                 double fRotation,
-                sal_uInt32 nBlinkTime,
+                sal_uInt64 nBlinkTime,
                 bool bAnimate);
 
             // data read access

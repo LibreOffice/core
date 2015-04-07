@@ -156,7 +156,7 @@ struct ImplStyleData
     long                            mnSpinSize;
     long                            mnCursorSize;
     long                            mnAntialiasedMin;
-    sal_uLong                       mnCursorBlinkTime;
+    sal_uInt64                      mnCursorBlinkTime;
     sal_uLong                       mnDragFullOptions;
     sal_uLong                       mnSelectionOptions;
     sal_uLong                       mnDisplayOptions;
@@ -1758,13 +1758,13 @@ StyleSettings::GetCursorSize() const
 }
 
 void
-StyleSettings::SetCursorBlinkTime( long nBlinkTime )
+StyleSettings::SetCursorBlinkTime( sal_uInt64 nBlinkTime )
 {
     CopyData();
     mxData->mnCursorBlinkTime = nBlinkTime;
 }
 
-long
+sal_uInt64
 StyleSettings::GetCursorBlinkTime() const
 {
     return (long) mxData->mnCursorBlinkTime;

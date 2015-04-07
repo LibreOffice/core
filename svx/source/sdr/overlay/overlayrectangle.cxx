@@ -71,7 +71,7 @@ namespace sdr
             double fDiscreteGrow,
             double fDiscreteShrink,
             double fRotation,
-            sal_uInt32 nBlinkTime,
+            sal_uInt64 nBlinkTime,
             bool bAnimate)
         :   OverlayObjectWithBasePosition(rBasePosition, rHatchColor),
             maSecondPosition(rSecondPosition),
@@ -79,7 +79,7 @@ namespace sdr
             mfDiscreteGrow(fDiscreteGrow),
             mfDiscreteShrink(fDiscreteShrink),
             mfRotation(fRotation),
-            mnBlinkTime(nBlinkTime),
+            mnBlinkTime(impCheckBlinkTimeValueRange(nBlinkTime)),
             mbOverlayState(false)
         {
             if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
@@ -90,9 +90,6 @@ namespace sdr
 
             // set AllowsAnimation flag to mark this object as animation capable
             mbAllowsAnimation = bAnimate;
-
-            // #i53216# check blink time value range
-            mnBlinkTime = impCheckBlinkTimeValueRange(mnBlinkTime);
         }
 
         void OverlayRectangle::Trigger(sal_uInt32 nTime)

@@ -759,7 +759,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const sal_uInt32 nBlinkTime((sal_uInt32)rStyleSettings.GetCursorBlinkTime());
+        const sal_uInt64 nBlinkTime(rStyleSettings.GetCursorBlinkTime());
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -2339,7 +2339,7 @@ void SdrCropHdl::CreateB2dIAObject()
 
                         BitmapEx aBmpEx2( GetBitmapForHandle( aHandlesBitmap, nHdlSize + 1 ) );
 
-                        const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
+                        const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
                         pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(
                             aPosition,

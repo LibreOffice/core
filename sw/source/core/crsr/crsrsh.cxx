@@ -1832,19 +1832,18 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
 
     // switch from blinking cursor to read-only-text-selection cursor
-    static const long nNoBlinkTime = STYLE_CURSOR_NOBLINKTIME;
-    const long nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
+    const sal_uInt64 nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
                             GetCursorBlinkTime();
 
     if ( (IsCrsrReadonly() && GetViewOptions()->IsSelectionInReadonly()) ==
-        ( nBlinkTime != nNoBlinkTime ) )
+        ( nBlinkTime != STYLE_CURSOR_NOBLINKTIME ) )
     {
         // non blinking cursor in read only - text selection mode
         AllSettings aSettings = GetOut()->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        const long nNewBlinkTime = nBlinkTime == nNoBlinkTime ?
+        const sal_uInt64 nNewBlinkTime = nBlinkTime == STYLE_CURSOR_NOBLINKTIME ?
                                    Application::GetSettings().GetStyleSettings().GetCursorBlinkTime() :
-                                   nNoBlinkTime;
+                                   STYLE_CURSOR_NOBLINKTIME;
         aStyleSettings.SetCursorBlinkTime( nNewBlinkTime );
         aSettings.SetStyleSettings( aStyleSettings );
         GetOut()->SetSettings( aSettings );

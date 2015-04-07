@@ -219,7 +219,7 @@ void AnnotationHdl::CreateB2dIAObject()
                             // animate focused handles
                             if(bFocused)
                             {
-                                const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
+                                const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
                                 pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
                             }

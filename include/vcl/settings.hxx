@@ -194,7 +194,7 @@ struct FrameStyle
 #define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
 #define STYLE_TOOLBAR_ICONSIZE_LARGE        ((sal_uLong)2)
 
-#define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
+#define STYLE_CURSOR_NOBLINKTIME    SAL_MAX_UINT64
 
 class VCL_DLLPUBLIC StyleSettings
 {
@@ -450,8 +450,8 @@ public:
     void                            SetCursorSize( long nSize );
     long                            GetCursorSize() const;
 
-    void                            SetCursorBlinkTime( long nBlinkTime );
-    long                            GetCursorBlinkTime() const;
+    void                            SetCursorBlinkTime( sal_uInt64 nBlinkTime );
+    sal_uInt64                      GetCursorBlinkTime() const;
 
     void                            SetScreenZoom( sal_uInt16 nPercent );
     sal_uInt16                      GetScreenZoom() const;

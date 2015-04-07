@@ -2657,7 +2657,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
-    aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
+    UINT blinkTime = GetCaretBlinkTime();
+    aStyleSettings.SetCursorBlinkTime(
+        blinkTime == 0 || blinkTime == INFINITE // 0 indicates error
+        ? STYLE_CURSOR_NOBLINKTIME : blinkTime );
     aStyleSettings.SetFloatTitleHeight( GetSystemMetrics( SM_CYSMCAPTION ) );
     aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
     aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
