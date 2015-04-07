@@ -40,7 +40,7 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::beans::XIntrospectionAccess inspect([in] any aObject);
     };
-    published service Introspection: ::com::sun::star::beans::XIntrospection;
+    /** @deprecated */ published service Introspection: ::com::sun::star::beans::XIntrospection;
     /** @deprecated */ published exception IntrospectionException: ::com::sun::star::uno::Exception {
     };
     published constants MethodConcept {
@@ -328,6 +328,7 @@ module com {
      interface ::com::sun::star::lang::XEventListener;
      void vetoableChange([in] ::com::sun::star::beans::PropertyChangeEvent aEvent) raises (::com::sun::star::beans::PropertyVetoException);
     };
+    published singleton theIntrospection: ::com::sun::star::beans::XIntrospection;
    };
    module bridge {
     published interface XBridge {
@@ -1083,7 +1084,7 @@ module com {
     published interface XTypeProvider {
      interface ::com::sun::star::uno::XInterface;
      sequence< type > getTypes();
-     sequence< byte > getImplementationId();
+     /** @deprecated */ sequence< byte > getImplementationId();
     };
     published interface XUnoTunnel {
      interface ::com::sun::star::uno::XInterface;
@@ -1185,10 +1186,10 @@ module com {
      ENUM = 15,
      TYPEDEF = 16,
      STRUCT = 17,
-     UNION = 18,
+     /** @deprecated */ UNION = 18,
      EXCEPTION = 19,
      SEQUENCE = 20,
-     ARRAY = 21,
+     /** @deprecated */ ARRAY = 21,
      INTERFACE = 22,
      SERVICE = 23,
      MODULE = 24,
