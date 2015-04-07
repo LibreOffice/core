@@ -183,12 +183,12 @@ static HMENU createSystrayMenu( )
         const char*                 pAsciiURLDescription;
     }   aMenuItems[] =
     {
-        { SvtModuleOptions::E_SWRITER,    IDM_WRITER, ICON_TEXT_DOCUMENT,         WRITER_URL },
-        { SvtModuleOptions::E_SCALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
-        { SvtModuleOptions::E_SIMPRESS,   IDM_IMPRESS,ICON_PRESENTATION_DOCUMENT, IMPRESS_WIZARD_URL },
-        { SvtModuleOptions::E_SDRAW,      IDM_DRAW,   ICON_DRAWING_DOCUMENT,      DRAW_URL },
-        { SvtModuleOptions::E_SDATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL },
-        { SvtModuleOptions::E_SMATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
+        { SvtModuleOptions::EModule::WRITER,    IDM_WRITER, ICON_TEXT_DOCUMENT,         WRITER_URL },
+        { SvtModuleOptions::EModule::CALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
+        { SvtModuleOptions::EModule::IMPRESS,   IDM_IMPRESS,ICON_PRESENTATION_DOCUMENT, IMPRESS_WIZARD_URL },
+        { SvtModuleOptions::EModule::DRAW,      IDM_DRAW,   ICON_DRAWING_DOCUMENT,      DRAW_URL },
+        { SvtModuleOptions::EModule::DATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL },
+        { SvtModuleOptions::EModule::MATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
     };
 
     OUString aEmpty;
