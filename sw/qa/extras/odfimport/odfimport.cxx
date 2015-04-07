@@ -400,6 +400,18 @@ DECLARE_ODFIMPORT_TEST(testFdo82165, "fdo82165.odt")
     } catch (lang::IndexOutOfBoundsException const&) { }
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf89802, "tdf89802.fodt")
+{
+    // the text frame was dropped during import
+    uno::Reference<text::XTextFramesSupplier> const xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> const xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    uno::Reference<beans::XPropertySet> const xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xFrame->getPropertyValue("BackColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x3f004586), nValue);
+}
+
 DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

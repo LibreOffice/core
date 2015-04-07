@@ -238,6 +238,19 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             OUString sStyleName;
             rState.maValue >>= sStyleName;
             sStyleName = GetImport().GetStyleDisplayName( aFamilies[i], sStyleName );
+            // All of these attributes refer to something with draw:name
+            // of type styleName = NCName which is non-empty.
+            // tdf#89802: for Writer frames there would be no exception here but
+            // it will fail later on attach() and take out the entire frame
+            if (sStyleName.isEmpty())
+            {
+                Sequence<OUString> const seq{ sStyleName };
+                GetImport().SetError(
+                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
+                    seq, "empty style name reference", NULL );
+                break;
+            }
+
             try
             {
 
