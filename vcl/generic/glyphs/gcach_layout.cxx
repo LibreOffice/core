@@ -364,10 +364,10 @@ namespace vcl {
     {
     public:
         std::vector<vcl::Run> runs;
-        TextLayoutCache(OUString const& rString, sal_Int32 const nEnd)
+        TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
         {
             vcl::ScriptRun aScriptRun(
-                reinterpret_cast<const UChar *>(rString.getStr()),
+                reinterpret_cast<const UChar *>(pStr),
                 nEnd);
             while (aScriptRun.next())
             {
@@ -381,7 +381,7 @@ namespace vcl {
 std::shared_ptr<vcl::TextLayoutCache> ServerFontLayout::CreateTextLayoutCache(
         OUString const& rString) const
 {
-    return std::make_shared<vcl::TextLayoutCache>(rString, rString.getLength());
+    return std::make_shared<vcl::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 
 bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
@@ -413,8 +413,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     }
     else
     {
-        pNewScriptRun.reset(new vcl::TextLayoutCache(
-            reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos));
+        pNewScriptRun.reset(new vcl::TextLayoutCache(rArgs.mpStr, rArgs.mnEndCharPos));
         pTextLayout = pNewScriptRun.get();
     }
 
