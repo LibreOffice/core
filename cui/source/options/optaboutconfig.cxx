@@ -487,10 +487,10 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
     SvTreeListEntry* pEntry = m_pPrefBox->FirstSelected();
 
-    OUString sPropertyPath = m_pPrefBox->GetEntryText( pEntry, 0 );
-    OUString sPropertyName = m_pPrefBox->GetEntryText( pEntry, 1 );
-    OUString sPropertyType = m_pPrefBox->GetEntryText( pEntry, 2 );
-    OUString sPropertyValue = m_pPrefBox->GetEntryText( pEntry, 3 );
+    OUString sPropertyPath = SvTabListBox::GetEntryText( pEntry, 0 );
+    OUString sPropertyName = SvTabListBox::GetEntryText( pEntry, 1 );
+    OUString sPropertyType = SvTabListBox::GetEntryText( pEntry, 2 );
+    OUString sPropertyValue = SvTabListBox::GetEntryText( pEntry, 3 );
 
     boost::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) ) );
 

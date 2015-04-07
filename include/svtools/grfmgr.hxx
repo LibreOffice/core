@@ -535,7 +535,7 @@ private:
                             bool& rCached
                         );
 
-    bool SVT_DLLPRIVATE ImplCreateOutput(
+    static bool SVT_DLLPRIVATE ImplCreateOutput(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
@@ -544,7 +544,7 @@ private:
                             const sal_uLong nFlags,
                             BitmapEx* pBmpEx = NULL
                         );
-    bool SVT_DLLPRIVATE ImplCreateOutput(
+    static bool SVT_DLLPRIVATE ImplCreateOutput(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,

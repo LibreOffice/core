@@ -1185,7 +1185,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
                 pEntry = pTmpEntry;
                 break;
             }
-            pTmpEntry = m_pScriptsBox->NextSibling( pTmpEntry );
+            pTmpEntry = SvTreeListBox::NextSibling( pTmpEntry );
         }
         if ( !pTmpEntry )
             break;

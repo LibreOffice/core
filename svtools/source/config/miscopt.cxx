@@ -157,7 +157,7 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         void SetSymbolsSize( sal_Int16 nSet );
 
-        OUString GetIconTheme() const;
+        static OUString GetIconTheme();
 
         enum SetModifiedFlag { SET_MODIFIED, DONT_SET_MODIFIED };
 
@@ -528,7 +528,7 @@ void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
     CallListeners();
 }
 
-OUString SvtMiscOptions_Impl::GetIconTheme() const
+OUString SvtMiscOptions_Impl::GetIconTheme()
 {
     return Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 }
@@ -784,7 +784,7 @@ bool SvtMiscOptions::AreCurrentSymbolsLarge() const
 
 OUString SvtMiscOptions::GetIconTheme() const
 {
-    return m_pDataContainer->GetIconTheme();
+    return SvtMiscOptions_Impl::GetIconTheme();
 }
 
 void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)

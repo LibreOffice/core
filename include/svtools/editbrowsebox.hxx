@@ -661,7 +661,7 @@ namespace svt
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         SVT_DLLPRIVATE void DetermineFocus( const sal_uInt16 _nGetFocusFlags = 0);
-        inline void HideAndDisable(CellControllerRef& rController);
+        static inline void HideAndDisable(CellControllerRef& rController);
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);

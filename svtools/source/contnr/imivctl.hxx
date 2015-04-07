@@ -235,7 +235,7 @@ class SvxIconChoiceCtrl_Impl
 
     void                AdjustScrollBars( bool bVirtSizeGrowedOnly = false);
     void                PositionScrollBars( long nRealWidth, long nRealHeight );
-    long                GetScrollBarPageSize( long nVisibleRange ) const
+    static long         GetScrollBarPageSize( long nVisibleRange )
                         {
                             return ((nVisibleRange*75)/100);
                         }
@@ -397,7 +397,7 @@ public:
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, bool bHit = false );
 
-    Point               GetEntryPos( SvxIconChoiceCtrlEntry* );
+    static Point        GetEntryPos( SvxIconChoiceCtrlEntry* );
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 
     void                Arrange(
@@ -432,7 +432,7 @@ public:
                             rRect.Right() = LONG_MAX;
                             bBoundRectsDirty = true;
                         }
-    bool            IsBoundingRectValid( const Rectangle& rRect ) const { return ( rRect.Right() != LONG_MAX ); }
+    static bool         IsBoundingRectValid( const Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
     void                PaintEmphasis(
                             const Rectangle& rRect1,
@@ -469,10 +469,10 @@ public:
 
     void                HideDDIcon();
 
-    bool                IsOver(
+    static bool         IsOver(
                             std::vector<Rectangle*>* pSelectedRectList,
                             const Rectangle& rEntryBoundRect
-                        ) const;
+                        );
 
     void                SelectRect(
                             const Rectangle&,

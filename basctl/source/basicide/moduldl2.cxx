@@ -489,7 +489,7 @@ void LibPage::CheckButtons()
     SvTreeListEntry* pCur = m_pLibBox->GetCurEntry();
     if ( pCur )
     {
-        OUString aLibName = m_pLibBox->GetEntryText( pCur, 0 );
+        OUString aLibName = SvTabListBox::GetEntryText( pCur, 0 );
         Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
 
@@ -572,7 +572,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
         SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
-        OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
+        OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
@@ -591,7 +591,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     else if (pButton == m_pPasswordButton)
     {
         SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-        OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
+        OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
 
         // load module library (if not loaded)
         Reference< script::XLibraryContainer > xModLibContainer = m_aCurDocument.getLibraryContainer( E_SCRIPTS );
@@ -655,7 +655,7 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
     long nRet = 0;
 
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
+    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
     Reference< script::XLibraryContainerPassword > xPasswd( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
 
     if ( xPasswd.is() )
@@ -817,7 +817,7 @@ void LibPage::InsertLib()
                         {
                             SvTreeListEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
                             DBG_ASSERT( pEntry, "Entry?!" );
-                            OUString aLibName( pLibDlg->GetLibBox().GetEntryText( pEntry, 0 ) );
+                            OUString aLibName( SvTabListBox::GetEntryText( pEntry, 0 ) );
                             Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
                             Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
 
@@ -1044,7 +1044,7 @@ void LibPage::InsertLib()
 void LibPage::Export( void )
 {
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
+    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
 
     // Password verification
     OUString aOULibName( aLibName );
@@ -1285,7 +1285,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
 void LibPage::DeleteCurrent()
 {
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
-    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
+    OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
     bool bIsLibraryLink = false;

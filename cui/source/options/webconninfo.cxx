@@ -208,8 +208,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
         SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
-            OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
+            OUString aURL = SvTabListBox::GetEntryText( pEntry, 0 );
+            OUString aUserName = SvTabListBox::GetEntryText( pEntry, 1 );
 
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
@@ -264,8 +264,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
         SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
-            OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
+            OUString aURL = SvTabListBox::GetEntryText( pEntry, 0 );
+            OUString aUserName = SvTabListBox::GetEntryText( pEntry, 1 );
 
             ::comphelper::SimplePasswordRequest* pPasswordRequest
                   = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );

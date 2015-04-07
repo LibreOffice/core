@@ -982,7 +982,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
         {
             // Select the next entry in the list if possible
             SvTreeListEntry* current = m_pCommands->FirstSelected();
-            SvTreeListEntry* next = m_pCommands->NextSibling( current );
+            SvTreeListEntry* next = SvTreeListBox::NextSibling( current );
 
             if ( next != NULL )
             {

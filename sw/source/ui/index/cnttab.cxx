@@ -691,7 +691,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
         if (!aName.isEmpty())
         {
             SvTreeListEntry* pEntry = m_pHeaderTree->First();
-            while (pEntry && m_pHeaderTree->GetEntryText(pEntry, 0) != aName)
+            while (pEntry && SvTabListBox::GetEntryText(pEntry, 0) != aName)
             {
                 pEntry = m_pHeaderTree->Next(pEntry);
             }
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         {
             if(!pStyleArr[nLevel].isEmpty())
                 pStyleArr[nLevel] += OUString(TOX_STYLE_DELIMITER);
-            pStyleArr[nLevel] += m_pHeaderTree->GetEntryText(pEntry, 0);
+            pStyleArr[nLevel] += SvTabListBox::GetEntryText(pEntry, 0);
         }
         pEntry = m_pHeaderTree->Next(pEntry);
     }

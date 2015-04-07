@@ -77,7 +77,7 @@ public:
 
                             ~SvLBoxButtonData();
 
-    SvBmp                   GetIndex( SvItemStateFlags nItemState );
+    static SvBmp            GetIndex( SvItemStateFlags nItemState );
     long                    Width();
     long                    Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
@@ -87,7 +87,7 @@ public:
     void                    CallLink();
 
     void                    StoreButtonState( SvTreeListEntry* pEntry, SvItemStateFlags nItemFlags );
-    SvButtonState           ConvertToButtonState( SvItemStateFlags nItemFlags ) const;
+    static SvButtonState    ConvertToButtonState( SvItemStateFlags nItemFlags );
 
     SvButtonState           GetActButtonState() const { return eState; }
 
@@ -164,7 +164,7 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     SvLBoxButtonKind eKind;
     SvItemStateFlags nItemFlags;
 
-    void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
+    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
 public:
     // An SvLBoxButton can be of three different kinds: an
     // enabled checkbox (the normal kind), a disabled checkbox

@@ -713,7 +713,7 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( bool bOccupyFound )
 // lead to small overlaps.
 void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, bool bOccupy )
 {
-    if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
+    if( !_pGridMap || !SvxIconChoiceCtrl_Impl::IsBoundingRectValid( pEntry->aRect ))
         return;
     OccupyGrid( GetGrid( pEntry->aRect.Center()), bOccupy );
 }

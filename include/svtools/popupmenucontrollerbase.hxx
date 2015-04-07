@@ -107,10 +107,10 @@ namespace svt
             */
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-            void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            static void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             virtual void impl_setPopupMenu();
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
-            OUString determineBaseURL( const OUString& aURL );
+            static OUString determineBaseURL( const OUString& aURL );
 
             DECL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo* );
 

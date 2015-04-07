@@ -519,7 +519,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
         if( xLink.Is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
-                    sOld( m_pTbLinks->GetEntryText( pBox, 3 ) );
+                    sOld( SvTabListBox::GetEntryText( pBox, 3 ) );
             if( sCur != sOld )
                 m_pTbLinks->SetEntryText( sCur, pBox, 3 );
         }

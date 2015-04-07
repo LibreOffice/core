@@ -160,8 +160,8 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
     while (pEntry)
     {
         SubstitutionStruct aAdd;
-        aAdd.sFont = m_pCheckLB->GetEntryText(pEntry, 0);
-        aAdd.sReplaceBy = m_pCheckLB->GetEntryText(pEntry, 1);
+        aAdd.sFont = SvTabListBox::GetEntryText(pEntry, 0);
+        aAdd.sReplaceBy = SvTabListBox::GetEntryText(pEntry, 1);
         aAdd.bReplaceAlways = m_pCheckLB->IsChecked(pEntry, 0);
         aAdd.bReplaceOnScreenOnly = m_pCheckLB->IsChecked(pEntry, 1);
         pConfig->AddSubstitution(aAdd);
@@ -288,8 +288,8 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 
         if (m_pCheckLB->NextSelected(pEntry) == 0)
         {
-            m_pFont1CB->SetText(m_pCheckLB->GetEntryText(pEntry, 0));
-            m_pFont2CB->SetText(m_pCheckLB->GetEntryText(pEntry, 1));
+            m_pFont1CB->SetText(SvTabListBox::GetEntryText(pEntry, 0));
+            m_pFont2CB->SetText(SvTabListBox::GetEntryText(pEntry, 1));
         }
     }
 
@@ -517,7 +517,7 @@ SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pE
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
-        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+        eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
     return eState;
