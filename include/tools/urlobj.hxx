@@ -853,9 +853,8 @@ public:
 
     // POP3 and URLs:
 
-    OUString GetMsgId(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
-        const;
+    static OUString GetMsgId(DecodeMechanism eMechanism = DECODE_TO_IURI,
+                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     // Coding:
 

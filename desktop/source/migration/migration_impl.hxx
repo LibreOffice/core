@@ -197,21 +197,21 @@ private:
      OUString      m_sModuleIdentifier;
 
     // functions to control the migration process
-    bool          readAvailableMigrations(migrations_available&);
+    static bool   readAvailableMigrations(migrations_available&);
     bool          alreadyMigrated();
-    migrations_vr readMigrationSteps(const OUString& rMigrationName);
+    static migrations_vr readMigrationSteps(const OUString& rMigrationName);
     sal_Int32     findPreferredMigrationProcess(const migrations_available&);
 #if defined UNX && ! defined MACOSX
-    OUString preXDGConfigDir(const OUString& rConfigDir);
+    static OUString preXDGConfigDir(const OUString& rConfigDir);
 #endif
-    void          setInstallInfoIfExist(install_info& aInfo,  const OUString& rConfigDir, const OUString& rVersion);
-    install_info  findInstallation(const strings_v& rVersions);
+    static void   setInstallInfoIfExist(install_info& aInfo,  const OUString& rConfigDir, const OUString& rVersion);
+    static install_info  findInstallation(const strings_v& rVersions);
     strings_vr    compileFileList();
 
     // helpers
     strings_vr getAllFiles(const OUString& baseURL) const;
-    strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
-    css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, bool rw=false);
+    static strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns);
+    static css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, bool rw=false);
 
     ::std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const OUString& sParentNodeName,
@@ -227,10 +227,10 @@ private:
     void copyFiles();
     void copyConfig();
     void runServices();
-    void refresh();
+    static void refresh();
 
-    void setMigrationCompleted();
-    bool checkMigrationCompleted();
+    static void setMigrationCompleted();
+    static bool checkMigrationCompleted();
 
 public:
     MigrationImpl();

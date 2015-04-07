@@ -1142,7 +1142,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 
 bool ExtMgrDialog::Close()
 {
-    bool bRet = m_pManager->queryTermination();
+    bool bRet = TheExtensionManager::queryTermination();
     if ( bRet )
     {
         bRet = ModelessDialog::Close();
@@ -1477,7 +1477,7 @@ bool UpdateRequiredDialog::Close()
 
 // Check dependencies of all packages
 
-bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage > &xPackage ) const
+bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage > &xPackage )
 {
     bool bRegistered = false;
     try {
@@ -1505,7 +1505,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
 }
 
 // Checks the dependencies no matter if the extension is enabled or disabled!
-bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::XPackage > &xPackage ) const
+bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::XPackage > &xPackage )
 {
     bool bDependenciesValid = false;
     try {

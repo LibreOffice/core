@@ -1728,7 +1728,7 @@ bool Desktop::InitializeConfiguration()
     }
     catch( ::com::sun::star::lang::ServiceNotRegisteredException & e )
     {
-        this->HandleBootstrapErrors(
+        HandleBootstrapErrors(
             Desktop::BE_UNO_SERVICE_CONFIG_MISSING, e.Message );
     }
     catch( const ::com::sun::star::configuration::MissingBootstrapFileException& e )

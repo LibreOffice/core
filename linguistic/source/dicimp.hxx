@@ -68,14 +68,14 @@ class DictionaryNeo :
 
     sal_uLong                   loadEntries(const OUString &rMainURL);
     sal_uLong                   saveEntries(const OUString &rMainURL);
-    int                     cmpDicEntry(const OUString &rWord1,
+    static int                  cmpDicEntry(const OUString &rWord1,
                                         const OUString &rWord2,
                                         bool bSimilarOnly = false);
-    bool                    seekEntry(const OUString &rWord, sal_Int32 *pPos,
+    bool                        seekEntry(const OUString &rWord, sal_Int32 *pPos,
                                         bool bSimilarOnly = false);
     bool                        isSorted();
 
-    bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
+    bool                        addEntry_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryEntry >& rDicEntry,
                                           bool bIsLoadEntries = false);
 
@@ -191,7 +191,7 @@ class DicEntry :
     DicEntry(const DicEntry &) SAL_DELETED_FUNCTION;
     DicEntry & operator = (const DicEntry &) SAL_DELETED_FUNCTION;
 
-    void            splitDicFileWord(const OUString &rDicFileWord,
+    static void            splitDicFileWord(const OUString &rDicFileWord,
                                      OUString &rDicWord,
                                      OUString &rReplacement);
 
