@@ -634,7 +634,7 @@ sal_Int32 MigrationImpl::findPreferredMigrationProcess(const migrations_availabl
     return nIndex;
 }
 
-strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const
+strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& vPatterns)
 {
     using namespace utl;
     strings_vr vrResult(new strings_v);

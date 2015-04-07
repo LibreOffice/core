@@ -43,7 +43,7 @@ protected:
     ::boost::optional< OUString> m_prop_suppress_license;
     ::boost::optional< OUString> m_prop_extension_update;
 
-    OUString getPropertyValue(css::beans::NamedValue const & v);
+    static OUString getPropertyValue(css::beans::NamedValue const & v);
 public:
 
     virtual ~ExtensionProperties() {};

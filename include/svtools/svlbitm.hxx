@@ -110,6 +110,7 @@ protected:
     OUString maText;
 
 public:
+<<<<<<< HEAD
     SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rText);
     SvLBoxString();
     virtual ~SvLBoxString();
@@ -123,7 +124,7 @@ public:
     {
         return maText;
     }
-    OUString GetExtendText() const
+    static OUString GetExtendText() const
     {
         return OUString();
     }

@@ -72,7 +72,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     void insertToActivationLayerDB(
         OUString const & id, ActivePackages::Data const & dbData );
 
-    void deletePackageFromCache(
+    static void deletePackageFromCache(
         css::uno::Reference<css::deployment::XPackage> const & xPackage,
         OUString const & destFolder );
 

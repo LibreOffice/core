@@ -249,7 +249,7 @@ struct OStorage_Impl
     ::com::sun::star::uno::Sequence< OUString > GetElementNames();
 
     void RemoveElement( SotElement_Impl* pElement );
-    void ClearElement( SotElement_Impl* pElement );
+    static void ClearElement( SotElement_Impl* pElement );
     void DisposeChildren();
 
     void CloneStreamElement(

@@ -318,7 +318,7 @@ void TheExtensionManager::createPackageList()
 }
 
 
-PackageState TheExtensionManager::getPackageState( const uno::Reference< deployment::XPackage > &xPackage ) const
+PackageState TheExtensionManager::getPackageState( const uno::Reference< deployment::XPackage > &xPackage )
 {
     try {
         beans::Optional< beans::Ambiguous< sal_Bool > > option(
