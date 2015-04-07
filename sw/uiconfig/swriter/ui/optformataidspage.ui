@@ -461,7 +461,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="cursorinprot">
-                            <property name="label" translatable="yes">Enable</property>
+                            <property name="label" translatable="yes">Enable cursor</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -471,8 +471,20 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="ignoreprot">
+                            <property name="label" translatable="yes">Ignore protection</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                       </object>
@@ -483,7 +495,7 @@
                   <object class="GtkLabel" id="cursoropt">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Cursor in Protected Areas</property>
+                    <property name="label" translatable="yes">Protected Areas</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

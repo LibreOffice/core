@@ -267,6 +267,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
 
     VclFrame* m_pCursorProtFrame;
     CheckBox* m_pCrsrInProtCB;
+    CheckBox* m_pIgnoreProtCB;
 
     CheckBox* m_pMathBaselineAlignmentCB;
 

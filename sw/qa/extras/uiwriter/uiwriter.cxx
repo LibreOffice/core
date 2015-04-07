@@ -88,6 +88,7 @@ public:
     void testCp1000115();
     void testTdf90003();
     void testSearchWithTransliterate();
+    void testTdf90362();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf90362);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -888,6 +890,24 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetTxt());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf90362()
+{
+    // First check if the end of the second paragraph is indeed protected.
+    SwDoc* pDoc = createDoc("tdf90362.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->EndPara();
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+
+    // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
+    pWrtShell->Up(/*bSelect=*/false);
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetIgnoreProtectedArea(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

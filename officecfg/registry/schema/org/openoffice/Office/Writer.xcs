@@ -2359,6 +2359,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="IgnoreProtectedArea" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether modifications are accepted in a protected area.</desc>
+            <label>Ignore protected areas</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Revision">
