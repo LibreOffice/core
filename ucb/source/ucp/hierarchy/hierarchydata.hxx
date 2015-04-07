@@ -94,7 +94,7 @@ class HierarchyEntry
     bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
-    OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
+    static OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
     getRootReadAccess();

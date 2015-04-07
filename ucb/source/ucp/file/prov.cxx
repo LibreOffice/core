@@ -201,7 +201,7 @@ FileProvider::queryContent(
 {
     init();
     OUString aUnc;
-    bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
+    bool err = fileaccess::shell::getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
 
     if(  err )
@@ -228,8 +228,8 @@ FileProvider::compareContentIds(
     {
         OUString aPath1, aPath2;
 
-        m_pMyShell->getUnqFromUrl( aUrl1, aPath1 );
-        m_pMyShell->getUnqFromUrl( aUrl2, aPath2 );
+        fileaccess::shell::getUnqFromUrl( aUrl1, aPath1 );
+        fileaccess::shell::getUnqFromUrl( aUrl2, aPath2 );
 
         osl::FileBase::RC   error;
         osl::DirectoryItem  aItem1, aItem2;
@@ -277,7 +277,7 @@ FileProvider::createContentIdentifier(
   throw( RuntimeException, std::exception )
 {
     init();
-    FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,ContentId,false );
+    FileContentIdentifier* p = new FileContentIdentifier( ContentId,false );
     return Reference< XContentIdentifier >( p );
 }
 

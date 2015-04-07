@@ -192,7 +192,7 @@ private:
     queryContentProvider( const OUString& Identifier,
                           bool bResolved );
 
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
+    static com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
     getCommandInfo();
 
     void

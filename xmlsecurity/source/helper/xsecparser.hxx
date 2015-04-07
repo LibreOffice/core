@@ -97,7 +97,7 @@ private:
     bool m_bReferenceUnresolved;
 
 private:
-    OUString getIdAttr(const com::sun::star::uno::Reference<
+    static OUString getIdAttr(const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttribs );
 
 public:

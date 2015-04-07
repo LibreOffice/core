@@ -196,17 +196,17 @@ private:
     OUString printBufferNode(
         BufferNode* pBufferNode, sal_Int32 nIndent) const;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+    static com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper > >
-        collectChildWorkingElement(BufferNode* pBufferNode) const;
+        collectChildWorkingElement(BufferNode* pBufferNode);
 
     void smashBufferNode(
         BufferNode* pBufferNode, bool bClearRoot) const;
 
-    BufferNode* findNextBlockingBufferNode(
-        BufferNode* pStartBufferNode) const;
+    static BufferNode* findNextBlockingBufferNode(
+        BufferNode* pStartBufferNode);
 
-    void diffuse(BufferNode* pBufferNode) const;
+    static void diffuse(BufferNode* pBufferNode);
 
     void releaseElementMarkBuffer();
 
