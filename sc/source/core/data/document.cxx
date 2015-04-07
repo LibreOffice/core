@@ -3525,17 +3525,19 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScRange& rRange ) const
 sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if ( maTabs[nTab] )
-        return maTabs[nTab]->GetNumberFormat( rPos );
-    return 0;
+    if (!TableExists(nTab))
+        return 0;
+
+    return maTabs[nTab]->GetNumberFormat( rPos );
 }
 
 void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat )
 {
-    if (!TableExists(rPos.Tab()))
+    SCTAB nTab = rPos.Tab();
+    if (!TableExists(nTab))
         return;
 
-    maTabs[rPos.Tab()]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
+    maTabs[nTab]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
 }
 
 void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
