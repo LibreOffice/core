@@ -4487,6 +4487,17 @@ module com {
     published exception CommandFailedException: ::com::sun::star::uno::Exception {
      any Reason;
     };
+    published enum ContentCreationError {
+     UNKNOWN = 0,
+     /** @deprecated */ NO_CONTENT_BROKER = 1,
+     /** @deprecated */ NO_IDENTIFIER_FACTORY = 2,
+     IDENTIFIER_CREATION_FAILED = 3,
+     NO_CONTENT_PROVIDER = 4,
+     CONTENT_CREATION_FAILED = 5
+    };
+    published exception ContentCreationException: ::com::sun::star::uno::Exception {
+     ::com::sun::star::ucb::ContentCreationError eError;
+    };
     published interface XProgressHandler;
     published interface XCommandEnvironment {
      interface ::com::sun::star::uno::XInterface;
@@ -9256,6 +9267,10 @@ module com {
      interface ::com::sun::star::io::XActiveDataSink;
      interface ::com::sun::star::beans::XPropertySet;
     };
+    module zip {
+     published exception ZipException: ::com::sun::star::uno::Exception {
+     };
+    };
     module manifest {
      published interface XManifestReader {
       interface ::com::sun::star::uno::XInterface;
@@ -9337,21 +9352,6 @@ module com {
       sequence< byte > extra;
       string sComment;
      };
-     published exception ZipException: ::com::sun::star::uno::Exception {
-     };
-    };
-   };
-   module ucb {
-    published enum ContentCreationError {
-     UNKNOWN = 0,
-     /** @deprecated */ NO_CONTENT_BROKER = 1,
-     /** @deprecated */ NO_IDENTIFIER_FACTORY = 2,
-     IDENTIFIER_CREATION_FAILED = 3,
-     NO_CONTENT_PROVIDER = 4,
-     CONTENT_CREATION_FAILED = 5
-    };
-    published exception ContentCreationException: ::com::sun::star::uno::Exception {
-     ::com::sun::star::ucb::ContentCreationError eError;
     };
    };
    module task {
@@ -14553,6 +14553,7 @@ module com {
      const short FILE = 2;
      const short MAIL = 3;
      const short PRINTER = 1;
+     const short SHELL = 4;
     };
     published service NumberingLevel {
      [property] short Adjust;
@@ -15170,6 +15171,7 @@ module com {
      [property] long Height;
      [property] boolean IsAutoHeight;
      [property, maybevoid, optional] boolean IsSplitAllowed;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > RowInteropGrabBag;
     };
     published service TextTables {
      interface ::com::sun::star::container::XIndexAccess;
