@@ -1343,7 +1343,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     g_object_get( pSettings, "gtk-cursor-blink", &blink, (char *)NULL );
     if( blink )
     {
-        gint blink_time = STYLE_CURSOR_NOBLINKTIME;
+        gint blink_time = static_cast<gint>(STYLE_CURSOR_NOBLINKTIME);
         g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, (char *)NULL );
         // set the blink_time if there is a setting and it is reasonable
         // else leave the default value
