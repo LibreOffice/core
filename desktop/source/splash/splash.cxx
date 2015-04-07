@@ -58,7 +58,7 @@ private:
     void loadConfig();
     void updateStatus();
     void SetScreenBitmap(BitmapEx &rBitmap);
-    void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
+    static void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static osl::Mutex _aMutex;
 

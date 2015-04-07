@@ -79,7 +79,7 @@ struct CompIdentifiers
             return false;
         }
 
-    OUString getName(::std::vector<Reference<css::deployment::XPackage> > const & a);
+    static OUString getName(::std::vector<Reference<css::deployment::XPackage> > const & a);
 };
 
 OUString CompIdentifiers::getName(::std::vector<Reference<css::deployment::XPackage> > const & a)

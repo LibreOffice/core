@@ -123,10 +123,6 @@ public:
     {
         return maText;
     }
-    OUString GetExtendText() const
-    {
-        return OUString();
-    }
     void SetText(const OUString& rText)
     {
         maText = rText;

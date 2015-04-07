@@ -204,8 +204,8 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK( startProgress, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
-    bool            isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
-    bool            checkDependencies( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
+    static bool     isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    static bool     checkDependencies( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool            hasActiveEntries();
     void            disableAllEntries();
 

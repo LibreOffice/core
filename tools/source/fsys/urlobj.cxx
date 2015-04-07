@@ -3660,7 +3660,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
         || GetPort() != rObject.GetPort()
         || HasParam() != rObject.HasParam()
         || GetParam(NO_DECODE) != rObject.GetParam(NO_DECODE)
-        || GetMsgId(NO_DECODE) != rObject.GetMsgId(NO_DECODE))
+        || GetMsgId(NO_DECODE) != INetURLObject::GetMsgId(NO_DECODE))
         return false;
     OUString aPath1(GetURLPath(NO_DECODE));
     OUString aPath2(rObject.GetURLPath(NO_DECODE));
@@ -3740,7 +3740,7 @@ bool INetURLObject::operator <(INetURLObject const & rObject) const
         return true;
     else if (nCompare > 0)
         return false;
-    return GetMsgId(NO_DECODE).compareTo(rObject.GetMsgId(NO_DECODE)) < 0;
+    return GetMsgId(NO_DECODE).compareTo(INetURLObject::GetMsgId(NO_DECODE)) < 0;
 }
 
 bool INetURLObject::ConcatData(INetProtocol eTheScheme,
@@ -4568,7 +4568,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
 }
 
 OUString INetURLObject::GetMsgId(DecodeMechanism,
-                                 rtl_TextEncoding) const
+                                 rtl_TextEncoding)
 {
     return OUString();
 }
