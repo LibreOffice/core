@@ -2112,12 +2112,12 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
     {
         // Move Up is just a Move Down with the source and target reversed
         pTargetEntry = pSourceEntry;
-        pSourceEntry = m_pContentsListBox->PrevSibling( pTargetEntry );
+        pSourceEntry = SvTreeListBox::PrevSibling( pTargetEntry );
         pToSelect = pTargetEntry;
     }
     else
     {
-        pTargetEntry = m_pContentsListBox->NextSibling( pSourceEntry );
+        pTargetEntry = SvTreeListBox::NextSibling( pSourceEntry );
         pToSelect = pSourceEntry;
     }
 
@@ -2709,13 +2709,13 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
 
     if (pButton == m_pMoveDownButton)
     {
-        pTargetEntry = m_pMenuListBox->NextSibling( pSourceEntry );
+        pTargetEntry = SvTreeListBox::NextSibling( pSourceEntry );
     }
     else if (pButton == m_pMoveUpButton)
     {
         // Move Up is just a Move Down with the source and target reversed
         pTargetEntry = pSourceEntry;
-        pSourceEntry = m_pMenuListBox->PrevSibling( pTargetEntry );
+        pSourceEntry = SvTreeListBox::PrevSibling( pTargetEntry );
     }
 
     if ( pSourceEntry != NULL && pTargetEntry != NULL )

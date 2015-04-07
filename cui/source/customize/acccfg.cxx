@@ -953,7 +953,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
 
         pEntry->m_bIsConfigurable = true;
         pEntry->m_sCommand = sCommand;
-        CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), sLabel);
+        CreateCustomItems(pLBEntry, SvTabListBox::GetEntryText(pLBEntry, 0), sLabel);
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
@@ -972,7 +972,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         TAccInfo* pEntry = static_cast<TAccInfo*>(pLBEntry->GetUserData());
 
         pEntry->m_bIsConfigurable = false;
-        CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), OUString());
+        CreateCustomItems(pLBEntry, SvTabListBox::GetEntryText(pLBEntry, 0), OUString());
     }
 }
 
@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
-    sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
     TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
     OUString sNewCommand = m_pFunctionBox->GetCurCommand();
     OUString sLabel = m_pFunctionBox->GetCurLabel();
@@ -1070,7 +1070,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
-    sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
     TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
 
     // remove function name from selected entry
@@ -1088,7 +1088,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     Help::ShowBalloon( this, Point(), OUString() );
     if (pListBox == m_pEntriesBox)
     {
-        sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+        sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
         TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
         OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
@@ -1117,7 +1117,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         SvTreeListEntry* pLBEntry = m_pEntriesBox->FirstSelected();
         if ( pLBEntry != 0 )
         {
-            sal_uLong nPos = m_pEntriesBox->GetModel()->GetRelPos( pLBEntry );
+            sal_uLong nPos = SvTreeList::GetRelPos( pLBEntry );
             TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
             OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 

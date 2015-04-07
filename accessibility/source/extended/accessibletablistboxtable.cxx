@@ -205,7 +205,7 @@ namespace accessibility
                                     m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                                 AccessibleCheckBoxCell* pCell =
                                     static_cast< AccessibleCheckBoxCell* >( xChild.get() );
-                                pCell->SetChecked( m_pTabListBox->IsItemChecked( pEntry, nCol ) );
+                                pCell->SetChecked( SvHeaderTabListBox::IsItemChecked( pEntry, nCol ) );
                             }
                         }
                     }

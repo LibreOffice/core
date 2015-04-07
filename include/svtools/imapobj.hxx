@@ -69,9 +69,9 @@ protected:
     virtual void        ReadIMapObject(  SvStream& rIStm ) = 0;
 
     // helper methods
-    void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100) const;
+    static void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100);
     void AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const;
-    void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) const;
+    static void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100);
     void AppendNCSAURL(OStringBuffer&rBuf, const OUString& rBaseURL) const;
 
 public:

@@ -194,7 +194,7 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
         if ( pRegistration && !pRegistration->sLocation.isEmpty() )
         {
-            OUString sName( pPathBox->GetEntryText( pEntry, 0 ) );
+            OUString sName( SvTabListBox::GetEntryText( pEntry, 0 ) );
             OFileNotation aTransformer( pRegistration->sLocation );
             aRegistrations[ sName ] = DatabaseRegistration( aTransformer.get( OFileNotation::N_URL ), pRegistration->bReadOnly );
         }
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
     if ( !pOldRegistration || pOldRegistration->bReadOnly )
         return 0L;
 
-    OUString sOldName = pPathBox->GetEntryText(pEntry,0);
+    OUString sOldName = SvTabListBox::GetEntryText(pEntry,0);
     m_pCurEntry = pEntry;
     openLinkDialog( sOldName, pOldRegistration->sLocation, pEntry );
     m_pCurEntry = NULL;
@@ -438,7 +438,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
         for ( sal_uLong i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = pPathBox->GetEntry(i);
-            if ( (!m_pCurEntry || m_pCurEntry != pEntry) && pPathBox->GetEntryText(pEntry,0) == *_pName )
+            if ( (!m_pCurEntry || m_pCurEntry != pEntry) && SvTabListBox::GetEntryText(pEntry,0) == *_pName )
                 return 0L;
         }
     }

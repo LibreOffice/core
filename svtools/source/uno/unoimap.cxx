@@ -527,7 +527,7 @@ public:
     virtual ~SvUnoImageMap();
 
     bool fillImageMap( ImageMap& rMap ) const;
-    SvUnoImageMapObject* getObject( const Any& aElement ) const throw( IllegalArgumentException );
+    static SvUnoImageMapObject* getObject( const Any& aElement ) throw( IllegalArgumentException );
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )
 
@@ -587,7 +587,7 @@ SvUnoImageMap::~SvUnoImageMap()
     }
 }
 
-SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement ) const
+SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
     throw( IllegalArgumentException )
 {
     Reference< XInterface > xObject;

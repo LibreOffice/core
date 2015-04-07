@@ -451,7 +451,7 @@ namespace svt
         /// read the current state of the dirs
         bool        readCurrentState();
 
-        OUString    implParseSmart( const OUString& _rPath );
+        static OUString    implParseSmart( const OUString& _rPath );
 
         bool        implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 

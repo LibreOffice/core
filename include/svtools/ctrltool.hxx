@@ -191,8 +191,8 @@ public:
     }
     const vcl::FontInfo&    GetFontName( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
-    sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
-    const vcl::FontInfo&    GetFontInfo( sal_Handle hFontInfo ) const;
+    static sal_Handle           GetNextFontInfo( sal_Handle hFontInfo );
+    static const vcl::FontInfo& GetFontInfo( sal_Handle hFontInfo );
 
     const sal_IntPtr*       GetSizeAry( const vcl::FontInfo& rInfo ) const;
     static const sal_IntPtr* GetStdSizeAry() { return aStdSizeAry; }

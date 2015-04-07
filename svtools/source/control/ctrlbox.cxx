@@ -1380,7 +1380,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         vcl::FontInfo    aInfo;
         while ( hFontInfo )
         {
-            aInfo = pList->GetFontInfo( hFontInfo );
+            aInfo = FontList::GetFontInfo( hFontInfo );
 
             FontWeight  eWeight = aInfo.GetWeight();
             FontItalic  eItalic = aInfo.GetItalic();
@@ -1445,7 +1445,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
             else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
                 bBoldItalic = true;
 
-            hFontInfo = pList->GetNextFontInfo( hFontInfo );
+            hFontInfo = FontList::GetNextFontInfo( hFontInfo );
         }
 
         if ( bInsert )

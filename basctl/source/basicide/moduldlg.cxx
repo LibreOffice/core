@@ -331,7 +331,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
     {
         // Target = module/dialog => put module/dialog under the superordinate Basic
         rpNewParent = GetParent( pTarget );
-        rNewChildPos = GetModel()->GetRelPos( pTarget ) + 1;
+        rNewChildPos = SvTreeList::GetRelPos( pTarget ) + 1;
     }
 
     // get target shell and target library name

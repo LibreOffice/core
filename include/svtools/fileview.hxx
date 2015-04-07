@@ -86,7 +86,7 @@ public:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     const OUString&         GetViewURL() const;
-    OUString                GetURL( SvTreeListEntry* pEntry ) const;
+    static OUString         GetURL( SvTreeListEntry* pEntry );
     OUString                GetCurrentURL() const;
 
     bool                    GetParentURL( OUString& _rParentURL ) const;

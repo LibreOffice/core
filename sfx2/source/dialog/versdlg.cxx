@@ -338,7 +338,7 @@ void SfxVersionDialog::Open_Impl()
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
 
     SvTreeListEntry *pEntry = m_pVersionBox->FirstSelected();
-    sal_uIntPtr nPos = m_pVersionBox->GetModel()->GetRelPos( pEntry );
+    sal_uIntPtr nPos = SvTreeList::GetRelPos( pEntry );
     SfxInt16Item aItem( SID_VERSION, (short)nPos+1 );
     SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
     SfxStringItem aReferer( SID_REFERER, "private:user" );
@@ -432,7 +432,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if (pEntry && pButton == m_pCompareButton)
     {
         SfxAllItemSet aSet( pObjShell->GetPool() );
-        sal_uIntPtr nPos = m_pVersionBox->GetModel()->GetRelPos( pEntry );
+        sal_uIntPtr nPos = SvTreeList::GetRelPos( pEntry );
         aSet.Put( SfxInt16Item( SID_VERSION, (short)nPos+1 ) );
         aSet.Put( SfxStringItem( SID_FILE_NAME, pObjShell->GetMedium()->GetName() ) );
 

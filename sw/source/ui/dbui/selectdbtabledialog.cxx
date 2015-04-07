@@ -155,7 +155,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
     if(pEntry)
     {
-        OUString sTableOrQuery = m_pTable->GetEntryText(pEntry, 0);
+        OUString sTableOrQuery = SvTabListBox::GetEntryText(pEntry, 0);
         sal_Int32 nCommandType = 0 == pEntry->GetUserData() ? 0 : 1;
 
         OUString sDataSourceName;
@@ -191,7 +191,7 @@ OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
-    return m_pTable->GetEntryText(pEntry, 0);
+    return SvTabListBox::GetEntryText(pEntry, 0);
 }
 
 void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTable)
@@ -199,8 +199,8 @@ void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsT
     SvTreeListEntry*    pEntry = m_pTable->First();
     while(pEntry)
     {
-        if((m_pTable->GetEntryText(pEntry, 0) == rTable) &&
-                 ((pEntry->GetUserData() == 0 ) == bIsTable))
+        if((SvTabListBox::GetEntryText(pEntry, 0) == rTable) &&
+           ((pEntry->GetUserData() == 0 ) == bIsTable))
         {
             m_pTable->Select(pEntry);
             break;

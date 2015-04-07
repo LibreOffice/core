@@ -247,7 +247,7 @@ private:
     ItemListenerMultiplexer     maItemListeners;
 
     RMItemData CurRMItemData;
-    RMItemData GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent );
+    static RMItemData GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent );
 
 protected:
     ::svt::ORoadmap*                GetRoadmap() const;

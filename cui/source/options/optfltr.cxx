@@ -216,7 +216,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             {
                 SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
                 bCheck = SV_BUTTON_CHECKED ==
-                        pCheckButtonData->ConvertToButtonState( nButtonFlags );
+                        SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
 
                 if( bCheck != (rOpt.*pArr->FnIs)() )
                     (rOpt.*pArr->FnSet)( bCheck );
@@ -398,7 +398,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
-        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+        eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
     return eState;

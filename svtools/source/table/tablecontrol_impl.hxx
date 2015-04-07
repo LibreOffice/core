@@ -197,7 +197,7 @@ namespace svt { namespace table
         OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
 
         /** returns the position of the current row in the selection vector */
-        int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+        static int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
         void invalidateRect(const Rectangle &rInvalidateRect);
 

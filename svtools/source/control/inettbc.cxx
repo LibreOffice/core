@@ -113,7 +113,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     void                            doExecute();
     void                            Insert( const OUString& rCompletion, const OUString& rURL, bool bForce = false);
     void                            ReadFolder( const OUString& rURL, const OUString& rMatch, bool bSmart );
-    void                            FillPicklist(std::vector<OUString>& rPickList);
+    static void                     FillPicklist(std::vector<OUString>& rPickList);
 
 public:
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const OUString& rText );

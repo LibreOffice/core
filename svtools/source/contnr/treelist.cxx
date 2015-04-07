@@ -359,7 +359,7 @@ SvTreeListEntry* SvTreeList::CloneEntry( SvTreeListEntry* pSource ) const
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::CreateEntry() const
+SvTreeListEntry* SvTreeList::CreateEntry()
 {
     return new SvTreeListEntry;
 }
@@ -807,7 +807,7 @@ SvTreeListEntry* SvTreeList::FirstChild( SvTreeListEntry* pParent ) const
     return pResult;
 }
 
-SvTreeListEntry* SvTreeList::NextSibling( SvTreeListEntry* pEntry ) const
+SvTreeListEntry* SvTreeList::NextSibling( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Entry?");
     if( !pEntry )
@@ -819,7 +819,7 @@ SvTreeListEntry* SvTreeList::NextSibling( SvTreeListEntry* pEntry ) const
     return nPos < rList.size() ? &rList[nPos] : NULL;
 }
 
-SvTreeListEntry* SvTreeList::PrevSibling( SvTreeListEntry* pEntry ) const
+SvTreeListEntry* SvTreeList::PrevSibling( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Entry?");
     if( !pEntry )
@@ -835,7 +835,7 @@ SvTreeListEntry* SvTreeList::PrevSibling( SvTreeListEntry* pEntry ) const
 }
 
 
-SvTreeListEntry* SvTreeList::LastSibling( SvTreeListEntry* pEntry ) const
+SvTreeListEntry* SvTreeList::LastSibling( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"LastSibling:Entry?");
     if( !pEntry )
@@ -915,7 +915,7 @@ sal_uLong SvTreeList::GetAbsPos( const SvTreeListEntry* pEntry) const
     return pEntry->nAbsPos;
 }
 
-sal_uLong SvTreeList::GetRelPos( const SvTreeListEntry* pChild ) const
+sal_uLong SvTreeList::GetRelPos( const SvTreeListEntry* pChild )
 {
     return pChild->GetChildListPos();
 }

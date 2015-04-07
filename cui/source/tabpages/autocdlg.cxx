@@ -792,7 +792,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
-        eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
+        eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
     return eState;
@@ -992,8 +992,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             pArray->push_back(DoubleString());
             DoubleString& rDouble = (*pArray)[pArray->size() - 1];
             SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
-            rDouble.sShort = m_pReplaceTLB->GetEntryText(pEntry, 0);
-            rDouble.sLong = m_pReplaceTLB->GetEntryText(pEntry, 1);
+            rDouble.sShort = SvTabListBox::GetEntryText(pEntry, 0);
+            rDouble.sLong = SvTabListBox::GetEntryText(pEntry, 1);
             rDouble.pUserData = pEntry->GetUserData();
         }
     }
@@ -1102,7 +1102,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     if(!bFirstSelect || !bHasSelectionText)
     {
         SvTreeListEntry* pEntry = pBox->FirstSelected();
-        OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
+        OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
         bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, m_pShortED->GetText() );
@@ -1116,7 +1116,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
                 m_pShortED->SetSelection(aSel);
             }
         }
-        m_pReplaceED->SetText( pBox->GetEntryText(pEntry, 1) );
+        m_pReplaceED->SetText( SvTabListBox::GetEntryText(pEntry, 1) );
         // with UserData there is a Formatinfo
         m_pTextOnlyCB->Check( pEntry->GetUserData() == 0);
     }
@@ -1196,7 +1196,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         DBG_ASSERT( pEntry, "no entry selected" );
         if( pEntry )
         {
-            DeleteEntry(m_pReplaceTLB->GetEntryText(pEntry, 0), m_pReplaceTLB->GetEntryText(pEntry, 1));
+            DeleteEntry(SvTabListBox::GetEntryText(pEntry, 0), SvTabListBox::GetEntryText(pEntry, 1));
             m_pReplaceTLB->GetModel()->Remove(pEntry);
             ModifyHdl(m_pShortED);
             return 0;
@@ -1227,7 +1227,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
                 for( j = 0; j < m_pReplaceTLB->GetEntryCount(); j++ )
                 {
                     SvTreeListEntry* pReplaceEntry = m_pReplaceTLB->GetEntry(j);
-                    if( 0 >=  pCompareClass->compareString(sEntry, m_pReplaceTLB->GetEntryText(pReplaceEntry, 0) ) )
+                    if( 0 >=  pCompareClass->compareString(sEntry, SvTabListBox::GetEntryText(pReplaceEntry, 0) ) )
                         break;
                 }
                 nPos = j;
@@ -1277,7 +1277,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             for(sal_uInt32 i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
-                OUString aTestStr = m_pReplaceTLB->GetEntryText(pEntry, 0);
+                OUString aTestStr = SvTabListBox::GetEntryText(pEntry, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
                     if( !rRepString.isEmpty() )
@@ -1331,7 +1331,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                         ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
-                                m_pReplaceTLB->GetEntryText( pFirstSel, 1 ) );
+                                SvTabListBox::GetEntryText( pFirstSel, 1 ) );
     if( bEnableNew )
     {
         for(std::set<OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)

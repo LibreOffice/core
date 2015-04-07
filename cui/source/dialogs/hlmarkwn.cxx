@@ -228,7 +228,7 @@ namespace
                 }
                 break;
             }
-            pEntry = rLbTree.NextSibling(pEntry);
+            pEntry = SvTreeListBox::NextSibling(pEntry);
         }
     }
 }

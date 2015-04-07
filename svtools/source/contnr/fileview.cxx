@@ -462,7 +462,7 @@ public:
 
     void                    OpenFolder_Impl();
     // #83004# -------
-    void                        ReplaceTabWithString( OUString& aValue );
+    static void             ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
     void                    SortFolderContent_Impl();
 
@@ -1117,7 +1117,7 @@ Size SvtFileView::GetOptimalSize() const
 
 
 
-OUString SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
+OUString SvtFileView::GetURL( SvTreeListEntry* pEntry )
 {
     OUString aURL;
     if ( pEntry && pEntry->GetUserData() )
