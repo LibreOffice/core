@@ -1014,6 +1014,10 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
         mpFS->endElementNS( XML_a, XML_tblGrid );
 
+        // map for holding the transpose index of the merged cells and pair<parentTransposeIndex, parentCell>
+        typedef std::unordered_map<sal_Int32, std::pair<sal_Int32, Reference< XMergeableCell> > > transposeTableMap;
+        transposeTableMap mergedCellMap;
+
         for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
         {
             Reference< XPropertySet > xRowPropSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -1022,21 +1026,132 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
             xRowPropSet->getPropertyValue( "Height" ) >>= nRowHeight;
 
             mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( oox::drawingml::convertHmmToEmu( nRowHeight ) ), FSEND );
-
             for( sal_Int32 nColumn = 0; nColumn < nColumnCount; nColumn++ )
             {
-                Reference< XMergeableCell > xCell( xTable->getCellByPosition( nColumn, nRow ), UNO_QUERY_THROW );
-                if ( !xCell->isMerged() )
+                Reference< XMergeableCell > xCell( xTable->getCellByPosition( nColumn, nRow ),
+                                                   UNO_QUERY_THROW );
+                sal_Int32 transposedIndexofCell = (nRow * nColumnCount) + nColumn;
+
+                if(xCell->getColumnSpan() > 1 && xCell->getRowSpan() > 1)
                 {
-                    mpFS->startElementNS( XML_a, XML_tc, FSEND );
+                    // having both : horizontal and vertical merge
+                    mpFS->startElementNS(XML_a, XML_tc, XML_gridSpan,
+                                         I32S(xCell->getColumnSpan()),
+                                         XML_rowSpan, I32S(xCell->getRowSpan()),
+                                         FSEND);
+                    // since, XMergeableCell doesn't have the information about
+                    // cell having hMerge or vMerge.
+                    // So, Populating the merged cell map in-order to use it to
+                    // decide the attribute for the individual cell.
+                    for(sal_Int32 columnIndex = nColumn; columnIndex < nColumn+xCell->getColumnSpan(); ++columnIndex)
+                    {
+                        for(sal_Int32 rowIndex = nRow; rowIndex < nRow+xCell->getRowSpan(); ++rowIndex)
+                        {
+                            sal_Int32 transposeIndexForMergeCell =
+                                (rowIndex * nColumnCount) + columnIndex;
+                            mergedCellMap[transposeIndexForMergeCell] =
+                                std::make_pair(transposedIndexofCell, xCell);
+                        }
+                    }
 
-                    WriteTextBox( xCell, XML_a );
-
-                    Reference< XPropertySet > xCellPropSet(xCell, UNO_QUERY_THROW);
-                    WriteTableCellProperties(xCellPropSet);
-
-                    mpFS->endElementNS( XML_a, XML_tc );
                 }
+                else if(xCell->getColumnSpan() > 1)
+                {
+                    // having : horizontal merge
+                    mpFS->startElementNS(XML_a, XML_tc, XML_gridSpan,
+                                         I32S(xCell->getColumnSpan()), FSEND);
+                    for(sal_Int32 columnIndex = nColumn; columnIndex < xCell->getColumnSpan(); ++columnIndex) {
+                        sal_Int32 transposeIndexForMergeCell = (nRow*nColumnCount) + columnIndex;
+                        mergedCellMap[transposeIndexForMergeCell] =
+                            std::make_pair(transposedIndexofCell, xCell);
+                    }
+                }
+                else if(xCell->getRowSpan() > 1)
+                {
+                    // having : vertical merge
+                    mpFS->startElementNS(XML_a, XML_tc, XML_rowSpan,
+                                         I32S(xCell->getRowSpan()), FSEND);
+
+                    for(sal_Int32 rowIndex = nRow; rowIndex < xCell->getRowSpan(); ++rowIndex) {
+                        sal_Int32 transposeIndexForMergeCell = (rowIndex*nColumnCount) + nColumn;
+                        mergedCellMap[transposeIndexForMergeCell] =
+                            std::make_pair(transposedIndexofCell, xCell);
+                    }
+                }
+                else
+                {
+                    // now, the cell can be an independent cell or
+                    // it can be a cell which is been merged to some parent cell
+                    if(!xCell->isMerged())
+                    {
+                        // independent cell
+                        mpFS->startElementNS( XML_a, XML_tc, FSEND );
+                    }
+                    else
+                    {
+                        // it a merged cell to some parent cell
+                        // find the parent cell for the current cell at hand
+                        transposeTableMap::iterator it = mergedCellMap.find(transposedIndexofCell);
+                        if(it != mergedCellMap.end())
+                        {
+                            sal_Int32 transposeIndexOfParent = it->second.first;
+                            Reference< XMergeableCell > parentCell = it->second.second;
+                            // finding the row and column index for the parent cell from transposed index
+                            sal_Int32 parentColumnIndex = transposeIndexOfParent % nColumnCount;
+                            sal_Int32 parentRowIndex = transposeIndexOfParent / nColumnCount;
+                            if(nColumn == parentColumnIndex)
+                            {
+                                // the cell is vertical merge and it might have gridspan
+                                if(parentCell->getColumnSpan() > 1)
+                                {
+                                    // vMerge and has gridSpan
+                                    mpFS->startElementNS( XML_a, XML_tc,
+                                                          XML_vMerge, I32S(1),
+                                                          XML_gridSpan, I32S(xCell->getColumnSpan()),
+                                                          FSEND );
+                                }
+                                else
+                                {
+                                    // only vMerge
+                                    mpFS->startElementNS( XML_a, XML_tc,
+                                                          XML_vMerge, I32S(1), FSEND );
+                                }
+                            }
+                            else if(nRow == parentRowIndex)
+                            {
+                                // the cell is horizontal merge and it might have rowspan
+                                if(parentCell->getRowSpan() > 1)
+                                {
+                                    // hMerge and has rowspan
+                                    mpFS->startElementNS( XML_a, XML_tc,
+                                                          XML_hMerge, I32S(1),
+                                                          XML_rowSpan, I32S(xCell->getRowSpan()),
+                                                          FSEND );
+                                }
+                                else
+                                {
+                                    // only hMerge
+                                    mpFS->startElementNS( XML_a, XML_tc,
+                                                          XML_hMerge, I32S(1), FSEND );
+                                }
+                            }
+                            else
+                            {
+                                // has hMerge and vMerge
+                                mpFS->startElementNS( XML_a, XML_tc,
+                                                      XML_vMerge, I32S(1),
+                                                      XML_hMerge, I32S(1),
+                                                      FSEND );
+                            }
+                        }
+                    }
+                }
+                WriteTextBox( xCell, XML_a );
+
+                Reference< XPropertySet > xCellPropSet(xCell, UNO_QUERY_THROW);
+                WriteTableCellProperties(xCellPropSet);
+
+                mpFS->endElementNS( XML_a, XML_tc );
             }
 
             mpFS->endElementNS( XML_a, XML_tr );
