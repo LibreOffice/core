@@ -802,6 +802,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
         rCfg.SetSaveRelFile(bCheck);
     else
         rCfg.SetSaveRelNet(bCheck);
+    rCfg.Commit();
     return 0;
 }
 
