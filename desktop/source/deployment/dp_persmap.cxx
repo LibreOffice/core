@@ -21,10 +21,6 @@
 #include "dp_persmap.h"
 #include <rtl/strbuf.hxx>
 
-#ifndef DISABLE_BDB2PMAP
-#  include <vector>
-#endif
-
 using namespace ::rtl;
 
 // the persistent map is used to manage a handful of key-value string pairs
