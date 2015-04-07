@@ -28,7 +28,9 @@
 
 using namespace css;
 
+#if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
+#endif
 
 class SdTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -36,9 +38,11 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
+#if !defined(WNT) && !defined(MACOSX)
     void testRegisterCallback();
     void testPostMouseEvent();
     void testSetTextSelection();
+#endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
@@ -49,12 +53,16 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+#if !defined(WNT) && !defined(MACOSX)
     SdXImpressDocument* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+#endif
 
     uno::Reference<lang::XComponent> mxComponent;
+#if !defined(WNT) && !defined(MACOSX)
     Rectangle m_aInvalidation;
+#endif
 };
 
 void SdTiledRenderingTest::setUp()
@@ -72,6 +80,7 @@ void SdTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#if !defined(WNT) && !defined(MACOSX)
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -182,6 +191,7 @@ void SdTiledRenderingTest::testSetTextSelection()
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
 
