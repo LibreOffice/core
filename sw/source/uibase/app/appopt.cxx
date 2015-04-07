@@ -108,6 +108,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
                                     SID_HTML_MODE,          SID_HTML_MODE,
                                     FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
+                                    FN_PARAM_IGNORE_PROTECTED, FN_PARAM_IGNORE_PROTECTED,
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
@@ -123,6 +124,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     {
         pRet->Put( SwShadowCursorItem( aViewOpt, FN_PARAM_SHADOWCURSOR ));
         pRet->Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
+        pRet->Put(SfxBoolItem(FN_PARAM_IGNORE_PROTECTED, aViewOpt.IsIgnoreProtectedArea()));
     }
 
     if( pAppView )
@@ -408,6 +410,9 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         aViewOpt.SetCursorInProtectedArea(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     }
+
+    if (rSet.GetItemState(FN_PARAM_IGNORE_PROTECTED, false, &pItem) == SfxItemState::SET)
+        aViewOpt.SetIgnoreProtectedArea(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
         // set elements for the current view and shell
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
