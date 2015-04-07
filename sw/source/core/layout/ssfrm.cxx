@@ -666,8 +666,8 @@ const SwRect SwFrm::UnionFrm( bool bBorder ) const
         if( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
         {
             const SvxShadowItem &rShadow = rAttrs.GetShadow();
-            nLeft -= rShadow.CalcShadowSpace( SHADOW_LEFT );
-            nAdd += rShadow.CalcShadowSpace( SHADOW_RIGHT );
+            nLeft -= rShadow.CalcShadowSpace( SvxShadowItemSide::LEFT );
+            nAdd += rShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT );
         }
     }
     if( IsTxtFrm() && static_cast<const SwTxtFrm*>(this)->HasPara() )

@@ -1498,12 +1498,12 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
             {
                 const SvxShadowItem &rShadow = rAttrs.GetShadow();
                 if ( bTop )
-                    (rRect.*fnRect->fnSubTop)(rShadow.CalcShadowSpace(SHADOW_TOP));
-                (rRect.*fnRect->fnSubLeft)(rShadow.CalcShadowSpace(SHADOW_LEFT));
+                    (rRect.*fnRect->fnSubTop)(rShadow.CalcShadowSpace(SvxShadowItemSide::TOP));
+                (rRect.*fnRect->fnSubLeft)(rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT));
                 if ( bBottom )
                     (rRect.*fnRect->fnAddBottom)
-                                    (rShadow.CalcShadowSpace( SHADOW_BOTTOM ));
-                (rRect.*fnRect->fnAddRight)(rShadow.CalcShadowSpace(SHADOW_RIGHT));
+                                    (rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ));
+                (rRect.*fnRect->fnAddRight)(rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT));
             }
         }
     }

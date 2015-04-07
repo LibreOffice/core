@@ -2718,8 +2718,8 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
     {
         SvxShadowItem aShadow( rTab.GetFrmFmt()->GetShadow() );
-        nPrtWidth += aShadow.CalcShadowSpace( SHADOW_LEFT ) +
-                     aShadow.CalcShadowSpace( SHADOW_RIGHT );
+        nPrtWidth += aShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) +
+                     aShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT );
     }
     if( nPrtWidth != rTblFrmSz.GetWidth() )
     {

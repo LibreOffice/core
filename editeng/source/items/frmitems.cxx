@@ -1429,31 +1429,31 @@ SfxPoolItem* SvxShadowItem::Clone( SfxItemPool* ) const
 
 
 
-sal_uInt16 SvxShadowItem::CalcShadowSpace( sal_uInt16 nShadow ) const
+sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
 {
     sal_uInt16 nSpace = 0;
 
     switch ( nShadow )
     {
-        case SHADOW_TOP:
+        case SvxShadowItemSide::TOP:
             if ( eLocation == SVX_SHADOW_TOPLEFT ||
                  eLocation == SVX_SHADOW_TOPRIGHT  )
                 nSpace = nWidth;
             break;
 
-        case SHADOW_BOTTOM:
+        case SvxShadowItemSide::BOTTOM:
             if ( eLocation == SVX_SHADOW_BOTTOMLEFT ||
                  eLocation == SVX_SHADOW_BOTTOMRIGHT  )
                 nSpace = nWidth;
             break;
 
-        case SHADOW_LEFT:
+        case SvxShadowItemSide::LEFT:
             if ( eLocation == SVX_SHADOW_TOPLEFT ||
                  eLocation == SVX_SHADOW_BOTTOMLEFT )
                 nSpace = nWidth;
             break;
 
-        case SHADOW_RIGHT:
+        case SvxShadowItemSide::RIGHT:
             if ( eLocation == SVX_SHADOW_TOPRIGHT ||
                  eLocation == SVX_SHADOW_BOTTOMRIGHT )
                 nSpace = nWidth;

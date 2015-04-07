@@ -31,11 +31,7 @@
 
     This item describes the shadow attribute (color, width and position).
 */
-
-#define SHADOW_TOP      ((sal_uInt16)0)
-#define SHADOW_BOTTOM   ((sal_uInt16)1)
-#define SHADOW_LEFT     ((sal_uInt16)2)
-#define SHADOW_RIGHT    ((sal_uInt16)3)
+enum class SvxShadowItemSide { TOP, BOTTOM, LEFT, RIGHT };
 
 class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
 {
@@ -77,7 +73,7 @@ public:
     void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
 
     // Calculate width of the shadow on the page.
-    sal_uInt16 CalcShadowSpace( sal_uInt16 nShadow ) const;
+    sal_uInt16 CalcShadowSpace( SvxShadowItemSide nShadow ) const;
 
     virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;

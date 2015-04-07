@@ -306,7 +306,7 @@ SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
 }
 
 sal_uInt16 SwFont::CalcShadowSpace(
-        const sal_uInt16 nShadow, const bool bVertLayout,
+        const SvxShadowItemSide nShadow, const bool bVertLayout,
         const bool bSkipLeft, const bool bSkipRight ) const
 {
     sal_uInt16 nSpace = 0;
@@ -314,7 +314,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
     const SvxShadowLocation aLoc = GetAbsShadowLocation( bVertLayout );
     switch( nShadow )
     {
-        case SHADOW_TOP:
+        case SvxShadowItemSide::TOP:
             if(( aLoc == SVX_SHADOW_TOPLEFT ||
                aLoc == SVX_SHADOW_TOPRIGHT ) &&
                ( nOrient == 0 || nOrient == 1800 ||
@@ -325,7 +325,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
             }
             break;
 
-        case SHADOW_BOTTOM:
+        case SvxShadowItemSide::BOTTOM:
             if(( aLoc == SVX_SHADOW_BOTTOMLEFT ||
                aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
                ( nOrient == 0 || nOrient == 1800 ||
@@ -336,7 +336,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
             }
             break;
 
-        case SHADOW_LEFT:
+        case SvxShadowItemSide::LEFT:
             if(( aLoc == SVX_SHADOW_TOPLEFT ||
                aLoc == SVX_SHADOW_BOTTOMLEFT ) &&
                ( nOrient == 900 || nOrient == 2700 ||
@@ -347,7 +347,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
             }
             break;
 
-         case SHADOW_RIGHT:
+         case SvxShadowItemSide::RIGHT:
             if(( aLoc == SVX_SHADOW_TOPRIGHT ||
                aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
                ( nOrient == 900 || nOrient == 2700 ||

@@ -1992,7 +1992,7 @@ void SwBorderAttrs::_CalcTopLine()
     nTopLine = (bBorderDist && !rBox.GetTop())
                             ? rBox.GetDistance  (SvxBoxItemLine::TOP)
                             : rBox.CalcLineSpace(SvxBoxItemLine::TOP);
-    nTopLine = nTopLine + rShadow.CalcShadowSpace(SHADOW_TOP);
+    nTopLine = nTopLine + rShadow.CalcShadowSpace(SvxShadowItemSide::TOP);
     bTopLine = false;
 }
 
@@ -2001,7 +2001,7 @@ void SwBorderAttrs::_CalcBottomLine()
     nBottomLine = (bBorderDist && !rBox.GetBottom())
                             ? rBox.GetDistance  (SvxBoxItemLine::BOTTOM)
                             : rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
-    nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SHADOW_BOTTOM);
+    nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM);
     bBottomLine = false;
 }
 
@@ -2010,7 +2010,7 @@ void SwBorderAttrs::_CalcLeftLine()
     nLeftLine = (bBorderDist && !rBox.GetLeft())
                             ? rBox.GetDistance  (SvxBoxItemLine::LEFT)
                             : rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
-    nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SHADOW_LEFT);
+    nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT);
     bLeftLine = false;
 }
 
@@ -2019,7 +2019,7 @@ void SwBorderAttrs::_CalcRightLine()
     nRightLine = (bBorderDist && !rBox.GetRight())
                             ? rBox.GetDistance  (SvxBoxItemLine::RIGHT)
                             : rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
-    nRightLine = nRightLine + rShadow.CalcShadowSpace(SHADOW_RIGHT);
+    nRightLine = nRightLine + rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT);
     bRightLine = false;
 }
 

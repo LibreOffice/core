@@ -902,8 +902,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             SvxLRSpaceItem aLR( pFmt->GetLRSpace() );
             SvxShadowItem aSh( pFmt->GetShadow() );
 
-            SwTwips nShRight = aSh.CalcShadowSpace( SHADOW_RIGHT );
-            SwTwips nShLeft = aSh.CalcShadowSpace( SHADOW_LEFT );
+            SwTwips nShRight = aSh.CalcShadowSpace( SvxShadowItemSide::RIGHT );
+            SwTwips nShLeft = aSh.CalcShadowSpace( SvxShadowItemSide::LEFT );
 
             aLR.SetLeft ( rNew.GetLeft() - nShLeft );
             aLR.SetRight( rNew.GetRightMax() - rNew.GetRight() - nShRight );

@@ -483,28 +483,28 @@ SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
-    return rShadow.CalcShadowSpace(SHADOW_TOP ) + rBox.CalcLineSpace(SvxBoxItemLine::TOP);
+    return rShadow.CalcShadowSpace(SvxShadowItemSide::TOP ) + rBox.CalcLineSpace(SvxBoxItemLine::TOP);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcBottomSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem& rBox       = GetBox();
-    return rShadow.CalcShadowSpace(SHADOW_BOTTOM) + rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
+    return rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM) + rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcLeftSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
-    return rShadow.CalcShadowSpace(SHADOW_LEFT) + rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
+    return rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT) + rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
-    return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
+    return rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT) + rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
 }
 
 // erase attribute from the set
