@@ -2562,7 +2562,6 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
             Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
             OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                     '%',
                                                      INetURLObject::DECODE_UNAMBIGUOUS,
                                                      RTL_TEXTENCODING_UTF8 );
             sal_Int32 nExtLen = aURL.GetExtension().getLength();

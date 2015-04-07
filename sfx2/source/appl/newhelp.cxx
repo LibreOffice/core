@@ -936,7 +936,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
             {
                 OUString aToken = aUserData.getToken(i, ';');
                 m_pSearchED->InsertEntry( INetURLObject::decode(
-                    aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                    aToken, INetURLObject::DECODE_WITH_CHARSET ) );
             }
         }
     }
@@ -959,7 +959,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     {
         OUString aText = m_pSearchED->GetEntry(i);
         aUserData += INetURLObject::encode(
-            aText, INetURLObject::PART_UNO_PARAM_VALUE, '%',
+            aText, INetURLObject::PART_UNO_PARAM_VALUE,
             INetURLObject::ENCODE_ALL );
         aUserData += ";";
     }

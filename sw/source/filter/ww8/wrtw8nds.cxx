@@ -1085,14 +1085,14 @@ bool WW8AttributeOutput::EndURL(bool const)
 OUString BookmarkToWord(const OUString &rBookmark)
 {
     OUString sRet(INetURLObject::encode(rBookmark,
-        INetURLObject::PART_REL_SEGMENT_EXTRA, '%',
+        INetURLObject::PART_REL_SEGMENT_EXTRA,
         INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_ASCII_US));
     return TruncateBookmark(sRet);
 }
 
 OUString BookmarkToWriter(const OUString &rBookmark)
 {
-    return INetURLObject::decode(rBookmark, '%',
+    return INetURLObject::decode(rBookmark,
         INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_ASCII_US);
 }
 

@@ -206,7 +206,7 @@ SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
 
 void SectRepr::SetFile( const OUString& rFile )
 {
-    OUString sNewFile( INetURLObject::decode( rFile, '%',
+    OUString sNewFile( INetURLObject::decode( rFile,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
@@ -293,7 +293,6 @@ OUString SectRepr::GetFile() const
                         .replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
     }
     return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
-                                  '%',
                                   INetURLObject::DECODE_UNAMBIGUOUS,
                                   RTL_TEXTENCODING_UTF8 );
 }
@@ -1783,7 +1782,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
-                m_sFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
+                m_sFileName, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
         }
     }

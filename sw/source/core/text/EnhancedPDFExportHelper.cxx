@@ -1647,7 +1647,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // than one link to this destination:
                     OUString aURL( INetURLObject::decode(
                         p->rINetAttr.GetINetFmt().GetValue(),
-                        '%',
                         INetURLObject::DECODE_UNAMBIGUOUS,
                         RTL_TEXTENCODING_UTF8 ) );
 

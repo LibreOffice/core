@@ -1200,7 +1200,6 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos(reinterpret_cast<void*>(nData)));
 
     sAutoMarkURL = INetURLObject::decode( rSh.GetTOIAutoMarkURL(),
-                                        '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );

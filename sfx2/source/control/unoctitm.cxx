@@ -561,7 +561,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
             {
                 // STRING support
-                rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, '%', INetURLObject::DECODE_WITH_CHARSET ));
+                rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, INetURLObject::DECODE_WITH_CHARSET ));
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
             {

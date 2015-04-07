@@ -81,7 +81,6 @@ enum class INetProtocol
     Cid,
     Out,
     VndSunStarHier,
-    Vim,
     Uno,
     Component,
     VndSunStarPkg,
@@ -185,7 +184,7 @@ public:
     inline OUString GetMainURL(DecodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset
                                     = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aAbsURIRef, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aAbsURIRef, eMechanism, eCharset); }
 
     OUString GetURLNoPass(DecodeMechanism eMechanism = DECODE_TO_IURI,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
@@ -439,12 +438,12 @@ public:
     inline OUString GetUser(DecodeMechanism eMechanism = DECODE_TO_IURI,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aUser, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aUser, eMechanism, eCharset); }
 
     inline OUString GetPass(DecodeMechanism eMechanism = DECODE_TO_IURI,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aAuth, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aAuth, eMechanism, eCharset); }
 
     inline bool SetUser(OUString const & rTheUser,
                         EncodeMechanism eMechanism = WAS_ENCODED,
@@ -468,7 +467,7 @@ public:
     inline OUString GetHost(DecodeMechanism eMechanism = DECODE_TO_IURI,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aHost, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aHost, eMechanism, eCharset); }
 
     OUString GetHostPort(DecodeMechanism eMechanism = DECODE_TO_IURI,
                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -489,7 +488,7 @@ public:
     inline OUString GetURLPath(DecodeMechanism eMechanism = DECODE_TO_IURI,
                                 rtl_TextEncoding eCharset
                                     = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aPath, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aPath, eMechanism, eCharset); }
 
     inline bool SetURLPath(OUString const & rThePath,
                            EncodeMechanism eMechanism = WAS_ENCODED,
@@ -789,7 +788,7 @@ public:
     inline OUString GetParam(DecodeMechanism eMechanism = DECODE_TO_IURI,
                               rtl_TextEncoding eCharset
                                   = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aQuery, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aQuery, eMechanism, eCharset); }
 
     inline bool SetParam(OUString const & rTheQuery,
                          EncodeMechanism eMechanism = WAS_ENCODED,
@@ -802,7 +801,7 @@ public:
     inline OUString GetMark(DecodeMechanism eMechanism = DECODE_TO_IURI,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aFragment, getEscapePrefix(), eMechanism, eCharset); }
+    { return decode(m_aFragment, eMechanism, eCharset); }
 
     inline bool SetMark(OUString const & rTheFragment,
                         EncodeMechanism eMechanism = WAS_ENCODED,
@@ -864,7 +863,6 @@ public:
     enum Part
     {
         PART_USER_PASSWORD          = 0x00001,
-        PART_VIM                    = 0x00004,
         PART_FPATH                  = 0x00008,
         PART_AUTHORITY              = 0x00010,
         PART_REL_SEGMENT_EXTRA      = 0x00020,
@@ -898,9 +896,6 @@ public:
         be encoded (replaced by escape sequences).  Characters outside the US-
         ASCII range are always 'forbidden.'
 
-        @param cEscapePrefix  The first character in an escape sequence
-        (normally '%').
-
         @param eMechanism  See the general discussion for set-methods.
 
         @param eCharset  See the general discussion for set-methods.
@@ -909,7 +904,6 @@ public:
         charset ('forbidden' characters replaced by escape sequences).
      */
     static inline OUString encode(OUString const & rText, Part ePart,
-                                   sal_Char cEscapePrefix,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
                                        = RTL_TEXTENCODING_UTF8);
@@ -917,9 +911,6 @@ public:
     /** Decode some text.
 
         @param rText  Some (encoded) text.
-
-        @param cEscapePrefix  The first character in an escape sequence
-        (normally '%').
 
         @param eMechanism  See the general discussion for get-methods.
 
@@ -929,29 +920,23 @@ public:
         charset (escape sequences replaced by 'raw' characters).
      */
     static inline OUString decode(OUString const & rText,
-                                   sal_Char cEscapePrefix,
                                    DecodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
                                        = RTL_TEXTENCODING_UTF8);
 
     static inline OUString decode(OUStringBuffer const & rText,
-                                   sal_Char cEscapePrefix,
                                    DecodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
                                        = RTL_TEXTENCODING_UTF8);
 
-    static void appendUCS4Escape(OUStringBuffer & rTheText,
-                                 sal_Char cEscapePrefix,
-                                 sal_uInt32 nUCS4);
+    static void appendUCS4Escape(OUStringBuffer & rTheText, sal_uInt32 nUCS4);
 
     static void appendUCS4(OUStringBuffer & rTheText, sal_uInt32 nUCS4,
                            EscapeType eEscapeType, bool bOctets, Part ePart,
-                           sal_Char cEscapePrefix, rtl_TextEncoding eCharset,
-                           bool bKeepVisibleEscapes);
+                           rtl_TextEncoding eCharset, bool bKeepVisibleEscapes);
 
     static sal_uInt32 getUTF32(sal_Unicode const *& rBegin,
                                sal_Unicode const * pEnd, bool bOctets,
-                               sal_Char cEscapePrefix,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset,
                                EscapeType & rEscapeType);
@@ -1227,32 +1212,25 @@ private:
 
     // Coding:
 
-    static inline sal_Char getEscapePrefix(INetProtocol eTheScheme)
-    { return eTheScheme == INetProtocol::Vim ? '=' : '%'; }
-
-    inline sal_Char getEscapePrefix() const
-    { return getEscapePrefix(m_eScheme); }
-
     TOOLS_DLLPRIVATE static inline void appendEscape(
-        OUStringBuffer & rTheText, sal_Char cEscapePrefix,
-        sal_uInt32 nOctet);
+        OUStringBuffer & rTheText, sal_uInt32 nOctet);
 
     static OUString encodeText(
         sal_Unicode const * pBegin, sal_Unicode const * pEnd, bool bOctets,
-        Part ePart, sal_Char cEscapePrefix, EncodeMechanism eMechanism,
-        rtl_TextEncoding eCharset, bool bKeepVisibleEscapes);
+        Part ePart, EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
+        bool bKeepVisibleEscapes);
 
     static inline OUString encodeText(
         OUString const & rTheText, bool bOctets, Part ePart,
-        sal_Char cEscapePrefix, EncodeMechanism eMechanism,
-        rtl_TextEncoding eCharset, bool bKeepVisibleEscapes);
+        EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
+        bool bKeepVisibleEscapes);
 
     static OUString decode(
         sal_Unicode const * pBegin, sal_Unicode const * pEnd,
-        sal_Char cEscapePrefix, DecodeMechanism, rtl_TextEncoding eCharset);
+        DecodeMechanism, rtl_TextEncoding eCharset);
 
     inline OUString decode(
-        SubString const & rSubString, sal_Char cEscapePrefix,
+        SubString const & rSubString,
         DecodeMechanism eMechanism, rtl_TextEncoding eCharset) const;
 
     // Specialized helpers:
@@ -1267,26 +1245,23 @@ private:
 // static
 inline OUString INetURLObject::encodeText(OUString const & rTheText,
                                            bool bOctets, Part ePart,
-                                           sal_Char cEscapePrefix,
                                            EncodeMechanism eMechanism,
                                            rtl_TextEncoding eCharset,
                                            bool bKeepVisibleEscapes)
 {
     return encodeText(rTheText.getStr(),
                       rTheText.getStr() + rTheText.getLength(), bOctets, ePart,
-                      cEscapePrefix, eMechanism, eCharset,
-                      bKeepVisibleEscapes);
+                      eMechanism, eCharset, bKeepVisibleEscapes);
 }
 
 inline OUString INetURLObject::decode(SubString const & rSubString,
-                                       sal_Char cEscapePrefix,
                                        DecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset) const
 {
     return rSubString.isPresent() ?
                decode(m_aAbsURIRef.getStr() + rSubString.getBegin(),
                       m_aAbsURIRef.getStr() + rSubString.getEnd(),
-                      cEscapePrefix, eMechanism, eCharset) :
+                      eMechanism, eCharset) :
                OUString();
 }
 
@@ -1457,31 +1432,27 @@ inline INetURLObject::INetURLObject(OUString const & rFSysPath,
 
 // static
 inline OUString INetURLObject::encode(OUString const & rText, Part ePart,
-                                       sal_Char cEscapePrefix,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
-    return encodeText(rText, false, ePart, cEscapePrefix, eMechanism,
-                      eCharset, false);
+    return encodeText(rText, false, ePart, eMechanism, eCharset, false);
 }
 
 // static
 inline OUString INetURLObject::decode(OUString const & rText,
-                                       sal_Char cEscapePrefix,
                                        DecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
     return decode(rText.getStr(), rText.getStr() + rText.getLength(),
-                  cEscapePrefix, eMechanism, eCharset);
+                  eMechanism, eCharset);
 }
 
 inline OUString INetURLObject::decode(OUStringBuffer const & rText,
-                                       sal_Char cEscapePrefix,
                                        DecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
     return decode(rText.getStr(), rText.getStr() + rText.getLength(),
-                  cEscapePrefix, eMechanism, eCharset);
+                  eMechanism, eCharset);
 }
 
 #endif

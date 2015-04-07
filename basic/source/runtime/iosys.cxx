@@ -195,7 +195,7 @@ OUString findUserInDescription( const OUString& aDescription )
 
         sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
         OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
-        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
+        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(),
                             INetURLObject::DECODE_WITH_CHARSET );
 
         if( left == "user" )

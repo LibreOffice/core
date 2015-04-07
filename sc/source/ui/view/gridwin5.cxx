@@ -379,7 +379,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             OUString aUrl;
             if ( GetEditUrl( aPosPixel, NULL, &aUrl, NULL ) )
             {
-                aHelpText = INetURLObject::decode( aUrl, '%',
+                aHelpText = INetURLObject::decode( aUrl,
                     INetURLObject::DECODE_UNAMBIGUOUS );
 
                 if( bCtrlClickHlink )

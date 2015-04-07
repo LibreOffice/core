@@ -167,11 +167,6 @@ using namespace css;
    vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" ["//"reg_name] *("/" *pchar)
    reg_name = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
-   ; private
-   vim-url = "VIM://" +vimc [":" *vimc] ["/" [("INBOX" message) / ("NEWSGROUPS" ["/" [+vimc message]])]]
-   message = ["/" [+vimc [":" +DIGIT "." +DIGIT "." +DIGIT]]]
-   vimc = ("=" HEXDIG HEXDIG) / alphanum
-
 
    ; private
    uno-url = ".UNO:" path ["?" *uric]
@@ -375,9 +370,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            "vim", "vim://", 0, true, true, false, true, false, false, true,
-            false},
-        SchemeInfo{
             ".uno", ".uno:", 0, false, false, false, false, false, false, false,
             true},
         SchemeInfo{
@@ -428,10 +420,9 @@ inline INetURLObject::SchemeInfo const & INetURLObject::getSchemeInfo() const
 
 // static
 inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
-                                        sal_Char cEscapePrefix,
                                         sal_uInt32 nOctet)
 {
-    rTheText.append( cEscapePrefix );
+    rTheText.append( '%' );
     rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet >> 4)) );
     rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet & 15)) );
 }
@@ -441,7 +432,6 @@ namespace unnamed_tools_urlobj {
 enum
 {
     PA = INetURLObject::PART_USER_PASSWORD,
-    PC = INetURLObject::PART_VIM,
     PD = INetURLObject::PART_FPATH,
     PE = INetURLObject::PART_AUTHORITY,
     PF = INetURLObject::PART_REL_SEGMENT_EXTRA,
@@ -463,100 +453,100 @@ static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                              PP,
-/* ! */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* " */                                     PM+PN   +PP,
-/* # */                                     PM,
-/* $ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* % */                                     PM,
-/* & */ PA      +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR,
-/* ' */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* ( */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* ) */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* * */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* + */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
-/* , */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR,
-/* - */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* . */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* / */         +PD      +PG+PH+PI+PJ+PK   +PM+PN+PO,
-/* 0 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 1 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 2 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 3 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 4 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 5 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 6 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 7 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 8 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* 9 */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* : */         +PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
-/* ; */ PA         +PE+PF+PG+PH+PI+PJ+PK   +PM         +PQ+PR,
-/* < */                        +PI         +PM+PN   +PP,
-/* = */ PA      +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR,
-/* > */                        +PI         +PM+PN   +PP,
-/* ? */                  +PG               +PM   +PO   +PQ,
-/* @ */         +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* A */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* B */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* C */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* D */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* E */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* F */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* G */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* H */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* I */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* J */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* K */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* L */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* M */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* N */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* O */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* P */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* Q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* R */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* S */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* T */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* U */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* V */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* W */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* X */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* Y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* Z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* [ */                   PG               +PM+PN+PO,
-/* \ */                                    +PM+PN   +PP,
-/* ] */                   PG               +PM+PN+PO,
-/* ^ */                                     PM+PN   +PP,
-/* _ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* ` */                                     PM+PN   +PP,
-/* a */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* b */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* c */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* d */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* e */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* f */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* g */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* h */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* i */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* j */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* k */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* l */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* m */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* n */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* o */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* p */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* q */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* r */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* s */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* t */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* u */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* v */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* w */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* x */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* y */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* z */ PA   +PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
-/* { */                                     PM+PN   +PP,
-/* | */                                    +PM+PN   +PP,
-/* } */                                     PM+PN   +PP,
-/* ~ */ PA      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ,
+/* ! */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* " */                                  PM+PN   +PP,
+/* # */                                  PM,
+/* $ */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* % */                                  PM,
+/* & */ PA   +PD+PE+PF+PG+PH+PI   +PK+PL+PM+PN+PO   +PQ+PR,
+/* ' */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* ( */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* ) */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* * */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* + */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
+/* , */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN      +PQ+PR,
+/* - */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* . */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* / */      +PD      +PG+PH+PI+PJ+PK   +PM+PN+PO,
+/* 0 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 1 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 2 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 3 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 4 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 5 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 6 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 7 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 8 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* 9 */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* : */      +PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO   +PQ+PR,
+/* ; */ PA      +PE+PF+PG+PH+PI+PJ+PK   +PM         +PQ+PR,
+/* < */                     +PI         +PM+PN   +PP,
+/* = */ PA   +PD+PE+PF+PG+PH      +PK+PL+PM+PN      +PQ+PR,
+/* > */                     +PI         +PM+PN   +PP,
+/* ? */               +PG               +PM   +PO   +PQ,
+/* @ */      +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* A */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* B */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* C */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* D */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* E */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* F */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* G */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* H */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* I */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* J */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* K */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* L */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* M */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* N */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* O */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* P */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Q */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* R */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* S */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* T */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* U */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* V */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* W */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* X */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Y */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* Z */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* [ */                PG               +PM+PN+PO,
+/* \ */                                 +PM+PN   +PP,
+/* ] */                PG               +PM+PN+PO,
+/* ^ */                                  PM+PN   +PP,
+/* _ */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* ` */                                  PM+PN   +PP,
+/* a */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* b */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* c */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* d */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* e */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* f */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* g */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* h */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* i */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* j */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* k */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* l */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* m */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* n */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* o */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* p */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* q */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* r */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* s */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* t */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* u */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* v */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* w */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* x */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* y */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* z */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR,
+/* { */                                  PM+PN   +PP,
+/* | */                                 +PM+PN   +PP,
+/* } */                                  PM+PN   +PP,
+/* ~ */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -867,7 +857,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         aSynAbsURIRef.append(':');
     }
 
-    sal_Char cEscapePrefix = getEscapePrefix();
     sal_uInt32 nSegmentDelimiter = '/';
     sal_uInt32 nAltSegmentDelimiter = 0x80000000;
     bool bSkippedInitialSlash = false;
@@ -899,11 +888,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 {
                     EscapeType eEscapeType;
                     sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                                 cEscapePrefix, eMechanism,
+                                                 eMechanism,
                                                  eCharset, eEscapeType);
                     appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
-                               PART_AUTHORITY, cEscapePrefix, eCharset,
-                               false);
+                               PART_AUTHORITY, eCharset, false);
                 }
                 m_aHost.set(aSynAbsURIRef,
                             aSynAuthority.makeStringAndClear(),
@@ -927,7 +915,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         sal_uInt32 nUTF32 = getUTF32(pPos,
                                                      pEnd,
                                                      bOctets,
-                                                     cEscapePrefix,
                                                      eMechanism,
                                                      eCharset,
                                                      eEscapeType);
@@ -936,7 +923,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                                    eEscapeType,
                                    bOctets,
                                    PART_AUTHORITY,
-                                   cEscapePrefix,
                                    eCharset,
                                    false);
                     }
@@ -971,11 +957,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 {
                     EscapeType eEscapeType;
                     sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                                 cEscapePrefix, eMechanism,
+                                                 eMechanism,
                                                  eCharset, eEscapeType);
                     appendUCS4(aSynUser, nUTF32, eEscapeType, bOctets,
-                               PART_USER_PASSWORD, cEscapePrefix, eCharset,
-                               false);
+                               PART_USER_PASSWORD, eCharset, false);
 
                     bHasUser = *pPos == '@';
                 }
@@ -999,11 +984,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     {
                         EscapeType eEscapeType;
                         sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                                     cEscapePrefix, eMechanism,
+                                                     eMechanism,
                                                      eCharset, eEscapeType);
                         appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
-                                   PART_AUTHORITY, cEscapePrefix, eCharset,
-                                   false);
+                                   PART_AUTHORITY, eCharset, false);
                     }
                 }
                 if (aSynAuthority.isEmpty())
@@ -1260,9 +1244,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
         if (pUserInfoBegin)
         {
-            Part ePart = m_eScheme == INetProtocol::Vim ?
-                             PART_VIM :
-                             PART_USER_PASSWORD;
+            Part ePart = PART_USER_PASSWORD;
             bool bSupportsPassword = getSchemeInfo().m_bPassword;
             bool bSupportsAuth
                 = !bSupportsPassword && getSchemeInfo().m_bAuth;
@@ -1273,8 +1255,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
-                                             eCharset, eEscapeType);
+                                             eMechanism, eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
                 {
                     if (nUTF32 == ':' && bSupportsPassword)
@@ -1296,7 +1277,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     }
                 }
                 appendUCS4(aSynUser, nUTF32, eEscapeType, bOctets, ePart,
-                           cEscapePrefix, eCharset, false);
+                           eCharset, false);
             }
             m_aUser.set(aSynAbsURIRef, aSynUser.makeStringAndClear(),
                 aSynAbsURIRef.getLength());
@@ -1310,11 +1291,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     {
                         EscapeType eEscapeType;
                         sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
-                                                     cEscapePrefix,
                                                      eMechanism, eCharset,
                                                      eEscapeType);
                         appendUCS4(aSynAuth, nUTF32, eEscapeType, bOctets,
-                                   ePart, cEscapePrefix, eCharset, false);
+                                   ePart, eCharset, false);
                     }
                     m_aAuth.set(aSynAbsURIRef, aSynAuth.makeStringAndClear(),
                         aSynAbsURIRef.getLength());
@@ -1327,7 +1307,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     {
                         EscapeType eEscapeType;
                         sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
-                                                     cEscapePrefix,
                                                      eMechanism, eCharset,
                                                      eEscapeType);
                         if (!INetMIME::isIMAPAtomChar(nUTF32))
@@ -1336,7 +1315,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                             return false;
                         }
                         appendUCS4(aSynAuth, nUTF32, eEscapeType, bOctets,
-                                   ePart, cEscapePrefix, eCharset, false);
+                                   ePart, eCharset, false);
                     }
                     m_aAuth.set(aSynAbsURIRef, aSynAuth.makeStringAndClear(),
                         aSynAbsURIRef.getLength());
@@ -1427,10 +1406,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {
             EscapeType eEscapeType;
-            sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, cEscapePrefix,
+            sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
                                          eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynQuery, nUTF32, eEscapeType, bOctets,
-                       PART_URIC, cEscapePrefix, eCharset, true);
+                       PART_URIC, eCharset, true);
         }
         m_aQuery.set(aSynAbsURIRef, aSynQuery.makeStringAndClear(),
             aSynAbsURIRef.getLength());
@@ -1444,10 +1423,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         for (++pPos; pPos < pEnd;)
         {
             EscapeType eEscapeType;
-            sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, cEscapePrefix,
+            sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
                                          eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynFragment, nUTF32, eEscapeType, bOctets, PART_URIC,
-                       cEscapePrefix, eCharset, true);
+                       eCharset, true);
         }
         m_aFragment.set(aSynAbsURIRef, aSynFragment.makeStringAndClear(),
             aSynAbsURIRef.getLength());
@@ -1666,8 +1645,6 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     }
     aSynAbsURIRef.append(':');
 
-    sal_Char cEscapePrefix = getEscapePrefix();
-
     State eState = STATE_AUTH;
     bool bSameDoc = true;
 
@@ -1683,7 +1660,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32
-                    = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
+                    = getUTF32(p, pEnd, bOctets, eMechanism,
                                eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
                 {
@@ -1696,7 +1673,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                     }
                 }
                 appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets,
-                           PART_VISIBLE, cEscapePrefix, eCharset, true);
+                           PART_VISIBLE, eCharset, true);
             }
         }
         else
@@ -1738,8 +1715,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
-                           eCharset, eEscapeType);
+                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
             if (eEscapeType == ESCAPE_NO)
             {
                 if (nUTF32 == nFragmentDelimiter)
@@ -1751,7 +1727,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                     nUTF32 = '/';
             }
             appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
-                       cEscapePrefix, eCharset, true);
+                       eCharset, true);
         }
     }
     else if (eState == STATE_REL_PATH)
@@ -1832,10 +1808,10 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32
-                    = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
+                    = getUTF32(p, pEnd, bOctets, eMechanism,
                                eCharset, eEscapeType);
                 appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
-                           cEscapePrefix, eCharset, true);
+                           eCharset, true);
             }
             if (p != pEnd && *p == nSegmentDelimiter)
             {
@@ -1848,10 +1824,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
-                           eCharset, eEscapeType);
+                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
-                       cEscapePrefix, eCharset, true);
+                       eCharset, true);
         }
 
         if (p == pEnd)
@@ -1879,10 +1854,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
-                = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
-                           eCharset, eEscapeType);
+                = getUTF32(p, pEnd, bOctets, eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets,
-                       PART_VISIBLE, cEscapePrefix, eCharset, true);
+                       PART_VISIBLE, eCharset, true);
         }
     }
 
@@ -1915,10 +1889,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // Check for hierarchical base URL:
     if (!getSchemeInfo().m_bHierarchical)
     {
-        rTheRelURIRef
-            = decode(rTheAbsURIRef,
-                     getEscapePrefix(CompareProtocolScheme(rTheAbsURIRef)),
-                     eDecodeMechanism, eCharset);
+        rTheRelURIRef = decode(rTheAbsURIRef, eDecodeMechanism, eCharset);
         return false;
     }
 
@@ -1930,10 +1901,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
                          eEncodeMechanism, eCharset, false, false, false,
                          eStyle))
     {
-        rTheRelURIRef
-            = decode(rTheAbsURIRef,
-                     getEscapePrefix(CompareProtocolScheme(rTheAbsURIRef)),
-                     eDecodeMechanism, eCharset);
+        rTheRelURIRef = decode(rTheAbsURIRef, eDecodeMechanism, eCharset);
         return false;
     }
 
@@ -2048,23 +2016,22 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
 
     // The remainder of the subject path, starting at nMatch, is appended to
     // the new relative URL:
-    sal_Char cEscapePrefix = getEscapePrefix();
     aSynRelURIRef.append(decode(pSubjectPathBegin + nMatch, pSubjectPathEnd,
-                            cEscapePrefix, eDecodeMechanism, eCharset));
+                            eDecodeMechanism, eCharset));
 
     // If the subject has defined query or fragment parts, they are appended
     // to the new relative URL:
     if (aSubject.m_aQuery.isPresent())
     {
         aSynRelURIRef.append('?');
-        aSynRelURIRef.append(aSubject.decode(aSubject.m_aQuery, cEscapePrefix,
+        aSynRelURIRef.append(aSubject.decode(aSubject.m_aQuery,
                                          eDecodeMechanism, eCharset));
     }
     if (aSubject.m_aFragment.isPresent())
     {
         aSynRelURIRef.append('#');
         aSynRelURIRef.append(aSubject.decode(aSubject.m_aFragment,
-            cEscapePrefix, eDecodeMechanism, eCharset));
+            eDecodeMechanism, eCharset));
     }
 
     rTheRelURIRef = aSynRelURIRef.makeStringAndClear();
@@ -2077,11 +2044,8 @@ bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    sal_Char cEscapePrefix
-        = getEscapePrefix(CompareProtocolScheme(rTheIntURIRef));
     OUString aSynExtURIRef(encodeText(rTheIntURIRef, bOctets, PART_VISIBLE,
-                                       cEscapePrefix, NOT_CANONIC, eCharset,
-                                       true));
+                                       NOT_CANONIC, eCharset, true));
     sal_Unicode const * pBegin = aSynExtURIRef.getStr();
     sal_Unicode const * pEnd = pBegin + aSynExtURIRef.getLength();
     sal_Unicode const * p = pBegin;
@@ -2093,8 +2057,7 @@ bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
             aSynExtURIRef.replaceAt(0, p - pBegin,
                 OUString::createFromAscii(pPrefix->m_pTranslatedPrefix));
     }
-    rTheExtURIRef = decode(aSynExtURIRef, cEscapePrefix, eDecodeMechanism,
-                           eCharset);
+    rTheExtURIRef = decode(aSynExtURIRef, eDecodeMechanism, eCharset);
     return bConvert;
 }
 
@@ -2104,11 +2067,8 @@ bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    sal_Char cEscapePrefix
-        = getEscapePrefix(CompareProtocolScheme(rTheExtURIRef));
     OUString aSynIntURIRef(encodeText(rTheExtURIRef, bOctets, PART_VISIBLE,
-                                       cEscapePrefix, NOT_CANONIC, eCharset,
-                                       true));
+                                       NOT_CANONIC, eCharset, true));
     sal_Unicode const * pBegin = aSynIntURIRef.getStr();
     sal_Unicode const * pEnd = pBegin + aSynIntURIRef.getLength();
     sal_Unicode const * p = pBegin;
@@ -2120,8 +2080,7 @@ bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
             aSynIntURIRef.replaceAt(0, p - pBegin,
                 OUString::createFromAscii(pPrefix->m_pTranslatedPrefix));
     }
-    rTheIntURIRef = decode(aSynIntURIRef, cEscapePrefix, eDecodeMechanism,
-                           eCharset);
+    rTheIntURIRef = decode(aSynIntURIRef, eDecodeMechanism, eCharset);
     return bConvert;
 }
 
@@ -2193,13 +2152,9 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
               INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
             { "staroffice.uno:", ".uno:", INetProtocol::Uno,
               PrefixInfo::EXTERNAL },
-            { "staroffice.vim:", "vim:", INetProtocol::Vim,
-              PrefixInfo::EXTERNAL },
             { "staroffice:", "private:", INetProtocol::PrivSoffice,
               PrefixInfo::EXTERNAL },
             { "telnet:", 0, INetProtocol::Telnet, PrefixInfo::OFFICIAL },
-            { "vim:", "staroffice.vim:", INetProtocol::Vim,
-              PrefixInfo::INTERNAL },
             { "vnd.libreoffice.cmis:", 0, INetProtocol::Cmis, PrefixInfo::INTERNAL },
             { "vnd.sun.star.cmd:", 0, INetProtocol::VndSunStarCmd,
               PrefixInfo::OFFICIAL },
@@ -2296,12 +2251,8 @@ bool INetURLObject::setUser(OUString const & rTheUser,
         return false;
     }
 
-    OUString aNewUser(encodeText(rTheUser, bOctets,
-                                  m_eScheme == INetProtocol::Vim ?
-                                      PART_VIM :
-                                      PART_USER_PASSWORD,
-                                  getEscapePrefix(), eMechanism, eCharset,
-                                  false));
+    OUString aNewUser(encodeText(rTheUser, bOctets, PART_USER_PASSWORD,
+                                  eMechanism, eCharset, false));
     sal_Int32 nDelta;
     if (m_aUser.isPresent())
         nDelta = m_aUser.set(m_aAbsURIRef, aNewUser);
@@ -2356,11 +2307,8 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
 {
     if (!getSchemeInfo().m_bPassword)
         return false;
-    OUString aNewAuth(encodeText(rThePassword, bOctets,
-                                  m_eScheme == INetProtocol::Vim ?
-                                      PART_VIM : PART_USER_PASSWORD,
-                                  getEscapePrefix(), eMechanism, eCharset,
-                                  false));
+    OUString aNewAuth(encodeText(rThePassword, bOctets, PART_USER_PASSWORD,
+                                  eMechanism, eCharset, false));
     sal_Int32 nDelta;
     if (m_aAuth.isPresent())
         nDelta = m_aAuth.set(m_aAbsURIRef, aNewAuth);
@@ -2847,7 +2795,7 @@ bool INetURLObject::parseHostOrNetBiosName(
                 while (pBegin < pEnd)
                 {
                     EscapeType eEscapeType;
-                    sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets, '%',
+                    sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets,
                                                  eMechanism, eCharset,
                                                  eEscapeType);
                     if (!INetMIME::isVisible(nUTF32))
@@ -2875,7 +2823,7 @@ bool INetURLObject::parseHostOrNetBiosName(
                         }
                     if (pCanonic != NULL) {
                         appendUCS4(
-                            buf, nUTF32, eEscapeType, bOctets, PART_URIC, '%',
+                            buf, nUTF32, eEscapeType, bOctets, PART_URIC,
                             eCharset, true);
                     }
                 }
@@ -2963,11 +2911,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_HTTP_PATH, '%', eCharset, true);
+                           PART_HTTP_PATH, eCharset, true);
             }
             if (aTheSynPath.isEmpty())
                 aTheSynPath.append('/');
@@ -2984,11 +2931,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                    && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_HTTP_PATH, '%', eCharset, true);
+                           PART_HTTP_PATH, eCharset, true);
             }
             if (aTheSynPath.isEmpty())
                 aTheSynPath.append('/');
@@ -3005,8 +2951,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
                 {
@@ -3031,7 +2976,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     }
                 }
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_PCHAR, '%', eCharset, true);
+                           PART_PCHAR, eCharset, true);
             }
             if (aTheSynPath.isEmpty())
                 aTheSynPath.append('/');
@@ -3043,11 +2988,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                    && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_MAILTO, '%', eCharset, true);
+                           PART_MAILTO, eCharset, true);
             }
             break;
 
@@ -3063,12 +3007,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                    && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_PATH_BEFORE_QUERY, '%', eCharset,
-                           true);
+                           PART_PATH_BEFORE_QUERY, eCharset, true);
             }
             break;
 
@@ -3086,10 +3028,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 {
                     EscapeType eEscapeType;
                     sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                                 '%', eMechanism,
+                                                 eMechanism,
                                                  eCharset, eEscapeType);
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_HTTP_PATH, '%', eCharset, true);
+                               PART_HTTP_PATH, eCharset, true);
                 }
             }
             break;
@@ -3101,11 +3043,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, '%', eCharset, true);
+                           PART_URIC, eCharset, true);
             }
             break;
 
@@ -3116,11 +3057,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, '%', eCharset, true);
+                           PART_URIC, eCharset, true);
             }
             break;
 
@@ -3133,122 +3073,17 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                    && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
                     aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_PCHAR, '%', eCharset, false);
+                               PART_PCHAR, eCharset, false);
             }
             if (aTheSynPath.isEmpty())
                 aTheSynPath.append('/');
             break;
-
-        case INetProtocol::Vim:
-        {
-            sal_Unicode const * pPathEnd = pPos;
-            while (pPathEnd < pEnd && *pPathEnd != nFragmentDelimiter)
-                ++pPathEnd;
-            aTheSynPath.append('/');
-            if (pPos == pPathEnd)
-                break;
-            else if (*pPos++ != '/')
-                return false;
-            if (pPos == pPathEnd)
-                break;
-            while (pPos < pPathEnd && *pPos != '/')
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                             '=', eMechanism,
-                                             eCharset, eEscapeType);
-                appendUCS4(aTheSynPath,
-                           eEscapeType == ESCAPE_NO ?
-                               rtl::toAsciiLowerCase(nUTF32) : nUTF32,
-                           eEscapeType, bOctets, PART_VIM, '=',
-                           eCharset, false);
-            }
-            bool bInbox;
-            OUString sCompare(aTheSynPath.toString());
-            if ( sCompare == "/inbox" )
-                bInbox = true;
-            else if ( sCompare == "/newsgroups" )
-                bInbox = false;
-            else
-                return false;
-            aTheSynPath.append('/');
-            if (pPos == pPathEnd)
-                break;
-            else if (*pPos++ != '/')
-                return false;
-            if (!bInbox)
-            {
-                bool bEmpty = true;
-                while (pPos < pPathEnd && *pPos != '/')
-                {
-                    EscapeType eEscapeType;
-                    sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                                 '=', eMechanism,
-                                                 eCharset, eEscapeType);
-                    appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_VIM, '=', eCharset, false);
-                    bEmpty = false;
-                }
-                if (bEmpty)
-                    return false;
-                aTheSynPath.append('/');
-                if (pPos == pPathEnd)
-                    break;
-                else if (*pPos++ != '/')
-                    return false;
-            }
-            bool bEmpty = true;
-            while (pPos < pPathEnd && *pPos != ':')
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                             '=', eMechanism,
-                                             eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_VIM, '=', eCharset, false);
-                bEmpty = false;
-            }
-            if (bEmpty)
-                return false;
-            if (pPos == pPathEnd)
-                break;
-            else if (*pPos++ != ':')
-                return false;
-            aTheSynPath.append(':');
-            for (int i = 0; i < 3; ++i)
-            {
-                if (i != 0)
-                {
-                    if (pPos == pPathEnd || *pPos++ != '.')
-                        return false;
-                    aTheSynPath.append('.');
-                }
-                bEmpty = true;
-                while (pPos < pPathEnd && *pPos != '.')
-                {
-                    EscapeType eEscapeType;
-                    sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                                 '=', eMechanism,
-                                                 eCharset, eEscapeType);
-                    if (!rtl::isAsciiDigit(nUTF32))
-                        return false;
-                    aTheSynPath.append(sal_Unicode(nUTF32));
-                    bEmpty = false;
-                }
-                if (bEmpty)
-                    return false;
-            }
-            if (pPos != pPathEnd)
-                return false;
-            break;
-        }
 
         case INetProtocol::VndSunStarCmd:
         case INetProtocol::VndSunStarExpand:
@@ -3259,11 +3094,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos != pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets, ePart,
-                           '%', eCharset, true);
+                           eCharset, true);
                 ePart = PART_URIC;
             }
             break;
@@ -3285,14 +3119,13 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
                     aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_PCHAR, '%', eCharset, false);
+                               PART_PCHAR, eCharset, false);
             }
             break;
 
@@ -3301,11 +3134,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, '%', eCharset, true);
+                           PART_URIC, eCharset, true);
             }
             if (aTheSynPath.isEmpty())
                 return false;
@@ -3477,7 +3309,7 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
     aNewPath.append('/');
-    aNewPath.append(encodeText(rTheName, bOctets, PART_PCHAR, getEscapePrefix(),
+    aNewPath.append(encodeText(rTheName, bOctets, PART_PCHAR,
                            eMechanism, eCharset, true));
     if (bInsertSlash) {
         aNewPath.append('/');
@@ -3508,8 +3340,7 @@ bool INetURLObject::setQuery(OUString const & rTheQuery, bool bOctets,
     if (!getSchemeInfo().m_bQuery)
         return false;
     OUString aNewQuery(encodeText(rTheQuery, bOctets, PART_URIC,
-                                   getEscapePrefix(), eMechanism, eCharset,
-                                   true));
+                                   eMechanism, eCharset, true));
     sal_Int32 nDelta;
     if (m_aQuery.isPresent())
         nDelta = m_aQuery.set(m_aAbsURIRef, aNewQuery);
@@ -3542,8 +3373,7 @@ bool INetURLObject::setFragment(OUString const & rTheFragment,
     if (HasError())
         return false;
     OUString aNewFragment(encodeText(rTheFragment, bOctets, PART_URIC,
-                                      getEscapePrefix(), eMechanism,
-                                      eCharset, true));
+                                      eMechanism, eCharset, true));
     if (m_aFragment.isPresent())
         m_aFragment.set(m_aAbsURIRef, aNewFragment);
     else
@@ -3568,8 +3398,7 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 // static
 OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
                                     sal_Unicode const * pEnd, bool bOctets,
-                                    Part ePart, sal_Char cEscapePrefix,
-                                    EncodeMechanism eMechanism,
+                                    Part ePart, EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset,
                                     bool bKeepVisibleEscapes)
 {
@@ -3577,10 +3406,10 @@ OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
-        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets, cEscapePrefix,
+        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets,
                                      eMechanism, eCharset, eEscapeType);
         appendUCS4(aResult, nUTF32, eEscapeType, bOctets, ePart,
-                   cEscapePrefix, eCharset, bKeepVisibleEscapes);
+                   eCharset, bKeepVisibleEscapes);
     }
     return aResult.makeStringAndClear();
 }
@@ -3588,7 +3417,6 @@ OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
 // static
 OUString INetURLObject::decode(sal_Unicode const * pBegin,
                                 sal_Unicode const * pEnd,
-                                sal_Char cEscapePrefix,
                                 DecodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset)
 {
@@ -3608,7 +3436,7 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
-        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, false, cEscapePrefix,
+        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, false,
                                      WAS_ENCODED, eCharset, eEscapeType);
         switch (eEscapeType)
         {
@@ -3617,7 +3445,7 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
                 break;
 
             case ESCAPE_OCTET:
-                appendEscape(aResult, cEscapePrefix, nUTF32);
+                appendEscape(aResult, nUTF32);
                 break;
 
             case ESCAPE_UTF32:
@@ -3632,7 +3460,7 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
                      )
                    )
                 {
-                    appendEscape(aResult, cEscapePrefix, nUTF32);
+                    appendEscape(aResult, nUTF32);
                 }
                 else
                     aResult.appendUtf32(nUTF32);
@@ -3667,7 +3495,6 @@ INetURLObject::getAbbreviated(
     const
 {
     OSL_ENSURE(rStringWidth.is(), "specification violation");
-    sal_Char cEscapePrefix = getEscapePrefix();
     OUStringBuffer aBuffer;
     // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
@@ -3727,7 +3554,6 @@ INetURLObject::getAbbreviated(
                     aSegment(decode(p + (p == pBegin && pBegin != pCoreBegin ?
                                              1 : 0),
                                     pSuffixEnd,
-                                    cEscapePrefix,
                                     eMechanism,
                                     eCharset));
                 pSuffixEnd = p;
@@ -3768,7 +3594,6 @@ INetURLObject::getAbbreviated(
                                         + (pPrefixBegin == pCoreBegin ? 0 :
                                                                         1),
                                     p == pEnd ? p : p + 1,
-                                    cEscapePrefix,
                                     eMechanism,
                                     eCharset));
                 pPrefixBegin = p;
@@ -3805,19 +3630,17 @@ INetURLObject::getAbbreviated(
     if (!bSegment)
         aBuffer.append(decode(pCoreBegin,
                               pCoreEnd,
-                              cEscapePrefix,
                               eMechanism,
                               eCharset));
     if (m_aQuery.isPresent())
     {
         aBuffer.append('?');
-        aBuffer.append(decode(m_aQuery, cEscapePrefix, eMechanism, eCharset));
+        aBuffer.append(decode(m_aQuery, eMechanism, eCharset));
     }
     if (m_aFragment.isPresent())
     {
         aBuffer.append('#');
-        aBuffer.
-            append(decode(m_aFragment, cEscapePrefix, eMechanism, eCharset));
+        aBuffer.append(decode(m_aFragment, eMechanism, eCharset));
     }
     if (!aBuffer.isEmpty())
     {
@@ -3971,12 +3794,8 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             if (!rTheUser.isEmpty())
             {
                 m_aUser.set(m_aAbsURIRef,
-                            encodeText(rTheUser, false,
-                                       m_eScheme == INetProtocol::Vim ?
-                                           PART_VIM :
-                                           PART_USER_PASSWORD,
-                                       getEscapePrefix(), eMechanism,
-                                       eCharset, false),
+                            encodeText(rTheUser, false, PART_USER_PASSWORD,
+                                       eMechanism, eCharset, false),
                             m_aAbsURIRef.getLength());
                 bUserInfo = true;
             }
@@ -3992,11 +3811,8 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 m_aAbsURIRef.append(':');
                 m_aAuth.set(m_aAbsURIRef,
-                            encodeText(rThePassword, false,
-                                       m_eScheme == INetProtocol::Vim ?
-                                           PART_VIM : PART_USER_PASSWORD,
-                                       getEscapePrefix(), eMechanism,
-                                       eCharset, false),
+                            encodeText(rThePassword, false, PART_USER_PASSWORD,
+                                       eMechanism, eCharset, false),
                             m_aAbsURIRef.getLength());
                 bUserInfo = true;
             }
@@ -4151,13 +3967,11 @@ OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
     // PROT_VND_SUN_STAR_PKG misuse m_aHost:
     if (!getSchemeInfo().m_bHost)
         return OUString();
-    OUStringBuffer aHostPort(decode(m_aHost, getEscapePrefix(),
-        eMechanism, eCharset));
+    OUStringBuffer aHostPort(decode(m_aHost, eMechanism, eCharset));
     if (m_aPort.isPresent())
     {
         aHostPort.append(':');
-        aHostPort.append(decode(m_aPort, getEscapePrefix(),
-            eMechanism, eCharset));
+        aHostPort.append(decode(m_aPort, eMechanism, eCharset));
     }
     return aHostPort.makeStringAndClear();
 }
@@ -4255,7 +4069,7 @@ OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     while (p != pSegEnd && *p != ';')
         ++p;
 
-    return decode(pSegBegin, p, getEscapePrefix(), eMechanism, eCharset);
+    return decode(pSegBegin, p, eMechanism, eCharset);
 }
 
 bool INetURLObject::setName(OUString const & rTheName, sal_Int32 nIndex,
@@ -4282,7 +4096,7 @@ bool INetURLObject::setName(OUString const & rTheName, sal_Int32 nIndex,
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheName, false, PART_PCHAR, getEscapePrefix(),
+    aNewPath.append(encodeText(rTheName, false, PART_PCHAR,
         eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
 
@@ -4331,8 +4145,7 @@ OUString INetURLObject::getBase(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     if (!pExtension)
         pExtension = p;
 
-    return decode(pSegBegin, pExtension, getEscapePrefix(), eMechanism,
-                  eCharset);
+    return decode(pSegBegin, pExtension, eMechanism, eCharset);
 }
 
 bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
@@ -4363,7 +4176,7 @@ bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheBase, false, PART_PCHAR, getEscapePrefix(),
+    aNewPath.append(encodeText(rTheBase, false, PART_PCHAR,
         eMechanism, eCharset, true));
     aNewPath.append(pExtension, pPathEnd - pExtension);
 
@@ -4395,7 +4208,7 @@ OUString INetURLObject::getExtension(sal_Int32 nIndex,
     if (!pExtension)
         return OUString();
 
-    return decode(pExtension + 1, p, getEscapePrefix(), eMechanism, eCharset);
+    return decode(pExtension + 1, p, eMechanism, eCharset);
 }
 
 bool INetURLObject::setExtension(OUString const & rTheExtension,
@@ -4428,7 +4241,7 @@ bool INetURLObject::setExtension(OUString const & rTheExtension,
     aNewPath.append(pPathBegin, pExtension - pPathBegin);
     aNewPath.append('.');
     aNewPath.append(encodeText(rTheExtension, false, PART_PCHAR,
-        getEscapePrefix(), eMechanism, eCharset, true));
+        eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
@@ -4607,7 +4420,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 {
                     case '#':
                     case '%':
-                        appendEscape(aSynAbsURIRef, '%', *p);
+                        appendEscape(aSynAbsURIRef, *p);
                         break;
 
                     default:
@@ -4628,7 +4441,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                     case '|':
                     case '#':
                     case '%':
-                        appendEscape(aSynAbsURIRef, '%', *p);
+                        appendEscape(aSynAbsURIRef, *p);
                         break;
 
                     default:
@@ -4662,7 +4475,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                         case '/':
                         case '#':
                         case '%':
-                            appendEscape(aSynAbsURIRef, '%', *p);
+                            appendEscape(aSynAbsURIRef, *p);
                             break;
 
                         default:
@@ -4722,11 +4535,11 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             OUStringBuffer aSynFSysPath;
             aSynFSysPath.append("//");
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
-                aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
+                aSynFSysPath.append(decode(m_aHost, DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
             else
                 aSynFSysPath.append('.');
-            aSynFSysPath.append(decode(m_aPath, '%', DECODE_WITH_CHARSET,
+            aSynFSysPath.append(decode(m_aPath, DECODE_WITH_CHARSET,
                                    RTL_TEXTENCODING_UTF8));
             return aSynFSysPath.makeStringAndClear();
         }
@@ -4739,8 +4552,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (pDelimiter)
                 *pDelimiter = '/';
 
-            return decode(m_aPath, '%', DECODE_WITH_CHARSET,
-                          RTL_TEXTENCODING_UTF8);
+            return decode(m_aPath, DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
         }
 
         case FSYS_DOS:
@@ -4752,7 +4564,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
                 aSynFSysPath.append("\\\\");
-                aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
+                aSynFSysPath.append(decode(m_aHost, DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
                 aSynFSysPath.append('\\');
             }
@@ -4765,7 +4577,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             while (p < pEnd)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(p, pEnd, false, '%', WAS_ENCODED,
+                sal_uInt32 nUTF32 = getUTF32(p, pEnd, false, WAS_ENCODED,
                                              RTL_TEXTENCODING_UTF8,
                                              eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
@@ -4789,54 +4601,53 @@ OUString INetURLObject::GetMsgId(DecodeMechanism,
 
 // static
 void INetURLObject::appendUCS4Escape(OUStringBuffer & rTheText,
-                                     sal_Char cEscapePrefix, sal_uInt32 nUCS4)
+                                     sal_uInt32 nUCS4)
 {
     DBG_ASSERT(nUCS4 < 0x80000000,
                "INetURLObject::appendUCS4Escape(): Bad char");
     if (nUCS4 < 0x80)
-        appendEscape(rTheText, cEscapePrefix, nUCS4);
+        appendEscape(rTheText, nUCS4);
     else if (nUCS4 < 0x800)
     {
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 | 0xC0);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
+        appendEscape(rTheText, nUCS4 >> 6 | 0xC0);
+        appendEscape(rTheText, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x10000)
     {
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 12 | 0xE0);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
+        appendEscape(rTheText, nUCS4 >> 12 | 0xE0);
+        appendEscape(rTheText, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x200000)
     {
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 18 | 0xF0);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
+        appendEscape(rTheText, nUCS4 >> 18 | 0xF0);
+        appendEscape(rTheText, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x4000000)
     {
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 24 | 0xF8);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 18 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
+        appendEscape(rTheText, nUCS4 >> 24 | 0xF8);
+        appendEscape(rTheText, (nUCS4 >> 18 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 & 0x3F) | 0x80);
     }
     else
     {
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 30 | 0xFC);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 24 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 18 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
-        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
+        appendEscape(rTheText, nUCS4 >> 30 | 0xFC);
+        appendEscape(rTheText, (nUCS4 >> 24 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 18 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, (nUCS4 & 0x3F) | 0x80);
     }
 }
 
 // static
 void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
                                EscapeType eEscapeType, bool bOctets,
-                               Part ePart, sal_Char cEscapePrefix,
-                               rtl_TextEncoding eCharset,
+                               Part ePart, rtl_TextEncoding eCharset,
                                bool bKeepVisibleEscapes)
 {
     bool bEscape;
@@ -4886,10 +4697,10 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
                 //fallthrough
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
-                appendEscape(rTheText, cEscapePrefix, nUCS4);
+                appendEscape(rTheText, nUCS4);
                 break;
             case RTL_TEXTENCODING_UTF8:
-                appendUCS4Escape(rTheText, cEscapePrefix, nUCS4);
+                appendUCS4Escape(rTheText, nUCS4);
                 break;
         }
     }
@@ -4900,7 +4711,6 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
 // static
 sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                    sal_Unicode const * pEnd, bool bOctets,
-                                   sal_Char cEscapePrefix,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset,
                                    EscapeType & rEscapeType)
@@ -4918,7 +4728,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == static_cast<unsigned char>(cEscapePrefix) && rBegin + 1 < pEnd
+            if (nUTF32 == static_cast<unsigned char>('%') && rBegin + 1 < pEnd
                 && (nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0
                 && (nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0)
             {
@@ -4972,7 +4782,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                 for (;;)
                                 {
                                     if (pEnd - p < 3
-                                        || p[0] != cEscapePrefix
+                                        || p[0] != '%'
                                         || (nWeight1
                                                = INetMIME::getHexWeight(p[1]))
                                                < 8
@@ -5017,7 +4827,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == static_cast<unsigned char>(cEscapePrefix) && rBegin + 1 < pEnd
+            if (nUTF32 == static_cast<unsigned char>('%') && rBegin + 1 < pEnd
                 && ((nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0)
                 && ((nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0))
             {
@@ -5159,7 +4969,7 @@ OUString INetURLObject::PathToFileName() const
     if (osl::FileBase::getSystemPathFromFileURL(
                 decode(m_aAbsURIRef.getStr(),
                        m_aAbsURIRef.getStr() + m_aPath.getEnd(),
-                       getEscapePrefix(), NO_DECODE, RTL_TEXTENCODING_UTF8),
+                       NO_DECODE, RTL_TEXTENCODING_UTF8),
                 aSystemPath)
             != osl::FileBase::E_None)
         return OUString();

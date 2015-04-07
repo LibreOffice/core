@@ -218,7 +218,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     {
         // find BasicManager
         SfxObjectShell* pDoc = NULL;
-        OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), '%', INetURLObject::DECODE_WITH_CHARSET) );
+        OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), INetURLObject::DECODE_WITH_CHARSET) );
         if ( aBasMgrName.isEmpty() )
             pBasMgr = pAppMgr;
         else if ( aBasMgrName == "." )
@@ -255,7 +255,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
             }
 
             // find BASIC method
-            OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), '%', INetURLObject::DECODE_WITH_CHARSET) );
+            OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), INetURLObject::DECODE_WITH_CHARSET) );
             OUString aArgs;
             if ( -1 != nArgsPos )
             {
@@ -318,7 +318,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     {
         // direct API call on a specified object
         OUStringBuffer aCall;
-        aCall.append('[').append(INetURLObject::decode(aMacro.copy(6), '%',
+        aCall.append('[').append(INetURLObject::decode(aMacro.copy(6),
             INetURLObject::DECODE_WITH_CHARSET));
         aCall.append(']');
         pAppMgr->GetLib(0)->Execute(aCall.makeStringAndClear());

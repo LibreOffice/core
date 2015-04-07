@@ -717,7 +717,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INetURLObject::FSYS_DETECT );
     OString aName( OUStringToOString( aPath.GetName( INetURLObject::DECODE_WITH_CHARSET, aEncoding ), aEncoding ) );
     OString aDir( OUStringToOString(
-        INetURLObject::decode( aPath.GetPath(), '%', INetURLObject::DECODE_WITH_CHARSET, aEncoding ), aEncoding ) );
+        INetURLObject::decode( aPath.GetPath(), INetURLObject::DECODE_WITH_CHARSET, aEncoding ), aEncoding ) );
 
     int nDirID = getDirectoryAtom( aDir, true );
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );

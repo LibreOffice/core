@@ -193,12 +193,12 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
             static const INetProtocol s_aQuickHelpSupported[] =
                 {   INetProtocol::Ftp, INetProtocol::Http, INetProtocol::File, INetProtocol::Mailto,
                     INetProtocol::Https, INetProtocol::Javascript,
-                    INetProtocol::Vim, INetProtocol::Ldap
+                    INetProtocol::Ldap
                 };
             for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
                 if (s_aQuickHelpSupported[i] == aProtocol)
                 {
-                    aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+                    aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), INetURLObject::DECODE_UNAMBIGUOUS);
                     break;
                 }
         }

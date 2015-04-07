@@ -431,7 +431,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
     rpPam = 0;
     rpRange = 0;
 
-    OUString sItem( INetURLObject::decode( rStr, '%',
+    OUString sItem( INetURLObject::decode( rStr,
                                          INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 

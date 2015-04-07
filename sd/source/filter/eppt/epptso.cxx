@@ -1142,7 +1142,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             }
                             else if ( pFieldEntry->aFieldUrl[0] == '#' )
                             {
-                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, INetURLObject::DECODE_WITH_CHARSET ) );
                                 aPage = aPage.copy( 1 );
 
                                 std::vector<OUString>::const_iterator pIter = std::find(
