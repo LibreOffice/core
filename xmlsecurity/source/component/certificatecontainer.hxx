@@ -39,7 +39,7 @@ class CertificateContainer : public ::cppu::WeakImplHelper2< css::lang::XService
         Map certMap;
         Map certTrustMap;
 
-        bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
+        static bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
         bool SAL_CALL isTemporaryCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
         bool SAL_CALL isCertificateTrust( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
 

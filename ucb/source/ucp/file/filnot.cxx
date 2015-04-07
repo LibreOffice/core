@@ -61,7 +61,7 @@ ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
 
 void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
 {
-    FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
+    FileContentIdentifier* p = new FileContentIdentifier( aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
 
     uno::Reference< XContent > xChildContent = m_pMyShell->m_pProvider->queryContent( xChildId );
@@ -100,7 +100,7 @@ void ContentEventNotifier::notifyDeleted( void )
 
 void ContentEventNotifier::notifyRemoved( const OUString& aChildName )
 {
-    FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
+    FileContentIdentifier* p = new FileContentIdentifier( aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
 
     BaseContent* pp = new BaseContent( m_pMyShell,xChildId,aChildName );

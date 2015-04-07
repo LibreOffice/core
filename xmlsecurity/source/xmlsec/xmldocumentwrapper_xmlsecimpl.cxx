@@ -183,7 +183,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
 void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler,
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler2,
-    const xmlNodePtr pNode) const
+    const xmlNodePtr pNode)
     throw (cssxs::SAXException)
 /****** XMLDocumentWrapper_XmlSecImpl/sendStartElement ************************
  *
@@ -283,7 +283,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
 void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler,
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler2,
-    const xmlNodePtr pNode) const
+    const xmlNodePtr pNode)
     throw (cssxs::SAXException)
 /****** XMLDocumentWrapper_XmlSecImpl/sendEndElement **************************
  *
@@ -327,7 +327,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
 void XMLDocumentWrapper_XmlSecImpl::sendNode(
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler,
     const cssu::Reference< cssxs::XDocumentHandler >& xHandler2,
-    const xmlNodePtr pNode) const
+    const xmlNodePtr pNode)
     throw (cssxs::SAXException)
 /****** XMLDocumentWrapper_XmlSecImpl/sendNode ********************************
  *
@@ -388,7 +388,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendNode(
     }
 }
 
-OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode) const
+OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode)
 /****** XMLDocumentWrapper_XmlSecImpl/getNodeQName ****************************
  *
  *   NAME
@@ -426,7 +426,7 @@ OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode) cons
     return sNodeName;
 }
 
-xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement) const
+xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement)
 /****** XMLDocumentWrapper_XmlSecImpl/checkElement ****************************
  *
  *   NAME

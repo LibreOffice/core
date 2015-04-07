@@ -39,7 +39,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper1<
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
         ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > m_Entries;
 
-        OString removeOIDFromString( const OString &oid);
+        static OString removeOIDFromString( const OString &oid);
 
     public :
         SanExtensionImpl() ;

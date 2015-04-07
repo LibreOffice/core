@@ -719,11 +719,11 @@ BaseContent::getParent(
     OUString ParentUrl;
 
 
-    bool err = m_pMyShell->getUrlFromUnq( ParentUnq, ParentUrl );
+    bool err = fileaccess::shell::getUrlFromUnq( ParentUnq, ParentUrl );
     if( err )
         return Reference< XInterface >( 0 );
 
-    FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,ParentUnq );
+    FileContentIdentifier* p = new FileContentIdentifier( ParentUnq );
     Reference< XContentIdentifier > Identifier( p );
 
     try
@@ -1077,7 +1077,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     }
 
     OUString srcUnc;
-    if( m_pMyShell->getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
+    if( fileaccess::shell::getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_INVALIDURL );
@@ -1244,7 +1244,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     if ( ! success )
         return;
 
-    FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
+    FileContentIdentifier* p = new FileContentIdentifier( m_aUncPath );
     m_xContentIdentifier = Reference< XContentIdentifier >( p );
 
     m_pMyShell->registerNotifier( m_aUncPath,this );
@@ -1291,7 +1291,7 @@ BaseContent::cEXC( const OUString& aNewName )
 
     Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
     m_aUncPath = aNewName;
-    FileContentIdentifier* pp = new FileContentIdentifier( m_pMyShell,aNewName );
+    FileContentIdentifier* pp = new FileContentIdentifier( aNewName );
     m_xContentIdentifier = Reference< XContentIdentifier >( pp );
 
     ContentEventNotifier* p = 0;
