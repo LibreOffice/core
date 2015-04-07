@@ -79,7 +79,7 @@ namespace
 {
 static void lcl_sendPartialGETRequest( bool &bError,
                                        DAVException &aLastException,
-                                       const std::vector< rtl::OUString > aProps,
+                                       const std::vector< rtl::OUString >& rProps,
                                        std::vector< rtl::OUString > &aHeaderNames,
                                        const boost::scoped_ptr< DAVResourceAccess > &xResAccess,
                                        boost::scoped_ptr< ContentProperties > &xProps,
@@ -175,7 +175,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
 
         if ( xProps.get() )
             xProps->addProperties(
-                aProps,
+                rProps,
                 ContentProperties( aResource ) );
         else
             xProps.reset ( new ContentProperties( aResource ) );
