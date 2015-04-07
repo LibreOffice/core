@@ -403,6 +403,8 @@ private:
     PushButton*         m_pBtnDelete;
     PushButton*         m_pBtnLoad;
     PushButton*         m_pBtnSave;
+    CheckBox*           m_pDiagonalCB;
+    ListBox*            m_pLbDiagType;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -429,6 +431,8 @@ private:
     DECL_LINK( ModifiedHdl_Impl, void * );
     DECL_LINK( ClickLoadHdl_Impl, void * );
     DECL_LINK( ClickSaveHdl_Impl, void * );
+    DECL_LINK( ClickDiagHdl_Impl, void * );
+    DECL_LINK( ModifyDiagTypeHdl_Impl, void * );
 
     long CheckChanges_Impl();
     void SetControlState_Impl( css::awt::GradientStyle eXGS );

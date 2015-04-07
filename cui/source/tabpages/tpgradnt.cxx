@@ -41,6 +41,9 @@
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 #include <boost/scoped_ptr.hpp>
+#include <svx/svdview.hxx>
+#include <sfx2/viewsh.hxx>
+#include <rtl/math.hxx>
 
 using namespace com::sun::star;
 
@@ -72,6 +75,8 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pFtCenterY,      "centeryft");
     get(m_pMtrCenterY,     "centerymtr");
     get(m_pFtAngle,        "angleft");
+    get(m_pDiagonalCB,     "diagonalAngle");
+    get(m_pLbDiagType,     "diagonaltypelb");
     get(m_pMtrAngle,       "anglemtr");
     get(m_pMtrBorder,      "bordermtr");
     get(m_pLbColorFrom,    "colorfromlb");
@@ -93,7 +98,7 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pBtnSave,        "save");
 
     m_pLbGradients->SetAccessibleName(GetText());
-
+    m_pLbDiagType->Disable();
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -133,6 +138,8 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pBtnSave->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
+    m_pDiagonalCB->SetClickHdl( LINK( this, SvxGradientTabPage , ClickDiagHdl_Impl ));
+    m_pLbDiagType->SetSelectHdl( LINK( this, SvxGradientTabPage , ModifyDiagTypeHdl_Impl ));
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlPreview->EnableRTL( false );
 
@@ -702,6 +709,57 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     return 0L;
 }
 
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickDiagHdl_Impl)
+{
+    if (m_pDiagonalCB->IsChecked())
+    {
+        m_pMtrAngle->Disable();
+        m_pLbDiagType->Enable();
+        ModifyDiagTypeHdl_Impl(this);
+    }
+    else
+    {
+        m_pMtrAngle->Enable();
+        m_pMtrAngle->SetValue(0);
+        m_pLbDiagType->Disable();
+     }
+     return 0L;
+}
+
+IMPL_LINK_NOARG(SvxGradientTabPage, ModifyDiagTypeHdl_Impl)
+{
+    double nlHeight = 0.0;
+    double nlWidth = 0.0;
+    basegfx::B2DRange                       maRect;
+    const SdrView*                          mpView;
+
+    SfxViewShell* pCurSh = SfxViewShell::Current();
+    if ( pCurSh )
+        mpView = pCurSh->GetDrawView();
+    else
+        mpView = NULL;
+
+    if ( mpView != NULL )
+    {
+        Rectangle aTmpRect(mpView->GetAllMarkedRect());
+        mpView->GetSdrPageView()->LogicToPagePos(aTmpRect);
+        maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
+        nlHeight = maRect.getHeight();
+        nlWidth = maRect.getWidth();
+    }
+
+    double LRAngle = ((atan(nlHeight/nlWidth)) * (180/M_PI));
+    double RLAngle = 360 - LRAngle;
+
+    sal_Int32 diagType = m_pLbDiagType->GetSelectEntryPos();
+
+    if ( diagType == 0 )
+        m_pMtrAngle->SetValue(Round(LRAngle));
+    else
+        m_pMtrAngle->SetValue(Round(RLAngle));
+
+    return 0L;
+}
 
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
@@ -818,7 +876,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
             m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
         }
 
-        m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
+        if  (!m_pDiagonalCB->IsChecked())
+            m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
+
         m_pMtrBorder->SetValue( pGradient->GetBorder() );
         m_pMtrCenterX->SetValue( pGradient->GetXOffset() );
         m_pMtrCenterY->SetValue( pGradient->GetYOffset() );
@@ -851,6 +911,16 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Disable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pDiagonalCB->Enable();
+            if (!m_pDiagonalCB->IsChecked())
+              {
+                m_pLbDiagType->Disable();
+              }
+            else
+              {
+                m_pMtrAngle->Disable();
+                m_pLbDiagType->Enable();
+              }
             break;
 
         case css::awt::GradientStyle_RADIAL:
@@ -860,6 +930,15 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Disable();
             m_pMtrAngle->Disable();
+            if (!m_pDiagonalCB->IsChecked())
+              {
+                m_pDiagonalCB->Disable();
+              }
+            else
+              {
+                m_pDiagonalCB->Disable();
+                m_pLbDiagType->Disable();
+              }
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
@@ -869,6 +948,16 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pDiagonalCB->Enable();
+            if (!m_pDiagonalCB->IsChecked())
+              {
+                m_pLbDiagType->Disable();
+              }
+            else
+              {
+                m_pMtrAngle->Disable();
+                m_pLbDiagType->Enable();
+              }
             break;
 
         case css::awt::GradientStyle_SQUARE:
@@ -879,6 +968,16 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pDiagonalCB->Enable();
+            if (!m_pDiagonalCB->IsChecked())
+              {
+                m_pLbDiagType->Disable();
+              }
+            else
+              {
+                m_pMtrAngle->Disable();
+                m_pLbDiagType->Enable();
+              }
             break;
         default:
             break;
