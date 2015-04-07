@@ -76,27 +76,23 @@ void SvLBoxButtonData::CallLink()
     aLink.Call( this );
 }
 
-SvBmp SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
+SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
 {
-    nItemState &= 0x000F;
     SvBmp nIdx;
-    switch( nItemState )
-    {
-        case SV_ITEMSTATE_UNCHECKED:
-                nIdx = SvBmp::UNCHECKED; break;
-        case SV_ITEMSTATE_CHECKED:
-                nIdx = SvBmp::CHECKED; break;
-        case SV_ITEMSTATE_TRISTATE:
-                nIdx = SvBmp::TRISTATE; break;
-        case SV_ITEMSTATE_UNCHECKED | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SvBmp::HIUNCHECKED; break;
-        case SV_ITEMSTATE_CHECKED | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SvBmp::HICHECKED; break;
-        case SV_ITEMSTATE_TRISTATE | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SvBmp::HITRISTATE; break;
-        default:
-                nIdx = SvBmp::UNCHECKED;
-    }
+    if (nItemState == SvItemStateFlags::UNCHECKED)
+        nIdx = SvBmp::UNCHECKED;
+    else if (nItemState == SvItemStateFlags::CHECKED)
+        nIdx = SvBmp::CHECKED;
+    else if (nItemState == SvItemStateFlags::TRISTATE)
+        nIdx = SvBmp::TRISTATE;
+    else if (nItemState == (SvItemStateFlags::UNCHECKED | SvItemStateFlags::HILIGHTED))
+        nIdx = SvBmp::HIUNCHECKED;
+    else if (nItemState == (SvItemStateFlags::CHECKED | SvItemStateFlags::HILIGHTED))
+        nIdx = SvBmp::HICHECKED;
+    else if (nItemState == (SvItemStateFlags::TRISTATE | SvItemStateFlags::HILIGHTED))
+        nIdx = SvBmp::HITRISTATE;
+    else
+        nIdx = SvBmp::UNCHECKED;
     return nIdx;
 }
 
@@ -109,26 +105,24 @@ void SvLBoxButtonData::SetWidthAndHeight()
 }
 
 
-void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry, sal_uInt16 nItemFlags )
+void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry, SvItemStateFlags nItemFlags )
 {
     pImpl->pEntry = pActEntry;
     eState = ConvertToButtonState( nItemFlags );
 }
 
-SvButtonState SvLBoxButtonData::ConvertToButtonState( sal_uInt16 nItemFlags ) const
+SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags ) const
 {
-    nItemFlags &= (SV_ITEMSTATE_UNCHECKED |
-                   SV_ITEMSTATE_CHECKED |
-                   SV_ITEMSTATE_TRISTATE);
+    nItemFlags &= (SvItemStateFlags::UNCHECKED |
+                   SvItemStateFlags::CHECKED |
+                   SvItemStateFlags::TRISTATE);
     switch( nItemFlags )
     {
-        case SV_ITEMSTATE_UNCHECKED:
+        case SvItemStateFlags::UNCHECKED:
             return SV_BUTTON_UNCHECKED;
-
-        case SV_ITEMSTATE_CHECKED:
+        case SvItemStateFlags::CHECKED:
             return SV_BUTTON_CHECKED;
-
-        case SV_ITEMSTATE_TRISTATE:
+        case SvItemStateFlags::TRISTATE:
             return SV_BUTTON_TRISTATE;
         default:
             return SV_BUTTON_UNCHECKED;
@@ -305,7 +299,7 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
     , isVis(true)
     , pData(pBData)
     , eKind(eTheKind)
-    , nItemFlags(0)
+    , nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
 }
@@ -315,7 +309,7 @@ SvLBoxButton::SvLBoxButton()
     , isVis(false)
     , pData(0)
     , eKind(SvLBoxButtonKind_enabledCheckbox)
-    , nItemFlags(0)
+    , nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
 }

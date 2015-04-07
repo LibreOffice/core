@@ -25,6 +25,7 @@
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
 #include <svtools/treelistbox.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListEntry;
 
@@ -39,6 +40,19 @@ enum class SvBmp
     HITRISTATE       = 5,
     STATICIMAGE      = 6
 };
+
+enum class SvItemStateFlags
+{
+    NONE               = 0x00,
+    UNCHECKED          = 0x01,
+    CHECKED            = 0x02,
+    TRISTATE           = 0x04,
+    HILIGHTED          = 0x08
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvItemStateFlags> : is_typed_flags<SvItemStateFlags, 0x0f> {};
+}
 
 struct SvLBoxButtonData_Impl;
 
@@ -63,7 +77,7 @@ public:
 
                             ~SvLBoxButtonData();
 
-    SvBmp                   GetIndex( sal_uInt16 nItemState );
+    SvBmp                   GetIndex( SvItemStateFlags nItemState );
     long                    Width();
     long                    Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
@@ -72,8 +86,8 @@ public:
     // as buttons are not derived from LinkHdl
     void                    CallLink();
 
-    void                    StoreButtonState( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags );
-    SvButtonState           ConvertToButtonState( sal_uInt16 nItemFlags ) const;
+    void                    StoreButtonState( SvTreeListEntry* pEntry, SvItemStateFlags nItemFlags );
+    SvButtonState           ConvertToButtonState( SvItemStateFlags nItemFlags ) const;
 
     SvButtonState           GetActButtonState() const { return eState; }
 
@@ -126,18 +140,12 @@ public:
 };
 
 
-#define SV_ITEMSTATE_UNCHECKED          0x0001
-#define SV_ITEMSTATE_CHECKED            0x0002
-#define SV_ITEMSTATE_TRISTATE           0x0004
-#define SV_ITEMSTATE_HILIGHTED          0x0008
-#define SV_STATE_MASK 0xFFF8  // for deletion of UNCHECKED,CHECKED,TRISTATE
-
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
     bool    isVis;
     SvLBoxButtonData*   pData;
     SvLBoxButtonKind eKind;
-    sal_uInt16 nItemFlags;
+    SvItemStateFlags nItemFlags;
 
     void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
 public:
@@ -158,11 +166,11 @@ public:
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;
     virtual void    Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
-    sal_uInt16          GetButtonFlags() const { return nItemFlags; }
-    bool            IsStateChecked() const { return (nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
-    bool            IsStateUnchecked() const { return (nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
-    bool            IsStateTristate() const { return (nItemFlags & SV_ITEMSTATE_TRISTATE)!=0; }
-    bool            IsStateHilighted() const { return (nItemFlags & SV_ITEMSTATE_HILIGHTED)!=0; }
+    SvItemStateFlags GetButtonFlags() const { return nItemFlags; }
+    bool            IsStateChecked() const { return bool(nItemFlags & SvItemStateFlags::CHECKED); }
+    bool            IsStateUnchecked() const { return bool(nItemFlags & SvItemStateFlags::UNCHECKED); }
+    bool            IsStateTristate() const { return bool(nItemFlags & SvItemStateFlags::TRISTATE); }
+    bool            IsStateHilighted() const { return bool(nItemFlags & SvItemStateFlags::HILIGHTED); }
     void            SetStateChecked();
     void            SetStateUnchecked();
     void            SetStateTristate();
@@ -178,25 +186,25 @@ public:
 
 inline void SvLBoxButton::SetStateChecked()
 {
-    nItemFlags &= SV_STATE_MASK;
-    nItemFlags |= SV_ITEMSTATE_CHECKED;
+    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags |= SvItemStateFlags::CHECKED;
 }
 inline void SvLBoxButton::SetStateUnchecked()
 {
-    nItemFlags &= SV_STATE_MASK;
-    nItemFlags |= SV_ITEMSTATE_UNCHECKED;
+    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags |= SvItemStateFlags::UNCHECKED;
 }
 inline void SvLBoxButton::SetStateTristate()
 {
-    nItemFlags &= SV_STATE_MASK;
-    nItemFlags |= SV_ITEMSTATE_TRISTATE;
+    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags |= SvItemStateFlags::TRISTATE;
 }
 inline void SvLBoxButton::SetStateHilighted( bool bHilight )
 {
     if ( bHilight )
-        nItemFlags |= SV_ITEMSTATE_HILIGHTED;
+        nItemFlags |= SvItemStateFlags::HILIGHTED;
     else
-        nItemFlags &= ~SV_ITEMSTATE_HILIGHTED;
+        nItemFlags &= ~SvItemStateFlags::HILIGHTED;
 }
 
 

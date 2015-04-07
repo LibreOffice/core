@@ -554,7 +554,7 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
 
     if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
 
@@ -686,7 +686,7 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 bRet = true;
-                _rState = ( ( pItem->GetButtonFlags() & SV_ITEMSTATE_UNCHECKED ) == 0 )
+                _rState = ( ( pItem->GetButtonFlags() & SvItemStateFlags::UNCHECKED ) == SvItemStateFlags::NONE )
                             ? TRISTATE_TRUE : TRISTATE_FALSE;
             }
         }

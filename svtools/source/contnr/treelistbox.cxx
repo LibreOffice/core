@@ -2006,7 +2006,7 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!pItem)
             return SV_BUTTON_TRISTATE;
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
     return eState;

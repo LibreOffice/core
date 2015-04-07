@@ -516,7 +516,7 @@ SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pE
 
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
 
