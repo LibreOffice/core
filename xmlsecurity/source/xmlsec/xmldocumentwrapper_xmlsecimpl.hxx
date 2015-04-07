@@ -94,25 +94,25 @@ private:
 private:
     void getNextSAXEvent();
 
-    void sendStartElement(
+    static void sendStartElement(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode) const
+        const xmlNodePtr pNode)
         throw (com::sun::star::xml::sax::SAXException);
 
-    void sendEndElement(
+    static void sendEndElement(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode) const
+        const xmlNodePtr pNode)
         throw (com::sun::star::xml::sax::SAXException);
 
-    void sendNode(
+    static void sendNode(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode) const
+        const xmlNodePtr pNode)
         throw (com::sun::star::xml::sax::SAXException);
 
-    OString getNodeQName(const xmlNodePtr pNode) const;
+    static OString getNodeQName(const xmlNodePtr pNode);
 
     sal_Int32 recursiveDelete( const xmlNodePtr pNode);
 
@@ -120,9 +120,9 @@ private:
 
     void removeNode( const xmlNodePtr pNode) const;
 
-    xmlNodePtr checkElement(
+    static xmlNodePtr checkElement(
         const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement) const;
+            com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
 
     void buildIDAttr( xmlNodePtr pNode ) const;
     void rebuildIDLink( xmlNodePtr pNode ) const;

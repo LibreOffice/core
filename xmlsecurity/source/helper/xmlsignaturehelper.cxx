@@ -183,7 +183,7 @@ void XMLSignatureHelper::ExportSignature(
     const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler,
     const SignatureInformation& signatureInfo )
 {
-    mpXSecController->exportSignature(xDocumentHandler, signatureInfo);
+    XSecController::exportSignature(xDocumentHandler, signatureInfo);
 }
 
 bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )

@@ -44,7 +44,7 @@ public:
     explicit ONSSInitializer(const css::uno::Reference<css::uno::XComponentContext> &rxContext);
     virtual ~ONSSInitializer();
 
-    bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
+    static bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
 
     /* XDigestContextSupplier */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

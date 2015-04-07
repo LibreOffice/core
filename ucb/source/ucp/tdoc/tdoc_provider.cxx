@@ -175,7 +175,7 @@ ContentProvider::createDocumentContent(
     // model -> id -> content identifier -> queryContent
     if ( m_xDocsMgr.is() )
     {
-        OUString aDocId = m_xDocsMgr->queryDocumentId( Model );
+        OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId( Model );
         if ( !aDocId.isEmpty() )
         {
             OUStringBuffer aBuffer;

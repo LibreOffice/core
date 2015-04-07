@@ -391,9 +391,9 @@ namespace fileaccess {
         /*                                                                            */
         /******************************************************************************/
 
-        bool SAL_CALL getUnqFromUrl( const OUString& Url, OUString& Unq );
+        static bool SAL_CALL getUnqFromUrl( const OUString& Url, OUString& Unq );
 
-        bool SAL_CALL getUrlFromUnq( const OUString& Unq, OUString& Url );
+        static bool SAL_CALL getUrlFromUnq( const OUString& Unq, OUString& Url );
 
 
         bool m_bWithConfig;
@@ -429,28 +429,28 @@ namespace fileaccess {
         /*                              notify eventListeners                           */
         /********************************************************************************/
 
-        void SAL_CALL notifyPropertyChanges(
+        static void SAL_CALL notifyPropertyChanges(
             std::list< PropertyChangeNotifier* >* listeners,
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& seqChanged );
 
-        void SAL_CALL notifyContentExchanged(
+        static void SAL_CALL notifyContentExchanged(
             std::vector< std::list< ContentEventNotifier* >* >* listeners_vec );
 
-        void SAL_CALL notifyInsert(
+        static void SAL_CALL notifyInsert(
             std::list< ContentEventNotifier* >* listeners,const OUString& aChildName );
 
-        void SAL_CALL notifyContentDeleted(
+        static void SAL_CALL notifyContentDeleted(
             std::list< ContentEventNotifier* >* listeners );
 
-        void SAL_CALL notifyContentRemoved(
+        static void SAL_CALL notifyContentRemoved(
             std::list< ContentEventNotifier* >* listeners,
             const OUString& aChildName );
 
-        void SAL_CALL notifyPropertyAdded(
+        static void SAL_CALL notifyPropertyAdded(
             std::list< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 
-        void SAL_CALL notifyPropertyRemoved(
+        static void SAL_CALL notifyPropertyRemoved(
             std::list< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 

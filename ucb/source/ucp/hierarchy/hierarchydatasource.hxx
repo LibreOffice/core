@@ -36,22 +36,18 @@ namespace hierarchy_ucp {
 
 
 class HierarchyDataSource : public cppu::OWeakObject,
-                            public com::sun::star::lang::XServiceInfo,
-                            public com::sun::star::lang::XTypeProvider,
-                            public com::sun::star::lang::XComponent,
-                            public com::sun::star::lang::XMultiServiceFactory
+                            public css::lang::XServiceInfo,
+                            public css::lang::XTypeProvider,
+                            public css::lang::XComponent,
+                            public css::lang::XMultiServiceFactory
 {
     osl::Mutex m_aMutex;
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > m_xContext;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
     cppu::OInterfaceContainerHelper * m_pDisposeEventListeners;
 
 public:
-    HierarchyDataSource( const com::sun::star::uno::Reference<
-                            com::sun::star::uno::XComponentContext > &
-                                rxContext );
+    HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     virtual ~HierarchyDataSource();
 
     // XInterface
@@ -73,8 +69,7 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
+    static css::uno::Reference< css::lang::XSingleServiceFactory > createServiceFactory( const css::uno::Reference<
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XTypeProvider
@@ -84,53 +79,37 @@ public:
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL
-    dispose()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XEventListener > & xListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener > & aListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener > & aListener )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XMultiServiceFactory
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface > SAL_CALL
-    createInstance( const OUString & aServiceSpecifier )
-        throw ( com::sun::star::uno::Exception,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface > SAL_CALL
-    createInstanceWithArguments( const OUString & ServiceSpecifier,
-                                 const com::sun::star::uno::Sequence<
-                                    com::sun::star::uno::Any > & Arguments )
-        throw ( com::sun::star::uno::Exception,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getAvailableServiceNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier )
+        throw ( css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+                                 const css::uno::Sequence<
+                                    css::uno::Any > & Arguments )
+        throw ( css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Non-Interface methods
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface > SAL_CALL
-    createInstanceWithArguments( const OUString & ServiceSpecifier,
-                                 const com::sun::star::uno::Sequence<
-                                    com::sun::star::uno::Any > & Arguments,
+    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+                                 const css::uno::Sequence<
+                                    css::uno::Any > & Arguments,
                                  bool bCheckArgs )
-        throw ( com::sun::star::uno::Exception,
-                com::sun::star::uno::RuntimeException );
+        throw ( css::uno::Exception, css::uno::RuntimeException );
 
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >
-    getConfigProvider();
+    css::uno::Reference< css::lang::XMultiServiceFactory > getConfigProvider();
 
-    bool
-    createConfigPath( const OUString & rInPath, OUString & rOutPath );
+    static bool createConfigPath( const OUString & rInPath, OUString & rOutPath );
 };
 
 } // namespace hierarchy_ucp
