@@ -45,7 +45,7 @@ void cpp2uno_call(
     void * pReturnValue )
 {
     // pCallStack: ret, [return ptr], this, params
-    char * pCppStack = (char *)(pCallStack +1);
+    char * pCppStack = reinterpret_cast<char *>(pCallStack +1);
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -78,12 +78,12 @@ void cpp2uno_call(
     // stack space
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
-    void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
+    void ** pUnoArgs = static_cast<void **>(alloca( 4 * sizeof(void *) * nParams ));
     void ** pCppArgs = pUnoArgs + nParams;
     // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    sal_Int32 * pTempIndices = reinterpret_cast<sal_Int32 *>(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = reinterpret_cast<typelib_TypeDescription **>(pUnoArgs + (3 * nParams));
 
     sal_Int32 nTempIndices   = 0;
 
@@ -248,7 +248,7 @@ extern "C" void cpp_vtable_call(
             ("illegal " + OUString::unacquired(&pTypeDescr->aBase.pTypeName)
              + " vtable index " + OUString::number(nFunctionIndex) + "/"
              + OUString::number(pTypeDescr->nMapFunctionIndexToMemberIndex)),
-            (XInterface *)pThis);
+            static_cast<XInterface *>(pThis));
     }
 
     // determine called method
@@ -301,7 +301,7 @@ extern "C" void cpp_vtable_call(
         case 0: // queryInterface() opt
         {
             typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pCallStack[3] )->getTypeLibType() );
+            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pCallStack[3] )->getTypeLibType() );
             if (pTD)
             {
                 XInterface * pInterface = 0;
@@ -313,7 +313,7 @@ extern "C" void cpp_vtable_call(
                 if (pInterface)
                 {
                     ::uno_any_construct(
-                        reinterpret_cast< uno_Any * >( pCallStack[1] ),
+                        static_cast< uno_Any * >( pCallStack[1] ),
                         &pInterface, pTD, cpp_acquire );
                     pInterface->release();
                     TYPELIB_DANGER_RELEASE( pTD );
@@ -335,7 +335,7 @@ extern "C" void cpp_vtable_call(
     }
     default:
     {
-        throw RuntimeException( "no member description found!", (XInterface *)pThis );
+        throw RuntimeException( "no member description found!", static_cast<XInterface *>(pThis) );
     }
     }
 }

@@ -46,7 +46,7 @@ static void cpp_call(
 {
       // max space for: [complex ret ptr], values|ptr ...
       char * pCppStack      =
-          (char *)alloca( sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
+          static_cast<char *>(alloca( sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) ));
       char * pCppStackStart = pCppStack;
 
     // return
@@ -84,11 +84,11 @@ static void cpp_call(
     // stack space
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
+    void ** pCppArgs  = static_cast<void **>(alloca( 3 * sizeof(void *) * nParams ));
     // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
+    sal_Int32 * pTempIndices = reinterpret_cast<sal_Int32 *>(pCppArgs + nParams);
     // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = reinterpret_cast<typelib_TypeDescription **>(pCppArgs + (2 * nParams));
 
     sal_Int32 nTempIndices   = 0;
 
@@ -328,7 +328,7 @@ void unoInterfaceProxyDispatch(
         case 0: // queryInterface() opt
         {
             typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
             if (pTD)
             {
                 uno_Interface * pInterface = 0;
@@ -339,7 +339,7 @@ void unoInterfaceProxyDispatch(
                 if (pInterface)
                 {
                     ::uno_any_construct(
-                        reinterpret_cast< uno_Any * >( pReturn ),
+                        static_cast< uno_Any * >( pReturn ),
                         &pInterface, pTD, 0 );
                     (*pInterface->release)( pInterface );
                     TYPELIB_DANGER_RELEASE( pTD );
