@@ -153,8 +153,9 @@ namespace
         const SwContentType *pCntType)
     {
         SwGetINetAttrs aArr;
-        const sal_uInt16 nCount = pWrtShell->GetINetAttrs( aArr );
-        for( sal_uInt16 n = 0; n < nCount; ++n )
+        pWrtShell->GetINetAttrs( aArr );
+        const SwGetINetAttrs::size_type nCount {aArr.size()};
+        for( SwGetINetAttrs::size_type n = 0; n < nCount; ++n )
         {
             SwGetINetAttr* p = &aArr[ n ];
             SwURLFieldContent* pCnt = new SwURLFieldContent(

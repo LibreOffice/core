@@ -788,7 +788,7 @@ public:
 
     bool InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
                     bool bKeepSelection = false );
-    sal_uInt16 GetINetAttrs( SwGetINetAttrs& rArr );
+    void GetINetAttrs( SwGetINetAttrs& rArr );
 
     OUString GetDropTxt( const sal_uInt16 nChars ) const;
     void   ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM = NULL );

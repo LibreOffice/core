@@ -660,7 +660,7 @@ bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, boo
     return true;
 }
 
-sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
+void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 {
     rArr.clear();
 
@@ -689,7 +689,6 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
             }
         }
     }
-    return rArr.size();
 }
 
 /// If the cursor is in a INetAttribute then it will be deleted completely (incl. hint text, the

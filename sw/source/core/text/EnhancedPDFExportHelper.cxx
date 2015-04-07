@@ -1623,10 +1623,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         // HYPERLINKS
 
         SwGetINetAttrs aArr;
-        const sal_uInt16 nHyperLinkCount = mrSh.GetINetAttrs( aArr );
-        for( sal_uInt16 n = 0; n < nHyperLinkCount; ++n )
+        mrSh.GetINetAttrs( aArr );
+        for( auto &rAttr : aArr )
         {
-            SwGetINetAttr* p = &aArr[ n ];
+            SwGetINetAttr* p = &rAttr;
             OSL_ENSURE( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" );
 
             const SwTxtNode* pTNd = p->rINetAttr.GetpTxtNode();
