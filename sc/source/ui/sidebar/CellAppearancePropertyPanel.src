@@ -301,4 +301,14 @@ Control RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE
     };
 };
 
+String RID_SFX_STR_THOUSAND_SEP
+{
+    Text [ en-US ] = "Thousands separator";
+};
+
+String RID_SFX_STR_ENGINEERING
+{
+    Text [ en-US ] = "Engineering notation";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
