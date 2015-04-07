@@ -112,7 +112,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 
 bool StartModuleDispatcher::implts_isBackingModePossible()
 {
-    if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
+    if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
         return false;
 
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(

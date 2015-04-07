@@ -1502,7 +1502,7 @@ int Desktop::Main()
         if ( !pExecGlobals->bRestartRequested )
         {
             if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
-                (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
+                (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
                 (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))
@@ -2335,13 +2335,13 @@ void Desktop::OpenClients()
             SvtModuleOptions    aOpt;
 
             // Support command line parameters to start a module (as preselection)
-            if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
                 aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::WRITER );
-            else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
                 aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::CALC );
-            else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
                 aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::IMPRESS );
-            else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
                 aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
         }
 
@@ -2397,36 +2397,36 @@ void Desktop::OpenDefault()
     if ( rArgs.HasModuleParam() )
     {
         // Support new command line parameters to start a module
-        if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::WRITER );
-        else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+        else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::CALC );
-        else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+        else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::IMPRESS );
-        else if ( rArgs.IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+        else if ( rArgs.IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DATABASE );
-        else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+        else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DRAW );
-        else if ( rArgs.IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+        else if ( rArgs.IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::MATH );
-        else if ( rArgs.IsGlobal() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        else if ( rArgs.IsGlobal() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::WRITERGLOBAL );
-        else if ( rArgs.IsWeb() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        else if ( rArgs.IsWeb() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::WRITERWEB );
     }
 
     if ( aName.isEmpty() )
     {
         // Old way to create a default document
-        if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        if ( aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::WRITER );
-        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::CALC );
-        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::IMPRESS );
-        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DATABASE );
-        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DRAW );
         else
             return;

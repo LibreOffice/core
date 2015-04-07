@@ -786,15 +786,15 @@ bool ColorConfigWindow_Impl::IsGroupVisible (Group eGroup) const
     {
         case Group_Writer:
         case Group_Html:
-            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SWRITER);
+            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER);
         case Group_Calc:
-            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SCALC);
+            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::CALC);
         case Group_Draw:
             return
-                aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDRAW) ||
-                aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS);
+                aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DRAW) ||
+                aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS);
         case Group_Sql:
-            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDATABASE);
+            return aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DATABASE);
         default:
             return true;
     }

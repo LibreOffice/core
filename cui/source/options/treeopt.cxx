@@ -1564,7 +1564,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
     // Writer and Writer/Web options
     SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
     {
         // text document
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
@@ -1614,7 +1614,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Calc options
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
     {
         if ( aFactory == "com.sun.star.sheet.SpreadsheetDocument" )
         {
@@ -1639,7 +1639,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
     // Impress options
     SfxModule* pSdMod = *reinterpret_cast<SfxModule**>(GetAppData( SHL_DRAW ));
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
     {
         if ( aFactory == "com.sun.star.presentation.PresentationDocument" )
         {
@@ -1662,7 +1662,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Draw options
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
     {
         if ( aFactory == "com.sun.star.drawing.DrawingDocument" )
         {
@@ -1685,7 +1685,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Math options
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
     {
         if ( aFactory == "com.sun.star.formula.FormulaProperties" )
         {
@@ -1707,9 +1707,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
     // Database - needed only if there is an application which integrates with databases
     if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) &&
-        (   aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
-        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER )
-        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC )
+        (   aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE )
+        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER )
+        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC )
         ) )
     {
         ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();

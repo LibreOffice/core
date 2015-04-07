@@ -49,19 +49,19 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 {
     public:
 
-        enum EModule
+        enum class EModule
         {
-            E_SWRITER       = 0,
-            E_SCALC         = 1,
-            E_SDRAW         = 2,
-            E_SIMPRESS      = 3,
-            E_SMATH         = 4,
-            E_SCHART        = 5,
-            E_SSTARTMODULE  = 6,
-            E_SBASIC        = 7,
-            E_SDATABASE     = 8,
-            E_SWEB          = 9,
-            E_SGLOBAL       = 10
+            WRITER       = 0,
+            CALC         = 1,
+            DRAW         = 2,
+            IMPRESS      = 3,
+            MATH         = 4,
+            CHART        = 5,
+            STARTMODULE  = 6,
+            BASIC        = 7,
+            DATABASE     = 8,
+            WEB          = 9,
+            GLOBAL       = 10
         };
 
         /*ATTENTION:

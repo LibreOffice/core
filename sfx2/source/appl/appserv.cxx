@@ -702,7 +702,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
             switch(nWhich)
             {
                 case SID_TEMPLATE_ADDRESSBOKSOURCE:
-                    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE) )
+                    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE) )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     break;
                 case SID_EXITANDRETURN:

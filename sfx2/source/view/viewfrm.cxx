@@ -3073,7 +3073,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, false);
     if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
     {
-        if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+        if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
             return;
         Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( "_beamer", FrameSearchFlag::CHILDREN ) );

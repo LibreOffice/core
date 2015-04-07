@@ -240,21 +240,21 @@ OUString getDefaultModule_Impl()
 {
     OUString sDefaultModule;
     SvtModuleOptions aModOpt;
-    if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+    if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
         sDefaultModule = "swriter";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
         sDefaultModule = "scalc";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
         sDefaultModule = "simpress";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
         sDefaultModule = "sdraw";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
         sDefaultModule = "smath";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::CHART ) )
         sDefaultModule = "schart";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::BASIC ) )
         sDefaultModule = "sbasic";
-    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
         sDefaultModule = "sdatabase";
     else
     {

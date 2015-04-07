@@ -1180,21 +1180,21 @@ namespace
                 // could not determine the document type we're living in
                 // ->fallback
                 SvtModuleOptions aModOpt;
-                if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
                     pReturn = "swriter";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                     pReturn = "sdatabase";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
                     pReturn = "scalc";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
                     pReturn = "simpress";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
                     pReturn = "sdraw";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
                     pReturn = "smath";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::CHART ) )
                     pReturn = "schart";
-                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::EModule::BASIC ) )
                     pReturn = "sbasic";
                 else
                 {

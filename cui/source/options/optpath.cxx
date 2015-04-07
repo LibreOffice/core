@@ -289,7 +289,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     {
         // only writer uses autotext
         if ( i == SvtPathOptions::PATH_AUTOTEXT
-            && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             continue;
 
         switch (i)

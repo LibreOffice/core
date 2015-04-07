@@ -927,13 +927,13 @@ void OfficeIPCThread::execute()
                         SvtModuleOptions    aOpt;
 
                         // Support command line parameters to start a module (as preselection)
-                        if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                        if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
                             pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::WRITER );
-                        else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                        else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
                             pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::CALC );
-                        else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                        else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
                             pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::IMPRESS );
-                        else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                        else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
                             pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
                     }
 

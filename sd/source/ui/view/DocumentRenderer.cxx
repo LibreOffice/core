@@ -378,7 +378,7 @@ namespace {
             SvtModuleOptions aOpt;
             OUString aAppGroupname(SD_RESSTR(_STR_IMPRESS_PRINT_UI_GROUP_NAME));
             aAppGroupname = aAppGroupname.replaceFirst("%s", aOpt.GetModuleName(
-                mbImpress ? SvtModuleOptions::E_SIMPRESS : SvtModuleOptions::E_SDRAW));
+                mbImpress ? SvtModuleOptions::EModule::IMPRESS : SvtModuleOptions::EModule::DRAW));
             AddDialogControl(vcl::PrinterOptionsHelper::setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage"));
 
             uno::Sequence< OUString > aHelpIds, aWidgetIds;

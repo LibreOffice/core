@@ -248,7 +248,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     OUString aAppGroupname( aStrings.GetString( 9 ) );
-    aAppGroupname = aAppGroupname.replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::E_SCALC ) );
+    aAppGroupname = aAppGroupname.replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::CALC ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, OUString());
 
     // show subgroup for pages

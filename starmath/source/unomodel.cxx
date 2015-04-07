@@ -85,7 +85,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     SvtModuleOptions aOpt;
     OUString aAppGroupname(
         aLocalizedStrings.GetString( 0 ).
-            replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ) );
+            replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::MATH ) ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create subgroup for print options

@@ -238,22 +238,22 @@ void BackingWindow::initControls()
             aFileNewAppsAvailable.insert( sURL );
     }
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_WRITER;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SCALC))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::CALC))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_CALC;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_IMPRESS;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_DRAW;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_DATABASE;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SMATH))
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::MATH))
         mpAllRecentThumbnails->mnFileTypes |= TYPE_MATH;
 
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;

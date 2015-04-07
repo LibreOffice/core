@@ -345,7 +345,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
             {
                 if (eOperation == E_CLOSE_FRAME)
                     bTerminateApp = true;
-                else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE) )
+                else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
                     bEstablishBackingMode = true;
                 else
                     bTerminateApp = true;

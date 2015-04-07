@@ -847,7 +847,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_FM_USE_WIZARDS:
-                if  ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                if  ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                     rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 else if (!GetFormModel())
                     rSet.DisableItem( nWhich );
@@ -869,7 +869,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_NAVIGATIONBAR:
             case SID_FM_DBGRID:
-                if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                 {
                     rSet.Put( SfxVisibilityItem( nWhich, false ) );
                     break;

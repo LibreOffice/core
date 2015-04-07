@@ -3120,7 +3120,7 @@ void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame
                             /*IN*/       bool                                   bState  )
 {
     // Note: If start module is not installed - no closer has to be shown!
-    if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
+    if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
         return;
 
     try

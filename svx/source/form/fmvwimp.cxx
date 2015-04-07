@@ -997,7 +997,7 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 
     // #i46898# no wizards if there is no Base installed - currently, all wizards are
     // database related
-    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
         return;
 
     if ( m_nControlWizardEvent )

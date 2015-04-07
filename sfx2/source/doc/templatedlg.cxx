@@ -863,10 +863,10 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
         sFilterExt += "*.ott;*.stw;*.oth";
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";
@@ -874,7 +874,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
         sFilterExt += "*.ots;*.stc";
     }
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";
@@ -882,7 +882,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
         sFilterExt += "*.otp;*.sti";
     }
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";

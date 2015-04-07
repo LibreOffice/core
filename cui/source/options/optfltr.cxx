@@ -245,13 +245,13 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     SvtModuleOptions aModuleOpt;
 
     // int the same sequence as the enums of MSFltrPg2_CheckBoxEntries
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
         InsertEntry( sChgToFromMath, static_cast< sal_IntPtr >( Math ) );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
         InsertEntry( sChgToFromWriter, static_cast< sal_IntPtr >( Writer ) );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
         InsertEntry( sChgToFromCalc, static_cast< sal_IntPtr >( Calc ) );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
         InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
     InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), true, false );
 

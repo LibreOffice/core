@@ -123,7 +123,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     aAutoSaveEdit->SetMaxTextLen( 2 );
 
     SvtModuleOptions aModuleOpt;
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
     {
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_MATH) ));
         aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_MATH) ));
@@ -134,7 +134,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_MATH] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::MATH);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
     {
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_DRAW) ));
         aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_DRAW) ));
@@ -145,7 +145,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_DRAW] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::DRAW);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
     {
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_IMPRESS) ));
         aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_IMPRESS) ));
@@ -156,7 +156,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_IMPRESS] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::IMPRESS);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
     {
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_CALC) ));
         aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_CALC) ));
@@ -167,7 +167,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_CALC] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::CALC);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
     {
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER) ));
         aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER_WEB) ));

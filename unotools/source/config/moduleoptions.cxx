@@ -447,27 +447,27 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     bool bInstalled = false;
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITER].getInstalled();
+        case SvtModuleOptions::EModule::WRITER    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITER].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SWEB       :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERWEB].getInstalled();
+        case SvtModuleOptions::EModule::WEB       :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERWEB].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SGLOBAL    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERGLOBAL].getInstalled();
+        case SvtModuleOptions::EModule::GLOBAL    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERGLOBAL].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CALC].getInstalled();
+        case SvtModuleOptions::EModule::CALC      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CALC].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SDRAW      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DRAW].getInstalled();
+        case SvtModuleOptions::EModule::DRAW      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DRAW].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SIMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::IMPRESS].getInstalled();
+        case SvtModuleOptions::EModule::IMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::IMPRESS].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SMATH      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::MATH].getInstalled();
+        case SvtModuleOptions::EModule::MATH      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::MATH].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SCHART     :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CHART].getInstalled();
+        case SvtModuleOptions::EModule::CHART     :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CHART].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SSTARTMODULE : bInstalled = m_lFactories[SvtModuleOptions::EFactory::STARTMODULE].getInstalled();
+        case SvtModuleOptions::EModule::STARTMODULE : bInstalled = m_lFactories[SvtModuleOptions::EFactory::STARTMODULE].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SBASIC     :   bInstalled = true; // Couldn't be deselected by setup yet!
+        case SvtModuleOptions::EModule::BASIC     :   bInstalled = true; // Couldn't be deselected by setup yet!
                                                 break;
-        case SvtModuleOptions::E_SDATABASE  :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DATABASE].getInstalled();
+        case SvtModuleOptions::EModule::DATABASE  :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DATABASE].getInstalled();
                                                 break;
     }
 
@@ -711,7 +711,7 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_BASIC;
+        eFactory = SvtModuleOptions::EFactory::BASIC;
         bState   = ( sName == FACTORYNAME_BASIC);
     }
 
@@ -937,43 +937,43 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
 bool SvtModuleOptions::IsMath() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SMATH );
+    return m_pDataContainer->IsModuleInstalled( EModule::MATH );
 }
 
 bool SvtModuleOptions::IsChart() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SCHART );
+    return m_pDataContainer->IsModuleInstalled( EModule::CHART );
 }
 
 bool SvtModuleOptions::IsCalc() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SCALC );
+    return m_pDataContainer->IsModuleInstalled( EModule::CALC );
 }
 
 bool SvtModuleOptions::IsDraw() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SDRAW );
+    return m_pDataContainer->IsModuleInstalled( EModule::DRAW );
 }
 
 bool SvtModuleOptions::IsWriter() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SWRITER );
+    return m_pDataContainer->IsModuleInstalled( EModule::WRITER );
 }
 
 bool SvtModuleOptions::IsImpress() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
+    return m_pDataContainer->IsModuleInstalled( EModule::IMPRESS );
 }
 
 bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( E_SDATABASE );
+    return m_pDataContainer->IsModuleInstalled( EModule::DATABASE );
 }
 
 namespace
@@ -997,16 +997,16 @@ OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return OUString("Writer"); }
-        case SvtModuleOptions::E_SWEB       :   { return OUString("Web"); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return OUString("Global"); }
-        case SvtModuleOptions::E_SCALC      :   { return OUString("Calc"); }
-        case SvtModuleOptions::E_SDRAW      :   { return OUString("Draw"); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return OUString("Impress"); }
-        case SvtModuleOptions::E_SMATH      :   { return OUString("Math"); }
-        case SvtModuleOptions::E_SCHART     :   { return OUString("Chart"); }
-        case SvtModuleOptions::E_SBASIC     :   { return OUString("Basic"); }
-        case SvtModuleOptions::E_SDATABASE  :   { return OUString("Database"); }
+        case SvtModuleOptions::EModule::WRITER    :   { return OUString("Writer"); }
+        case SvtModuleOptions::EModule::WEB       :   { return OUString("Web"); }
+        case SvtModuleOptions::EModule::GLOBAL    :   { return OUString("Global"); }
+        case SvtModuleOptions::EModule::CALC      :   { return OUString("Calc"); }
+        case SvtModuleOptions::EModule::DRAW      :   { return OUString("Draw"); }
+        case SvtModuleOptions::EModule::IMPRESS   :   { return OUString("Impress"); }
+        case SvtModuleOptions::EModule::MATH      :   { return OUString("Math"); }
+        case SvtModuleOptions::EModule::CHART     :   { return OUString("Chart"); }
+        case SvtModuleOptions::EModule::BASIC     :   { return OUString("Basic"); }
+        case SvtModuleOptions::EModule::DATABASE  :   { return OUString("Database"); }
         default:
             OSL_FAIL( "unknown module" );
             break;
@@ -1172,21 +1172,21 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
 OUString SvtModuleOptions::GetDefaultModuleName()
 {
     OUString aModule;
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITER);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::CALC))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::CALC);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::IMPRESS);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::DATABASE);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::DRAW);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWEB))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::WEB))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITERWEB);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SGLOBAL))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::GLOBAL))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITERGLOBAL);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::MATH))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::MATH);
     return aModule;
 }
