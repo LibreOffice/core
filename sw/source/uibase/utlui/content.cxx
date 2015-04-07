@@ -146,6 +146,30 @@ namespace
     {
         return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
+
+    sal_uInt16 lcl_InsertURLFieldContent(
+        SwContentArr *pMember,
+        SwWrtShell* pWrtShell,
+        const SwContentType *pCntType)
+    {
+        SwGetINetAttrs aArr;
+        const sal_uInt16 nCount = pWrtShell->GetINetAttrs( aArr );
+        for( sal_uInt16 n = 0; n < nCount; ++n )
+        {
+            SwGetINetAttr* p = &aArr[ n ];
+            SwURLFieldContent* pCnt = new SwURLFieldContent(
+                                pCntType,
+                                p->sText,
+                                INetURLObject::decode(
+                                    p->rINetAttr.GetINetFmt().GetValue(),
+                                    INetURLObject::DECODE_UNAMBIGUOUS,
+                                    RTL_TEXTENCODING_UTF8 ),
+                                &p->rINetAttr,
+                                n );
+            pMember->insert( pCnt );
+        }
+        return nCount;
+    }
 }
 
 // Content, contains names and reference at the content type.
@@ -354,22 +378,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
 
-            SwGetINetAttrs aArr;
-            nMemberCount = pWrtShell->GetINetAttrs( aArr );
-            for( sal_uInt16 n = 0; n < nMemberCount; ++n )
-            {
-                SwGetINetAttr* p = &aArr[ n ];
-                SwURLFieldContent* pCnt = new SwURLFieldContent(
-                                    this,
-                                    p->sText,
-                                    INetURLObject::decode(
-                                        p->rINetAttr.GetINetFmt().GetValue(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ),
-                                    &p->rINetAttr,
-                                    n );
-                pMember->insert( pCnt );
-            }
+            nMemberCount = lcl_InsertURLFieldContent(pMember, pWrtShell, this);
+
             bEdit = true;
             nOldMemberCount = nMemberCount;
             bDelete = false;
@@ -657,24 +667,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         }
         break;
         case CONTENT_TYPE_URLFIELD:
-        {
-            SwGetINetAttrs aArr;
-            nMemberCount = pWrtShell->GetINetAttrs( aArr );
-            for( sal_uInt16 n = 0; n < nMemberCount; ++n )
-            {
-                SwGetINetAttr* p = &aArr[ n ];
-                SwURLFieldContent* pCnt = new SwURLFieldContent(
-                                    this,
-                                    p->sText,
-                                    INetURLObject::decode(
-                                        p->rINetAttr.GetINetFmt().GetValue(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ),
-                                    &p->rINetAttr,
-                                    n );
-                pMember->insert( pCnt );
-            }
-        }
+            nMemberCount = lcl_InsertURLFieldContent(pMember, pWrtShell, this);
         break;
         case CONTENT_TYPE_INDEX:
         {
