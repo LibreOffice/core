@@ -439,16 +439,16 @@ void aqua_init_systray()
                 const char*                 pAsciiURLDescription;
             }   aMenuItems[] =
             {
-                { SvtModuleOptions::E_SWRITER,    MI_WRITER,  WRITER_URL },
-                { SvtModuleOptions::E_SCALC,      MI_CALC,    CALC_URL },
-                { SvtModuleOptions::E_SIMPRESS,   MI_IMPRESS, IMPRESS_WIZARD_URL },
-                { SvtModuleOptions::E_SDRAW,      MI_DRAW,    DRAW_URL },
-                { SvtModuleOptions::E_SDATABASE,  MI_BASE,    BASE_URL },
-                { SvtModuleOptions::E_SMATH,      MI_MATH,    MATH_URL }
+                { SvtModuleOptions::EModule::WRITER,    MI_WRITER,  WRITER_URL },
+                { SvtModuleOptions::EModule::CALC,      MI_CALC,    CALC_URL },
+                { SvtModuleOptions::EModule::IMPRESS,   MI_IMPRESS, IMPRESS_WIZARD_URL },
+                { SvtModuleOptions::EModule::DRAW,      MI_DRAW,    DRAW_URL },
+                { SvtModuleOptions::EModule::DATABASE,  MI_BASE,    BASE_URL },
+                { SvtModuleOptions::EModule::MATH,      MI_MATH,    MATH_URL }
             };
 
             // insert entry for startcenter
-            if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SSTARTMODULE ) )
+            if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::EModule::STARTMODULE ) )
             {
                 appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, OUString( "n" ) );
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
