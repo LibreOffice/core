@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_99fd1b71",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-07T11:40:35Z",
+      "side": 1,
+      "message": "have 4 sheets\n in Sheet1.A1 \u003dSUM(Sheet2.A1:Sheet4.A1)\n delete Sheet2\n formula becomes \u003dSUM(Sheet4.A1:Sheet4.A1)",
+      "parentUuid": "1a26ad4f_b6f7c6f4",
+      "revId": "3d61972fc3e57283fa1772c870c5e2eb22e63bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a29b11f_b13a67e6",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 1
