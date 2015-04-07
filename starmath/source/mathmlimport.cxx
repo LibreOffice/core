@@ -594,7 +594,7 @@ struct SmXMLContext_Helper
 
     SmXMLImportContext rContext;
 
-    SmXMLContext_Helper(SmXMLImportContext &rImport)
+    explicit SmXMLContext_Helper(SmXMLImportContext &rImport)
         : nIsBold( -1 )
         , nIsItalic( -1 )
         , nFontSize( 0.0 )

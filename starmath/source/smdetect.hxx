@@ -54,7 +54,7 @@ namespace com
 class SmFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-                            SmFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+    explicit SmFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SmFilterDetect();
 
     SFX_DECL_XSERVICEINFO_NOFACTORY

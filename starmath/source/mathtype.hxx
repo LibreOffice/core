@@ -35,7 +35,7 @@ public:
     sal_uInt8 nTface;
     sal_uInt8 nStyle;
     MathTypeFont() : nTface(0),nStyle(0) {}
-    MathTypeFont(sal_uInt8 nFace) : nTface(nFace),nStyle(0) {}
+    explicit MathTypeFont(sal_uInt8 nFace) : nTface(nFace),nStyle(0) {}
     void AppendStyleToText(OUString &rS);
 };
 
@@ -53,7 +53,7 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(OUString &rIn)
+    explicit MathType(OUString &rIn)
         : nVersion(0)
         , nPlatform(0)
         , nProduct(0)

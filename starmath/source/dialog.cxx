@@ -408,7 +408,7 @@ void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
 class SaveDefaultsQuery : public MessageDialog
 {
 public:
-    SaveDefaultsQuery(vcl::Window *pParent)
+    explicit SaveDefaultsQuery(vcl::Window *pParent)
         : MessageDialog(pParent, "SaveDefaultsDialog",
             "modules/smath/ui/savedefaultsdialog.ui")
     {

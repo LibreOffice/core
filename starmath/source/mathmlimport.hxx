@@ -42,7 +42,7 @@ class SmXMLImportWrapper
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> xModel;
 
 public:
-    SmXMLImportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
+    explicit SmXMLImportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef) {}
 
     sal_uLong Import(SfxMedium &rMedium);
