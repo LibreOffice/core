@@ -3281,7 +3281,6 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             uno::Reference< excel::XRange > xResultRange = new ScVbaRange( mxParent, mxContext, xCellRange );
             if( xResultRange.is() )
             {
-                xResultRange->Select();
                 return xResultRange;
             }
         }
