@@ -961,8 +961,6 @@ void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntr
     }
 }
 
-
-
 void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable, bool bWithChildren )
 {
     sal_uInt16 nRefDepth;
@@ -2566,13 +2564,11 @@ void SvTreeListBox::Paint( const Rectangle& rRect )
         if( HasFocus() )
         {
             long tempHeight = GetTextHeight();
-            Rectangle tempRect(
-                                Point(0,0),Size(GetSizePixel().Width(),tempHeight)
-                               );
+            Rectangle tempRect(Point(0, 0), Size(GetSizePixel().Width(), tempHeight));
             ShowFocus(tempRect);
         }
-
-        else{
+        else
+        {
             HideFocus();
         }
     }

@@ -337,19 +337,39 @@ public:
     SvTreeListBox( vcl::Window* pParent, const ResId& rResId );
     virtual ~SvTreeListBox();
 
-    SvTreeList* GetModel() const { return pModel; }
+    SvTreeList* GetModel() const
+    {
+        return pModel;
+    }
+
     using SvListView::SetModel;
+
     void SetModel(SvTreeList* pNewModel) SAL_OVERRIDE;
 
-    sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
-    SvTreeListEntry*    First() const { return pModel->First(); }
-    SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Next(pEntry,pDepth); }
-    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Prev(pEntry,pDepth); }
-    SvTreeListEntry*    Last() const { return pModel->Last(); }
+    sal_uLong GetEntryCount() const
+    {
+        return pModel->GetEntryCount();
+    }
+    SvTreeListEntry* First() const
+    {
+        return pModel->First();
+    }
+    SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
+    {
+         return pModel->Next(pEntry, pDepth);
+    }
+    SvTreeListEntry* Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
+    {
+        return pModel->Prev(pEntry, pDepth);
+    }
+    SvTreeListEntry* Last() const
+    {
+        return pModel->Last();
+    }
 
-    SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
-    SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry* NextSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry* PrevSibling( SvTreeListEntry* pEntry ) const;
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );

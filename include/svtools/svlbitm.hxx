@@ -108,21 +108,37 @@ class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
 protected:
     OUString maText;
-public:
-                    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rStr);
-                    SvLBoxString();
-    virtual         ~SvLBoxString();
-    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*) SAL_OVERRIDE;
-    OUString   GetText() const { return maText; }
-    OUString GetExtendText() const { return OUString(); }
-    void            SetText( const OUString& rText ) { maText = rText; }
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+public:
+    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rText);
+    SvLBoxString();
+    virtual ~SvLBoxString();
+
+    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
+    virtual void InitViewData(SvTreeListBox* pView,
+                              SvTreeListEntry* pEntry,
+                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+
+    OUString GetText() const
+    {
+        return maText;
+    }
+    OUString GetExtendText() const
+    {
+        return OUString();
+    }
+    void SetText(const OUString& rText)
+    {
+        maText = rText;
+    }
+
+    virtual void Paint(const Point& rPos,
+                       SvTreeListBox& rOutDev,
+                       const SvViewDataEntry* pView,
+                       const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void    Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
 };
 
 class SvLBoxBmp : public SvLBoxItem
@@ -149,39 +165,65 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 
     void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
 public:
-                    // An SvLBoxButton can be of three different kinds: an
-                    // enabled checkbox (the normal kind), a disabled checkbox
-                    // (which cannot be modified via UI), or a static image
-                    // (see SV_BMP_STATICIMAGE; nFlags are effectively ignored
-                    // for that kind).
-                    SvLBoxButton( SvTreeListEntry* pEntry,
-                                  SvLBoxButtonKind eTheKind, sal_uInt16 nFlags,
-                                  SvLBoxButtonData* pBData );
-                    SvLBoxButton();
-    virtual         ~SvLBoxButton();
-    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    // An SvLBoxButton can be of three different kinds: an
+    // enabled checkbox (the normal kind), a disabled checkbox
+    // (which cannot be modified via UI), or a static image
+    // (see SV_BMP_STATICIMAGE; nFlags are effectively ignored
+    // for that kind).
+    SvLBoxButton( SvTreeListEntry* pEntry,
+                  SvLBoxButtonKind eTheKind, sal_uInt16 nFlags,
+                  SvLBoxButtonData* pBData );
+    SvLBoxButton();
+    virtual ~SvLBoxButton();
+    virtual void InitViewData(SvTreeListBox* pView,
+                              SvTreeListEntry* pEntry,
+                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    bool ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
+
+    virtual void Paint(const Point& rPos,
+                       SvTreeListBox& rOutDev,
+                       const SvViewDataEntry* pView,
+                       const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void    Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
-    SvItemStateFlags GetButtonFlags() const { return nItemFlags; }
-    bool            IsStateChecked() const { return bool(nItemFlags & SvItemStateFlags::CHECKED); }
-    bool            IsStateUnchecked() const { return bool(nItemFlags & SvItemStateFlags::UNCHECKED); }
-    bool            IsStateTristate() const { return bool(nItemFlags & SvItemStateFlags::TRISTATE); }
-    bool            IsStateHilighted() const { return bool(nItemFlags & SvItemStateFlags::HILIGHTED); }
-    void            SetStateChecked();
-    void            SetStateUnchecked();
-    void            SetStateTristate();
-    void            SetStateHilighted( bool bHilight );
-    void            SetStateInvisible();
+
+    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
+    SvItemStateFlags GetButtonFlags() const
+    {
+        return nItemFlags;
+    }
+    bool IsStateChecked() const
+    {
+        return bool(nItemFlags & SvItemStateFlags::CHECKED);
+    }
+    bool IsStateUnchecked() const
+    {
+        return bool(nItemFlags & SvItemStateFlags::UNCHECKED);
+    }
+    bool IsStateTristate() const
+    {
+        return bool(nItemFlags & SvItemStateFlags::TRISTATE);
+    }
+    bool IsStateHilighted() const
+    {
+        return bool(nItemFlags & SvItemStateFlags::HILIGHTED);
+    }
+    void SetStateChecked();
+    void SetStateUnchecked();
+    void SetStateTristate();
+    void SetStateHilighted(bool bHilight);
+    void SetStateInvisible();
 
     SvLBoxButtonKind GetKind() const { return eKind; }
 
     // Check whether this button can be modified via UI
-    bool            CheckModification() const;
-    SvLBoxButtonData* GetButtonData() const{ return pData;}
+    bool CheckModification() const;
+    SvLBoxButtonData* GetButtonData() const
+    {
+        return pData;
+    }
 };
 
 inline void SvLBoxButton::SetStateChecked()
@@ -189,6 +231,7 @@ inline void SvLBoxButton::SetStateChecked()
     nItemFlags &= SvItemStateFlags::HILIGHTED;
     nItemFlags |= SvItemStateFlags::CHECKED;
 }
+
 inline void SvLBoxButton::SetStateUnchecked()
 {
     nItemFlags &= SvItemStateFlags::HILIGHTED;
@@ -207,56 +250,64 @@ inline void SvLBoxButton::SetStateHilighted( bool bHilight )
         nItemFlags &= ~SvItemStateFlags::HILIGHTED;
 }
 
-
 struct SvLBoxContextBmp_Impl;
+
 class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     SvLBoxContextBmp_Impl*  m_pImpl;
 public:
-    SvLBoxContextBmp(
-        SvTreeListEntry* pEntry, sal_uInt16 nItemFlags, Image aBmp1, Image aBmp2, bool bExpanded);
+    SvLBoxContextBmp(SvTreeListEntry* pEntry,
+                     sal_uInt16 nItemFlags,
+                     Image aBmp1,
+                     Image aBmp2,
+                     bool bExpanded);
     SvLBoxContextBmp();
+    virtual ~SvLBoxContextBmp();
 
-    virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void InitViewData(SvTreeListBox* pView,
+                              SvTreeListEntry* pEntry,
+                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos,
+                       SvTreeListBox& rOutDev,
+                       const SvViewDataEntry* pView,
+                       const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void    Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
 
 
-    bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 );
-    void            GetModeImages(       Image& _rBitmap1,       Image& _rBitmap2 ) const;
+    bool SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
+    void  GetModeImages(Image& rBitmap1, Image& rBitmap2) const;
 
-    inline void         SetBitmap1( const Image& _rImage );
-    inline void         SetBitmap2( const Image& _rImage );
-    inline const Image& GetBitmap1( ) const;
-    inline const Image& GetBitmap2( ) const;
+    inline void SetBitmap1(const Image& rImage);
+    inline void SetBitmap2(const Image& rImage);
+    inline const Image& GetBitmap1() const;
+    inline const Image& GetBitmap2() const;
 
 private:
-    Image& implGetImageStore( bool _bFirst );
+    Image& implGetImageStore(bool bFirst);
 };
 
-inline void SvLBoxContextBmp::SetBitmap1( const Image& _rImage  )
+inline void SvLBoxContextBmp::SetBitmap1(const Image& _rImage)
 {
-    implGetImageStore( true ) = _rImage;
+    implGetImageStore(true) = _rImage;
 }
 
-inline void SvLBoxContextBmp::SetBitmap2( const Image& _rImage )
+inline void SvLBoxContextBmp::SetBitmap2(const Image& _rImage)
 {
-    implGetImageStore( false ) = _rImage;
+    implGetImageStore(false) = _rImage;
 }
 
-inline const Image& SvLBoxContextBmp::GetBitmap1( ) const
+inline const Image& SvLBoxContextBmp::GetBitmap1() const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( true );
+    Image& rImage = const_cast<SvLBoxContextBmp*>(this)->implGetImageStore(true);
     return rImage;
 }
 
-inline const Image& SvLBoxContextBmp::GetBitmap2( ) const
+inline const Image& SvLBoxContextBmp::GetBitmap2() const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( false );
+    Image& rImage = const_cast<SvLBoxContextBmp*>(this)->implGetImageStore(false);
     return rImage;
 }
 
