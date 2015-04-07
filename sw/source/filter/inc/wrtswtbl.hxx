@@ -204,7 +204,7 @@ inline bool SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 {
     // Da wir hier nur die Wahrheits-Grade 0 und 1 kennen, lassen wir lieber
     // auch nicht zu, dass x==y und x<y gleichzeitig gilt ;-)
-    return nPos < rCol.nPos - COLFUZZY;
+    return nPos + COLFUZZY < rCol.nPos;
 }
 
 struct SwWriteTableColLess {
