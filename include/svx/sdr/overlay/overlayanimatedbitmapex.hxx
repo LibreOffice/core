@@ -78,9 +78,6 @@ namespace sdr
             sal_uInt16 getCenterX2() const { return mnCenterX2; }
             sal_uInt16 getCenterY2() const { return mnCenterY2; }
 
-            // #i53216# added CursorBlinkTime (in ms)
-            sal_uInt32 getBlinkTime() const { return mnBlinkTime; }
-
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;

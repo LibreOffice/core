@@ -65,9 +65,6 @@ namespace sdr
             double getDiscreteShrink() const { return mfDiscreteShrink; }
             double getRotation() const { return mfRotation; }
 
-            // added CursorBlinkTime (in ms)
-            sal_uInt32 getBlinkTime() const { return mnBlinkTime; }
-
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
