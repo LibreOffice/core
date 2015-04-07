@@ -526,6 +526,7 @@ module com {
      const short PROPERTIES = 1303;
      const short Q = 528;
      const short QUOTELEFT = 1311;
+     const short QUOTERIGHT = 1318;
      const short R = 529;
      const short REPEAT = 1301;
      const short RETURN = 1280;
@@ -2785,6 +2786,16 @@ module com {
      MIDDLE_BOTTOM = 7,
      RIGHT_BOTTOM = 8
     };
+   };
+   module text {
+    published struct GraphicCrop {
+     long Top;
+     long Bottom;
+     long Left;
+     long Right;
+    };
+   };
+   module drawing {
     published service FillProperties {
      [property] ::com::sun::star::drawing::FillStyle FillStyle;
      [property] ::com::sun::star::util::Color FillColor;
@@ -2810,6 +2821,7 @@ module com {
      [property] ::com::sun::star::drawing::BitmapMode FillBitmapMode;
      [property, optional] boolean FillBitmapStretch;
      [property, optional] boolean FillBitmapTile;
+     [property, optional] ::com::sun::star::text::GraphicCrop GraphicCrop;
     };
     published enum LineCap {
      BUTT = 0,
@@ -3007,6 +3019,7 @@ module com {
      [property, optional] long CharBottomBorderDistance;
      [property, optional] ::com::sun::star::table::ShadowFormat CharShadowFormat;
      [property, optional] ::com::sun::star::util::Color CharHighlight;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > CharInteropGrabBag;
     };
    };
    module chart {
@@ -3246,6 +3259,10 @@ module com {
      [property, optional] long NavigationOrder;
      [property, optional] string Hyperlink;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > InteropGrabBag;
+     [property, optional] short RelativeHeight;
+     [property, optional] short RelativeWidth;
+     [property, optional] short RelativeHeightRelation;
+     [property, optional] short RelativeWidthRelation;
     };
    };
    module chart {
@@ -7417,7 +7434,7 @@ module com {
      interface ::com::sun::star::frame::XDesktop;
      interface ::com::sun::star::frame::XComponentLoader;
     };
-    published service Desktop: ::com::sun::star::frame::XDesktop2;
+    /** @deprecated */ published service Desktop: ::com::sun::star::frame::XDesktop2;
     /** @deprecated */ published interface XDesktopTask {
      interface ::com::sun::star::lang::XComponent;
      /** @deprecated */ void initialize([in] ::com::sun::star::awt::XWindow TaskWindow);
@@ -7751,6 +7768,7 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      [attribute] sequence< string > List;
     };
+    published singleton theDesktop: ::com::sun::star::frame::XDesktop2;
    };
    module graphic {
     published service GraphicDescriptor {
@@ -12261,6 +12279,7 @@ module com {
      [property, optional] ::com::sun::star::table::BorderLine2 RightBorder2;
      [property, optional] ::com::sun::star::table::BorderLine2 DiagonalTLBR2;
      [property, optional] ::com::sun::star::table::BorderLine2 DiagonalBLTR2;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > CellInteropGrabBag;
     };
     published enum CellContentType {
      EMPTY = 0,
@@ -13730,7 +13749,7 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      void trigger([in] string Event);
     };
-    published service JobExecutor: ::com::sun::star::task::XJobExecutor;
+    /** @deprecated */ published service JobExecutor: ::com::sun::star::task::XJobExecutor;
     published exception MasterPasswordRequest: ::com::sun::star::task::PasswordRequest {
     };
     published exception NoMasterException: ::com::sun::star::uno::RuntimeException {
@@ -13828,6 +13847,7 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ ::com::sun::star::task::XStatusIndicator getStatusIndicator();
     };
+    published singleton theJobExecutor: ::com::sun::star::task::XJobExecutor;
    };
    module text {
     published constants AuthorDisplayFormat {
@@ -13927,6 +13947,8 @@ module com {
      [property, optional] string FillGradientName;
      [property, optional] short ShadowTransparence;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > FrameInteropGrabBag;
+     [property, optional] short RelativeHeightRelation;
+     [property, optional] short RelativeWidthRelation;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -14104,6 +14126,7 @@ module com {
      [property, optional] short WidthType;
      [property, optional] short WritingMode;
      [property, optional] boolean IsFollowingTextFlow;
+     [property, optional] ::com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
     };
     published service ChainedTextFrame {
      service ::com::sun::star::text::TextFrame;
@@ -14433,12 +14456,6 @@ module com {
      interface ::com::sun::star::view::XPrintSettingsSupplier;
      interface ::com::sun::star::view::XViewSettingsSupplier;
     };
-    published struct GraphicCrop {
-     long Top;
-     long Bottom;
-     long Left;
-     long Right;
-    };
     published constants HoriOrientation {
      const short CENTER = 2;
      const short FULL = 6;
@@ -14497,6 +14514,7 @@ module com {
      service ::com::sun::star::sdb::DataAccessDescriptor;
      interface ::com::sun::star::task::XJob;
      interface ::com::sun::star::beans::XPropertySet;
+     [optional] interface ::com::sun::star::util::XCancellable;
      [optional] interface ::com::sun::star::text::XMailMergeBroadcaster;
      [property] string DataSourceName;
      [property] long CommandType;
@@ -14665,6 +14683,7 @@ module com {
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property, optional] boolean CollapsingBorders;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > TableInteropGrabBag;
     };
     published service Paragraph {
      service ::com::sun::star::text::TextContent;
@@ -17206,7 +17225,7 @@ module com {
      [attribute] string BasePathShareLayer;
      [attribute] string BasePathUserLayer;
     };
-    published service PathSettings: ::com::sun::star::util::XPathSettings;
+    /** @deprecated */ published service PathSettings: ::com::sun::star::util::XPathSettings;
     published interface XStringSubstitution {
      interface ::com::sun::star::uno::XInterface;
      string substituteVariables([in] string aText, [in] boolean bSubstRequired) raises (::com::sun::star::container::NoSuchElementException);
@@ -17387,6 +17406,7 @@ module com {
      string createUniqueID();
     };
     published singleton theOfficeInstallationDirectories: ::com::sun::star::util::XOfficeInstallationDirectories;
+    published singleton thePathSettings: ::com::sun::star::util::XPathSettings;
    };
    module view {
     published constants DocumentZoomType {
