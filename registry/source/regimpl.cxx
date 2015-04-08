@@ -452,18 +452,18 @@ ORegistry::~ORegistry()
 
 //  initRegistry
 
-RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode)
+RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode, bool bCreate)
 {
     RegError eRet = REG_INVALID_REGISTRY;
     OStoreFile      rRegFile;
     storeAccessMode sAccessMode = REG_MODE_OPEN;
     storeError      errCode;
 
-    if (accessMode & REG_CREATE)
+    if (bCreate)
     {
         sAccessMode = REG_MODE_CREATE;
     }
-    else if (accessMode & REG_READONLY)
+    else if (accessMode & RegAccessMode::READONLY)
     {
         sAccessMode = REG_MODE_OPENREAD;
         m_readOnly = true;
@@ -547,7 +547,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
     {
         std::unique_ptr<ORegistry> pReg(new ORegistry());
 
-        if (!pReg->initRegistry(regName, REG_READWRITE))
+        if (!pReg->initRegistry(regName, RegAccessMode::READWRITE))
         {
             pReg.reset();
 
@@ -908,7 +908,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
-    _ret = pReg->initRegistry(regFileName, REG_READONLY);
+    _ret = pReg->initRegistry(regFileName, RegAccessMode::READONLY);
     if (_ret != REG_NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();
@@ -956,7 +956,7 @@ RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
-    _ret = pReg->initRegistry(regFileName, REG_CREATE);
+    _ret = pReg->initRegistry(regFileName, RegAccessMode::READWRITE, true/*bCreate*/);
     if (_ret != REG_NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();

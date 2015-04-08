@@ -796,7 +796,7 @@ LegacyProvider::LegacyProvider(Manager & manager, OUString const & uri):
     manager_(manager)
 {
     Registry reg;
-    RegError e = reg.open(uri, REG_READONLY);
+    RegError e = reg.open(uri, RegAccessMode::READONLY);
     switch (e) {
     case REG_NO_ERROR:
         break;

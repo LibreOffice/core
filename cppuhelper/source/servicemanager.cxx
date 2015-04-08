@@ -1451,7 +1451,7 @@ void cppuhelper::ServiceManager::readRdbFile(
 
 bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
     Registry reg;
-    switch (reg.open(uri, REG_READONLY)) {
+    switch (reg.open(uri, RegAccessMode::READONLY)) {
     case REG_NO_ERROR:
         break;
     case REG_REGISTRY_NOT_EXISTS:

@@ -109,7 +109,7 @@ int __cdecl main( int argc, char * argv[] )
 
     Registry reg;
     OUString regName( convertToFileUrl(args[0].c_str(), args[0].size()) );
-    if (reg.open(regName, REG_READWRITE) != REG_NO_ERROR)
+    if (reg.open(regName, RegAccessMode::READWRITE) != REG_NO_ERROR)
     {
         if (reg.create(regName) != REG_NO_ERROR)
         {

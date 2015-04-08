@@ -1018,7 +1018,7 @@ void SimpleRegistry::open(
     osl::MutexGuard guard(mutex_);
     RegError err = (rURL.isEmpty() && bCreate)
         ? REG_REGISTRY_NOT_EXISTS
-        : registry_.open(rURL, bReadOnly ? REG_READONLY : REG_READWRITE);
+        : registry_.open(rURL, bReadOnly ? RegAccessMode::READONLY : RegAccessMode::READWRITE);
     if (err == REG_REGISTRY_NOT_EXISTS && bCreate) {
         err = registry_.create(rURL);
     }

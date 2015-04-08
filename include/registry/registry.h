@@ -411,7 +411,7 @@ REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
 
     @param  registryName points to a null terminated string specifying the name of the registry.
     @param  phRegistry points to a hanle of the opened registry if the function succeeds otherwise NULL.
-    @param  accessMode specifies the accessmode of the registry, REG_READONLY or REG_READWRITE.
+    @param  accessMode specifies the accessmode of the registry, RegAccessMode::READONLY or RegAccessMode::READWRITE.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,

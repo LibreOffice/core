@@ -48,8 +48,6 @@
 #define VALUE_TYPEOFFSET    1
 #define VALUE_HEADEROFFSET  5
 
-#define REG_CREATE      0x0004  // allow write accesses
-
 #define REG_GUARD(mutex) \
     osl::Guard< osl::Mutex > aGuard( mutex );
 
@@ -68,7 +66,8 @@ public:
         { return --m_refCount; }
 
     RegError    initRegistry(const OUString& name,
-                             RegAccessMode accessMode);
+                             RegAccessMode accessMode,
+                             bool bCreate = false);
 
     RegError    closeRegistry();
 
