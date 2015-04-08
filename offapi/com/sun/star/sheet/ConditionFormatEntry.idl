@@ -10,6 +10,8 @@
 #ifndef __com_sun_star_sheet_ConditionFormatEntry_idl__
 #define __com_sun_star_sheet_ConditionFormatEntry_idl__
 
+#include <com/sun/star/sheet/XConditionEntry.idl>
+
 module com {  module sun {  module star {  module sheet {
 
 service ConditionFormatEntry

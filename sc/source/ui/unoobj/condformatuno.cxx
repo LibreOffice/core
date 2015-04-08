@@ -44,9 +44,9 @@ const SfxItemPropertyMapEntry* getCondFormatPropset()
 {
     static const SfxItemPropertyMapEntry aCondFormatPropertyMap_Impl[] =
     {
-        {OUString("ID"), ID, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {OUString("Range"), CondFormat_Range, cppu::UnoType<sheet::XSheetCellRanges>::get(), 0, 0},
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("ID"), ID, &cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {MAP_CHAR_LEN("Range"), CondFormat_Range, &cppu::UnoType<sheet::XSheetCellRanges>::get(), 0, 0},
+        {0, 0, 0, 0, 0, 0}
     };
     return aCondFormatPropertyMap_Impl;
 }
@@ -63,11 +63,11 @@ const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
 {
     static const SfxItemPropertyMapEntry aConditionEntryPropertyMap_Impl[] =
     {
-        {OUString("StyleName"), StyleName, cppu::UnoType<OUString>::get(), 0, 0},
-        {OUString("Formula1"), Formula1, cppu::UnoType<OUString>::get(), 0, 0},
-        {OUString("Formula2"), Formula2, cppu::UnoType<OUString>::get(), 0, 0},
-        {OUString("Operator"), Operator, getCppuType(&sheet::ConditionFormatOperator::EQUAL), 0, 0 },
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("StyleName"), StyleName, &cppu::UnoType<OUString>::get(), 0, 0},
+        {MAP_CHAR_LEN("Formula1"), Formula1, &cppu::UnoType<OUString>::get(), 0, 0},
+        {MAP_CHAR_LEN("Formula2"), Formula2, &cppu::UnoType<OUString>::get(), 0, 0},
+        {MAP_CHAR_LEN("Operator"), Operator, &getCppuType(&sheet::ConditionFormatOperator::EQUAL), 0, 0 },
+        {0, 0, 0, 0, 0, 0}
     };
     return aConditionEntryPropertyMap_Impl;
 }
@@ -117,8 +117,8 @@ const SfxItemPropertyMapEntry* getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
-        {OUString("ColorScaleEntries"), ColorScaleEntries, getCppuType((uno::Sequence< sheet::XColorScaleEntry >*)0), 0, 0 },
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("ColorScaleEntries"), ColorScaleEntries, &getCppuType((uno::Sequence< sheet::XColorScaleEntry >*)0), 0, 0 },
+        {0, 0, 0, 0, 0, 0}
     };
     return aColorScalePropertyMap_Impl;
 }
@@ -155,15 +155,15 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
 {
     static const SfxItemPropertyMapEntry aDataBarPropertyMap_Impl[] =
     {
-        {OUString("AxisPosition"), AxisPosition, getCppuType(&sheet::DataBarAxis::AXIS_AUTOMATIC), 0, 0 },
-        {OUString("UseGradient"), UseGradient, getBooleanCppuType(), 0, 0 },
-        {OUString("UseNegativeColor"), UseNegativeColor, getBooleanCppuType(), 0, 0 },
-        {OUString("ShowValue"), DataBar_ShowValue, getBooleanCppuType(), 0, 0 },
-        {OUString("Color"), DataBar_Color, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {OUString("AxisColor"), AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {OUString("NegativeColor"), NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {OUString("DataBarEntries"), DataBarEntries, getCppuType((uno::Sequence< sheet::XDataBarEntry >*)0), 0, 0 },
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("AxisPosition"), AxisPosition, &getCppuType(&sheet::DataBarAxis::AXIS_AUTOMATIC), 0, 0 },
+        {MAP_CHAR_LEN("UseGradient"), UseGradient, &getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN("UseNegativeColor"), UseNegativeColor, &getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN("ShowValue"), DataBar_ShowValue, &getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN("Color"), DataBar_Color, &cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {MAP_CHAR_LEN("AxisColor"), AxisColor, &cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {MAP_CHAR_LEN("NegativeColor"), NegativeColor, &cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {MAP_CHAR_LEN("DataBarEntries"), DataBarEntries, &getCppuType((uno::Sequence< sheet::XDataBarEntry >*)0), 0, 0 },
+        {0, 0, 0, 0, 0, 0}
     };
     return aDataBarPropertyMap_Impl;
 }
@@ -210,11 +210,11 @@ const SfxItemPropertyMapEntry* getIconSetPropSet()
 {
     static const SfxItemPropertyMapEntry aIconSetPropertyMap_Impl[] =
     {
-        {OUString("Icons"), Icons, getCppuType(&sheet::IconSetType::ICONSET_3SYMBOLS), 0, 0 },
-        {OUString("Reverse"), Reverse, getBooleanCppuType(), 0, 0 },
-        {OUString("ShowValue"), ShowValue, getBooleanCppuType(), 0, 0 },
-        {OUString("IconSetEntries"), IconSetEntries, getCppuType((uno::Sequence< sheet::XIconSetEntry >*)0), 0, 0 },
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("Icons"), Icons, &getCppuType(&sheet::IconSetType::ICONSET_3SYMBOLS), 0, 0 },
+        {MAP_CHAR_LEN("Reverse"), Reverse, &getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN("ShowValue"), ShowValue, &getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN("IconSetEntries"), IconSetEntries, &getCppuType((uno::Sequence< sheet::XIconSetEntry >*)0), 0, 0 },
+        {0, 0, 0, 0, 0, 0}
     };
     return aIconSetPropertyMap_Impl;
 }
@@ -235,8 +235,8 @@ const IconSetTypeApiMap aIconSetApiMap[] =
     { IconSet_3Signs, sheet::IconSetType::ICONSET_3SIGNS },
     { IconSet_3Symbols, sheet::IconSetType::ICONSET_3SYMBOLS },
     { IconSet_3Symbols2, sheet::IconSetType::ICONSET_3SYMBOLS2 },
-    { IconSet_3Smilies, sheet::IconSetType::ICONSET_3SMILIES },
-    { IconSet_3ColorSmilies, sheet::IconSetType::ICONSET_3COLOR_SIMILIES },
+//    { IconSet_3Smilies, sheet::IconSetType::ICONSET_3SMILIES },
+//    { IconSet_3ColorSmilies, sheet::IconSetType::ICONSET_3COLOR_SIMILIES },
     { IconSet_4Arrows, sheet::IconSetType::ICONSET_4ARROWS },
     { IconSet_4ArrowsGray, sheet::IconSetType::ICONSET_4ARROWS_GRAY },
     { IconSet_4Rating, sheet::IconSetType::ICONSET_4RATING },
@@ -269,13 +269,13 @@ ScCondFormatsObj::ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab):
     mnTab(nTab),
     mpDocShell(pDocShell)
 {
-    pDocShell->GetDocument().AddUnoObject(*this);
+    pDocShell->GetDocument()->AddUnoObject(*this);
 }
 
 ScCondFormatsObj::~ScCondFormatsObj()
 {
     if (mpDocShell)
-        mpDocShell->GetDocument().RemoveUnoObject(*this);
+        mpDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
 void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -340,7 +340,7 @@ ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
     if (!mpDocShell)
         throw uno::RuntimeException();
 
-    ScConditionalFormatList* pList = mpDocShell->GetDocument().GetCondFormList(mnTab);
+    ScConditionalFormatList* pList = mpDocShell->GetDocument()->GetCondFormList(mnTab);
     if (!pList)
         throw uno::RuntimeException();
 
@@ -503,7 +503,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
                     ScUnoConversion::FillScRange(aRange, aRanges[i]);
                     aTargetRange.Join(aRange);
                 }
-                pFormat->SetRange(aTargetRange);
+                pFormat->AddRange(aTargetRange);
             }
         }
         break;
@@ -652,7 +652,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             OUString aFormula;
             if ((aValue >>= aFormula) && !aFormula.isEmpty())
             {
-                ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                ScCompiler aComp(mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
                 boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
                 getCoreObject()->SetFormula1(*pArr);
             }
@@ -663,7 +663,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             OUString aFormula;
             if ((aValue >>= aFormula) && !aFormula.isEmpty())
             {
-                ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                ScCompiler aComp(mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
                 boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
                 getCoreObject()->SetFormula2(*pArr);
             }

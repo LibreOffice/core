@@ -11,6 +11,7 @@
 #define __com_sun_star_sheet_IconSet_idl__
 
 #include <com/sun/star/sheet/XConditionEntry.idl>
+#include <com/sun/star/sheet/XIconSetEntry.idl>
 
 module com {  module sun {  module star {  module sheet {
 

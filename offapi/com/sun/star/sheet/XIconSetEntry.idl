@@ -10,7 +10,8 @@
 #ifndef __com_sun_star_sheet_XIconSetEntry_idl__
 #define __com_sun_star_sheet_XIconSetEntry_idl__
 
-#include <com/sun/star/sheet/IconSetEntryType.idl>
+#include <com/sun/star/sheet/IconSetFormatEntry.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module sheet {
 
@@ -21,12 +22,12 @@ interface XIconSetEntry
     void setFormula([in] string Formula);
 
     /**
-      * See com.sun.star.sheet.IconSetEntryType for possible values.
+      * See com.sun.star.sheet.IconSetFormatEntry for possible values.
       */
     long getType();
 
     /**
-      * See com.sun.star.sheet.IconSetEntryType for possible values.
+      * See com.sun.star.sheet.IconSetFormatEntry for possible values.
       */
     void setType([in] long Type);
 };

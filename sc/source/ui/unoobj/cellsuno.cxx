@@ -818,7 +818,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, &getCppuType((table::TableBorder2*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),           0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFORMAT),SC_WID_UNO_CONDFORMAT, &::getCppuType((const sheet::XConditionalFormats*0)), 0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFORMAT),SC_WID_UNO_CONDFORMAT, &::cppu::UnoType< sheet::XConditionalFormats >::get(), 0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       &::getCppuType((const table::BorderLine2*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },

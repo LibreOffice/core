@@ -13,6 +13,7 @@
 #include <com/sun/star/sheet/XConditionEntry.idl>
 #include <com/sun/star/sheet/XColorScaleEntry.idl>
 #include <com/sun/star/sheet/DataBarAxis.idl>
+#include <com/sun/star/sheet/XDataBarEntry.idl>
 #include <com/sun/star/util/Color.idl>
 
 module com {  module sun {  module star {  module sheet {

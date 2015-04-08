@@ -19,6 +19,7 @@
 #ifndef __com_sun_star_sheet_ConditionalFormat_idl__
 #define __com_sun_star_sheet_ConditionalFormat_idl__
 
+#include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/sheet/XConditionalFormat.idl>
 #include <com/sun/star/sheet/XSheetCellRanges.idl>
 
