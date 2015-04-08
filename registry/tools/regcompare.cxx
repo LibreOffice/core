@@ -1321,7 +1321,7 @@ static sal_uInt32 checkValueDifference(
         bool bEqual = true;
         switch (valueType1)
         {
-        case RG_VALUETYPE_LONGLIST:
+        case RegValueType::LONGLIST:
             {
                 RegistryValueList<sal_Int32> valueList1;
                 RegistryValueList<sal_Int32> valueList2;
@@ -1344,7 +1344,7 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_STRINGLIST:
+        case RegValueType::STRINGLIST:
             {
                 RegistryValueList<sal_Char*> valueList1;
                 RegistryValueList<sal_Char*> valueList2;
@@ -1367,7 +1367,7 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_UNICODELIST:
+        case RegValueType::UNICODELIST:
             {
                 RegistryValueList<sal_Unicode*> valueList1;
                 RegistryValueList<sal_Unicode*> valueList2;
@@ -1403,7 +1403,7 @@ static sal_uInt32 checkValueDifference(
             key2.getValue(tmpName, &value2[0]);
 
             bEqual = (memcmp(&value1[0], &value2[0], value1.size()) == 0 );
-            if ( !bEqual && valueType1 == RG_VALUETYPE_BINARY && valueType2 == RG_VALUETYPE_BINARY )
+            if ( !bEqual && valueType1 == RegValueType::BINARY && valueType2 == RegValueType::BINARY )
             {
                 typereg::Reader reader1(&value1[0], value1.size(), false, TYPEREG_VERSION_1);
                 typereg::Reader reader2(&value2[0], value2.size(), false, TYPEREG_VERSION_1);
@@ -1431,54 +1431,54 @@ static sal_uInt32 checkValueDifference(
     {
         switch (valueType1)
         {
-        case RG_VALUETYPE_NOT_DEFINED:
+        case RegValueType::NOT_DEFINED:
             fprintf(stdout, "    Registry 1: key has no value\n");
             break;
-        case RG_VALUETYPE_LONG:
+        case RegValueType::LONG:
             {
                 std::vector< sal_uInt8 > value1(size1);
                 key1.getValue(tmpName, &value1[0]);
 
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::LONG\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = %p\n", &value1[0]);
             }
             break;
-        case RG_VALUETYPE_STRING:
+        case RegValueType::STRING:
             {
                 std::vector< sal_uInt8 > value1(size1);
                 key1.getValue(tmpName, &value1[0]);
 
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::STRING\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(&value1[0]));
             }
             break;
-        case RG_VALUETYPE_UNICODE:
+        case RegValueType::UNICODE:
             {
                 std::vector< sal_uInt8 > value1(size1);
                 key1.getValue(tmpName, &value1[0]);
 
                 OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value1[0]));
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODE\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::UNICODE\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
             }
             break;
-        case RG_VALUETYPE_BINARY:
-            fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_BINARY\n");
+        case RegValueType::BINARY:
+            fprintf(stdout, "    Registry 1: Value: Type = RegValueType::BINARY\n");
             break;
-        case RG_VALUETYPE_LONGLIST:
+        case RegValueType::LONGLIST:
             {
                 RegistryValueList<sal_Int32> valueList;
                 key1.getLongListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONGLIST\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::LONGLIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
@@ -1492,11 +1492,11 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_STRINGLIST:
+        case RegValueType::STRINGLIST:
             {
                 RegistryValueList<sal_Char*> valueList;
                 key1.getStringListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRINGLIST\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::STRINGLIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
@@ -1510,11 +1510,11 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_UNICODELIST:
+        case RegValueType::UNICODELIST:
             {
                 RegistryValueList<sal_Unicode*> valueList;
                 key1.getUnicodeListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODELIST\n");
+                fprintf(stdout, "    Registry 1: Value: Type = RegValueType::UNICODELIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
@@ -1533,54 +1533,54 @@ static sal_uInt32 checkValueDifference(
 
         switch (valueType2)
         {
-        case RG_VALUETYPE_NOT_DEFINED:
+        case RegValueType::NOT_DEFINED:
             fprintf(stdout, "    Registry 2: key has no value\n");
             break;
-        case RG_VALUETYPE_LONG:
+        case RegValueType::LONG:
             {
                 std::vector< sal_uInt8 > value2(size2);
                 key2.getValue(tmpName, &value2[0]);
 
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::LONG\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = %p\n", &value2[0]);
             }
             break;
-        case RG_VALUETYPE_STRING:
+        case RegValueType::STRING:
             {
                 std::vector< sal_uInt8 > value2(size2);
                 key2.getValue(tmpName, &value2[0]);
 
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::STRING\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(&value2[0]));
             }
             break;
-        case RG_VALUETYPE_UNICODE:
+        case RegValueType::UNICODE:
             {
                 std::vector< sal_uInt8 > value2(size2);
                 key2.getValue(tmpName, &value2[0]);
 
                 OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value2[0]));
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODE\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::UNICODE\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
             }
             break;
-        case RG_VALUETYPE_BINARY:
-            fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_BINARY\n");
+        case RegValueType::BINARY:
+            fprintf(stdout, "    Registry 2: Value: Type = RegValueType::BINARY\n");
             break;
-        case RG_VALUETYPE_LONGLIST:
+        case RegValueType::LONGLIST:
             {
                 RegistryValueList<sal_Int32> valueList;
                 key2.getLongListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONGLIST\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::LONGLIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
@@ -1594,11 +1594,11 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_STRINGLIST:
+        case RegValueType::STRINGLIST:
             {
                 RegistryValueList<sal_Char*> valueList;
                 key2.getStringListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRINGLIST\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::STRINGLIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
@@ -1612,11 +1612,11 @@ static sal_uInt32 checkValueDifference(
                 }
             }
             break;
-        case RG_VALUETYPE_UNICODELIST:
+        case RegValueType::UNICODELIST:
             {
                 RegistryValueList<sal_Unicode*> valueList;
                 key2.getUnicodeListValue(tmpName, valueList);
-                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODELIST\n");
+                fprintf(stdout, "    Registry 2: Value: Type = RegValueType::UNICODELIST\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
@@ -1675,7 +1675,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                             options.getRegName1().c_str());
                     }
                 }
-                else if (type == RG_VALUETYPE_BINARY)
+                else if (type == RegValueType::BINARY)
                 {
                     bool published = false;
                     std::vector< sal_uInt8 > value(size);
@@ -1777,7 +1777,7 @@ static sal_uInt32 checkDifferences(
                             }
                             ++nError;
                         }
-                        else if (type == RG_VALUETYPE_BINARY)
+                        else if (type == RegValueType::BINARY)
                         {
                             std::vector< sal_uInt8 > value(size);
                             if (subKey.getValue(OUString(), &value[0]) != REG_NO_ERROR)
@@ -1868,8 +1868,8 @@ static sal_uInt32 compareKeys(
 {
     sal_uInt32 nError = 0;
 
-    RegValueType valueType1 = RG_VALUETYPE_NOT_DEFINED;
-    RegValueType valueType2 = RG_VALUETYPE_NOT_DEFINED;
+    RegValueType valueType1 = RegValueType::NOT_DEFINED;
+    RegValueType valueType2 = RegValueType::NOT_DEFINED;
     sal_uInt32 size1 = 0;
     sal_uInt32 size2 = 0;
 

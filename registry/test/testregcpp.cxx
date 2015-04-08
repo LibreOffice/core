@@ -131,7 +131,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key2.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9");
+        REG_ENSURE(!key2.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9");
 
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key2.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9a");
@@ -178,7 +178,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key3.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9a");
+        REG_ENSURE(!key3.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9a");
     }
 
     {
@@ -205,7 +205,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key4.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9b");
+        REG_ENSURE(!key4.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9b");
     }
 
     {
@@ -246,7 +246,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key5.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9c");
+        REG_ENSURE(!key5.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9c");
 
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key5.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9c1");
@@ -283,7 +283,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key6.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9d");
+        REG_ENSURE(!key6.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9d");
     }
 
     {
@@ -312,7 +312,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key7.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9e");
+        REG_ENSURE(!key7.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9e");
         sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
         REG_ENSURE(!key7.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9e2");
 
@@ -362,7 +362,7 @@ void test_coreReflection()
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
-        REG_ENSURE(!key8.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9f");
+        REG_ENSURE(!key8.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9f");
     }
 
 //  REG_ENSURE(!myRegistry->destroy(NULL), "testCoreReflection error 10");
@@ -492,7 +492,7 @@ void test_registry_CppApi()
 
 
     sal_Char* Value=(sal_Char*)"Mein erster Value";
-    REG_ENSURE(!rootKey.setValue(OUString("mySecondKey"), RG_VALUETYPE_STRING, Value, 18), "test_registry_CppApi error 9");
+    REG_ENSURE(!rootKey.setValue(OUString("mySecondKey"), RegValueType::STRING, Value, 18), "test_registry_CppApi error 9");
 
     RegValueType    valueType;
     sal_uInt32          valueSize;
@@ -502,7 +502,7 @@ void test_registry_CppApi()
     readValue = (sal_Char*)rtl_allocateMemory(valueSize);
     REG_ENSURE(!key2.getValue(OUString(), readValue), "test_registry_CppApi error 10");
 
-    REG_ENSURE(valueType == RG_VALUETYPE_STRING, "test_registry_CppApi error 11");
+    REG_ENSURE(valueType == RegValueType::STRING, "test_registry_CppApi error 11");
     REG_ENSURE(valueSize == 18, "test_registry_CppApi error 12");
     REG_ENSURE(strcmp(readValue, Value) == 0, "test_registry_CppApi error 13");
     rtl_freeMemory(readValue);
@@ -526,7 +526,7 @@ void test_registry_CppApi()
     REG_ENSURE(strcmp(n3, valueList.getElement(2)) == 0, "test_registry_CppApi error 13e");
 
     REG_ENSURE(!rootKey.getValueInfo(OUString("myFourthKey"), &valueType, &valueSize), "test_registry_CppApi error 13e1");
-    REG_ENSURE(valueType == RG_VALUETYPE_STRINGLIST, "test_registry_CppApi error 13e2");
+    REG_ENSURE(valueType == RegValueType::STRINGLIST, "test_registry_CppApi error 13e2");
     REG_ENSURE(valueSize == 3, "test_registry_CppApi error 13e3");
 
     sal_Int32 pLong[3];
@@ -546,7 +546,7 @@ void test_registry_CppApi()
 
     OUString sWTestValue("Mein erster Unicode Value");
     const sal_Unicode* wTestValue= sWTestValue.getStr();
-    REG_ENSURE(!rootKey.setValue(OUString("mySixthKey"), RG_VALUETYPE_UNICODE, (void*)wTestValue,
+    REG_ENSURE(!rootKey.setValue(OUString("mySixthKey"), RegValueType::UNICODE, (void*)wTestValue,
                 (rtl_ustr_getLength(wTestValue)+1)*sizeof(sal_Unicode)), "test_registry_CppApi error 13j1");
 
     REG_ENSURE(!rootKey.getValueInfo(OUString("mySixthKey"), &valueType, &valueSize), "test_registry_CppApi error 13j2");
@@ -608,7 +608,7 @@ void test_registry_CppApi()
     REG_ENSURE(!rootKey2.createKey(OUString("reg2ThirdKey"), key25), "test_registry_CppApi error 29");
 
     sal_uInt32 nValue= 123456789;
-    REG_ENSURE(!key23.setValue(OUString(), RG_VALUETYPE_LONG, &nValue, sizeof(sal_uInt32)), "test_registry_CppApi error 30");
+    REG_ENSURE(!key23.setValue(OUString(), RegValueType::LONG, &nValue, sizeof(sal_uInt32)), "test_registry_CppApi error 30");
 
     REG_ENSURE(!key21.closeKey() &&
                !key22.closeKey() &&
@@ -643,7 +643,7 @@ void test_registry_CppApi()
                 !key2.closeKey(), "test_registry_CppApi error 41");
 
     const sal_Unicode* wValue= OUString("Mein erster Unicode Value").getStr();
-    REG_ENSURE(!key3.setValue(OUString(), RG_VALUETYPE_UNICODE, (void*)wValue,
+    REG_ENSURE(!key3.setValue(OUString(), RegValueType::UNICODE, (void*)wValue,
                 (rtl_ustr_getLength(wValue)+1)*sizeof(sal_Unicode)), "test_registry_CppApi error 42");
 
     REG_ENSURE(!key3.closeKey(), "test_registry_CppApi error 43");

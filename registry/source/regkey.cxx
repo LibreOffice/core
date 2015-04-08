@@ -372,7 +372,7 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
                                         RegValueType* pValueType,
                                         sal_uInt32* pValueSize)
 {
-    *pValueType = RG_VALUETYPE_NOT_DEFINED;
+    *pValueType = RegValueType::NOT_DEFINED;
     *pValueSize = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
@@ -576,12 +576,12 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 {
     switch (valueType)
     {
-        case 5:
+        case RegValueType::LONGLIST:
             {
                 rtl_freeMemory(pValueList);
             }
             break;
-        case 6:
+        case RegValueType::STRINGLIST:
             {
                 sal_Char** pVList = static_cast<sal_Char**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
@@ -592,7 +592,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
                 rtl_freeMemory(pVList);
             }
             break;
-        case 7:
+        case RegValueType::UNICODELIST:
             {
                 sal_Unicode** pVList = static_cast<sal_Unicode**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)

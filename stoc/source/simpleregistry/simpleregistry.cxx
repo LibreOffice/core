@@ -281,7 +281,7 @@ css::registry::RegistryValueType Key::getValueType()
     case REG_NO_ERROR:
         break;
     case REG_INVALID_VALUE:
-        type = RG_VALUETYPE_NOT_DEFINED;
+        type = RegValueType::NOT_DEFINED;
         break;
     default:
         throw css::registry::InvalidRegistryException(
@@ -294,21 +294,21 @@ css::registry::RegistryValueType Key::getValueType()
     default:
         std::abort(); // this cannot happen
         // pseudo-fall-through to avoid warnings on MSC
-    case RG_VALUETYPE_NOT_DEFINED:
+    case RegValueType::NOT_DEFINED:
         return css::registry::RegistryValueType_NOT_DEFINED;
-    case RG_VALUETYPE_LONG:
+    case RegValueType::LONG:
         return css::registry::RegistryValueType_LONG;
-    case RG_VALUETYPE_STRING:
+    case RegValueType::STRING:
         return css::registry::RegistryValueType_ASCII;
-    case RG_VALUETYPE_UNICODE:
+    case RegValueType::UNICODE:
         return css::registry::RegistryValueType_STRING;
-    case RG_VALUETYPE_BINARY:
+    case RegValueType::BINARY:
         return css::registry::RegistryValueType_BINARY;
-    case RG_VALUETYPE_LONGLIST:
+    case RegValueType::LONGLIST:
         return css::registry::RegistryValueType_LONGLIST;
-    case RG_VALUETYPE_STRINGLIST:
+    case RegValueType::STRINGLIST:
         return css::registry::RegistryValueType_ASCIILIST;
-    case RG_VALUETYPE_UNICODELIST:
+    case RegValueType::UNICODELIST:
         return css::registry::RegistryValueType_STRINGLIST;
     }
 }
@@ -343,7 +343,7 @@ void Key::setLongValue(sal_Int32 value)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        OUString(), RG_VALUETYPE_LONG, &value, sizeof (sal_Int32));
+        OUString(), RegValueType::LONG, &value, sizeof (sal_Int32));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (("com.sun.star.registry.SimpleRegistry key setLongValue:"
@@ -426,11 +426,11 @@ OUString Key::getAsciiValue() throw (
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
-    if (type != RG_VALUETYPE_STRING) {
+    if (type != RegValueType::STRING) {
         throw css::registry::InvalidValueException(
             (("com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                       " underlying RegistryKey type = ") +
-             OUString::number(type)),
+             OUString::number(static_cast<int>(type))),
             static_cast< OWeakObject * >(this));
     }
     // size contains terminating null (error in underlying registry.cxx):
@@ -495,7 +495,7 @@ void Key::setAsciiValue(OUString const & value)
             static_cast< OWeakObject * >(this));
     }
     RegError err = key_.setValue(
-        OUString(), RG_VALUETYPE_STRING,
+        OUString(), RegValueType::STRING,
         const_cast< char * >(utf8.getStr()), utf8.getLength() + 1);
         // +1 for terminating null (error in underlying registry.cxx)
     if (err != REG_NO_ERROR) {
@@ -615,11 +615,11 @@ OUString Key::getStringValue() throw (
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
-    if (type != RG_VALUETYPE_UNICODE) {
+    if (type != RegValueType::UNICODE) {
         throw css::registry::InvalidValueException(
             (("com.sun.star.registry.SimpleRegistry key getStringValue:"
                       " underlying RegistryKey type = ") +
-             OUString::number(type)),
+             OUString::number(static_cast<int>(type))),
             static_cast< OWeakObject * >(this));
     }
     // size contains terminating null and is *2 (error in underlying
@@ -661,7 +661,7 @@ void Key::setStringValue(OUString const & value)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        OUString(), RG_VALUETYPE_UNICODE,
+        OUString(), RegValueType::UNICODE,
         const_cast< sal_Unicode * >(value.getStr()),
         (value.getLength() + 1) * sizeof (sal_Unicode));
         // +1 for terminating null (error in underlying registry.cxx)
@@ -752,11 +752,11 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
-    if (type != RG_VALUETYPE_BINARY) {
+    if (type != RegValueType::BINARY) {
         throw css::registry::InvalidValueException(
             (("com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                       " underlying RegistryKey type = ") +
-             OUString::number(type)),
+             OUString::number(static_cast<int>(type))),
             static_cast< OWeakObject * >(this));
     }
     if (size > SAL_MAX_INT32) {
@@ -782,7 +782,7 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        OUString(), RG_VALUETYPE_BINARY,
+        OUString(), RegValueType::BINARY,
         const_cast< sal_Int8 * >(value.getConstArray()),
         static_cast< sal_uInt32 >(value.getLength()));
     if (err != REG_NO_ERROR) {
