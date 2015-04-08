@@ -174,10 +174,10 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
             ("legacy format: cannot get value info about key " + key.getName()
              + ": " + OUString::number(e)));
     }
-    if (type != RG_VALUETYPE_BINARY) {
+    if (type != RegValueType::BINARY) {
         throw FileFormatException(
             key.getRegistryName(),
-            ("legacy format: unexpected value type " + OUString::number(type)
+            ("legacy format: unexpected value type " + OUString::number(static_cast<int>(type))
              + " of key " + key.getName()));
     }
     if (size == 0

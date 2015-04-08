@@ -322,7 +322,7 @@ public:
     RegistryValueList()
         : m_length(0)
         , m_pValueList(NULL)
-        , m_valueType(RG_VALUETYPE_NOT_DEFINED)
+        , m_valueType(RegValueType::NOT_DEFINED)
         {}
 
     /// Destructor, the internal value list will be freed.
@@ -1018,7 +1018,7 @@ inline RegError RegistryKey::getLongListValue(const rtl::OUString& keyName,
                 return ret;
             } else
             {
-                rValueList.setValueList(m_registry, RG_VALUETYPE_LONGLIST,
+                rValueList.setValueList(m_registry, RegValueType::LONGLIST,
                                         pValueList, length);
                 return ret;
             }
@@ -1041,7 +1041,7 @@ inline RegError RegistryKey::getStringListValue(const rtl::OUString& keyName,
                 return ret;
             } else
             {
-                rValueList.setValueList(m_registry, RG_VALUETYPE_STRINGLIST,
+                rValueList.setValueList(m_registry, RegValueType::STRINGLIST,
                                         pValueList, length);
                 return ret;
             }
@@ -1064,7 +1064,7 @@ inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
                 return ret;
             } else
             {
-                rValueList.setValueList(m_registry, RG_VALUETYPE_UNICODELIST,
+                rValueList.setValueList(m_registry, RegValueType::UNICODELIST,
                                         pValueList, length);
                 return ret;
             }

@@ -1536,7 +1536,7 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
     sal_uInt32 s(0);
     if (key.openKey(path, subkey) != REG_NO_ERROR
         || subkey.getValueInfo(rtl::OUString(), &t, &s) != REG_NO_ERROR
-        || t != RG_VALUETYPE_STRING
+        || t != RegValueType::STRING
         || s == 0 || s > static_cast< sal_uInt32 >(SAL_MAX_INT32))
     {
         throw css::uno::DeploymentException(

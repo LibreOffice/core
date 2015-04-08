@@ -91,7 +91,7 @@ int _cdecl main()
 
 
     char* Value=(char*)"Mein erster Value";
-    if (reg_setValue(hRootKey, OUString("mySecondKey").pData, RG_VALUETYPE_STRING, Value, 18))
+    if (reg_setValue(hRootKey, OUString("mySecondKey").pData, RegValueType::STRING, Value, 18))
         cout << "\t9. setValue of key \"mySecondKey\" failed\n";
     else
         cout << "9. setValue (string Value)  of key \"mySecondKey\"\n";
@@ -208,7 +208,7 @@ int _cdecl main()
         cout << "27. key \"reg2ThirdKey\" is created\n";
 
     sal_uInt32 nValue= 123456789;
-    if (reg_setValue(h2Key3, OUString().pData, RG_VALUETYPE_LONG, &nValue, sizeof(sal_uInt32)))
+    if (reg_setValue(h2Key3, OUString().pData, RegValueType::LONG, &nValue, sizeof(sal_uInt32)))
         cout << "\t27.b) setValue of key \"reg2FirstSubKey\" failed\n";
     else
         cout << "27.b). setValue (long Value)  of key \"reg2FirstSubKey\"\n";

@@ -1078,7 +1078,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 
     if (!rValue.create(rTargetFile, sTargetPath, valueName, VALUE_MODE_OPEN))
     {
-        if (valueType == RG_VALUETYPE_BINARY)
+        if (valueType == RegValueType::BINARY)
         {
             _ret = checkBlop(
                 rValue, sTargetPath, valueSize, pBuffer+VALUE_HEADEROFFSET,
@@ -1153,7 +1153,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
         readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
         rtl_freeMemory(pBuffer);
 
-        if (valueType == RG_VALUETYPE_BINARY)
+        if (valueType == RegValueType::BINARY)
         {
             pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));
             if (!rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, rwBytes) &&
@@ -1303,7 +1303,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         const sal_uInt8*    pBlop = writer.getBlop();
         sal_uInt32          aBlopSize = writer.getBlopSize();
 
-        sal_uInt8   type = (sal_uInt8)RG_VALUETYPE_BINARY;
+        sal_uInt8   type = (sal_uInt8)RegValueType::BINARY;
         sal_uInt8*  pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + aBlopSize));
 
         memcpy(pBuffer, &type, 1);
@@ -1509,12 +1509,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     const sal_Char* indent = sIndent.getStr();
     switch (valueType)
     {
-        case 0:
+        case RegValueType::NOT_DEFINED:
             fprintf(stdout, "%sValue: Type = VALUETYPE_NOT_DEFINED\n", indent);
             break;
-        case 1:
+        case RegValueType::LONG:
             {
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_LONG\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::LONG\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1525,11 +1525,11 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 fprintf(stdout, "%ld\n", sal::static_int_cast< long >(value));
             }
             break;
-        case 2:
+        case RegValueType::STRING:
             {
                 sal_Char* value = static_cast<sal_Char*>(rtl_allocateMemory(valueSize));
                 readUtf8(pBuffer, value, valueSize);
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRING\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::STRING\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1537,10 +1537,10 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 rtl_freeMemory(value);
             }
             break;
-        case 3:
+        case RegValueType::UNICODE:
             {
                 sal_uInt32 size = (valueSize / 2) * sizeof(sal_Unicode);
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_UNICODE\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::UNICODE\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1554,9 +1554,9 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 delete[] value;
             }
             break;
-        case 4:
+        case RegValueType::BINARY:
             {
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_BINARY\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::BINARY\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1567,14 +1567,14 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     sIndent + "              ");
             }
             break;
-        case 5:
+        case RegValueType::LONGLIST:
             {
                 sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 len = 0;
 
                 readUINT32(pBuffer, len);
 
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_LONGLIST\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::LONGLIST\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1599,7 +1599,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 }
             }
             break;
-        case 6:
+        case RegValueType::STRINGLIST:
             {
                 sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 sLen = 0;
@@ -1607,7 +1607,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                 readUINT32(pBuffer, len);
 
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRINGLIST\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::STRINGLIST\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
@@ -1636,7 +1636,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 }
             }
             break;
-        case 7:
+        case RegValueType::UNICODELIST:
             {
                 sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 sLen = 0;
@@ -1644,7 +1644,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                 readUINT32(pBuffer, len);
 
-                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_UNICODELIST\n", indent);
+                fprintf(stdout, "%sValue: Type = RegValueType::UNICODELIST\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));

@@ -238,7 +238,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 
     if ( rValue.create(m_pRegistry->getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
-        *pValueType = RG_VALUETYPE_NOT_DEFINED;
+        *pValueType = RegValueType::NOT_DEFINED;
         *pValueSize = 0;
         return REG_VALUE_NOT_EXISTS;
     }
@@ -262,12 +262,12 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     readUINT32(pBuffer+VALUE_TYPEOFFSET, size);
 
     *pValueType = (RegValueType)type;
-//    if (*pValueType == RG_VALUETYPE_UNICODE)
+//    if (*pValueType == RegValueType::UNICODE)
 //    {
 //        *pValueSize = (size / 2) * sizeof(sal_Unicode);
 //    } else
 //    {
-        if (*pValueType > 4)
+        if (*pValueType > RegValueType::BINARY)
         {
             rtl_freeMemory(pBuffer);
             pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(4));
@@ -297,7 +297,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         return REG_REGISTRY_READONLY;
     }
 
-    if (vType > 4)
+    if (vType > RegValueType::BINARY)
     {
         return REG_INVALID_VALUE;
     }
@@ -322,19 +322,19 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     switch (vType)
     {
-        case RG_VALUETYPE_NOT_DEFINED:
+        case RegValueType::NOT_DEFINED:
             memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
             break;
-        case RG_VALUETYPE_LONG:
+        case RegValueType::LONG:
             writeINT32(pBuffer+VALUE_HEADEROFFSET, *static_cast<sal_Int32*>(value));
             break;
-        case RG_VALUETYPE_STRING:
+        case RegValueType::STRING:
             writeUtf8(pBuffer+VALUE_HEADEROFFSET, static_cast<const sal_Char*>(value));
             break;
-        case RG_VALUETYPE_UNICODE:
+        case RegValueType::UNICODE:
             writeString(pBuffer+VALUE_HEADEROFFSET, static_cast<const sal_Unicode*>(value));
             break;
-        case RG_VALUETYPE_BINARY:
+        case RegValueType::BINARY:
             memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
             break;
         default:
@@ -386,7 +386,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
 
     size += len * 4;
 
-    sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_LONGLIST;
+    sal_uInt8 type = (sal_uInt8)RegValueType::LONGLIST;
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -449,7 +449,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         size +=  4 + strlen(pValueList[i]) + 1;
     }
 
-    sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_STRINGLIST;
+    sal_uInt8 type = (sal_uInt8)RegValueType::STRINGLIST;
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -517,7 +517,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         size +=  4 + ((rtl_ustr_getLength(pValueList[i]) +1) * 2);
     }
 
-    sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_UNICODELIST;
+    sal_uInt8 type = (sal_uInt8)RegValueType::UNICODELIST;
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
@@ -600,7 +600,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 
     rtl_freeMemory(pBuffer);
 
-    if (valueType > 4)
+    if (valueType > RegValueType::BINARY)
     {
         return REG_INVALID_VALUE;
     }
@@ -620,25 +620,25 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 
     switch (valueType)
     {
-        case RG_VALUETYPE_NOT_DEFINED:
+        case RegValueType::NOT_DEFINED:
             memcpy(value, pBuffer, valueSize);
             break;
-        case RG_VALUETYPE_LONG:
+        case RegValueType::LONG:
             readINT32(pBuffer, *static_cast<sal_Int32*>(value));
             break;
-        case RG_VALUETYPE_STRING:
+        case RegValueType::STRING:
             readUtf8(pBuffer, static_cast<sal_Char*>(value), valueSize);
             break;
-        case RG_VALUETYPE_UNICODE:
+        case RegValueType::UNICODE:
             readString(pBuffer, static_cast<sal_Unicode*>(value), valueSize);
             break;
-        case RG_VALUETYPE_BINARY:
+        case RegValueType::BINARY:
             memcpy(value, pBuffer, valueSize);
             break;
         // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-        case RG_VALUETYPE_LONGLIST:
-        case RG_VALUETYPE_STRINGLIST:
-        case RG_VALUETYPE_UNICODELIST:
+        case RegValueType::LONGLIST:
+        case RegValueType::STRINGLIST:
+        case RegValueType::UNICODELIST:
             memcpy(value, pBuffer, valueSize);
             break;
     }
@@ -697,7 +697,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     sal_uInt8   type = *((sal_uInt8*)pBuffer);
     valueType = (RegValueType)type;
 
-    if (valueType != RG_VALUETYPE_LONGLIST)
+    if (valueType != RegValueType::LONGLIST)
     {
         pValueList = NULL;
         *pLen = 0;
@@ -811,7 +811,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     sal_uInt8   type = *((sal_uInt8*)pBuffer);
     valueType = (RegValueType)type;
 
-    if (valueType != RG_VALUETYPE_STRINGLIST)
+    if (valueType != RegValueType::STRINGLIST)
     {
         pValueList = NULL;
         *pLen = 0;
@@ -917,7 +917,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     sal_uInt8   type = *((sal_uInt8*)pBuffer);
     valueType = (RegValueType)type;
 
-    if (valueType != RG_VALUETYPE_UNICODELIST)
+    if (valueType != RegValueType::UNICODELIST)
     {
         pValueList = NULL;
         *pLen = 0;

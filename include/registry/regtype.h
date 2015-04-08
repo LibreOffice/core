@@ -56,24 +56,24 @@ namespace o3tl
     to define own data structures and store these types in the registry. The UNO
     core reflection data is stored as a binary blob in the type registry.
  */
-enum SAL_DLLPUBLIC_RTTI RegValueType
+enum class SAL_DLLPUBLIC_RTTI RegValueType
 {
     /// The key has no value or the value type is unknown.
-    RG_VALUETYPE_NOT_DEFINED,
+    NOT_DEFINED,
     /// The key has a value of type long
-    RG_VALUETYPE_LONG,
+    LONG,
     /// The key has a value of type ascii string
-    RG_VALUETYPE_STRING,
+    STRING,
     /// The key has a value of type unicode string
-    RG_VALUETYPE_UNICODE,
+    UNICODE,
     /// The key has a value of type binary
-    RG_VALUETYPE_BINARY,
+    BINARY,
     /// The key has a value of type long list
-    RG_VALUETYPE_LONGLIST,
+    LONGLIST,
     /// The key has a value of type ascii string list
-    RG_VALUETYPE_STRINGLIST,
+    STRINGLIST,
     /// The key has a value of type unicode string list
-    RG_VALUETYPE_UNICODELIST
+    UNICODELIST
 };
 
 /// specifies the possible error codes which can occur using the registry API.
