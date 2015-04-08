@@ -840,7 +840,7 @@ inline bool ScRefAddress::operator==( const ScRefAddress& rRefAddress ) const
 
 // Global functions
 
-// Special values for cells always broadcasting or listening (RECALCMODE_ALWAYS
+// Special values for cells always broadcasting or listening (ScRecalcMode::ALWAYS
 // and the like).
 #define BCA_BRDCST_ALWAYS ScAddress( 0, SCROW_MAX, 0 )
 #define BCA_LISTEN_ALWAYS ScRange( BCA_BRDCST_ALWAYS, BCA_BRDCST_ALWAYS )

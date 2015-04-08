@@ -115,7 +115,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 {
                     ScFormulaCell* pFormula = new ScFormulaCell(pDoc, aAddr, *pArray);
                     nStyle = nStyle >> 3;
-                    pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+                    pFormula->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                     pDoc->EnsureTable(nTab);
                     pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pFormula);

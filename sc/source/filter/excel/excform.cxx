@@ -165,7 +165,7 @@ void ImportExcel::Formula(
     {
         pCell = rDoc.getDoc().GetFormulaCell(aScPos);
         if (pCell)
-            pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+            pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
     }
 
     if (pCell)

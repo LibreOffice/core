@@ -346,7 +346,7 @@ public:
     bool IsInChangeTrack() const { return bInChangeTrack;}
 
     // For import filters!
-    void            AddRecalcMode( formula::ScRecalcMode );
+    void            AddRecalcMode( ScRecalcMode );
     /** For import only: set a double result. */
     void SetHybridDouble( double n );
     /** For import only: set a string result.

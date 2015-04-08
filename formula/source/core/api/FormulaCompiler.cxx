@@ -1198,12 +1198,12 @@ void FormulaCompiler::Factor()
                     // Functions recalculated on every document load.
                     // Don't use SetExclusiveRecalcModeOnLoad() which would
                     // override ModeAlways, use
-                    // AddRecalcMode(RECALCMODE_ONLOAD) instead.
+                    // AddRecalcMode(ScRecalcMode::ONLOAD) instead.
                 case ocConvert :
                 case ocDde:
                 case ocMacro:
                 case ocExternal:
-                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
                 break;
                     // If the referred cell is moved the value changes.
                 case ocColumn :
@@ -1214,12 +1214,12 @@ void FormulaCompiler::Factor()
                     // and recalc mode on load, fdo#60646
                 case ocCell :
                     pArr->SetRecalcModeOnRefMove();
-                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
                 break;
                 case ocHyperLink :
                     // cell with hyperlink needs to be calculated on load to
                     // get its matrix result generated.
-                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
                     pArr->SetHyperLink( true);
                 break;
                 default:

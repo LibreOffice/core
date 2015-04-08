@@ -452,7 +452,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         while ( pCell )
         {
             // Interpret resets bDirty and calls Remove, also the referenced!
-            // the Cell remains when RECALCMODE_ALWAYS.
+            // the Cell remains when ScRecalcMode::ALWAYS.
             if ( bOnlyForced )
             {
                 if ( pCell->GetCode()->IsRecalcModeForced() )

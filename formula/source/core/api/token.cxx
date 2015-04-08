@@ -699,7 +699,7 @@ FormulaTokenArray::FormulaTokenArray() :
     nRPN(0),
     nIndex(0),
     nError(0),
-    nMode(RECALCMODE_NORMAL),
+    nMode(ScRecalcMode::NORMAL),
     bHyperLink(false)
 {
 }
@@ -929,13 +929,13 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
     //! Order is important.
-    if ( nBits & RECALCMODE_ALWAYS )
+    if ( nBits & ScRecalcMode::ALWAYS )
         SetExclusiveRecalcModeAlways();
     else if ( !IsRecalcModeAlways() )
     {
-        if ( nBits & RECALCMODE_ONLOAD )
+        if ( nBits & ScRecalcMode::ONLOAD )
             SetExclusiveRecalcModeOnLoad();
-        else if ( nBits & RECALCMODE_ONLOAD_ONCE && !IsRecalcModeOnLoad() )
+        else if ( nBits & ScRecalcMode::ONLOAD_ONCE && !IsRecalcModeOnLoad() )
             SetExclusiveRecalcModeOnLoadOnce();
     }
     SetCombinedBitsRecalcMode( nBits );
@@ -1357,7 +1357,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     int nOcas = 0;
 
     FormulaTokenArray *pNewArr = new FormulaTokenArray;
-    // At least RECALCMODE_ALWAYS needs to be set.
+    // At least ScRecalcMode::ALWAYS needs to be set.
     pNewArr->AddRecalcMode( GetRecalcMode());
 
     for ( FormulaToken *pCur = First(); pCur; pCur = Next() )

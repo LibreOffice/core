@@ -24,6 +24,7 @@
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
 #include <o3tl/underlying_type.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <limits.h>
 #include <unordered_set>
@@ -35,22 +36,28 @@ class SharedStringPool;
 
 }
 
-namespace formula
-{
-
 // RecalcMode access only via TokenArray SetRecalcMode / IsRecalcMode...
 
-typedef sal_uInt8 ScRecalcMode;
 // Only one of the exclusive bits can be set,
 // handled by TokenArray SetRecalcMode... methods
-#define RECALCMODE_NORMAL       0x01    // exclusive
-#define RECALCMODE_ALWAYS       0x02    // exclusive, always
-#define RECALCMODE_ONLOAD       0x04    // exclusive, always after load
-#define RECALCMODE_ONLOAD_ONCE  0x08    // exclusive, once after load
-#define RECALCMODE_FORCED       0x10    // combined, also if cell isn't visible
-#define RECALCMODE_ONREFMOVE    0x20    // combined, if reference was moved
-#define RECALCMODE_EMASK        0x0F    // mask of exclusive bits
+enum class ScRecalcMode : sal_uInt8
+{
+    NORMAL       = 0x01,    // exclusive
+    ALWAYS       = 0x02,    // exclusive, always
+    ONLOAD       = 0x04,    // exclusive, always after load
+    ONLOAD_ONCE  = 0x08,    // exclusive, once after load
+    FORCED       = 0x10,    // combined, also if cell isn't visible
+    ONREFMOVE    = 0x20,    // combined, if reference was moved
+};
 // If new bits are to be defined, AddRecalcMode has to be adjusted!
+namespace o3tl
+{
+    template<> struct typed_flags<ScRecalcMode> : is_typed_flags<ScRecalcMode, 0x3f> {};
+}
+#define RECALCMODE_EMASK (ScRecalcMode(ScRecalcMode::NORMAL | ScRecalcMode::ALWAYS | ScRecalcMode::ONLOAD | ScRecalcMode::ONLOAD_ONCE))  // mask of exclusive bits
+
+namespace formula
+{
 
 class FormulaMissingContext;
 
@@ -191,35 +198,35 @@ public:
                                 than one exclusive bit was set. */
             void            AddRecalcMode( ScRecalcMode nBits );
 
-    inline  void            ClearRecalcMode() { nMode = RECALCMODE_NORMAL; }
+    inline  void            ClearRecalcMode() { nMode = ScRecalcMode::NORMAL; }
     inline  void            SetExclusiveRecalcModeNormal()
-                                { SetMaskedRecalcMode( RECALCMODE_NORMAL ); }
+                                { SetMaskedRecalcMode( ScRecalcMode::NORMAL ); }
     inline  void            SetExclusiveRecalcModeAlways()
-                                { SetMaskedRecalcMode( RECALCMODE_ALWAYS ); }
+                                { SetMaskedRecalcMode( ScRecalcMode::ALWAYS ); }
     inline  void            SetExclusiveRecalcModeOnLoad()
-                                { SetMaskedRecalcMode( RECALCMODE_ONLOAD ); }
+                                { SetMaskedRecalcMode( ScRecalcMode::ONLOAD ); }
     inline  void            SetExclusiveRecalcModeOnLoadOnce()
-                                { SetMaskedRecalcMode( RECALCMODE_ONLOAD_ONCE ); }
+                                { SetMaskedRecalcMode( ScRecalcMode::ONLOAD_ONCE ); }
     inline  void            SetRecalcModeForced()
-                                { nMode |= RECALCMODE_FORCED; }
+                                { nMode |= ScRecalcMode::FORCED; }
     inline  void            ClearRecalcModeForced()
-                                { nMode &= ~RECALCMODE_FORCED; }
+                                { nMode &= ~ScRecalcMode::FORCED; }
     inline  void            SetRecalcModeOnRefMove()
-                                { nMode |= RECALCMODE_ONREFMOVE; }
+                                { nMode |= ScRecalcMode::ONREFMOVE; }
     inline  void            ClearRecalcModeOnRefMove()
-                                { nMode &= ~RECALCMODE_ONREFMOVE; }
+                                { nMode &= ~ScRecalcMode::ONREFMOVE; }
     inline  bool            IsRecalcModeNormal() const
-                                { return (nMode & RECALCMODE_NORMAL) != 0; }
+                                { return bool(nMode & ScRecalcMode::NORMAL); }
     inline  bool            IsRecalcModeAlways() const
-                                { return (nMode & RECALCMODE_ALWAYS) != 0; }
+                                { return bool(nMode & ScRecalcMode::ALWAYS); }
     inline  bool            IsRecalcModeOnLoad() const
-                                { return (nMode & RECALCMODE_ONLOAD) != 0; }
+                                { return bool(nMode & ScRecalcMode::ONLOAD); }
     inline  bool            IsRecalcModeOnLoadOnce() const
-                                { return (nMode & RECALCMODE_ONLOAD_ONCE) != 0; }
+                                { return bool(nMode & ScRecalcMode::ONLOAD_ONCE); }
     inline  bool            IsRecalcModeForced() const
-                                { return (nMode & RECALCMODE_FORCED) != 0; }
+                                { return bool(nMode & ScRecalcMode::FORCED); }
     inline  bool            IsRecalcModeOnRefMove() const
-                                { return (nMode & RECALCMODE_ONREFMOVE) != 0; }
+                                { return bool(nMode & ScRecalcMode::ONREFMOVE); }
 
                             /** Get OpCode of the most outer function */
     inline OpCode           GetOuterFuncOpCode();

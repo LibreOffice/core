@@ -1397,7 +1397,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     }
 
     // Do the cells need to be calculated? After Load cells can contain an error code, and then start
-    // the listener and Recalculate (if needed) if not RECALCMODE_NORMAL
+    // the listener and Recalculate (if needed) if not ScRecalcMode::NORMAL
     if( !bNewCompiled || !pCode->GetCodeError() )
     {
         if (bStartListening)
@@ -2101,7 +2101,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
             }
             // Don't remove from FormulaTree to put in FormulaTrack to
             // put in FormulaTree again and again, only if necessary.
-            // Any other means except RECALCMODE_ALWAYS by which a cell could
+            // Any other means except ScRecalcMode::ALWAYS by which a cell could
             // be in FormulaTree if it would notify other cells through
             // FormulaTrack which weren't in FormulaTrack/FormulaTree before?!?
             // Yes. The new TableOpDirty made it necessary to have a
@@ -2255,11 +2255,11 @@ void ScFormulaCell::SetResultError( sal_uInt16 n )
 
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
-    if ( (nBits & RECALCMODE_EMASK) != RECALCMODE_NORMAL )
+    if ( (nBits & RECALCMODE_EMASK) != ScRecalcMode::NORMAL )
         SetDirtyVar();
-    if ( nBits & RECALCMODE_ONLOAD_ONCE )
+    if ( nBits & ScRecalcMode::ONLOAD_ONCE )
     {   // OnLoadOnce nur zum Dirty setzen nach Filter-Import
-        nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
+        nBits = (nBits & ~RECALCMODE_EMASK) | ScRecalcMode::NORMAL;
     }
     pCode->AddRecalcMode( nBits );
 }
