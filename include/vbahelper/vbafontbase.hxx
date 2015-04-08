@@ -25,29 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-// use local constants there is no need to expose these constants
-// externally. Looking at the Format->Character dialog it seem that
-// these may infact be even be calculated. Leave hardcoded for now
-// #FIXEME #TBD investigate the code for dialog mentioned above
-
-// The font baseline is not specified.
-const short NORMAL = 0;
-
-// specifies a superscripted.
-const short SUPERSCRIPT = 33;
-
-// specifies a subscripted.
-const short SUBSCRIPT = -33;
-
-// specifies a hight of superscripted font
- const sal_Int8 SUPERSCRIPTHEIGHT = 58;
-
-// specifies a hight of subscripted font
-const sal_Int8 SUBSCRIPTHEIGHT = 58;
-
-// specifies a hight of normal font
-const short NORMALHEIGHT = 100;
-
 typedef  InheritedHelperInterfaceImpl1< ov::XFontBase > VbaFontBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaFontBase : public VbaFontBase_BASE
@@ -58,6 +35,29 @@ protected:
     bool mbFormControl;
 
 public:
+    // use local constants there is no need to expose these constants
+    // externally. Looking at the Format->Character dialog it seem that
+    // these may in fact even be calculated. Leave hardcoded for now
+    // #FIXEME #TBD investigate the code for dialog mentioned above
+
+    // The font baseline is not specified.
+    static const short NORMAL = 0;
+
+    // specifies a superscripted.
+    static const short SUPERSCRIPT = 33;
+
+    // specifies a subscripted.
+    static const short SUBSCRIPT = -33;
+
+    // specifies a hight of superscripted font
+    static const sal_Int8 SUPERSCRIPTHEIGHT = 58;
+
+    // specifies a hight of subscripted font
+    static const sal_Int8 SUBSCRIPTHEIGHT = 58;
+
+    // specifies a hight of normal font
+    static const short NORMALHEIGHT = 100;
+
     VbaFontBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,

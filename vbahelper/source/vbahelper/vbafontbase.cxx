@@ -27,6 +27,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+
 // form controls use other property name as the remaining OOo API
 #define VBAFONTBASE_PROPNAME( ascii_normal, ascii_control ) \
     mbFormControl ? OUString( ascii_control ) : OUString( ascii_normal )
