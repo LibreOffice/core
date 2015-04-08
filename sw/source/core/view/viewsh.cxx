@@ -1816,6 +1816,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // tiled rendering?
     VisPortChgd(SwRect(aOutRect));
 
+    // Invoke SwLayAction if layout is not yet ready.
+    CheckInvalidForPaint(aOutRect);
+
     // draw - works in logic coordinates
     Paint(aOutRect);
 
