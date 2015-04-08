@@ -61,13 +61,6 @@ class LocaleDataWrapper;
 namespace linguistic
 {
 
-/// Flags to be used with the multi-path related functions
-/// @see GetDictionaryPaths
-#define PATH_FLAG_INTERNAL  0x01
-#define PATH_FLAG_USER      0x02
-#define PATH_FLAG_WRITABLE  0x04
-#define PATH_FLAG_ALL       (PATH_FLAG_INTERNAL | PATH_FLAG_USER | PATH_FLAG_WRITABLE)
-
 
 // AddEntryToDic return values
 #define DIC_ERR_NONE        0
@@ -127,7 +120,7 @@ bool    FileExists( const OUString &rURL );
 
 
 OUString     GetDictionaryWriteablePath();
-::com::sun::star::uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
+::com::sun::star::uno::Sequence< OUString > GetDictionaryPaths();
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'

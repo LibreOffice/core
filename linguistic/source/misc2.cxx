@@ -31,10 +31,25 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 #include "linguistic/misc.hxx"
 
 using namespace com::sun::star;
+
+/// Flags to be used with the multi-path related functions
+/// @see GetDictionaryPaths
+enum class DictionaryPathFlags
+{
+    INTERNAL  = 0x01,
+    USER      = 0x02,
+    WRITABLE  = 0x04
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DictionaryPathFlags> : is_typed_flags<DictionaryPathFlags, 0x07> {};
+}
+#define PATH_FLAG_ALL       (DictionaryPathFlags::INTERNAL | DictionaryPathFlags::USER | DictionaryPathFlags::WRITABLE)
 
 namespace linguistic
 {
@@ -61,7 +76,7 @@ bool FileExists( const OUString &rMainURL )
 
 static uno::Sequence< OUString > GetMultiPaths_Impl(
     const OUString &rPathPrefix,
-    sal_Int16 nPathFlags )
+    DictionaryPathFlags nPathFlags )
 {
     uno::Sequence< OUString >   aRes;
     uno::Sequence< OUString >   aInternalPaths;
@@ -98,7 +113,7 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
         aRes.realloc( nMaxEntries );
         OUString *pRes = aRes.getArray();
         sal_Int32 nCount = 0;   // number of actually added entries
-        if ((nPathFlags & PATH_FLAG_WRITABLE) && !aWritablePath.isEmpty())
+        if ((nPathFlags & DictionaryPathFlags::WRITABLE) && !aWritablePath.isEmpty())
             pRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
         {
@@ -106,8 +121,8 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
             const OUString *pPathSeq = rPathSeq.getConstArray();
             for (sal_Int32 k = 0;  k < rPathSeq.getLength();  ++k)
             {
-                const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & PATH_FLAG_USER);
-                const bool bAddInternal = &rPathSeq == &aInternalPaths && (nPathFlags & PATH_FLAG_INTERNAL);
+                const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & DictionaryPathFlags::USER);
+                const bool bAddInternal = &rPathSeq == &aInternalPaths && (nPathFlags & DictionaryPathFlags::INTERNAL);
                 if ((bAddUser || bAddInternal) && !pPathSeq[k].isEmpty())
                     pRes[ nCount++ ] = pPathSeq[k];
             }
@@ -120,7 +135,7 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
 
 OUString GetDictionaryWriteablePath()
 {
-    uno::Sequence< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", PATH_FLAG_WRITABLE ) );
+    uno::Sequence< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::WRITABLE ) );
     DBG_ASSERT( aPaths.getLength() == 1, "Dictionary_writable path corrupted?" );
     OUString aRes;
     if (aPaths.getLength() > 0)
@@ -128,9 +143,9 @@ OUString GetDictionaryWriteablePath()
     return aRes;
 }
 
-uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
+uno::Sequence< OUString > GetDictionaryPaths()
 {
-    return GetMultiPaths_Impl( "Dictionary", nPathFlags );
+    return GetMultiPaths_Impl( "Dictionary", PATH_FLAG_ALL );
 }
 
 OUString  GetWritableDictionaryURL( const OUString &rDicName )
