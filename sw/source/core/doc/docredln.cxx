@@ -1220,7 +1220,7 @@ void SwRangeRedline::CopyToSection()
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
-            pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, false );
+            pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
             // Take over the style from the EndNode if needed
             // We don't want this in Doc::Copy
@@ -1244,7 +1244,7 @@ void SwRangeRedline::CopyToSection()
             if( pCEndNd )
             {
                 SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, false );
+                pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
             }
             else
             {

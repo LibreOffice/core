@@ -244,7 +244,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = false;
         }
 
-        const bool bSuccess( GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, *pPos, false ) );
+        const bool bSuccess( GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, *pPos, /*bCopyAll=*/false, /*bCheckPos=*/true ) );
         if (!bSuccess)
             continue;
 
