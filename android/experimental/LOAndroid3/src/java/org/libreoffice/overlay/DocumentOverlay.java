@@ -26,43 +26,52 @@ import java.util.List;
  * to setup the document overlay view, report visibility and position of its elements
  * when they change and report any changes to the viewport.
  */
-public class DocumentOverlay extends Layer {
+public class DocumentOverlay {
     private static final String LOGTAG = DocumentOverlay.class.getSimpleName();
 
-    private final DocumentOverlayView mCursorView;
-    private float mViewLeft;
-    private float mViewTop;
-    private float mViewZoom;
-
-    public DocumentOverlay(Activity context, LayerView layerView) {
-        mCursorView = (DocumentOverlayView) context.findViewById(R.id.text_cursor_view);
-        if (mCursorView == null) {
-            Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
-        }
-        layerView.addLayer(this);
-        mCursorView.initialize(layerView);
-    }
+    private final DocumentOverlayView mDocumentOverlayView;
+    private final DocumentOverlayLayer mDocumentOverlayLayer;
 
     /**
-     * @see Layer#draw(org.mozilla.gecko.gfx.Layer.RenderContext)
+     * DocumentOverlayLayer responsibility is to get the changes to the viewport
+     * and report them to DocumentOverlayView.
      */
-    @Override
-    public void draw(final RenderContext context) {
-        if (FloatUtils.fuzzyEquals(mViewLeft, context.viewport.left)
-                && FloatUtils.fuzzyEquals(mViewTop, context.viewport.top)
-                && FloatUtils.fuzzyEquals(mViewZoom, context.zoomFactor)) {
-            return;
-        }
+    private class DocumentOverlayLayer extends Layer {
+        private float mViewLeft;
+        private float mViewTop;
+        private float mViewZoom;
 
-        mViewLeft = context.viewport.left;
-        mViewTop = context.viewport.top;
-        mViewZoom = context.zoomFactor;
-
-        LOKitShell.getMainHandler().post(new Runnable() {
-            public void run() {
-                mCursorView.repositionWithViewport(mViewLeft, mViewTop, mViewZoom);
+        /**
+         * @see Layer#draw(org.mozilla.gecko.gfx.Layer.RenderContext)
+         */
+        @Override
+        public void draw(final RenderContext context) {
+            if (FloatUtils.fuzzyEquals(mViewLeft, context.viewport.left)
+                    && FloatUtils.fuzzyEquals(mViewTop, context.viewport.top)
+                    && FloatUtils.fuzzyEquals(mViewZoom, context.zoomFactor)) {
+                return;
             }
-        });
+
+            mViewLeft = context.viewport.left;
+            mViewTop = context.viewport.top;
+            mViewZoom = context.zoomFactor;
+
+            LOKitShell.getMainHandler().post(new Runnable() {
+                public void run() {
+                    mDocumentOverlayView.repositionWithViewport(mViewLeft, mViewTop, mViewZoom);
+                }
+            });
+        }
+    }
+
+    public DocumentOverlay(Activity context, LayerView layerView) {
+        mDocumentOverlayView = (DocumentOverlayView) context.findViewById(R.id.text_cursor_view);
+        mDocumentOverlayLayer = new DocumentOverlayLayer();
+        if (mDocumentOverlayView == null) {
+            Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
+        }
+        layerView.addLayer(mDocumentOverlayLayer);
+        mDocumentOverlayView.initialize(layerView);
     }
 
     /**
@@ -71,7 +80,7 @@ public class DocumentOverlay extends Layer {
     public void showCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.showCursor();
+                mDocumentOverlayView.showCursor();
             }
         });
     }
@@ -82,7 +91,7 @@ public class DocumentOverlay extends Layer {
     public void hideCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.hideCursor();
+                mDocumentOverlayView.hideCursor();
             }
         });
     }
@@ -93,7 +102,7 @@ public class DocumentOverlay extends Layer {
     public void positionCursor(final RectF position) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.changeCursorPosition(position);
+                mDocumentOverlayView.changeCursorPosition(position);
             }
         });
     }
@@ -104,7 +113,7 @@ public class DocumentOverlay extends Layer {
     public void showSelections() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.showSelections();
+                mDocumentOverlayView.showSelections();
             }
         });
     }
@@ -115,7 +124,7 @@ public class DocumentOverlay extends Layer {
     public void hideSelections() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.hideSelections();
+                mDocumentOverlayView.hideSelections();
             }
         });
     }
@@ -126,7 +135,7 @@ public class DocumentOverlay extends Layer {
     public void changeSelections(final List<RectF> selections) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.changeSelections(selections);
+                mDocumentOverlayView.changeSelections(selections);
             }
         });
     }
@@ -137,7 +146,7 @@ public class DocumentOverlay extends Layer {
     public void showGraphicSelection() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.showGraphicSelection();
+                mDocumentOverlayView.showGraphicSelection();
             }
         });
     }
@@ -148,7 +157,7 @@ public class DocumentOverlay extends Layer {
     public void hideGraphicSelection() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.hideGraphicSelection();
+                mDocumentOverlayView.hideGraphicSelection();
             }
         });
     }
@@ -159,7 +168,7 @@ public class DocumentOverlay extends Layer {
     public void changeGraphicSelection(final RectF rectangle) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.changeGraphicSelection(rectangle);
+                mDocumentOverlayView.changeGraphicSelection(rectangle);
             }
         });
     }
@@ -170,7 +179,7 @@ public class DocumentOverlay extends Layer {
     public void showHandle(final SelectionHandle.HandleType type) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.showHandle(type);
+                mDocumentOverlayView.showHandle(type);
             }
         });
     }
@@ -181,7 +190,7 @@ public class DocumentOverlay extends Layer {
     public void hideHandle(final SelectionHandle.HandleType type) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.hideHandle(type);
+                mDocumentOverlayView.hideHandle(type);
             }
         });
     }
@@ -192,13 +201,13 @@ public class DocumentOverlay extends Layer {
     public void positionHandle(final SelectionHandle.HandleType type, final RectF rectangle) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.positionHandle(type, rectangle);
+                mDocumentOverlayView.positionHandle(type, rectangle);
             }
         });
     }
 
     public RectF getCursorPosition() {
-        return mCursorView.getCursorPosition();
+        return mDocumentOverlayView.getCursorPosition();
     }
 }
 
