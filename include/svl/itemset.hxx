@@ -41,11 +41,11 @@ class SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
 
-    SfxItemPool*                _pPool;         // pool, which is used
-    const SfxItemSet*           _pParent;       // derivation
-    SfxItemArray                _aItems;        // field of items
-    sal_uInt16*                     _pWhichRanges;  // array of Which Ranges
-    sal_uInt16                      _nCount;        // number of items
+    SfxItemPool*      m_pPool;         ///< pool that stores the items
+    const SfxItemSet* m_pParent;       ///< derivation
+    SfxItemArray      m_pItems;        ///< array of items
+    sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
+    sal_uInt16        m_nCount;        ///< number of items
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -57,7 +57,7 @@ private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2);
 
 public:
-    SfxItemArray                GetItems_Impl() const { return _aItems; }
+    SfxItemArray                GetItems_Impl() const { return m_pItems; }
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &) SAL_DELETED_FUNCTION;
@@ -80,7 +80,7 @@ public:
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
 
     // Get number of items
-    sal_uInt16                  Count() const { return _nCount; }
+    sal_uInt16                  Count() const { return m_nCount; }
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
@@ -123,11 +123,11 @@ public:
     void                        Differentiate( const SfxItemSet& rSet );
     void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
-    SfxItemPool*                GetPool() const { return _pPool; }
-    const sal_uInt16*           GetRanges() const { return _pWhichRanges; }
+    SfxItemPool*                GetPool() const { return m_pPool; }
+    const sal_uInt16*           GetRanges() const { return m_pWhichRanges; }
     void                        SetRanges( const sal_uInt16 *pRanges );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
-    const SfxItemSet*           GetParent() const { return _pParent; }
+    const SfxItemSet*           GetParent() const { return m_pParent; }
 
     SvStream &                  Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
@@ -141,7 +141,7 @@ public:
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
 {
-    _pParent = pNew;
+    m_pParent = pNew;
 }
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet

@@ -25,14 +25,14 @@
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     : _rSet( rItemSet )
 {
-    if ( !_rSet._nCount )
+    if (!_rSet.m_nCount)
     {
         _nStt = 1;
         _nEnd = 0;
     }
     else
     {
-        SfxItemArray ppFnd = _rSet._aItems;
+        SfxItemArray ppFnd = _rSet.m_pItems;
 
         // Find the first Item that is set
         for ( _nStt = 0; !*(ppFnd + _nStt ); ++_nStt )
@@ -53,7 +53,7 @@ SfxItemIter::~SfxItemIter()
 
 const SfxPoolItem* SfxItemIter::NextItem()
 {
-    SfxItemArray ppFnd = _rSet._aItems;
+    SfxItemArray ppFnd = _rSet.m_pItems;
 
     if( _nAkt < _nEnd )
     {

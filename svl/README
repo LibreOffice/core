@@ -44,7 +44,7 @@ set's SfxItemPool, and for poolable items only a single instance that
 compares equal under the predicate operator== will be stored in the pool,
 regardless of how many sets contain it, thus conserving memory.
 
-There are members _pWhichRanges for the valid ranges (as pairs of WhichIds),
-_nCount for the number of items contained, and _aItems for the pointers to
+There are members m_pWhichRanges for the valid ranges (as pairs of WhichIds),
+m_nCount for the number of items contained, and m_pItems for the pointers to
 the actual items.
 

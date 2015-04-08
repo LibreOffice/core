@@ -39,12 +39,12 @@ public:
     // falls es diese gibt, returne sie, sonst 0
     const SfxPoolItem* FirstItem()
                        { _nAkt = _nStt;
-                         return _rSet._nCount ? *(_rSet._aItems+_nAkt) : 0; }
+                         return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
     const SfxPoolItem* LastItem()
                        { _nAkt = _nEnd;
-                         return _rSet._nCount ? *(_rSet._aItems+_nAkt) : 0; }
+                         return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
     const SfxPoolItem* GetCurItem()
-                       { return _rSet._nCount ? *(_rSet._aItems+_nAkt) : 0; }
+                       { return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
     const SfxPoolItem* NextItem();
 
     bool               IsAtStart() const { return _nAkt == _nStt; }
