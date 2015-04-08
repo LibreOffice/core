@@ -1975,13 +1975,13 @@ int _cdecl main( int argc, char * argv[] )
     OUString regName2( convertToFileUrl(options.getRegName2().c_str(), options.getRegName2().size()) );
 
     Registry reg1, reg2;
-    if ( reg1.open(regName1, REG_READONLY) )
+    if ( reg1.open(regName1, RegAccessMode::READONLY) )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
         return 2;
     }
-    if ( reg2.open(regName2, REG_READONLY) )
+    if ( reg2.open(regName2, RegAccessMode::READONLY) )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());

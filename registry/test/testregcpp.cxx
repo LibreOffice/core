@@ -619,7 +619,7 @@ void test_registry_CppApi()
 
     REG_ENSURE(!myRegistry->close(), "test_registry_CppApi error 32");
 
-    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), REG_READWRITE), "test_registry_CppApi error 33");
+    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), RegAccessMode::READWRITE), "test_registry_CppApi error 33");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "test_registry_CppApi error 34");
 
     REG_ENSURE(!myRegistry->loadKey(rootKey, OUString("allFromTest2"),
@@ -659,7 +659,7 @@ void test_registry_CppApi()
 
     REG_ENSURE(!myRegistry->close(), "test_registry_CppApi error 46");
 
-    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), REG_READWRITE), "test_registry_CppApi error 47");
+    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), RegAccessMode::READWRITE), "test_registry_CppApi error 47");
 
     REG_ENSURE(!myRegistry->destroy(OUString("test2.rdb")), "test_registry_CppApi error 48");
 //  REG_ENSURE(!myRegistry->destroy("test3.rdb"), "test_registry_CppApi error 49");
@@ -672,7 +672,7 @@ void test_registry_CppApi()
 
     REG_ENSURE(!myRegistry->create(OUString("destroytest.rdb")), "test_registry_CppApi error 51");
     REG_ENSURE(!myRegistry->close(), "test_registry_CppApi error 52");
-    REG_ENSURE(!myRegistry->open(OUString("destroytest.rdb"), REG_READONLY), "test_registry_CppApi error 53");
+    REG_ENSURE(!myRegistry->open(OUString("destroytest.rdb"), RegAccessMode::READONLY), "test_registry_CppApi error 53");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "test_registry_CppApi error 54");
 
     REG_ENSURE(myRegistry->mergeKey(rootKey, OUString("allFromTest3"),
@@ -681,10 +681,10 @@ void test_registry_CppApi()
 
     REG_ENSURE(!rootKey.closeKey(), "test_registry_CppApi error 57");
     REG_ENSURE(!myRegistry->close(), "test_registry_CppApi error 58");
-    REG_ENSURE(!myRegistry->open(OUString("destroytest.rdb"), REG_READWRITE), "test_registry_CppApi error 59");
+    REG_ENSURE(!myRegistry->open(OUString("destroytest.rdb"), RegAccessMode::READWRITE), "test_registry_CppApi error 59");
     REG_ENSURE(!myRegistry->destroy(OUString()), "test_registry_CppApi error 60");
 
-    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), REG_READWRITE), "test_registry_CppApi error 61");
+    REG_ENSURE(!myRegistry->open(OUString("test.rdb"), RegAccessMode::READWRITE), "test_registry_CppApi error 61");
     REG_ENSURE(!myRegistry->destroy(OUString("ucrtest.rdb")), "test_registry_CppApi error 62");
     REG_ENSURE(!myRegistry->destroy(OUString()), "test_registry_CppApi error 63");
     delete(myRegistry);

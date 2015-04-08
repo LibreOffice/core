@@ -21,6 +21,7 @@
 #define INCLUDED_REGISTRY_REGTYPE_H
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 /// defines the type of a registry handle used in the C API.
 typedef void*       RegHandle;
@@ -34,15 +35,18 @@ typedef void*       RegValue;
 /** defines the open/access mode of the registry.
 
     Two modes are valid:
-    -REG_READONLY    allows readonly access
-    -REG_READWRITE   allows read and write access
+    -READONLY    allows readonly access
+    -READWRITE   allows read and write access
  */
-typedef sal_uInt16  RegAccessMode;
-
-/// Flag to specify the open mode of a registry. This mode allows readonly access.
-#define REG_READONLY        0x0001
-/// Flag to specify the open mode of a registry. This mode allows read and write access.
-#define REG_READWRITE       0x0002
+enum class RegAccessMode
+{
+    READONLY        = 0x0001, /// This mode allows readonly access.
+    READWRITE       = 0x0002  /// This mode allows read and write access.
+};
+namespace o3tl
+{
+    template<> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x07> {};
+}
 
 /** defines the type of a registry key.
 

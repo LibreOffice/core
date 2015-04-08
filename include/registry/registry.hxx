@@ -136,7 +136,7 @@ public:
 
         If the registry already points to a valid registry, the old registry will be closed.
         @param  registryName specifies a registry name.
-        @param  accessMode specifies the access mode for the registry, REG_READONLY or REG_READWRITE.
+        @param  accessMode specifies the access mode for the registry, RegAccessMode::READONLY or RegAccessMode::READWRITE.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError open(const rtl::OUString& registryName,

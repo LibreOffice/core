@@ -63,7 +63,7 @@ void setStarUserRegistry()
 
     OUString userReg = getExePath();
     userReg += "user.rdb";
-    if(myRegistry->open(userReg, REG_READWRITE))
+    if(myRegistry->open(userReg, RegAccessMode::READWRITE))
     {
         OSL_VERIFY(!myRegistry->create(userReg));
     }

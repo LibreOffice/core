@@ -232,7 +232,7 @@ int _cdecl main()
     else
         cout << "30. registry test5.rdb is closed\n";
 
-    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg, REG_READWRITE))
+    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg, RegAccessMode::READWRITE))
         cout << "\t31. registry test4.rdb is opened\n";
     else
         cout << "31. registry test4.rdb is opened\n";
@@ -293,13 +293,13 @@ int _cdecl main()
     else
         cout << "\n43. key \"/allFromTest3/reg2FirstKey/reg2FirstSubKey\" is deleted\n";
 
-    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg2, REG_READONLY))
+    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg2, RegAccessMode::READONLY))
         cout << "\n\t44. registry test4.rdb is opened for read only\n";
     else
         cout << "\n44. registry test4.rdb is opened for read only\n";
 
     RegHandle hReg3;
-    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg3, REG_READONLY))
+    if (reg_openRegistry(OUString("test4.rdb").pData, &hReg3, RegAccessMode::READONLY))
         cout << "\n\t44.a). registry test4.rdb is opened for read only\n";
     else
         cout << "\n44.a). registry test4.rdb is opened for read only\n";

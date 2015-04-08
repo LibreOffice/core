@@ -107,7 +107,7 @@ RegistryKey rootKey, rKey, rKey2;
 
 OUString userReg = getExePath();
 userReg += "user.rdb";
-if(myRegistry->open(userReg, REG_READWRITE))
+if(myRegistry->open(userReg, RegAccessMode::READWRITE))
 {
 OSL_VERIFY(!myRegistry->create(userReg));
 }
@@ -128,7 +128,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
     OUString appReg = getExePath();
     appReg += "stoctest.rdb";
 
-    OSL_VERIFY(!myRegistry->open(appReg, REG_READWRITE));
+    OSL_VERIFY(!myRegistry->open(appReg, RegAccessMode::READWRITE));
     OSL_VERIFY(!myRegistry->openRootKey(rootKey));
 
     OSL_VERIFY(!rootKey.createLink(linkName, linkTarget));

@@ -114,7 +114,7 @@ static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
     RegError ret;
 
     ORegistry* pReg = new ORegistry();
-    if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
+    if ((ret = pReg->initRegistry(registryName, RegAccessMode::READWRITE, true/*bCreate*/)))
     {
         delete pReg;
         *phRegistry = NULL;
@@ -508,7 +508,7 @@ RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
     RegError ret;
 
     ORegistry* pReg = new ORegistry();
-    if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
+    if ((ret = pReg->initRegistry(registryName, RegAccessMode::READWRITE, true/*bCreate*/)))
     {
         delete pReg;
         *phRegistry = NULL;
