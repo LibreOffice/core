@@ -22,19 +22,20 @@ import org.mozilla.gecko.util.FloatUtils;
 import java.util.List;
 
 /**
- * The TextCursorLayer is a layer which is responsible for showing the cursor and
- * controls its position, height and visibility.
+ * The DocumentOverlay is an overlay over the document. This class is responsible
+ * to setup the document overlay view, report visibility and position of its elements
+ * when they change and report any changes to the viewport.
  */
-public class TextCursorLayer extends Layer {
-    private static final String LOGTAG = TextCursorLayer.class.getSimpleName();
+public class DocumentOverlay extends Layer {
+    private static final String LOGTAG = DocumentOverlay.class.getSimpleName();
 
-    private final TextCursorView mCursorView;
+    private final DocumentOverlayView mCursorView;
     private float mViewLeft;
     private float mViewTop;
     private float mViewZoom;
 
-    public TextCursorLayer(Activity context, LayerView layerView) {
-        mCursorView = (TextCursorView) context.findViewById(R.id.text_cursor_view);
+    public DocumentOverlay(Activity context, LayerView layerView) {
+        mCursorView = (DocumentOverlayView) context.findViewById(R.id.text_cursor_view);
         if (mCursorView == null) {
             Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
         }

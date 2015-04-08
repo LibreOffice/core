@@ -18,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.libreoffice.overlay.TextCursorLayer;
+import org.libreoffice.overlay.DocumentOverlay;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -52,7 +52,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
-    private TextCursorLayer mTextCursorLayer;
+    private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
     private LOAbout mAbout;
     private ToolbarController mToolbarController;
@@ -175,7 +175,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         mLayerClient.notifyReady();
 
         // create TextCursorLayer
-        mTextCursorLayer = new TextCursorLayer(mAppContext, layerView);
+        mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
     }
 
     private boolean copyFileToTemp() {
@@ -342,8 +342,8 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         alertDialog.show();
     }
 
-    public TextCursorLayer getTextCursorLayer() {
-        return mTextCursorLayer;
+    public DocumentOverlay getDocumentOverlay() {
+        return mDocumentOverlay;
     }
 
     public ToolbarController getToolbarController() {

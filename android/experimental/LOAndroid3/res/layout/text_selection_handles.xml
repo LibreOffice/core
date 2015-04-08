@@ -6,7 +6,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:gecko="http://schemas.android.com/apk/res-auto">
 
-    <org.libreoffice.overlay.TextCursorView
+    <org.libreoffice.overlay.DocumentOverlayView
         android:id="@+id/text_cursor_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>

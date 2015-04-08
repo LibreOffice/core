@@ -9,20 +9,15 @@
 package org.libreoffice.overlay;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.libreoffice.LOKitShell;
-import org.libreoffice.R;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
 import org.libreoffice.canvas.SelectionHandle;
@@ -37,10 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Text cursor view responsible to show the cursor drawable on the screen.
+ * Document overlay view is responsible for showing the client drawn overlay
+ * elements like cursor, selection and graphic selection, and manipulate them.
  */
-public class TextCursorView extends View implements View.OnTouchListener {
-    private static final String LOGTAG = TextCursorView.class.getSimpleName();
+public class DocumentOverlayView extends View implements View.OnTouchListener {
+    private static final String LOGTAG = DocumentOverlayView.class.getSimpleName();
 
     private static final int CURSOR_BLINK_TIME = 500;
 
@@ -65,15 +61,15 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private SelectionHandle mDragHandle = null;
 
-    public TextCursorView(Context context) {
+    public DocumentOverlayView(Context context) {
         super(context);
     }
 
-    public TextCursorView(Context context, AttributeSet attrs) {
+    public DocumentOverlayView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public TextCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DocumentOverlayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
