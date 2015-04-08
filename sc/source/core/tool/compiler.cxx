@@ -4762,6 +4762,14 @@ bool ScCompiler::HandleDbData()
     return true;
 }
 
+
+/* Documentation on MS-Excel Table structured references:
+ * https://support.office.com/en-us/article/Use-structured-references-in-Excel-table-formulas-75fb07d3-826a-449c-b76f-363057e3d16f
+ * * as of Excel 2013
+ * [MS-XLSX]: Formulas https://msdn.microsoft.com/en-us/library/dd906358.aspx
+ * * look for structure-reference
+ */
+
 bool ScCompiler::HandleTableRef()
 {
     ScTableRefToken* pTR = dynamic_cast<ScTableRefToken*>(mpToken.get());
