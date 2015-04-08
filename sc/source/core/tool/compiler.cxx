@@ -4789,6 +4789,15 @@ bool ScCompiler::HandleTableRef()
         {
             case ScTableRefToken::TABLE:
                 {
+                    // The table name without items references the table data,
+                    // without headers or totals.
+                    if (pDBData->HasHeader())
+                        aRange.aStart.IncRow();
+                    if (pDBData->HasTotals())
+                        aRange.aEnd.IncRow(-1);
+                    if (aRange.aEnd.Row() < aRange.aStart.Row())
+                        bAddRange = false;
+
                     // Optional [] may follow.
                     if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
                     {
