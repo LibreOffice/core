@@ -372,6 +372,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
         return null;
     }
+
+    public RectF getCursorPosition() {
+        return mCursor.mPosition;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

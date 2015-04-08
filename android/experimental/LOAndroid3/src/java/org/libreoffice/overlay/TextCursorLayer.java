@@ -195,6 +195,10 @@ public class TextCursorLayer extends Layer {
             }
         });
     }
+
+    public RectF getCursorPosition() {
+        return mCursorView.getCursorPosition();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
