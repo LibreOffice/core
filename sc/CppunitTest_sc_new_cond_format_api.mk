@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_new_cond_format_api,\
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
 	dbaccess/util/dba \
+	fileaccess/source/fileacc \
 	filter/source/config/cache/filterconfig1 \
 	forms/util/frm \
 	framework/util/fwk \
@@ -102,6 +103,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_new_cond_format_api,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_new_cond_format_api))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sc_new_cond_format_api))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_new_cond_format_api))
 

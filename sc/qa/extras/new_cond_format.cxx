@@ -59,7 +59,7 @@ sal_Int32 ScConditionalFormatTest::nTest = 0;
 uno::Reference< lang::XComponent > ScConditionalFormatTest::mxComponent;
 
 ScConditionalFormatTest::ScConditionalFormatTest()
-    : CalcUnoApiTest("sc/qa/extras/testdocuments/")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
