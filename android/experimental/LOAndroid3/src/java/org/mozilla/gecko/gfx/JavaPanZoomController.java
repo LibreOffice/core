@@ -418,6 +418,7 @@ public class JavaPanZoomController
         } else {
             setState(PanZoomState.PANNING);
         }
+        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
     private float panDistance(MotionEvent move) {

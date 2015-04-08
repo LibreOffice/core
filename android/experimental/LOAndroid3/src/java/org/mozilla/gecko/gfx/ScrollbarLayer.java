@@ -208,8 +208,6 @@ public class ScrollbarLayer extends TileLayer {
         mOpacity = 1.0f;
         endTransaction();
 
-        // Scrollbar is now visible, scrolling will start: hide the soft keyboard.
-        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
         return true;
     }
 
