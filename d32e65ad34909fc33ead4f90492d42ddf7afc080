@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_9c08a92a",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-08T10:33:45Z",
+      "side": 1,
+      "message": "the definition of OSL_ASSERT maps to SAL_WARN because it lacks context about each individual use of OSL_ASSERT, but that does not mean that each original occurrence of OSL_ASSERT is really worth a SAL_WARN.  Then again, the distinction between SAL_WARN and SAL_INFO isn\u0027t clear-cut enough to worry too much about that here.",
+      "parentUuid": "1a26ad4f_b916d753",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_397407fc",
         "filename": "sal/osl/unx/socket.cxx",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "In base version, there is an OSL_TRACE that was changed to a SAL_INFO and an OSL_ASSERT that only made sense if it was changed to a C/C++ assert. The code following the assert is only dead code in debug mode. I only tried to keep most of the behavior, but I can change it if necessary.",
       "parentUuid": "1a26ad4f_d95f1374",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_bc0d6539",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-08T10:33:45Z",
+      "side": 1,
+      "message": "While the following code is indeed only \"physically\" dead in debug mode, it is \"logically\" dead also in non-debug mode, as an assert states that its condition will never hold (modulo bugs), so assert(false) indicates an unreachable place in the code.  Please fix the original code as I outlined above.",
+      "parentUuid": "1a26ad4f_79091f31",
       "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
