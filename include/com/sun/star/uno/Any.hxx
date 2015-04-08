@@ -204,6 +204,10 @@ inline Any SAL_CALL makeAny( const rtl::OUStringConcat< C1, C2 >& value )
 }
 #endif
 
+template<typename T> Any toAny(T const & value) { return makeAny(value); }
+
+template<> Any toAny(Any const & value) { return value; }
+
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
 {

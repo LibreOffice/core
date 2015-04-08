@@ -265,7 +265,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         {
             if (find(sKey) == end())
             {
-                (*this)[sKey] = ::com::sun::star::uno::makeAny(aValue);
+                (*this)[sKey] = ::com::sun::star::uno::toAny(aValue);
                 return true;
             }
 

@@ -1370,12 +1370,12 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             if ( mpCLBDimColor->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
                 aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
 
-            aDimColor = makeAny( makeAny( (sal_Int32)aSelectedColor.GetRGBColor() ) );
+            aDimColor = makeAny( (sal_Int32)aSelectedColor.GetRGBColor() );
         }
 
         if( (mpSet->getPropertyState( nHandleDimColor ) == STLPropertyState_AMBIGUOUS) ||
             (mpSet->getPropertyValue( nHandleDimColor ) != aDimColor) )
-            pSet->setPropertyValue( nHandleDimColor, makeAny( aDimColor ) );
+            pSet->setPropertyValue( nHandleDimColor, aDimColor );
 
         bool bAfterEffectOnNextEffect = nPos != 2 ? sal_True : sal_False;
         bool bOldAfterEffectOnNextEffect = !bAfterEffectOnNextEffect;

@@ -2519,7 +2519,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag))), true, ROW_GRAB_BAG);
+        pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag)), true, ROW_GRAB_BAG);
         m_pImpl->getTableManager().insertRowProps(pPropMap);
 
         m_pImpl->disableInteropGrabBag();
@@ -2531,7 +2531,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_CELL_CNF_STYLE, uno::makeAny(uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag))), true, CELL_GRAB_BAG);
+        pPropMap->Insert(PROP_CELL_CNF_STYLE, uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag)), true, CELL_GRAB_BAG);
         m_pImpl->getTableManager().cellProps(pPropMap);
 
         m_pImpl->disableInteropGrabBag();

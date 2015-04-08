@@ -366,7 +366,7 @@ ScVbaInterior::getPatternColorIndex() throw (uno::RuntimeException, std::excepti
     sal_Int32 nColor = 0;
     XLRGBToOORGB( getPatternColor() ) >>= nColor;
 
-    return uno::makeAny( GetIndexColor( nColor ) );
+    return GetIndexColor( nColor );
 }
 void SAL_CALL
 ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex ) throw (uno::RuntimeException, std::exception)

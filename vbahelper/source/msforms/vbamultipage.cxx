@@ -102,7 +102,7 @@ ScVbaMultiPage::Pages( const uno::Any& index ) throw (uno::RuntimeException, std
     uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, getPages( xContainer->getElementNames().getLength() ) ) );
     if ( !index.hasValue() )
         return uno::makeAny( xColl );
-    return xColl->Item( uno::makeAny( index ), uno::Any() );
+    return xColl->Item( index, uno::Any() );
 }
 
 uno::Sequence< OUString >

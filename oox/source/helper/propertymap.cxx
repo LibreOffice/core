@@ -670,7 +670,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
         for( int i=0; i<adjArray.getLength(); i++ ) {
             printLevel (level);
             fprintf (stderr, "{\n");
-            const char *var = lclDumpAnyValueCode( makeAny (adjArray[i].Value), level + 1 );
+            const char *var = lclDumpAnyValueCode( adjArray[i].Value, level + 1 );
             printLevel (level + 1);
             fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
             if (adjArray[i].Name.getLength() > 0) {

@@ -293,7 +293,7 @@ VbaApplicationBase::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeExc
 {
     uno::Reference< XCommandBars > xCommandBars( new ScVbaCommandBars( this, mxContext, uno::Reference< container::XIndexAccess >(), getCurrentDocument() ) );
     if( aIndex.hasValue() )
-        return uno::makeAny( xCommandBars->Item( aIndex, uno::Any() ) );
+        return xCommandBars->Item( aIndex, uno::Any() );
     return uno::makeAny( xCommandBars );
 }
 

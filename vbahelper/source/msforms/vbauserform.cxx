@@ -285,7 +285,7 @@ ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException, s
     uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() ) );
     if ( index.hasValue() )
-        return uno::makeAny( xControls->Item( index, uno::Any() ) );
+        return xControls->Item( index, uno::Any() );
     return uno::makeAny( xControls );
 }
 

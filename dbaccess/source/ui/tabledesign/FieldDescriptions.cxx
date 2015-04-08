@@ -286,7 +286,7 @@ void OFieldDescription::SetDefaultValue(const Any& _rDefaultValue)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
-            m_xDest->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_rDefaultValue));
+            m_xDest->setPropertyValue(PROPERTY_DEFAULTVALUE, _rDefaultValue);
         else
             m_aDefaultValue = _rDefaultValue;
     }
@@ -301,7 +301,7 @@ void OFieldDescription::SetControlDefault(const Any& _rControlDefault)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
-            m_xDest->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(_rControlDefault));
+            m_xDest->setPropertyValue(PROPERTY_CONTROLDEFAULT, _rControlDefault);
         else
             m_aControlDefault = _rControlDefault;
     }

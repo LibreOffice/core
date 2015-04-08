@@ -1154,7 +1154,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
         case FN_UNO_REDLINE_NODE_END:
         {
             //redline can only be returned if it's a living object
-            return makeAny(SwXText::getPropertyValue(rPropertyName));
+            return SwXText::getPropertyValue(rPropertyName);
         }
         break;
         default:

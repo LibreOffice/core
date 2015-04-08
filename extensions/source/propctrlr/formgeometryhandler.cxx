@@ -744,11 +744,11 @@ namespace pcr
         }
         else if ( _event.PropertyName == PROPERTY_ANCHOR_TYPE )
         {
-            aEventTranslations.push_back( EventTranslation( PROPERTY_TEXT_ANCHOR_TYPE, makeAny( _event.NewValue ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_TEXT_ANCHOR_TYPE, _event.NewValue ) );
         }
         else if ( _event.PropertyName == PROPERTY_ANCHOR )
         {
-            aEventTranslations.push_back( EventTranslation( PROPERTY_SHEET_ANCHOR_TYPE, makeAny( _event.NewValue ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_SHEET_ANCHOR_TYPE, _event.NewValue ) );
         }
 
         PropertyChangeEvent aTranslatedEvent( _event );

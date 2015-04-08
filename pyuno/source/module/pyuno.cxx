@@ -513,7 +513,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
     }
     catch( const com::sun::star::reflection::InvocationTargetException & e )
     {
-        raisePyExceptionWithAny( makeAny(e.TargetException) );
+        raisePyExceptionWithAny( e.TargetException );
     }
     catch( const com::sun::star::beans::UnknownPropertyException & e )
     {
@@ -557,7 +557,7 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     }
     catch( const com::sun::star::reflection::InvocationTargetException & e )
     {
-        raisePyExceptionWithAny( makeAny(e.TargetException) );
+        raisePyExceptionWithAny( e.TargetException );
         return 1;
     }
     catch( const com::sun::star::beans::UnknownPropertyException & e )

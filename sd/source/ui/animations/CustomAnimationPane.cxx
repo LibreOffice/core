@@ -1068,7 +1068,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandleBegin, makeAny( pEffect->getBegin() ) );
         addValue( pSet, nHandleDuration, makeAny( pEffect->getDuration() ) );
         addValue( pSet, nHandleStart, makeAny( pEffect->getNodeType() ) );
-        addValue( pSet, nHandleRepeat, makeAny( pEffect->getRepeatCount() ) );
+        addValue( pSet, nHandleRepeat, pEffect->getRepeatCount() );
         addValue( pSet, nHandleEnd, pEffect->getEnd() );
         addValue( pSet, nHandleRewind, makeAny( pEffect->getFill() ) );
 

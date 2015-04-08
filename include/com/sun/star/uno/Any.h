@@ -260,6 +260,19 @@ inline Any SAL_CALL makeAny( const C & value );
 template<>
 inline Any SAL_CALL makeAny( bool const & value );
 
+template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
+
+/** Wrap a value in an Any, if necessary.
+
+    The difference to makeAny is that makeAny cannot be called on an Any, while
+    toAny just returns the given Any.
+
+    @since LibreOffice 4.5
+*/
+template<typename T> inline Any toAny(T const & value);
+
+template<> inline Any toAny(Any const & value);
+
 class BaseReference;
 
 /** Template binary <<= operator to set the value of an any.

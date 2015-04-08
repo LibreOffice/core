@@ -934,7 +934,7 @@ ScVbaWorksheet::invoke( const OUString& aFunctionName, const uno::Sequence< uno:
 void SAL_CALL
 ScVbaWorksheet::setValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
 {
-    setDefaultPropByIntrospection( uno::makeAny( getValue( aPropertyName ) ), aValue );
+    setDefaultPropByIntrospection( getValue( aPropertyName ), aValue );
 }
 uno::Any SAL_CALL
 ScVbaWorksheet::getValue( const OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)

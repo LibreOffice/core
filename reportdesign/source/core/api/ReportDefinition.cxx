@@ -2351,7 +2351,7 @@ uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index ) throw(lang::Index
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( Index < 0 || Index >= static_cast<sal_Int32>(m_aElementsPos.size()) )
         throw lang::IndexOutOfBoundsException();
-    return uno::makeAny(m_aElementsPos[Index]->second);
+    return m_aElementsPos[Index]->second;
 }
 
 // container::XNameAccess
@@ -2361,7 +2361,7 @@ uno::Any SAL_CALL OStylesHelper::getByName( const OUString& aName ) throw(contai
     TStyleElements::iterator aFind = m_aElements.find(aName);
     if ( aFind == m_aElements.end() )
         throw container::NoSuchElementException();
-    return uno::makeAny(aFind->second);
+    return aFind->second;
 }
 
 uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  ) throw(uno::RuntimeException, std::exception)

@@ -2206,7 +2206,7 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxVariable*)pDocObject);
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
         return;
-    pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
+    pDocObject = new SbUnoObject( GetName(), aObj );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )

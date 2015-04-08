@@ -198,9 +198,8 @@ namespace comphelper
     template <class TYPE>
     inline ::com::sun::star::uno::Any OSequenceIterator<TYPE>::nextElement()
     {
-        return ::com::sun::star::uno::makeAny(*m_pCurrent++);
+        return ::com::sun::star::uno::toAny(*m_pCurrent++);
     }
-
 
     /** Copy from a plain C/C++ array into a Sequence.
 
