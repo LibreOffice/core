@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_b916d753",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000952
+      },
+      "writtenOn": "2015-04-08T10:22:52Z",
+      "side": 1,
+      "message": "From include/osl/diagnose.h, OSL_ASSERT is mapped to a SAL_WARN, thus the choice to use SAL_WARN instead of SAL_INFO.",
+      "parentUuid": "1a26ad4f_1977cb03",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_397407fc",
         "filename": "sal/osl/unx/socket.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-04-07T14:33:10Z",
       "side": 1,
       "message": "Failure of osl_getFullQualifiedDomainName is not necessarily due to insufficient memory.",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_590c6342",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1000952
+      },
+      "writtenOn": "2015-04-08T10:22:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a26ad4f_397407fc",
       "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a26ad4f_79091f31",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000952
+      },
+      "writtenOn": "2015-04-08T10:22:52Z",
+      "side": 1,
+      "message": "In base version, there is an OSL_TRACE that was changed to a SAL_INFO and an OSL_ASSERT that only made sense if it was changed to a C/C++ assert. The code following the assert is only dead code in debug mode. I only tried to keep most of the behavior, but I can change it if necessary.",
+      "parentUuid": "1a26ad4f_d95f1374",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a26ad4f_99599b91",
         "filename": "sal/osl/unx/socket.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-04-07T14:33:10Z",
       "side": 1,
       "message": "SAL_WARN is a macro that expands to \"arbitrary\" amounts of code.  Do not assume that it does not arbitrarily modify errno.  Better copy the current value of errno and use that in the SAL_WARN call.",
+      "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_1906eb20",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000952
+      },
+      "writtenOn": "2015-04-08T10:22:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a26ad4f_99599b91",
       "revId": "d32e65ad34909fc33ead4f90492d42ddf7afc080",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
