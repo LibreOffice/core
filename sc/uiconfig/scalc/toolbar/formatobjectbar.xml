@@ -43,8 +43,8 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto"/>
@@ -54,8 +54,9 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals"/>
  <toolbar:toolbarseparator/>
