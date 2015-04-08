@@ -324,6 +324,15 @@ public class GeckoLayerClient implements PanZoomTarget {
         }
     }
 
+    /**
+     * Move the viewport to the desired point, and change the zoom level.
+     */
+    public void moveTo(PointF point, Float zoom) {
+        if (mPanZoomController instanceof JavaPanZoomController) {
+            ((JavaPanZoomController) mPanZoomController).animatedMove(point, zoom);
+        }
+    }
+
     public void zoomTo(float pageWidth, float pageHeight) {
         zoomTo(new RectF(0, 0, pageWidth, pageHeight));
     }

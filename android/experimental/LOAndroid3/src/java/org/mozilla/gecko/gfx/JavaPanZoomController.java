@@ -1021,6 +1021,30 @@ public class JavaPanZoomController
         return true;
     }
 
+    /**
+     * Move to centerPosition and zoom to the desired input zoom factor. Input zoom
+     * factor can be null, in this case leave the zoom unchanged.
+     */
+    public boolean animatedMove(PointF centerPoint, Float zoom) {
+        RectF moveToRect = getMetrics().getCssViewport();
+        moveToRect.offsetTo(
+                centerPoint.x - moveToRect.width() / 2.0f,
+                centerPoint.y - moveToRect.height() / 2.0f);
+
+        ImmutableViewportMetrics finalMetrics = getMetrics();
+        finalMetrics = finalMetrics.setViewportOrigin(
+                moveToRect.left * finalMetrics.zoomFactor,
+                moveToRect.top * finalMetrics.zoomFactor);
+
+        if (zoom != null) {
+            finalMetrics = finalMetrics.scaleTo(zoom, new PointF(0.0f, 0.0f));
+        }
+        finalMetrics = getValidViewportMetrics(finalMetrics);
+
+        bounce(finalMetrics, PanZoomState.ANIMATED_ZOOM);
+        return true;
+    }
+
     /** This function must be called from the UI thread. */
     public void abortPanning() {
         checkMainThread();

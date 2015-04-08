@@ -156,6 +156,19 @@ public class LOKitShell {
     public static void sendNavigationClickEvent() {
         LOKitShell.sendEvent(new LOEvent(LOEvent.NAVIGATION_CLICK));
     }
+
+    /**
+     * Move the viewport to the desired point, and change the zoom level.
+     * Ensure this runs on the UI thread.
+     */
+    public static void moveViewportTo(final PointF position, final Float zoom) {
+        getLayerView().getLayerClient().post(new Runnable() {
+            @Override
+            public void run() {
+                getLayerView().getLayerClient().moveTo(position, zoom);
+            }
+        });
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
