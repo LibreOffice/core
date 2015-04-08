@@ -235,7 +235,7 @@ void test_coreReflection()
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
 
         writer.setMethodData(0, OUString("methodA"),
-                             OUString("double"), RT_MODE_TWOWAY, 2, 1,
+                             OUString("double"), RTMethodMode::TWOWAY, 2, 1,
                              OUString("Hallo ich bin die methodA"));
         writer.setParamData(0, 0, OUString("ModuleA/StructA"),
                             OUString("aStruct"), RT_PARAM_IN);

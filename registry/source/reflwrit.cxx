@@ -538,7 +538,7 @@ protected:
 };
 
 MethodEntry::MethodEntry()
-    : m_mode(RT_MODE_INVALID)
+    : m_mode(RTMethodMode::INVALID)
     , m_paramCount(0)
     , m_params(NULL)
     , m_excCount(0)

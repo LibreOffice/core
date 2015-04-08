@@ -258,7 +258,7 @@ rtl::Reference< Entity > readEntity(
                 for (sal_uInt16 k = 0; k != methodCount; ++k) {
                     if (reader.getMethodName(k) == attrName) {
                         switch (reader.getMethodFlags(k)) {
-                        case RT_MODE_ATTRIBUTE_GET:
+                        case RTMethodMode::ATTRIBUTE_GET:
                             {
                                 sal_uInt16 m
                                     = reader.getMethodExceptionCount(k);
@@ -272,7 +272,7 @@ rtl::Reference< Entity > readEntity(
                                 }
                                 break;
                             }
-                        case RT_MODE_ATTRIBUTE_SET:
+                        case RTMethodMode::ATTRIBUTE_SET:
                             {
                                 sal_uInt16 m
                                     = reader.getMethodExceptionCount(k);
@@ -307,8 +307,8 @@ rtl::Reference< Entity > readEntity(
             std::vector< InterfaceTypeEntity::Method > meths;
             for (sal_uInt16 j = 0; j != methodCount; ++j) {
                 RTMethodMode flags = reader.getMethodFlags(j);
-                if (flags != RT_MODE_ATTRIBUTE_GET
-                    && flags != RT_MODE_ATTRIBUTE_SET)
+                if (flags != RTMethodMode::ATTRIBUTE_GET
+                    && flags != RTMethodMode::ATTRIBUTE_SET)
                 {
                     std::vector< InterfaceTypeEntity::Method::Parameter >
                         params;
@@ -598,7 +598,7 @@ rtl::Reference< Entity > readEntity(
                 std::vector< SingleInterfaceBasedServiceEntity::Constructor >
                     ctors;
                 sal_uInt16 n = reader.getMethodCount();
-                if (n == 1 && reader.getMethodFlags(0) == RT_MODE_TWOWAY
+                if (n == 1 && reader.getMethodFlags(0) == RTMethodMode::TWOWAY
                     && reader.getMethodName(0).isEmpty()
                     && reader.getMethodReturnTypeName(0) == "void"
                     && reader.getMethodParameterCount(0) == 0
@@ -608,11 +608,11 @@ rtl::Reference< Entity > readEntity(
                         SingleInterfaceBasedServiceEntity::Constructor());
                 } else {
                     for (sal_uInt16 j = 0; j != n; ++j) {
-                        if (reader.getMethodFlags(j) != RT_MODE_TWOWAY) {
+                        if (reader.getMethodFlags(j) != RTMethodMode::TWOWAY) {
                             throw FileFormatException(
                                 key.getRegistryName(),
                                 ("legacy format: unexpected mode "
-                                 + OUString::number(reader.getMethodFlags(j))
+                                 + OUString::number(static_cast<int>(reader.getMethodFlags(j)))
                                  + " of constructor " + reader.getMethodName(j)
                                  + " in service with key " + sub.getName()));
                         }

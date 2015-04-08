@@ -42,7 +42,7 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = nExceptions();
-    RTMethodMode    methodMode = RT_MODE_TWOWAY;
+    RTMethodMode    methodMode = RTMethodMode::TWOWAY;
 
     OUString returnTypeName;
     if (m_pReturnType == 0) {

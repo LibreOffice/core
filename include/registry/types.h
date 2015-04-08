@@ -232,21 +232,21 @@ union RTConstValueUnion {
     A method can be synchron or asynchron (oneway).  The const attribute for
     methods was removed so that the const values are deprecated.
  */
-enum RTMethodMode {
+enum class RTMethodMode {
     /// indicates an invalid mode
-    RT_MODE_INVALID,
+    INVALID,
 
     /// indicates the asynchronous mode of a method
-    RT_MODE_ONEWAY,
+    ONEWAY,
 
     /// @deprecated
-    RT_MODE_ONEWAY_CONST,
+    ONEWAY_CONST,
 
     /// indicated the synchronous mode of a method
-    RT_MODE_TWOWAY,
+    TWOWAY,
 
     /// @deprecated
-    RT_MODE_TWOWAY_CONST,
+    TWOWAY_CONST,
 
     /**
        Indicates an extended attribute getter (that has a 'raises' clause) of an
@@ -254,7 +254,7 @@ enum RTMethodMode {
 
        @since UDK 3.2.0
      */
-    RT_MODE_ATTRIBUTE_GET,
+    ATTRIBUTE_GET,
 
     /**
        Indicates an extended attribute setter (that has a 'raises' clause) of an
@@ -262,7 +262,7 @@ enum RTMethodMode {
 
        @since UDK 3.2.0
      */
-    RT_MODE_ATTRIBUTE_SET
+    ATTRIBUTE_SET
 };
 
 /** specifies the mode of a parameter.

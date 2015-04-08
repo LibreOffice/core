@@ -1132,7 +1132,7 @@ const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
 
 RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
 {
-    RTMethodMode aMode = RT_MODE_INVALID;
+    RTMethodMode aMode = RTMethodMode::INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1730,7 +1730,7 @@ RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RT_MODE_INVALID;
+    if (pEntry == NULL) return RTMethodMode::INVALID;
 
     return pEntry->m_pMethods->getMethodMode(index);
 }

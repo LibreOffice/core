@@ -294,19 +294,19 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
             printf("\n");
             printf("%s    flags: ", indent.getStr());
             switch (reader.getMethodFlags(i)) {
-            case RT_MODE_ONEWAY:
+            case RTMethodMode::ONEWAY:
                 printf("oneway");
                 break;
 
-            case RT_MODE_TWOWAY:
+            case RTMethodMode::TWOWAY:
                 printf("synchronous");
                 break;
 
-            case RT_MODE_ATTRIBUTE_GET:
+            case RTMethodMode::ATTRIBUTE_GET:
                 printf("attribute get");
                 break;
 
-            case RT_MODE_ATTRIBUTE_SET:
+            case RTMethodMode::ATTRIBUTE_SET:
                 printf("attribute set");
                 break;
 

@@ -302,7 +302,7 @@ bool AstService::dump(RegistryKey& rKey)
     }
     if (m_defaultConstructor) {
         writer.setMethodData(
-            constructorIndex++, emptyStr, RT_MODE_TWOWAY,
+            constructorIndex++, emptyStr, RTMethodMode::TWOWAY,
             emptyStr, OUString("void"),
             0, 0);
     }
@@ -374,10 +374,10 @@ bool AstAttribute::dumpBlob(
         OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
         RTConstValue());
     dumpExceptions(
-        rBlob, m_getDocumentation, m_getExceptions, RT_MODE_ATTRIBUTE_GET,
+        rBlob, m_getDocumentation, m_getExceptions, RTMethodMode::ATTRIBUTE_GET,
         methodIndex);
     dumpExceptions(
-        rBlob, m_setDocumentation, m_setExceptions, RT_MODE_ATTRIBUTE_SET,
+        rBlob, m_setDocumentation, m_setExceptions, RTMethodMode::ATTRIBUTE_SET,
         methodIndex);
 
     return true;

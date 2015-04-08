@@ -700,13 +700,13 @@ static char const * getMethodMode(RTMethodMode methodMode)
 {
     switch ( methodMode )
     {
-        case RT_MODE_ONEWAY:
+        case RTMethodMode::ONEWAY:
             return "ONEWAY";
-        case RT_MODE_ONEWAY_CONST:
+        case RTMethodMode::ONEWAY_CONST:
             return "ONEWAY,CONST";
-        case RT_MODE_TWOWAY:
+        case RTMethodMode::TWOWAY:
             return "NONE";
-        case RT_MODE_TWOWAY_CONST:
+        case RTMethodMode::TWOWAY_CONST:
             return "CONST";
         default:
             return "INVALID";
