@@ -1694,6 +1694,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bool bFormulaMode = pScMod->IsFormulaMode();            // naechster Klick -> Referenz
     bool bEditMode = pViewData->HasEditView(eWhich);        // auch bei Mode==SC_INPUT_TYPE
     bool bDouble = (rMEvt.GetClicks() == 2);
+    bool bIsTiledRendering = pViewData->GetDocument()->GetDrawLayer()->isTiledRendering();
 
     //  DeactivateIP passiert nur noch bei MarkListHasChanged
 
@@ -1702,6 +1703,36 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
     if ( !nButtonDown || !bDouble )             // single (first) click is always valid
         nButtonDown = rMEvt.GetButtons();       // set nButtonDown first, so StopMarking works
+
+    // special handling of empty cells with tiled rendering - with double
+    // click, the entire cell is selected
+    if (bIsTiledRendering && bDouble)
+    {
+        Point aPos = rMEvt.GetPosPixel();
+        SCsCOL nPosX;
+        SCsROW nPosY;
+        SCTAB nTab = pViewData->GetTabNo();
+        pViewData->GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
+
+        ScRefCellValue aCell;
+        aCell.assign(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
+        if (aCell.isEmpty())
+        {
+            // stop editing
+            ScTabViewShell* pViewShell = pViewData->GetViewShell();
+            pViewShell->UpdateInputLine();
+            pViewShell->UpdateInputHandler();
+
+            // select the given cell
+            ScTabView* pTabView = pViewData->GetView();
+            pTabView->SetCursor(nPosX, nPosY);
+            pTabView->DoneBlockMode();
+            pTabView->InitBlockMode(nPosX, nPosY, nTab, true);
+            pTabView->MarkCursor(nPosX, nPosY, nTab);
+            pTabView->SelectionChanged();
+            return;
+        }
+    }
 
     if ( ( bEditMode && pViewData->GetActivePart() == eWhich ) || !bFormulaMode )
         GrabFocus();
@@ -1825,7 +1856,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
     }
 
-    if (!bFormulaMode && !bEditMode && rMEvt.IsLeft())
+    // in the tiled rendering case, single clicks into drawing objects take
+    // precedence over bEditMode
+    if (((!bFormulaMode && !bEditMode) || bIsTiledRendering) && rMEvt.IsLeft())
     {
         if ( !bCrossPointer && DrawMouseButtonDown(rMEvt) )
         {
@@ -1835,17 +1868,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         pViewData->GetViewShell()->SetDrawShell( false );               // kein Draw-Objekt selektiert
 
         //  TestMouse schon oben passiert
-    }
-
-    // In the tiled rendering case, select shapes
-    if (rMEvt.IsLeft() && pViewData->GetDocument()->GetDrawLayer()->isTiledRendering())
-    {
-        if ( !bCrossPointer && DrawMouseButtonDown(rMEvt) )
-        {
-            return;
-        }
-
-        pViewData->GetViewShell()->SetDrawShell( false );
     }
 
     Point aPos = rMEvt.GetPosPixel();
@@ -1927,10 +1949,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
         else
             nMouseStatus = SC_GM_TABDOWN;
-
-        // In the tiled rendering case, fake mouse status to double click
-        if ( nMouseStatus == SC_GM_TABDOWN && pDoc->GetDrawLayer()->isTiledRendering() )
-            nMouseStatus = SC_GM_DBLDOWN;
     }
 
             //      Links in Edit-Zellen
@@ -2215,9 +2233,12 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
-    // In the tiled rendering case, change double click to single click (only left button)
-    bool bDouble = ( pDoc->GetDrawLayer()->isTiledRendering() && rMEvt.IsLeft() ) || ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
-    if ( bDouble && !bRefMode && nMouseStatus == SC_GM_DBLDOWN && !pScMod->IsRefDialogOpen() )
+    // double click (only left button)
+    // in the tiled rendering case, single click works this way too
+
+    bool bIsTiledRendering = pViewData->GetDocument()->GetDrawLayer()->isTiledRendering();
+    bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
+    if ((bDouble || bIsTiledRendering) && !bRefMode && (nMouseStatus == SC_GM_DBLDOWN || bIsTiledRendering) && !pScMod->IsRefDialogOpen())
     {
         //  data pilot table
         Point aPos = rMEvt.GetPosPixel();
@@ -2282,6 +2303,16 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( bEditAllowed )
         {
+            // don't forward the event to an empty cell, causes deselection in
+            // case we used the double-click to select the empty cell
+            if (bIsTiledRendering)
+            {
+                ScRefCellValue aCell;
+                aCell.assign(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
+                if (aCell.isEmpty())
+                    return;
+            }
+
             //  edit cell contents
             pViewData->GetViewShell()->UpdateInputHandler();
             pScMod->SetInputMode( SC_INPUT_TABLE );
@@ -2765,10 +2796,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
         MouseEvent aUpEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(),
                             rMEvt.GetMode(), nButtonDown, rMEvt.GetModifier() );
-
-        // In the tiled rendering case, do not spawn fake mouse up
-        if (!pViewData->GetDocument()->GetDrawLayer()->isTiledRendering())
-            MouseButtonUp( aUpEvt );
+        MouseButtonUp( aUpEvt );
     }
     else
         MouseMove( rMEvt );
