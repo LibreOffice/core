@@ -271,6 +271,7 @@ public class LOKitThread extends Thread {
         if (mTileProvider == null) {
             return;
         }
+        mInvalidationHandler.keyEvent();
         mTileProvider.sendKeyEvent(keyEvent);
     }
 

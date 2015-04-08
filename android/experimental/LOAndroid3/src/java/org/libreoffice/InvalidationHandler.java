@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.content.Intent;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 
@@ -19,6 +20,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final DocumentOverlay mDocumentOverlay;
     private OverlayState mState;
+    private boolean mKeyEvent = false;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mDocumentOverlay = mainActivity.getDocumentOverlay();
@@ -149,6 +151,12 @@ public class InvalidationHandler implements Document.MessageCallback {
         if (cursorRectangle != null) {
             mDocumentOverlay.positionCursor(cursorRectangle);
             mDocumentOverlay.positionHandle(SelectionHandle.HandleType.MIDDLE, cursorRectangle);
+
+            if (mKeyEvent) {
+                PointF point = new PointF(cursorRectangle.centerX(), cursorRectangle.centerY());
+                LOKitShell.moveViewportTo(point, null);
+                mKeyEvent = false;
+            }
 
             if (mState == OverlayState.TRANSITION || mState == OverlayState.CURSOR) {
                 changeStateTo(OverlayState.CURSOR);
@@ -350,6 +358,10 @@ public class InvalidationHandler implements Document.MessageCallback {
      */
     public OverlayState getCurrentState() {
         return mState;
+    }
+
+    public void keyEvent() {
+        mKeyEvent = true;
     }
 
     public enum OverlayState {
