@@ -305,59 +305,59 @@ static char const * getTypeClass(RTTypeClass typeClass)
 static OString getFieldAccess(RTFieldAccess fieldAccess)
 {
     OString ret;
-    if ( (fieldAccess & RT_ACCESS_INVALID) == RT_ACCESS_INVALID )
+    if ( (fieldAccess & RTFieldAccess::INVALID) == RTFieldAccess::INVALID )
     {
         ret += OString("INVALID");
     }
-    if ( (fieldAccess & RT_ACCESS_READONLY) == RT_ACCESS_READONLY )
+    if ( (fieldAccess & RTFieldAccess::READONLY) == RTFieldAccess::READONLY )
     {
         ret += OString(ret.isEmpty() ? "READONLY" : ",READONLY");
     }
-    if ( (fieldAccess & RT_ACCESS_OPTIONAL) == RT_ACCESS_OPTIONAL )
+    if ( (fieldAccess & RTFieldAccess::OPTIONAL) == RTFieldAccess::OPTIONAL )
     {
         ret += OString(ret.isEmpty() ? "OPTIONAL" : ",OPTIONAL");
     }
-    if ( (fieldAccess & RT_ACCESS_MAYBEVOID) == RT_ACCESS_MAYBEVOID )
+    if ( (fieldAccess & RTFieldAccess::MAYBEVOID) == RTFieldAccess::MAYBEVOID )
     {
         ret += OString(ret.isEmpty() ? "MAYBEVOID" : ",MAYBEVOID");
     }
-    if ( (fieldAccess & RT_ACCESS_BOUND) == RT_ACCESS_BOUND )
+    if ( (fieldAccess & RTFieldAccess::BOUND) == RTFieldAccess::BOUND )
     {
         ret += OString(ret.isEmpty() ? "BOUND" : ",BOUND");
     }
-    if ( (fieldAccess & RT_ACCESS_CONSTRAINED) == RT_ACCESS_CONSTRAINED )
+    if ( (fieldAccess & RTFieldAccess::CONSTRAINED) == RTFieldAccess::CONSTRAINED )
     {
         ret += OString(ret.isEmpty() ? "CONSTRAINED" : ",CONSTRAINED");
     }
-    if ( (fieldAccess & RT_ACCESS_TRANSIENT) == RT_ACCESS_TRANSIENT )
+    if ( (fieldAccess & RTFieldAccess::TRANSIENT) == RTFieldAccess::TRANSIENT )
     {
         ret += OString(ret.isEmpty() ? "TRANSIENT" : ",TRANSIENT");
     }
-    if ( (fieldAccess & RT_ACCESS_MAYBEAMBIGUOUS) == RT_ACCESS_MAYBEAMBIGUOUS )
+    if ( (fieldAccess & RTFieldAccess::MAYBEAMBIGUOUS) == RTFieldAccess::MAYBEAMBIGUOUS )
     {
         ret += OString(ret.isEmpty() ? "MAYBEAMBIGUOUS" : ",MAYBEAMBIGUOUS");
     }
-    if ( (fieldAccess & RT_ACCESS_MAYBEDEFAULT) == RT_ACCESS_MAYBEDEFAULT )
+    if ( (fieldAccess & RTFieldAccess::MAYBEDEFAULT) == RTFieldAccess::MAYBEDEFAULT )
     {
         ret += OString(ret.isEmpty() ? "MAYBEDEFAULT" : ",MAYBEDEFAULT");
     }
-    if ( (fieldAccess & RT_ACCESS_REMOVABLE) == RT_ACCESS_REMOVABLE )
+    if ( (fieldAccess & RTFieldAccess::REMOVABLE) == RTFieldAccess::REMOVABLE )
     {
         ret += OString(ret.isEmpty() ? "REMOVABLE" : ",REMOVABLE");
     }
-    if ( (fieldAccess & RT_ACCESS_ATTRIBUTE) == RT_ACCESS_ATTRIBUTE )
+    if ( (fieldAccess & RTFieldAccess::ATTRIBUTE) == RTFieldAccess::ATTRIBUTE )
     {
         ret += OString(ret.isEmpty() ? "ATTRIBUTE" : ",ATTRIBUTE");
     }
-    if ( (fieldAccess & RT_ACCESS_PROPERTY) == RT_ACCESS_PROPERTY )
+    if ( (fieldAccess & RTFieldAccess::PROPERTY) == RTFieldAccess::PROPERTY )
     {
         ret += OString(ret.isEmpty() ? "PROPERTY" : ",PROPERTY");
     }
-    if ( (fieldAccess & RT_ACCESS_CONST) == RT_ACCESS_CONST )
+    if ( (fieldAccess & RTFieldAccess::CONST) == RTFieldAccess::CONST )
     {
         ret += OString(ret.isEmpty() ? "CONST" : ",CONST");
     }
-    if ( (fieldAccess & RT_ACCESS_READWRITE) == RT_ACCESS_READWRITE )
+    if ( (fieldAccess & RTFieldAccess::READWRITE) == RTFieldAccess::READWRITE )
     {
         ret += OString(ret.isEmpty() ? "READWRITE" : ",READWRITE");
     }
@@ -1015,7 +1015,7 @@ static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
         {
             if ( moreProps.find(j) == moreProps.end() )
             {
-                if ( (reader2.getFieldFlags(j) & RT_ACCESS_OPTIONAL) != RT_ACCESS_OPTIONAL )
+                if ( (reader2.getFieldFlags(j) & RTFieldAccess::OPTIONAL) != RTFieldAccess::OPTIONAL )
                 {
                     if ( options.forceOutput() )
                     {
@@ -1251,7 +1251,7 @@ static sal_uInt32 checkBlob(
                 {
                     if ( moreReferences.find(j) == moreReferences.end() )
                     {
-                        if ( (reader2.getReferenceFlags(j) & RT_ACCESS_OPTIONAL) != RT_ACCESS_OPTIONAL )
+                        if ( (reader2.getReferenceFlags(j) & RTFieldAccess::OPTIONAL) != RTFieldAccess::OPTIONAL )
                         {
                             if ( options.forceOutput() )
                             {

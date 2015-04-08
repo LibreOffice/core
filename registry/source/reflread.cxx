@@ -681,7 +681,7 @@ const sal_Char* FieldList::getFieldType(sal_uInt16 index)
 
 RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
 {
-    RTFieldAccess aAccess = RT_ACCESS_INVALID;
+    RTFieldAccess aAccess = RTFieldAccess::INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -878,7 +878,7 @@ const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
 
 RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index)
 {
-    RTFieldAccess aAccess = RT_ACCESS_INVALID;
+    RTFieldAccess aAccess = RTFieldAccess::INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1519,7 +1519,7 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RT_ACCESS_INVALID;
+    if (pEntry == NULL) return RTFieldAccess::INVALID;
 
     return pEntry->m_pFields->getFieldAccess(index);
 }
@@ -1815,7 +1815,7 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(void * hEntry, s
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RT_ACCESS_INVALID;
+    if (pEntry == NULL) return RTFieldAccess::INVALID;
 
     return pEntry->m_pReferences->getReferenceAccess(index);
 }

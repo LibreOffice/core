@@ -216,7 +216,7 @@ public:
                                     const rtl::OUString&  name,
                                     RTReferenceType             refType,
                                     const rtl::OUString&  doku,
-                                    RTFieldAccess               access = RT_ACCESS_INVALID);
+                                    RTFieldAccess               access = RTFieldAccess::INVALID);
 
 protected:
 

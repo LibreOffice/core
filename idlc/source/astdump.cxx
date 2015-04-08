@@ -258,7 +258,7 @@ bool AstService::dump(RegistryKey& rKey)
             AstInterfaceMember * decl = static_cast<AstInterfaceMember *>(*i);
             writer.setReferenceData(
                 referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
-                (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                (decl->isOptional() ? RTFieldAccess::OPTIONAL : RTFieldAccess::INVALID),
                 OStringToOUString( decl->getRealInterface()->getRelativName(),
                                         RTL_TEXTENCODING_UTF8));
             break;
@@ -269,7 +269,7 @@ bool AstService::dump(RegistryKey& rKey)
             {
                 AstServiceMember * decl = static_cast<AstServiceMember *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
-                    (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                    (decl->isOptional() ? RTFieldAccess::OPTIONAL : RTFieldAccess::INVALID),
                     OStringToOUString(decl->getRealService()->getRelativName(),
                                            RTL_TEXTENCODING_UTF8));
             }
@@ -279,7 +279,7 @@ bool AstService::dump(RegistryKey& rKey)
             {
                 AstObserves * decl = static_cast<AstObserves *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
-                    RT_ACCESS_INVALID,
+                    RTFieldAccess::INVALID,
                     OStringToOUString( decl->getRealInterface()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));
                 break;
@@ -289,7 +289,7 @@ bool AstService::dump(RegistryKey& rKey)
             {
                 AstNeeds * decl = static_cast<AstNeeds *>(*i);
                 writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
-                    RT_ACCESS_INVALID,
+                    RTFieldAccess::INVALID,
                     OStringToOUString( decl->getRealService()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));
                 break;
@@ -326,46 +326,46 @@ bool AstService::dump(RegistryKey& rKey)
 bool AstAttribute::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex)
 {
-    RTFieldAccess accessMode = RT_ACCESS_INVALID;
+    RTFieldAccess accessMode = RTFieldAccess::INVALID;
 
     if (isReadonly())
     {
-        accessMode |= RT_ACCESS_READONLY;
+        accessMode |= RTFieldAccess::READONLY;
     } else
     {
-        accessMode |= RT_ACCESS_READWRITE;
+        accessMode |= RTFieldAccess::READWRITE;
     }
     if (isOptional())
     {
-        accessMode |= RT_ACCESS_OPTIONAL;
+        accessMode |= RTFieldAccess::OPTIONAL;
     }
     if (isBound())
     {
-        accessMode |= RT_ACCESS_BOUND;
+        accessMode |= RTFieldAccess::BOUND;
     }
     if (isMayBeVoid())
     {
-        accessMode |= RT_ACCESS_MAYBEVOID;
+        accessMode |= RTFieldAccess::MAYBEVOID;
     }
     if (isConstrained())
     {
-        accessMode |= RT_ACCESS_CONSTRAINED;
+        accessMode |= RTFieldAccess::CONSTRAINED;
     }
     if (isTransient())
     {
-        accessMode |= RT_ACCESS_TRANSIENT;
+        accessMode |= RTFieldAccess::TRANSIENT;
     }
     if (isMayBeAmbiguous())
     {
-        accessMode |= RT_ACCESS_MAYBEAMBIGUOUS;
+        accessMode |= RTFieldAccess::MAYBEAMBIGUOUS;
     }
     if (isMayBeDefault())
     {
-        accessMode |= RT_ACCESS_MAYBEDEFAULT;
+        accessMode |= RTFieldAccess::MAYBEDEFAULT;
     }
     if (isRemoveable())
     {
-        accessMode |= RT_ACCESS_REMOVABLE;
+        accessMode |= RTFieldAccess::REMOVABLE;
     }
 
     OUString name(OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));

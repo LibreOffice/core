@@ -351,7 +351,7 @@ public:
 };
 
 FieldEntry::FieldEntry()
-    : m_access(RT_ACCESS_INVALID)
+    : m_access(RTFieldAccess::INVALID)
     , m_constValueType(RT_TYPE_NONE)
 {
 }
@@ -481,7 +481,7 @@ public:
 
 ReferenceEntry::ReferenceEntry()
     : m_type(RT_REF_INVALID)
-    , m_access(RT_ACCESS_INVALID)
+    , m_access(RTFieldAccess::INVALID)
 {
 }
 
@@ -856,7 +856,7 @@ void TypeWriter::createBlop()
             cpIndexDoku2 = 0;
             cpIndexFileName2 = 0;
 
-            pBuffer += writeUINT16(pBuffer, m_fields[i].m_access);
+            pBuffer += writeUINT16(pBuffer, static_cast<sal_uInt16>(m_fields[i].m_access));
 
             if (!m_fields[i].m_name.isEmpty())
             {
@@ -1060,7 +1060,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexDoku2);
 
-            pBuffer += writeUINT16(pBuffer, m_references[i].m_access);
+            pBuffer += writeUINT16(pBuffer, static_cast<sal_uInt16>(m_references[i].m_access));
         }
     }
 

@@ -65,60 +65,60 @@ void test_coreReflection()
         writer.setFieldData(0, OUString("aConstBool"),
                             OUString("boolean"),
                             OUString("ich bin ein boolean"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
         writer.setFieldData(1, OUString("aConstByte"),
                             OUString("byte"),
                             OUString("ich bin ein byte"),
-                            OUString("DummyFile"),  RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
         writer.setFieldData(2, OUString("aConstShort"),
                             OUString("short"),
                             OUString("ich bin ein short"),
-                            OUString("DummyFile"),  RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT16;
         aConst.m_value.aUShort = 10;
         writer.setFieldData(3, OUString("aConstUShort"),
                             OUString("unsigned short"),
                             OUString("ich bin ein unsigned short"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT32;
         aConst.m_value.aLong = -100000;
         writer.setFieldData(4, OUString("aConstLong"),
                             OUString("long"),
                             OUString("ich bin ein long"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT32;
         aConst.m_value.aULong = 100000;
         writer.setFieldData(5, OUString("aConstULong"),
                             OUString("unsigned long"),
                             OUString("ich bin ein unsigned long"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT64;
         aConst.m_value.aHyper = -100000000;
         writer.setFieldData(6, OUString("aConstHyper"),
                             OUString("hyper"),
                             OUString("ich bin ein hyper"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT64;
         aConst.m_value.aUHyper = 100000000;
         writer.setFieldData(7, OUString("aConstULong"),
                             OUString("unsigned long"),
                             OUString("ich bin ein unsigned long"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_FLOAT;
         aConst.m_value.aFloat = -2e-10f;
         writer.setFieldData(8, OUString("aConstFloat"),
                             OUString("float"),
                             OUString("ich bin ein float"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_DOUBLE;
         aConst.m_value.aDouble = -2e-100; writer.setFieldData(9, OUString("aConstDouble"),
                                                               OUString("double"),
                                                               OUString("ich bin ein double"),
-                                                              OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                                                              OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_STRING;
         OUString tmpStr("dies ist ein unicode string");
         aConst.m_value.aString = tmpStr.getStr();
@@ -126,7 +126,7 @@ void test_coreReflection()
         writer.setFieldData(10, OUString("aConstString"),
                             OUString("string"),
                             OUString("ich bin ein string"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
@@ -167,13 +167,13 @@ void test_coreReflection()
 
         writer.setFieldData(0, OUString("asal_uInt32"),
                             OUString("unsigned long"),
-                            OUString(), OUString(), RT_ACCESS_READWRITE);
+                            OUString(), OUString(), RTFieldAccess::READWRITE);
         writer.setFieldData(1, OUString("aXInterface"),
                             OUString("stardiv/uno/XInterface"),
-                            OUString(), OUString(), RT_ACCESS_READWRITE);
+                            OUString(), OUString(), RTFieldAccess::READWRITE);
         writer.setFieldData(2, OUString("aSequence"),
                             OUString("[]ModuleA/EnumA"),
-                            OUString(), OUString(), RT_ACCESS_READWRITE);
+                            OUString(), OUString(), RTFieldAccess::READWRITE);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
@@ -196,11 +196,11 @@ void test_coreReflection()
 
         writer.setFieldData(0, OUString("ENUM_VAL_1"),
                             OUString(), OUString("ich bin ein enum value"),
-                            OUString(), RT_ACCESS_CONST, aConst);
+                            OUString(), RTFieldAccess::CONST, aConst);
 
         aConst.m_value.aULong = 10;
         writer.setFieldData(1, OUString("ENUM_VAL_2"),
-                            OUString(), OUString(), OUString(), RT_ACCESS_CONST, aConst);
+                            OUString(), OUString(), OUString(), RTFieldAccess::CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
@@ -222,17 +222,17 @@ void test_coreReflection()
         writer.setFileName(OUString("DummyFile"));
 
         writer.setFieldData(0, OUString("aString"),
-                            OUString("string"), OUString(), OUString(), RT_ACCESS_READWRITE);
+                            OUString("string"), OUString(), OUString(), RTFieldAccess::READWRITE);
         writer.setFieldData(1, OUString("aStruct"),
                             OUString("ModuleA/StructA"),
-                            OUString(), OUString(), RT_ACCESS_READONLY);
+                            OUString(), OUString(), RTFieldAccess::READONLY);
         writer.setFieldData(2, OUString("aEnum"),
-                            OUString("ModuleA/EnumA"), OUString(), OUString(), RT_ACCESS_BOUND);
+                            OUString("ModuleA/EnumA"), OUString(), OUString(), RTFieldAccess::BOUND);
         aConst.m_type = RT_TYPE_UINT16;
         aConst.m_value.aUShort = 12;
         writer.setFieldData(3, OUString("aConstUShort"),
                             OUString("unsigned short"), OUString(),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
 
         writer.setMethodData(0, OUString("methodA"),
                              OUString("double"), RT_MODE_TWOWAY, 2, 1,
@@ -278,7 +278,7 @@ void test_coreReflection()
         writer.setFieldData(0, OUString("aSource"),
                             OUString("stardiv/uno/XInterface"),
                             OUString("ich bin ein interface member"),
-                            OUString(), RT_ACCESS_READWRITE);
+                            OUString(), RTFieldAccess::READWRITE);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
@@ -297,11 +297,11 @@ void test_coreReflection()
         writer.setFieldData(0, OUString("aProperty"),
                             OUString("stardiv/uno/XInterface"),
                             OUString("ich bin eine property"),
-                            OUString(), RT_ACCESS_READWRITE);
+                            OUString(), RTFieldAccess::READWRITE);
 
         writer.setReferenceData(0, OUString("ModuleA/XInterfaceA"), RT_REF_SUPPORTS,
                                 OUString("Hallo ich eine Reference auf ein supported interface"),
-                                RT_ACCESS_OPTIONAL);
+                                RTFieldAccess::OPTIONAL);
         writer.setReferenceData(1, OUString("ModuleA/XInterfaceA"), RT_REF_OBSERVES,
                                 OUString("Hallo ich eine Reference auf ein observed interface"));
         writer.setReferenceData(2, OUString("ModuleA/ServiceB"), RT_REF_EXPORTS,
@@ -345,19 +345,19 @@ void test_coreReflection()
         writer.setFieldData(0, OUString("ConstantsA_aConstBool"),
                             OUString("boolean"),
                             OUString("ich bin ein boolean"),
-                            OUString("DummyFile"), RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
         writer.setFieldData(1, OUString("ConstantsA_aConstByte"),
                             OUString("byte"),
                             OUString("ich bin ein byte"),
-                            OUString("DummyFile"),  RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
         writer.setFieldData(2, OUString("ConstantsA_aConstShort"),
                             OUString("short"),
                             OUString("ich bin ein short"),
-                            OUString("DummyFile"),  RT_ACCESS_CONST, aConst);
+                            OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();

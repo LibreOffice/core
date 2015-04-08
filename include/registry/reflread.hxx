@@ -297,7 +297,7 @@ public:
 
     /** returns the access mode of the reference specified by index.
 
-        The only valid value is RT_ACCESS_OPTIONAL in the context of
+        The only valid value is RTFieldAccess::OPTIONAL in the context of
         references.
         @param index indicates the reference.
      */

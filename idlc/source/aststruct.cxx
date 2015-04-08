@@ -129,10 +129,10 @@ bool AstStruct::dump(RegistryKey& rKey)
             if ( pDecl->getNodeType() == NT_member )
             {
                 pMember = static_cast<AstMember*>(pDecl);
-                RTFieldAccess flags = RT_ACCESS_READWRITE;
+                RTFieldAccess flags = RTFieldAccess::READWRITE;
                 OString typeName;
                 if (pMember->getType()->getNodeType() == NT_type_parameter) {
-                    flags |= RT_ACCESS_PARAMETERIZED_TYPE;
+                    flags |= RTFieldAccess::PARAMETERIZED_TYPE;
                     typeName = pMember->getType()->getLocalName();
                 } else {
                     typeName = pMember->getType()->getRelativName();
@@ -153,7 +153,7 @@ bool AstStruct::dump(RegistryKey& rKey)
          i != m_typeParameters.end(); ++i)
     {
         aBlob.setReferenceData(
-            index++, emptyStr, RT_REF_TYPE_PARAMETER, RT_ACCESS_INVALID,
+            index++, emptyStr, RT_REF_TYPE_PARAMETER, RTFieldAccess::INVALID,
             OStringToOUString(
                 (*i)->getLocalName(), RTL_TEXTENCODING_UTF8));
     }

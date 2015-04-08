@@ -207,7 +207,7 @@ bool AstInterface::dump(RegistryKey& rKey)
         if (i->isOptional()) {
             aBlob.setReferenceData(
                 referenceIndex++, i->getDocumentation(), RT_REF_SUPPORTS,
-                RT_ACCESS_OPTIONAL,
+                RTFieldAccess::OPTIONAL,
                 OStringToOUString(
                     i->getInterface()->getRelativName(),
                     RTL_TEXTENCODING_UTF8));

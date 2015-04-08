@@ -300,8 +300,8 @@ rtl::Reference< Entity > readEntity(
                 attrs.push_back(
                     InterfaceTypeEntity::Attribute(
                         attrName, reader.getFieldTypeName(j).replace('/', '.'),
-                        (flags & RT_ACCESS_BOUND) != 0,
-                        (flags & RT_ACCESS_READONLY) != 0, getExcs, setExcs,
+                        bool(flags & RTFieldAccess::BOUND),
+                        bool(flags & RTFieldAccess::READONLY), getExcs, setExcs,
                         translateAnnotations(reader.getFieldDocumentation(j))));
             }
             std::vector< InterfaceTypeEntity::Method > meths;
@@ -422,9 +422,8 @@ rtl::Reference< Entity > readEntity(
                         PolymorphicStructTypeTemplateEntity::Member(
                             reader.getFieldName(j),
                             reader.getFieldTypeName(j).replace('/', '.'),
-                            ((reader.getFieldFlags(j)
-                              & RT_ACCESS_PARAMETERIZED_TYPE)
-                             != 0),
+                            bool(reader.getFieldFlags(j)
+                                 & RTFieldAccess::PARAMETERIZED_TYPE),
                             translateAnnotations(
                                 reader.getFieldDocumentation(j))));
                 }
@@ -514,8 +513,7 @@ rtl::Reference< Entity > readEntity(
                             reader.getReferenceDocumentation(j)));
                     switch (reader.getReferenceSort(j)) {
                     case RT_REF_EXPORTS:
-                        if ((reader.getReferenceFlags(j) & RT_ACCESS_OPTIONAL)
-                            == 0)
+                        if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
                             mandServs.push_back(base);
                         } else {
@@ -523,8 +521,7 @@ rtl::Reference< Entity > readEntity(
                         }
                         break;
                     case RT_REF_SUPPORTS:
-                        if ((reader.getReferenceFlags(j) & RT_ACCESS_OPTIONAL)
-                            == 0)
+                        if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
                             mandIfcs.push_back(base);
                         } else {
@@ -545,39 +542,39 @@ rtl::Reference< Entity > readEntity(
                 for (sal_uInt16 j = 0; j != n; ++j) {
                     RTFieldAccess acc = reader.getFieldFlags(j);
                     int attrs = 0;
-                    if ((acc & RT_ACCESS_READONLY) != 0) {
+                    if (acc & RTFieldAccess::READONLY) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_READ_ONLY;
                     }
-                    if ((acc & RT_ACCESS_OPTIONAL) != 0) {
+                    if (acc & RTFieldAccess::OPTIONAL) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_OPTIONAL;
                     }
-                    if ((acc & RT_ACCESS_MAYBEVOID) != 0) {
+                    if (acc & RTFieldAccess::MAYBEVOID) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_MAYBE_VOID;
                     }
-                    if ((acc & RT_ACCESS_BOUND) != 0) {
+                    if (acc & RTFieldAccess::BOUND) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_BOUND;
                     }
-                    if ((acc & RT_ACCESS_CONSTRAINED) != 0) {
+                    if (acc & RTFieldAccess::CONSTRAINED) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_CONSTRAINED;
                     }
-                    if ((acc & RT_ACCESS_TRANSIENT) != 0) {
+                    if (acc & RTFieldAccess::TRANSIENT) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_TRANSIENT;
                     }
-                    if ((acc & RT_ACCESS_MAYBEAMBIGUOUS) != 0) {
+                    if (acc & RTFieldAccess::MAYBEAMBIGUOUS) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_MAYBE_AMBIGUOUS;
                     }
-                    if ((acc & RT_ACCESS_MAYBEDEFAULT) != 0) {
+                    if (acc & RTFieldAccess::MAYBEDEFAULT) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_MAYBE_DEFAULT;
                     }
-                    if ((acc & RT_ACCESS_REMOVABLE) != 0) {
+                    if (acc & RTFieldAccess::REMOVABLE) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_REMOVABLE;
                     }

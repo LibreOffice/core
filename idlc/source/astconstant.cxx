@@ -114,7 +114,7 @@ bool AstConstant::dumpBlob(
 
     rBlob.setFieldData(
         index, getDocumentation(), OUString(),
-        RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
+        RTFieldAccess::CONST | (published ? RTFieldAccess::PUBLISHED : RTFieldAccess::NONE),
         OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
 
     return true;

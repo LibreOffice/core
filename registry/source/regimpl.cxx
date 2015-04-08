@@ -73,7 +73,7 @@ void printString(OUString const & s) {
 void printFieldOrReferenceFlag(
     RTFieldAccess * flags, RTFieldAccess flag, char const * name, bool * first)
 {
-    if ((*flags & flag) != 0) {
+    if ((*flags & flag) != RTFieldAccess::NONE) {
         if (!*first) {
             printf("|");
         }
@@ -84,39 +84,39 @@ void printFieldOrReferenceFlag(
 }
 
 void printFieldOrReferenceFlags(RTFieldAccess flags) {
-    if (flags == 0) {
+    if (flags == RTFieldAccess::NONE) {
         printf("none");
     } else {
         bool first = true;
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_READONLY, "readonly", &first);
+            &flags, RTFieldAccess::READONLY, "readonly", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_OPTIONAL, "optional", &first);
+            &flags, RTFieldAccess::OPTIONAL, "optional", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_MAYBEVOID, "maybevoid", &first);
-        printFieldOrReferenceFlag(&flags, RT_ACCESS_BOUND, "bound", &first);
+            &flags, RTFieldAccess::MAYBEVOID, "maybevoid", &first);
+        printFieldOrReferenceFlag(&flags, RTFieldAccess::BOUND, "bound", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_CONSTRAINED, "constrained", &first);
+            &flags, RTFieldAccess::CONSTRAINED, "constrained", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_TRANSIENT, "transient", &first);
+            &flags, RTFieldAccess::TRANSIENT, "transient", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_MAYBEAMBIGUOUS, "maybeambiguous", &first);
+            &flags, RTFieldAccess::MAYBEAMBIGUOUS, "maybeambiguous", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_MAYBEDEFAULT, "maybedefault", &first);
+            &flags, RTFieldAccess::MAYBEDEFAULT, "maybedefault", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_REMOVABLE, "removable", &first);
+            &flags, RTFieldAccess::REMOVABLE, "removable", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_ATTRIBUTE, "attribute", &first);
+            &flags, RTFieldAccess::ATTRIBUTE, "attribute", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_PROPERTY, "property", &first);
-        printFieldOrReferenceFlag(&flags, RT_ACCESS_CONST, "const", &first);
+            &flags, RTFieldAccess::PROPERTY, "property", &first);
+        printFieldOrReferenceFlag(&flags, RTFieldAccess::CONST, "const", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_READWRITE, "readwrite", &first);
+            &flags, RTFieldAccess::READWRITE, "readwrite", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_PARAMETERIZED_TYPE, "parameterized type", &first);
+            &flags, RTFieldAccess::PARAMETERIZED_TYPE, "parameterized type", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_PUBLISHED, "published", &first);
-        if (flags != 0) {
+            &flags, RTFieldAccess::PUBLISHED, "published", &first);
+        if (flags != RTFieldAccess::NONE) {
             if (!first) {
                 printf("|");
             }

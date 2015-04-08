@@ -21,6 +21,7 @@
 #define INCLUDED_REGISTRY_TYPES_H
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #ifdef __cplusplus
 extern "C" {
@@ -114,77 +115,82 @@ enum RTTypeClass {
     Fields in a type blob are used for different types.  Among others they were
     used for properties of services and these properties can have several flags.
 
-    @see RT_ACCESS_INVALID
-    @see RT_ACCESS_READONLY
-    @see RT_ACCESS_OPTIONAL
-    @see RT_ACCESS_MAYBEVOID
-    @see RT_ACCESS_BOUND
-    @see RT_ACCESS_CONSTRAINED
-    @see RT_ACCESS_TRANSIENT
-    @see RT_ACCESS_MAYBEAMBIGUOUS
-    @see RT_ACCESS_MAYBEDEFAULT
-    @see RT_ACCESS_REMOVABLE
-    @see RT_ACCESS_ATTRIBUTE
-    @see RT_ACCESS_PROPERTY
-    @see RT_ACCESS_CONST
-    @see RT_ACCESS_READWRITE
-    @see RT_ACCESS_DEFAULT
-    @see RT_ACCESS_PARAMETERIZED_TYPE
-    @see RT_ACCESS_PUBLISHED
+    @see RTFieldAccess::INVALID
+    @see RTFieldAccess::READONLY
+    @see RTFieldAccess::OPTIONAL
+    @see RTFieldAccess::MAYBEVOID
+    @see RTFieldAccess::BOUND
+    @see RTFieldAccess::CONSTRAINED
+    @see RTFieldAccess::TRANSIENT
+    @see RTFieldAccess::MAYBEAMBIGUOUS
+    @see RTFieldAccess::MAYBEDEFAULT
+    @see RTFieldAccess::REMOVABLE
+    @see RTFieldAccess::ATTRIBUTE
+    @see RTFieldAccess::PROPERTY
+    @see RTFieldAccess::CONST
+    @see RTFieldAccess::READWRITE
+    @see RTFieldAccess::DEFAULT
+    @see RTFieldAccess::PARAMETERIZED_TYPE
+    @see RTFieldAccess::PUBLISHED
  */
-typedef sal_uInt16 RTFieldAccess;
+enum class RTFieldAccess
+{
+    NONE        = 0x0000,
+    /// specifies a unknown flag
+    INVALID     = 0x0000,
+    /// specifies a readonly property/attribute
+    READONLY    = 0x0001,
+    /// specifies a property as optional that means that it must not be implemented.
+    OPTIONAL    = 0x0002,
+    /// @see com::sun::star::beans::PropertyAttribute
+    MAYBEVOID   = 0x0004,
+    /// @see com::sun::star::beans::PropertyAttribute
+    BOUND       = 0x0008,
+    /// @see com::sun::star::beans::PropertyAttribute
+    CONSTRAINED = 0x0010,
+    /// @see com::sun::star::beans::PropertyAttribute
+    TRANSIENT   = 0x0020,
+    /// @see com::sun::star::beans::PropertyAttribute
+    MAYBEAMBIGUOUS = 0x0040,
+    /// @see com::sun::star::beans::PropertyAttribute
+    MAYBEDEFAULT = 0x0080,
+    /// @see com::sun::star::beans::PropertyAttribute
+    REMOVABLE   = 0x0100,
+    /// @see com::sun::star::beans::PropertyAttribute
+    ATTRIBUTE   = 0x0200,
+    /// specifies that the field is a property
+    PROPERTY    = 0x0400,
+    /// specifies that the field is a constant or enum value
+    CONST       = 0x0800,
+    /// specifies that the property/attribute has read/write access
+    READWRITE   = 0x1000,
+    /// only to describe a union default label
+    DEFAULT     = 0x2000,
+    /**
+       Indicates that a member of a polymorphic struct type template is of a
+       parameterized type.
 
-/// specifies a unknown flag
-#define RT_ACCESS_INVALID 0x0000
-/// specifies a readonly property/attribute
-#define RT_ACCESS_READONLY 0x0001
-/// specifies a property as optional that means that it must not be implemented.
-#define RT_ACCESS_OPTIONAL 0x0002
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_MAYBEVOID 0x0004
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_BOUND 0x0008
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_CONSTRAINED 0x0010
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_TRANSIENT 0x0020
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_MAYBEAMBIGUOUS 0x0040
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_MAYBEDEFAULT 0x0080
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_REMOVABLE 0x0100
-/// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_ATTRIBUTE 0x0200
-/// specifies that the field is a property
-#define RT_ACCESS_PROPERTY 0x0400
-/// specifies that the field is a constant or enum value
-#define RT_ACCESS_CONST 0x0800
-/// specifies that the property/attribute has read/write access
-#define RT_ACCESS_READWRITE 0x1000
-/// only to describe a union default label
-#define RT_ACCESS_DEFAULT 0x2000
+       Only valid for fields that represent members of polymorphic struct type
+       templates.
 
-/**
-   Indicates that a member of a polymorphic struct type template is of a
-   parameterized type.
+       @since UDK 3.2.0
+     */
+    PARAMETERIZED_TYPE = 0x4000,
+    /**
+       Flag for published individual constants.
 
-   Only valid for fields that represent members of polymorphic struct type
-   templates.
+       Used in combination with RTFieldAccess::CONST for individual constants (which are
+       not members of constant groups).
 
-   @since UDK 3.2.0
- */
-#define RT_ACCESS_PARAMETERIZED_TYPE 0x4000
+       @since UDK 3.2.0
+     */
+    PUBLISHED = 0x8000,
 
-/**
-   Flag for published individual constants.
-
-   Used in combination with RT_ACCESS_CONST for individual constants (which are
-   not members of constant groups).
-
-   @since UDK 3.2.0
- */
-#define RT_ACCESS_PUBLISHED 0x8000
+};
+namespace o3tl
+{
+    template<> struct typed_flags<RTFieldAccess> : is_typed_flags<RTFieldAccess, 0xffff> {};
+}
 
 /** specifies the type of a field value.
 
