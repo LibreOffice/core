@@ -319,7 +319,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         if (eEnc == RTL_TEXTENCODING_DONTKNOW)
             return NULL;
 
-        sal_uInt16 ct = capitalType(aWord, pCC);
+        CapType ct = capitalType(aWord, pCC);
 
         // first convert any smart quotes or apostrophes to normal ones
         OUStringBuffer rBuf(aWord);
@@ -444,12 +444,12 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 OUString repHyph;
                 switch (ct)
                 {
-                    case CAPTYPE_ALLCAP:
+                    case CapType::ALLCAP:
                     {
                         repHyph = makeUpperCase(repHyphlow, pCC);
                         break;
                     }
-                    case CAPTYPE_INITCAP:
+                    case CapType::INITCAP:
                     {
                         if (nHyphenationPosAlt == -1)
                             repHyph = makeInitCap(repHyphlow, pCC);

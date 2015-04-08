@@ -428,8 +428,8 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 bRes = !xTmp->isNegative();
             } else {
                 setCharClass(LanguageTag(nLanguage));
-                sal_uInt16 ct = capitalType(aChkWord, pCharClass);
-                if (ct == CAPTYPE_INITCAP || ct == CAPTYPE_ALLCAP) {
+                CapType ct = capitalType(aChkWord, pCharClass);
+                if (ct == CapType::INITCAP || ct == CapType::ALLCAP) {
                     Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, pCharClass), nLanguage ) );
                     if (xTmp2.is()) {
                         bRes = !xTmp2->isNegative();
@@ -672,8 +672,8 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             else
             {
                 setCharClass(LanguageTag(nLanguage));
-                sal_uInt16 ct = capitalType(aChkWord, pCharClass);
-                if (ct == CAPTYPE_INITCAP || ct == CAPTYPE_ALLCAP)
+                CapType ct = capitalType(aChkWord, pCharClass);
+                if (ct == CapType::INITCAP || ct == CapType::ALLCAP)
                 {
                     Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, pCharClass), nLanguage ) );
                     if (xTmp2.is())
@@ -691,10 +691,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                             {
                                 switch ( ct )
                                 {
-                                    case CAPTYPE_INITCAP:
+                                    case CapType::INITCAP:
                                         aProposalList.Prepend( pCharClass->titlecase(aAddRplcTxt) );
                                         break;
-                                    case CAPTYPE_ALLCAP:
+                                    case CapType::ALLCAP:
                                         aProposalList.Prepend( pCharClass->uppercase(aAddRplcTxt) );
                                         break;
                                     default:

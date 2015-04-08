@@ -69,13 +69,13 @@ enum class DictionaryError
 };
 
 // values asigned to capitalization types
-enum CapType
+enum class CapType
 {
-    CAPTYPE_UNKNOWN,
-    CAPTYPE_NOCAP,
-    CAPTYPE_INITCAP,
-    CAPTYPE_ALLCAP,
-    CAPTYPE_MIXED
+    UNKNOWN,
+    NOCAP,
+    INITCAP,
+    ALLCAP,
+    MIXED
 };
 
 LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();

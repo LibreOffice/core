@@ -622,16 +622,16 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
             }
 
             if (nc == 0)
-                return CAPTYPE_NOCAP;
+                return CapType::NOCAP;
             if (nc == tlen)
-                return CAPTYPE_ALLCAP;
+                return CapType::ALLCAP;
             if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
                   ::com::sun::star::i18n::KCharacterType::UPPER))
-                return CAPTYPE_INITCAP;
+                return CapType::INITCAP;
 
-            return CAPTYPE_MIXED;
+            return CapType::MIXED;
         }
-        return CAPTYPE_UNKNOWN;
+        return CapType::UNKNOWN;
 }
 
 OUString ToLower( const OUString &rText, sal_Int16 nLanguage )

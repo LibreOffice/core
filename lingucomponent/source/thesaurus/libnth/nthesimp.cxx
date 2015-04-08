@@ -285,7 +285,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
 
     OUString rTerm(qTerm);
     OUString pTerm(qTerm);
-    sal_uInt16 ct = CAPTYPE_UNKNOWN;
+    CapType ct = CapType::UNKNOWN;
     sal_Int32 stem = 0;
     sal_Int32 stem2 = 0;
 
@@ -424,16 +424,16 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                         }
                     }
 
-                    sal_uInt16 ct1 = capitalType(sTerm, pCC);
-                    if (CAPTYPE_MIXED == ct1)
+                    CapType ct1 = capitalType(sTerm, pCC);
+                    if (CapType::MIXED == ct1)
                         ct = ct1;
                     OUString cTerm;
                     switch (ct)
                     {
-                        case CAPTYPE_ALLCAP:
+                        case CapType::ALLCAP:
                             cTerm = makeUpperCase(sTerm, pCC);
                             break;
-                        case CAPTYPE_INITCAP:
+                        case CapType::INITCAP:
                             cTerm = makeInitCap(sTerm, pCC);
                             break;
                         default:
