@@ -4818,11 +4818,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                    {
-                        /* TODO: add RefData with deleted rows to generate
-                         * #REF! error? */
                         bAddRange = false;
-                    }
                     bForwardToClose = true;
                 }
                 break;
@@ -4840,11 +4836,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aStart.IncRow();
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                    {
-                        /* TODO: add RefData with deleted rows to generate
-                         * #REF! error? */
                         bAddRange = false;
-                    }
                     bForwardToClose = true;
                 }
                 break;
@@ -4856,11 +4848,7 @@ bool ScCompiler::HandleTableRef()
                         aRange.aEnd.SetRow( aPos.Row());
                     }
                     else
-                    {
-                        /* TODO: add RefData with deleted rows to generate
-                         * #REF! error? */
                         bAddRange = false;
-                    }
                     bForwardToClose = true;
                 }
                 break;
@@ -4871,6 +4859,10 @@ bool ScCompiler::HandleTableRef()
             aRefData.InitFlags();
             aRefData.SetRange( aRange, aPos);
             pNew->AddDoubleReference( aRefData );
+        }
+        else
+        {
+            SetError( errNoRef);
         }
         if (bForwardToClose)
         {
