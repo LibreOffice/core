@@ -2356,7 +2356,7 @@ throw (uno::RuntimeException, std::exception)
 
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
-    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange( *pCursor->GetPaM(), rPos, false );
+    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange( *pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
