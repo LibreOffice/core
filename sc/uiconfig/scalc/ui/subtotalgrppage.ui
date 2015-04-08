@@ -24,6 +24,9 @@
         <col id="0" translatable="yes">Min</col>
       </row>
       <row>
+        <col id="0" translatable="yes">Product</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">Count (numbers only)</col>
       </row>
       <row>
