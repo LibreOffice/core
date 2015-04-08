@@ -67,7 +67,6 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, sal_Char***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeValueList)      (RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *getKeyType)         (RegKeyHandle, rtl_uString*, RegKeyType*);
     RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *getKeyNames)        (RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
@@ -604,15 +603,6 @@ public:
      */
     inline RegError deleteLink(const rtl::OUString& linkName);
 
-    /** returns the type of the specified key.
-
-        @param name specifies the name of the key or link.
-        @param pKeyType returns the type of the key (always RG_KEYTYPE).
-        @return REG_NO_ERROR if succeeds else an error code.
-     */
-    inline RegError getKeyType(const rtl::OUString& name,
-                                  RegKeyType* pKeyType) const;
-
     /** used to return the target of a link.
 
         @deprecated Links are no longer supported.
@@ -1095,15 +1085,6 @@ inline RegError RegistryKey::deleteLink(const rtl::OUString& )
     {
         if (m_registry.isValid())
             return REG_INVALID_LINK; // links are no longer supported
-        else
-            return REG_INVALID_KEY;
-    }
-
-inline RegError RegistryKey::getKeyType(const rtl::OUString& keyName,
-                                              RegKeyType* pKeyType) const
-    {
-        if (m_registry.isValid())
-            return m_registry.m_pApi->getKeyType(m_hImpl, keyName.pData, pKeyType);
         else
             return REG_INVALID_KEY;
     }

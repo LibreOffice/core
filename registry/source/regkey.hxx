@@ -56,7 +56,6 @@ RegError REGISTRY_CALLTYPE getStringListValue(
 RegError REGISTRY_CALLTYPE getUnicodeListValue(
     RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
 RegError REGISTRY_CALLTYPE freeValueList(RegValueType, RegValue, sal_uInt32);
-RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle, rtl_uString*, RegKeyType*);
 RegError REGISTRY_CALLTYPE getResolvedKeyName(
     RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
 RegError REGISTRY_CALLTYPE getKeyNames(

@@ -975,28 +975,6 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 }
 
 
-//  getKeyType()
-
-RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
-{
-    *pKeyType = RG_KEYTYPE;
-
-    REG_GUARD(m_pRegistry->m_mutex);
-
-    if ( !name.isEmpty() )
-    {
-        ORegKey* pThis = const_cast< ORegKey* >(this);
-
-        RegKeyHandle hKey = 0;
-        RegError _ret = pThis->openKey(name, &hKey);
-        if (_ret != REG_NO_ERROR)
-            return _ret;
-        (void) pThis->releaseKey(hKey);
-    }
-
-    return REG_NO_ERROR;
-}
-
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
                                      OUString& resolvedName)
 {

@@ -283,22 +283,6 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueTyp
                                                   RegValue pValueList,
                                                   sal_uInt32 len);
 
-/** This function returns the type of a key.
-
-    The registry differentiates two possible types:
-    - RG_KEYTYPE represents a real key
-    - RG_LINKTYPE used to represent a link (no longer used)
-    @param[in]  hKey identifies a currently open key. The key specified by keyName is a subkey
-                 of the key identified by hKey.
-    @param[in]  keyName points to a null terminated string specifying the name of the key which keytype
-                    will be returned.
-    @param[out]  pKeyType returns the type of the key.
-    @return REG_NO_ERROR if succeeds else an error code.
-*/
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
-                                          rtl_uString* keyName,
-                                             RegKeyType* pKeyType);
-
 /** This function resolves a keyname.
 
     @param[in]  hKey identifies a currently open key. The key specified by keyName is a subkey

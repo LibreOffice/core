@@ -48,20 +48,6 @@ namespace o3tl
     template<> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x07> {};
 }
 
-/** defines the type of a registry key.
-
-    The registry differs between normal keys which can contain subkeys or
-    a value and link keys which navigate over the linktarget to an existing
-    other key (which are no longer supported).
-*/
-enum SAL_DLLPUBLIC_RTTI RegKeyType
-{
-    /// represents a real key
-    RG_KEYTYPE,
-    /// represents a link (which is no longer supported)
-    RG_LINKTYPE
-};
-
 /** defines the type of a key value.
 
     A registry key can contain a value which has one of seven different types.
