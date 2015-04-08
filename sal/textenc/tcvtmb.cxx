@@ -87,112 +87,117 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
             /* Source buffer to small */
             if ( pSrcBuf +1 == pEndSrcBuf )
             {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
-                break;
-            }
-
-            pSrcBuf++;
-            cTrail = (unsigned char)*pSrcBuf;
-            if ( (cTrail >= pLeadEntry->mnTrailStart) && (cTrail <= pLeadEntry->mnTrailEnd) )
-                cConv = pLeadEntry->mpToUniTrailTab[cTrail-pLeadEntry->mnTrailStart];
-            else
-                cConv = 0;
-
-            if ( !cConv )
-            {
-                /* EUDC Ranges */
-                sal_uInt16              i;
-                const ImplDBCSEUDCData* pEUDCTab = pConvertData->mpEUDCTab;
-                for ( i = 0; i < pConvertData->mnEUDCCount; i++ )
+                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0 )
                 {
-                    if ( (cLead >= pEUDCTab->mnLeadStart) &&
-                         (cLead <= pEUDCTab->mnLeadEnd) )
+                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                    break;
+                }
+            }
+            else
+            {
+                pSrcBuf++;
+                cTrail = (unsigned char)*pSrcBuf;
+                if ( (cTrail >= pLeadEntry->mnTrailStart) && (cTrail <= pLeadEntry->mnTrailEnd) )
+                    cConv = pLeadEntry->mpToUniTrailTab[cTrail-pLeadEntry->mnTrailStart];
+                else
+                    cConv = 0;
+
+                if ( !cConv )
+                {
+                    /* EUDC Ranges */
+                    sal_uInt16              i;
+                    const ImplDBCSEUDCData* pEUDCTab = pConvertData->mpEUDCTab;
+                    for ( i = 0; i < pConvertData->mnEUDCCount; i++ )
                     {
-                        if ( (cTrail >= pEUDCTab->mnTrail1Start) &&
-                             (cTrail <= pEUDCTab->mnTrail1End) )
+                        if ( (cLead >= pEUDCTab->mnLeadStart) &&
+                             (cLead <= pEUDCTab->mnLeadEnd) )
                         {
-                            cConv = pEUDCTab->mnUniStart+
-                                    ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
-                                    (cTrail-pEUDCTab->mnTrail1Start);
-                            break;
-                        }
-                        else
-                        {
-                            sal_uInt16 nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
-                            if ( (pEUDCTab->mnTrailCount >= 2) &&
-                                 (cTrail >= pEUDCTab->mnTrail2Start) &&
-                                 (cTrail <= pEUDCTab->mnTrail2End) )
+                            if ( (cTrail >= pEUDCTab->mnTrail1Start) &&
+                                 (cTrail <= pEUDCTab->mnTrail1End) )
                             {
                                 cConv = pEUDCTab->mnUniStart+
-                                        ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
-                                        nTrailCount+
-                                        (cTrail-pEUDCTab->mnTrail2Start);
+                                    ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
+                                    (cTrail-pEUDCTab->mnTrail1Start);
                                 break;
                             }
                             else
                             {
-                                nTrailCount = pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1;
-                                if ( (pEUDCTab->mnTrailCount >= 3) &&
-                                     (cTrail >= pEUDCTab->mnTrail3Start) &&
-                                     (cTrail <= pEUDCTab->mnTrail3End) )
+                                sal_uInt16 nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
+                                if ( (pEUDCTab->mnTrailCount >= 2) &&
+                                     (cTrail >= pEUDCTab->mnTrail2Start) &&
+                                     (cTrail <= pEUDCTab->mnTrail2End) )
                                 {
                                     cConv = pEUDCTab->mnUniStart+
+                                        ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
+                                        nTrailCount+
+                                        (cTrail-pEUDCTab->mnTrail2Start);
+                                    break;
+                                }
+                                else
+                                {
+                                    nTrailCount = pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1;
+                                    if ( (pEUDCTab->mnTrailCount >= 3) &&
+                                         (cTrail >= pEUDCTab->mnTrail3Start) &&
+                                         (cTrail <= pEUDCTab->mnTrail3End) )
+                                    {
+                                        cConv = pEUDCTab->mnUniStart+
                                             ((cLead-pEUDCTab->mnLeadStart)*pEUDCTab->mnTrailRangeCount)+
                                             nTrailCount+
                                             (cTrail-pEUDCTab->mnTrail3Start);
-                                    break;
+                                        break;
+                                    }
                                 }
                             }
                         }
+
+                        pEUDCTab++;
                     }
 
-                    pEUDCTab++;
-                }
+                    if ( !cConv )
+                    {
+                        /* We compare the full range of the trail we defined, */
+                        /* which can often be greater than the limit. We do this */
+                        /* so that extensions that don't consider encodings */
+                        /* correctly treat double-byte characters as a single */
+                        /* character as much as possible. */
 
-                if ( !cConv )
+                        if (cLead < pConvertData->mnLeadStart
+                            || cLead > pConvertData->mnLeadEnd
+                            || cTrail < pConvertData->mnTrailStart
+                            || cTrail > pConvertData->mnTrailEnd)
+                        {
+                            *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
+                            if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
+                            {
+                                *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
+                                break;
+                            }
+                            else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
+                            {
+                                pSrcBuf++;
+                                continue;
+                            }
+                            else
+                                cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
+                        }
+                    }
+                }
+            }
+            if ( !cConv )
+            {
+                *pInfo |= RTL_TEXTTOUNICODE_INFO_MBUNDEFINED;
+                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR )
                 {
-                    /* We compare the full range of the trail we defined, */
-                    /* which can often be greater than the limit. We do this */
-                    /* so that extensions that don't consider encodings */
-                    /* correctly treat double-byte characters as a single */
-                    /* character as much as possible. */
-
-                    if (cLead < pConvertData->mnLeadStart
-                        || cLead > pConvertData->mnLeadEnd
-                        || cTrail < pConvertData->mnTrailStart
-                        || cTrail > pConvertData->mnTrailEnd)
-                    {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                        if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                        {
-                            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                            break;
-                        }
-                        else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                        {
-                            pSrcBuf++;
-                            continue;
-                        }
-                        else
-                            cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                    }
-                    else
-                    {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_MBUNDEFINED;
-                        if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR )
-                        {
-                            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                            break;
-                        }
-                        else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
-                        {
-                            pSrcBuf++;
-                            continue;
-                        }
-                        else
-                            cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                    }
+                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
+                    break;
                 }
+                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
+                {
+                    pSrcBuf++;
+                    continue;
+                }
+                else
+                    cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
             }
         }
 
