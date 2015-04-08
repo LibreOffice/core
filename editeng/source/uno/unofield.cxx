@@ -364,6 +364,10 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             case text::textfield::Type::MEASURE:
                 mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(static_cast<const SdrMeasureField*>(pData)->GetMeasureFieldKind());
                 break;
+
+            default:
+                SAL_WARN("editeng.uno", "Id service unknown: " << mnServiceId);
+                break;
             }
         }
     }
