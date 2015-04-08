@@ -475,15 +475,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 static bool bMerge = false;
                 sal_uInt16 nRet = USHRT_MAX;
 
-                sal_uInt16 nFlags = bFrame ? SFX_LOAD_FRAME_STYLES : 0;
+                SfxTemplateFlags nFlags = bFrame ? SfxTemplateFlags::LOAD_FRAME_STYLES : SfxTemplateFlags::NONE;
                 if(bPage)
-                    nFlags|= SFX_LOAD_PAGE_STYLES;
+                    nFlags |= SfxTemplateFlags::LOAD_PAGE_STYLES;
                 if(bNum)
-                    nFlags|= SFX_LOAD_NUM_STYLES;
-                if(!nFlags || bText)
-                    nFlags|= SFX_LOAD_TEXT_STYLES;
+                    nFlags |= SfxTemplateFlags::LOAD_NUM_STYLES;
+                if(nFlags == SfxTemplateFlags::NONE || bText)
+                    nFlags |= SfxTemplateFlags::LOAD_TEXT_STYLES;
                 if(bMerge)
-                    nFlags|= SFX_MERGE_STYLES;
+                    nFlags |= SfxTemplateFlags::MERGE_STYLES;
 
                 if ( pArgs )
                 {
@@ -493,7 +493,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aFileName = pTemplateItem->GetValue();
                         SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, false );
                         if ( pFlagsItem )
-                            nFlags = (sal_uInt16) pFlagsItem->GetValue();
+                            nFlags = static_cast<SfxTemplateFlags>((sal_uInt16) pFlagsItem->GetValue());
                     }
                 }
 
@@ -570,12 +570,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( !aFileName.isEmpty() )
                 {
                     SwgReaderOption aOpt;
-                    aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
-                    aOpt.SetFrmFmts(    bFrame = (0 != (nFlags&SFX_LOAD_FRAME_STYLES)));
-                    aOpt.SetPageDescs(  bPage = (0 != (nFlags&SFX_LOAD_PAGE_STYLES )));
-                    aOpt.SetNumRules(   bNum = (0 != (nFlags&SFX_LOAD_NUM_STYLES  )));
+                    aOpt.SetTxtFmts(    bText  = bool(nFlags & SfxTemplateFlags::LOAD_TEXT_STYLES ));
+                    aOpt.SetFrmFmts(    bFrame = bool(nFlags & SfxTemplateFlags::LOAD_FRAME_STYLES));
+                    aOpt.SetPageDescs(  bPage  = bool(nFlags & SfxTemplateFlags::LOAD_PAGE_STYLES ));
+                    aOpt.SetNumRules(   bNum   = bool(nFlags & SfxTemplateFlags::LOAD_NUM_STYLES  ));
                     //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
-                    bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
+                    bMerge = bool(nFlags & SfxTemplateFlags::MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );
 
                     SetError( LoadStylesFromFile( aFileName, aOpt, false ), OUString( OSL_LOG_PREFIX ));

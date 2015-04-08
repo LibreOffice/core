@@ -165,8 +165,8 @@ public:
     bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 
-    sal_uInt16  GetTemplateFlags()const;
-    void    SetTemplateFlags(sal_uInt16 nSet);
+    SfxTemplateFlags GetTemplateFlags() const;
+    void             SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
@@ -340,27 +340,27 @@ OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
                               GetSelectedTemplatePos()-1);
 }
 
-sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
+SfxTemplateFlags  SfxNewFileDialog_Impl::GetTemplateFlags()const
 {
-    sal_uInt16 nRet = m_pTextStyleCB->IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
+    SfxTemplateFlags nRet = m_pTextStyleCB->IsChecked() ? SfxTemplateFlags::LOAD_TEXT_STYLES : SfxTemplateFlags::NONE;
     if(m_pFrameStyleCB->IsChecked())
-        nRet |= SFX_LOAD_FRAME_STYLES;
+        nRet |= SfxTemplateFlags::LOAD_FRAME_STYLES;
     if(m_pPageStyleCB->IsChecked())
-        nRet |= SFX_LOAD_PAGE_STYLES;
+        nRet |= SfxTemplateFlags::LOAD_PAGE_STYLES;
     if(m_pNumStyleCB->IsChecked())
-        nRet |= SFX_LOAD_NUM_STYLES;
+        nRet |= SfxTemplateFlags::LOAD_NUM_STYLES;
     if(m_pMergeStyleCB->IsChecked())
-        nRet |= SFX_MERGE_STYLES;
+        nRet |= SfxTemplateFlags::MERGE_STYLES;
     return nRet;
 }
 
-void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
+void    SfxNewFileDialog_Impl::SetTemplateFlags(SfxTemplateFlags nSet)
 {
-    m_pTextStyleCB->Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
-    m_pFrameStyleCB->Check( 0 != (nSet&SFX_LOAD_FRAME_STYLES));
-    m_pPageStyleCB->Check(  0 != (nSet&SFX_LOAD_PAGE_STYLES ));
-    m_pNumStyleCB->Check(   0 != (nSet&SFX_LOAD_NUM_STYLES  ));
-    m_pMergeStyleCB->Check( 0 != (nSet&SFX_MERGE_STYLES     ));
+    m_pTextStyleCB->Check(  bool(nSet & SfxTemplateFlags::LOAD_TEXT_STYLES ));
+    m_pFrameStyleCB->Check( bool(nSet & SfxTemplateFlags::LOAD_FRAME_STYLES));
+    m_pPageStyleCB->Check(  bool(nSet & SfxTemplateFlags::LOAD_PAGE_STYLES ));
+    m_pNumStyleCB->Check(   bool(nSet & SfxTemplateFlags::LOAD_NUM_STYLES  ));
+    m_pMergeStyleCB->Check( bool(nSet & SfxTemplateFlags::MERGE_STYLES     ));
 }
 
 
@@ -467,13 +467,12 @@ OUString SfxNewFileDialog::GetTemplateFileName() const
     return pImpl->GetTemplateFileName();
 }
 
-sal_uInt16 SfxNewFileDialog::GetTemplateFlags()const
+SfxTemplateFlags SfxNewFileDialog::GetTemplateFlags()const
 {
     return pImpl->GetTemplateFlags();
-
 }
 
-void    SfxNewFileDialog::SetTemplateFlags(sal_uInt16 nSet)
+void SfxNewFileDialog::SetTemplateFlags(SfxTemplateFlags nSet)
 {
     pImpl->SetTemplateFlags(nSet);
 }

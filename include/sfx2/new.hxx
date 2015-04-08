@@ -27,6 +27,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
 
@@ -38,11 +39,19 @@ class SfxObjectShell;
 #define SFXWB_PREVIEW 0x0003
 #define SFXWB_LOAD_TEMPLATE 0x0004
 
-#define SFX_LOAD_TEXT_STYLES    0x0001
-#define SFX_LOAD_FRAME_STYLES   0x0002
-#define SFX_LOAD_PAGE_STYLES    0x0004
-#define SFX_LOAD_NUM_STYLES     0x0008
-#define SFX_MERGE_STYLES        0x0010
+enum class SfxTemplateFlags
+{
+    NONE                = 0x00,
+    LOAD_TEXT_STYLES    = 0x01,
+    LOAD_FRAME_STYLES   = 0x02,
+    LOAD_PAGE_STYLES    = 0x04,
+    LOAD_NUM_STYLES     = 0x08,
+    MERGE_STYLES        = 0x10,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxTemplateFlags> : is_typed_flags<SfxTemplateFlags, 0x1f> {};
+}
 
 #define RET_TEMPLATE_LOAD       100
 
@@ -65,8 +74,8 @@ public:
     OUString GetTemplateFileName() const;
 
     // load template methods
-    sal_uInt16  GetTemplateFlags()const;
-    void    SetTemplateFlags(sal_uInt16 nSet);
+    SfxTemplateFlags  GetTemplateFlags() const;
+    void              SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
 #endif
