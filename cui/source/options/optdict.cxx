@@ -39,6 +39,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
+using namespace linguistic;
 
 // static ----------------------------------------------------------------
 
@@ -597,7 +598,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         OUString sEntry(aNewWord);
         OUString aReplaceStr(pReplaceED->GetText());
 
-        sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
+        DictionaryError nAddRes = DictionaryError::UNKNOWN;
         sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
         if ( nPos != LISTBOX_ENTRY_NOTFOUND && !aNewWord.isEmpty())
         {
@@ -624,10 +625,10 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                             aRplcText, LanguageTag( xDic->getLocale() ).getLanguageType(), false );
              }
         }
-        if (DIC_ERR_NONE != nAddRes)
+        if (DictionaryError::NONE != nAddRes)
             SvxDicError( this, nAddRes );
 
-        if(DIC_ERR_NONE == nAddRes && !sEntry.isEmpty())
+        if(DictionaryError::NONE == nAddRes && !sEntry.isEmpty())
         {
             // insert new entry in list-box etc...
 

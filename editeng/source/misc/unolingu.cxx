@@ -822,16 +822,16 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
     }
 }
 
-short SvxDicError( vcl::Window *pParent, sal_Int16 nError )
+short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError )
 {
     short nRes = 0;
-    if (DIC_ERR_NONE != nError)
+    if (linguistic::DictionaryError::NONE != nError)
     {
         int nRid;
         switch (nError)
         {
-            case DIC_ERR_FULL     : nRid = RID_SVXSTR_DIC_ERR_FULL;  break;
-            case DIC_ERR_READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
+            case linguistic::DictionaryError::FULL     : nRid = RID_SVXSTR_DIC_ERR_FULL;  break;
+            case linguistic::DictionaryError::READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
             default:
                 nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
                 SAL_WARN("editeng", "unexpected case");

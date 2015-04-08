@@ -64,6 +64,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
+using namespace linguistic;
 
 
 // struct SpellDialog_Impl ---------------------------------------------
@@ -249,7 +250,7 @@ SpellDialog::~SpellDialog()
     Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
-        linguistic::SaveDictionaries( xDicList );
+        SaveDictionaries( xDicList );
     }
 
     delete pImpl;
@@ -577,11 +578,11 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
     OUString  aOldWord( m_pSentenceED->GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
     Reference<XDictionary> aXDictionary( SvxGetChangeAllList(), UNO_QUERY );
-    sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
+    DictionaryError nAdded = AddEntryToDic( aXDictionary,
             aOldWord, true,
             aString, eLang );
 
-    if(nAdded == DIC_ERR_NONE)
+    if(nAdded == DictionaryError::NONE)
     {
         SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                         SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink);
@@ -626,10 +627,10 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
     else
     {
         OUString sErrorText(m_pSentenceED->GetErrorText());
-        sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
+        DictionaryError nAdded = AddEntryToDic( aXDictionary,
             sErrorText, false,
             OUString(), LANGUAGE_NONE );
-        if(nAdded == DIC_ERR_NONE)
+        if(nAdded == DictionaryError::NONE)
         {
             SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                             SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink);
@@ -910,16 +911,16 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     if (xDicList.is())
         xDic = xDicList->getDictionaryByName( aDicName );
 
-    sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
+    DictionaryError nAddRes = DictionaryError::UNKNOWN;
     if (xDic.is())
     {
-        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, false, OUString(), LANGUAGE_NONE );
+        nAddRes = AddEntryToDic( xDic, aNewWord, false, OUString(), LANGUAGE_NONE );
         // save modified user-dictionary if it is persistent
         uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
         if (xSavDic.is())
             xSavDic->store();
 
-        if (nAddRes == DIC_ERR_NONE)
+        if (nAddRes == DictionaryError::NONE)
         {
             SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                             SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink);
@@ -928,10 +929,10 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
             m_pSentenceED->AddUndoAction( pAction );
         }
         // failed because there is already an entry?
-        if (DIC_ERR_NONE != nAddRes && xDic->getEntry( aNewWord ).is())
-            nAddRes = DIC_ERR_NONE;
+        if (DictionaryError::NONE != nAddRes && xDic->getEntry( aNewWord ).is())
+            nAddRes = DictionaryError::NONE;
     }
-    if (DIC_ERR_NONE != nAddRes)
+    if (DictionaryError::NONE != nAddRes)
     {
         SvxDicError( this, nAddRes );
         return 0; // don't continue

@@ -350,14 +350,14 @@ bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicLi
     return bRet;
 }
 
-sal_uInt8 AddEntryToDic(
+DictionaryError AddEntryToDic(
         uno::Reference< XDictionary >  &rxDic,
         const OUString &rWord, bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
         bool bStripDot )
 {
     if (!rxDic.is())
-        return DIC_ERR_NOT_EXISTS;
+        return DictionaryError::NOT_EXISTS;
 
     OUString aTmp( rWord );
     if (bStripDot)
@@ -372,18 +372,18 @@ sal_uInt8 AddEntryToDic(
     }
     bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
 
-    sal_uInt8 nRes = DIC_ERR_NONE;
+    DictionaryError nRes = DictionaryError::NONE;
     if (!bAddOk)
     {
         if (rxDic->isFull())
-            nRes = DIC_ERR_FULL;
+            nRes = DictionaryError::FULL;
         else
         {
             uno::Reference< frame::XStorable >  xStor( rxDic, UNO_QUERY );
             if (xStor.is() && xStor->isReadonly())
-                nRes = DIC_ERR_READONLY;
+                nRes = DictionaryError::READONLY;
             else
-                nRes = DIC_ERR_UNKNOWN;
+                nRes = DictionaryError::UNKNOWN;
         }
     }
 

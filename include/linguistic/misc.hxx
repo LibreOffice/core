@@ -63,11 +63,10 @@ namespace linguistic
 
 
 // AddEntryToDic return values
-#define DIC_ERR_NONE        0
-#define DIC_ERR_FULL        1
-#define DIC_ERR_READONLY    2
-#define DIC_ERR_UNKNOWN     3
-#define DIC_ERR_NOT_EXISTS  4
+enum class DictionaryError
+{
+    NONE, FULL, READONLY, UNKNOWN, NOT_EXISTS
+};
 
 // values asigned to capitalization types
 enum CapType
@@ -166,7 +165,7 @@ bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rPrope
             const OUString& rWord, sal_Int16 nLanguage,
             bool bSearchPosDics, bool bSearchSpellEntry );
 
-LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
+LNG_DLLPUBLIC DictionaryError AddEntryToDic(
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,
     const OUString &rWord, bool bIsNeg,
     const OUString &rRplcTxt, sal_Int16 nRplcLang,

@@ -35,6 +35,7 @@
 class LinguMgrExitLstnr;
 
 namespace vcl { class Window; }
+namespace linguistic { enum class DictionaryError; }
 
 
 
@@ -181,7 +182,7 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 // misc functions
 
 
-EDITENG_DLLPUBLIC short SvxDicError( vcl::Window *pParent, sal_Int16 nError );
+EDITENG_DLLPUBLIC short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError );
 
 
 #endif
