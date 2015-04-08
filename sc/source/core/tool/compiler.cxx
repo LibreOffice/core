@@ -4940,7 +4940,7 @@ bool ScCompiler::HandleTableRef()
                     default:
                         ;   // nothing
                 }
-                if (aColRange.aStart.Row() != aRange.aStart.Row() && aColRange.aEnd.Row() != aRange.aStart.Row())
+                if (aColRange.aStart.Row() != aRange.aStart.Row() || aColRange.aEnd.Row() != aRange.aStart.Row())
                     aRange = ScRange( ScAddress::INITIALIZE_INVALID);
                 else
                 {
