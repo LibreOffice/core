@@ -708,7 +708,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                     assert(pDstTxtCrsr && "SwXTextCursor missing");
                     SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
-                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, false );
+                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
                     nColRepeat--;
                 }

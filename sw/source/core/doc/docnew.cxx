@@ -987,7 +987,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "CopyRange In: " << CNTNT_DOC( this ) );
 #endif
-            rSource.getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, true );
+            rSource.getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, /*bCopyAll=*/true, /*bCheckPos=*/true );
             // Note: aCpyPam is invalid now
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "CopyRange Out: " << CNTNT_DOC( this ) );

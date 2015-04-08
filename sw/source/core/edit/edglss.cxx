@@ -146,7 +146,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
             SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
-            pMyDoc->getIDocumentContentOperations().CopyRange( aCpyPam, aInsPos, false );
+            pMyDoc->getIDocumentContentOperations().CopyRange( aCpyPam, aInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
             nRet = rBlock.PutDoc();
         }
@@ -226,7 +226,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                     {
                         rPaM.SetMark();
                         rPaM.Move( fnMoveForward, fnGoCntnt );
-                        bRet = GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, aPos, false )
+                        bRet = GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true )
                             || bRet;
                         rPaM.Exchange();
                         rPaM.DeleteMark();
@@ -245,7 +245,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                         // the first cell as well.
                         aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
                     }
-                    bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, false ) || bRet;
+                    bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true ) || bRet;
                 }
             }
         }

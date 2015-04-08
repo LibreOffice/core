@@ -1914,7 +1914,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 }
             }
 
-            getIDocumentContentOperations().CopyRange( aPam, aInsPos, false );
+            getIDocumentContentOperations().CopyRange( aPam, aInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
             if( bDelLastPara )
             {
                 // We need to remove the last empty Node again

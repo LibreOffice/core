@@ -1576,7 +1576,7 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 
 // Copy an area into this document or into another document
 bool
-DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
+DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -1588,7 +1588,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         return false;
 
     // Prevent copying in Flys that are anchored in the area
-    if( pDoc == &m_rDoc )
+    if( pDoc == &m_rDoc && bCheckPos )
     {
         // Correct the Start-/EndNode
         sal_uLong nStt = pStt->nNode.GetIndex(),

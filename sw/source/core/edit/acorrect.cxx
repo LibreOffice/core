@@ -377,7 +377,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
 
-                pAutoDoc->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(), false );
+                pAutoDoc->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true );
 
                 aExpItem.RestoreDontExpandItems( *aPam.GetPoint() );
 
