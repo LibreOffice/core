@@ -15,6 +15,7 @@
 #include <vcl/svapp.hxx>
 #include <crsskip.hxx>
 #include <drawdoc.hxx>
+#include <ndtxt.hxx>
 #include <wrtsh.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
@@ -24,6 +25,7 @@ class SwTiledRenderingTest : public SwModelTestBase
 {
 public:
     void testRegisterCallback();
+    void testPostKeyEvent();
     void testPostMouseEvent();
     void testSetTextSelection();
     void testSetGraphicSelection();
@@ -31,6 +33,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
+    CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
@@ -108,6 +111,21 @@ void SwTiledRenderingTest::testRegisterCallback()
     // Also on OS X. But is tiled rendering even supposed to work on Windows and OS X?
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
 #endif
+}
+
+void SwTiledRenderingTest::testPostKeyEvent()
+{
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    // Did we manage to go after the first character?
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCrsr->GetPoint()->nContent.GetIndex());
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    // Did we manage to insert the character after the first one?
+    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCrsr->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt());
 }
 
 void SwTiledRenderingTest::testPostMouseEvent()
