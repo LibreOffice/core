@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/svapp.hxx>
 #include <smdll.hxx>
 #include <document.hxx>
 #include <view.hxx>
@@ -19,8 +18,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-
-#include <svl/stritem.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -55,9 +52,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-
     SfxBindings m_aBindings;
     SfxDispatcher *m_pDispatcher;
     SmCmdBoxWindow *m_pSmCmdBoxWindow;
