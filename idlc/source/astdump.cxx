@@ -43,7 +43,7 @@ bool AstModule::dump(RegistryKey& rKey)
         localKey = rKey;
     }else
     {
-        if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
+        if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey) != RegError::NO_ERROR)
         {
             fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                     idlc()->getOptions()->getProgramName().getStr(),
@@ -87,7 +87,7 @@ bool AstModule::dump(RegistryKey& rKey)
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
         if (localKey.setValue(emptyStr, RegValueType::BINARY,
-                                const_cast<RegValue>(pBlob), aBlobSize))
+                                const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
@@ -112,7 +112,7 @@ bool AstModule::dump(RegistryKey& rKey)
         if ( getNodeType() != NT_root )
         {
             if (localKey.setValue(emptyStr, RegValueType::BINARY,
-                                    const_cast<RegValue>(pBlob), aBlobSize))
+                                    const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
             {
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                         idlc()->getOptions()->getProgramName().getStr(),
@@ -132,7 +132,7 @@ bool AstTypeDef::dump(RegistryKey& rKey)
 {
     OUString emptyStr;
     RegistryKey localKey;
-    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
+    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -152,7 +152,7 @@ bool AstTypeDef::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(emptyStr, RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize))
+    if (localKey.setValue(emptyStr, RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -219,7 +219,7 @@ bool AstService::dump(RegistryKey& rKey)
     RegistryKey localKey;
     if (rKey.createKey(
             OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
-            localKey)) {
+            localKey) != RegError::NO_ERROR) {
         fprintf(
             stderr, "%s: warning, could not create key '%s' in '%s'\n",
             idlc()->getOptions()->getProgramName().getStr(),
@@ -310,7 +310,7 @@ bool AstService::dump(RegistryKey& rKey)
     void const * blob = writer.getBlob(&size);
     if (localKey.setValue(
             emptyStr, RegValueType::BINARY, const_cast< void * >(blob),
-            size))
+            size) != RegError::NO_ERROR)
     {
         fprintf(
             stderr, "%s: warning, could not set value of key \"%s\" in %s\n",

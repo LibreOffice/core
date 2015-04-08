@@ -154,7 +154,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     OString urlRegTmpName = convertToFileUrl(regTmpName);
 
     Registry regFile;
-    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) != REG_NO_ERROR )
+    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) != RegError::NO_ERROR )
     {
         fprintf(stderr, "%s: could not create registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regTmpName.getStr());
@@ -165,7 +165,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     }
 
     RegistryKey rootKey;
-    if ( regFile.openRootKey(rootKey) != REG_NO_ERROR )
+    if ( regFile.openRootKey(rootKey) != RegError::NO_ERROR )
     {
         fprintf(stderr, "%s: could not open root of registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regFileName.getStr());
@@ -179,7 +179,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     if ( !idlc()->getRoot()->dump(rootKey) )
     {
         rootKey.releaseKey();
-        if (regFile.close() != REG_NO_ERROR)
+        if (regFile.close() != RegError::NO_ERROR)
         {
             fprintf(stderr, "%s: could not close registry file '%s'\n",
                     pOptions->getProgramName().getStr(), regFileName.getStr());
@@ -191,7 +191,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     }
 
     rootKey.releaseKey();
-    if ( regFile.close() != REG_NO_ERROR )
+    if ( regFile.close() != RegError::NO_ERROR )
     {
         fprintf(stderr, "%s: could not close registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regFileName.getStr());

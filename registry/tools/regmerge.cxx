@@ -109,9 +109,9 @@ int __cdecl main( int argc, char * argv[] )
 
     Registry reg;
     OUString regName( convertToFileUrl(args[0].c_str(), args[0].size()) );
-    if (reg.open(regName, RegAccessMode::READWRITE) != REG_NO_ERROR)
+    if (reg.open(regName, RegAccessMode::READWRITE) != RegError::NO_ERROR)
     {
-        if (reg.create(regName) != REG_NO_ERROR)
+        if (reg.create(regName) != RegError::NO_ERROR)
         {
             if (options.isVerbose())
                 fprintf(stderr, "open registry \"%s\" failed\n", args[0].c_str());
@@ -120,7 +120,7 @@ int __cdecl main( int argc, char * argv[] )
     }
 
     RegistryKey rootKey;
-    if (reg.openRootKey(rootKey) != REG_NO_ERROR)
+    if (reg.openRootKey(rootKey) != RegError::NO_ERROR)
     {
         if (options.isVerbose())
             fprintf(stderr, "open root key of registry \"%s\" failed\n", args[0].c_str());
@@ -132,9 +132,9 @@ int __cdecl main( int argc, char * argv[] )
     {
         OUString targetRegName( convertToFileUrl(args[i].c_str(), args[i].size()) );
         RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, false, options.isVerbose());
-        if (_ret != REG_NO_ERROR)
+        if (_ret != RegError::NO_ERROR)
         {
-            if (_ret == REG_MERGE_CONFLICT)
+            if (_ret == RegError::MERGE_CONFLICT)
             {
                 if (options.isVerbose())
                     fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
@@ -157,7 +157,7 @@ int __cdecl main( int argc, char * argv[] )
     }
 
     rootKey.releaseKey();
-    if (reg.close() != REG_NO_ERROR)
+    if (reg.close() != RegError::NO_ERROR)
     {
         if (options.isVerbose())
             fprintf(stderr, "closing registry \"%s\" failed\n", args[0].c_str());

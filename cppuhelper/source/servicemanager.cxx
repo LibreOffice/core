@@ -1452,10 +1452,10 @@ void cppuhelper::ServiceManager::readRdbFile(
 bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
     Registry reg;
     switch (reg.open(uri, RegAccessMode::READONLY)) {
-    case REG_NO_ERROR:
+    case RegError::NO_ERROR:
         break;
-    case REG_REGISTRY_NOT_EXISTS:
-    case REG_INVALID_REGISTRY:
+    case RegError::REGISTRY_NOT_EXISTS:
+    case RegError::INVALID_REGISTRY:
         {
             // Ignore empty rdb files (which are at least seen by subordinate
             // uno processes during extension registration; Registry::open can
@@ -1475,16 +1475,16 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
         return false;
     }
     RegistryKey rootKey;
-    if (reg.openRootKey(rootKey) != REG_NO_ERROR) {
+    if (reg.openRootKey(rootKey) != RegError::NO_ERROR) {
         throw css::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     RegistryKeyArray impls;
     switch (rootKey.openSubKeys("IMPLEMENTATIONS", impls)) {
-    case REG_NO_ERROR:
+    case RegError::NO_ERROR:
         break;
-    case REG_KEY_NOT_EXISTS:
+    case RegError::KEY_NOT_EXISTS:
         return true;
     default:
         throw css::uno::DeploymentException(
@@ -1534,8 +1534,8 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
     RegistryKey subkey;
     RegValueType t;
     sal_uInt32 s(0);
-    if (key.openKey(path, subkey) != REG_NO_ERROR
-        || subkey.getValueInfo(rtl::OUString(), &t, &s) != REG_NO_ERROR
+    if (key.openKey(path, subkey) != RegError::NO_ERROR
+        || subkey.getValueInfo(rtl::OUString(), &t, &s) != RegError::NO_ERROR
         || t != RegValueType::STRING
         || s == 0 || s > static_cast< sal_uInt32 >(SAL_MAX_INT32))
     {
@@ -1545,7 +1545,7 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
     }
     rtl::OUString val;
     std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
-    if (subkey.getValue(rtl::OUString(), &v[0]) != REG_NO_ERROR
+    if (subkey.getValue(rtl::OUString(), &v[0]) != RegError::NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(
             &val.pData, &v[0], static_cast< sal_Int32 >(s - 1),
@@ -1568,9 +1568,9 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
     assert(strings != 0);
     RegistryKey subkey;
     switch (key.openKey(path, subkey)) {
-    case REG_NO_ERROR:
+    case RegError::NO_ERROR:
         break;
-    case REG_KEY_NOT_EXISTS:
+    case RegError::KEY_NOT_EXISTS:
         return;
     default:
         throw css::uno::DeploymentException(
@@ -1579,7 +1579,7 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
     }
     rtl::OUString prefix(subkey.getName() + "/");
     RegistryKeyNames names;
-    if (subkey.getKeyNames(rtl::OUString(), names) != REG_NO_ERROR) {
+    if (subkey.getKeyNames(rtl::OUString(), names) != RegError::NO_ERROR) {
         throw css::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));

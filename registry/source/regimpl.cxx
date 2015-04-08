@@ -454,7 +454,7 @@ ORegistry::~ORegistry()
 
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode, bool bCreate)
 {
-    RegError eRet = REG_INVALID_REGISTRY;
+    RegError eRet = RegError::INVALID_REGISTRY;
     OStoreFile      rRegFile;
     storeAccessMode sAccessMode = REG_MODE_OPEN;
     storeError      errCode;
@@ -484,13 +484,13 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         switch (errCode)
         {
             case store_E_NotExists:
-                eRet = REG_REGISTRY_NOT_EXISTS;
+                eRet = RegError::REGISTRY_NOT_EXISTS;
                 break;
             case store_E_LockingViolation:
-                eRet = REG_CANNOT_OPEN_FOR_READWRITE;
+                eRet = RegError::CANNOT_OPEN_FOR_READWRITE;
                 break;
             default:
-                eRet = REG_INVALID_REGISTRY;
+                eRet = RegError::INVALID_REGISTRY;
                 break;
         }
     }
@@ -506,10 +506,10 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
             m_isOpen = true;
 
             m_openKeyTable[ROOT] = new ORegKey(ROOT, this);
-            eRet = REG_NO_ERROR;
+            eRet = RegError::NO_ERROR;
         }
         else
-            eRet = REG_INVALID_REGISTRY;
+            eRet = RegError::INVALID_REGISTRY;
     }
 
     return eRet;
@@ -528,10 +528,10 @@ RegError ORegistry::closeRegistry()
         (void) releaseKey(m_openKeyTable[ROOT]);
         m_file.close();
         m_isOpen = false;
-        return REG_NO_ERROR;
+        return RegError::NO_ERROR;
     } else
     {
-        return REG_REGISTRY_NOT_EXISTS;
+        return RegError::REGISTRY_NOT_EXISTS;
     }
 }
 
@@ -547,7 +547,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
     {
         std::unique_ptr<ORegistry> pReg(new ORegistry());
 
-        if (!pReg->initRegistry(regName, RegAccessMode::READWRITE))
+        if (pReg->initRegistry(regName, RegAccessMode::READWRITE) == RegError::NO_ERROR)
         {
             pReg.reset();
 
@@ -558,17 +558,17 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
             if (unlink(name.getStr()) != 0)
             {
-                return REG_DESTROY_REGISTRY_FAILED;
+                return RegError::DESTROY_REGISTRY_FAILED;
             }
         } else
         {
-            return REG_DESTROY_REGISTRY_FAILED;
+            return RegError::DESTROY_REGISTRY_FAILED;
         }
     } else
     {
         if (m_refCount != 1 || isReadOnly())
         {
-            return REG_DESTROY_REGISTRY_FAILED;
+            return RegError::DESTROY_REGISTRY_FAILED;
         }
 
         if (m_file.isValid())
@@ -586,16 +586,16 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
                 OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
                 if (unlink(name.getStr()) != 0)
                 {
-                    return REG_DESTROY_REGISTRY_FAILED;
+                    return RegError::DESTROY_REGISTRY_FAILED;
                 }
             }
         } else
         {
-            return REG_REGISTRY_NOT_EXISTS;
+            return RegError::REGISTRY_NOT_EXISTS;
         }
     }
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -605,12 +605,12 @@ RegError ORegistry::acquireKey (RegKeyHandle hKey)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if (!pKey)
-        return REG_INVALID_KEY;
+        return RegError::INVALID_KEY;
 
     REG_GUARD(m_mutex);
     pKey->acquire();
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -620,7 +620,7 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if (!pKey)
-        return REG_INVALID_KEY;
+        return RegError::INVALID_KEY;
 
     REG_GUARD(m_mutex);
     if (pKey->release() == 0)
@@ -628,7 +628,7 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
         m_openKeyTable.erase(pKey->getName());
         delete pKey;
     }
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -642,7 +642,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     *phNewKey = NULL;
 
     if ( keyName.isEmpty() )
-        return REG_INVALID_KEYNAME;
+        return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
 
@@ -658,7 +658,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
         *phNewKey = m_openKeyTable[sFullKeyName];
         static_cast<ORegKey*>(*phNewKey)->acquire();
         static_cast<ORegKey*>(*phNewKey)->setDeleted(false);
-        return REG_NO_ERROR;
+        return RegError::NO_ERROR;
     }
 
     OStoreDirectory rStoreDir;
@@ -675,7 +675,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
         {
             if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, KEY_MODE_CREATE))
             {
-                return REG_CREATE_KEY_FAILED;
+                return RegError::CREATE_KEY_FAILED;
             }
 
             sFullPath.append(token);
@@ -688,7 +688,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     *phNewKey = pKey;
     m_openKeyTable[sFullKeyName] = pKey;
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -704,7 +704,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 
     if ( keyName.isEmpty() )
     {
-        return REG_INVALID_KEYNAME;
+        return RegError::INVALID_KEYNAME;
     }
 
     REG_GUARD(m_mutex);
@@ -723,9 +723,9 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
                     isReadOnly() ? KEY_MODE_OPENREAD : KEY_MODE_OPEN))
         {
         case store_E_NotExists:
-            return REG_KEY_NOT_EXISTS;
+            return RegError::KEY_NOT_EXISTS;
         case store_E_WrongFormat:
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
         default:
             break;
         }
@@ -737,7 +737,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
         i->second->acquire();
     }
     *phOpenKey = i->second;
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -752,7 +752,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
 
     OUString const aKeyName (pKey->getName());
     if (!(m_openKeyTable.count(aKeyName) > 0))
-        return REG_KEY_NOT_OPEN;
+        return RegError::KEY_NOT_OPEN;
 
     if (pKey->isModified())
     {
@@ -782,7 +782,7 @@ RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if ( keyName.isEmpty() )
-        return REG_INVALID_KEYNAME;
+        return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
 
@@ -795,11 +795,11 @@ RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 
 RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 {
-    RegError _ret = REG_NO_ERROR;
+    RegError _ret = RegError::NO_ERROR;
 
     if ( keyName.isEmpty() )
     {
-        return REG_INVALID_KEYNAME;
+        return RegError::INVALID_KEYNAME;
     }
 
     OUString     sFullKeyName(pKey->getName());
@@ -831,11 +831,11 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 
     ORegKey* pOldKey = 0;
     _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pOldKey));
-    if (_ret != REG_NO_ERROR)
+    if (_ret != RegError::NO_ERROR)
         return _ret;
 
     _ret = deleteSubkeysAndValues(pOldKey);
-    if (_ret != REG_NO_ERROR)
+    if (_ret != RegError::NO_ERROR)
     {
         pKey->closeKey(pOldKey);
         return _ret;
@@ -847,7 +847,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     OStoreFile sFile(pKey->getStoreFile());
     if ( sFile.isValid() && sFile.remove(sFullPath, tmpName) )
     {
-        return REG_DELETE_KEY_FAILED;
+        return RegError::DELETE_KEY_FAILED;
     }
     pOldKey->setModified();
 
@@ -863,7 +863,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 {
     OStoreDirectory::iterator   iter;
-    RegError                    _ret = REG_NO_ERROR;
+    RegError                    _ret = RegError::NO_ERROR;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
@@ -874,7 +874,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
             _ret = eraseKey(pKey, keyName);
-            if (_ret)
+            if (_ret != RegError::NO_ERROR)
                 return _ret;
         }
         else
@@ -886,7 +886,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 
             if ( ((OStoreFile&)pKey->getStoreFile()).remove(sFullPath, keyName) )
             {
-                return REG_DELETE_VALUE_FAILED;
+                return RegError::DELETE_VALUE_FAILED;
             }
             pKey->setModified();
         }
@@ -894,7 +894,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
         _err = rStoreDir.next(iter);
     }
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -904,12 +904,12 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
 {
-    RegError _ret = REG_NO_ERROR;
+    RegError _ret = RegError::NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
     _ret = pReg->initRegistry(regFileName, RegAccessMode::READONLY);
-    if (_ret != REG_NO_ERROR)
+    if (_ret != RegError::NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();
 
@@ -932,9 +932,9 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
             _ret = loadAndSaveValue(pKey, pRootKey, keyName, 0, bWarnings, bReport);
         }
 
-        if (_ret == REG_MERGE_ERROR)
+        if (_ret == RegError::MERGE_ERROR)
             break;
-        if (_ret == REG_MERGE_CONFLICT && bWarnings)
+        if (_ret == RegError::MERGE_CONFLICT && bWarnings)
             break;
 
         _err = rStoreDir.next(iter);
@@ -952,12 +952,12 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
 {
-    RegError _ret = REG_NO_ERROR;
+    RegError _ret = RegError::NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
     _ret = pReg->initRegistry(regFileName, RegAccessMode::READWRITE, true/*bCreate*/);
-    if (_ret != REG_NO_ERROR)
+    if (_ret != RegError::NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();
 
@@ -984,7 +984,7 @@ RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
                                     bWarnings, bReport);
         }
 
-        if (_ret != REG_NO_ERROR)
+        if (_ret != RegError::NO_ERROR)
             break;
 
         _err = rStoreDir.next(iter);
@@ -1037,7 +1037,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 
     if (rValue.create(pSourceKey->getStoreFile(), sSourcePath, valueName, sourceAccess))
     {
-        return REG_VALUE_NOT_EXISTS;
+        return RegError::VALUE_NOT_EXISTS;
     }
 
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
@@ -1046,15 +1046,15 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     if (rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, rwBytes))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     if (rwBytes != VALUE_HEADERSIZE)
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
-    RegError _ret = REG_NO_ERROR;
+    RegError _ret = RegError::NO_ERROR;
     sal_uInt8   type = *((sal_uInt8*)pBuffer);
     valueType = (RegValueType)type;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
@@ -1066,12 +1066,12 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     if (rValue.readAt(0, pBuffer, nSize, rwBytes))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     if (rwBytes != nSize)
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
     OStoreFile  rTargetFile(pTargetKey->getStoreFile());
@@ -1083,10 +1083,10 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
             _ret = checkBlop(
                 rValue, sTargetPath, valueSize, pBuffer+VALUE_HEADEROFFSET,
                 bReport);
-            if (_ret)
+            if (_ret != RegError::NO_ERROR)
             {
-                if (_ret == REG_MERGE_ERROR ||
-                    (_ret == REG_MERGE_CONFLICT && bWarnings))
+                if (_ret == RegError::MERGE_ERROR ||
+                    (_ret == RegError::MERGE_CONFLICT && bWarnings))
                 {
                     rtl_freeMemory(pBuffer);
                     return _ret;
@@ -1103,18 +1103,18 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     if (rValue.create(rTargetFile, sTargetPath, valueName, VALUE_MODE_CREATE))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     if (rValue.writeAt(0, pBuffer, nSize, rwBytes))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
     if (rwBytes != nSize)
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     pTargetKey->setModified();
 
@@ -1136,7 +1136,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
 
     if (reader.getTypeClass() == RT_TYPE_INVALID)
     {
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
     sal_uInt8*      pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
@@ -1171,7 +1171,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                         fprintf(stdout, "ERROR: values of blop from key \"%s\" has different types.\n",
                                 targetPath.getStr());
                     }
-                    return REG_MERGE_ERROR;
+                    return RegError::MERGE_ERROR;
                 }
 
                 if (reader.getTypeClass() == RT_TYPE_MODULE)
@@ -1182,16 +1182,16 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                         mergeModuleValue(rValue, reader, reader2);
 
                         rtl_freeMemory(pBuffer);
-                        return REG_NO_ERROR;
+                        return RegError::NO_ERROR;
                     } else
                     if (reader2.getFieldCount() > 0)
                     {
                         rtl_freeMemory(pBuffer);
-                        return REG_NO_ERROR;
+                        return RegError::NO_ERROR;
                     } else
                     {
                         rtl_freeMemory(pBuffer);
-                        return REG_MERGE_CONFLICT;
+                        return RegError::MERGE_CONFLICT;
                     }
                 } else
                 {
@@ -1202,7 +1202,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                         fprintf(stderr, "WARNING: value of key \"%s\" already exists.\n",
                                 targetPath.getStr());
                     }
-                    return REG_MERGE_CONFLICT;
+                    return RegError::MERGE_CONFLICT;
                 }
             } else
             {
@@ -1212,7 +1212,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                     fprintf(stderr, "ERROR: values of key \"%s\" contains bad data.\n",
                             targetPath.getStr());
                 }
-                return REG_MERGE_ERROR;
+                return RegError::MERGE_ERROR;
             }
         } else
         {
@@ -1222,12 +1222,12 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                 fprintf(stderr, "ERROR: values of key \"%s\" has different types.\n",
                         targetPath.getStr());
             }
-            return REG_MERGE_ERROR;
+            return RegError::MERGE_ERROR;
         }
     } else
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 }
 
@@ -1314,18 +1314,18 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         if (rTargetValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+aBlopSize, rwBytes))
         {
             rtl_freeMemory(pBuffer);
-            return REG_INVALID_VALUE;
+            return RegError::INVALID_VALUE;
         }
 
         if (rwBytes != VALUE_HEADERSIZE+aBlopSize)
         {
             rtl_freeMemory(pBuffer);
-            return REG_INVALID_VALUE;
+            return RegError::INVALID_VALUE;
         }
 
         rtl_freeMemory(pBuffer);
     }
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -1338,7 +1338,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     bool bWarnings,
                                     bool bReport)
 {
-    RegError    _ret = REG_NO_ERROR;
+    RegError    _ret = RegError::NO_ERROR;
     OUString    sRelPath(pSourceKey->getName().copy(nCut));
     OUString    sFullPath;
 
@@ -1354,7 +1354,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     OStoreDirectory rStoreDir;
     if (rStoreDir.create(pTargetKey->getStoreFile(), sFullPath, keyName, KEY_MODE_CREATE))
     {
-        return REG_CREATE_KEY_FAILED;
+        return RegError::CREATE_KEY_FAILED;
     }
 
     if (m_openKeyTable.count(sFullKeyName) > 0)
@@ -1364,7 +1364,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 
     ORegKey* pTmpKey = 0;
     _ret = pSourceKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pTmpKey));
-    if (_ret != REG_NO_ERROR)
+    if (_ret != RegError::NO_ERROR)
         return _ret;
 
     OStoreDirectory::iterator   iter;
@@ -1385,9 +1385,9 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     sName, nCut, bWarnings, bReport);
         }
 
-        if (_ret == REG_MERGE_ERROR)
+        if (_ret == RegError::MERGE_ERROR)
             break;
-        if (_ret == REG_MERGE_CONFLICT && bWarnings)
+        if (_ret == RegError::MERGE_CONFLICT && bWarnings)
             break;
 
         _err = rTmpStoreDir.next(iter);
@@ -1415,7 +1415,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
 {
     ORegKey                     *pKey = static_cast<ORegKey*>(hKey);
     OUString                    sName;
-    RegError                    _ret = REG_NO_ERROR;
+    RegError                    _ret = RegError::NO_ERROR;
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
@@ -1436,7 +1436,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
             _ret = dumpValue(pKey->getName(), sName, 1);
         }
 
-        if (_ret)
+        if (_ret != RegError::NO_ERROR)
         {
             return _ret;
         }
@@ -1444,7 +1444,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
         _err = rStoreDir.next(iter);
     }
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -1473,7 +1473,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     }
     if (rValue.create(m_file, sFullPath, sName, accessMode))
     {
-        return REG_VALUE_NOT_EXISTS;
+        return RegError::VALUE_NOT_EXISTS;
     }
 
     pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
@@ -1482,12 +1482,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     if (rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, rwBytes))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     if (rwBytes != (VALUE_HEADERSIZE))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
     sal_uInt8 type = *((sal_uInt8*)pBuffer);
@@ -1498,12 +1498,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     if (rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, rwBytes))
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
     if (rwBytes != valueSize)
     {
         rtl_freeMemory(pBuffer);
-        return REG_INVALID_VALUE;
+        return RegError::INVALID_VALUE;
     }
 
     const sal_Char* indent = sIndent.getStr();
@@ -1683,7 +1683,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     fprintf(stdout, "\n");
 
     rtl_freeMemory(pBuffer);
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 
@@ -1695,7 +1695,7 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
     OUString            sFullPath(sPath);
     OString             sIndent;
     storeAccessMode     accessMode = KEY_MODE_OPEN;
-    RegError            _ret = REG_NO_ERROR;
+    RegError            _ret = RegError::NO_ERROR;
 
     if (isReadOnly())
     {
@@ -1710,9 +1710,9 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
     storeError _err = rStoreDir.create(m_file, sFullPath, sName, accessMode);
 
     if (_err == store_E_NotExists)
-        return REG_KEY_NOT_EXISTS;
+        return RegError::KEY_NOT_EXISTS;
     else if (_err == store_E_WrongFormat)
-        return REG_INVALID_KEY;
+        return RegError::INVALID_KEY;
 
     fprintf(stdout, "%s/ %s\n", sIndent.getStr(), OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
 
@@ -1736,7 +1736,7 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
             _ret = dumpValue(sSubPath, sSubName, nSpace+2);
         }
 
-        if (_ret)
+        if (_ret != RegError::NO_ERROR)
         {
             return _ret;
         }
@@ -1744,7 +1744,7 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
         _err = rStoreDir.next(iter);
     }
 
-    return REG_NO_ERROR;
+    return RegError::NO_ERROR;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

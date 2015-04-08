@@ -78,7 +78,7 @@ bool AstStruct::isType() const {
 bool AstStruct::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
-    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
+    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -162,7 +162,7 @@ bool AstStruct::dump(RegistryKey& rKey)
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
     if (localKey.setValue(emptyStr, RegValueType::BINARY,
-                            const_cast<RegValue>(pBlob), aBlobSize))
+                            const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),

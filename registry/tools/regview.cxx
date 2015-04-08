@@ -44,25 +44,25 @@ int __cdecl main( int argc, char * argv[] )
     }
 
     OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
-    if (reg_openRegistry(regName.pData, &hReg, RegAccessMode::READONLY))
+    if (reg_openRegistry(regName.pData, &hReg, RegAccessMode::READONLY) != RegError::NO_ERROR)
     {
         fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
         exit(1);
     }
 
-    if (!reg_openRootKey(hReg, &hRootKey))
+    if (reg_openRootKey(hReg, &hRootKey) == RegError::NO_ERROR)
     {
         if (argc == 3)
         {
             OUString keyName( OUString::createFromAscii(argv[2]) );
-            if (!reg_openKey(hRootKey, keyName.pData, &hKey))
+            if (reg_openKey(hRootKey, keyName.pData, &hKey) == RegError::NO_ERROR)
             {
-                if (reg_dumpRegistry(hKey))
+                if (reg_dumpRegistry(hKey) != RegError::NO_ERROR)
                 {
                     fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
                 }
 
-                if (reg_closeKey(hKey))
+                if (reg_closeKey(hKey) != RegError::NO_ERROR)
                 {
                     fprintf(stderr, "closing key \"%s\" of registry \"%s\" failed\n",
                             argv[2], argv[1]);
@@ -76,13 +76,13 @@ int __cdecl main( int argc, char * argv[] )
         }
         else
         {
-            if (reg_dumpRegistry(hRootKey))
+            if (reg_dumpRegistry(hRootKey) != RegError::NO_ERROR)
             {
                 fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
             }
         }
 
-        if (reg_closeKey(hRootKey))
+        if (reg_closeKey(hRootKey) != RegError::NO_ERROR)
         {
             fprintf(stderr, "closing root key of registry \"%s\" failed\n", argv[1]);
         }
@@ -92,7 +92,7 @@ int __cdecl main( int argc, char * argv[] )
         fprintf(stderr, "open root key of registry \"%s\" failed\n", argv[1]);
     }
 
-    if (reg_closeRegistry(hReg))
+    if (reg_closeRegistry(hReg) != RegError::NO_ERROR)
     {
         fprintf(stderr, "closing registry \"%s\" failed\n", argv[1]);
         exit(1);

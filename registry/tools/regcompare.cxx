@@ -1647,7 +1647,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
         {
             keyName = keyName.copy(keyName.lastIndexOf('/') + 1);
             RegistryKey subKey;
-            if (!key.openKey(keyName, subKey))
+            if (key.openKey(keyName, subKey) == RegError::NO_ERROR)
             {
                 if (options.forceOutput())
                 {
@@ -1663,7 +1663,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
             {
                 RegValueType type;
                 sal_uInt32 size;
-                if (subKey.getValueInfo(OUString(), &type, &size) != REG_NO_ERROR)
+                if (subKey.getValueInfo(OUString(), &type, &size) != RegError::NO_ERROR)
                 {
                     if (options.forceOutput())
                     {
@@ -1679,7 +1679,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                 {
                     bool published = false;
                     std::vector< sal_uInt8 > value(size);
-                    if (subKey.getValue(OUString(), &value[0]) != REG_NO_ERROR)
+                    if (subKey.getValue(OUString(), &value[0]) != RegError::NO_ERROR)
                     {
                         if (options.forceOutput())
                         {
@@ -1747,7 +1747,7 @@ static sal_uInt32 checkDifferences(
                 {
                     keyName = keyName.copy(keyName.lastIndexOf('/') + 1);
                     RegistryKey subKey;
-                    if (key.openKey(keyName, subKey))
+                    if (key.openKey(keyName, subKey) != RegError::NO_ERROR)
                     {
                         if (options.forceOutput())
                         {
@@ -1764,7 +1764,7 @@ static sal_uInt32 checkDifferences(
                     {
                         RegValueType type;
                         sal_uInt32 size;
-                        if (subKey.getValueInfo(OUString(), &type, &size) != REG_NO_ERROR)
+                        if (subKey.getValueInfo(OUString(), &type, &size) != RegError::NO_ERROR)
                         {
                             if (options.forceOutput())
                             {
@@ -1780,7 +1780,7 @@ static sal_uInt32 checkDifferences(
                         else if (type == RegValueType::BINARY)
                         {
                             std::vector< sal_uInt8 > value(size);
-                            if (subKey.getValue(OUString(), &value[0]) != REG_NO_ERROR)
+                            if (subKey.getValue(OUString(), &value[0]) != RegError::NO_ERROR)
                             {
                                 if (options.forceOutput())
                                 {
@@ -1876,13 +1876,13 @@ static sal_uInt32 compareKeys(
     OUString tmpName;
     RegError e1 = key1.getValueInfo(tmpName, &valueType1, &size1);
     RegError e2 = key2.getValueInfo(tmpName, &valueType2, &size2);
-    if ( (e1 == e2) && (e1 != REG_VALUE_NOT_EXISTS) && (e1 != REG_INVALID_VALUE) )
+    if ( (e1 == e2) && (e1 != RegError::VALUE_NOT_EXISTS) && (e1 != RegError::INVALID_VALUE) )
     {
         nError += checkValueDifference(options, key1, valueType1, size1, key2, valueType2, size2);
     }
     else
     {
-        if ( (e1 != REG_INVALID_VALUE) || (e2 != REG_INVALID_VALUE) )
+        if ( (e1 != RegError::INVALID_VALUE) || (e2 != RegError::INVALID_VALUE) )
         {
             if ( options.forceOutput() )
             {
@@ -1917,7 +1917,7 @@ static sal_uInt32 compareKeys(
         keyName = keyName.copy( nPos != -1 ? nPos+1 : 0 );
 
         RegistryKey subKey1;
-        if ( key1.openKey(keyName, subKey1) )
+        if ( key1.openKey(keyName, subKey1) != RegError::NO_ERROR )
         {
             if ( options.forceOutput() )
             {
@@ -1928,7 +1928,7 @@ static sal_uInt32 compareKeys(
         }
 
         RegistryKey subKey2;
-        if ( key2.openKey(keyName, subKey2) )
+        if ( key2.openKey(keyName, subKey2) != RegError::NO_ERROR )
         {
             if ( options.forceOutput() )
             {
@@ -1975,13 +1975,13 @@ int _cdecl main( int argc, char * argv[] )
     OUString regName2( convertToFileUrl(options.getRegName2().c_str(), options.getRegName2().size()) );
 
     Registry reg1, reg2;
-    if ( reg1.open(regName1, RegAccessMode::READONLY) )
+    if ( reg1.open(regName1, RegAccessMode::READONLY) != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
         return 2;
     }
-    if ( reg2.open(regName2, RegAccessMode::READONLY) )
+    if ( reg2.open(regName2, RegAccessMode::READONLY) != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());
@@ -1989,13 +1989,13 @@ int _cdecl main( int argc, char * argv[] )
     }
 
     RegistryKey key1, key2;
-    if ( reg1.openRootKey(key1) )
+    if ( reg1.openRootKey(key1) != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
         return 4;
     }
-    if ( reg2.openRootKey(key2) )
+    if ( reg2.openRootKey(key2) != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());
@@ -2011,13 +2011,13 @@ int _cdecl main( int argc, char * argv[] )
             return 6;
         }
         RegistryKey sk1, sk2;
-        if ( key1.openKey(options.getStartKey(), sk1) )
+        if ( key1.openKey(options.getStartKey(), sk1) != RegError::NO_ERROR )
         {
             fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName1().c_str());
             return 7;
         }
-        if ( key2.openKey(options.getStartKey(), sk2) )
+        if ( key2.openKey(options.getStartKey(), sk2) != RegError::NO_ERROR )
         {
             fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName2().c_str());
@@ -2047,13 +2047,13 @@ int _cdecl main( int argc, char * argv[] )
 
     key1.releaseKey();
     key2.releaseKey();
-    if ( reg1.close() )
+    if ( reg1.close() != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
         return 9;
     }
-    if ( reg2.close() )
+    if ( reg2.close() != RegError::NO_ERROR )
     {
         fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());

@@ -117,7 +117,7 @@ public:
     /** opens the root key of the registry.
 
         @param  rRootKey reference to a RegistryKey which is filled with the rootkey.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError openRootKey(RegistryKey& rRootKey);
 
@@ -127,7 +127,7 @@ public:
     /** creates a new registry with the specified name and creates a root key.
 
         @param  registryName specifies the name of the new registry.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError create(const rtl::OUString& registryName);
 
@@ -136,7 +136,7 @@ public:
         If the registry already points to a valid registry, the old registry will be closed.
         @param  registryName specifies a registry name.
         @param  accessMode specifies the access mode for the registry, RegAccessMode::READONLY or RegAccessMode::READWRITE.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError open(const rtl::OUString& registryName,
                             RegAccessMode accessMode);
@@ -148,7 +148,7 @@ public:
 
         @param registryName specifies a registry name, if the name is an empty string the registry
                             itselfs will be destroyed.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError destroy(const rtl::OUString& registryName);
 
@@ -161,7 +161,7 @@ public:
                         is an empty string the registry information will be saved under the key specified
                         by rKey.
         @param  regFileName specifies the file containing the registry information.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError loadKey(RegistryKey& rKey,
                                const rtl::OUString& keyName,
@@ -176,7 +176,7 @@ public:
                         If keyName is an empty string the registry information under the key specified
                         by rKey is saved in the specified file.
         @param  regFileName specifies the file containing the registry information.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError saveKey(RegistryKey& rKey,
                                const rtl::OUString& keyName,
@@ -194,7 +194,7 @@ public:
         @param  regFileName specifies the file containing the registry information.
         @param  bWarnings if TRUE the function returns an error if a key already exists.
         @param  bReport if TRUE the function reports warnings on stdout if a key already exists.
-        @return REG_NO_ERROR if succeeds else an error code. If it returns an error the registry will
+        @return RegError::NO_ERROR if succeeds else an error code. If it returns an error the registry will
                 restore the state before merging.
     */
     inline RegError mergeKey(RegistryKey& rKey,
@@ -208,7 +208,7 @@ public:
         All information which are available (keynames, value types, values, ...)
         will be printed to stdout for report issues only.
         @param  rKey references a currently open key which content will be reported.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError dumpRegistry(RegistryKey& rKey);
 
@@ -420,7 +420,7 @@ public:
         The specified keyname is relativ to this key.
         @param  keyName specifies the name of the key which will be opened or created.
         @param  rNewKey references a RegistryKey which will be filled with the new or open key.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError createKey(const rtl::OUString& keyName,
                               RegistryKey& rNewKey);
@@ -430,7 +430,7 @@ public:
         The specified keyname is relativ to this key.
         @param  keyName specifies the name of the key which will be opened.
         @param  rOpenKey references a RegistryKey which will be filled with the open key.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError openKey(const rtl::OUString& keyName,
                               RegistryKey& rOpenKey);
@@ -440,7 +440,7 @@ public:
         The specified keyname is relativ to this key.
         @param  keyName specifies the name of the key which subkeys will be opened.
         @param  rSubKeys reference a RegistryKeyArray which will be filled with the open subkeys.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError openSubKeys(const rtl::OUString& keyName,
                                     RegistryKeyArray& rSubKeys);
@@ -450,7 +450,7 @@ public:
         The specified keyname is relativ to this key.
         @param  keyName specifies the name of the key which subkey names will be returned.
         @param  rSubKeyNames reference a RegistryKeyNames array which will be filled with the subkey names.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getKeyNames(const rtl::OUString& keyName,
                                     RegistryKeyNames& rSubKeyNames);
@@ -458,14 +458,14 @@ public:
     /** closes all keys specified in the array.
 
         @param  rSubKeys reference a RegistryKeyArray which contains the open keys.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError closeSubKeys(RegistryKeyArray& rSubKeys);
 
     /** deletes the specified key.
 
         @param  keyName specifies the name of the key which will be deleted.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError deleteKey(const rtl::OUString& keyName);
 
@@ -483,7 +483,7 @@ public:
         @param  valueType specifies the type of the value.
         @param  pValue points to a memory block containing the data for the value.
         @param  valueSize specifies the size of pData in bytes
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setValue(const rtl::OUString& keyName,
                                 RegValueType valueType,
@@ -497,7 +497,7 @@ public:
                         specified by hKey.
         @param  pValueList points to an array of longs containing the data for the value.
         @param  len specifies the length of the list (the array referenced by pValueList).
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setLongListValue(const rtl::OUString& keyName,
                                          sal_Int32* pValueList,
@@ -510,7 +510,7 @@ public:
                         specified by hKey.
         @param  pValueList points to an array of sal_Char* containing the data for the value.
         @param  len specifies the length of the list (the array referenced by pValueList).
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setStringListValue(const rtl::OUString& keyName,
                                            sal_Char** pValueList,
@@ -523,7 +523,7 @@ public:
                         specified by hKey.
         @param  pValueList points to an array of sal_Unicode* containing the data for the value.
         @param  len specifies the length of the list (the array referenced by pValueList).
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setUnicodeListValue(const rtl::OUString& keyName,
                                             sal_Unicode** pValueList,
@@ -536,7 +536,7 @@ public:
                         specified by hKey will be returned.
         @param  pValueType returns the type of the value.
         @param  pValueSize returns the size of the value in bytes or the length of a list value.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getValueInfo(const rtl::OUString& keyName,
                                     RegValueType* pValueType,
@@ -548,7 +548,7 @@ public:
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
         @param  pValue points to an allocated memory block receiving the data of the value.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getValue(const rtl::OUString& keyName,
                                 RegValue pValue);
@@ -559,7 +559,7 @@ public:
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
         @param  rValueList references a RegistryValueList which will be filled with the long values.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getLongListValue(const rtl::OUString& keyName,
                                           RegistryValueList<sal_Int32>& rValueList);
@@ -570,7 +570,7 @@ public:
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
         @param  rValueList references a RegistryValueList which will be filled with the ascii values.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getStringListValue(const rtl::OUString& keyName,
                                            RegistryValueList<sal_Char*>& rValueList);
@@ -581,7 +581,7 @@ public:
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
         @param  rValueList reference a RegistryValueList which will be filled with the unicode values.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getUnicodeListValue(const rtl::OUString& keyName,
                                               RegistryValueList<sal_Unicode*>& rValueList);
@@ -590,7 +590,7 @@ public:
 
         @deprecated Links are no longer supported.
 
-        @return REG_INVALID_LINK
+        @return RegError::INVALID_LINK
      */
     inline RegError createLink(const rtl::OUString& linkName,
                                const rtl::OUString& linkTarget);
@@ -599,7 +599,7 @@ public:
 
         @deprecated Links are no longer supported.
 
-        @return REG_INVALID_LINK
+        @return RegError::INVALID_LINK
      */
     inline RegError deleteLink(const rtl::OUString& linkName);
 
@@ -607,7 +607,7 @@ public:
 
         @deprecated Links are no longer supported.
 
-        @return REG_INVALID_LINK
+        @return RegError::INVALID_LINK
      */
     inline RegError getLinkTarget(const rtl::OUString& linkName,
                                     rtl::OUString& rLinkTarget) const;
@@ -618,7 +618,7 @@ public:
                         The resolved name will be prefixed with the name of this key.
         @param[in]  firstLinkOnly ignored
         @param[out] rResolvedName the resolved name.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @return RegError::NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const rtl::OUString& keyName,
                                        bool firstLinkOnly,
@@ -706,7 +706,7 @@ inline RegError RegistryKeyArray::closeKeyHandles()
         m_phKeys = NULL;
         return ret;
     } else
-        return REG_INVALID_KEY;
+        return RegError::INVALID_KEY;
 }
 
 
@@ -750,14 +750,14 @@ inline RegError RegistryKeyNames::freeKeyNames()
 {
     if (m_registry.isValid() && m_pKeyNames)
     {
-        RegError ret = REG_NO_ERROR;
+        RegError ret = RegError::NO_ERROR;
         ret = m_registry.m_pApi->freeKeyNames(m_pKeyNames, m_length);
         m_registry = Registry();
         m_length = 0;
         m_pKeyNames = NULL;
         return ret;
     } else
-        return REG_INVALID_KEY;
+        return RegError::INVALID_KEY;
 }
 
 
@@ -836,10 +836,10 @@ inline RegError RegistryKey::createKey(const rtl::OUString& keyName,
         if (m_registry.isValid())
         {
             RegError ret = m_registry.m_pApi->createKey(m_hImpl, keyName.pData, &rNewKey.m_hImpl);
-            if (!ret) rNewKey.setRegistry(m_registry);
+            if (ret == RegError::NO_ERROR) rNewKey.setRegistry(m_registry);
             return ret;
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::openKey(const rtl::OUString& keyName,
@@ -850,10 +850,10 @@ inline RegError RegistryKey::openKey(const rtl::OUString& keyName,
         {
             RegError ret = m_registry.m_pApi->openKey(m_hImpl, keyName.pData,
                                                     &rOpenKey.m_hImpl);
-            if (!ret) rOpenKey.setRegistry(m_registry);
+            if (ret == RegError::NO_ERROR) rOpenKey.setRegistry(m_registry);
             return ret;
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::openSubKeys(const rtl::OUString& keyName,
@@ -861,12 +861,12 @@ inline RegError RegistryKey::openSubKeys(const rtl::OUString& keyName,
     {
         if (m_registry.isValid())
         {
-            RegError        ret = REG_NO_ERROR;
+            RegError        ret = RegError::NO_ERROR;
             RegKeyHandle*   pSubKeys;
             sal_uInt32      nSubKeys;
-             ret = m_registry.m_pApi->openSubKeys(m_hImpl, keyName.pData,
+            ret = m_registry.m_pApi->openSubKeys(m_hImpl, keyName.pData,
                                                       &pSubKeys, &nSubKeys);
-             if ( ret )
+            if ( ret != RegError::NO_ERROR)
             {
                 return ret;
             } else
@@ -875,7 +875,7 @@ inline RegError RegistryKey::openSubKeys(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getKeyNames(const rtl::OUString& keyName,
@@ -883,12 +883,12 @@ inline RegError RegistryKey::getKeyNames(const rtl::OUString& keyName,
     {
         if (m_registry.isValid())
         {
-            RegError        ret = REG_NO_ERROR;
+            RegError        ret = RegError::NO_ERROR;
             rtl_uString**   pSubKeyNames;
             sal_uInt32      nSubKeys;
-             ret = m_registry.m_pApi->getKeyNames(m_hImpl, keyName.pData,
+            ret = m_registry.m_pApi->getKeyNames(m_hImpl, keyName.pData,
                                                   &pSubKeyNames, &nSubKeys);
-             if ( ret )
+            if ( ret != RegError::NO_ERROR)
             {
                 return ret;
             } else
@@ -897,7 +897,7 @@ inline RegError RegistryKey::getKeyNames(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::closeSubKeys(RegistryKeyArray& rSubKeys)
@@ -905,7 +905,7 @@ inline RegError RegistryKey::closeSubKeys(RegistryKeyArray& rSubKeys)
         if (m_registry.isValid())
             return rSubKeys.closeKeyHandles();
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::deleteKey(const rtl::OUString& keyName)
@@ -913,7 +913,7 @@ inline RegError RegistryKey::deleteKey(const rtl::OUString& keyName)
         if (m_registry.isValid())
             return m_registry.m_pApi->deleteKey(m_hImpl, keyName.pData);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::closeKey()
@@ -921,14 +921,14 @@ inline RegError RegistryKey::closeKey()
         if (m_registry.isValid())
         {
             RegError ret = m_registry.m_pApi->closeKey(m_hImpl);
-            if (!ret)
+            if (ret == RegError::NO_ERROR)
             {
                 m_hImpl = NULL;
                 m_registry = Registry();
             }
             return ret;
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline void RegistryKey::releaseKey()
@@ -948,7 +948,7 @@ inline RegError RegistryKey::setValue(const rtl::OUString& keyName,
             return m_registry.m_pApi->setValue(m_hImpl, keyName.pData, valueType,
                                                 pValue, valueSize);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::setLongListValue(const rtl::OUString& keyName,
@@ -959,7 +959,7 @@ inline RegError RegistryKey::setLongListValue(const rtl::OUString& keyName,
             return m_registry.m_pApi->setLongListValue(m_hImpl, keyName.pData,
                                                            pValueList, len);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::setStringListValue(const rtl::OUString& keyName,
@@ -970,7 +970,7 @@ inline RegError RegistryKey::setStringListValue(const rtl::OUString& keyName,
             return m_registry.m_pApi->setStringListValue(m_hImpl, keyName.pData,
                                                             pValueList, len);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::setUnicodeListValue(const rtl::OUString& keyName,
@@ -981,7 +981,7 @@ inline RegError RegistryKey::setUnicodeListValue(const rtl::OUString& keyName,
             return m_registry.m_pApi->setUnicodeListValue(m_hImpl, keyName.pData,
                                                               pValueList, len);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getValueInfo(const rtl::OUString& keyName,
@@ -991,7 +991,7 @@ inline RegError RegistryKey::getValueInfo(const rtl::OUString& keyName,
         if (m_registry.isValid())
             return m_registry.m_pApi->getValueInfo(m_hImpl, keyName.pData, pValueType, pValueSize);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getValue(const rtl::OUString& keyName,
@@ -1000,7 +1000,7 @@ inline RegError RegistryKey::getValue(const rtl::OUString& keyName,
         if (m_registry.isValid())
             return m_registry.m_pApi->getValue(m_hImpl, keyName.pData, pValue);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getLongListValue(const rtl::OUString& keyName,
@@ -1008,12 +1008,12 @@ inline RegError RegistryKey::getLongListValue(const rtl::OUString& keyName,
     {
         if (m_registry.isValid())
         {
-            RegError    ret = REG_NO_ERROR;
+            RegError    ret = RegError::NO_ERROR;
             sal_Int32*  pValueList;
             sal_uInt32  length;
-             ret = m_registry.m_pApi->getLongListValue(m_hImpl, keyName.pData,
+            ret = m_registry.m_pApi->getLongListValue(m_hImpl, keyName.pData,
                                                       &pValueList, &length);
-             if ( ret )
+            if ( ret != RegError::NO_ERROR)
             {
                 return ret;
             } else
@@ -1023,7 +1023,7 @@ inline RegError RegistryKey::getLongListValue(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getStringListValue(const rtl::OUString& keyName,
@@ -1031,12 +1031,12 @@ inline RegError RegistryKey::getStringListValue(const rtl::OUString& keyName,
     {
         if (m_registry.isValid())
         {
-            RegError    ret = REG_NO_ERROR;
+            RegError    ret = RegError::NO_ERROR;
             sal_Char**  pValueList;
             sal_uInt32  length;
-             ret = m_registry.m_pApi->getStringListValue(m_hImpl, keyName.pData,
+            ret = m_registry.m_pApi->getStringListValue(m_hImpl, keyName.pData,
                                                       &pValueList, &length);
-             if ( ret )
+            if ( ret != RegError::NO_ERROR )
             {
                 return ret;
             } else
@@ -1046,7 +1046,7 @@ inline RegError RegistryKey::getStringListValue(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
@@ -1054,12 +1054,12 @@ inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
     {
         if (m_registry.isValid())
         {
-            RegError        ret = REG_NO_ERROR;
+            RegError        ret = RegError::NO_ERROR;
             sal_Unicode**   pValueList;
             sal_uInt32      length;
-             ret = m_registry.m_pApi->getUnicodeListValue(m_hImpl, keyName.pData,
+            ret = m_registry.m_pApi->getUnicodeListValue(m_hImpl, keyName.pData,
                                                       &pValueList, &length);
-             if ( ret )
+            if ( ret != RegError::NO_ERROR )
             {
                 return ret;
             } else
@@ -1069,33 +1069,33 @@ inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::createLink(const rtl::OUString& ,
                                         const rtl::OUString& )
     {
         if (m_registry.isValid())
-            return REG_INVALID_LINK; // links are no longer supported
+            return RegError::INVALID_LINK; // links are no longer supported
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::deleteLink(const rtl::OUString& )
     {
         if (m_registry.isValid())
-            return REG_INVALID_LINK; // links are no longer supported
+            return RegError::INVALID_LINK; // links are no longer supported
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline RegError RegistryKey::getLinkTarget(const rtl::OUString& ,
                                                  rtl::OUString& ) const
     {
         if (m_registry.isValid())
-            return REG_INVALID_LINK; // links are no longer supported
+            return RegError::INVALID_LINK; // links are no longer supported
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 
@@ -1109,7 +1109,7 @@ inline RegError RegistryKey::getResolvedKeyName(const rtl::OUString& keyName,
                                                          firstLinkOnly,
                                                          &rResolvedName.pData);
         else
-            return REG_INVALID_KEY;
+            return RegError::INVALID_KEY;
     }
 
 inline rtl::OUString RegistryKey::getRegistryName()
@@ -1193,7 +1193,7 @@ inline RegError Registry::open(const rtl::OUString& registryName,
 inline RegError Registry::close()
     {
         RegError ret = m_pApi->closeRegistry(m_hImpl);
-        if (!ret)
+        if (ret == RegError::NO_ERROR)
             m_hImpl = NULL;
         return ret;
     }
@@ -1201,7 +1201,7 @@ inline RegError Registry::close()
 inline RegError Registry::destroy(const rtl::OUString& registryName)
     {
         RegError ret = m_pApi->destroyRegistry(m_hImpl, registryName.pData);
-        if ( !ret && registryName.isEmpty() )
+        if ( ret == RegError::NO_ERROR && registryName.isEmpty() )
             m_hImpl = NULL;
         return ret;
     }

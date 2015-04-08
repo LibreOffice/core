@@ -103,11 +103,11 @@ Cursor::Cursor(
             prefix_ += "/";
         }
         RegError e = key_.getKeyNames("", names_);
-        if (e != REG_NO_ERROR) {
+        if (e != RegError::NO_ERROR) {
             throw FileFormatException(
                 key_.getRegistryName(),
                 ("legacy format: cannot get sub-key names of " + key_.getName()
-                 + ": " + OUString::number(e)));
+                 + ": " + OUString::number(static_cast<int>(e))));
         }
     }
 }
@@ -150,11 +150,11 @@ private:
 std::vector< OUString > Module::getMemberNames() const {
     RegistryKeyNames names;
     RegError e = key_.getKeyNames("", names);
-    if (e != REG_NO_ERROR) {
+    if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key_.getRegistryName(),
             ("legacy format: cannot get sub-key names of " + key_.getName()
-             + ": " + OUString::number(e)));
+             + ": " + OUString::number(static_cast<int>(e))));
     }
     std::vector< OUString > ns;
     for (sal_uInt32 i = 0; i != names.getLength(); ++i) {
@@ -168,11 +168,11 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
     RegValueType type;
     sal_uInt32 size;
     RegError e = key.getValueInfo("", &type, &size);
-    if (e != REG_NO_ERROR) {
+    if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key.getRegistryName(),
             ("legacy format: cannot get value info about key " + key.getName()
-             + ": " + OUString::number(e)));
+             + ": " + OUString::number(static_cast<int>(e))));
     }
     if (type != RegValueType::BINARY) {
         throw FileFormatException(
@@ -190,11 +190,11 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
     }
     buffer->resize(static_cast< std::vector< char >::size_type >(size));
     e = key.getValue("", &(*buffer)[0]);
-    if (e != REG_NO_ERROR) {
+    if (e != RegError::NO_ERROR) {
         throw FileFormatException(
             key.getRegistryName(),
             ("legacy format: cannot get binary value of key " + key.getName()
-             + ": " + OUString::number(e)));
+             + ": " + OUString::number(static_cast<int>(e))));
     }
     typereg::Reader reader(&(*buffer)[0], size, false, TYPEREG_VERSION_1);
     if (!reader.isValid()) {
@@ -213,9 +213,9 @@ rtl::Reference< Entity > readEntity(
     RegistryKey sub;
     RegError e = key.openKey(path, sub);
     switch (e) {
-    case REG_NO_ERROR:
+    case RegError::NO_ERROR:
         break;
-    case REG_KEY_NOT_EXISTS:
+    case RegError::KEY_NOT_EXISTS:
         if (probe) {
             return rtl::Reference< Entity >();
         }
@@ -224,7 +224,7 @@ rtl::Reference< Entity > readEntity(
         throw FileFormatException(
             key.getRegistryName(),
             ("legacy format: cannot open sub-key " + path + " of "
-             + key.getName() + ": " + OUString::number(e)));
+             + key.getName() + ": " + OUString::number(static_cast<int>(e))));
     }
     std::vector< char > buf;
     typereg::Reader reader(getReader(sub, &buf));
@@ -725,9 +725,9 @@ rtl::Reference< Entity > readEntity(
                 RegistryKey key2;
                 e = ucr.openKey(basePath, key2);
                 switch (e) {
-                case REG_NO_ERROR:
+                case RegError::NO_ERROR:
                     break;
-                case REG_KEY_NOT_EXISTS:
+                case RegError::KEY_NOT_EXISTS:
                     throw FileFormatException(
                         key.getRegistryName(),
                         ("legacy format: unknown super-type " + basePath
@@ -736,7 +736,7 @@ rtl::Reference< Entity > readEntity(
                     throw FileFormatException(
                         key.getRegistryName(),
                         ("legacy format: cannot open ucr sub-key " + basePath
-                         + ": " + OUString::number(e)));
+                         + ": " + OUString::number(static_cast<int>(e))));
                 }
                 std::vector< char > buf2;
                 typereg::Reader reader2(getReader(key2, &buf2));
@@ -798,28 +798,28 @@ LegacyProvider::LegacyProvider(Manager & manager, OUString const & uri):
     Registry reg;
     RegError e = reg.open(uri, RegAccessMode::READONLY);
     switch (e) {
-    case REG_NO_ERROR:
+    case RegError::NO_ERROR:
         break;
-    case REG_REGISTRY_NOT_EXISTS:
+    case RegError::REGISTRY_NOT_EXISTS:
         throw NoSuchFileException(uri);
     default:
         throw FileFormatException(
-            uri, "cannot open legacy file: " + OUString::number(e));
+            uri, "cannot open legacy file: " + OUString::number(static_cast<int>(e)));
     }
     RegistryKey root;
     e = reg.openRootKey(root);
-    if (e != REG_NO_ERROR) {
+    if (e != RegError::NO_ERROR) {
         throw FileFormatException(
-            uri, "legacy format: cannot open root key: " + OUString::number(e));
+            uri, "legacy format: cannot open root key: " + OUString::number(static_cast<int>(e)));
     }
     e = root.openKey("UCR", ucr_);
     switch (e) {
-    case REG_NO_ERROR:
-    case REG_KEY_NOT_EXISTS: // such effectively empty files exist in the wild
+    case RegError::NO_ERROR:
+    case RegError::KEY_NOT_EXISTS: // such effectively empty files exist in the wild
         break;
     default:
         throw FileFormatException(
-            uri, "legacy format: cannot open UCR key: " + OUString::number(e));
+            uri, "legacy format: cannot open UCR key: " + OUString::number(static_cast<int>(e)));
     }
 }
 
