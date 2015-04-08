@@ -846,7 +846,7 @@ const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 
 RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
 {
-    RTReferenceType refType = RT_REF_INVALID;
+    RTReferenceType refType = RTReferenceType::INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1788,7 +1788,7 @@ RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(void * hEntry, 
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RT_REF_INVALID;
+    if (pEntry == NULL) return RTReferenceType::INVALID;
 
     return pEntry->m_pReferences->getReferenceType(index);
 }

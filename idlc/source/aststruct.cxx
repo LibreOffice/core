@@ -153,7 +153,7 @@ bool AstStruct::dump(RegistryKey& rKey)
          i != m_typeParameters.end(); ++i)
     {
         aBlob.setReferenceData(
-            index++, emptyStr, RT_REF_TYPE_PARAMETER, RTFieldAccess::INVALID,
+            index++, emptyStr, RTReferenceType::TYPE_PARAMETER, RTFieldAccess::INVALID,
             OStringToOUString(
                 (*i)->getLocalName(), RTL_TEXTENCODING_UTF8));
     }

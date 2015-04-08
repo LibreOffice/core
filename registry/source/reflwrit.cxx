@@ -480,7 +480,7 @@ public:
 };
 
 ReferenceEntry::ReferenceEntry()
-    : m_type(RT_REF_INVALID)
+    : m_type(RTReferenceType::INVALID)
     , m_access(RTFieldAccess::INVALID)
 {
 }

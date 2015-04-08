@@ -886,16 +886,16 @@ static char const * getReferenceType(RTReferenceType refType)
 {
     switch (refType)
     {
-        case RT_REF_SUPPORTS:
-            return "RT_REF_SUPPORTS";
-        case RT_REF_OBSERVES:
-            return "RT_REF_OBSERVES";
-        case RT_REF_EXPORTS:
-            return "RT_REF_EXPORTS";
-        case RT_REF_NEEDS:
-            return "RT_REF_NEEDS";
+        case RTReferenceType::SUPPORTS:
+            return "RTReferenceType::SUPPORTS";
+        case RTReferenceType::OBSERVES:
+            return "RTReferenceType::OBSERVES";
+        case RTReferenceType::EXPORTS:
+            return "RTReferenceType::EXPORTS";
+        case RTReferenceType::NEEDS:
+            return "RTReferenceType::NEEDS";
         default:
-            return "RT_REF_INVALID";
+            return "RTReferenceType::INVALID";
     }
 }
 

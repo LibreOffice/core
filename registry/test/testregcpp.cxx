@@ -299,14 +299,14 @@ void test_coreReflection()
                             OUString("ich bin eine property"),
                             OUString(), RTFieldAccess::READWRITE);
 
-        writer.setReferenceData(0, OUString("ModuleA/XInterfaceA"), RT_REF_SUPPORTS,
+        writer.setReferenceData(0, OUString("ModuleA/XInterfaceA"), RTReferenceType::SUPPORTS,
                                 OUString("Hallo ich eine Reference auf ein supported interface"),
                                 RTFieldAccess::OPTIONAL);
-        writer.setReferenceData(1, OUString("ModuleA/XInterfaceA"), RT_REF_OBSERVES,
+        writer.setReferenceData(1, OUString("ModuleA/XInterfaceA"), RTReferenceType::OBSERVES,
                                 OUString("Hallo ich eine Reference auf ein observed interface"));
-        writer.setReferenceData(2, OUString("ModuleA/ServiceB"), RT_REF_EXPORTS,
+        writer.setReferenceData(2, OUString("ModuleA/ServiceB"), RTReferenceType::EXPORTS,
                                 OUString("Hallo ich eine Reference auf einen exported service"));
-        writer.setReferenceData(3, OUString("ModuleA/ServiceB"), RT_REF_NEEDS,
+        writer.setReferenceData(3, OUString("ModuleA/ServiceB"), RTReferenceType::NEEDS,
                                 OUString("Hallo ich eine Reference auf einen needed service"));
 
         const sal_uInt8* pBlop = writer.getBlop();

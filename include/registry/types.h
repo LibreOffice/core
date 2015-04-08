@@ -298,37 +298,37 @@ enum RTParamMode {
 
 /** specifies the type of a reference used in a service description.
  */
-enum RTReferenceType {
+enum class RTReferenceType {
     /// the reference type is unknown
-    RT_REF_INVALID,
+    INVALID,
 
     /** the service support the interface that means a implementation of this
         service must implement this interface.
      */
-    RT_REF_SUPPORTS,
+    SUPPORTS,
 
     /** @deprecated
         the service observes the interface.
      */
-    RT_REF_OBSERVES,
+    OBSERVES,
 
     /** the service exports the specified service that means this service
         provides also the specified service.
      */
-    RT_REF_EXPORTS,
+    EXPORTS,
 
     /** @deprecated
         the service needs the specified service that means in the context of
         this service the specified service will be used or must be available.
      */
-    RT_REF_NEEDS,
+    NEEDS,
 
     /**
        Indicates a type parameter of a polymorphic struct type template.
 
        @since UDK 3.2.0
      */
-    RT_REF_TYPE_PARAMETER
+    TYPE_PARAMETER
 };
 
 #ifdef __cplusplus

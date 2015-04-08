@@ -257,7 +257,7 @@ bool AstService::dump(RegistryKey& rKey)
         {
             AstInterfaceMember * decl = static_cast<AstInterfaceMember *>(*i);
             writer.setReferenceData(
-                referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
+                referenceIndex++, decl->getDocumentation(), RTReferenceType::SUPPORTS,
                 (decl->isOptional() ? RTFieldAccess::OPTIONAL : RTFieldAccess::INVALID),
                 OStringToOUString( decl->getRealInterface()->getRelativName(),
                                         RTL_TEXTENCODING_UTF8));
@@ -268,7 +268,7 @@ bool AstService::dump(RegistryKey& rKey)
             if (getNodeType() == NT_service)
             {
                 AstServiceMember * decl = static_cast<AstServiceMember *>(*i);
-                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
+                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RTReferenceType::EXPORTS,
                     (decl->isOptional() ? RTFieldAccess::OPTIONAL : RTFieldAccess::INVALID),
                     OStringToOUString(decl->getRealService()->getRelativName(),
                                            RTL_TEXTENCODING_UTF8));
@@ -278,7 +278,7 @@ bool AstService::dump(RegistryKey& rKey)
         case NT_observes:
             {
                 AstObserves * decl = static_cast<AstObserves *>(*i);
-                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
+                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RTReferenceType::OBSERVES,
                     RTFieldAccess::INVALID,
                     OStringToOUString( decl->getRealInterface()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));
@@ -288,7 +288,7 @@ bool AstService::dump(RegistryKey& rKey)
         case NT_needs:
             {
                 AstNeeds * decl = static_cast<AstNeeds *>(*i);
-                writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
+                writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RTReferenceType::NEEDS,
                     RTFieldAccess::INVALID,
                     OStringToOUString( decl->getRealService()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));

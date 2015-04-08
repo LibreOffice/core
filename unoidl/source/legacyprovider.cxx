@@ -512,7 +512,7 @@ rtl::Reference< Entity > readEntity(
                         translateAnnotations(
                             reader.getReferenceDocumentation(j)));
                     switch (reader.getReferenceSort(j)) {
-                    case RT_REF_EXPORTS:
+                    case RTReferenceType::EXPORTS:
                         if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
                             mandServs.push_back(base);
@@ -520,7 +520,7 @@ rtl::Reference< Entity > readEntity(
                             optServs.push_back(base);
                         }
                         break;
-                    case RT_REF_SUPPORTS:
+                    case RTReferenceType::SUPPORTS:
                         if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
                             mandIfcs.push_back(base);
@@ -532,7 +532,7 @@ rtl::Reference< Entity > readEntity(
                         throw FileFormatException(
                             key.getRegistryName(),
                             ("legacy format: unexpected mode "
-                             + OUString::number(reader.getReferenceSort(j))
+                             + OUString::number(static_cast<int>(reader.getReferenceSort(j)))
                              + " of reference " + reader.getReferenceTypeName(j)
                              + " in service with key " + sub.getName()));
                     }

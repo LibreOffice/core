@@ -394,15 +394,15 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
             printf("\n");
             printf("%s    sort: ", indent.getStr());
             switch (reader.getReferenceSort(i)) {
-            case RT_REF_SUPPORTS:
+            case RTReferenceType::SUPPORTS:
                 printf("supports");
                 break;
 
-            case RT_REF_EXPORTS:
+            case RTReferenceType::EXPORTS:
                 printf("exports");
                 break;
 
-            case RT_REF_TYPE_PARAMETER:
+            case RTReferenceType::TYPE_PARAMETER:
                 printf("type parameter");
                 break;
 
