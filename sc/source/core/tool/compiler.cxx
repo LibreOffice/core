@@ -1986,7 +1986,7 @@ Label_MaskStateMachine:
                 else if( nMask & SC_COMPILER_C_CHAR_ERRCONST )
                 {
                     *pSym++ = c;
-                    if (!maTableRefs.empty() && maTableRefs.back().mnLevel)
+                    if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
                         eState = ssGetTableRefItem;
                     else
                         eState = ssGetErrorConstant;
@@ -3664,7 +3664,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             if (cSymbol[0] == '#')
             {
                 // Check for TableRef item specifiers first.
-                if (!maTableRefs.empty())
+                if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
                 {
                     if (IsTableRefItem( aUpper ))
                         return true;
@@ -4859,8 +4859,70 @@ bool ScCompiler::HandleTableRef()
                 }
                 break;
         }
+        bool bColumnRange = false;
+        if (bForwardToClose && (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
+        {
+            int nLevel = 1;
+            enum
+            {
+                sOpen,
+                sItem,
+                sClose,
+                sSep,
+                sStop
+            } eState = sOpen;
+            do
+            {
+                if ((bGotToken = GetToken()))
+                {
+                    switch (mpToken->GetOpCode())
+                    {
+                        case ocTableRefOpen:
+                            eState = ((eState == sOpen || eState == sSep) ? sOpen : sStop);
+                            if (++nLevel > 2)
+                            {
+                                SetError( errPair);
+                                eState = sStop;
+                            }
+                            break;
+                        case ocTableRefItemAll:
+                        case ocTableRefItemHeaders:
+                        case ocTableRefItemData:
+                        case ocTableRefItemTotals:
+                        case ocTableRefItemThisRow:
+                            eState = ((eState == sOpen) ? sItem : sStop);
+                            break;
+                        case ocTableRefClose:
+                            eState = ((eState == sItem || eState == sClose) ? sClose : sStop);
+                            if (--nLevel <= 0)
+                            {
+                                if (nLevel < 0)
+                                    SetError( errPair);
+                                eState = sStop;
+                            }
+                            break;
+                        case ocSep:
+                            eState = ((eState == sClose) ? sSep : sStop);
+                            break;
+                        case ocPush:
+                            if (mpToken->GetType() == svSingleRef || mpToken->GetType() == svDoubleRef)
+                                bColumnRange = true;
+                            eState = sStop;
+                            break;
+                        default:
+                            eState = sStop;
+                    }
+                }
+            } while (bGotToken && eState != sStop);
+            if (bGotToken && mpToken->GetOpCode() == ocTableRefClose)
+                bGotToken = false;  // get next token below in return
+        }
         if (bAddRange)
         {
+            if (bColumnRange)
+            {
+                /* TODO: limit range to specified columns */
+            }
             ScComplexRefData aRefData;
             aRefData.InitFlags();
             aRefData.SetRange( aRange, aPos);
@@ -4869,12 +4931,6 @@ bool ScCompiler::HandleTableRef()
         else
         {
             SetError( errNoRef);
-        }
-        if (bForwardToClose)
-        {
-            while ((bGotToken = GetToken()) && mpToken->GetOpCode() != ocTableRefClose)
-                ;
-            bGotToken = false;  // get next token below
         }
         PushTokenArray( pNew, true );
         pNew->Reset();
