@@ -205,10 +205,6 @@ public class DocumentOverlay {
             }
         });
     }
-
-    public RectF getCursorPosition() {
-        return mDocumentOverlayView.getCursorPosition();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
