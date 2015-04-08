@@ -23,6 +23,7 @@ import android.view.View;
 
 import org.libreoffice.LOKitShell;
 import org.libreoffice.R;
+import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.canvas.SelectionHandleEnd;
@@ -40,15 +41,10 @@ import java.util.List;
  */
 public class TextCursorView extends View implements View.OnTouchListener {
     private static final String LOGTAG = TextCursorView.class.getSimpleName();
-    private static final float CURSOR_WIDTH = 2f;
+
     private static final int CURSOR_BLINK_TIME = 500;
 
     private boolean mInitialized = false;
-    private RectF mCursorPosition = new RectF();
-    private RectF mCursorScaledPosition = new RectF();
-    private Paint mCursorPaint = new Paint();
-    private int mCursorAlpha = 0;
-    private boolean mCursorVisible;
 
     private List<RectF> mSelections = new ArrayList<RectF>();
     private List<RectF> mScaledSelections = new ArrayList<RectF>();
@@ -64,6 +60,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private SelectionHandle mHandleMiddle;
     private SelectionHandle mHandleStart;
     private SelectionHandle mHandleEnd;
+
+    private Cursor mCursor;
 
     private SelectionHandle mDragHandle = null;
 
@@ -87,9 +85,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
             setOnTouchListener(this);
             mLayerView = layerView;
 
-            mCursorPaint.setColor(Color.BLACK);
-            mCursorPaint.setAlpha(0xFF);
-            mCursorVisible = false;
+            mCursor = new Cursor();
+            mCursor.setVisible(false);
 
             mSelectionPaint.setColor(Color.BLUE);
             mSelectionPaint.setAlpha(50);
@@ -113,10 +110,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * @param position - new position of the cursor
      */
     public void changeCursorPosition(RectF position) {
-        if (RectUtils.fuzzyEquals(mCursorPosition, position)) {
+        if (RectUtils.fuzzyEquals(mCursor.mPosition, position)) {
             return;
         }
-        mCursorPosition = position;
+        mCursor.mPosition = position;
 
         ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
@@ -149,10 +146,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
     }
 
     public void repositionWithViewport(float x, float y, float zoom) {
-        mCursorScaledPosition = convertToScreen(mCursorPosition, x, y, zoom);
-        mCursorScaledPosition.right = mCursorScaledPosition.left + CURSOR_WIDTH;
+        RectF rect = convertToScreen(mCursor.mPosition, x, y, zoom);
+        mCursor.reposition(rect);
 
-        RectF rect = convertToScreen(mHandleMiddle.mDocumentPosition, x, y, zoom);
+        rect = convertToScreen(mHandleMiddle.mDocumentPosition, x, y, zoom);
         mHandleMiddle.reposition(rect.left, rect.bottom);
 
         rect = convertToScreen(mHandleStart.mDocumentPosition, x, y, zoom);
@@ -189,9 +186,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mCursorVisible) {
-            canvas.drawRect(mCursorScaledPosition, mCursorPaint);
-        }
+        mCursor.draw(canvas);
+
         mHandleMiddle.draw(canvas);
         mHandleStart.draw(canvas);
         mHandleEnd.draw(canvas);
@@ -211,8 +207,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
      */
     private Runnable cursorAnimation = new Runnable() {
         public void run() {
-            if (mCursorVisible) {
-                mCursorPaint.setAlpha(mCursorPaint.getAlpha() == 0 ? 0xFF : 0);
+            if (mCursor.isVisible()) {
+                mCursor.cycleAlpha();
                 invalidate();
             }
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
@@ -223,8 +219,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * Show the cursor on the view.
      */
     public void showCursor() {
-        if (!mCursorVisible) {
-            mCursorVisible = true;
+        if (!mCursor.isVisible()) {
+            mCursor.setVisible(true);
             invalidate();
         }
     }
@@ -233,8 +229,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
      * Hide the cursor.
      */
     public void hideCursor() {
-        if (mCursorVisible) {
-            mCursorVisible = false;
+        if (mCursor.isVisible()) {
+            mCursor.setVisible(false);
             invalidate();
         }
     }
