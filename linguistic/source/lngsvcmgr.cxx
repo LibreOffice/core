@@ -860,6 +860,8 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         SAL_WARN_IF( aKeyText.isEmpty(), "linguistic", "unexpected key (lang::Locale) string" );
         if (rName.startsWith( aSpellCheckerList ))
         {
+            osl::MutexGuard aGuard(GetLinguMutex());
+
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailSpellSvcs);
 
@@ -885,6 +887,8 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         }
         else if (rName.startsWith( aGrammarCheckerList ))
         {
+            osl::MutexGuard aGuard(GetLinguMutex());
+
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailGrammarSvcs);
 
@@ -913,6 +917,8 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         }
         else if (rName.startsWith( aHyphenatorList ))
         {
+            osl::MutexGuard aGuard(GetLinguMutex());
+
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailHyphSvcs);
 
@@ -938,6 +944,8 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         }
         else if (rName.startsWith( aThesaurusList ))
         {
+            osl::MutexGuard aGuard(GetLinguMutex());
+
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailThesSvcs);
 
