@@ -855,8 +855,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     if (DBMGR_MERGE_SHELL == nMergeType)
     {
-        SwXTextDocument *xTextDoc = new SwXTextDocument( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell() );
-        return makeAny( Reference< XComponent >( xTextDoc->queryInterface( XComponent::static_type() ), css::uno::UNO_QUERY) );
+        return makeAny( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetBaseModel() );
     }
     else
         return makeAny( sal_True );
