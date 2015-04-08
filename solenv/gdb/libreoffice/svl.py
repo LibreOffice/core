@@ -12,6 +12,71 @@ import six
 
 from libreoffice.util import printing
 
+class ItemSetPrinter(object):
+    '''Prints SfxItemSets'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        whichranges = self.which_ranges()
+        return "SfxItemSet of pool %s with parent %s and Which ranges: %s" \
+                % (self.value['m_pPool'], self.value['m_pParent'], whichranges)
+
+    def which_ranges(self):
+        whichranges = self.value['m_pWhichRanges']
+        index = 0
+        whiches = []
+        while (whichranges[index]):
+            whiches.append((int(whichranges[index]), int(whichranges[index+1])))
+            index = index + 2
+        return whiches
+
+    def children(self):
+        whichranges = self.which_ranges()
+        size = 0
+        whichids = []
+        for (whichfrom, whichto) in whichranges:
+            size += whichto - whichfrom + 1
+            whichids += [which for which in range(whichfrom, whichto+1)]
+        return self._iterator(self.value['m_pItems'], size, whichids)
+
+    class _iterator(six.Iterator):
+
+        def __init__(self, data, count, whichids):
+            self.data = data
+            self.whichids = whichids
+            self.count = count
+            self.pos = 0
+            self._check_invariant()
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.pos == self.count:
+                raise StopIteration()
+
+            which = self.whichids[self.pos]
+            elem = self.data[self.pos]
+            self.pos = self.pos + 1
+
+            self._check_invariant()
+            if (elem == -1):
+                elem = "(Invalid)"
+            elif (elem != 0):
+                # let's try how well that works...
+                elem = elem.cast(elem.dynamic_type).dereference()
+            return (str(which), elem)
+
+        def _check_invariant(self):
+            assert self.count >= 0
+            assert self.data
+            assert self.pos >= 0
+            assert self.pos <= self.count
+            assert len(self.whichids) == self.count
+
 class SvArrayPrinter(object):
     '''Prints macro-declared arrays from svl module'''
 
@@ -97,6 +162,7 @@ def build_pretty_printers():
 
     printer = printing.Printer("libreoffice/svl")
 
+    printer.add('SfxItemSet', ItemSetPrinter)
     # macro-based arrays from svl module
     printer.add('SvArray', SvArrayPrinter, SvArrayPrinter.query)
 
