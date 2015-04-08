@@ -203,7 +203,11 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     return pSym2( install_path, user_profile_path );
 }
 
-static LibreOfficeKit *lok_init( const char *install_path )
+static
+#ifdef __GNUC__
+__attribute__((used))
+#endif
+LibreOfficeKit *lok_init( const char *install_path )
 {
     return lok_init_2( install_path, NULL );
 }
