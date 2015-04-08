@@ -4921,12 +4921,56 @@ bool ScCompiler::HandleTableRef()
         {
             if (bColumnRange)
             {
-                /* TODO: limit range to specified columns */
+                // Limit range to specified columns.
+                ScRange aColRange( ScAddress::INITIALIZE_INVALID );
+                switch (mpToken->GetType())
+                {
+                    case svSingleRef:
+                        {
+                            ScAddress aRef( mpToken->GetSingleRef()->toAbs( aPos));
+                            aColRange.aStart = aColRange.aEnd = aRef;
+                        }
+                        break;
+                    case svDoubleRef:
+                        {
+                            aColRange = mpToken->GetDoubleRef()->toAbs( aPos);
+                        }
+                        break;
+                    default:
+                        ;   // nothing
+                }
+                if (aColRange.aStart.Row() != aRange.aStart.Row() && aColRange.aEnd.Row() != aRange.aStart.Row())
+                    aRange = ScRange( ScAddress::INITIALIZE_INVALID);
+                else
+                {
+                    aColRange.aEnd.SetRow( aRange.aEnd.Row());
+                    aRange = aRange.Intersection( aColRange);
+                }
             }
-            ScComplexRefData aRefData;
-            aRefData.InitFlags();
-            aRefData.SetRange( aRange, aPos);
-            pNew->AddDoubleReference( aRefData );
+            if (aRange.IsValid())
+            {
+                ScComplexRefData aRefData;
+                aRefData.InitFlags();
+                aRefData.SetRange( aRange, aPos);
+                pNew->AddDoubleReference( aRefData );
+            }
+            else
+            {
+                SetError( errNoRef);
+            }
+            if (bColumnRange)
+            {
+                if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
+                {
+                    if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
+                        bGotToken = false;  // get next token below in return
+                }
+                else
+                {
+                    SetError( errPair);
+                    bGotToken = false;  // get next token below in return
+                }
+            }
         }
         else
         {
