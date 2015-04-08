@@ -4849,9 +4849,20 @@ bool ScCompiler::HandleTableRef()
                 }
                 break;
             case ScTableRefToken::THIS_ROW:
-                /* TODO: implement this. */
-                SetError(errUnknownToken);
-                bAddRange = false;
+                {
+                    if (aRange.aStart.Row() <= aPos.Row() && aPos.Row() <= aRange.aEnd.Row())
+                    {
+                        aRange.aStart.SetRow( aPos.Row());
+                        aRange.aEnd.SetRow( aPos.Row());
+                    }
+                    else
+                    {
+                        /* TODO: add RefData with deleted rows to generate
+                         * #REF! error? */
+                        bAddRange = false;
+                    }
+                    bForwardToClose = true;
+                }
                 break;
         }
         if (bAddRange)
