@@ -4905,7 +4905,8 @@ bool ScCompiler::HandleTableRef()
                             eState = ((eState == sClose) ? sSep : sStop);
                             break;
                         case ocPush:
-                            if (mpToken->GetType() == svSingleRef || mpToken->GetType() == svDoubleRef)
+                            if (eState == sOpen &&
+                                    (mpToken->GetType() == svSingleRef || mpToken->GetType() == svDoubleRef))
                                 bColumnRange = true;
                             eState = sStop;
                             break;
