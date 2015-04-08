@@ -109,8 +109,6 @@ SfxItemSet::SfxItemSet
     memset(static_cast<void*>(m_pItems), 0, nSize * sizeof(SfxPoolItem*));
 }
 
-
-
 SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2)
     : m_pPool( &rPool )
     , m_pParent(nullptr)
@@ -120,8 +118,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich
 
     InitRanges_Impl(nWhich1, nWhich2);
 }
-
-
 
 void SfxItemSet::InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2)
 {
@@ -134,16 +130,12 @@ void SfxItemSet::InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2)
     memset(static_cast<void*>(m_pItems), 0, nRg * sizeof(SfxPoolItem*));
 }
 
-
-
 void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull)
 {
     sal_uInt16 nSize = InitializeRanges_Impl(m_pWhichRanges, pArgs, nWh1, nWh2, nNull);
     m_pItems = new const SfxPoolItem* [ nSize ];
     memset(static_cast<void*>(m_pItems), 0, sizeof(SfxPoolItem*) * nSize);
 }
-
-
 
 SfxItemSet::SfxItemSet(SfxItemPool& rPool,
                        USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ...)
@@ -169,8 +161,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool,
     }
 }
 
-
-
 void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
 {
     sal_uInt16 nCnt = 0;
@@ -189,9 +179,6 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     memcpy( m_pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * cnt );
 }
 
-
-
-
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     : m_pPool(&rPool)
     , m_pParent(nullptr)
@@ -199,7 +186,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     , m_pWhichRanges(nullptr)
     , m_nCount(0)
 {
-    // pWhichPairTable == 0 ist f"ur das SfxAllEnumItemSet
+    // pWhichPairTable == 0 is for the SfxAllEnumItemSet
     if ( pWhichPairTable )
         InitRanges_Impl(pWhichPairTable);
 }
@@ -246,8 +233,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     memcpy( m_pWhichRanges, rASet.m_pWhichRanges, sizeof( sal_uInt16 ) * cnt);
 }
 
-
-
 SfxItemSet::~SfxItemSet()
 {
     sal_uInt16 nCount = TotalCount();
@@ -271,13 +256,11 @@ SfxItemSet::~SfxItemSet()
             }
     }
 
-    // FIXME: could be delete[] (SfxPoolItem **)m_pItems;
     delete[] m_pItems;
     if (m_pWhichRanges != m_pPool->GetFrozenIdRanges())
         delete[] m_pWhichRanges;
     m_pWhichRanges = nullptr; // for invariant-testing
 }
-
 
 /**
  * Delete single Items or all Items (nWhich == 0)
@@ -376,8 +359,6 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
     return nDel;
 }
 
-
-
 void SfxItemSet::ClearInvalidItems( bool bHardDefault )
 {
     sal_uInt16* pPtr = m_pWhichRanges;
@@ -427,8 +408,6 @@ void SfxItemSet::InvalidateAllItems()
     m_nCount = TotalCount();
     memset(static_cast<void*>(m_pItems), -1, m_nCount * sizeof(SfxPoolItem*));
 }
-
-
 
 SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                                         bool bSrchInParent,
@@ -485,8 +464,6 @@ bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
         *ppItem = NULL;
     return bRet;
 }
-
-
 
 const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
@@ -563,8 +540,6 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
     return 0;
 }
 
-
-
 bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
 {
     bool bRet = false;
@@ -594,7 +569,6 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
     }
     return bRet;
 }
-
 
 /**
  * This method takes the Items from the 'rSet' and adds to '*this'.
@@ -676,7 +650,6 @@ void SfxItemSet::PutExtended
     }
 }
 
-
 /**
  * Expands the ranges of settable items by 'nFrom' to 'nTo'. Keeps state of
  * items which are new ranges too.
@@ -693,7 +666,6 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     aRanges += SfxUShortRanges( nFrom, nTo );
     SetRanges( aRanges );
 }
-
 
 /**
  * Modifies the ranges of settable items. Keeps state of items which
@@ -782,7 +754,6 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
         memcpy( m_pWhichRanges, pNewRanges, sizeof( sal_uInt16 ) * nCount );
     }
 }
-
 
 /**
  * The SfxItemSet takes over exactly those SfxPoolItems that are
@@ -883,9 +854,6 @@ const SfxPoolItem* SfxItemSet::GetItem
     return 0;
 }
 
-
-
-
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 {
     // Search the Range in which the Which is located in:
@@ -942,8 +910,6 @@ void SfxItemSet::Changed( const SfxPoolItem&, const SfxPoolItem& )
 {
 }
 
-
-
 sal_uInt16 SfxItemSet::TotalCount() const
 {
     sal_uInt16 nRet = 0;
@@ -955,7 +921,6 @@ sal_uInt16 SfxItemSet::TotalCount() const
     }
     return nRet;
 }
-
 
 /**
  * Only retain the Items that are also present in rSet
@@ -1037,8 +1002,6 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     }
 }
 
-
-
 void SfxItemSet::Differentiate( const SfxItemSet& rSet )
 {
     if( !Count() || !rSet.Count() )// None set?
@@ -1107,7 +1070,6 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
 
     }
 }
-
 
 /**
  * Decision table for MergeValue(s)
@@ -1307,8 +1269,6 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
     }
 }
 
-
-
 void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, bool bIgnoreDefaults )
 {
     SfxItemArray ppFnd = m_pItems;
@@ -1327,8 +1287,6 @@ void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, bool bIgnoreDefaults )
         pPtr += 2;
     }
 }
-
-
 
 void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
 {
@@ -1361,8 +1319,6 @@ void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
     }
 }
 
-
-
 sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
 {
     sal_uInt16 n = 0;
@@ -1378,7 +1334,6 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
     assert(false);
     return 0;
 }
-
 
 /**
  * Saves the SfxItemSet instance to the supplied Stream.
@@ -1437,7 +1392,6 @@ SvStream &SfxItemSet::Store
 
     return rStream;
 }
-
 
 /**
  * This method loads an SfxItemSet from a stream.
@@ -1517,8 +1471,6 @@ SvStream &SfxItemSet::Load
     return rStream;
 }
 
-
-
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
     // Values we can get quickly need to be the same
@@ -1585,8 +1537,6 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
     return true;
 }
 
-
-
 SfxItemSet *SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
     if (pToPool && pToPool != m_pPool)
@@ -1611,8 +1561,6 @@ SfxItemSet *SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
                 ? new SfxItemSet(*this)
                 : new SfxItemSet(*m_pPool, m_pWhichRanges);
 }
-
-
 
 int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
 {
@@ -1672,19 +1620,12 @@ SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
     memset( m_pWhichRanges, 0, (nInitCount + 1) * sizeof(sal_uInt16) );
 }
 
-
-
-
-
 SfxAllItemSet::SfxAllItemSet(const SfxItemSet &rCopy)
 :   SfxItemSet(rCopy),
     aDefault(0),
     nFree(0)
 {
 }
-
-
-
 
 /**
  * Explicitly define this ctor to avoid auto-generation by the compiler.
@@ -1696,7 +1637,6 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
     nFree(0)
 {
 }
-
 
 /**
  * This internal function creates a new WhichRanges array, which is copied
@@ -1724,7 +1664,6 @@ static sal_uInt16 *AddRanges_Impl(
 
     return pNew;
 }
-
 
 /**
  * This internal function creates a new ItemArray, which is copied from 'pItems',
@@ -1758,7 +1697,6 @@ static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_u
 
     return pNew;
 }
-
 
 /**
  * Putting with automatic extension of the WhichId with the ID of the Item.
@@ -1883,7 +1821,6 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     return &rNew;
 }
 
-
 /**
  * Disable Item
  * Using a VoidItem with Which value 0
@@ -1892,8 +1829,6 @@ void SfxItemSet::DisableItem(sal_uInt16 nWhich)
 {
     Put( SfxVoidItem(0), nWhich );
 }
-
-
 
 SfxItemSet *SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
@@ -1914,8 +1849,6 @@ sal_Int32 SfxItemSet::getHash() const
 {
     return stringify().hashCode();
 }
-
-
 
 OString SfxItemSet::stringify() const
 {
