@@ -28,31 +28,38 @@ class SfxItemPool;
 
 class SVL_DLLPUBLIC SfxItemIter
 {
-    // Item-Feld - Start & Ende
-    const SfxItemSet&   _rSet;
-    sal_uInt16              _nStt, _nEnd, _nAkt;
+    const SfxItemSet&   m_rSet;
+    sal_uInt16 m_nStart;
+    sal_uInt16 m_nEnd;
+    sal_uInt16 m_nCurrent;
 
 public:
     SfxItemIter( const SfxItemSet& rSet );
     ~SfxItemIter();
 
-    // falls es diese gibt, returne sie, sonst 0
+    /// get item, or null if no items
     const SfxPoolItem* FirstItem()
-                       { _nAkt = _nStt;
-                         return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
+    {
+        m_nCurrent = m_nStart;
+        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
+    }
     const SfxPoolItem* LastItem()
-                       { _nAkt = _nEnd;
-                         return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
+    {
+        m_nCurrent = m_nEnd;
+        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
+    }
     const SfxPoolItem* GetCurItem()
-                       { return _rSet.m_nCount ? *(_rSet.m_pItems+_nAkt) : nullptr; }
+    {
+        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
+    }
     const SfxPoolItem* NextItem();
 
-    bool               IsAtStart() const { return _nAkt == _nStt; }
-    bool               IsAtEnd() const   { return _nAkt == _nEnd; }
+    bool       IsAtStart()   const { return m_nCurrent == m_nStart; }
+    bool       IsAtEnd()     const { return m_nCurrent == m_nEnd; }
 
-    sal_uInt16             GetCurPos() const { return _nAkt; }
-    sal_uInt16             GetFirstPos() const { return _nStt; }
-    sal_uInt16             GetLastPos() const { return _nEnd; }
+    sal_uInt16 GetCurPos()   const { return m_nCurrent; }
+    sal_uInt16 GetFirstPos() const { return m_nStart; }
+    sal_uInt16 GetLastPos()  const { return m_nEnd; }
 };
 
 #endif

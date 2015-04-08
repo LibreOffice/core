@@ -23,28 +23,28 @@
 #include <svl/itemset.hxx>
 
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
-    : _rSet( rItemSet )
+    : m_rSet( rItemSet )
 {
-    if (!_rSet.m_nCount)
+    if (!m_rSet.m_nCount)
     {
-        _nStt = 1;
-        _nEnd = 0;
+        m_nStart = 1;
+        m_nEnd = 0;
     }
     else
     {
-        SfxItemArray ppFnd = _rSet.m_pItems;
+        SfxItemArray ppFnd = m_rSet.m_pItems;
 
         // Find the first Item that is set
-        for ( _nStt = 0; !*(ppFnd + _nStt ); ++_nStt )
+        for (m_nStart = 0; !*(ppFnd + m_nStart ); ++m_nStart)
             ; // empty loop
-        if ( 1 < _rSet.Count() )
-            for( _nEnd = _rSet.TotalCount(); !*( ppFnd + --_nEnd);  )
+        if (1 < m_rSet.Count())
+            for (m_nEnd = m_rSet.TotalCount(); !*(ppFnd + --m_nEnd); )
                 ; // empty loop
         else
-            _nEnd = _nStt;
+            m_nEnd = m_nStart;
     }
 
-    _nAkt = _nStt;
+    m_nCurrent = m_nStart;
 }
 
 SfxItemIter::~SfxItemIter()
@@ -53,14 +53,14 @@ SfxItemIter::~SfxItemIter()
 
 const SfxPoolItem* SfxItemIter::NextItem()
 {
-    SfxItemArray ppFnd = _rSet.m_pItems;
+    SfxItemArray ppFnd = m_rSet.m_pItems;
 
-    if( _nAkt < _nEnd )
+    if (m_nCurrent < m_nEnd)
     {
         do {
-            _nAkt++;
-        } while( _nAkt < _nEnd && !*(ppFnd + _nAkt ) );
-        return *(ppFnd+_nAkt);
+            m_nCurrent++;
+        } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
+        return *(ppFnd+m_nCurrent);
     }
     return 0;
 }
