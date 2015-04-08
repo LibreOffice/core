@@ -612,23 +612,6 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 }
 
 
-//  getKeyType
-
-RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
-                                      rtl_uString* keyName,
-                                         RegKeyType* pKeyType)
-{
-    ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if (!pKey)
-        return REG_INVALID_KEY;
-
-    if (pKey->isDeleted())
-        return REG_INVALID_KEY;
-
-    return pKey->getKeyType(keyName, pKeyType);
-}
-
-
 //  getName
 
 RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
@@ -917,19 +900,6 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
         return freeValueList(valueType, pValueList, len);
     else
         return REG_INVALID_VALUE;
-}
-
-
-//  reg_getKeyType
-
-RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
-                                          rtl_uString* keyName,
-                                             RegKeyType* pKeyType)
-{
-    if (!hKey)
-        return REG_INVALID_KEY;
-
-    return getKeyType(hKey, keyName, pKeyType);
 }
 
 

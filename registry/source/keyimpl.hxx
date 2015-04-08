@@ -90,9 +90,6 @@ public:
                                      sal_Unicode*** pValueList,
                                     sal_uInt32* pLen) const;
 
-    RegError    getKeyType(const OUString& name,
-                           RegKeyType* pKeyType) const;
-
     RegError    getResolvedKeyName(const OUString& keyName,
                                    OUString& resolvedName);
 

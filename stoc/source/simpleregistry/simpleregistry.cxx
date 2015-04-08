@@ -264,28 +264,10 @@ sal_Bool Key::isValid() throw (css::uno::RuntimeException, std::exception) {
     return key_.isValid();
 }
 
-css::registry::RegistryKeyType Key::getKeyType(OUString const & rKeyName)
+css::registry::RegistryKeyType Key::getKeyType(OUString const & )
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard guard(registry_->mutex_);
-    RegKeyType type;
-    RegError err = key_.getKeyType(rKeyName, &type);
-    if (err != REG_NO_ERROR) {
-        throw css::registry::InvalidRegistryException(
-            ("com.sun.star.registry.SimpleRegistry key getKeyType:"
-             " underlying RegistryKey::getKeyType() = " +
-             OUString::number(err)),
-            static_cast< OWeakObject * >(this));
-    }
-    switch (type) {
-    default:
-        std::abort(); // this cannot happen
-        // pseudo-fall-through to avoid warnings on MSC
-    case RG_KEYTYPE:
-        return css::registry::RegistryKeyType_KEY;
-    case RG_LINKTYPE:
-        return css::registry::RegistryKeyType_LINK;
-    }
+    return css::registry::RegistryKeyType_KEY;
 }
 
 css::registry::RegistryValueType Key::getValueType()
