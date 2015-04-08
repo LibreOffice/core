@@ -1435,7 +1435,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
     ::std::pair<StyleMap::iterator,bool> aRes( mpStyleMap->insert( aValue ) );
     SAL_WARN_IF( !aRes.second,
                  "xmloff.core",
-                 "duplicate style name" );
+       "duplicate style name of family " << nFamily << ": \"" << rName << "\"");
 
 }
 
