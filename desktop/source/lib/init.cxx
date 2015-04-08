@@ -268,7 +268,7 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 }
 
 static void                    lo_destroy       (LibreOfficeKit* pThis);
-static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath);
+static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
@@ -839,7 +839,7 @@ static void lo_startmain(void*)
 
 static bool bInitialized = false;
 
-static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
+static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfilePath)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
@@ -847,6 +847,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         return 1;
 
     comphelper::LibreOfficeKit::setActive();
+
+    if (pUserProfilePath)
+        rtl::Bootstrap::set(OUString("UserInstallation"), OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
 
     OUString aAppPath;
     if (pAppPath)
@@ -947,19 +950,29 @@ __attribute__ ((visibility("default")))
 #else
 SAL_DLLPUBLIC_EXPORT
 #endif
-LibreOfficeKit *libreofficekit_hook(const char* install_path)
+LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path)
 {
     if (!gImpl)
     {
         SAL_INFO("lok", "Create libreoffice object");
 
         gImpl = new LibLibreOffice_Impl();
-        if (!lo_initialize(gImpl, install_path))
+        if (!lo_initialize(gImpl, install_path, user_profile_path))
         {
             lo_destroy(gImpl);
         }
     }
     return static_cast<LibreOfficeKit*>(gImpl);
+}
+
+#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE) && defined(DISABLE_DYNLOADING)
+__attribute__ ((visibility("default")))
+#else
+SAL_DLLPUBLIC_EXPORT
+#endif
+LibreOfficeKit *libreofficekit_hook(const char* install_path)
+{
+    return libreofficekit_hook_2(install_path, NULL);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)

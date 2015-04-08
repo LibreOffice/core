@@ -126,11 +126,14 @@ extern "C"
 
 typedef LibreOfficeKit *(HookFunction)( const char *install_path);
 
-static LibreOfficeKit *lok_init( const char *install_path )
+typedef LibreOfficeKit *(HookFunction2)( const char *install_path, const char *user_profile_path );
+
+static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_path )
 {
     char *imp_lib;
     void *dlhandle;
     HookFunction *pSym;
+    HookFunction2 *pSym2;
 
 #if !(defined(__APPLE__) && defined(__arm__))
     size_t partial_length;
@@ -173,17 +176,36 @@ static LibreOfficeKit *lok_init( const char *install_path )
     dlhandle = RTLD_MAIN_ONLY;
 #endif
 
-    pSym = (HookFunction *) _dlsym( dlhandle, "libreofficekit_hook" );
-    if (!pSym)
+    pSym2 = (HookFunction2 *) _dlsym( dlhandle, "libreofficekit_hook_2" );
+    if (!pSym2)
     {
-        fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
-        _dlclose( dlhandle );
+        if (user_profile_path != NULL)
+        {
+            fprintf( stderr, "the LibreOffice version in '%s' does not support passing a user profile to the hook function\n",
+                     imp_lib );
+            _dlclose( dlhandle );
+            free( imp_lib );
+            return NULL;
+        }
+        pSym = (HookFunction *) _dlsym( dlhandle, "libreofficekit_hook" );
+        if (!pSym)
+        {
+            fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
+            _dlclose( dlhandle );
+            free( imp_lib );
+            return NULL;
+        }
         free( imp_lib );
-        return NULL;
+        return pSym( install_path );
     }
 
     free( imp_lib );
-    return pSym( install_path );
+    return pSym2( install_path, user_profile_path );
+}
+
+static LibreOfficeKit *lok_init( const char *install_path )
+{
+    return lok_init_2( install_path, NULL );
 }
 
 #undef SEPARATOR // It is used at least in enum class MenuItemType
