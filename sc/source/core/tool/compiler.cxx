@@ -4776,9 +4776,10 @@ bool ScCompiler::HandleTableRef()
         SetError(errNoName);
     else if (mbJumpCommandReorder)
     {
-        ScRange aRange;
-        pDBData->GetArea(aRange);
-        aRange.aEnd.SetTab(aRange.aStart.Tab());
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        aDBRange.aEnd.SetTab(aDBRange.aStart.Tab());
+        ScRange aRange( aDBRange);
         ScTokenArray* pNew = new ScTokenArray();
         bool bGotToken = false;
         bool bAddRange = true;
@@ -4954,7 +4955,7 @@ bool ScCompiler::HandleTableRef()
                     default:
                         ;   // nothing
                 }
-                if (aColRange.aStart.Row() != aRange.aStart.Row() || aColRange.aEnd.Row() != aRange.aStart.Row())
+                if (aColRange.aStart.Row() != aDBRange.aStart.Row() || aColRange.aEnd.Row() != aDBRange.aStart.Row())
                     aRange = ScRange( ScAddress::INITIALIZE_INVALID);
                 else
                 {
