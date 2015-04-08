@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/svapp.hxx>
 #include <smdll.hxx>
 #include <document.hxx>
 #include <view.hxx>
@@ -20,12 +19,11 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svl/stritem.hxx>
-
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 
 #include <sfx2/zoomitem.hxx>
+#include <memory>
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
@@ -36,6 +34,8 @@ namespace {
 class Test : public test::BootstrapFixture
 {
 public:
+    Test();
+
     // init
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
@@ -55,16 +55,23 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-
     SfxBindings m_aBindings;
-    SfxDispatcher *m_pDispatcher;
-    SmCmdBoxWindow *m_pSmCmdBoxWindow;
-    SmEditWindow *m_pEditWindow;
+    std::unique_ptr<SfxDispatcher> m_pDispatcher;
+    std::unique_ptr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
+    std::unique_ptr<SmEditWindow> m_pEditWindow;
     SmDocShellRef m_xDocShRef;
     SmViewShell *m_pViewShell;
 };
+
+Test::Test()
+    : m_aBindings()
+    , m_pDispatcher()
+    , m_pSmCmdBoxWindow()
+    , m_pEditWindow()
+    , m_xDocShRef()
+    , m_pViewShell(nullptr)
+{
+}
 
 void Test::setUp()
 {
@@ -82,21 +89,21 @@ void Test::setUp()
 
     CPPUNIT_ASSERT_MESSAGE("Should have a SfxViewFrame", pViewFrame);
 
-    m_pDispatcher = new SfxDispatcher(pViewFrame);
-    m_aBindings.SetDispatcher(m_pDispatcher);
+    m_pDispatcher.reset(new SfxDispatcher(pViewFrame));
+    m_aBindings.SetDispatcher(m_pDispatcher.get());
     m_aBindings.EnterRegistrations();
-    m_pSmCmdBoxWindow = new SmCmdBoxWindow(&m_aBindings, NULL, NULL);
+    m_pSmCmdBoxWindow.reset(new SmCmdBoxWindow(&m_aBindings, NULL, NULL));
     m_aBindings.LeaveRegistrations();
-    m_pEditWindow = new SmEditWindow(*m_pSmCmdBoxWindow);
+    m_pEditWindow.reset(new SmEditWindow(*m_pSmCmdBoxWindow));
     m_pViewShell = m_pEditWindow->GetView();
     CPPUNIT_ASSERT_MESSAGE("Should have a SmViewShell", m_pViewShell);
 }
 
 void Test::tearDown()
 {
-    delete m_pEditWindow;
-    delete m_pSmCmdBoxWindow;
-    delete m_pDispatcher;
+    m_pEditWindow.reset();
+    m_pSmCmdBoxWindow.reset();
+    m_pDispatcher.reset();
     m_xDocShRef->DoClose();
     m_xDocShRef.Clear();
 
