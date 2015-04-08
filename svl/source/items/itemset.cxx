@@ -1605,7 +1605,33 @@ int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
     return sal_False;
 }
 
+sal_Int32 SfxItemSet::getHash() const
+{
+    return stringify().hashCode();
+}
 
+OString SfxItemSet::stringify() const
+{
+    SvMemoryStream aStream;
+    SfxItemSet aSet(*this);
+    aSet.InvalidateDefaultItems();
+    aSet.Store(aStream, true);
+    aStream.Flush();
+    return OString(
+        static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
+}
+
+void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxItemSet"));
+    SfxItemIter aIter(*this);
+    for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+         pItem->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
+
+// ----------------------------------------------- class SfxAllItemSet
 
 SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
 :   SfxItemSet(rPool, (const sal_uInt16*) 0),
@@ -1841,33 +1867,6 @@ SfxItemSet *SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
     }
     else
         return bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool);
-}
-
-
-
-sal_Int32 SfxItemSet::getHash() const
-{
-    return stringify().hashCode();
-}
-
-OString SfxItemSet::stringify() const
-{
-    SvMemoryStream aStream;
-    SfxItemSet aSet(*this);
-    aSet.InvalidateDefaultItems();
-    aSet.Store(aStream, true);
-    aStream.Flush();
-    return OString(
-        static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
-}
-
-void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxItemSet"));
-    SfxItemIter aIter(*this);
-    for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
-         pItem->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
