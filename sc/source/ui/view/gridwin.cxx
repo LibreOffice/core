@@ -1718,18 +1718,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         aCell.assign(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
         if (aCell.isEmpty())
         {
-            // stop editing
-            ScTabViewShell* pViewShell = pViewData->GetViewShell();
-            pViewShell->UpdateInputLine();
-            pViewShell->UpdateInputHandler();
-
-            // select the given cell
-            ScTabView* pTabView = pViewData->GetView();
-            pTabView->SetCursor(nPosX, nPosY);
-            pTabView->DoneBlockMode();
-            pTabView->InitBlockMode(nPosX, nPosY, nTab, true);
-            pTabView->MarkCursor(nPosX, nPosY, nTab);
-            pTabView->SelectionChanged();
+            SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aPos.X(), aPos.Y());
+            SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aPos.X(), aPos.Y());
             return;
         }
     }

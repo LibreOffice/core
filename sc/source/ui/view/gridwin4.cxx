@@ -1010,6 +1010,15 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
 {
     ScTabView* pTabView = pViewData->GetView();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
+
+    if (pInputHandler && pInputHandler->IsInputMode())
+    {
+        // we need to switch off the editeng
+        pViewShell->UpdateInputLine();
+        pViewShell->UpdateInputHandler();
+    }
 
     if (nType == LOK_SETTEXTSELECTION_RESET)
     {
@@ -1024,10 +1033,12 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
 
+    bool bWasEmpty = false;
     if (aRangeList.empty())
     {
         nCol1 = nCol2 = pViewData->GetCurX();
         nRow1 = nRow2 = pViewData->GetCurY();
+        bWasEmpty = true;
     }
     else
         aRangeList.Combine().GetVars(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -1042,7 +1053,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
     switch (nType)
     {
         case LOK_SETTEXTSELECTION_START:
-            if (nNewPosX != nCol1 || nNewPosY != nRow1)
+            if (nNewPosX != nCol1 || nNewPosY != nRow1 || bWasEmpty)
             {
                 pTabView->SetCursor(nNewPosX, nNewPosY);
                 pTabView->DoneBlockMode();
@@ -1051,7 +1062,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
             }
             break;
         case LOK_SETTEXTSELECTION_END:
-            if (nNewPosX != nCol2 || nNewPosY != nRow2)
+            if (nNewPosX != nCol2 || nNewPosY != nRow2 || bWasEmpty)
             {
                 pTabView->SetCursor(nCol1, nRow1);
                 pTabView->DoneBlockMode();

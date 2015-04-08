@@ -622,14 +622,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
 
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
 
-        if (!pTableView->GetOutputArea().IsInside(aPoint))
-        {
-            // if the handle does not stay in the editeng area, we want to turn
-            // the selection into the cell selection
-            pViewShell->UpdateInputLine();
-            pViewShell->UpdateInputHandler();
-        }
-        else
+        if (pTableView->GetOutputArea().IsInside(aPoint))
         {
             switch (nType)
             {
