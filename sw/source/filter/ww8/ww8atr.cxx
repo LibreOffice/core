@@ -2061,10 +2061,12 @@ static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, OUString& rText )
                 nRet = 2;
                 break;
             case TOKEN_TEXT:
+            {
                 nRet = 3;
-                rText = aIt->sText.copy( 0, 5 ); // #i21237#
+                sal_Int32 nCount = std::min<sal_Int32>(5, aIt->sText.getLength());
+                rText = aIt->sText.copy(0, nCount); // #i21237#
                 break;
-
+            }
             case TOKEN_LINK_START:
             case TOKEN_LINK_END:
                 break;
