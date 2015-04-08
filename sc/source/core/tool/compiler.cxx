@@ -4922,14 +4922,28 @@ bool ScCompiler::HandleTableRef()
         {
             if (bColumnRange)
             {
+                bGotToken = false;  // obtain at least a close hereafter
                 // Limit range to specified columns.
                 ScRange aColRange( ScAddress::INITIALIZE_INVALID );
                 switch (mpToken->GetType())
                 {
                     case svSingleRef:
                         {
-                            ScAddress aRef( mpToken->GetSingleRef()->toAbs( aPos));
-                            aColRange.aStart = aColRange.aEnd = aRef;
+                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
+                            if (    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose &&
+                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocRange &&
+                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen &&
+                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocPush)
+                            {
+                                if (mpToken->GetType() != svSingleRef)
+                                    aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
+                                else
+                                {
+                                    bGotToken = false;  // obtain at least a close hereafter
+                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
+                                    aColRange.Justify();
+                                }
+                            }
                         }
                         break;
                     case svDoubleRef:
@@ -4959,7 +4973,7 @@ bool ScCompiler::HandleTableRef()
             {
                 SetError( errNoRef);
             }
-            if (bColumnRange)
+            if (bColumnRange && !bGotToken)
             {
                 if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
                 {
