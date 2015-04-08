@@ -4787,15 +4787,21 @@ bool ScCompiler::HandleTableRef()
         switch (eItem)
         {
             case ScTableRefToken::TABLE:
-            case ScTableRefToken::ALL:
                 {
-                    // Optional [] (or [#All]) may follow.
+                    // Optional [] may follow.
                     if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
                     {
-                        bool bAll = ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefItemAll);
-                        if (bGotToken && (!bAll || (bGotToken = GetToken())) && mpToken->GetOpCode() == ocTableRefClose)
-                            bGotToken = false;  // get next token below
+                        if ((bGotToken = GetToken()))
+                        {
+                            if (mpToken->GetOpCode() == ocTableRefClose)
+                                bGotToken = false;  // get next token below
+                        }
                     }
+                }
+                break;
+            case ScTableRefToken::ALL:
+                {
+                    bForwardToClose = true;
                 }
                 break;
             case ScTableRefToken::HEADERS:
