@@ -363,9 +363,9 @@ Time tools::Time::GetUTCOffset()
         aTime = -aTime;
     return aTime;
 #else
-    static sal_uIntPtr  nCacheTicks = 0;
+    static sal_uInt64   nCacheTicks = 0;
     static sal_Int32    nCacheSecOffset = -1;
-    sal_uIntPtr         nTicks = tools::Time::GetSystemTicks();
+    sal_uInt64          nTicks = tools::Time::GetSystemTicks();
     time_t          nTime;
     tm              aTM;
     sal_Int32           nLocalTime;
@@ -404,7 +404,7 @@ Time tools::Time::GetUTCOffset()
 #endif
 }
 
-sal_uIntPtr tools::Time::GetSystemTicks()
+sal_uInt64 tools::Time::GetSystemTicks()
 {
 #if defined WNT
     static LARGE_INTEGER nTicksPerSecond;
@@ -418,7 +418,8 @@ sal_uIntPtr tools::Time::GetSystemTicks()
     LARGE_INTEGER nPerformanceCount;
     QueryPerformanceCounter(&nPerformanceCount);
 
-    return (sal_uIntPtr)((nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
+    return static_cast<sal_uInt64>(
+        (nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
 #else
     timeval tv;
     gettimeofday (&tv, 0);
@@ -427,8 +428,8 @@ sal_uIntPtr tools::Time::GetSystemTicks()
     fTicks *= 1000;
     fTicks += ((tv.tv_usec + 500) / 1000);
 
-    fTicks = fmod (fTicks, double(ULONG_MAX));
-    return sal_uIntPtr(fTicks);
+    fTicks = fmod (fTicks, double(SAL_MAX_UINT64));
+    return static_cast<sal_uInt64>(fTicks);
 #endif
 }
 

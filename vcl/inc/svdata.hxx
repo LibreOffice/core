@@ -126,7 +126,7 @@ struct ImplSVAppData
     ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;               // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
-    sal_uLong               mnLastInputTime;                // GetLastInputTime()
+    sal_uInt64              mnLastInputTime;                // GetLastInputTime()
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
     sal_uInt16              mnModalMode;                    // ModalMode Count
     sal_uInt16              mnModalDialog;                  // ModalDialog Count
@@ -240,7 +240,7 @@ struct ImplSVHelpData
     bool                    mbAutoHelpId        : 1;        // generate HelpIds
     bool                    mbRequestingHelp    : 1;        // In Window::RequestHelp
     HelpTextWindow*         mpHelpWin;                      // HelpWindow
-    sal_uLong               mnLastHelpHideTime;             // ticks of last show
+    sal_uInt64              mnLastHelpHideTime;             // ticks of last show
 };
 
 // "NWF" means "Native Widget Framework" and was the term used for the

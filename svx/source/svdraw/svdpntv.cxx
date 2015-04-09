@@ -576,7 +576,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
     static bool bTimesInited(false);
     static sal_uInt32 nRepeatCount(10L);
     static double fLastTimes[REMEMBERED_TIMES_COUNT];
-    const sal_uInt32 nStartTime(tools::Time::GetSystemTicks());
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
     sal_uInt32 count(1L);
     sal_uInt32 a;
 
@@ -650,8 +650,8 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
     if(bDoTimerTest)
     {
-        const sal_uInt32 nStopTime(tools::Time::GetSystemTicks());
-        const sal_uInt32 nNeededTime(nStopTime - nStartTime);
+        const sal_uInt64 nStopTime(tools::Time::GetSystemTicks());
+        const sal_uInt64 nNeededTime(nStopTime - nStartTime);
         const double fTimePerPaint((double)nNeededTime / (double)nRepeatCount);
 
         if(!bTimesInited)
@@ -683,7 +683,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
         const double fAverageTimePerPaint(fAddedTimes / (double)REMEMBERED_TIMES_COUNT);
 
         fprintf(stderr, "-----------(start result)----------\n");
-        fprintf(stderr, "StartTime : %u, StopTime: %u, NeededTime: %u, TimePerPaint: %f\n", nStartTime, nStopTime, nNeededTime, fTimePerPaint);
+        fprintf(stderr, "StartTime : %" SAL_PRIuUINT64 ", StopTime: %" SAL_PRIuUINT64 ", NeededTime: %" SAL_PRIuUINT64 ", TimePerPaint: %f\n", nStartTime, nStopTime, nNeededTime, fTimePerPaint);
         fprintf(stderr, "Remembered times: ");
 
         for(a = 0L; a < REMEMBERED_TIMES_COUNT; a++)

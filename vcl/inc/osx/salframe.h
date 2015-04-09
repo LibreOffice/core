@@ -73,7 +73,7 @@ public:
     sal_uLong                           mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
 
-    sal_uLong                           mnLastEventTime;
+    sal_uInt64                      mnLastEventTime;
     unsigned int                    mnLastModifierFlags;
     AquaSalMenu*                    mpMenu;
 

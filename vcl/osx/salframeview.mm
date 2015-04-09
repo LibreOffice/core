@@ -606,7 +606,7 @@ private:
 
     if( pDispatchFrame && AquaSalFrame::isAlive( pDispatchFrame ) )
     {
-        pDispatchFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        pDispatchFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         pDispatchFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         NSPoint aPt = [NSEvent mouseLocation];
@@ -746,7 +746,7 @@ private:
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         const NSTimeInterval fMagnifyTime = [pEvent timestamp];
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( fMagnifyTime * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<sal_uInt64>( fMagnifyTime * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // check if this is a new series of magnify events
@@ -818,7 +818,7 @@ private:
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // merge pending scroll wheel events
@@ -878,7 +878,7 @@ private:
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // merge pending scroll wheel events
@@ -950,7 +950,7 @@ private:
         mbNeedSpecialKeyHandle = false;
         mbKeyHandled = false;
 
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         if( ! [self handleKeyDownException: pEvent] )
@@ -1007,7 +1007,7 @@ private:
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
     }
 }

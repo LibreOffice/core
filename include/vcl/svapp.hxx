@@ -652,7 +652,7 @@ public:
 
      @see AnyInput
     */
-    static sal_uLong            GetLastInputInterval();
+    static sal_uInt64           GetLastInputInterval();
 
     ///@}
 

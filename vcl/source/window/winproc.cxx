@@ -263,7 +263,7 @@ static sal_IntPtr ContextMenuEventLink( void* pCEvent, void* )
 }
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
-                           long nX, long nY, sal_uLong nMsgTime,
+                           long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -579,7 +579,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
             {
                 const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-                sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
+                sal_uInt64 nDblClkTime = rMSettings.GetDoubleClickTime();
                 long    nDblClkW    = rMSettings.GetDoubleClickWidth();
                 long    nDblClkH    = rMSettings.GetDoubleClickHeight();
                 //long    nMouseX     = nX;

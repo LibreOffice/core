@@ -60,7 +60,7 @@ class ImplDockFloatWin : public FloatingWindow
 {
 private:
     DockingWindow*  mpDockWin;
-    sal_uLong           mnLastTicks;
+    sal_uInt64      mnLastTicks;
     Idle            maDockIdle;
     Point           maDockPos;
     Rectangle       maDockRect;

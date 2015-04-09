@@ -80,8 +80,8 @@ public:
     void                            SetOptions( sal_uLong nOptions );
     sal_uLong                       GetOptions() const;
 
-    void                            SetDoubleClickTime( sal_uLong nDoubleClkTime );
-    sal_uLong                       GetDoubleClickTime() const;
+    void                            SetDoubleClickTime( sal_uInt64 nDoubleClkTime );
+    sal_uInt64                      GetDoubleClickTime() const;
 
     void                            SetDoubleClickWidth( long nDoubleClkWidth );
     long                            GetDoubleClickWidth() const;

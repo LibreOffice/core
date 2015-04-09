@@ -117,7 +117,7 @@ static void InitKeyEvent( SalKeyEvent &rKeyEvent )
 {
     double nRand = getRandom();
     if (nRand < 0.001)
-        rKeyEvent.mnTime = getRandom() * ULONG_MAX;
+        rKeyEvent.mnTime = getRandom() * SAL_MAX_UINT64;
     else
         rKeyEvent.mnTime = tools::Time::GetSystemTicks();
 

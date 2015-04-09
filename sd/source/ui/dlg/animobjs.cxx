@@ -624,8 +624,8 @@ void AnimationWindow::ResetAttrs()
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
 {
-    clock_t aEnd = tools::Time::GetSystemTicks() + nMilliSeconds;
-    clock_t aCurrent = tools::Time::GetSystemTicks();
+    sal_uInt64 aEnd = tools::Time::GetSystemTicks() + nMilliSeconds;
+    sal_uInt64 aCurrent = tools::Time::GetSystemTicks();
     while (aCurrent < aEnd)
     {
         aCurrent = tools::Time::GetSystemTicks();

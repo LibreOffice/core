@@ -462,7 +462,7 @@ class IdleCalcTextWidthScope
     ScDocument& mrDoc;
     ScAddress& mrCalcPos;
     MapMode maOldMapMode;
-    sal_uLong mnStartTime;
+    sal_uInt64 mnStartTime;
     ScStyleSheetPool* mpStylePool;
     sal_uInt16 mnOldSearchMask;
     SfxStyleFamily meOldFamily;
@@ -517,7 +517,7 @@ public:
     void setNeedMore(bool b) { mbNeedMore = b; }
     bool getNeedMore() const { return mbNeedMore; }
 
-    sal_uLong getStartTime() const { return mnStartTime; }
+    sal_uInt64 getStartTime() const { return mnStartTime; }
 
     void createProgressBar()
     {

@@ -157,7 +157,7 @@ struct ImplFrameData
     long                mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
     long                mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
     sal_uInt16          mnModalMode;            //< frame based modal count (app based makes no sense anymore)
-    sal_uIntPtr         mnMouseDownTime;        //< mouse button down time for double click
+    sal_uInt64          mnMouseDownTime;        //< mouse button down time for double click
     sal_uInt16          mnClickCount;           //< mouse click count
     sal_uInt16          mnFirstMouseCode;       //< mouse code by mousebuttondown
     sal_uInt16          mnMouseCode;            //< mouse code
@@ -382,7 +382,7 @@ public:
 // helper methods
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
-                           long nX, long nY, sal_uIntPtr nMsgTime,
+                           long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
