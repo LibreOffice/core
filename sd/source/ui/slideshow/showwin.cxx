@@ -38,8 +38,8 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-static const sal_uLong HIDE_MOUSE_TIMEOUT = 10000;
-static const sal_uLong SHOW_MOUSE_TIMEOUT = 1000;
+static const sal_uInt64 HIDE_MOUSE_TIMEOUT = 10000;
+static const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
 
 ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vcl::Window* pParent )
 : ::sd::Window( pParent )
@@ -187,7 +187,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
             {
                 // if this is not the first mouse move while hidden, see if
                 // enough time has pasted to show mouse pointer again
-                sal_uLong nTime = ::tools::Time::GetSystemTicks();
+                sal_uInt64 nTime = ::tools::Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
                     ShowPointer( true );

@@ -517,7 +517,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uIn
 
     if (!pHelpWin && !rHelpText.isEmpty())
     {
-        sal_uLong nCurTime = tools::Time::GetSystemTicks();
+        sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
         if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
             ||  ( ( nStyle & QUICKHELP_NO_DELAY ) != 0 )
             )

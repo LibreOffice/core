@@ -104,7 +104,7 @@ private:
     Rectangle       maPresArea;
     bool            mbMouseAutoHide;
     bool            mbMouseCursorHidden;
-    sal_uLong           mnFirstMouseMove;
+    sal_uInt64      mnFirstMouseMove;
 
                     DECL_LINK( PauseTimeoutHdl, Timer* pTimer );
                     DECL_LINK(MouseTimeoutHdl, void *);

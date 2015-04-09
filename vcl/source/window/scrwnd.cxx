@@ -167,13 +167,13 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     }
     else
     {
-        sal_uLong nCurTime;
+        sal_uInt64 nCurTime;
 
         // calc current time
         if( mnMaxWidth )
         {
             const double fExp = ( (double) mnActDist / mnMaxWidth ) * log10( (double) MAX_TIME / MIN_TIME );
-            nCurTime = (sal_uLong) ( MAX_TIME / pow( 10., fExp ) );
+            nCurTime = (sal_uInt64) ( MAX_TIME / pow( 10., fExp ) );
         }
         else
             nCurTime = MAX_TIME;
@@ -185,7 +185,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             mnTimeout = nCurTime - mnRepaintTime;
         else
         {
-            long nMult = mnRepaintTime / nCurTime;
+            sal_uInt64 nMult = mnRepaintTime / nCurTime;
 
             if( !( mnRepaintTime % nCurTime ) )
                 mnTimeout = 0UL;
@@ -350,12 +350,12 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
-            const sal_uLong nTime = tools::Time::GetSystemTicks();
+            const sal_uInt64 nTime = tools::Time::GetSystemTicks();
             ImplDelData aDel( this );
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )
                 return 0;
-            mnRepaintTime = std::max( tools::Time::GetSystemTicks() - nTime, (sal_uLong)1 );
+            mnRepaintTime = std::max( tools::Time::GetSystemTicks() - nTime, (sal_uInt64)1 );
             ImplRecalcScrollValues();
         }
     }

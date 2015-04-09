@@ -87,7 +87,7 @@ class FontSelectPattern;
 // MAC: Ctrl+Button is MOUSE_RIGHT
 struct SalMouseEvent
 {
-    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt64      mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
     sal_uInt16      mnButton;       // 0-MouseMove/MouseLeave, MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE
@@ -97,7 +97,7 @@ struct SalMouseEvent
 // KEYINPUT and KEYUP
 struct SalKeyEvent
 {
-    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt64      mnTime;         // Time in ms, when event is created
     sal_uInt16      mnCode;         // SV-KeyCode (KEY_xxx | KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
     sal_uInt16      mnCharCode;     // SV-CharCode
     sal_uInt16      mnRepeat;       // Repeat-Count (KeyInputs-1)
@@ -117,7 +117,7 @@ struct SalMenuEvent
 // KEYMODCHANGE
 struct SalKeyModEvent
 {
-    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt64      mnTime;         // Time in ms, when event is created
     sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2)
     sal_uInt16      mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
 };
@@ -145,7 +145,7 @@ struct SalPaintEvent
 #define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uLong)0xFFFFFFFF)
 struct SalWheelMouseEvent
 {
-    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt64      mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
     long            mnDelta;        // Number of rotations
@@ -170,7 +170,7 @@ struct SalMouseActivateEvent
 // EXTTEXTINPUT
 struct SalExtTextInputEvent
 {
-    sal_uLong           mnTime;         // Time in ms, when event is created
+    sal_uInt64          mnTime;         // Time in ms, when event is created
     OUString            maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
     sal_Int32           mnCursorPos;    // Cursor-Position

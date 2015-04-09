@@ -61,7 +61,7 @@ struct ImplMouseData
                                     ImplMouseData( const ImplMouseData& rData );
 
     sal_uLong                           mnOptions;
-    sal_uLong                           mnDoubleClkTime;
+    sal_uInt64                          mnDoubleClkTime;
     long                            mnDoubleClkWidth;
     long                            mnDoubleClkHeight;
     long                            mnStartDragWidth;
@@ -302,13 +302,13 @@ MouseSettings::GetOptions() const
 }
 
 void
-MouseSettings::SetDoubleClickTime( sal_uLong nDoubleClkTime )
+MouseSettings::SetDoubleClickTime( sal_uInt64 nDoubleClkTime )
 {
     CopyData();
     mxData->mnDoubleClkTime = nDoubleClkTime;
 }
 
-sal_uLong
+sal_uInt64
 MouseSettings::GetDoubleClickTime() const
 {
     return mxData->mnDoubleClkTime;

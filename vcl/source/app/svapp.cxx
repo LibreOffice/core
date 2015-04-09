@@ -441,7 +441,7 @@ bool Application::AnyInput( VclInputFlags nType )
     return ImplGetSVData()->mpDefInst->AnyInput( nType );
 }
 
-sal_uLong Application::GetLastInputInterval()
+sal_uInt64 Application::GetLastInputInterval()
 {
     return (tools::Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
 }

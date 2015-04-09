@@ -40,7 +40,7 @@ FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlot
     , m_bPersistentCopy(false)
     , m_aDoubleClickTimer()
 {
-    sal_uIntPtr nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
+    sal_uInt64 nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
 
     m_aDoubleClickTimer.SetTimeoutHdl( LINK(this, FormatPaintBrushToolBoxControl, WaitDoubleClickHdl) );
     m_aDoubleClickTimer.SetTimeout(nDblClkTime);

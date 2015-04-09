@@ -44,8 +44,8 @@ private:
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;
-    sal_uLong               mnRepaintTime;
-    sal_uLong               mnTimeout;
+    sal_uInt64          mnRepaintTime;
+    sal_uInt64          mnTimeout;
     sal_uLong               mnWheelMode;
     sal_uLong               mnMaxWidth;
     sal_uLong               mnActDist;

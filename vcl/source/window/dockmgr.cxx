@@ -42,7 +42,7 @@ class ImplDockFloatWin2 : public FloatingWindow
 {
 private:
     ImplDockingWindowWrapper*  mpDockWin;
-    sal_uLong           mnLastTicks;
+    sal_uInt64      mnLastTicks;
     Idle            maDockIdle;
     Idle            maEndDockIdle;
     Point           maDockPos;

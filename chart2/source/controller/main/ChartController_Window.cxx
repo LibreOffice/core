@@ -517,7 +517,7 @@ void ChartController::startDoubleClickWaiting()
 
     m_bWaitingForDoubleClick = true;
 
-    sal_uLong nDblClkTime = 500;
+    sal_uInt64 nDblClkTime = 500;
     if( m_pChartWindow )
     {
         const MouseSettings& rMSettings = m_pChartWindow->GetSettings().GetMouseSettings();
