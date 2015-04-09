@@ -594,6 +594,8 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
     // get symbol
     basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(aMod.getFunctionSymbol("basicide_macro_organizer"));
 
+    aMod.release();
+
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return;
