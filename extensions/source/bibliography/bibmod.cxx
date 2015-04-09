@@ -70,6 +70,8 @@ BibModul::BibModul()
 BibModul::~BibModul()
 {
     delete pResMgr;
+    if (pBibConfig && pBibConfig->IsModified())
+        pBibConfig->Commit();
     delete pBibConfig;
     pBibConfig = 0;
 }
