@@ -384,6 +384,7 @@ public:
 
     bool IsErrorConstant( const OUString& ) const;
     bool IsTableRefItem( const OUString& ) const;
+    bool IsTableRefColumn( const OUString& ) const;
 
     /**
      * When auto correction is set, the jump command reorder must be enabled.

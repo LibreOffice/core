@@ -3349,6 +3349,56 @@ bool ScCompiler::IsTableRefItem( const OUString& rName ) const
     return bItem;
 }
 
+bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
+{
+    // Only called when there actually is a current TableRef, hence
+    // accessing maTableRefs.back() is safe.
+    ScTableRefToken* p = dynamic_cast<ScTableRefToken*>(maTableRefs.back().mxToken.get());
+    assert(p);  // not a ScTableRefToken can't be
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex( p->GetIndex());
+    if (!pDBData)
+        return false;
+
+    // '#', '[', ']' and '\'' are escaped with '\''
+    OUString aName( rName.replaceAll( OUString("'"), OUString()));
+
+    ScRange aRange;
+    pDBData->GetArea( aRange);
+    aRange.aEnd.SetTab( aRange.aStart.Tab());
+    aRange.aEnd.SetRow( aRange.aStart.Row());
+
+    // Quite similar to IsColRowName() but limited to one row of headers.
+    ScCellIterator aIter( pDoc, aRange);
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+    {
+        CellType eType = aIter.getType();
+        bool bOk = false;
+        if (eType == CELLTYPE_FORMULA)
+        {
+            ScFormulaCell* pFC = aIter.getFormulaCell();
+            bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
+        }
+        else
+            bOk = true;
+
+        if (bOk && aIter.hasString())
+        {
+            OUString aStr = aIter.getString();
+            if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
+            {
+                ScSingleRefData aRef;
+                aRef.InitFlags();
+                aRef.SetColRel( true );
+                aRef.SetAddress( aIter.GetPos(), aPos);
+                maRawToken.SetSingleReference( aRef );
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void ScCompiler::SetAutoCorrection( bool bVal )
 {
     assert(mbJumpCommandReorder);
@@ -3653,8 +3703,16 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
     do
     {
-        mbRewind = false;
         const OUString aOrg( cSymbol );
+
+        // Check for TableRef column specifier first, it may be anything.
+        if (cSymbol[0] != '#' && !maTableRefs.empty() && maTableRefs.back().mnLevel)
+        {
+            if (IsTableRefColumn( aOrg ))
+                return true;
+        }
+
+        mbRewind = false;
         aUpper.clear();
         bool bAsciiUpper = false;
 
