@@ -37,6 +37,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -59,12 +60,12 @@
 #include "bibresid.hxx"
 #include "bibmod.hxx"
 #include "bibview.hxx"
-// #100312# ---------
 #include "bibprop.hrc"
 #include "toolbar.hxx"
 #include "toolbar.hrc"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
+#include "general.hxx"
 #include "bib.hrc"
 #include "datman.hrc"
 #include "bibliography.hrc"
@@ -1377,6 +1378,62 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
             xPropSet->setPropertyValue("NativeWidgetLook", makeAny( true ) );
+
+            if (bForceListBox)
+            {
+                uno::Any aAny;
+
+                //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
+                aAny <<= (sal_Int16)1;
+                xPropSet->setPropertyValue("BoundColumn", aAny);
+                ListSourceType eSet = ListSourceType_VALUELIST;
+                aAny.setValue( &eSet, ::cppu::UnoType<ListSourceType>::get() );
+                xPropSet->setPropertyValue("ListSourceType", aAny);
+
+                uno::Sequence<OUString> aListSource(TYPE_COUNT);
+                OUString* pListSourceArr = aListSource.getArray();
+                //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
+                for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
+                    pListSourceArr[i] = OUString::number(i);
+                aAny.setValue(&aListSource, cppu::UnoType<uno::Sequence<OUString>>::get());
+
+                xPropSet->setPropertyValue("ListSource", aAny);
+
+                uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
+                OUString* pValuesArr = aValues.getArray();
+                pValuesArr[0] = BIB_RESSTR(ST_TYPE_ARTICLE);
+                pValuesArr[1] = BIB_RESSTR(ST_TYPE_BOOK);
+                pValuesArr[2] = BIB_RESSTR(ST_TYPE_BOOKLET);
+                pValuesArr[3] = BIB_RESSTR(ST_TYPE_CONFERENCE);
+                pValuesArr[4] = BIB_RESSTR(ST_TYPE_INBOOK );
+                pValuesArr[5] = BIB_RESSTR(ST_TYPE_INCOLLECTION);
+                pValuesArr[6] = BIB_RESSTR(ST_TYPE_INPROCEEDINGS);
+                pValuesArr[7] = BIB_RESSTR(ST_TYPE_JOURNAL       );
+                pValuesArr[8] = BIB_RESSTR(ST_TYPE_MANUAL    );
+                pValuesArr[9] = BIB_RESSTR(ST_TYPE_MASTERSTHESIS);
+                pValuesArr[10] = BIB_RESSTR(ST_TYPE_MISC      );
+                pValuesArr[11] = BIB_RESSTR(ST_TYPE_PHDTHESIS );
+                pValuesArr[12] = BIB_RESSTR(ST_TYPE_PROCEEDINGS   );
+                pValuesArr[13] = BIB_RESSTR(ST_TYPE_TECHREPORT    );
+                pValuesArr[14] = BIB_RESSTR(ST_TYPE_UNPUBLISHED   );
+                pValuesArr[15] = BIB_RESSTR(ST_TYPE_EMAIL     );
+                pValuesArr[16] = BIB_RESSTR(ST_TYPE_WWW           );
+                pValuesArr[17] = BIB_RESSTR(ST_TYPE_CUSTOM1       );
+                pValuesArr[18] = BIB_RESSTR(ST_TYPE_CUSTOM2       );
+                pValuesArr[19] = BIB_RESSTR(ST_TYPE_CUSTOM3       );
+                pValuesArr[20] = BIB_RESSTR(ST_TYPE_CUSTOM4       );
+                pValuesArr[21] = BIB_RESSTR(ST_TYPE_CUSTOM5       );
+                // empty string if an invalid value no values is set
+                pValuesArr[TYPE_COUNT] = OUString();
+
+                aAny.setValue(&aValues, cppu::UnoType<uno::Sequence<OUString>>::get());
+
+                xPropSet->setPropertyValue("StringItemList", aAny);
+
+                sal_Bool bTrue = sal_True;
+                aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
+                xPropSet->setPropertyValue( "Dropdown", aAny );
+            }
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 

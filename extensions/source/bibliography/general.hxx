@@ -102,7 +102,6 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     Size                aStdSize;
     Point               aBasePos;
 
-    OUString            aBibTypeArr[ TYPE_COUNT ];
     OUString            sErrorPrefix;
     OUString            sTableErrorString;
 
