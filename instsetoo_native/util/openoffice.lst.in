@@ -34,6 +34,7 @@ Globals
             OOODOWNLOADNAME 1
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
             64BITPRODUCT @WINDOWS_X64@
+            WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
         }
     }
 }
