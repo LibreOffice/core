@@ -1474,7 +1474,7 @@ void SfxViewShell::PushSubShells_Impl( bool bPush )
     {
         SfxShell& rPopUntil = *pImp->aArr[0];
         if ( pDisp->GetShellLevel( rPopUntil ) != USHRT_MAX )
-            pDisp->Pop( rPopUntil, SFX_SHELL_POP_UNTIL );
+            pDisp->Pop( rPopUntil, SfxDispatcherPopFlags::POP_UNTIL );
     }
 
     pDisp->Flush();

@@ -169,7 +169,7 @@ void SfxDispatcher::Flush()
 void SfxDispatcher::Push(SfxShell& rShell)
 
 {
-    Pop( rShell, SFX_SHELL_PUSH );
+    Pop( rShell, SfxDispatcherPopFlags::PUSH );
 }
 
 /** This method checks whether a particular <SfxShell> instance is
@@ -411,25 +411,25 @@ SfxDispatcher::~SfxDispatcher()
     SfxShell cancel each other out.
 
     @param rShell the stack to take the SfxShell instance.
-    @param nMode SFX_SHELL_POP_UNTIL
+    @param nMode SfxDispatcherPopFlags::POP_UNTIL
                             Also all 'rShell' of SfxShells are taken from the
                             stack.
 
-                 SFX_SHELL_POP_DELETE
+                 SfxDispatcherPopFlags::POP_DELETE
                             All SfxShells actually taken from the stack
                             will be deleted.
 
-                 SFX_SHELL_PUSH (InPlace use only)
+                 SfxDispatcherPopFlags::PUSH (InPlace use only)
                             The Shell is pushed.
 */
-void SfxDispatcher::Pop(SfxShell& rShell, sal_uInt16 nMode)
+void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
 {
     DBG_ASSERT( rShell.GetInterface(),
                 "pushing SfxShell without previous RegisterInterface()" );
 
-    bool bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
-    bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
-    bool bPush = (nMode & SFX_SHELL_PUSH) == SFX_SHELL_PUSH;
+    bool bDelete = bool(nMode & SfxDispatcherPopFlags::POP_DELETE);
+    bool bUntil = bool(nMode & SfxDispatcherPopFlags::POP_UNTIL);
+    bool bPush = bool(nMode & SfxDispatcherPopFlags::PUSH);
 
     SfxApplication *pSfxApp = SfxGetpApp();
 

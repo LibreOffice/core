@@ -27,6 +27,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SfxSlotServer;
 class SfxShell;
@@ -54,11 +55,17 @@ namespace com
 }
 
 
-
-#define SFX_SHELL_POP_UNTIL     4
-#define SFX_SHELL_POP_DELETE    2
-#define SFX_SHELL_PUSH          1
-
+enum class SfxDispatcherPopFlags
+{
+    NONE          = 0,
+    POP_UNTIL     = 4,
+    POP_DELETE    = 2,
+    PUSH          = 1,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxDispatcherPopFlags> : is_typed_flags<SfxDispatcherPopFlags, 0x07> {};
+}
 
 enum SfxSlotFilterState
 {
@@ -143,11 +150,11 @@ public:
     SfxBindings*        GetBindings() const;
 
     void                Push( SfxShell& rShell );
-    void                Pop( SfxShell& rShell, sal_uInt16 nMode = 0 );
+    void                Pop( SfxShell& rShell, SfxDispatcherPopFlags nMode = SfxDispatcherPopFlags::NONE );
 
     SfxShell*           GetShell(sal_uInt16 nIdx) const;
     SfxViewFrame*       GetFrame() const;
-    SfxModule*      GetModule() const;
+    SfxModule*          GetModule() const;
     // caller has to clean up the Manager on his own
     static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos );
 
@@ -173,7 +180,7 @@ public:
 
     ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const OUString& );
     void                SetDisableFlags( sal_uInt32 nFlags );
-    sal_uInt32              GetDisableFlags() const;
+    sal_uInt32          GetDisableFlags() const;
 
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE void Update_Impl( bool bForce = false ); // ObjectBars etc.

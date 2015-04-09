@@ -1028,9 +1028,9 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
             SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
             if ( pSubShell == i_rViewShell.GetSubShell() )
                 // "real" sub shells will be deleted elsewhere
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL );
+                pDispatcher->Pop( *pSubShell, SfxDispatcherPopFlags::POP_UNTIL );
             else
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
+                pDispatcher->Pop( *pSubShell, SfxDispatcherPopFlags::POP_UNTIL | SfxDispatcherPopFlags::POP_DELETE );
         }
         pDispatcher->Pop( i_rViewShell );
         pDispatcher->Flush();
@@ -1519,7 +1519,7 @@ void SfxViewFrame::KillDispatcher_Impl()
     if ( pDispatcher )
     {
         if( pModule )
-            pDispatcher->Pop( *pModule, SFX_SHELL_POP_UNTIL );
+            pDispatcher->Pop( *pModule, SfxDispatcherPopFlags::POP_UNTIL );
         else
             pDispatcher->Pop( *this );
         DELETEZ(pDispatcher);

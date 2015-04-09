@@ -279,7 +279,7 @@ void SwView::SelectShell()
                     || pSfxShell->ISA( SwAnnotationShell )
                     )
                 {
-                    rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
+                    rDispatcher.Pop( *pSfxShell, SfxDispatcherPopFlags::POP_DELETE );
                 }
                 else if ( pSfxShell->ISA( FmFormShell ) )
                 {

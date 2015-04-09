@@ -85,7 +85,7 @@ void SfxApplication::Deinitialize()
                 "existing SfxViewFrame after Execute" );
     DBG_ASSERT( !SfxObjectShell::GetFirst(),
                 "existing SfxObjectShell after Execute" );
-    pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
+    pAppData_Impl->pAppDispat->Pop( *this, SfxDispatcherPopFlags::POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->bDowning = true;
     pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, NULL );
