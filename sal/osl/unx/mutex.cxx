@@ -117,7 +117,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 {
-    sal_Bool result = sal_False;
+    bool result = false;
 
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
         int nRet = 0;
         nRet = pthread_mutex_trylock(&(pMutex->mutex));
         if ( nRet == 0  )
-            result = sal_True;
+            result = true;
     }
 
     SAL_INFO("sal.osl.mutex", "osl_tryToAcquireMutex(" << pMutex << "): " << (result ? "YES" : "NO"));
