@@ -191,7 +191,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // autogrowsize
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SfxItemState::DONTCARE )
     {
-        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWSIZE ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowSize->EnableTriState( false );
     }
