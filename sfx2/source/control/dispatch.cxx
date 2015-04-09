@@ -321,7 +321,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     xImp->bQuiet = false;
     xImp->bModal = false;
     xImp->pInCallAliveFlag = 0;
-    xImp->nFilterEnabling = SFX_SLOT_FILTER_DISABLED;
+    xImp->nFilterEnabling = SfxSlotFilterState::DISABLED;
     xImp->nFilterCount = 0;
     xImp->pFilterSIDs = 0;
     xImp->nDisableFlags = 0;
@@ -1626,20 +1626,20 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
     // no filter?
     if ( 0 == xImp->nFilterCount )
         // => all SIDs allowed
-        return SFX_SLOT_FILTER_ENABLED;
+        return SfxSlotFilterState::ENABLED;
 
     // search
     bool bFound = 0 != bsearch( &nSID, xImp->pFilterSIDs, xImp->nFilterCount,
                                 sizeof(sal_uInt16), SfxCompareSIDs_Impl );
 
     // even if ReadOnlyDoc
-    if ( SFX_SLOT_FILTER_ENABLED_READONLY == xImp->nFilterEnabling )
-        return bFound ? SFX_SLOT_FILTER_ENABLED_READONLY : SFX_SLOT_FILTER_ENABLED;
+    if ( SfxSlotFilterState::ENABLED_READONLY == xImp->nFilterEnabling )
+        return bFound ? SfxSlotFilterState::ENABLED_READONLY : SfxSlotFilterState::ENABLED;
     // Otherwise after Negative/Positive Filter
-    else if ( SFX_SLOT_FILTER_ENABLED == xImp->nFilterEnabling )
-        return bFound ? SFX_SLOT_FILTER_ENABLED : SFX_SLOT_FILTER_DISABLED;
+    else if ( SfxSlotFilterState::ENABLED == xImp->nFilterEnabling )
+        return bFound ? SfxSlotFilterState::ENABLED : SfxSlotFilterState::DISABLED;
     else
-        return bFound ? SFX_SLOT_FILTER_DISABLED : SFX_SLOT_FILTER_ENABLED;
+        return bFound ? SfxSlotFilterState::DISABLED : SfxSlotFilterState::ENABLED;
 }
 
 /** This helper method searches for the <Slot-Server> which currently serves
@@ -1706,11 +1706,11 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
     }
 
     // SID check against set filter
-    SfxSlotFilterState nSlotEnableMode = SFX_SLOT_FILTER_DISABLED;
+    SfxSlotFilterState nSlotEnableMode = SfxSlotFilterState::DISABLED;
     if ( xImp->pFrame )
     {
         nSlotEnableMode = IsSlotEnabledByFilter_Impl( nSlot );
-        if ( SFX_SLOT_FILTER_DISABLED == nSlotEnableMode )
+        if ( SfxSlotFilterState::DISABLED == nSlotEnableMode )
             return false;
     }
 
@@ -1728,7 +1728,7 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
             return false;
     }
 
-    bool bReadOnly = ( SFX_SLOT_FILTER_ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly );
+    bool bReadOnly = ( SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly );
 
     // search through all the shells of the chained dispatchers
     // from top to bottom

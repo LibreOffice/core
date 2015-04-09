@@ -67,12 +67,12 @@ namespace o3tl
     template<> struct typed_flags<SfxDispatcherPopFlags> : is_typed_flags<SfxDispatcherPopFlags, 0x07> {};
 }
 
-enum SfxSlotFilterState
+enum class SfxSlotFilterState
 {
-    SFX_SLOT_FILTER_DISABLED,
-    SFX_SLOT_FILTER_ENABLED,
+    DISABLED,
+    ENABLED,
     // enabled even if ReadOnlyDoc
-    SFX_SLOT_FILTER_ENABLED_READONLY,
+    ENABLED_READONLY,
 };
 
 
@@ -168,7 +168,7 @@ public:
     void                Flush();
     void                Lock( bool bLock );
     bool                IsLocked( sal_uInt16 nSID = 0 ) const;
-    void                SetSlotFilter( SfxSlotFilterState nEnable = SFX_SLOT_FILTER_DISABLED,
+    void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
 
     void                HideUI( bool bHide = true );

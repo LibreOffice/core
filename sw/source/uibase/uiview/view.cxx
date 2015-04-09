@@ -602,7 +602,7 @@ void SwView::_CheckReadonlyState()
         }
         if ( SfxItemState::DISABLED == eStateRO )
         {
-            rDis.SetSlotFilter( SFX_SLOT_FILTER_ENABLED_READONLY, sizeof(aROIds)/sizeof(sal_uInt16), aROIds );
+            rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY, sizeof(aROIds)/sizeof(sal_uInt16), aROIds );
             bChgd = true;
         }
     }
@@ -617,7 +617,7 @@ void SwView::_CheckReadonlyState()
                 qsort( (void*)aAllProtIds, sizeof(aAllProtIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
                 bAllProtFirst = false;
             }
-            rDis.SetSlotFilter( SFX_SLOT_FILTER_ENABLED_READONLY,
+            rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY,
                                 sizeof(aAllProtIds)/sizeof(sal_uInt16),
                                 aAllProtIds );
             bChgd = true;
