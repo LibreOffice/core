@@ -274,9 +274,9 @@ const SfxItemPropertyMapEntry* getCondDatePropSet()
 {
     static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
     {
-        {OUString("StyleName"), StyleName, cppu::UnoType<OUString>::get(), 0, 0},
-        {OUString("DateType"), Icons, getCppuType(&sheet::DateType::TODAY), 0, 0 },
-        {OUString(), 0, css::uno::Type(), 0, 0}
+        {MAP_CHAR_LEN("StyleName"), StyleName, &cppu::UnoType<OUString>::get(), 0, 0},
+        {MAP_CHAR_LEN("DateType"), Icons, &getCppuType(&sheet::DateType::TODAY), 0, 0 },
+        {0, 0, 0, 0, 0, 0}
     };
     return aCondDatePropertyMap_Impl;
 }
@@ -354,9 +354,9 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
 
     SCTAB nTab = aCoreRange[0]->aStart.Tab();
 
-    ScConditionalFormat* pNewFormat = new ScConditionalFormat(0, &mpDocShell->GetDocument());
-    pNewFormat->SetRange(aCoreRange);
-    return mpDocShell->GetDocument().AddCondFormat(pNewFormat, nTab);
+    ScConditionalFormat* pNewFormat = new ScConditionalFormat(0, mpDocShell->GetDocument());
+    pNewFormat->AddRange(aCoreRange);
+    return mpDocShell->GetDocument()->AddCondFormat(pNewFormat, nTab);
 }
 
 void ScCondFormatsObj::removeByID(const sal_Int32 nID)
@@ -475,7 +475,7 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
         throw lang::IllegalArgumentException();
 
     ScFormatEntry* pNewEntry = NULL;
-    ScDocument* pDoc = &mpDocShell->GetDocument();
+    ScDocument* pDoc = mpDocShell->GetDocument();
     switch (nType)
     {
         case sheet::ConditionEntryType::CONDITION:
