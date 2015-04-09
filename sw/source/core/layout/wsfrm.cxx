@@ -2323,7 +2323,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
                 _InvalidateAll();
                 InvalidatePage( pPage );
             }
-            if ( !(GetType() & 0x1823) ) //Tab, Row, FtnCont, Root, Page
+            if (!(GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
                 NotifyLowerObjs();
 
             if( IsCellFrm() )
@@ -2495,7 +2495,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
                 SetCompletePaint();
         }
 
-        if ( !(GetType() & 0x1823) ) //Tab, Row, FtnCont, Root, Page
+        if (!(GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
             NotifyLowerObjs();
 
         if( IsCellFrm() )
@@ -2990,7 +2990,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                 }
             } while ( !mbValidSize );
         }
-        else if ( GetType() & 0x0018 )
+        else if (GetType() & FRM_HEADFOOT)
         {
             do
             {   if ( Frm().Height() != pAttrs->GetSize().Height() )

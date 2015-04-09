@@ -1152,11 +1152,11 @@ inline bool SwFrm::IsNoTxtFrm() const
 }
 inline bool SwFrm::IsFlowFrm() const
 {
-    return (GetType() & 0xCA00) != 0;   //TabFrm, CntntFrm, SectionFrm
+    return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION)) != 0;
 }
 inline bool SwFrm::IsRetoucheFrm() const
 {
-    return (GetType() & 0xCA40) != 0;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
+    return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION|FRM_FTN)) != 0;
 }
 inline bool SwFrm::IsAccessibleFrm() const
 {

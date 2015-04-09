@@ -5402,11 +5402,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
     // There's nothing (Row,Body,Ftn,Root,Column,NoTxt) need to do here
-    if ( (GetType() & 0x90C5) )
+    if ((GetType() & (FRM_NOTXT|FRM_ROW|FRM_BODY|FRM_FTN|FRM_COLUMN|FRM_ROOT)))
         return;
 
-    if ( (GetType() & 0x2000) &&    //Cell
-         !gProp.pSGlobalShell->GetViewOptions()->IsTable() )
+    if (IsCellFrm() && !gProp.pSGlobalShell->GetViewOptions()->IsTable())
         return;
 
     // #i29550#

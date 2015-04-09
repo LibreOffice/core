@@ -583,7 +583,8 @@ SwLayNotify::~SwLayNotify()
     if ( !IsLowersComplete() &&
          !(pLay->GetType()&(FRM_FLY|FRM_SECTION) &&
             pLay->Lower() && pLay->Lower()->IsColumnFrm()) &&
-         (bPos || bNotify) && !(pLay->GetType() & 0x1823) )  //Tab, Row, FtnCont, Root, Page
+         (bPos || bNotify) &&
+         !(pLay->GetType() & (FRM_ROW|FRM_TAB|FRM_FTNCONT|FRM_PAGE|FRM_ROOT)))
     {
         // #i44016# - force unlock of position of lower objects.
         // #i43913# - no unlock of position of objects,

@@ -828,8 +828,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         //Otherwise I'll just refuse to leave to current area.
         else if ( pCnt )
         {
-            const SwFrm *pUp = pStart->GetUpper();               //Head/Foot
-            while ( pUp && pUp->GetUpper() && !(pUp->GetType() & 0x0018 ) )
+            const SwFrm *pUp = pStart->GetUpper();
+            while (pUp && pUp->GetUpper() && !(pUp->GetType() & FRM_HEADFOOT))
                 pUp = pUp->GetUpper();
             bool bSame = false;
             const SwFrm *pCntUp = pCnt->GetUpper();

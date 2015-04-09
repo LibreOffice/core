@@ -375,7 +375,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         }
         mbValidSize = mbValidPrtArea = true;
     }
-    else //if ( GetType() & 0x0018 )
+    else //if (GetType() & FRM_HEADFOOT)
     {
         do
         {

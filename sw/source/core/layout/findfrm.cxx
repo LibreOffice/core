@@ -519,7 +519,8 @@ SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;
     do
-    {   if ( pRet->GetType() & 0x0018 ) //header and footer
+    {
+        if (pRet->GetType() & FRM_HEADFOOT) //header and footer
             return pRet;
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
