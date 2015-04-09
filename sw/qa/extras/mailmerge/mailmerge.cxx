@@ -334,6 +334,18 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundaries2Pages, "simple-mail-merge-2pages
     }
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf89214, "tdf89214.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    executeMailMerge();
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxMMComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(3, xTextDocument->getText()), uno::UNO_QUERY);
+    // Make sure that we assert the right paragraph.
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xParagraph->getString());
+    // This paragraph had a bullet numbering, make sure that the list id is not empty.
+    CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, "ListId").isEmpty());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
