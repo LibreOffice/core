@@ -589,7 +589,7 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked, and after init has been called:
-    ::rtl::Reference< Paragraph >
+    static ::rtl::Reference< Paragraph >
     getParagraph(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex
@@ -633,7 +633,7 @@ private:
 
     static ::FontWeight mapFontWeight(css::uno::Any const & rWeight);
 
-    void retrieveDefaultAttributesImpl(
+    static void retrieveDefaultAttributesImpl(
         Paragraph const * pParagraph,
         const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rDefAttrSeq);

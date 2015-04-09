@@ -235,22 +235,22 @@ public:
     librdf_storage *createStorage_Lock(librdf_world *i_pWorld) const;
     librdf_model *createModel_Lock(librdf_world *i_pWorld,
         librdf_storage * i_pStorage) const;
-    librdf_uri* mkURI_Lock(librdf_world* i_pWorld,
-        const OString & i_rURI) const;
-    librdf_node* mkResource_Lock(librdf_world* i_pWorld,
-        const Resource * i_pResource) const;
-    librdf_node* mkNode_Lock(librdf_world* i_pWorld,
-        const Node * i_pNode) const;
-    librdf_statement* mkStatement_Lock(librdf_world* i_pWorld,
-        Statement const& i_rStatement) const;
-    ::boost::shared_ptr<Resource> extractResource_NoLock(
-        const uno::Reference< rdf::XResource > & i_xResource) const;
-    ::boost::shared_ptr<Node> extractNode_NoLock(
-        const uno::Reference< rdf::XNode > & i_xNode) const;
-    Statement extractStatement_NoLock(
+    static librdf_uri* mkURI_Lock(librdf_world* i_pWorld,
+        const OString & i_rURI);
+    static librdf_node* mkResource_Lock(librdf_world* i_pWorld,
+        const Resource * i_pResource);
+    static librdf_node* mkNode_Lock(librdf_world* i_pWorld,
+        const Node * i_pNode);
+    static librdf_statement* mkStatement_Lock(librdf_world* i_pWorld,
+        Statement const& i_rStatement);
+    static ::boost::shared_ptr<Resource> extractResource_NoLock(
+        const uno::Reference< rdf::XResource > & i_xResource);
+    static ::boost::shared_ptr<Node> extractNode_NoLock(
+        const uno::Reference< rdf::XNode > & i_xNode);
+    static Statement extractStatement_NoLock(
         const uno::Reference< rdf::XResource > & i_xSubject,
         const uno::Reference< rdf::XURI > & i_xPredicate,
-        const uno::Reference< rdf::XNode > & i_xObject) const;
+        const uno::Reference< rdf::XNode > & i_xObject);
     uno::Reference<rdf::XURI> convertToXURI(librdf_uri* i_pURI) const;
     uno::Reference<rdf::XURI> convertToXURI(librdf_node* i_pURI) const;
     uno::Reference<rdf::XResource>
@@ -1355,13 +1355,13 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     }
 
     librdf_TypeConverter::Statement const stmt(
-        m_TypeConverter.extractStatement_NoLock(
+        librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     const boost::shared_ptr<librdf_statement> pStatement(
-        m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
+        librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
@@ -1581,15 +1581,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     ::boost::shared_ptr<librdf_TypeConverter::Resource> const pSubject(
-        m_TypeConverter.extractResource_NoLock(i_xSubject));
+        librdf_TypeConverter::extractResource_NoLock(i_xSubject));
     ::boost::shared_ptr<librdf_TypeConverter::Node> const pContent(
-        m_TypeConverter.extractNode_NoLock(xContent));
+        librdf_TypeConverter::extractNode_NoLock(xContent));
     ::std::vector< ::boost::shared_ptr<librdf_TypeConverter::Resource> >
         predicates;
     ::std::transform(i_rPredicates.begin(), i_rPredicates.end(),
         ::std::back_inserter(predicates),
-        ::boost::bind(&librdf_TypeConverter::extractResource_NoLock,
-            m_TypeConverter, _1));
+        ::boost::bind(&librdf_TypeConverter::extractResource_NoLock, _1));
 
     removeStatementRDFa(i_xObject); // not atomic with insertion?
 
@@ -1733,13 +1732,13 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     }
 
     librdf_TypeConverter::Statement const stmt(
-        m_TypeConverter.extractStatement_NoLock(
+        librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     const boost::shared_ptr<librdf_statement> pStatement(
-        m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
+        librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
@@ -1844,7 +1843,7 @@ void librdf_Repository::addStatementGraph_NoLock(
     }
 
     librdf_TypeConverter::Statement const stmt(
-        m_TypeConverter.extractStatement_NoLock(
+        librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
     const OUString contextU( i_xGraphName->getStringValue() );
@@ -1879,7 +1878,7 @@ void librdf_Repository::addStatementGraph_Lock(
             "librdf_new_node_from_uri_string failed", *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
-        m_TypeConverter.mkStatement_Lock(m_pWorld.get(), i_rStatement),
+        librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), i_rStatement),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
@@ -1919,7 +1918,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
     }
 
     librdf_TypeConverter::Statement const stmt(
-        m_TypeConverter.extractStatement_NoLock(
+        librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
@@ -1943,7 +1942,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             "librdf_new_node_from_uri_string failed", *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
-        m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
+        librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
@@ -1999,7 +1998,7 @@ librdf_Repository::getStatementsGraph_NoLock(
     }
 
     librdf_TypeConverter::Statement const stmt(
-        m_TypeConverter.extractStatement_NoLock(
+        librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
@@ -2023,7 +2022,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             "librdf_new_node_from_uri_string failed", *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
-        m_TypeConverter.mkStatement_Lock(m_pWorld.get(), stmt),
+        librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
@@ -2119,7 +2118,7 @@ librdf_model *librdf_TypeConverter::createModel_Lock(
 
 // this does NOT create a node, only URI
 librdf_uri* librdf_TypeConverter::mkURI_Lock( librdf_world* i_pWorld,
-    OString const& i_rURI) const
+    OString const& i_rURI)
 {
     librdf_uri *pURI( librdf_new_uri(i_pWorld,
         reinterpret_cast<const unsigned char *>(i_rURI.getStr())));
@@ -2133,7 +2132,7 @@ librdf_uri* librdf_TypeConverter::mkURI_Lock( librdf_world* i_pWorld,
 // extract blank or URI node - call without Mutex locked
 ::boost::shared_ptr<librdf_TypeConverter::Resource>
 librdf_TypeConverter::extractResource_NoLock(
-    const uno::Reference< rdf::XResource > & i_xResource) const
+    const uno::Reference< rdf::XResource > & i_xResource)
 {
     if (!i_xResource.is()) {
         return ::boost::shared_ptr<Resource>();
@@ -2154,7 +2153,7 @@ librdf_TypeConverter::extractResource_NoLock(
 
 // create blank or URI node
 librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
-    Resource const*const i_pResource) const
+    Resource const*const i_pResource)
 {
     if (!i_pResource) return 0;
     BlankNode const*const pBlankNode(
@@ -2188,7 +2187,7 @@ librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
 // extract blank or URI or literal node - call without Mutex locked
 ::boost::shared_ptr<librdf_TypeConverter::Node>
 librdf_TypeConverter::extractNode_NoLock(
-    const uno::Reference< rdf::XNode > & i_xNode) const
+    const uno::Reference< rdf::XNode > & i_xNode)
 {
     if (!i_xNode.is()) {
         return ::boost::shared_ptr<Node>();
@@ -2221,7 +2220,7 @@ librdf_TypeConverter::extractNode_NoLock(
 
 // create blank or URI or literal node
 librdf_node* librdf_TypeConverter::mkNode_Lock( librdf_world* i_pWorld,
-    Node const*const i_pNode) const
+    Node const*const i_pNode)
 {
     if (!i_pNode) return 0;
     Resource const*const pResource(dynamic_cast<Resource const*>(i_pNode));
@@ -2266,7 +2265,7 @@ librdf_node* librdf_TypeConverter::mkNode_Lock( librdf_world* i_pWorld,
 librdf_TypeConverter::Statement librdf_TypeConverter::extractStatement_NoLock(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
-    const uno::Reference< rdf::XNode > & i_xObject) const
+    const uno::Reference< rdf::XNode > & i_xObject)
 {
     ::boost::shared_ptr<Resource> const pSubject(
             extractResource_NoLock(i_xSubject));
@@ -2279,7 +2278,7 @@ librdf_TypeConverter::Statement librdf_TypeConverter::extractStatement_NoLock(
 }
 
 librdf_statement* librdf_TypeConverter::mkStatement_Lock(librdf_world* i_pWorld,
-    Statement const& i_rStatement) const
+    Statement const& i_rStatement)
 {
     librdf_node *const pSubject(
             mkResource_Lock(i_pWorld, i_rStatement.pSubject.get()) );

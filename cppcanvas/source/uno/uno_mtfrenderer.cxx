@@ -22,9 +22,8 @@ void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/) throw 
 void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeException, std::exception)
 {
     if (mpMetafile && mxCanvas.get()) {
-        cppcanvas::VCLFactory& factory = cppcanvas::VCLFactory::getInstance();
-        cppcanvas::BitmapCanvasSharedPtr canvas = factory.createBitmapCanvas (mxCanvas);
-        cppcanvas::RendererSharedPtr renderer = factory.createRenderer (canvas, *mpMetafile, cppcanvas::Renderer::Parameters ());
+        cppcanvas::BitmapCanvasSharedPtr canvas = cppcanvas::VCLFactory::createBitmapCanvas (mxCanvas);
+        cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *mpMetafile, cppcanvas::Renderer::Parameters ());
         ::basegfx::B2DHomMatrix aMatrix;
         aMatrix.scale( fScaleX, fScaleY );
         canvas->setTransformation( aMatrix );

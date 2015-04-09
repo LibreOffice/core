@@ -398,14 +398,14 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     const cppcanvas::CanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(
+        cppcanvas::VCLFactory::createCanvas(
             Reference<css::rendering::XCanvas>(rxCanvas,UNO_QUERY)));
 
     if (pCanvas.get() != NULL)
     {
         BitmapEx aBitmapEx = SdResId(nid);
         cppcanvas::BitmapSharedPtr xBitmap(
-            cppcanvas::VCLFactory::getInstance().createBitmap(pCanvas,
+            cppcanvas::VCLFactory::createBitmap(pCanvas,
                 aBitmapEx));
         if (xBitmap.get() == NULL)
             return NULL;

@@ -158,9 +158,9 @@ namespace slideshow
                     }
                 }
 
-                io_rCacheEntry.mpRenderer = ::cppcanvas::VCLFactory::getInstance().createRenderer( rDestinationCanvas,
-                                                                                                   *rMtf.get(),
-                                                                                                   aParms );
+                io_rCacheEntry.mpRenderer = ::cppcanvas::VCLFactory::createRenderer( rDestinationCanvas,
+                                                                                     *rMtf.get(),
+                                                                                     aParms );
 
                 io_rCacheEntry.mpMtf               = rMtf;
                 io_rCacheEntry.mpDestinationCanvas = rDestinationCanvas;
@@ -619,7 +619,7 @@ namespace slideshow
                         {
                             // create a bitmap of appropriate size
                             ::cppcanvas::BitmapSharedPtr pBitmap(
-                                ::cppcanvas::BaseGfxFactory::getInstance().createAlphaBitmap(
+                                ::cppcanvas::BaseGfxFactory::createAlphaBitmap(
                                     rDestinationCanvas,
                                     aBmpSize ) );
 

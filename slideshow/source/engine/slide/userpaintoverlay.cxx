@@ -418,8 +418,8 @@ namespace slideshow
                              ++aIter )
                         {
                             ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
-                                                                                              aPoly ) );
+                                ::cppcanvas::BaseGfxFactory::createPolyPolygon( (*aIter)->getCanvas(),
+                                                                                aPoly ) );
 
                             if( pPolyPoly )
                             {

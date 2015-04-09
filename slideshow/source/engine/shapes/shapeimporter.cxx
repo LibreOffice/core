@@ -497,8 +497,8 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     while(aIter != aEnd)
     {
         ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
-                                                                          aPoly ) );
+            ::cppcanvas::BaseGfxFactory::createPolyPolygon( (*aIter)->getCanvas(),
+                                                            aPoly ) );
         if( pPolyPoly )
         {
                 pPolyPoly->setRGBALineColor( unoColor2RGBColor( nLineColor ).getIntegerColor() );

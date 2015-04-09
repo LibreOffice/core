@@ -25,11 +25,11 @@ class mgcLinearSystemD
 public:
   mgcLinearSystemD() {;}
 
-  double** NewMatrix (int N);
-  void DeleteMatrix (int N, double** A);
-  double* NewVector (int N);
+  static double** NewMatrix (int N);
+  static void DeleteMatrix (int N, double** A);
+  static double* NewVector (int N);
 
-  int Solve (int N, double** A, double* b);
+  static int Solve (int N, double** A, double* b);
   // Input:
   //     A[N][N] coefficient matrix, entries are A[row][col]
   //     b[N] vector, entries are b[row]

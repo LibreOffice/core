@@ -223,7 +223,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateTempDocFromLink_Impl();
 
     OUString GetBaseURL_Impl() const;
-    OUString GetBaseURLFrom_Impl(
+    static OUString GetBaseURLFrom_Impl(
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs );
 

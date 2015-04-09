@@ -138,7 +138,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 
     cppcanvas::CanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(rxCanvas));
+        cppcanvas::VCLFactory::createCanvas(rxCanvas));
 
     const SdrPage* pPage = mpCacheContext->GetPage(nSlideIndex);
     if (pPage == NULL)
@@ -148,7 +148,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     if (aPreview.IsEmpty())
         return NULL;
     else
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
+        return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
             aPreview)->getUNOBitmap();
 }
