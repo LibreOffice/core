@@ -22,7 +22,7 @@
 
 #include <registry/writer.h>
 #include <registry/refltype.hxx>
-#include <registry/types.h>
+#include <registry/types.hxx>
 #include <registry/version.h>
 
 #include <rtl/ustring.hxx>

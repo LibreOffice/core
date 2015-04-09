@@ -22,7 +22,7 @@
 #include <idlc/astdeclaration.hxx>
 #include "idlc/astscope.hxx"
 
-#include <registry/types.h>
+#include <registry/types.hxx>
 #include <rtl/ustring.hxx>
 
 namespace typereg { class Writer; }

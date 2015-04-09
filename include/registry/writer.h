@@ -21,7 +21,7 @@
 #define INCLUDED_REGISTRY_WRITER_H
 
 #include <registry/regdllapi.h>
-#include <registry/types.h>
+#include <registry/types.hxx>
 #include <registry/version.h>
 
 #include <rtl/ustring.h>

@@ -23,10 +23,6 @@
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /** specifies the typeclass of a binary type blob.
 
     The general structure of a binary type blob is always the same.  It depends
@@ -330,10 +326,6 @@ enum class RTReferenceType {
      */
     TYPE_PARAMETER
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 
