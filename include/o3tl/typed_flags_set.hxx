@@ -23,10 +23,28 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <type_traits>
 
 #include <o3tl/underlying_type.hxx>
 
 namespace o3tl {
+
+namespace detail {
+
+template<typename T> inline
+typename std::enable_if<std::is_signed<T>::value, bool>::type isNonNegative(
+    T value)
+{
+    return value >= 0;
+}
+
+template<typename T> inline
+typename std::enable_if<std::is_unsigned<T>::value, bool>::type isNonNegative(T)
+{
+    return true;
+}
+
+}
 
 template<typename T> struct typed_flags {};
 
@@ -54,7 +72,7 @@ struct is_typed_flags {
     public:
         explicit Wrap(typename underlying_type<E>::type value):
             value_(value)
-        { assert(value >= 0); }
+        { assert(detail::isNonNegative(value)); }
 
         operator E() { return static_cast<E>(value_); }
 
@@ -73,7 +91,9 @@ struct is_typed_flags {
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         o3tl::typed_flags<E>::mask
         & ~static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -90,8 +110,12 @@ inline typename o3tl::typed_flags<E>::Wrap operator ~(
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator ^(E lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         ^ static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -101,7 +125,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator ^(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         ^ static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -111,7 +137,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator ^(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         ^ static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -129,8 +157,12 @@ inline typename o3tl::typed_flags<E>::Wrap operator ^(
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         & static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -140,7 +172,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator &(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         & static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -150,7 +184,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator &(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         & static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -168,8 +204,12 @@ inline typename o3tl::typed_flags<E>::Wrap operator &(
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         | static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -179,7 +219,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator |(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         | static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -189,7 +231,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator |(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename o3tl::underlying_type<E>::type>(lhs)
         | static_cast<typename o3tl::underlying_type<E>::type>(rhs));
@@ -207,8 +251,12 @@ inline typename o3tl::typed_flags<E>::Wrap operator |(
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     lhs = lhs & rhs;
     return lhs;
 }
@@ -217,15 +265,21 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator &=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     lhs = lhs & rhs;
     return lhs;
 }
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     lhs = lhs | rhs;
     return lhs;
 }
@@ -234,15 +288,21 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator |=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     lhs = lhs | rhs;
     return lhs;
 }
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(rhs)));
     lhs = lhs ^ rhs;
     return lhs;
 }
@@ -251,7 +311,9 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator ^=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(
+        o3tl::detail::isNonNegative(
+            static_cast<typename o3tl::underlying_type<E>::type>(lhs)));
     lhs = lhs ^ rhs;
     return lhs;
 }

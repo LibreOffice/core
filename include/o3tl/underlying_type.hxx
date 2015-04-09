@@ -17,7 +17,7 @@
 namespace o3tl {
 
 template<typename T> struct underlying_type {
-#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 7 && \
+#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 6 && \
         !defined __clang__
     typedef int type;
 #else
