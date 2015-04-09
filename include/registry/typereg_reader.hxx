@@ -56,8 +56,8 @@
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_create(
-    void const * buffer, sal_uInt32 length, sal_Bool copy,
+REG_DLLPUBLIC bool SAL_CALL typereg_reader_create(
+    void const * buffer, sal_uInt32 length, bool copy,
     typereg_Version maxVersion, void ** result);
 
 /**
@@ -148,7 +148,7 @@ REG_DLLPUBLIC RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_isPublished(void * handle);
+REG_DLLPUBLIC bool SAL_CALL typereg_reader_isPublished(void * handle);
 
 /**
    Returns the type name of a type reader.
@@ -301,7 +301,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_getFieldTypeName(
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_getFieldValue(
+REG_DLLPUBLIC bool SAL_CALL typereg_reader_getFieldValue(
     void * handle, sal_uInt16 index, RTValueType * type,
     union RTConstValueUnion * value);
 

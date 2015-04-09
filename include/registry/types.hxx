@@ -210,7 +210,7 @@ enum RTValueType {
 /** specifies a variable container for field values.
  */
 union RTConstValueUnion {
-    sal_Bool aBool;
+    bool aBool;
     sal_Int8 aByte;
     sal_Int16 aShort;
     sal_uInt16 aUShort;

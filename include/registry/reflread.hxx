@@ -44,7 +44,7 @@ extern "C" {
 */
 struct RegistryTypeReader_Api
 {
-    TypeReaderImpl      (TYPEREG_CALLTYPE *createEntry)         (const sal_uInt8*, sal_uInt32, sal_Bool);
+    TypeReaderImpl      (TYPEREG_CALLTYPE *createEntry)         (const sal_uInt8*, sal_uInt32, bool);
     void                (TYPEREG_CALLTYPE *acquire)             (TypeReaderImpl);
     void                (TYPEREG_CALLTYPE *release)             (TypeReaderImpl);
     sal_uInt16          (TYPEREG_CALLTYPE *getMinorVersion)     (TypeReaderImpl);

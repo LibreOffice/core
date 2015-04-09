@@ -1252,8 +1252,8 @@ typereg_Version TypeRegistryEntry::getVersion() const {
 
 **************************************************************************/
 
-sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
-    void const * buffer, sal_uInt32 length, sal_Bool copy,
+bool TYPEREG_CALLTYPE typereg_reader_create(
+    void const * buffer, sal_uInt32 length, bool copy,
     typereg_Version maxVersion, void ** result)
 {
     if (length < OFFSET_CP || length > SAL_MAX_UINT32) {
@@ -1287,7 +1287,7 @@ sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
     }
 }
 
-static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
+static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer)
 {
     void * handle;
     typereg_reader_create(buffer, len, copyBuffer, TYPEREG_VERSION_1, &handle);
@@ -1364,7 +1364,7 @@ RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hEntry)
     return RT_TYPE_INVALID;
 }
 
-sal_Bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry)
+bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry)
 {
     TypeRegistryEntry * entry = static_cast< TypeRegistryEntry * >(hEntry);
     if (entry != nullptr) {
@@ -1515,7 +1515,7 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_u
     return pEntry->m_pFields->getFieldAccess(index);
 }
 
-sal_Bool TYPEREG_CALLTYPE typereg_reader_getFieldValue(
+bool TYPEREG_CALLTYPE typereg_reader_getFieldValue(
     void * hEntry, sal_uInt16 index, RTValueType * type,
     RTConstValueUnion * value)
 {
