@@ -1880,7 +1880,7 @@ namespace cppcanvas
 
                             float dx, dy, dw, dh;
 
-                            ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+                            ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
                             SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
@@ -1939,7 +1939,7 @@ namespace cppcanvas
 
                             float dx, dy, dw, dh;
 
-                            ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+                            ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
                             SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
@@ -2098,7 +2098,7 @@ namespace cppcanvas
                                 } else if (type == EmfPlusRecordTypeDrawImage) {
                                     float dx, dy, dw, dh;
 
-                                    ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+                                    ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
                                     SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
 

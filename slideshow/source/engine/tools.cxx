@@ -677,8 +677,7 @@ namespace slideshow
                 ::basegfx::tools::createPolygonFromRect( rRect ));
 
             ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( rCanvas,
-                                                                              aPoly ) );
+                ::cppcanvas::BaseGfxFactory::createPolyPolygon( rCanvas, aPoly ) );
 
             if( pPolyPoly )
             {

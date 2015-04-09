@@ -419,7 +419,7 @@ namespace cppcanvas
 
         void ImplRenderer::skipContent( GDIMetaFile& rMtf,
                                         const char*  pCommentString,
-                                        sal_Int32&   io_rCurrActionIndex ) const
+                                        sal_Int32&   io_rCurrActionIndex )
         {
             ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::skipContent(): NULL string given" );
@@ -445,7 +445,7 @@ namespace cppcanvas
 
         bool ImplRenderer::isActionContained( GDIMetaFile& rMtf,
                                               const char*  pCommentString,
-                                              sal_uInt16       nType ) const
+                                              sal_uInt16       nType )
         {
             ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::isActionContained(): NULL string given" );
@@ -754,7 +754,7 @@ namespace cppcanvas
 
         uno::Reference< rendering::XCanvasFont > ImplRenderer::createFont( double&                        o_rFontRotation,
                                                                            const vcl::Font&               rFont,
-                                                                           const ActionFactoryParameters& rParms ) const
+                                                                           const ActionFactoryParameters& rParms )
         {
             rendering::FontRequest aFontRequest;
 
@@ -2688,7 +2688,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result() const
+                static bool result()
                 {
                     return true; // nothing can fail here
                 }

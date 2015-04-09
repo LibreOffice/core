@@ -219,8 +219,8 @@ static float GetSwapFloat( SvStream& rSt )
             typedef ::std::vector< MtfAction >      ActionVector;
 
             /* EMF+ */
-            void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
-            void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags);
+            static void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
+            static void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags);
             void MapToDevice (double &x, double &y);
             ::basegfx::B2DPoint Map (double ix, double iy);
             ::basegfx::B2DSize MapSize (double iwidth, double iheight);
@@ -231,18 +231,18 @@ static float GetSwapFloat( SvStream& rSt )
             ImplRenderer(const ImplRenderer&) SAL_DELETED_FUNCTION;
             ImplRenderer& operator=( const ImplRenderer& ) SAL_DELETED_FUNCTION;
 
-            void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
+            static void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            void updateClipping( const ::Rectangle&                 rClipRect,
+            static void updateClipping( const ::Rectangle&                 rClipRect,
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            ::com::sun::star::uno::Reference<
+            static ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
                                                                        const ::vcl::Font&              rFont,
-                                                                       const ActionFactoryParameters&  rParms ) const;
+                                                                       const ActionFactoryParameters&  rParms );
             bool createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,
                                 bool                            bSubsettableActions );
@@ -250,13 +250,13 @@ static float GetSwapFloat( SvStream& rSt )
                                       const ActionFactoryParameters&   rParms );
             bool createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
                                       const ActionFactoryParameters& rParms );
-            void skipContent( GDIMetaFile& rMtf,
+            static void skipContent( GDIMetaFile& rMtf,
                               const char*  pCommentString,
-                              sal_Int32&   io_rCurrActionIndex ) const;
+                              sal_Int32&   io_rCurrActionIndex );
 
-            bool isActionContained( GDIMetaFile& rMtf,
+            static bool isActionContained( GDIMetaFile& rMtf,
                                     const char*  pCommentString,
-                                    sal_uInt16       nType ) const;
+                                    sal_uInt16       nType );
 
             void createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                        const ::Gradient&              rGradient,

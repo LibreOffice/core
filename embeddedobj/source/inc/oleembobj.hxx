@@ -232,7 +232,7 @@ protected:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
                 const OUString& aNewName );
 
-    void GetRidOfComponent();
+    static void GetRidOfComponent();
 
     void StoreToLocation_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -255,7 +255,7 @@ protected:
     void SetVisReplInStream( bool bExists );
     bool HasVisReplInStream();
 
-    ::com::sun::star::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
+    static ::com::sun::star::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xCachedVisRepr )
         throw ( ::com::sun::star::uno::Exception );
 

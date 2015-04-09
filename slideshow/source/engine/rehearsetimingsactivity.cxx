@@ -475,7 +475,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     metaFile.WindStart();
 
     cppcanvas::RendererSharedPtr renderer(
-        cppcanvas::VCLFactory::getInstance().createRenderer(
+        cppcanvas::VCLFactory::createRenderer(
             canvas, metaFile, cppcanvas::Renderer::Parameters() ) );
     const bool succ = renderer->draw();
     OSL_ASSERT( succ );

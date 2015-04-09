@@ -107,9 +107,9 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     SolarMutexGuard aGuard;
 
     cppcanvas::CanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(rxCanvas));
+        cppcanvas::VCLFactory::createCanvas(rxCanvas));
     if (pCanvas.get() != NULL)
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
+        return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
             CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
     else

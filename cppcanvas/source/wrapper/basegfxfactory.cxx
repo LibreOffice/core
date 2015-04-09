@@ -44,28 +44,8 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas
 {
-    /* Singleton handling */
-    struct InitInstance2
-    {
-        BaseGfxFactory* operator()()
-        {
-            return new BaseGfxFactory();
-        }
-    };
-
-    BaseGfxFactory& BaseGfxFactory::getInstance()
-    {
-        return *rtl_Instance< BaseGfxFactory, InitInstance2, ::osl::MutexGuard,
-            ::osl::GetGlobalMutex >::create(
-                InitInstance2(), ::osl::GetGlobalMutex());
-    }
-
-    BaseGfxFactory::BaseGfxFactory()
-    {
-    }
-
     PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr&          rCanvas,
-                                                            const ::basegfx::B2DPolygon&    rPoly ) const
+                                                            const ::basegfx::B2DPolygon&    rPoly )
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
@@ -86,7 +66,7 @@ namespace cppcanvas
     }
 
     BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
-                                                  const ::basegfx::B2ISize& rSize ) const
+                                                  const ::basegfx::B2ISize& rSize )
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
@@ -106,7 +86,7 @@ namespace cppcanvas
     }
 
     BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
-                                                       const ::basegfx::B2ISize& rSize ) const
+                                                       const ::basegfx::B2ISize& rSize )
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
