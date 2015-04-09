@@ -685,8 +685,6 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             }
             if (rEntry.MakeRegion(pDoc, aRegion, false))
             {
-                nStart = rEntry.GetStartCP();
-                nEnd = rEntry.GetEndCP();
                 if (rEntry.IsParaEnd())
                 {
                     pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, SetAttrMode::DEFAULT, true);
