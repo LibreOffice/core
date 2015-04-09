@@ -47,7 +47,7 @@ sal_Int32 ScConditionalFormatTest::nTest = 0;
 uno::Reference< lang::XComponent > ScConditionalFormatTest::mxComponent;
 
 ScConditionalFormatTest::ScConditionalFormatTest()
-    : CalcUnoApiTest("sc/qa/unit/data/ods")
+    : CalcUnoApiTest("/sc/qa/unit/data/ods")
 {
 }
 
