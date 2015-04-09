@@ -4863,16 +4863,7 @@ bool ScCompiler::HandleTableRef()
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
                         bAddRange = false;
-
-                    // Optional [] may follow.
-                    if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
-                    {
-                        if ((bGotToken = GetToken()))
-                        {
-                            if (mpToken->GetOpCode() == ocTableRefClose)
-                                bGotToken = false;  // get next token below
-                        }
-                    }
+                    bForwardToClose = true;
                 }
                 break;
             case ScTableRefToken::ALL:
