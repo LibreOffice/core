@@ -59,27 +59,4 @@
 #define FL_2                35
 #define FL_3                36
 
-#define ST_TYPE_ARTICLE                 40
-#define ST_TYPE_BOOK                    41
-#define ST_TYPE_BOOKLET                 42
-#define ST_TYPE_CONFERENCE              43
-#define ST_TYPE_INBOOK                  44
-#define ST_TYPE_INCOLLECTION            45
-#define ST_TYPE_INPROCEEDINGS           46
-#define ST_TYPE_JOURNAL                 47
-#define ST_TYPE_MANUAL                  48
-#define ST_TYPE_MASTERSTHESIS           49
-#define ST_TYPE_MISC                    50
-#define ST_TYPE_PHDTHESIS               51
-#define ST_TYPE_PROCEEDINGS             52
-#define ST_TYPE_TECHREPORT              53
-#define ST_TYPE_UNPUBLISHED             54
-#define ST_TYPE_EMAIL                   55
-#define ST_TYPE_WWW                     56
-#define ST_TYPE_CUSTOM1                 57
-#define ST_TYPE_CUSTOM2                 58
-#define ST_TYPE_CUSTOM3                 59
-#define ST_TYPE_CUSTOM4                 60
-#define ST_TYPE_CUSTOM5                 61
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

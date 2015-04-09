@@ -23,7 +23,6 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -221,29 +220,6 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     aControlParentWin.Show();
     aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
     aStdSize = GetOutputSizePixel();
-
-    aBibTypeArr[0] = BIB_RESSTR(ST_TYPE_ARTICLE);
-    aBibTypeArr[1] = BIB_RESSTR(ST_TYPE_BOOK);
-    aBibTypeArr[2] = BIB_RESSTR(ST_TYPE_BOOKLET);
-    aBibTypeArr[3] = BIB_RESSTR(ST_TYPE_CONFERENCE);
-    aBibTypeArr[4] = BIB_RESSTR(ST_TYPE_INBOOK );
-    aBibTypeArr[5] = BIB_RESSTR(ST_TYPE_INCOLLECTION);
-    aBibTypeArr[6] = BIB_RESSTR(ST_TYPE_INPROCEEDINGS);
-    aBibTypeArr[7] = BIB_RESSTR(ST_TYPE_JOURNAL       );
-    aBibTypeArr[8] = BIB_RESSTR(ST_TYPE_MANUAL    );
-    aBibTypeArr[9] = BIB_RESSTR(ST_TYPE_MASTERSTHESIS);
-    aBibTypeArr[10] = BIB_RESSTR(ST_TYPE_MISC      );
-    aBibTypeArr[11] = BIB_RESSTR(ST_TYPE_PHDTHESIS );
-    aBibTypeArr[12] = BIB_RESSTR(ST_TYPE_PROCEEDINGS   );
-    aBibTypeArr[13] = BIB_RESSTR(ST_TYPE_TECHREPORT    );
-    aBibTypeArr[14] = BIB_RESSTR(ST_TYPE_UNPUBLISHED   );
-    aBibTypeArr[15] = BIB_RESSTR(ST_TYPE_EMAIL     );
-    aBibTypeArr[16] = BIB_RESSTR(ST_TYPE_WWW           );
-    aBibTypeArr[17] = BIB_RESSTR(ST_TYPE_CUSTOM1       );
-    aBibTypeArr[18] = BIB_RESSTR(ST_TYPE_CUSTOM2       );
-    aBibTypeArr[19] = BIB_RESSTR(ST_TYPE_CUSTOM3       );
-    aBibTypeArr[20] = BIB_RESSTR(ST_TYPE_CUSTOM4       );
-    aBibTypeArr[21] = BIB_RESSTR(ST_TYPE_CUSTOM5       );
 
     FreeResource();
 
@@ -461,7 +437,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
     {
-        bool bTypeListBox = sTypeColumnName == rName;
+        const bool bTypeListBox = sTypeColumnName == rName;
         xCtrModel = pDatMan->loadControlModel(rName, bTypeListBox);
         if ( xCtrModel.is() )
         {
@@ -471,9 +447,17 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
             {
                 uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
 
-                uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
                 OUString aControlName;
-                aAny >>= aControlName;
+                if (bTypeListBox)
+                {
+                    aControlName = "com.sun.star.form.control.ListBox";
+                    xLBModel = Reference< form::XBoundComponent >(xCtrModel, UNO_QUERY);
+                }
+                else
+                {
+                    uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
+                    aAny >>= aControlName;
+                }
 
                 OUString uProp("HelpURL");
                 if(xPropInfo->hasPropertyByName(uProp))
@@ -482,44 +466,6 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     DBG_ASSERT( INetURLObject( OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
                     sId += OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 );
                     xPropSet->setPropertyValue( uProp, makeAny( sId ) );
-                }
-
-                if(bTypeListBox)
-                {
-                    //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
-                    aAny <<= (sal_Int16)1;
-                    xPropSet->setPropertyValue("BoundColumn", aAny);
-                    ListSourceType eSet = ListSourceType_VALUELIST;
-                    aAny.setValue( &eSet, ::cppu::UnoType<ListSourceType>::get() );
-                    xPropSet->setPropertyValue("ListSourceType", aAny);
-
-                    uno::Sequence<OUString> aListSource(TYPE_COUNT);
-                    OUString* pListSourceArr = aListSource.getArray();
-                    //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
-                    for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
-                        pListSourceArr[i] = OUString::number(i);
-                    aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<OUString>*)0));
-
-                    xPropSet->setPropertyValue("ListSource", aAny);
-
-                    uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
-                    OUString* pValuesArr = aValues.getArray();
-                    for(sal_uInt16 j = 0; j < TYPE_COUNT; j++)
-                        pValuesArr[j]  = aBibTypeArr[j];
-                    // empty string if an invalid value no values is set
-                    pValuesArr[TYPE_COUNT] = OUString();
-
-                    aAny.setValue(&aValues, ::getCppuType((uno::Sequence<OUString>*)0));
-
-                    xPropSet->setPropertyValue("StringItemList", aAny);
-
-                    sal_Bool bTrue = sal_True;
-                    aAny.setValue( &bTrue, ::getBooleanCppuType() );
-                    xPropSet->setPropertyValue( "Dropdown", aAny );
-
-                    aControlName = "com.sun.star.form.control.ListBox";
-                    xLBModel = Reference< form::XBoundComponent >(xCtrModel, UNO_QUERY);
-
                 }
 
                 uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
