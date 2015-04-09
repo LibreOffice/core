@@ -40,6 +40,8 @@ private:
     Edit* mpLenMin;
     Edit* mpLenMax;
 
+    CheckBox *mpCbOnlyBar;
+
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 

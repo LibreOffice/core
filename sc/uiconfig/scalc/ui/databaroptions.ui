@@ -465,7 +465,7 @@
                           </packing>
                         </child>
                         <child>
-                            <object class="GtkEntry" id="max_length">
+                          <object class="GtkEntry" id="max_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -495,6 +495,23 @@
                 <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="only_bar">
+                <property name="label" translatable="yes">Show Bar Only</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="str_same_value">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Min value must be smaller than max value!</property>
@@ -503,7 +520,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>

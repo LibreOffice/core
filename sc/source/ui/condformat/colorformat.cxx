@@ -87,6 +87,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     get( mpEdMax, "max_value" );
     get( mpLenMin, "min_length" );
     get( mpLenMax, "max_length" );
+    get( mpCbOnlyBar, "only_bar");
 
     maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
 
@@ -116,6 +117,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     mpLenMin->SetText(convertNumberToString(rData.mnMinLength, mpDoc));
     mpLenMax->SetText(convertNumberToString(rData.mnMaxLength, mpDoc));
     mpLbAxisCol->SelectEntry(rData.maAxisColor);
+    mpCbOnlyBar->Check(rData.mbOnlyBar);
 
     TypeSelectHdl(NULL);
     PosSelectHdl(NULL);
@@ -208,6 +210,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();
+    pData->mbOnlyBar = mpCbOnlyBar->IsChecked();
 
     ::GetType(*mpLbTypeMin, *mpEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
     ::GetType(*mpLbTypeMax, *mpEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
