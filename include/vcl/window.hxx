@@ -1192,9 +1192,11 @@ protected:
      * the preferred widget size.
      *
      * Use get_preferred_size to retrieve this value
-     * mediated via height and width requests
+     * cached and mediated via height and width requests
      */
     virtual Size GetOptimalSize() const;
+    /// clear OptimalSize cache
+    void InvalidateSizeCache();
 private:
 
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;

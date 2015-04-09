@@ -994,9 +994,7 @@ void SystemWindow::queue_resize(StateChangedType /*eReason*/)
         return;
     if (!isLayoutEnabled())
         return;
-    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-    pWindowImpl->mnOptimalWidthCache = -1;
-    pWindowImpl->mnOptimalHeightCache = -1;
+    InvalidateSizeCache();
     maLayoutTimer.Start();
 }
 
