@@ -21,13 +21,27 @@
  <toolbar:toolbaritem xlink:href=".uno:ChartElementSelector"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatSelection"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DiagramType" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DiagramData" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramType"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramArea"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramWall"/>
+ <toolbar:toolbaritem xlink:href=".uno:View3D"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleGridHorizontal" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleGridVertical" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleLegend" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ScaleText" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DataRanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramData"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:NewArrangement" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertMenuTitles"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleLegend"/>
+ <toolbar:toolbaritem xlink:href=".uno:Legend"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleGridHorizontal"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleGridVertical"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramAxisX"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramAxisY"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramAxisZ"/>
+ <toolbar:toolbaritem xlink:href=".uno:DiagramAxisAll"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ScaleText" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NewArrangement" toolbar:visible="false"/>
 </toolbar:toolbar>
