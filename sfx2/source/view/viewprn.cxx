@@ -581,7 +581,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
 void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
 {
-    assert( pImp->m_xPrinterController.get() == NULL );
+    assert( pImp->m_pPrinterController == NULL );
 
     // get the current selection; our controller should know it
     Reference< frame::XController > xController( GetController() );
