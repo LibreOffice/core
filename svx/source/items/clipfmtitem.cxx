@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 struct SvxClipboardFmtItem_Impl
 {
-    boost::ptr_vector< boost::nullable<OUString> > aFmtNms;
+    std::vector<OUString> aFmtNms;
     std::vector<SotClipboardFormatId> aFmtIds;
 
     SvxClipboardFmtItem_Impl() {}
@@ -102,8 +104,7 @@ bool SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
     for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.size(); n < nEnd; ++n )
     {
         if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
-            ( pImpl->aFmtNms.is_null(n) != rCmp.pImpl->aFmtNms.is_null(n) ) ||
-            ( !pImpl->aFmtNms.is_null(n) && pImpl->aFmtNms[n] != rCmp.pImpl->aFmtNms[n] ) )
+            pImpl->aFmtNms[n] != rCmp.pImpl->aFmtNms[n] )
         {
             nRet = 0;
             break;
@@ -123,7 +124,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, 0);
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, OUString());
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
@@ -133,7 +134,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUSt
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new OUString(rName));
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, rName);
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
@@ -149,7 +150,7 @@ SotClipboardFormatId SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) 
 
 const OUString SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    return pImpl->aFmtNms.is_null(nPos) ? OUString() : pImpl->aFmtNms[nPos];
+    return pImpl->aFmtNms[nPos];
 }
 
 
