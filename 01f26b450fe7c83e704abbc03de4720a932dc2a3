@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_9ce669e7",
+        "filename": "starmath/qa/cppunit/test_starmath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-09T08:37:45Z",
+      "side": 1,
+      "message": "wouldn\u0027t it make more sense to replace the member variables of naked pointer type with std::unique_ptr; that would obviate the need for a user-supplied ctor again (and no real need for a user-supplied dtor anyway)",
+      "revId": "01f26b450fe7c83e704abbc03de4720a932dc2a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
