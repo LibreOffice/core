@@ -71,8 +71,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_condformats,\
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
 	dbaccess/util/dba \
+	fileaccess/source/fileacc \
 	filter/source/config/cache/filterconfig1 \
-	filter/source/textfilterdetect/textfd \
 	forms/util/frm \
 	framework/util/fwk \
 	i18npool/util/i18npool \
@@ -103,6 +103,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_condformats,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_condformats))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sc_condformats))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_condformats))
 
