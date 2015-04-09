@@ -17,6 +17,9 @@ $(eval $(call gb_InstallModule_add_defs,scp2/windows,\
 	$(if $(WINDOWS_SDK_HOME),\
 		-DHAVE_WINDOWS_SDK \
 	) \
+        $(if $(WINDOWS_SDK_VERSION),\
+                -DWINDOWS_SDK_VERSION=$(WINDOWS_SDK_VERSION) \
+        ) \
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/windows,\

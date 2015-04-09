@@ -220,4 +220,19 @@ WindowsCustomAction gid_Customaction_RegisterSomeExtensions
 	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
 End
 
+WindowsCustomAction gid_Customaction_WrongWindowsVersion
+        Name = "WrongWindowsVersion";
+        Typ = "19";
+        Source = "";
+#if WINDOWS_SDK_VERSION = 70
+        Target = "OOO_CUSTOMACTION_4";
+        Assignment1 = ("InstallExecuteSequence", "VersionNT < 501", "AppSearch");
+        Assignment2 = ("InstallUISequence", "VersionNT < 501", "AppSearch");
+#else
+        Target = "OOO_CUSTOMACTION_5";
+        Assignment1 = ("InstallExecuteSequence", "VersionNT < 600", "AppSearch");
+        Assignment2 = ("InstallUISequence", "VersionNT < 600", "AppSearch");
+#endif
+End
+
 #endif /* HAVE_WINDOWS_SDK */

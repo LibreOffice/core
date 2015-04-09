@@ -27,3 +27,6 @@ en-US = "An older version of [ProductName] was found. To install a newer version
 
 [OOO_CUSTOMACTION_4]
 en-US = "[ProductName] cannot be installed on this Windows version. Windows XP or newer is required."
+
+[OOO_CUSTOMACTION_5]
+en-US = "[ProductName] cannot be installed on this Windows version. Windows Vista or newer is required."
