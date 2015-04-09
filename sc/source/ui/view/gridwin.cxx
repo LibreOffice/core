@@ -1706,7 +1706,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
     // special handling of empty cells with tiled rendering - with double
     // click, the entire cell is selected
-    if (bIsTiledRendering && bDouble)
+    if (bIsTiledRendering && bEditMode && bDouble)
     {
         Point aPos = rMEvt.GetPosPixel();
         SCsCOL nPosX;
