@@ -244,94 +244,6 @@ TabPage RID_TP_GENERAL
     {
         Text [ en-US ] = "The following column names could not be assigned:\n";
     };
-    String ST_TYPE_ARTICLE
-    {
-        Text [ en-US ] = "Article";
-    };
-    String ST_TYPE_BOOK
-    {
-        Text [ en-US ] = "Book";
-    };
-    String ST_TYPE_BOOKLET
-    {
-        Text [ en-US ] = "Brochures";
-    };
-    String ST_TYPE_CONFERENCE
-    {
-        Text [ en-US ] = "Conference proceedings";
-    };
-    String ST_TYPE_INBOOK
-    {
-        Text [ en-US ] = "Book excerpt";
-    };
-    String ST_TYPE_INCOLLECTION
-    {
-        Text [ en-US ] = "Book excerpt with title";
-    };
-    String ST_TYPE_INPROCEEDINGS
-    {
-        Text [ en-US ] = "Conference proceedings";
-    };
-    String ST_TYPE_JOURNAL
-    {
-        Text [ en-US ] = "Journal";
-    };
-    String ST_TYPE_MANUAL
-    {
-        Text [ en-US ] = "Techn. documentation";
-    };
-    String ST_TYPE_MASTERSTHESIS
-    {
-        Text [ en-US ] = "Thesis";
-    };
-    String ST_TYPE_MISC
-    {
-        Text [ en-US ] = "Miscellaneous";
-    };
-    String ST_TYPE_PHDTHESIS
-    {
-        Text [ en-US ] = "Dissertation";
-    };
-    String ST_TYPE_PROCEEDINGS
-    {
-        Text [ en-US ] = "Conference proceedings";
-    };
-    String ST_TYPE_TECHREPORT
-    {
-        Text [ en-US ] = "Research report";
-    };
-    String ST_TYPE_UNPUBLISHED
-    {
-        Text [ en-US ] = "Unpublished";
-    };
-    String ST_TYPE_EMAIL
-    {
-        Text [ en-US ] = "e-mail";
-    };
-    String ST_TYPE_WWW
-    {
-        Text [ en-US ] = "WWW document";
-    };
-    String ST_TYPE_CUSTOM1
-    {
-        Text [ en-US ] = "User-defined1";
-    };
-    String ST_TYPE_CUSTOM2
-    {
-        Text [ en-US ] = "User-defined2";
-    };
-    String ST_TYPE_CUSTOM3
-    {
-        Text [ en-US ] = "User-defined3";
-    };
-    String ST_TYPE_CUSTOM4
-    {
-        Text [ en-US ] = "User-defined4";
-    };
-    String ST_TYPE_CUSTOM5
-    {
-        Text [ en-US ] = "User-defined5";
-    };
     Text [ en-US ] = "General";
 };
 
@@ -459,6 +371,95 @@ String ST_CUSTOM4
 String ST_CUSTOM5
 {
     Text [ en-US ] = "User-defined field ~5";
+};
+
+String ST_TYPE_ARTICLE
+{
+    Text [ en-US ] = "Article";
+};
+String ST_TYPE_BOOK
+{
+    Text [ en-US ] = "Book";
+};
+String ST_TYPE_BOOKLET
+{
+    Text [ en-US ] = "Brochures";
+};
+String ST_TYPE_CONFERENCE
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String ST_TYPE_INBOOK
+{
+    Text [ en-US ] = "Book excerpt";
+};
+String ST_TYPE_INCOLLECTION
+{
+    Text [ en-US ] = "Book excerpt with title";
+};
+String ST_TYPE_INPROCEEDINGS
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String ST_TYPE_JOURNAL
+{
+    Text [ en-US ] = "Journal";
+};
+String ST_TYPE_MANUAL
+{
+    Text [ en-US ] = "Techn. documentation";
+};
+String ST_TYPE_MASTERSTHESIS
+{
+    Text [ en-US ] = "Thesis";
+};
+String ST_TYPE_MISC
+{
+    Text [ en-US ] = "Miscellaneous";
+};
+String ST_TYPE_PHDTHESIS
+{
+    Text [ en-US ] = "Dissertation";
+};
+String ST_TYPE_PROCEEDINGS
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String ST_TYPE_TECHREPORT
+{
+    Text [ en-US ] = "Research report";
+};
+String ST_TYPE_UNPUBLISHED
+{
+    Text [ en-US ] = "Unpublished";
+};
+String ST_TYPE_EMAIL
+{
+    Text [ en-US ] = "e-mail";
+};
+String ST_TYPE_WWW
+{
+    Text [ en-US ] = "WWW document";
+};
+String ST_TYPE_CUSTOM1
+{
+    Text [ en-US ] = "User-defined1";
+};
+String ST_TYPE_CUSTOM2
+{
+    Text [ en-US ] = "User-defined2";
+};
+String ST_TYPE_CUSTOM3
+{
+    Text [ en-US ] = "User-defined3";
+};
+String ST_TYPE_CUSTOM4
+{
+    Text [ en-US ] = "User-defined4";
+};
+String ST_TYPE_CUSTOM5
+{
+    Text [ en-US ] = "User-defined5";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
