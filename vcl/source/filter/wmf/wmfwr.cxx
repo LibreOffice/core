@@ -25,6 +25,7 @@
 #include <unotools/fontcvt.hxx>
 #include "emfwr.hxx"
 #include <rtl/crc.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
@@ -1630,7 +1631,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 default:
                 {
-                    OSL_FAIL( "Unsupported meta action!" );
+                    OSL_FAIL(OStringBuffer(
+                        "WMFWriter::WriteRecords: unsupported MetaAction #" ).
+                         append(static_cast<sal_Int32>(pMA->GetType())).getStr());
                 }
                 break;
           }
