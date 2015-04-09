@@ -96,7 +96,6 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                         aControls[ FIELD_COUNT ];
 
-    OUString            aBibTypeArr[ TYPE_COUNT ];
     OUString            sErrorPrefix;
     OUString            sTableErrorString;
 
