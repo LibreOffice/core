@@ -832,7 +832,7 @@ private:
         SwOLENode* mOLENode;
         const SdrObject* pSdrObj;
     };
-    std::list< PostponedGraphic >* m_postponedGraphic;
+    std::unique_ptr< std::list<PostponedGraphic> > m_pPostponedGraphic;
     struct PostponedDiagram
     {
         PostponedDiagram( const SdrObject* o, const SwFrmFmt* frm ) : object( o ), frame( frm ) {};

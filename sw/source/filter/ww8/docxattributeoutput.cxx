@@ -1596,8 +1596,8 @@ void DocxAttributeOutput::StartRunProperties()
     }
     InitCollectedRunProperties();
 
-    OSL_ASSERT( m_postponedGraphic == NULL );
-    m_postponedGraphic = new std::list< PostponedGraphic >;
+    OSL_ASSERT( !m_pPostponedGraphic );
+    m_pPostponedGraphic.reset(new std::list<PostponedGraphic>());
 
     OSL_ASSERT( m_postponedDiagram == NULL );
     m_postponedDiagram = new std::list< PostponedDiagram >;
@@ -1962,12 +1962,11 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 
 void DocxAttributeOutput::WritePostponedGraphic()
 {
-    for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
-         it != m_postponedGraphic->end();
+    for( std::list< PostponedGraphic >::const_iterator it = m_pPostponedGraphic->begin();
+         it != m_pPostponedGraphic->end();
          ++it )
         FlyFrameGraphic( it->grfNode, it->size, it->mOLEFrmFmt, it->mOLENode, it->pSdrObj );
-    delete m_postponedGraphic;
-    m_postponedGraphic = NULL;
+    m_pPostponedGraphic.reset(0);
 }
 
 void DocxAttributeOutput::WritePostponedDiagram()
@@ -4211,11 +4210,11 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
     if( PostponeOLE( pSdrObj, rOLENode, rSize, pFlyFrmFmt ))
         return;
     // Then we fall back to just export the object as a graphic.
-    if( m_postponedGraphic == NULL )
+    if( !m_pPostponedGraphic )
         FlyFrameGraphic( 0, rSize, pFlyFrmFmt, &rOLENode );
     else
         // w:drawing should not be inside w:rPr, so write it out later
-        m_postponedGraphic->push_back( PostponedGraphic( 0, rSize, pFlyFrmFmt, &rOLENode, 0 ) );
+        m_pPostponedGraphic->push_back(PostponedGraphic(0, rSize, pFlyFrmFmt, &rOLENode, 0));
 }
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
@@ -4786,7 +4785,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : 0;
                 if ( pGrfNode )
                 {
-                    if( m_postponedGraphic == NULL )
+                    if (!m_pPostponedGraphic)
                     {
                         m_bPostponedProcessingFly = false ;
                         FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj);
@@ -4794,7 +4793,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_bPostponedProcessingFly = true ;
-                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj));
+                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj));
                     }
                 }
             }
@@ -8279,7 +8278,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
-      m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
