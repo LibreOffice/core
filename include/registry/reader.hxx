@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REGISTRY_READER_HXX
 #define INCLUDED_REGISTRY_READER_HXX
 
-#include <registry/reader.h>
+#include <registry/typereg_reader.hxx>
 #include <registry/refltype.hxx>
 #include <registry/types.hxx>
 #include <registry/version.h>
