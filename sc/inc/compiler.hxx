@@ -386,6 +386,9 @@ public:
     bool IsTableRefItem( const OUString& ) const;
     bool IsTableRefColumn( const OUString& ) const;
 
+    /** Calls GetToken() if PeekNextNoSpaces() is of given OpCode. */
+    bool GetTokenIfOpCode( OpCode eOp );
+
     /**
      * When auto correction is set, the jump command reorder must be enabled.
      */

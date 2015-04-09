@@ -4820,6 +4820,14 @@ bool ScCompiler::HandleDbData()
     return true;
 }
 
+bool ScCompiler::GetTokenIfOpCode( OpCode eOp )
+{
+    const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+    if (p && p->GetOpCode() == eOp)
+        return GetToken();
+    return false;
+}
+
 
 /* Documentation on MS-Excel Table structured references:
  * https://support.office.com/en-us/article/Use-structured-references-in-Excel-table-formulas-75fb07d3-826a-449c-b76f-363057e3d16f
@@ -4847,7 +4855,6 @@ bool ScCompiler::HandleTableRef()
         aDBRange.aEnd.SetTab(aDBRange.aStart.Tab());
         ScRange aRange( aDBRange);
         ScTokenArray* pNew = new ScTokenArray();
-        bool bGotToken = false;
         bool bAddRange = true;
         bool bForwardToClose = false;
         ScTableRefToken::Item eItem = pTR->GetItem();
@@ -4927,22 +4934,27 @@ bool ScCompiler::HandleTableRef()
                 break;
         }
         bool bColumnRange = false;
-        if (bForwardToClose && (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
+        int nLevel = 0;
+        if (bForwardToClose && GetTokenIfOpCode( ocTableRefOpen))
         {
-            int nLevel = 1;
+            ++nLevel;
             enum
             {
                 sOpen,
                 sItem,
                 sClose,
                 sSep,
+                sLast,
                 sStop
             } eState = sOpen;
             do
             {
-                if ((bGotToken = GetToken()))
+                const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+                if (!p)
+                    eState = sStop;
+                else
                 {
-                    switch (mpToken->GetOpCode())
+                    switch (p->GetOpCode())
                     {
                         case ocTableRefOpen:
                             eState = ((eState == sOpen || eState == sSep) ? sOpen : sStop);
@@ -4961,35 +4973,37 @@ bool ScCompiler::HandleTableRef()
                             break;
                         case ocTableRefClose:
                             eState = ((eState == sItem || eState == sClose) ? sClose : sStop);
-                            if (--nLevel <= 0)
-                            {
-                                if (nLevel < 0)
-                                    SetError( errPair);
-                                eState = sStop;
-                            }
+                            if (eState != sStop && --nLevel == 0)
+                                eState = sLast;
                             break;
                         case ocSep:
                             eState = ((eState == sClose) ? sSep : sStop);
                             break;
                         case ocPush:
-                            if (eState == sOpen &&
-                                    (mpToken->GetType() == svSingleRef || mpToken->GetType() == svDoubleRef))
+                            if (eState == sOpen && (p->GetType() == svSingleRef || p->GetType() == svDoubleRef))
+                            {
                                 bColumnRange = true;
-                            eState = sStop;
+                                eState = sLast;
+                            }
+                            else
+                            {
+                                eState = sStop;
+                            }
                             break;
                         default:
                             eState = sStop;
                     }
+                    if (eState != sStop)
+                        GetToken();
+                    if (eState == sLast)
+                        eState = sStop;
                 }
-            } while (bGotToken && eState != sStop);
-            if (bGotToken && mpToken->GetOpCode() == ocTableRefClose)
-                bGotToken = false;  // get next token below in return
+            } while (eState != sStop);
         }
         if (bAddRange)
         {
             if (bColumnRange)
             {
-                bGotToken = false;  // obtain at least a close hereafter
                 // Limit range to specified columns.
                 ScRange aColRange( ScAddress::INITIALIZE_INVALID );
                 switch (mpToken->GetType())
@@ -4997,16 +5011,15 @@ bool ScCompiler::HandleTableRef()
                     case svSingleRef:
                         {
                             aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
-                            if (    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose &&
-                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocRange &&
-                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen &&
-                                    (bGotToken = GetToken()) && mpToken->GetOpCode() == ocPush)
+                            if (    GetTokenIfOpCode( ocTableRefClose) && (nLevel--) &&
+                                    GetTokenIfOpCode( ocRange) &&
+                                    GetTokenIfOpCode( ocTableRefOpen) && (++nLevel) &&
+                                    GetTokenIfOpCode( ocPush))
                             {
                                 if (mpToken->GetType() != svSingleRef)
                                     aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
                                 else
                                 {
-                                    bGotToken = false;  // obtain at least a close hereafter
                                     aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
                                     aColRange.Justify();
                                 }
@@ -5040,27 +5053,19 @@ bool ScCompiler::HandleTableRef()
             {
                 SetError( errNoRef);
             }
-            if (bColumnRange && !bGotToken)
-            {
-                if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
-                {
-                    if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
-                        bGotToken = false;  // get next token below in return
-                }
-                else
-                {
-                    SetError( errPair);
-                    bGotToken = false;  // get next token below in return
-                }
-            }
         }
         else
         {
             SetError( errNoRef);
         }
+        while (nLevel-- > 0)
+        {
+            if (!GetTokenIfOpCode( ocTableRefClose))
+                SetError( errPair);
+        }
         PushTokenArray( pNew, true );
         pNew->Reset();
-        return bGotToken ? true : GetToken();
+        return GetToken();
     }
     return true;
 }
