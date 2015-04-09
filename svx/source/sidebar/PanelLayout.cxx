@@ -51,6 +51,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
         return;
     if (!isLayoutEnabled(this))
         return;
+    InvalidateSizeCache();
     m_aPanelLayoutIdle.Start();
 }
 

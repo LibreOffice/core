@@ -1427,16 +1427,23 @@ namespace
     }
 }
 
+void Window::InvalidateSizeCache()
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnOptimalWidthCache = -1;
+    pWindowImpl->mnOptimalHeightCache = -1;
+}
+
 void Window::queue_resize(StateChangedType eReason)
 {
     bool bSomeoneCares = queue_ungrouped_resize(this);
 
-    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     if (eReason != StateChangedType::VISIBLE)
     {
-        pWindowImpl->mnOptimalWidthCache = -1;
-        pWindowImpl->mnOptimalHeightCache = -1;
+        InvalidateSizeCache();
     }
+
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
         std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
