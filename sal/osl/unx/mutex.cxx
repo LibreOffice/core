@@ -25,8 +25,8 @@
 #endif
 #include "system.hxx"
 
+#include <sal/log.hxx>
 #include <osl/mutex.h>
-#include <osl/diagnose.h>
 
 #include <pthread.h>
 #include <stdlib.h>
@@ -37,16 +37,13 @@ typedef struct _oslMutexImpl
     pthread_mutex_t mutex;
 } oslMutexImpl;
 
-/*****************************************************************************/
-/* osl_createMutex */
-/*****************************************************************************/
 oslMutex SAL_CALL osl_createMutex()
 {
     oslMutexImpl* pMutex = static_cast<oslMutexImpl*>(malloc(sizeof(oslMutexImpl)));
     pthread_mutexattr_t aMutexAttr;
     int nRet=0;
 
-    OSL_ASSERT(pMutex);
+    SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
     if ( pMutex == 0 )
     {
@@ -60,8 +57,7 @@ oslMutex SAL_CALL osl_createMutex()
         nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
     if ( nRet != 0 )
     {
-        OSL_TRACE("osl_createMutex : mutex init/setattr failed. Errno: %d; %s\n",
-                  nRet, strerror(nRet));
+        SAL_WARN("sal.osl.mutex", "pthread_muxex_init failed: " << strerror(nRet));
 
         free(pMutex);
         pMutex = 0;
@@ -69,12 +65,16 @@ oslMutex SAL_CALL osl_createMutex()
 
     pthread_mutexattr_destroy(&aMutexAttr);
 
+    SAL_INFO("sal.osl.mutex", "osl_createMutex(): " << pMutex);
+
     return pMutex;
 }
 
 void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
+
+    SAL_INFO("sal.osl.mutex", "osl_destroyMutex(" << pMutex << ")");
 
     if ( pMutex != 0 )
     {
@@ -83,8 +83,7 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
         nRet = pthread_mutex_destroy(&(pMutex->mutex));
         if ( nRet != 0 )
         {
-            OSL_TRACE("osl_destroyMutex : mutex destroy failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
+            SAL_WARN("sal.osl.mutex", "pthread_mutex_destroy failed: " << strerror(nRet));
         }
 
         free(pMutex);
@@ -95,7 +94,9 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
+
+    SAL_INFO("sal.osl.mutex", "osl_acquireMutex(" << pMutex << ")");
 
     if ( pMutex != 0 )
     {
@@ -104,8 +105,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
         nRet = pthread_mutex_lock(&(pMutex->mutex));
         if ( nRet != 0 )
         {
-            OSL_TRACE("osl_acquireMutex : mutex lock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
+            SAL_WARN("sal.osl.mutex", "pthread_mutex_lock failed: " << strerror(nRet));
             return sal_False;
         }
         return sal_True;
@@ -117,25 +117,28 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    sal_Bool result = sal_False;
+
+    SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
     if ( pMutex )
     {
         int nRet = 0;
         nRet = pthread_mutex_trylock(&(pMutex->mutex));
-        if ( nRet != 0  )
-            return sal_False;
-
-        return sal_True;
+        if ( nRet == 0  )
+            result = sal_True;
     }
 
-    /* not initialized */
-    return sal_False;
+    SAL_INFO("sal.osl.mutex", "osl_tryToAcquireMutex(" << pMutex << "): " << (result ? "YES" : "NO"));
+
+    return result;
 }
 
 sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
+
+    SAL_INFO("sal.osl.mutex", "osl_releaseMutex(" << pMutex << ")");
 
     if ( pMutex )
     {
@@ -143,8 +146,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
         nRet = pthread_mutex_unlock(&(pMutex->mutex));
         if ( nRet != 0 )
         {
-            OSL_TRACE("osl_releaseMutex : mutex unlock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
+            SAL_WARN("sal.osl.mutex", "pthread_mutex_unlock failed: " << strerror(nRet));
             return sal_False;
         }
 
