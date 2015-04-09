@@ -115,8 +115,6 @@ namespace bib
         m_xGeneralPage = m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
         m_pGeneralPage->Show();
 
-        Resize();
-
         if( HasFocus() )
             // "delayed" GetFocus() because GetFocus() is initially called before GeneralPage is created
             m_pGeneralPage->GrabFocus();
@@ -156,12 +154,14 @@ namespace bib
     {
         UpdatePages();
         FormControlContainer::_loaded( _rEvent );
+        Resize();
     }
 
     void BibView::_reloaded( const EventObject& _rEvent )
     {
         UpdatePages();
         FormControlContainer::_loaded( _rEvent );
+        Resize();
     }
 
     IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
