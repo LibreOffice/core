@@ -141,7 +141,7 @@ public:
 
     void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );
 
-    bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    static bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                                     bool bVisible );
 
     bool ShowInplace( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,

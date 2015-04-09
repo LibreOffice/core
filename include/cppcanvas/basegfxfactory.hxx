@@ -60,15 +60,15 @@ namespace cppcanvas
             The created polygon initially has the same size in user
             coordinate space as the source polygon
          */
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolygon& rPoly ) const;
+        static PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolygon& rPoly );
 
         /** Create an uninitialized bitmap with the given size
          */
-        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
+        static BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
 
         /** Create an uninitialized alpha bitmap with the given size
          */
-        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
+        static BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
 
     private:
         friend struct InitInstance2;

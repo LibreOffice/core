@@ -3124,7 +3124,7 @@ OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
         if(xShape.is())
         {
             XShapeDumper dumper;
-            OUString aString = dumper.dump(mxRootShape);
+            OUString aString = XShapeDumper::dump(mxRootShape);
             aBuffer.append(aString);
         }
         else
@@ -3133,7 +3133,7 @@ OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
             if(!xSingleShape.is())
                 continue;
             XShapeDumper dumper;
-            OUString aString = dumper.dump(xSingleShape);
+            OUString aString = XShapeDumper::dump(xSingleShape);
             aBuffer.append(aString);
         }
         aBuffer.append("\n\n");

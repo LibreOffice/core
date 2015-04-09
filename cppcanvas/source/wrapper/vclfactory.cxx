@@ -71,7 +71,7 @@ namespace cppcanvas
             new internal::ImplBitmapCanvas( xCanvas ) );
     }
 
-    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow ) const
+    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow )
     {
         return SpriteCanvasSharedPtr(
             new internal::ImplSpriteCanvas(
@@ -80,14 +80,14 @@ namespace cppcanvas
                     uno::UNO_QUERY) ) );
     }
 
-    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas ) const
+    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas )
     {
         return SpriteCanvasSharedPtr(
             new internal::ImplSpriteCanvas( xCanvas ) );
     }
 
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
-                                              const ::BitmapEx&         rBmpEx ) const
+                                              const ::BitmapEx&         rBmpEx )
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
@@ -108,7 +108,7 @@ namespace cppcanvas
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
                                                   const ::GDIMetaFile&          rMtf,
-                                                  const Renderer::Parameters&   rParms ) const
+                                                  const Renderer::Parameters&   rParms )
     {
         return RendererSharedPtr( new internal::ImplRenderer( rCanvas,
                                                               rMtf,
