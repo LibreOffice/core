@@ -1090,7 +1090,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
     }
 
     if( (sal_uInt16)nPos <= ( nIMax + 2U ) * 4U + ( nIMax + 1U ) * nItemSize )
-                                            // does it fits behind the CPs and offsets?
+                                            // does it fits after the CPs and offsets?
         return false;                       // no
 
     reinterpret_cast<sal_Int32*>(pFkp)[nIMax + 1] = nEndFc;     // insert FC

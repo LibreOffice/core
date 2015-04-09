@@ -495,9 +495,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
 
-            // the correct anchor is set in Read_F_IncludePicture and the current PaM point's
-            // behind the position if it is anchored in content; because this anchor add
-            // a character into the textnode. IussueZilla task 2806
+            // the correct anchor is set in Read_F_IncludePicture and the current PaM point
+            // is after the position if it is anchored in content; because this anchor add
+            // a character into the textnode. #i2806#
             if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {

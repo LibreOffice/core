@@ -150,7 +150,7 @@ using namespace nsHdFtFlags;
 //#define VT_LPWSTR           31
 //#define VT_BLOB             65
 //#define VT_TYPEMASK         0xFFF
-/** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
+/** Expands to a pointer after the last element of a STATIC data array (like STL end()). */
 //#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
 /** Expands to the size of a STATIC data array. */
 //#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))

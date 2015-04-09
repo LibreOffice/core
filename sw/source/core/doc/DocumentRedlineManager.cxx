@@ -41,7 +41,7 @@ using namespace com::sun::star;
         // helper function for lcl_CheckRedline
         // 1. make sure that pPos->nContent points into pPos->nNode
         //    (or into the 'special' no-content-node-IndexReg)
-        // 2. check that position is valid and doesn't point behind text
+        // 2. check that position is valid and doesn't point after text
         static void lcl_CheckPosition( const SwPosition* pPos )
         {
             SwPosition aComparePos( *pPos );
@@ -61,7 +61,7 @@ using namespace com::sun::star;
             {
                 OSL_ENSURE( pPos->nContent >= 0  &&
                             pPos->nContent <= pTxtNode->Len(),
-                            _ERROR_PREFIX "index behind text" );
+                            _ERROR_PREFIX "index after text" );
             }
         }
 
@@ -771,7 +771,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             {
                 if( pStt->nContent > pTxtNode->Len() )
                 {
-                    OSL_ENSURE( false, "Redline start: index behind text" );
+                    OSL_ENSURE( false, "Redline start: index after text" );
                     pStt->nContent = pTxtNode->Len();
                 }
             }
@@ -788,7 +788,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             {
                 if( pEnd->nContent > pTxtNode->Len() )
                 {
-                    OSL_ENSURE( false, "Redline end: index behind text" );
+                    OSL_ENSURE( false, "Redline end: index after text" );
                     pEnd->nContent = pTxtNode->Len();
                 }
             }
