@@ -200,7 +200,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         pMed->UseInteractionHandler(true);    // enable the filter options dialog
 
     // aRef->DoClose() will be called explicitly, but it is still more safe to use SfxObjectShellLock here
-    ScDocShell* pSrcShell = new ScDocShell(SFXMODEL_EMBEDDED_OBJECT | SFXMODEL_DISABLE_EMBEDDED_SCRIPTS);
+    ScDocShell* pSrcShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS);
     SfxObjectShellLock aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
@@ -532,7 +532,7 @@ ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
     if ( bWithInteraction )
         pMedium->UseInteractionHandler( true ); // to enable the filter options dialog
 
-    pDocShell = new ScDocShell( SFXMODEL_EMBEDDED_OBJECT | SFXMODEL_DISABLE_EMBEDDED_SCRIPTS );
+    pDocShell = new ScDocShell( SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS );
     aRef = pDocShell;
 
     ScDocument& rDoc = pDocShell->GetDocument();

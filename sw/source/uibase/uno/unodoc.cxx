@@ -48,7 +48,7 @@ OUString SAL_CALL SwTextDocument_getImplementationName() throw()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory >&, const sal_uInt64 _nCreationFlags )
+        const uno::Reference< lang::XMultiServiceFactory >&, SfxModelFlags _nCreationFlags )
     throw( uno::Exception )
 {
     SolarMutexGuard aGuard;

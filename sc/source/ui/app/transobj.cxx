@@ -736,7 +736,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     if (bAnyOle)
     {
         ScGlobal::pDrawClipDocShellRef =
-                        new ScDocShellRef(new ScDocShell(SFXMODEL_EMBEDDED_OBJECT | SFXMODEL_DISABLE_EMBEDDED_SCRIPTS));      // there must be a ref
+                        new ScDocShellRef(new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS));      // there must be a ref
         (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
         return *ScGlobal::pDrawClipDocShellRef;
     }

@@ -55,9 +55,9 @@ private:
                                            "private:factory/smath*");
         pFilter->SetVersion(SOFFICE_FILEFORMAT_60);
 
-        mxDocShell = new SmDocShell(SFXMODEL_STANDARD |
-                                    SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
-                                    SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+        mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
+                                    SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+                                    SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
         SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
         pSrcMed->SetFilter(pFilter);

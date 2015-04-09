@@ -27,6 +27,7 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/settings.hxx>
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
@@ -219,7 +220,7 @@ const sal_uInt16 SmElementsControl::aOthers[][2] =
 
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
-    , mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL))
+    , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , maCurrentSetId(0)
     , mpCurrentElement(NULL)
     , mbVerticalMode(true)

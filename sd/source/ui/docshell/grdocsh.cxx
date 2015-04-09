@@ -60,7 +60,7 @@ GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
     SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
 }
 
-GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
+GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags,
                                      bool bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(nModelCreationFlags, bDataObject, eDocType)

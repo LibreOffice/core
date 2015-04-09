@@ -11,6 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/svapp.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <smdll.hxx>
 
 #include <document.hxx>
@@ -87,7 +88,7 @@ void Test::setUp()
 
     SmGlobals::ensure();
 
-    xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
+    xDocShRef = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT);
 }
 
 void Test::tearDown()

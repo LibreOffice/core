@@ -173,7 +173,7 @@ private:
 
 public:
                     ScDocShell( const ScDocShell& rDocShell );
-                    ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
+                    ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell();
 
 #if ENABLE_TELEPATHY

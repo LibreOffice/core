@@ -653,7 +653,7 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),

@@ -89,9 +89,9 @@ void Test::setUp()
 
     ScDLL::Init();
     m_xDocShRef = new ScDocShell(
-        SFXMODEL_STANDARD |
-        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
-        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
     m_pDoc = &m_xDocShRef->GetDocument();
 }

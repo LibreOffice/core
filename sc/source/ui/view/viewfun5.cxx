@@ -129,7 +129,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 SfxMedium* pMedium = new SfxMedium( xStore, OUString() );
 
                 //  TODO/LATER: is it a problem that we don't support binary formats here?
-                ScDocShellRef xDocShRef = new ScDocShell(SFXMODEL_STANDARD);
+                ScDocShellRef xDocShRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT);
                 if (xDocShRef->DoLoad(pMedium))
                 {
                     ScDocument& rSrcDoc = xDocShRef->GetDocument();

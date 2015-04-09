@@ -90,7 +90,7 @@ namespace sfx2
         virtual ~SfxModelFactory();
 
     private:
-        Reference< XInterface > impl_createInstance( const sal_uInt64 _nCreationFlags ) const;
+        Reference< XInterface > impl_createInstance( const SfxModelFlags _nCreationFlags ) const;
 
     private:
         const Reference< XMultiServiceFactory >     m_xServiceFactory;
@@ -119,7 +119,7 @@ namespace sfx2
     }
 
 
-    Reference< XInterface > SfxModelFactory::impl_createInstance( const sal_uInt64 _nCreationFlags ) const
+    Reference< XInterface > SfxModelFactory::impl_createInstance( const SfxModelFlags _nCreationFlags ) const
     {
         return (*m_pComponentFactoryFunc)( m_xServiceFactory, _nCreationFlags );
     }
@@ -161,10 +161,10 @@ namespace sfx2
         const bool bScriptSupport = aArgs.getOrDefault( "EmbeddedScriptSupport", sal_True );
         const bool bDocRecoverySupport = aArgs.getOrDefault( "DocumentRecoverySupport", sal_True );
 
-        sal_uInt64 nCreationFlags =
-                ( bEmbeddedObject ? SFXMODEL_EMBEDDED_OBJECT : 0 )
-            |   ( bScriptSupport ? 0 : SFXMODEL_DISABLE_EMBEDDED_SCRIPTS )
-            |   ( bDocRecoverySupport ? 0 : SFXMODEL_DISABLE_DOCUMENT_RECOVERY );
+        SfxModelFlags nCreationFlags =
+                ( bEmbeddedObject ? SfxModelFlags::EMBEDDED_OBJECT : SfxModelFlags::NONE )
+            |   ( bScriptSupport ? SfxModelFlags::NONE : SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS )
+            |   ( bDocRecoverySupport ? SfxModelFlags::NONE : SfxModelFlags::DISABLE_DOCUMENT_RECOVERY );
 
         Reference< XInterface > xInstance( impl_createInstance( nCreationFlags ) );
 

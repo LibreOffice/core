@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOFREG_HXX
 
 #include <sal/config.h>
+#include <sfx2/sfxmodelfactory.hxx>
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -37,7 +38,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SwUnoModule_createInstance(
 // writer documents
 css::uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
 OUString SAL_CALL SwTextDocument_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwTextDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr, const sal_uInt64 _nCreationFlags ) throw( css::uno::Exception );
+css::uno::Reference< css::uno::XInterface > SAL_CALL SwTextDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr, SfxModelFlags _nCreationFlags ) throw( css::uno::Exception );
 
 #endif
 

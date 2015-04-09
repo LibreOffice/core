@@ -24,18 +24,26 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
-#define SFXMODEL_STANDARD                   (sal_uInt64)(0x0000)
-#define SFXMODEL_EMBEDDED_OBJECT            (sal_uInt64)(0x0001)
-#define SFXMODEL_EXTERNAL_LINK              (sal_uInt64)(0x0002)
-#define SFXMODEL_DISABLE_EMBEDDED_SCRIPTS   (sal_uInt64)(0x0004)
-#define SFXMODEL_DISABLE_DOCUMENT_RECOVERY  (sal_uInt64)(0x0008)
+enum class SfxModelFlags
+{
+    NONE                       = 0x00,
+    EMBEDDED_OBJECT            = 0x01,
+    EXTERNAL_LINK              = 0x02,
+    DISABLE_EMBEDDED_SCRIPTS   = 0x04,
+    DISABLE_DOCUMENT_RECOVERY  = 0x08,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxModelFlags> : is_typed_flags<SfxModelFlags, 0x0f> {};
+}
 
 namespace sfx2
 {
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ( SAL_CALL * SfxModelFactoryFunc ) (
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
-        const sal_uInt64 _nCreationFlags
+        SfxModelFlags _nCreationFlags
     );
 
 

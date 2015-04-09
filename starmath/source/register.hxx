@@ -21,6 +21,7 @@
 #define INCLUDED_STARMATH_SOURCE_REGISTER_HXX
 
 #include <sal/config.h>
+#include <sfx2/sfxmodelfactory.hxx>
 
 //Math document
 css::uno::Sequence< OUString > SAL_CALL
@@ -28,7 +29,7 @@ css::uno::Sequence< OUString > SAL_CALL
 OUString SAL_CALL
         SmDocument_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface >SAL_CALL
-        SmDocument_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags) throw( css::uno::Exception );
+        SmDocument_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags) throw( css::uno::Exception );
 
 //MathML import
 css::uno::Sequence< OUString > SAL_CALL

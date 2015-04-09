@@ -337,7 +337,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode const eMode )
 }
 
 // Ctor / Dtor
-SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags )
+SwDocShell::SwDocShell( const SfxModelFlags i_nSfxCreationFlags )
     : SfxObjectShell ( i_nSfxCreationFlags )
     , m_pDoc(nullptr)
     , m_pFontList(nullptr)

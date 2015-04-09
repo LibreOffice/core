@@ -132,7 +132,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     Construct( eMode == SfxObjectCreateMode::INTERNAL );
 }
 
-DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
+DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(NULL),
     mpUndoManager(NULL),

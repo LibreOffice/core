@@ -168,7 +168,7 @@ public:
 
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
-    SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
+    SwDocShell( SfxModelFlags i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SfxObjectCreateMode::STANDARD );
     virtual ~SwDocShell();
 

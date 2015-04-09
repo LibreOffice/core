@@ -162,7 +162,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                SmDocShell( const sal_uInt64 i_nSfxCreationFlags );
+                SmDocShell( SfxModelFlags i_nSfxCreationFlags );
     virtual     ~SmDocShell();
 
     void        LoadSymbols();

@@ -48,7 +48,7 @@ uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() 
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
+                const uno::Reference< lang::XMultiServiceFactory > &, SfxModelFlags _nCreationFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -77,7 +77,7 @@ uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNam
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
+                const uno::Reference< lang::XMultiServiceFactory > &, SfxModelFlags _nCreationFlags )
 {
     SolarMutexGuard aGuard;
 

@@ -280,7 +280,7 @@ SfxObjectShell_Impl::~SfxObjectShell_Impl()
 
 
 
-SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
+SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     :   pImp( new SfxObjectShell_Impl( *this ) )
     ,   pMedium(0)
     ,   pStyleSheetPool(0)
@@ -288,16 +288,16 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     ,   bHasName( false )
     ,   bIsInGenerateThumbnail ( false )
 {
-    if (i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT)
+    if (i_nCreationFlags & SfxModelFlags::EMBEDDED_OBJECT)
         eCreateMode = SfxObjectCreateMode::EMBEDDED;
-    else if (i_nCreationFlags & SFXMODEL_EXTERNAL_LINK)
+    else if (i_nCreationFlags & SfxModelFlags::EXTERNAL_LINK)
         eCreateMode = SfxObjectCreateMode::INTERNAL;
 
-    const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
+    const bool bScriptSupport = ( i_nCreationFlags & SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS ) == SfxModelFlags::NONE;
     if ( !bScriptSupport )
         SetHasNoBasic();
 
-    const bool bDocRecovery = ( i_nCreationFlags & SFXMODEL_DISABLE_DOCUMENT_RECOVERY ) == 0;
+    const bool bDocRecovery = ( i_nCreationFlags & SfxModelFlags::DISABLE_DOCUMENT_RECOVERY ) == SfxModelFlags::NONE;
     if ( !bDocRecovery )
         pImp->m_bDocRecoverySupport = false;
 }

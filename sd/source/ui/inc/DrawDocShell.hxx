@@ -64,7 +64,7 @@ public:
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
-        const sal_uInt64 nModelCreationFlags,
+        SfxModelFlags nModelCreationFlags,
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 

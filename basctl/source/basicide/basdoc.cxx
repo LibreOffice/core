@@ -44,7 +44,7 @@ void basctl_DocShell::InitInterface_Impl()
 }
 
 DocShell::DocShell()
-    :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
+    :SfxObjectShell( SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY )
 {
     SetPool( &SfxGetpApp()->GetPool() );
     SetBaseModel( new SIDEModel(this) );

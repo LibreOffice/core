@@ -73,9 +73,9 @@ void Test::setUp()
     SmGlobals::ensure();
 
     m_xDocShRef = new SmDocShell(
-        SFXMODEL_STANDARD |
-        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
-        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_xDocShRef->DoInitNew(0);
 
     SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, 0);

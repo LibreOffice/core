@@ -2671,7 +2671,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
 
-ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
     aDdeTextFmt(OUString("TEXT")),

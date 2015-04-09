@@ -74,6 +74,7 @@ class IndexBitSet;
 class JobSetup;
 class Size;
 class Point;
+enum class SfxModelFlags;
 
 // These values presumably must match exactly the corresponding
 // css::embed::Aspects ones (in offapi/com/sun/star/embed/Aspects.idl)
@@ -189,7 +190,7 @@ private:
 
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
-                                SfxObjectShell( const sal_uInt64 i_nCreationFlags );    // see sfxmodelfactory.hxx
+                                SfxObjectShell(SfxModelFlags);    // see sfxmodelfactory.hxx
     virtual                     ~SfxObjectShell();
 
     void                        ModifyChanged();

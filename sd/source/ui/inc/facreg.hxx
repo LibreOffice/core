@@ -21,17 +21,18 @@
 #define INCLUDED_SD_SOURCE_UI_INC_FACREG_HXX
 
 #include <sal/config.h>
+#include <sfx2/sfxmodelfactory.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XComponentContext; }
 } } }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
+css::uno::Reference< css::uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 OUString SdDrawingDocument_getImplementationName() throw( css::uno::RuntimeException );
 css::uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
+css::uno::Reference< css::uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 OUString SdPresentationDocument_getImplementationName() throw( css::uno::RuntimeException );
 css::uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( css::uno::RuntimeException );
 
