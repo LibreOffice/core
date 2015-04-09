@@ -71,4 +71,4 @@ ValidateProductID		300
 WriteEnvironmentStrings		2500
 WriteIniValues		2450
 WriteRegistryValues		2400
-WrongWindowsVersion	VersionNT < 501	10
+WrongWindowsVersion	VersionNT < WindowsMinVersionNumber	10
