@@ -218,7 +218,7 @@ protected:
             uno::Any aAny = xDrawPages->getByIndex(i);
             aAny >>= xDrawPage;
             uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
-            OUString aString = xShapeDumper.dump(xShapes);
+            OUString aString = XShapeDumper::dump(xShapes);
 
             OStringBuffer aFileNameBuf( OUStringToOString( rShapesDumpFileNameBase, RTL_TEXTENCODING_UTF8 ) );
             aFileNameBuf.append(i);

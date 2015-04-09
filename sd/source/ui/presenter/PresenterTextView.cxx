@@ -128,7 +128,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
             if (xCanvas.is())
             {
                 mpImplementation->SetCanvas(
-                    cppcanvas::VCLFactory::getInstance().createCanvas(xCanvas));
+                    cppcanvas::VCLFactory::createCanvas(xCanvas));
             }
         }
         catch (RuntimeException&)
@@ -476,7 +476,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
         mpEditEngine->Draw(mpOutputDevice, aWindowBox, Point(0,mnTop));
 
         const BitmapEx aBitmap (mpOutputDevice->GetBitmapEx(Point(0,0), maSize));
-        mxBitmap = cppcanvas::VCLFactory::getInstance().createBitmap(
+        mxBitmap = cppcanvas::VCLFactory::createBitmap(
             mpCanvas,
             aBitmap
             )->getUNOBitmap();

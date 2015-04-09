@@ -147,8 +147,8 @@ private:
     void makeTableStyle(Table *);
     void parseCharShape(CharShape *);
     void parseParaShape(ParaShape *);
-    char* getTStyleName(int, char *);
-    char* getPStyleName(int, char *);
+    static char* getTStyleName(int, char *);
+    static char* getPStyleName(int, char *);
 };
 
 class HwpImportFilter : public WeakImplHelper4< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >

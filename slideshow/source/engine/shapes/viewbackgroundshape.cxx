@@ -84,7 +84,7 @@ namespace slideshow
 
                 // create a bitmap of appropriate size
                 ::cppcanvas::BitmapSharedPtr pBitmap(
-                    ::cppcanvas::BaseGfxFactory::getInstance().createBitmap(
+                    ::cppcanvas::BaseGfxFactory::createBitmap(
                         rDestinationCanvas,
                         aBmpSizePixel ) );
 
@@ -112,7 +112,7 @@ namespace slideshow
                     maBounds.getMinX(), maBounds.getMinY()));
 
                 ::cppcanvas::RendererSharedPtr pRenderer(
-                    ::cppcanvas::VCLFactory::getInstance().createRenderer(
+                    ::cppcanvas::VCLFactory::createRenderer(
                         pBitmapCanvas,
                         *rMtf.get(),
                         ::cppcanvas::Renderer::Parameters() ) );

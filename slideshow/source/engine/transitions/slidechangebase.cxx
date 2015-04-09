@@ -105,7 +105,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
 
         // create a bitmap of appropriate size
         cppcanvas::BitmapSharedPtr pBitmap(
-            cppcanvas::BaseGfxFactory::getInstance().createBitmap(
+            cppcanvas::BaseGfxFactory::createBitmap(
                 pCanvas,
                 slideSizePixel ) );
 

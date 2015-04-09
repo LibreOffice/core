@@ -183,7 +183,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SlideshowImpl*  pSlideShow,
                               bool            bFullScreen )
 :   SlideShowView_Base( m_aMutex ),
-    mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
+    mpCanvas( ::cppcanvas::VCLFactory::createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mxPointer(),
@@ -305,7 +305,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
                                                              aWindowSize.Width(),
                                                              aWindowSize.Height() ) ) );
     ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-        ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( mpCanvas, aPoly ) );
+        ::cppcanvas::BaseGfxFactory::createPolyPolygon( mpCanvas, aPoly ) );
 
     if( pPolyPoly.get() )
     {

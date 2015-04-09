@@ -180,8 +180,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
             basegfx::B2DRange(rArea)));
 
     ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-        ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCanvas,
-                                                                      aPoly ) );
+        ::cppcanvas::BaseGfxFactory::createPolyPolygon( pCanvas, aPoly ) );
 
     if( pPolyPoly )
     {
@@ -782,7 +781,7 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     ENSURE_OR_THROW( mxView.is(),
                       "SlideView::SlideView(): Invalid view" );
 
-    mpCanvas = cppcanvas::VCLFactory::getInstance().createSpriteCanvas(
+    mpCanvas = cppcanvas::VCLFactory::createSpriteCanvas(
         xView->getCanvas() );
     ENSURE_OR_THROW( mpCanvas,
                       "Could not create cppcanvas" );

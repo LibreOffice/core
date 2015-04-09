@@ -142,7 +142,12 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     {
         return true;
     }
-
+    std::string fqn = aParentName + "::" + pCXXMethodDecl->getNameAsString();
+    // only empty on Linux, not on windows
+    if (fqn == "OleEmbeddedObject::GetVisualRepresentationInNativeFormat_Impl"
+        || fqn == "OleEmbeddedObject::GetRidOfComponent") {
+        return true;
+    }
 
     bVisitedThis = false;
     TraverseStmt(pCXXMethodDecl->getBody());
@@ -152,7 +157,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
 
     report(
         DiagnosticsEngine::Warning,
-        "this method can be declared static " + aParentName,
+        "this method can be declared static " + fqn,
         pCXXMethodDecl->getCanonicalDecl()->getLocStart())
       << pCXXMethodDecl->getCanonicalDecl()->getSourceRange();
     return true;

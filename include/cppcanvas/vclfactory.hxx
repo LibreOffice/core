@@ -62,36 +62,30 @@ namespace cppcanvas
     class CPPCANVAS_DLLPUBLIC VCLFactory
     {
     public:
-        static VCLFactory& getInstance();
-
-        CanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
+        static CanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XCanvas >& xCanvas );
-        BitmapCanvasSharedPtr   createBitmapCanvas( const ::com::sun::star::uno::Reference<
+        static BitmapCanvasSharedPtr   createBitmapCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
-        SpriteCanvasSharedPtr   createSpriteCanvas( const vcl::Window& rVCLWindow ) const;
-        SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
-                                                               ::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
+        static SpriteCanvasSharedPtr   createSpriteCanvas( const vcl::Window& rVCLWindow );
+        static SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
+                                                               ::com::sun::star::rendering::XSpriteCanvas >& xCanvas );
 
         /** Create a bitmap from a VCL Bitmap
          */
-        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx ) const;
+        static BitmapSharedPtr   createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx );
 
         /** Create a renderer object from a Metafile
 
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
+        static RendererSharedPtr createRenderer( const CanvasSharedPtr&          rCanvas,
                                                 const ::GDIMetaFile&            rMtf,
-                                                const Renderer::Parameters&     rParms ) const;
+                                                const Renderer::Parameters&     rParms );
 
     private:
-        friend struct InitInstance;
-
-        // singleton
-        VCLFactory();
-
+        VCLFactory() SAL_DELETED_FUNCTION;
         VCLFactory(const VCLFactory&) SAL_DELETED_FUNCTION;
         VCLFactory& operator=( const VCLFactory& ) SAL_DELETED_FUNCTION;
     };
