@@ -51,3 +51,9 @@ cmd/sc_removetableof.png cmd/sc_cancel.png
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 
+# chart app
+cmd/lc_formatselection.png sfx2/res/symphony/sidebar-property-large.png
+cmd/sc_formatselection.png sfx2/res/symphony/sidebar-property-small.png
+cmd/lc_view3d.png sfx2/res/symphony/sidebar-3d-large.png
+cmd/sc_view3d.png sfx2/res/symphony/sidebar-3d-small.png
+

@@ -11,6 +11,9 @@
       </node>
       <node oor:name=".uno:InsertMenuLegend" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Position</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Legend...</value>
         </prop>
       </node>
@@ -54,9 +57,15 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Format Selection...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Legend" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Legend...</value>
         </prop>
       </node>
@@ -90,7 +99,7 @@
       </node>
       <node oor:name=".uno:DiagramData" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Chart ~Data Table...</value>
+          <value xml:lang="en-US">~Data Table...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -493,7 +502,7 @@
       </node>
       <node oor:name=".uno:ToggleGridHorizontal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Horizontal Grid Major/Major&amp;Minor/Off</value>
+          <value xml:lang="en-US">Horizontal Grids</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -547,7 +556,7 @@
       </node>
       <node oor:name=".uno:ToggleGridVertical" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Vertical Grid Major/Major&amp;Minor/Off</value>
+          <value xml:lang="en-US">Vertical Grids</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

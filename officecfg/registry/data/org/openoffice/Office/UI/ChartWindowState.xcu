@@ -27,6 +27,9 @@
         <prop oor:name="DockingArea" oor:type="xs:int">
           <value>0</value>
         </prop>
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Standard</value>
         </prop>
@@ -41,11 +44,17 @@
         <prop oor:name="DockingArea" oor:type="xs:int">
           <value>0</value>
         </prop>
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,1</value>
+        </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Formatting</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/drawbar" oor:op="replace">
@@ -59,7 +68,7 @@
           <value xml:lang="en-US">Drawing</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
