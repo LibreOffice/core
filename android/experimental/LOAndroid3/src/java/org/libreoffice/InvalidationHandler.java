@@ -8,6 +8,8 @@ import android.net.Uri;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
 import org.libreoffice.overlay.DocumentOverlay;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,11 +21,13 @@ import java.util.List;
 public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final DocumentOverlay mDocumentOverlay;
+    private final GeckoLayerClient mLayerClient;
     private OverlayState mState;
     private boolean mKeyEvent = false;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mDocumentOverlay = mainActivity.getDocumentOverlay();
+        mLayerClient = mainActivity.getLayerClient();
         mState = OverlayState.NONE;
     }
 
@@ -153,8 +157,7 @@ public class InvalidationHandler implements Document.MessageCallback {
             mDocumentOverlay.positionHandle(SelectionHandle.HandleType.MIDDLE, cursorRectangle);
 
             if (mKeyEvent) {
-                PointF point = new PointF(cursorRectangle.centerX(), cursorRectangle.centerY());
-                LOKitShell.moveViewportTo(point, null);
+                moveViewportToMakeCursorVisible(cursorRectangle);
                 mKeyEvent = false;
             }
 
@@ -162,6 +165,37 @@ public class InvalidationHandler implements Document.MessageCallback {
                 changeStateTo(OverlayState.CURSOR);
             }
         }
+    }
+
+    /**
+     * Move the viewport to show the cursor. The cursor will appear at the
+     * viewport position depending on where the cursor is relative to the
+     * viewport (either cursor is above, below, on left or right).
+     *
+     * @param cursorRectangle - cursor position on the document
+     */
+    public void moveViewportToMakeCursorVisible(RectF cursorRectangle) {
+        RectF moveToRect = mLayerClient.getViewportMetrics().getCssViewport();
+        if (moveToRect.contains(cursorRectangle)) {
+            return;
+        }
+
+        float newLeft = moveToRect.left;
+        float newTop = moveToRect.top;
+
+        if (cursorRectangle.right < moveToRect.left || cursorRectangle.left < moveToRect.left) {
+            newLeft = cursorRectangle.left -  (moveToRect.width() * 0.1f);
+        } else if (cursorRectangle.right > moveToRect.right || cursorRectangle.left > moveToRect.right) {
+            newLeft = cursorRectangle.right - (moveToRect.width() * 0.9f);
+        }
+
+        if (cursorRectangle.top < moveToRect.top || cursorRectangle.bottom < moveToRect.top) {
+            newTop = cursorRectangle.top - (moveToRect.height() * 0.1f);
+        } else if (cursorRectangle.bottom > moveToRect.bottom || cursorRectangle.top > moveToRect.bottom) {
+            newTop = cursorRectangle.bottom - (moveToRect.height() / 2.0f);
+        }
+
+        LOKitShell.moveViewportTo(new PointF(newLeft, newTop), null);
     }
 
     /**

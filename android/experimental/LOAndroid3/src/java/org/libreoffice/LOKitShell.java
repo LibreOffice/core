@@ -158,7 +158,7 @@ public class LOKitShell {
     }
 
     /**
-     * Move the viewport to the desired point, and change the zoom level.
+     * Move the viewport to the desired point (top-left), and change the zoom level.
      * Ensure this runs on the UI thread.
      */
     public static void moveViewportTo(final PointF position, final Float zoom) {

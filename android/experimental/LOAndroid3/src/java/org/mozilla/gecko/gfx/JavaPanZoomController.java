@@ -418,7 +418,7 @@ public class JavaPanZoomController
         } else {
             setState(PanZoomState.PANNING);
         }
-        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+        //LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
     private float panDistance(MotionEvent move) {
@@ -1023,16 +1023,15 @@ public class JavaPanZoomController
     }
 
     /**
-     * Move to centerPosition and zoom to the desired input zoom factor. Input zoom
-     * factor can be null, in this case leave the zoom unchanged.
+     * Move the viewport to the top-left point to and zoom to the desired
+     * zoom factor. Input zoom factor can be null, in this case leave the zoom unchanged.
      */
-    public boolean animatedMove(PointF centerPoint, Float zoom) {
+    public boolean animatedMove(PointF topLeft, Float zoom) {
         RectF moveToRect = getMetrics().getCssViewport();
-        moveToRect.offsetTo(
-                centerPoint.x - moveToRect.width() / 2.0f,
-                centerPoint.y - moveToRect.height() / 2.0f);
+        moveToRect.offsetTo(topLeft.x, topLeft.y);
 
         ImmutableViewportMetrics finalMetrics = getMetrics();
+
         finalMetrics = finalMetrics.setViewportOrigin(
                 moveToRect.left * finalMetrics.zoomFactor,
                 moveToRect.top * finalMetrics.zoomFactor);
