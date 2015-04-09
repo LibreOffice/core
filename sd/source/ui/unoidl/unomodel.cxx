@@ -651,7 +651,7 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
         throw lang::DisposedException();
 
     SfxBaseModel::setViewData( xData );
-    if( mpDocShell && (mpDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED) && xData.is() )
+    if( mpDocShell && (mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED) && xData.is() )
     {
         const sal_Int32 nCount = xData->getCount();
 

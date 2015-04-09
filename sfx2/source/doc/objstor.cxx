@@ -519,7 +519,7 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
         pImp->aMacroMode.allowMacroExecution();
-        if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
+        if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
             SetTitle(SfxResId(STR_NONAME).toString());
 
         uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
@@ -842,7 +842,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
 
-        if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
+        if ( SfxObjectCreateMode::EMBEDDED != eCreateMode )
         {
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, false);
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, false);
@@ -1196,7 +1196,7 @@ bool SfxObjectShell::SaveTo_Impl
     if( pMedSet )
     {
         SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
-        bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+        bCopyTo =   GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
                     (pSaveToItem && pSaveToItem->GetValue());
     }
 
@@ -1211,7 +1211,7 @@ bool SfxObjectShell::SaveTo_Impl
         if ( pMedium->DocNeedsFileDateCheck() )
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
 
-        if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        if ( bCopyTo && GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
         {
             // export to the same location is forbidden
             SetError( ERRCODE_IO_CANTWRITE, OUString( OSL_LOG_PREFIX  ) );
@@ -1451,7 +1451,7 @@ bool SfxObjectShell::SaveTo_Impl
 
         //fdo#61320: only store thumbnail image if the corresponding option is enabled in the configuration
         if ( bOk && officecfg::Office::Common::Save::Document::GenerateThumbnail::get()
-                && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
+                && GetCreateMode() != SfxObjectCreateMode::EMBEDDED && !bPasswdProvided )
         {
             // store the thumbnail representation image
             // the thumbnail is not stored in case of encrypted document
@@ -2082,7 +2082,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
 
             // Set new title
-            if (!pNewMed->GetName().isEmpty() && SFX_CREATE_MODE_EMBEDDED != eCreateMode)
+            if (!pNewMed->GetName().isEmpty() && SfxObjectCreateMode::EMBEDDED != eCreateMode)
                 InvalidateName();
             SetModified(false); // reset only by set medium
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
@@ -2818,7 +2818,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
 
     // check if a "SaveTo" is wanted, no "SaveAs"
     SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
-    bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
+    bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
     // distinguish between "Save" and "SaveAs"
     pImp->bIsSaving = false;
@@ -3155,7 +3155,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
     if ( pImp->mpObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-        GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SFX_CREATE_MODE_EMBEDDED == eCreateMode,xStorage);
+        GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,xStorage);
     }
 
     if ( bResult )

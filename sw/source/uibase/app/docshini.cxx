@@ -111,7 +111,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);       // Globaldokument
 
-        if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
+        if ( GetCreateMode() ==  SfxObjectCreateMode::EMBEDDED )
             SwTransferable::InitOle( this, *m_pDoc );
 
         // set forbidden characters if necessary
@@ -490,8 +490,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         // Loading
         // for MD
         OSL_ENSURE( !m_xBasePool.is(), "who hasn't destroyed their Pool?" );
-        m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
-        if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+        m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
+        if(GetCreateMode() != SfxObjectCreateMode::ORGANIZER)
         {
             SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
             m_nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
@@ -501,7 +501,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
-            case SFX_CREATE_MODE_ORGANIZER:
+            case SfxObjectCreateMode::ORGANIZER:
                 {
                     if( ReadXML )
                     {
@@ -513,8 +513,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 }
                 break;
 
-            case SFX_CREATE_MODE_INTERNAL:
-            case SFX_CREATE_MODE_EMBEDDED:
+            case SfxObjectCreateMode::INTERNAL:
+            case SfxObjectCreateMode::EMBEDDED:
                 {
                     SwTransferable::InitOle( this, *m_pDoc );
                 }
@@ -522,8 +522,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 SW_MOD()->SetEmbeddedLoadSave( true );
                 // no break;
 
-            case SFX_CREATE_MODE_STANDARD:
-            case SFX_CREATE_MODE_PREVIEW:
+            case SfxObjectCreateMode::STANDARD:
+            case SfxObjectCreateMode::PREVIEW:
                 {
                     Reader *pReader = ReadXML;
                     if( pReader )
@@ -562,7 +562,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         bRet = !IsError( nErr );
 
         if (bRet && !m_pDoc->IsInLoadAsynchron() &&
-            GetCreateMode() == SFX_CREATE_MODE_STANDARD)
+            GetCreateMode() == SfxObjectCreateMode::STANDARD)
         {
             LoadingFinished();
         }
@@ -592,7 +592,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             SwWait aWait( *this, true );
             {
                 OSL_ENSURE( !m_xBasePool.is(), "who hasn't destroyed their Pool?" );
-                m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+                m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( true );
@@ -620,7 +620,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 void SwDocShell::SubInitNew()
 {
     OSL_ENSURE( !m_xBasePool.is(), "who hasn't destroyed their Pool?" );
-    m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+    m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
     UpdateFontList();
     InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
 

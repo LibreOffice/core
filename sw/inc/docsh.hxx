@@ -167,9 +167,9 @@ public:
     static OUString GetEventName( sal_Int32 nId );
 
     /// Doc is required for SO data exchange!
-    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
+    SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
     SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
-    SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
+    SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SfxObjectCreateMode::STANDARD );
     virtual ~SwDocShell();
 
     /// OLE 2.0-notification.

@@ -1722,7 +1722,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.DisableItem( SID_DIAMODE );
     }
 
-    if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+    if (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
     {
         // Outplace-Edit: do not allow switch
         rSet.ClearItem( SID_OUTLINEMODE );

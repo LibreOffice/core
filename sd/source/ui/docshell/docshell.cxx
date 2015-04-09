@@ -117,7 +117,7 @@ void DrawDocShell::Construct( bool bClipboard )
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                bool bDataObject,
                                DocumentType eDocumentType) :
-    SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
+    SfxObjectShell( eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(NULL),
     mpUndoManager(NULL),
     mpPrinter(NULL),
@@ -129,7 +129,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mbOwnPrinter(false),
     mbNewDocument( true )
 {
-    Construct( eMode == SFX_CREATE_MODE_INTERNAL );
+    Construct( eMode == SfxObjectCreateMode::INTERNAL );
 }
 
 DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
@@ -151,7 +151,7 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, bool bDataObje
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                bool bDataObject,
                                DocumentType eDocumentType) :
-    SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
+    SfxObjectShell(eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(pDoc),
     mpUndoManager(NULL),
     mpPrinter(NULL),
@@ -163,7 +163,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     mbOwnPrinter(false),
     mbNewDocument( true )
 {
-    Construct( eMode == SFX_CREATE_MODE_INTERNAL );
+    Construct( eMode == SfxObjectCreateMode::INTERNAL );
 }
 
 DrawDocShell::~DrawDocShell()

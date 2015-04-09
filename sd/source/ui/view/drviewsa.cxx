@@ -277,7 +277,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     Point aVisAreaPos;
 
-    if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         aVisAreaPos = pDocSh->GetVisArea(ASPECT_CONTENT).TopLeft();
     }
@@ -343,7 +343,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     FuPermanent(aReq);
     mpDrawView->SetFrameDragSingles(true);
 
-    if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+    if (pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
     {
         mbZoomOnPage = false;
     }
@@ -549,7 +549,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     Point aVisAreaPos;
 
-    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
     }

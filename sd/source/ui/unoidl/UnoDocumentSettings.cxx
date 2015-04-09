@@ -725,7 +725,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     if( *pValues >>= aPrinterName )
                     {
                         bOk = true;
-                        if( !aPrinterName.isEmpty() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                        if( !aPrinterName.isEmpty() && pDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
                         {
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
                             if (pTempPrinter)

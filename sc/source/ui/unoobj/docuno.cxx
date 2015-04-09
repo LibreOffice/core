@@ -1854,7 +1854,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
     if( !xRet.is() )
     {
         SolarMutexGuard aGuard;
-        if (pDocShell && pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+        if (pDocShell && pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
         {
             uno::Reference < container::XIndexContainer > xCont = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
             xRet.set( xCont, uno::UNO_QUERY_THROW );
@@ -2209,7 +2209,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aString == "InternalDocument" )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
+            ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL) );
         }
         else if ( aString == SC_UNO_INTEROPGRABBAG )
         {
@@ -2251,7 +2251,7 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
         // there should be no data provider, so that own data is used
         bool bCreate =
             ! ( nType == SC_SERVICE_CHDATAPROV &&
-                ( pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL ));
+                ( pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
         // loaded, because this unlinks the data
         OSL_ASSERT( bCreate );

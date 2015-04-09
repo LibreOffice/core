@@ -704,7 +704,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         case SID_INSERT_VIDEO:
             if ( GetShell().IsSelFrmMode()
                  || GetShell().CrsrInsideInputFld()
-                 || SFX_CREATE_MODE_EMBEDDED == eCreateMode
+                 || SfxObjectCreateMode::EMBEDDED == eCreateMode
                  || bCrsrInHidden )
             {
                 rSet.DisableItem( nWhich );
@@ -714,7 +714,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         case SID_INSERT_DIAGRAM:
             if( !aMOpt.IsChart()
                 || GetShell().CrsrInsideInputFld()
-                || eCreateMode == SFX_CREATE_MODE_EMBEDDED
+                || eCreateMode == SfxObjectCreateMode::EMBEDDED
                 || bCrsrInHidden )
             {
                 rSet.DisableItem( nWhich );
@@ -723,7 +723,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case FN_INSERT_SMA:
                 if( !aMOpt.IsMath()
-                    || eCreateMode == SFX_CREATE_MODE_EMBEDDED
+                    || eCreateMode == SfxObjectCreateMode::EMBEDDED
                     || bCrsrInHidden
                     || rSh.CrsrInsideInputFld() )
                 {
@@ -735,7 +735,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_OBJECT:
             case SID_INSERT_PLUGIN:
                 {
-                    if( eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
+                    if( eCreateMode == SfxObjectCreateMode::EMBEDDED || bCrsrInHidden )
                     {
                         rSet.DisableItem( nWhich );
                     }

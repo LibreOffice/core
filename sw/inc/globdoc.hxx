@@ -28,7 +28,7 @@ public:
     SFX_DECL_OBJECTFACTORY();
     TYPEINFO_OVERRIDE();
 
-    SwGlobalDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
+    SwGlobalDocShell(SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED);
     virtual ~SwGlobalDocShell();
 
     virtual void    FillClass( SvGlobalName * pClassName,

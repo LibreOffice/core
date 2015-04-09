@@ -194,7 +194,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     // Set base URI
     xInfoSet->setPropertyValue( "BaseURI", makeAny( GetBaseURL() ) );
 
-    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
+    if( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
         const OUString aName( !aDocHierarchicalName.isEmpty()
             ? aDocHierarchicalName
@@ -295,7 +295,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
         }
     }
 
-    bool bStoreMeta = ( SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
+    bool bStoreMeta = ( SfxObjectCreateMode::EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
     if ( !bStoreMeta )
     {
         try

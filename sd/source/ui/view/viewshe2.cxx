@@ -594,7 +594,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     Point aVisAreaPos;
 
-    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
     }

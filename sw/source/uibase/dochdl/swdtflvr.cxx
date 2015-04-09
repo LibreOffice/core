@@ -594,7 +594,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             {
                 SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 SwDocShell* pNewDocSh = new SwDocShell( pDoc,
-                                         SFX_CREATE_MODE_EMBEDDED );
+                                         SfxObjectCreateMode::EMBEDDED );
                 aDocShellRef = pNewDocSh;
                 aDocShellRef->DoInitNew( NULL );
                 SwTransferable::InitOle( aDocShellRef, *pDoc );
@@ -824,7 +824,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     {
         pClpDocFac = new SwDocFac;
         SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
-        aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_EMBEDDED);
+        aDocShellRef = new SwDocShell( pDoc, SfxObjectCreateMode::EMBEDDED);
         aDocShellRef->DoInitNew( NULL );
         pWrtShell->Copy( pDoc );
 
@@ -969,7 +969,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         SwDocShell* pDShell;
         if( !bIsCut && bDDELink &&
             0 != ( pDShell = pWrtShell->GetDoc()->GetDocShell()) &&
-            SFX_CREATE_MODE_STANDARD == pDShell->GetCreateMode() )
+            SfxObjectCreateMode::STANDARD == pDShell->GetCreateMode() )
         {
             AddFormat( SotClipboardFormatId::LINK );
             refDdeLink = new SwTrnsfrDdeLink( *this, *pWrtShell );

@@ -133,7 +133,7 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
 
 SwGlosDocShell::SwGlosDocShell(bool bNewShow)
     : SwDocShell( (bNewShow)
-            ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
+            ? SfxObjectCreateMode::STANDARD : SfxObjectCreateMode::INTERNAL )
 {
     SetHelpId(SW_GLOSDOCSHELL);
 }
@@ -169,7 +169,7 @@ bool SwGlosDocShell::Save()
 }
 
 SwWebGlosDocShell::SwWebGlosDocShell()
-    : SwWebDocShell( SFX_CREATE_MODE_STANDARD )
+    : SwWebDocShell( SfxObjectCreateMode::STANDARD )
 {
     SetHelpId(SW_WEBGLOSDOCSHELL);
 }

@@ -432,7 +432,7 @@ SwHTMLParser::~SwHTMLParser()
         // Gelinkte Bereiche updaten
         sal_uInt16 nLinkMode = pDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
-            SFX_CREATE_MODE_INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
+            SfxObjectCreateMode::INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
             pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
                                                    true, false );
 

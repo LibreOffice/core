@@ -750,7 +750,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     // TODO/LATER: separate links from usual embedded objects
     OUString StreamPath;
-    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
+    if( SfxObjectCreateMode::EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
     {
         if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
         {

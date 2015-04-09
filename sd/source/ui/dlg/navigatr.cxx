@@ -691,7 +691,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
         while( pSfxDocShell )
         {
             ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
-            if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) )
+            if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) )
             {
                 NavDocInfo aInfo ;
                 aInfo.mpDocShell = pDocShell;

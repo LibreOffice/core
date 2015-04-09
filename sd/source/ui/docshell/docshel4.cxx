@@ -301,7 +301,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         // space. Had to remove the check for empty VisArea below,
         // since XML load always sets a VisArea before.
         //TODO/LATER: looks a little bit strange!
-        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && SfxObjectShell::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
+        if( ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED ) && SfxObjectShell::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
         {
             SdPage* pPage = mpDoc->GetSdPage( 0, PK_STANDARD );
 
@@ -517,7 +517,7 @@ bool DrawDocShell::Save()
     mpDoc->StopWorkStartupDelay();
 
     //TODO/LATER: why this?!
-    if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
+    if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
     bool bRet = SfxObjectShell::Save();
@@ -550,7 +550,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     mpDoc->StopWorkStartupDelay();
 
     //TODO/LATER: why this?!
-    if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
+    if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
     sal_uInt32  nVBWarning = ERRCODE_NONE;

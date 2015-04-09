@@ -62,7 +62,7 @@ static sal_uInt16 nPgNum = 0;
 
 bool SwView::IsDocumentBorder()
 {
-    if (GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+    if (GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
         return true;
 
     if (!m_pWrtShell)
@@ -282,7 +282,7 @@ void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
         // TODO/LATER: why casting?!
         GetDocShell()->SfxObjectShell::SetVisArea( aVis );
         /*
-        if ( GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             GetDocShell()->SfxInPlaceObject::SetVisArea( aVis );
         else
             GetDocShell()->SvEmbeddedObject::SetVisArea( aVis );*/
@@ -1100,7 +1100,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //Thus also in the outplace editing the page width will be adjusted immediately.
         //TODO/LATER: is that still necessary?!
         /*
-        if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( m_pWrtShell->GetViewOptions()->GetZoomType() != SvxZoomType::PERCENT &&

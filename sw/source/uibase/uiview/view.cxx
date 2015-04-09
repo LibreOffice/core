@@ -865,7 +865,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // no margin for OLE!
     Size aBrwsBorder;
-    if( SFX_CREATE_MODE_EMBEDDED != pDocSh->GetCreateMode() )
+    if( SfxObjectCreateMode::EMBEDDED != pDocSh->GetCreateMode() )
         aBrwsBorder = GetMargin();
 
     m_pWrtShell->SetBrowseBorder( aBrwsBorder );
@@ -916,7 +916,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         // Set AttrChangedNotify link
     m_pWrtShell->SetChgLnk(LINK(this, SwView, AttrChangedNotify));
 
-    if( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+    if( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
         !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),false);
 

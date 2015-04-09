@@ -498,7 +498,7 @@ SwDoc* Reader::GetTemplateDoc()
                 if( aModuleOptions.IsWriter() )
                 {
                     SwDocShell *pDocSh =
-                        new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
+                        new SwDocShell ( SfxObjectCreateMode::INTERNAL );
                     SfxObjectShellLock xDocSh = pDocSh;
                     if( pDocSh->DoInitNew( 0 ) )
                     {

@@ -171,7 +171,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart 
 
 bool ScDocShell::IsOle()
 {
-    return (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
+    return (GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
 }
 
 void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
@@ -179,7 +179,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
     //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
     //  (VisArea wird dann beim Save wieder zurueckgesetzt)
 
-    if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode() == SfxObjectCreateMode::STANDARD)
         return;
 
     OSL_ENSURE(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");

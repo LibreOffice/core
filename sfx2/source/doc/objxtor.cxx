@@ -284,14 +284,14 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     :   pImp( new SfxObjectShell_Impl( *this ) )
     ,   pMedium(0)
     ,   pStyleSheetPool(0)
-    ,   eCreateMode(SFX_CREATE_MODE_STANDARD)
+    ,   eCreateMode(SfxObjectCreateMode::STANDARD)
     ,   bHasName( false )
     ,   bIsInGenerateThumbnail ( false )
 {
     if (i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT)
-        eCreateMode = SFX_CREATE_MODE_EMBEDDED;
+        eCreateMode = SfxObjectCreateMode::EMBEDDED;
     else if (i_nCreationFlags & SFXMODEL_EXTERNAL_LINK)
-        eCreateMode = SFX_CREATE_MODE_INTERNAL;
+        eCreateMode = SfxObjectCreateMode::INTERNAL;
 
     const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
     if ( !bScriptSupport )
@@ -311,18 +311,18 @@ SfxObjectShell::SfxObjectShell
     SfxObjectCreateMode eMode   /*  Purpose, io which the SfxObjectShell
                                     is created:
 
-                                    SFX_CREATE_MODE_EMBEDDED (default)
+                                    SfxObjectCreateMode::EMBEDDED (default)
                                         as SO-Server from within another
                                         Document
 
-                                    SFX_CREATE_MODE_STANDARD,
+                                    SfxObjectCreateMode::STANDARD,
                                         as a normal Document open stand-alone
 
-                                    SFX_CREATE_MODE_PREVIEW
+                                    SfxObjectCreateMode::PREVIEW
                                         to enable a Preview, if possible are
                                         only little information is needed
 
-                                    SFX_CREATE_MODE_ORGANIZER
+                                    SfxObjectCreateMode::ORGANIZER
                                         to be displayed in the Organizer, here
                                         notning of the contents is used  */
 )
@@ -609,7 +609,7 @@ bool SfxObjectShell::PrepareClose
     SfxApplication *pSfxApp = SfxGetpApp();
     pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
 
-    if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         pImp->bPreparedForClose = true;
         return true;

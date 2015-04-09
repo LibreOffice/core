@@ -274,7 +274,7 @@ void ScDocShell::BeforeXMLLoading()
 
 void ScDocShell::AfterXMLLoading(bool bRet)
 {
-    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+    if (GetCreateMode() != SfxObjectCreateMode::ORGANIZER)
     {
         UpdateLinks();
         // don't prevent establishing of listeners anymore
@@ -444,7 +444,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
     bool bRet = false;
     ErrCode nError = ERRCODE_NONE;
     aDocument.EnableAdjustHeight(false);
-    if (GetCreateMode() == SFX_CREATE_MODE_ORGANIZER)
+    if (GetCreateMode() == SfxObjectCreateMode::ORGANIZER)
         bRet = aImport.Import(ScXMLImportWrapper::STYLES, nError);
     else
         bRet = aImport.Import(ScXMLImportWrapper::ALL, nError);
@@ -517,7 +517,7 @@ bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
 
     ScXMLImportWrapper aImport(*this, pSaveMedium, xStor);
     bool bRet(false);
-    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+    if (GetCreateMode() != SfxObjectCreateMode::ORGANIZER)
         bRet = aImport.Export(false);
     else
         bRet = aImport.Export(true);
@@ -1575,7 +1575,7 @@ ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
             mrDocShell.aDocument.MarkUsedExternalReferences();  // Mark tables of external references to be written.
         }
     }
-    if (mrDocShell.GetCreateMode()== SFX_CREATE_MODE_STANDARD)
+    if (mrDocShell.GetCreateMode()== SfxObjectCreateMode::STANDARD)
         mrDocShell.SfxObjectShell::SetVisArea( Rectangle() );   // "Normally" worked on => no VisArea.
 }
 
@@ -2192,7 +2192,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow(); // Execute template timeouts now
-    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode()== SfxObjectCreateMode::STANDARD)
         SfxObjectShell::SetVisArea( Rectangle() ); // Edited normally -> no VisArea
 
     OSL_ENSURE( rMed.GetFilter(), "Filter == 0" );
@@ -2698,7 +2698,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 {
     SetPool( &SC_MOD()->GetPool() );
 
-    bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
+    bIsInplace = (GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
     //  Will be reset if not in place
 
     pDocFunc = CreateDocFunc();

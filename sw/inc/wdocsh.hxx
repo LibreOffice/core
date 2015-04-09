@@ -36,7 +36,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
+    SwWebDocShell(SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED);
     virtual ~SwWebDocShell();
 
     virtual void        FillClass( SvGlobalName * pClassName,

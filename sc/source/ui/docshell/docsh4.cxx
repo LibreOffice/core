@@ -1888,7 +1888,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
 Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     SfxObjectCreateMode eShellMode = GetCreateMode();
-    if ( eShellMode == SFX_CREATE_MODE_ORGANIZER )
+    if ( eShellMode == SfxObjectCreateMode::ORGANIZER )
     {
         //  ohne Inhalte wissen wir auch nicht, wie gross die Inhalte sind
         //  leeres Rechteck zurueckgeben, das wird dann nach dem Laden berechnet
@@ -1913,7 +1913,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SnapVisArea( aArea );
         return aArea;
     }
-    else if( nAspect == ASPECT_CONTENT && eShellMode != SFX_CREATE_MODE_EMBEDDED )
+    else if( nAspect == ASPECT_CONTENT && eShellMode != SfxObjectCreateMode::EMBEDDED )
     {
         //  Visarea holen wie nach Load
 

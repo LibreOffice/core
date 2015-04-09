@@ -965,7 +965,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if(bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
-                xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
+                xTargetDocShell = new SwDocShell( SfxObjectCreateMode::STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
                 if (nMaxDumpDocs)
                     lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
@@ -2723,7 +2723,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             {
                 // the shell will be explicitly closed, but it is more safe to use SfxObjectShellLock here
                 // especially for the case that the loading has failed
-                SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xWorkDocSh( new SwDocShell( SfxObjectCreateMode::INTERNAL ));
                 SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ );
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )

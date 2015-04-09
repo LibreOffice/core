@@ -206,7 +206,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         if ( 0 != (nStrings = static_cast< sal_uInt16 >(aStrings.size())))
         {
-            SfxObjectShellLock xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
+            SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             if (xDocSh->DoInitNew(0))
             {
                 SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();

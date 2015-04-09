@@ -149,7 +149,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 SwDocShell *pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
                 if ( bDisable ||
                     (pDocSh &&    (pDocSh->IsReadOnly() ||
-                                  pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)) )
+                                  pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)) )
                     rSet.DisableItem( nWhich );
 
             }
@@ -883,7 +883,7 @@ void NewXForms( SfxRequest& rReq )
     // copied & excerpted from SwModule::InsertLab(..)
 
     // create new document
-    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
+    SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD) );
     xDocSh->DoInitNew( 0 );
 
     // initialize XForms

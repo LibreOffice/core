@@ -95,7 +95,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
 
         pProgress = NULL;
     }
-    else if ( pObjSh && ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+    else if ( pObjSh && ( pObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
                           pObjSh->GetProgress() ||
                           lcl_HasControllersLocked(*pObjSh) ) )
     {

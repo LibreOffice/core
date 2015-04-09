@@ -47,7 +47,7 @@ public:
     SFX_DECL_OBJECTFACTORY();
 
     GraphicDocShell (
-        SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
+        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_DRAW);
 

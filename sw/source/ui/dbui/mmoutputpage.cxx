@@ -711,7 +711,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
-            SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+            SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
@@ -1116,7 +1116,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
         //now extract a document from the target document
         // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
-        SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+        SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );

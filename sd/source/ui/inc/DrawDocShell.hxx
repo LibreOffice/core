@@ -59,7 +59,7 @@ private:
 
 public:
     DrawDocShell (
-        SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
+        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
@@ -70,7 +70,7 @@ public:
 
     DrawDocShell (
         SdDrawDocument* pDoc,
-        SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
+        SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
     virtual ~DrawDocShell();

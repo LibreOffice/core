@@ -330,7 +330,7 @@ void SwMacrosTest::testControlShapeGrouping()
 void SwMacrosTest::testFdo55289()
 {
     SwDoc *const pDoc = new SwDoc;
-    SwDocShellRef pDocShell = new SwDocShell(pDoc, SFX_CREATE_MODE_EMBEDDED);
+    SwDocShellRef pDocShell = new SwDocShell(pDoc, SfxObjectCreateMode::EMBEDDED);
     // this needs to run with no layout to tickle the bugs in the special
     // cases in SwXShape re-anchoring
     assert(!pDoc->getIDocumentLayoutAccess().GetCurrentLayout());

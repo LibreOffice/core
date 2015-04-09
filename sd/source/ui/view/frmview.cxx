@@ -610,7 +610,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt16 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetPageKind( (PageKind)nInt16 );
 
                     SetPageKindOnLoad( (PageKind)nInt16 );
@@ -621,7 +621,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt16 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetSelectedPage( (sal_uInt16)nInt16 );
 
                     SetSelectedPageOnLoad( (sal_uInt16)nInt16 );
@@ -660,7 +660,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt32 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
                 }
             }
@@ -669,7 +669,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt32 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
                 }
             }
@@ -678,7 +678,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt32 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
                 }
             }

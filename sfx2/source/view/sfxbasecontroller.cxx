@@ -1241,7 +1241,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
         if ( i_eConnect == E_CONNECT )
         {
             if  (   ( m_pData->m_pViewShell->GetObjectShell() != NULL )
-                &&  ( m_pData->m_pViewShell->GetObjectShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+                &&  ( m_pData->m_pViewShell->GetObjectShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                 )
             {
                 SfxViewFrame* pViewFrm = m_pData->m_pViewShell->GetViewFrame();

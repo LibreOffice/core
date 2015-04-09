@@ -721,7 +721,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pMedium->CloseAndRelease();
                 }
 
-                xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
+                xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SfxObjectCreateMode::STANDARD );
 
                 if ( xOldObj->IsModifyPasswordEntered() )
                     xNewObj->SetModifyPasswordEntered();
@@ -863,7 +863,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 if ( !pSh ||
                      !pSh->HasName() ||
                      !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) ||
-                     ( pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+                     ( pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        ( !(pVSh = pSh->GetViewShell())  ||
                          !(pFSh = pVSh->GetFormShell()) ||
                          !pFSh->IsDesignMode())))
@@ -883,7 +883,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
             {
                 SfxFrame* pFrame = &GetTopFrame();
 
-                if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+                if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                     rSet.DisableItem(nWhich);
                 else
                 {
@@ -1092,7 +1092,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         Notify( *xObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
         Notify( *xObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
 
-        if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             xObjSh->DoClose();
         SfxObjectShellRef xDyingObjSh = xObjSh;
         xObjSh.Clear();
@@ -1348,7 +1348,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( !xObjSh->IsReadOnly() ||
-                     ( xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+                     ( xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        (pVSh = xObjSh->GetViewShell()) &&
                        (pFSh = pVSh->GetFormShell()) &&
                        !pFSh->IsDesignMode()))

@@ -241,7 +241,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
         // Suppress SfxProgress, when we are Embedded
     SW_MOD()->SetEmbeddedLoadSave(
-                            SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
+                            SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
     pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell));
 
@@ -259,7 +259,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
         AddLink();
 
         if (!m_xBasePool.is())
-            m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+            m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
     }
 
     UpdateFontList();
@@ -305,11 +305,11 @@ bool SwDocShell::Save()
     {
         switch( GetCreateMode() )
         {
-        case SFX_CREATE_MODE_INTERNAL:
+        case SfxObjectCreateMode::INTERNAL:
             nErr = 0;
             break;
 
-        case SFX_CREATE_MODE_ORGANIZER:
+        case SfxObjectCreateMode::ORGANIZER:
             {
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
@@ -320,13 +320,13 @@ bool SwDocShell::Save()
             }
             break;
 
-        case SFX_CREATE_MODE_EMBEDDED:
+        case SfxObjectCreateMode::EMBEDDED:
             // Suppress SfxProgress, if we are Embedded
             SW_MOD()->SetEmbeddedLoadSave( true );
             // no break;
 
-        case SFX_CREATE_MODE_STANDARD:
-        case SFX_CREATE_MODE_PREVIEW:
+        case SfxObjectCreateMode::STANDARD:
+        case SfxObjectCreateMode::PREVIEW:
         default:
             {
                 if (m_pDoc->ContainsMSVBasic())
@@ -435,7 +435,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
             SvGlobalName aClassName;
             // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
             SfxObjectShellLock xDocSh =
-                new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
+                new SwGlobalDocShell( SfxObjectCreateMode::INTERNAL );
             // the global document can not be a template
             xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), false );
             xDocSh->DoClose();
@@ -461,7 +461,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
             // Suppress SfxProgress when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave(
-                            SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
+                            SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
         ::GetXMLWriter( aEmptyOUStr, rMedium.GetBaseURL( true ), xWrt );
@@ -687,7 +687,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         // Suppress SfxProgress when we are Embedded
     SW_MOD()->SetEmbeddedLoadSave(
-                            SFX_CREATE_MODE_EMBEDDED == GetCreateMode());
+                            SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
     // Span Context in order to suppress the Selection's View
     sal_uLong nErrno;

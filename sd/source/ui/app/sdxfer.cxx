@@ -555,7 +555,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 {
                     maDocShellRef = new ::sd::DrawDocShell(
                         mpSdDrawDocumentIntern,
-                        SFX_CREATE_MODE_EMBEDDED,
+                        SfxObjectCreateMode::EMBEDDED,
                         true,
                         mpSdDrawDocumentIntern->GetDocumentType());
                     mbOwnDocument = false;

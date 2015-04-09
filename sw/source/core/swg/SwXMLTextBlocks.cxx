@@ -62,7 +62,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     , nFlags(0)
     , nCurBlk(0)
 {
-    SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
+    SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
     bReadOnly = true;
@@ -108,7 +108,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     , nFlags(0)
     , nCurBlk(0)
 {
-    SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
+    SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
     bReadOnly = false;

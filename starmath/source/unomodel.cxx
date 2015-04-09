@@ -597,7 +597,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_PRINTER_NAME:
             {
                 // embedded documents just ignore this property for now
-                if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
                 {
                     SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
                     if (pPrinter)

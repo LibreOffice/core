@@ -79,14 +79,14 @@ TYPEINIT1( PresentationViewShell, DrawViewShell );
 PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
 : DrawViewShell( pFrame, rViewShellBase, pParentWindow, PK_STANDARD, pFrameView)
 {
-    if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
     meShellType = ST_PRESENTATION;
 }
 
 PresentationViewShell::~PresentationViewShell (void)
 {
-    if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !maOldVisArea.IsEmpty() )
+    if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !maOldVisArea.IsEmpty() )
         GetDocSh()->SetVisArea( maOldVisArea );
 }
 

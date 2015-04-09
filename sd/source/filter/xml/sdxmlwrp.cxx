@@ -612,7 +612,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     // Set base URI
     xInfoSet->setPropertyValue( "BaseURI" , makeAny( mrMedium.GetBaseURL() ) );
 
-    if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+    if( 0 == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {
         OUString aName;
         if ( mrMedium.GetItemSet() )
@@ -904,7 +904,7 @@ bool SdXMLFilter::Export()
         OUString sTargetStorage( "TargetStorage" );
         xInfoSet->setPropertyValue( sTargetStorage, Any( xStorage ) );
 
-        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+        if( SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
         {
             OUString aName;
             if ( mrMedium.GetItemSet() )
@@ -979,7 +979,7 @@ bool SdXMLFilter::Export()
             aServices[i  ].mpService = pServiceNames->mpSettings;
             aServices[i++].mpStream  = sXML_settingsStreamName;
 
-            if( mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if( mrDocShell.GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
                 aServices[i  ].mpService = pServiceNames->mpMeta;
                 aServices[i++].mpStream  = sXML_metaStreamName;

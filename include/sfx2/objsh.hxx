@@ -143,14 +143,14 @@ enum HiddenWarningFact
     WhenCreatingPDF
 };
 
-enum SfxObjectCreateMode
+enum class SfxObjectCreateMode
 {
-    SFX_CREATE_MODE_EMBEDDED,
-    SFX_CREATE_MODE_STANDARD,
-    SFX_CREATE_MODE_PREVIEW,
-    SFX_CREATE_MODE_ORGANIZER,
-    SFX_CREATE_MODE_PLUGIN,
-    SFX_CREATE_MODE_INTERNAL
+    EMBEDDED,
+    STANDARD,
+    PREVIEW,
+    ORGANIZER,
+    PLUGIN,
+    INTERNAL
 };
 
 /*
@@ -506,8 +506,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > GetEventNames();
 
     vcl::Window*                GetDialogParent( SfxMedium* pMedium=0 );
-    static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
-    static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
+    static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
+    static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );

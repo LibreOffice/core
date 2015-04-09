@@ -452,10 +452,10 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
-                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
+                SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
         else
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
-                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
+                SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
 
         pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew( NULL );
@@ -487,7 +487,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         SdDrawDocument* pDoc = const_cast<SdDrawDocument*>(this);
         pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
-            SFX_CREATE_MODE_EMBEDDED, true, meDocType);
+            SfxObjectCreateMode::EMBEDDED, true, meDocType);
         pDoc->mxAllocedDocShRef->DoInitNew(NULL);
         pNewModel = pDoc->mxAllocedDocShRef->GetDoc();
     }

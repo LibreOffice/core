@@ -119,7 +119,7 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
     if( pImp->m_aVisArea != rVisArea )
     {
         pImp->m_aVisArea = rVisArea;
-        if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
             if ( IsEnableSetModified() )
                 SetModified( true );

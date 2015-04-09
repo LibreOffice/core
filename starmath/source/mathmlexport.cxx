@@ -111,7 +111,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     SmDocShell *pDocShell = pModel ?
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
     if ( pDocShell &&
-        SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+        SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode() )
         bEmbedded = true;
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator;

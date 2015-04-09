@@ -385,7 +385,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
 
     // TODO/LATER: do not do it for embedded links
     OUString aName;
-    if (SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode())
+    if (SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode())
     {
         if ( pMedium && pMedium->GetItemSet() )
         {
@@ -404,7 +404,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
         }
     }
 
-    if (mrDocShell.GetCreateMode() == SFX_CREATE_MODE_ORGANIZER)
+    if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::ORGANIZER)
         xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
 
     xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
@@ -520,7 +520,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     sal_uInt32 nDocRetval(0);
     if ((nMode & CONTENT) == CONTENT)
     {
-        if (mrDocShell.GetCreateMode() == SFX_CREATE_MODE_INTERNAL)
+        if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::INTERNAL)
             // We only need to import content for external link cache document.
             xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, uno::makeAny(false));
 
@@ -807,7 +807,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
-        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
+        if( SfxObjectCreateMode::EMBEDDED == pObjSh->GetCreateMode() )
         {
             OUString aName("dummyObjectName");
             if ( pMedium && pMedium->GetItemSet() )
@@ -825,7 +825,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             }
         }
 
-        bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
+        bool bMetaRet(pObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
         bool bStylesRet (false);
         bool bDocRet(false);
         bool bSettingsRet(false);

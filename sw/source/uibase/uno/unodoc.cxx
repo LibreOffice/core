@@ -63,7 +63,7 @@ com_sun_star_comp_Writer_WebDocument_get_implementation(::com::sun::star::uno::X
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
+    SfxObjectShell* pShell = new SwWebDocShell( SfxObjectCreateMode::STANDARD );
     uno::Reference< uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();
@@ -76,7 +76,7 @@ com_sun_star_comp_Writer_GlobalDocument_get_implementation(::com::sun::star::uno
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
+    SfxObjectShell* pShell = new SwGlobalDocShell( SfxObjectCreateMode::STANDARD );
     uno::Reference< uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();

@@ -887,7 +887,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         {
             bool bEmb(false);
             if ( ( rArgs[0].Value >>= bEmb ) && bEmb )
-                m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
+                m_pData->m_pObjectShell->SetCreateMode_Impl( SfxObjectCreateMode::EMBEDDED );
         }
 
         return sal_True;
@@ -1581,7 +1581,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         bool bRet = false;
 
         // TODO/LATER: let the embedded case of saving be handled more careful
-        if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
             // If this is an embedded object that has no URL based location it should be stored to own storage.
             // An embedded object can have a location based on URL in case it is a link, then it should be
@@ -1914,7 +1914,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     }
 
     // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
-    if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, false );
         if ( pFilterItem )
@@ -2761,7 +2761,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             case SFX_EVENT_STORAGECHANGED:
             {
                 if ( m_pData->m_xUIConfigurationManager.is()
-                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                  && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
                 {
                     Reference< embed::XStorage > xConfigStorage;
                     OUString aUIConfigFolderName( "Configurations2" );
@@ -3051,7 +3051,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         // DocumentProperties must be saved on "SaveTo", so it can be restored
         // after saving
         bool bCopyTo =  bSaveTo ||
-            m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
+            m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
         Reference<document::XDocumentProperties> xOldDocProps;
         if ( bCopyTo )
         {
@@ -3566,7 +3566,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
 
         // embedded objects did not support local configuration data until OOo 3.0, so there's nothing to
         // migrate
-        if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        if ( m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
         {
             // Import old UI configuration from OOo 1.x
             Reference< embed::XStorage > xOOo1ConfigStorage;
@@ -3642,7 +3642,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
         throw Exception(); // TODO: error handling
 
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false );
-    if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
+    if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
     {
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame().GetFrameInterface()->getContainerWindow() );
         Size aWinSize = pWindow->GetSizePixel();

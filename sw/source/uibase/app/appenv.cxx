@@ -158,7 +158,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Create new document (don't show!)
-    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+    SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = static_cast<SwView*>( pFrame->GetViewShell());

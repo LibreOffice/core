@@ -166,7 +166,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
         if( pViewSh )
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
-            if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+            if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
             {
                 // have SwOleClient::FormatChanged() to align the modified formula properly
                 // even if the vis area does not change (e.g. when formula text changes from
@@ -195,7 +195,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
             }
         }
 
-        if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             OnDocumentPrinterChanged(0);
     }
 }
@@ -509,7 +509,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pPrinter = rDocShell.GetPrt()) )
     {
         pPrinter->Push( PushFlags::MAPMODE );
-        if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
+        if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
@@ -534,7 +534,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
     {
         pRefDev->Push( PushFlags::MAPMODE );
-        if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
+        if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
@@ -570,7 +570,7 @@ SmPrinterAccess::~SmPrinterAccess()
 
 Printer* SmDocShell::GetPrt()
 {
-    if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+    if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
     {
         // Normally the server provides the printer. But if it doesn't provide one (e.g. because
         // there is no connection) it still can be the case that we know the printer because it
@@ -603,7 +603,7 @@ Printer* SmDocShell::GetPrt()
 
 OutputDevice* SmDocShell::GetRefDev()
 {
-    if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+    if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
     {
         OutputDevice* pOutDev = GetDocumentRefDev();
         if ( pOutDev )
@@ -734,7 +734,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         }
     }
 
-    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         SetFormulaArranged( false );
         Repaint();
@@ -784,7 +784,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         }
     }
 
-    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         SetFormulaArranged( false );
         Repaint();
@@ -1289,7 +1289,7 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
     // If outplace editing, then dont resize the OutplaceWindow. But the
     // ObjectShell has to resize. Bug 56470
     bool bUnLockFrame;
-    if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !IsInPlaceActive() && GetFrame() )
+    if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !IsInPlaceActive() && GetFrame() )
     {
         GetFrame()->LockAdjustPosSizePixel();
         bUnLockFrame = true;

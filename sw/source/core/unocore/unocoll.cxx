@@ -816,7 +816,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
-            if (rDoc.GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED)
+            if (rDoc.GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED)
                 xRet = (cppu::OWeakObject*) rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
             else
                 SAL_WARN("sw.uno",

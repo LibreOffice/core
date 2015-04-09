@@ -1801,7 +1801,7 @@ void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
 
 bool SfxObjectShell::IsInPlaceActive()
 {
-    if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
+    if ( eCreateMode != SfxObjectCreateMode::EMBEDDED )
         return false;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
@@ -1810,7 +1810,7 @@ bool SfxObjectShell::IsInPlaceActive()
 
 bool SfxObjectShell::IsUIActive()
 {
-    if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
+    if ( eCreateMode != SfxObjectCreateMode::EMBEDDED )
         return false;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );

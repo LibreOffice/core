@@ -704,7 +704,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 sal_uInt8 nLevel = pDlg->GetLevel();
                 sal_uInt8 nPara = pDlg->GetPara();
                 SwDoc* pSmryDoc = new SwDoc();
-                SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
+                SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SfxObjectCreateMode::STANDARD));
                 xDocSh->DoInitNew( 0 );
 
                 bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
@@ -1571,7 +1571,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             pMed->SetFilter( pSfxFlt );
 
             // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
-            SwDocShell *const pNew(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
+            SwDocShell *const pNew(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             xLockRef = pNew;
             xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )

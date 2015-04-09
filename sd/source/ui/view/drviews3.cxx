@@ -183,7 +183,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     break;
                 }
 
-                if( GetDocSh() && (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED))
+                if( GetDocSh() && (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED))
                     GetDocSh()->SetModified();
 
                 SwitchPage(nSelectedPage);

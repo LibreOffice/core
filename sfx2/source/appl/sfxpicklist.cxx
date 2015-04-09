@@ -167,7 +167,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     // Unnamed Documents and embedded-Documents not in Picklist
     if ( !pDocSh->HasName() ||
-            SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
+            SfxObjectCreateMode::STANDARD != pDocSh->GetCreateMode() )
         return;
 
     // Help not in History

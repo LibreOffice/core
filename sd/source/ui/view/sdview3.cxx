@@ -663,7 +663,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
-            DrawDocShellRef xShell = new DrawDocShell(SFX_CREATE_MODE_INTERNAL);
+            DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL);
             xShell->DoInitNew(0);
 
             SdDrawDocument* pModel = xShell->GetDoc();
@@ -857,7 +857,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( mrDoc.GetDocSh() && ( mrDoc.GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
                 uno::Reference < embed::XStorage > xStore( ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm ) );
-                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, true, mrDoc.GetDocumentType() ) );
+                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SfxObjectCreateMode::EMBEDDED, true, mrDoc.GetDocumentType() ) );
 
                 // mba: BaseURL doesn't make sense for clipboard functionality
                 SfxMedium *pMedium = new SfxMedium( xStore, OUString() );

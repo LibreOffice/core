@@ -6511,7 +6511,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             // the global retouche color.
             if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
                  pSh->GetViewOptions()->IsPDFExport() ||
-                 ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+                 ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive()
                  )
                )

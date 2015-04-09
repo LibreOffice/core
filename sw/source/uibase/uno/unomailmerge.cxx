@@ -385,7 +385,7 @@ SwXMailMerge::SwXMailMerge() :
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
-    xDocSh = new SwDocShell( SFX_CREATE_MODE_STANDARD );
+    xDocSh = new SwDocShell( SfxObjectCreateMode::STANDARD );
     xDocSh->DoInitNew( 0 );
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );

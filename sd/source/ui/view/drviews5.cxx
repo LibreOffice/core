@@ -89,7 +89,7 @@ void DrawViewShell::Resize (void)
 {
     ViewShell::Resize();
 
-    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
     }
@@ -508,7 +508,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
     {
         const Rectangle aVisArea( mpFrameView->GetVisArea() );
 
-        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
             GetDocSh()->SetVisArea(aVisArea);
         }

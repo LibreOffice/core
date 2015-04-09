@@ -116,7 +116,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
                 pItem->GetValue() >>= xStatusIndicator;
         }
 
-        if ( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+        if ( SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode() )
             bEmbedded = true;
     }
 

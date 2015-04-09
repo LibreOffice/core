@@ -323,7 +323,7 @@ bool ScTabViewShell::PrepareClose(bool bUI)
 void ScTabViewShell::UpdateOleZoom()
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
         Size aObjSize = ((const SfxObjectShell*)pDocSh)->GetVisArea().GetSize();
@@ -1473,7 +1473,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     bool bFirstView = !pFirst
           || (pFirst == GetViewFrame() && !SfxViewFrame::GetNext(*pFirst,pDocSh));
 
-    if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
         Rectangle aVisArea = ((const SfxObjectShell*)pDocSh)->GetVisArea();
@@ -1552,7 +1552,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
             rDoc.SetLayoutRTL( 0, ScGlobal::IsSystemRTL() );
 
             // append additional sheets (not for OLE object)
-            if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
                 // Get the customized initial tab count
                 const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
@@ -1568,7 +1568,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
         // ReadExtOptions is now in Activate
 
         //  Link-Update nicht verschachteln
-        if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_INTERNAL &&
+        if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::INTERNAL &&
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
             // Check if there are any external data.

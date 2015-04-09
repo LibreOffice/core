@@ -207,10 +207,10 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
         sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
         if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
             !GetLinkManager().GetLinks().empty() &&
-            SFX_CREATE_MODE_INTERNAL !=
+            SfxObjectCreateMode::INTERNAL !=
                         ( eMode = m_rDoc.GetDocShell()->GetCreateMode()) &&
-            SFX_CREATE_MODE_ORGANIZER != eMode &&
-            SFX_CREATE_MODE_PREVIEW != eMode &&
+            SfxObjectCreateMode::ORGANIZER != eMode &&
+            SfxObjectCreateMode::PREVIEW != eMode &&
             !m_rDoc.GetDocShell()->IsPreview() )
         {
             bool bAskUpdate = nLinkMode == MANUAL;

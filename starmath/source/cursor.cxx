@@ -1455,7 +1455,7 @@ void SmCursor::EndEdit(){
 
     //TODO: Consider copying the update accessability code from SmDocShell::SetText in here...
     //This somehow updates the size of SmGraphicView if it is running in embedded mode
-    if( pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if( pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         pDocShell->OnDocumentPrinterChanged(0);
 
     //Request a replaint...
@@ -1473,7 +1473,7 @@ void SmCursor::EndEdit(){
 void SmCursor::RequestRepaint(){
     SmViewShell *pViewSh = SmGetActiveView();
     if( pViewSh ) {
-        if ( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+        if ( SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode() )
             pDocShell->Repaint();
         else
             pViewSh->GetGraphicWindow().Invalidate();
