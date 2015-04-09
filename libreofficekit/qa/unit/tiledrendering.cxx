@@ -84,9 +84,6 @@ void TiledRenderingTest::runAllTests()
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
     rtl::Bootstrap::set(OUString("UserInstallation"), sUserInstallURL);
 
-    // No restart in desktop.
-    setenv("LOK_TEST", "1", true);
-
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );

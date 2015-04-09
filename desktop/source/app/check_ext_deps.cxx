@@ -33,6 +33,7 @@
 #include <unotools/configmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -421,8 +422,7 @@ void Desktop::SynchronizeExtensionRepositories()
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, "user", Reference<task::XAbortChannel>(), silent);
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-        // getenv is a hack to detect if we're running in a LOK unit test
-        if (!getenv("LOK_TEST"))
+        if (!comphelper::LibreOfficeKit::isActive())
             task::OfficeRestartManager::get(context)->requestRestart(
                 silent->getInteractionHandler());
 #endif

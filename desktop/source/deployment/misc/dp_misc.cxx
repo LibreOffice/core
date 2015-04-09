@@ -42,6 +42,7 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
 
@@ -558,8 +559,7 @@ void syncRepositories(
         }
     }
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    // getenv is a hack to detect if we're running in a LOK unit test
-    if (bModified && !getenv("LOK_TEST"))
+    if (bModified && !comphelper::LibreOfficeKit::isActive())
     {
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
         if (restarter.is())
