@@ -53,7 +53,7 @@ private:
     Color       aActFillColor;
     vcl::Font   aActFont;
 
-    sal_uLong CountEntities(const DXFEntities & rEntities);
+    static sal_uLong CountEntities(const DXFEntities & rEntities);
 
     Color ConvertColor(sal_uInt8 nColor);
 

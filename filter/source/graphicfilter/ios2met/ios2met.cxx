@@ -399,7 +399,7 @@ private:
     sal_uLong   ReadLittleEndian3BytesLong();
     long        ReadCoord(bool b32);
     Point       ReadPoint( const bool bAdjustBoundRect = true );
-    RasterOp    OS2MixToRasterOp(sal_uInt8 nMix);
+    static RasterOp    OS2MixToRasterOp(sal_uInt8 nMix);
     void        ReadLine(bool bGivenPos, sal_uInt16 nOrderLen);
     void        ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen);
     void        ReadBox(bool bGivenPos);

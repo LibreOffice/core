@@ -30,7 +30,7 @@ class SbiDdeControl
 {
 private:
     DECL_LINK( Data, DdeData* );
-    SbError GetLastErr( DdeConnection* );
+    static SbError GetLastErr( DdeConnection* );
     size_t GetFreeChannel();
     std::vector<DdeConnection*> aConvList;
     OUString aData;

@@ -261,8 +261,8 @@ protected:
     virtual void implLoadAllLocales( void ) SAL_OVERRIDE;
 
     void implScanLocaleNames( const ::com::sun::star::uno::Sequence< OUString >& aContentSeq );
-    OUString implGetFileNameForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase );
-    OUString implGetPathForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase,
+    static OUString implGetFileNameForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase );
+    static OUString implGetPathForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase,
         const OUString& aLocation, bool bDefaultFile=false );
 
     bool implReadPropertiesFile( LocaleItem* pLocaleItem,

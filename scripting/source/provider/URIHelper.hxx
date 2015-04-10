@@ -53,7 +53,7 @@ private:
 
     bool initBaseURI();
     OUString getLanguagePart(const OUString& rStorageURI);
-    OUString getLanguagePath(const OUString& rLanguagePart);
+    static OUString getLanguagePath(const OUString& rLanguagePart);
 
 public:
 

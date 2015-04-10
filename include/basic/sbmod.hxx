@@ -137,7 +137,7 @@ public:
     bool     createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     SbxArrayRef GetMethods() { return pMethods;}
-    OUString GetKeywordCase( const OUString& sKeyword ) const;
+    static OUString GetKeywordCase( const OUString& sKeyword );
 };
 
 typedef tools::SvRef<SbModule> SbModuleRef;

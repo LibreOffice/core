@@ -466,7 +466,7 @@ public:
         return dInst;
     }
 
-    void QuitApplication()
+    static void QuitApplication()
     {
         uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
         xDeskTop->terminate();
@@ -1784,7 +1784,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
 }
 
 
-OUString SbModule::GetKeywordCase( const OUString& sKeyword ) const
+OUString SbModule::GetKeywordCase( const OUString& sKeyword )
 {
     return SbiParser::GetKeywordCase( sKeyword );
 }

@@ -112,7 +112,7 @@ public:
     OUString getContextString() { return m_sCtxString; }
 
 private:
-    OUString parseLocationName( const OUString& location );
+    static OUString parseLocationName( const OUString& location );
     void  createPkgProvider();
     bool  isValid() { return m_bIsValid;}
     OUString getURLForModel();
