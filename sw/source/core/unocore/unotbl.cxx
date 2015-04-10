@@ -757,7 +757,7 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, size_t const nPos) :
     SwClient(pTblFmt),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(pBx),
-    pStartNode(0),
+    pStartNode(nullptr),
     nFndPos(nPos)
 {
 }
@@ -766,7 +766,7 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
     SwClient(pTblFmt),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
-    pBox(0),
+    pBox(nullptr),
     pStartNode(&rStartNode),
     nFndPos(NOTFOUND)
 {
