@@ -1,0 +1,52 @@
+diff -ru2 1.icu/source/i18n/regexcmp.cpp 2.icu/source/i18n/regexcmp.cpp
+--- 1.icu/source/i18n/regexcmp.cpp	2015-04-10 18:07:53.410434700 +0200
++++ 2.icu/source/i18n/regexcmp.cpp	2015-04-10 18:08:23.356622663 +0200
+@@ -2338,5 +2338,13 @@
+     if (fIntervalUpper == 0) {
+         // Pathological case.  Attempt no matches, as if the block doesn't exist.
++        // Discard the generated code for the block.
++        // If the block included parens, discard the info pertaining to them as well.
+         fRXPat->fCompiledPat->setSize(topOfBlock);
++        if (fMatchOpenParen >= topOfBlock) {
++            fMatchOpenParen = -1;
++        }
++        if (fMatchCloseParen >= topOfBlock) {
++            fMatchCloseParen = -1;
++        }
+         return TRUE;
+     }
+diff -ru2 1.icu/source/i18n/regexcmp.h 2.icu/source/i18n/regexcmp.h
+--- 1.icu/source/i18n/regexcmp.h	2013-10-04 22:48:44.000000000 +0200
++++ 2.icu/source/i18n/regexcmp.h	2015-04-10 18:08:23.356622663 +0200
+@@ -183,5 +183,7 @@
+                                                      //   of the slot reserved for a state save
+                                                      //   at the start of the most recently processed
+-                                                     //   parenthesized block.
++                                                     //   parenthesized block. Updated when processing
++                                                     //   a close to the location for the corresponding open.
++
+     int32_t                       fMatchCloseParen;  // The position in the pattern of the first
+                                                      //   location after the most recently processed
+diff -ru2 1.icu/source/test/testdata/regextst.txt 2.icu/source/test/testdata/regextst.txt
+--- 1.icu/source/test/testdata/regextst.txt	2015-04-10 18:07:53.411434706 +0200
++++ 2.icu/source/test/testdata/regextst.txt	2015-04-10 18:09:19.386974352 +0200
+@@ -1174,4 +1174,13 @@
+ 
+ 
++# Bug 11369
++#   Incorrect optimization of patterns with a zero length quantifier {0}
++
++"(.|b)(|b){0}\$(?#xxx){3}(?>\D*)"   "AAAAABBBBBCCCCCDDDDEEEEE"
++"(|b)ab(c)"                     "<0><1></1>ab<2>c</2></0>"
++"(|b){0}a{3}(D*)"               "<0>aaa<2></2></0>"
++"(|b){0,1}a{3}(D*)"             "<0><1></1>aaa<2></2></0>"
++"((|b){0})a{3}(D*)"             "<0><1></1>aaa<3></3></0>"
++
+ # Bug 11370
+ #   Max match length computation of look-behind expression gives result that is too big to fit in the
+@@ -1182,4 +1191,5 @@
+ "(?<!\\ubeaf(\\ubeaf{11000}){11000})"   E  "no match"
+ 
++
+ #  Random debugging, Temporary
+ #
