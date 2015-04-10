@@ -1039,7 +1039,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         }
         else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pEntry, aValue, aSet ))
         {
-            SvxItemPropertySet_setPropertyValue( GetStylePropertySet(), pEntry, aValue, aSet );
+            SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
         }
 
         rStyleSet.Put( aSet );
@@ -1120,7 +1120,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
                 return aAny;
 
             // Hole Wert aus ItemSet
-            aAny = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(),pEntry, aSet );
+            aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
         }
 
         if( pEntry->aType != aAny.getValueType() )
@@ -1295,7 +1295,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
         SfxItemPool& rMyPool = GetPool().GetPool();
         SfxItemSet aSet( rMyPool,   pEntry->nWID, pEntry->nWID);
         aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
-        aRet = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(), pEntry, aSet );
+        aRet = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
     }
     return aRet;
 }

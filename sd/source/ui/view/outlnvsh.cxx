@@ -810,7 +810,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
         sal_Int16 nDepth;
         sal_Int16 nTmpDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
-        bool bPage = rOutl.HasParaFlag( pPara, ParaFlag::ISPAGE );
+        bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
 
         while (iter != aSelList.begin())
         {
@@ -818,7 +818,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
             nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
 
-            if( nDepth != nTmpDepth || bPage != rOutl.HasParaFlag( pPara, ParaFlag::ISPAGE ))
+            if( nDepth != nTmpDepth || bPage != ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ))
                 bUnique = false;
 
             if (rOutl.HasChildren(pPara))
@@ -1310,7 +1310,6 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
     ::sd::Window*   pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
-    ::Outliner&     rOutliner   = pOlView->GetOutliner();
 
     std::vector<Paragraph*> aSelList;
     pActiveView->CreateSelectionList(aSelList);
@@ -1324,10 +1323,10 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         pLastPara = *(aSelList.rbegin());
     }
 
-    if( !rOutliner.HasParaFlag(pFirstPara,ParaFlag::ISPAGE) )
+    if( !::Outliner::HasParaFlag(pFirstPara,ParaFlag::ISPAGE) )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
 
-    if( !rOutliner.HasParaFlag(pLastPara, ParaFlag::ISPAGE) )
+    if( !::Outliner::HasParaFlag(pLastPara, ParaFlag::ISPAGE) )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
 
     // only one page selected?
@@ -1690,7 +1689,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     sal_Int32 nPara          = nTitlePara + 1;
     sal_Int32 nParasInLayout = 0L;
     pPara = rOutliner.GetParagraph( nPara );
-    while( pPara && !rOutliner.HasParaFlag(pPara, ParaFlag::ISPAGE) )
+    while( pPara && !::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
     {
         nParasInLayout++;
         pPara = rOutliner.GetParagraph( ++nPara );

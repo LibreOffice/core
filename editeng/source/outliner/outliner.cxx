@@ -2078,7 +2078,7 @@ void Outliner::SetParaFlag( Paragraph* pPara,  ParaFlag nFlag )
     }
 }
 
-bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag ) const
+bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag )
 {
     return pPara && pPara->HasFlag( nFlag );
 }

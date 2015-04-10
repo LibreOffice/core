@@ -592,8 +592,8 @@ private:
     EditPaM             CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
     EditPaM             CursorStartOfLine( const EditPaM& rPaM );
     EditPaM             CursorEndOfLine( const EditPaM& rPaM );
-    EditPaM             CursorStartOfParagraph( const EditPaM& rPaM );
-    EditPaM             CursorEndOfParagraph( const EditPaM& rPaM );
+    static EditPaM      CursorStartOfParagraph( const EditPaM& rPaM );
+    static EditPaM      CursorEndOfParagraph( const EditPaM& rPaM );
     EditPaM             CursorStartOfDoc();
     EditPaM             CursorEndOfDoc();
     EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
@@ -619,7 +619,7 @@ private:
     void                ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_Int32 nIndex );
     LanguageType        ImplCalcDigitLang(LanguageType eCurLang) const;
     void                ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eLang);
-    OUString            convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang) const;
+    static OUString     convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang);
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
@@ -1011,7 +1011,7 @@ public:
     bool                IsAddExtLeading() const { return bAddExtLeading; }
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable( bool bGetInternal = true ) const;
-    void                SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    static void         SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }

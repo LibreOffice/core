@@ -778,7 +778,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
     }
 
     pOutliner->SetRefDevice(GetRefDevice());
-    pOutliner->SetForbiddenCharsTable(GetForbiddenCharsTable());
+    Outliner::SetForbiddenCharsTable(GetForbiddenCharsTable());
     pOutliner->SetAsianCompressionMode( mnCharCompressType );
     pOutliner->SetKernAsianPunctuation( IsKernAsianPunctuation() );
     pOutliner->SetAddExtLeading( IsAddExtLeading() );

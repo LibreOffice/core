@@ -2139,7 +2139,7 @@ void EditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRanges
 
 void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
-    pImpEditEngine->SetForbiddenCharsTable( xForbiddenChars );
+    ImpEditEngine::SetForbiddenCharsTable( xForbiddenChars );
 }
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )

@@ -632,7 +632,7 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                             if(SfxItemPool::IsWhich(pEntry->nWID))
                                 rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
                             // set
-                            SvxItemPropertySet_setPropertyValue(rPropSet, pEntry, *pUsrAny, rSet);
+                            SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
                         }
                     }
                 }
@@ -1725,7 +1725,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
         {
-            SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rVal, *pSet );
+            SvxItemPropertySet_setPropertyValue( pMap, rVal, *pSet );
         }
     }
 
@@ -2007,7 +2007,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     default:
     {
         // get value form ItemSet
-        aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pMap, aSet );
+        aAny = SvxItemPropertySet_getPropertyValue( pMap, aSet );
 
         if( pMap->aType != aAny.getValueType() )
         {
@@ -4210,23 +4210,23 @@ SdrObject* SdrObject::getSdrObjectFromXShape( const ::com::sun::star::uno::Refer
     return pSvxShape ? pSvxShape->GetSdrObject() : 0;
 }
 
-uno::Any SvxItemPropertySet_getPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet )
+uno::Any SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet )
 {
     if(!pMap || !pMap->nWID)
         return uno::Any();
 
     // Check is for items that store either metric values if thei are positiv or percentage if thei are negativ.
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
-    return rPropSet.getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES), bDontConvertNegativeValues );
+    return SvxItemPropertySet::getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES), bDontConvertNegativeValues );
 }
 
-void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
+void SvxItemPropertySet_setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
 {
     if(!pMap || !pMap->nWID)
         return;
 
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
-    rPropSet.setPropertyValue( pMap, rVal, rSet, bDontConvertNegativeValues );
+    SvxItemPropertySet::setPropertyValue( pMap, rVal, rSet, bDontConvertNegativeValues );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

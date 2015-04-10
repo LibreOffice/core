@@ -271,7 +271,7 @@ MetaAction* SvxFieldData::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-MetaAction* SvxFieldData::createEndComment() const
+MetaAction* SvxFieldData::createEndComment()
 {
     return new MetaCommentAction( "FIELD_SEQ_END" );
 }

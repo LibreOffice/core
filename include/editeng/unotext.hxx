@@ -264,7 +264,7 @@ protected:
     ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL _getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     // returns true if property found or false if unknown property
-    bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::beans::PropertyState& rState);
+    static bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::beans::PropertyState& rState);
 
     void SAL_CALL _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara ) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException );

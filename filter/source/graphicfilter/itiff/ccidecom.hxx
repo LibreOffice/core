@@ -72,11 +72,11 @@ private:
     sal_uInt16 ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
                              sal_uInt16 nMaxCodeBits);
 
-    void FillBits(sal_uInt8 * pTarget, sal_uInt16 nTargetBits,
+    static void FillBits(sal_uInt8 * pTarget, sal_uInt16 nTargetBits,
                   sal_uInt16 nBitPos, sal_uInt16 nNumBits,
                   sal_uInt8 nBlackOrWhite);
 
-    sal_uInt16 CountBits(const sal_uInt8 * pData, sal_uInt16 nDataSizeBits,
+    static sal_uInt16 CountBits(const sal_uInt8 * pData, sal_uInt16 nDataSizeBits,
                      sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite);
 
     void Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);

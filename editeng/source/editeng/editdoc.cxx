@@ -2223,7 +2223,7 @@ OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 
 OUString EditDoc::GetParaAsString(
     const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos,
-    bool bResolveFields) const
+    bool bResolveFields)
 {
     return pNode->GetExpandedText(nStartPos, nEndPos, bResolveFields);
 }

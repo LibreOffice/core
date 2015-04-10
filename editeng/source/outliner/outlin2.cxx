@@ -401,7 +401,7 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
 
 void Outliner::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
-    pEditEngine->SetForbiddenCharsTable( xForbiddenChars );
+    EditEngine::SetForbiddenCharsTable( xForbiddenChars );
 }
 
 void Outliner::SetHyphenator( Reference< XHyphenator >& xHyph )

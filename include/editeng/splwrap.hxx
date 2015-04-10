@@ -125,9 +125,9 @@ protected:
     virtual bool SpellContinue();     // Check Areas
                                           // Result available through GetLast
     virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
-    ::com::sun::star::uno::Reference<
+    static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
-                 GetAllRightDic() const;
+                 GetAllRightDic();
     virtual void SpellEnd();                        // Finish area
     virtual void ScrollArea();                      // Set ScrollArea
     // Replace word

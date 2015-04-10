@@ -254,7 +254,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             }
             else
             {
-                SvxItemPropertySet_setPropertyValue( *mpPropSet, pEntry, aValue, aSet );
+                SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
             }
 
             mpSet->Put( aSet );
@@ -308,7 +308,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
                 // get value from ItemSet
-                aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
+                aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
             }
         }
         else
@@ -436,7 +436,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
             SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
             aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
-            aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
+            aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
         }
     }
     return aAny;

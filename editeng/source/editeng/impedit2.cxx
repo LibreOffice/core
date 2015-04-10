@@ -294,7 +294,7 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eE
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
 
-        aText += aEditDoc.GetParaAsString( pNode, nStartPos, nEndPos );
+        aText += EditDoc::GetParaAsString( pNode, nStartPos, nEndPos );
         if ( nNode < nEndNode )
             aText += aSep;
     }
