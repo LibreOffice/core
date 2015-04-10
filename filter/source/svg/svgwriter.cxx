@@ -3435,12 +3435,26 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                         else
                         {
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
 
                     }
@@ -3459,11 +3473,25 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                         {
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                     }
                 }
@@ -3483,12 +3511,26 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                         else
                         {
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                     }
                 }
@@ -3508,14 +3550,26 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                         else
                         {
-                            maTextWriter.startTextShape();
+                            bool      bTextShapeStarted=false;
+                            if( !maTextWriter.isTextShapeStarted() ) {
+                                bTextShapeStarted=true;
+                                maTextWriter.startTextShape();
+                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
-                            maTextWriter.endTextShape();
+                            if( bTextShapeStarted )
+                                maTextWriter.endTextShape();
                         }
                     }
                 }
