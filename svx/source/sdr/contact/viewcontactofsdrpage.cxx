@@ -544,7 +544,8 @@ ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
         case 7: return (ViewContact&)maViewContactOfHelplinesBack;
         case 8: return (ViewContact&)maViewContactOfPageHierarchy;
         case 9: return (ViewContact&)maViewContactOfGridFront;
-        default: return (ViewContact&)maViewContactOfHelplinesFront;
+        case 10: case 11: return (ViewContact&)maViewContactOfHelplinesFront;
+        default: assert(false);
     }
 }
 
