@@ -1784,7 +1784,7 @@ public:
     void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
     bool GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
     template<typename Tpoolitem>
-    inline void AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember);
+    inline void AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips = false);
 
     void ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
@@ -1802,7 +1802,7 @@ bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMember
     { return aAnyMap.FillValue( nWhichId, nMemberId, rpAny ); }
 
 template<typename Tpoolitem>
-void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember)
+void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpoolitem()> aItemFactory, sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips)
 {
     std::list< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
     for(sal_uInt16 nMember : vMember)
@@ -1816,7 +1816,7 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpooli
     {
         Tpoolitem aItem = aItemFactory();
         for(auto& aMemberAndAny : vMemberAndAny)
-            aItem.PutValue(*aMemberAndAny.second, aMemberAndAny.first);
+            aItem.PutValue(*aMemberAndAny.second, aMemberAndAny.first | (bAddTwips ? CONVERT_TWIPS : 0) );
         rSet.Put(aItem);
     }
 }
@@ -1874,22 +1874,9 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
     if(bPutBreak)
         AddItemToSet<SvxFmtBreakItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetBreak(); }, RES_BREAK, {0});
-    const uno::Any* pShadow;
-    if(GetProperty(RES_SHADOW, 0, pShadow))
-    {
-        SvxShadowItem aShd(rFrmFmt.GetShadow());
-        aShd.PutValue(*pShadow, CONVERT_TWIPS); // putting to CONVERT_TWIPS, but getting from 0?
-        aSet.Put(aShd);
-    }
+    AddItemToSet<SvxShadowItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetShadow(); }, RES_SHADOW, {0}, true);
     AddItemToSet<SvxFmtKeepItem>(aSet, [&rFrmFmt]() { return rFrmFmt.GetKeep(); }, RES_KEEP, {0});
-
-    const uno::Any* pHOrient;
-    if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
-    {
-        SwFmtHoriOrient aOrient(rFrmFmt.GetHoriOrient());
-        aOrient.PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
-        aSet.Put(aOrient);
-    }
+    AddItemToSet<SwFmtHoriOrient>(aSet, [&rFrmFmt]() { return rFrmFmt.GetHoriOrient(); }, RES_HORI_ORIENT, {MID_HORIORIENT_ORIENT}, true);
 
     const uno::Any* pSzRel(nullptr);
     GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel);
