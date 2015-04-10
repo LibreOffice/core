@@ -1513,7 +1513,8 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     sal_uInt16 nTSize;
-    bool bIsTiledRendering = GetDocument()->GetDrawLayer()->isTiledRendering();
+    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
+    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
 
     SCCOL   nPosX = GetPosX(eWhichX);
     SCCOL   nX;
@@ -1866,7 +1867,9 @@ void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
 void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 {
     // in the tiled rendering case, nPosX [the leftmost visible column] must be 0
-    if (nNewPosX != 0 && !GetDocument()->GetDrawLayer()->isTiledRendering())
+    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
+    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
+    if (nNewPosX != 0 && !bIsTiledRendering)
     {
         SCCOL nOldPosX = pThisTab->nPosX[eWhich];
         long nTPosX = pThisTab->nTPosX[eWhich];
@@ -1904,7 +1907,9 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
     // in the tiled rendering case, nPosY [the topmost visible row] must be 0
-    if (nNewPosY != 0 && !GetDocument()->GetDrawLayer()->isTiledRendering())
+    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
+    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
+    if (nNewPosY != 0 && !bIsTiledRendering)
     {
         SCROW nOldPosY = pThisTab->nPosY[eWhich];
         long nTPosY = pThisTab->nTPosY[eWhich];
