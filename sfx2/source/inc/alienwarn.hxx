@@ -30,7 +30,8 @@ private:
     CheckBox*               m_pWarningOnBox;
 
 public:
-    SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName, const OUString& _rDefaultExtension);
+    SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName,
+                          const OUString& _rDefaultExtension, bool rDefaultIsAlien);
     virtual ~SfxAlienWarningDialog();
 };
 
