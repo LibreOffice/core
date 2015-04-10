@@ -1057,11 +1057,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
         return uno::Any();
     auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
     if(!pEntry)
-    {
-        beans::UnknownPropertyException aEx;
-        aEx.Message = rPropertyName;
-        throw(aEx);
-    }
+        throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
     switch(pEntry->nWID)
     {
         case FN_UNO_CELL_ROW_SPAN:
