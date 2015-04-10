@@ -802,22 +802,14 @@ sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
 uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence< uno::Type > aRetTypes;
-    if(!aRetTypes.getLength())
-    {
-        aRetTypes = SwXCellBaseClass::getTypes();
-        uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
 
-        long nIndex = aRetTypes.getLength();
-        aRetTypes.realloc(
-            aRetTypes.getLength() +
-            aTextTypes.getLength());
-
-        uno::Type* pRetTypes = aRetTypes.getArray();
-
-        const uno::Type* pTextTypes = aTextTypes.getConstArray();
-        for(long nPos = 0; nPos <aTextTypes.getLength(); nPos++)
-            pRetTypes[nIndex++] = pTextTypes[nPos];
-    }
+    if(aRetTypes.getLength())
+        return aRetTypes;
+    const auto& rCellTypes = SwXCellBaseClass::getTypes();
+    const auto& rTextTypes = SwXText::getTypes();
+    aRetTypes = uno::Sequence<uno::Type>(rCellTypes.getLength() + rTextTypes.getLength());
+    std::copy_n(rCellTypes.begin(), rCellTypes.getLength(), aRetTypes.begin());
+    std::copy_n(rTextTypes.begin(), rTextTypes.getLength(), aRetTypes.begin()+rCellTypes.getLength());
     return aRetTypes;
 }
 
