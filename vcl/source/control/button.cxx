@@ -88,15 +88,14 @@ ImplCommonButtonData::~ImplCommonButtonData()
 }
 
 Button::Button( WindowType nType ) :
-    Control( nType )
+    Control( nType ),
+    mpButtonData( new ImplCommonButtonData )
 {
-    mpButtonData = new ImplCommonButtonData;
 }
 
 Button::~Button()
 {
     disposeOnce();
-    delete mpButtonData;
 }
 
 void Button::dispose()

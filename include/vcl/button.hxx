@@ -37,7 +37,7 @@ class ImplCommonButtonData;
 class VCL_DLLPUBLIC Button : public Control
 {
 private:
-    ImplCommonButtonData *mpButtonData;
+    std::unique_ptr<ImplCommonButtonData> mpButtonData;
     Link maClickHdl;
 
     /// Command URL (like .uno:Save) in case the button should handle it.
