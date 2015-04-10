@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cerrno>
+
 #if defined( WNT )
 #include <windows.h>
 #elif defined UNX
@@ -422,14 +426,13 @@ sal_uInt64 tools::Time::GetSystemTicks()
         (nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
 #else
     timeval tv;
-    gettimeofday (&tv, 0);
-
-    double fTicks = tv.tv_sec;
-    fTicks *= 1000;
-    fTicks += ((tv.tv_usec + 500) / 1000);
-
-    fTicks = fmod (fTicks, double(SAL_MAX_UINT64));
-    return static_cast<sal_uInt64>(fTicks);
+    int n = gettimeofday (&tv, 0);
+    if (n == -1) {
+        int e = errno;
+        SAL_WARN("tools.datetime", "gettimeofday failed: " << e);
+    }
+    return static_cast<sal_uInt64>(tv.tv_sec) * 1000
+        + (static_cast<sal_uInt64>(tv.tv_usec) + 500) / 1000;
 #endif
 }
 
