@@ -224,15 +224,15 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
                 maEdVal1->Show();
                 maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
                 maEdVal2->Hide();
-                OnEdChanged(&maEdVal1);
+                OnEdChanged(maEdVal1);
                 break;
             case 2:
                 maEdVal1->Show();
                 maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
-                OnEdChanged(&maEdVal1);
+                OnEdChanged(maEdVal1);
                 maEdVal2->Show();
                 maEdVal2->SetText(pFormatEntry->GetExpression(maPos, 1));
-                OnEdChanged(&maEdVal2);
+                OnEdChanged(maEdVal2);
                 break;
         }
     }
@@ -324,7 +324,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
 
     if( aFormula.isEmpty() )
     {
-        maFtVal.SetText(ScGlobal::GetRscString(STR_ENTER_VALUE));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_ENTER_VALUE));
         return 0;
     }
 
@@ -336,7 +336,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     if( ta->GetCodeError() )
     {
         pEdit->SetControlBackground(COL_LIGHTRED);
-        maFtVal.SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
         return 0;
     }
 
@@ -348,38 +348,38 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
         aComp2.SetGrammar( mpDoc->GetGrammar() );
         if (&maEdVal1 == pEdit)
         {
-            OUString aFormula2 = maEdVal2.GetText();
+            OUString aFormula2 = maEdVal2->GetText();
             boost::scoped_ptr<ScTokenArray> pArr2(aComp2.CompileString(aFormula2));
-            bContainsColumnLabel = containsOnlyColumnLabel(&maEdVal2, pArr2.get());
+            bContainsColumnLabel = containsOnlyColumnLabel(maEdVal2, pArr2.get());
         }
         else
         {
-            OUString aFormula1 = maEdVal1.GetText();
+            OUString aFormula1 = maEdVal1->GetText();
             boost::scoped_ptr<ScTokenArray> pArr1(aComp2.CompileString(aFormula1));
-            bContainsColumnLabel = containsOnlyColumnLabel(&maEdVal1, pArr1.get());
+            bContainsColumnLabel = containsOnlyColumnLabel(maEdVal1, pArr1.get());
         }
     }
 
     if (bContainsColumnLabel)
     {
-        maFtVal.SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
         return 0;
     }
 
     pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
-    maFtVal.SetText("");
+    maFtVal->SetText("");
     return 0;
 }
 
 void ScConditionFrmtEntry::Select()
 {
-    maFtVal.Show();
+    maFtVal->Show();
     ScCondFrmtEntry::Select();
 }
 
 void ScConditionFrmtEntry::Deselect()
 {
-    maFtVal.Hide();
+    maFtVal->Hide();
     ScCondFrmtEntry::Deselect();
 }
 

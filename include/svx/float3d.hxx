@@ -127,7 +127,7 @@ private:
     VclPtr<PushButton>         m_pBtnAmbientColor;   // color button
 
 // Textures
-    VclContainer*       m_pFLTexture;
+    VclPtr<VclContainer>       m_pFLTexture;
     VclPtr<PushButton>         m_pBtnTexLuminance;
     VclPtr<PushButton>         m_pBtnTexColor;
     VclPtr<PushButton>         m_pBtnTexReplace;

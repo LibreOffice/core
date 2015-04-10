@@ -185,7 +185,6 @@ namespace dbaui
             { m_pEscapeDateTime,               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
             { m_pPrimaryKeySupport,            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
             { m_pRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false },
-            { NULL,                            "",                0,                          false }
         };
 
         for ( const BooleanSettingDesc& pCopy : aSettings )

@@ -258,10 +258,7 @@ void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 
         // for VBA documents, show a warning that we can save them only in ODF
         if (pCurWin->GetDocument().isInVBAMode())
-        {
-            std::vector< VclPtr<PushButton> > aButtons;
-            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA), aButtons);
-        }
+            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA));
     }
 
     UpdateWindows();

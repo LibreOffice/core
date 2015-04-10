@@ -113,20 +113,11 @@ void SvxOpenCLTabPage::dispose()
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpBlackList->GetEntry(i)->GetUserData());
     for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpWhiteList->GetEntry(i)->GetUserData());
-    mpBlackList.disposeAndClear()
-    mpWhiteList.disposeAndClear()
-}
+    mpBlackList.disposeAndClear();
+    mpWhiteList.disposeAndClear();
 
-SvxOpenCLTabPage::~SvxOpenCLTabPage()
-{
-    disposeOnce();
-}
-
-void SvxOpenCLTabPage::dispose()
-{
     mpUseOpenCL.clear();
     mpBlackListFrame.clear();
-    mpBlackList.clear();
     mpBlackListTable.clear();
     mpBlackListEdit.clear();
     mpBlackListAdd.clear();
@@ -137,11 +128,11 @@ void SvxOpenCLTabPage::dispose()
     mpVendor.clear();
     mpDrvVersion.clear();
     mpWhiteListFrame.clear();
-    mpWhiteList.clear();
     mpWhiteListTable.clear();
     mpWhiteListEdit.clear();
     mpWhiteListAdd.clear();
     mpWhiteListDelete.clear();
+
     SfxTabPage::dispose();
 }
 

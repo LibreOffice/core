@@ -187,6 +187,9 @@ void OfaMSFilterTabPage2::dispose()
     pCheckButtonData = NULL;
     m_pCheckLB.clear();
     m_pCheckLBContainer.clear();
+    aHighlightingRB.clear();
+    aShadingRB.clear();
+
     SfxTabPage::dispose();
 }
 

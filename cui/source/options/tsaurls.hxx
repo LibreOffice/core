@@ -16,10 +16,10 @@
 class TSAURLsDialog : public ModalDialog
 {
 private:
-    ListBox* m_pURLListBox;
-    PushButton* m_pAddBtn;
-    PushButton* m_pDeleteBtn;
-    OKButton*   m_pOKBtn;
+    VclPtr<ListBox>    m_pURLListBox;
+    VclPtr<PushButton> m_pAddBtn;
+    VclPtr<PushButton> m_pDeleteBtn;
+    VclPtr<OKButton>   m_pOKBtn;
 
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(DeleteHdl_Impl, void *);
@@ -32,7 +32,7 @@ private:
 public:
     TSAURLsDialog(vcl::Window* pParent);
     virtual ~TSAURLsDialog();
-
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

@@ -84,8 +84,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromSmartArt;
     SvLBoxButtonData*   pCheckButtonData;
 
-    RadioButton*    aHighlightingRB;
-    RadioButton*    aShadingRB;
+    VclPtr<RadioButton> aHighlightingRB;
+    VclPtr<RadioButton> aShadingRB;
 
     OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();

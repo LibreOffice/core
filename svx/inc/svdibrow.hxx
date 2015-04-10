@@ -109,8 +109,7 @@ public:
     virtual void GetFocus() SAL_OVERRIDE;
     void Clear()                                            { aBrowse->Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse->SetAttributes(pAttr,p2ndSet); }
-    const _SdrItemBrowserControl& GetBrowserControl() const { return aBrowse.get(); }
-    _SdrItemBrowserControl& GetBrowserControl()             { return aBrowse.get(); }
+    _SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
 
 class SdrView;

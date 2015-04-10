@@ -1082,8 +1082,8 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     bDirty(false)
 {
     aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
-    GetBrowserControl().SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
-    GetBrowserControl().SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
+    GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
+    GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
     SetDirty();
 }
 

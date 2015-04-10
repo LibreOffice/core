@@ -267,7 +267,7 @@ void ShapeController::executeDispatch_FormatLine()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                ScopedVclPtr< SfxAbstractTabDialog > pDlg(
+                boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateSvxLineTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
                         pSelectedObj, bHasMarked ) );
                 if ( pDlg->Execute() == RET_OK )

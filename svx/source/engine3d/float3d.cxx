@@ -342,13 +342,13 @@ void Svx3DWin::dispose()
 
     delete mpImpl;
 
-    aBtnGeo.disposeAndClear();
-    aBtnRepresentation.disposeAndClear();
-    aBtnLight.disposeAndClear();
-    aBtnTexture.disposeAndClear();
-    aBtnMaterial.disposeAndClear();
-    aBtnUpdate.disposeAndClear();
-    aBtnAssign.disposeAndClear();
+    m_pBtnGeo.clear();
+    m_pBtnRepresentation.clear();
+    m_pBtnLight.clear();
+    m_pBtnTexture.clear();
+    m_pBtnMaterial.clear();
+    m_pBtnUpdate.clear();
+    m_pBtnAssign.clear();
 
     SfxDockingWindow::dispose();
 }

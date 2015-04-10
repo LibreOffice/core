@@ -222,7 +222,6 @@ SvxProxyTabPage::~SvxProxyTabPage()
 
 void SvxProxyTabPage::dispose()
 {
-    mpCertPathDlg.disposeAndClear();
     m_pProxyModeLB.clear();
     m_pHttpProxyFT.clear();
     m_pHttpProxyED.clear();
@@ -656,7 +655,7 @@ void SvxSecurityTabPage::dispose()
 {
     delete mpSecOptions;
     mpSecOptions = NULL;
-    mpCertPathDlg.clear();
+    mpCertPathDlg.disposeAndClear();
     mpSecOptDlg.clear();
     m_pSecurityOptionsPB.clear();
     m_pSavePasswordsCB.clear();
@@ -668,6 +667,9 @@ void SvxSecurityTabPage::dispose()
     m_pMacroSecPB.clear();
     m_pCertFrame.clear();
     m_pCertPathPB.clear();
+    m_pTSAURLsFrame.clear();
+    m_pTSAURLsPB.clear();
+
     SfxTabPage::dispose();
 }
 

@@ -1178,12 +1178,12 @@ IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
 {
     if (pBtn == maBtnOk.get())
         close(true);
-    else if (pBtn == maBtnSelectSingle->get())
+    else if (pBtn == maBtnSelectSingle.get())
     {
         selectCurrentMemberOnly(true);
         CheckHdl(maChecks.get());
     }
-    else if (pBtn == maBtnUnselectSingle->get())
+    else if (pBtn == maBtnUnselectSingle.get())
     {
         selectCurrentMemberOnly(false);
         CheckHdl(maChecks.get());
@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 
         if ( bSearchTextEmpty )
         {
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
             if ( maMembers[i].mbVisible )
                 ++nSelCount;
             continue;
@@ -1240,19 +1240,19 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 
         if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
         {
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
             ++nSelCount;
         }
         else
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
     }
 
     if ( nSelCount == n )
-        maChkToggleAll.SetState( TRISTATE_TRUE );
+        maChkToggleAll->SetState( TRISTATE_TRUE );
     else if ( nSelCount == 0 )
-        maChkToggleAll.SetState( TRISTATE_FALSE );
+        maChkToggleAll->SetState( TRISTATE_FALSE );
     else
-        maChkToggleAll.SetState( TRISTATE_INDET );
+        maChkToggleAll->SetState( TRISTATE_INDET );
 
     return 0;
 }
