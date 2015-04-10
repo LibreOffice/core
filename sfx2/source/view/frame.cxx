@@ -284,7 +284,7 @@ void SfxFrame::CancelTransfers( bool /*bCancelLoadEnv*/ )
     {
         pImp->bInCancelTransfers = true;
         SfxObjectShell* pObj = GetCurrentDocument();
-        if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SFX_LOADED_ALL ))
+        if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SfxLoadedFlags::ALL ))
         {
             SfxViewFrame* pFrm;
             for( pFrm = SfxViewFrame::GetFirst( pObj );

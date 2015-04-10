@@ -95,31 +95,31 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         m_bConfigOptionsChecked:1; // whether or not the user options are checked after the Options dialog is closed.
 
     IndexBitSet         aBitSet;
-    sal_uInt32               lErr;
+    sal_uInt32          lErr;
     sal_uInt16          nEventId;           // If Open/Create as to be sent
                                             // before Activate
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
-    sal_uInt16              nLoadedFlags;
-    sal_uInt16              nFlagsInProgress;
+    SfxLoadedFlags      nLoadedFlags;
+    SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;
     bool                bRunningMacro;
     bool                bReloadAvailable;
-    sal_uInt16              nAutoLoadLocks;
-    SfxModule*              pModule;
+    sal_uInt16          nAutoLoadLocks;
+    SfxModule*          pModule;
     SfxObjectShellFlags     eFlags;
     bool                bReadOnlyUI;
     tools::SvRef<SvRefBase>  xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >
                             pBaseModel;
-    sal_uInt16              nStyleFilter;
+    sal_uInt16          nStyleFilter;
     bool                bDisposing;
 
     bool                m_bEnableSetModified;
     bool                m_bIsModified;
 
-    Rectangle               m_aVisArea;
-    MapUnit                 m_nMapUnit;
+    Rectangle           m_aVisArea;
+    MapUnit             m_nMapUnit;
 
     bool                m_bCreateTempStor;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;

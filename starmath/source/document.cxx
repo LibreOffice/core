@@ -740,7 +740,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         Repaint();
     }
 
-    FinishedLoading( SFX_LOADED_ALL );
+    FinishedLoading( SfxLoadedFlags::ALL );
     return bSuccess;
 }
 
@@ -790,7 +790,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         Repaint();
     }
 
-    FinishedLoading( SFX_LOADED_ALL );
+    FinishedLoading( SfxLoadedFlags::ALL );
     return bRet;
 }
 

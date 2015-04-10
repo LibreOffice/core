@@ -1050,7 +1050,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEASDOC:
             {
-                if( ( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) != SFX_LOADED_MAINDOCUMENT )
+                if( !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1064,7 +1064,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEACOPY:
             {
-                if( ( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) != SFX_LOADED_MAINDOCUMENT )
+                if( !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1234,13 +1234,11 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
             }
 
             case SID_DOC_LOADING:
-                rSet.Put( SfxBoolItem( nSID, SFX_LOADED_MAINDOCUMENT !=
-                            ( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) ) );
+                rSet.Put( SfxBoolItem( nSID, ! ( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) ) );
                 break;
 
             case SID_IMG_LOADING:
-                rSet.Put( SfxBoolItem( nSID, SFX_LOADED_IMAGES !=
-                            ( pImp->nLoadedFlags & SFX_LOADED_IMAGES ) ) );
+                rSet.Put( SfxBoolItem( nSID, ! ( pImp->nLoadedFlags & SfxLoadedFlags::IMAGES ) ) );
                 break;
         }
     }

@@ -135,9 +135,17 @@ namespace o3tl
 #define SFX_TITLE_HISTORY  7
 #define SFX_TITLE_MAXLEN   10   // this gives the limits on length
 
-#define SFX_LOADED_MAINDOCUMENT 1
-#define SFX_LOADED_IMAGES       2
-#define SFX_LOADED_ALL          3
+enum class SfxLoadedFlags
+{
+    NONE         = 0,
+    MAINDOCUMENT = 1,
+    IMAGES       = 2,
+    ALL          = MAINDOCUMENT | IMAGES
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxLoadedFlags> : is_typed_flags<SfxLoadedFlags, 0x03> {};
+}
 
 #define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
 #define HIDDENINFORMATION_NOTES                 0x0002
@@ -438,7 +446,7 @@ public:
     void                        AbortImport();
     bool                        IsAbortingImport() const;
     bool                        IsReloading() const;
-    void                        FinishedLoading( sal_uInt16 nWhich = SFX_LOADED_ALL );
+    void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
     void                        TemplateDisconnectionAfterLoad();
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;

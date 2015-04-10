@@ -1155,7 +1155,7 @@ void SfxObjectShell::SetAutoLoad(
 
 bool SfxObjectShell::IsLoadingFinished() const
 {
-    return ( pImp->nLoadedFlags == SFX_LOADED_ALL );
+    return ( pImp->nLoadedFlags == SfxLoadedFlags::ALL );
 }
 
 void SfxObjectShell::InitOwnModel_Impl()
@@ -1194,14 +1194,14 @@ void SfxObjectShell::InitOwnModel_Impl()
     }
 }
 
-void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
+void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 {
     bool bSetModifiedTRUE = false;
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
-    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
-        && !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ))
+    if( ( nFlags & SfxLoadedFlags::MAINDOCUMENT ) && !(pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT )
+        && !(pImp->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ))
     {
-        pImp->nFlagsInProgress |= SFX_LOADED_MAINDOCUMENT;
+        pImp->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
         static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
         pImp->bImportDone = true;
         if( !IsAbortingImport() )
@@ -1225,13 +1225,13 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         bHasName = true; // the document is loaded, so the name should already available
         GetTitle( SFX_TITLE_DETECT );
         InitOwnModel_Impl();
-        pImp->nFlagsInProgress &= ~SFX_LOADED_MAINDOCUMENT;
+        pImp->nFlagsInProgress &= ~SfxLoadedFlags::MAINDOCUMENT;
     }
 
-    if( ( nFlags & SFX_LOADED_IMAGES ) && !(pImp->nLoadedFlags & SFX_LOADED_IMAGES )
-        && !(pImp->nFlagsInProgress & SFX_LOADED_IMAGES ))
+    if( ( nFlags & SfxLoadedFlags::IMAGES ) && !(pImp->nLoadedFlags & SfxLoadedFlags::IMAGES )
+        && !(pImp->nFlagsInProgress & SfxLoadedFlags::IMAGES ))
     {
-        pImp->nFlagsInProgress |= SFX_LOADED_IMAGES;
+        pImp->nFlagsInProgress |= SfxLoadedFlags::IMAGES;
         uno::Reference<document::XDocumentProperties> xDocProps(
             getDocProperties());
         OUString url(xDocProps->getAutoloadURL());
@@ -1241,12 +1241,12 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( false );
         Invalidate( SID_SAVEASDOC );
-        pImp->nFlagsInProgress &= ~SFX_LOADED_IMAGES;
+        pImp->nFlagsInProgress &= ~SfxLoadedFlags::IMAGES;
     }
 
     pImp->nLoadedFlags |= nFlags;
 
-    if ( !pImp->nFlagsInProgress )
+    if ( pImp->nFlagsInProgress == SfxLoadedFlags::NONE )
     {
         // in case of reentrance calls the first called FinishedLoading() call on the stack
         // should do the notification, in result the notification is done when all the FinishedLoading() calls are finished
@@ -1256,7 +1256,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         else
             SetModified( false );
 
-        if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+        if ( (pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) && (pImp->nLoadedFlags & SfxLoadedFlags::IMAGES ) )
         {
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
             bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
@@ -1402,7 +1402,7 @@ bool SfxObjectShell::IsLoading() const
     Has FinishedLoading been called?
 */
 {
-    return !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT );
+    return !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT );
 }
 
 
@@ -1414,11 +1414,11 @@ void SfxObjectShell::CancelTransfers()
     by RegisterTransfer.
 */
 {
-    if( ( pImp->nLoadedFlags & SFX_LOADED_ALL ) != SFX_LOADED_ALL )
+    if( ( pImp->nLoadedFlags & SfxLoadedFlags::ALL ) != SfxLoadedFlags::ALL )
     {
         AbortImport();
         if( IsLoading() )
-            FinishedLoading( SFX_LOADED_ALL );
+            FinishedLoading( SfxLoadedFlags::ALL );
     }
 }
 

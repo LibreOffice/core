@@ -1088,7 +1088,7 @@ void SwDocShell::LoadingFinished()
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( m_pDoc->getIDocumentState().IsModified() && m_pDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
-    FinishedLoading( SFX_LOADED_ALL );
+    FinishedLoading( SfxLoadedFlags::ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {

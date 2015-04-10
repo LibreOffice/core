@@ -331,7 +331,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // Due to Double occupancy in toolboxes (with or without Ctrl),
             // it is also possible that the slot is enabled, but Ctrl-click
             // despite this is not!
-            if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
+            if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ))
                 break;
 
             SfxMedium* pMed = pSh->GetMedium();
@@ -862,7 +862,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 const SfxShell *pFSh;
                 if ( !pSh ||
                      !pSh->HasName() ||
-                     !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) ||
+                     !( pSh->Get_Impl()->nLoadedFlags &  SfxLoadedFlags::MAINDOCUMENT ) ||
                      ( pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        ( !(pVSh = pSh->GetViewShell())  ||
                          !(pFSh = pVSh->GetFormShell()) ||

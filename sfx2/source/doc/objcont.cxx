@@ -599,7 +599,7 @@ sal_uInt32 SfxObjectShell::GetModifyPasswordHash() const
 bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
 {
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
-      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+      || !(pImp->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ) )
     {
         // the hash can be changed only in editable documents,
         // or during loading of document
@@ -618,7 +618,7 @@ uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() co
 bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
-      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+      || !(pImp->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ) )
     {
         // the hash can be changed only in editable documents,
         // or during loading of document

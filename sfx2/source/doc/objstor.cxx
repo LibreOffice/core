@@ -657,7 +657,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
     pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, aBaseURL ) );
 
-    pImp->nLoadedFlags = 0;
+    pImp->nLoadedFlags = SfxLoadedFlags::NONE;
     pImp->bModelInitialized = false;
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
@@ -718,7 +718,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             // Load
             if ( !GetError() )
             {
-                pImp->nLoadedFlags = 0;
+                pImp->nLoadedFlags = SfxLoadedFlags::NONE;
                 pImp->bModelInitialized = false;
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
                 if ( bOk )
@@ -748,7 +748,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( GetError() == ERRCODE_NONE )
         {
-            pImp->nLoadedFlags = 0;
+            pImp->nLoadedFlags = SfxLoadedFlags::NONE;
             pImp->bModelInitialized = false;
             if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
             {
@@ -774,7 +774,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     {}
                 }
                 UpdateLinks();
-                FinishedLoading( SFX_LOADED_ALL );
+                FinishedLoading( SfxLoadedFlags::ALL );
             }
             else
             {
@@ -832,10 +832,10 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
 
         // If not loaded asynchronously call FinishedLoading
-        if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
-            ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
+        if ( !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) &&
+              ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
             )
-            FinishedLoading( SFX_LOADED_MAINDOCUMENT );
+            FinishedLoading( SfxLoadedFlags::MAINDOCUMENT );
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {

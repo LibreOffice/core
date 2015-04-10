@@ -595,7 +595,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
         aDocument.InvalidateTableArea();
 
     bIsEmpty = false;
-    FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
+    FinishedLoading( SfxLoadedFlags::ALL );
     return bRet;
 }
 
@@ -1503,7 +1503,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             aUpdater.update();
         }
     }
-    FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
+    FinishedLoading( SfxLoadedFlags::ALL );
 
     // invalidate eventually temporary table areas
     if ( bRet )
@@ -1548,7 +1548,7 @@ bool ScDocShell::LoadExternal( SfxMedium& rMed )
                 return false;
         }
 
-        FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);
+        FinishedLoading(SfxLoadedFlags::ALL);
         return true;
     }
 

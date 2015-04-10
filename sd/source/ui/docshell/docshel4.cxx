@@ -309,7 +309,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
                 SetVisArea( Rectangle( pPage->GetAllObjBoundRect() ) );
         }
 
-        FinishedLoading( SFX_LOADED_ALL );
+        FinishedLoading( SfxLoadedFlags::ALL );
 
         const INetURLObject aUrl;
         SfxObjectShell::SetAutoLoad( aUrl, 0, false );
@@ -486,7 +486,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         bRet = SdGRFFilter( rMedium, *this ).Import();
     }
 
-    FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
+    FinishedLoading( SfxLoadedFlags::ALL );
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
