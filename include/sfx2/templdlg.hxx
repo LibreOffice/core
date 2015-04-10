@@ -51,7 +51,7 @@ public:
     void FreeResource (void);
 
 private:
-    const std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
+    std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
     SfxBindings* mpBindings;
 };
 

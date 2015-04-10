@@ -225,7 +225,7 @@ int SfxPrinterController::getPageCount() const
 {
     int nPages = 0;
     VclPtr<Printer> xPrinter( getPrinter() );
-    if( mxRenderable.is() && pPrinter )
+    if( mxRenderable.is() && xPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         try
@@ -270,7 +270,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
 void SfxPrinterController::printPage( int i_nPage ) const
 {
     VclPtr<Printer> xPrinter( getPrinter() );
-    if( mxRenderable.is() && pPrinter )
+    if( mxRenderable.is() && xPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         try

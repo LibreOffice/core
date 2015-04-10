@@ -410,15 +410,15 @@ void SfxTabDialog::dispose()
     delete [] pRanges;
 
     if (m_bOwnsBaseFmtBtn)
-        m_pBaseFmtBtn.disposeAndClear()
+        m_pBaseFmtBtn.disposeAndClear();
     if (m_bOwnsResetBtn)
-        m_pResetBtn.disposeAndClear()
+        m_pResetBtn.disposeAndClear();
     if (m_bOwnsHelpBtn)
-        m_pHelpBtn.disposeAndClear()
+        m_pHelpBtn.disposeAndClear();
     if (m_bOwnsCancelBtn)
-        m_pCancelBtn.disposeAndClear()
+        m_pCancelBtn.disposeAndClear();
     if (m_bOwnsOKBtn)
-        m_pOKBtn.disposeAndClear()
+        m_pOKBtn.disposeAndClear();
     m_pBox.clear();
     m_pTabCtrl.clear();
     m_pOKBtn.clear();

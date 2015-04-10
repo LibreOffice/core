@@ -628,7 +628,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
 
         if (dlg->Execute())
         {
-            std::shared_ptr<Place> xPlace = dlg.GetPlace();
+            std::shared_ptr<Place> xPlace = dlg->GetPlace();
 
             if (insertRepository(xPlace->GetName(), xPlace->GetUrl()))
             {

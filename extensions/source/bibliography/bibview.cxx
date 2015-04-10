@@ -164,14 +164,14 @@ namespace bib
     {
         mpBibView->UpdatePages();
         FormControlContainer::_loaded( _rEvent );
-        Resize();
+        mpBibView->Resize();
     }
 
     void BibViewFormControlContainer::_reloaded( const EventObject& _rEvent )
     {
         mpBibView->UpdatePages();
         FormControlContainer::_loaded( _rEvent );
-        Resize();
+        mpBibView->Resize();
     }
 
     IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )

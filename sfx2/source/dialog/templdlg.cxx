@@ -546,8 +546,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(NULL)
 
-    , aFmtLb( new SfxActionListBox(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) ),
-    , aFilterLb( new ListBox(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) ),
+    , aFmtLb( new SfxActionListBox(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
+    , aFilterLb( new ListBox(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -1835,7 +1835,6 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             for (; it != itEnd; ++it)
             {
                 const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(*it) : aFmtLb->GetEntryText(*it));
-                PrepareDeleteAction();
                 bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
                               OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );

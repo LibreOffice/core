@@ -814,8 +814,7 @@ void SfxDocumentPage::dispose()
     m_pNameED.clear();
     m_pChangePassBtn.clear();
     m_pShowTypeFT.clear();
-    m_pReadOnlyCB.clear();
-    m_pFileValFt.clear();
+    m_pFileValEd.clear();
     m_pShowSizeFT.clear();
     m_pCreateValFt.clear();
     m_pChangeValFt.clear();
@@ -1444,22 +1443,22 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aValueEdit    ( new Edit( this, WB_BORDER|WB_TABSTOP|WB_LEFT ) ),
     m_aDateField    ( new DateField( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
     m_aTimeField    ( new TimeField( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aDurationField( new Edit( this, WB_BORDER|WB_TABSTOP|WB_READONLY ),
+    m_aDurationField( new Edit( this, WB_BORDER|WB_TABSTOP|WB_READONLY ) ),
     m_aEditButton   ( new PushButton( this, WB_TABSTOP ) ),
     m_aYesNoButton  ( new CustomPropertiesYesNoButton( this, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
-    m_aRemoveButton ( new ImageButton( this, 0 ),
+    m_aRemoveButton ( new ImageButton( this, 0 ) ),
     m_nScrollPos (0),
     m_pCurrentLine (NULL),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
-    m_aEditButton.SetPosSizePixel(
+    m_aEditButton->SetPosSizePixel(
         LogicToPixel(Point(159, 2), MAP_APPFONT),
         LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
-    m_aRemoveButton.SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
+    m_aRemoveButton->SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
 
-    m_aValueEdit.SetPosSizePixel(
+    m_aValueEdit->SetPosSizePixel(
         LogicToPixel(Point(159, 2), MAP_APPFONT),
         LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
 
@@ -2374,7 +2373,7 @@ CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
     pParent->get(m_pBox, "CmisWindow");
     CmisPropertyLine aTemp( m_pBox );
     m_nItemHeight = aTemp.getItemHeight();
-};
+}
 
 CmisPropertiesWindow::~CmisPropertiesWindow()
 {

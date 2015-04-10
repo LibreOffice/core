@@ -148,7 +148,7 @@ namespace sdr
 
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
-            const_cast<OverlayManagerBuffered*>(this)->maBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
+            const_cast<OverlayManagerBuffered*>(this)->mpBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
         }
 
         void OverlayManagerBuffered::ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice)
