@@ -11,7 +11,6 @@
 
 #include "util.hxx"
 
-#include "dociter.hxx"
 #include "document.hxx"
 #include "refdata.hxx"
 #include "stringutil.hxx"
@@ -85,55 +84,7 @@ UnitsImpl::~UnitsImpl() {
     // (i.e. if udunits can't handle being used across threads)?
 }
 
-class RangeListIterator {
-private:
-    const ScRangeList mRangeList;
-    ScDocument* mpDoc;
-
-    ScCellIterator mIt;
-    size_t nCurrentIndex;
-
-public:
-    RangeListIterator(ScDocument* pDoc, const ScRangeList& rRangeList)
-        :
-        mRangeList(rRangeList),
-        mpDoc(pDoc),
-        mIt(pDoc, ScRange()),
-        nCurrentIndex(0)
-    {
-    }
-
-    bool first() {
-        if (mRangeList.size() > 0) {
-            mIt = ScCellIterator(mpDoc, *mRangeList[0]);
-            return mIt.first();
-        } else {
-            return false;
-        }
-    }
-
-    const ScAddress& GetPos() const {
-        return mIt.GetPos();
-    }
-
-    bool next() {
-        if (!(mRangeList.size() > 0) || nCurrentIndex >= mRangeList.size()) {
-            return false;
-        }
-
-        if (mIt.next()) {
-            return true;
-        } else if (++nCurrentIndex < mRangeList.size()) {
-            mIt = ScCellIterator(mpDoc, *mRangeList[nCurrentIndex]);
-            mIt.first();
-            return true;
-        } else {
-            return false;
-        }
-    }
-};
-
-UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc) {
+UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc) {
     const OpCode aOpCode = pToken->GetOpCode();
     auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(aOpCode);
 
@@ -147,7 +98,7 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const
         if (rStack.size() == 0) {
             SAL_WARN("sc.units", "Single item opcode failed (no stack items, or range used)");
             return { UnitsStatus::UNITS_INVALID, boost::none };
-        } else if (rStack.top().type != StackItemType::UNITS) {
+        } else if (rStack.top().type != RAUSItemType::UNITS) {
             return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
 
@@ -183,13 +134,13 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const
             return { UnitsStatus::UNITS_INVALID, boost::none };
         }
 
-        if (rStack.top().type != StackItemType::UNITS) {
+        if (rStack.top().type != RAUSItemType::UNITS) {
             return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
         UtUnit pSecondUnit = boost::get<UtUnit>(rStack.top().item);
         rStack.pop();
 
-        if (rStack.top().type != StackItemType::UNITS) {
+        if (rStack.top().type != RAUSItemType::UNITS) {
             return { UnitsStatus::UNITS_UNKNOWN, boost::none };
         }
         UtUnit pFirstUnit = boost::get<UtUnit>(rStack.top().item);
@@ -240,12 +191,12 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< StackItem >& rStack, const
 
         for ( ; nParams > 0; nParams--) {
             switch (rStack.top().type) {
-            case StackItemType::UNITS:
+            case RAUSItemType::UNITS:
             {
                 aUnitsStack.push(boost::get< UtUnit >(rStack.top().item));
                 break;
             }
-            case StackItemType::RANGE:
+            case RAUSItemType::RANGE:
             {
                 aRangeList.Append(boost::get< ScRange >(rStack.top().item));
                 break;
@@ -545,7 +496,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
     pArray->Dump();
 #endif
 
-    stack< StackItem > aStack;
+    stack< RAUSItem > aStack;
 
     for (FormulaToken* pToken = pArray->FirstRPN(); pToken != 0; pToken = pArray->NextRPN()) {
         switch (pToken->GetType()) {
@@ -564,14 +515,14 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
                 return false;
             }
 
-            aStack.push( { StackItemType::UNITS, aUnit } );
+            aStack.push( { RAUSItemType::UNITS, aUnit } );
             break;
         }
         case formula::svDoubleRef:
         {
             ScComplexRefData* pDoubleRef = pToken->GetDoubleRef();
             ScRange aRange = pDoubleRef->toAbs(rFormulaAddress);
-            aStack.push( { StackItemType::RANGE, aRange } );
+            aStack.push( { RAUSItemType::RANGE, aRange } );
 
             break;
         }
@@ -588,7 +539,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             case UnitsStatus::UNITS_VALID:
                 assert(aResult.units); // ensure that we have the optional unit
                 assert(aResult.units->isValid());
-                aStack.push( { StackItemType::UNITS, aResult.units.get() } );
+                aStack.push( { RAUSItemType::UNITS, aResult.units.get() } );
                 break;
             }
 
@@ -603,7 +554,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             UtUnit::createUnit("", aScale, mpUnitSystem); // Get the dimensionless unit 1
             aScale = aScale*(pToken->GetDouble());
 
-            aStack.push( { StackItemType::UNITS, aScale } );
+            aStack.push( { RAUSItemType::UNITS, aScale } );
 
             break;
         }
@@ -619,7 +570,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
     if (aStack.size() != 1) {
         SAL_WARN("sc.units", "Wrong number of units on stack, should be 1, actual number: " << aStack.size());
         return false;
-    } else if (aStack.top().type != StackItemType::UNITS) {
+    } else if (aStack.top().type != RAUSItemType::UNITS) {
         SAL_WARN("sc.units", "End of verification: item on stack does not contain units");
         return false;
     }
