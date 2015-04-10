@@ -1002,7 +1002,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg->SetMinLen( 0 );
                     pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
                     pDlg->SetEditHelpId( HID_PASSWD_DOC );
-                    pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+                    pDlg->ShowExtras( SfxShowExtras::CONFIRM );
 
                     if (pDlg->Execute() == RET_OK)
                     {

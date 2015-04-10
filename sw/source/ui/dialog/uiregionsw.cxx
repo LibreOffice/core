@@ -1233,7 +1233,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
                 SfxPasswordDialog aPasswdDlg(this);
-                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
+                aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
                 if(RET_OK == aPasswdDlg.Execute())
                 {
                     const OUString sNewPasswd( aPasswdDlg.GetPassword() );
@@ -1671,7 +1671,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
         if(!m_aNewPasswd.getLength() || bChange)
         {
             SfxPasswordDialog aPasswdDlg(this);
-            aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
+            aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
             if(RET_OK == aPasswdDlg.Execute())
             {
                 const OUString sNewPasswd( aPasswdDlg.GetPassword() );

@@ -102,7 +102,7 @@ static bool lcl_GetPassword(
     SfxPasswordDialog aPasswdDlg( pParent );
     aPasswdDlg.SetMinLen( 1 );
     if (bProtect)
-        aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
+        aPasswdDlg.ShowExtras( SfxShowExtras::CONFIRM );
     if (RET_OK == aPasswdDlg.Execute() && !aPasswdDlg.GetPassword().isEmpty())
     {
         rPassword = aPasswdDlg.GetPassword();

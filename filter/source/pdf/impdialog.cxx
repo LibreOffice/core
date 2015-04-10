@@ -1194,7 +1194,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
     SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog.SetMinLen( 0 );
     aPwdDialog.ShowMinLengthText(false);
-    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );
+    aPwdDialog.ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
     aPwdDialog.SetText(msStrSetPwd);
     aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
     aPwdDialog.AllowAsciiOnly();

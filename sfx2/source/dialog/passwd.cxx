@@ -65,9 +65,9 @@ IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
 
 IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {
-    bool bConfirmFailed = ( ( mnExtras & SHOWEXTRAS_CONFIRM ) == SHOWEXTRAS_CONFIRM ) &&
-                            ( GetConfirm() != GetPassword() );
-    if( ( mnExtras & SHOWEXTRAS_CONFIRM2 ) == SHOWEXTRAS_CONFIRM2 && ( GetConfirm2() != GetPassword2() ) )
+    bool bConfirmFailed = bool( mnExtras & SfxShowExtras::CONFIRM ) &&
+                          ( GetConfirm() != GetPassword() );
+    if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( GetConfirm2() != GetPassword2() ) )
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
@@ -89,7 +89,7 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
     , maMinLenPwdStr1(SFX2_RESSTR(STR_PASSWD_MIN_LEN1))
     , maEmptyPwdStr(SFX2_RESSTR(STR_PASSWD_EMPTY))
     , mnMinLen(5)
-    , mnExtras(0)
+    , mnExtras(SfxShowExtras::NONE)
     , mbAsciiOnly(false)
 {
     get(mpPassword1Box, "password1frame");
@@ -175,25 +175,25 @@ short SfxPasswordDialog::Execute()
     mpConfirm2FT->Hide();
     mpConfirm2ED->Hide();
 
-    if (mnExtras != SHOWEXTRAS_NONE)
+    if (mnExtras != SfxShowExtras::NONE)
         mpPassword1FT->Show();
-    if (mnExtras & SHOWEXTRAS_USER)
+    if (mnExtras & SfxShowExtras::USER)
     {
         mpUserFT->Show();
         mpUserED->Show();
     }
-    if (mnExtras & SHOWEXTRAS_CONFIRM)
+    if (mnExtras & SfxShowExtras::CONFIRM)
     {
         mpConfirm1FT->Show();
         mpConfirm1ED->Show();
     }
-    if (mnExtras & SHOWEXTRAS_PASSWORD2)
+    if (mnExtras & SfxShowExtras::PASSWORD2)
     {
         mpPassword2Box->Show();
         mpPassword2FT->Show();
         mpPassword2ED->Show();
     }
-    if (mnExtras & SHOWEXTRAS_CONFIRM2)
+    if (mnExtras & SfxShowExtras::CONFIRM2)
     {
         mpConfirm2FT->Show();
         mpConfirm2ED->Show();

@@ -626,7 +626,7 @@ void SwView::Execute(SfxRequest &rReq)
             SfxPasswordDialog aPasswdDlg( pParent );
             aPasswdDlg.SetMinLen( 1 );
             if(!aPasswd.getLength())
-                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
+                aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
             if (aPasswdDlg.Execute())
             {
                 sal_uInt16 nOn = nsRedlineMode_t::REDLINE_ON;

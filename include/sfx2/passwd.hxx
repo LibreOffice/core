@@ -27,15 +27,23 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/app.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // defines ---------------------------------------------------------------
 
-#define SHOWEXTRAS_NONE      ((sal_uInt16)0x0000)
-#define SHOWEXTRAS_USER      ((sal_uInt16)0x0001)
-#define SHOWEXTRAS_CONFIRM   ((sal_uInt16)0x0002)
-#define SHOWEXTRAS_PASSWORD2 ((sal_uInt16)0x0004)
-#define SHOWEXTRAS_CONFIRM2  ((sal_uInt16)0x0008)
-#define SHOWEXTRAS_ALL       ((sal_uInt16)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
+enum class SfxShowExtras
+{
+    NONE      = 0x0000,
+    USER      = 0x0001,
+    CONFIRM   = 0x0002,
+    PASSWORD2 = 0x0004,
+    CONFIRM2  = 0x0008,
+    ALL       = USER | CONFIRM
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxShowExtras> : is_typed_flags<SfxShowExtras, 0x0f> {};
+}
 
 // class SfxPasswordDialog -----------------------------------------------
 
@@ -65,7 +73,7 @@ private:
     OUString        maEmptyPwdStr;
     OUString        maMainPwdStr;
     sal_uInt16      mnMinLen;
-    sal_uInt16      mnExtras;
+    SfxShowExtras  mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK(EditModifyHdl, Edit*);
@@ -105,7 +113,7 @@ public:
     {
         mpPassword1ED->SetHelpId( rId );
     }
-    void ShowExtras(sal_uInt16 nExtras)
+    void ShowExtras(SfxShowExtras nExtras)
     {
         mnExtras = nExtras;
     }

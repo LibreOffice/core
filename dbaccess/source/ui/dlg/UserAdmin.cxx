@@ -193,7 +193,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         if(pButton == m_pNEWUSER)
         {
             SfxPasswordDialog aPwdDlg(this);
-            aPwdDlg.ShowExtras(SHOWEXTRAS_ALL);
+            aPwdDlg.ShowExtras(SfxShowExtras::ALL);
             if(aPwdDlg.Execute())
             {
                 Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);

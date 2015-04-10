@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                 {
                     // ask for the password
                     SfxPasswordDialog aPasswordDlg( NULL );
-                    aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
+                    aPasswordDlg.ShowExtras( SfxShowExtras::CONFIRM );
                     short nRet = aPasswordDlg.Execute();
                     if ( RET_OK == nRet )
                     {

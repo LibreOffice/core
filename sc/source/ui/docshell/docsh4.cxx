@@ -1137,7 +1137,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
         pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );
         pDlg->SetEditHelpId( HID_CHG_PROTECT );
         if ( !bProtected )
-            pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+            pDlg->ShowExtras( SfxShowExtras::CONFIRM );
         if ( pDlg->Execute() == RET_OK )
             aPassword = pDlg->GetPassword();
         pDlg.reset();
