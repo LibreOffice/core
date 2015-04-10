@@ -198,13 +198,13 @@ published service SpreadsheetDocumentSettings
         <p>No modification applied if the record changes protection is activated
         information given by SpreadsheetDocumentSettings::IsRecordChangesProtected</p>
 
-        @since LibreOffice 4.5
+        @since LibreOffice 5.0
      */
     [optional, property] boolean RecordChanges;
 
     /** specifies whether changes record is protected.
 
-        @since LibreOffice 4.5
+        @since LibreOffice 5.0
      */
     [readonly,optional, property] boolean IsRecordChangesProtected;
 

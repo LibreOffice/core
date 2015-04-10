@@ -23,7 +23,7 @@ module com { module sun { module star { module i18n {
     <p> It is derived from ::com::sun::star::i18n::XCalendar3 and
     provides additional methods to set and get the local time. </p>
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
  */
 interface XCalendar4 : com::sun::star::i18n::XCalendar3
 {

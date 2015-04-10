@@ -27,7 +27,7 @@ interface XReadWriteAccess {
 
     interface com::sun::star::util::XChangesBatch;
 
-    // @since LibreOffice 4.5
+    // @since LibreOffice 5.0
     interface com::sun::star::beans::XHierarchicalPropertySetInfo;
 };
 

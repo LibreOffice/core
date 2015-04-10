@@ -154,7 +154,7 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
 
     @return  True if code is an ASCII octal digit character (ASCII '0'--'7').
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
  */
 inline bool isAsciiOctalDigit(sal_uInt32 code)
 {

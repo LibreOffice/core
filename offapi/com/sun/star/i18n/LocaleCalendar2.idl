@@ -16,7 +16,7 @@ module com { module sun { module star { module i18n {
 
 /** Access a locale specific calendar.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
  */
 service LocaleCalendar2 : XCalendar4;
 

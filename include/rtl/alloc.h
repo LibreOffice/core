@@ -90,7 +90,7 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
     @param  Ptr   [in] pointer to previously allocated memory.
     @param  Bytes [in] memory size.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_secureZeroMemory (
     void *   Ptr,

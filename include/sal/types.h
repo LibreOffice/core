@@ -431,7 +431,7 @@ namespace css = ::com::sun::star;
 
 /** C++11 "constexpr" feature.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
 */
 #if HAVE_CXX11_CONSTEXPR
 #define SAL_CONSTEXPR constexpr

@@ -267,7 +267,7 @@ template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
     The difference to makeAny is that makeAny cannot be called on an Any, while
     toAny just returns the given Any.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
 */
 template<typename T> inline Any toAny(T const & value);
 

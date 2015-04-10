@@ -76,7 +76,7 @@ struct SAL_WARN_UNUSED OUStringLiteral
 /** A simple wrapper around an ASCII character literal, for use in certain
     OUString functions designed for efficient processing of string literals.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
 */
 template<char C> struct SAL_WARN_UNUSED OUStringLiteral1 {
     static_assert(
@@ -266,7 +266,7 @@ public:
 
         OUString(flag ? OUStringLiteral("a") : OUStringLiteral("bb"))
 
-      @since LibreOffice 4.5
+      @since LibreOffice 5.0
     */
     OUString(OUStringLiteral literal): pData(0) {
         rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 0);
@@ -405,7 +405,7 @@ public:
     /// @cond INTERNAL
     /** Assign a new string from a single ASCII character literal.
 
-        @since LibreOffice 4.5
+        @since LibreOffice 5.0
     */
     template<char C> OUString & operator =(OUStringLiteral1<C>) {
         sal_Unicode const c = C;
@@ -1310,7 +1310,7 @@ public:
 
     /* Comparison between OUString and OUStringLiteral.
 
-       @since LibreOffice 4.5
+       @since LibreOffice 5.0
     */
 
     friend bool operator ==(OUString const & lhs, OUStringLiteral const & rhs) {
@@ -2502,7 +2502,7 @@ public:
 
 /** Compare a string and an ASCII character literal for equality.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
 */
 template<char C> bool operator ==(OUString const & string, OUStringLiteral1<C>)
 {
@@ -2512,7 +2512,7 @@ template<char C> bool operator ==(OUString const & string, OUStringLiteral1<C>)
 
 /** Compare a string and an ASCII character literal for inequality.
 
-    @since LibreOffice 4.5
+    @since LibreOffice 5.0
 */
 template<char C> bool operator !=(
     OUString const & string, OUStringLiteral1<C> literal)

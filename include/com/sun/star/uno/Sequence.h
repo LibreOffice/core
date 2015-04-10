@@ -118,7 +118,7 @@ public:
 
         @param init an initializer_list
 
-        @since LibreOffice 4.5
+        @since LibreOffice 5.0
      */
     inline Sequence(std::initializer_list<E> init);
 #endif

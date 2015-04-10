@@ -678,7 +678,7 @@ LIBO_UDK_4.3 { # symbols available in >= LibO 4.3
         osl_areCommandArgsSet;
 } LIBO_UDK_4.2;
 
-LIBO_UDK_4.5 { # symbols available in >= LibO 4.5
+LIBO_UDK_5.0 { # symbols available in >= LibO 5.0
     global:
         rtl_secureZeroMemory;
 } LIBO_UDK_4.3;
