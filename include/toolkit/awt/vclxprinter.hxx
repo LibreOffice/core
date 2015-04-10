@@ -57,7 +57,7 @@ class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
                                 ,public ::cppu::OPropertySetHelper
 {
 protected:
-    VclPtr<Printer>             mpPrinter;
+    VclPtr<Printer>             mxPrinter;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  mxPrnDevice;
 
     sal_Int16                   mnOrientation;
