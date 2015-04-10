@@ -564,15 +564,12 @@ void SwRangeDescriptor::Normalize()
 
 static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
 {
-    SwXCell* pXCell = nullptr;
     const OUString sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable(pFmt);
-    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
-    if(pBox)
-    {
-        pXCell = SwXCell::CreateXCell(pFmt, pBox, pTable);
-    }
-    return pXCell;
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox(sCellName));
+    if(!pBox)
+        return nullptr;
+    return SwXCell::CreateXCell(pFmt, pBox, pTable);
 }
 
 static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString>& rAllNames)
