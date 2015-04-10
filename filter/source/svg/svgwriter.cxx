@@ -3427,7 +3427,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pAction);
-                    const OUString          aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    sal_Int32               aLength = std::min( pA->GetText().getLength(), pA->GetLen() );
+                    const OUString          aText = pA->GetText().copy( pA->GetIndex(), aLength );
 
                     if( !aText.isEmpty() )
                     {
@@ -3474,7 +3475,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
-                    const OUString              aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    sal_Int32                   aLength = std::min( pA->GetText().getLength(), pA->GetLen() );
+                    const OUString              aText = pA->GetText().copy( pA->GetIndex(), aLength );
 
                     if( !aText.isEmpty() )
                     {
@@ -3498,7 +3500,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pAction);
-                    const OUString                  aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    sal_Int32                       aLength = std::min( pA->GetText().getLength(), pA->GetLen() );
+                    const OUString                  aText = pA->GetText().copy( pA->GetIndex(), aLength );
 
                     if( !aText.isEmpty() )
                     {
