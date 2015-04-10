@@ -13,7 +13,6 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/variant.hpp>
 #include <boost/weak_ptr.hpp>
 
 #include <formula/opcode.hxx>
@@ -25,6 +24,7 @@
 #include "rangelst.hxx"
 #include "units.hxx"
 
+#include "raustack.hxx"
 #include "utunit.hxx"
 
 #include <stack>
@@ -41,16 +41,6 @@ namespace units {
 namespace test {
     class UnitsTest;
 }
-
-enum class StackItemType {
-    UNITS,
-    RANGE
-};
-
-struct StackItem {
-    StackItemType type;
-    boost::variant< ScRange, UtUnit > item;
-};
 
 enum class UnitsStatus {
     UNITS_VALID,
@@ -103,7 +93,7 @@ public:
                                          const OUString& rsOldUnit) SAL_OVERRIDE;
 
 private:
-    UnitsResult getOutputUnitsForOpCode(std::stack< StackItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
+    UnitsResult getOutputUnitsForOpCode(std::stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
 
     /**
      * Find and extract a Unit in the standard header notation,
