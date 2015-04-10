@@ -2310,52 +2310,14 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
-
-    if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt )
-    {
-        bool bChanged = false;
-
-        const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
-        if(rData.getLength() < nRowCount - nRowStart)
-        {
-            throw uno::RuntimeException();
-        }
-        const uno::Sequence< double >* pRowArray = rData.getConstArray();
-        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
-        {
-            const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-            const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
-            if(rColSeq.getLength() < nColCount - nColStart)
-            {
-                throw uno::RuntimeException();
-            }
-            const double * pColArray = rColSeq.getConstArray();
-            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
-            {
-                uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
-                if(!xCell.is())
-                {
-                    throw uno::RuntimeException();
-                }
-                xCell->setValue(pColArray[nCol - nColStart]);
-                bChanged=true;
-            }
-        }
-        if ( bChanged )
-        {
-            lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
-        }
-    }
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    uno::Reference<chart::XChartDataArray> const xAllRange(
+        getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
+        uno::UNO_QUERY);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    xAllRange->setData(rData);
+    // this is rather inconsistent: setData on XTextTable sends events, but e.g. CellRanges do not
+    lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
 }
 
 uno::Sequence<OUString> SwXTextTable::getRowDescriptions(void)
