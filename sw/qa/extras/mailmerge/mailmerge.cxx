@@ -346,6 +346,11 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf89214, "tdf89214.odt", "10-testing-addresses
     CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, "ListId").isEmpty());
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf90230, "empty.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // MM of an empty document caused an assertion in the SwIndexReg dtor.
+    executeMailMerge();
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
