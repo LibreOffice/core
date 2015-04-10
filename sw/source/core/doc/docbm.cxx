@@ -1144,6 +1144,8 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         const container_t* pContainer;
     } aContainers[] =
     {
+        // UNO marks are only part of all marks.
+        {"allmarks", &m_vAllMarks},
         {"bookmarks", &m_vBookmarks},
         {"fieldmarks", &m_vFieldmarks},
         {"annotationmarks", &m_vAnnotationMarks}
