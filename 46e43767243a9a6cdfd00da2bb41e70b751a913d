@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_87acd6ee",
+        "filename": "starmath/qa/cppunit/test_starmath.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-10T07:07:53Z",
+      "side": 1,
+      "message": "I really wouldn\u0027t explicitly mention those members in the initializer list for which the value-initialization via empty \"()\" boils down to default-initialization; the standard idiom is to not mention them, so mentioning them is confusing to the reader (\"why does this need special treatment here?  what am I missing?\") and comes at a maintenance cost (the redundant list of initializers has to be kept in sync with the list of members)",
+      "revId": "46e43767243a9a6cdfd00da2bb41e70b751a913d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
