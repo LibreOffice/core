@@ -839,7 +839,7 @@ private:
         const SdrObject* object;
         const SwFrmFmt* frame;
     };
-    std::list< PostponedDiagram >* m_postponedDiagram;
+    std::unique_ptr< std::list<PostponedDiagram> > m_pPostponedDiagrams;
 
     struct PostponedDrawing
     {

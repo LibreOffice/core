@@ -1599,8 +1599,8 @@ void DocxAttributeOutput::StartRunProperties()
     OSL_ASSERT( !m_pPostponedGraphic );
     m_pPostponedGraphic.reset(new std::list<PostponedGraphic>());
 
-    OSL_ASSERT( m_postponedDiagram == NULL );
-    m_postponedDiagram = new std::list< PostponedDiagram >;
+    OSL_ASSERT( !m_pPostponedDiagrams );
+    m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>());
 
     OSL_ASSERT( m_postponedVMLDrawing == NULL );
     m_postponedVMLDrawing = new std::list< PostponedDrawing >;
@@ -1971,12 +1971,11 @@ void DocxAttributeOutput::WritePostponedGraphic()
 
 void DocxAttributeOutput::WritePostponedDiagram()
 {
-    for( std::list< PostponedDiagram >::const_iterator it = m_postponedDiagram->begin();
-         it != m_postponedDiagram->end();
+    for( std::list< PostponedDiagram >::const_iterator it = m_pPostponedDiagrams->begin();
+         it != m_pPostponedDiagrams->end();
          ++it )
         m_rExport.SdrExporter().writeDiagram( it->object, *(it->frame), m_anchorId++ );
-    delete m_postponedDiagram;
-    m_postponedDiagram = NULL;
+    m_pPostponedDiagrams.reset(0);
 }
 
 void DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -4805,7 +4804,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 {
                     if ( IsDiagram( pSdrObj ) )
                     {
-                        if ( m_postponedDiagram == NULL )
+                        if ( !m_pPostponedDiagrams )
                         {
                             m_bPostponedProcessingFly = false ;
                             m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrmFmt(), m_anchorId++);
@@ -4813,7 +4812,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                         {    // so write it out later
                             m_bPostponedProcessingFly = true ;
-                            m_postponedDiagram->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrmFmt()) ));
+                            m_pPostponedDiagrams->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrmFmt()) ));
                         }
                     }
                     else
@@ -8278,7 +8277,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
-      m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
       m_postponedOLE( NULL ),
