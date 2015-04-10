@@ -1230,6 +1230,32 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         if ( pTargetPageDesc ) {
             String name = pTargetPageDesc->GetName();
             pTargetShell->InsertPageBreak( &name, nStartPageNumber );
+
+            // There is now a new empty text node on the new page. If it has
+            // any marks, those are from the previous page: move them back
+            // there, otherwise later we can't delete that empty text node.
+            SwNodeIndex aNodeIndex(GetNodes().GetEndOfContent(), -1);
+            if (SwTxtNode* pTxtNode = aNodeIndex.GetNode().GetTxtNode())
+            {
+                // Position of the last paragraph on the previous page.
+                --aNodeIndex;
+                SwPaM aPaM(aNodeIndex);
+                // Collect the marks starting or ending at this text node.
+                std::set<sw::mark::IMark*> aSeenMarks;
+                IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
+                for (const SwIndex* pIndex = pTxtNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+                {
+                    sw::mark::IMark* pMark = const_cast<sw::mark::IMark*>(pIndex->GetMark());
+                    if (!pMark)
+                        continue;
+                    if (aSeenMarks.find(pMark) != aSeenMarks.end())
+                        continue;
+                    aSeenMarks.insert(pMark);
+                }
+                // And move them back.
+                for (sw::mark::IMark* pMark : aSeenMarks)
+                    pMarkAccess->repositionMark(pMark, aPaM);
+            }
         }
     }
 #ifdef DBG_UTIL
