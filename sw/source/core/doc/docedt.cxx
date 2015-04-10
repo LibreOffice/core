@@ -221,7 +221,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     if( i > rTable.size() )
                         i = rTable.size();
                     else if( pFormat != rTable[i] )
-                        i = rTable.GetPos( pFormat );
+                        i = std::distance(rTable.begin(), rTable.find( pFormat ));
                 }
 
                 pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );

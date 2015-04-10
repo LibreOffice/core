@@ -1014,7 +1014,8 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
     {
         // no Layout for this format, then recalc the ordnum
         SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(&rFormat);
-        nOrdNum = static_cast<sal_uInt32>(m_pDoc->GetSpzFrameFormats()->GetPos( pFormat ));
+        nOrdNum = std::distance(m_pDoc->GetSpzFrameFormats()->begin(),
+                                m_pDoc->GetSpzFrameFormats()->find( pFormat ) );
 
         const SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )

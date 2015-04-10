@@ -560,7 +560,7 @@ SwDoc::~SwDoc()
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no
     // Layout could be constructed due to a read error.
-    mpSpzFrameFormatTable->DeleteAndDestroy( 0, mpSpzFrameFormatTable->size() );
+    mpSpzFrameFormatTable->DeleteAndDestroyAll();
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
@@ -731,12 +731,12 @@ void SwDoc::ClearDoc()
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        mpFrameFormatTable->erase( std::find( mpFrameFormatTable->begin(), mpFrameFormatTable->end(), getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFormat() ) );
-        mpFrameFormatTable->DeleteAndDestroy(1, mpFrameFormatTable->size());
+        mpFrameFormatTable->erase( getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFormat() );
+        mpFrameFormatTable->DeleteAndDestroyAll( true );
         mpFrameFormatTable->push_back( getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFormat() );
     }
     else
-        mpFrameFormatTable->DeleteAndDestroy(1, mpFrameFormatTable->size());
+        mpFrameFormatTable->DeleteAndDestroyAll( true );
 
     mxForbiddenCharsTable.clear();
 

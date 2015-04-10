@@ -34,6 +34,7 @@ class SwRect;
 class SwContact;
 class SdrObject;
 namespace sw { class DocumentLayoutManager; }
+class SwFrameFormats;
 
 /// Style of a layout element.
 class SW_DLLPUBLIC SwFrameFormat: public SwFormat
@@ -41,11 +42,22 @@ class SW_DLLPUBLIC SwFrameFormat: public SwFormat
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
+    friend class SwFrameFormats;     ///< Is allowed to update the list backref.
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
     //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
+
+    // The assigned SwFrmFmt list.
+    SwFrameFormats *m_ffList;
+
+    struct change_name
+    {
+        change_name(const OUString &rName) : mName(rName) {}
+        void operator()(SwFormat *pFormat) { pFormat->m_aFormatName = mName; }
+        const OUString &mName;
+    };
 
 protected:
     SwFrameFormat(
@@ -136,6 +148,8 @@ public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
+    virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) SAL_OVERRIDE;
 };
 
 // The FlyFrame-Format

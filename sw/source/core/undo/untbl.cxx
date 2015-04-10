@@ -113,7 +113,7 @@ class SaveTable
     SaveLine* m_pLine;
     const SwTable* m_pSwTable;
     SfxItemSets m_aSets;
-    SwFrameFormats m_aFrameFormats;
+    SwFrameFormatsV m_aFrameFormats;
     sal_uInt16 m_nLineCount;
     bool m_bModifyBox : 1;
     bool m_bSaveFormula : 1;
