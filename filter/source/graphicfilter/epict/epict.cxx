@@ -1699,7 +1699,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 if ( aSrcFont.GetAlign() != ALIGN_BASELINE )
                 {
-                    ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+                    ScopedVclPtrInstance<VirtualDevice> pVirDev;
                     if (aSrcFont.GetAlign()==ALIGN_TOP)
                         aPt.Y()+=(long)pVirDev->GetFontMetric(aSrcFont).GetAscent();
                     else
@@ -1854,7 +1854,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_GRADIENT_ACTION:
             {
-                ScopedVclPtr<VirtualDevice> aVDev;
+                ScopedVclPtrInstance<VirtualDevice> aVDev;
                 GDIMetaFile                 aTmpMtf;
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
 
@@ -1866,7 +1866,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_HATCH_ACTION:
             {
-                ScopedVclPtr<VirtualDevice> aVDev;
+                ScopedVclPtrInstance<VirtualDevice> aVDev;
                 GDIMetaFile             aTmpMtf;
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
 

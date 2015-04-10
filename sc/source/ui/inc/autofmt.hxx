@@ -56,7 +56,7 @@ protected:
 
 private:
     ScAutoFormatData*       pCurData;
-    ScopedVclPtr<VirtualDevice> aVD;
+    ScopedVclPtrInstance<VirtualDevice> aVD;
     SvtScriptedTextHelper   aScriptedText;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
     bool                    bFitWidth;
