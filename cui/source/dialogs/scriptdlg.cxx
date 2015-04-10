@@ -906,7 +906,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
         }
 
-        VclPtr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
+        ScopedVclPtr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         do
@@ -1029,7 +1029,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         }
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
-        VclPtr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
+        ScopedVclPtr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         bool bValid;

@@ -93,7 +93,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            VclPtr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
+            ScopedVclPtr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
                             pParent, xManager.get(), aMessage ) );
             nResult = xDialog->Execute();
         }
@@ -107,7 +107,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            VclPtr< TryLaterQueryBox > xDialog(
+            ScopedVclPtr< TryLaterQueryBox > xDialog(
                 new TryLaterQueryBox( pParent, xManager.get(), aMessage ) );
             nResult = xDialog->Execute();
         }

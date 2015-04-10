@@ -242,7 +242,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     OUString aScriptURL;
     SbMethod* pMethod = NULL;
 
-    VclPtr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
+    ScopedVclPtr< MacroChooser > pChooser( NULL, true );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode(MacroChooser::ChooseOnly);
 

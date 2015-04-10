@@ -267,10 +267,10 @@ void ShapeController::executeDispatch_FormatLine()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
+                ScopedVclPtr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateSvxLineTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
                         pSelectedObj, bHasMarked ) );
-                if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+                if ( pDlg->Execute() == RET_OK )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                     if ( bHasMarked )
@@ -549,7 +549,7 @@ void ShapeController::executeDispatch_FontDialog()
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
-            VclPtr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
+            ScopedVclPtr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -587,7 +587,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-            VclPtr< ShapeParagraphDialog > pDlg( new ShapeParagraphDialog( pParent, &aNewAttr ) );
+            ScopedVclPtr< ShapeParagraphDialog > pDlg( new ShapeParagraphDialog( pParent, &aNewAttr ) );
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
