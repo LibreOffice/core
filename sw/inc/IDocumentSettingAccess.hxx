@@ -28,6 +28,7 @@
 class SvxForbiddenCharactersTable;
 namespace com { namespace sun { namespace star { namespace i18n { struct ForbiddenCharacters; } } } }
 
+
  /** Provides access to settings of a document
  */
  class IDocumentSettingAccess
@@ -80,6 +81,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          // MS Word still wraps text around objects with less space than LO would.
          SURROUND_TEXT_WRAP_SMALL,
          PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
+         SUBTRACT_FLYS,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,

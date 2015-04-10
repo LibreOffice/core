@@ -82,6 +82,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
@@ -1526,172 +1527,168 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
     }
 }
 
-//static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
-//                           const SwRect &rRect, SwRegionRects &rRegion )
-//{
-//    const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
-//    const SwFlyFrm* pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : gProp.pSRetoucheFly2;
-//    if ( !gProp.pSRetoucheFly )
-//        gProp.pSRetoucheFly = gProp.pSRetoucheFly2;
-//
-//    for ( sal_uInt16 j = 0; (j < rObjs.Count()) && !rRegion.empty(); ++j )
-//    {
-//        const SwAnchoredObject* pAnchoredObj = rObjs[j];
-//        const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
-//
-//        // Do not consider invisible objects
-//        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
-//            continue;
-//
-//        if ( !pAnchoredObj->ISA(SwFlyFrm) )
-//            continue;
-//
-//        const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
-//
-//        if ( pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.IsOver( pFly->Frm() ) )
-//            continue;
-//
-//        if ( !pFly->GetFmt()->GetPrint().GetValue() &&
-//                (OUTDEV_PRINTER == gProp.pSGlobalShell->GetOut()->GetOutDevType() ||
-//                gProp.pSGlobalShell->IsPreview()))
-//            continue;
-//
-//        const bool bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly );
-//
-//        //For character bound Flys only examine those Flys in which it is not
-//        //anchored itself.
-//        //Why only for character bound ones you may ask? It never makes sense to
-//        //subtract frames in which it is anchored itself right?
-//        if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
-//            continue;
-//
-//        //Any why does it not apply for the RetoucheFly too?
-//        if ( gProp.pSRetoucheFly && gProp.pSRetoucheFly->IsLowerOf( pFly ) )
-//            continue;
-//
-//#if OSL_DEBUG_LEVEL > 0
-//        //Flys who are anchored inside their own one, must have a bigger OrdNum
-//        //or be character bound.
-//        if ( pSelfFly && bLowerOfSelf )
-//        {
-//            OSL_ENSURE( pFly->IsFlyInCntFrm() ||
-//                    pSdrObj->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
-//                    "Fly with wrong z-Order" );
-//        }
-//#endif
-//
-//        bool bStopOnHell = true;
-//        if ( pSelfFly )
-//        {
-//            const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
-//            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
-//            {
-//                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-//                    //In the same layer we only observe those that are above.
-//                    continue;
-//            }
-//            else
-//            {
-//                if ( !bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue() )
-//                    //From other layers we are only interested in non
-//                    //transparent ones or those that are internal
-//                    continue;
-//                bStopOnHell = false;
-//            }
-//        }
-//        if ( gProp.pSRetoucheFly )
-//        {
-//            const SdrObject *pTmp = gProp.pSRetoucheFly->GetVirtDrawObj();
-//            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
-//            {
-//                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-//                    //In the same layer we only observe those that are above.
-//                    continue;
-//            }
-//            else
-//            {
-//                if ( !pFly->IsLowerOf( gProp.pSRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue() )
-//                    //From other layers we are only interested in non
-//                    //transparent ones or those that are internal
-//                    continue;
-//                bStopOnHell = false;
-//            }
-//        }
-//
-//        //If the content of the Fly is transparent, we subtract it only if it's
-//        //contained in the hell layer.
-//        const IDocumentDrawModelAccess* pIDDMA = pFly->GetFmt()->getIDocumentDrawModelAccess();
-//        bool bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
-//        if ( (bStopOnHell && bHell) ||
-//             /// Change internal order of condition
-//             ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
-//             ///    have not to be performed, if frame is in "Hell"
-//             ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
-//               ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
-//                 ((SwNoTxtFrm*)pFly->Lower())->HasAnimation() ||
-//                 pFly->GetFmt()->GetSurround().IsContour()
-//               )
-//             )
-//           )
-//            continue;
-//
-//        // Own if-statements for transparent background/shadow of fly frames
-//        // in order to handle special conditions.
-//        if ( pFly->IsBackgroundTransparent() )
-//        {
-//            // Background <pFly> is transparent drawn. Thus normally, its region
-//            // have not to be subtracted from given region.
-//            // But, if method is called for a fly frame and
-//            // <pFly> is a direct lower of this fly frame and
-//            // <pFly> inherites its transparent background brush from its parent,
-//            // then <pFly> frame area have to be subtracted from given region.
-//            // NOTE: Because in Status Quo transparent backgrounds can only be
-//            //     assigned to fly frames, the handle of this special case
-//            //     avoids drawing of transparent areas more than once, if
-//            //     a fly frame inherites a transparent background from its
-//            //     parent fly frame.
-//            if ( pFrm->IsFlyFrm() &&
-//                 (pFly->GetAnchorFrm()->FindFlyFrm() == pFrm) &&
-//                 static_cast<const SwFlyFrmFmt*>(pFly->GetFmt())->IsBackgroundBrushInherited()
-//               )
-//            {
-//                SwRect aRect;
-//                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
-//                const SwBorderAttrs &rAttrs = *aAccess.Get();
-//                ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true );
-//                rRegion -= aRect;
-//                continue;
-//            }
-//            else
-//            {
-//                continue;
-//            }
-//        }
-//        if ( pFly->IsShadowTransparent() )
-//        {
-//            continue;
-//        }
-//
-//        if ( bHell && pFly->GetAnchorFrm()->IsInFly() )
-//        {
-//            //So the border won't get dismantled by the background of the other
-//            //Fly.
-//            SwRect aRect;
-//            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
-//            const SwBorderAttrs &rAttrs = *aAccess.Get();
-//            ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true );
-//            rRegion -= aRect;
-//        }
-//        else
-//        {
-//            SwRect aRect( pFly->Prt() );
-//            aRect += pFly->Frm().Pos();
-//            rRegion -= aRect;
-//        }
-//    }
-//    if ( gProp.pSRetoucheFly == gProp.pSRetoucheFly2 )
-//        gProp.pSRetoucheFly = 0;
-//}
+static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
+   const SwRect &rRect, SwRegionRects &rRegion)
+{
+    const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
+    const SwFlyFrm* pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : gProp.pSRetoucheFly2;
+    if (!gProp.pSRetoucheFly)
+        gProp.pSRetoucheFly = gProp.pSRetoucheFly2;
+
+    for (size_t j = 0; (j < rObjs.size()) && !rRegion.empty(); ++j)
+    {
+        const SwAnchoredObject* pAnchoredObj = rObjs[j];
+        const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
+
+        // Do not consider invisible objects
+        if (!pPage->GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
+            continue;
+
+        if (!pAnchoredObj->ISA(SwFlyFrm))
+            continue;
+
+        const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+
+        if (pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.IsOver(pFly->Frm()))
+            continue;
+
+        if (!pFly->GetFmt()->GetPrint().GetValue() &&
+                (OUTDEV_PRINTER == gProp.pSGlobalShell->GetOut()->GetOutDevType() ||
+                gProp.pSGlobalShell->IsPreview()))
+            continue;
+
+        const bool bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly );
+
+        //For character bound Flys only examine those Flys in which it is not
+        //anchored itself.
+        //Why only for character bound ones you may ask? It never makes sense to
+        //subtract frames in which it is anchored itself right?
+        if (pSelfFly && pSelfFly->IsLowerOf(pFly))
+            continue;
+
+        //Any why does it not apply for the RetoucheFly too?
+        if (gProp.pSRetoucheFly && gProp.pSRetoucheFly->IsLowerOf(pFly))
+            continue;
+
+#if OSL_DEBUG_LEVEL > 0
+        //Flys who are anchored inside their own one, must have a bigger OrdNum
+        //or be character bound.
+        if (pSelfFly && bLowerOfSelf)
+        {
+            OSL_ENSURE( pFly->IsFlyInCntFrm() ||
+                    pSdrObj->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
+                    "Fly with wrong z-Order" );
+        }
+#endif
+
+        bool bStopOnHell = true;
+        if (pSelfFly)
+        {
+            const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
+            if (pSdrObj->GetLayer() == pTmp->GetLayer())
+            {
+                if (pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect())
+                    //In the same layer we only observe those that are above.
+                    continue;
+            }
+            else
+            {
+                if (!bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue())
+                    //From other layers we are only interested in non
+                    //transparent ones or those that are internal
+                    continue;
+                bStopOnHell = false;
+            }
+        }
+        if (gProp.pSRetoucheFly)
+        {
+            const SdrObject *pTmp = gProp.pSRetoucheFly->GetVirtDrawObj();
+            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
+            {
+                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                    //In the same layer we only observe those that are above.
+                    continue;
+            }
+            else
+            {
+                if (!pFly->IsLowerOf( gProp.pSRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue())
+                    //From other layers we are only interested in non
+                    //transparent ones or those that are internal
+                    continue;
+                bStopOnHell = false;
+            }
+        }
+
+        //If the content of the Fly is transparent, we subtract it only if it's
+        //contained in the hell layer.
+        const IDocumentDrawModelAccess* pIDDMA = pFly->GetFmt()->getIDocumentDrawModelAccess();
+        bool bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
+        if ( (bStopOnHell && bHell) ||
+             /// Change internal order of condition
+             ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
+             ///    have not to be performed, if frame is in "Hell"
+             ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
+               (static_cast<SwNoTxtFrm const*>(pFly->Lower())->IsTransparent() ||
+                static_cast<SwNoTxtFrm const*>(pFly->Lower())->HasAnimation() ||
+                 pFly->GetFmt()->GetSurround().IsContour()
+               )
+             )
+           )
+            continue;
+
+        // Own if-statements for transparent background/shadow of fly frames
+        // in order to handle special conditions.
+        if (pFly->IsBackgroundTransparent())
+        {
+            // Background <pFly> is transparent drawn. Thus normally, its region
+            // have not to be subtracted from given region.
+            // But, if method is called for a fly frame and
+            // <pFly> is a direct lower of this fly frame and
+            // <pFly> inherites its transparent background brush from its parent,
+            // then <pFly> frame area have to be subtracted from given region.
+            // NOTE: Because in Status Quo transparent backgrounds can only be
+            //     assigned to fly frames, the handle of this special case
+            //     avoids drawing of transparent areas more than once, if
+            //     a fly frame inherites a transparent background from its
+            //     parent fly frame.
+            if (pFrm->IsFlyFrm() &&
+                (pFly->GetAnchorFrm()->FindFlyFrm() == pFrm) &&
+                static_cast<const SwFlyFrmFmt*>(pFly->GetFmt())->IsBackgroundBrushInherited()
+               )
+            {
+                SwRect aRect;
+                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
+                const SwBorderAttrs &rAttrs = *aAccess.Get();
+                ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true );
+                rRegion -= aRect;
+                continue;
+            }
+            else
+            {
+                continue;
+            }
+        }
+
+        if (bHell && pFly->GetAnchorFrm()->IsInFly())
+        {
+            //So the border won't get dismantled by the background of the other
+            //Fly.
+            SwRect aRect;
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
+            const SwBorderAttrs &rAttrs = *aAccess.Get();
+            ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true );
+            rRegion -= aRect;
+        }
+        else
+        {
+            SwRect aRect( pFly->Prt() );
+            aRect += pFly->Frm().Pos();
+            rRegion -= aRect;
+        }
+    }
+    if (gProp.pSRetoucheFly == gProp.pSRetoucheFly2)
+        gProp.pSRetoucheFly = 0;
+}
 
 static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                  OutputDevice* _pOut,
@@ -1850,16 +1847,16 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
-    const SwRect& rPaintRect,
+    const SwRegionRects& rPaintRegion,
     OutputDevice& rOut)
 {
     if(rFillAttributes.get() && rFillAttributes->isUsed())
     {
         basegfx::B2DRange aPaintRange(
-            rPaintRect.Left(),
-            rPaintRect.Top(),
-            rPaintRect.Right(),
-            rPaintRect.Bottom());
+            rPaintRegion.GetOrigin().Left(),
+            rPaintRegion.GetOrigin().Top(),
+            rPaintRegion.GetOrigin().Right(),
+            rPaintRegion.GetOrigin().Bottom());
 
         if(!aPaintRange.isEmpty() &&
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
@@ -1906,6 +1903,26 @@ bool DrawFillAttributes(
 
             if(rSequence.getLength())
             {
+                drawinglayer::primitive2d::Primitive2DSequence const*
+                    pPrimitives(&rSequence);
+                drawinglayer::primitive2d::Primitive2DSequence primitives;
+                // tdf#86578 the awful lcl_SubtractFlys hack
+                if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
+                {
+                    tools::PolyPolygon tempRegion;
+                    for (size_t i = 0; i < rPaintRegion.size(); ++i)
+                    {
+                        tempRegion.Insert(Polygon(rPaintRegion[i].SVRect()));
+                    }
+                    basegfx::B2DPolyPolygon const maskRegion(
+                            tempRegion.getB2DPolyPolygon());
+                    primitives.realloc(1);
+                    primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
+                            maskRegion, rSequence);
+                    pPrimitives = &primitives;
+                }
+                assert(pPrimitives && pPrimitives->getLength());
+
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
                     basegfx::B2DHomMatrix(),
                     rOut.GetViewTransformation(),
@@ -1919,7 +1936,7 @@ bool DrawFillAttributes(
 
                 if(pProcessor)
                 {
-                    pProcessor->process(rSequence);
+                    pProcessor->process(*pPrimitives);
 
                     delete pProcessor;
 
@@ -4196,7 +4213,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // parent fly frame area and the paint area <aRect>
         const IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
 
-        if ( bIsGraphicTransparent &&
+        if (bIsGraphicTransparent &&
+            GetFmt()->GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::SUBTRACT_FLYS) &&
             GetVirtDrawObj()->GetLayer() == pIDDMA->GetHellId() &&
             GetAnchorFrm()->FindFlyFrm() )
         {
@@ -4651,7 +4669,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
-                             const SwPageFrm * /*pPage*/,
+                             const SwPageFrm * pPage,
                              const Color *pColor,
                              const SvxBorderStyle nStyle ) const
 {
@@ -4671,14 +4689,15 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
         pColor = &SwViewOption::GetFontColor();
     }
 
-    //if ( pPage->GetSortedObjs() )
-    //{
-    //    SwRegionRects aRegion( aOut, 4 );
-    //    ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
-    //    for ( size_t i = 0; i < aRegion.size(); ++i )
-    //        gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
-    //}
-    //else
+    if (pPage->GetSortedObjs() &&
+        pPage->GetFmt()->GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::SUBTRACT_FLYS))
+    {
+        SwRegionRects aRegion( aOut, 4 );
+        ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
+        for ( size_t i = 0; i < aRegion.size(); ++i )
+            gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
+    }
+    else
         gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
 }
 
@@ -6563,7 +6582,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             if ( aRect.HasArea() )
             {
                 SvxBrushItem* pNewItem = 0;
-                //SwRegionRects aRegion( aRect );
 
                 if( pCol )
                 {
@@ -6574,10 +6592,12 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
                 }
 
-                //if ( pPage->GetSortedObjs() )
-                //{
-                //    ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
-                //}
+                SwRegionRects aRegion( aRect );
+                if (pPage->GetSortedObjs() &&
+                    pSh->GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::SUBTRACT_FLYS))
+                {
+                    ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
+                }
 
                 // OD 06.08.2002 #99657# - determine, if background transparency
                 //     have to be considered for drawing.
@@ -6593,7 +6613,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     if(aFillAttributes->isUsed())
                     {
                         // check if really something is painted
-                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRect, *pOut);
+                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRegion, *pOut);
                     }
 
                     if(!bDone)
@@ -6613,27 +6633,27 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
                 if(!bDone)
                 {
-                    //for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
-                    //{
-                    //    if ( 1 < aRegion.Count() )
-                    //    {
-                    //        ::SwAlignRect( aRegion[i], gProp.pSGlobalShell );
-                    //        if( !aRegion[i].HasArea() )
-                    //          continue;
-                    //    }
+                    for (size_t i = 0; i < aRegion.size(); ++i)
+                    {
+                        if (1 < aRegion.size())
+                        {
+                            ::SwAlignRect( aRegion[i], gProp.pSGlobalShell );
+                            if( !aRegion[i].HasArea() )
+                              continue;
+                        }
                     // OD 06.08.2002 #99657# - add 6th parameter to indicate, if
                     //     background transparency have to be considered
                     //     Set missing 5th parameter to the default value GRFNUM_NO
                     //         - see declaration in /core/inc/frmtool.hxx.
-                    if (IsTxtFrm() || !bOnlyTxtBackground)
-                        ::DrawGraphic(
-                            pItem,
-                            pOut,
-                            aOrigBackRect,
-                            aRect, // aRegion[i],
-                            GRFNUM_NO,
-                            bConsiderBackgroundTransparency );
-                    //}
+                        if (IsTxtFrm() || !bOnlyTxtBackground)
+                            ::DrawGraphic(
+                                pItem,
+                                pOut,
+                                aOrigBackRect,
+                                aRegion[i],
+                                GRFNUM_NO,
+                                bConsiderBackgroundTransparency );
+                    }
                 }
                 if( pCol )
                     delete pNewItem;
