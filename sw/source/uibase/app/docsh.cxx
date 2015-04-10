@@ -878,17 +878,17 @@ sal_uLong SwDocShell::GetMiscStatus() const
 }
 
 // #i20883# Digital Signatures and Encryption
-sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
+HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStates )
 {
-    // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
-    sal_uInt16 nState = SfxObjectShell::GetHiddenInformationState( nStates );
+    // get global state like HiddenInformation::DOCUMENTVERSIONS
+    HiddenInformation nState = SfxObjectShell::GetHiddenInformationState( nStates );
 
-    if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
+    if ( nStates & HiddenInformation::RECORDEDCHANGES )
     {
         if ( !GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
-            nState |= HIDDENINFORMATION_RECORDEDCHANGES;
+            nState |= HiddenInformation::RECORDEDCHANGES;
     }
-    if ( nStates & HIDDENINFORMATION_NOTES )
+    if ( nStates & HiddenInformation::NOTES )
     {
         OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
         if ( GetWrtShell() )
@@ -900,7 +900,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
             {
                 if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
-                    nState |= HIDDENINFORMATION_NOTES;
+                    nState |= HiddenInformation::NOTES;
                     break;
                 }
                 pFirst = aIter.Next();

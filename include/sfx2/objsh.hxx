@@ -147,9 +147,17 @@ namespace o3tl
     template<> struct typed_flags<SfxLoadedFlags> : is_typed_flags<SfxLoadedFlags, 0x03> {};
 }
 
-#define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
-#define HIDDENINFORMATION_NOTES                 0x0002
-#define HIDDENINFORMATION_DOCUMENTVERSIONS      0x0004
+enum class HiddenInformation
+{
+    NONE                  = 0x0000,
+    RECORDEDCHANGES       = 0x0001,
+    NOTES                 = 0x0002,
+    DOCUMENTVERSIONS      = 0x0004
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HiddenInformation> : is_typed_flags<HiddenInformation, 0x07> {};
+}
 
 enum HiddenWarningFact
 {
@@ -419,7 +427,7 @@ public:
 
     virtual bool                PrepareClose(bool bUI = true);
     virtual bool                IsInformationLost();
-    virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
+    virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );

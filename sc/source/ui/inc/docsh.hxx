@@ -413,7 +413,7 @@ public:
     void            BeforeXMLLoading();
     void            AfterXMLLoading(bool bRet);
 
-    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates ) SAL_OVERRIDE;
+    virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) SAL_OVERRIDE;
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );

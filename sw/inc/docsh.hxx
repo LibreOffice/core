@@ -288,7 +288,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString >  GetEventNames() SAL_OVERRIDE;
 
     /// #i20883# Digital Signatures and Encryption
-    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates ) SAL_OVERRIDE;
+    virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) SAL_OVERRIDE;
 
     /** #i42634# Overwrites SfxObjectShell::UpdateLinks
      This new function is necessary to trigger update of links in docs

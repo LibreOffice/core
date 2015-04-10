@@ -2939,13 +2939,13 @@ bool SfxObjectShell::CanReload_Impl()
 
 
 
-sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
+HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation nStates )
 {
-    sal_uInt16 nState = 0;
-    if ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS )
+    HiddenInformation nState = HiddenInformation::NONE;
+    if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
     {
         if ( GetMedium()->GetVersionList().getLength() )
-            nState |= HIDDENINFORMATION_DOCUMENTVERSIONS;
+            nState |= HiddenInformation::DOCUMENTVERSIONS;
     }
 
     return nState;
@@ -2990,25 +2990,25 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
     if ( SvtSecurityOptions().IsOptionSet( eOption ) )
     {
         OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
-        sal_uInt16 nWantedStates = HIDDENINFORMATION_RECORDEDCHANGES | HIDDENINFORMATION_NOTES;
+        HiddenInformation nWantedStates = HiddenInformation::RECORDEDCHANGES | HiddenInformation::NOTES;
         if ( eFact != WhenPrinting )
-            nWantedStates |= HIDDENINFORMATION_DOCUMENTVERSIONS;
-        sal_uInt16 nStates = GetHiddenInformationState( nWantedStates );
+            nWantedStates |= HiddenInformation::DOCUMENTVERSIONS;
+        HiddenInformation nStates = GetHiddenInformationState( nWantedStates );
         bool bWarning = false;
 
-        if ( ( nStates & HIDDENINFORMATION_RECORDEDCHANGES ) == HIDDENINFORMATION_RECORDEDCHANGES )
+        if ( nStates & HiddenInformation::RECORDEDCHANGES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES).toString();
             sMessage += "\n";
             bWarning = true;
         }
-        if ( ( nStates & HIDDENINFORMATION_NOTES ) == HIDDENINFORMATION_NOTES )
+        if ( nStates & HiddenInformation::NOTES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_NOTES).toString();
             sMessage += "\n";
             bWarning = true;
         }
-        if ( ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS ) == HIDDENINFORMATION_DOCUMENTVERSIONS )
+        if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
         {
             sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS).toString();
             sMessage += "\n";

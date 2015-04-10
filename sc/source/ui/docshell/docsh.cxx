@@ -230,17 +230,17 @@ SCTAB ScDocShell::GetSaveTab()
     return nTab;
 }
 
-sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
+HiddenInformation ScDocShell::GetHiddenInformationState( HiddenInformation nStates )
 {
-    // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
-    sal_uInt16 nState = SfxObjectShell::GetHiddenInformationState( nStates );
+    // get global state like HiddenInformation::DOCUMENTVERSIONS
+    HiddenInformation nState = SfxObjectShell::GetHiddenInformationState( nStates );
 
-    if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
+    if ( nStates & HiddenInformation::RECORDEDCHANGES )
     {
         if ( aDocument.GetChangeTrack() && aDocument.GetChangeTrack()->GetFirst() )
-          nState |= HIDDENINFORMATION_RECORDEDCHANGES;
+          nState |= HiddenInformation::RECORDEDCHANGES;
     }
-    if ( nStates & HIDDENINFORMATION_NOTES )
+    if ( nStates & HiddenInformation::NOTES )
     {
         SCTAB nTableCount = aDocument.GetTableCount();
         bool bFound = false;
@@ -251,7 +251,7 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         }
 
         if (bFound)
-            nState |= HIDDENINFORMATION_NOTES;
+            nState |= HiddenInformation::NOTES;
     }
 
     return nState;
