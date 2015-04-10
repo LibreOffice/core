@@ -101,6 +101,8 @@ OpenGLContext::~OpenGLContext()
         mpNextContext->mpPrevContext = mpPrevContext;
     else
         pSVData->maGDIData.mpLastContext = mpPrevContext;
+
+    m_pChildWindow.disposeAndClear();
 }
 
 #ifdef DBG_UTIL
@@ -1080,7 +1082,6 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData = generateWinData(mpWindow, false);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
-        m_xChildWindowGC.reset(m_pChildWindow);
     }
 
     if( m_pChildWindow )
@@ -1108,7 +1109,6 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
-        m_xChildWindowGC.reset(m_pChildWindow);
     }
 
     if( m_pChildWindow )
@@ -1143,7 +1143,6 @@ bool OpenGLContext::initWindow()
         if( !m_pChildWindow )
         {
             m_pChildWindow = VclPtrInstance<SystemChildWindow>(mpWindow, 0, &winData, false);
-            m_xChildWindowGC.reset(m_pChildWindow);
         }
         pChildSysData = m_pChildWindow->GetSystemData();
     }
