@@ -1041,7 +1041,6 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
         m_nActive += 1;
-
     guard.clear();
 
     if ( IsReallyVisible() )
@@ -1178,6 +1177,7 @@ void ExtensionBox_Impl::prepareChecking()
 void ExtensionBox_Impl::checkEntries()
 {
     long nNewPos = -1;
+    long nChangedActivePos = -1;
     long nPos = 0;
     bool bNeedsUpdate = false;
 
@@ -1201,15 +1201,19 @@ void ExtensionBox_Impl::checkEntries()
             }
             else
             {   // remove entry from list
+                if (nPos < nNewPos) {
+                    --nNewPos;
+                }
+                if (nPos < nChangedActivePos) {
+                    --nChangedActivePos;
+                }
                 if ( nPos < m_nActive )
                     m_nActive -= 1;
-                else if ( ( nPos == m_nActive ) && ( nPos == (long) m_vEntries.size() - 1 ) )
+                else if ( nPos == m_nActive )
                 {
-                    m_nActive -= 1;
-                    if (m_nActive == -1)
-                    {
-                        m_bHasActive = false;
-                    }
+                    nChangedActivePos = nPos;
+                    m_nActive = -1;
+                    m_bHasActive = false;
                 }
                 m_vRemovedEntries.push_back( *iIndex );
                 m_vEntries.erase( iIndex );
@@ -1225,6 +1229,9 @@ void ExtensionBox_Impl::checkEntries()
 
     if ( nNewPos != - 1)
         selectEntry( nNewPos );
+    else if (nChangedActivePos != -1) {
+        selectEntry(nChangedActivePos);
+    }
 
     if ( bNeedsUpdate )
     {
