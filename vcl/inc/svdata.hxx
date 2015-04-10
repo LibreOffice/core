@@ -327,7 +327,7 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;                     // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    vcl::Window*            mpIntroWindow;                  // the splash screen
+    VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
     bool                    mbIsTestTool;

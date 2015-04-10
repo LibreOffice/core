@@ -436,23 +436,6 @@ public:
     const CommandEvent*     GetCommandEvent() const;
 };
 
-inline NotifyEvent::NotifyEvent()
-{
-    mpWindow    = NULL;
-    mpData      = NULL;
-    mnEventType = MouseNotifyEvent::NONE;
-    mnRetValue  = 0;
-}
-
-inline NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
-                                 const void* pEvent, long nRet )
-{
-    mpWindow    = pWindow;
-    mpData      = const_cast<void*>(pEvent);
-    mnEventType  = nEventType;
-    mnRetValue  = nRet;
-}
-
 inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 {
     if ( (mnEventType == MouseNotifyEvent::KEYINPUT) || (mnEventType == MouseNotifyEvent::KEYUP) )

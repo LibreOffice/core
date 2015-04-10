@@ -45,7 +45,6 @@ IntroWindow::~IntroWindow()
 
 void IntroWindow::dispose()
 {
-    // FIXME: really we should have a dispose & a ref-ptr there [!] ...
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->mpIntroWindow.get() == this )
         pSVData->mpIntroWindow = nullptr;
