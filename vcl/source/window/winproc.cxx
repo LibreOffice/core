@@ -1371,14 +1371,14 @@ class HandleGestureEventBase
 {
 protected:
     ImplSVData* m_pSVData;
-    vcl::Window *m_pWindow;
+    VclPtr<vcl::Window> m_pWindow;
     Point m_aMousePos;
 
 public:
 
     struct WindowDescription
     {
-        vcl::Window *m_pMouseWindow;
+        VclPtr<vcl::Window> m_pMouseWindow;
         bool m_bIsFloat;
         WindowDescription(vcl::Window *pMouseWindow, bool bIsFloat)
             : m_pMouseWindow(pMouseWindow)
