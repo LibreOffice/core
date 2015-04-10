@@ -32,7 +32,7 @@
 
 TYPEINIT1(SwGlobalDocShell, SwDocShell);
 
-SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/GlobalDocument" )
+SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter/GlobalDocument" )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode)

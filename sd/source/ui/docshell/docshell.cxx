@@ -89,7 +89,7 @@ TYPEINIT1( DrawDocShell, SfxObjectShell );
 SFX_IMPL_OBJECTFACTORY(
     DrawDocShell,
     SvGlobalName(SO3_SIMPRESS_CLASSID),
-    SFXOBJECTSHELL_STD_NORMAL,
+    SfxObjectShellFlags::STD_NORMAL,
     "simpress" )
 
 void DrawDocShell::Construct( bool bClipboard )

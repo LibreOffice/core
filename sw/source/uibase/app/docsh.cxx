@@ -134,7 +134,7 @@ void SwDocShell::InitInterface_Impl()
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 
-SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
+SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter"  )
 
 bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)

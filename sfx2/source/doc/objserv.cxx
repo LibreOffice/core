@@ -1024,7 +1024,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
 
             case SID_DOCINFO:
-                if ( 0 != ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
+                if ( pImp->eFlags & SfxObjectShellFlags::NODOCINFO )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -1041,7 +1041,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     pDoc = pFrame->GetTopViewFrame()->GetObjectShell();
                 }
 
-                if ( pDoc->GetFlags() & SFXOBJECTSHELL_DONTCLOSE )
+                if ( pDoc->GetFlags() & SfxObjectShellFlags::DONTCLOSE )
                     rSet.DisableItem(nWhich);
                 else
                     rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC).toString()));

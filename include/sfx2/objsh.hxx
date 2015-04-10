@@ -47,6 +47,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <memory>
 #include <set>
+#include <o3tl/typed_flags_set.hxx>
 
 class SbxValue;
 class SvxMacro;
@@ -108,15 +109,21 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-typedef sal_uInt32 SfxObjectShellFlags;
-#define SFXOBJECTSHELL_HASOPENDOC      0x01L
-#define SFXOBJECTSHELL_HASMENU         0x04L
-#define SFXOBJECTSHELL_DONTLOADFILTERS 0x08L
-#define SFXOBJECTSHELL_DONTCLOSE       0x10L
-#define SFXOBJECTSHELL_NODOCINFO       0x20L
-#define SFXOBJECTSHELL_STD_NORMAL      ( SFXOBJECTSHELL_HASOPENDOC )
-#define SFXOBJECTSHELL_STD_SPECIAL     ( SFXOBJECTSHELL_DONTLOADFILTERS )
-#define SFXOBJECTSHELL_UNDEFINED       0xf000000
+enum class SfxObjectShellFlags
+{
+    HASOPENDOC      = 0x01L,
+    HASMENU         = 0x04L,
+    DONTLOADFILTERS = 0x08L,
+    DONTCLOSE       = 0x10L,
+    NODOCINFO       = 0x20L,
+    STD_NORMAL      = HASOPENDOC,
+    STD_SPECIAL     = DONTLOADFILTERS,
+    UNDEFINED       = 0xf000000
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf00003d> {};
+}
 
 #define SFX_TITLE_TITLE    0
 #define SFX_TITLE_FILENAME 1
@@ -236,7 +243,7 @@ public:
 
     virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
 
-    SfxObjectShellFlags         GetFlags( ) const ;
+    SfxObjectShellFlags         GetFlags( ) const;
 
     SfxModule*                  GetModule() const;
 

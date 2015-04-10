@@ -34,7 +34,7 @@ namespace basctl
 
 TYPEINIT1(DocShell, SfxObjectShell);
 
-SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
+SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SfxObjectShellFlags::STD_NORMAL, "sbasic" )
 
 SFX_IMPL_SUPERCLASS_INTERFACE(basctl_DocShell, SfxObjectShell)
 

@@ -1041,7 +1041,7 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 
 void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId )
 {
-    if ( GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
+    if ( GetFactory().GetFlags() & SfxObjectShellFlags::HASOPENDOC )
         pImp->nEventId = nId;
 }
 
@@ -1596,7 +1596,7 @@ ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
 
 SfxObjectShellFlags SfxObjectShell::GetFlags() const
 {
-    if( pImp->eFlags == SFXOBJECTSHELL_UNDEFINED )
+    if( pImp->eFlags == SfxObjectShellFlags::UNDEFINED )
         pImp->eFlags = GetFactory().GetFlags();
     return pImp->eFlags;
 }

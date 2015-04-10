@@ -115,7 +115,7 @@ void SmDocShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(SmResId(RID_COMMANDMENU));
 }
 
-SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "smath" )
+SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SfxObjectShellFlags::STD_NORMAL, "smath" )
 
 void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
                     const SfxHint& rHint, const TypeId&)
