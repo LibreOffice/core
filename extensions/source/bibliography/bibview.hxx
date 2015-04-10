@@ -65,7 +65,7 @@ namespace bib
     private:
         DECL_STATIC_LINK(BibView, CallMappingHdl, BibView*);
 
-    protected:
+    public:
         // Window overridables
         virtual void    Resize() SAL_OVERRIDE;
 

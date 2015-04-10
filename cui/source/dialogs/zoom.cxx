@@ -295,8 +295,7 @@ SvxZoomDialog::~SvxZoomDialog()
 
 void SvxZoomDialog::dispose()
 {
-    delete mpOutSet;
-    mpOutSet = 0;
+    mpOutSet.reset();
     m_pOptimalBtn.clear();
     m_pWholePageBtn.clear();
     m_pPageWidthBtn.clear();
