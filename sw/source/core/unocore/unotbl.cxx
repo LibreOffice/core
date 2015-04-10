@@ -557,17 +557,9 @@ void sw_NormalizeRange(OUString &rCell1, OUString &rCell2)
 void SwRangeDescriptor::Normalize()
 {
     if (nTop > nBottom)
-    {
-        sal_Int32 nTmp = nTop;
-        nTop = nBottom;
-        nBottom = nTmp;
-    }
+        std::swap(nBottom, nTop);
     if (nLeft > nRight)
-    {
-        sal_Int32 nTmp = nLeft;
-        nLeft = nRight;
-        nRight = nTmp;
-    }
+        std::swap(nLeft, nRight);
 }
 
 static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
