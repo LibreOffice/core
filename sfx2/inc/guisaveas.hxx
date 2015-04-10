@@ -81,7 +81,8 @@ public:
                                     const OUString& aOldUIName,
                                     const OUString& aDefUIName,
                                     const OUString& aDefExtension,
-                                    bool bCanProceedFurther );
+                                    bool bCanProceedFurther,
+                                    bool rDefaultIsAlien );
 
     static vcl::Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 
