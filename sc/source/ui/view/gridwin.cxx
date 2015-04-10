@@ -547,7 +547,7 @@ void ScGridWindow::dispose()
 
     mpFilterBox.disposeAndClear();
     mpFilterFloat.disposeAndClear();
-    delete pNoteMarker;
+    mpNoteMarker.reset();
     mpAutoFilterPopup.disposeAndClear();
     mpDPFieldPopup.disposeAndClear();
 

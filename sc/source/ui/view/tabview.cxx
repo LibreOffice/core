@@ -280,7 +280,7 @@ IMPL_LINK_NOARG(ScTabView, TimerHdl)
 // --- Resize ---------------------------------------------------------------------
 
 static void lcl_SetPosSize( vcl::Window& rWindow, const Point& rPos, const Size& rSize,
-                        long nTotalWidth, bool bLayoutRTL )
+                            long nTotalWidth, bool bLayoutRTL )
 {
     Point aNewPos = rPos;
     if ( bLayoutRTL )
@@ -467,7 +467,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
                 Point aHSplitterPoint(nPosX + nTabSize + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nBarY);
-                lcl_SetPosSize(pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pHSplitter.get(), aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
                 Point aHScrollRightPoint(nPosX + nTabSize + nSizeLt + nSizeSp, nPosY + nSizeY);
                 Size aHScrollRightSize(nSizeRt, nBarY);
@@ -486,7 +486,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
                 Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nScrollBarSize);
-                lcl_SetPosSize(pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pHSplitter.get(), aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
                 Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp, nPosY + nSizeY);
                 Size aHScrollRightSize(nSizeRt, nScrollBarSize);

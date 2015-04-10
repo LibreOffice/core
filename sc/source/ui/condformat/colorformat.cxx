@@ -137,6 +137,7 @@ void ScDataBarSettingsDlg::dispose()
     mpLbAxisCol.clear();
     mpLbTypeMin.clear();
     mpLbTypeMax.clear();
+    mpLbFillType.clear();
     mpLbAxisPos.clear();
     mpEdMin.clear();
     mpEdMax.clear();

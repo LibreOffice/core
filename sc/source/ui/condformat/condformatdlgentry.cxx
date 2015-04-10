@@ -346,7 +346,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     {
         ScCompiler aComp2( mpDoc, maPos );
         aComp2.SetGrammar( mpDoc->GetGrammar() );
-        if (&maEdVal1 == pEdit)
+        if (maEdVal1 == pEdit)
         {
             OUString aFormula2 = maEdVal2->GetText();
             boost::scoped_ptr<ScTokenArray> pArr2(aComp2.CompileString(aFormula2));

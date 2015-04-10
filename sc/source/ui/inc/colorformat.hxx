@@ -28,6 +28,7 @@ private:
 
     VclPtr<ColorListBox> mpLbPos;
     VclPtr<ColorListBox> mpLbNeg;
+    VclPtr<ColorListBox> mpLbFillType;
     VclPtr<ColorListBox> mpLbAxisCol;
 
     VclPtr<ListBox> mpLbTypeMin;

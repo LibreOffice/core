@@ -57,7 +57,7 @@
 ScAutoFmtPreview::ScAutoFmtPreview(vcl::Window* pParent)
     : Window(pParent)
     , pCurData(NULL)
-    , aVD(new VirtualDevice(*this))
+    , aVD(*this)
     , aScriptedText(*aVD.get())
     , bFitWidth(false)
     , mbRTL(false)
