@@ -25,7 +25,8 @@
 #include <vcl/msgbox.hxx>
 #include "alienwarn.hxx"
 
-SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName, const OUString& _rDefaultExtension)
+SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName,
+                                             const OUString& _rDefaultExtension, bool rDefaultIsAlien)
     : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
@@ -36,7 +37,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
     get(m_pKeepCurrentBtn, "save");
     get(m_pUseDefaultFormatBtn, "cancel");
 
-    OUString aExtension = _rDefaultExtension.toAsciiUpperCase();
+    OUString aExtension = "ODF";
 
     // replace formatname (text)
     OUString sInfoText = get_primary_text();
@@ -47,6 +48,14 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
     sInfoText = m_pKeepCurrentBtn->GetText();
     sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     m_pKeepCurrentBtn->SetText( sInfoText );
+
+    // hide ODF explanation if default format is alien
+    // and set the proper extension in the button
+    if( rDefaultIsAlien )
+    {
+        set_secondary_text(OUString());
+        aExtension = _rDefaultExtension.toAsciiUpperCase();
+    }
 
     // replace defaultextension (button)
     sInfoText = m_pUseDefaultFormatBtn->GetText();

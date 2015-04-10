@@ -833,7 +833,8 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
                         return STATUS_SAVEAS;
                 }
             }
-            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, aDefExtension, true ) )
+            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, aDefExtension,
+                                                            true, (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
     }
@@ -1875,13 +1876,14 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
                                                     const OUString& aOldUIName,
                                                     const OUString& /*aDefUIName*/,
                                                     const OUString& aDefExtension,
-                                                    bool /*bCanProceedFurther*/ )
+                                                    bool /*bCanProceedFurther*/,
+                                                    bool bDefIsAlien )
 {
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return true;
 
     vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-    SfxAlienWarningDialog aDlg( pWin, aOldUIName, aDefExtension );
+    SfxAlienWarningDialog aDlg( pWin, aOldUIName, aDefExtension, bDefIsAlien );
 
     return aDlg.Execute() == RET_OK;
 }
