@@ -186,7 +186,8 @@ static void lcl_ClearArea( const SwFrm &rFrm,
 
         if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {
-            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, rPtArea, rOut));
+            SwRegionRects const region(rPtArea);
+            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, rOut));
 
             if(!bDone)
             {

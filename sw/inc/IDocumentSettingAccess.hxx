@@ -75,6 +75,7 @@ enum class DocumentSettingId
     // MS Word still wraps text around objects with less space than LO would.
     SURROUND_TEXT_WRAP_SMALL,
     PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
+    SUBTRACT_FLYS,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,

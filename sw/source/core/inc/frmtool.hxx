@@ -45,6 +45,7 @@ class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
 class SwFrmFmts;
+class SwRegionRects;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
 #define BROWSE_HEIGHT 56700L * 10L // 10 Meters
@@ -68,7 +69,7 @@ void DrawGraphic(
 bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
-    const SwRect& rPaintRect,
+    const SwRegionRects& rPaintRegion,
     OutputDevice& rOut);
 
 void paintGraphicUsingPrimitivesHelper(
