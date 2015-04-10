@@ -433,7 +433,7 @@ class LinguMgrExitLstnr : public cppu::WeakImplHelper1<XEventListener>
 {
     uno::Reference< XDesktop2 >        xDesktop;
 
-    void AtExit();
+    static void AtExit();
 
 public:
     LinguMgrExitLstnr();

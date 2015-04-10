@@ -28,7 +28,7 @@ class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
 {
 private:
     SvxAutoCorrCfg& rParent;
-    com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
     virtual void            ImplCommit() SAL_OVERRIDE;
 
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
 private:
     SvxAutoCorrCfg& rParent;
-    com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
     virtual void            ImplCommit() SAL_OVERRIDE;
 

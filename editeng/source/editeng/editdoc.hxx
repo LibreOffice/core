@@ -798,7 +798,7 @@ public:
     sal_uLong       GetTextLen() const;
 
     OUString       GetParaAsString( sal_Int32 nNode ) const;
-    OUString       GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
+    static OUString  GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true);
 
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;
@@ -813,7 +813,7 @@ public:
     void            InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
     bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich = 0 );
     bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
-    void            FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet );
+    static void     FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet );
 
     sal_Int32 GetPos(const ContentNode* pNode) const;
     const ContentNode* GetObject(sal_Int32 nPos) const;

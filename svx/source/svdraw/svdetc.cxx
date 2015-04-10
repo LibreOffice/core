@@ -412,7 +412,7 @@ SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rModel)
     pOutl->SetEditTextObjectPool( pPool );
     pOutl->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(rModel.GetStyleSheetPool()));
     pOutl->SetDefTab(rModel.GetDefaultTabulator());
-    pOutl->SetForbiddenCharsTable(rModel.GetForbiddenCharsTable());
+    Outliner::SetForbiddenCharsTable(rModel.GetForbiddenCharsTable());
     pOutl->SetAsianCompressionMode(rModel.GetCharCompressType());
     pOutl->SetKernAsianPunctuation(rModel.IsKernAsianPunctuation());
     pOutl->SetAddExtLeading(rModel.IsAddExtLeading());

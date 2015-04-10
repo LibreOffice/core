@@ -994,7 +994,7 @@ sal_Int32 SAL_CALL Cell::getError(  ) throw (RuntimeException, std::exception)
 
 Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap )
 {
-    Any aAny( SvxItemPropertySet_getPropertyValue( *mpPropSet, pMap, aSet ) );
+    Any aAny( SvxItemPropertySet_getPropertyValue( pMap, aSet ) );
 
     if( pMap->aType != aAny.getValueType() )
     {
@@ -1150,7 +1150,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
                     if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
                     {
-                        SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rValue, aSet );
+                        SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
                     }
                 }
             }

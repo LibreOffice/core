@@ -210,7 +210,6 @@ public:
      */
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const = 0;
 
-    OUString        GetNumStr(sal_uInt16) const { return OUString(); }
     virtual void            SetUpdateModeForAcc(bool) {}
     virtual bool            GetUpdateModeForAcc() const { return true; }
 

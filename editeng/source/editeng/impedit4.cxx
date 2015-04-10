@@ -254,7 +254,7 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
             if ( nNode == nEndNode ) // can also be == nStart!
                 nEndPos = aSel.Max().GetIndex();
         }
-        OUString aTmpStr = aEditDoc.GetParaAsString( pNode, nStartPos, nEndPos );
+        OUString aTmpStr = EditDoc::GetParaAsString( pNode, nStartPos, nEndPos );
         rOutput.WriteByteStringLine( aTmpStr, rOutput.GetStreamCharSet() );
     }
 
@@ -665,7 +665,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 if ( n == nEndPortion )
                     nE = nEndPos;
 
-                OUString aRTFStr = aEditDoc.GetParaAsString( pNode, nS, nE);
+                OUString aRTFStr = EditDoc::GetParaAsString( pNode, nS, nE);
                 RTFOutFuncs::Out_String( rOutput, aRTFStr, eDestEnc );
                 rOutput.WriteChar( '}' );
             }

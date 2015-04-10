@@ -743,7 +743,7 @@ public:
     sal_Int16       GetDepth( sal_Int32 nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
 
-    bool            IsVisible( Paragraph* pPara ) const { return pPara->IsVisible(); }
+    static bool     IsVisible( Paragraph* pPara ) { return pPara->IsVisible(); }
 
     void            EnableUndo( bool bEnable );
     bool            IsUndoEnabled() const;
@@ -887,7 +887,7 @@ public:
     bool            Collapse( Paragraph* );
 
     void            SetParaFlag( Paragraph* pPara,  ParaFlag nFlag );
-    bool            HasParaFlag( const Paragraph* pPara, ParaFlag nFlag ) const;
+    static bool     HasParaFlag( const Paragraph* pPara, ParaFlag nFlag );
 
     // Returns an array containing the widths of the Bullet Indentations
     // Last value must be -1. Is deleted by the outliner.
@@ -936,7 +936,7 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    static void     SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     // Deprecated
     void            SetDefaultLanguage( LanguageType eLang );

@@ -34,7 +34,7 @@ struct TrieNode
     TrieNode* traversePath(const OUString& sPath);
     void      addNewChild(TrieNode* pChild);
     void      collectSuggestions(const OUString& sPath, std::vector<OUString>& rSuggestionList);
-    void      collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList);
+    static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList);
 };
 
 TrieNode::TrieNode(sal_Unicode aCharacter) :

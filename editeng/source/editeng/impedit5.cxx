@@ -328,7 +328,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
         // 2) Examine Style and paragraph attributes only when OFF ...
 
         // First the very hard formatting ...
-        aEditDoc.FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
+        EditDoc::FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
 
         if( nOnlyHardAttrib != EditEngineAttribs_OnlyHard )
         {

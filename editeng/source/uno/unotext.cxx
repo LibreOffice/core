@@ -496,7 +496,7 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
         // For parts of composite items with multiple properties (eg background)
         // must be taken from the document before the old item.
         rNewSet.Put(rOldSet.Get(pMap->nWID));  // Old Item in new Set
-        mpPropSet->setPropertyValue(pMap, rValue, rNewSet, false );
+        SvxItemPropertySet::setPropertyValue(pMap, rValue, rNewSet, false );
     }
 }
 
@@ -679,7 +679,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
 
     default:
         if(!GetPropertyValueHelper( *const_cast<SfxItemSet*>(&rSet), pMap, rAny, &maSelection, GetEditSource() ))
-            rAny = mpPropSet->getPropertyValue(pMap, rSet, true, false );
+            rAny = SvxItemPropertySet::getPropertyValue(pMap, rSet, true, false );
     }
 }
 
@@ -1299,7 +1299,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                     {
                         SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
                         aSet.Put(pPool->GetDefaultItem(pMap->nWID));
-                        return mpPropSet->getPropertyValue(pMap, aSet, true, false );
+                        return SvxItemPropertySet::getPropertyValue(pMap, aSet, true, false );
                     }
                 }
             }

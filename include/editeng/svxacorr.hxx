@@ -176,7 +176,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     void LoadXMLExceptList_Imp( SvStringsISortDtor*& rpLst,
                                 const sal_Char* pStrmName,
                                 SotStorageRef& rStg);
-    void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
+    static void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
                                 const sal_Char* pStrmName,
                                 SotStorageRef& rStg,
                                 bool bConvert = false);
@@ -420,7 +420,7 @@ public:
 // (used to avoid occasional 'collisions' with (Thai) input-sequence-checking)
     static bool     IsAutoCorrectChar( sal_Unicode cChar );
 
-    bool NeedsHardspaceAutocorr( sal_Unicode cChar );
+    static bool NeedsHardspaceAutocorr( sal_Unicode cChar );
 
     CharClass& GetCharClass( LanguageType eLang )
     {

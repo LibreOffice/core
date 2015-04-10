@@ -158,7 +158,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-OUString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal )
 {
     DBG_ASSERT( nVal <= SVX_HOR_JUSTIFY_REPEAT, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_HORJUST_STANDARD + nVal);
@@ -294,7 +294,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-OUString SvxVerJustifyItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxVerJustifyItem::GetValueText( sal_uInt16 nVal )
 {
     DBG_ASSERT( nVal <= SVX_VER_JUSTIFY_BOTTOM, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_VERJUST_STANDARD + nVal);
@@ -376,7 +376,7 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
 }
 
 
-OUString SvxJustifyMethodItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxJustifyMethodItem::GetValueText( sal_uInt16 nVal )
 {
     DBG_ASSERT( nVal <= SVX_VER_JUSTIFY_BOTTOM, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_JUSTMETHOD_AUTO + nVal);

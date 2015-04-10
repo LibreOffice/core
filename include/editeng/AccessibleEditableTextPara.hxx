@@ -167,7 +167,7 @@ namespace accessibility
         virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceName
-        OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
 
         /** Set the current index in the accessibility parent
 

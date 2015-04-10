@@ -432,7 +432,7 @@ bool SvxSpellWrapper::SpellNext( )
 
 
 
-Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
+Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 {
     Reference< XDictionary >  xDic;
 

@@ -3505,7 +3505,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         {
                                             const SvxFieldData* pFieldData = pFieldItem->GetField();
                                             if( pFieldData )
-                                                pMtf->AddAction( pFieldData->createEndComment() );
+                                                pMtf->AddAction( SvxFieldData::createEndComment() );
                                         }
                                     }
 
@@ -4291,7 +4291,7 @@ LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
     return eLang;
 }
 
-OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang) const
+OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang)
 {
     OUStringBuffer aBuf(rString);
     for (sal_Int32 nIdx = nStt, nEnd = nStt + nLen; nIdx < nEnd; ++nIdx)

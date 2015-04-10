@@ -647,7 +647,7 @@ void ScDocument::SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharact
 {
     xForbiddenCharacters = rNew;
     if ( pEditEngine )
-        pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
+        EditEngine::SetForbiddenCharsTable( xForbiddenCharacters );
     if ( pDrawLayer )
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
 }
@@ -698,7 +698,7 @@ void ScDocument::SetAsianKerning(bool bNew)
 
 void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
 {
-    rEngine.SetForbiddenCharsTable( xForbiddenCharacters );
+    EditEngine::SetForbiddenCharsTable( xForbiddenCharacters );
     rEngine.SetAsianCompressionMode( GetAsianCompression() );
     rEngine.SetKernAsianPunctuation( GetAsianKerning() );
 }

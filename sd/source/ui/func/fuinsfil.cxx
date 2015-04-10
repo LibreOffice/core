@@ -533,7 +533,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
     // what should we insert?
-    while (pPara && !rDocliner.HasParaFlag(pPara, ParaFlag::ISPAGE))
+    while (pPara && !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE))
         pPara = rDocliner.GetParent(pPara);
 
     sal_Int32 nTargetPos = rDocliner.GetAbsPos(pPara) + 1;
@@ -544,7 +544,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     while (pPara)
     {
         sal_Int32 nPos = rDocliner.GetAbsPos( pPara );
-        if ( rDocliner.HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+        if ( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
             nPage++;
         pPara = rDocliner.GetParagraph( nPos - 1 );
     }
@@ -588,7 +588,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pPara)
         {
             sal_Int32 nPos = pOutliner->GetAbsPos( pPara );
-            if( pOutliner->HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+            if( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
         }
@@ -625,7 +625,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 rDocliner.SetStyleSheet( nTargetPos, pOutlStyle );
             }
 
-            if( rDocliner.HasParaFlag( pSourcePara, ParaFlag::ISPAGE ) )
+            if( Outliner::HasParaFlag( pSourcePara, ParaFlag::ISPAGE ) )
             {
                 nNewPages++;
                 if( pProgress )

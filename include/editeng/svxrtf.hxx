@@ -242,7 +242,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 protected:
     virtual void InsertPara() = 0;
 
-    OUString& DelCharAtEnd( OUString& rStr, const sal_Unicode cDel );
+    static OUString& DelCharAtEnd( OUString& rStr, const sal_Unicode cDel );
 
     // is called for each token that is recognized in CallParser
     virtual void NextToken( int nToken ) SAL_OVERRIDE;
