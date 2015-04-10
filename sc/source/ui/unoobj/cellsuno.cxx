@@ -2417,6 +2417,11 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                     pNew->AddRange( aRanges );
                                     pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
                                 }
+
+                                // and repaint
+                                for (size_t i = 0; i < aRanges.size(); ++i)
+                                    pDocShell->PostPaint(*aRanges[i], PAINT_GRID);
+                                pDocShell->SetDocumentModified();
                             }
                         }
                     }
