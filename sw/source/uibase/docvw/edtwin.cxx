@@ -6209,7 +6209,7 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     SetPointerPosPixel(aPoint);
 }
 
-void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     if (SdrView* pSdrView = m_rView.GetWrtShell().GetDrawView())
     {
