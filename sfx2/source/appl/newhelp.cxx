@@ -1977,11 +1977,11 @@ void SfxHelpTextWindow_Impl::dispose()
 
     bIsInClose = true;
     SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
-    pSrchDlg.clear();
+    pSrchDlg.disposeAndClear();
     aToolBox.disposeAndClear();
     aOnStartupCB.disposeAndClear();
     pHelpWin.clear();
-    pTextWin.clear();
+    pTextWin.disposeAndClear();
     vcl::Window::dispose();
 }
 

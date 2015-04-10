@@ -218,7 +218,7 @@ _SdrItemBrowserControl::~_SdrItemBrowserControl()
 
 void _SdrItemBrowserControl::dispose()
 {
-    pEditControl.clear();
+    pEditControl.disposeAndClear();
 
     delete pAktChangeEntry;
 
@@ -532,7 +532,7 @@ bool _SdrItemBrowserControl::EndChangeEntry()
     bool bRet = false;
     if (pEditControl!=nullptr) {
         aEntryChangedHdl.Call(this);
-        pEditControl.clear();
+        pEditControl.disposeAndClear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();
@@ -546,7 +546,7 @@ bool _SdrItemBrowserControl::EndChangeEntry()
 void _SdrItemBrowserControl::BrkChangeEntry()
 {
     if (pEditControl!=nullptr) {
-        pEditControl.clear();
+        pEditControl.disposeAndClear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();

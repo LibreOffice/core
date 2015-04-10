@@ -147,7 +147,7 @@ WebConnectionInfoDialog::~WebConnectionInfoDialog()
 
 void WebConnectionInfoDialog::dispose()
 {
-    m_pPasswordsLB.clear();
+    m_pPasswordsLB.disposeAndClear();
     m_pRemoveBtn.clear();
     m_pRemoveAllBtn.clear();
     m_pChangeBtn.clear();

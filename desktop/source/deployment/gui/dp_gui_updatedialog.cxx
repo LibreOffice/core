@@ -579,11 +579,11 @@ void UpdateDialog::dispose()
     {
         delete (*i);
     }
+    m_pUpdates.disposeAndClear();
     m_pchecking.clear();
     m_pthrobber.clear();
     m_pUpdate.clear();
     m_pContainer.clear();
-    m_pUpdates.clear();
     m_pAll.clear();
     m_pDescription.clear();
     m_pPublisherLabel.clear();

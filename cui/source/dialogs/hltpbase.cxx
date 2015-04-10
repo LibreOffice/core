@@ -114,13 +114,15 @@ void SvxHyperlinkTabPageBase::dispose()
 {
     maTimer.Stop();
 
+    mpMarkWnd.disposeAndClear();
+
     mpCbbFrame.clear();
     mpLbForm.clear();
     mpEdIndication.clear();
     mpEdText.clear();
     mpBtScript.clear();
     mpDialog.clear();
-    mpMarkWnd.clear();
+
     IconChoicePage::dispose();
 }
 

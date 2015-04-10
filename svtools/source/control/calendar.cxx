@@ -2229,9 +2229,9 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 
 void ImplCFieldFloatWin::dispose()
 {
-    mpTodayBtn.clear();
-    mpNoneBtn.clear();
-    mpFixedLine.clear();
+    mpTodayBtn.disposeAndClear();
+    mpNoneBtn.disposeAndClear();
+    mpFixedLine.disposeAndClear();
     mpCalendar.clear();
     FloatingWindow::dispose();
 }
@@ -2258,7 +2258,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
     }
     else
     {
-        mpTodayBtn.clear();
+        mpTodayBtn.disposeAndClear();
     }
 
     return mpTodayBtn;
@@ -2286,7 +2286,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
     }
     else
     {
-        mpNoneBtn.clear();
+        mpNoneBtn.disposeAndClear();
     }
 
     return mpNoneBtn;
@@ -2350,7 +2350,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     }
     else
     {
-        mpFixedLine.clear();
+        mpFixedLine.disposeAndClear();
     }
 }
 
@@ -2388,8 +2388,8 @@ CalendarField::~CalendarField()
 
 void CalendarField::dispose()
 {
-    mpCalendar.clear();
-    mpFloatWin.clear();
+    mpCalendar.disposeAndClear();
+    mpFloatWin.disposeAndClear();
     mpTodayBtn.clear();
     mpNoneBtn.clear();
     DateField::dispose();

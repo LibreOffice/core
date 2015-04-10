@@ -208,9 +208,9 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 
 void ExtBoxWithBtns_Impl::dispose()
 {
-    m_pOptionsBtn.clear();
-    m_pEnableBtn.clear();
-    m_pRemoveBtn.clear();
+    m_pOptionsBtn.disposeAndClear();
+    m_pEnableBtn.disposeAndClear();
+    m_pRemoveBtn.disposeAndClear();
     m_pParent.clear();
     ExtensionBox_Impl::dispose();
 }

@@ -730,7 +730,7 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
 
 {
     SetUniqId(nSettingsId);
-    pImpl->m_pSfxPage.clear();
+    pImpl->m_pSfxPage.disposeAndClear();
     pImpl->m_pSfxPage = pTabPage;
     fnGetRanges = pRangesFunc;
 

@@ -122,10 +122,10 @@ UnoDataBrowserView::~UnoDataBrowserView()
 
 void UnoDataBrowserView::dispose()
 {
-    m_pSplitter.clear();
+    m_pSplitter.disposeAndClear();
     setTreeView(NULL);
 
-    m_pStatus.clear();
+    m_pStatus.disposeAndClear();
 
     try
     {

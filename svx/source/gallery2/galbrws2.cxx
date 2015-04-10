@@ -481,9 +481,9 @@ void GalleryBrowser2::dispose()
 {
     maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
-    mpPreview.clear();
-    mpListView.clear();
-    mpIconView.clear();
+    mpPreview.disposeAndClear();
+    mpListView.disposeAndClear();
+    mpIconView.disposeAndClear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
@@ -740,9 +740,9 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
 void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 {
-    mpIconView.clear();
-    mpListView.clear();
-    mpPreview.clear();
+    mpIconView.disposeAndClear();
+    mpListView.disposeAndClear();
+    mpPreview.disposeAndClear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );

@@ -240,10 +240,10 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
 
 void DigitalSignaturesDialog::dispose()
 {
+    m_pSignaturesLB.disposeAndClear();
     m_pHintDocFT.clear();
     m_pHintBasicFT.clear();
     m_pHintPackageFT.clear();
-    m_pSignaturesLB.clear();
     m_pSigsValidImg.clear();
     m_pSigsValidFI.clear();
     m_pSigsInvalidImg.clear();

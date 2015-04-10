@@ -80,7 +80,7 @@ public:                                             \
 Class::~Class()                                     \
 {                                                   \
 }                                                   \
-short Class::Execute()                             \
+short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
 }

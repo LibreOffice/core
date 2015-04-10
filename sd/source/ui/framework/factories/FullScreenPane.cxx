@@ -103,7 +103,7 @@ FullScreenPane::~FullScreenPane (void) throw()
 
 void SAL_CALL FullScreenPane::disposing (void)
 {
-    mpWindow.clear();
+    mpWindow.disposeAndClear();
 
     if (mpWorkWindow.get() != NULL)
     {

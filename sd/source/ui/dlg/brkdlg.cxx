@@ -72,6 +72,8 @@ BreakDlg::~BreakDlg()
 
 void BreakDlg::dispose()
 {
+    mpProgress.disposeAndClear();
+    pProgrInfo.disposeAndClear();
     m_pFiObjInfo.clear();
     m_pFiActInfo.clear();
     m_pFiInsInfo.clear();

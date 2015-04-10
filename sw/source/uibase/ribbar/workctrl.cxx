@@ -453,7 +453,7 @@ SwScrollNaviPopup::~SwScrollNaviPopup()
 
 void SwScrollNaviPopup::dispose()
 {
-    m_pToolBox.clear();
+    m_pToolBox.disposeAndClear();
     m_pInfoField.clear();
     SfxPopupWindow::dispose();
 }

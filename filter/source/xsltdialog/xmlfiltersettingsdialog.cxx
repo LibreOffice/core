@@ -1421,9 +1421,9 @@ SvxPathControl::~SvxPathControl()
 
 void SvxPathControl::dispose()
 {
-    m_pVBox.clear();
-    m_pFocusCtrl.clear();
-    m_pHeaderBar.clear();
+    m_pFocusCtrl.disposeAndClear();
+    m_pHeaderBar.disposeAndClear();
+    m_pVBox.disposeAndClear();
     vcl::Window::dispose();
 }
 

@@ -207,7 +207,9 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 void SvxJavaOptionsPage::dispose()
 {
-    m_pJavaList.clear();
+    m_pJavaList.disposeAndClear();
+    m_pParamDlg.disposeAndClear();
+    m_pPathDlg.disposeAndClear();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     std::vector< JavaInfo* >::iterator pIter;
@@ -229,8 +231,6 @@ void SvxJavaOptionsPage::dispose()
     m_pExpertConfigBtn.clear();
     m_pExperimentalCB.clear();
     m_pMacroCB.clear();
-    m_pParamDlg.clear();
-    m_pPathDlg.clear();
     SfxTabPage::dispose();
 }
 

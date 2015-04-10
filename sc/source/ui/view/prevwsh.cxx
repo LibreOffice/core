@@ -196,10 +196,10 @@ ScPreviewShell::~ScPreviewShell()
     EndListening(*pDocShell);
 
     SetWindow(0);
-    pPreview.clear();
-    pHorScroll.clear();
-    pVerScroll.clear();
-    pCorner.clear();
+    pPreview.disposeAndClear();
+    pHorScroll.disposeAndClear();
+    pVerScroll.disposeAndClear();
+    pCorner.disposeAndClear();
 
     //  normal mode of operation is switching back to default view in the same frame,
     //  so there's no need to activate any other window here anymore

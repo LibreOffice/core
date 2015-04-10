@@ -139,7 +139,7 @@ throw (uno::RuntimeException, std::exception)
     svt::ToolboxController::dispose();
 
     SolarMutexGuard aSolarMutexGuard;
-    m_pLimitBox.clear();
+    m_pLimitBox.disposeAndClear();
 }
 
 /// XStatusListener

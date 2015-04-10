@@ -75,7 +75,7 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
 void ScHighlightChgDlg::dispose()
 {
     SetDispatcherLock( false );
-    m_pFilterCtr.clear();
+    m_pFilterCtr.disposeAndClear();
     m_pHighlightBox.clear();
     m_pCbAccept.clear();
     m_pCbReject.clear();

@@ -46,7 +46,7 @@ OConnectionURLEdit::~OConnectionURLEdit()
 void OConnectionURLEdit::dispose()
 {
     SetSubEdit(nullptr);
-    m_pForcedPrefix.clear();
+    m_pForcedPrefix.disposeAndClear();
     Edit::dispose();
 }
 

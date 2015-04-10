@@ -96,7 +96,7 @@ void OScrollWindowHelper::dispose()
 {
     m_aHScrollBar.disposeAndClear();
     m_aVScrollBar.disposeAndClear();
-    m_pCornerWindow.clear();
+    m_pCornerWindow.disposeAndClear();
     m_pTableView.clear();
     vcl::Window::dispose();
 }

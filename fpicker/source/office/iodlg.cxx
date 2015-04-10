@@ -449,10 +449,10 @@ void SvtFileDialog::dispose()
     }
 
     delete _pImp;
-    _pFileView.clear();
-    _pSplitter.clear();
-    _pContainer.clear();
-    _pPrevBmp.clear();
+    _pFileView.disposeAndClear();
+    _pSplitter.disposeAndClear();
+    _pContainer.disposeAndClear();
+    _pPrevBmp.disposeAndClear();
     _pCbReadOnly.clear();
     _pCbLinkBox.clear();
     _pCbPreviewBox.clear();

@@ -147,7 +147,7 @@ void SvxFontSubstTabPage::dispose()
     pCheckButtonData = NULL;
     delete pConfig;
     pConfig = NULL;
-    m_pCheckLB.clear();
+    m_pCheckLB.disposeAndClear();
     m_pUseTableCB.clear();
     m_pReplacements.clear();
     m_pFont1CB.clear();

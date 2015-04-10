@@ -448,7 +448,7 @@ namespace pcr
         if ( rpButton )
         {
             rpButton->Hide();
-            rpButton.clear();
+            rpButton.disposeAndClear();
         }
 
         if ( _bReLayout )

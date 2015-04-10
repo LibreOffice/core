@@ -335,7 +335,7 @@ SfxVersionDialog::~SfxVersionDialog()
 void SfxVersionDialog::dispose()
 {
     delete m_pTable;
-    m_pVersionBox.clear();
+    m_pVersionBox.disposeAndClear();
     m_pSaveButton.clear();
     m_pSaveCheckBox.clear();
     m_pOpenButton.clear();
@@ -592,7 +592,7 @@ SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 void SfxCmisVersionsDialog::dispose()
 {
     delete m_pTable;
-    m_pVersionBox.clear();
+    m_pVersionBox.disposeAndClear();
     m_pOpenButton.clear();
     m_pViewButton.clear();
     m_pDeleteButton.clear();

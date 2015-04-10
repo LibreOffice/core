@@ -46,7 +46,7 @@ SearchResultsDlg::~SearchResultsDlg()
 
 void SearchResultsDlg::dispose()
 {
-    mpList.clear();
+    mpList.disposeAndClear();
     ModelessDialog::dispose();
 }
 

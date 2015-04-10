@@ -1051,18 +1051,18 @@ SwView::~SwView()
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
-    m_pScrollFill.clear();
+    m_pScrollFill.disposeAndClear();
     delete m_pWrtShell;
     m_pWrtShell = 0;      // Set to 0, so that it is not accessible by the following dtors cannot.
     m_pShell = 0;
-    m_pHScrollbar.clear();
-    m_pVScrollbar.clear();
-    m_pHRuler.clear();
-    m_pVRuler.clear();
-    m_pTogglePageBtn.clear();
+    m_pHScrollbar.disposeAndClear();
+    m_pVScrollbar.disposeAndClear();
+    m_pHRuler.disposeAndClear();
+    m_pVRuler.disposeAndClear();
+    m_pTogglePageBtn.disposeAndClear();
     delete m_pGlosHdl;
     delete m_pViewImpl;
-    m_pEditWin.clear();
+    m_pEditWin.disposeAndClear();
     delete m_pFormatClipboard;
 }
 

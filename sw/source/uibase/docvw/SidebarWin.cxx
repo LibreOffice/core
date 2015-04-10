@@ -157,7 +157,7 @@ void SwSidebarWin::dispose()
             mpOutlinerView->SetWindow( 0 );
         }
     }
-    mpSidebarTxtControl.clear();
+    mpSidebarTxtControl.disposeAndClear();
 
     if ( mpOutlinerView )
     {
@@ -175,19 +175,19 @@ void SwSidebarWin::dispose()
     {
         mpMetadataAuthor->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
     }
-    mpMetadataAuthor.clear();
+    mpMetadataAuthor.disposeAndClear();
 
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
     }
-    mpMetadataDate.clear();
+    mpMetadataDate.disposeAndClear();
 
     if (mpVScrollbar)
     {
         mpVScrollbar->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
     }
-    mpVScrollbar.clear();
+    mpVScrollbar.disposeAndClear();
 
     RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
@@ -200,7 +200,7 @@ void SwSidebarWin::dispose()
     delete mpTextRangeOverlay;
     mpTextRangeOverlay = NULL;
 
-    mpMenuButton.clear();
+    mpMenuButton.disposeAndClear();
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );

@@ -219,11 +219,11 @@ SwColumnDlg::~SwColumnDlg()
 
 void SwColumnDlg::dispose()
 {
+    pTabPage.disposeAndClear();
     delete pPageSet;
     delete pSectionSet;
     delete pSelectionSet;
     m_pApplyToLB.clear();
-    pTabPage.clear();
     SfxModalDialog::dispose();
 }
 

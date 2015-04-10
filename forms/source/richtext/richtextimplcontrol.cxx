@@ -91,10 +91,10 @@ namespace frm
         m_pEngine->RemoveView( m_pView );
         m_pEngine->revokeEngineStatusListener( this );
         delete m_pView;
-        m_pViewport.clear();
-        m_pHScroll.clear();
-        m_pVScroll.clear();
-        m_pScrollCorner.clear();
+        m_pViewport.disposeAndClear();
+        m_pHScroll.disposeAndClear();
+        m_pVScroll.disposeAndClear();
+        m_pScrollCorner.disposeAndClear();
     }
 
 
@@ -344,7 +344,7 @@ namespace frm
         // create or delete the scrollbars, as necessary
         if ( !bNeedVScroll )
         {
-            m_pVScroll.clear();
+            m_pVScroll.disposeAndClear();
         }
         else
         {
@@ -355,7 +355,7 @@ namespace frm
 
         if ( !bNeedHScroll )
         {
-            m_pHScroll.clear();
+            m_pHScroll.disposeAndClear();
         }
         else
         {
@@ -366,13 +366,13 @@ namespace frm
 
         if ( m_pHScroll && m_pVScroll )
         {
-            m_pScrollCorner.clear();
+            m_pScrollCorner.disposeAndClear();
             m_pScrollCorner = new ScrollBarBox( m_pAntiImpl );
             m_pScrollCorner->Show();
         }
         else
         {
-            m_pScrollCorner.clear();
+            m_pScrollCorner.disposeAndClear();
         }
 
         layoutWindow();

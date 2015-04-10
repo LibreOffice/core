@@ -107,7 +107,7 @@ ScNameDlg::~ScNameDlg()
 
 void ScNameDlg::dispose()
 {
-    m_pRangeManagerTable.clear();
+    m_pRangeManagerTable.disposeAndClear();
     m_pEdName.clear();
     m_pEdAssign.clear();
     m_pRbAssign.clear();

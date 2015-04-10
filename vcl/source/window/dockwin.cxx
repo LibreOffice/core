@@ -877,8 +877,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
                 mpWindowImpl->mpRealParent = pRealParent;
-                mpFloatWin.clear();
-                mpFloatWin = NULL;
+                mpFloatWin.disposeAndClear();
                 SetPosPixel( maDockPos );
 
                 ToggleFloatingMode();

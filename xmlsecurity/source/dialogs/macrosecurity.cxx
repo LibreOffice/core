@@ -435,7 +435,7 @@ MacroSecurityTrustedSourcesTP::~MacroSecurityTrustedSourcesTP()
 
 void MacroSecurityTrustedSourcesTP::dispose()
 {
-    m_pTrustCertLB.clear();
+    m_pTrustCertLB.disposeAndClear();
     m_pTrustCertROFI.clear();
     m_pViewCertPB.clear();
     m_pRemoveCertPB.clear();

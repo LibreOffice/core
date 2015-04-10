@@ -364,9 +364,9 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
     m_pTabCtrl->RemovePage(TP_FUNCTION);
     m_pTabCtrl->RemovePage(TP_STRUCT);
 
-    pStructPage.clear();
-    pFuncPage.clear();
-    pParaWin.clear();
+    pStructPage.disposeAndClear();
+    pFuncPage.disposeAndClear();
+    pParaWin.disposeAndClear();
     DeleteArgs();
 }
 

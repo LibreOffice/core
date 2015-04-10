@@ -82,7 +82,7 @@ PageColumnControl::~PageColumnControl(void)
 
 void PageColumnControl::dispose()
 {
-    mpColumnValueSet.clear();
+    mpColumnValueSet.disposeAndClear();
     maMoreButton.disposeAndClear();
     ::svx::sidebar::PopupControl::dispose();
 }

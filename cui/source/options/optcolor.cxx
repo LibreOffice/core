@@ -302,6 +302,8 @@ ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
 
 ColorConfigWindow_Impl::Chapter::~Chapter()
 {
+    // FIXME: we had an horrible m_bOwnsWidget const
+    m_pText.disposeAndClear();
 }
 
 void ColorConfigWindow_Impl::Chapter::Show(Wallpaper const& rBackWall)
@@ -368,9 +370,9 @@ ColorConfigWindow_Impl::Entry::~Entry()
 {
     if (m_bOwnsWidgets)
     {
-        m_pText.clear();
-        m_pColorList.clear();
-        m_pPreview.clear();
+        m_pText.disposeAndClear();
+        m_pColorList.disposeAndClear();
+        m_pPreview.disposeAndClear();
     }
 }
 
@@ -508,9 +510,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
 void ColorConfigWindow_Impl::dispose()
 {
     disposeBuilder();
-        m_pGrid.clear();
-        m_pVScroll.clear();
-        m_pHeaderHB.clear();
+    m_pGrid.clear();
+    m_pVScroll.clear();
+    m_pHeaderHB.clear();
     VclContainer::dispose();
 }
 
@@ -918,10 +920,10 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 
 void ColorConfigCtrl_Impl::dispose()
 {
-    m_pVScroll.clear();
-    m_pScrollWindow.clear();
-    m_pBody.clear();
-    m_pHeaderHB.clear();
+    m_pVScroll.disposeAndClear();
+    m_pScrollWindow.disposeAndClear();
+    m_pBody.disposeAndClear();
+    m_pHeaderHB.disposeAndClear();
     VclVBox::dispose();
 }
 

@@ -423,7 +423,7 @@ SvxTPView::~SvxTPView()
 
 void SvxTPView::dispose()
 {
-    m_pViewData.clear();
+    m_pViewData.disposeAndClear();
     m_pAccept.clear();
     m_pReject.clear();
     m_pAcceptAll.clear();
@@ -1119,8 +1119,8 @@ SvxAcceptChgCtr::~SvxAcceptChgCtr()
 void SvxAcceptChgCtr::dispose()
 {
     disposeBuilder();
-    pTPFilter.clear();
-    pTPView.clear();
+    pTPView.disposeAndClear();
+    pTPFilter.disposeAndClear();
     TabControl::dispose();
 }
 

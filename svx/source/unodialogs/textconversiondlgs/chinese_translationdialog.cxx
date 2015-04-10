@@ -73,7 +73,7 @@ void ChineseTranslationDialog::dispose()
         if(m_pDictionaryDialog->IsInExecute())
             m_pDictionaryDialog->EndDialog();
     }
-    m_pDictionaryDialog.clear();
+    m_pDictionaryDialog.disposeAndClear();
     m_pRB_To_Simplified.clear();
     m_pRB_To_Traditional.clear();
     m_pCB_Translate_Commonterms.clear();

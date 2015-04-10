@@ -87,6 +87,7 @@ struct TabEntry
 
     TabEntry( sal_Int32 nIndex, const OUString& sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
         m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_xEventHdl( rEventHdl ) {}
+    ~TabEntry() { m_pPage.disposeAndClear(); }
 };
 
 typedef std::vector< TabEntry* > TabEntryList;

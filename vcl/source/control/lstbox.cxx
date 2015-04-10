@@ -77,10 +77,10 @@ void ListBox::dispose()
 {
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
-    mpFloatWin.clear();
-    mpImplWin.clear();
-    mpBtn.clear();
-    mpImplLB.clear();
+    mpImplLB.disposeAndClear();
+    mpFloatWin.disposeAndClear();
+    mpImplWin.disposeAndClear();
+    mpBtn.disposeAndClear();
 
     Control::dispose();
 }

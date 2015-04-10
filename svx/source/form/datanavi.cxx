@@ -2948,7 +2948,7 @@ namespace svxform
 
     void NamespaceItemDialog::dispose()
     {
-        m_pNamespacesList.clear();
+        m_pNamespacesList.disposeAndClear();
         m_pAddNamespaceBtn.clear();
         m_pEditNamespaceBtn.clear();
         m_pDeleteNamespaceBtn.clear();

@@ -223,7 +223,7 @@ SvxIMapDlg::~SvxIMapDlg()
 void SvxIMapDlg::dispose()
 {
     // Delete URL-List
-    pIMapWnd.clear();
+    pIMapWnd.disposeAndClear();
     delete pOwnData;
     m_pTbxIMapDlg1.clear();
     m_pFtURL.clear();

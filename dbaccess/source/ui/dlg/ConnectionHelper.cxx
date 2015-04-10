@@ -114,10 +114,11 @@ namespace dbaui
 
     void OConnectionHelper::dispose()
     {
-        m_pFT_Connection.clear();
-        m_pConnectionURL.clear();
-        m_pPB_Connection.clear();
-        m_pPB_CreateDB.clear();
+        // FIXME: used to have an if (m_bDelete) ...
+        m_pFT_Connection.disposeAndClear();
+        m_pConnectionURL.disposeAndClear();
+        m_pPB_Connection.disposeAndClear();
+        m_pPB_CreateDB.disposeAndClear();
         OGenericAdministrationPage::dispose();
     }
 

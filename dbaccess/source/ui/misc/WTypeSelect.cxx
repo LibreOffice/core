@@ -45,7 +45,6 @@ using namespace ::com::sun::star::sdbc;
 OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent, pHelpBar)
 {
-
     m_pParentTabPage = pParentTabPage;
 }
 

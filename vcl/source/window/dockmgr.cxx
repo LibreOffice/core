@@ -1185,7 +1185,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     GetWindow()->SetParent( pRealParent );
     GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
-    mpFloatWin.clear();
+    mpFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
     GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );

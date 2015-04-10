@@ -217,17 +217,10 @@ namespace bib
         if ( pToolBar )
         {
             pDatMan->SetToolbar(0);
+            pToolBar.disposeAndClear();
         }
 
-        if( pGridWin )
-        {
-            BibGridwin* pDel = pGridWin;
-            pGridWin.clear();
-            pDel->disposeGridWin();
-            delete pDel;
-        }
-        pToolBar.clear();
-        pGridWin.clear();
+        pGridWin.disposeAndClear();
         BibSplitWindow::dispose();
     }
 

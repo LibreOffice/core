@@ -1531,7 +1531,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
     }
     else
     {
-        pTreeBox.clear();
+        pTreeBox.disposeAndClear();
         aFmtLb->Show();
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start

@@ -159,7 +159,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 
 PresetPropertyBox::~PresetPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 Any PresetPropertyBox::getValue()
@@ -219,7 +219,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
 ColorPropertyBox::~ColorPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
@@ -303,7 +303,7 @@ void FontPropertyBox::setValue( const Any& rValue, const OUString& )
 
 FontPropertyBox::~FontPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 Any FontPropertyBox::getValue()
@@ -357,7 +357,7 @@ DropdownMenuBox::~DropdownMenuBox()
 void DropdownMenuBox::dispose()
 {
     SetSubEdit(nullptr);
-    mpDropdownButton.clear();
+    mpDropdownButton.disposeAndClear();
     delete mpMenu;
     mpSubControl.disposeAndClear();
     Edit::dispose();
@@ -437,7 +437,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
 
 CharHeightPropertyBox::~CharHeightPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
@@ -528,7 +528,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 
 TransparencyPropertyBox::~TransparencyPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 void TransparencyPropertyBox::updateMenu()
@@ -626,7 +626,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 
 RotationPropertyBox::~RotationPropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 void RotationPropertyBox::updateMenu()
@@ -751,7 +751,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
 ScalePropertyBox::~ScalePropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 void ScalePropertyBox::updateMenu()
@@ -911,7 +911,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 
 FontStylePropertyBox::~FontStylePropertyBox()
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 void FontStylePropertyBox::update()
@@ -2212,9 +2212,9 @@ CustomAnimationDialog::~CustomAnimationDialog()
 
 void CustomAnimationDialog::dispose()
 {
-    mpEffectTabPage.clear();
-    mpDurationTabPage.clear();
-    mpTextAnimTabPage.clear();
+    mpEffectTabPage.disposeAndClear();
+    mpDurationTabPage.disposeAndClear();
+    mpTextAnimTabPage.disposeAndClear();
 
     delete mpSet;
     delete mpResultSet;

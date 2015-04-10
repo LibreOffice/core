@@ -507,7 +507,7 @@ void SwCreateAddressListDialog::dispose()
     m_pNextPB.clear();
     m_pEndPB.clear();
     m_pOK.clear();
-    m_pFindDlg.clear();
+    m_pFindDlg.disposeAndClear();
     SfxModalDialog::dispose();
 }
 

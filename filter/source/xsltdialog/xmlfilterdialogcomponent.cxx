@@ -266,7 +266,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 {
     ::SolarMutexGuard aGuard;
 
-    mpDialog.clear();
+    mpDialog.disposeAndClear();
 
     if (pXSLTResMgr)
     {

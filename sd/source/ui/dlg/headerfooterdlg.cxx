@@ -246,8 +246,8 @@ HeaderFooterDialog::~HeaderFooterDialog()
 
 void HeaderFooterDialog::dispose()
 {
-    mpSlideTabPage.clear();
-    mpNotesHandoutsTabPage.clear();
+    mpSlideTabPage.disposeAndClear();
+    mpNotesHandoutsTabPage.disposeAndClear();
     mpTabCtrl.clear();
     maPBApplyToAll.clear();
     maPBApply.clear();

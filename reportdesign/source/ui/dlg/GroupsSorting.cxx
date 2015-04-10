@@ -230,7 +230,7 @@ void OFieldExpressionControl::dispose()
     if( m_nDeleteEvent )
         Application::RemoveUserEvent( m_nDeleteEvent );
 
-    m_pComboCell.clear();
+    m_pComboCell.disposeAndClear();
     m_pParent.clear();
     ::svt::EditBrowseBox::dispose();
 }
@@ -1028,7 +1028,7 @@ void OGroupsSortingDialog::dispose()
     m_pGroupIntervalEd.clear();
     m_pKeepTogetherLst.clear();
     m_pHelpWindow.clear();
-    m_pFieldExpression.clear();
+    m_pFieldExpression.disposeAndClear();
     FloatingWindow::dispose();
 }
 

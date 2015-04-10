@@ -235,7 +235,7 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 void SfxPrintOptionsDialog::dispose()
 {
     delete pDlgImpl;
-    pPage.clear();
+    pPage.disposeAndClear();
     delete pOptions;
     ModalDialog::dispose();
 }

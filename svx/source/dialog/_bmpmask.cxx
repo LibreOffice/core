@@ -491,11 +491,11 @@ SvxBmpMask::~SvxBmpMask()
 
 void SvxBmpMask::dispose()
 {
-    m_pQSet1.clear();
-    m_pQSet2.clear();
-    m_pQSet3.clear();
-    m_pQSet4.clear();
-    m_pCtlPipette.clear();
+    m_pQSet1.disposeAndClear();
+    m_pQSet2.disposeAndClear();
+    m_pQSet3.disposeAndClear();
+    m_pQSet4.disposeAndClear();
+    m_pCtlPipette.disposeAndClear();
     delete pData;
     m_pTbxPipette.clear();
     m_pBtnExec.clear();

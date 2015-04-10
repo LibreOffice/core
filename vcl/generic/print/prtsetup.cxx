@@ -101,8 +101,8 @@ void RTSDialog::dispose()
     m_pTabControl.clear();
     m_pOKButton.clear();
     m_pCancelButton.clear();
-    m_pPaperPage.clear();
-    m_pDevicePage.clear();
+    m_pPaperPage.disposeAndClear();
+    m_pDevicePage.disposeAndClear();
     TabDialog::dispose();
 }
 

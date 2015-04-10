@@ -222,6 +222,7 @@ SvxProxyTabPage::~SvxProxyTabPage()
 
 void SvxProxyTabPage::dispose()
 {
+    mpCertPathDlg.disposeAndClear();
     m_pProxyModeLB.clear();
     m_pHttpProxyFT.clear();
     m_pHttpProxyED.clear();

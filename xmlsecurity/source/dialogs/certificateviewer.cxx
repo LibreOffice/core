@@ -299,8 +299,8 @@ CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 void CertificateViewerDetailsTP::dispose()
 {
     Clear();
+    m_pElementsLB.disposeAndClear();
     m_pElementsLBContainer.clear();
-    m_pElementsLB.clear();
     m_pValueDetails.clear();
     CertificateViewerTP::dispose();
 }

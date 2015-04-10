@@ -158,12 +158,12 @@ OSelectionBrowseBox::~OSelectionBrowseBox()
 
 void OSelectionBrowseBox::dispose()
 {
-    m_pTextCell.clear();
-    m_pVisibleCell.clear();
-    m_pFieldCell.clear();
-    m_pTableCell.clear();
-    m_pOrderCell.clear();
-    m_pFunctionCell.clear();
+    m_pTextCell.disposeAndClear();
+    m_pVisibleCell.disposeAndClear();
+    m_pFieldCell.disposeAndClear();
+    m_pTableCell.disposeAndClear();
+    m_pOrderCell.disposeAndClear();
+    m_pFunctionCell.disposeAndClear();
     ::svt::EditBrowseBox::dispose();
 }
 

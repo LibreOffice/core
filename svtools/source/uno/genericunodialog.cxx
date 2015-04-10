@@ -313,7 +313,7 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 
 void OGenericUnoDialog::destroyDialog()
 {
-    m_pDialog.clear();
+    m_pDialog.disposeAndClear();
 }
 
 

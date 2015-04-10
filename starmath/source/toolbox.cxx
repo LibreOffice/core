@@ -146,9 +146,8 @@ void SmToolBoxWindow::dispose()
 {
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
-    {
-        vToolBoxCategories[i].clear();
-    }
+        vToolBoxCategories[i].disposeAndClear();
+
     pToolBoxCmd = 0;
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
     {

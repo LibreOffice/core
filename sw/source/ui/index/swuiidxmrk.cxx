@@ -1534,11 +1534,11 @@ void SwCreateAuthEntryDlg_Impl::dispose()
 {
     for(int i = 0; i < AUTH_FIELD_END; i++)
     {
-        pFixedTexts[i].clear();
-        pEdits[i].clear();
+        pFixedTexts[i].disposeAndClear();
+        pEdits[i].disposeAndClear();
     }
-    pTypeListBox.clear();
-    pIdentifierBox.clear();
+    pTypeListBox.disposeAndClear();
+    pIdentifierBox.disposeAndClear();
     m_pOKBT.clear();
     ModalDialog::dispose();
 }

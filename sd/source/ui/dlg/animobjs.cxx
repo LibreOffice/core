@@ -224,7 +224,7 @@ void AnimationWindow::dispose()
     // delete the clones
     delete pMyDoc;
 
-    m_pCtlDisplay.clear();
+    m_pCtlDisplay.disposeAndClear();
     m_pBtnFirst.clear();
     m_pBtnReverse.clear();
     m_pBtnStop.clear();

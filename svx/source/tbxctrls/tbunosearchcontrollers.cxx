@@ -660,7 +660,7 @@ void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeExc
 
     svt::ToolboxController::dispose();
 
-    m_pMatchCaseControl.clear();
+    m_pMatchCaseControl.disposeAndClear();
 }
 
 // XInitialization

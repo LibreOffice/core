@@ -169,7 +169,7 @@ sal_Int16 TheExtensionManager::execute()
     if ( m_pUpdReqDialog )
     {
         nRet = m_pUpdReqDialog->Execute();
-        m_pUpdReqDialog.clear();
+        m_pUpdReqDialog.disposeAndClear();
     }
 
     return nRet;
@@ -256,8 +256,8 @@ void TheExtensionManager::terminateDialog()
     if ( ! dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        m_pExtMgrDialog.clear();
-        m_pUpdReqDialog.clear();
+        m_pExtMgrDialog.disposeAndClear();
+        m_pUpdReqDialog.disposeAndClear();
         Application::Quit();
     }
 }
@@ -421,8 +421,8 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         if ( dp_misc::office_is_running() )
         {
             const SolarMutexGuard guard;
-            m_pExtMgrDialog.clear();
-            m_pUpdReqDialog.clear();
+            m_pExtMgrDialog.disposeAndClear();
+            m_pUpdReqDialog.disposeAndClear();
         }
         s_ExtMgr.clear();
     }

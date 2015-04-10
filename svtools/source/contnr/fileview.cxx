@@ -642,7 +642,7 @@ void ViewTabListBox_Impl::dispose()
 {
     maResetQuickSearch.Stop();
 
-    mpHeaderBar.clear();
+    mpHeaderBar.disposeAndClear();
     SvHeaderTabListBox::dispose();
 }
 

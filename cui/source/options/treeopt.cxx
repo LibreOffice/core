@@ -575,6 +575,7 @@ void OfaTreeOptionsDialog::dispose()
                     SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
                     SetViewOptUserItem( aTabPageOpt, aPageData );
                 }
+                pPageInfo->m_pPage.disposeAndClear();
             }
 
             if (pPageInfo->m_nPageId == RID_SFXPAGE_LINGU)
@@ -586,6 +587,8 @@ void OfaTreeOptionsDialog::dispose()
                     linguistic::SaveDictionaries( xDicList );
                 }
             }
+
+            pPageInfo->m_pExtPage.disposeAndClear();
 
             delete pPageInfo;
         }
@@ -600,7 +603,7 @@ void OfaTreeOptionsDialog::dispose()
         {
             OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
             if ( pGroupInfo )
-                pGroupInfo->m_pExtPage.clear();
+                pGroupInfo->m_pExtPage.disposeAndClear();
             delete pGroupInfo;
         }
         pEntry = pTreeLB->Next(pEntry);

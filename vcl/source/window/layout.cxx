@@ -1478,6 +1478,12 @@ bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void VclExpander::dispose()
+{
+    m_pDisclosureButton.disposeAndClear();
+    VclBin::dispose();
+}
+
 const vcl::Window *VclExpander::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
@@ -1630,6 +1636,14 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     Link aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
     m_pHScroll->SetScrollHdl(aLink);
+}
+
+void VclScrolledWindow::dispose()
+{
+    m_pVScroll.disposeAndClear();
+    m_pHScroll.disposeAndClear();
+    m_aScrollBarBox.disposeAndClear();
+    VclBin::dispose();
 }
 
 IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)

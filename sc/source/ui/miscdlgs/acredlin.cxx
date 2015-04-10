@@ -168,7 +168,7 @@ void ScAcceptChgDlg::dispose()
         pChanges->SetModifiedLink(aLink);
     }
 
-    m_pAcceptChgCtr.clear();
+    m_pAcceptChgCtr.disposeAndClear();
     pTPFilter.clear();
     pTPView.clear();
     pTheView.clear();

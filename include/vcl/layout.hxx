@@ -522,8 +522,8 @@ public:
         m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_pDisclosureButton->Show();
     }
-    virtual ~VclExpander() { dispose(); }
-    void dispose() SAL_OVERRIDE { m_pDisclosureButton.clear(); VclBin::dispose(); }
+    virtual ~VclExpander() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { m_pDisclosureButton.disposeAndClear(); VclBin::dispose(); }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

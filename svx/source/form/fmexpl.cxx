@@ -519,7 +519,7 @@ namespace svxform
 
     void NavigatorFrame::dispose()
     {
-        m_pNavigatorTree.clear();
+        m_pNavigatorTree.disposeAndClear();
         SfxDockingWindow::dispose();
     }
 

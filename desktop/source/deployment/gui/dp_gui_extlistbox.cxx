@@ -253,13 +253,13 @@ void ExtensionBox_Impl::dispose()
 
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
-        (*iIndex)->m_pPublisher.clear();
+        (*iIndex)->m_pPublisher.disposeAndClear();
         (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
     }
 
     m_vEntries.clear();
 
-    m_pScrollBar.clear();
+    m_pScrollBar.disposeAndClear();
 
     m_xRemoveListener.clear();
 
@@ -435,7 +435,7 @@ void ExtensionBox_Impl::DeleteRemoved()
 
         for ( ITER iIndex = m_vRemovedEntries.begin(); iIndex < m_vRemovedEntries.end(); ++iIndex )
         {
-            (*iIndex)->m_pPublisher.clear();
+            (*iIndex)->m_pPublisher.disposeAndClear();
         }
 
         m_vRemovedEntries.clear();

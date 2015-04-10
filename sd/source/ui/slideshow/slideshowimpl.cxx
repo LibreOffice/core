@@ -705,13 +705,12 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     if( mpTimeButton )
-    {
         mpTimeButton->Hide();
-        mpTimeButton.clear();
-    }
+    mpTimeButton.disposeAndClear();
 
     if( mpShowWindow )
         mpShowWindow->Hide();
+    mpShowWindow.disposeAndClear();
 
     if ( mpViewShell )
     {

@@ -251,10 +251,10 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
-    _pBtnUp.clear();
+    _pBtnUp.disposeAndClear();
     delete _pUserFilter;
     delete _pFilter;
-    _pPlaces.clear();
+    _pPlaces.disposeAndClear();
 }
 
 

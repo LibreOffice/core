@@ -214,7 +214,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
                 delete pUserData;
         }
 
-        m_pStatusBar.clear();
+        m_pStatusBar.disposeAndClear();
 
         if ( m_bFrameActionRegistered && m_xFrame.is() )
         {

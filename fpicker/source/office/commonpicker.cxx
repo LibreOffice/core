@@ -123,7 +123,7 @@ namespace svt
                 m_pDlg->EndDialog( RET_CANCEL );
         }
 
-        m_pDlg.clear();
+        m_pDlg.disposeAndClear();
         m_xWindow = NULL;
         m_xDialogParent = NULL;
     }

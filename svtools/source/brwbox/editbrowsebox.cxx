@@ -195,7 +195,7 @@ namespace svt
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
 
-        pCheckBoxPaint.clear();
+        pCheckBoxPaint.disposeAndClear();
         m_pFocusWhileRequest.clear();
         pHeader.clear();
         BrowseBox::dispose();

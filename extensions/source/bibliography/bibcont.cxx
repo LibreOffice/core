@@ -181,7 +181,7 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
     if(pTopWin)
     {
         RemoveItem(TOP_WINDOW);
-        pTopWin.clear();
+        pTopWin.disposeAndClear();
     }
     pTopWin=new BibWindowContainer(this,pWin);
     pTopWin->Show();
@@ -198,7 +198,7 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
     if(pBottomWin)
     {
         RemoveItem(BOTTOM_WINDOW);
-        pBottomWin.clear();
+        pBottomWin.disposeAndClear();
     }
 
     pBottomWin=new BibWindowContainer(this,pWin);

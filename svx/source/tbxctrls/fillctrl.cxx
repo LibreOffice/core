@@ -567,8 +567,8 @@ FillControl::~FillControl()
 
 void FillControl::dispose()
 {
-    mpLbFillType.clear();
-    mpLbFillAttr.clear();
+    mpLbFillType.disposeAndClear();
+    mpLbFillAttr.disposeAndClear();
     vcl::Window::dispose();
 }
 

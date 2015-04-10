@@ -81,7 +81,7 @@ SidebarPanelBase::~SidebarPanelBase (void)
 void SAL_CALL SidebarPanelBase::disposing (void)
     throw (css::uno::RuntimeException)
 {
-    mpControl.clear();
+    mpControl.disposeAndClear();
 
     if (mxFrame.is())
     {

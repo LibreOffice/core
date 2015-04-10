@@ -83,8 +83,8 @@ namespace
             --_nPos;
             _pControl->Hide();
             _pControlText->Hide();
-            _pControl.clear();
-            _pControlText.clear();
+            _pControl.disposeAndClear();
+            _pControlText.disposeAndClear();
         }
     }
 
@@ -1049,7 +1049,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         if ( pFormatSample )
         {
             pFormatSample->Hide();
-            pFormatSample.clear();
+            pFormatSample.disposeAndClear();
         }
         break;
     case tpBoolDefault:

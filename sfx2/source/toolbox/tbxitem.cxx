@@ -209,7 +209,7 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
         if (( pWindow == mpFloatingWindow ) &&
             ( mpPopupWindow != nullptr ))
         {
-            mpPopupWindow.clear();
+            mpPopupWindow.disposeAndClear();
         }
     }
 
@@ -291,8 +291,8 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     pImpl->mxUIElement = 0;
 
     // Delete my popup windows
-    pImpl->mpFloatingWindow.clear();
-    pImpl->mpPopupWindow.clear();
+    pImpl->mpFloatingWindow.disposeAndClear();
+    pImpl->mpPopupWindow.disposeAndClear();
 }
 
 
@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
-        pImpl->mpFloatingWindow.clear();
+        pImpl->mpFloatingWindow.disposeAndClear();
         pImpl->mpFloatingWindow = pImpl->mpPopupWindow;
         pImpl->mpPopupWindow.clear();
         // We also need to know when the user tries to use the

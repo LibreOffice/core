@@ -153,10 +153,10 @@ void BrowseBox::dispose()
     }
 
     Hide();
-    getDataWindow()->pHeaderBar.clear();
-    getDataWindow()->pCornerWin.clear();
+    getDataWindow()->pHeaderBar.disposeAndClear();
+    getDataWindow()->pCornerWin.disposeAndClear();
     pDataWin.clear();
-    pVScroll.clear();
+    pVScroll.disposeAndClear();
     aHScroll.disposeAndClear();
 
     // free columns-space
@@ -2255,7 +2255,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     MultiSelection *pOldRowSel = bMultiSelection ? uRow.pSel : 0;
     MultiSelection *pOldColSel = pColSel;
 
-    pVScroll.clear();
+    pVScroll.disposeAndClear();
 
     bThumbDragging = ( nMode & BROWSER_THUMBDRAGGING ) == BROWSER_THUMBDRAGGING;
     bMultiSelection = ( nMode & BROWSER_MULTISELECTION ) == BROWSER_MULTISELECTION;
@@ -2408,7 +2408,7 @@ BrowserHeader* BrowseBox::CreateHeaderBar( BrowseBox* pParent )
 
 void BrowseBox::SetHeaderBar( BrowserHeader* pHeaderBar )
 {
-    static_cast<BrowserDataWin*>( pDataWin.get() )->pHeaderBar.clear();
+    static_cast<BrowserDataWin*>( pDataWin.get() )->pHeaderBar.disposeAndClear();
     static_cast<BrowserDataWin*>( pDataWin.get() )->pHeaderBar = pHeaderBar;
     static_cast<BrowserDataWin*>( pDataWin.get() )->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
 }

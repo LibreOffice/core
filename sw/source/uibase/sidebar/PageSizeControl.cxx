@@ -148,7 +148,7 @@ PageSizeControl::~PageSizeControl()
 
 void PageSizeControl::dispose()
 {
-    mpSizeValueSet.clear();
+    mpSizeValueSet.disposeAndClear();
     maMoreButton.disposeAndClear();
     maWidthHeightField.disposeAndClear();
     ::svx::sidebar::PopupControl::dispose();

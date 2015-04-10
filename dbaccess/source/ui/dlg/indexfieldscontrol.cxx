@@ -115,8 +115,8 @@ namespace dbaui
 
     void IndexFieldsControl::dispose()
     {
-        m_pSortingCell.clear();
-        m_pFieldNameCell.clear();
+        m_pSortingCell.disposeAndClear();
+        m_pFieldNameCell.disposeAndClear();
         ::svt::EditBrowseBox::dispose();
     }
 

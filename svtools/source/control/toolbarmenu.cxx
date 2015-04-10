@@ -129,7 +129,7 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
             xComponent->dispose();
         mxAccContext.clear();
     }
-    mpControl.clear();
+    mpControl.disposeAndClear();
 }
 
 

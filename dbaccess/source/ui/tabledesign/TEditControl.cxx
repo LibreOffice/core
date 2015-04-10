@@ -274,10 +274,10 @@ void OTableEditorCtrl::dispose()
         Application::RemoveUserEvent( nInvalidateTypeEvent );
 
     // Delete the control types
-    pNameCell.clear();
-    pTypeCell.clear();
-    pDescrCell.clear();
-    pHelpTextCell.clear();
+    pNameCell.disposeAndClear();
+    pTypeCell.disposeAndClear();
+    pDescrCell.disposeAndClear();
+    pHelpTextCell.disposeAndClear();
     pDescrWin.clear();
     OTableRowView::dispose();
 }

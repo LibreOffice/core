@@ -277,8 +277,8 @@ void SwAddressListDialog::dispose()
         delete pUserData;
         pEntry = m_pListLB->Next( pEntry );
     }
+    m_pListLB.disposeAndClear();
     m_pAddressPage.clear();
-    m_pListLB.clear();
     m_pDescriptionFI.clear();
     m_pLoadListPB.clear();
     m_pCreateListPB.clear();

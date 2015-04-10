@@ -1331,7 +1331,7 @@ void PrinterController::abortJob()
     // applications (well, sw) depend on a page request with "IsLastPage" = true
     // to free resources, else they (well, sw) will crash eventually
     setLastPage( true );
-    mpImplData->mpProgress.clear();
+    mpImplData->mpProgress.disposeAndClear();
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf, false );
 }

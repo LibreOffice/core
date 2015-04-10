@@ -871,8 +871,8 @@ void SwNavigationPI::dispose()
     if ( IsBound() )
         rBindings.Release(*this);
 
-    pPopupWindow.clear();
-    pFloatingWindow.clear();
+    pPopupWindow.disposeAndClear();
+    pFloatingWindow.disposeAndClear();
     aContentToolBox.disposeAndClear();
     aGlobalToolBox.disposeAndClear();
     aContentTree.disposeAndClear();

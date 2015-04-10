@@ -888,7 +888,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
 
 IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl)
 {
-    m_pFieldPopup.clear();
+    m_pFieldPopup.disposeAndClear();
     return 0;
 }
 

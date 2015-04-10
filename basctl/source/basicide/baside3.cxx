@@ -1414,10 +1414,8 @@ DialogWindowLayout::~DialogWindowLayout()
 void DialogWindowLayout::dispose()
 {
     if (pPropertyBrowser)
-    {
         Remove(pPropertyBrowser);
-    }
-    pPropertyBrowser.clear();
+    pPropertyBrowser.disposeAndClear();
     pChild.clear();
     Layout::dispose();
 }

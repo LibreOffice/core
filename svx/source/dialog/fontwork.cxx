@@ -163,14 +163,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 
     SfxChildWindow( _pParent, nId )
 {
-<<<<<<< HEAD
-    SvxFontWorkDialog* pDlg = new SvxFontWorkDialog(pBindings, this, _pParent);
-    pWindow = pDlg;
-=======
-    pWindow = new SvxFontWorkDialog( pBindings, this, _pParent,
-                                     SVX_RES( RID_SVXDLG_FONTWORK ) );
-    SvxFontWorkDialog* pDlg = static_cast<SvxFontWorkDialog*>(pWindow.get());
->>>>>>> 765a16f... vclwidget: change all vcl::window fields to be wrapped in VclPtr
+    pWindow = VclPtrInstance<SvxFontWorkDialog>(pBindings, this, _pParent);
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 

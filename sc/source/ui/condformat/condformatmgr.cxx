@@ -142,7 +142,7 @@ void ScCondFormatManagerDlg::dispose()
     m_pBtnAdd.clear();
     m_pBtnRemove.clear();
     m_pBtnEdit.clear();
-    m_pCtrlManager.clear();
+    m_pCtrlManager.disposeAndClear();
     ModalDialog::dispose();
 }
 

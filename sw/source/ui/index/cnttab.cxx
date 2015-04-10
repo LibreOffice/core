@@ -723,7 +723,7 @@ SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 
 void SwAddStylesDlg_Impl::dispose()
 {
-    m_pHeaderTree.clear();
+    m_pHeaderTree.disposeAndClear();
     m_pOk.clear();
     m_pLeftPB.clear();
     m_pRightPB.clear();
@@ -2767,10 +2767,9 @@ void SwTokenWindow::dispose()
 {
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control* pControl = (*it);
-        pControl->SetGetFocusHdl( Link() );
-        pControl->SetLoseFocusHdl( Link() );
-        delete pControl;
+        it->SetGetFocusHdl( Link() );
+        it->SetLoseFocusHdl( Link() );
+        it->disposeAndClear();
     }
     aControlList.clear();
     disposeBuilder();
@@ -2790,6 +2789,8 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     if(pForm)
     {
         //apply current level settings to the form
+        for (auto it = aControlList.begin(); it != aControlList.end(); ++it)
+             it->disposeAndClear();
         aControlList.clear();
     }
 
@@ -3133,7 +3134,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     {
         iterActive = aControlList.erase(iterActive);
         pActiveCtrl->Hide();
-        pActiveCtrl.clear();
+        pActiveCtrl.disposeAndClear();
     }
 
     //now the new button
@@ -3198,7 +3199,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
 
     aControlList.erase(it);
     pActiveCtrl->Hide();
-    pActiveCtrl.clear();
+    pActiveCtrl.disposeAndClear();
 
     SetActiveControl(pLeftEdit);
     AdjustPositions();
@@ -4216,7 +4217,7 @@ SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 
 void SwAutoMarkDlg_Impl::dispose()
 {
-    m_pEntriesBB.clear();
+    m_pEntriesBB.disposeAndClear();
     m_pOKPB.clear();
     ModalDialog::dispose();
 }

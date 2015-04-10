@@ -207,11 +207,11 @@ namespace svt
 
     void OWizardMachine::dispose()
     {
-        m_pFinish.clear();
-        m_pCancel.clear();
-        m_pNextPage.clear();
-        m_pPrevPage.clear();
-        m_pHelp.clear();
+        m_pFinish.disposeAndClear();
+        m_pCancel.disposeAndClear();
+        m_pNextPage.disposeAndClear();
+        m_pPrevPage.disposeAndClear();
+        m_pHelp.disposeAndClear();
 
         for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
             delete GetPage(i);

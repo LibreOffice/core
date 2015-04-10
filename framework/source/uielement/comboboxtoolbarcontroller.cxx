@@ -171,7 +171,7 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    m_pComboBox.clear();
+    m_pComboBox.disposeAndClear();
 
     ComplexToolbarController::dispose();
 }

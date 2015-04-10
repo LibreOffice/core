@@ -239,7 +239,7 @@ void SvxMultiPathDialog::dispose()
         }
     }
 
-    m_pRadioLB.clear();
+    m_pRadioLB.disposeAndClear();
     m_pAddBtn.clear();
     m_pDelBtn.clear();
     ModalDialog::dispose();

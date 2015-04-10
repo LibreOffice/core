@@ -330,7 +330,7 @@ void Condition::dispose()
     m_pMoveDown.clear();
     m_pAddCondition.clear();
     m_pRemoveCondition.clear();
-    m_pColorFloat.clear();
+    m_pColorFloat.disposeAndClear();
     VclHBox::dispose();
 }
 

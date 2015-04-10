@@ -126,12 +126,12 @@ void SwPageBreakWin::dispose()
     m_bDestroyed = true;
     m_aFadeTimer.Stop();
 
+    m_pLine.disposeAndClear();
     delete m_pPopupMenu;
     m_pPopupMenu = NULL;
     delete m_pMousePt;
     m_pMousePt = NULL;
 
-    m_pLine.clear();
     MenuButton::dispose();
 }
 

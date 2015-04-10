@@ -235,7 +235,7 @@ SdrPaintView::~SdrPaintView()
     ClearPageView();
 
 #ifdef DBG_UTIL
-    pItemBrowser.clear();
+    pItemBrowser.disposeAndClear();
 #endif
 
     // delete existing SdrPaintWindows
@@ -1132,7 +1132,7 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
     } else {
         if (pItemBrowser!=nullptr) {
             pItemBrowser->Hide();
-            pItemBrowser.clear();
+            pItemBrowser.disposeAndClear();
         }
     }
 }
