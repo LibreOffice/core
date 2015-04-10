@@ -281,7 +281,7 @@ private:
     {
         assert(mnRefCnt>0);
         if (!--mnRefCnt)
-            delete const_cast<OutputDevice*>(this);
+            delete this;
     }
 
 private:
