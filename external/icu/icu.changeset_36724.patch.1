@@ -1,0 +1,37 @@
+diff -ru2 icu/source/i18n/regexcmp.cpp icu/source/i18n/regexcmp.cpp
+--- icu/source/i18n/regexcmp.cpp	2013-10-04 22:48:42.000000000 +0200
++++ icu/source/i18n/regexcmp.cpp	2015-04-10 17:59:24.568227804 +0200
+@@ -2134,4 +2134,8 @@
+             int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
+             int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
++            if (URX_TYPE(maxML) != 0) {
++                error(U_REGEX_LOOK_BEHIND_LIMIT);
++                break;
++            }
+             if (maxML == INT32_MAX) {
+                 error(U_REGEX_LOOK_BEHIND_LIMIT);
+@@ -2167,4 +2171,8 @@
+             int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
+             int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
++            if (URX_TYPE(maxML) != 0) {
++                error(U_REGEX_LOOK_BEHIND_LIMIT);
++                break;
++            }
+             if (maxML == INT32_MAX) {
+                 error(U_REGEX_LOOK_BEHIND_LIMIT);
+diff -ru2 icu/source/test/testdata/regextst.txt icu/source/test/testdata/regextst.txt
+--- icu/source/test/testdata/regextst.txt	2013-10-04 22:48:12.000000000 +0200
++++ icu/source/test/testdata/regextst.txt	2015-04-10 18:00:41.254717186 +0200
+@@ -1174,4 +1174,12 @@
+ 
+ 
++# Bug 11370
++#   Max match length computation of look-behind expression gives result that is too big to fit in the
++#   in the 24 bit operand portion of the compiled code. Expressions should fail to compile
++#   (Look-behind match length must be bounded. This case is treated as unbounded, an error.)
++
++"(?<!(0123456789a){10000000})x"         E  "no match"
++"(?<!\\ubeaf(\\ubeaf{11000}){11000})"   E  "no match"
++
+ #  Random debugging, Temporary
+ #
