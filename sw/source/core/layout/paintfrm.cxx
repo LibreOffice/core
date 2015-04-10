@@ -4309,7 +4309,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         }
         else
         {
-            // create new subsidiardy lines
+            // create new subsidiary lines
             gProp.pSSubsLines = new SwSubsRects;
             bSubsLineRectsCreated = true;
         }
@@ -4323,7 +4323,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         }
         else
         {
-            // create new special subsidiardy lines
+            // create new special subsidiary lines
             gProp.pSSpecSubsLines = new SwSubsRects;
             bSpecSubsLineRectsCreated = true;
         }
