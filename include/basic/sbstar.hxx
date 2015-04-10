@@ -109,7 +109,7 @@ public:
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, const OUString& rSrc );
-    bool            Compile( SbModule* );
+    static bool     Compile( SbModule* );
     static void     Stop();
     static void     Error( SbError );
     static void     Error( SbError, const OUString& rMsg );

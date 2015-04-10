@@ -126,7 +126,7 @@ class MacroSnippet
 
     DECL_LINK( BasicErrorHdl, StarBASIC * );
 
-    ErrorDetail GetError()
+    static ErrorDetail GetError()
     {
         ErrorDetail aErr;
         aErr.sErrorText = StarBASIC::GetErrorText();

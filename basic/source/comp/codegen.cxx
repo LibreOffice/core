@@ -408,7 +408,7 @@ class PCodeBufferWalker
 private:
     T  m_nBytes;
     sal_uInt8* m_pCode;
-    T readParam( sal_uInt8*& pCode )
+    static T readParam( sal_uInt8*& pCode )
     {
         short nBytes = sizeof( T );
         T nOp1=0;

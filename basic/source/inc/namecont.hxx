@@ -389,7 +389,7 @@ public:
     }
 
     void    enterMethod();
-    void    leaveMethod();
+    static void leaveMethod();
     bool    isDisposed() const { return rBHelper.bInDispose || rBHelper.bDisposed; }
     void    checkDisposed() const;
 
@@ -540,18 +540,15 @@ public:
 
 class LibraryContainerMethodGuard
 {
-private:
-    SfxLibraryContainer&    m_rContainer;
 public:
     LibraryContainerMethodGuard( SfxLibraryContainer& _rContainer )
-        :m_rContainer( _rContainer )
     {
-        m_rContainer.enterMethod();
+        _rContainer.enterMethod();
     }
 
     ~LibraryContainerMethodGuard()
     {
-        m_rContainer.leaveMethod();
+        basic::SfxLibraryContainer::leaveMethod();
     }
 };
 
@@ -732,7 +729,7 @@ class ScriptSubPackageIterator
     sal_Int32 m_nSubPkgCount;
     sal_Int32 m_iNextSubPkg;
 
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+    static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implDetectScriptPackage( const com::sun::star::uno::Reference
             < com::sun::star::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
 

@@ -1059,7 +1059,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     return false;
 }
 
-bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
+bool BasicManager::ImplEncryptStream( SvStream& rStrm )
 {
     sal_Size nPos = rStrm.Tell();
     sal_uInt32 nCreator;
@@ -1114,7 +1114,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     return bLoaded;
 }
 
-void BasicManager::CheckModules( StarBASIC* pLib, bool bReference ) const
+void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
 {
     if ( !pLib )
     {
@@ -1128,7 +1128,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference ) const
         DBG_ASSERT( pModule, "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
-            pLib->Compile( pModule );
+            StarBASIC::Compile( pModule );
         }
     }
 
