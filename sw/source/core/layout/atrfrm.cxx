@@ -2499,7 +2499,8 @@ SwFrameFormat::SwFrameFormat(
     const sal_uInt16* pWhichRange)
 :   SwFormat(rPool, pFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
-    maFillAttributes()
+    maFillAttributes(),
+    m_ffList(nullptr)
 {
 }
 
@@ -2511,7 +2512,8 @@ SwFrameFormat::SwFrameFormat(
     const sal_uInt16* pWhichRange)
 :   SwFormat(rPool, rFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
-    maFillAttributes()
+    maFillAttributes(),
+    m_ffList(nullptr)
 {
 }
 
@@ -2525,6 +2527,29 @@ SwFrameFormat::~SwFrameFormat()
             rAnchor.GetContentAnchor()->nNode.GetNode().RemoveAnchoredFly(this);
         }
     }
+}
+
+void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
+{
+    if (m_ffList != nullptr) {
+        SwFrameFormats::iterator it = m_ffList->find( this );
+        assert( m_ffList->end() != it );
+        SAL_INFO_IF(m_aFormatName == rNewName, "sw", "SwFrmFmt not really renamed, as both names are equal");
+
+        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
+        // As it's a non-unique list, rename should never fail!
+#if OSL_DEBUG_LEVEL > 0
+        bool renamed =
+#endif
+            m_ffList->modify( it, change_name( rNewName ), change_name( m_aFormatName ) );
+        assert(renamed);
+        if (bBroadcast) {
+            SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
+            ModifyNotification( &aOld, &aNew );
+        }
+    }
+    else
+        SwFormat::SetName( rNewName, bBroadcast );
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
@@ -2827,8 +2852,8 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
-    for (size_t i = 0; i < size(); ++i)
-        GetFormat(i)->dumpAsXml(pWriter);
+    for (const SwFrameFormat *pFormat : SwFrameFormatsBase::get<0>())
+        pFormat->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 

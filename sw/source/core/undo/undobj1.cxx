@@ -220,7 +220,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     // delete from array
     SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
-    rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFrameFormat ));
+    rFlyFormats.erase( pFrameFormat );
 }
 
 SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )

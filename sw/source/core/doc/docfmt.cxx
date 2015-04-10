@@ -711,10 +711,8 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
     }
     else
     {
-
         // The format has to be in the one or the other, we'll see in which one.
-        SwFrameFormats::iterator it = std::find( mpFrameFormatTable->begin(), mpFrameFormatTable->end(), pFormat );
-        if ( it != mpFrameFormatTable->end() )
+        if ( mpFrameFormatTable->Contains( pFormat ) )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFormat->GetName(),
@@ -728,17 +726,17 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            delete *it;
-            mpFrameFormatTable->erase(it);
+            mpFrameFormatTable->erase( pFormat );
+            delete pFormat;
         }
         else
         {
-            SwFrameFormats::iterator it2 = std::find( GetSpzFrameFormats()->begin(), GetSpzFrameFormats()->end(), pFormat );
-            OSL_ENSURE( it2 != GetSpzFrameFormats()->end(), "FrameFormat not found." );
-            if( it2 != GetSpzFrameFormats()->end() )
+            bool contains = GetSpzFrameFormats()->Contains( pFormat );
+            OSL_ENSURE( contains, "FrameFormat not found." );
+            if( contains )
             {
-                delete *it2;
-                GetSpzFrameFormats()->erase( it2 );
+                GetSpzFrameFormats()->erase( pFormat );
+                delete pFormat;
             }
         }
     }
@@ -746,10 +744,10 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
 
 void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
 {
-    SwFrameFormats::iterator it = std::find( mpTableFrameFormatTable->begin(), mpTableFrameFormatTable->end(), pFormat );
+    SwFrameFormats::const_iterator it = mpTableFrameFormatTable->find( pFormat );
     OSL_ENSURE( it != mpTableFrameFormatTable->end(), "Format not found," );
-    delete *it;
-    mpTableFrameFormatTable->erase(it);
+    mpTableFrameFormatTable->erase( it );
+    delete pFormat;
 }
 
 /// Create the formats
@@ -1567,11 +1565,11 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     }
 
     // then there are the numbering templates
-    const SwPageDescs::size_type nCnt = rSource.GetNumRuleTable().size();
+    const SwNumRuleTable::size_type nCnt = rSource.GetNumRuleTable().size();
     if( nCnt )
     {
         const SwNumRuleTable& rArr = rSource.GetNumRuleTable();
-        for( SwPageDescs::size_type n = 0; n < nCnt; ++n )
+        for( SwNumRuleTable::size_type n = 0; n < nCnt; ++n )
         {
             const SwNumRule& rR = *rArr[ n ];
             SwNumRule* pNew = FindNumRulePtr( rR.GetName());
@@ -2031,6 +2029,112 @@ namespace docfunc
         }
         return bRet;
     }
+}
+
+SwFrameFormats::~SwFrameFormats()
+{
+    DeleteAndDestroyAll( false );
+}
+
+SwFrameFormats::iterator SwFrameFormats::find( const value_type& x ) const
+{
+    const ByTypeAndName &pd_named = SwFrameFormatsBase::get<1>();
+    ByTypeAndName::iterator it = pd_named.find( boost::make_tuple(x->Which(), x->GetName(), x) );
+    return project<0>( it );
+}
+
+std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
+SwFrameFormats::rangeFind( sal_uInt16 type, const OUString& name ) const
+{
+    const ByTypeAndName &pd_named = SwFrameFormatsBase::get<1>();
+    return pd_named.equal_range( boost::make_tuple(type, name) );
+}
+
+std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
+SwFrameFormats::rangeFind( const value_type& x ) const
+{
+    return rangeFind( x->Which(), x->GetName() );
+}
+
+void SwFrameFormats::DeleteAndDestroy(int aStartIdx, int aEndIdx)
+{
+    if (aEndIdx < aStartIdx)
+        return;
+    for (const_iterator it = begin() + aStartIdx;
+                        it != begin() + aEndIdx; ++it)
+        delete *it;
+    ByPos::erase( begin() + aStartIdx, begin() + aEndIdx);
+}
+
+void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
+{
+    if ( empty() )
+        return;
+    const int _offset = keepDefault ? 1 : 0;
+    for( const_iterator it = begin() + _offset; it != end(); ++it )
+        delete *it;
+    if ( _offset )
+        SwFrameFormatsBase::erase( begin() + _offset, end() );
+    else
+        clear();
+}
+
+size_t SwFrameFormats::GetPos( const value_type& x ) const
+{
+    const_iterator const it = find( x );
+    return it == end() ? SIZE_MAX : it - begin();
+}
+
+std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const value_type& x )
+{
+    SAL_WARN_IF(x->m_ffList != nullptr, "sw", "Inserting already assigned item");
+    assert(x->m_ffList == nullptr);
+    x->m_ffList = this;
+    return ByPos::push_back( x );
+}
+
+bool SwFrameFormats::erase( const value_type& x )
+{
+    const_iterator const ret = find( x );
+    SAL_WARN_IF(x->m_ffList != this, "sw", "Removing invalid / unassigned item");
+    if (ret != end()) {
+        assert( x == *ret );
+        ByPos::erase( ret );
+        x->m_ffList = nullptr;
+        return true;
+    }
+    return false;
+}
+
+void SwFrameFormats::erase( size_type index_ )
+{
+    erase( begin() + index_ );
+}
+
+void SwFrameFormats::erase( const_iterator const& position )
+{
+    (*position)->m_ffList = nullptr;
+    ByPos::erase( begin() + (position - begin()) );
+}
+
+bool SwFrameFormats::Contains( const SwFrameFormats::value_type& x ) const
+{
+    return (x->m_ffList == this);
+}
+
+bool SwFrameFormats::newDefault( const value_type& x )
+{
+    std::pair<iterator,bool> res = ByPos::push_front( x );
+    if( ! res.second )
+        newDefault( res.first );
+    return res.second;
+}
+
+void SwFrameFormats::newDefault( const_iterator const& position )
+{
+    if (position == begin())
+        return;
+    ByPos::relocate( begin(), position );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

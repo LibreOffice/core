@@ -43,6 +43,8 @@ namespace drawinglayer { namespace attribute {
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFormat : public SwModify
 {
+    friend class SwFrameFormat;
+
     OUString m_aFormatName;
     SwAttrSet m_aSet;
 
@@ -111,7 +113,7 @@ public:
 
     const OUString& GetName() const                  { return m_aFormatName; }
     inline bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
-    void SetName( const OUString& rNewName, bool bBroadcast=false );
+    virtual void SetName( const OUString& rNewName, bool bBroadcast=false );
 
     /// For querying the attribute array.
     inline const SwAttrSet& GetAttrSet() const { return m_aSet; }
