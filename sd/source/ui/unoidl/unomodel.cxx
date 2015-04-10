@@ -2442,13 +2442,13 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     switch (nType)
     {
     case LOK_SETTEXTSELECTION_START:
-        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+        pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
         break;
     case LOK_SETTEXTSELECTION_END:
-        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+        pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
         break;
     case LOK_SETTEXTSELECTION_RESET:
-        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+        pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:
         assert(false);

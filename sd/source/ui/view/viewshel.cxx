@@ -532,7 +532,7 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     mpActiveWindow->SetPointerPosPixel(aPoint);
 }
 
-void ViewShell::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     if (SdrView* pSdrView = GetView())
     {
