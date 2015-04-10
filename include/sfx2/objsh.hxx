@@ -159,7 +159,7 @@ namespace o3tl
     template<> struct typed_flags<HiddenInformation> : is_typed_flags<HiddenInformation, 0x07> {};
 }
 
-enum HiddenWarningFact
+enum class HiddenWarningFact
 {
     WhenSaving = 0,
     WhenPrinting,

@@ -2959,25 +2959,25 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
 
     switch ( eFact )
     {
-        case WhenSaving :
+        case HiddenWarningFact::WhenSaving :
         {
             nResId = STR_HIDDENINFO_CONTINUE_SAVING;
             eOption = SvtSecurityOptions::E_DOCWARN_SAVEORSEND;
             break;
         }
-        case WhenPrinting :
+        case HiddenWarningFact::WhenPrinting :
         {
             nResId = STR_HIDDENINFO_CONTINUE_PRINTING;
             eOption = SvtSecurityOptions::E_DOCWARN_PRINT;
             break;
         }
-        case WhenSigning :
+        case HiddenWarningFact::WhenSigning :
         {
             nResId = STR_HIDDENINFO_CONTINUE_SIGNING;
             eOption = SvtSecurityOptions::E_DOCWARN_SIGNING;
             break;
         }
-        case WhenCreatingPDF :
+        case HiddenWarningFact::WhenCreatingPDF :
         {
             nResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
             eOption = SvtSecurityOptions::E_DOCWARN_CREATEPDF;
@@ -2991,7 +2991,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
     {
         OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
         HiddenInformation nWantedStates = HiddenInformation::RECORDEDCHANGES | HiddenInformation::NOTES;
-        if ( eFact != WhenPrinting )
+        if ( eFact != HiddenWarningFact::WhenPrinting )
             nWantedStates |= HiddenInformation::DOCUMENTVERSIONS;
         HiddenInformation nStates = GetHiddenInformationState( nWantedStates );
         bool bWarning = false;

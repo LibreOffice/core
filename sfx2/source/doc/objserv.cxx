@@ -405,7 +405,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
-        if ( QueryHiddenInformation( WhenSigning, NULL ) == RET_YES )
+        if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, NULL ) == RET_YES )
             ( SID_SIGNATURE == nId ) ? SignDocumentContent() : SignScriptingContent();
         return;
     }
@@ -653,7 +653,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 SfxStoringHelper aHelper;
 
-                if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
+                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, NULL ) == RET_YES )
                 {
                     aHelper.GUIStoreModel( GetModel(),
                                                          OUString::createFromAscii( pSlot->GetUnoName() ),

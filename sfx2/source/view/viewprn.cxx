@@ -675,7 +675,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
             }
 
-            if ( !bSilent && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
+            if ( !bSilent && pDoc->QueryHiddenInformation( HiddenWarningFact::WhenPrinting, NULL ) != RET_YES )
                 return;
 
             // should we print only the selection or the whole document
