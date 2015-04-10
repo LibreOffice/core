@@ -663,31 +663,23 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
 
     const uno::Sequence< text::TableColumnSeparator>* pSepSeq =
                 static_cast<uno::Sequence< text::TableColumnSeparator> const *>(rVal.getValue());
-    if(pSepSeq && static_cast<size_t>(pSepSeq->getLength()) == nOldCount)
+    if(!pSepSeq || static_cast<size_t>(pSepSeq->getLength()) != nOldCount)
+        return;
+    SwTabCols aCols(aOldCols);
+    const text::TableColumnSeparator* pArray = pSepSeq->getConstArray();
+    long nLastValue = 0;
+    //sal_Int32 nTblWidth = aCols.GetRight() - aCols.GetLeft();
+    for(size_t i = 0; i < nOldCount; ++i)
     {
-        SwTabCols aCols(aOldCols);
-        bool bError = false;
-        const text::TableColumnSeparator* pArray = pSepSeq->getConstArray();
-        long nLastValue = 0;
-        //sal_Int32 nTblWidth = aCols.GetRight() - aCols.GetLeft();
-        for(size_t i = 0; i < nOldCount; ++i)
-        {
-            aCols[i] = pArray[i].Position;
-            if(pArray[i].IsVisible == (aCols.IsHidden(i) ? 1 : 0) ||
+        aCols[i] = pArray[i].Position;
+        if(pArray[i].IsVisible == (aCols.IsHidden(i) ? 1 : 0) ||
                 (!bRow && aCols.IsHidden(i)) ||
                 aCols[i] < nLastValue ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )
-            {
-                bError = true;
-                break;
-            }
-            nLastValue = aCols[i];
-        }
-        if(!bError)
-        {
-            pDoc->SetTabCols(*pTable, aCols, aOldCols, pBox, bRow );
-        }
+            return; // probably this should assert()
+        nLastValue = aCols[i];
     }
+    pDoc->SetTabCols(*pTable, aCols, aOldCols, pBox, bRow );
 }
 
 static inline OUString lcl_getString( SwXCell &rCell )
