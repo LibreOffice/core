@@ -357,42 +357,43 @@ void sw_GetCellPosition(const OUString &rCellName,
 {
     rColumn = rRow = -1;    // default return values indicating failure
     const sal_Int32 nLen = rCellName.getLength();
-    if (nLen)
+    if(!nLen)
     {
-        sal_Int32 nRowPos = 0;
-        while (nRowPos<nLen)
+        SAL_WARN("sw.uno", "failed to get column or row index");
+        return;
+    }
+    sal_Int32 nRowPos = 0;
+    while (nRowPos<nLen)
+    {
+        if (rCellName[nRowPos]>='0' && rCellName[nRowPos]<='9')
         {
-            if (rCellName[nRowPos]>='0' && rCellName[nRowPos]<='9')
+            break;
+        }
+        ++nRowPos;
+    }
+    if (nRowPos>0 && nRowPos<nLen)
+    {
+        sal_Int32 nColIdx = 0;
+        for (sal_Int32 i = 0;  i < nRowPos;  ++i)
+        {
+            nColIdx *= 52;
+            if (i < nRowPos - 1)
+                ++nColIdx;
+            const sal_Unicode cChar = rCellName[i];
+            if ('A' <= cChar && cChar <= 'Z')
+                nColIdx += cChar - 'A';
+            else if ('a' <= cChar && cChar <= 'z')
+                nColIdx += 26 + cChar - 'a';
+            else
             {
+                nColIdx = -1;   // sth failed
                 break;
             }
-            ++nRowPos;
         }
-        if (nRowPos>0 && nRowPos<nLen)
-        {
-            sal_Int32 nColIdx = 0;
-            for (sal_Int32 i = 0;  i < nRowPos;  ++i)
-            {
-                nColIdx *= 52;
-                if (i < nRowPos - 1)
-                    ++nColIdx;
-                const sal_Unicode cChar = rCellName[i];
-                if ('A' <= cChar && cChar <= 'Z')
-                    nColIdx += cChar - 'A';
-                else if ('a' <= cChar && cChar <= 'z')
-                    nColIdx += 26 + cChar - 'a';
-                else
-                {
-                    nColIdx = -1;   // sth failed
-                    break;
-                }
-            }
 
-            rColumn = nColIdx;
-            rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
-        }
+        rColumn = nColIdx;
+        rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
     }
-    OSL_ENSURE( rColumn >= 0 && rRow >= 0, "failed to get column or row index" );
 }
 
 /** compare position of two cells (check rows first)
@@ -512,28 +513,24 @@ OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
  */
 const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const bool i_bTopLeft)
 {
-    bool bFirst = true;
-    const SwTableBox* pBox = 0;
-    do
+    const SwTableLines* pLines(&rTableLines);
+    while(true)
     {
-        const SwTableLines& rLines(bFirst ? rTableLines : pBox->GetTabLines());
-        bFirst = false;
-        assert(rLines.size() != 0);
-        if (!rLines.empty())
-        {
-            const SwTableLine* pLine(i_bTopLeft ? rLines.front() : rLines.back());
-            assert(pLine);
-            const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
-            assert(rBoxes.size() != 0);
-            pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
-            assert(pBox);
-        }
-        else
-        {
-            pBox = 0;
-        }
-    } while (pBox && !pBox->GetSttNd());
-    return pBox;
+        assert(!pLines->empty());
+        if(pLines->empty())
+            return nullptr;
+        const SwTableLine* pLine(i_bTopLeft ? pLines->front() : pLines->back());
+        assert(pLine);
+        const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
+        assert(rBoxes.size() != 0);
+        const SwTableBox* pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
+        assert(pBox);
+        if(!pBox)
+            return nullptr;
+        if(pBox->GetSttNd())
+            return pBox;
+        pLines = &pBox->GetTabLines();
+    }
 }
 
 /** cleanup order in a range
