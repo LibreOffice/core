@@ -1117,6 +1117,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert("BackgroundParaOverDrawings");
     aSet.insert("TabOverMargin");
     aSet.insert("PropLineSpacingShrinksFirstLine");
+    aSet.insert("SubtractFlysAnchoredAtFlys");
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1152,6 +1153,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bBackgroundParaOverDrawings = false;
     bool bTabOverMargin = false;
     bool bPropLineSpacingShrinksFirstLine = false;
+    bool bSubtractFlysAnchoredAtFlys = false;
 
     const PropertyValue* currentDatabaseDataSource = NULL;
     const PropertyValue* currentDatabaseCommand = NULL;
@@ -1241,6 +1243,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bTabOverMargin = true;
                 else if ( pValues->Name == "PropLineSpacingShrinksFirstLine" )
                     bPropLineSpacingShrinksFirstLine = true;
+                else if (pValues->Name == "SubtractFlysAnchoredAtFlys")
+                    bSubtractFlysAnchoredAtFlys = true;
             }
             catch( Exception& )
             {
@@ -1418,6 +1422,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bPropLineSpacingShrinksFirstLine)
         xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));
+
+    if (!bSubtractFlysAnchoredAtFlys)
+        xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );

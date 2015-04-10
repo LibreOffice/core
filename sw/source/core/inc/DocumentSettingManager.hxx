@@ -148,6 +148,7 @@ class DocumentSettingManager :
     bool mbTabOverMargin;
     bool mbSurroundTextWrapSmall;
     bool mbPropLineSpacingShrinksFirstLine; // fdo#79602
+    bool mbSubtractFlys; // tdf#86578
     bool mApplyParagraphMarkFormatToNumbering;
 
     bool mbLastBrowseMode                           : 1;
