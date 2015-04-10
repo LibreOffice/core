@@ -40,6 +40,7 @@ public:
 
 #if !defined(WNT) && !defined(MACOSX)
     void testRegisterCallback();
+    void testPostKeyEvent();
     void testPostMouseEvent();
     void testSetTextSelection();
 #endif
@@ -47,6 +48,7 @@ public:
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testRegisterCallback);
+    CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
 #endif
@@ -135,6 +137,32 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+}
+
+void SdTiledRenderingTest::testPostKeyEvent()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject->GetObjIdentifier());
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    // Did we manage to enter a second character?
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), rEditView.GetSelection().nStartPos);
+    ESelection aWordSelection(0, 0, 0, 2); // start para, start char, end para, end char.
+    rEditView.SetSelection(aWordSelection);
+    // Did we enter the expected character?
+    CPPUNIT_ASSERT_EQUAL(OUString("xx"), rEditView.GetSelected());
 }
 
 void SdTiledRenderingTest::testPostMouseEvent()
