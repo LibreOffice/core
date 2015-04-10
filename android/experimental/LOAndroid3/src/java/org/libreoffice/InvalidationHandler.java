@@ -156,13 +156,13 @@ public class InvalidationHandler implements Document.MessageCallback {
             mDocumentOverlay.positionCursor(cursorRectangle);
             mDocumentOverlay.positionHandle(SelectionHandle.HandleType.MIDDLE, cursorRectangle);
 
+            if (mState == OverlayState.TRANSITION || mState == OverlayState.CURSOR) {
+                changeStateTo(OverlayState.CURSOR);
+            }
+
             if (mKeyEvent) {
                 moveViewportToMakeCursorVisible(cursorRectangle);
                 mKeyEvent = false;
-            }
-
-            if (mState == OverlayState.TRANSITION || mState == OverlayState.CURSOR) {
-                changeStateTo(OverlayState.CURSOR);
             }
         }
     }
