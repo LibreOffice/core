@@ -135,7 +135,7 @@ void ValueSet::dispose()
         xComponent->dispose();
 
     ImplDeleteItems();
-    mpScrollBar.disposeAndClear();
+    mxScrollBar.disposeAndClear();
     Control::dispose();
 }
 

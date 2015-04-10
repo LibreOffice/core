@@ -833,7 +833,7 @@ void DbgGUIStart()
 
     if ( pData )
     {
-        ScopedVclPtrInstance< DbgDialog > pDialog;
+        ScopedVclPtrInstance< DbgDialog > xDialog;
         // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;

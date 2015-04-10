@@ -1456,9 +1456,9 @@ class DemoWidgets : public WorkWindow
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_STDWORK),
-        mpBox(new VclVBox(this, false, 3)),
-        mpToolbox(new ToolBox(mpBox)),
-        mpButton(new PushButton(mpBox))
+        mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
+        mpToolbox(VclPtrInstance<ToolBox>(mpBox)),
+        mpButton(VclPtrInstance<PushButton>(mpBox))
     {
         SetText("VCL widget demo");
 
@@ -1486,7 +1486,7 @@ public:
     {
         mpBox.disposeAndClear();
         mpToolbox.disposeAndClear();
-        mpPushButton.disposeAndClear();
+        mpButton.disposeAndClear();
         WorkWindow::dispose();
     }
     virtual void Paint(const Rectangle&) SAL_OVERRIDE

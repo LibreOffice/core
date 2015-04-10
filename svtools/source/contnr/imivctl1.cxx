@@ -2084,8 +2084,8 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight( SvxIconChoiceCtrlEntry* pEntry 
     if( nHeight > nMaxBoundHeight )
     {
         const_cast<SvxIconChoiceCtrl_Impl*>(this)->nMaxBoundHeight = nHeight;
-        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aHorSBar.SetLineSize( GetScrollBarLineSize() );
-        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aVerSBar.SetLineSize( GetScrollBarLineSize() );
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aHorSBar->SetLineSize( GetScrollBarLineSize() );
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aVerSBar->SetLineSize( GetScrollBarLineSize() );
     }
     return nHeight;
 }

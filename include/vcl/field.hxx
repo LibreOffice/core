@@ -628,7 +628,6 @@ protected:
 
 public:
     explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
-    virtual                 ~DateField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -662,7 +661,6 @@ protected:
 
 public:
     explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
-    virtual                 ~TimeField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
