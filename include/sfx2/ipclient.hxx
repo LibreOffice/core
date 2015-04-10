@@ -29,11 +29,11 @@
 #include <tools/gen.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <vcl/window.hxx>
 
 class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
-namespace vcl { class Window; }
 class Fraction;
 
 

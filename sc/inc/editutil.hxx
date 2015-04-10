@@ -28,8 +28,8 @@
 #include <tools/time.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
+#include <vcl/outdev.hxx>
 
-class OutputDevice;
 class ScDocument;
 class ScPatternAttr;
 class ScEditEngineDefaulter;

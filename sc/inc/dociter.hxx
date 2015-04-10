@@ -26,6 +26,7 @@
 #include "scdllapi.h"
 #include "cellvalue.hxx"
 #include "mtvelements.hxx"
+#include <vcl/vclptr.hxx>
 
 #include <memory>
 

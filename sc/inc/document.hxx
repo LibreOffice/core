@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
