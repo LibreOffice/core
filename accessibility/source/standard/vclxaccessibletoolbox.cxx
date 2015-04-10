@@ -624,7 +624,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
                 VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >(
                     pWin->GetParent()->GetAccessible()->getAccessibleContext().get() );
                 if ( pParent )
-                    pParent->ReleaseSubToolBox(static_cast<ToolBox *>(pWin));
+                    pParent->ReleaseSubToolBox(static_cast<ToolBox *>(pWin.get()));
             }
 
             // dispose all items

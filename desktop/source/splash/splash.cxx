@@ -629,7 +629,7 @@ void SplashScreenWindow::Paint( const Rectangle&)
         }
 
         if( (DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                ControlState::ENABLED, aValue, _sProgressText )) )
+                                ControlState::ENABLED, aValue, pSpl->_sProgressText )) )
         {
             return;
         }

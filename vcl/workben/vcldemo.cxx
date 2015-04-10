@@ -1457,8 +1457,8 @@ public:
     DemoWidgets() :
         WorkWindow(NULL, WB_STDWORK),
         mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
-        mpToolbox(VclPtrInstance<ToolBox>(mpBox)),
-        mpButton(VclPtrInstance<PushButton>(mpBox))
+        mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
+        mpButton(VclPtrInstance<PushButton>(mpBox.get()))
     {
         SetText("VCL widget demo");
 
@@ -1503,7 +1503,7 @@ public:
         DrawWallpaper(aWholeSize, aWallpaper);
         Pop();
 
-        ScopedVclPtr< VirtualDevice > pDev(new VirtualDevice(*this));
+        ScopedVclPtrInstance< VirtualDevice > pDev(*this);
         pDev->EnableRTL(IsRTLEnabled());
         pDev->SetOutputSizePixel(aExclude.GetSize());
 
@@ -1617,19 +1617,22 @@ public:
             }
 
             ScopedVclPtrInstance<DemoWin> aMainWin(aRenderer, bThreads);
-            VclPtr<DemoWidgets> aWidgets;
+            VclPtr<DemoWidgets> xWidgets;
             VclPtr<DemoPopup> xPopup;
 
             aMainWin->SetText("Interactive VCL demo #1");
 
             if (bWidgets)
-                xWidgets.reset(new DemoWidgets());
+                xWidgets = VclPtrInstance< DemoWidgets > ();
             else if (bPopup)
-                xPopup.reset(new DemoPopup());
+                xPopup = VclPtrInstance< DemoPopup> ();
             else
                 aMainWin->Show();
 
             Application::Execute();
+
+            xWidgets.disposeAndClear();
+            xPopup.disposeAndClear();
         }
         catch (const css::uno::Exception& e)
         {
