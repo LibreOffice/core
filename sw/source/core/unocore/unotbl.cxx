@@ -259,7 +259,6 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
 
 static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry )
 {
-    uno::Any aRet;
     switch(pEntry->nWID)
     {
         case  FN_TABLE_HEADLINE_REPEAT:
@@ -268,69 +267,52 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             SwTable* pTable = SwTable::FindTable( pFmt );
             const sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
-            {
-                aRet <<= nRepeat > 0;
-            }
-            else
-                aRet <<= (sal_Int32)nRepeat;
+                return uno::makeAny<bool>(nRepeat > 0);
+            return uno::makeAny<sal_Int32>(nRepeat);
         }
-        break;
 
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_IS_RELATIVE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
+            uno::Any aRet;
             const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
             if(FN_TABLE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
             else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
             else
-            {
-                aRet <<= 0 != rSz.GetWidthPercent();
-            }
+                aRet = uno::makeAny<bool>(0 != rSz.GetWidthPercent());
+            return aRet;
         }
-        break;
 
         case RES_PAGEDESC:
         {
             const SfxItemSet& rSet = pFmt->GetAttrSet();
             const SfxPoolItem* pItem;
-            OUString sPDesc;
             if(SfxItemState::SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
             {
                 const SwPageDesc* pDsc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
                 if(pDsc)
-                {
-                   sPDesc = SwStyleNameMapper::GetProgName(pDsc->GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
-                }
+                    return uno::makeAny<OUString>(SwStyleNameMapper::GetProgName(pDsc->GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC ));
             }
-            aRet <<= sPDesc;
+            return uno::makeAny(OUString());
         }
-        break;
 
-        case RES_ANCHOR :
-            aRet <<= text::TextContentAnchorType_AT_PARAGRAPH;
-        break;
+        case RES_ANCHOR:
+            return uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH);
 
-        case FN_UNO_ANCHOR_TYPES :
+        case FN_UNO_ANCHOR_TYPES:
         {
-            uno::Sequence<text::TextContentAnchorType> aTypes(1);
-             text::TextContentAnchorType* pArray = aTypes.getArray();
-            pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
-            aRet <<= aTypes;
+            uno::Sequence<text::TextContentAnchorType> aTypes{text::TextContentAnchorType_AT_PARAGRAPH};
+            return uno::makeAny(aTypes);
         }
-        break;
 
         case FN_UNO_WRAP :
-        {
-            aRet <<= text::WrapTextMode_NONE;
-        }
-        break;
+            return uno::makeAny(text::WrapTextMode_NONE);
 
         case FN_PARAM_LINK_DISPLAY_NAME :
-            aRet <<= pFmt->GetName();
-        break;
+            return uno::makeAny(pFmt->GetName());
 
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
@@ -339,10 +321,8 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             SwNode* pTblNode = pTable->GetTableNode();
             if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 pTblNode = pTblNode->EndOfSectionNode();
-            const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
-            for(size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
+            for(const SwRangeRedline* pRedline : pFmt->GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl())
             {
-                const SwRangeRedline* pRedline = rRedTbl[nRed];
                 const SwNode& rRedPointNode = pRedline->GetNode(true);
                 const SwNode& rRedMarkNode = pRedline->GetNode(false);
                 if(&rRedPointNode == pTblNode || &rRedMarkNode == pTblNode)
@@ -350,14 +330,12 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
                     const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
                         rRedPointNode : rRedMarkNode;
                     bool bIsStart = &rStartOfRedline == pTblNode;
-                    aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
-                    break;
+                    return uno::makeAny(SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart));
                 }
             }
         }
-        break;
     }
-    return aRet;
+    return uno::Any();
 }
 
 /** get position of a cell with a given name
