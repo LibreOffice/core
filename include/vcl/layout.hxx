@@ -523,7 +523,7 @@ public:
         m_pDisclosureButton->Show();
     }
     virtual ~VclExpander() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { m_pDisclosureButton.disposeAndClear(); VclBin::dispose(); }
+    virtual void dispose() SAL_OVERRIDE;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
@@ -561,7 +561,7 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
     virtual ~VclScrolledWindow() { disposeOnce(); }
-    void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); m_aScrollBarBox.clear(); VclBin::dispose(); }
+    virtual void dispose() SAL_OVERRIDE;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

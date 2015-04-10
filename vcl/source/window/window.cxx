@@ -159,8 +159,6 @@ void Window::dispose()
             xCanvasComponent->dispose();
     }
 
-    mpWindowImpl->mbInDtor = true;
-
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
     // do not send child events for frames that were registered as native frames
