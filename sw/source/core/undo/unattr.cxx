@@ -255,11 +255,9 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
             SAL_FALLTHROUGH;
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
-            bFound = pDoc->GetSpzFrameFormats()->Contains( m_pFormat );
-            if ( !bFound )
-            {
-                bFound = pDoc->GetFrameFormats()->Contains( m_pFormat );
-            }
+            if (pDoc->GetSpzFrameFormats()->Contains( m_pFormat )
+                    || pDoc->GetFrameFormats()->Contains( m_pFormat ))
+                bFound = true;
             break;
     }
 

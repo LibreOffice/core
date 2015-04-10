@@ -1360,10 +1360,10 @@ OUString SwDoc::GetUniqueShapeName() const
 
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp ) const
 {
-    const SwFrameFormats& rFormats = *GetSpzFrameFormats();
-    for( auto n = rFormats.size(); n; )
+    auto range = GetSpzFrameFormats()->rangeFind( RES_FLYFRMFMT, rName );
+    for( auto it = range.first; it != range.second; it++ )
     {
-        const SwFrameFormat* pFlyFormat = rFormats[ --n ];
+        const SwFrameFormat* pFlyFormat = *it;
         const SwNodeIndex* pIdx = nullptr;
         if( RES_FLYFRMFMT == pFlyFormat->Which() && pFlyFormat->GetName() == rName &&
             nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() ) &&
@@ -1423,7 +1423,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
     if( 255 < ( n = GetSpzFrameFormats()->size() ))
         n = 255;
-    SwFrameFormats aArr;
+    SwFrameFormatsV aArr;
     aArr.reserve( n );
     SwFrameFormat* pFlyFormat;
     bool bContainsAtPageObjWithContentAnchor = false;

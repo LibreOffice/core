@@ -25,6 +25,13 @@
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
 
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/composite_key.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/mem_fun.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
+
 class SwRangeRedline;
 class SwExtraRedline;
 class SwUnoCursor;
@@ -46,6 +53,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <fldbas.hxx>
 #include <tox.hxx>
 #include <numrule.hxx>
+#include <frmfmt.hxx>
 
 /** provides some methods for generic operations on lists that contain
 SwFormat* subclasses. */
@@ -140,11 +148,112 @@ public:
     SwGrfFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
+namespace bmi = boost::multi_index;
+
+// Like o3tl::find_partialorder_ptrequals
+// We don't allow duplicated object entries!
+struct type_name_key:bmi::composite_key<
+    SwFrameFormat*,
+    bmi::const_mem_fun<SwFormat,sal_uInt16,&SwFormat::Which>,
+    bmi::const_mem_fun<SwFormat,const OUString&,&SwFormat::GetName>,
+    bmi::identity<SwFrameFormat*> // the actual object pointer
+>{};
+
+typedef boost::multi_index_container<
+        SwFrameFormat*,
+        bmi::indexed_by<
+            bmi::random_access<>,
+            bmi::ordered_unique< type_name_key >
+        >
+    >
+    SwFrameFormatsBase;
+
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrameFormats : public SwFormatsModifyBase<SwFrameFormat*>
+class SW_DLLPUBLIC SwFrameFormats : public SwFrameFormatsBase, public SwFormatsBase
+{
+    // function updating ByName index via modify
+    friend void SwFrameFormat::SetName( const OUString&, bool );
+
+    typedef nth_index<0>::type ByPos;
+    typedef nth_index<1>::type ByTypeAndName;
+    typedef ByPos::iterator iterator;
+
+    using ByPos::modify;
+
+public:
+    typedef ByPos::const_iterator const_iterator;
+    typedef ByTypeAndName::const_iterator const_range_iterator;
+    typedef SwFrameFormatsBase::size_type size_type;
+    typedef SwFrameFormatsBase::value_type value_type;
+
+    // frees all SwFrameFormat!
+    virtual ~SwFrameFormats();
+
+    using SwFrameFormatsBase::clear;
+    using SwFrameFormatsBase::empty;
+    using SwFrameFormatsBase::size;
+
+    // Only fails, if you try to insert the same object twice
+    std::pair<const_iterator,bool> push_back( const value_type& x );
+
+    // This will try to remove the exact object!
+    bool erase( const value_type& x );
+    void erase( size_type index );
+    void erase( const_iterator const& position );
+
+    // Get the iterator of the exact object (includes pointer!),
+    // e.g for position with std::distance.
+    // There is also Contains, if you don't need the position.
+    const_iterator find( const value_type& x ) const;
+
+    // As this array is non-unique related to type and name,
+    // we always get ranges for the "key" values.
+    std::pair<const_range_iterator,const_range_iterator>
+        rangeFind( sal_uInt16 type, const OUString& name ) const;
+    // Convenience function, which just uses type and name!
+    // To look for the exact object use find.
+    std::pair<const_range_iterator,const_range_iterator>
+        rangeFind( const value_type& x ) const;
+    // So we can actually check for end()
+    const_range_iterator rangeEnd() const { return ByTypeAndName::end(); }
+    inline const_iterator rangeProject( const_range_iterator const& position )
+        { return project<0>( position ); }
+
+    const value_type& operator[]( size_t index_ ) const
+        { return ByPos::operator[]( index_ ); }
+    const value_type& front() const { return ByPos::front(); }
+    const value_type& back() const { return ByPos::back(); }
+    const_iterator begin() const { return ByPos::begin(); }
+    const_iterator end() const { return ByPos::end(); }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
+
+    virtual size_t GetFormatCount() const { return size(); }
+    virtual SwFormat* GetFormat(size_t idx) const { return operator[]( idx ); }
+
+    bool Contains( const value_type& x ) const;
+    inline bool Contains( const SwFormat* p ) const;
+
+    void DeleteAndDestroy( int aStartIdx, int aEndIdx );
+    void DeleteAndDestroyAll( bool keepDefault = false );
+
+    size_t GetPos( const value_type& x ) const;
+
+    bool newDefault( const value_type& x );
+    void newDefault( const_iterator const& position );
+};
+
+inline bool SwFrameFormats::Contains( const SwFormat* p ) const
+{
+    value_type p2 = dynamic_cast<value_type>(const_cast<SwFormat*>( p ));
+    return p2 != nullptr && this->Contains( p2 );
+}
+
+/// Unsorted, undeleting SwFrameFormat vector
+class SwFrameFormatsV : public SwFormatsModifyBase<SwFrameFormat*>
 {
 public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
+    SwFrameFormatsV() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
 class SwCharFormats : public SwFormatsModifyBase<SwCharFormat*>
