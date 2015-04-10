@@ -504,13 +504,7 @@ public:
                                 GetDialogContainer();
     StarBASIC*                  GetBasic() const;
 
-    // Interface Document content, Organizer
-#define CONTENT_STYLE 0
-#define CONTENT_CONFIG 1
-#define CONTENT_MACRO 2
-
-
-    virtual std::set<Color> GetDocColors();
+    virtual std::set<Color>     GetDocColors();
 
     virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
