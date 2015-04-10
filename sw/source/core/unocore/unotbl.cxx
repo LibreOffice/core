@@ -3717,66 +3717,36 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
 }
 
 ///@see SwXCellRange::setData
-void SAL_CALL SwXCellRange::setDataArray(
-        const uno::Sequence< uno::Sequence< uno::Any > >& rArray )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno::Any > >& rArray) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt )
+    if(!pFmt)
+        return;
+    if(rArray.getLength() != nRowCount)
+        throw uno::RuntimeException("Row count mismatch", static_cast<cppu::OWeakObject*>(this));
+    auto vCells(getCells());
+    auto pCurrentCell(vCells.begin());
+    for(const auto& rColSeq : rArray)
     {
-        if(rArray.getLength() != nRowCount)
+        if(rColSeq.getLength() != nColCount)
+            throw uno::RuntimeException("Column count mismatch", static_cast<cppu::OWeakObject*>(this));
+        for(const auto& aValue : rColSeq)
         {
-            throw uno::RuntimeException();
-        }
-        const uno::Sequence< uno::Any >* pRowArray = rArray.getConstArray();
-        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
-        {
-            const uno::Sequence< uno::Any >& rColSeq = pRowArray[nRow];
-            if(rColSeq.getLength() != nColCount)
-            {
-                throw uno::RuntimeException();
-            }
-            const uno::Any * pColArray = rColSeq.getConstArray();
-            uno::Reference< table::XCell > xCellRef;
-            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
-            {
-                SwXCell * pXCell = lcl_CreateXCell(pFmt,
-                                    aRgDesc.nLeft + nCol,
-                                    aRgDesc.nTop + nRow);
-                //! keep (additional) reference to object to prevent implicit destruction
-                //! in following UNO calls (when object will get referenced)
-                xCellRef = pXCell;
-                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
-                if(!pBox)
-                {
-                    throw uno::RuntimeException();
-                }
-                else
-                {
-                    const uno::Any &rAny = pColArray[nCol];
-                    if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        sw_setString( *pXCell, *static_cast<OUString const *>(rAny.getValue()) );
-                    else
-                    {
-                        double d = 0;
-                        // #i20067# don't throw exception just do nothing if
-                        // there is no value set
-                        if( (rAny >>= d) )
-                            sw_setValue( *pXCell, d );
-                        else
-                            sw_setString( *pXCell, OUString(), true );
-                    }
-                }
-            }
+            auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
+            if(!pCell || !pCell->GetTblBox())
+                throw uno::RuntimeException("Box for cell missing", static_cast<cppu::OWeakObject*>(this));
+            if(aValue.isExtractableTo(cppu::UnoType<OUString>::get()))
+                sw_setString(*pCell, aValue.get<OUString>());
+            else if(aValue.isExtractableTo(cppu::UnoType<double>::get()))
+                sw_setValue(*pCell, aValue.get<double>());
+            else
+                sw_setString(*pCell, OUString(), true);
+            ++pCurrentCell;
         }
     }
 }
