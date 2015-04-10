@@ -250,7 +250,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     {
                         if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                         {
-                            ScopedVclPtr< VirtualDevice > pVDev(new VirtualDevice());
+                            ScopedVclPtrInstance< VirtualDevice > pVDev;
                             const Size    aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
                             if( pVDev->SetOutputSizePixel( aSize ) )
@@ -283,7 +283,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 {
                     if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                     {
-                        ScopedVclPtr< VirtualDevice > pVDev(new VirtualDevice());
+                        ScopedVclPtrInstance< VirtualDevice > pVDev;
                         const Size      aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
                         if( pVDev->SetOutputSizePixel( aSize ) )

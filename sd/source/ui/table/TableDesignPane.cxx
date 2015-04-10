@@ -813,7 +813,7 @@ short TableDesignDialog::Execute()
 
 void showTableDesignDialog( ::vcl::Window* pParent, ViewShellBase& rBase )
 {
-    ScopedVclPtr< TableDesignDialog > xDialog( new TableDesignDialog( pParent, rBase ) );
+    ScopedVclPtrInstance< TableDesignDialog > xDialog( pParent, rBase );
     xDialog->Execute();
 }
 

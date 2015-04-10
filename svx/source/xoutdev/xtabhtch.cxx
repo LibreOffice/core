@@ -142,7 +142,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
                 aBlack));
 
         // prepare VirtualDevice
-        ScopedVclPtr< VirtualDevice > pVirtualDevice(new VirtualDevice());
+        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
         pVirtualDevice->SetOutputSizePixel(rSize);

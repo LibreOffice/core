@@ -125,7 +125,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
                 aLineStartEndAttribute));
 
         // prepare VirtualDevice
-        ScopedVclPtr< VirtualDevice > pVirtualDevice(new VirtualDevice());
+        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
         pVirtualDevice->SetOutputSizePixel(aSize);

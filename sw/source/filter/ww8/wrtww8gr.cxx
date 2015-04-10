@@ -726,7 +726,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
             {
                 case GRAPHIC_BITMAP:        // Bitmap -> play in Metafile
                     {
-                        ScopedVclPtr< VirtualDevice > pVirt(new VirtualDevice());
+                        ScopedVclPtrInstance< VirtualDevice > pVirt;
                         aMeta.Record(pVirt.get());
                         pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
                         aMeta.Stop();
@@ -854,7 +854,7 @@ void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uIn
         {
             case GRAPHIC_BITMAP:        // Bitmap -> in Metafile abspielen
             {
-                ScopedVclPtr< VirtualDevice > pVirt(new VirtualDevice());
+                ScopedVclPtrInstance< VirtualDevice > pVirt;
                 aMeta.Record(pVirt.get());
                 pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
                 aMeta.Stop();

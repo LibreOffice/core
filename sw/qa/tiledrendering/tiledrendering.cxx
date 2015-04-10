@@ -131,7 +131,7 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
         // SystemGraphicsData aData;
         // [setup the aData]
         // VirtualDevice pDevice(&aData, [color depth]);
-        ScopedVclPtr< VirtualDevice > pDevice(new VirtualDevice());
+        ScopedVclPtrInstance< VirtualDevice > pDevice;
 
         // paint to it
         pViewShell->PaintTile(*pDevice.get(), contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);

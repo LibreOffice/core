@@ -944,8 +944,8 @@ public:
         BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
         {
             // Compositing onto 2x colors beyond our control
-            ScopedVclPtr< VirtualDevice > aWhite(new VirtualDevice());
-            ScopedVclPtr< VirtualDevice > aBlack(new VirtualDevice());
+            ScopedVclPtrInstance< VirtualDevice > aWhite;
+            ScopedVclPtrInstance< VirtualDevice > aBlack;
             aWhite->SetOutputSizePixel(aSrc.GetSizePixel());
             aWhite->SetBackground(Wallpaper(COL_WHITE));
             aWhite->Erase();

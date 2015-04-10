@@ -2722,9 +2722,8 @@ namespace pcr
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            ScopedVclPtr< SfxSingleTabDialog > xDialog(new SfxSingleTabDialog(
-                impl_getDefaultDialogParent_nothrow(), aCoreSet,
-                "FormatNumberDialog", "cui/ui/formatnumberdialog.ui"));
+            ScopedVclPtrInstance< SfxSingleTabDialog > xDialog( impl_getDefaultDialogParent_nothrow(), aCoreSet,
+                "FormatNumberDialog", "cui/ui/formatnumberdialog.ui");
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT( pFact, "CreateFactory fail!" );
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );

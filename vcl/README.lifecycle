@@ -125,7 +125,7 @@ or:
 +	// someone else gets a VclPtr to xDialog
 or:
 -	VirtualDevice aDev;
-+	ScopedVclPtrInstance<VirtualDevice> pDev();
++	ScopedVclPtrInstance<VirtualDevice> pDev;
 
 ** Why are these 'disposeOnce' calls in destructors ?
 

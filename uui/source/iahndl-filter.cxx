@@ -55,7 +55,7 @@ executeFilterDialog(
     {
         SolarMutexGuard aGuard;
 
-        ScopedVclPtr< uui::FilterDialog > xDialog(new uui::FilterDialog(pParent));
+        ScopedVclPtrInstance< uui::FilterDialog > xDialog(pParent);
 
         xDialog->SetURL(rURL);
         xDialog->ChangeFilters(&rFilters);

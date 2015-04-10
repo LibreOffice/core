@@ -7640,7 +7640,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pFirst);
 
         OutputDevice *pOld = pSh->GetOut();
-        ScopedVclPtr< VirtualDevice > pDev( new VirtualDevice( *pOld ) );
+        ScopedVclPtrInstance< VirtualDevice > pDev( *pOld );
         pDev->EnableOutput( false );
 
         GDIMetaFile aMet;

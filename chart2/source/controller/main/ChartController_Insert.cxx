@@ -147,7 +147,7 @@ void ChartController::executeDispatch_InsertGrid()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
 
         SolarMutexGuard aGuard;
-        ScopedVclPtr<SchGridDlg> aDlg(new SchGridDlg( m_pChartWindow, aDialogInput ));//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
+        ScopedVclPtrInstance<SchGridDlg> aDlg(m_pChartWindow, aDialogInput);//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block

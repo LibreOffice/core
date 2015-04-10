@@ -3044,8 +3044,8 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            ScopedVclPtr<MessageDialog> qbox(new MessageDialog(this,
-                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance<MessageDialog> qbox(this,
+                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if ( qbox->Execute() == RET_YES )
             {
@@ -3124,8 +3124,8 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_STYLE:
         {
-            ScopedVclPtr<MessageDialog> qbox(new MessageDialog(this,
-                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtrInstance<MessageDialog> qbox(this,
+                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if ( qbox->Execute() == RET_YES )
             {

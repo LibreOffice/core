@@ -135,7 +135,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
             aStrokeAttribute));
 
     // prepare VirtualDevice
-    ScopedVclPtr< VirtualDevice > pVirtualDevice(new VirtualDevice());
+    ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
     const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
     pVirtualDevice->SetOutputSizePixel(aSize);

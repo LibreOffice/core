@@ -93,8 +93,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
-                            pParent, xManager.get(), aMessage ) );
+            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, xManager.get(), aMessage);
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
@@ -107,8 +106,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtr< TryLaterQueryBox > xDialog(
-                new TryLaterQueryBox( pParent, xManager.get(), aMessage ) );
+            ScopedVclPtrInstance< TryLaterQueryBox > xDialog( pParent, xManager.get(), aMessage );
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
