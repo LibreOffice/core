@@ -66,7 +66,7 @@ private:
 
     /** Returns whether a given argument is an argument name
     */
-    bool is_arg_name(const std::string& Argument) const;
+    static bool is_arg_name(const std::string& Argument);
 
 private:
     size_t      m_argc;

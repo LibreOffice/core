@@ -1311,8 +1311,7 @@ void SbiRuntime::DllCall
     // NOT YET IMPLEMENTED
 
     SbxVariable* pRes = new SbxVariable( eResType );
-    SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
+    SbError nErr = SbiDllMgr::Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
     {
         Error( nErr );

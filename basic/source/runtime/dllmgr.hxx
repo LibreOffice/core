@@ -36,11 +36,11 @@ public:
 
     ~SbiDllMgr();
 
-    SbError Call(
+    static SbError Call(
         OUString const & function, OUString const &  library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
 
-    void FreeDll(OUString const & library);
+    static void FreeDll(OUString const & library);
 
 private:
     struct Impl;

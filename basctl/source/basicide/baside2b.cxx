@@ -628,9 +628,9 @@ void EditorWindow::HandleAutoCorrect()
     if( r.tokenType == TT_KEYWORDS )
     {
         sStr = sStr.toAsciiLowerCase();
-        if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
+        if( !SbModule::GetKeywordCase(sStr).isEmpty() )
         // if it is a keyword, get its correct case
-            sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
+            sStr = SbModule::GetKeywordCase(sStr);
         else
         // else capitalize first letter/select the correct one, and replace
             sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );

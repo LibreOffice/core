@@ -140,9 +140,9 @@ protected:
     void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadBasics = true );
     void            LoadOldBasicManager( SotStorage& rStorage );
     bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
-    bool            ImplEncryptStream( SvStream& rStream ) const;
+    static bool     ImplEncryptStream( SvStream& rStream );
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
-    void            CheckModules( StarBASIC* pBasic, bool bReference ) const;
+    static void     CheckModules( StarBASIC* pBasic, bool bReference );
     virtual ~BasicManager();
 
 public:

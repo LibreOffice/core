@@ -148,7 +148,7 @@ namespace basic
                 <arg>_out_rStorage</arg> might or might not be <NULL/>), <FALSE/> otherwise.
                 In the latter case, processing this document should stop.
         */
-        bool    impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage );
+        static bool impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage );
 
         /** retrieves the containers for Basic and Dialog libraries for a given document
 
@@ -164,7 +164,7 @@ namespace basic
             @return
                 <TRUE/> if and only if both containers exist, and could successfully be retrieved
         */
-        bool    impl_getDocumentLibraryContainers_nothrow(
+        static bool impl_getDocumentLibraryContainers_nothrow(
                     const Reference< XModel >& _rxDocument,
                     Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries,
                     Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries
@@ -172,7 +172,7 @@ namespace basic
 
         /** initializes the given library containers, which belong to a document
         */
-        void    impl_initDocLibraryContainers_nothrow(
+        static void impl_initDocLibraryContainers_nothrow(
                     const Reference< XPersistentLibraryContainer >& _rxBasicLibraries,
                     const Reference< XPersistentLibraryContainer >& _rxDialogLibraries
                 );

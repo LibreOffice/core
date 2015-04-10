@@ -82,7 +82,7 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 
 /** Returns whether a given argument is an argument name
 */
-bool CommandLine::is_arg_name(const std::string& Argument) const
+bool CommandLine::is_arg_name(const std::string& Argument)
 {
     return (Argument.length() > 0 && Argument[0] == '-');
 }

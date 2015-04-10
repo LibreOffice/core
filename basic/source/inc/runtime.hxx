@@ -330,7 +330,7 @@ class SbiRuntime
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    bool implIsClass( SbxObject* pObj, const OUString& aClass );
+    static bool implIsClass( SbxObject* pObj, const OUString& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );
 
@@ -380,7 +380,7 @@ class SbiRuntime
     void StepDCREATE_REDIMP(sal_uInt32,sal_uInt32), StepDCREATE_IMPL(sal_uInt32,sal_uInt32);
     void StepFIND_CM( sal_uInt32, sal_uInt32 );
     void StepFIND_STATIC( sal_uInt32, sal_uInt32 );
-    void implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt32 nOp2 );
+    static void implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
     bool          IsImageFlag( SbiImageFlags n ) const;

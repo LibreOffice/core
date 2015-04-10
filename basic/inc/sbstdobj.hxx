@@ -109,12 +109,12 @@ protected:
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
-    void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
 
 public:
     TYPEINFO_OVERRIDE();

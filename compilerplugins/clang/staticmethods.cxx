@@ -103,7 +103,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // the DDE has a dummy implementation on Linux and a real one on Windows
-    if (getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()) == SRCDIR "/include/svl/svdde.hxx") {
+    std::string aFilename = getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart());
+    if (aFilename == SRCDIR "/include/svl/svdde.hxx") {
         return true;
     }
     std::string aParentName = pCXXMethodDecl->getParent()->getQualifiedNameAsString();
@@ -127,10 +128,17 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
-    if (startsWith(getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()), SRCDIR "/include/unotools")) {
+    if (startsWith(aFilename, SRCDIR "/include/unotools")) {
         return true;
     }
-    if (startsWith(getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart()), SRCDIR "/include/svl")) {
+    if (startsWith(aFilename, SRCDIR "/include/svl")) {
+        return true;
+    }
+    if (startsWith(aFilename, SRCDIR "/include/framework") || startsWith(aFilename, SRCDIR "/framework")) {
+        return true;
+    }
+    // there is some odd stuff happening here I don't fully understand, leave it for now
+    if (startsWith(aFilename, SRCDIR "/include/canvas") || startsWith(aFilename, SRCDIR "/canvas")) {
         return true;
     }
     // classes that have static data and some kind of weird reference-counting trick in it's constructor
@@ -142,7 +150,19 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     {
         return true;
     }
-
+    std::string fqn = aParentName + "::" + pCXXMethodDecl->getNameAsString();
+    // only empty on Linux, not on windows
+    if (fqn == "connectivity::mozab::ProfileAccess::isProfileLocked") {
+        return true;
+    }
+    // used in a function-pointer-table
+    if (startsWith(fqn, "SbiRuntime::Step")) {
+        return true;
+    }
+    // not static on windows
+    if (startsWith(fqn, "SbxDecimal::")) {
+        return true;
+    }
 
     bVisitedThis = false;
     TraverseStmt(pCXXMethodDecl->getBody());
@@ -152,7 +172,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
 
     report(
         DiagnosticsEngine::Warning,
-        "this method can be declared static " + aParentName,
+        "this method can be declared static " + fqn,
         pCXXMethodDecl->getCanonicalDecl()->getLocStart())
       << pCXXMethodDecl->getCanonicalDecl()->getSourceRange();
     return true;

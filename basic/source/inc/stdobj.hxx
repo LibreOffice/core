@@ -29,9 +29,9 @@ class SbiStdObject : public SbxObject
 {
     SbStdFactory* pStdFactory;
 
-   virtual ~SbiStdObject();
+    virtual ~SbiStdObject();
     using SbxVariable::GetInfo;
-    SbxInfo* GetInfo( short );
+    static SbxInfo* GetInfo( short );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 public:
