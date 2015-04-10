@@ -1323,14 +1323,17 @@ void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool 
 {
     Point aDocPos(pImpEditView->GetDocPos(rPosition));
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aDocPos);
+    EditSelection aSelection(pImpEditView->GetEditSelection());
 
     // Explicitly create or delete the selection.
     if (bClearMark)
+    {
         pImpEditView->DeselectAll();
+        aSelection = pImpEditView->GetEditSelection();
+    }
     else
         pImpEditView->CreateAnchor();
 
-    EditSelection aSelection(pImpEditView->GetEditSelection());
     if (bPoint)
         aSelection.Max() = aPaM;
     else
