@@ -704,7 +704,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 bContainsEffects = true;
                         }
 
-                        ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
+                        beans::PropertyValues aMediaProperties( 1 );
                         aMediaProperties[0].Name = "URL";
                         aMediaProperties[0].Value <<= sUrl;
 
@@ -1218,16 +1218,16 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 if (m_pImpl->nShadowXDistance > 0)
                 {
                     if (m_pImpl->nShadowYDistance > 0)
-                        aShadow.Location = com::sun::star::table::ShadowLocation_BOTTOM_RIGHT;
+                        aShadow.Location = table::ShadowLocation_BOTTOM_RIGHT;
                     else
-                        aShadow.Location = com::sun::star::table::ShadowLocation_TOP_RIGHT;
+                        aShadow.Location = table::ShadowLocation_TOP_RIGHT;
                 }
                 else
                 {
                     if (m_pImpl->nShadowYDistance > 0)
-                        aShadow.Location = com::sun::star::table::ShadowLocation_BOTTOM_LEFT;
+                        aShadow.Location = table::ShadowLocation_BOTTOM_LEFT;
                     else
-                        aShadow.Location = com::sun::star::table::ShadowLocation_TOP_LEFT;
+                        aShadow.Location = table::ShadowLocation_TOP_LEFT;
                 }
 
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aShadow));
@@ -1385,7 +1385,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-        ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
+        beans::PropertyValues aMediaProperties( 1 );
         aMediaProperties[0].Name = rPropNameSupplier.GetName(PROP_INPUT_STREAM);
 
         uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );

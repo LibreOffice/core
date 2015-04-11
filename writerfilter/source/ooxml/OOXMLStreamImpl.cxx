@@ -25,8 +25,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 
-//#define DEBUG_STREAM
-
 namespace writerfilter {
 namespace ooxml
 {
@@ -126,11 +124,11 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     }
 
     bool bFound = false;
-    static uno::Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  ::com::sun::star::uri::UriReferenceFactory::create( mxContext );
+    static uno::Reference<uri::XUriReferenceFactory> xFac = uri::UriReferenceFactory::create(mxContext);
     // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
     // keep the XUriReference implementation happy )
     // add mspath to represent the 'source' of this stream
-    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( "file:///" + msPath );
+    uno::Reference<uri::XUriReference> xBase = xFac->parse("file:///" + msPath);
 
     static const char sType[] = "Type";
     static const char sDocumentType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
@@ -325,8 +323,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     // with a base Uri of file://base/foo will resolve to
                     // file://base/word. We need something more than some
                     // simple string concatination here to handle that.
-                    uno::Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  sMyTarget );
-                    uno::Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
+                    uno::Reference<uri::XUriReference> xPart = xFac->parse(sMyTarget);
+                    uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, sal_True, uri::RelativeUriExcessParentSegments_RETAIN);
                     rDocumentTarget = xAbs->getPath();
                     // path will start with the fragment separator. need to
                     // remove that

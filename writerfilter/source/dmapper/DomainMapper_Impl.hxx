@@ -136,17 +136,17 @@ public:
 class FieldContext
 {
     bool                                                                            m_bFieldCommandCompleted;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >          m_xStartRange;
+    css::uno::Reference<css::text::XTextRange> m_xStartRange;
 
     OUString                                                                 m_sCommand;
     OUString m_sResult;
     bool m_bFieldLocked;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xCustomField;
+    css::uno::Reference<css::text::XTextField> m_xTextField;
+    css::uno::Reference<css::text::XFormField>  m_xFormField;
+    css::uno::Reference<css::beans::XPropertySet> m_xTOC;
+    css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
+    css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
     OUString                                                                 m_sHyperlinkURL;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
@@ -154,10 +154,10 @@ class FieldContext
     PropertyMapPtr m_pProperties;
 
 public:
-    FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xStart);
+    FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
     ~FieldContext();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartRange() const { return m_xStartRange; }
+    css::uno::Reference<css::text::XTextRange> GetStartRange() const { return m_xStartRange; }
 
     void                    AppendCommand(const OUString& rPart);
     const OUString&  GetCommand() const {return m_sCommand; }
@@ -171,18 +171,18 @@ public:
     void                    SetFieldLocked() { m_bFieldLocked = true; }
     bool                    IsFieldLocked() { return m_bFieldLocked; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetCustomField() const { return m_xCustomField; }
-    void    SetCustomField( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xCustomField ) { m_xCustomField = xCustomField; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
-    void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > const& xTextField) { m_xTextField = xTextField;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >      GetFormField() const { return m_xFormField;}
-    void    SetFormField(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField > const& xFormField) { m_xFormField = xFormField;}
+    css::uno::Reference<css::beans::XPropertySet> GetCustomField() const { return m_xCustomField; }
+    void SetCustomField(css::uno::Reference<css::beans::XPropertySet> const& xCustomField) { m_xCustomField = xCustomField; }
+    css::uno::Reference<css::text::XTextField> GetTextField() const { return m_xTextField;}
+    void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField) { m_xTextField = xTextField;}
+    css::uno::Reference<css::text::XFormField> GetFormField() const { return m_xFormField;}
+    void SetFormField(css::uno::Reference<css::text::XFormField> const& xFormField) { m_xFormField = xFormField;}
 
-    void    SetTOC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xTOC ) { m_xTOC = xTOC; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTOC() { return m_xTOC; }
+    void SetTOC(css::uno::Reference<css::beans::XPropertySet> const& xTOC) { m_xTOC = xTOC; }
+    css::uno::Reference<css::beans::XPropertySet> GetTOC() { return m_xTOC; }
 
-    void    SetTC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xTC ) { m_xTC = xTC; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTC( ) { return m_xTC; }
+    void SetTC(css::uno::Reference<css::beans::XPropertySet> const& xTC) { m_xTC = xTC; }
+    css::uno::Reference<css::beans::XPropertySet> GetTC() { return m_xTC; }
 
     void    SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
@@ -199,14 +199,13 @@ public:
 
 struct TextAppendContext
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >       xTextAppend;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >        xInsertPosition;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XParagraphCursor >  xCursor;
+    css::uno::Reference<css::text::XTextAppend> xTextAppend;
+    css::uno::Reference<css::text::XTextRange> xInsertPosition;
+    css::uno::Reference<css::text::XParagraphCursor> xCursor;
     ParagraphPropertiesPtr                                                        pLastParagraphProperties;
 
-    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend,
-           const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >& xCur ) :
-        xTextAppend( xAppend )
+    TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
+        : xTextAppend(xAppend)
     {
         xCursor.set(xCur, css::uno::UNO_QUERY);
         xInsertPosition.set(xCursor, css::uno::UNO_QUERY);
@@ -215,11 +214,13 @@ struct TextAppendContext
 
 struct AnchoredContext
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >       xTextContent;
-    bool                                                                           bToRemove;
+    css::uno::Reference<css::text::XTextContent> xTextContent;
+    bool bToRemove;
 
-    AnchoredContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent ) :
-        xTextContent( xContent ), bToRemove( false ) {}
+    AnchoredContext(const css::uno::Reference<css::text::XTextContent>& xContent)
+        : xTextContent(xContent), bToRemove(false)
+    {
+    }
 };
 
 typedef std::shared_ptr<FieldContext>  FieldContextPtr;
@@ -234,7 +235,7 @@ typedef std::stack< AnchoredContext >           TextContentStack;
 /*-------------------------------------------------------------------------
     extended tab stop struct
   -----------------------------------------------------------------------*/
-struct DeletableTabStop : public ::com::sun::star::style::TabStop
+struct DeletableTabStop : public css::style::TabStop
 {
     bool bDeleted;
     DeletableTabStop()
@@ -244,9 +245,11 @@ struct DeletableTabStop : public ::com::sun::star::style::TabStop
         FillChar = ' ';
         DecimalChar = ',';
     }
-    DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop ) :
-        TabStop( rTabStop ),
-            bDeleted( false ){}
+    DeletableTabStop(const css::style::TabStop& rTabStop)
+        : TabStop(rTabStop),
+        bDeleted(false)
+    {
+    }
 };
 /*-------------------------------------------------------------------------
     /// helper to remember bookmark start position
@@ -255,9 +258,8 @@ struct BookmarkInsertPosition
 {
     bool                                                                    m_bIsStartOfText;
     OUString                                                         m_sBookmarkName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName,
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xTextRange):
+    css::uno::Reference<css::text::XTextRange> m_xTextRange;
+    BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName, css::uno::Reference<css::text::XTextRange> const& xTextRange):
         m_bIsStartOfText( bIsStartOfText ),
         m_sBookmarkName( rName ),
         m_xTextRange( xTextRange )
@@ -267,8 +269,8 @@ struct BookmarkInsertPosition
 /// Stores the start/end positions of an annotation before its insertion.
 struct AnnotationPosition
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xStart;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xEnd;
+    css::uno::Reference<css::text::XTextRange> m_xStart;
+    css::uno::Reference<css::text::XTextRange> m_xEnd;
 };
 typedef std::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
@@ -319,13 +321,13 @@ public:
 private:
     SourceDocumentType                                                              m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       m_xTextDocument;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDocumentSettings;
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > m_xTextFactory;
-    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     m_xComponentContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPageStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               m_xBodyText;
-    ::com::sun::star::uno::Reference< css::text::XTextContent >                     m_xEmbedded;
+    css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
+    css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<css::container::XNameContainer> m_xPageStyles;
+    css::uno::Reference<css::text::XText> m_xBodyText;
+    css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
@@ -371,7 +373,7 @@ private:
     ContextStack            m_aContextStack;
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
-    std::deque< com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > m_aPendingShapes;
+    std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
@@ -396,9 +398,9 @@ private:
     bool                            m_bIsCustomFtnMark;
 
     //registered frame properties
-    ::com::sun::star::uno::Sequence< css::beans::PropertyValue >   m_aFrameProperties;
-    ::com::sun::star::uno::Reference< css::text::XTextRange >      m_xFrameStartRange;
-    ::com::sun::star::uno::Reference< css::text::XTextRange >      m_xFrameEndRange;
+    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
+    css::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
+    css::uno::Reference<css::text::XTextRange> m_xFrameEndRange;
 
     // Redline stack
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
@@ -431,20 +433,15 @@ private:
     sal_Int32 m_nAnnotationId;
     AnnotationPositions_t m_aAnnotationPositions;
 
-    void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
-    void                            SetNumberFormat( const OUString& rCommand,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xPropertySet,
-                                        bool bDetectFormat = false );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                    FindOrCreateFieldMaster( const sal_Char* pFieldMasterService,
-                                                            const OUString& rFieldMasterName )
-                                                                throw(::com::sun::star::uno::Exception);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       GetDocumentSettings();
+    void GetCurrentLocale(css::lang::Locale& rLocale);
+    void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
+    css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName) throw(css::uno::Exception);
+    css::uno::Reference<css::beans::XPropertySet> GetDocumentSettings();
 
-    std::map< sal_Int32, com::sun::star::uno::Any > deferredCharacterProperties;
+    std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
 
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
+    css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
 private:
     bool m_bIsNewDoc;
 public:
@@ -462,27 +459,27 @@ public:
         return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetPageStyles();
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               GetBodyText();
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory() const
+    css::uno::Reference<css::container::XNameContainer> GetPageStyles();
+    css::uno::Reference<css::text::XText> GetBodyText();
+    css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const
     {
         return m_xTextFactory;
     }
-    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     GetComponentContext() const
+    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const
     {
         return m_xComponentContext;
     }
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       GetTextDocument() const
+    css::uno::Reference<css::text::XTextDocument> GetTextDocument() const
     {
         return m_xTextDocument;
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
-    void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange, RedlineParamsPtr pRedline  );
+    void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, RedlineParamsPtr pRedline);
 
-    void CheckParaMarkerRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange );
+    void CheckParaMarkerRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
 
-    void CheckRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange );
+    void CheckRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
 
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
@@ -524,12 +521,10 @@ public:
 
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
-    void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >&,
-                            const css::uno::Sequence< css::beans::PropertyValue >& );
+    void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, OLEHandlerPtr pOleHandler );
     void appendStarMath( const Value& v );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
+    css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange>& xBefore);
 
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
@@ -544,7 +539,7 @@ public:
     }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >  GetTopTextAppend();
+    css::uno::Reference<css::text::XTextAppend> GetTopTextAppend();
     FieldContextPtr GetTopFieldContext();
 
     FontTablePtr GetFontTable()
@@ -579,28 +574,28 @@ public:
     // this method deletes the current m_pGraphicImport after import
     void    ImportGraphic(writerfilter::Reference< Properties>::Pointer_t, GraphicImportType eGraphicImportType );
 
-    void    InitTabStopFromStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >& rInitTabStops );
+    void InitTabStopFromStyle(const css::uno::Sequence<css::style::TabStop>& rInitTabStops);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
+    css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
     void        SetCurrentParaStyleId(const OUString& sStringValue) {m_sCurrentParaStyleId = sStringValue;}
     OUString    GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
-    ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
+    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
     bool        IsInShape()const { return m_aAnchoredStack.size() > 0;}
 
-    void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape );
+    void PushShapeContext(const css::uno::Reference<css::drawing::XShape>& xShape);
     void PopShapeContext();
-    void UpdateEmbeddedShapeProps( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape );
+    void UpdateEmbeddedShapeProps(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Add a pending shape: it's currently inserted into the document, but it should be removed before the import finishes.
-    void PushPendingShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape );
+    void PushPendingShape(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Get the first pending shape, if there are any.
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > PopPendingShape();
+    css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
@@ -732,11 +727,9 @@ public:
 
     void CheckUnregisteredFrameConversion( );
 
-    void RegisterFrameConversion(
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xFrameStartRange,
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xFrameEndRange,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aFrameProperties
-        );
+    void RegisterFrameConversion(css::uno::Reference<css::text::XTextRange> const& xFrameStartRange,
+                                 css::uno::Reference<css::text::XTextRange> const& xFrameEndRange,
+                                 const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties);
     bool ExecuteFrameConversion();
 
     void AddNewRedline( sal_uInt32 sprmId );
@@ -759,9 +752,9 @@ public:
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
     /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> GetCurrentNumberingCharStyle();
+    css::uno::Reference<css::beans::XPropertySet> GetCurrentNumberingCharStyle();
     /// If the current paragraph has a numbering style associated, this method returns its numbering rules
-    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = nullptr);
+    css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = nullptr);
 
     /**
      Used for attributes/sprms which cannot be evaluated immediatelly (e.g. they depend

@@ -36,7 +36,7 @@ namespace dmapper {
 class _PgBorder
 {
 public:
-    com::sun::star::table::BorderLine2 m_rLine;
+    css::table::BorderLine2 m_rLine;
     sal_Int32   m_nDistance;
     BorderPosition m_ePos;
     bool m_bShadow;

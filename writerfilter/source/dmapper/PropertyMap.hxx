@@ -105,14 +105,14 @@ public:
 class PropertyMap
 {
     /// Cache the property values for the GetPropertyValues() call(s).
-    std::vector< ::com::sun::star::beans::PropertyValue >   m_aValues;
+    std::vector<css::beans::PropertyValue> m_aValues;
 
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     //depending on sprmCSymbol
     sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
     sal_Int32                                                                   m_nFootnoteFontId; // negative values are invalid ids
     OUString                                                             m_sFootnoteFontName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
+    css::uno::Reference<css::text::XFootnote> m_xFootnote;
 
     std::map< PropertyIds, PropValue >                                          m_vMap;
 
@@ -133,13 +133,13 @@ public:
     PropertyMap();
     virtual ~PropertyMap();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues(bool bCharGrabBag = true);
+    css::uno::Sequence<css::beans::PropertyValue> GetPropertyValues(bool bCharGrabBag = true);
         //Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
         //  the contained properties are their Value.
     bool hasEmptyPropertyValues() const {return m_aValues.empty();}
 
     //Add property, optionally overwriting existing attributes
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG );
+    void Insert(PropertyIds eId, const css::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG);
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     //Remove a named property from *this, does nothing if the property id has not been set
     void Erase( PropertyIds eId);
@@ -153,8 +153,8 @@ public:
     //Has the property named been set (via Insert)?
     bool isSet( PropertyIds eId ) const;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}
-    void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> const& xF ) { m_xFootnote = xF; }
+    const css::uno::Reference<css::text::XFootnote>& GetFootnote() const { return m_xFootnote; }
+    void SetFootnote(css::uno::Reference<css::text::XFootnote> const& xF) { m_xFootnote = xF; }
 
     sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
     void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
@@ -174,7 +174,7 @@ public:
 #ifdef DEBUG_WRITERFILTER
     void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
-    static com::sun::star::table::ShadowFormat getShadowFromBorder(const css::table::BorderLine2& rBorder);
+    static css::table::ShadowFormat getShadowFromBorder(const css::table::BorderLine2& rBorder);
 
 };
 typedef std::shared_ptr<PropertyMap>  PropertyMapPtr;
@@ -188,14 +188,14 @@ class SectionPropertyMap : public PropertyMap
     // empty strings mark page settings as not yet imported
 
     bool                                                                        m_bIsFirstSection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange;
+    css::uno::Reference<css::text::XTextRange> m_xStartingRange;
 
     OUString                                                             m_sFirstPageStyleName;
     OUString                                                             m_sFollowPageStyleName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFollowPageStyle;
+    css::uno::Reference<css::beans::XPropertySet> m_aFirstPageStyle;
+    css::uno::Reference<css::beans::XPropertySet> m_aFollowPageStyle;
 
-    ::com::sun::star::table::BorderLine2*   m_pBorderLines[4];
+    css::table::BorderLine2* m_pBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
     sal_Int32                               m_nBorderParams;
     bool                                    m_bBorderShadows[4];
@@ -237,18 +237,22 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_ndxaLnn;
     sal_Int32                               m_nLnnMin;
 
-    void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xStyle );
-    ::com::sun::star::uno::Reference< com::sun::star::text::XTextColumns > ApplyColumnProperties(
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xFollowPageStyle, DomainMapper_Impl& rDM_Impl );
+    void _ApplyProperties(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
+    css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
+                                                                       DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
-    void CopyHeaderFooter( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPrevStyle,
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
+    void CopyHeaderFooter(css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
+                          css::uno::Reference<css::beans::XPropertySet> xStyle);
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
 
-    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xStyle,
-        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth );
+    void SetBorderDistance(css::uno::Reference<css::beans::XPropertySet> const& xStyle,
+                           PropertyIds eMarginId,
+                           PropertyIds eDistId,
+                           sal_Int32 nDistance,
+                           sal_Int32 nOffsetFrom,
+                           sal_uInt32 nLineWidth);
 
 public:
         explicit SectionPropertyMap(bool bIsFirstSection);
@@ -261,19 +265,18 @@ public:
         PAGE_RIGHT
     };
 
-    void SetStart( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange )
+    void SetStart(const css::uno::Reference<css::text::XTextRange>& xRange)
     {
         m_xStartingRange = xRange;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartingRange() const { return m_xStartingRange; }
+    css::uno::Reference<css::text::XTextRange> GetStartingRange() const { return m_xStartingRange; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetPageStyle(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
-            bool bFirst );
+    css::uno::Reference<css::beans::XPropertySet> GetPageStyle(const css::uno::Reference<css::container::XNameContainer>& xStyles,
+                                                               const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
+                                                               bool bFirst);
 
-    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine2& rBorderLine, bool bShadow );
+    void SetBorder(BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow);
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
@@ -317,10 +320,9 @@ public:
     void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
 
     //determine which style gets the borders
-    void ApplyBorderToPageStyles(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
-            sal_Int32 nValue );
+    void ApplyBorderToPageStyles(const css::uno::Reference<css::container::XNameContainer>& xStyles,
+                                 const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
+                                 sal_Int32 nValue);
 
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     /// Handling of margins, header and footer for any kind of sections breaks.
@@ -354,8 +356,8 @@ class ParagraphProperties
 
     OUString         m_sParaStyleName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange; //start of a frame
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xEndingRange; //end of the frame
+    css::uno::Reference<css::text::XTextRange> m_xStartingRange; // start of a frame
+    css::uno::Reference<css::text::XTextRange> m_xEndingRange; // end of the frame
 
 public:
     ParagraphProperties();
@@ -416,11 +418,11 @@ public:
     sal_Int8    GetDropCapLength() const { return m_nDropCapLength;}
     void        SetDropCapLength(sal_Int8 nSet) { m_nDropCapLength = nSet;}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartingRange() const { return m_xStartingRange; }
-    void SetStartingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xSet ) { m_xStartingRange = xSet; }
+    css::uno::Reference<css::text::XTextRange> GetStartingRange() const { return m_xStartingRange; }
+    void SetStartingRange(css::uno::Reference<css::text::XTextRange> const& xSet) { m_xStartingRange = xSet; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetEndingRange() const { return m_xEndingRange; }
-    void SetEndingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xSet ) { m_xEndingRange = xSet; }
+    css::uno::Reference<css::text::XTextRange> GetEndingRange() const { return m_xEndingRange; }
+    void SetEndingRange(css::uno::Reference<css::text::XTextRange> const& xSet) { m_xEndingRange = xSet; }
 
     void                    SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet;}
     const OUString&  GetParaStyleName() const { return m_sParaStyleName;}

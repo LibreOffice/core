@@ -44,9 +44,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     SettingsTable_Impl *m_pImpl;
 
  public:
-    SettingsTable(  DomainMapper& rDMapper,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xTextFactory
-            );
+    SettingsTable(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory);
     virtual ~SettingsTable();
 
     //returns default TabStop in 1/100th mm

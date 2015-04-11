@@ -159,7 +159,7 @@ namespace dmapper {
                             nToken = XML_tableCellDelete;
                             break;
                         default:
-                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
+                            throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
                             break;
                     };
                     TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
