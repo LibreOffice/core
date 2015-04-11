@@ -22,9 +22,10 @@
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 
 class SwTxtFrm;
-class OutputDevice;
 class SwViewShell;
 class SwScriptInfo;
 class Point;
