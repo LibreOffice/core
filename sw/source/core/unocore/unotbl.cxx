@@ -3639,28 +3639,25 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    SwFrmFmt* pFmt(GetFrmFmt());
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
-    if(!pFmt)
-        throw uno::RuntimeException();
-    sal_uInt16 nRow = 0;
+    auto vCells(getCells());
+    auto pCurrentCell(vCells.begin());
     for(auto& rRow : aRowSeq)
     {
         rRow = uno::Sequence< uno::Any >(nColCount);
-        sal_uInt16 nCol = 0;
         for(auto& rCellAny : rRow)
         {
-            SwXCell* pXCell(lcl_CreateXCell(pFmt, nCol++, nRow));
-            uno::Reference<table::XCell> xCell = pXCell; // to prevent distruction in UNO calls
-            SwTableBox* pBox = pXCell ? pXCell->GetTblBox() : nullptr;
+            auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
+            SwTableBox* pBox = pCell ? pCell->GetTblBox() : nullptr;
             if(!pBox)
                 throw uno::RuntimeException();
             // check if table box value item is set
             SwFrmFmt* pBoxFmt(pBox->GetFrmFmt());
             const bool bIsNum = pBoxFmt->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pXCell)) : uno::makeAny(lcl_getString(*pXCell));
+            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pCell)) : uno::makeAny(lcl_getString(*pCell));
+            ++pCurrentCell;
         }
-        ++nRow;
     }
     return aRowSeq;
 }
