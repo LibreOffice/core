@@ -943,7 +943,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bool bPageStylesWithHeaderFooter = false;
 
             vcl::Window *pSourceWindow = 0;
-            VclPtr<CancelableModelessDialog> pProgressDlg;
+            VclPtr<CancelableDialog> pProgressDlg;
 
             if (!IsMergeSilent()) {
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();

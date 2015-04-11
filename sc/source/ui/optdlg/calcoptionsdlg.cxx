@@ -116,8 +116,6 @@ ScCalcOptionsDialog::~ScCalcOptionsDialog()
 
 void ScCalcOptionsDialog::dispose()
 {
-    mpLbOptionEdit.clear();
-
     mpUseOpenCL.clear();
     mpSpinButton.clear();
     mpEditField.clear();

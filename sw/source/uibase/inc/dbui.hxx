@@ -39,7 +39,7 @@ protected:
     using Dialog::StartExecuteModal;
 
 public:
-    virtual ~CancelableModelessDialog();
+    virtual ~CancelableDialog();
     virtual void dispose() SAL_OVERRIDE;
 
     void SetCancelHdl( const Link& rLink );

@@ -339,7 +339,6 @@ protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
     CustomPropertiesDurationField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
-    virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
@@ -351,7 +350,6 @@ class CustomPropertiesEditButton : public PushButton
 
 public:
     CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
-    virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
 };

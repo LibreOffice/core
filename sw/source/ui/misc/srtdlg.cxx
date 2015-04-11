@@ -413,7 +413,6 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
 IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
 {
     if( pControl == m_pRowRB.get())
-r
     {
         m_pColLbl->SetText(aColTxt);
         m_pColEdt1->SetMax(nY);

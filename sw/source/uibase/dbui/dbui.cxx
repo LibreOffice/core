@@ -53,7 +53,8 @@ void PrintMonitor::dispose()
     m_pPrinting.clear();
     m_pPrinter.clear();
     m_pPrintInfo.clear();
-    CancelableModelessDialog::dispose();
+
+    CancelableDialog::dispose();
 }
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
@@ -80,7 +81,8 @@ void CreateMonitor::dispose()
 {
     m_pCancelButton.clear();
     m_pCounting.clear();
-    CancelableModelessDialog::dispose();
+
+    CancelableDialog::dispose();
 }
 
 void CreateMonitor::UpdateCountingText()
@@ -121,7 +123,8 @@ void CancelableDialog::dispose()
 {
     EndDialog( 0 );
     m_pCancelButton.clear();
-    ModelessDialog::dispose();
+
+    Dialog::dispose();
 }
 
 void CancelableDialog::SetCancelHdl( const Link& rLink )
