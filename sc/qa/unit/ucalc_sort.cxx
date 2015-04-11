@@ -182,12 +182,9 @@ void Test::testSortHorizontal()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)"))
-        CPPUNIT_FAIL("Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
 
     m_pDoc->DeleteTab(0);
 }
@@ -763,8 +760,7 @@ void Test::testSortRefUpdate()
     }
 
     // C2 should now point to A4.
-    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]"))
-        CPPUNIT_FAIL("Wrong formula in C2!");
+    checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
 
     // Undo the sort.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -787,8 +783,7 @@ void Test::testSortRefUpdate()
     }
 
     // C2 should now point to A2.
-    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "RC[-2]"))
-        CPPUNIT_FAIL("Wrong formula in C2!");
+    checkFormula(*m_pDoc, ScAddress(2,1,0), "RC[-2]", "Wrong formula in C2!");
 
     // Redo.
     pUndoMgr->Redo();
@@ -809,8 +804,7 @@ void Test::testSortRefUpdate()
     }
 
     // C2 should now point to A4.
-    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]"))
-        CPPUNIT_FAIL("Wrong formula in C2!");
+    checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
 
     // Undo again.
     pUndoMgr->Undo();
@@ -913,8 +907,7 @@ void Test::testSortRefUpdate2()
     // Formulas in column B should still point to their respective left neighbor cell.
     for (SCROW i = 1; i <= 4; ++i)
     {
-        if (!checkFormula(*m_pDoc, ScAddress(1,i,0), "RC[-1]"))
-            CPPUNIT_FAIL("Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(1,i,0), "RC[-1]", "Wrong formula!");
     }
 
     // Undo and check the result in column B.
@@ -994,12 +987,9 @@ void Test::testSortRefUpdate3()
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Make sure the formula cells have been adjusted correctly.
-    if (!checkFormula(*m_pDoc, ScAddress(0,3,0), "A2+A3"))
-        CPPUNIT_FAIL("Wrong formula in A4.");
-    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "A2+10"))
-        CPPUNIT_FAIL("Wrong formula in A5.");
-    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "A3+10"))
-        CPPUNIT_FAIL("Wrong formula in A6.");
+    checkFormula(*m_pDoc, ScAddress(0,3,0), "A2+A3", "Wrong formula in A4.");
+    checkFormula(*m_pDoc, ScAddress(0,4,0), "A2+10", "Wrong formula in A5.");
+    checkFormula(*m_pDoc, ScAddress(0,5,0), "A3+10", "Wrong formula in A6.");
 
     // Undo and check the result.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -1148,8 +1138,7 @@ void Test::testSortRefUpdate4_Impl()
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                if (!checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol]))
-                    CPPUNIT_FAIL(OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+                checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
             }
         }
 
@@ -1220,8 +1209,7 @@ void Test::testSortRefUpdate4_Impl()
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                if (!checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol]))
-                    CPPUNIT_FAIL(OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+                checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
             }
         }
     }
@@ -1314,8 +1302,7 @@ void Test::testSortRefUpdate5()
     };
     for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
     {
-        if (!checkFormula(*m_pDoc, ScAddress(1,nRow+1,0), aFormulaCheck[nRow]))
-            CPPUNIT_FAIL(OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr());
+        checkFormula(*m_pDoc, ScAddress(1,nRow+1,0), aFormulaCheck[nRow], OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr());
     }
 
     // Undo and check the result.
@@ -1405,12 +1392,9 @@ void Test::testSortRefUpdate6()
     }
 
     // Make sure that the formulas in C2:C4 are not adjusted.
-    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "C1+B2"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(2,2,0), "C2+B3"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(2,3,0), "C3+B4"))
-        CPPUNIT_FAIL("Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(2,1,0), "C1+B2", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(2,2,0), "C2+B3", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(2,3,0), "C3+B4", "Wrong formula!");
 
     // Undo and check.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -1542,22 +1526,14 @@ void Test::testSortBroadcaster()
         }
 
         // Make sure that the formulas in D1:G2 are not adjusted.
-        if (!checkFormula(*m_pDoc, ScAddress(3,0,0), "B1"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(3,1,0), "B2"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(4,0,0), "$B$1"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(4,1,0), "$B$2"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(5,0,0), "SUM(A1:B1)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(5,1,0), "SUM(A2:B2)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(6,0,0), "SUM($A$1:$B$1)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(6,1,0), "SUM($A$2:$B$2)"))
-            CPPUNIT_FAIL("Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(3,0,0), "B1", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(3,1,0), "B2", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(4,0,0), "$B$1", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(4,1,0), "$B$2", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(5,0,0), "SUM(A1:B1)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(5,1,0), "SUM(A2:B2)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(6,0,0), "SUM($A$1:$B$1)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(6,1,0), "SUM($A$2:$B$2)", "Wrong formula!");
 
         // Enter new value and check that it is broadcasted. First in empty cell.
         m_pDoc->SetString(1,1,0, "16");
@@ -1652,22 +1628,14 @@ void Test::testSortBroadcaster()
         }
 
         // Make sure that the formulas in A8:B11 are not adjusted.
-        if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "A6"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(1,7,0), "B6"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "$A$6"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(1,8,0), "$B$6"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(A5:A6)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(B5:B6)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM($A$5:$A$6)"))
-            CPPUNIT_FAIL("Wrong formula!");
-        if (!checkFormula(*m_pDoc, ScAddress(1,10,0), "SUM($B$5:$B$6)"))
-            CPPUNIT_FAIL("Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(0,7,0), "A6", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(1,7,0), "B6", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(0,8,0), "$A$6", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(1,8,0), "$B$6", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(A5:A6)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(B5:B6)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM($A$5:$A$6)", "Wrong formula!");
+        checkFormula(*m_pDoc, ScAddress(1,10,0), "SUM($B$5:$B$6)", "Wrong formula!");
 
         // Enter new value and check that it is broadcasted. First in empty cell.
         m_pDoc->SetString(1,5,0, "16");
