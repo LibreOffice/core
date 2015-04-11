@@ -259,9 +259,9 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
 void ScExportTest::test()
 {
     ScDocShell* pShell = new ScDocShell(
-        SFXMODEL_STANDARD |
-        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
-        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     pShell->DoInitNew();
 
     ScDocument& rDoc = pShell->GetDocument();
@@ -281,9 +281,9 @@ void ScExportTest::test()
 void ScExportTest::testPasswordExport()
 {
     ScDocShell* pShell = new ScDocShell(
-        SFXMODEL_STANDARD |
-        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
-        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     pShell->DoInitNew();
 
     ScDocument& rDoc = pShell->GetDocument();
