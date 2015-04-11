@@ -51,7 +51,7 @@ namespace utl
 class MediaDescriptor;
 }
 
-typedef std::vector< com::sun::star::beans::PropertyValue > PropertyValueVector_t;
+typedef std::vector<css::beans::PropertyValue> PropertyValueVector_t;
 
 namespace writerfilter {
 namespace dmapper
@@ -75,13 +75,13 @@ class DomainMapper : public LoggedProperties, public LoggedTable,
     DomainMapper_Impl   *m_pImpl;
 
 public:
-    DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const& xInputStream,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const& xModel,
-                                bool bRepairStorage,
-                                SourceDocumentType eDocumentType,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xInsertTextRange,
-                                utl::MediaDescriptor& rMediaDesc);
+    DomainMapper(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                 css::uno::Reference<css::io::XInputStream> const& xInputStream,
+                 css::uno::Reference<css::lang::XComponent> const& xModel,
+                 bool bRepairStorage,
+                 SourceDocumentType eDocumentType,
+                 css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
+                 utl::MediaDescriptor& rMediaDesc);
     virtual ~DomainMapper();
 
     // Stream
@@ -102,24 +102,23 @@ public:
 
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory() const;
+    css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const;
     void  AddListIDToLFOTable( sal_Int32 nAbstractNumId );
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();
+    css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
     std::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
 
     /// Return the first from the pending (not inserted to the document) shapes, if there are any.
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> PopPendingShape();
+    css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     bool IsInHeaderFooter() const;
     bool IsStyleSheetImport() const;
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
-    void processDeferredCharacterProperties(
-        const std::map< sal_Int32, com::sun::star::uno::Any >& deferredCharacterProperties );
+    void processDeferredCharacterProperties(const std::map<sal_Int32, css::uno::Any>& rDeferredCharacterProperties);
     void setInTableStyleRunProps(bool bInTableStyleRunProps);
 
     /// Enable storing of seen tokens in a named grab bag.
@@ -140,7 +139,7 @@ private:
     virtual void lcl_endParagraphGroup() SAL_OVERRIDE;
     virtual void lcl_startCharacterGroup() SAL_OVERRIDE;
     virtual void lcl_endCharacterGroup() SAL_OVERRIDE;
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > const& xShape ) SAL_OVERRIDE;
+    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) SAL_OVERRIDE;
     virtual void lcl_endShape( ) SAL_OVERRIDE;
 
     virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
@@ -168,7 +167,7 @@ private:
     bool getColorFromId(const Id, sal_Int32 &nColor);
     sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
-    com::sun::star::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
+    css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;

@@ -58,7 +58,7 @@ public:
 
     virtual ~OOXMLFastContextHandler();
 
-    // ::com::sun::star::xml::sax::XFastContextHandler:
+    // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
@@ -459,7 +459,7 @@ public:
 
     virtual std::string getType() const SAL_OVERRIDE { return "Shape"; }
 
-    // ::com::sun::star::xml::sax::XFastContextHandler:
+    // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement (const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
@@ -498,9 +498,8 @@ protected:
 /**
    OOXMLFastContextHandlerWrapper wraps an OOXMLFastContextHandler.
 
-   The method calls for the interface
-   ::com::sun::star::xml::sax::XFastContextHandler are forwarded to the wrapped
-   OOXMLFastContextHandler.
+   The method calls for the interface css::xml::sax::XFastContextHandler are
+   forwarded to the wrapped OOXMLFastContextHandler.
  */
 class OOXMLFastContextHandlerWrapper : public OOXMLFastContextHandler
 {
@@ -508,7 +507,7 @@ public:
     explicit OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent, css::uno::Reference<css::xml::sax::XFastContextHandler> xContext);
     virtual ~OOXMLFastContextHandlerWrapper();
 
-    // ::com::sun::star::xml::sax::XFastContextHandler:
+    // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 

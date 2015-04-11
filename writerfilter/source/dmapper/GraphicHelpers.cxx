@@ -209,7 +209,7 @@ sal_Int32 WrapHandler::getWrapMode( )
 {
     // The wrap values do not map directly to our wrap mode,
     // e.g. none in .docx actually means through in LO.
-    sal_Int32 nMode = com::sun::star::text::WrapTextMode_THROUGHT;
+    sal_Int32 nMode = text::WrapTextMode_THROUGHT;
 
     switch ( m_nType )
     {
@@ -221,22 +221,22 @@ sal_Int32 WrapHandler::getWrapMode( )
                 switch ( m_nSide )
                 {
                     case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapSide_left:
-                        nMode = com::sun::star::text::WrapTextMode_LEFT;
+                        nMode = text::WrapTextMode_LEFT;
                         break;
                     case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapSide_right:
-                        nMode = com::sun::star::text::WrapTextMode_RIGHT;
+                        nMode = text::WrapTextMode_RIGHT;
                         break;
                     default:
-                        nMode = com::sun::star::text::WrapTextMode_PARALLEL;
+                        nMode = text::WrapTextMode_PARALLEL;
                 }
             }
             break;
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_topAndBottom:
-            nMode = com::sun::star::text::WrapTextMode_NONE;
+            nMode = text::WrapTextMode_NONE;
             break;
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_none:
         default:
-            nMode = com::sun::star::text::WrapTextMode_THROUGHT;
+            nMode = text::WrapTextMode_THROUGHT;
     }
 
     return nMode;

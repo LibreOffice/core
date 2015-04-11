@@ -29,18 +29,18 @@ namespace writerfilter {
 namespace dmapper {
 
 typedef css::uno::Reference< css::text::XTextRange > Handle_t;
-typedef ::com::sun::star::uno::Sequence< Handle_t> CellSequence_t;
+typedef css::uno::Sequence<Handle_t> CellSequence_t;
 typedef std::shared_ptr<CellSequence_t> CellSequencePointer_t;
-typedef ::com::sun::star::uno::Sequence< CellSequence_t > RowSequence_t;
+typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
 typedef std::shared_ptr<RowSequence_t> RowSequencePointer_t;
-typedef ::com::sun::star::uno::Sequence< RowSequence_t> TableSequence_t;
+typedef css::uno::Sequence<RowSequence_t> TableSequence_t;
 typedef std::shared_ptr<TableSequence_t> TableSequencePointer_t;
-typedef ::com::sun::star::text::XTextAppendAndConvert Text_t;
-typedef ::com::sun::star::uno::Reference<Text_t> TextReference_t;
+typedef css::text::XTextAppendAndConvert Text_t;
+typedef css::uno::Reference<Text_t> TextReference_t;
 
-typedef ::com::sun::star::beans::PropertyValues                     TablePropertyValues_t;
-typedef ::com::sun::star::uno::Sequence< TablePropertyValues_t >    RowPropertyValuesSeq_t;
-typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellPropertyValuesSeq_t;
+typedef css::beans::PropertyValues TablePropertyValues_t;
+typedef css::uno::Sequence<TablePropertyValues_t> RowPropertyValuesSeq_t;
+typedef css::uno::Sequence<RowPropertyValuesSeq_t> CellPropertyValuesSeq_t;
 
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;

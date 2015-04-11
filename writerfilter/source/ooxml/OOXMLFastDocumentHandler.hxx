@@ -44,7 +44,7 @@ public:
         sal_Int32 nXNoteId );
     virtual ~OOXMLFastDocumentHandler() {}
 
-    // ::com::sun::star::xml::sax::XFastDocumentHandler:
+    // css::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument()
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument()
@@ -53,7 +53,7 @@ public:
     (const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::xml::sax::XFastContextHandler:
+    // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
     (::sal_Int32 Element,
      const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)

@@ -155,7 +155,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
     return false;
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+// xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
