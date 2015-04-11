@@ -355,28 +355,21 @@ void ScFiltersTest::testSharedFormulaXLS()
     ScDocument& rDoc2 = xDocSh->GetDocument();
     rDoc2.CalcAll();
 
-    if (!checkFormula(rDoc2, ScAddress(1,0,0), "A1*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,0,0), "A1*20", "Wrong formula.");
 
-    if (!checkFormula(rDoc2, ScAddress(1,1,0), "A2*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,1,0), "A2*20", "Wrong formula.");
 
-    if (!checkFormula(rDoc2, ScAddress(1,2,0), "A3*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,2,0), "A3*20", "Wrong formula.");
 
     // There is an intentional gap at row 4.
 
-    if (!checkFormula(rDoc2, ScAddress(1,4,0), "A5*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,4,0), "A5*20", "Wrong formula.");
 
-    if (!checkFormula(rDoc2, ScAddress(1,5,0), "A6*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,5,0), "A6*20", "Wrong formula.");
 
-    if (!checkFormula(rDoc2, ScAddress(1,6,0), "A7*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,6,0), "A7*20", "Wrong formula.");
 
-    if (!checkFormula(rDoc2, ScAddress(1,7,0), "A8*20"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(rDoc2, ScAddress(1,7,0), "A8*20", "Wrong formula.");
 
     // We re-group formula cells on load. Let's check that as well.
 
