@@ -33,7 +33,7 @@ public:
     LatentStyleHandler();
     virtual ~LatentStyleHandler();
 
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getAttributes() const;
+    css::uno::Sequence<css::beans::PropertyValue> getAttributes() const;
 };
 
 typedef std::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;

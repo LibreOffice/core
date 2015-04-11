@@ -95,9 +95,9 @@ public:
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt, int nAnchorId);
-    void writeDiagramRels(com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument> xDom,
-                          const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >& xRelSeq,
-                          com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
+    void writeDiagramRels(css::uno::Reference<css::xml::dom::XDocument> xDom,
+                          const css::uno::Sequence< css::uno::Sequence<css::uno::Any> >& xRelSeq,
+                          css::uno::Reference<css::io::XOutputStream> xOutStream, const OUString& sGrabBagProperyName,
                           int nAnchorId);
     /// Writes text frame in DML format.
     void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);

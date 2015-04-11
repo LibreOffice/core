@@ -169,14 +169,14 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
     m_bHasElements = true;
 }
 
-void SdtHelper::appendToInteropGrabBag(const com::sun::star::beans::PropertyValue& rValue)
+void SdtHelper::appendToInteropGrabBag(const beans::PropertyValue& rValue)
 {
     m_aGrabBag.push_back(rValue);
 }
 
-com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
+uno::Sequence<beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
 {
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = comphelper::containerToSequence(m_aGrabBag);
+    uno::Sequence<beans::PropertyValue> aRet = comphelper::containerToSequence(m_aGrabBag);
     m_aGrabBag.clear();
     return aRet;
 }

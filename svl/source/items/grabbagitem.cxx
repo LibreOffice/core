@@ -72,7 +72,7 @@ bool SfxGrabBagItem::QueryValue(uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     uno::Sequence<beans::PropertyValue> aValue(m_aMap.size());
     beans::PropertyValue* pValue = aValue.getArray();
-    for (std::map<OUString, com::sun::star::uno::Any>::const_iterator i = m_aMap.begin(); i != m_aMap.end(); ++i)
+    for (std::map<OUString, uno::Any>::const_iterator i = m_aMap.begin(); i != m_aMap.end(); ++i)
     {
         pValue[0].Name = i->first;
         pValue[0].Value = i->second;

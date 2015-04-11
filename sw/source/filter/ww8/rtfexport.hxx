@@ -123,7 +123,7 @@ public:
                             const OUString& rHelp,
                             const OUString& ToolTip,
                             const OUString& rSelected,
-                            com::sun::star::uno::Sequence<OUString>& rListItems) SAL_OVERRIDE;
+                            css::uno::Sequence<OUString>& rListItems) SAL_OVERRIDE;
 
     virtual void DoFormText(const SwInputField* pFld) SAL_OVERRIDE;
 

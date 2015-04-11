@@ -4149,31 +4149,28 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         switch (nParam)
         {
         case 1:
-            m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_NONE;
+            m_aStates.top().aShape.nWrap = css::text::WrapTextMode_NONE;
             break;
         case 2:
-            m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL;
+            m_aStates.top().aShape.nWrap = css::text::WrapTextMode_PARALLEL;
             break;
         case 3:
-            m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT;
+            m_aStates.top().aShape.nWrap = css::text::WrapTextMode_THROUGHT;
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone, std::make_shared<RTFValue>());
             break;
         case 4:
-            m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL;
+            m_aStates.top().aShape.nWrap = css::text::WrapTextMode_PARALLEL;
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight, std::make_shared<RTFValue>());
             break;
         case 5:
-            m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT;
+            m_aStates.top().aShape.nWrap = css::text::WrapTextMode_THROUGHT;
             break;
         }
     }
     break;
     case RTF_CELLX:
     {
-        int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES ==
-                            m_aStates.top().eDestination)
-                           ? m_nNestedCurrentCellX
-                           : m_nTopLevelCurrentCellX);
+        int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination) ? m_nNestedCurrentCellX : m_nTopLevelCurrentCellX);
         int nCellX = nParam - rCurrentCellX;
         const int COL_DFLT_WIDTH = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
         if (!nCellX)
