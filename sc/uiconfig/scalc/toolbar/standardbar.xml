@@ -70,9 +70,9 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FreezePanes"/>
  <toolbar:toolbaritem xlink:href=".uno:DefinePrintArea"/>
- <toolbar:toolbaritem xlink:href=".uno:SplitWindow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FreezePanes"/>
+ <toolbar:toolbaritem xlink:href=".uno:SplitWindow"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:visible="false"/>

@@ -54,7 +54,7 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals"/>
