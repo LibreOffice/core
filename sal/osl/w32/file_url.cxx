@@ -121,7 +121,7 @@ static BOOL IsValidFilePathComponent(
                 }
                 break;
             }
-            cLast = *lpCurrent++;
+            cLast = *++lpCurrent;
         }
 
         /*  If we don't reached the end of the component the length of the component was to long
@@ -303,7 +303,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
         else if (  ( dwCandidatPathType & PATHTYPE_MASK_TYPE ) == PATHTYPE_ABSOLUTE_LOCAL )
         {
             if ( 1 == _tcsspn( lpComponent, CHARSET_SEPARATOR ) )
-                lpComponent++;
+                ++lpComponent;
             else if ( *lpComponent )
                 fValid = FALSE;
 
@@ -326,7 +326,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 
             if ( 1 == _tcsspn( lpComponent, CHARSET_SEPARATOR ) )
             {
-                lpComponent++;
+                ++lpComponent;
                 if ( !*lpComponent )
                     lpComponent = NULL;
             }
@@ -356,7 +356,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 
             if ( fValid && lpComponent )
             {
-                lpComponent++;
+                ++lpComponent;
 
                 /* If the string behind the backslash is empty, we've done */
 
@@ -425,7 +425,7 @@ static LPTSTR PathAddBackslash(LPTSTR lpPath, sal_Int32 nBufLen)
             if ( !nLen || ( lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 ) )
             {
                 lpEndPath = lpPath + nLen;
-                *lpEndPath++ = '\\';
+                *++lpEndPath = '\\';
                 *lpEndPath = 0;
             }
     }
@@ -577,9 +577,9 @@ static sal_Bool _osl_decodeURL( rtl_String* strUTF8, rtl_uString** pstrDecodedUR
                 sal_Char    aToken[3];
                 sal_Char    aChar;
 
-                pSrc++;
-                aToken[0] = *pSrc++;
-                aToken[1] = *pSrc++;
+                ++pSrc;
+                aToken[0] = *++pSrc;
+                aToken[1] = *++pSrc;
                 aToken[2] = 0;
 
                 aChar = (sal_Char)strtoul( aToken, NULL, 16 );
@@ -589,16 +589,16 @@ static sal_Bool _osl_decodeURL( rtl_String* strUTF8, rtl_uString** pstrDecodedUR
                 if ( 0 == aChar || '\\' == aChar || '/' == aChar || ':' == aChar )
                     bValidEncoded = sal_False;
                 else
-                    *pDest++ = aChar;
+                    *++pDest = aChar;
             }
             break;
         default:
-            *pDest++ = *pSrc++;
+            *++pDest = *++pSrc;
             break;
         }
     }
 
-    *pDest++ = 0;
+    *++pDest = 0;
 
     if ( bValidEncoded )
     {
@@ -662,14 +662,14 @@ static void _osl_encodeURL( rtl_uString *strURL, rtl_String **pstrEncodedURL )
         case '/':
         case '\\':
         case '|':
-            *pURLDest++ = cCurrent;
+            *++pURLDest = cCurrent;
             break;
         case 0:
             break;
         }
 
-        pURLScan++;
-        nURLScanCount++;
+        ++pURLScan;
+        ++nURLScanCount;
     }
 
     *pURLDest = 0;

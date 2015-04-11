@@ -30,7 +30,7 @@ static SbxVariable* Element
 static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 {
     while( *p && ( *p == ' ' || *p == '\t' ) )
-        p++;
+        ++p;
     return p;
 }
 
@@ -46,9 +46,9 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         rSym = ++p;
         while( *p && *p != ']' )
         {
-            p++, nLen++;
+            ++p, ++nLen;
         }
-        p++;
+        ++p;
     }
     else
     {
@@ -63,12 +63,12 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
             // The it can contain alphabetic characters, numbers or underlines
             while( *p && (rtl::isAsciiAlphanumeric( *p ) || *p == '_') )
             {
-                p++, nLen++;
+                ++p, ++nLen;
             }
             // BASIC-Standard-Suffixes were ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
             {
-                p++;
+                ++p;
             }
         }
     }
@@ -99,7 +99,7 @@ static SbxVariable* QualifiedName
             refVar.Clear();
             if( !pObj )
                 break;
-            p++;
+            ++p;
             // And the next element please
             refVar = Element( pObj, pGbl, &p, t );
         }
@@ -140,7 +140,7 @@ static SbxVariable* Operand
     {
         // A string
         OUString aString;
-        p++;
+        ++p;
         for( ;; )
         {
             // This is perhaps an error
@@ -156,7 +156,7 @@ static SbxVariable* Operand
                     break;
                 }
             }
-            aString += OUString(*p++);
+            aString += OUString(*++p);
         }
         refVar->PutString( aString );
     }
@@ -180,7 +180,7 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
-        sal_Unicode cOp = *p++;
+        sal_Unicode cOp = *++p;
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
         if( refVar2.Is() )
         {
@@ -212,7 +212,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unico
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '+' || *p == '-' ) )
     {
-        sal_Unicode cOp = *p++;
+        sal_Unicode cOp = *++p;
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
         if( refVar2.Is() )
         {
@@ -254,7 +254,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
             }
             else
             {
-                p++;
+                ++p;
                 SbxVariableRef refVar2( PlusMinus( pObj, pGbl, &p ) );
                 if( refVar2.Is() )
                 {
@@ -302,7 +302,7 @@ static SbxVariable* Element
             p = SkipWhitespace( p );
             if( *p == '(' )
             {
-                p++;
+                ++p;
                 SbxArrayRef refPar = new SbxArray;
                 sal_uInt16 nArg = 0;
                 // We are once relaxed and accept as well
@@ -326,10 +326,10 @@ static SbxVariable* Element
                     }
                     p = SkipWhitespace( p );
                     if( *p == ',' )
-                        p++;
+                        ++p;
                 }
                 if( *p == ')' )
-                    p++;
+                    ++p;
                 if( refVar.Is() )
                     refVar->SetParameters( refPar );
             }
@@ -356,7 +356,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
         {
             break;
         }
-        if( *p++ != '[' )
+        if( *++p != '[' )
         {
             SetError( SbxERR_SYNTAX ); break;
         }
@@ -366,7 +366,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
             break;
         }
         p = SkipWhitespace( p );
-        if( *p++ != ']' )
+        if( *++p != ']' )
         {
             SetError( SbxERR_SYNTAX ); break;
         }

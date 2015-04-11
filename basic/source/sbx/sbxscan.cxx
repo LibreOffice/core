@@ -72,7 +72,7 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
         return false;
     while (*p)
     {
-        if (*p++ == c)
+        if (*++p == c)
             return true;
     }
     return false;
@@ -112,10 +112,10 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
     while( *p == ' ' || *p == '\t' )
-        p++;
+        ++p;
     if( *p == '-' )
     {
-        p++;
+        ++p;
         bMinus = true;
     }
     if( ImpIsDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
@@ -138,14 +138,14 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             aBuf.append( *p );
             if( bOnlyIntntl && *p == cIntntlGrpSep )
             {
-                p++;
+                ++p;
                 continue;
             }
             if( *p == cNonIntntlDecSep || *p == cIntntlDecSep )
             {
                 // Use the separator that is passed to stringToDouble()
                 aBuf[ p - pStart ] = cIntntlDecSep;
-                p++;
+                ++p;
                 if( ++decsep > 1 )
                     continue;
             }
@@ -153,22 +153,22 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             {
                 if( ++exp > 1 )
                 {
-                    p++;
+                    ++p;
                     continue;
                 }
                 if( *p == 'D' || *p == 'd' )
                     eScanType = SbxDOUBLE;
                 aBuf[ p - pStart ] = 'E';
-                p++;
+                ++p;
             }
             else
             {
-                p++;
+                ++p;
                 if( decsep && !exp )
-                    ncdig++;
+                    ++ncdig;
             }
             if( !exp )
-                ndig++;
+                ++ndig;
         }
 
         if( decsep > 1 || exp > 1 )
@@ -197,7 +197,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         // type detection?
         const sal_Unicode pTypes[] = { '%', '!', '&', '#', 0 };
         if( ImpStrChr( pTypes, *p ) )
-            p++;
+            ++p;
     }
     // hex/octal number? read in and convert:
     else if( *p == '&' )
@@ -207,7 +207,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         OUString aCmp( "0123456789ABCDEFabcdef" );
         char base = 16;
         char ndig = 8;
-        switch( *p++ )
+        switch( *++p )
         {
             case 'O':
             case 'o':
@@ -233,7 +233,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             }
             else
                 bRes = false;
-            p++;
+            ++p;
         }
         OUString aBufStr( aBuf.makeStringAndClear());
         long l = 0;
@@ -247,7 +247,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 bRes = false;
         }
         if( *p == '&' )
-            p++;
+            ++p;
         nVal = (double) l;
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
@@ -326,13 +326,13 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     nExp = 0;
     if( nNum > 0.0 )
     {
-        while( nNum <   1.0 ) nNum *= 10.0, nExp--;
-        while( nNum >= 10.0 ) nNum /= 10.0, nExp++;
+        while( nNum <   1.0 ) nNum *= 10.0, --nExp;
+        while( nNum >= 10.0 ) nNum /= 10.0, ++nExp;
     }
     if( !bFix && !nExpWidth )
         nDig = nDig + nExp;
     else if( bFix && !nPrec )
-        nDig = nExp + 1;
+        nDig = ++nExp;
 
     // round number
     if( (nNum += roundArray [( nDig > 16 ) ? 16 : nDig] ) >= 10.0 )
@@ -348,15 +348,15 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         if( nExp < 0 )
         {
             // #41691: also a 0 at bFix
-            *pBuf++ = '0';
-            if( nPrec ) *pBuf++ = (char)cDecimalSep;
+            *++pBuf= '0';
+            if( nPrec ) *++pBuf = (char)cDecimalSep;
             i = -nExp - 1;
             if( nDig <= 0 ) i = nPrec;
-            while( i-- )    *pBuf++ = '0';
+            while( i-- )    *++pBuf = '0';
             nDec = 0;
         }
         else
-            nDec = nExp+1;
+            nDec = ++nExp;
     }
     else
         nDec = 1;
@@ -370,18 +370,18 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
             if( i < 16 )
             {
                 digit = (int) nNum;
-                *pBuf++ = sal::static_int_cast< char >(digit + '0');
+                *++pBuf = sal::static_int_cast< char >(digit + '0');
                 nNum =( nNum - digit ) * 10.0;
             } else
-                *pBuf++ = '0';
+                *++pBuf = '0';
             if( --nDig == 0 ) break;
             if( nDec )
             {
-                nDec--;
+                --nDec;
                 if( !nDec )
-                    *pBuf++ = (char)cDecimalSep;
+                    *++pBuf = (char)cDecimalSep;
                 else if( !(nDec % 3 ) && bPt )
-                    *pBuf++ = (char)cThousandSep;
+                    *++pBuf = (char)cThousandSep;
             }
         }
     }
@@ -391,17 +391,17 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     {
         if( nExpWidth < 3 ) nExpWidth = 3;
         nExpWidth -= 2;
-        *pBuf++ = 'E';
-        *pBuf++ =( nExp < 0 ) ?( (nExp = -nExp ), '-' ) : '+';
-        while( nExpWidth > 3 ) *pBuf++ = '0', nExpWidth--;
+        *++pBuf = 'E';
+        *++pBuf =( nExp < 0 ) ?( (nExp = -nExp ), '-' ) : '+';
+        while( nExpWidth > 3 ) *++pBuf = '0', nExpWidth--;
         if( nExp >= 100 || nExpWidth == 3 )
         {
-            *pBuf++ = sal::static_int_cast< char >(nExp/100 + '0');
+            *++pBuf = sal::static_int_cast< char >(nExp/100 + '0');
             nExp %= 100;
         }
         if( nExp/10 || nExpWidth >= 2 )
             *pBuf++ = sal::static_int_cast< char >(nExp/10 + '0');
-        *pBuf++ = sal::static_int_cast< char >(nExp%10 + '0');
+        *++pBuf = sal::static_int_cast< char >(nExp%10 + '0');
     }
     *pBuf = 0;
 }
@@ -423,17 +423,17 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
 
     if( nNum < 0.0 ) {
         nNum = -nNum;
-        *p++ = '-';
+        *++p = '-';
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
     myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
         false, true, cDecimalSep );
     // remove trailing zeros
-    for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
+    for( p = cBuf; *p &&( *p != 'E' ); ++p ) {}
     q = p; p--;
-    while( nPrec && *p == '0' ) nPrec--, p--;
-    if( *p == cDecimalSep ) p--;
-    while( *q ) *++p = *q++;
+    while( nPrec && *p == '0' ) --nPrec, --p;
+    if( *p == cDecimalSep ) --p;
+    while( *q ) *++p = *++q;
     *++p = 0;
     rRes = OUString::createFromAscii( cBuf );
 }
@@ -506,21 +506,21 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
     switch( *pFmt )
     {
     case '!':
-        aTemp.append(*pStr++);
-        pFmt++;
+        aTemp.append(*++pStr);
+        ++pFmt;
         break;
     case '\\':
         do
         {
-            aTemp.append( *pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
-            pFmt++;
+            aTemp.append( *pStr ? *++pStr : static_cast< sal_Unicode >(' '));
+            ++pFmt;
         }
         while( *pFmt != '\\' );
-        aTemp.append(*pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
-        pFmt++; break;
+        aTemp.append(*pStr ? *++pStr : static_cast< sal_Unicode >(' '));
+        ++pFmt; break;
     case '&':
         aTemp = rStr;
-        pFmt++; break;
+        ++pFmt; break;
     default:
         aTemp = rStr;
         break;
@@ -626,7 +626,7 @@ VbaFormatInfo* getFormatInfo( const OUString& rFmt )
     {
         if( rFmt.equalsIgnoreAsciiCase( pInfo->mpVbaFormat ) )
             break;
-        i++;
+        ++i;
     }
     return pInfo;
 }
