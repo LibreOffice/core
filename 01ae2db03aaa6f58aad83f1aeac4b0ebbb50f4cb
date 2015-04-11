@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_e7dcaa1a",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3430,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-11T11:20:48Z",
+      "side": 1,
+      "message": "those guys could all be const sal_Int32, but that is probably nuance.",
+      "revId": "01ae2db03aaa6f58aad83f1aeac4b0ebbb50f4cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
