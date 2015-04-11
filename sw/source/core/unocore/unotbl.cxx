@@ -3674,13 +3674,13 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
     if(!pFmt)
         return;
     if(rArray.getLength() != nRowCount)
-        throw uno::RuntimeException("Row count mismatch", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rArray.getLength()), static_cast<cppu::OWeakObject*>(this));
     auto vCells(getCells());
     auto pCurrentCell(vCells.begin());
     for(const auto& rColSeq : rArray)
     {
         if(rColSeq.getLength() != nColCount)
-            throw uno::RuntimeException("Column count mismatch", static_cast<cppu::OWeakObject*>(this));
+            throw uno::RuntimeException("Column count mismatch. expected: " + OUString::number(nColCount) + " got: " + OUString::number(rColSeq.getLength()), static_cast<cppu::OWeakObject*>(this));
         for(const auto& aValue : rColSeq)
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
@@ -3706,16 +3706,16 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     if(m_bFirstColumnAsLabel || m_bFirstRowAsLabel)
     {
-        uno::Reference<chart::XChartDataArray> xDataRange(getCellRangeByPosition(m_bFirstRowAsLabel ? 1 : 0, m_bFirstColumnAsLabel ? 1 : 0,
-            nRowCount, nColCount), uno::UNO_QUERY);
+        uno::Reference<chart::XChartDataArray> xDataRange(getCellRangeByPosition(m_bFirstColumnAsLabel ? 1 : 0, m_bFirstRowAsLabel ? 1 : 0,
+            nColCount-1, nRowCount-1), uno::UNO_QUERY);
         return xDataRange->getData();
     }
-    uno::Sequence< uno::Sequence< double > > vRows(nColCount);
+    uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
     auto vCells(getCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : vRows)
     {
-        rRow = uno::Sequence<double>(nRowCount);
+        rRow = uno::Sequence<double>(nColCount);
         for(auto& rValue : rRow)
         {
             rValue = (*pCurrentCell)->getValue();
@@ -3733,24 +3733,25 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
-    if(rData.getLength() < nRowCount - nRowStart)
-        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-    const uno::Sequence< double >* pRowArray = rData.getConstArray();
-    for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; ++nRow)
+    if(m_bFirstColumnAsLabel || m_bFirstRowAsLabel)
     {
-        const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-        const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
-        if(rColSeq.getLength() < nColCount - nColStart)
-            throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-        const double * pColArray = rColSeq.getConstArray();
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
+        uno::Reference<chart::XChartDataArray> xDataRange(getCellRangeByPosition(m_bFirstColumnAsLabel ? 1 : 0, m_bFirstRowAsLabel ? 1 : 0,
+            nColCount-1, nRowCount-1), uno::UNO_QUERY);
+        return xDataRange->setData(rData);
+    }
+    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
+    if(rData.getLength() != nRowCount)
+        throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rData.getLength()), static_cast<cppu::OWeakObject*>(this));
+    auto vCells(getCells());
+    auto pCurrentCell(vCells.begin());
+    for(const auto& rRow : rData)
+    {
+        if(rRow.getLength() != nColCount)
+            throw uno::RuntimeException("Column count mismatch. expected: " + OUString::number(nColCount) + " got: " + OUString::number(rRow.getLength()), static_cast<cppu::OWeakObject*>(this));
+        for(const auto& rValue : rRow)
         {
-            uno::Reference<table::XCell> xCell = getCellByPosition(nCol, nRow);
-            if(!xCell.is())
-                throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-            xCell->setValue(pColArray[nCol - nColStart]);
+            uno::Reference<table::XCell>(*pCurrentCell, uno::UNO_QUERY)->setValue(rValue);
+            ++pCurrentCell;
         }
     }
 }
