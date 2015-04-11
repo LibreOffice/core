@@ -76,6 +76,7 @@
                 <property name="fill">True</property>
                 <property name="position">3</property>
                 <property name="secondary">True</property>
+                <property name="non_homogeneous">True</property>
               </packing>
             </child>
           </object>
@@ -108,7 +109,7 @@
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkEntry" id="search_term">
                             <property name="visible">True</property>
@@ -202,7 +203,7 @@
                       <object class="GtkBox" id="box7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="suggestion1">
                             <property name="visible">True</property>
