@@ -71,7 +71,6 @@ namespace dbaui
         ,m_pAutoRetrievingLabel(NULL)
         ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
-        ,m_bDelete(false)
     {
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -102,15 +101,15 @@ namespace dbaui
 
     void OCommonBehaviourTabPage::dispose()
     {
-        m_pOptionsLabel.clear();
-        m_pOptions.clear();
-        m_pCharsetLabel.clear();
-        m_pCharset.clear();
-        m_pAutoIncrementLabel.clear();
-        m_pAutoIncrement.clear();
-        m_pAutoRetrievingEnabled.clear();
-        m_pAutoRetrievingLabel.clear();
-        m_pAutoRetrieving.clear();
+        m_pOptionsLabel.disposeAndClear();
+        m_pOptions.disposeAndClear();
+        m_pCharsetLabel.disposeAndClear();
+        m_pCharset.disposeAndClear();
+        m_pAutoIncrementLabel.disposeAndClear();
+        m_pAutoIncrement.disposeAndClear();
+        m_pAutoRetrievingEnabled.disposeAndClear();
+        m_pAutoRetrievingLabel.disposeAndClear();
+        m_pAutoRetrieving.disposeAndClear();
         OGenericAdministrationPage::dispose();
     }
 
@@ -762,7 +761,7 @@ namespace dbaui
 
     void OTextDetailsPage::dispose()
     {
-        m_pTextConnectionHelper.clear();
+        m_pTextConnectionHelper.disposeAndClear();
         OCommonBehaviourTabPage::dispose();
     }
 

@@ -1432,9 +1432,9 @@ namespace svxform
         aAny <<= m_bShowDetails;
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
 
-        m_pInstPage.clear();
-        m_pSubmissionPage.clear();
-        m_pBindingPage.clear();
+        m_pInstPage.disposeAndClear();
+        m_pSubmissionPage.disposeAndClear();
+        m_pBindingPage.disposeAndClear();
 
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
@@ -1727,7 +1727,7 @@ namespace svxform
                         }
                         else
                         {
-                            m_pInstPage.clear();
+                            m_pInstPage.disposeAndClear();
                             bDoRemove = true;
                         }
 

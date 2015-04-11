@@ -2305,10 +2305,8 @@ void BrowseBox::SetMode( BrowserMode nMode )
     }
     else
     {
-        getDataWindow()->pHeaderBar.clear();
+        getDataWindow()->pHeaderBar.disposeAndClear();
     }
-
-
 
     if ( bColumnCursor )
     {

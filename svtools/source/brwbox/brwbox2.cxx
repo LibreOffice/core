@@ -1258,7 +1258,7 @@ void BrowseBox::UpdateScrollbars()
         getDataWindow()->pCornerWin->Show();
     }
     else
-        getDataWindow()->pCornerWin.clear();
+        getDataWindow()->pCornerWin.disposeAndClear();
 
     // scroll headerbar, if necessary
     if ( getDataWindow()->pHeaderBar )

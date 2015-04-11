@@ -64,8 +64,6 @@ namespace dbaui
 
         sal_uInt32          m_nControlFlags;
 
-        bool                m_bDelete;
-
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 

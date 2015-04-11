@@ -1489,10 +1489,10 @@ void SfxHelpIndexWindow_Impl::dispose()
 {
     sfx2::RemoveFromTaskPaneList( this );
 
-    pCPage.clear();
-    pIPage.clear();
-    pSPage.clear();
-    pBPage.clear();
+    pCPage.disposeAndClear();
+    pIPage.disposeAndClear();
+    pSPage.disposeAndClear();
+    pBPage.disposeAndClear();
 
     for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));

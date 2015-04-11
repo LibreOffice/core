@@ -88,7 +88,7 @@ namespace pcr
 
     void SAL_CALL ControlHelper::dispose()
     {
-        m_pControlWindow.clear();
+        m_pControlWindow.disposeAndClear();
     }
 
 

@@ -81,7 +81,7 @@ using namespace ::com::sun::star;
 
     void OTextConnectionPageSetup::dispose()
     {
-        m_pTextConnectionHelper.clear();
+        m_pTextConnectionHelper.disposeAndClear();
         OConnectionTabPageSetup::dispose();
     }
 

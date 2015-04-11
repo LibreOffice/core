@@ -157,7 +157,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 {
     pCurEditedEntry = 0;
-    pEdit.clear();
+    pEdit.disposeAndClear();
     Clear();
     StopEditTimer();
     CancelUserEvents();
@@ -3127,7 +3127,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
         return;
 
     StopEntryEditing( true );
-    pEdit.clear();
+    pEdit.disposeAndClear();
     SetNoSelection();
 
     pCurEditedEntry = pEntry;

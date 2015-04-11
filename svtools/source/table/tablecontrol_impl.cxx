@@ -261,6 +261,9 @@ namespace svt { namespace table
 
     TableControl_Impl::~TableControl_Impl()
     {
+        m_pVScroll.disposeAndClear();
+        m_pHScroll.disposeAndClear();
+        m_pScrollCorner.disposeAndClear();
         DELETEZ( m_pTableFunctionSet );
         DELETEZ( m_pSelEngine );
     }
@@ -641,7 +644,7 @@ namespace svt { namespace table
             {
                 if ( _rpBar->IsTracking() )
                     _rpBar->EndTracking();
-                _rpBar.clear();
+                _rpBar.disposeAndClear();
             }
             else if ( !bHaveBar && i_needBar )
             {
@@ -1162,7 +1165,7 @@ namespace svt { namespace table
         bool bNeedScrollCorner = ( nullptr != m_pHScroll ) && ( nullptr != m_pVScroll );
         if ( bHaveScrollCorner && !bNeedScrollCorner )
         {
-            m_pScrollCorner.clear();
+            m_pScrollCorner.disposeAndClear();
         }
         else if ( !bHaveScrollCorner && bNeedScrollCorner )
         {
