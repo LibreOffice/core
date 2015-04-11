@@ -3076,6 +3076,11 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     ExportDocument_Impl();
 
+    // park curpam in a "safe place" now that document is fully exported before
+    // toggling redline mode to avoid ~SwIndexReg assert e.g. export
+    // ooo103014-1.odt to .doc
+    *pCurPam = *pOrigPam;
+
     if ( mnRedlineMode != pDoc->getIDocumentRedlineAccess().GetRedlineMode() )
         pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(mnRedlineMode) );
 }
