@@ -581,9 +581,9 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     return nRet;
 }
 
-com::sun::star::util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
+util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
 {
-    com::sun::star::util::DateTime aDateTime;
+    util::DateTime aDateTime;
     //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
     //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
     sal_Int32 nIndex = 0;

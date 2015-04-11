@@ -26,8 +26,7 @@ namespace writerfilter {
 namespace dmapper{
 
 
-class ModelEventListener :
-    public cppu::WeakImplHelper< ::com::sun::star::document::XEventListener >
+class ModelEventListener : public cppu::WeakImplHelper<css::document::XEventListener>
 {
     bool m_bIndexes;
     bool m_bControls;
@@ -35,8 +34,8 @@ public:
     ModelEventListener(bool bIndexes, bool bControls);
     virtual ~ModelEventListener();
 
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyEvent(const css::document::EventObject& Event) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 }//namespace writerfilter

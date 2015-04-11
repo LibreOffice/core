@@ -52,7 +52,7 @@ class ListLevel : public PropertyMap
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     OUString                               m_sGraphicURL;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > m_sGraphicBitmap;
+    css::uno::Reference<css::graphic::XGraphic> m_sGraphicBitmap;
     sal_Int32                                     m_nTabstop;
     std::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
@@ -80,7 +80,7 @@ public:
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
     void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
-    void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > const& sValue )
+    void SetGraphicBitmap(css::uno::Reference<css::graphic::XGraphic> const& sValue)
         { m_sGraphicBitmap = sValue; }
     void SetParaStyle( std::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( const OUString& sValue ) { m_sRGBXchNums += sValue; };
@@ -96,17 +96,14 @@ public:
     static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix );
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        GetProperties(  );
+    css::uno::Sequence<css::beans::PropertyValue> GetProperties();
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue>
-        GetCharStyleProperties( );
+    css::uno::Sequence<css::beans::PropertyValue> GetCharStyleProperties();
 private:
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        GetLevelProperties(  );
+    css::uno::Sequence<css::beans::PropertyValue> GetLevelProperties();
 
-    void AddParaProperties( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* props );
+    void AddParaProperties(css::uno::Sequence<css::beans::PropertyValue>* pProps);
 };
 
 /// Represents a numbering picture bullet: an id and a graphic.
@@ -119,11 +116,11 @@ public:
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
-    void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const& xShape);
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape() { return m_xShape;}
+    void SetShape(css::uno::Reference<css::drawing::XShape> const& xShape);
+    css::uno::Reference<css::drawing::XShape> GetShape() { return m_xShape; }
 private:
     sal_Int32 m_nId;
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xShape;
+    css::uno::Reference<css::drawing::XShape> m_xShape;
 };
 
 class AbstractListDef
@@ -166,9 +163,7 @@ public:
 
     ListLevel::Pointer    GetCurrentLevel( ) { return m_pCurrentLevel; };
 
-    virtual com::sun::star::uno::Sequence<
-        com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue > > GetPropertyValues( );
+    virtual css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues();
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
     OUString              GetNumStyleLink() { return m_sNumStyleLink; };
@@ -196,17 +191,11 @@ public:
     // Mapping functions
     static OUString GetStyleName( sal_Int32 nId );
 
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue > > GetPropertyValues( ) SAL_OVERRIDE;
+    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues() SAL_OVERRIDE;
 
-    void CreateNumberingRules(
-            DomainMapper& rDMapper,
-            com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory> const& xFactory );
+    void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
-            GetNumberingRules( ) { return m_xNumRules; };
+    css::uno::Reference<css::container::XIndexReplace> GetNumberingRules() { return m_xNumRules; }
 
 };
 
@@ -219,8 +208,7 @@ class ListsManager :
 private:
 
     DomainMapper&                                       m_rDMapper;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xFactory;
 
     // The numbering entries
     std::vector< NumPicBullet::Pointer >                m_aNumPicBullets;
@@ -244,9 +232,7 @@ private:
 
 public:
 
-    ListsManager(
-            DomainMapper& rDMapper,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory);
+    ListsManager(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
     virtual ~ListsManager();
 
     typedef std::shared_ptr< ListsManager >  Pointer;

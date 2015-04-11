@@ -102,7 +102,7 @@ public:
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
+    const css::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
     TablePositionHandler* getCurrentTableRealPosition();
 
     virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE

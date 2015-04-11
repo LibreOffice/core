@@ -2701,9 +2701,9 @@ void DomainMapper::lcl_startParagraphGroup()
             m_pImpl->SetCurrentParaStyleId(sDefault);
         }
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-               m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
+            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-            m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
+            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
 
         if (m_pImpl->isParaSdtEndDeferred())
             m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::makeAny(true), true, PARA_GRAB_BAG);
@@ -2748,7 +2748,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
             lcl_endCharacterGroup();
             lcl_endParagraphGroup();
             lcl_startParagraphGroup();
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE));
+            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
         }
         m_pImpl->PushShapeContext( xShape );
         lcl_startParagraphGroup();
@@ -2884,12 +2884,12 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
         }
 
         PropertyMapPtr pContext = m_pImpl->GetTopContext();
-    if ( pContext && !pContext->GetFootnote().is() )
-    {
-        if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-                m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
+        if (pContext && !pContext->GetFootnote().is())
+        {
+            if (m_pImpl->isBreakDeferred(PAGE_BREAK))
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
             else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-                m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
             m_pImpl->clearDeferredBreaks();
         }
 
@@ -3046,9 +3046,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             if (pContext && m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-                    pContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE));
+                    pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-                    pContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE));
+                    pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
                 m_pImpl->clearDeferredBreaks();
             }
 
@@ -3079,7 +3079,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
                         lcl_startParagraphGroup();
                     }
-                    m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
+                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
@@ -3089,7 +3089,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
                         lcl_startParagraphGroup();
                     }
-                    m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
+                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
                 }
                 m_pImpl->clearDeferredBreaks();
             }
@@ -3310,15 +3310,15 @@ sal_Int16 DomainMapper::getEmphasisValue(const sal_Int32 nIntValue)
     switch (nIntValue)
     {
     case NS_ooxml::LN_Value_ST_Em_dot:
-        return com::sun::star::text::FontEmphasis::DOT_ABOVE;
+        return text::FontEmphasis::DOT_ABOVE;
     case NS_ooxml::LN_Value_ST_Em_comma:
-        return com::sun::star::text::FontEmphasis::ACCENT_ABOVE;
+        return text::FontEmphasis::ACCENT_ABOVE;
     case NS_ooxml::LN_Value_ST_Em_circle:
-        return com::sun::star::text::FontEmphasis::CIRCLE_ABOVE;
+        return text::FontEmphasis::CIRCLE_ABOVE;
     case NS_ooxml::LN_Value_ST_Em_underDot:
-        return com::sun::star::text::FontEmphasis::DOT_BELOW;
+        return text::FontEmphasis::DOT_BELOW;
     default:
-        return com::sun::star::text::FontEmphasis::NONE;
+        return text::FontEmphasis::NONE;
     }
 }
 
@@ -3352,7 +3352,7 @@ OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, const
     }
 }
 
-com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int32 nIntValue)
+style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int32 nIntValue)
 {
     switch (nIntValue)
     {
@@ -3360,16 +3360,16 @@ com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int
     case NS_ooxml::LN_Value_ST_TabJc_left:
     case NS_ooxml::LN_Value_ST_TabJc_bar: // bar not supported
     case NS_ooxml::LN_Value_ST_TabJc_num: // num not supported
-        return com::sun::star::style::TabAlign_LEFT;
+        return style::TabAlign_LEFT;
     case NS_ooxml::LN_Value_ST_TabJc_center:
-        return com::sun::star::style::TabAlign_CENTER;
+        return style::TabAlign_CENTER;
     case NS_ooxml::LN_Value_ST_TabJc_end:
     case NS_ooxml::LN_Value_ST_TabJc_right:
-        return com::sun::star::style::TabAlign_RIGHT;
+        return style::TabAlign_RIGHT;
     case NS_ooxml::LN_Value_ST_TabJc_decimal:
-        return com::sun::star::style::TabAlign_DECIMAL;
+        return style::TabAlign_DECIMAL;
     }
-    return com::sun::star::style::TabAlign_LEFT;
+    return style::TabAlign_LEFT;
 }
 
 sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)

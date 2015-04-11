@@ -1650,7 +1650,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
                 sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
                 break;
             default:
-                throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
+                throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
             }
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
@@ -2415,7 +2415,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
         uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
         if( bDetectFormat )
         {
-            uno::Reference< util::XNumberFormatter> xFormatter( ::com::sun::star::util::NumberFormatter::create( m_xComponentContext ), uno::UNO_QUERY_THROW );
+            uno::Reference< util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
             nKey = xFormatter->detectNumberFormat( 0, rCommand );
          }
@@ -2541,9 +2541,7 @@ void DomainMapper_Impl::ChainTextFrames()
     }
 }
 
-uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster(
-        const sal_Char* pFieldMasterService, const OUString& rFieldMasterName )
-            throw(::com::sun::star::uno::Exception)
+uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName) throw(uno::Exception)
 {
     // query master, create if not available
     uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
@@ -4007,8 +4005,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                                   uno::UNO_QUERY_THROW);
                         OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText inclusing the index e.g. CITATION Kra06 \l 1033
                         if( !sCmd.isEmpty()){
-                            uno::Sequence<com::sun::star::beans::PropertyValue> aValues(1);
-                            com::sun::star::beans::PropertyValue propertyVal;
+                            uno::Sequence<beans::PropertyValue> aValues(1);
+                            beans::PropertyValue propertyVal;
                             propertyVal.Name = "Identifier";
                             propertyVal.Value = uno::makeAny(sCmd);
                             aValues[0] = propertyVal;
@@ -4130,7 +4128,7 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
 }
 
 // Calculates css::DateTime based on ddddd.sssss since 1900-1-0
-::com::sun::star::util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
+util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
 {
     const sal_uInt32 secondsPerDay = 86400;
     const sal_uInt16 secondsPerHour = 3600;
@@ -4141,7 +4139,7 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
     double frac = dSerial - (long)dSerial;
     sal_uInt32 seconds = frac * secondsPerDay;
 
-    ::com::sun::star::util::DateTime date;
+    util::DateTime date;
     date.Year = d.GetYear();
     date.Month = d.GetMonth();
     date.Day = d.GetDay();
@@ -4193,10 +4191,10 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         bool bIsSetbiblio = xServiceInfo->supportsService("com.sun.star.text.TextField.Bibliography");
                         if( bIsSetbiblio )
                         {
-                            com::sun::star::uno::Any aProperty  = xFieldProperties->getPropertyValue("Fields");
-                            uno::Sequence<com::sun::star::beans::PropertyValue> aValues ;
+                            uno::Any aProperty  = xFieldProperties->getPropertyValue("Fields");
+                            uno::Sequence<beans::PropertyValue> aValues ;
                             aProperty >>= aValues;
-                            com::sun::star::beans::PropertyValue propertyVal;
+                            beans::PropertyValue propertyVal;
                             bool bTitleFound = false;
                             int i=0;
                             for (; i < aValues.getLength(); i++)
@@ -4231,7 +4229,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     {
                         uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
 
-                        uno::Reference< util::XNumberFormatter > xFormatter( ::com::sun::star::util::NumberFormatter::create( m_xComponentContext ), uno::UNO_QUERY_THROW );
+                        uno::Reference<util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);
                         xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
                         sal_Int32 nKey = 0;
 

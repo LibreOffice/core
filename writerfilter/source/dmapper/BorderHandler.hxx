@@ -55,7 +55,7 @@ private:
     bool            m_bOOXML;
 
     bool                                        m_aFilledLines[BORDER_COUNT];
-    ::com::sun::star::table::BorderLine2        m_aBorderLines[BORDER_COUNT];
+    css::table::BorderLine2 m_aBorderLines[BORDER_COUNT];
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
@@ -69,7 +69,7 @@ public:
     virtual ~BorderHandler();
 
     ::std::shared_ptr<PropertyMap>            getProperties();
-    ::com::sun::star::table::BorderLine2        getBorderLine();
+    css::table::BorderLine2 getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
     bool                                        getShadow() { return m_bShadow;}
     void enableInteropGrabBag(const OUString& aName);

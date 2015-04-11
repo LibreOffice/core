@@ -88,8 +88,7 @@ class StyleSheetTable :
     StyleSheetTable_Impl   *m_pImpl;
 
 public:
-    StyleSheetTable( DomainMapper& rDMapper,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> const& xTextDocument, bool bIsNewDoc );
+    StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
     virtual ~StyleSheetTable();
 
     void ApplyStyleSheets( FontTablePtr rFontTable );
