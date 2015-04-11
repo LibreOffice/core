@@ -185,7 +185,7 @@ struct DocxSdrExport::Impl
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
-    bool isSupportedDMLShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
+    bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)

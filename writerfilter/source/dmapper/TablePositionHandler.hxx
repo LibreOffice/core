@@ -89,7 +89,7 @@ public:
         Note that the properties will need to be adjusted with the table
         properties before actually using them.
       */
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() const;
+    css::uno::Sequence<css::beans::PropertyValue> getTablePosition() const;
 
     bool operator== (const TablePositionHandler& rHandler) const;
 };

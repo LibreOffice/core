@@ -20,22 +20,22 @@
 class SVL_DLLPUBLIC SfxGrabBagItem : public SfxPoolItem
 {
 private:
-    std::map<OUString, com::sun::star::uno::Any> m_aMap;
+    std::map<OUString, css::uno::Any> m_aMap;
 
 public:
     TYPEINFO_OVERRIDE();
 
     SfxGrabBagItem();
-    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, com::sun::star::uno::Any>* pMap = 0);
+    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, css::uno::Any>* pMap = 0);
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     virtual ~SfxGrabBagItem();
 
-    const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const
+    const std::map<OUString, css::uno::Any>& GetGrabBag() const
     {
         return m_aMap;
     }
 
-    std::map<OUString, com::sun::star::uno::Any>& GetGrabBag()
+    std::map<OUString, css::uno::Any>& GetGrabBag()
     {
         return m_aMap;
     }
@@ -43,8 +43,8 @@ public:
     virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
 
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
-    virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 };
 #endif
 

@@ -114,8 +114,8 @@ public:
     /// Create date control from w:sdt's w:date.
     void createDateControl(OUString& rContentText, const css::beans::PropertyValue& rCharFormat);
 
-    void appendToInteropGrabBag(const com::sun::star::beans::PropertyValue& rValue);
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getInteropGrabBagAndClear();
+    void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
+    css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
     bool isInteropGrabBagEmpty();
     bool containedInInteropGrabBag(const OUString& rValueName);
     sal_Int32 getInteropGrabBagSize();

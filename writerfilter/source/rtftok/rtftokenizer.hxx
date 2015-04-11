@@ -27,7 +27,7 @@ namespace rtftok
 class RTFTokenizer
 {
 public:
-    RTFTokenizer(RTFListener& rImport, SvStream* pInStream, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const& xStatusIndicator);
+    RTFTokenizer(RTFListener& rImport, SvStream* pInStream, css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
     virtual ~RTFTokenizer();
 
     RTFError resolveParse();
@@ -58,7 +58,7 @@ private:
 
     RTFListener& m_rImport;
     SvStream* m_pInStream;
-    com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const& m_xStatusIndicator;
+    css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     // This is the same as aRTFControlWords, but sorted
     static std::vector<RTFSymbol> m_aRTFControlWords;
     static bool m_bControlWordsSorted;
