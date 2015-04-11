@@ -924,8 +924,9 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std:
         {
             VclPtr<OutputDevice> pOutDev = GetOutputDevice();
             SetWindow( NULL );  // so that handlers are logged off, if necessary (virtual)
-            SetOutputDevice( NULL );
+            SetOutputDevice( pOutDev );
             pOutDev.disposeAndClear();
+            SetOutputDevice( NULL );
         }
 
         // #i14103# dispose the accessible context after the window has been destroyed,

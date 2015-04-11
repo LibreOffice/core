@@ -56,7 +56,7 @@ void OTitleWindow::dispose()
     {
         m_pChild->Hide();
     }
-    m_pChild.clear();
+    m_pChild.disposeAndClear();
     m_aSpace1.disposeAndClear();
     m_aSpace2.disposeAndClear();
     m_aTitle.disposeAndClear();

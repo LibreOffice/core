@@ -93,15 +93,11 @@ void OAppBorderWindow::dispose()
 {
     // destroy children
     if ( m_pPanel )
-    {
         m_pPanel->Hide();
-    }
+    m_pPanel.disposeAndClear();
     if ( m_pDetailView )
-    {
         m_pDetailView->Hide();
-    }
-    m_pPanel.clear();
-    m_pDetailView.clear();
+    m_pDetailView.disposeAndClear();
     m_pView.clear();
     vcl::Window::dispose();
 }
@@ -213,12 +209,10 @@ OApplicationView::~OApplicationView()
 
 void OApplicationView::dispose()
 {
-    if (m_xObject.is())
-    {
-        stopComponentListening(m_xObject);
-        m_xObject.clear();
-    }
-    m_pWin.clear();
+    stopComponentListening(m_xObject);
+    m_xObject.clear();
+    m_pWin->Hide();
+    m_pWin.disposeAndClear();
     ODataView::dispose();
 }
 

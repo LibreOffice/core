@@ -105,7 +105,7 @@ void Deck::Dispose (void)
         if (*iPanel)
         {
             (*iPanel)->Dispose();
-            iPanel->reset();
+            iPanel->disposeAndClear();
         }
     }
 

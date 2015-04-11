@@ -318,7 +318,7 @@ void SfxSplitWindow::dispose()
         // window that is just being docked is always deleted from the outside.
         pEmptyWin->pOwner = NULL;
     }
-    pEmptyWin.clear();
+    pEmptyWin.disposeAndClear();
 
     delete pDockArr;
     pActive.clear();
