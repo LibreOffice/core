@@ -146,7 +146,7 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
 TableStyle* CreateTableStyle(const OUString& styleId)
 {
     TableStyle* pTableStyle = NULL;
-    if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accenat 1
+    if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accent 1
         pTableStyle = new TableStyle();
         //first row style
         //fill color and type
