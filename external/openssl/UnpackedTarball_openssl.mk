@@ -91,7 +91,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	external/openssl/openssllnx.patch \
+	$(if $(filter MACOSX1060,$(OS)$(MACOSX_SDK_VERSION)),,external/openssl/openssllnx.patch) \
 	external/openssl/opensslmingw.patch \
 	external/openssl/opensslwnt.patch \
 	external/openssl/openssl-1.0.1g-msvc2012-winxp.patch.1 \
