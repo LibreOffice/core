@@ -3704,25 +3704,25 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
-    uno::Sequence< uno::Sequence< double > > aRowSeq(m_bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
-    lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
-    uno::Sequence<double>* pRowArray = aRowSeq.getArray();
-    const sal_uInt16 nRowStart = m_bFirstRowAsLabel ? 1 : 0;
-    for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+    if(m_bFirstColumnAsLabel || m_bFirstRowAsLabel)
     {
-        uno::Sequence<double> aColSeq(m_bFirstColumnAsLabel ? nColCount - 1 : nColCount);
-        double* pArray = aColSeq.getArray();
-        const sal_uInt16 nColStart = m_bFirstColumnAsLabel ? 1 : 0;
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
-        {
-            uno::Reference<table::XCell>  xCell = getCellByPosition(nCol, nRow);
-            if(!xCell.is())
-                throw uno::RuntimeException();
-            pArray[nCol - nColStart] = xCell->getValue();
-        }
-        pRowArray[nRow - nRowStart] = aColSeq;
+        uno::Reference<chart::XChartDataArray> xDataRange(getCellRangeByPosition(m_bFirstRowAsLabel ? 1 : 0, m_bFirstColumnAsLabel ? 1 : 0,
+            nRowCount, nColCount), uno::UNO_QUERY);
+        return xDataRange->getData();
     }
-    return aRowSeq;
+    uno::Sequence< uno::Sequence< double > > vRows(nColCount);
+    auto vCells(getCells());
+    auto pCurrentCell(vCells.begin());
+    for(auto& rRow : vRows)
+    {
+        rRow = uno::Sequence<double>(nRowCount);
+        for(auto& rValue : rRow)
+        {
+            rValue = (*pCurrentCell)->getValue();
+            ++pCurrentCell;
+        }
+    }
+    return vRows;
 }
 
 void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData)
