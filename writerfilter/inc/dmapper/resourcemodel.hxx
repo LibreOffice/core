@@ -223,7 +223,7 @@ public:
     /**
       Receives a shape.
      */
-    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > const& xShape ) = 0;
+    virtual void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) = 0;
 
     virtual void endShape( ) = 0;
 

@@ -62,14 +62,14 @@ class OLEHandler : public LoggedProperties
     sal_Int32                   m_nDyaOrig;
     sal_Int32                   m_nWrapMode;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
+    css::uno::Reference<css::drawing::XShape> m_xShape;
 
-    ::com::sun::star::awt::Size m_aShapeSize;
-    ::com::sun::star::awt::Point m_aShapePosition;
+    css::awt::Size m_aShapeSize;
+    css::awt::Point m_aShapePosition;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
+    css::uno::Reference<css::graphic::XGraphic> m_xReplacement;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
+    css::uno::Reference<css::io::XInputStream> m_xInputStream;
     DomainMapper& m_rDomainMapper;
 
     // Properties
@@ -77,16 +77,17 @@ class OLEHandler : public LoggedProperties
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Interoperability
-    void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const& xTextDocument,
-                                        const OUString& sObjectName, const OUString& sOldObjectName = OUString() );
+    void saveInteropProperties(css::uno::Reference<css::text::XTextDocument> const& xTextDocument,
+                                        const OUString& sObjectName,
+                                        const OUString& sOldObjectName = OUString());
 
 public:
     OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler();
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
+    css::uno::Reference<css::drawing::XShape> getShape() { return m_xShape; };
 
-    inline bool isOLEObject( ) { return m_xInputStream.is( ); };
+    bool isOLEObject() { return m_xInputStream.is(); }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
     void importStream(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
@@ -96,12 +97,11 @@ public:
     /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
     OUString getCLSID(css::uno::Reference<css::uno::XComponentContext> xComponentContext) const;
 
-    OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const & xTextDocument );
+    OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 
-    ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
-    ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                                    getReplacement() const { return m_xReplacement; }
+    css::awt::Size getSize() const { return m_aShapeSize; }
+    css::awt::Point getPosition() const { return m_aShapePosition; }
+    css::uno::Reference<css::graphic::XGraphic> getReplacement() const { return m_xReplacement; }
 
 };
 typedef std::shared_ptr< OLEHandler >  OLEHandlerPtr;

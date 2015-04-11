@@ -1117,8 +1117,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             //set the start value at the beginning of the document
             xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
         }
-        xRangeProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_BREAK_TYPE ),
-            uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE));
+        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_BREAK_TYPE), uno::makeAny(style::BreakType_COLUMN_BEFORE));
     }
     else
     {

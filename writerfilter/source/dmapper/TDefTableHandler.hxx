@@ -44,14 +44,14 @@ private:
     ::std::vector<sal_Int32>                                m_aCellBorderPositions;
     ::std::vector<sal_Int32>                                m_aCellVertAlign;
 
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aLeftBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aRightBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTopBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aBottomBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aInsideHBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aInsideVBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTl2brBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTr2blBorderLines;
+    std::vector<css::table::BorderLine2> m_aLeftBorderLines;
+    std::vector<css::table::BorderLine2> m_aRightBorderLines;
+    std::vector<css::table::BorderLine2> m_aTopBorderLines;
+    std::vector<css::table::BorderLine2> m_aBottomBorderLines;
+    std::vector<css::table::BorderLine2> m_aInsideHBorderLines;
+    std::vector<css::table::BorderLine2> m_aInsideVBorderLines;
+    std::vector<css::table::BorderLine2> m_aTl2brBorderLines;
+    std::vector<css::table::BorderLine2> m_aTr2blBorderLines;
 
     //values of the current border
     sal_Int32                                           m_nLineWidth;

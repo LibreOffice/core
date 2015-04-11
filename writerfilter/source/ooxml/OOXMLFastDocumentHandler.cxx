@@ -46,7 +46,7 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 {
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+// css::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
 (::sal_Int32
 #ifdef DEBUG_WRITERFILTER
@@ -182,7 +182,7 @@ void SAL_CALL OOXMLFastDocumentHandler::characters(const OUString & /*aChars*/)
 {
 }
 
-// ::com::sun::star::xml::sax::XFastDocumentHandler:
+// css::xml::sax::XFastDocumentHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startDocument()
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
