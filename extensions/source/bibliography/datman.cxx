@@ -1395,7 +1395,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                 for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
                     pListSourceArr[i] = OUString::number(i);
-                aAny.setValue(&aListSource, cppu::UnoType<uno::Sequence<OUString>>::get());
+                aAny.setValue(&aListSource, cppu::UnoType< uno::Sequence< OUString > >::get());
 
                 xPropSet->setPropertyValue("ListSource", aAny);
 
@@ -1426,7 +1426,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 // empty string if an invalid value no values is set
                 pValuesArr[TYPE_COUNT] = OUString();
 
-                aAny.setValue(&aValues, cppu::UnoType<uno::Sequence<OUString>>::get());
+                aAny.setValue(&aValues, cppu::UnoType< uno::Sequence< OUString > >::get());
 
                 xPropSet->setPropertyValue("StringItemList", aAny);
 
