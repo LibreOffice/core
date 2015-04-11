@@ -293,6 +293,7 @@ namespace sax_fastparser {
 #ifdef DBG_UTIL
             // Well-formedness constraint: Unique Att Spec
             OString const nameId(getId(nToken));
+            SAL_WARN_IF(DebugAttributes.find(nameId) != DebugAttributes.end(),  "sax", "Duplicate attribute: " << nameId );
             assert(DebugAttributes.find(nameId) == DebugAttributes.end());
             DebugAttributes.insert(nameId);
 #endif
