@@ -1942,7 +1942,11 @@ awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
 
 awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect )
 {
-    impl_updateView();
+    ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
+    if ( eObjectType == OBJECTTYPE_LEGEND )  // tdf#86624
+        impl_updateView(false);
+    else
+        impl_updateView();
 
     awt::Rectangle aRet;
     uno::Reference< drawing::XShape > xShape( getShapeForCID(rObjectCID) );
@@ -1950,7 +1954,6 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
     {
         //special handling for axis for old api:
         //same special handling for diagram
-        ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
             SolarMutexGuard aSolarGuard;
