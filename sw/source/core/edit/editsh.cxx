@@ -438,7 +438,7 @@ sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
     return GetDoc()->GetRefMarks( pStrings );
 }
 
-OUString SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
+OUString SwEditShell::GetDropTxt( const sal_Int32 nChars ) const
 {
     /*
      * pb: made changes for #i74939#

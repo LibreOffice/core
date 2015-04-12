@@ -790,7 +790,7 @@ public:
                     bool bKeepSelection = false );
     void GetINetAttrs( SwGetINetAttrs& rArr );
 
-    OUString GetDropTxt( const sal_uInt16 nChars ) const;
+    OUString GetDropTxt( const sal_Int32 nChars ) const;
     void   ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM = NULL );
 
     /** May an outline be moved or copied?

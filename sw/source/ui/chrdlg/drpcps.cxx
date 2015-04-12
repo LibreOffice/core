@@ -181,10 +181,10 @@ void SwDropCapsPict::InitPrinter( void )
 }
 
 // Create Default-String from character-count (A, AB, ABC, ...)
-OUString GetDefaultString(sal_uInt16 nChars)
+OUString GetDefaultString(sal_Int32 nChars)
 {
     OUString aStr;
-    for (sal_uInt16 i = 0; i < nChars; i++)
+    for (sal_Int32 i = 0; i < nChars; i++)
         aStr += OUString((char) (i + 65));
     return aStr;
 }
@@ -620,7 +620,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 
     // Enable controls
     m_pDropCapsBox->Check(aFmtDrop.GetLines() > 1);
-    const sal_uInt16 nVal = sal_uInt16(m_pDropCapsField->GetValue());
+    const sal_Int32 nVal = static_cast<sal_Int32>(m_pDropCapsField->GetValue());
     if (bFormat)
         m_pTextEdit->SetText(GetDefaultString(nVal));
     else
@@ -688,8 +688,8 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     // set text if applicable
     if (pEdit == m_pDropCapsField)
     {
-        const sal_uInt16 nVal = !m_pWholeWordCB->IsChecked()
-            ? (sal_uInt16)m_pDropCapsField->GetValue()
+        const sal_Int32 nVal = !m_pWholeWordCB->IsChecked()
+            ? static_cast<sal_Int32>(m_pDropCapsField->GetValue())
             : 0;
         bool bSetText = false;
 
