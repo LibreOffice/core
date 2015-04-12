@@ -129,7 +129,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
     const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     sal_uInt16 nIdx = 0;
     const SwFldTypes::size_type nSize = pFldTypes->size();
-    for( SwFldTypes::size_type i; i < nSize; ++i )
+    for( SwFldTypes::size_type i = 0; i < nSize; ++i )
         // Gleiche ResId -> Index erhoehen
         if( (*pFldTypes)[i]->Which() == nResId && nIdx++ == nFld )
         {
