@@ -6004,6 +6004,13 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 
     aColorString = msfilter::util::ConvertColor( aColor );
 
+    const char* pExistingValue(NULL);
+    if (m_pColorAttrList && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
+    {
+        assert(aColorString.equalsL(pExistingValue, rtl_str_getLength(pExistingValue)));
+        return;
+    }
+
     AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
 }
 
