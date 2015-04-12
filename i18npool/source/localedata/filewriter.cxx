@@ -26,10 +26,8 @@
 
 OFileWriter::OFileWriter(const char *pcFile, const char *locale ) {
 
-    strncpy( m_pcFile , pcFile, sizeof(m_pcFile) );
-    m_pcFile[sizeof(m_pcFile)-1] = 0;
-    printf("file generated=%s\n", m_pcFile);
-    m_f = fopen( m_pcFile , "w" );
+    printf("file generated=%s\n", pcFile);
+    m_f = fopen(pcFile, "w");
     strncpy( theLocale, locale, sizeof(theLocale) );
     theLocale[sizeof(theLocale)-1] = 0;
 }

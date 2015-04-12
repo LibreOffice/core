@@ -65,7 +65,6 @@ public:
     /// Return the locale string, something like en_US or de_DE
     const char * getLocale() const { return theLocale; }
 private:
-    char m_pcFile[1024];
     char theLocale[50];
     FILE *m_f;
 };
