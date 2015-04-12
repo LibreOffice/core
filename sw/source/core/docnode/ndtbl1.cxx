@@ -934,7 +934,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 
         aSetBoxInfo.ResetFlags();
 
-        for ( SwSelUnions::size_type i; i < aUnions.size(); ++i )
+        for ( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
         {
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTab = pUnion->GetTable();
