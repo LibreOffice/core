@@ -98,12 +98,17 @@ class WLevDisPatternMem
     sal_Unicode     *cp;
     bool            *bp;
 public:
-    WLevDisPatternMem( sal_Int32 s )    { cp = new sal_Unicode[ s ];
-                                          bp = new bool[ s ];
-                                        }
-    ~WLevDisPatternMem()                { if (cp) delete [] cp;
-                                          if (bp) delete [] bp;
-                                        }
+    explicit WLevDisPatternMem( sal_Int32 s )
+        : cp(new sal_Unicode[s])
+        , bp(new bool[s])
+    {
+    }
+
+    ~WLevDisPatternMem()
+    {
+        delete [] cp;
+        delete [] bp;
+    }
     sal_Unicode* GetcPtr() const        { return cp; }
     bool* GetbPtr() const               { return bp; }
 };
@@ -112,12 +117,18 @@ class WLevDisDistanceMem
 {
     int*    p;
 public:
-    WLevDisDistanceMem( size_t s )  { p = 0; NewMem(s); }
-    ~WLevDisDistanceMem()           { if (p) delete [] p; }
+    explicit WLevDisDistanceMem( size_t s )
+        : p(0)
+    {
+        NewMem(s);
+    }
+    ~WLevDisDistanceMem()           { delete [] p; }
     int* GetPtr() const             { return p; }
-    int* NewMem( size_t s )         {   if (p) delete [] p;
-                                        return (p = new int[ s<3 ? 3 : s ]);
-                                    }
+    int* NewMem( size_t s )
+    {
+        delete [] p;
+        return (p = new int[ s<3 ? 3 : s ]);
+    }
 };
 
 /** Weighted Levenshtein Distance (WLD)

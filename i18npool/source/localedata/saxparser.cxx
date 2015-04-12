@@ -62,10 +62,10 @@ using namespace ::com::sun::star::io;
 class OInputStream : public WeakImplHelper1 < XInputStream >
 {
 public:
-    OInputStream( const Sequence< sal_Int8 >&seq ) :
-        nPos( 0 ),
-        m_seq( seq )
-        {}
+    explicit OInputStream( const Sequence< sal_Int8 >&seq )
+        : nPos(0)
+        , m_seq(seq)
+    {}
 
 public:
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
