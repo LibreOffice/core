@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_47555e1b",
+        "filename": "sw/inc/PostItMgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-12T07:55:25Z",
+      "side": 1,
+      "message": "What compiler is that? And what is the warning? If the constructor were really needed, the compilation would fail.",
+      "revId": "e6b89a741a173512dc2d92f9ea5d2c82efb172d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
