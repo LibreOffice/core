@@ -65,7 +65,6 @@ public:
     void    SetErrorStr( const OUString& rStr)     { aErrStr = rStr; }
 };
 
-class BasicLibs;
 class ErrorManager;
 class BasicLibInfo;
 
@@ -120,7 +119,6 @@ class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
     friend class ::basic::ImplRepository;
 
 private:
-    BasicLibs*          pLibs;
     std::vector<BasicError> aErrors;
 
     OUString            aName;
@@ -141,7 +139,7 @@ protected:
     void            LoadOldBasicManager( SotStorage& rStorage );
     bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
     bool            ImplEncryptStream( SvStream& rStream ) const;
-    BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
+    BasicLibInfo*   FindLibInfo( StarBASIC* pBasic );
     void            CheckModules( StarBASIC* pBasic, bool bReference ) const;
     virtual ~BasicManager();
 
