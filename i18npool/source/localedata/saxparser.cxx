@@ -238,7 +238,7 @@ public: // ExtendedDocumentHandler
 
         LocaleNode * l =  LocaleNode::createNode (aName, xAttribs);
         if (!currentNode.empty() ) {
-            LocaleNode * ln = (LocaleNode *) currentNode.top();
+            LocaleNode * ln = currentNode.top();
             ln->addChild(l);
         } else {
             rootNode = l;
