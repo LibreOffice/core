@@ -737,7 +737,7 @@ void Shell::UpdateWindows()
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
                                      pLibInfoItem->GetCurrentType() == TYPE_MODULE )
                                 {
-                                    pNextActiveWindow = (BaseWindow*)pWin;
+                                    pNextActiveWindow = static_cast<BaseWindow*>(pWin);
                                 }
                             }
                         }
@@ -768,7 +768,7 @@ void Shell::UpdateWindows()
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
                                      pLibInfoItem->GetCurrentType() == TYPE_DIALOG )
                                 {
-                                    pNextActiveWindow = (BaseWindow*)pWin;
+                                    pNextActiveWindow = static_cast<BaseWindow*>(pWin);
                                 }
                             }
                         }
