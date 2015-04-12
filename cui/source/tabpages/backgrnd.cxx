@@ -1588,8 +1588,6 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             nWhich = pTableBck_Impl->nCellWhich;
             break;
         case TBL_DEST_ROW:
-            if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_SOME_STYLES))
-                m_pLbSelect->Disable();
             pActItem = pTableBck_Impl->pRowBrush;
             nWhich = pTableBck_Impl->nRowWhich;
             break;

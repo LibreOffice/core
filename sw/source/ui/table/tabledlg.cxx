@@ -1222,10 +1222,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nId == m_nBackgroundId)
     {
-        sal_Int32 nFlagType = SVX_SHOW_TBLCTL;
-        if(!( m_nHtmlMode & HTMLMODE_ON ) ||
-            m_nHtmlMode & HTMLMODE_SOME_STYLES)
-            nFlagType |= SVX_SHOW_SELECTOR;
+        sal_Int32 nFlagType = SVX_SHOW_TBLCTL | SVX_SHOW_SELECTOR;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
         rPage.PageCreated(aSet);
     }
