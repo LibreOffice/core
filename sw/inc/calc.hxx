@@ -105,6 +105,7 @@ class SwSbxValue : public SbxValue
     bool bVoid;
 public:
     // always default to a number. otherwise it will become a SbxEMPTY
+    SwSbxValue(){} /*Remove Compiler Warning*/
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
     SwSbxValue( const SwSbxValue& rVal ) :
@@ -184,6 +185,7 @@ class SwCalc
     SwCalc& operator=( const SwCalc& ) SAL_DELETED_FUNCTION;
 
 public:
+        SwCalc() {}
         SwCalc( SwDoc& rD );
         ~SwCalc();
 

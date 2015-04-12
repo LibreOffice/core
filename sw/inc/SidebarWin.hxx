@@ -60,6 +60,7 @@ typedef sal_Int64 SwPostItBits;
 class SwSidebarWin : public vcl::Window
 {
     public:
+        SwSidebarWin(){} /*Remove compler Warning*/
         SwSidebarWin( SwEditWin& rEditWin,
                       WinBits nBits,
                       SwPostItMgr& aMgr,

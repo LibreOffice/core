@@ -48,6 +48,7 @@ class SwAutoCompleteWord
 
     void DocumentDying(const SwDoc& rDoc);
 public:
+    SwAutoCompleteWord() {} /*Remove compiler Warning*/
     SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 

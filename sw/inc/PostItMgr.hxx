@@ -188,6 +188,7 @@ class SwPostItMgr: public SfxListener
         void Sort();
 
     public:
+            SwPostItMgr() {}           //Remove compiler warning
             SwPostItMgr(SwView* aDoc);
             virtual ~SwPostItMgr();
 
