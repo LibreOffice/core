@@ -2326,8 +2326,12 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     }
     break;
     case RTF_CHFTN:
-        // Nothing to do, dmapper assumes this is the default.
+    {
+        if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
+            // Stop buffering, there will be no custom mark for this footnote or endnote.
+            m_aStates.top().pCurrentBuffer = 0;
         break;
+    }
     case RTF_PAGE:
     {
         // Ignore page breaks inside tables.

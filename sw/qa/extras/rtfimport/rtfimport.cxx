@@ -2226,6 +2226,12 @@ DECLARE_RTFIMPORT_TEST(testFdo89496, "fdo89496.rtf")
     CPPUNIT_ASSERT(xShape.is());
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo75614, "tdf75614.rtf")
+{
+    // Text after the footnote was missing, so this resulted in a css::container::NoSuchElementException.
+    CPPUNIT_ASSERT_EQUAL(OUString("after."), getRun(getParagraph(1), 3)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
