@@ -483,7 +483,7 @@
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Bar lengths</property>
+                    <property name="label" translatable="yes">Bar Lengths</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -498,7 +498,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="only_bar">
-                <property name="label" translatable="yes">Show Bar Only</property>
+                <property name="label" translatable="yes">Display bar only</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -514,8 +514,8 @@
             <child>
               <object class="GtkLabel" id="str_same_value">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Min value must be smaller than max value!</property>
                 <property name="xalign">0</property>
+                <property name="label" translatable="yes">The minimum value must be less than the maximum value.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
