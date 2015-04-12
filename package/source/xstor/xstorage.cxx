@@ -209,7 +209,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
     // all the checks done below by assertion statements must be done by factory
     SAL_WARN_IF( !xInputStream.is(), "package.xstor", "No input stream is provided!" );
 
-    m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext, xInputStream );
+    m_pSwitchStream = new SwitchablePersistenceStream(xContext, xInputStream);
     m_xInputStream = m_pSwitchStream->getInputStream();
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
@@ -251,13 +251,12 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
-        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext, xStream );
+        m_pSwitchStream = new SwitchablePersistenceStream(xContext, xStream);
         m_xStream = static_cast< io::XStream* >( m_pSwitchStream );
     }
     else
     {
-        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext,
-                                                                                          xStream->getInputStream() );
+        m_pSwitchStream = new SwitchablePersistenceStream(xContext, xStream->getInputStream());
         m_xInputStream = m_pSwitchStream->getInputStream();
     }
 }
