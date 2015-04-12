@@ -1,0 +1,195 @@
+diff --git a/include/sfx2/tbxctrl.hxx b/include/sfx2/tbxctrl.hxx
+index f0fbfdb..83d9fcc 100644
+--- a/include/sfx2/tbxctrl.hxx
++++ b/include/sfx2/tbxctrl.hxx
+@@ -273,7 +273,7 @@ public:
+     static void                RegisterToolBoxControl( SfxModule*, SfxTbxCtrlFactory*);
+ };
+ 
+-#define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
++#define SFX_IMPL_TOOLBOX_CONTROL_CURL(Class, nItemClass) \
+         SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
+                { return new Class( nSlotId, nId, rTbx ); } \
+         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
+@@ -287,6 +287,13 @@ public:
+                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
+                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+ 
++#define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
++        SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
++               { return new Class( nSlotId, nId, rTbx ); } \
++        void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
++               { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
++                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
++
+ 
+ 
+ 
+@@ -332,6 +339,23 @@ protected:
+     virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+ };
+ 
++// Toolbox that implement dropdown menu for the curreny toolbar button
++class SfxCurrencyListToolBoxControl : public SfxToolBoxControl
++{
++public:
++    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
++    // RegisterControl() marked as SFX2_DLLPUBLIC
++    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
++    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL);
++
++    SfxCurrencyListToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
++    virtual ~SfxCurrencyListToolBoxControl();
++
++protected:
++    virtual SfxPopupWindow* CreatePopupWindow();
++};
++
++
+ class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
+ {
+     protected:
+diff --git a/sc/sdi/scalc.sdi b/sc/sdi/scalc.sdi
+index 2fbf373..ef74c88 100644
+--- a/sc/sdi/scalc.sdi
++++ b/sc/sdi/scalc.sdi
+@@ -5040,6 +5040,9 @@ SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
+     RecordPerSet;
+     Synchron;
+ 
++    /* status */
++    SlotType = SfxStringItem
++
+     /* config: */
+     AccelConfig = TRUE,
+     MenuConfig = TRUE,
+@@ -8987,9 +8990,10 @@ SfxUInt16Item NumberFormatType SID_NUMBER_TYPE_FORMAT
+     RecordAbsolute = FALSE,
+     RecordPerSet;
+     Synchron;
+-
++ 
+     Readonly = FALSE,
+ 
++
+     /* config: */
+     AccelConfig = FALSE,
+     MenuConfig = FALSE,
+diff --git a/sc/source/ui/app/scdll.cxx b/sc/source/ui/app/scdll.cxx
+index 52a98d4..34a3d9f 100644
+--- a/sc/source/ui/app/scdll.cxx
++++ b/sc/source/ui/app/scdll.cxx
+@@ -107,6 +107,8 @@
+ #include "dwfunctr.hxx"
+ #include "acredlin.hxx"
+ 
++#include <sfx2/tbxctrl.hxx>
++
+ ScResId::ScResId( sal_uInt16 nId ) :
+     ResId( nId, *SC_MOD()->GetResMgr() )
+ {
+@@ -153,6 +155,8 @@ void ScDLL::Init()
+     ScPageBreakShell    ::RegisterInterface(pMod);
+ 
+     SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
++    SfxCurrencyListToolBoxControl::RegisterControl(SID_NUMBER_CURRENCY, pMod);
++    
+ 
+     // Own Controller
+     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
+diff --git a/sc/uiconfig/scalc/toolbar/formatobjectbar.xml b/sc/uiconfig/scalc/toolbar/formatobjectbar.xml
+index 2de1389..1221732 100644
+--- a/sc/uiconfig/scalc/toolbar/formatobjectbar.xml
++++ b/sc/uiconfig/scalc/toolbar/formatobjectbar.xml
+@@ -49,7 +49,7 @@
+  <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
+  <toolbar:toolbarseparator/>
+  <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
+- <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
++ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:style="dropdown"/>
+  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
+  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
+  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate"/>
+diff --git a/sfx2/source/toolbox/tbxitem.cxx b/sfx2/source/toolbox/tbxitem.cxx
+index 4c49cb9..0f2660a 100644
+--- a/sfx2/source/toolbox/tbxitem.cxx
++++ b/sfx2/source/toolbox/tbxitem.cxx
+@@ -26,6 +26,12 @@
+ #include <com/sun/star/uno/Reference.h>
+ #include <com/sun/star/frame/XFrame.hpp>
+ #include <com/sun/star/awt/XPopupMenu.hpp>
++//new------------------------------------------
++#include <com/sun/star/awt/PopupMenu.hpp>
++#include <com/sun/star/awt/PopupMenuDirection.hpp>
++#include <svx/numfmtsh.hxx>
++#include <stdio.h>
++//end------------------------------------------
+ #include <com/sun/star/awt/XWindow.hpp>
+ #include <com/sun/star/awt/XWindowPeer.hpp>
+ #include <com/sun/star/util/URL.hpp>
+@@ -93,6 +99,11 @@
+ #include <sfx2/imagemgr.hxx>
+ #include <ctrlfactoryimpl.hxx>
+ 
++
++//new includes-----------------------------------------------------------------------------------
++//none
++//new includes ends -----------------------------------------------------------------------------
++
+ using namespace ::com::sun::star;
+ using namespace ::com::sun::star::beans;
+ using namespace ::com::sun::star::frame;
+@@ -107,6 +118,7 @@ using namespace ::com::sun::star::ui;
+ 
+ SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
+ SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
++SFX_IMPL_TOOLBOX_CONTROL_CURL(SfxCurrencyListToolBoxControl, SfxStringItem);
+ 
+ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
+ {
+@@ -1436,4 +1448,45 @@ SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
+     return 0;
+ }
+ 
++SfxCurrencyListToolBoxControl::SfxCurrencyListToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
++    : SfxToolBoxControl( nSlotId, nId, rBox )
++{
++    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN);
++}
++
++SfxCurrencyListToolBoxControl::~SfxCurrencyListToolBoxControl()
++{
++}
++
++SfxPopupWindow* SfxCurrencyListToolBoxControl::CreatePopupWindow()       
++    {
++        //declaring shell
++        SvxNumberFormatShell* pNumFmtShell;
++        pNumFmtShell = (SvxNumberFormatShell*) malloc(sizeof(SvxNumberFormatShell));    
++        
++        //add context menu
++        Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
++
++        // get languages to be displayed in the menu
++        std::vector< OUString > aCurrItems;
++        sal_uInt16  nSelPos=0;
++        pNumFmtShell->GetCurrencySymbols(aCurrItems, &nSelPos);
++
++        // add entries to menu   
++        sal_Int16 nItemId = static_cast< sal_Int16 >(1);    
++        std::vector< OUString >::iterator it;
++        for (it = aCurrItems.begin(); it != aCurrItems.end(); ++it)
++        {
++            const OUString & rStr( *it );
++            xPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
++        }
++
++        // now display the popup menu and execute every command ...
++        Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );    
++        com::sun::star::awt::Rectangle aRect( 0, 0, 0, 0 );
++        sal_uInt16 nId = xPopupMenu->execute( xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
++        
++        return (nId-nId);
++    }
++
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
