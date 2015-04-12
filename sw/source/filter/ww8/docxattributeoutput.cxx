@@ -8377,7 +8377,7 @@ void DocxAttributeOutput::AddToAttrList( std::unique_ptr<sax_fastparser::FastAtt
     {
         sal_Int32 nName = va_arg( args, sal_Int32 );
         const char* pValue = va_arg( args, const char* );
-        if( pValue )
+        if( pValue && *pValue )
             pAttrList->add( nName, pValue );
     }
     va_end( args );
