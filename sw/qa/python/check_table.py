@@ -8,6 +8,14 @@ from com.sun.star.table.BorderLineStyle import (DOUBLE, SOLID, EMBOSSED,\
 
 class CheckTable(unittest.TestCase):
     _uno = None
+    def _fill_table(self, xTable):
+        for x in range(3):
+            for y in range(3):
+                xTable.getCellByPosition(x, y).String = 'Cell %d %d' % (x, y)
+    def _check_table(self, xTable):
+        for x in range(3):
+            for y in range(3):
+                self.assertEqual('Cell %d %d' % (x, y), xTable.getCellByPosition(x, y).String)
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -248,14 +256,6 @@ class CheckTable(unittest.TestCase):
     # close document
         xDoc.dispose()
 
-    def _fill_table(self, xTable):
-        for x in range(3):
-            for y in range(3):
-                xTable.getCellByPosition(x, y).String = 'Cell %d %d' % (x, y)
-    def _check_table(self, xTable):
-        for x in range(3):
-            for y in range(3):
-                self.assertEqual('Cell %d %d' % (x, y), xTable.getCellByPosition(x, y).String)
     def test_descriptions(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
@@ -310,6 +310,33 @@ class CheckTable(unittest.TestCase):
             foo = xTable2.ColumnDescriptions
         xDoc.dispose()
 
+    def test_getset_data(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        # insert table
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(3, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        # roundtrip
+        xTable.Data = ((1,2,3), (4,5,6), (7,8,9))
+        self.assertEqual( xTable.Data, ((1,2,3), (4,5,6), (7,8,9)))
+        # missing row
+        with self.assertRaises(Exception):
+            xTable.Data = ((1,2,3), (4,5,6))
+        # missing column
+        with self.assertRaises(Exception):
+            xTable.Data = ((1,2), (4,5), (7,8))
+        # with labels
+        xTable.ChartColumnAsLabel = True
+        xTable.ChartRowAsLabel = True
+        self.assertEqual( xTable.Data, ((5,6), (8,9)))
+        xTable.Data = ((55,66), (88,99))
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        self.assertEqual( xTable.Data, ((1,2,3), (4,55,66), (7,88,99)))
+        xDoc.dispose()
 
 if __name__ == '__main__':
     unittest.main()
