@@ -1942,7 +1942,10 @@ awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
 
 awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect )
 {
-    impl_updateView();
+    if ( rObjectCID.equals( "CID/D=0:Legend=" ) )  // tdf#86624
+        impl_updateView(false);
+    else
+        impl_updateView();
 
     awt::Rectangle aRet;
     uno::Reference< drawing::XShape > xShape( getShapeForCID(rObjectCID) );
