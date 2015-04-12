@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_c7488e8a",
+        "filename": "basic/source/sbx/sbxexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-12T07:38:41Z",
+      "side": 1,
+      "message": "This is not the same thing! p++ returns the old value, ++p the new one.",
+      "revId": "832b8d464fdb493c071fc775e449d0add8bb2a4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_675e5a47",
+        "filename": "basic/source/sbx/sbxexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-12T07:38:41Z",
+      "side": 1,
+      "message": "Wrong again.",
+      "revId": "832b8d464fdb493c071fc775e449d0add8bb2a4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_875b7654",
+        "filename": "basic/source/sbx/sbxexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-12T07:38:41Z",
+      "side": 1,
+      "message": "Wrong again. Please do not do automatic replacements without at least a minimal review.",
+      "revId": "832b8d464fdb493c071fc775e449d0add8bb2a4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
