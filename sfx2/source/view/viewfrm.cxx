@@ -2621,7 +2621,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
             // application basic
-            pBasMgr = pSfxApp->GetBasicManager();
+            pBasMgr = SfxApplication::GetBasicManager();
         }
         else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
         {

@@ -291,12 +291,12 @@ void SfxOleStringHelper::SaveString8( SvStream& rStrm, const OUString& rValue ) 
         ImplSaveString8( rStrm, rValue );
 }
 
-OUString SfxOleStringHelper::LoadString16( SvStream& rStrm ) const
+OUString SfxOleStringHelper::LoadString16( SvStream& rStrm )
 {
     return ImplLoadString16( rStrm );
 }
 
-void SfxOleStringHelper::SaveString16( SvStream& rStrm, const OUString& rValue ) const
+void SfxOleStringHelper::SaveString16( SvStream& rStrm, const OUString& rValue )
 {
     ImplSaveString16( rStrm, rValue );
 }
@@ -322,7 +322,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     return aValue;
 }
 
-OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
+OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
 {
     OUString aValue;
     // read size field (signed 32-bit), may be buffer size or character count
@@ -363,7 +363,7 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const OUString& rValu
     rStrm.WriteUChar( 0 );
 }
 
-void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const
+void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rValue )
 {
     // write size field (including trailing NUL character)
     sal_Int32 nSize = static_cast< sal_Int32 >( rValue.getLength() + 1 );

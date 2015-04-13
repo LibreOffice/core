@@ -179,8 +179,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
         aLabel = OUStringToOString (*pOverrideLabel, RTL_TEXTENCODING_UTF8);
     else
     {
-        ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
-        aLabel = OUStringToOString (pShutdownIcon->GetUrlDescription( *pURL ),
+        aLabel = OUStringToOString (ShutdownIcon::GetUrlDescription( *pURL ),
                                     RTL_TEXTENCODING_UTF8);
     }
 

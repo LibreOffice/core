@@ -205,7 +205,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         return false;
 
     // Test if not another link of the same connection already exists
-    pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFileNm, 0, &sFilter );
+    sfx2::LinkManager::GetDisplayNames( pLink, 0, &sFileNm, 0, &sFilter );
 
     if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
@@ -398,7 +398,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
     OUString sFile, sRange, sTmpFilter;
     if( pLink && pLink->GetLinkManager() )
     {
-        pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFile, &sRange, &sTmpFilter );
+        sfx2::LinkManager::GetDisplayNames( pLink, 0, &sFile, &sRange, &sTmpFilter );
 
         switch( pLink->GetObjType() )
         {

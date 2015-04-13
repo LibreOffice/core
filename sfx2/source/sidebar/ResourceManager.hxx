@@ -106,16 +106,16 @@ private:
 
     void ReadDeckList();
     void ReadPanelList();
-    void ReadContextList(const utl::OConfigurationNode& rNode,
+    static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
-                         const OUString& rsDefaultMenuCommand) const;
+                         const OUString& rsDefaultMenuCommand);
     void ReadLegacyAddons(const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName) const;
-    void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
-                               const utl::OConfigurationTreeRoot& aRoot) const;
-    bool IsDeckEnabled(const OUString& rsDeckId,
+    static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
+    static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
+                               const utl::OConfigurationTreeRoot& aRoot);
+    static bool IsDeckEnabled(const OUString& rsDeckId,
                        const Context& rContext,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame) const;
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 } } // end of namespace sfx2::sidebar

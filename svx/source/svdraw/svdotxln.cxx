@@ -81,7 +81,7 @@ void ImpSdrObjTextLink::Closed()
         {
             OUString aFile;
             OUString aFilter;
-            pLinkManager->GetDisplayNames( this, 0,&aFile, 0, &aFilter );
+            sfx2::LinkManager::GetDisplayNames( this, 0,&aFile, 0, &aFilter );
 
             if( pData->aFileName != aFile ||
                 pData->aFilterName != aFilter )

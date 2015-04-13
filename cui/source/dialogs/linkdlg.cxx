@@ -225,7 +225,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         }
 
         OUString aFileName;
-        pLinkMgr->GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
+        sfx2::LinkManager::GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
         aFileName = INetURLObject::decode(aFileName, INetURLObject::DECODE_UNAMBIGUOUS);
         m_pFtFullFileName->SetText( aFileName );
         m_pFtFullSourceName->SetText( sLink );
@@ -359,7 +359,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
             OUString sFilter;
             SvTreeListEntry* pEntry = m_pTbLinks->FirstSelected();
             SvBaseLink* pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
-            pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
+            sfx2::LinkManager::GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
             INetURLObject aUrl(sFile);
             if(aUrl.GetProtocol() == INetProtocol::File)
             {
@@ -384,7 +384,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                     DBG_ASSERT(pLink,"Where is the link?");
                     if (!pLink)
                         continue;
-                    pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
+                    sfx2::LinkManager::GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
                     INetURLObject aUrl_(sFile);
                     INetURLObject aUrl2(aPath, INetProtocol::File);
                     aUrl2.insertName( aUrl_.getName() );
@@ -632,7 +632,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
 {
     OUString aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 
-    pLinkMgr->GetDisplayNames( &rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
+    sfx2::LinkManager::GetDisplayNames( &rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
     // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
     // So the first text column's width is Tab(2)-Tab(1).

@@ -1216,7 +1216,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                     pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
                                     SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
-                                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
+                                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
                                     Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
 #if ENABLE_CUPS && !defined(MACOSX)
                                     psp::PrinterInfoManager::get().startBatchPrint();

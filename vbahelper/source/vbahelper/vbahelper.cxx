@@ -188,7 +188,7 @@ uno::Reference< frame::XModel >
 getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
-    SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxGetpApp()->GetBasic() );
+    SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxApplication::GetBasic() );
     SbxObject* basicChosen =  pBasic ;
     if ( basicChosen == NULL)
     {

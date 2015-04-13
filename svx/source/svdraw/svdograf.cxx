@@ -226,7 +226,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 
     if( pLinkManager && rValue.hasValue() )
     {
-        pLinkManager->GetDisplayNames( this, 0, &rGrafObj.aFileName, 0, &rGrafObj.aFilterName );
+        sfx2::LinkManager::GetDisplayNames( this, 0, &rGrafObj.aFileName, 0, &rGrafObj.aFilterName );
 
         Graphic aGraphic;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))

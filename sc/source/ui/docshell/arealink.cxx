@@ -113,7 +113,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link& /* rEndEditHdl */ )
     if (pLinkManager!=NULL)
     {
         OUString aFile, aArea, aFilter;
-        pLinkManager->GetDisplayNames(this, NULL, &aFile, &aArea, &aFilter);
+        sfx2::LinkManager::GetDisplayNames(this, NULL, &aFile, &aArea, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix

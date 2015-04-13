@@ -55,7 +55,7 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::rtl::OUString& rsModuleName,
         const ::rtl::OUString& rsContextName);
-    ::rtl::OUString GetModuleName (
+    static ::rtl::OUString GetModuleName (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 

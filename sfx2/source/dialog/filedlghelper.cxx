@@ -171,7 +171,7 @@ void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aE
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    return mpAntiImpl->HelpRequested( aEvent );
+    return sfx2::FileDialogHelper::HelpRequested( aEvent );
 }
 
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException, std::exception )
@@ -2558,7 +2558,7 @@ void SAL_CALL FileDialogHelper::DirectoryChanged( const FilePickerEvent& aEvent 
 
 OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
 {
-    return mpImp->handleHelpRequested( aEvent );
+    return sfx2::FileDialogHelper_Impl::handleHelpRequested( aEvent );
 }
 
 void SAL_CALL FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )

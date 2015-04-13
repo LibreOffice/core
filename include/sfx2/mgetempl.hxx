@@ -88,7 +88,7 @@ protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
     virtual void        Reset(const SfxItemSet *) SAL_OVERRIDE;
 
-    bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+    static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                           const sal_uInt16* pModifier = NULL );
     using TabPage::ActivatePage;

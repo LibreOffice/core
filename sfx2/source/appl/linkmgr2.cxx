@@ -226,7 +226,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         OUString* pType,
                                         OUString* pFile,
                                         OUString* pLinkStr,
-                                        OUString* pFilter ) const
+                                        OUString* pFilter )
 {
     bool bRet = false;
     const OUString sLNm( pLink->GetLinkSourceName() );
@@ -444,7 +444,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
     }
 }
 
-void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const
+void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink)
 {
     ::sfx2::SvLinkSource* pSrvSrc = rServer.DdeCreateLinkSource(rPath);
     if (pSrvSrc)
@@ -576,7 +576,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     sal_uInt16 nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
     OUString sTopic, sItem, sReferer;
     LinkManager* pLinkMgr = pLink->GetLinkManager();
-    if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
+    if (pLinkMgr && sfx2::LinkManager::GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
     {
         // first only loop over the DocumentShells the shells and find those
         // with the name:
@@ -687,7 +687,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if (xComp.is() && pFndShell)
             {
                 pLinkMgr->InsertCachedComp(xComp);
-                pLinkMgr->LinkServerShell(sItem, *pFndShell, *pLink);
+                sfx2::LinkManager::LinkServerShell(sItem, *pFndShell, *pLink);
                 return true;
             }
         }

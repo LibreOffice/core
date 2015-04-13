@@ -141,7 +141,7 @@ public:
     static SfxApplication*      Get() { return pApp;}
 
     // Resource Manager
-    ResMgr*                     GetSfxResManager();
+    static ResMgr*              GetSfxResManager();
 
     // DDE
 #if defined( WNT )
@@ -175,11 +175,11 @@ public:
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
-                                { return CallBasic( i_macroName, SfxApplication::GetOrCreate()->GetBasicManager(), i_args, i_ret ); }
-    BasicManager*               GetBasicManager();
+                                { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), i_args, i_ret ); }
+    static BasicManager*        GetBasicManager();
     com::sun::star::script::XLibraryContainer * GetDialogContainer();
     com::sun::star::script::XLibraryContainer * GetBasicContainer();
-    StarBASIC*                  GetBasic();
+    static StarBASIC*           GetBasic();
     sal_uInt16                  SaveBasicAndDialogContainer() const;
 
     // misc.

@@ -133,10 +133,10 @@ private:
                             const OUString& i_rServiceName
                         ) const;
 
-    OUString     impl_askForFilter_nothrow(
+    static OUString     impl_askForFilter_nothrow(
                             const css::uno::Reference< css::task::XInteractionHandler >& i_rxHandler,
                             const OUString& i_rDocumentURL
-                        ) const;
+                        );
 
     const SfxFilter*    impl_detectFilterForURL(
                             const OUString& _rURL,
@@ -144,7 +144,7 @@ private:
                             const SfxFilterMatcher& rMatcher
                         ) const;
 
-    bool            impl_createNewDocWithSlotParam(
+    static bool         impl_createNewDocWithSlotParam(
                             const sal_uInt16 _nSlotID,
                             const css::uno::Reference< css::frame::XFrame >& i_rxFrame,
                             const bool i_bHidden
@@ -158,34 +158,34 @@ private:
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         ) const;
 
-    sal_uInt16              impl_findSlotParam(
+    static sal_uInt16   impl_findSlotParam(
                             const OUString& i_rFactoryURL
-                        ) const;
+                        );
 
-    SfxObjectShellRef   impl_findObjectShell(
+    static SfxObjectShellRef   impl_findObjectShell(
                             const css::uno::Reference< css::frame::XModel2 >& i_rxDocument
-                        ) const;
+                        );
 
-    void                impl_handleCaughtError_nothrow(
+    static void         impl_handleCaughtError_nothrow(
                             const css::uno::Any& i_rCaughtError,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
-                        ) const;
+                        );
 
-    void                impl_removeLoaderArguments(
+    static void         impl_removeLoaderArguments(
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
-    sal_Int16           impl_determineEffectiveViewId_nothrow(
+    static sal_Int16   impl_determineEffectiveViewId_nothrow(
                             const SfxObjectShell& i_rDocument,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
                         );
 
-    ::comphelper::NamedValueCollection
+    static ::comphelper::NamedValueCollection
                         impl_extractViewCreationArgs(
                                   ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
-    css::uno::Reference< css::frame::XController2 >
+    static css::uno::Reference< css::frame::XController2 >
                         impl_createDocumentView(
                             const css::uno::Reference< css::frame::XModel2 >& i_rModel,
                             const css::uno::Reference< css::frame::XFrame >& i_rFrame,
@@ -297,7 +297,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
 
 
 OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInteractionHandler >& i_rxHandler,
-                                                                 const OUString& i_rDocumentURL ) const
+                                                                 const OUString& i_rDocumentURL )
 {
     ENSURE_OR_THROW( i_rxHandler.is(), "invalid interaction handler" );
 
@@ -400,7 +400,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 }
 
 
-SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
+SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument )
 {
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, false ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, false ) )
     {
@@ -466,7 +466,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 }
 
 
-sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryURL ) const
+sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryURL )
 {
     OUString sSlotParam;
     const sal_Int32 nParamPos = i_rFactoryURL.indexOf( '?' );
@@ -485,7 +485,7 @@ sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryUR
 }
 
 
-void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtError, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
+void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtError, const ::comphelper::NamedValueCollection& i_rDescriptor )
 {
     try
     {

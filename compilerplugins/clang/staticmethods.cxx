@@ -157,7 +157,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || fqn == "OleEmbeddedObject::GetRidOfComponent"
         || fqn == "connectivity::mozab::ProfileAccess::isProfileLocked"
         || startsWith(fqn, "SbxDecimal::")
-        || fqn == "SbiDllMgr::Call" || fqn == "SbiDllMgr::FreeDll") {
+        || fqn == "SbiDllMgr::Call" || fqn == "SbiDllMgr::FreeDll"
+        || fqn == "SfxApplication::InitializeDde" || fqn == "SfxApplication::RemoveDdeTopic") {
         return true;
     }
     // used in a function-pointer-table
@@ -179,7 +180,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", true);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
 
 }
 

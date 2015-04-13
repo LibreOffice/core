@@ -947,7 +947,7 @@ namespace svxform
             if ( sMacroLocation.isEmpty() )
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
-                if ( SfxGetpApp()->GetBasicManager()->HasMacro( sScriptCode ) )
+                if ( SfxApplication::GetBasicManager()->HasMacro( sScriptCode ) )
                     sMacroLocation = "application";
                 else
                     sMacroLocation = "document";

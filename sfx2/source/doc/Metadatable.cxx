@@ -235,7 +235,7 @@ public:
         const bool i_bCopyPrecedesSource);
 
     /** create a Undo Metadatable for i_rObject. */
-    std::shared_ptr<MetadatableUndo> CreateUndo(
+    static std::shared_ptr<MetadatableUndo> CreateUndo(
         Metadatable const& i_rObject);
 
     /** merge i_rMerged and i_rOther into i_rMerged. */
@@ -339,7 +339,7 @@ private:
         const OUString & i_rIdref) const SAL_OVERRIDE;
 
     /** create a Clipboard Metadatable for i_rObject. */
-    std::shared_ptr<MetadatableClipboard> CreateClipboard(
+    static std::shared_ptr<MetadatableClipboard> CreateClipboard(
         const bool i_isInContent);
 
     struct XmlIdRegistry_Impl;
@@ -1492,7 +1492,7 @@ std::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
             XmlIdRegistryDocument * pRegDoc(
                 dynamic_cast<XmlIdRegistryDocument*>( m_pReg ) );
             std::shared_ptr<MetadatableUndo> xUndo(
-                pRegDoc->CreateUndo(*this) );
+                sfx2::XmlIdRegistryDocument::CreateUndo(*this) );
             pRegDoc->RegisterCopy(*this, *xUndo, false);
             xUndo->m_pReg = pRegDoc;
             return xUndo;

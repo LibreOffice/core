@@ -458,7 +458,7 @@ ScVbaApplication::Windows( const uno::Any& aIndex  ) throw (uno::RuntimeExceptio
 void SAL_CALL
 ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::exception)
 {
-    StarBASIC* pBasic = SfxGetpApp()->GetBasic();
+    StarBASIC* pBasic = SfxApplication::GetBasic();
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
@@ -1261,7 +1261,7 @@ ScVbaApplication::setDisplayFormulaBar( sal_Bool _displayformulabar )
 uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException, std::exception )
 {
-    StarBASIC* pBasic = SfxGetpApp()->GetBasic();
+    StarBASIC* pBasic = SfxApplication::GetBasic();
     SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( OUString("FuncCaller"), SbxCLASS_METHOD ));
     uno::Any aRet;
     if ( pMeth )

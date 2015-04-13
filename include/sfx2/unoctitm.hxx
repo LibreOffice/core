@@ -150,9 +150,9 @@ class SfxDispatchController_Impl : public SfxControllerItem
     const char*                 pUnoName;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xFrame;
 
-    void                addParametersToArgs( const com::sun::star::util::URL& aURL,
-                                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs ) const;
-    SfxMapUnit          GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
+    static void         addParametersToArgs( const com::sun::star::util::URL& aURL,
+                                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+    static SfxMapUnit   GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
 
 public:
                         SfxDispatchController_Impl( SfxOfficeDispatch*                 pDisp,

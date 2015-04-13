@@ -82,7 +82,7 @@ public:
     css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const ::rtl::OUString& rsCommandName);
     ::rtl::OUString GetCommandLabel (const ::rtl::OUString& rsCommandName);
-    rtl::OUString RetrieveShortcutsFromConfiguration(
+    static rtl::OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const rtl::OUString& rsCommandName);
 };

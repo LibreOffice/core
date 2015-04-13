@@ -145,7 +145,7 @@ void ImeStatusWindow::show(bool bShow)
     }
 }
 
-bool ImeStatusWindow::canToggle() const
+bool ImeStatusWindow::canToggle()
 {
     return Application::CanToggleImeStatusWindow();
 }

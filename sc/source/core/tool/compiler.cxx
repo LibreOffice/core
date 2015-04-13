@@ -2930,14 +2930,12 @@ bool ScCompiler::IsMacro( const OUString& rName )
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
-    SfxApplication* pSfxApp = SfxGetpApp();
-
     try
     {
         if( pDocSh )//XXX
             pObj = pDocSh->GetBasic();
         else
-            pObj = pSfxApp->GetBasic();
+            pObj = SfxApplication::GetBasic();
     }
     catch (...)
     {

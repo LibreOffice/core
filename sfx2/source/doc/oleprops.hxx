@@ -153,15 +153,15 @@ public:
     void                SaveString8( SvStream& rStrm, const OUString& rValue ) const;
 
     /** Loads a Unicode string from the passed stream, ignores own encoding. */
-    OUString            LoadString16( SvStream& rStrm ) const;
+    static OUString     LoadString16( SvStream& rStrm );
     /** Saves a Unicode string to the passed stream, ignores own encoding. */
-    void                SaveString16( SvStream& rStrm, const OUString& rValue ) const;
+    static void         SaveString16( SvStream& rStrm, const OUString& rValue );
 
 private:
     OUString            ImplLoadString8( SvStream& rStrm ) const;
-    OUString            ImplLoadString16( SvStream& rStrm ) const;
+    static OUString     ImplLoadString16( SvStream& rStrm );
     void                ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const;
-    void                ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const;
+    static void         ImplSaveString16( SvStream& rStrm, const OUString& rValue );
 };
 
 

@@ -64,7 +64,7 @@ protected:
         SAVE_ERROR
     };
     ::std::vector< OUString > maAttachedDocuments;
-    SaveResult          SaveDocumentAsFormat( const OUString& aSaveFileName,
+    static SaveResult   SaveDocumentAsFormat( const OUString& aSaveFileName,
                                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
                                               const OUString& rType,
                                               OUString& rFileNamePath );
@@ -79,7 +79,7 @@ private:
 
     bool                mbLoadDone;
 
-    SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
+    static SaveResult   ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                                                  const OUString& rFilterName,
                                                  const OUString& rType,

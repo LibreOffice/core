@@ -217,12 +217,12 @@ class SfxDocTplService_Impl
                                               bool  bFsysFolder,
                                               Content   &rNewFolder );
 
-    bool                    CreateNewUniqueFolderWithPrefix( const OUString& aPath,
+    static bool             CreateNewUniqueFolderWithPrefix( const OUString& aPath,
                                                                 const OUString& aPrefix,
                                                                 OUString& aNewFolderName,
                                                                 OUString& aNewFolderURL,
                                                                 Content& aNewFolder );
-    OUString             CreateNewUniqueFileWithPrefix( const OUString& aPath,
+    static OUString         CreateNewUniqueFileWithPrefix( const OUString& aPath,
                                                                 const OUString& aPrefix,
                                                                 const OUString& aExt );
 
@@ -239,9 +239,9 @@ class SfxDocTplService_Impl
     bool                    WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                 const uno::Sequence< beans::StringPair >& aUINames );
 
-    OUString             CreateNewGroupFsys( const OUString& rGroupName, Content& aGroup );
+    OUString                CreateNewGroupFsys( const OUString& rGroupName, Content& aGroup );
 
-    bool                    removeContent( Content& rContent );
+    static bool             removeContent( Content& rContent );
     bool                    removeContent( const OUString& rContentURL );
 
     bool                    setProperty( Content& rContent,

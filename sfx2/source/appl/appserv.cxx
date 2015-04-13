@@ -564,7 +564,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 #endif
 
         case SID_SHOW_IME_STATUS_WINDOW:
-            if (pAppData_Impl->m_xImeStatusWindow->canToggle())
+            if (sfx2::appl::ImeStatusWindow::canToggle())
             {
                 SfxBoolItem const * pItem = static_cast< SfxBoolItem const * >(
                     rReq.GetArg(SID_SHOW_IME_STATUS_WINDOW, false,
@@ -780,7 +780,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 }
 
                 case SID_SHOW_IME_STATUS_WINDOW:
-                    if (pAppData_Impl->m_xImeStatusWindow->canToggle())
+                    if (sfx2::appl::ImeStatusWindow::canToggle())
                         rSet.Put(SfxBoolItem(
                                      SID_SHOW_IME_STATUS_WINDOW,
                                      pAppData_Impl->m_xImeStatusWindow->

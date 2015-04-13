@@ -173,7 +173,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    SfxGetpApp()->GetBasicManager();
+    SfxApplication::GetBasicManager();
     css::uno::XInterface* pRet = SfxGetpApp()->GetDialogContainer();
     pRet->acquire();
     return pRet;
@@ -185,7 +185,7 @@ com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    SfxGetpApp()->GetBasicManager();
+    SfxApplication::GetBasicManager();
     css::uno::XInterface* pRet = SfxGetpApp()->GetBasicContainer();
     pRet->acquire();
     return pRet;

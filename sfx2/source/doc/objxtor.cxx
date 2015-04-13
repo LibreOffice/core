@@ -189,7 +189,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( _rEvent.Source.get() );
         if ( aIt != s_aRegisteredVBAConstants.end() )
         {
-            if ( BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager() )
+            if ( BasicManager* pAppMgr = SfxApplication::GetBasicManager() )
                 pAppMgr->SetGlobalUNOConstant( aIt->second.getStr(), Any( Reference< XInterface >() ) );
             s_aRegisteredVBAConstants.erase( aIt );
         }
@@ -711,7 +711,7 @@ BasicManager* SfxObjectShell::GetBasicManager() const
     {
         pBasMgr = lcl_getBasicManagerForDocument( *this );
         if ( !pBasMgr )
-            pBasMgr = SfxGetpApp()->GetBasicManager();
+            pBasMgr = SfxApplication::GetBasicManager();
     }
     catch (const css::ucb::ContentCreationException& e)
     {
@@ -960,7 +960,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // but we should have filtered quite some unnecessary calls already.
 
 #if HAVE_FEATURE_SCRIPTING
-    BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager();
+    BasicManager* pAppMgr = SfxApplication::GetBasicManager();
     rTheCurrentComponent = _rxComponent;
     if ( pAppMgr )
     {

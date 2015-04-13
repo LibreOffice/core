@@ -115,16 +115,16 @@ public:
      * @param rServer server document shell instance
      * @param rLink link object of the client document
      */
-    void LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
+    static void LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink);
 
     // Obtain the string for the dialog
-    bool GetDisplayNames( const SvBaseLink *,
+    static bool GetDisplayNames( const SvBaseLink *,
                                     OUString* pType,
                                     OUString* pFile = NULL,
                                     OUString* pLink = NULL,
-                                    OUString* pFilter = NULL ) const;
+                                    OUString* pFilter = NULL );
 
-    SvLinkSourceRef CreateObj( SvBaseLink* );
+    static SvLinkSourceRef CreateObj( SvBaseLink* );
 
     void        UpdateAllLinks( bool bAskUpdate = true,
                                 bool bCallErrHdl = true,

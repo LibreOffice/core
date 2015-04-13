@@ -419,7 +419,7 @@ namespace basctl
                 return NULL;
 
             if ( isApplication() )
-                return SfxGetpApp()->GetBasicManager();
+                return SfxApplication::GetBasicManager();
 
             return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
         }
@@ -1077,7 +1077,7 @@ namespace basctl
 
     ScriptDocument ScriptDocument::getDocumentForBasicManager( const BasicManager* _pManager )
     {
-        if ( _pManager == SfxGetpApp()->GetBasicManager() )
+        if ( _pManager == SfxApplication::GetBasicManager() )
             return getApplicationScriptDocument();
 
         docs::Documents aDocuments;
@@ -1089,7 +1089,7 @@ namespace basctl
             )
         {
             const BasicManager* pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( doc->xModel );
-            if  (   ( pDocBasicManager != SfxGetpApp()->GetBasicManager() )
+            if  (   ( pDocBasicManager != SfxApplication::GetBasicManager() )
                 &&  ( pDocBasicManager == _pManager )
                 )
             {

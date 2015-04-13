@@ -906,7 +906,7 @@ bool SfxViewShell::HasPrintOptionsPage() const
     return false;
 }
 
-JobSetup SfxViewShell::GetJobSetup() const
+JobSetup SfxViewShell::GetJobSetup()
 {
     return JobSetup();
 }

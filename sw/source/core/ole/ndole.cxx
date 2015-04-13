@@ -519,7 +519,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
     if ( mpObjectLink )
     {
         OUString aNewLinkURL;
-        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
         if ( !aNewLinkURL.equalsIgnoreAsciiCase( maLinkURL ) )
         {
             if ( !aOLEObj.xOLERef.is() )

@@ -1484,7 +1484,7 @@ ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
 
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
-        pMgr = pApp->GetBasicManager();
+        pMgr = SfxApplication::GetBasicManager();
     ErrCode nRet = SfxApplication::CallBasic( rMacro, pMgr, pArgs, pRet );
     return nRet;
 }

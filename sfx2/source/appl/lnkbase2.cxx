@@ -396,12 +396,12 @@ void SvBaseLink::_GetRealObject( bool bConnect)
     if( OBJECT_CLIENT_DDE == nObjType )
     {
         OUString sServer;
-        if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
+        if( sfx2::LinkManager::GetDisplayNames( this, &sServer ) &&
             sServer == Application::GetAppName() )  // internal Link !!!
         {
             // so that the Internal link can be created!
             nObjType = OBJECT_INTERN;
-            xObj = pImpl->m_pLinkMgr->CreateObj( this );
+            xObj = sfx2::LinkManager::CreateObj( this );
 
             pImplData->ClientType.bIntrnlLnk = true;
             nObjType = OBJECT_CLIENT_DDE;  // so we know what it once was!
@@ -409,11 +409,11 @@ void SvBaseLink::_GetRealObject( bool bConnect)
         else
         {
             pImplData->ClientType.bIntrnlLnk = false;
-            xObj = pImpl->m_pLinkMgr->CreateObj( this );
+            xObj = sfx2::LinkManager::CreateObj( this );
         }
     }
     else if( (OBJECT_CLIENT_SO & nObjType) )
-        xObj = pImpl->m_pLinkMgr->CreateObj( this );
+        xObj = sfx2::LinkManager::CreateObj( this );
 
     if( bConnect && ( !xObj.Is() || !xObj->Connect( this ) ) )
         Disconnect();
@@ -490,7 +490,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
     {
         if( pImpl->m_pLinkMgr )
         {
-            SvLinkSourceRef ref = pImpl->m_pLinkMgr->CreateObj( this );
+            SvLinkSourceRef ref = sfx2::LinkManager::CreateObj( this );
             if( ref.Is() )
             {
                 ref->Edit( pParent, this, aLink );
@@ -521,7 +521,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
         if( !Update() )
         {
             OUString sApp, sTopic, sItem, sError;
-            pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
+            sfx2::LinkManager::GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( nObjType == OBJECT_CLIENT_DDE )
             {
                 sError = SFX2_RESSTR(STR_DDE_ERROR);

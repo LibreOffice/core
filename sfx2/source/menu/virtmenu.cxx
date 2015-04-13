@@ -965,7 +965,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     }
     else if ( nSlotId >= START_ITEMID_PICKLIST && nSlotId <= END_ITEMID_PICKLIST )
     {
-        SfxPickList::Get().ExecuteMenuEntry( nSlotId );
+        SfxPickList::ExecuteMenuEntry( nSlotId );
         return sal_True;
     }
 

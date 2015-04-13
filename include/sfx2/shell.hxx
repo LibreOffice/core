@@ -164,7 +164,7 @@ protected:
     SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
     SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
-    void HandleOpenXmlFilterSettings(SfxRequest &);
+    static void HandleOpenXmlFilterSettings(SfxRequest &);
 
 public:
     TYPEINFO_OVERRIDE();
@@ -445,7 +445,7 @@ public:
     void SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs);
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbs() const;
     void                        VerbExec (SfxRequest&);
-    void                        VerbState (SfxItemSet&);
+    static void                 VerbState (SfxItemSet&);
     SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;
 
     void                        SetHelpId(sal_uIntPtr nId);

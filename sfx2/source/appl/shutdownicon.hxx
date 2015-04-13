@@ -111,7 +111,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         void init() throw( ::com::sun::star::uno::Exception );
 
         OUString GetResString( int id );
-        OUString GetUrlDescription( const OUString& aUrl );
+        static OUString GetUrlDescription( const OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }

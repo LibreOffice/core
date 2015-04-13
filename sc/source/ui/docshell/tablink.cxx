@@ -127,7 +127,7 @@ void ScTableLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
     if (pLinkManager!=NULL)
     {
         OUString aFile, aFilter;
-        pLinkManager->GetDisplayNames(this, 0, &aFile, NULL, &aFilter);
+        sfx2::LinkManager::GetDisplayNames(this, 0, &aFile, NULL, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix

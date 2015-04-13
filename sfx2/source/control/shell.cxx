@@ -521,7 +521,10 @@ const SfxPoolItem* SfxShell::GetSlotState
 }
 
 SFX_EXEC_STUB(SfxShell, VerbExec)
-SFX_STATE_STUB(SfxShell, VerbState)
+void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
+{
+    SfxShell::VerbState( rSet );
+}
 
 void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
 {

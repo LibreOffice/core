@@ -80,7 +80,7 @@ public:
 
         Must only be called with the Solar mutex locked.
      */
-    bool canToggle() const;
+    static bool canToggle();
 
     using ImeStatusWindow_Impl::acquire;
     using ImeStatusWindow_Impl::release;

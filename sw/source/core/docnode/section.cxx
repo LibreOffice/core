@@ -561,7 +561,7 @@ OUString SwSection::GetLinkFileName() const
                 OUString sRange;
                 OUString sFilter;
                 if (m_RefLink->GetLinkManager() &&
-                    m_RefLink->GetLinkManager()->GetDisplayNames(
+                    sfx2::LinkManager::GetDisplayNames(
                         m_RefLink, 0, &sTmp, &sRange, &sFilter ))
                 {
                     sTmp += OUString(sfx2::cTokenSeparator) + sFilter
@@ -1161,7 +1161,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         {
             // It's in the Section, so update. But only if it's not in the same File!
             OUString sFName;
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
+            sfx2::LinkManager::GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
             if( sFName != sName )
             {
                 pBLink->DataChanged( sMimeType, aValue );
@@ -1263,7 +1263,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 break;
             OUString sFilter;
             OUString sRange;
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( this, 0, &sFileName,
+            sfx2::LinkManager::GetDisplayNames( this, 0, &sFileName,
                                                     &sRange, &sFilter );
 
             RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;

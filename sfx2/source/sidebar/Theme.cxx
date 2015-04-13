@@ -905,7 +905,7 @@ Theme::ChangeListenerContainer* Theme::GetChangeListeners (
 
 bool Theme::DoVetoableListenersVeto (
     const VetoableListenerContainer* pListeners,
-    const beans::PropertyChangeEvent& rEvent) const
+    const beans::PropertyChangeEvent& rEvent)
 {
     if (pListeners == NULL)
         return false;
@@ -935,7 +935,7 @@ bool Theme::DoVetoableListenersVeto (
 
 void Theme::BroadcastPropertyChange (
     const ChangeListenerContainer* pListeners,
-    const beans::PropertyChangeEvent& rEvent) const
+    const beans::PropertyChangeEvent& rEvent)
 {
     if (pListeners == NULL)
         return;

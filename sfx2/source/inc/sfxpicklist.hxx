@@ -58,7 +58,7 @@ class SfxPickList : public SfxListener
        certain requirements, e.g. being writable. Check implementation for requirement
        details.
      */
-    void                    AddDocumentToPickList( SfxObjectShell* pDocShell );
+    static void             AddDocumentToPickList( SfxObjectShell* pDocShell );
 
     public:
         static SfxPickList& Get();
@@ -67,8 +67,8 @@ class SfxPickList : public SfxListener
         sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
         sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
         void                CreateMenuEntries( Menu* pMenu );
-        void                ExecuteMenuEntry( sal_uInt16 nId );
-        void                ExecuteEntry( sal_uInt32 nIndex );
+        static void         ExecuteMenuEntry( sal_uInt16 nId );
+        static void         ExecuteEntry( sal_uInt32 nIndex );
 
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };

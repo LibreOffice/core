@@ -283,7 +283,7 @@ void ResourceManager::ReadPanelList()
 void ResourceManager::ReadContextList (
                         const utl::OConfigurationNode& rParentNode,
                         ContextList& rContextList,
-                        const OUString& rsDefaultMenuCommand) const
+                        const OUString& rsDefaultMenuCommand)
 {
     const Any aValue = rParentNode.getNodeValue("ContextList");
     Sequence<OUString> aValues;
@@ -522,7 +522,7 @@ void ResourceManager::StorePanelExpansionState (
     }
 }
 
-utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUString& rsModuleName) const
+utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUString& rsModuleName)
 {
     try
     {
@@ -550,7 +550,7 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
 
 void ResourceManager::GetToolPanelNodeNames (
                         std::vector<OUString>& rMatchingNames,
-                        const utl::OConfigurationTreeRoot& aRoot) const
+                        const utl::OConfigurationTreeRoot& aRoot)
 {
     Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
     const sal_Int32 nCount (aChildNodeNames.getLength());
@@ -564,7 +564,7 @@ void ResourceManager::GetToolPanelNodeNames (
 bool ResourceManager::IsDeckEnabled (
                         const OUString& rsDeckId,
                         const Context& rContext,
-                        const Reference<frame::XFrame>& rxFrame) const
+                        const Reference<frame::XFrame>& rxFrame)
 {
     // Check if any panel that matches the current context can be
     // displayed.

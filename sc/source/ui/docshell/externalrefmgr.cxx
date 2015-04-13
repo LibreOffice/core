@@ -1298,7 +1298,7 @@ void ScExternalRefLink::Closed()
         return SUCCESS;
 
     OUString aFile, aFilter;
-    mpDoc->GetLinkManager()->GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
+    sfx2::LinkManager::GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
     ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
 
     if (!pMgr->isFileLoadable(aFile))

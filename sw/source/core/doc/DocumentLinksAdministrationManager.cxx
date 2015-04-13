@@ -61,7 +61,7 @@ namespace
         {}
      };
 
-    ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
+    ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks )
     {
         for( ::sfx2::SvBaseLinks::size_type n = 0; n < rLinks.size(); ++n )
         {
@@ -74,7 +74,7 @@ namespace
                     ::sfx2::SvBaseLinkRef xLink = pLnk;
 
                     OUString sFName;
-                    rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
+                    sfx2::LinkManager::GetDisplayNames( xLink, 0, &sFName, 0, 0 );
 
                     INetURLObject aURL( sFName );
                     if( INetProtocol::File == aURL.GetProtocol() ||
@@ -391,7 +391,7 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
         ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
 
         ::sfx2::SvBaseLink* pLnk = 0;
-        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
+        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks ) ) )
         {
             ::sfx2::SvBaseLinkRef xLink = pLnk;
             // Tell the link that it's being destroyed!

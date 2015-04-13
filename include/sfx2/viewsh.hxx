@@ -234,7 +234,7 @@ public:
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
     virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
-    JobSetup                    GetJobSetup() const;
+    static JobSetup             GetJobSetup();
     Printer*                    GetActivePrinter() const;
 
     // Working set

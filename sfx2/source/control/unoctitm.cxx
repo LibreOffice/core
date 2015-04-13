@@ -497,7 +497,7 @@ void SfxDispatchController_Impl::UnBindController()
     }
 }
 
-void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util::URL& aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs ) const
+void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util::URL& aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
 {
     // Extract the parameter from the URL and put them into the property value sequence
     sal_Int32 nQueryIndex = aURL.Complete.indexOf( '?' );

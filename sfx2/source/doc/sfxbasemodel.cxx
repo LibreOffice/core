@@ -349,7 +349,7 @@ class SfxOwnFramesLocker
 {
     Sequence< Reference< frame::XFrame > > m_aLockedFrames;
 
-    vcl::Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
+    static vcl::Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
 public:
     SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
     ~SfxOwnFramesLocker();

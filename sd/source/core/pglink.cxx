@@ -69,7 +69,7 @@ SdPageLink::~SdPageLink()
         OUString aFileName;
         OUString aBookmarkName;
         OUString aFilterName;
-        pLinkManager->GetDisplayNames( this,0, &aFileName, &aBookmarkName,
+        sfx2::LinkManager::GetDisplayNames( this,0, &aFileName, &aBookmarkName,
                                       &aFilterName);
         pPage->SetFileName(aFileName);
         pPage->SetBookmarkName(aBookmarkName);

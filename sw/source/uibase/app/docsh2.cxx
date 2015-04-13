@@ -1290,7 +1290,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     if( rHtmlOptions.IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
-        if( pBasicMan && (pBasicMan != SfxGetpApp()->GetBasicManager()) )
+        if( pBasicMan && (pBasicMan != SfxApplication::GetBasicManager()) )
         {
             sal_uInt16 nLibCount = pBasicMan->GetLibCount();
             while( nLibCount )

@@ -629,14 +629,14 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
     {
         sal_uInt16 nType = refLink->GetObjType();
         if( OBJECT_CLIENT_GRF == nType )
-            bRet = refLink->GetLinkManager()->GetDisplayNames(
+            bRet = sfx2::LinkManager::GetDisplayNames(
                     refLink, 0, pFileNm, 0, pFilterNm );
         else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
         {
             OUString sApp;
             OUString sTopic;
             OUString sItem;
-            if( refLink->GetLinkManager()->GetDisplayNames(
+            if( sfx2::LinkManager::GetDisplayNames(
                     refLink, &sApp, &sTopic, &sItem ) )
             {
                 *pFileNm = sApp + OUString(sfx2::cTokenSeparator)
@@ -933,14 +933,13 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     Graphic aTmpGrf = GetGrf();
 
-    const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     OUString sFile, sFilter;
     if( IsLinkedFile() )
-        rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
+        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
     else if( IsLinkedDDE() )
     {
         OUString sTmp1, sTmp2;
-        rMgr.GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
+        sfx2::LinkManager::GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
         sfx2::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
         sFilter = "DDE";
     }
@@ -1096,7 +1095,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
 
         OUString sGrfNm;
-        refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
         OUString sReferer;
         SfxObjectShell * sh = GetDoc()->GetPersist();
         if (sh != 0 && sh->HasName())
@@ -1151,7 +1150,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     if ( IsLinkedFile() )
     {
         OUString sGrfNm;
-        refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
         if ( !sGrfNm.startsWith( "vnd.sun.star.pkg:" ) )
         {
             bRet = true;

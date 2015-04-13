@@ -77,7 +77,7 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLin
     get(m_pEdDdeItem, "category");
 
     OUString sServer, sTopic, sItem;
-    pLink->GetLinkManager()->GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
+    sfx2::LinkManager::GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
 
     m_pEdDdeApp->SetText( sServer );
     m_pEdDdeTopic->SetText( sTopic );
@@ -204,7 +204,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         return false;
 
     OUString sServer, sTopic;
-    pSvLink->GetLinkManager()->GetDisplayNames( pSvLink, &sServer, &sTopic, &sItem );
+    sfx2::LinkManager::GetDisplayNames( pSvLink, &sServer, &sTopic, &sItem );
 
     if( sServer.isEmpty() || sTopic.isEmpty() || sItem.isEmpty() )
         return false;

@@ -83,7 +83,7 @@ private:
 
     void OnTemplateImport ();
     void OnTemplateSearch ();
-    void OnTemplateLink ();
+    static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateEdit ();
     void OnTemplateProperties ();

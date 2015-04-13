@@ -258,12 +258,12 @@ private:
     ChangeListenerContainer* GetChangeListeners (
         const ThemeItem eItem,
         const bool bCreate);
-    bool DoVetoableListenersVeto (
+    static bool DoVetoableListenersVeto (
         const VetoableListenerContainer* pListeners,
-        const css::beans::PropertyChangeEvent& rEvent) const;
-    void BroadcastPropertyChange (
+        const css::beans::PropertyChangeEvent& rEvent);
+    static void BroadcastPropertyChange (
         const ChangeListenerContainer* pListeners,
-        const css::beans::PropertyChangeEvent& rEvent) const;
+        const css::beans::PropertyChangeEvent& rEvent);
     void ProcessNewValue (
         const css::uno::Any& rValue,
         const ThemeItem eItem,

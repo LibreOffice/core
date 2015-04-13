@@ -930,7 +930,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
         if ( pLinkManager )
         {
             OUString aNewLinkURL;
-            pLinkManager->GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+            sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
             if ( !aNewLinkURL.equalsIgnoreAsciiCase( mpImpl->maLinkURL ) )
             {
                 const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();

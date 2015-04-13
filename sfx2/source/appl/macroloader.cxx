@@ -209,7 +209,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     OUString aMacro( rURL );
     sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
     sal_Int32 nArgsPos = aMacro.indexOf( '(' );
-    BasicManager *pAppMgr = SfxGetpApp()->GetBasicManager();
+    BasicManager *pAppMgr = SfxApplication::GetBasicManager();
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
 

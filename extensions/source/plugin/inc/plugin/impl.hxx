@@ -303,7 +303,7 @@ public:
     virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw(std::exception) SAL_OVERRIDE;
 
     // has to be implemented per system
-    Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception);
+    static Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception);
     // calls system specific impl_getPluginDescriptions
     // checks whether plugins are disabled
     virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions()
