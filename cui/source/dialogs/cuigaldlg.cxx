@@ -253,7 +253,7 @@ IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
 
     EndDialog( RET_OK );
 
-    VclPtr<SearchProgress>(this).disposeAndClear();
+    disposeOnce();
     return 0L;
 }
 
@@ -431,7 +431,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     GetParent()->LeaveWait();
 
     EndDialog( RET_OK );
-    VclPtr<TakeProgress>(this).disposeAndClear();
+    disposeOnce();
     return 0L;
 }
 

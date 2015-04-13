@@ -859,8 +859,7 @@ void SwNavigationPI::dispose()
     SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
     pImgMan->ReleaseToolBox(aContentToolBox.get());
     pImgMan->ReleaseToolBox(aGlobalToolBox.get());
-    VclPtr<vcl::Window> a(aContentToolBox->GetItemWindow(FN_PAGENUMBER));
-    a.disposeAndClear();
+    aContentToolBox->GetItemWindow(FN_PAGENUMBER)->disposeOnce();
     aContentToolBox->Clear();
     if(pxObjectShell)
     {

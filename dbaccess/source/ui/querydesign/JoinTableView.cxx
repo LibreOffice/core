@@ -264,9 +264,7 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
                                                 makeAny(_pConn->GetAccessible()),
                                                 Any());
     if ( _bDelete )
-    {
-        VclPtr<OTableConnection>(_pConn).disposeAndClear();
-    }
+        _pConn->disposeOnce();
 
     return true;
 }
@@ -398,9 +396,9 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             m_pLastFocusTabWin = NULL;
 
         pTabWin->clearListBox();
-        VclPtr<OTableWindow>(pTabWin).disposeAndClear();
-
+        pTabWin->disposeOnce();
     }
+
     if ( (sal_Int32)m_vTableConnection.size() < (nCount-1) ) // if some connections could be removed
         modified();
 }

@@ -3297,7 +3297,7 @@ void VclBuilder::delete_by_name(const OString& sID)
 void VclBuilder::delete_by_window(vcl::Window *pWindow)
 {
     drop_ownership(pWindow);
-    VclPtr<vcl::Window>(pWindow).disposeAndClear();
+    pWindow->disposeOnce();
 }
 
 void VclBuilder::drop_ownership(const vcl::Window *pWindow)

@@ -926,7 +926,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // Initialisation failed
             // (for example when the Connection to the database is not available at the moment)
             pTabWin->clearListBox();
-            VclPtr<OQueryTableWindow>(pTabWin).disposeAndClear();
+            pTabWin->disposeOnce();
         }
     }
 
