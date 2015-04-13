@@ -68,6 +68,9 @@
 #include <iostream>
 #include <map>
 
+#include <sal/log.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -973,8 +976,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         pLastState = pState;
     }
 
-    ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
-    if ( bNotify && pContnr )
+    if (bNotify)
     {
         ::com::sun::star::uno::Any aState;
         if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
@@ -1015,16 +1017,24 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         aEvent.Requery = sal_False;
         aEvent.State = aState;
 
-        ::cppu::OInterfaceIteratorHelper aIt( *pContnr );
-        while( aIt.hasMoreElements() )
-        {
-            try
+        if (pDispatcher && pDispatcher->GetFrame()) {
+            InterceptLOKStateChangeEvent(
+                    pDispatcher->GetFrame()->GetObjectShell(), aEvent);
+        }
+
+        ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
+        if (pContnr) {
+            ::cppu::OInterfaceIteratorHelper aIt( *pContnr );
+            while( aIt.hasMoreElements() )
             {
-                static_cast< ::com::sun::star::frame::XStatusListener *>(aIt.next())->statusChanged( aEvent );
-            }
-            catch (const ::com::sun::star::uno::RuntimeException&)
-            {
-                aIt.remove();
+                try
+                {
+                    static_cast< ::com::sun::star::frame::XStatusListener *>(aIt.next())->statusChanged( aEvent );
+                }
+                catch (const ::com::sun::star::uno::RuntimeException&)
+                {
+                    aIt.remove();
+                }
             }
         }
     }
@@ -1033,6 +1043,29 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     StateChanged( nSID, eState, pState, 0 );
+}
+
+void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent) const
+{
+    if (!objSh || !objSh->isTiledRendering()) {
+        return;
+    }
+
+    if (aEvent.FeatureURL.Path == "Bold" ||
+            aEvent.FeatureURL.Path == "Italic" ||
+            aEvent.FeatureURL.Path == "Underline" ||
+            aEvent.FeatureURL.Path == "StrikeOut") {
+
+        OUStringBuffer aBuffer;
+        aBuffer.append(aEvent.FeatureURL.Complete);
+        aBuffer.append("=");
+        bool bTemp = false;
+        aEvent.State >>= bTemp;
+        aBuffer.append(bTemp);
+
+        OUString payload = aBuffer.makeStringAndClear();
+        objSh->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

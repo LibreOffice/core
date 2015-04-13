@@ -49,6 +49,9 @@
 #include <set>
 #include <o3tl/typed_flags_set.hxx>
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
 class SbxValue;
 class SvxMacro;
 class SbxArray;
@@ -708,6 +711,14 @@ public:
     SAL_DLLPRIVATE void CancelCheckOut( );
     SAL_DLLPRIVATE void CheckIn( );
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisVersion > GetCmisVersions();
+
+    /**
+     * Interface shared by document shell. Allow LOK calls from sfx.
+     * Default behavior doesn't do anything. relevant SfxObjectShells should override
+     * the default behavior and implements LOK calls.
+     */
+    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const;
+    virtual bool isTiledRendering() const;
 };
 
 #define SFX_GLOBAL_CLASSID \

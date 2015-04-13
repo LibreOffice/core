@@ -175,6 +175,8 @@ public:
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();
     void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
+
+    void InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent) const;
 };
 
 #endif

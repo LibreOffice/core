@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Log;
 
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
@@ -73,19 +74,26 @@ public class InvalidationHandler implements Document.MessageCallback {
                 LibreOfficeMainActivity.mAppContext.startActivity(urlIntent);
                 break;
             case Document.CALLBACK_STATE_CHANGED:
-                Log.d("Document.CALLBACK_STATE_CHANGED: " + payload);
-                String[] parts = payload.split(":");
-                boolean pressed = Boolean.parseBoolean(parts[1]);
-                if (parts[0].equals("Bold")) {
-                    LOKitShell.getToolbarController().onToggleStateChanged(Document.BOLD, pressed);
-                } else if (parts[0].equals("Italic")) {
-                    LOKitShell.getToolbarController().onToggleStateChanged(Document.ITALIC, pressed);
-                } else if (parts[0].equals("Underline")) {
-                    LOKitShell.getToolbarController().onToggleStateChanged(Document.UNDERLINE, pressed);
-                } else if (parts[0].equals("Strikeout")) {
-                    LOKitShell.getToolbarController().onToggleStateChanged(Document.STRIKEOUT, pressed);
-                }
+                stateChanged(payload);
                 break;
+            default:
+                Log.d(LOGTAG, "LOK_CALLBACK uncatched: " + messageID + " : " + payload);
+        }
+    }
+
+    private void stateChanged(String payload) {
+        String[] parts = payload.split("=");
+        boolean pressed = Boolean.parseBoolean(parts[1]);
+        if (parts[0].equals(".uno:Bold")) {
+            LOKitShell.getToolbarController().onToggleStateChanged(Document.BOLD, pressed);
+        } else if (parts[0].equals(".uno:Italic")) {
+            LOKitShell.getToolbarController().onToggleStateChanged(Document.ITALIC, pressed);
+        } else if (parts[0].equals(".uno:Underline")) {
+            LOKitShell.getToolbarController().onToggleStateChanged(Document.UNDERLINE, pressed);
+        } else if (parts[0].equals(".uno:StrikeOut")) {
+            LOKitShell.getToolbarController().onToggleStateChanged(Document.STRIKEOUT, pressed);
+        } else {
+            Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
     }
 

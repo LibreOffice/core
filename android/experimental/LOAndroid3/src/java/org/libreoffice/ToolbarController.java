@@ -72,7 +72,13 @@ public class ToolbarController {
             icon = ImageUtils.bitmapToPressed(icon);
         }
 
-        menuItem.setIcon(new BitmapDrawable(mContext.getResources(), icon));
+        final MenuItem fMenuItem = menuItem;
+        final Bitmap fIcon = icon;
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                fMenuItem.setIcon(new BitmapDrawable(mContext.getResources(), fIcon));
+            }
+        });
     }
 
     public void setOptionMenu(Menu menu) {

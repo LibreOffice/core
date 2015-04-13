@@ -102,7 +102,14 @@ typedef enum
      * User clicked on an hyperlink that should be handled by other
      * applications accordingly.
      */
-    LOK_CALLBACK_HYPERLINK_CLICKED
+    LOK_CALLBACK_HYPERLINK_CLICKED,
+
+    /**
+     * Emit state update to the client.
+     * For example, when cursor is on bold text, this callback is triggered
+     * with payload: ".uno:Bold=true"
+     */
+    LOK_CALLBACK_STATE_CHANGED
 }
 LibreOfficeKitCallbackType;
 

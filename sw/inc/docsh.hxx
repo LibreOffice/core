@@ -29,6 +29,8 @@
 
 #include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class SwDoc;
 class SfxDocumentInfoDialog;
@@ -311,6 +313,9 @@ public:
     virtual void    SetChangeRecording( bool bActivate ) SAL_OVERRIDE;
     virtual bool    SetProtectionPassword( const OUString &rPassword ) SAL_OVERRIDE;
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) SAL_OVERRIDE;
+
+    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const SAL_OVERRIDE;
+    virtual bool isTiledRendering() const SAL_OVERRIDE;
 };
 
 /** Find the right DocShell and create a new one:

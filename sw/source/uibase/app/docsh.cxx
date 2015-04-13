@@ -72,6 +72,7 @@
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <docfunc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -120,6 +121,9 @@
 
 #include <sfx2/Metadatable.hxx>
 #include <calbck.hxx>
+
+#include <sal/log.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1294,6 +1298,21 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     bRes = true;
 
     return bRes;
+}
+
+void SwDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
+{
+    if (!m_pDoc) {
+        return;
+    }
+
+    SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    pDrawModel->libreOfficeKitCallback(nType, pPayload);
+}
+
+bool SwDocShell::isTiledRendering() const {
+    SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    return pDrawModel->isTiledRendering();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

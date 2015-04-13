@@ -76,6 +76,10 @@
 #include "querytemplate.hxx"
 #include <boost/scoped_array.hpp>
 
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
+#include <typeinfo>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -637,6 +641,14 @@ void SfxObjectShell::SetModifyPasswordEntered( bool bEntered )
 bool SfxObjectShell::IsModifyPasswordEntered()
 {
     return pImp->m_bModifyPasswordEntered;
+}
+
+void SfxObjectShell::libreOfficeKitCallback(SAL_UNUSED_PARAMETER int nType, SAL_UNUSED_PARAMETER const char* pPayload) const {
+    SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+}
+bool SfxObjectShell::isTiledRendering() const {
+    SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

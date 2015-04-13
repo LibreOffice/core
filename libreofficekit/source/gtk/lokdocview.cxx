@@ -857,6 +857,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
     case LOK_CALLBACK_HYPERLINK_CLICKED:
         return "LOK_CALLBACK_HYPERLINK_CLICKED";
+    case LOK_CALLBACK_STATE_CHANGED:
+        return "LOK_CALLBACK_STATE_CHANGED";
     }
     return 0;
 }
@@ -936,6 +938,10 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
 #if GTK_CHECK_VERSION(2,14,0)
         gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
 #endif
+    }
+    case LOK_CALLBACK_STATE_CHANGED:
+    {
+        g_info(pCallback->m_aPayload.c_str());
     }
     break;
     default:
