@@ -49,7 +49,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate"/>

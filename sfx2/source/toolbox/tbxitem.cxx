@@ -58,6 +58,12 @@
 #include <vcl/toolbox.hxx>
 #include <unotools/moduleoptions.hxx>
 
+#include <com/sun/star/awt/PopupMenu.hpp>
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <svx/numfmtsh.hxx>
+#include <stdio.h>
+#include <cui/numfmt.hxx>
+
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/addonmenu.hxx>
@@ -107,6 +113,7 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
+SFX_IMPL_TOOLBOX_CONTROL_CURL(SfxCurrencyListToolBoxControl, SfxStringItem);
 
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
@@ -1434,6 +1441,47 @@ SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
     }
 
     return 0;
+}
+
+SfxCurrencyListToolBoxControl::SfxCurrencyListToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox)
+: SfxToolBoxControl(nSlotId, nId, rBox)
+{
+	rBox.SetItemBits(nId, rBox.GetItemBits(nId) | ToolBoxItemBits::DROPDOWN);
+}
+
+SfxCurrencyListToolBoxControl::~SfxCurrencyListToolBoxControl()
+{
+}
+
+SfxPopupWindow* SfxCurrencyListToolBoxControl::CreatePopupWindow()
+{
+	//declaring shell
+	SvxNumberFormatShell* pNumFmtShell;
+	pNumFmtShell = (SvxNumberFormatShell*)malloc(sizeof(SvxNumberFormatShell));
+
+	//add context menu
+	Reference< awt::XPopupMenu > xPopupMenu(awt::PopupMenu::create(m_xContext));
+
+	// get languages to be displayed in the menu
+	std::vector< OUString > aCurrItems;
+	sal_uInt16  nSelPos = 0;
+	pNumFmtShell->GetCurrencySymbols(aCurrItems, &nSelPos);
+
+	// add entries to menu   
+	sal_Int16 nItemId = static_cast< sal_Int16 >(1);
+	std::vector< OUString >::iterator it;
+	for (it = aCurrItems.begin(); it != aCurrItems.end(); ++it)
+	{
+		const OUString & rStr(*it);
+		xPopupMenu->insertItem(nItemId, rStr, 0, nItemId);
+	}
+
+	// now display the popup menu and execute every command ...
+	Reference< awt::XWindowPeer > xParent(m_xParentWindow, UNO_QUERY);
+	com::sun::star::awt::Rectangle aRect(0, 0, 0, 0);
+	sal_uInt16 nId = xPopupMenu->execute(xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP + 16);
+
+	return (nId - nId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
