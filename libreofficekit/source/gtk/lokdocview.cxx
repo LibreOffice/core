@@ -941,7 +941,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     }
     case LOK_CALLBACK_STATE_CHANGED:
     {
-        g_info(pCallback->m_aPayload.c_str());
+        g_info("%s", pCallback->m_aPayload.c_str());
     }
     break;
     default:
