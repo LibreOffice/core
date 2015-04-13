@@ -37,8 +37,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#include <stdio.h>
-
 CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
     m_pGraphicObj     ( pGraphicObj ),
