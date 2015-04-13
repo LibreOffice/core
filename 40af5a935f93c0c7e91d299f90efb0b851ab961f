@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a26ad4f_8248442f",
+        "filename": "connectivity/source/commontools/dbtools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-13T07:15:14Z",
+      "side": 1,
+      "message": "Do not use .. in includes--set appropriate path in Library_dbtools.mk. And move the headers to connectivity/inc/simpledbt.",
+      "revId": "40af5a935f93c0c7e91d299f90efb0b851ab961f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_2255b0c5",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-13T07:15:14Z",
+      "side": 1,
+      "message": "Is this include really needed?",
+      "revId": "40af5a935f93c0c7e91d299f90efb0b851ab961f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
