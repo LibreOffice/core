@@ -3448,7 +3448,7 @@ bool SfxBaseModel::hasValidSignatures() const
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
-        return ( m_pData->m_pObjectShell->ImplGetSignatureState( false ) == SIGNATURESTATE_SIGNATURES_OK );
+        return ( m_pData->m_pObjectShell->ImplGetSignatureState( false ) == SignatureState::OK );
     return false;
 }
 
@@ -4007,7 +4007,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += SfxResId(STR_SHARED).toString();
 
-        if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+        if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SignatureState::OK )
             aResult += SfxResId(RID_XMLSEC_DOCUMENTSIGNED).toString();
     }
 

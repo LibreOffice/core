@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -260,8 +261,8 @@ public:
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the methods will be used generally, and might need to be renamed
-    SAL_DLLPRIVATE sal_uInt16 GetCachedSignatureState_Impl();
-    SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( sal_uInt16 nState );
+    SAL_DLLPRIVATE SignatureState GetCachedSignatureState_Impl();
+    SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( SignatureState nState );
 
     static css::uno::Sequence < css::util::RevisionTag > GetVersionList(
                     const css::uno::Reference< css::embed::XStorage >& xStorage );

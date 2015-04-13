@@ -20,8 +20,8 @@
 #define INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-
 #include <boost/scoped_ptr.hpp>
+#include <sfx2/signaturestate.hxx>
 
 
 namespace basctl
@@ -62,7 +62,7 @@ namespace basctl
 
             If the instance is not valid, then SIGNATURESTATE_NOSIGNATURES is returned.
         */
-        sal_uInt16  getScriptingSignatureState() const;
+        SignatureState getScriptingSignatureState() const;
 
     private:
         DocumentSignature();        // not implemented

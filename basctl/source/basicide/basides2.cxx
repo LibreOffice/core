@@ -106,7 +106,7 @@ void Shell::SetMDITitle()
         aTitleBuf = IDE_RESSTR(RID_STR_ALL) ;
 
     DocumentSignature aCurSignature( m_aCurDocument );
-    if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+    if ( aCurSignature.getScriptingSignatureState() == SignatureState::OK )
     {
         aTitleBuf = aTitleBuf + " " + IDE_RESSTR(RID_STR_SIGNED) + " ";
     }

@@ -62,8 +62,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     OUString            aTempName;
     DateTime            nTime;
     sal_uInt16          nVisualDocumentNumber;
-    sal_Int16           nDocumentSignatureState;
-    sal_Int16           nScriptingSignatureState;
+    SignatureState      nDocumentSignatureState;
+    SignatureState      nScriptingSignatureState;
     bool            bInList:1,          // if reachable by First/Next
                         bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
@@ -147,7 +147,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign() SAL_OVERRIDE;
     virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
-    virtual sal_Int16 getScriptingSignatureState() SAL_OVERRIDE;
+    virtual SignatureState getScriptingSignatureState() SAL_OVERRIDE;
 
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) SAL_OVERRIDE;
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;

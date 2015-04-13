@@ -21,6 +21,7 @@
 #define INCLUDED_SFX2_DOCMACROMODE_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/signaturestate.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -148,7 +149,7 @@ namespace sfx2
 
             @seealso <sfx2/signaturestate.hxx>
         */
-        virtual sal_Int16
+        virtual SignatureState
                     getScriptingSignatureState() = 0;
 
         /** allows to detect whether there is a trusted scripting signature

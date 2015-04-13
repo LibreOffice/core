@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -363,9 +364,9 @@ public:
     bool                        ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team
-    sal_uInt16                  GetDocumentSignatureState();
+    SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent();
-    sal_uInt16                  GetScriptingSignatureState();
+    SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
 
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
@@ -635,7 +636,7 @@ public:
     SAL_DLLPRIVATE void BreakMacroSign_Impl( bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
     SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
-    SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
+    SAL_DLLPRIVATE SignatureState ImplCheckSignaturesInformation(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE void SetModifyPasswordEntered( bool bEntered = true );
@@ -696,7 +697,7 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
-    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( bool bScriptingContent = false );
+    SAL_DLLPRIVATE SignatureState ImplGetSignatureState( bool bScriptingContent = false );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
         ImplAnalyzeSignature(

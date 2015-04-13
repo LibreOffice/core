@@ -474,7 +474,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign() SAL_OVERRIDE;
     virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
-    virtual sal_Int16 getScriptingSignatureState() SAL_OVERRIDE;
+    virtual SignatureState getScriptingSignatureState() SAL_OVERRIDE;
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) SAL_OVERRIDE;
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;
 

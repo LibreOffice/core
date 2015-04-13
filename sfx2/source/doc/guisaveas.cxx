@@ -1383,7 +1383,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
                                             const OUString& _aSuggestedName,
-                                            sal_uInt16 nDocumentSignatureState )
+                                            SignatureState nDocumentSignatureState )
 {
     OUString aSuggestedName = _aSuggestedName;
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
@@ -1459,10 +1459,10 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     if ( !( nStoreMode & EXPORT_REQUESTED ) )
     {
         // if it is no export, warn user that the signature will be removed
-        if (  SIGNATURESTATE_SIGNATURES_OK == nDocumentSignatureState
-           || SIGNATURESTATE_SIGNATURES_INVALID == nDocumentSignatureState
-           || SIGNATURESTATE_SIGNATURES_NOTVALIDATED == nDocumentSignatureState
-           || SIGNATURESTATE_SIGNATURES_PARTIAL_OK == nDocumentSignatureState)
+        if (  SignatureState::OK == nDocumentSignatureState
+           || SignatureState::INVALID == nDocumentSignatureState
+           || SignatureState::NOTVALIDATED == nDocumentSignatureState
+           || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
             if (MessageDialog(NULL, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE),
                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() != RET_YES)

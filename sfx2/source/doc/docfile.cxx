@@ -232,7 +232,7 @@ public:
     // the following member is changed and makes sense only during saving
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the member will hold this information
-    sal_uInt16      m_nSignatureState;
+    SignatureState             m_nSignatureState;
 
     util::DateTime m_aDateTime;
 
@@ -275,7 +275,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     aExpireTime( Date( Date::SYSTEM ) + 10, tools::Time( tools::Time::SYSTEM ) ),
     pTempFile( NULL ),
     nLastStorageError( 0 ),
-    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )
+    m_nSignatureState( SignatureState::NOSIGNATURES )
 {
     aDoneLink.CreateMutex();
 }
@@ -3456,13 +3456,13 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
 }
 
 
-sal_uInt16 SfxMedium::GetCachedSignatureState_Impl()
+SignatureState SfxMedium::GetCachedSignatureState_Impl()
 {
     return pImp->m_nSignatureState;
 }
 
 
-void SfxMedium::SetCachedSignatureState_Impl( sal_uInt16 nState )
+void SfxMedium::SetCachedSignatureState_Impl( SignatureState nState )
 {
     pImp->m_nSignatureState = nState;
 }

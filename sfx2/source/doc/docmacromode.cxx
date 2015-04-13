@@ -246,8 +246,8 @@ namespace sfx2
                 // the trusted macro check will also retrieve the signature state ( small optimization )
                 bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
 
-                sal_uInt16 nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
-                if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
+                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
+                if ( nSignatureState == SignatureState::BROKEN )
                 {
                     // the signature is broken, no macro execution
                     if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
@@ -260,8 +260,8 @@ namespace sfx2
                     // there is trusted macro signature, allow macro execution
                     return allowMacroExecution();
                 }
-                else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK
-                       || nSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+                else if ( nSignatureState == SignatureState::OK
+                       || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
                     return disallowMacroExecution();

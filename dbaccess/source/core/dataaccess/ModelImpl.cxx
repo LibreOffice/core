@@ -1345,10 +1345,10 @@ Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() c
     return Reference< XEmbeddedScripts >( getModel_noCreate(), UNO_QUERY );
 }
 
-sal_Int16 ODatabaseModelImpl::getScriptingSignatureState()
+SignatureState ODatabaseModelImpl::getScriptingSignatureState()
 {
     // no support for signatures at the moment
-    return SIGNATURESTATE_NOSIGNATURES;
+    return SignatureState::NOSIGNATURES;
 }
 
 bool ODatabaseModelImpl::hasTrustedScriptingSignature( bool /*bAllowUIToAddAuthor*/ )
