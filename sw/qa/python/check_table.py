@@ -314,34 +314,34 @@ class CheckTable(unittest.TestCase):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
-        xTable.initialize(3, 3)
+        xTable.initialize(4, 3)
         xCursor = xDoc.Text.createTextCursor()
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
         # roundtrip
-        xTable.Data = ((1,2,3), (4,5,6), (7,8,9))
-        self.assertEqual( xTable.Data, ((1,2,3), (4,5,6), (7,8,9)))
+        xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
+        self.assertEqual( xTable.Data, ((1,2,3), (4,5,6), (7,8,9), (10,11,12)))
         # missing row
         with self.assertRaises(Exception):
-            xTable.Data = ((1,2,3), (4,5,6))
+            xTable.Data = ((1,2,3), (4,5,6), (7,8,9))
         # missing column
         with self.assertRaises(Exception):
-            xTable.Data = ((1,2), (4,5), (7,8))
+            xTable.Data = ((1,2), (4,5), (7,8), (10,11))
         # with labels
         xTable.ChartColumnAsLabel = True
         xTable.ChartRowAsLabel = True
-        self.assertEqual( xTable.Data, ((5,6), (8,9)))
-        xTable.Data = ((55,66), (88,99))
+        self.assertEqual( xTable.Data, ((5,6), (8,9), (11,12)))
+        xTable.Data = ((55,66), (88,99), (1111,1212))
         xTable.ChartColumnAsLabel = True
         xTable.ChartRowAsLabel = False
-        self.assertEqual( xTable.Data, ((2,3), (55,66), (88,99)))
+        self.assertEqual( xTable.Data, ((2,3), (55,66), (88,99), (1111,1212)))
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = True
-        self.assertEqual( xTable.Data, ((4,55,66), (7,88,99)))
+        self.assertEqual( xTable.Data, ((4,55,66), (7,88,99), (10,1111,1212)))
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        self.assertEqual( xTable.Data, ((1,2,3), (4,55,66), (7,88,99)))
+        self.assertEqual( xTable.Data, ((1,2,3), (4,55,66), (7,88,99), (10,1111,1212)))
         xDoc.dispose()
 
 if __name__ == '__main__':
