@@ -60,7 +60,7 @@ const sal_Char *DbgCheckItemSet( const void* pVoid )
                     ) && "SfxItemSet: invalid which-id" );
             assert((IsInvalidItem(pItem) || !pItem->Which() ||
                     !SfxItemPool::IsWhich(pItem->Which()) ||
-                    pSet->GetPool()->IsItemFlag(nWh, SFX_ITEM_NOT_POOLABLE) ||
+                    pSet->GetPool()->IsItemFlag(nWh, SfxItemPoolFlags::NOT_POOLABLE) ||
                     SFX_ITEMS_NULL != pSet->GetPool()->GetSurrogate(pItem)
                    ) && "SfxItemSet: item in set which is not in pool" );
         }
@@ -215,7 +215,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
              IsStaticDefaultItem(*ppSrc) )  // Defaults that are not to be pooled?
             // Just copy the pointer
             *ppDst = *ppSrc;
-        else if (m_pPool->IsItemFlag( **ppSrc, SFX_ITEM_POOLABLE ))
+        else if (m_pPool->IsItemFlag( **ppSrc, SfxItemPoolFlags::POOLABLE ))
         {
             // Just copy the pointer and increase RefCount
             *ppDst = *ppSrc;
@@ -529,7 +529,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     }
                 }
             }
-            SFX_ASSERT( !m_pPool->IsItemFlag(nWhich, SFX_ITEM_POOLABLE) ||
+            SFX_ASSERT( !m_pPool->IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
                         rItem.ISA(SfxSetItem) || **ppFnd == rItem,
                         nWhich, "putted Item unequal" );
             return *ppFnd;
@@ -1503,7 +1503,7 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
                         rCmp.GetItemState( nWh, false, &pItem2 ) ||
                      ( pItem1 != pItem2 &&
                         ( !pItem1 || IsInvalidItem(pItem1) ||
-                          (m_pPool->IsItemFlag(*pItem1, SFX_ITEM_POOLABLE) &&
+                          (m_pPool->IsItemFlag(*pItem1, SfxItemPoolFlags::POOLABLE) &&
                             *pItem1 != *pItem2 ) ) ) )
                     return false;
             }
@@ -1526,7 +1526,7 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
         if ( *ppItem1 != *ppItem2 &&
              ( ( !*ppItem1 || !*ppItem2 ) ||
                ( IsInvalidItem(*ppItem1) || IsInvalidItem(*ppItem2) ) ||
-               (m_pPool->IsItemFlag(**ppItem1, SFX_ITEM_POOLABLE)) ||
+               (m_pPool->IsItemFlag(**ppItem1, SfxItemPoolFlags::POOLABLE)) ||
                  **ppItem1 != **ppItem2 ) )
             return false;
 

@@ -2364,35 +2364,35 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { SID_ATTR_LRSPACE,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_ULSPACE,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_PAGE,        SFX_ITEM_POOLABLE },
-        { SID_ATTR_PAGE_SIZE,   SFX_ITEM_POOLABLE },
-        { SID_ENUM_PAGE_MODE,   SFX_ITEM_POOLABLE },
-        { SID_PAPER_START,      SFX_ITEM_POOLABLE },
-        { SID_PAPER_END,        SFX_ITEM_POOLABLE },
-        { SID_ATTR_BRUSH,       SFX_ITEM_POOLABLE },
-        { XATTR_FILLSTYLE,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLCOLOR,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLGRADIENT,       SFX_ITEM_POOLABLE },
-        { XATTR_FILLHATCH,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLBITMAP,     SFX_ITEM_POOLABLE },
-        { XATTR_FILLTRANSPARENCE,       SFX_ITEM_POOLABLE },
-        { XATTR_GRADIENTSTEPCOUNT,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_TILE,       SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_POS,        SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_SIZEX,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_SIZEY,      SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_SIZELOG,        SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_TILEOFFSETX,    SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_TILEOFFSETY,    SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_STRETCH,        SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_POSOFFSETX,     SFX_ITEM_POOLABLE },
-        { XATTR_FILLBMP_POSOFFSETY,     SFX_ITEM_POOLABLE },
-        { XATTR_FILLFLOATTRANSPARENCE,  SFX_ITEM_POOLABLE },
-        { XATTR_SECONDARYFILLCOLOR,     SFX_ITEM_POOLABLE },
-        { XATTR_FILLBACKGROUND,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_METRIC,      SFX_ITEM_POOLABLE }
+        { SID_ATTR_LRSPACE,     SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_ULSPACE,     SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_PAGE,        SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_PAGE_SIZE,   SfxItemPoolFlags::POOLABLE },
+        { SID_ENUM_PAGE_MODE,   SfxItemPoolFlags::POOLABLE },
+        { SID_PAPER_START,      SfxItemPoolFlags::POOLABLE },
+        { SID_PAPER_END,        SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_BRUSH,       SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLSTYLE,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLCOLOR,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLGRADIENT,       SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLHATCH,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBITMAP,     SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLTRANSPARENCE,       SfxItemPoolFlags::POOLABLE },
+        { XATTR_GRADIENTSTEPCOUNT,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_TILE,       SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_POS,        SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_SIZEX,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_SIZEY,      SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_SIZELOG,        SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_TILEOFFSETX,    SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_TILEOFFSETY,    SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_STRETCH,        SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_POSOFFSETX,     SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBMP_POSOFFSETY,     SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLFLOATTRANSPARENCE,  SfxItemPoolFlags::POOLABLE },
+        { XATTR_SECONDARYFILLCOLOR,     SfxItemPoolFlags::POOLABLE },
+        { XATTR_FILLBACKGROUND,     SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_METRIC,      SfxItemPoolFlags::POOLABLE }
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
@@ -4240,7 +4240,7 @@ void OReportController::openZoomDialog()
     {
         static SfxItemInfo aItemInfos[] =
         {
-            { SID_ATTR_ZOOM, SFX_ITEM_POOLABLE }
+            { SID_ATTR_ZOOM, SfxItemPoolFlags::POOLABLE }
         };
         SfxPoolItem* pDefaults[] =
         {

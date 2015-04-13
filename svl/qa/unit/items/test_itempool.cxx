@@ -35,10 +35,10 @@ class PoolItemTest : public CppUnit::TestFixture
 void PoolItemTest::testPool()
 {
     SfxItemInfo aItems[] =
-        { { 0, SFX_ITEM_POOLABLE },
-          { 1, 0 /* not poolable */ },
-          { 2, SFX_ITEM_NOT_POOLABLE },
-          { 3, 0 /* not poolable */}
+        { { 0, SfxItemPoolFlags::POOLABLE },
+          { 1, SfxItemPoolFlags::NONE /* not poolable */ },
+          { 2, SfxItemPoolFlags::NOT_POOLABLE },
+          { 3, SfxItemPoolFlags::NONE /* not poolable */}
         };
 
     SfxItemPool *pPool = new SfxItemPool("testpool", 0, 3, aItems);

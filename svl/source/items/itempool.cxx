@@ -114,15 +114,14 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 
 
 
-bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
+bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, SfxItemPoolFlags nFlag ) const
 {
-    sal_uInt16 nItemFlag = pItemInfos[nPos]._nFlags;
-    return nFlag == (nItemFlag & nFlag);
+    return bool(pItemInfos[nPos]._nFlags & nFlag);
 }
 
 
 
-bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
+bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, SfxItemPoolFlags nFlag ) const
 {
     for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImp->mpSecondary )
     {
@@ -154,7 +153,7 @@ SfxBroadcaster& SfxItemPool::BC()
  * 'pItemInfos' is a USHORT array arranged in the same way, which holds
  *  SlotIds and Flags. These SlotIds can be 0, if the affected Items are
  *  exclusively used in the Core.
- *  The flags allow for e.g. enabling value sharing (SFX_ITEM_POOLABLE).
+ *  The flags allow for e.g. enabling value sharing (SfxItemPoolFlags::POOLABLE).
  *
  *  If the Pool is supposed to hold SfxSetItems, the ctor cannot yet contain
  *  static Defaults. This needs to be done afterwards, using
@@ -657,7 +656,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     // SID or not poolable (new definition)?
     sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( USHRT_MAX == nIndex ||
-         IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
+         IsItemFlag_Impl( nIndex, SfxItemPoolFlags::NOT_POOLABLE ) )
     {
         SFX_ASSERT( USHRT_MAX != nIndex || rItem.Which() != nWhich ||
                     !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE,
@@ -684,7 +683,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 
     // Is this a 'poolable' item - ie. should we re-use and return
     // the same underlying item for equivalent (==) SfxPoolItems?
-    if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
+    if ( IsItemFlag_Impl( nIndex, SfxItemPoolFlags::POOLABLE ) )
     {
         // if is already in a pool, then it is worth checking if it is in this one.
         if ( IsPooledItem(&rItem) )
@@ -745,10 +744,10 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     SFX_ASSERT( rItem.Type() == pNewItem->Type(), nWhich, "unequal types in Put(): no Clone()?" )
     if ( !rItem.ISA(SfxSetItem) )
     {
-        SFX_ASSERT( !IsItemFlag(nWhich, SFX_ITEM_POOLABLE) ||
+        SFX_ASSERT( !IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
                     rItem == *pNewItem,
                     nWhich, "unequal items in Put(): no operator==?" );
-        SFX_ASSERT( !IsItemFlag(*pNewItem, SFX_ITEM_POOLABLE) ||
+        SFX_ASSERT( !IsItemFlag(*pNewItem, SfxItemPoolFlags::POOLABLE) ||
                     *pNewItem == rItem,
                     nWhich, "unequal items in Put(): no operator==?" );
     }
@@ -812,7 +811,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
     // SID or not poolable (new definition)?
     sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
-    if ( bSID || IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
+    if ( bSID || IsItemFlag_Impl( nIndex, SfxItemPoolFlags::NOT_POOLABLE ) )
     {
         SFX_ASSERT( USHRT_MAX != nIndex ||
                     !IsDefaultItem(&rItem), rItem.Which(),
