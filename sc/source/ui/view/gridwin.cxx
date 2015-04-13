@@ -812,7 +812,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         case SortAscending:
         case SortDescending:
         {
-            SCTAB nTab = pViewData->GetTabNo();
             SCCOL nCol = rPos.Col();
             ScSortParam aSortParam;
             pDBData->GetSortParam(aSortParam);
@@ -820,8 +819,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 // out of bound
                 return;
 
-            bool bHasHeader = pDoc->HasColHeader(
-                aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab);
+            bool bHasHeader = pDBData->HasHeader();
 
             aSortParam.bHasHeader = bHasHeader;
             aSortParam.bByRow = true;
