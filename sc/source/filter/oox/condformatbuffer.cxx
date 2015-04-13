@@ -1114,7 +1114,6 @@ void ExtCfRule::finalizeImport()
             else
                 pDataBar->meAxisPosition = databar::AUTOMATIC;
             pDataBar->mbGradient = maModel.mbGradient;
-            pDataBar->mbNeg = !maModel.mbNegativeBarColorSameAsPositive;
             break;
         }
         case AXISCOLOR:
@@ -1127,6 +1126,7 @@ void ExtCfRule::finalizeImport()
         {
             ScDataBarFormatData* pDataBar = mpTarget;
             pDataBar->mpNegativeColor.reset( new ::Color( RgbToRgbComponents(maModel.mnNegativeColor) ) );
+            pDataBar->mbNeg = true;
             break;
         }
         case CFVO:
@@ -1171,7 +1171,6 @@ void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
 {
      mnRuleType = NEGATIVEFILLCOLOR;
      maModel.mnNegativeColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
-     maModel.mbNegativeBarColorSameAsPositive = false;
 }
 
 void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
