@@ -121,8 +121,7 @@ COooFilter::~COooFilter()
 
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::QueryInterface      (IUnknown::QueryInterface)
-//  Summary:    Queries for requested interface
-//  Arguments:  riid
+//  Summary:    Queries for requested interface //  Arguments:  riid
 //              [in] Reference IID of requested interface
 //              ppvObject
 //              [out] Address that receives requested interface pointer

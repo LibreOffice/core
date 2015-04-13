@@ -1629,6 +1629,11 @@ AC_ARG_WITH(system-opencollada,
         [Use openCOLLADA already on system.]),,
     [with_system_opencollada=no])
 
+AC_ARG_WITH(system-collada2gltf,
+    AS_HELP_STRING([--with-system-collada2gltf],
+        [Use collada2gltf already on system.]),,
+    [with_system_collada2gltf=no])
+
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -10342,6 +10347,7 @@ if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
     AC_MSG_RESULT([yes])
     ENABLE_COLLADA=TRUE
     AC_DEFINE(HAVE_FEATURE_COLLADA,1)
+
     AC_MSG_CHECKING([which OPENCOLLADA to use])
     if test "$with_system_opencollada" = "yes"; then
         AC_MSG_RESULT([external])
@@ -10369,7 +10375,35 @@ if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE OPENCOLLADA"
     fi
-    BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
+
+    AC_MSG_CHECKING([which collada2gltf to use])
+    if test "$with_system_collada2gltf" = "yes"; then
+        if test "$with_system_opencollada" = "no"; then
+            AC_MSG_ERROR([the combination of system collada2gltf and internal openCOLLADA is not allowed])
+        fi
+        AC_MSG_RESULT([external])
+        SYSTEM_COLLADA2GLTF=TRUE
+        AS_IF([test -n "$COLLADA2GLTF_CFLAGS"],[],[AC_MSG_ERROR([export COLLADA2GLTF_CFLAGS])])
+        AS_IF([test -n "$COLLADA2GLTF_LIBS"],[],[AC_MSG_ERROR([export COLLADA2GLTF_LIBS])])
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        save_CPPFLAGS=$CPPFLAGS
+        CXXFLAGS="$CXXFLAGS $COLLADA2GLTF_CFLAGS $OPENCOLLADA_CFLAGS $CXXFLAGS_CXX11"
+        CPPFLAGS="$CPPFLAGS $COLLADA2GLTF_CFLAGS $OPENCOLLADA_CFLAGS $CXXFLAGS_CXX11"
+        AC_CHECK_HEADERS(
+                GLTF.h \
+                encodingHelpers.h,
+            [],
+            [AC_MSG_ERROR([collada2gltf headers not found. Install collada2gltf])],
+            [])
+        CXXFLAGS=$save_CXXFLAGS
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+        COLLADA2GLTF_CFLAGS=$(printf '%s' "$COLLADA2GLTF_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    else
+        AC_MSG_RESULT([internal])
+        BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
+    fi
 else
     AC_MSG_RESULT([no])
 fi
@@ -10377,6 +10411,10 @@ AC_SUBST(ENABLE_COLLADA)
 AC_SUBST([OPENCOLLADA_CFLAGS])
 AC_SUBST([OPENCOLLADA_LIBS])
 AC_SUBST([SYSTEM_OPENCOLLADA])
+
+AC_SUBST([COLLADA2GLTF_CFLAGS])
+AC_SUBST([COLLADA2GLTF_LIBS])
+AC_SUBST([SYSTEM_COLLADA2GLTF])
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
