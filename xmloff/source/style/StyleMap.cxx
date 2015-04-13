@@ -24,53 +24,53 @@
 
 #include "StyleMap.hxx"
 
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace osl;
+using namespace css::uno;
+using namespace css::lang;
 
+namespace
+{
+
+class theStyleMapUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theStyleMapUnoTunnelId>
+{};
+
+} // end anonymous namespace
 
 StyleMap::StyleMap()
 {
 }
 
-
-
 StyleMap::~StyleMap()
 {
 }
 
-namespace
-{
-    class theStyleMapUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theStyleMapUnoTunnelId> {};
-}
-
 // XUnoTunnel & co
-const Sequence< sal_Int8 > & StyleMap::getUnoTunnelId() throw()
+const Sequence<sal_Int8>& StyleMap::getUnoTunnelId() throw()
 {
     return theStyleMapUnoTunnelId::get().getSeq();
 }
 
-StyleMap* StyleMap::getImplementation( Reference< XInterface > xInt ) throw()
+StyleMap* StyleMap::getImplementation(Reference<XInterface> xInterface) throw()
 {
-    Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<StyleMap *>(
-                xUT->getSomething( StyleMap::getUnoTunnelId() ) );
-    else
-        return 0;
+    Reference<XUnoTunnel> xUnoTunnel(xInterface, UNO_QUERY);
+    if (xUnoTunnel.is())
+    {
+        return reinterpret_cast<StyleMap*>(xUnoTunnel->getSomething(StyleMap::getUnoTunnelId()));
+    }
+
+    return 0;
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL StyleMap::getSomething(
-        const Sequence< sal_Int8 >& rId )
-    throw( RuntimeException, std::exception )
+sal_Int64 SAL_CALL StyleMap::getSomething(const Sequence<sal_Int8>& rId)
+    throw(RuntimeException, std::exception)
 {
-    if( rId.getLength() == 16 &&
-        0 == memcmp( getUnoTunnelId().getConstArray(),
-                                             rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 &&
+        memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
     {
-        return reinterpret_cast<sal_Int64>( this );
+        return reinterpret_cast<sal_Int64>(this);
     }
+
     return 0;
 }
 
