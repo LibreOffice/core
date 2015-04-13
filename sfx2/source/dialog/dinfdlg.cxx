@@ -2142,11 +2142,11 @@ CustomPropertiesControl::~CustomPropertiesControl()
 
 void CustomPropertiesControl::dispose()
 {
-    m_pVertScroll.clear();
-    m_pPropertiesWin.clear();
-    m_pBody.clear();
-    m_pHeaderBar.clear();
-    m_pVBox.clear();
+    m_pVertScroll.disposeAndClear();
+    m_pPropertiesWin.disposeAndClear();
+    m_pBody.disposeAndClear();
+    m_pHeaderBar.disposeAndClear();
+    m_pVBox.disposeAndClear();
     vcl::Window::dispose();
 }
 

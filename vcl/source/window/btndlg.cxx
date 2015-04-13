@@ -334,7 +334,10 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
         if (it->mnId == nId)
         {
             it->mpPushButton->Hide();
-            it->mpPushButton.clear();
+            if (it->mbOwnButton)
+                it->mpPushButton.disposeAndClear();
+            else
+                it->mpPushButton.clear();
             maItemList.erase(it);
             return;
         }
@@ -348,7 +351,8 @@ void ButtonDialog::Clear()
     for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         it->mpPushButton->Hide();
-        it->mpPushButton.disposeAndClear();
+        if (it->mbOwnButton)
+            it->mpPushButton.disposeAndClear();
     }
 
     maItemList.clear();

@@ -203,9 +203,8 @@ void SAL_CALL SidebarController::disposing (void)
 
     if (mpCurrentDeck)
     {
-        mpCurrentDeck->Dispose();
-        mpCurrentDeck->PrintWindowTree();
         mpCurrentDeck.disposeAndClear();
+//        mpCurrentDeck->PrintWindowTree();
     }
 
     mpTabBar.disposeAndClear();
@@ -535,11 +534,7 @@ void SidebarController::SwitchToDeck (
     {
         // When the deck changes then destroy the deck and all panels
         // and create everything new.
-        if (mpCurrentDeck)
-        {
-            mpCurrentDeck->Dispose();
-            mpCurrentDeck.disposeAndClear();
-        }
+        mpCurrentDeck.disposeAndClear();
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }

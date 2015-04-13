@@ -49,8 +49,6 @@ public:
     virtual ~Deck (void);
     virtual void dispose() SAL_OVERRIDE;
 
-    void Dispose (void);
-
     const ::rtl::OUString& GetId (void) const { return msId;}
     DeckTitleBar* GetTitleBar (void) const;
     Rectangle GetContentArea (void) const;

@@ -296,11 +296,11 @@ AnnotationWindow::~AnnotationWindow()
 
 void AnnotationWindow::dispose()
 {
-    mpMeta.clear();
+    mpMeta.disposeAndClear();
     delete mpOutlinerView;
     delete mpOutliner;
-    mpVScrollbar.clear();
-    mpTextWindow.clear();
+    mpVScrollbar.disposeAndClear();
+    mpTextWindow.disposeAndClear();
     FloatingWindow::dispose();
 }
 

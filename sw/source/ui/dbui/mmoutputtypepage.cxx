@@ -334,7 +334,7 @@ void SwSendMailDialog::dispose()
         }
     }
     delete m_pImpl;
-    m_pStatus.clear();
+    m_pStatus.disposeAndClear();
     m_pTransferStatus.clear();
     m_pPaused.clear();
     m_pProgressBar.clear();

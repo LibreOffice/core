@@ -380,7 +380,7 @@ EditBox::~EditBox()
 void EditBox::dispose()
 {
     pMEdit->Disable();
-    pMEdit.clear();
+    pMEdit.disposeAndClear();
     Control::dispose();
 }
 

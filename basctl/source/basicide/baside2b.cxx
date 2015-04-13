@@ -2875,7 +2875,7 @@ CodeCompleteWindow::~CodeCompleteWindow()
 
 void CodeCompleteWindow::dispose()
 {
-    pListBox.clear();
+    pListBox.disposeAndClear();
     pParent.clear();
     vcl::Window::dispose();
 }

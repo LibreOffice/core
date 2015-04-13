@@ -508,7 +508,7 @@ void OfaSwAutoFmtOptionsPage::dispose()
         delete pCheckButtonData;
         pCheckButtonData = NULL;
     }
-    m_pCheckLB.clear();
+    m_pCheckLB.disposeAndClear();
     m_pEditPB.clear();
     SfxTabPage::dispose();
 }
@@ -1892,8 +1892,8 @@ void OfaQuoteTabPage::dispose()
 {
     delete pCheckButtonData;
     pCheckButtonData = NULL;
-    m_pSwCheckLB.clear();
-    m_pCheckLB.clear();
+    m_pSwCheckLB.disposeAndClear();
+    m_pCheckLB.disposeAndClear();
     m_pSingleTypoCB.clear();
     m_pSglStartQuotePB.clear();
     m_pSglStartExFT.clear();

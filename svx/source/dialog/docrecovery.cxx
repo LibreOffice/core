@@ -932,7 +932,7 @@ RecoveryDialog::~RecoveryDialog()
 
 void RecoveryDialog::dispose()
 {
-    m_pFileListLB.clear();
+    m_pFileListLB.disposeAndClear();
     m_pTitleFT.clear();
     m_pDescrFT.clear();
     m_pProgrParent.clear();

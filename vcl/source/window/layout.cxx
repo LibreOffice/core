@@ -2036,7 +2036,6 @@ void MessageDialog::dispose()
 
     m_pPrimaryMessage.disposeAndClear();
     m_pSecondaryMessage.disposeAndClear();
-    m_pSecondaryMessage.disposeAndClear();
     m_pImage.disposeAndClear();
     m_pGrid.disposeAndClear();
     m_pOwnedActionArea.disposeAndClear();

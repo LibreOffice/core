@@ -80,40 +80,23 @@ Deck::~Deck()
 
 void Deck::dispose()
 {
-    Dispose();
+    SharedPanelContainer aPanels;
+    aPanels.swap(maPanels);
 
     // We have to explicitly trigger the destruction of panels.
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
-    for (size_t i = 0; i < maPanels.size(); i++)
-        maPanels[i]->dispose();
-
+    for (size_t i = 0; i < aPanels.size(); i++)
+        aPanels[i].disposeAndClear();
     maPanels.clear();
-    vcl::Window::dispose();
-}
-
-void Deck::Dispose (void)
-{
-    SharedPanelContainer aPanels;
-    aPanels.swap(maPanels);
-    for (SharedPanelContainer::iterator
-             iPanel(aPanels.begin()),
-             iEnd(aPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
-    {
-        if (*iPanel)
-        {
-            (*iPanel)->Dispose();
-            iPanel->disposeAndClear();
-        }
-    }
 
     mpTitleBar.disposeAndClear();
     mpFiller.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();
     mpScrollContainer.disposeAndClear();
     mpScrollClipWindow.disposeAndClear();
+
+    vcl::Window::dispose();
 }
 
 DeckTitleBar* Deck::GetTitleBar (void) const

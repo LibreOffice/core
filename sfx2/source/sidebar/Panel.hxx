@@ -49,8 +49,6 @@ public:
     virtual ~Panel (void);
     virtual void dispose() SAL_OVERRIDE;
 
-    void Dispose (void);
-
     PanelTitleBar* GetTitleBar (void) const;
     bool IsTitleBarOptional (void) const { return mbIsTitleBarOptional;}
     void SetUIElement (const css::uno::Reference<css::ui::XUIElement>& rxElement);

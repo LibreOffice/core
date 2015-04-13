@@ -76,12 +76,6 @@ Panel::~Panel()
 
 void Panel::dispose()
 {
-    Dispose();
-    vcl::Window::dispose();
-}
-
-void Panel::Dispose (void)
-{
     mxPanelComponent = NULL;
 
     {
@@ -98,6 +92,8 @@ void Panel::Dispose (void)
     }
 
     mpTitleBar.disposeAndClear();
+
+    vcl::Window::dispose();
 }
 
 PanelTitleBar* Panel::GetTitleBar (void) const

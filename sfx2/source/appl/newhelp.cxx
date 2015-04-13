@@ -3080,10 +3080,9 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 void SfxHelpWindow_Impl::dispose()
 {
     SaveConfig();
-    pIndexWin.clear();
-
+    pIndexWin.disposeAndClear();
     pTextWin->CloseFrame();
-    pTextWin.clear();
+    pTextWin.disposeAndClear();
     SplitWindow::dispose();
 }
 

@@ -265,7 +265,7 @@ OWizTypeSelect::~OWizTypeSelect()
 
 void OWizTypeSelect::dispose()
 {
-    m_pTypeControl.clear();
+    m_pTypeControl.disposeAndClear();
     m_pColumnNames.clear();
     m_pColumns.clear();
     m_pAutoType.clear();

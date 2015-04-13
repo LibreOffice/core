@@ -209,7 +209,7 @@ void FmFieldWin::dispose()
         m_pChangeListener->release();
         //  delete m_pChangeListener;
     }
-    pListBox.clear();
+    pListBox.disposeAndClear();
     delete pData;
     SfxFloatingWindow::dispose();
 }

@@ -561,8 +561,8 @@ ChineseDictionaryDialog::~ChineseDictionaryDialog()
 void ChineseDictionaryDialog::dispose()
 {
     m_xContext=0;
-    m_pCT_DictionaryToSimplified.clear();
-    m_pCT_DictionaryToTraditional.clear();
+    m_pCT_DictionaryToSimplified.disposeAndClear();
+    m_pCT_DictionaryToTraditional.disposeAndClear();
     m_pRB_To_Simplified.clear();
     m_pRB_To_Traditional.clear();
     m_pCB_Reverse.clear();
