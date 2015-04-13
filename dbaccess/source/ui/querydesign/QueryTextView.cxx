@@ -73,11 +73,6 @@ OUString OQueryTextView::getStatement()
     return m_pEdit->GetText();
 }
 
-void OQueryTextView::setReadOnly(bool _bReadOnly)
-{
-    m_pEdit->SetReadOnly(_bReadOnly);
-}
-
 void OQueryTextView::clear()
 {
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );

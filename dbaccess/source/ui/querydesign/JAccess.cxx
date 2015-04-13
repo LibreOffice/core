@@ -83,10 +83,6 @@ namespace dbaui
             throw IndexOutOfBoundsException();
         return aRet;
     }
-    bool OJoinDesignViewAccess::isEditable() const
-    {
-        return m_pTableView && !m_pTableView->getDesignView()->getController().isReadOnly();
-    }
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         return AccessibleRole::VIEW_PORT;

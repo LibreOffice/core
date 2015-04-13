@@ -43,11 +43,6 @@ namespace dbaui
         */
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-        /** isEditable returns the current editable state
-            @return true if it is editable otherwise false
-        */
-        bool isEditable() const;
-
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
     public:
         OTableWindowAccess( OTableWindow* _pTable);

@@ -34,11 +34,6 @@ namespace dbaui
     {
         OJoinTableView* m_pTableView; // the window which I should give accessibility to
 
-    protected:
-        /** isEditable returns the current editable state
-            @return true if the controller is not readonly otherwise false
-        */
-        bool isEditable() const;
     public:
         /** OJoinDesignViewAccess needs a valid view
         */

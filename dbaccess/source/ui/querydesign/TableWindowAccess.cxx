@@ -229,10 +229,6 @@ namespace dbaui
         }
         return AccessibleRelation();
     }
-    bool OTableWindowAccess::isEditable() const
-    {
-        return m_pTable && !m_pTable->getTableView()->getDesignView()->getController().isReadOnly();
-    }
     OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException, std::exception)
     {
         return getAccessibleName(  );

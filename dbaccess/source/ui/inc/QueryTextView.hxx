@@ -41,8 +41,6 @@ namespace dbaui
         void paste();
         // clears the whole query
         void clear();
-        // set the view readonly or not
-        void setReadOnly(bool _bReadOnly);
         // set the statement for representation
         void setStatement(const OUString& _rsStatement);
         OUString getStatement();
