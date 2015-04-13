@@ -89,7 +89,8 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider7" oor:op="replace" install:module="neon">
+            <node oor:name="Provider7" oor:op="replace"
+                install:module="neon_gnomevfs">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -155,7 +156,8 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider13" oor:op="replace" install:module="neon">
+            <node oor:name="Provider13" oor:op="replace"
+                install:module="neon_gnomevfs">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
