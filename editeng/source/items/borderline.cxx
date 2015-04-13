@@ -285,6 +285,9 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
         case INSET:
             return (fWidth - INSET_line2) / 2.0;
 
+        case css::table::BorderLineStyle::NONE:
+            return 0;
+
         default:
             assert(false); // should only be called for known border style
             return 0;
