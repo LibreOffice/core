@@ -98,8 +98,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 using ::com::sun::star::util::SearchOptions;
 
-#define SWSRCVIEWFLAGS ( SFX_VIEW_CAN_PRINT|\
-                      SFX_VIEW_NO_NEWWINDOW )
+#define SWSRCVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW )
 
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))
 

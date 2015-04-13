@@ -119,8 +119,7 @@ using namespace ::com::sun::star::scanner;
 
 extern bool g_bNoInterrupt;       // in swmodule.cxx
 
-#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
-                      SFX_VIEW_HAS_PRINTOPTIONS)
+#define SWVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS)
 
 // Statics. OMG.
 
