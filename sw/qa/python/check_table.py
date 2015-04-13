@@ -333,6 +333,12 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = True
         self.assertEqual( xTable.Data, ((5,6), (8,9)))
         xTable.Data = ((55,66), (88,99))
+        xTable.ChartColumnAsLabel = True
+        xTable.ChartRowAsLabel = False
+        self.assertEqual( xTable.Data, ((2,3), (55,66), (88,99)))
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = True
+        self.assertEqual( xTable.Data, ((4,55,66), (7,88,99)))
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
         self.assertEqual( xTable.Data, ((1,2,3), (4,55,66), (7,88,99)))
