@@ -154,7 +154,7 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
             the thousands separator is shown or not
 
         @param bRed
-            show negative number in red colored if <TRUE/>
+            show negative number in red colored if `TRUE`
 
         @param nDecimals
             how many digits are shown after the decimal point
