@@ -122,6 +122,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/TypeDetection/UISort-math.xcu \
 	org/openoffice/ucb/Configuration-gio.xcu \
 	org/openoffice/ucb/Configuration-neon.xcu \
+	org/openoffice/ucb/Configuration-neon_gnomevfs.xcu \
 	org/openoffice/ucb/Configuration-win.xcu \
 ))
 
