@@ -73,7 +73,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
 
     ::osl::MutexGuard aGuard( m_aMutex );
     ::std::vector< OUString > tables;
-    if (!m_pMetaDataHelper->getTableStrings(m_pConnection, tables))
+    if (!connectivity::mork::MDatabaseMetaDataHelper::getTableStrings(m_pConnection, tables))
     {
         ::connectivity::SharedResources aResources;
         // TODO:
@@ -943,7 +943,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // aRows = m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern );
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
-    if ( !m_pMetaDataHelper->getTables( m_pConnection, tableNamePattern, _rRows ) ) {
+    if ( !connectivity::mork::MDatabaseMetaDataHelper::getTables( m_pConnection, tableNamePattern, _rRows ) ) {
         ::connectivity::SharedResources aResources;
         // TODO:
         // get better message here?
@@ -963,7 +963,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     Reference< XResultSet > xRef = pResult;
 
     ::std::vector< OUString > tables;
-    if ( !m_pMetaDataHelper->getTableStrings( m_pConnection, tables) )
+    if ( !connectivity::mork::MDatabaseMetaDataHelper::getTableStrings( m_pConnection, tables) )
     {
         ::connectivity::SharedResources aResources;
         // TODO:

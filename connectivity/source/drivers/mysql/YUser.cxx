@@ -281,7 +281,7 @@ void SAL_CALL OMySQLUser::changePassword( const OUString& /*oldPassword*/, const
     }
 }
 
-OUString OMySQLUser::getPrivilegeString(sal_Int32 nRights) const
+OUString OMySQLUser::getPrivilegeString(sal_Int32 nRights)
 {
     OUString sPrivs;
     if((nRights & Privilege::INSERT) == Privilege::INSERT)

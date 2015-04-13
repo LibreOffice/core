@@ -695,13 +695,13 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
     return Any();
 }
 
-sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue=1;
     return nValue;
 }
 
-OUString ODatabaseMetaDataResultSet::getCursorName() const throw(SQLException, RuntimeException)
+OUString ODatabaseMetaDataResultSet::getCursorName() throw(SQLException, RuntimeException)
 {
     return OUString();
 }

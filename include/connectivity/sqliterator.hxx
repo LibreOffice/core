@@ -274,7 +274,7 @@ namespace connectivity
         bool getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
-        bool isTableNode(const OSQLParseNode* _pTableNode) const;
+        static bool isTableNode(const OSQLParseNode* _pTableNode);
 
         // tries to find the correct type of the function
         sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );

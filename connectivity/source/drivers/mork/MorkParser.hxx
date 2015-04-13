@@ -99,7 +99,7 @@ public:
 
     /// Returns all rows under specified scope
 
-    MorkRowMap *getRows( int rowScope, RowScopeMap *table );
+    static MorkRowMap *getRows( int rowScope, RowScopeMap *table );
 
     /// Return value of specified value oid
 
@@ -121,10 +121,10 @@ protected: // Members
 
     void initVars();
 
-    bool isWhiteSpace( char c );
+    static bool isWhiteSpace( char c );
     char nextChar();
 
-    void parseScopeId( const std::string &TextId, int *Id, int *Scope );
+    static void parseScopeId( const std::string &TextId, int *Id, int *Scope );
     void setCurrentRow( int TableScope, int TableId, int RowScope, int RowId );
 
     // Parse methods

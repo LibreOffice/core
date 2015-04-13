@@ -107,7 +107,7 @@ namespace dbtools
     }
 
 
-    void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const
+    void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component )
     {
         if ( !io_appendTo.isEmpty() )
         {

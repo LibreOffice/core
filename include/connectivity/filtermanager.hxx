@@ -97,7 +97,7 @@ namespace dbtools
 
         /** appends one filter component to the statement in our composer
         */
-        void    appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const;
+        static void      appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component );
 
         /// checks whether there is only one (or even no) non-empty filter component
         bool    isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const;

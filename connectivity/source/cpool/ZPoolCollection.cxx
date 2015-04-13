@@ -326,7 +326,7 @@ Reference< XInterface > OPoolCollection::createWithServiceFactory(const OUString
 }
 
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,
-                            const OUString& _rPath) const
+                            const OUString& _rPath)
 {
     OSL_ASSERT(_rxConfProvider.is());
     Sequence< Any > args(1);
@@ -344,7 +344,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
     return xInterface;
 }
 
-Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) const throw()
+Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) throw()
 {
     Reference< XHierarchicalNameAccess > xHierarchyAccess(_xTreeNode, UNO_QUERY);
     Reference< XNameAccess > xDirectAccess(_xTreeNode, UNO_QUERY);

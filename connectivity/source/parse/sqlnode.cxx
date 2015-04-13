@@ -225,7 +225,7 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 //= OSQLParseNode
 
 
-OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString) const
+OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
     Date aDate = DBTypeConversion::toDate(rString);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -237,7 +237,7 @@ OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, c
 }
 
 
-OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const
+OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
     DateTime aDate = DBTypeConversion::toDateTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -249,7 +249,7 @@ OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rPara
 }
 
 
-OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const
+OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
     css::util::Time aTime = DBTypeConversion::toTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());

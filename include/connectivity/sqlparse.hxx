@@ -221,7 +221,7 @@ namespace connectivity
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
 
         void error(const sal_Char *fmt);
-        int SQLlex();
+        static int SQLlex();
 #ifdef YYBISON
         void setParseTree(OSQLParseNode * pNewParseTree);
 
@@ -230,7 +230,7 @@ namespace connectivity
         bool inPredicateCheck() const {return m_xField.is();}
         const OUString& getFieldName() const {return m_sFieldName;}
 
-        void reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank);
+        static void reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank);
          // does not change the pLiteral argument
         sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2);
 

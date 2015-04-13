@@ -437,9 +437,9 @@ namespace connectivity
         bool impl_parseTableNameNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
         bool addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
-        OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
-        OUString convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
-        OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
+        static OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString);
+        static OUString convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString);
+        static OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString);
         void parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };
 

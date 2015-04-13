@@ -86,8 +86,8 @@ namespace connectivity
             static sal_Int32 getResultSetConcurrency() { return css::sdbc::ResultSetConcurrency::READ_ONLY; }
             static sal_Int32 getResultSetType()        { return css::sdbc::ResultSetType::FORWARD_ONLY; }
             static sal_Int32 getFetchDirection()       { return css::sdbc::FetchDirection::FORWARD; }
-            sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static sal_Int32 getFetchSize()     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static OUString getCursorName()     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             sal_Int32 mapColumn (sal_Int32  column);

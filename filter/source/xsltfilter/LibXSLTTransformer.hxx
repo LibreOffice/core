@@ -175,10 +175,8 @@ namespace XSLT
         Sequence<sal_Int8> m_readBuf;
         Sequence<sal_Int8> m_writeBuf;
 
-        virtual void
-        execute() SAL_OVERRIDE;
-        void SAL_CALL
-        registerExtensionModule();
+        virtual void execute() SAL_OVERRIDE;
+        static void SAL_CALL registerExtensionModule();
     };
 
 }

@@ -146,7 +146,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || aParentName == "svtools::ExtendedColorConfig" || aParentName == "SvtMiscOptions"
         || aParentName == "SvtAccessibilityOptions" || aParentName == "svtools::ColorConfig"
         || aParentName == "SvtOptionsDrawinglayer" || aParentName == "SvtMenuOptions"
-        || aParentName == "SvtToolPanelOptions" || aParentName == "SvtSlideSorterBarOptions")
+        || aParentName == "SvtToolPanelOptions" || aParentName == "SvtSlideSorterBarOptions"
+        || aParentName == "connectivity::SharedResources" )
     {
         return true;
     }
@@ -178,7 +179,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", true);
 
 }
 

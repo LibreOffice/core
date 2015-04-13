@@ -132,7 +132,7 @@ namespace connectivity
             bool                                m_bShowDeleted;
             bool                                m_bIsCount;
 
-            void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
+            static void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
             //sal_Bool evaluate();
 

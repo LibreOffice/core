@@ -1976,7 +1976,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     return pHavingClause;
 }
 
-bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
+bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode)
 {
     return _pTableNode && (SQL_ISRULE(_pTableNode,catalog_name) ||
                            SQL_ISRULE(_pTableNode,schema_name)  ||

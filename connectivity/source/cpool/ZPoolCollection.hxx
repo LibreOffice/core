@@ -86,10 +86,10 @@ namespace connectivity
         // some configuration helper methods
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const OUString& _rPath) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getConfigPoolRoot();
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
-                                                                                                    const OUString& _rPath) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const OUString& _rPath,
-                                                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) const throw();
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
+                                                                                                    const OUString& _rPath);
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const OUString& _rPath,
+                                                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) throw();
         bool isPoolingEnabled();
         bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);

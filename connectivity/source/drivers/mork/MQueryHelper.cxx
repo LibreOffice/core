@@ -223,7 +223,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
-        Rows = xMork->getRows( 0x80, &tableIter->second );
+        Rows = MorkParser::getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
             // Iterate all rows

@@ -276,7 +276,7 @@ protected:
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void checkPendingUpdate() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void checkPendingUpdate() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getCurrentCardNumber();
 
 public:

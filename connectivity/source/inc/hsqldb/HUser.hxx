@@ -33,7 +33,7 @@ namespace connectivity
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
-            OUString getPrivilegeString(sal_Int32 nRights) const;
+            static OUString getPrivilegeString(sal_Int32 nRights);
             // return the privileges and additional the grant rights
             void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
