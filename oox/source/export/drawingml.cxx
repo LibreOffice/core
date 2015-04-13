@@ -1659,7 +1659,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             }
             else if ( aPropName == "StartWith" )
             {
-                nStartWith = *( (sal_Int16*)pValue );
+                nStartWith = *static_cast<sal_Int16 const *>(pValue);
             }
             else if ( aPropName == "GraphicURL" )
             {
