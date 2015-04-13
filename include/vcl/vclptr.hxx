@@ -125,6 +125,20 @@ public:
     {
     }
 
+    /**
+     * A construction helper for VclPtr. Since VclPtr types are created
+     * with a reference-count of one - to help fit into the existing
+     * code-flow; this helps us to construct them easily.
+     *
+     * For more details on the design please see vcl/README.lifecycle
+     *
+     * @param reference_type must be a subclass of vcl::Window
+     */
+    template<typename... Arg> static VclPtr< reference_type > Create(Arg &&... arg)
+    {
+        return VclPtr< reference_type >( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE );
+    }
+
     /** Probably most common used: handle->someBodyOp().
      */
     inline reference_type * SAL_CALL operator->() const
@@ -224,9 +238,10 @@ public:
 }; // class VclPtr
 
 /**
- * A construction helper for VclPtr. Since VclPtr types are created
- * with a reference-count of one - to help fit into the existing
- * code-flow; this helps us to construct them easily.
+ * A construction helper for a temporary VclPtr. Since VclPtr types
+ * are created with a reference-count of one - to help fit into
+ * the existing code-flow; this helps us to construct them easily.
+ * see also VclPtr::Create and ScopedVclPtr
  *
  * For more details on the design please see vcl/README.lifecycle
  *
@@ -295,6 +310,7 @@ public:
         VclPtr<reference_type>::disposeAndClear();
         assert(VclPtr<reference_type>::get() == nullptr); // make sure there are no lingering references
     }
+
 private:
     // Most likely we don't want this default copy-construtor.
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;

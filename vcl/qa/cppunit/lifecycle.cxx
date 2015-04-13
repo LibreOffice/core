@@ -59,7 +59,7 @@ void LifecycleTest::testCast()
 
 void LifecycleTest::testVirtualDevice()
 {
-    VclPtrInstance< VirtualDevice > pVDev;
+    VclPtr<VirtualDevice> pVDev = VclPtr< VirtualDevice >::Create();
     ScopedVclPtrInstance< VirtualDevice > pVDev2;
     VclPtrInstance<VirtualDevice> pVDev3;
     VclPtrInstance<VirtualDevice> pVDev4( 1 );
