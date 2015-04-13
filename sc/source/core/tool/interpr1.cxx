@@ -3254,15 +3254,20 @@ void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
     OUString aStr = GetString().getString();
-    //"classic" ByteString conversion flags
-    const sal_uInt32 convertFlags =
-        RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
-        RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
-        RTL_UNICODETOTEXT_FLAGS_FLUSH |
-        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
-        RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
-        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    PushInt( (unsigned char) OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar() );
+    if (aStr.isEmpty())
+        PushInt(0);
+    else
+    {
+        //"classic" ByteString conversion flags
+        const sal_uInt32 convertFlags =
+            RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
+            RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
+            RTL_UNICODETOTEXT_FLAGS_FLUSH |
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
+            RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
+        PushInt( (unsigned char) OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar() );
+    }
 }
 
 
