@@ -352,6 +352,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
             aXFillColorItem.PutValue(*pXFillColorItem);
             rToSet.Put(aXFillColorItem);
+            //set old-school brush color if we later encounter the
+            //MID_BACK_COLOR_TRANSPARENCY case below
+            aBrush = getSvxBrushItemFromSourceSet(rToSet, RES_BACKGROUND, false);
         }
         else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && (pCol || pRGBCol))
         {
