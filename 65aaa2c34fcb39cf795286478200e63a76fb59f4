@@ -16,6 +16,24 @@
       "revId": "65aaa2c34fcb39cf795286478200e63a76fb59f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a26ad4f_c22abc2c",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-13T08:18:22Z",
+      "side": 1,
+      "message": "I\u0027ll reply to myself: it will be ignored.",
+      "parentUuid": "1a26ad4f_023194a2",
+      "revId": "65aaa2c34fcb39cf795286478200e63a76fb59f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
