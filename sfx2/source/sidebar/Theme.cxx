@@ -390,13 +390,13 @@ void Theme::UpdateTheme (void)
 void SAL_CALL Theme::disposing (void)
 {
     ChangeListeners aListeners;
-    maChangeListeners.swap(aListeners);
+    aListeners.swap(maChangeListeners);
 
     const lang::EventObject aEvent (static_cast<XWeak*>(this));
 
     for (ChangeListeners::const_iterator
-             iContainer(maChangeListeners.begin()),
-             iContainerEnd(maChangeListeners.end());
+             iContainer(aListeners.begin()),
+             iContainerEnd(aListeners.end());
          iContainer != iContainerEnd;
          ++iContainer)
     {
