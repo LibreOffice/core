@@ -57,7 +57,7 @@ public:
     virtual ~AreaPropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
-    static AreaPropertyPanel* Create(
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -147,7 +147,7 @@ private:
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
 
     // for transparency gradient
-    PopupControl* CreateTransparencyGradientControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK( ClickTrGrHdl_Impl, ToolBox* );
 
     // constructor/destuctor

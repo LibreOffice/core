@@ -232,7 +232,7 @@ void PosSizePropertyPanel::SetupIcons(void)
 
 
 
-PosSizePropertyPanel* PosSizePropertyPanel::Create (
+VclPtr<vcl::Window> PosSizePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -245,11 +245,13 @@ PosSizePropertyPanel* PosSizePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", NULL, 2);
 
-    return new PosSizePropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings,
-        rxSidebar);
+    return VclPtr<vcl::Window>(
+                new PosSizePropertyPanel(
+                        pParent,
+                        rxFrame,
+                        pBindings,
+                        rxSidebar),
+                SAL_NO_ACQUIRE);
 }
 
 

@@ -42,7 +42,7 @@ public:
     virtual ~GraphicPropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
-    static GraphicPropertyPanel* Create(
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);

@@ -55,7 +55,7 @@ namespace svx {namespace sidebar {
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
 
-ParaPropertyPanel* ParaPropertyPanel::Create (
+VclPtr<vcl::Window> ParaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -68,11 +68,13 @@ ParaPropertyPanel* ParaPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", NULL, 2);
 
-    return new ParaPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings,
-        rxSidebar);
+    return VclPtr<vcl::Window>(
+        new ParaPropertyPanel(
+                pParent,
+                rxFrame,
+                pBindings,
+                rxSidebar),
+        SAL_NO_ACQUIRE);
 }
 
 void ParaPropertyPanel::HandleContextChange (

@@ -493,9 +493,9 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 }
 
 
-PopupControl* AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
+VclPtr<PopupControl> AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
 {
-    return new AreaTransparencyGradientControl(pParent, *this);
+    return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
 }
 
 
@@ -515,7 +515,7 @@ void AreaPropertyPanel::SetupIcons(void)
 
 
 
-AreaPropertyPanel* AreaPropertyPanel::Create (
+VclPtr<vcl::Window> AreaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -527,10 +527,12 @@ AreaPropertyPanel* AreaPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
 
-    return new AreaPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+        new AreaPropertyPanel(
+                pParent,
+                rxFrame,
+                pBindings),
+        SAL_NO_ACQUIRE);
 }
 
 

@@ -49,7 +49,7 @@ public:
     virtual ~TextPropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
-    static TextPropertyPanel* Create (
+    static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
@@ -107,8 +107,8 @@ private:
         const ::sfx2::sidebar::EnumContext& rContext);
 
 
-    PopupControl* CreateCharacterSpacingControl (PopupContainer* pParent);
-    PopupControl* CreateUnderlinePopupControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateCharacterSpacingControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateUnderlinePopupControl (PopupContainer* pParent);
     DECL_LINK(SpacingClickHdl, ToolBox*);
     DECL_LINK(UnderlineClickHdl, ToolBox* );
 

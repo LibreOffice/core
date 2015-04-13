@@ -286,7 +286,7 @@ void LinePropertyPanel::SetupIcons(void)
     }
 }
 
-LinePropertyPanel* LinePropertyPanel::Create (
+VclPtr<vcl::Window> LinePropertyPanel::Create (
     vcl::Window* pParent,
     const uno::Reference<frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -298,7 +298,9 @@ LinePropertyPanel* LinePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", NULL, 2);
 
-    return new LinePropertyPanel(pParent, rxFrame, pBindings);
+    return VclPtr<vcl::Window>(
+                new LinePropertyPanel(pParent, rxFrame, pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 void LinePropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
@@ -769,9 +771,9 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
     return 0L;
 }
 
-PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
+VclPtr<PopupControl> LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
 {
-    return new LineWidthControl(pParent, *this);
+    return VclPtrInstance<LineWidthControl>(pParent, *this);
 }
 
 void LinePropertyPanel::EndLineWidthPopupMode (void)

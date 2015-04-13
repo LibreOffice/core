@@ -90,11 +90,11 @@ void Deck::dispose()
         aPanels[i].disposeAndClear();
     maPanels.clear();
 
-    mpTitleBar.disposeAndClear();
     mpFiller.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();
     mpScrollContainer.disposeAndClear();
     mpScrollClipWindow.disposeAndClear();
+    mpTitleBar.disposeAndClear();
 
     vcl::Window::dispose();
 }

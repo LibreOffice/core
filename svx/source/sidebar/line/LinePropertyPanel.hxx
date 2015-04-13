@@ -63,7 +63,7 @@ public:
     virtual ~LinePropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
-    static LinePropertyPanel* Create(
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -161,7 +161,7 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
-    PopupControl* CreateLineWidthPopupControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };
 
 } } // end of namespace svx::sidebar

@@ -137,7 +137,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             NULL);
 
-    vcl::Window* pControl = NULL;
+    VclPtr<vcl::Window> pControl;
     ui::LayoutSize aLayoutSize (-1,-1,-1);
 
     if (rsResourceURL.endsWith("/TextPropertyPanel"))
@@ -166,25 +166,25 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/InsertPropertyPanel"))
     {
-        pControl = new InsertPropertyPanel(pParentWindow, xFrame);
+        pControl.reset(VclPtr<InsertPropertyPanel>::Create(pParentWindow, xFrame));
     }
     else if (rsResourceURL.endsWith("/GalleryPanel"))
     {
-        pControl = new GalleryControl(pBindings, pParentWindow);
+        pControl.reset(VclPtr<GalleryControl>::Create(pBindings, pParentWindow));
         aLayoutSize = ui::LayoutSize(300,-1,400);
     }
     else if (rsResourceURL.endsWith("/StyleListPanel"))
     {
-        pControl = new SfxTemplatePanelControl(pBindings, pParentWindow);
+        pControl.reset(VclPtr<SfxTemplatePanelControl>::Create(pBindings, pParentWindow));
         aLayoutSize = ui::LayoutSize(0,-1,-1);
     }
     else if (rsResourceURL.endsWith("/EmptyPanel"))
     {
-        pControl = new EmptyPanel(pParentWindow);
+        pControl.reset(VclPtr<EmptyPanel>::Create(pParentWindow));
         aLayoutSize = ui::LayoutSize(20,-1, 50);
     }
 
-    if (pControl != NULL)
+    if (pControl)
     {
         return sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,

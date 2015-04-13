@@ -91,7 +91,7 @@ protected:
 
 private:
     VclPtr<vcl::Window> mpParent;
-    ::boost::function<PopupControl*(PopupContainer*)> maControlCreator;
+    ::boost::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
     ::boost::function<void(void)> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
     VclPtr<PopupContainer> mxContainer;
