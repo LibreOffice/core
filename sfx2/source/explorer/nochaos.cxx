@@ -41,7 +41,7 @@ class CntStaticPoolDefaults_Impl: private boost::noncopyable
     SfxItemInfo*  m_pItemInfos;
 
 private:
-    inline void Insert( SfxPoolItem* pItem, sal_uInt16 nSID, sal_uInt16 nFlags );
+    inline void Insert( SfxPoolItem* pItem, sal_uInt16 nSID, SfxItemPoolFlags nFlags );
 
 public:
     CntStaticPoolDefaults_Impl( CntItemPool* pPool );
@@ -163,7 +163,7 @@ sal_uInt16 CntItemPool::Release()
 
 inline void CntStaticPoolDefaults_Impl::Insert(
          SfxPoolItem* pItem,        /* Static Pool Default Item */
-         sal_uInt16 nSID, sal_uInt16 nFlags  /* Item Info */    )
+         sal_uInt16 nSID, SfxItemPoolFlags nFlags  /* Item Info */    )
 {
     sal_uInt16 nPos = pItem->Which() - WID_CHAOS_START;
 
@@ -193,7 +193,7 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
     Insert(
         new SfxStringItem( WID_CHAOS_START, OUString() ),
         0,
-        SFX_ITEM_POOLABLE );
+        SfxItemPoolFlags::POOLABLE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

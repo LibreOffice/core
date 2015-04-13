@@ -798,11 +798,11 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { 0, 0 },
-        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
-        { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
+        { 0, SfxItemPoolFlags::NONE },
+        { SID_ATTR_NUMBERFORMAT_VALUE,      SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_INFO,       SfxItemPoolFlags::POOLABLE }
     };
     static const sal_uInt16 aAttrMap[] =
     {

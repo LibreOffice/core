@@ -26,16 +26,16 @@
 
 static SfxItemInfo const aMsgItemInfos[] =
 {
-    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
-    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - stop using this!
-    { SID_SORT,                  SFX_ITEM_POOLABLE },   // SCITEM_SORTDATA
-    { SID_QUERY,                 SFX_ITEM_POOLABLE },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             SFX_ITEM_POOLABLE },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           SFX_ITEM_POOLABLE },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           SFX_ITEM_POOLABLE },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 SFX_ITEM_POOLABLE },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           SFX_ITEM_POOLABLE },   // SCITEM_USERLIST
-    { SID_PRINTER_NOTFOUND_WARN, SFX_ITEM_POOLABLE }    // SCITEM_PRINTWARN
+    { 0,                         SfxItemPoolFlags::POOLABLE },   // SCITEM_STRING
+    { 0,                         SfxItemPoolFlags::POOLABLE },   // SCITEM_SEARCHDATA - stop using this!
+    { SID_SORT,                  SfxItemPoolFlags::POOLABLE },   // SCITEM_SORTDATA
+    { SID_QUERY,                 SfxItemPoolFlags::POOLABLE },   // SCITEM_QUERYDATA
+    { SID_SUBTOTALS,             SfxItemPoolFlags::POOLABLE },   // SCITEM_SUBTDATA
+    { SID_CONSOLIDATE,           SfxItemPoolFlags::POOLABLE },   // SCITEM_CONSOLIDATEDATA
+    { SID_PIVOT_TABLE,           SfxItemPoolFlags::POOLABLE },   // SCITEM_PIVOTDATA
+    { SID_SOLVE,                 SfxItemPoolFlags::POOLABLE },   // SCITEM_SOLVEDATA
+    { SID_SCUSERLISTS,           SfxItemPoolFlags::POOLABLE },   // SCITEM_USERLIST
+    { SID_PRINTER_NOTFOUND_WARN, SfxItemPoolFlags::POOLABLE }    // SCITEM_PRINTWARN
 };
 
 ScMessagePool::ScMessagePool()

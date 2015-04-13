@@ -161,61 +161,61 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 }
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
-        { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },       // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },         // EE_PARA_NUMBULL
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_HYPHENATE
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_BULLETSTATE
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },         // EE_PARA_OUTLLEVEL
-        { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },            // EE_PARA_BULLET
-        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_LRSPACE
-        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_ULSPACE
-        { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },         // EE_PARA_SBL
-        { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },            // EE_PARA_JUST
-        { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },                // EE_PARA_TABS
-        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // EE_PARA_JUST_METHOD
-        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },      // EE_PARA_VER_JUST
-        { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_WEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_UNDERLINE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_POSTURE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CONTOUR, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_SHADOWED, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
-        { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // EE_CHAR_CASEMAP
-        { SID_ATTR_CHAR_GRABBAG, SFX_ITEM_POOLABLE },       // EE_CHAR_GRABBAG
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_BKGCOLOR
-        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
-        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
-        { SID_FIELD, SFX_ITEM_POOLABLE }
+        { SID_ATTR_FRAMEDIRECTION, SfxItemPoolFlags::POOLABLE },         // EE_PARA_WRITINGDIR
+        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, SfxItemPoolFlags::POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_FORBIDDEN_RULES, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_PARA_SCRIPTSPACE, SfxItemPoolFlags::POOLABLE },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, SfxItemPoolFlags::POOLABLE },         // EE_PARA_NUMBULL
+        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_HYPHENATE
+        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_BULLETSTATE
+        { 0, SfxItemPoolFlags::POOLABLE },                               // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_OUTLLEVEL, SfxItemPoolFlags::POOLABLE },         // EE_PARA_OUTLLEVEL
+        { SID_ATTR_PARA_BULLET, SfxItemPoolFlags::POOLABLE },            // EE_PARA_BULLET
+        { SID_ATTR_LRSPACE, SfxItemPoolFlags::POOLABLE },                // EE_PARA_LRSPACE
+        { SID_ATTR_ULSPACE, SfxItemPoolFlags::POOLABLE },                // EE_PARA_ULSPACE
+        { SID_ATTR_PARA_LINESPACE, SfxItemPoolFlags::POOLABLE },         // EE_PARA_SBL
+        { SID_ATTR_PARA_ADJUST, SfxItemPoolFlags::POOLABLE },            // EE_PARA_JUST
+        { SID_ATTR_TABSTOP, SfxItemPoolFlags::POOLABLE },                // EE_PARA_TABS
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SfxItemPoolFlags::POOLABLE }, // EE_PARA_JUST_METHOD
+        { SID_ATTR_ALIGN_VER_JUSTIFY, SfxItemPoolFlags::POOLABLE },      // EE_PARA_VER_JUST
+        { SID_ATTR_CHAR_COLOR, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_FONT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_SCALEWIDTH, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_WEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_UNDERLINE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_STRIKEOUT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_POSTURE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CONTOUR, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_SHADOWED, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_ESCAPEMENT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_AUTOKERN, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_KERNING, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_WORDLINEMODE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_LANGUAGE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CJK_LANGUAGE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CTL_LANGUAGE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CJK_FONT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CTL_FONT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CJK_WEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CTL_WEIGHT, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CJK_POSTURE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CTL_POSTURE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_EMPHASISMARK, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_RELIEF, SfxItemPoolFlags::POOLABLE },
+        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_RUBI_DUMMY
+        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_XMLATTRIBS
+        { SID_ATTR_CHAR_OVERLINE, SfxItemPoolFlags::POOLABLE },
+        { SID_ATTR_CHAR_CASEMAP, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_CASEMAP
+        { SID_ATTR_CHAR_GRABBAG, SfxItemPoolFlags::POOLABLE },       // EE_CHAR_GRABBAG
+        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_CHAR_BKGCOLOR
+        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_TAB
+        { 0, SfxItemPoolFlags::POOLABLE },                           // EE_FEATURE_LINEBR
+        { SID_ATTR_CHAR_CHARSETCOLOR, SfxItemPoolFlags::POOLABLE },  // EE_FEATURE_NOTCONV
+        { SID_FIELD, SfxItemPoolFlags::POOLABLE }
 };
 
 const sal_uInt16 aV1Map[] = {

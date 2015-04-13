@@ -198,7 +198,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
                 // ! Poolable is not even saved in the Pool
                 // And itemsets/plain-items depending on the round
-                if ( *itrArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
+                if ( *itrArr && IsItemFlag(**ppDefItem, SfxItemPoolFlags::POOLABLE) &&
                      pImp->bInSetItem == (bool) (*ppDefItem)->ISA(SfxSetItem) )
                 {
                     // Own signature, global WhichId and ItemVersion
@@ -720,7 +720,7 @@ sal_uInt16 SfxItemPool::GetSize_Impl() const
  * Loads surrogate from 'rStream' and returns the corresponding SfxPoolItem
  * from the rRefPool.
  * If the surrogate contained within the stream == SFX_ITEMS_DIRECT
- * (!SFX_ITEM_POOLABLE), we return 0 and the Item is to be loaded directly
+ * (!SfxItemPoolFlags::POOLABLE), we return 0 and the Item is to be loaded directly
  * from the stream.
  * We also return 0 for 0xfffffff0 (SFX_ITEMS_NULL) and rWhich is set to 0,
  * making the Items unavailable.
@@ -852,7 +852,7 @@ bool SfxItemPool::StoreSurrogate ( SvStream& rStream, const SfxPoolItem*  pItem)
 {
     if ( pItem )
     {
-        bool bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
+        bool bRealSurrogate = IsItemFlag(*pItem, SfxItemPoolFlags::POOLABLE);
         rStream.WriteUInt32( bRealSurrogate
                         ? GetSurrogate( pItem )
                         : SFX_ITEMS_DIRECT  );
