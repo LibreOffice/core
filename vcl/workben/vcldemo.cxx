@@ -1623,7 +1623,7 @@ public:
             aMainWin->SetText("Interactive VCL demo #1");
 
             if (bWidgets)
-                xWidgets = VclPtrInstance< DemoWidgets > ();
+                xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();
             else

@@ -1142,7 +1142,7 @@ bool OpenGLContext::initWindow()
     {
         if( !m_pChildWindow )
         {
-            m_pChildWindow = VclPtrInstance<SystemChildWindow>(mpWindow, 0, &winData, false);
+            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
         }
         pChildSysData = m_pChildWindow->GetSystemData();
     }
