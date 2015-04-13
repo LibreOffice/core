@@ -204,6 +204,9 @@ public:
 
     void                    ClearUndoBuffer();
 
+    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const SAL_OVERRIDE;
+    virtual bool isTiledRendering() const SAL_OVERRIDE;
+
 protected:
 
     SdDrawDocument*         mpDoc;

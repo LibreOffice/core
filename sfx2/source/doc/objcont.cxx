@@ -646,6 +646,7 @@ bool SfxObjectShell::IsModifyPasswordEntered()
 void SfxObjectShell::libreOfficeKitCallback(SAL_UNUSED_PARAMETER int nType, SAL_UNUSED_PARAMETER const char* pPayload) const {
     SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
 }
+
 bool SfxObjectShell::isTiledRendering() const {
     SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
     return false;

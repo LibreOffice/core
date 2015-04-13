@@ -430,6 +430,9 @@ public:
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) SAL_OVERRIDE;
 
     void SnapVisArea( Rectangle& rRect ) const;
+
+    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const SAL_OVERRIDE;
+    virtual bool isTiledRendering() const SAL_OVERRIDE;
 };
 
 void UpdateAcceptChangesDialog();

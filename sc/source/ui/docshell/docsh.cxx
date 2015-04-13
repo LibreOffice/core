@@ -3181,4 +3181,14 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     return bRes;
 }
 
+void ScDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
+{
+    aDocument.GetDrawLayer()->libreOfficeKitCallback(nType, pPayload);
+}
+
+bool ScDocShell::isTiledRendering() const
+{
+    return aDocument.GetDrawLayer()->isTiledRendering();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
