@@ -274,6 +274,11 @@ public class JavaPanZoomController
     }
 
     private boolean handleTouchMove(MotionEvent event) {
+        if (mState == PanZoomState.PANNING_LOCKED || mState == PanZoomState.PANNING) {
+            if (getVelocity() > 18.0f) {
+                LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+            }
+        }
 
         switch (mState) {
         case FLING:
@@ -418,7 +423,6 @@ public class JavaPanZoomController
         } else {
             setState(PanZoomState.PANNING);
         }
-        //LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
     private float panDistance(MotionEvent move) {
