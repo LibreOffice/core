@@ -37,7 +37,7 @@ export AR="callarchive ${AR:-ar}"
 
 export dbglevel=2
 
-make clean && make
+make clean && make check
 
 callanalyse \
   instdir/program/* \
