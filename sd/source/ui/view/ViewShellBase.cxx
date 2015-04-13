@@ -231,8 +231,8 @@ ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
     : SfxViewShell (_pFrame,
-          SFX_VIEW_CAN_PRINT
-        | SFX_VIEW_HAS_PRINTOPTIONS),
+          SfxViewShellFlags::CAN_PRINT
+        | SfxViewShellFlags::HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
       mpDocShell (NULL),

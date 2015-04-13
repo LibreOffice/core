@@ -143,17 +143,10 @@ void basctl_Shell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(IDEResId(RID_POPUP_DLGED));
 }
 
-namespace
-{
-
-unsigned const ShellFlags = SFX_VIEW_CAN_PRINT | SFX_VIEW_NO_NEWWINDOW;
-
-}
-
 unsigned Shell::nShellCount = 0;
 
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
-    SfxViewShell( pFrame_, ShellFlags ),
+    SfxViewShell( pFrame_, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
     aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
     aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),

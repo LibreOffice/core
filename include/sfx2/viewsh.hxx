@@ -89,13 +89,18 @@ namespace o3tl
 
 //  @[SfxViewShell-Flags]
 
-#define SFX_VIEW_HAS_PRINTOPTIONS  0x0010 /* Options-Button and Options-
-                                             Dialog in PrintDialog */
-#define SFX_VIEW_CAN_PRINT         0x0020 /* Printing enabled without having
-                                             to create a Printer */
-#define SFX_VIEW_NO_SHOW           0x0040 /* Window of the ViewShell shall
-                                             not be showed automatically */
-#define SFX_VIEW_NO_NEWWINDOW      0x0100 /* Allow N View */
+enum class SfxViewShellFlags
+{
+    NONE              = 0x0000,
+    HAS_PRINTOPTIONS  = 0x0010, /* Options-Button and Options-Dialog in PrintDialog */
+    CAN_PRINT         = 0x0020, /* Printing enabled without having to create a Printer */
+    NO_SHOW           = 0x0040, /* Window of the ViewShell shall not be showed automatically */
+    NO_NEWWINDOW      = 0x0100, /* Allow N View */
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxViewShellFlags> : is_typed_flags<SfxViewShellFlags, 0x0170> {};
+}
 
 /*  [Description]
 
@@ -174,7 +179,7 @@ private:
 
 public:
 
-                                SfxViewShell( SfxViewFrame *pFrame, sal_uInt16 nFlags = 0 );
+                                SfxViewShell( SfxViewFrame *pFrame, SfxViewShellFlags nFlags = SfxViewShellFlags::NONE );
     virtual                     ~SfxViewShell();
 
     SfxInPlaceClient*           GetIPClient() const;

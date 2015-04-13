@@ -65,7 +65,7 @@ struct SfxViewShell_Impl
 
     mutable SfxInPlaceClientList* mpIPClientList;
 
-    SfxViewShell_Impl(sal_uInt16 const nFlags);
+    SfxViewShell_Impl(SfxViewShellFlags const nFlags);
     ~SfxViewShell_Impl();
 
     SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;

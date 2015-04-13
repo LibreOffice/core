@@ -297,15 +297,14 @@ public:
     size_t size() const { return maData.size(); }
 };
 
-SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
+SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
 ,   m_nPrinterLocks(0)
-,   m_bCanPrint(SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT))
-,   m_bHasPrintOptions(
-        SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS))
+,   m_bCanPrint(nFlags & SfxViewShellFlags::CAN_PRINT)
+,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_bPlugInsActive(true)
-,   m_bIsShowView(SFX_VIEW_NO_SHOW != (nFlags & SFX_VIEW_NO_SHOW))
+,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
 ,   m_bGotOwnership(false)
 ,   m_bGotFrameOwnership(false)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
@@ -1247,9 +1246,9 @@ void SfxViewShell::SetWindow
 
 SfxViewShell::SfxViewShell
 (
-    SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, which will be
-                                        displayed in this View */
-    sal_uInt16          nFlags          /*  See <SfxViewShell-Flags> */
+    SfxViewFrame*     pViewFrame,     /*  <SfxViewFrame>, which will be
+                                          displayed in this View */
+    SfxViewShellFlags nFlags          /*  See <SfxViewShell-Flags> */
 )
 
 :   SfxShell(this)
@@ -1257,7 +1256,7 @@ SfxViewShell::SfxViewShell
 ,   pFrame(pViewFrame)
 ,   pSubShell(0)
 ,   pWindow(0)
-,   bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
+,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 {
 
     if ( pViewFrame->GetParentViewFrame() )
