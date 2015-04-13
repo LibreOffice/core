@@ -1608,8 +1608,8 @@ void DocxAttributeOutput::StartRunProperties()
     assert(!m_postponedDMLDrawing);
     m_postponedDMLDrawing = new std::list< PostponedDrawing >;
 
-    assert( !m_postponedOLE );
-    m_postponedOLE = new std::list< PostponedOLE >;
+    assert( !m_pPostponedOLEs );
+    m_pPostponedOLEs.reset(new std::list<PostponedOLE>());
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -4507,11 +4507,11 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
 bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
 {
-    if( m_postponedOLE == NULL )
+    if( !m_pPostponedOLEs )
         //cannot be postponed, try to write now
         WriteOLE( rNode, rSize, pFlyFrmFmt );
     else
-        m_postponedOLE->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
+        m_pPostponedOLEs->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
     return true;
 }
 
@@ -4520,19 +4520,18 @@ bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const
  */
 void DocxAttributeOutput::WritePostponedOLE()
 {
-    if( m_postponedOLE == NULL )
+    if( !m_pPostponedOLEs )
         return;
 
-    for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
-         it != m_postponedOLE->end();
+    for( std::list< PostponedOLE >::iterator it = m_pPostponedOLEs->begin();
+         it != m_pPostponedOLEs->end();
          ++it )
     {
         WriteOLE( *it->object, it->size, it->frame );
     }
 
     // clear list of postponed objects
-    delete m_postponedOLE;
-    m_postponedOLE = NULL;
+    m_pPostponedOLEs.reset(0);
 }
 
 void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* rFlyFrmFmt )
@@ -4751,8 +4750,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     // Clear the list early, this method may be called recursively.
     std::list<PostponedDrawing>* postponedDMLDrawing = m_postponedDMLDrawing;
     m_postponedDMLDrawing = NULL;
-    std::list<PostponedOLE>* postponedOLE = m_postponedOLE;
-    m_postponedOLE = 0;
+    std::unique_ptr< std::list<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
 
     bool bStartedParaSdt = m_bStartedParaSdt;
     for( std::list< PostponedDrawing >::iterator it = postponedDMLDrawing->begin();
@@ -4768,7 +4766,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     m_bStartedParaSdt = bStartedParaSdt;
 
     delete postponedDMLDrawing;
-    m_postponedOLE = postponedOLE;
+    m_pPostponedOLEs.reset(pPostponedOLEs.release());
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
@@ -8286,7 +8284,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nFieldsInHyperlink( 0 ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
-      m_postponedOLE( NULL ),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),

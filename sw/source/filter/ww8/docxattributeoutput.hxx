@@ -859,7 +859,7 @@ private:
         const Size size;
         const SwFlyFrmFmt* frame;
     };
-    std::list< PostponedOLE >* m_postponedOLE;
+    std::unique_ptr< std::list<PostponedOLE> > m_pPostponedOLEs;
 
     const SwOLENode* m_postponedMath;
     const SdrObject* m_postponedChart;
