@@ -80,11 +80,11 @@ namespace basctl
             m_pImpl->pShell->SignScriptingContent();
     }
 
-    sal_uInt16 DocumentSignature::getScriptingSignatureState() const
+    SignatureState DocumentSignature::getScriptingSignatureState() const
     {
         if ( m_pImpl->pShell )
             return m_pImpl->pShell->GetScriptingSignatureState();
-        return SIGNATURESTATE_NOSIGNATURES;
+        return SignatureState::NOSIGNATURES;
     }
 
 } // namespace basctl

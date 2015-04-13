@@ -1109,14 +1109,14 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_SIGNATURE:
             {
-                rSet.Put( SfxUInt16Item( SID_SIGNATURE, GetDocumentSignatureState() ) );
+                rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
                 break;
             }
             case SID_MACRO_SIGNATURE:
             {
                 // the slot makes sense only if there is a macro in the document
                 if ( pImp->documentStorageHasMacros() || pImp->aMacroMode.hasMacroLibrary() )
-                    rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, GetScriptingSignatureState() ) );
+                    rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, static_cast<sal_uInt16>(GetScriptingSignatureState()) ) );
                 else
                     rSet.DisableItem( nWhich );
                 break;
@@ -1287,36 +1287,36 @@ void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
 {
 }
 
-sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
+SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
 {
     bool bCertValid = true;
-    sal_uInt16 nResult = SIGNATURESTATE_NOSIGNATURES;
+    SignatureState nResult = SignatureState::NOSIGNATURES;
     int nInfos = aInfos.getLength();
     bool bCompleteSignature = true;
     if( nInfos )
     {
-        nResult = SIGNATURESTATE_SIGNATURES_OK;
+        nResult = SignatureState::OK;
         for ( int n = 0; n < nInfos; n++ )
         {
             if ( bCertValid )
             {
                 sal_Int32 nCertStat = aInfos[n].CertificateStatus;
-                bCertValid = nCertStat == security::CertificateValidity::VALID ? sal_True : sal_False;
+                bCertValid = nCertStat == security::CertificateValidity::VALID;
             }
 
             if ( !aInfos[n].SignatureIsValid )
             {
-                nResult = SIGNATURESTATE_SIGNATURES_BROKEN;
+                nResult = SignatureState::BROKEN;
                 break; // we know enough
             }
             bCompleteSignature &= !aInfos[n].PartialDocumentSignature;
         }
     }
 
-    if ( nResult == SIGNATURESTATE_SIGNATURES_OK && !bCertValid )
-        nResult = SIGNATURESTATE_SIGNATURES_NOTVALIDATED;
-    else if ( nResult == SIGNATURESTATE_SIGNATURES_OK && bCertValid && !bCompleteSignature)
-        nResult = SIGNATURESTATE_SIGNATURES_PARTIAL_OK;
+    if ( nResult == SignatureState::OK && !bCertValid )
+        nResult = SignatureState::NOTVALIDATED;
+    else if ( nResult == SignatureState::OK && bCertValid && !bCompleteSignature)
+        nResult = SignatureState::PARTIAL_OK;
 
     // this code must not check whether the document is modified
     // it should only check the provided info
@@ -1364,26 +1364,26 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     return aResult;
 }
 
-sal_uInt16 SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
+SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
-    sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
+    SignatureState* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
 
-    if ( *pState == SIGNATURESTATE_UNKNOWN )
+    if ( *pState == SignatureState::UNKNOWN )
     {
-        *pState = SIGNATURESTATE_NOSIGNATURES;
+        *pState = SignatureState::NOSIGNATURES;
 
         uno::Sequence< security::DocumentSignatureInformation > aInfos = ImplAnalyzeSignature( bScriptingContent );
         *pState = ImplCheckSignaturesInformation( aInfos );
     }
 
-    if ( *pState == SIGNATURESTATE_SIGNATURES_OK || *pState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
-        || *pState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
+    if ( *pState == SignatureState::OK || *pState == SignatureState::NOTVALIDATED
+        || *pState == SignatureState::PARTIAL_OK)
     {
         if ( IsModified() )
-            *pState = SIGNATURESTATE_SIGNATURES_INVALID;
+            *pState = SignatureState::INVALID;
     }
 
-    return (sal_uInt16)*pState;
+    return *pState;
 }
 
 void SfxObjectShell::ImplSign( bool bScriptingContent )
@@ -1405,7 +1405,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     // check whether the document is signed
     ImplGetSignatureState( false ); // document signature
     ImplGetSignatureState( true ); // script signature
-    bool bHasSign = ( pImp->nScriptingSignatureState != SIGNATURESTATE_NOSIGNATURES || pImp->nDocumentSignatureState != SIGNATURESTATE_NOSIGNATURES );
+    bool bHasSign = ( pImp->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImp->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving
     SvtSaveOptions aSaveOpt;
@@ -1492,9 +1492,9 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         bool bSigned = GetMedium()->SignContents_Impl(
             bScriptingContent,
             aODFVersion,
-            pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_OK
-            || pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
-            || pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK);
+            pImp->nDocumentSignatureState == SignatureState::OK
+            || pImp->nDocumentSignatureState == SignatureState::NOTVALIDATED
+            || pImp->nDocumentSignatureState == SignatureState::PARTIAL_OK);
 
         DoSaveCompleted( GetMedium() );
 
@@ -1502,13 +1502,13 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         {
             if ( bScriptingContent )
             {
-                pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+                pImp->nScriptingSignatureState = SignatureState::UNKNOWN;// Re-Check
 
                 // adding of scripting signature removes existing document signature
-                pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+                pImp->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
             }
             else
-                pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+                pImp->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
 
             pImp->bSignatureErrorIsShown = false;
 
@@ -1522,7 +1522,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         EnableSetModified( true );
 }
 
-sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
+SignatureState SfxObjectShell::GetDocumentSignatureState()
 {
     return ImplGetSignatureState( false );
 }
@@ -1532,7 +1532,7 @@ void SfxObjectShell::SignDocumentContent()
     ImplSign( false );
 }
 
-sal_uInt16 SfxObjectShell::GetScriptingSignatureState()
+SignatureState SfxObjectShell::GetScriptingSignatureState()
 {
     return ImplGetSignatureState( true );
 }

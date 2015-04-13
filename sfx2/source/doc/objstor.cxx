@@ -1156,9 +1156,9 @@ bool SfxObjectShell::SaveTo_Impl
     // no way to detect whether a filter is oasis format, have to wait for saving process
     bool bNoPreserveForOasis = false;
     if ( bOwnSource && bOwnTarget
-      && ( pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
-        || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
-        || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_INVALID ) )
+      && ( pImp->nScriptingSignatureState == SignatureState::OK
+        || pImp->nScriptingSignatureState == SignatureState::NOTVALIDATED
+        || pImp->nScriptingSignatureState == SignatureState::INVALID ) )
     {
         AddLog( OUString( OSL_LOG_PREFIX "MacroSignaturePreserving"  ) );
 
@@ -1640,9 +1640,9 @@ bool SfxObjectShell::SaveTo_Impl
                         uno::Sequence< security::DocumentSignatureInformation > aInfos =
                             xDDSigns->verifyScriptingContentSignatures( xTarget,
                                                                         uno::Reference< io::XInputStream >() );
-                        sal_uInt16 nState = ImplCheckSignaturesInformation( aInfos );
-                        if ( nState == SIGNATURESTATE_SIGNATURES_OK || nState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
-                            || nState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
+                        SignatureState nState = ImplCheckSignaturesInformation( aInfos );
+                        if ( nState == SignatureState::OK || nState == SignatureState::NOTVALIDATED
+                            || nState == SignatureState::PARTIAL_OK)
                         {
                             rMedium.SetCachedSignatureState_Impl( nState );
 
@@ -2073,13 +2073,13 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             }
 
             // before the title regenerated the document must lose the signatures
-            pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            pImp->nDocumentSignatureState = SignatureState::NOSIGNATURES;
             pImp->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
-            OSL_ENSURE( pImp->nScriptingSignatureState != SIGNATURESTATE_SIGNATURES_BROKEN, "The signature must not be broken at this place" );
+            OSL_ENSURE( pImp->nScriptingSignatureState != SignatureState::BROKEN, "The signature must not be broken at this place" );
             pImp->bSignatureErrorIsShown = false;
 
             // TODO/LATER: in future the medium must control own signature state, not the document
-            pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
+            pNewMed->SetCachedSignatureState_Impl( SignatureState::NOSIGNATURES ); // set the default value back
 
             // Set new title
             if (!pNewMed->GetName().isEmpty() && SfxObjectCreateMode::EMBEDDED != eCreateMode)

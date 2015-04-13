@@ -63,7 +63,7 @@ public:
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
                     const OUString& aUserSelectedName,
-                    sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
+                    SignatureState nDocumentSignatureState = SignatureState::NOSIGNATURES );
 
     static bool CheckFilterOptionsAppearence(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,

@@ -43,7 +43,7 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
     Point       maPos;
     Size        maSize;
-    sal_uInt16      mnState;
+    SignatureState  mnState;
     Image       maImage;
     Image       maImageBroken;
     Image       maImageNotValidated;
@@ -54,7 +54,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
     :SfxStatusBarControl( _nSlotId, _nId, _rStb )
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
-    mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+    mpImpl->mnState = SignatureState::UNKNOWN;
 
     mpImpl->maImage             = Image( SVX_RES( RID_SVXBMP_SIGNET              ) );
     mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
@@ -87,16 +87,16 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
 {
     if( SfxItemState::DEFAULT != eState )
     {
-        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = SignatureState::UNKNOWN;
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
-        mpImpl->mnState = static_cast<const SfxUInt16Item*>(pState)->GetValue();
+        mpImpl->mnState = static_cast<SignatureState>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
     }
     else
     {
         SAL_WARN( "svx.stbcrtls", "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
-        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = SignatureState::UNKNOWN;
     }
 
     if( GetStatusBar().AreItemsVisible() )              // necessary ?
@@ -105,13 +105,13 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 
     sal_uInt16 nResId = RID_SVXSTR_XMLSEC_NO_SIG;
-    if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
+    if ( mpImpl->mnState == SignatureState::OK )
         nResId = RID_SVXSTR_XMLSEC_SIG_OK;
-    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )
+    else if ( mpImpl->mnState == SignatureState::BROKEN )
         nResId = RID_SVXSTR_XMLSEC_SIG_NOT_OK;
-    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+    else if ( mpImpl->mnState == SignatureState::NOTVALIDATED )
         nResId = RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY;
-    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK )
+    else if ( mpImpl->mnState == SignatureState::PARTIAL_OK )
         nResId = RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG;
 
     GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( nResId ) );
@@ -153,18 +153,18 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
     long yOffset = (aRect.GetHeight() - mpImpl->maImage.GetSizePixel().Height()) / 2;
 
-    if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
+    if( mpImpl->mnState == SignatureState::OK )
     {
         aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImage );
     }
-    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )
+    else if( mpImpl->mnState == SignatureState::BROKEN )
     {
         aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
-    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
-        || mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
+    else if( mpImpl->mnState == SignatureState::NOTVALIDATED
+        || mpImpl->mnState == SignatureState::PARTIAL_OK)
     {
         aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageNotValidated );

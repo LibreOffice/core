@@ -1127,8 +1127,8 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
 
 void SfxObjectShell::CheckForBrokenDocSignatures_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-    sal_Int16 nSignatureState = GetDocumentSignatureState();
-    bool bSignatureBroken = ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN );
+    SignatureState nSignatureState = GetDocumentSignatureState();
+    bool bSignatureBroken = ( nSignatureState == SignatureState::BROKEN );
     if ( !bSignatureBroken )
         return;
 
@@ -1921,14 +1921,14 @@ Reference< XEmbeddedScripts > SfxObjectShell_Impl::getEmbeddedDocumentScripts() 
     return Reference< XEmbeddedScripts >( rDocShell.GetModel(), UNO_QUERY );
 }
 
-sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState()
+SignatureState SfxObjectShell_Impl::getScriptingSignatureState()
 {
-    sal_Int16 nSignatureState( rDocShell.GetScriptingSignatureState() );
+    SignatureState nSignatureState( rDocShell.GetScriptingSignatureState() );
 
-    if ( nSignatureState != SIGNATURESTATE_NOSIGNATURES && m_bMacroSignBroken )
+    if ( nSignatureState != SignatureState::NOSIGNATURES && m_bMacroSignBroken )
     {
         // if there is a macro signature it must be handled as broken
-        nSignatureState = SIGNATURESTATE_SIGNATURES_BROKEN;
+        nSignatureState = SignatureState::BROKEN;
     }
 
     return nSignatureState;
@@ -1952,19 +1952,19 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
 
         uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
 
-        if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN
-          || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
-          || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+        if ( nScriptingSignatureState == SignatureState::UNKNOWN
+          || nScriptingSignatureState == SignatureState::OK
+          || nScriptingSignatureState == SignatureState::NOTVALIDATED )
         {
             uno::Sequence< security::DocumentSignatureInformation > aInfo = rDocShell.ImplAnalyzeSignature( true, xSigner );
 
             if ( aInfo.getLength() )
             {
-                if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN )
+                if ( nScriptingSignatureState == SignatureState::UNKNOWN )
                     nScriptingSignatureState = rDocShell.ImplCheckSignaturesInformation( aInfo );
 
-                if ( nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
-                  || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+                if ( nScriptingSignatureState == SignatureState::OK
+                  || nScriptingSignatureState == SignatureState::NOTVALIDATED )
                 {
                     for ( sal_Int32 nInd = 0; !bResult && nInd < aInfo.getLength(); nInd++ )
                     {

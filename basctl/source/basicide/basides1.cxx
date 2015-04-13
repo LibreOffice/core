@@ -733,13 +733,13 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_SIGNATURE:
             {
-                sal_uInt16 nState = 0;
+                SignatureState nState = SignatureState::NOSIGNATURES;
                 if ( pCurWin )
                 {
                     DocumentSignature aSignature( pCurWin->GetDocument() );
                     nState = aSignature.getScriptingSignatureState();
                 }
-                rSet.Put( SfxUInt16Item( SID_SIGNATURE, nState ) );
+                rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(nState) ) );
             }
             break;
             case SID_BASICIDE_MODULEDLG:
