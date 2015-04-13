@@ -622,7 +622,7 @@ void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLExce
 ::cppu::IPropertyArrayHelper & java_sql_Statement_Base::getInfoHelper()
 
 {
-    return *const_cast<java_sql_Statement_Base*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool java_sql_Statement_Base::convertFastPropertyValue(

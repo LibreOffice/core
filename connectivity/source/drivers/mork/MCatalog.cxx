@@ -105,7 +105,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
         // allowed
     }
 
-    return const_cast<OCatalog*>(this)->m_pTables;
+    return m_pTables;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

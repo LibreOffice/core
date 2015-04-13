@@ -129,7 +129,7 @@ namespace pcr
 
     ::cppu::IPropertyArrayHelper& OControlFontDialog::getInfoHelper()
     {
-        return *const_cast<OControlFontDialog*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

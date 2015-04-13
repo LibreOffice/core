@@ -511,7 +511,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
 
 ::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
 {
-    return *const_cast<ODatabaseMetaDataResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 void ODatabaseMetaDataResultSet::setProceduresMap()

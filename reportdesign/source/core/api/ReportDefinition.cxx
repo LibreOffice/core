@@ -407,7 +407,7 @@ void OStyle::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, uno::Any& /*_rD
 
 ::cppu::IPropertyArrayHelper& OStyle::getInfoHelper()
 {
-    return *const_cast<OStyle*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* OStyle::createArrayHelper( ) const

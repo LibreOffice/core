@@ -86,7 +86,7 @@ Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException, std::excep
 
 ::cppu::IPropertyArrayHelper & OUser::getInfoHelper()
 {
-    return *const_cast<OUser*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 // XUser

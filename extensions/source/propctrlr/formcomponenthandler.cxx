@@ -3314,7 +3314,7 @@ namespace pcr
 
     ::cppu::IPropertyArrayHelper & FormComponentPropertyHandler::getInfoHelper()
     {
-        return *const_cast<FormComponentPropertyHandler*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
     uno::Reference< beans::XPropertySetInfo > SAL_CALL FormComponentPropertyHandler::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)

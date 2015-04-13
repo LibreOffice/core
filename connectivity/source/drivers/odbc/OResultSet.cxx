@@ -1434,7 +1434,7 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 
 IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
-    return *const_cast<OResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OResultSet::convertFastPropertyValue(

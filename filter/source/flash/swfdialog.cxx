@@ -201,7 +201,7 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
 
 ::cppu::IPropertyArrayHelper& SWFDialog::getInfoHelper()
 {
-    return *const_cast<SWFDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 

@@ -91,7 +91,7 @@ namespace pcr
 
     ::cppu::IPropertyArrayHelper& MasterDetailLinkDialog::getInfoHelper()
     {
-        return *const_cast<MasterDetailLinkDialog*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

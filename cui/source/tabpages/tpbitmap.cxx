@@ -969,7 +969,7 @@ void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
 vcl::Window* SvxBitmapTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const
 {
     if (pLabeled == m_pLbBitmaps)
-        return const_cast<FixedText*>(m_pLbBitmapsHidden);
+        return m_pLbBitmapsHidden;
     else
         return SvxTabPage::GetParentLabeledBy (pLabeled);
 }

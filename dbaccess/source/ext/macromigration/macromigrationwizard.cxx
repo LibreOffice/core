@@ -197,7 +197,7 @@ namespace dbmm
 
     ::cppu::IPropertyArrayHelper& SAL_CALL MacroMigrationDialogService::getInfoHelper()
     {
-        return *const_cast< MacroMigrationDialogService* >( this )->getArrayHelper();
+        return *getArrayHelper();
     }
 
     ::cppu::IPropertyArrayHelper* MacroMigrationDialogService::createArrayHelper( ) const

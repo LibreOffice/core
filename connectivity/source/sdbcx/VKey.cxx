@@ -148,7 +148,7 @@ void SAL_CALL OKey::disposing()
 
 ::cppu::IPropertyArrayHelper & OKey::getInfoHelper()
 {
-    return *const_cast<OKey*>(this)->getArrayHelper(isNew() ? 1 : 0);
+    return *getArrayHelper(isNew() ? 1 : 0);
 }
 
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OKey::getColumns(  ) throw(RuntimeException, std::exception)

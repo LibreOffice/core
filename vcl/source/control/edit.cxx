@@ -1304,7 +1304,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 OUString aText;
                 aData >>= aText;
                 if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
-                    ShowTruncationWarning( const_cast<Edit*>(this) );
+                    ShowTruncationWarning( this );
                 ReplaceSelected( aText );
             }
             catch( const ::com::sun::star::uno::Exception& )

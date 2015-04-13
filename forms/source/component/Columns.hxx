@@ -150,7 +150,7 @@ ClassName::ClassName( const ClassName* _pCloneFrom ) \
 } \
 ::cppu::IPropertyArrayHelper& ClassName::getInfoHelper() \
 { \
-    return *const_cast<ClassName*>(this)->getArrayHelper(); \
+    return *getArrayHelper(); \
 } \
 void ClassName::fillProperties( \
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps, \

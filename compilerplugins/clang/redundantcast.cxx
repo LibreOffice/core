@@ -156,6 +156,48 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
             }
         }
         break;
+    case CK_DerivedToBase:
+    case CK_UncheckedDerivedToBase:
+        if (expr->getType()->isPointerType()) {
+            Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
+            while (isa<CXXConstCastExpr>(e)) {
+                auto cc = dyn_cast<CXXConstCastExpr>(e);
+                if (expr->getType()->getAs<PointerType>()->getPointeeType()
+                    .isAtLeastAsQualifiedAs(
+                        cc->getSubExpr()->getType()
+                        ->getAs<PointerType>()->getPointeeType()))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("redundant const_cast from %0 to %1, result is"
+                         " ultimately implictly cast to %2"),
+                        cc->getExprLoc())
+                        << cc->getSubExprAsWritten()->getType() << cc->getType()
+                        << expr->getType() << expr->getSourceRange();
+                }
+                e = cc->getSubExpr()->IgnoreParenImpCasts();
+            }
+        } else if (expr->getType()->isReferenceType()) {
+            Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
+            while (isa<CXXConstCastExpr>(e)) {
+                auto cc = dyn_cast<CXXConstCastExpr>(e);
+                if (expr->getType()->getAs<ReferenceType>()->getPointeeType()
+                    .isAtLeastAsQualifiedAs(
+                        cc->getSubExpr()->getType()
+                        ->getAs<ReferenceType>()->getPointeeType()))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("redundant const_cast from %0 to %1, result is"
+                         " ultimately implictly cast to %2"),
+                        cc->getExprLoc())
+                        << cc->getSubExprAsWritten()->getType() << cc->getType()
+                        << expr->getType() << expr->getSourceRange();
+                }
+                e = cc->getSubExpr()->IgnoreParenImpCasts();
+            }
+        }
+        break;
     default:
         break;
     }

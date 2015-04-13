@@ -118,7 +118,7 @@ namespace pcr
 
     ::cppu::IPropertyArrayHelper& OTabOrderDialog::getInfoHelper()
     {
-        return *const_cast< OTabOrderDialog* >( this )->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

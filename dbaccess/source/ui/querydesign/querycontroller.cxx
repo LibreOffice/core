@@ -413,7 +413,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
 
 ::cppu::IPropertyArrayHelper& OQueryController::getInfoHelper()
 {
-    return *const_cast< OQueryController* >( this )->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* OQueryController::createArrayHelper( ) const

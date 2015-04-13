@@ -142,7 +142,7 @@ void SmDocShell::LoadSymbols()
 const OUString SmDocShell::GetComment() const
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        const_cast<SmDocShell*>(this)->GetModel(), uno::UNO_QUERY_THROW);
+        GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps(
         xDPS->getDocumentProperties());
     return xDocProps->getDescription();

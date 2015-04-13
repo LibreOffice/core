@@ -141,7 +141,7 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
 
 ::cppu::IPropertyArrayHelper& PDFDialog::getInfoHelper()
 {
-    return *const_cast<PDFDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 

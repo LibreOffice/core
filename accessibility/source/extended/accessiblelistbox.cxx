@@ -69,7 +69,7 @@ namespace accessibility
 
     SvTreeListBox* AccessibleListBox::getListBox() const
     {
-        return  static_cast< SvTreeListBox* >( const_cast<AccessibleListBox*>(this)->GetWindow() );
+        return  static_cast< SvTreeListBox* >( GetWindow() );
     }
 
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )

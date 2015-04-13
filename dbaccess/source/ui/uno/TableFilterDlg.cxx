@@ -82,7 +82,7 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo() t
 
 ::cppu::IPropertyArrayHelper& OTableFilterDialog::getInfoHelper()
 {
-    return *const_cast<OTableFilterDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* OTableFilterDialog::createArrayHelper( ) const

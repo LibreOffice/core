@@ -703,7 +703,7 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
         if( rValue >>=nNewAngleDegree )
         {
             sal_Int32 nHorizontal, nVertical;
-            ThreeDHelper::getRotationFromDiagram( const_cast< Diagram* >( this ), nHorizontal, nVertical );
+            ThreeDHelper::getRotationFromDiagram( this, nHorizontal, nVertical );
             if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle )
                 nHorizontal = nNewAngleDegree;
             else

@@ -2027,7 +2027,7 @@ bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
 
 void OBoundControlModel::impl_determineAmbientForm_nothrow()
 {
-    Reference< XInterface > xParent( const_cast< OBoundControlModel* >( this )->getParent() );
+    Reference< XInterface > xParent( getParent() );
     m_xAmbientForm.set( xParent, UNO_QUERY );
     if ( !m_xAmbientForm.is() )
     {

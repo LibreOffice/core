@@ -86,7 +86,7 @@ void OGroup::disposing(void)
 
 ::cppu::IPropertyArrayHelper & OGroup::getInfoHelper()
 {
-    return *const_cast<OGroup*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException, std::exception)

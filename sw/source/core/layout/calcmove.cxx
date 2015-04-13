@@ -1549,7 +1549,7 @@ void SwCntntFrm::MakeAll()
         // Finally, we are able to split table rows. Therefore, bDontMoveMe
         // can be set to false:
         if( bDontMoveMe && IsInTab() &&
-            0 != const_cast<SwCntntFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) )
+            0 != GetNextCellLeaf( MAKEPAGE_NONE ) )
             bDontMoveMe = false;
 
         if ( bDontMoveMe && (Frm().*fnRect->fnGetHeight)() >

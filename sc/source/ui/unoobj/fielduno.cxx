@@ -418,7 +418,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
             if (pInterfaces)
             {
                 lang::EventObject aEvent;
-                aEvent.Source.set(uno::Reference< util::XRefreshable >(const_cast<ScCellFieldsObj*>(this)));
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
                 sal_uInt32 i(0);
                 while (i < nLength)
                 {
@@ -598,7 +598,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
             if (pInterfaces)
             {
                 lang::EventObject aEvent;
-                aEvent.Source.set(uno::Reference< util::XRefreshable >(const_cast<ScHeaderFieldsObj*>(this)));
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
                 sal_uInt32 i(0);
                 while (i < nLength)
                 {

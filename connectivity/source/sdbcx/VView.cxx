@@ -93,7 +93,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException,
 
 ::cppu::IPropertyArrayHelper & OView::getInfoHelper()
 {
-    return *const_cast<OView*>(this)->getArrayHelper(isNew() ? 1 : 0);
+    return *getArrayHelper(isNew() ? 1 : 0);
 }
 
 OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException, std::exception)

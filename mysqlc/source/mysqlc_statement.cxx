@@ -327,7 +327,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
 ::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
     OSL_TRACE("OCommonStatement::getInfoHelper");
-    return *const_cast<OCommonStatement*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OCommonStatement::convertFastPropertyValue(

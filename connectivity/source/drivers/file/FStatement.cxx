@@ -230,7 +230,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 OResultSet* OStatement::createResultSet()

@@ -1479,7 +1479,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                                 nCnt != pPage->GetSortedObjs()->size(),
                                 "Object couldn't be reattached!" );
 #else
-                        rFmt.NotifyClients( 0, const_cast<SwFmtAnchor*>(&rAnch) );
+                        rFmt.NotifyClients( 0, &rAnch );
 #endif
                         // Do not increment index, in this case
                         continue;

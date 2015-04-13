@@ -182,7 +182,7 @@ void SAL_CALL ORowSetBase::disposing(void)
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetBase::getInfoHelper()
 {
-    return *const_cast<ORowSetBase*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 // XRow

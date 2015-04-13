@@ -125,7 +125,7 @@ void OMySQLTable::construct()
 
 ::cppu::IPropertyArrayHelper & OMySQLTable::getInfoHelper()
 {
-    return *static_cast<OMySQLTable_PROP*>(const_cast<OMySQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
+    return *static_cast<OMySQLTable_PROP*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)

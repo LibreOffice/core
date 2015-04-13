@@ -915,7 +915,7 @@ void OStatement_Base::setUsingBookmarks(bool _bUseBookmark)
 
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OStatement_Base::convertFastPropertyValue(

@@ -891,7 +891,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
 
 ::cppu::IPropertyArrayHelper & java_sql_ResultSet::getInfoHelper()
 {
-    return *const_cast<java_sql_ResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool java_sql_ResultSet::convertFastPropertyValue(

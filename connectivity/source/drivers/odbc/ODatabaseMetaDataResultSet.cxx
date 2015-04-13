@@ -729,7 +729,7 @@ OUString ODatabaseMetaDataResultSet::getCursorName() const throw(SQLException, R
 
 ::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
 {
-    return *const_cast<ODatabaseMetaDataResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(

@@ -308,7 +308,7 @@ namespace {
 
     ::cppu::IPropertyArrayHelper& SAL_CALL Wizard::getInfoHelper()
     {
-        return *const_cast< Wizard* >( this )->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

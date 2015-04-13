@@ -106,7 +106,7 @@ void OHSQLTable::construct()
 
 ::cppu::IPropertyArrayHelper & OHSQLTable::getInfoHelper()
 {
-    return *static_cast<OHSQLTable_PROP*>(const_cast<OHSQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
+    return *static_cast<OHSQLTable_PROP*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 
 sdbcx::OCollection* OHSQLTable::createColumns(const TStringVector& _rNames)

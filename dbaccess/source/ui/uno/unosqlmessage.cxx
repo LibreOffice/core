@@ -131,7 +131,7 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
 
 ::cppu::IPropertyArrayHelper& OSQLMessageDialog::getInfoHelper()
 {
-    return *const_cast<OSQLMessageDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* OSQLMessageDialog::createArrayHelper( ) const

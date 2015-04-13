@@ -220,7 +220,7 @@ cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 /*_nId*/ ) cons
 
 cppu::IPropertyArrayHelper & OTable::getInfoHelper()
 {
-    return *const_cast<OTable*>(this)->getArrayHelper(isNew() ? 1 : 0);
+    return *getArrayHelper(isNew() ? 1 : 0);
 }
 
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException, std::exception)

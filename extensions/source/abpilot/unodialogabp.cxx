@@ -128,7 +128,7 @@ namespace abp
 
     ::cppu::IPropertyArrayHelper& OABSPilotUno::getInfoHelper()
     {
-        return *const_cast<OABSPilotUno*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

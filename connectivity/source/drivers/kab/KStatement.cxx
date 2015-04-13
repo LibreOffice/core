@@ -506,7 +506,7 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
 
 ::cppu::IPropertyArrayHelper & KabCommonStatement::getInfoHelper()
 {
-    return *const_cast<KabCommonStatement*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool KabCommonStatement::convertFastPropertyValue(

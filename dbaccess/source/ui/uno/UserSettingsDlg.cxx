@@ -82,7 +82,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
 
 ::cppu::IPropertyArrayHelper& OUserSettingsDialog::getInfoHelper()
 {
-    return *const_cast<OUserSettingsDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* OUserSettingsDialog::createArrayHelper( ) const

@@ -133,7 +133,7 @@ namespace svxform
 
     ::cppu::IPropertyArrayHelper& OAddConditionDialog::getInfoHelper()
     {
-        return *const_cast< OAddConditionDialog* >( this )->getArrayHelper();
+        return *getArrayHelper();
     }
 
 

@@ -82,7 +82,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo() thr
 
 ::cppu::IPropertyArrayHelper& ODBTypeWizDialog::getInfoHelper()
 {
-    return *const_cast<ODBTypeWizDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* ODBTypeWizDialog::createArrayHelper( ) const

@@ -708,7 +708,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_C
 
 ::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
 {
-        return *const_cast<ToolboxController*>(this)->getArrayHelper();
+        return *getArrayHelper();
 }
 
 

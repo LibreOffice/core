@@ -110,7 +110,7 @@ namespace dbaui
 
     ::cppu::IPropertyArrayHelper& OAdvancedSettingsDialog::getInfoHelper()
     {
-        return *const_cast<OAdvancedSettingsDialog*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
     ::cppu::IPropertyArrayHelper* OAdvancedSettingsDialog::createArrayHelper( ) const

@@ -1135,7 +1135,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) thr
 
 ::cppu::IPropertyArrayHelper & OEvoabResultSet::getInfoHelper()
 {
-    return *const_cast<OEvoabResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 void SAL_CALL OEvoabResultSet::acquire() throw()

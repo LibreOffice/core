@@ -82,7 +82,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
 
 ::cppu::IPropertyArrayHelper& ODataSourcePropertyDialog::getInfoHelper()
 {
-    return *const_cast<ODataSourcePropertyDialog*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* ODataSourcePropertyDialog::createArrayHelper( ) const

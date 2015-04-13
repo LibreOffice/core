@@ -363,7 +363,7 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
 
 ::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
-    return *const_cast<OCommonStatement*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OCommonStatement::convertFastPropertyValue(

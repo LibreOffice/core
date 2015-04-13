@@ -289,7 +289,7 @@ void SAL_CALL OStatementCommonBase::clearWarnings() throw(SQLException, RuntimeE
 
 ::cppu::IPropertyArrayHelper & OStatementCommonBase::getInfoHelper()
 {
-    return *const_cast<OStatementCommonBase*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool OStatementCommonBase::convertFastPropertyValue(

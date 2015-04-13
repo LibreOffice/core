@@ -90,7 +90,7 @@ uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySe
 
 ::cppu::IPropertyArrayHelper& ChartTypeUnoDlg::getInfoHelper()
 {
-    return *const_cast<ChartTypeUnoDlg*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 ::cppu::IPropertyArrayHelper* ChartTypeUnoDlg::createArrayHelper( ) const

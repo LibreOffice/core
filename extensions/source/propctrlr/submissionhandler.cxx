@@ -292,7 +292,7 @@ namespace pcr
         switch ( nPropId )
         {
         case PROPERTY_ID_SUBMISSION_ID:
-            const_cast< SubmissionHelper* >( m_pHelper.get() )->getAllElementUINames( EFormsHelper::Submission, aListEntries, false );
+            m_pHelper.get()->getAllElementUINames( EFormsHelper::Submission, aListEntries, false );
             break;
 
         case PROPERTY_ID_XFORMS_BUTTONTYPE:

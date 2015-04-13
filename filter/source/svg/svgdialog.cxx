@@ -171,7 +171,7 @@ Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
 
 ::cppu::IPropertyArrayHelper& SVGDialog::getInfoHelper()
 {
-    return *const_cast< SVGDialog *>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 

@@ -175,7 +175,7 @@ namespace svt
 
     ::cppu::IPropertyArrayHelper& SAL_CALL OCommonPicker::getInfoHelper()
     {
-        return *const_cast< OCommonPicker* >( this )->getArrayHelper();
+        return *getArrayHelper();
     }
 
 
