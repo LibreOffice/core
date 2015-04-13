@@ -2059,42 +2059,43 @@ bool EscherPropertyContainer::CreatePolygonProperties(
         {
             Polygon aPolygon;
 
-            sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
+            sal_uInt16 nPolyCount = aPolyPolygon.Count();
+            sal_uInt32 nTotalPoints(0), nTotalBezPoints(0);
             Rectangle aRect( aPolyPolygon.GetBoundRect() );
             rGeoRect = ::com::sun::star::awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
 
-            for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
+            for (sal_uInt16 i = 0; i < nPolyCount; ++i)
             {
-                k = aPolyPolygon[ i ].GetSize();
-                nPoints = nPoints + k;
-                for ( j = 0; j < k; j++ )
+                sal_uInt16 k = aPolyPolygon[ i ].GetSize();
+                nTotalPoints += k;
+                for (sal_uInt16 j = 0; j < k; ++j)
                 {
                     if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
-                        nBezPoints++;
+                        nTotalBezPoints++;
                 }
             }
-            sal_uInt32 nVerticesBufSize = ( nPoints << 2 ) + 6;
+            sal_uInt32 nVerticesBufSize = ( nTotalPoints << 2 ) + 6;
             sal_uInt8* pVerticesBuf = new sal_uInt8[ nVerticesBufSize ];
 
 
-            sal_uInt32 nSegmentBufSize = ( ( nBezPoints << 2 ) + 8 );
+            sal_uInt32 nSegmentBufSize = ( ( nTotalBezPoints << 2 ) + 8 );
             if ( nPolyCount > 1 )
                 nSegmentBufSize += ( nPolyCount << 1 );
             sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
 
             sal_uInt8* pPtr = pVerticesBuf;
-            *pPtr++ = (sal_uInt8)( nPoints );                    // Little endian
-            *pPtr++ = (sal_uInt8)( nPoints >> 8 );
-            *pPtr++ = (sal_uInt8)( nPoints );
-            *pPtr++ = (sal_uInt8)( nPoints >> 8 );
+            *pPtr++ = (sal_uInt8)( nTotalPoints );                    // Little endian
+            *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
+            *pPtr++ = (sal_uInt8)( nTotalPoints );
+            *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
             *pPtr++ = (sal_uInt8)0xf0;
             *pPtr++ = (sal_uInt8)0xff;
 
-            for ( j = 0; j < nPolyCount; j++ )
+            for (sal_uInt16 j = 0; j < nPolyCount; ++j)
             {
                 aPolygon = aPolyPolygon[ j ];
-                nPoints = aPolygon.GetSize();
-                for ( i = 0; i < nPoints; i++ )             // write points from polygon to buffer
+                sal_uInt16 nPoints = aPolygon.GetSize();
+                for (sal_uInt16 i = 0; i < nPoints; ++i)             // write points from polygon to buffer
                 {
                     Point aPoint = aPolygon[ i ];
                     aPoint.X() -= rGeoRect.X;
@@ -2115,13 +2116,13 @@ bool EscherPropertyContainer::CreatePolygonProperties(
             *pPtr++ = (sal_uInt8)2;
             *pPtr++ = (sal_uInt8)0;
 
-            for ( j = 0; j < nPolyCount; j++ )
+            for (sal_uInt16 j = 0; j < nPolyCount; ++j)
             {
                 *pPtr++ = 0x0;          // Polygon start
                 *pPtr++ = 0x40;
                 aPolygon = aPolyPolygon[ j ];
-                nPoints = aPolygon.GetSize();
-                for ( i = 0; i < nPoints; i++ )         // write Polyflags to Buffer
+                sal_uInt16 nPoints = aPolygon.GetSize();
+                for (sal_uInt16 i = 0; i < nPoints; ++i)         // write Polyflags to Buffer
                 {
                     *pPtr++ = 0;
                     if ( bBezier )
