@@ -30,9 +30,25 @@
 #include "itabenum.hxx"
 #include <tools/globname.hxx>
 #include <editeng/svxenum.hxx>
-class SwModuleOptions;
+#include <o3tl/typed_flags_set.hxx>
 
+class SwModuleOptions;
 class InsCaptionOpt;
+
+// text format for the sending of messages ------------------------------
+enum class MailTxtFormats
+{
+    NONE      = 0x00,
+    ASCII     = 0x01,
+    HTML      = 0x02,
+    RTF       = 0x04,
+    OFFICE    = 0x08
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MailTxtFormats> : is_typed_flags<MailTxtFormats, 0x0f> {};
+}
+
 
 class InsCaptionOptArr
 {
@@ -161,7 +177,7 @@ class SwMiscConfig : public utl::ConfigItem
     bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
     bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
     bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
-    sal_Int16   nMailingFormats;            // FormLetter/MailingOutput/Formats
+    MailTxtFormats nMailingFormats;            // FormLetter/MailingOutput/Formats
     OUString    sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
     OUString    sMailingPath;               // FormLetter/FileOutput/Path
     OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
@@ -286,9 +302,9 @@ public:
     void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
                                                   aMiscConfig.SetModified();}
 
-    sal_Int16   GetMailingFormats() const       { return aMiscConfig.nMailingFormats;}
-    void        SetMailingFormats( sal_Int16 nSet ) { aMiscConfig.nMailingFormats = nSet;
-                                                  aMiscConfig.SetModified();}
+    MailTxtFormats GetMailingFormats() const               { return aMiscConfig.nMailingFormats;}
+    void           SetMailingFormats( MailTxtFormats nSet ) { aMiscConfig.nMailingFormats = nSet;
+                                                            aMiscConfig.SetModified();}
 
     bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
     void        SetSinglePrintJob( bool b )     { aMiscConfig.bSinglePrintJob = b;

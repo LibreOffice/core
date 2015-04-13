@@ -256,10 +256,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Int16 nMailingMode(pModOpt->GetMailingFormats());
-    m_pFormatSwCB->Check((nMailingMode & TXTFORMAT_OFFICE) != 0);
-    m_pFormatHtmlCB->Check((nMailingMode & TXTFORMAT_HTML) != 0);
-    m_pFormatRtfCB->Check((nMailingMode & TXTFORMAT_RTF) != 0);
+    MailTxtFormats nMailingMode(pModOpt->GetMailingFormats());
+    m_pFormatSwCB->Check(bool(nMailingMode & MailTxtFormats::OFFICE));
+    m_pFormatHtmlCB->Check(bool(nMailingMode & MailTxtFormats::HTML));
+    m_pFormatRtfCB->Check(bool(nMailingMode & MailTxtFormats::RTF));
 
     m_pAllRB->Check(true);
 
@@ -578,14 +578,14 @@ bool SwMailMergeDlg::ExecQryShell()
 
     pModOpt->SetSinglePrintJob(m_pSingleJobsCB->IsChecked());
 
-    sal_uInt8 nMailingMode = 0;
+    MailTxtFormats nMailingMode = MailTxtFormats::NONE;
 
     if (m_pFormatSwCB->IsChecked())
-        nMailingMode |= TXTFORMAT_OFFICE;
+        nMailingMode |= MailTxtFormats::OFFICE;
     if (m_pFormatHtmlCB->IsChecked())
-        nMailingMode |= TXTFORMAT_HTML;
+        nMailingMode |= MailTxtFormats::HTML;
     if (m_pFormatRtfCB->IsChecked())
-        nMailingMode |= TXTFORMAT_RTF;
+        nMailingMode |= MailTxtFormats::RTF;
     pModOpt->SetMailingFormats(nMailingMode);
     return true;
 }

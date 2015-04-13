@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVL_MAILENUM_HXX
 #define INCLUDED_SVL_MAILENUM_HXX
 
-// enum ------------------------------------------------------------------
-
 enum MailState
 {
     MAIL_STATE_SUCCESS = 0,
@@ -74,14 +72,6 @@ enum MailAction
     MAIL_ACTION_NEXT,       // jump to next mail
     MAIL_ACTION_PREV        // jump to previous mail
 };
-
-// text format for the sending of messages ------------------------------
-
-#define TXTFORMAT_ASCII     ((sal_uInt8)0x01)
-#define TXTFORMAT_HTML      ((sal_uInt8)0x02)
-#define TXTFORMAT_RTF       ((sal_uInt8)0x04)
-#define TXTFORMAT_OFFICE    ((sal_uInt8)0x08)
-
 
 #endif
 
