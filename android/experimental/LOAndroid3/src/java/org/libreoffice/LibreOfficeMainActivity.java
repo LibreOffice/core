@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.libreoffice.overlay.DocumentOverlay;
+
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -69,6 +70,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        mToolbarController.setOptionMenu(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,7 +143,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mToolbarController = new ToolbarController(getSupportActionBar(), toolbar);
+        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +178,8 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
+
+
     }
 
     private boolean copyFileToTemp() {

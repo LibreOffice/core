@@ -31,6 +31,15 @@ public class Document {
     public static final int MOUSE_BUTTON_UP = 1;
     public static final int MOUSE_MOVE = 2;
 
+
+    /**
+     * State change types
+     */
+    public static final int BOLD = 0;
+    public static final int ITALIC = 1;
+    public static final int UNDERLINE = 2;
+    public static final int STRIKEOUT = 3;
+
     /**
      * Callback message types
      */
@@ -42,6 +51,7 @@ public class Document {
     public static final int CALLBACK_CURSOR_VISIBLE = 5;
     public static final int CALLBACK_GRAPHIC_SELECTION = 6;
     public static final int CALLBACK_HYPERLINK_CLICKED = 7;
+    public static final int CALLBACK_STATE_CHANGED = 8;
 
     /**
      * Set text selection types

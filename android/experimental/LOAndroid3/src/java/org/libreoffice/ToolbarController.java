@@ -8,20 +8,75 @@
  */
 package org.libreoffice;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import org.libreoffice.canvas.ImageUtils;
+import org.libreoffice.kit.Document;
 
 /**
  * Controls the changes to the toolbar.
  */
 public class ToolbarController {
+    private static final String LOGTAG = ToolbarController.class.getSimpleName();
     private final Toolbar mToolbar;
     private final ActionBar mActionBar;
+    private Menu mOptionsMenu;
+    private Context mContext;
 
-    public ToolbarController(ActionBar actionBar, Toolbar toolbar) {
+    public ToolbarController(Context context, ActionBar actionBar, Toolbar toolbar) {
         mToolbar = toolbar;
         mActionBar = actionBar;
+        mContext = context;
         switchToViewMode();
+    }
+
+    public void onToggleStateChanged(int type, boolean pressed) {
+        MenuItem menuItem = null;
+        Bitmap icon = null;
+        switch (type) {
+            case Document.BOLD:
+                menuItem = mOptionsMenu.findItem(R.id.action_bold);
+                icon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.action_bold);
+                break;
+            case Document.ITALIC:
+                menuItem = mOptionsMenu.findItem(R.id.action_italic);
+                icon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.action_italic);
+                break;
+            case Document.UNDERLINE:
+                menuItem = mOptionsMenu.findItem(R.id.action_underline);
+                icon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.action_underline);
+                break;
+            case Document.STRIKEOUT:
+                menuItem = mOptionsMenu.findItem(R.id.action_strikeout);
+                icon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.action_strikeout);
+                break;
+            default:
+                Log.e(LOGTAG, "Uncaptured state change type: " + type);
+                return;
+        }
+
+        if (menuItem == null) {
+            Log.e(LOGTAG, "MenuItem not found.");
+            return;
+        }
+
+        if (pressed) {
+            icon = ImageUtils.bitmapToPressed(icon);
+        }
+
+        menuItem.setIcon(new BitmapDrawable(mContext.getResources(), icon));
+    }
+
+    public void setOptionMenu(Menu menu) {
+        mOptionsMenu = menu;
     }
 
     /**

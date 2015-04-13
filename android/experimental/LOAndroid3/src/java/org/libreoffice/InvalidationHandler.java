@@ -68,10 +68,23 @@ public class InvalidationHandler implements Document.MessageCallback {
                 if (!payload.startsWith("http://") && !payload.startsWith("https://")) {
                     payload = "http://" + payload;
                 }
-
                 Intent urlIntent = new Intent(Intent.ACTION_VIEW);
                 urlIntent.setData(Uri.parse(payload));
                 LibreOfficeMainActivity.mAppContext.startActivity(urlIntent);
+                break;
+            case Document.CALLBACK_STATE_CHANGED:
+                Log.d("Document.CALLBACK_STATE_CHANGED: " + payload);
+                String[] parts = payload.split(":");
+                boolean pressed = Boolean.parseBoolean(parts[1]);
+                if (parts[0].equals("Bold")) {
+                    LOKitShell.getToolbarController().onToggleStateChanged(Document.BOLD, pressed);
+                } else if (parts[0].equals("Italic")) {
+                    LOKitShell.getToolbarController().onToggleStateChanged(Document.ITALIC, pressed);
+                } else if (parts[0].equals("Underline")) {
+                    LOKitShell.getToolbarController().onToggleStateChanged(Document.UNDERLINE, pressed);
+                } else if (parts[0].equals("Strikeout")) {
+                    LOKitShell.getToolbarController().onToggleStateChanged(Document.STRIKEOUT, pressed);
+                }
                 break;
         }
     }
