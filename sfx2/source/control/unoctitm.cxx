@@ -1017,7 +1017,8 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         aEvent.Requery = sal_False;
         aEvent.State = aState;
 
-        if (pDispatcher && pDispatcher->GetFrame()) {
+        if (pDispatcher && pDispatcher->GetFrame())
+        {
             InterceptLOKStateChangeEvent(
                     pDispatcher->GetFrame()->GetObjectShell(), aEvent);
         }
@@ -1047,14 +1048,14 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
 void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent) const
 {
-    if (!objSh || !objSh->isTiledRendering()) {
+    if (!objSh || !objSh->isTiledRendering())
         return;
-    }
 
     if (aEvent.FeatureURL.Path == "Bold" ||
-            aEvent.FeatureURL.Path == "Italic" ||
-            aEvent.FeatureURL.Path == "Underline" ||
-            aEvent.FeatureURL.Path == "StrikeOut") {
+        aEvent.FeatureURL.Path == "Italic" ||
+        aEvent.FeatureURL.Path == "Underline" ||
+        aEvent.FeatureURL.Path == "StrikeOut")
+    {
 
         OUStringBuffer aBuffer;
         aBuffer.append(aEvent.FeatureURL.Complete);

@@ -1302,15 +1302,15 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
 
 void SwDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    if (!m_pDoc) {
+    if (!m_pDoc)
         return;
-    }
 
     SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     pDrawModel->libreOfficeKitCallback(nType, pPayload);
 }
 
-bool SwDocShell::isTiledRendering() const {
+bool SwDocShell::isTiledRendering() const
+{
     SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     return pDrawModel->isTiledRendering();
 }
