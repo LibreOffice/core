@@ -398,7 +398,7 @@ OUString UnoEditControl::getText() throw(uno::RuntimeException, std::exception)
     return aText;
 }
 
-OUString UnoEditControl::getSelectedText( void ) throw(uno::RuntimeException, std::exception)
+OUString UnoEditControl::getSelectedText() throw(uno::RuntimeException, std::exception)
 {
     OUString sSelected;
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
@@ -415,7 +415,7 @@ void UnoEditControl::setSelection( const awt::Selection& aSelection ) throw(uno:
         xText->setSelection( aSelection );
 }
 
-awt::Selection UnoEditControl::getSelection( void ) throw(uno::RuntimeException, std::exception)
+awt::Selection UnoEditControl::getSelection() throw(uno::RuntimeException, std::exception)
 {
     awt::Selection aSel;
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
@@ -424,7 +424,7 @@ awt::Selection UnoEditControl::getSelection( void ) throw(uno::RuntimeException,
     return aSel;
 }
 
-sal_Bool UnoEditControl::isEditable( void ) throw(uno::RuntimeException, std::exception)
+sal_Bool UnoEditControl::isEditable() throw(uno::RuntimeException, std::exception)
 {
     return !ImplGetPropertyValue_BOOL( BASEPROPERTY_READONLY );
 }

@@ -145,7 +145,7 @@ namespace vcl
  *
  * INTERNAL: gets called only from ProcessTables();
  */
-    TrueTypeTable *TrueTypeTableNew_loca(void);
+    TrueTypeTable *TrueTypeTableNew_loca();
 
 /**
  * Creates a new 'maxp' table based on an existing maxp table.
@@ -158,12 +158,12 @@ namespace vcl
 /**
  * Creates a new empty 'glyf' table.
  */
-    TrueTypeTable *TrueTypeTableNew_glyf(void);
+    TrueTypeTable *TrueTypeTableNew_glyf();
 
 /**
  * Creates a new empty 'cmap' table.
  */
-    TrueTypeTable *TrueTypeTableNew_cmap(void);
+    TrueTypeTable *TrueTypeTableNew_cmap();
 
 /**
  * Creates a new 'name' table. If n != 0 the table gets populated by

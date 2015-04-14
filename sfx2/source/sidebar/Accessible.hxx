@@ -49,11 +49,11 @@ class Accessible
 public:
     Accessible (
         const css::uno::Reference<css::accessibility::XAccessibleContext>& rxContext);
-    virtual ~Accessible (void);
+    virtual ~Accessible();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext (void)
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:

@@ -760,7 +760,7 @@ ExcDocument::~ExcDocument()
     delete pExpChangeTrack;
 }
 
-void ExcDocument::ReadDoc( void )
+void ExcDocument::ReadDoc()
 {
     InitializeConvert();
 

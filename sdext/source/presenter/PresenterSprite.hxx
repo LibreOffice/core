@@ -37,8 +37,8 @@ class PresenterSprite
     : private ::boost::noncopyable
 {
 public:
-    PresenterSprite (void);
-    virtual ~PresenterSprite (void);
+    PresenterSprite();
+    virtual ~PresenterSprite();
 
     /** The given sprite canvas is used as factory to create the sprite that
         is wrapped by objects of this class.
@@ -47,15 +47,15 @@ public:
     void SetFactory (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
 
-    css::uno::Reference<css::rendering::XCanvas> GetCanvas (void);
+    css::uno::Reference<css::rendering::XCanvas> GetCanvas();
 
-    void Show (void);
-    void Hide (void);
+    void Show();
+    void Hide();
 
     void Resize (const css::geometry::RealSize2D& rSize);
     void MoveTo (const css::geometry::RealPoint2D& rLocation);
 
-    void Update (void);
+    void Update();
 
 private:
     css::uno::Reference<css::rendering::XSpriteCanvas> mxSpriteFactory;
@@ -66,8 +66,8 @@ private:
     double mnPriority;
     double mnAlpha;
 
-    void ProvideSprite (void);
-    void DisposeSprite (void);
+    void ProvideSprite();
+    void DisposeSprite();
 };
 
 } }

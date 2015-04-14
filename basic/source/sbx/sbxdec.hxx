@@ -51,13 +51,13 @@ class SbxDecimal
     sal_Int32       mnRefCount;
 
 public:
-    SbxDecimal( void );
+    SbxDecimal();
     SbxDecimal( const SbxDecimal& rDec );
     SbxDecimal( const com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
 
     ~SbxDecimal();
 
-    void addRef( void )
+    void addRef()
         { mnRefCount++; }
 
     void fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
@@ -98,9 +98,9 @@ public:
     bool operator += ( const SbxDecimal &r );
     bool operator /= ( const SbxDecimal &r );
     bool operator *= ( const SbxDecimal &r );
-    bool neg( void );
+    bool neg();
 
-    bool isZero( void );
+    bool isZero();
 
     enum CmpResult { LT, EQ, GT };
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );

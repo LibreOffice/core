@@ -117,7 +117,7 @@ SlotManager::SlotManager (SlideSorter& rSlideSorter)
 {
 }
 
-SlotManager::~SlotManager (void)
+SlotManager::~SlotManager()
 {
 }
 
@@ -877,7 +877,7 @@ void SlotManager::ShowSlideShow( SfxRequest& rReq)
     slideshowhelp::ShowSlideShow(rReq, *mrSlideSorter.GetModel().GetDocument());
 }
 
-void SlotManager::RenameSlide (void)
+void SlotManager::RenameSlide()
 {
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
     View* pDrView = &mrSlideSorter.GetView();
@@ -1186,7 +1186,7 @@ void SlotManager::ChangeSlideExclusionState (
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
 }
 
-sal_Int32 SlotManager::GetInsertionPosition (void)
+sal_Int32 SlotManager::GetInsertionPosition()
 {
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
 
@@ -1233,7 +1233,7 @@ sal_Int32 SlotManager::GetInsertionPosition (void)
     }
 }
 
-void SlotManager::NotifyEditModeChange (void)
+void SlotManager::NotifyEditModeChange()
 {
     SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
     rBindings.Invalidate(SID_PRESENTATION);

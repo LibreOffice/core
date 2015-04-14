@@ -56,7 +56,7 @@ svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopu
     return new CellLineStyleControl(pParent, *this);
 }
 
-void CellAppearancePropertyPanel::EndCellLineStylePopupMode(void)
+void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
 {
     if(mpCellLineStylePopup.get())
     {
@@ -69,7 +69,7 @@ svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellBorderStylePo
     return new CellBorderStyleControl(pParent, *this);
 }
 
-void CellAppearancePropertyPanel::EndCellBorderStylePopupMode(void)
+void CellAppearancePropertyPanel::EndCellBorderStylePopupMode()
 {
     if(mpCellBorderStylePopup.get())
     {

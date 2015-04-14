@@ -110,7 +110,7 @@ SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 {
 }
 
-OUString SwHyperlinkEventDescriptor::getImplementationName(void)
+OUString SwHyperlinkEventDescriptor::getImplementationName()
     throw( RuntimeException, std::exception )
 {
     return sImplName;

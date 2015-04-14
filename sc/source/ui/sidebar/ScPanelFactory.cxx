@@ -67,12 +67,12 @@ css::uno::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames_s
 
 }
 
-ScPanelFactory::ScPanelFactory (void)
+ScPanelFactory::ScPanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
-ScPanelFactory::~ScPanelFactory (void)
+ScPanelFactory::~ScPanelFactory()
 {
 }
 

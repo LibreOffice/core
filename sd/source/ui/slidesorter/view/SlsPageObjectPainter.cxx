@@ -61,7 +61,7 @@ PageObjectPainter::PageObjectPainter (
     mpFocusBorderPainter->AdaptColor(aColor, true);
 }
 
-PageObjectPainter::~PageObjectPainter (void)
+PageObjectPainter::~PageObjectPainter()
 {
 }
 
@@ -87,7 +87,7 @@ void PageObjectPainter::PaintPageObject (
     }
 }
 
-bool PageObjectPainter::UpdatePageObjectLayouter (void)
+bool PageObjectPainter::UpdatePageObjectLayouter()
 {
     // The page object layouter is quite volatile. It may have been replaced
     // since the last call.  Update it now.

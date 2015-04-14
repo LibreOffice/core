@@ -43,12 +43,12 @@ namespace sdext { namespace presenter {
 
 //===== Service ===============================================================
 
-OUString PresenterPaneBorderManager::getImplementationName_static (void)
+OUString PresenterPaneBorderManager::getImplementationName_static()
 {
     return OUString("com.sun.star.comp.Draw.PresenterPaneBorderManager");
 }
 
-Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
+Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static()
 {
     static const OUString sServiceName(
         "com.sun.star.drawing.PresenterPaneBorderManager");
@@ -91,11 +91,11 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     }
 }
 
-PresenterPaneBorderManager::~PresenterPaneBorderManager (void)
+PresenterPaneBorderManager::~PresenterPaneBorderManager()
 {
 }
 
-void PresenterPaneBorderManager::disposing (void)
+void PresenterPaneBorderManager::disposing()
 {
     WindowList::const_iterator iDescriptor;
     for (iDescriptor=maWindowList.begin(); iDescriptor!=maWindowList.end(); ++iDescriptor)
@@ -491,7 +491,7 @@ void PresenterPaneBorderManager::ReleaseMouse (const Reference<awt::XWindow>& rx
         mxPresenterHelper->releaseMouse(rxWindow);
 }
 
-void PresenterPaneBorderManager::ThrowIfDisposed (void)
+void PresenterPaneBorderManager::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

@@ -683,7 +683,7 @@ static Link g_aEventListenerLink( NULL, WindowEventHandler );
 extern "C" {
 
 static G_CONST_RETURN gchar *
-ooo_atk_util_get_toolkit_name (void)
+ooo_atk_util_get_toolkit_name()
 {
     return "VCL";
 }
@@ -691,7 +691,7 @@ ooo_atk_util_get_toolkit_name (void)
 /*****************************************************************************/
 
 static G_CONST_RETURN gchar *
-ooo_atk_util_get_toolkit_version (void)
+ooo_atk_util_get_toolkit_version()
 {
     return LIBO_VERSION_DOTTED;
 }
@@ -722,7 +722,7 @@ ooo_atk_util_class_init (AtkUtilClass *)
 /*****************************************************************************/
 
 GType
-ooo_atk_util_get_type (void)
+ooo_atk_util_get_type()
 {
     static GType type = 0;
 

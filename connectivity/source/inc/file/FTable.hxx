@@ -68,7 +68,7 @@ namespace connectivity
             virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
             virtual void SAL_CALL release() throw() SAL_OVERRIDE;
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
             OConnection* getConnection() const { return m_pConnection;}
             virtual sal_Int32 getCurrentLastPos() const {return -1;}

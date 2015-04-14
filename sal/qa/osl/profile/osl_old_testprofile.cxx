@@ -38,7 +38,7 @@ namespace osl_Profile
         CPPUNIT_TEST_SUITE_END( );
     };
 
-void oldtests::test_profile(void)
+void oldtests::test_profile()
 {
     rtl::OUString baseUrl;
     CPPUNIT_ASSERT(rtl::Bootstrap::get("UserInstallation", baseUrl));

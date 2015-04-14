@@ -49,7 +49,7 @@ public:
     */
     CurrentSlideManager (SlideSorter& rSlideSorter);
 
-    ~CurrentSlideManager (void);
+    ~CurrentSlideManager();
 
     /** Call this when the current page of the main view shell has been
         switched.  Use SwitchCurrentSlide() to initiate such a switch.
@@ -76,15 +76,15 @@ public:
     /** Return the page descriptor for the current slide.  Note, that when
         there is no current slide then the returned pointer is empty.
     */
-    model::SharedPageDescriptor GetCurrentSlide (void) { return mpCurrentSlide;}
+    model::SharedPageDescriptor GetCurrentSlide() { return mpCurrentSlide;}
 
     /** Release all references to model data.
     */
-    void PrepareModelChange (void);
+    void PrepareModelChange();
 
     /** Modify inner state in reaction to a change of the SlideSorterModel.
     */
-    void HandleModelChange (void);
+    void HandleModelChange();
 
 private:
     SlideSorter& mrSlideSorter;
@@ -95,7 +95,7 @@ private:
     */
     Timer maSwitchPageDelayTimer;
 
-    bool IsCurrentSlideIsValid (void);
+    bool IsCurrentSlideIsValid();
     void SetCurrentSlideAtViewShellBase (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtTabControl (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtXController (const model::SharedPageDescriptor& rpSlide);
@@ -103,7 +103,7 @@ private:
     /** When switching from one slide to a new current slide then this
         method releases all ties to the old slide.
     */
-    void ReleaseCurrentSlide (void);
+    void ReleaseCurrentSlide();
 
     /** When switching from one slide to a new current slide then this
         method connects to the new current slide.

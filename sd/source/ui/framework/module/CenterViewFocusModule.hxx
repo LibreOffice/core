@@ -56,9 +56,9 @@ class CenterViewFocusModule
 public:
     CenterViewFocusModule (
         ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
-    virtual ~CenterViewFocusModule (void);
+    virtual ~CenterViewFocusModule();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfigurationChangeListener
 

@@ -32,7 +32,7 @@ public :
     TextUnderlinePopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    virtual ~TextUnderlinePopup (void);
+    virtual ~TextUnderlinePopup();
 
     void Rearrange (FontUnderline eLine);
 };

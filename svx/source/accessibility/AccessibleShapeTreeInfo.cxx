@@ -26,7 +26,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (void)
+AccessibleShapeTreeInfo::AccessibleShapeTreeInfo()
     : mpView (NULL),
       mpWindow (NULL),
       mpViewForwarder (NULL)
@@ -68,7 +68,7 @@ AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleSha
 
 
 
-AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo (void)
+AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo()
 {
     //empty
 }

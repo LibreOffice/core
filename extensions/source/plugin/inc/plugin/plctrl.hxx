@@ -99,10 +99,10 @@ public:
     // ::com::sun::star::awt::XWindow
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setFocus(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener > & l ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener > & l ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -132,10 +132,10 @@ public:
     // ::com::sun::star::awt::XView
     virtual sal_Bool SAL_CALL setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & /*aDevice*/ ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     { return sal_False; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > (); }
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     { return ::com::sun::star::awt::Size(_nWidth, _nHeight); }
 
     virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

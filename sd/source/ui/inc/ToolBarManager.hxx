@@ -74,14 +74,14 @@ public:
         const ::boost::shared_ptr<tools::EventMultiplexer>& rpMultiplexer,
         const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager);
 
-    ~ToolBarManager (void);
+    ~ToolBarManager();
 
     /** Call this method prior to the destructor to prevent the
         ToolBarManager from accessing the ViewShellManager or the
         XLayoutManager when those are possibly not well and alive anymore
         (like during the destruction of the ViewShellBase.)
     */
-    void Shutdown (void);
+    void Shutdown();
 
     /** When the view in the center pane changes then this method sets up
         the initial set of tool bars for the new view.
@@ -146,7 +146,7 @@ public:
             When this shell is not the main view then the method returns
             immediately.
     */
-    void ResetAllToolBars (void);
+    void ResetAllToolBars();
 
     /** Add the tool bar with the given name to the specified group of tool
         bars.
@@ -223,19 +223,19 @@ public:
         ToolBarGroup eGroup,
         ShellId nToolBarId);
 
-    void PreUpdate (void);
+    void PreUpdate();
 
     /** Request an update of the active tool bars.  The update is made
         asynchronously.
     */
-    void RequestUpdate (void);
+    void RequestUpdate();
 
     /** This is a hint for the ToolBarManager to improve the performance
         when it updates its tool bars when its own lock is released.  Taking
         control of the release of the update lock of the ViewShellManager
         avoids some shell stack modifications and tool bar updates.
     */
-    void LockViewShellManager (void);
+    void LockViewShellManager();
 
     /** Use this class to prevent the visible tool bars from being updated
         (and thus causing repaints and GUI rearrangements) when several tool
@@ -244,13 +244,13 @@ public:
     class UpdateLock { public:
         UpdateLock(const ::boost::shared_ptr<ToolBarManager>& rpManager)
             : mpManager(rpManager) { mpManager->LockUpdate(); }
-        ~UpdateLock(void) { mpManager->UnlockUpdate(); }
+        ~UpdateLock() { mpManager->UnlockUpdate(); }
     private:
         ::boost::shared_ptr<ToolBarManager> mpManager;
     };
     friend class UpdateLock;
 
-    void ToolBarsDestroyed(void);
+    void ToolBarsDestroyed();
 
 private:
     class Implementation;
@@ -259,10 +259,10 @@ private:
     /** The ViewShellBase is used to get the XLayoutManager and to determine
         the plug in mode.
     */
-    ToolBarManager (void);
+    ToolBarManager();
 
-    void LockUpdate (void);
-    void UnlockUpdate (void);
+    void LockUpdate();
+    void UnlockUpdate();
 };
 
 } // end of namespace sd

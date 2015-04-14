@@ -209,13 +209,13 @@ XMLTransformerBase::~XMLTransformerBase() throw ()
     delete m_pTokenMap;
 }
 
-void SAL_CALL XMLTransformerBase::startDocument( void )
+void SAL_CALL XMLTransformerBase::startDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
     m_xHandler->startDocument();
 }
 
-void SAL_CALL XMLTransformerBase::endDocument( void )
+void SAL_CALL XMLTransformerBase::endDocument()
     throw( SAXException, RuntimeException, std::exception)
 {
     m_xHandler->endDocument();
@@ -382,13 +382,13 @@ void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator 
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL XMLTransformerBase::startCDATA( void ) throw(SAXException, RuntimeException, std::exception)
+void SAL_CALL XMLTransformerBase::startCDATA() throw(SAXException, RuntimeException, std::exception)
 {
     if( m_xExtHandler.is() )
         m_xExtHandler->startCDATA();
 }
 
-void SAL_CALL XMLTransformerBase::endCDATA( void ) throw(RuntimeException, std::exception)
+void SAL_CALL XMLTransformerBase::endCDATA() throw(RuntimeException, std::exception)
 {
     if( m_xExtHandler.is() )
         m_xExtHandler->endCDATA();
@@ -401,7 +401,7 @@ void SAL_CALL XMLTransformerBase::comment( const OUString& rComment )
         m_xExtHandler->comment( rComment );
 }
 
-void SAL_CALL XMLTransformerBase::allowLineBreak( void )
+void SAL_CALL XMLTransformerBase::allowLineBreak()
     throw(SAXException, RuntimeException, std::exception)
 {
     if( m_xExtHandler.is() )

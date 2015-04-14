@@ -41,11 +41,11 @@ SlideRenderer::SlideRenderer (const Reference<XComponentContext>& rxContext)
     (void)rxContext;
 }
 
-SlideRenderer::~SlideRenderer (void)
+SlideRenderer::~SlideRenderer()
 {
 }
 
-void SAL_CALL SlideRenderer::disposing (void)
+void SAL_CALL SlideRenderer::disposing()
 {
 }
 
@@ -197,7 +197,7 @@ BitmapEx SlideRenderer::CreatePreview (
     }
 }
 
-void SlideRenderer::ThrowIfDisposed (void)
+void SlideRenderer::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (SlideRendererInterfaceBase::rBHelper.bDisposed || SlideRendererInterfaceBase::rBHelper.bInDispose)

@@ -97,7 +97,7 @@ public:
     explicit                    ExcDocument( const XclExpRoot& rRoot );
     virtual                     ~ExcDocument();
 
-    void                ReadDoc( void );
+    void                ReadDoc();
     void                Write( SvStream& rSvStrm );
     void                WriteXml( XclExpXmlStream& );
 };

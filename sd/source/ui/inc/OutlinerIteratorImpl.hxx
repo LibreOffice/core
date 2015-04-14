@@ -60,14 +60,14 @@ public:
     IteratorImplBase (SdDrawDocument* pDocument,
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode);
-    virtual ~IteratorImplBase (void);
+    virtual ~IteratorImplBase();
 
     /** Advance to the next text of the current object or to the next object.
         This takes the iteration direction into
         account.  The new object pointed to can be retrieved (among other
         information) by calling the <member>GetPosition</member> method.
     */
-    virtual void GotoNextText (void) = 0;
+    virtual void GotoNextText() = 0;
     /** Return an object that describes the current object.
         @return
             The returned object describes the current object pointed to by
@@ -75,7 +75,7 @@ public:
             <type>IteratorPosition</type> for details on the available
             information.
     */
-    virtual const IteratorPosition& GetPosition (void);
+    virtual const IteratorPosition& GetPosition();
     /** Create an exact copy of this object.  No argument should be
         specified when called from the outside.  It then creates an object
         first and passes that to the inherited <member>Clone()</member>
@@ -107,7 +107,7 @@ public:
     virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
     /** Reverse the direction of iteration.  The current object stays the same.
     */
-    virtual void Reverse (void);
+    virtual void Reverse();
 
 protected:
     /// The current position as returned by <member>GetPosition()</member>.
@@ -140,10 +140,10 @@ public:
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
-    virtual ~SelectionIteratorImpl (void);
+    virtual ~SelectionIteratorImpl();
 
-    virtual void GotoNextText (void) SAL_OVERRIDE;
-    virtual const IteratorPosition& GetPosition (void) SAL_OVERRIDE;
+    virtual void GotoNextText() SAL_OVERRIDE;
+    virtual const IteratorPosition& GetPosition() SAL_OVERRIDE;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
     virtual bool operator== (const IteratorImplBase& rIterator) const SAL_OVERRIDE;
 
@@ -188,11 +188,11 @@ public:
         bool bDirectionIsForward,
         PageKind ePageKind,
         EditMode eEditMode);
-    virtual ~ViewIteratorImpl (void);
+    virtual ~ViewIteratorImpl();
 
-    virtual void GotoNextText (void) SAL_OVERRIDE;
+    virtual void GotoNextText() SAL_OVERRIDE;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
-    virtual void Reverse (void) SAL_OVERRIDE;
+    virtual void Reverse() SAL_OVERRIDE;
 
 protected:
     /** Initialize this iterator with respect to the given location.  After
@@ -236,9 +236,9 @@ public:
         SdDrawDocument* pDocument,
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
-    virtual ~DocumentIteratorImpl (void);
+    virtual ~DocumentIteratorImpl();
 
-    virtual void GotoNextText (void) SAL_OVERRIDE;
+    virtual void GotoNextText() SAL_OVERRIDE;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
 
 private:

@@ -50,7 +50,7 @@ public:
 
 private:
     CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
-    ~CanvasUpdateRequester (void);
+    ~CanvasUpdateRequester();
     class Deleter; friend class Deleter;
 
     typedef ::std::vector<

@@ -67,7 +67,7 @@ public:
     ~OPumpTest();
 
 public: // implementation names
-    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw();
+    static Sequence< OUString >     getSupportedServiceNames_Static() throw();
     static OUString                 getImplementationName_Static() throw();
 
 public:
@@ -80,10 +80,10 @@ public:
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void)                              throw  (    RuntimeException) ;
-    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw  (RuntimeException) ;
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)                 throw  (RuntimeException);
+    virtual sal_Bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
+    virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException) ;
+    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings()                 throw  (RuntimeException);
 
 private:
     void testSimple( const Reference < XInterface > & );
@@ -190,25 +190,25 @@ sal_Int32 OPumpTest::test(
 
 
 
-sal_Bool OPumpTest::testPassed(void)        throw  (RuntimeException)
+sal_Bool OPumpTest::testPassed()        throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OPumpTest::getErrors(void)     throw  (RuntimeException)
+Sequence< OUString > OPumpTest::getErrors()     throw  (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OPumpTest::getErrorExceptions(void)                     throw  (RuntimeException)
+Sequence< Any > OPumpTest::getErrorExceptions()                     throw  (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OPumpTest::getWarnings(void)                       throw  (RuntimeException)
+Sequence< OUString > OPumpTest::getWarnings()                       throw  (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -420,7 +420,7 @@ Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMul
     return *new OPumpTest( rSMgr );
 }
 
-Sequence<OUString> OPumpTest_getSupportedServiceNames(void) throw()
+Sequence<OUString> OPumpTest_getSupportedServiceNames() throw()
 {
     OUString s = OPumpTest_getServiceName();
     Sequence< OUString > seq( &s , 1 );

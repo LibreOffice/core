@@ -131,7 +131,7 @@ public:
     }
     void MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
-    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
 };
 
 class SfxActionListBox : public DropListBox_Impl
@@ -140,7 +140,7 @@ protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
-    virtual PopupMenu*  CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
 };
 
 class SfxCommonTemplateDialog_Impl : public SfxListener
@@ -325,31 +325,31 @@ public:
         return pCurObjShell;
     }
 
-    inline bool CanEdit( void ) const
+    inline bool CanEdit() const
     {
         return bCanEdit;
     }
-    inline bool CanDel( void ) const
+    inline bool CanDel() const
     {
         return bCanDel;
     }
-    inline bool CanNew( void ) const
+    inline bool CanNew() const
     {
         return bCanNew;
     }
 
-    inline bool CanHide( void ) const
+    inline bool CanHide() const
     {
         return bCanHide;
     }
 
-    inline bool CanShow( void ) const
+    inline bool CanShow() const
     {
         return bCanShow;
     }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    PopupMenu*  CreateContextMenu( void );
+    PopupMenu*  CreateContextMenu();
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper

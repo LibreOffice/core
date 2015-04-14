@@ -337,34 +337,34 @@ public:
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getPublicId(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSystemId(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getColumnNumber() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getLineNumber() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPublicId() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSystemId() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     FastSaxParserImpl *mpParser;
 };
 
-sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber() throw (RuntimeException, std::exception)
 {
     checkDispose();
     return xmlSAX2GetColumnNumber( mpParser->getEntity().mpParser );
 }
 
-sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber() throw (RuntimeException, std::exception)
 {
     checkDispose();
     return xmlSAX2GetLineNumber( mpParser->getEntity().mpParser );
 }
 
-OUString SAL_CALL FastLocatorImpl::getPublicId(void) throw (RuntimeException, std::exception)
+OUString SAL_CALL FastLocatorImpl::getPublicId() throw (RuntimeException, std::exception)
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sPublicId;
 }
 
-OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException, std::exception)
+OUString SAL_CALL FastLocatorImpl::getSystemId() throw (RuntimeException, std::exception)
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sSystemId;

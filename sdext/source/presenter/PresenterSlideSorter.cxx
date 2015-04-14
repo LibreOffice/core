@@ -86,8 +86,8 @@ public:
     Layout (const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
 
     void Update (const geometry::RealRectangle2D& rBoundingBox, const double nSlideAspectRatio);
-    void SetupVisibleArea (void);
-    void UpdateScrollBars (void);
+    void SetupVisibleArea();
+    void UpdateScrollBars();
     bool IsScrollBarNeeded (const sal_Int32 nSlideCount);
     geometry::RealPoint2D GetLocalPosition (const geometry::RealPoint2D& rWindowPoint) const;
     geometry::RealPoint2D GetWindowPosition(const geometry::RealPoint2D& rLocalPoint) const;
@@ -102,8 +102,8 @@ public:
         const sal_Int32 nRelativeVerticalPosition) const;
     css::awt::Rectangle GetBoundingBox (const sal_Int32 nSlideIndex) const;
     void ForAllVisibleSlides (const ::boost::function<void(sal_Int32)>& rAction);
-    sal_Int32 GetFirstVisibleSlideIndex (void) const;
-    sal_Int32 GetLastVisibleSlideIndex (void) const;
+    sal_Int32 GetFirstVisibleSlideIndex() const;
+    sal_Int32 GetLastVisibleSlideIndex() const;
     bool SetHorizontalOffset (const double nOffset);
     bool SetVerticalOffset (const double nOffset);
 
@@ -143,7 +143,7 @@ public:
         const ::boost::shared_ptr<PresenterTheme>& rpTheme,
         const Reference<awt::XWindow>& rxInvalidateTarget,
         const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager);
-    ~MouseOverManager (void);
+    ~MouseOverManager();
 
     void Paint (
         const sal_Int32 nSlideIndex,
@@ -176,7 +176,7 @@ private:
     Reference<rendering::XBitmap> CreateBitmap (
         const OUString& rsText,
         const sal_Int32 nMaximalWidth) const;
-    void Invalidate (void);
+    void Invalidate();
     geometry::IntegerSize2D CalculateLabelSize (
         const OUString& rsText) const;
     OUString GetFittingText (const OUString& rsText, const double nMaximalWidth) const;
@@ -193,7 +193,7 @@ public:
     CurrentSlideFrameRenderer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    ~CurrentSlideFrameRenderer (void);
+    ~CurrentSlideFrameRenderer();
 
     void PaintCurrentSlideFrame (
         const awt::Rectangle& rSlideBoundingBox,
@@ -365,11 +365,11 @@ PresenterSlideSorter::PresenterSlideSorter (
     }
 }
 
-PresenterSlideSorter::~PresenterSlideSorter (void)
+PresenterSlideSorter::~PresenterSlideSorter()
 {
 }
 
-void SAL_CALL PresenterSlideSorter::disposing (void)
+void SAL_CALL PresenterSlideSorter::disposing()
 {
     mxComponentContext = NULL;
     mxViewId = NULL;
@@ -606,14 +606,14 @@ void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent& rE
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlideSorter::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterSlideSorter::getResourceId()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -674,7 +674,7 @@ void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDr
     }
 }
 
-Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage (void)
+Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -683,7 +683,7 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage (voi
 
 
 
-void PresenterSlideSorter::UpdateLayout (void)
+void PresenterSlideSorter::UpdateLayout()
 {
     if ( ! mxWindow.is())
         return;
@@ -842,7 +842,7 @@ void PresenterSlideSorter::ClearBackground (
         awt::Rectangle());
 }
 
-double PresenterSlideSorter::GetSlideAspectRatio (void) const
+double PresenterSlideSorter::GetSlideAspectRatio() const
 {
     double nSlideAspectRatio (28.0/21.0);
 
@@ -1094,7 +1094,7 @@ void PresenterSlideSorter::GotoSlide (const sal_Int32 nSlideIndex)
     mxSlideShowController->gotoSlideIndex(nSlideIndex);
 }
 
-bool PresenterSlideSorter::ProvideCanvas (void)
+bool PresenterSlideSorter::ProvideCanvas()
 {
     if ( ! mxCanvas.is())
     {
@@ -1113,7 +1113,7 @@ bool PresenterSlideSorter::ProvideCanvas (void)
     return mxCanvas.is();
 }
 
-void PresenterSlideSorter::ThrowIfDisposed (void)
+void PresenterSlideSorter::ThrowIfDisposed()
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1245,7 +1245,7 @@ void PresenterSlideSorter::Layout::Update (
         / 2);
 }
 
-void PresenterSlideSorter::Layout::SetupVisibleArea (void)
+void PresenterSlideSorter::Layout::SetupVisibleArea()
 {
     geometry::RealPoint2D aPoint (GetLocalPosition(
         geometry::RealPoint2D(maBoundingBox.X1, maBoundingBox.Y1)));
@@ -1408,12 +1408,12 @@ void PresenterSlideSorter::Layout::ForAllVisibleSlides (const ::boost::function<
     }
 }
 
-sal_Int32 PresenterSlideSorter::Layout::GetFirstVisibleSlideIndex (void) const
+sal_Int32 PresenterSlideSorter::Layout::GetFirstVisibleSlideIndex() const
 {
     return GetIndex(mnFirstVisibleRow, mnFirstVisibleColumn);
 }
 
-sal_Int32 PresenterSlideSorter::Layout::GetLastVisibleSlideIndex (void) const
+sal_Int32 PresenterSlideSorter::Layout::GetLastVisibleSlideIndex() const
 {
     return ::std::min(
         GetIndex(mnLastVisibleRow, mnLastVisibleColumn),
@@ -1446,7 +1446,7 @@ bool PresenterSlideSorter::Layout::SetVerticalOffset (const double nOffset)
         return false;
 }
 
-void PresenterSlideSorter::Layout::UpdateScrollBars (void)
+void PresenterSlideSorter::Layout::UpdateScrollBars()
 {
     sal_Int32 nTotalRowCount (0);
     nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
@@ -1514,7 +1514,7 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
     }
 }
 
-PresenterSlideSorter::MouseOverManager::~MouseOverManager (void)
+PresenterSlideSorter::MouseOverManager::~MouseOverManager()
 {
 }
 
@@ -1768,7 +1768,7 @@ void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
         xRightLabelBitmap);
 }
 
-void PresenterSlideSorter::MouseOverManager::Invalidate (void)
+void PresenterSlideSorter::MouseOverManager::Invalidate()
 {
     if (mpPaintManager.get() != NULL)
         mpPaintManager->Invalidate(mxInvalidateTarget, maSlideBoundingBox, true);
@@ -1850,7 +1850,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
     }
 }
 
-PresenterSlideSorter::CurrentSlideFrameRenderer::~CurrentSlideFrameRenderer (void)
+PresenterSlideSorter::CurrentSlideFrameRenderer::~CurrentSlideFrameRenderer()
 {
 }
 

@@ -40,7 +40,7 @@ namespace sd { namespace sidebar {
 
 //===== PagePreviewProvider ===================================================
 
-PagePreviewProvider::PagePreviewProvider (void)
+PagePreviewProvider::PagePreviewProvider()
 {
 }
 
@@ -65,12 +65,12 @@ Image PagePreviewProvider::operator () (
     return aPreview;
 }
 
-int PagePreviewProvider::GetCostIndex (void)
+int PagePreviewProvider::GetCostIndex()
 {
     return 5;
 }
 
-bool PagePreviewProvider::NeedsPageObject (void)
+bool PagePreviewProvider::NeedsPageObject()
 {
     return true;
 }
@@ -95,12 +95,12 @@ Image TemplatePreviewProvider::operator() (
     return Image(ThumbnailView::readThumbnail(msURL));
 }
 
-int TemplatePreviewProvider::GetCostIndex (void)
+int TemplatePreviewProvider::GetCostIndex()
 {
     return 10;
 }
 
-bool TemplatePreviewProvider::NeedsPageObject (void)
+bool TemplatePreviewProvider::NeedsPageObject()
 {
     return false;
 }
@@ -163,7 +163,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     return PTR_CAST(::sd::DrawDocShell,pShell);
 }
 
-int TemplatePageObjectProvider::GetCostIndex (void)
+int TemplatePageObjectProvider::GetCostIndex()
 {
     return 20;
 }
@@ -180,7 +180,7 @@ bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider
 
 //===== DefaultPageObjectProvider ==============================================
 
-DefaultPageObjectProvider::DefaultPageObjectProvider (void)
+DefaultPageObjectProvider::DefaultPageObjectProvider()
 {
 }
 
@@ -203,7 +203,7 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
     return pLocalMasterPage;
 }
 
-int DefaultPageObjectProvider::GetCostIndex (void)
+int DefaultPageObjectProvider::GetCostIndex()
 {
     return 15;
 }
@@ -227,7 +227,7 @@ SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
     return mpPage;
 }
 
-int ExistingPageProvider::GetCostIndex (void)
+int ExistingPageProvider::GetCostIndex()
 {
     return 0;
 }

@@ -56,7 +56,7 @@ public:
     DescriptionGenerator (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& xShape);
 
-    ~DescriptionGenerator (void);
+    ~DescriptionGenerator();
 
     /** Initialize the description with the given prefix followed by the
         shape's style in parantheses and a colon.
@@ -134,19 +134,19 @@ public:
 
     /** Add properties that describe line and border attributes.
     */
-    void AddLineProperties (void);
+    void AddLineProperties();
 
     /** Add properties that describe how areas are filled.
     */
-    void AddFillProperties (void);
+    void AddFillProperties();
 
     /** Add properties that describesattributes of 3D objects.
     */
-    void Add3DProperties (void);
+    void Add3DProperties();
 
     /** Add properties that describe text attributes.
     */
-    void AddTextProperties (void);
+    void AddTextProperties();
 
 private:
     /// Reference to the shape from which the properties are extracted.

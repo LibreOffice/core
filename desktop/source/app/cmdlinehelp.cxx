@@ -198,7 +198,7 @@ namespace desktop
     }
 
 #ifndef UNX
-    CmdlineHelpDialog::CmdlineHelpDialog (void)
+    CmdlineHelpDialog::CmdlineHelpDialog()
     : ModalDialog( NULL, "CmdLineHelp", "desktop/ui/cmdlinehelp.ui" )
     {
         get(m_pftHead, "header");

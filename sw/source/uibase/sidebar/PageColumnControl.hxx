@@ -44,7 +44,7 @@ public:
         const sal_uInt16 nColumnType,
         const bool bLandscape );
 
-    virtual ~PageColumnControl(void);
+    virtual ~PageColumnControl();
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpColumnValueSet;

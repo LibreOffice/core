@@ -64,11 +64,11 @@ ToolPanelModule::ToolPanelModule (
     }
 }
 
-ToolPanelModule::~ToolPanelModule (void)
+ToolPanelModule::~ToolPanelModule()
 {
 }
 
-void ToolPanelModule::SaveResourceState (void)
+void ToolPanelModule::SaveResourceState()
 {
     SvtToolPanelOptions().SetVisibleImpressView(IsResourceActive(FrameworkHelper::msImpressViewURL));
     SvtToolPanelOptions().SetVisibleOutlineView(IsResourceActive(FrameworkHelper::msOutlineViewURL));

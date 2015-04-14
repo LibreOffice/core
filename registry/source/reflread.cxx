@@ -1824,7 +1824,7 @@ void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
     rtl_uString_new(pSuperTypeName);
 }
 
-RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
+RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api()
 {
     static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)

@@ -153,7 +153,7 @@ sal_Bool ReflectionBase::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > ReflectionBase::getSupportedServiceNames(void)
+Sequence< OUString > ReflectionBase::getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_supportedServices;

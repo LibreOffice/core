@@ -284,9 +284,9 @@ public:
     const ESelection&       GetSelection() const throw() { CheckSelection( const_cast<SvxUnoTextRangeBase*>(this)->maSelection, mpEditSource->GetTextForwarder() ); return maSelection; };
     void                    SetSelection( const ESelection& rSelection ) throw();
 
-    void            CollapseToStart(void) throw();
-    void            CollapseToEnd(void) throw();
-    bool            IsCollapsed(void) throw();
+    void            CollapseToStart() throw();
+    void            CollapseToEnd() throw();
+    bool            IsCollapsed() throw();
     bool            GoLeft(sal_Int16 nCount, bool Expand) throw();
     bool            GoRight(sal_Int16 nCount, bool Expand) throw();
     void            GotoStart(bool Expand) throw();

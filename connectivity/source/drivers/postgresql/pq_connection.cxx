@@ -136,7 +136,7 @@ OUString    ConnectionGetImplementationName()
 {
     return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
 }
-com::sun::star::uno::Sequence<OUString> ConnectionGetSupportedServiceNames(void)
+com::sun::star::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
 {
     OUString serv( "com.sun.star.sdbc.Connection" );
     return Sequence< OUString> (&serv,1);

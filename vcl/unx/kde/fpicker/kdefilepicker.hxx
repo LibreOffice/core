@@ -102,17 +102,17 @@ protected:
     QString                     addExtension( const QString &rFileName ) const;
 
     void                        setIsSave( bool bIsSave ) { m_bIsSave = bIsSave; }
-    bool                        isSave( void ) const { return m_bIsSave; }
+    bool                        isSave() const { return m_bIsSave; }
 
     void                        setIsExecuting( bool bIsExecuting ) { m_bIsExecuting = bIsExecuting; }
-    bool                        isExecuting( void ) const { return m_bIsExecuting; }
+    bool                        isExecuting() const { return m_bIsExecuting; }
 
     bool                        isSupportedProtocol( const QString &rProtocol ) const;
     KURL                        mostLocalURL( const KURL &rURL ) const;
     QString                     localCopy( const QString &rFileName ) const;
 
     void                        setCanNotifySelection( bool bCanNotifySelection ) { m_bCanNotifySelection = bCanNotifySelection; }
-    bool                        canNotifySelection( void ) const { return m_bCanNotifySelection; }
+    bool                        canNotifySelection() const { return m_bCanNotifySelection; }
 
 protected slots:
 // Qt3 moc does not really understand #ifdef and would process both slots,

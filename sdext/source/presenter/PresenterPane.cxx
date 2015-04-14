@@ -49,20 +49,20 @@ PresenterPane::PresenterPane (
         UNO_QUERY_THROW);
 }
 
-PresenterPane::~PresenterPane (void)
+PresenterPane::~PresenterPane()
 {
 }
 
 //----- XPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL PresenterPane::getWindow (void)
+Reference<awt::XWindow> SAL_CALL PresenterPane::getWindow()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxContentWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas (void)
+Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -175,7 +175,7 @@ void PresenterPane::Invalidate (const css::awt::Rectangle& rRepaintBox)
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow, rRepaintBox);
 }
 
-void PresenterPane::UpdateBoundingBox (void)
+void PresenterPane::UpdateBoundingBox()
 {
     if (mxBorderWindow.is() && IsVisible())
         maBoundingBox = mxBorderWindow->getPosSize();

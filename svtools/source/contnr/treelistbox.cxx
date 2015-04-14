@@ -3796,7 +3796,7 @@ void SvTreeListBox::InitStartEntry()
         pImp->pStartEntry = GetModel()->First();
 }
 
-PopupMenu* SvTreeListBox::CreateContextMenu( void )
+PopupMenu* SvTreeListBox::CreateContextMenu()
 {
     return NULL;
 }
@@ -3806,7 +3806,7 @@ void SvTreeListBox::ExcecuteContextMenuAction( sal_uInt16 )
     DBG_WARNING( "SvTreeListBox::ExcecuteContextMenuAction(): now there's happening nothing!" );
 }
 
-void SvTreeListBox::EnableContextMenuHandling( void )
+void SvTreeListBox::EnableContextMenuHandling()
 {
     assert(pImp && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
     pImp->bContextMenuHandling = true;

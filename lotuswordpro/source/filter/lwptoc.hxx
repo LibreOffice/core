@@ -152,10 +152,10 @@ public:
     LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    inline sal_uInt16 GetLevel(void){return m_nLevel;}
-    inline bool GetUseText(void){   return (m_nFlags & USETEXT) ? sal_True : sal_False;}
-    inline OUString GetSearchStyle(void){return m_SearchName.str();}
-    inline bool GetUseLeadingText(void){    return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
+    inline sal_uInt16 GetLevel(){return m_nLevel;}
+    inline bool GetUseText(){   return (m_nFlags & USETEXT) ? sal_True : sal_False;}
+    inline OUString GetSearchStyle(){return m_SearchName.str();}
+    inline bool GetUseLeadingText(){    return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
 private:
     virtual ~LwpTocLevelData();
 

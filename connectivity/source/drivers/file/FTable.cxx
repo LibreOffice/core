@@ -116,7 +116,7 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return OTable_TYPEDEF::queryInterface(rType);
 }
 
-void SAL_CALL OFileTable::disposing(void)
+void SAL_CALL OFileTable::disposing()
 {
     OTable::disposing();
 

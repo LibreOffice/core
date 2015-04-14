@@ -42,13 +42,13 @@ public:
         VS_None };
 
     VisualState (const sal_Int32 nPageId);
-    ~VisualState (void);
+    ~VisualState();
 
     void SetVisualState (const State eState);
 
     void UpdateVisualState (const PageDescriptor& rDescriptor);
 
-    Point GetLocationOffset (void) const { return maLocationOffset;}
+    Point GetLocationOffset() const { return maLocationOffset;}
     bool SetLocationOffset (const Point& rPoint);
 
     sal_Int32 mnPageId; // For debugging

@@ -109,7 +109,7 @@ namespace ucbhelper
 
 
 
-    sal_Int32 SAL_CALL FdInputStream::available(void)
+    sal_Int32 SAL_CALL FdInputStream::available()
         throw(NotConnectedException,
               IOException,
               RuntimeException, std::exception)
@@ -119,7 +119,7 @@ namespace ucbhelper
 
 
 
-    void SAL_CALL FdInputStream::closeInput(void)
+    void SAL_CALL FdInputStream::closeInput()
         throw(NotConnectedException,
               IOException,
               RuntimeException, std::exception)

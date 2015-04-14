@@ -63,7 +63,7 @@ ImpressViewShellBase::ImpressViewShellBase (
     MasterPageObserver::Instance().RegisterDocument (*GetDocShell()->GetDoc());
 }
 
-ImpressViewShellBase::~ImpressViewShellBase (void)
+ImpressViewShellBase::~ImpressViewShellBase()
 {
     MasterPageObserver::Instance().UnregisterDocument (*GetDocShell()->GetDoc());
 }
@@ -86,7 +86,7 @@ void ImpressViewShellBase::Execute (SfxRequest& rRequest)
     }
 }
 
-void ImpressViewShellBase::InitializeFramework (void)
+void ImpressViewShellBase::InitializeFramework()
 {
     ::com::sun::star::uno::Reference<com::sun::star::frame::XController>
         xController (GetController());

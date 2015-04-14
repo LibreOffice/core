@@ -147,7 +147,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     }
 }
 
-void ConfigurationControllerBroadcaster::DisposeAndClear (void)
+void ConfigurationControllerBroadcaster::DisposeAndClear()
 {
     lang::EventObject aEvent;
     aEvent.Source = mxConfigurationController;

@@ -44,7 +44,7 @@ public:
     virtual void Deactivate() SAL_OVERRIDE;      ///< deactivates the function
 
 protected:
-    virtual ~FuZoom (void);
+    virtual ~FuZoom();
 
     Point       aBeginPosPix;
     Point       aBeginPos;

@@ -55,7 +55,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
     public :
 
         LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
-        virtual ~LdapUserProfileBe(void) ;
+        virtual ~LdapUserProfileBe() ;
 
         // XServiceInfo
         virtual OUString SAL_CALL
@@ -125,13 +125,13 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
           Provides the implementation name.
           @return   implementation name
           */
-        static OUString SAL_CALL getLdapUserProfileBeName(void) ;
+        static OUString SAL_CALL getLdapUserProfileBeName() ;
         /**
           Provides the supported services names
           @return   service names
           */
         static uno::Sequence<OUString> SAL_CALL
-            getLdapUserProfileBeServiceNames(void) ;
+            getLdapUserProfileBeServiceNames() ;
 
     private:
         /** Check if LDAP is configured */

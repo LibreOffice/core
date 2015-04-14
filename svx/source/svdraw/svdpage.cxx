@@ -763,7 +763,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
 
 
 
-bool SdrObjList::HasObjectNavigationOrder (void) const
+bool SdrObjList::HasObjectNavigationOrder() const
 {
     return mxNavigationOrder.get() != NULL;
 }
@@ -857,7 +857,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
 
 
 
-void SdrObjList::ClearObjectNavigationOrder (void)
+void SdrObjList::ClearObjectNavigationOrder()
 {
     mxNavigationOrder.reset();
     mbIsNavigationOrderDirty = true;
@@ -866,7 +866,7 @@ void SdrObjList::ClearObjectNavigationOrder (void)
 
 
 
-bool SdrObjList::RecalcNavigationPositions (void)
+bool SdrObjList::RecalcNavigationPositions()
 {
     if (mbIsNavigationOrderDirty)
     {

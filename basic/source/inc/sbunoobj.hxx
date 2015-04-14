@@ -92,7 +92,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     // Force creation of all properties for debugging
-    void createAllProperties( void  )
+    void createAllProperties()
         { implCreateAll(); }
 
     // give out value
@@ -112,11 +112,11 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
     ::boost::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties
-    void implCreateDbgProperties( void );
+    void implCreateDbgProperties();
 
     // help method to establish all properties and methods
     // (on the on-demand-mechanism required for the dbg_-properties)
-    void implCreateAll( void );
+    void implCreateAll();
 
 public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
@@ -125,35 +125,35 @@ public:
     virtual ~SbUnoObject();
 
     // #76470 do introspection on demand
-    void doIntrospection( void );
+    void doIntrospection();
 
     // override Find to support e. g. NameAccess
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     // Force creation of all properties for debugging
-    void createAllProperties( void  )
+    void createAllProperties()
         { implCreateAll(); }
 
     // give out value
-    ::com::sun::star::uno::Any getUnoAny( void );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )    { return mxUnoAccess; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
+    ::com::sun::star::uno::Any getUnoAny();
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation()         { return mxInvocation; }
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 
-    bool isNativeCOMObject( void )
+    bool isNativeCOMObject()
         { return bNativeCOMObject; }
 };
 typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 
 // #67781 delete return values of the uno-methods
-void clearUnoMethods( void );
+void clearUnoMethods();
 void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
-    friend void clearUnoMethods( void );
+    friend void clearUnoMethods();
     friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
@@ -175,11 +175,11 @@ public:
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo() SAL_OVERRIDE;
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >& getParamInfos( void );
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >& getParamInfos();
 
-    bool isInvocationBased( void )
+    bool isInvocationBased()
         { return mbInvocation; }
-    bool needsDirectInvocation( void )
+    bool needsDirectInvocation()
         { return mbDirectInvocation; }
 };
 
@@ -206,7 +206,7 @@ public:
         const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
     bool isUnoStruct() { return mbUnoStruct; }
-    bool isInvocationBased( void )
+    bool isInvocationBased()
         { return mbInvocation; }
     SbxDataType getRealType() { return mRealType; }
 };
@@ -238,7 +238,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass() { return m_xClass; }
 
 };
 
@@ -271,12 +271,12 @@ public:
 SbUnoService* findUnoService( const OUString& rName );
 
 
-void clearUnoServiceCtors( void );
+void clearUnoServiceCtors();
 
 class SbUnoServiceCtor : public SbxMethod
 {
     friend class SbUnoService;
-    friend void clearUnoServiceCtors( void );
+    friend void clearUnoServiceCtors();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
@@ -289,7 +289,7 @@ public:
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > getServiceCtorDesc( void )
+    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > getServiceCtorDesc()
         { return m_xServiceCtorDesc; }
 };
 
@@ -321,7 +321,7 @@ public:
         , mVal( rVal )
     {}
 
-    const ::com::sun::star::uno::Any& getValue( void )
+    const ::com::sun::star::uno::Any& getValue()
         { return mVal; }
 
     TYPEINFO_OVERRIDE();
@@ -340,7 +340,7 @@ public:
         : maNameSeq( nSeqSize )
     {}
 
-    ::com::sun::star::uno::Sequence< OUString >& getNames( void )
+    ::com::sun::star::uno::Sequence< OUString >& getNames()
         { return maNameSeq; }
 };
 
@@ -359,7 +359,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
 void disposeComVariablesForBasic( StarBASIC* pBasic );
-void clearNativeObjectWrapperVector( void );
+void clearNativeObjectWrapperVector();
 
 
 

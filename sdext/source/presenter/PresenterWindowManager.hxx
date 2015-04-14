@@ -71,9 +71,9 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterWindowManager (void);
+    virtual ~PresenterWindowManager();
 
-    void SAL_CALL disposing (void) SAL_OVERRIDE;
+    void SAL_CALL disposing() SAL_OVERRIDE;
 
     void SetParentPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
@@ -85,8 +85,8 @@ public:
         const double nWidth,
         const double nHeight);
     void SetPaneBorderPainter (const ::rtl::Reference<PresenterPaneBorderPainter>& rPainter);
-    void Update (void);
-    void Layout (void);
+    void Update();
+    void Layout();
 
     void SetSlideSorterState (bool bIsActive);
     void SetHelpViewState (bool bIsActive);
@@ -102,12 +102,12 @@ public:
     */
     void SetViewMode (const ViewMode eMode);
 
-    ViewMode GetViewMode (void) const;
+    ViewMode GetViewMode() const;
 
     /** Restore the layout mode (or slide sorter state) from the
         configuration.
     */
-    void RestoreViewMode (void);
+    void RestoreViewMode();
 
     void AddLayoutListener (
         const css::uno::Reference<css::document::XEventListener>& rxListener);
@@ -191,26 +191,26 @@ private:
     bool PaintChildren (const css::awt::PaintEvent& rEvent) const;
     void UpdateWindowSize (const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
     void PaintBackground (const css::awt::Rectangle& rUpdateBox);
-    void ProvideBackgroundBitmap (void);
-    css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon (void) const;
+    void ProvideBackgroundBitmap();
+    css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon() const;
     void ToTop ();
 
-    static void UpdateWindowList (void);
+    static void UpdateWindowList();
     bool ChildNeedsRepaint (
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 
-    void Invalidate (void);
+    void Invalidate();
 
     void StoreViewMode (const ViewMode eViewMode);
 
-    void LayoutStandardMode (void);
-    void LayoutNotesMode (void);
-    void LayoutSlideSorterMode (void);
-    void LayoutHelpMode (void);
+    void LayoutStandardMode();
+    void LayoutNotesMode();
+    void LayoutSlideSorterMode();
+    void LayoutHelpMode();
 
     /** Layout the tool bar and return its outer bounding box.
     */
-    css::geometry::RealRectangle2D LayoutToolBar (void);
+    css::geometry::RealRectangle2D LayoutToolBar();
 
     css::awt::Size CalculatePaneSize (
         const double nOuterWidth,
@@ -218,11 +218,11 @@ private:
 
     /** Notify changes of the layout mode and of the slide sorter state.
     */
-    void NotifyLayoutModeChange (void);
+    void NotifyLayoutModeChange();
 
-    void NotifyDisposing (void);
+    void NotifyDisposing();
 
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 } }

@@ -65,7 +65,7 @@ public:
     /* com::sun::star::lang::XUnoTunnel */
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    static com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
+    static com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId()
         throw(com::sun::star::uno::RuntimeException);
 
     /* com::sun::star::lang::XServiceInfo */

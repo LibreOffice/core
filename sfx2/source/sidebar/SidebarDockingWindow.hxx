@@ -38,13 +38,13 @@ public:
         SidebarChildWindow& rChildWindow,
         vcl::Window* pParent,
         WinBits nBits);
-    virtual ~SidebarDockingWindow (void);
+    virtual ~SidebarDockingWindow();
 
-    virtual bool Close (void) SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
 protected:
     // Window overridables
-    virtual void GetFocus (void) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,
@@ -53,7 +53,7 @@ protected:
 private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
 
-    void DoDispose (void);
+    void DoDispose();
 };
 
 } } // end of namespace sfx2::sidebar

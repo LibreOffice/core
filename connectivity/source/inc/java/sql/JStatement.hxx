@@ -130,7 +130,7 @@ namespace connectivity
         sal_Int32   getStatementObjectID() const { return m_aLogger.getObjectID(); }
 
         // OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         // XInterface
         virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
@@ -173,7 +173,7 @@ namespace connectivity
                                 OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>(static_cast<cppu::OWeakObject*>(&_rCon), this){}
 
         // OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         // XInterface
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
     };

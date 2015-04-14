@@ -54,27 +54,27 @@ class TreeNode
 {
 public:
     TreeNode (TreeNode* pParent);
-    virtual ~TreeNode (void);
+    virtual ~TreeNode();
 
     void SetParentNode (TreeNode* pNewParent);
-    TreeNode* GetParentNode (void);
+    TreeNode* GetParentNode();
 
     /** Return the Window pointer of a tree node.
     */
-    virtual vcl::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow();
 
     /** Return a const pointer to the window of a tree node.
     */
-    virtual const vcl::Window* GetConstWindow (void) const;
+    virtual const vcl::Window* GetConstWindow() const;
 
     /** Return the joined minimum width of all children, i.e. the largest of
         the minimum widths.
     */
-    virtual sal_Int32 GetMinimumWidth (void);
+    virtual sal_Int32 GetMinimumWidth();
 
     /** The default implementaion always returns <FALSE/>
     */
-    virtual bool IsResizable (void);
+    virtual bool IsResizable();
 
     /** Call this method whenever the size of one of the children of the
         called node has to be changed, e.g. when the layout menu shows more
@@ -86,7 +86,7 @@ public:
 
         The default implementation passes this call to its parent.
     */
-    virtual void RequestResize (void);
+    virtual void RequestResize();
 
     /** The default implementation shows the window (when it exists) when
         bExpansionState is <TRUE/>.  It hides the window otherwise.
@@ -100,7 +100,7 @@ public:
     /** The default implementation returns whether the window is showing.
         When there is no window then it returns <FALSE/>.
     */
-    virtual bool IsExpanded (void) const;
+    virtual bool IsExpanded() const;
 
     /** Return whether the node can be expanded or collapsed.  The default
         implementation always returns <TRUE/> when there is window and
@@ -108,7 +108,7 @@ public:
         then Expand() may be called but it will not change the expansion
         state.
     */
-    virtual bool IsExpandable (void) const;
+    virtual bool IsExpandable() const;
 
     /** The default implementation calls GetWindow()->Show().
     */
@@ -116,9 +116,9 @@ public:
 
     /** The default implementation returns GetWindow()->IsVisible().
     */
-    virtual bool IsShowing (void) const;
+    virtual bool IsShowing() const;
 
-    ControlContainer& GetControlContainer (void);
+    ControlContainer& GetControlContainer();
 
     /** Give each node access to a shell manage.  This usually is the shell
         manager of the ToolPanelViewShell.
@@ -127,13 +127,13 @@ public:
         default implementation simply returns the shell manager of its
         parent.
     */
-    virtual TaskPaneShellManager* GetShellManager (void);
+    virtual TaskPaneShellManager* GetShellManager();
 
     /** You will rarely need to override this method.  To supply your own
         accessible object you should override CreateAccessible() instead.
     */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> GetAccessibleObject (void);
+        ::com::sun::star::accessibility::XAccessible> GetAccessibleObject();
 
     /** Override this method in order to supply a class specific accessible
         object.

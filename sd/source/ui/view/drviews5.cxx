@@ -85,7 +85,7 @@ void DrawViewShell::ModelHasChanged()
     }
 }
 
-void DrawViewShell::Resize (void)
+void DrawViewShell::Resize()
 {
     ViewShell::Resize();
 
@@ -101,7 +101,7 @@ void DrawViewShell::Resize (void)
     }
 }
 
-void DrawViewShell::ArrangeGUIElements (void)
+void DrawViewShell::ArrangeGUIElements()
 {
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
@@ -564,7 +564,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
     return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>();
 }
 
-int DrawViewShell::GetActiveTabLayerIndex (void) const
+int DrawViewShell::GetActiveTabLayerIndex() const
 {
     const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
@@ -594,12 +594,12 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
     }
 }
 
-LayerTabBar* DrawViewShell::GetLayerTabControl (void)
+LayerTabBar* DrawViewShell::GetLayerTabControl()
 {
     return mpLayerTabBar.get();
 }
 
-int DrawViewShell::GetTabLayerCount (void) const
+int DrawViewShell::GetTabLayerCount() const
 {
     const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();

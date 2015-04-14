@@ -82,7 +82,7 @@ static lnode *appendPrim(list pThis, void *el)
 }
 
 /*- public methods  */
-list listNewEmpty(void)                           /*- default ctor */
+list listNewEmpty()                           /*- default ctor */
 {
     list pThis = static_cast<list>(rtl_allocateMemory(sizeof(struct _list)));
     assert(pThis != 0);

@@ -23,7 +23,7 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-Properties::Properties (void)
+Properties::Properties()
     : mbIsHighlightCurrentSlide(false),
       mbIsShowSelection(true),
       mbIsShowFocus(true),
@@ -41,11 +41,11 @@ Properties::Properties (void)
 {
 }
 
-Properties::~Properties (void)
+Properties::~Properties()
 {
 }
 
-void Properties::HandleDataChangeEvent (void)
+void Properties::HandleDataChangeEvent()
 {
     maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();

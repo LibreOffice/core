@@ -84,7 +84,7 @@ private:
     sal_uLong               mnParaSize;
     sal_uInt8*              mpPara;
 
-    bool                    ImplGetString( void );
+    bool                    ImplGetString();
     bool                    ImplGetColor( sal_uLong );
     bool                    ImplGetScanLine( sal_uLong );
     bool                    ImplGetColSub( sal_uInt8* );

@@ -67,18 +67,18 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         long nIndex = -1);
 
-    virtual ~AccessiblePageShape (void);
+    virtual ~AccessiblePageShape();
 
     /** Initialize a new shape.  See the documentation of the constructor
         for the reason of this method's existence.
     */
-    virtual void Init (void) SAL_OVERRIDE;
+    virtual void Init() SAL_OVERRIDE;
 
     //=====  XAccessibleContext  ==============================================
 
     /// Returns always 0 because there can be no children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount()
         throw (std::exception) SAL_OVERRIDE;
 
     /** Return the specified child.
@@ -97,29 +97,29 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XComponent  ======================================================
 
     virtual void SAL_CALL
-        dispose (void)
+        dispose()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  lang::XEventListener  ============================================
@@ -134,16 +134,16 @@ protected:
     /** Create a base name string that contains the accessible name.
     */
     virtual OUString
-        CreateAccessibleBaseName (void)
+        CreateAccessibleBaseName()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual OUString
-        CreateAccessibleName (void)
+        CreateAccessibleName()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
-        CreateAccessibleDescription (void)
+        CreateAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:

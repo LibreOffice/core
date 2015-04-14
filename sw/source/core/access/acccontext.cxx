@@ -536,14 +536,14 @@ SwAccessibleContext::~SwAccessibleContext()
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL
-    SwAccessibleContext::getAccessibleContext( void )
+    SwAccessibleContext::getAccessibleContext()
         throw (uno::RuntimeException, std::exception)
 {
     uno::Reference < XAccessibleContext > xRet( this );
     return xRet;
 }
 
-sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
+sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -623,7 +623,7 @@ uno::Reference< XAccessible> SAL_CALL
     return xChild;
 }
 
-uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
+uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -648,7 +648,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (
     return xAcc;
 }
 
-sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
+sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -671,27 +671,27 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
     return nIndex;
 }
 
-sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole (void)
+sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole()
         throw (uno::RuntimeException, std::exception)
 {
     return nRole;
 }
 
-OUString SAL_CALL SwAccessibleContext::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(false, "description needs to be overriden");
     THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overridden)" );
 }
 
-OUString SAL_CALL SwAccessibleContext::getAccessibleName (void)
+OUString SAL_CALL SwAccessibleContext::getAccessibleName()
         throw (uno::RuntimeException, std::exception)
 {
     return sName;
 }
 
 uno::Reference< XAccessibleRelationSet> SAL_CALL
-    SwAccessibleContext::getAccessibleRelationSet (void)
+    SwAccessibleContext::getAccessibleRelationSet()
         throw (uno::RuntimeException, std::exception)
 {
     // by default there are no relations
@@ -700,7 +700,7 @@ uno::Reference< XAccessibleRelationSet> SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    SwAccessibleContext::getAccessibleStateSet (void)
+    SwAccessibleContext::getAccessibleStateSet()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -719,7 +719,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return xStateSet;
 }
 
-lang::Locale SAL_CALL SwAccessibleContext::getLocale (void)
+lang::Locale SAL_CALL SwAccessibleContext::getLocale()
         throw (IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

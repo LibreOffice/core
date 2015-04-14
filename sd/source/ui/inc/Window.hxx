@@ -45,7 +45,7 @@ class Window
 {
 public:
     Window (vcl::Window* pParent);
-    virtual ~Window (void);
+    virtual ~Window();
 
     void    SetViewShell (ViewShell* pViewSh);
 
@@ -98,17 +98,17 @@ public:
         <p>This calculation is performed only when the
         <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
-    void CalcMinZoom (void);
+    void CalcMinZoom();
     void SetMinZoom (long int nMin);
-    long GetMinZoom (void) const { return mnMinZoom;}
+    long GetMinZoom() const { return mnMinZoom;}
     void SetMaxZoom (long int nMax);
-    long GetMaxZoom (void) const { return mnMaxZoom;}
+    long GetMaxZoom() const { return mnMaxZoom;}
 
-    long GetZoom (void) const;
+    long GetZoom() const;
 
-    Point GetWinViewPos (void) const { return maWinPos;}
-    Point GetViewOrigin (void) const { return maViewOrigin;}
-    Size GetViewSize (void) const { return maViewSize;}
+    Point GetWinViewPos() const { return maWinPos;}
+    Point GetViewOrigin() const { return maViewOrigin;}
+    Size GetViewSize() const { return maViewSize;}
     void SetWinViewPos(const Point& rPnt);
     void SetViewOrigin(const Point& rPnt);
     void SetViewSize(const Size& rSize);
@@ -123,7 +123,7 @@ public:
         */
     void UpdateMapOrigin (bool bInvalidate = true);
 
-    void UpdateMapMode (void);
+    void UpdateMapMode();
 
     double  GetVisibleX();          // Interface fuer ScrollBars
     double  GetVisibleY();
@@ -188,7 +188,7 @@ protected:
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible (void) SAL_OVERRIDE;
+        CreateAccessible() SAL_OVERRIDE;
 
     OUString GetSurroundingText() const SAL_OVERRIDE;
     Selection GetSurroundingTextSelection() const SAL_OVERRIDE;

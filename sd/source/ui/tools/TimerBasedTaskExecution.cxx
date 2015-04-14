@@ -52,7 +52,7 @@ public:
     return pExecution;
 }
 
-void TimerBasedTaskExecution::Release (void)
+void TimerBasedTaskExecution::Release()
 {
     maTimer.Stop();
     mpSelf.reset();
@@ -94,7 +94,7 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
     maTimer.Start();
 }
 
-TimerBasedTaskExecution::~TimerBasedTaskExecution (void)
+TimerBasedTaskExecution::~TimerBasedTaskExecution()
 {
     maTimer.Stop();
 }

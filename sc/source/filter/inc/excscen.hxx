@@ -39,7 +39,7 @@ public:
 
     inline void SetValue( const OUString& rVal ) { aValue = rVal; }
 
-    inline const OUString& GetValue( void ) const { return aValue; }
+    inline const OUString& GetValue() const { return aValue; }
 };
 
 class ExcScenario

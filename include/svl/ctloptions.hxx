@@ -45,7 +45,7 @@ public:
     bool        IsCTLSequenceChecking() const;
 
     void        SetCTLSequenceCheckingRestricted( bool _bEnable );
-    bool        IsCTLSequenceCheckingRestricted( void ) const;
+    bool        IsCTLSequenceCheckingRestricted() const;
 
     void        SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
     bool        IsCTLSequenceCheckingTypeAndReplace() const;

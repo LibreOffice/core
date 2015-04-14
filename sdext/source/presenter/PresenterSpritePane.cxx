@@ -47,11 +47,11 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         UNO_QUERY_THROW);
 }
 
-PresenterSpritePane::~PresenterSpritePane (void)
+PresenterSpritePane::~PresenterSpritePane()
 {
 }
 
-void PresenterSpritePane::disposing (void)
+void PresenterSpritePane::disposing()
 {
     mpSprite->SetFactory(NULL);
     mxParentWindow = NULL;
@@ -61,14 +61,14 @@ void PresenterSpritePane::disposing (void)
 
 //----- XPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL PresenterSpritePane::getWindow (void)
+Reference<awt::XWindow> SAL_CALL PresenterSpritePane::getWindow()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxContentWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas (void)
+Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -148,12 +148,12 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
 
 
 
-::boost::shared_ptr<PresenterSprite> PresenterSpritePane::GetSprite (void)
+::boost::shared_ptr<PresenterSprite> PresenterSpritePane::GetSprite()
 {
     return mpSprite;
 }
 
-void PresenterSpritePane::UpdateCanvases (void)
+void PresenterSpritePane::UpdateCanvases()
 {
     Reference<XComponent> xContentCanvasComponent (mxContentCanvas, UNO_QUERY);
     if (xContentCanvasComponent.is())

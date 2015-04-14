@@ -52,7 +52,7 @@ public:
     void Update (
         const ::boost::shared_ptr<controller::Properties>& rpProperties);
 
-    //    BitmapEx GetInsertIndicatorIcon (void) const;
+    //    BitmapEx GetInsertIndicatorIcon() const;
 
     enum FontType {
         Font_PageNumber,

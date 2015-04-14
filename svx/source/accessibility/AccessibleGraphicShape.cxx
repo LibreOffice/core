@@ -41,12 +41,12 @@ AccessibleGraphicShape::AccessibleGraphicShape (
 
 
 
-AccessibleGraphicShape::~AccessibleGraphicShape (void)
+AccessibleGraphicShape::~AccessibleGraphicShape()
 {
 }
 
 // XAccessibleImage
-OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
+OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (m_pShape)
@@ -57,7 +57,7 @@ OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
+sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return AccessibleShape::getSize().Height;
@@ -66,7 +66,7 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth (void)
+sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return AccessibleShape::getSize().Width;
@@ -87,7 +87,7 @@ com::sun::star::uno::Any SAL_CALL
 
 
 void SAL_CALL
-    AccessibleGraphicShape::acquire (void)
+    AccessibleGraphicShape::acquire()
     throw ()
 {
     AccessibleShape::acquire ();
@@ -96,7 +96,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleGraphicShape::release (void)
+    AccessibleGraphicShape::release()
     throw ()
 {
     AccessibleShape::release ();
@@ -104,7 +104,7 @@ void SAL_CALL
 
 // XServiceInfo
 OUString SAL_CALL
-    AccessibleGraphicShape::getImplementationName (void)
+    AccessibleGraphicShape::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleGraphicShape");
@@ -114,7 +114,7 @@ OUString SAL_CALL
 
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-    AccessibleGraphicShape::getSupportedServiceNames (void)
+    AccessibleGraphicShape::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -132,7 +132,7 @@ OUString SAL_CALL
 
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
-    AccessibleGraphicShape::getTypes (void)
+    AccessibleGraphicShape::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...
@@ -152,7 +152,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 /// Create the base name of this object, i.e. the name without appended number.
 OUString
-    AccessibleGraphicShape::CreateAccessibleBaseName (void)
+    AccessibleGraphicShape::CreateAccessibleBaseName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sName;
@@ -174,7 +174,7 @@ OUString
     return sName;
 }
 
-OUString AccessibleGraphicShape::CreateAccessibleDescription (void)
+OUString AccessibleGraphicShape::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     //Don't use the same information for accessible name and accessible description.
@@ -187,7 +187,7 @@ OUString AccessibleGraphicShape::CreateAccessibleDescription (void)
 }
 
 //  Return this object's role.
-sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole (void)
+sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != NULL )

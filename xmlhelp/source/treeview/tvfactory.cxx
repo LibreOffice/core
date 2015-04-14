@@ -57,7 +57,7 @@ sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
 }
 
 Sequence< OUString > SAL_CALL
-TVFactory::getSupportedServiceNames( void )
+TVFactory::getSupportedServiceNames()
     throw( RuntimeException, std::exception )
 {
     return TVFactory::getSupportedServiceNames_static();

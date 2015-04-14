@@ -175,7 +175,7 @@ protected:
                                 throw (::com::sun::star::uno::RuntimeException,
                                        std::exception) SAL_OVERRIDE;
 
-    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Rectangle GetBoundingBoxOnScreen() const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Rectangle GetBoundingBox() const throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:

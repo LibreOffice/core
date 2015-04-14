@@ -48,7 +48,7 @@ public:
     */
     SlotManager (SlideSorter& rSlideSorter);
 
-    ~SlotManager (void);
+    ~SlotManager();
 
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);
@@ -72,7 +72,7 @@ public:
     /** Call this after a change from normal mode to master mode or back.
         The affected slots are invalidated.
     */
-    void NotifyEditModeChange (void);
+    void NotifyEditModeChange();
 
 private:
     /// The controller for which we manage the slot calls.
@@ -88,7 +88,7 @@ private:
     /** The implementation is a copy of the code for SID_RENAMEPAGE in
         drviews2.cxx.
     */
-    void RenameSlide (void);
+    void RenameSlide();
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog*);
     bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
 
@@ -101,7 +101,7 @@ private:
     /** Use one of several ways to determine where to insert a new page.
         This can be the current selection or the insertion indicator.
     */
-    sal_Int32 GetInsertionPosition (void);
+    sal_Int32 GetInsertionPosition();
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

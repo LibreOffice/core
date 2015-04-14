@@ -514,7 +514,7 @@ void OFlatTable::refreshColumns()
 }
 
 
-void SAL_CALL OFlatTable::disposing(void)
+void SAL_CALL OFlatTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

@@ -134,7 +134,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
 }
 
 OUString SAL_CALL
-InputSequenceCheckerImpl::getImplementationName(void) throw( RuntimeException, std::exception )
+InputSequenceCheckerImpl::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(serviceName);
 }
@@ -146,7 +146,7 @@ InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( R
 }
 
 Sequence< OUString > SAL_CALL
-InputSequenceCheckerImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+InputSequenceCheckerImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(serviceName);

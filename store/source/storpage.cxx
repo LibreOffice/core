@@ -47,14 +47,14 @@ const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
 /*
  * OStorePageManager.
  */
-OStorePageManager::OStorePageManager (void)
+OStorePageManager::OStorePageManager()
 {
 }
 
 /*
  * ~OStorePageManager.
  */
-OStorePageManager::~OStorePageManager (void)
+OStorePageManager::~OStorePageManager()
 {
 }
 
@@ -798,7 +798,7 @@ struct RebuildContext
 
     /** Construction.
      */
-    RebuildContext (void)
+    RebuildContext()
         : m_xBIOS     (new OStorePageBIOS()),
           m_nPageSize (0)
     {}

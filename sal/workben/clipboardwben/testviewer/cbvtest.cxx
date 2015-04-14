@@ -59,7 +59,7 @@ void  RegisterClipboardViewer( BOOL bRegister );
 void ShowAvailableClipboardFormats( HWND hWnd, HDC hdc, PAINTSTRUCT ps, RECT rcWnd );
 void ClearClipboardContent( HWND hWnd );
 
-void    CALLBACK OnClipboardContentChange( void );
+void    CALLBACK OnClipboardContentChange();
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
 
@@ -322,7 +322,7 @@ void ClearClipboardContent( HWND hWnd )
 }
 
 // clipboard viewer callback function
-void CALLBACK OnClipboardContentChange( void )
+void CALLBACK OnClipboardContentChange()
 {
     ++g_nCBChanges;
     InvalidateRect( g_hwndMain, NULL, TRUE );

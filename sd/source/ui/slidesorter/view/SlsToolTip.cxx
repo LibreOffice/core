@@ -44,7 +44,7 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
     maHiddenTimer.SetTimeout(rHelpSettings.GetTipDelay());
 }
 
-ToolTip::~ToolTip (void)
+ToolTip::~ToolTip()
 {
     maShowTimer.Stop();
     maHiddenTimer.Stop();
@@ -100,7 +100,7 @@ void ToolTip::Show (const bool bNoDelay)
         maShowTimer.Start();
 }
 
-void ToolTip::DoShow (void)
+void ToolTip::DoShow()
 {
     if (maShowTimer.IsActive())
     {
@@ -142,7 +142,7 @@ void ToolTip::DoShow (void)
     }
 }
 
-bool ToolTip::Hide (void)
+bool ToolTip::Hide()
 {
     if (mnHelpWindowHandle>0)
     {

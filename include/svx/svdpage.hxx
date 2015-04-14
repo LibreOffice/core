@@ -201,7 +201,7 @@ public:
         different from those returne by SdrObject::GetOrdNum() and
         GetObj().
     */
-    bool HasObjectNavigationOrder (void) const;
+    bool HasObjectNavigationOrder() const;
 
     /** Set the navigation position of the given object to the specified
         value.  Note that this changes the navigation position for all
@@ -225,7 +225,7 @@ public:
 
     /** Restore the navigation order to that defined by the z-order.
     */
-    void ClearObjectNavigationOrder (void);
+    void ClearObjectNavigationOrder();
 
     /** Set the navigation position of all SdrObjects to their position in
         the mxNavigationOrder list.  This method returns immediately when no
@@ -237,7 +237,7 @@ public:
             for example because no explicit navigation order has been
             defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
     */
-    bool RecalcNavigationPositions (void);
+    bool RecalcNavigationPositions();
 
     /** Set the navigation order to the one defined by the given list of
         XShape objects.

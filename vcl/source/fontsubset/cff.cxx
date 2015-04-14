@@ -323,7 +323,7 @@ public:
     static const int NMAXTRANS = 32;    // see CFF.appendixB
 public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
-    ~CffSubsetterContext( void);
+    ~CffSubsetterContext();
 
     bool    initialCffRead();
     bool    emitAsType1( class Type1Emitter&,
@@ -335,10 +335,10 @@ public:
 protected:
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
 private:
-    void    convertOneTypeOp( void);
-    void    convertOneTypeEsc( void);
+    void    convertOneTypeOp();
+    void    convertOneTypeEsc();
     void    callType2Subr( bool bGlobal, int nSubrNumber);
-    sal_Int32 getReadOfs( void) const { return (sal_Int32)(mpReadPtr - mpBasePtr);}
+    sal_Int32 getReadOfs() const { return (sal_Int32)(mpReadPtr - mpBasePtr);}
 
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
@@ -363,14 +363,14 @@ private:
     CffLocal    maCffLocal[256];
     CffLocal*   mpCffLocal;
 
-    void        readDictOp( void);
-    RealType    readRealVal( void);
+    void        readDictOp();
+    RealType    readRealVal();
     const char* getString( int nStringID);
     int         getFDSelect( int nGlyphIndex) const;
     int         getGlyphSID( int nGlyphIndex) const;
     const char* getGlyphName( int nGlyphIndex);
 
-    void    read2push( void);
+    void    read2push();
     void    writeType1Val( ValType);
     void    writeTypeOp( int nTypeOp);
     void    writeTypeEsc( int nTypeOp);
@@ -382,18 +382,18 @@ public: // TODO: is public really needed?
     // accessing the value stack
     // TODO: add more checks
     void    push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
-    ValType popVal( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
+    ValType popVal() { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
     ValType getVal( int nIndex) const { return mnValStack[ nIndex];}
-    int     popInt( void);
-    int     size( void) const { return mnStackIdx;}
-    void    clear( void) { mnStackIdx = 0;}
+    int     popInt();
+    int     size() const { return mnStackIdx;}
+    void    clear() { mnStackIdx = 0;}
 
     // accessing the charstring hints
     void    addHints( bool bVerticalHints);
 
     // accessing other charstring specifics
-    bool    hasCharWidth( void) const { return (maCharWidth > 0);}
-    ValType getCharWidth( void) const { return maCharWidth;}
+    bool    hasCharWidth() const { return (maCharWidth > 0);}
+    ValType getCharWidth() const { return maCharWidth;}
     void    setNominalWidth( ValType aWidth) { mpCffLocal->maNominalWidth = aWidth;}
     void    setDefaultWidth( ValType aWidth) { mpCffLocal->maDefaultWidth = aWidth;}
     void    updateWidth( bool bUseFirstVal);
@@ -433,12 +433,12 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     mpCffLocal = &maCffLocal[0];
 }
 
-CffSubsetterContext::~CffSubsetterContext( void)
+CffSubsetterContext::~CffSubsetterContext()
 {
     // TODO: delete[] maCffLocal;
 }
 
-inline int CffSubsetterContext::popInt( void)
+inline int CffSubsetterContext::popInt()
 {
     const ValType aVal = popVal();
     const int nInt = static_cast<int>(aVal);
@@ -504,7 +504,7 @@ void CffSubsetterContext::setCharStringType( int nVal)
     }
 }
 
-void CffSubsetterContext::readDictOp( void)
+void CffSubsetterContext::readDictOp()
 {
     ValType nVal = 0;
     const U8 c = *mpReadPtr;
@@ -758,7 +758,7 @@ void CffSubsetterContext::writeCurveTo( int nStackPos,
     writeTypeOp( TYPE1OP::RCURVETO );
 }
 
-void CffSubsetterContext::convertOneTypeOp( void)
+void CffSubsetterContext::convertOneTypeOp()
 {
     const int nType2Op = *(mpReadPtr++);
 
@@ -983,7 +983,7 @@ void CffSubsetterContext::convertOneTypeOp( void)
     }
 }
 
-void CffSubsetterContext::convertOneTypeEsc( void)
+void CffSubsetterContext::convertOneTypeEsc()
 {
     const int nType2Esc = *(mpReadPtr++);
     ValType* pTop = &mnValStack[ mnStackIdx-1];
@@ -1393,7 +1393,7 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
 }
 
 // initialize FONTDICT specific values
-CffLocal::CffLocal( void)
+CffLocal::CffLocal()
 :   mnPrivDictBase( 0)
 ,   mnPrivDictSize( 0)
 ,   mnLocalSubrOffs( 0)
@@ -1419,7 +1419,7 @@ CffLocal::CffLocal( void)
     maFamilyOtherBlues.clear();
 }
 
-CffGlobal::CffGlobal( void)
+CffGlobal::CffGlobal()
 :   mnNameIdxBase( 0)
 ,   mnNameIdxCount( 0)
 ,   mnStringIdxBase( 0)
@@ -1713,14 +1713,14 @@ class Type1Emitter
 {
 public:
     explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
-    ~Type1Emitter( void);
+    ~Type1Emitter();
     void        setSubsetName( const char* );
 
     size_t      emitRawData( const char* pData, size_t nLength) const;
-    void        emitAllRaw( void);
-    void        emitAllHex( void);
-    void        emitAllCrypted( void);
-    int         tellPos( void) const;
+    void        emitAllRaw();
+    void        emitAllHex();
+    void        emitAllCrypted();
+    int         tellPos() const;
     size_t      updateLen( int nTellPos, size_t nLength);
     void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
 private:
@@ -1747,7 +1747,7 @@ Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
     maSubsetName[0] = '\0';
 }
 
-Type1Emitter::~Type1Emitter( void)
+Type1Emitter::~Type1Emitter()
 {
     if( !mpFileOut)
         return;
@@ -1764,7 +1764,7 @@ void Type1Emitter::setSubsetName( const char* pSubsetName)
     maSubsetName[sizeof(maSubsetName)-1] = '\0';
 }
 
-int Type1Emitter::tellPos( void) const
+int Type1Emitter::tellPos() const
 {
     int nTellPos = ftell( mpFileOut);
     return nTellPos;
@@ -1794,7 +1794,7 @@ inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
     return fwrite( pData, 1, nLength, mpFileOut);
 }
 
-inline void Type1Emitter::emitAllRaw( void)
+inline void Type1Emitter::emitAllRaw()
 {
     // writeout raw data
     assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
@@ -1803,7 +1803,7 @@ inline void Type1Emitter::emitAllRaw( void)
     mpPtr = maBuffer;
 }
 
-inline void Type1Emitter::emitAllHex( void)
+inline void Type1Emitter::emitAllHex()
 {
     assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
     for( const char* p = maBuffer; p < mpPtr;) {
@@ -1829,7 +1829,7 @@ inline void Type1Emitter::emitAllHex( void)
     mpPtr = maBuffer;
 }
 
-void Type1Emitter::emitAllCrypted( void)
+void Type1Emitter::emitAllCrypted()
 {
     // apply t1crypt
     for( char* p = maBuffer; p < mpPtr; ++p) {

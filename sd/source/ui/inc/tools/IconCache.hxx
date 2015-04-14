@@ -41,7 +41,7 @@ public:
     /** The lifetime of the returned reference is limited to that of the sd
         module.
     */
-    static IconCache& Instance (void);
+    static IconCache& Instance();
 
     /** Return the icon with the given resource id.
         @return
@@ -59,11 +59,11 @@ private:
         it at the SdGlobalResourceContainer to limit is lifetime to that of
         the sd module.
     */
-    IconCache (void);
+    IconCache();
 
     /** This destructor is called by SdGlobalResourceContainer.
     */
-    virtual ~IconCache (void);
+    virtual ~IconCache();
 };
 
 } // end of namespace sd

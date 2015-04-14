@@ -34,10 +34,10 @@ class ColorPanel
 {
 public:
     ColorPanel (vcl::Window* pParent);
-    virtual ~ColorPanel (void);
+    virtual ~ColorPanel();
 
     // From vcl::Window
-    virtual void Resize (void);
+    virtual void Resize();
     virtual void DataChanged (const DataChangedEvent& rEvent);
 
 private:
@@ -48,7 +48,7 @@ private:
         items.
     */
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
-    void Fill (void);
+    void Fill();
 };
 
 } } // end of namespace ::svx::sidebar

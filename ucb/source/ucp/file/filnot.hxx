@@ -56,7 +56,7 @@ namespace fileaccess {
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
 
         void notifyChildInserted( const OUString& aChildName );
-        void notifyDeleted( void );
+        void notifyDeleted();
         void notifyRemoved( const OUString& aChildName );
         void notifyExchanged( );
     };
@@ -109,11 +109,11 @@ namespace fileaccess {
         // Side effect of this function is the change of the name
         virtual ContentEventNotifier*          cEXC( const OUString& aNewName ) = 0;
         // Side effect is the change of the state of the object to "deleted".
-        virtual ContentEventNotifier*          cDEL( void ) = 0;
-        virtual ContentEventNotifier*          cCEL( void ) = 0;
-        virtual PropertySetInfoChangeNotifier* cPSL( void ) = 0;
-        virtual PropertyChangeNotifier*        cPCL( void ) = 0;
-        virtual OUString                  getKey( void ) = 0;
+        virtual ContentEventNotifier*          cDEL() = 0;
+        virtual ContentEventNotifier*          cCEL() = 0;
+        virtual PropertySetInfoChangeNotifier* cPSL() = 0;
+        virtual PropertyChangeNotifier*        cPCL() = 0;
+        virtual OUString                  getKey() = 0;
 
     protected:
         ~Notifier() {}

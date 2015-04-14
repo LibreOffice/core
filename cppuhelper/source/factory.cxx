@@ -104,7 +104,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
@@ -240,7 +240,7 @@ sal_Bool OSingleFactoryHelper::supportsService(
 }
 
 // XServiceInfo
-Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames(void)
+Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return aServiceNames;
@@ -522,7 +522,7 @@ public:
         throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
@@ -811,7 +811,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 }
 
 // XServiceInfo
-Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames(void)
+Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
@@ -892,7 +892,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
@@ -935,7 +935,7 @@ sal_Bool OFactoryProxyHelper::supportsService(const OUString& ServiceName)
 }
 
 // XServiceInfo
-Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames(void)
+Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );

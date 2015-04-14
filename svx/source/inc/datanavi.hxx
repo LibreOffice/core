@@ -130,7 +130,7 @@ namespace svxform
         DataTreeListBox( vcl::Window* pParent, WinBits nBits );
         virtual ~DataTreeListBox();
 
-        virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
+        virtual PopupMenu*      CreateContextMenu() SAL_OVERRIDE;
         virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
         virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -314,7 +314,7 @@ namespace svxform
 
         inline XPropertySet_t GetBindingForNode( const XNode_t &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
         inline OUString GetServiceNameForNode( const XNode_t &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
-        inline XFormsUIHelper1_ref GetXFormsHelper( void ) const { return m_xUIHelper; }
+        inline XFormsUIHelper1_ref GetXFormsHelper() const { return m_xUIHelper; }
     };
 
 

@@ -98,14 +98,14 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
     // handled by default inprocess handler
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave()
 {
     // TODO: ???
     // The object knows about document saving already since it contolls it as ClienSite
     // other interested listeners must be registered for the object
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose()
 {
     ::rtl::Reference< OleComponent > xLockComponent;
 

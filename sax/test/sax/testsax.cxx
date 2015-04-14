@@ -63,10 +63,10 @@ public:
         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException,RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void) throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL testPassed() throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getErrors() throw (RuntimeException);
+    virtual Sequence< Any > SAL_CALL getErrorExceptions() throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings() throw (RuntimeException);
 
 private:
     void testSimple( const Reference < XParser > &r );
@@ -174,22 +174,22 @@ sal_Int32 OSaxParserTest::test(
     return hTestHandle;
 }
 
-sal_Bool OSaxParserTest::testPassed(void) throw (RuntimeException)
+sal_Bool OSaxParserTest::testPassed() throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
-Sequence< OUString > OSaxParserTest::getErrors(void) throw (RuntimeException)
+Sequence< OUString > OSaxParserTest::getErrors() throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
-Sequence< Any > OSaxParserTest::getErrorExceptions(void) throw (RuntimeException)
+Sequence< Any > OSaxParserTest::getErrorExceptions() throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
-Sequence< OUString > OSaxParserTest::getWarnings(void) throw (RuntimeException)
+Sequence< OUString > OSaxParserTest::getWarnings() throw (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -264,7 +264,7 @@ public:
     }
 
     // ExtendedDocumentHandler
-    virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException)
     {
          m_iLevel = 0;
         m_iElementCount = 0;
@@ -275,7 +275,7 @@ public:
             printf( "document started\n" );
         }
     }
-    virtual void SAL_CALL endDocument(void) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException)
     {
         if( m_bPrint ) {
             printf( "document finished\n" );
@@ -379,13 +379,13 @@ public:
         return source;
     }
 
-    virtual void SAL_CALL startCDATA(void) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL startCDATA() throw (SAXException,RuntimeException)
     {
         if( m_bPrint ) {
             printf( "CDataStart :\n" );
         }
     }
-    virtual void SAL_CALL endCDATA(void) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL endCDATA() throw (SAXException,RuntimeException)
     {
         if( m_bPrint ) {
             printf( "CEndStart :\n" );
@@ -407,7 +407,7 @@ public:
         }
     }
 
-    virtual void SAL_CALL allowLineBreak( void) throw (SAXException, RuntimeException )
+    virtual void SAL_CALL allowLineBreak() throw (SAXException, RuntimeException )
     {
 
     }

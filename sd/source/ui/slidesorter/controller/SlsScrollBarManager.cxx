@@ -66,11 +66,11 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
 }
 
-ScrollBarManager::~ScrollBarManager (void)
+ScrollBarManager::~ScrollBarManager()
 {
 }
 
-void ScrollBarManager::Connect (void)
+void ScrollBarManager::Connect()
 {
     if (mpVerticalScrollBar != 0)
     {
@@ -84,7 +84,7 @@ void ScrollBarManager::Connect (void)
     }
 }
 
-void ScrollBarManager::Disconnect (void)
+void ScrollBarManager::Disconnect()
 {
     if (mpVerticalScrollBar != 0)
     {
@@ -429,7 +429,7 @@ void ScrollBarManager::SetTopLeft(const Point& rNewTopLeft)
     mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
 }
 
-int ScrollBarManager::GetVerticalScrollBarWidth (void) const
+int ScrollBarManager::GetVerticalScrollBarWidth() const
 {
     if (mpVerticalScrollBar != 0 && mpVerticalScrollBar->IsVisible())
         return mpVerticalScrollBar->GetSizePixel().Width();
@@ -437,7 +437,7 @@ int ScrollBarManager::GetVerticalScrollBarWidth (void) const
         return 0;
 }
 
-int ScrollBarManager::GetHorizontalScrollBarHeight (void) const
+int ScrollBarManager::GetHorizontalScrollBarHeight() const
 {
     if (mpHorizontalScrollBar != 0 && mpHorizontalScrollBar->IsVisible())
         return mpHorizontalScrollBar->GetSizePixel().Height();
@@ -501,7 +501,7 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 
 bool ScrollBarManager::AutoScroll (
     const Point& rMouseWindowPosition,
-    const ::boost::function<void(void)>& rAutoScrollFunctor)
+    const ::boost::function<void()>& rAutoScrollFunctor)
 {
     maAutoScrollFunctor = rAutoScrollFunctor;
     CalcAutoScrollOffset(rMouseWindowPosition);
@@ -512,13 +512,13 @@ bool ScrollBarManager::AutoScroll (
     return bResult;
 }
 
-void ScrollBarManager::StopAutoScroll (void)
+void ScrollBarManager::StopAutoScroll()
 {
     maAutoScrollTimer.Stop();
     mbIsAutoScrollActive = false;
 }
 
-bool ScrollBarManager::RepeatAutoScroll (void)
+bool ScrollBarManager::RepeatAutoScroll()
 {
     if (maAutoScrollOffset != Size(0,0))
     {
@@ -546,7 +546,7 @@ bool ScrollBarManager::RepeatAutoScroll (void)
 
 void ScrollBarManager::clearAutoScrollFunctor()
 {
-    maAutoScrollFunctor = ::boost::function<void(void)>();
+    maAutoScrollFunctor = ::boost::function<void()>();
 }
 
 IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler)

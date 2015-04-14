@@ -115,7 +115,7 @@ namespace ftp {
         void child(const OUString& title);
 
         /** returns the unencoded title */
-        OUString child(void) const;
+        OUString child() const;
 
         std::vector<FTPDirentry> list(sal_Int16 nMode) const
             throw(curl_exception);

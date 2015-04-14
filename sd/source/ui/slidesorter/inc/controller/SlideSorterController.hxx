@@ -70,11 +70,11 @@ public:
     /** Late initialization. Call this method once a new new object has been
         created.
     */
-    void Init (void);
+    void Init();
 
-    virtual ~SlideSorterController (void);
+    virtual ~SlideSorterController();
 
-    void Dispose (void);
+    void Dispose();
 
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
@@ -106,18 +106,18 @@ public:
     */
     model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
 
-    PageSelector& GetPageSelector (void);
-    FocusManager& GetFocusManager (void);
-    controller::Clipboard& GetClipboard (void);
+    PageSelector& GetPageSelector();
+    FocusManager& GetFocusManager();
+    controller::Clipboard& GetClipboard();
 
     /** Return the object that manages the scroll bars.
     */
-    ScrollBarManager& GetScrollBarManager (void);
+    ScrollBarManager& GetScrollBarManager();
 
-    ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager (void) const;
-    ::boost::shared_ptr<SlotManager> GetSlotManager (void) const;
-    ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
-    ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler (void) const;
+    ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager() const;
+    ::boost::shared_ptr<SlotManager> GetSlotManager() const;
+    ::boost::shared_ptr<SelectionManager> GetSelectionManager() const;
+    ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler() const;
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
@@ -137,7 +137,7 @@ public:
     void ExecCtrl (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
 
-    bool IsLocked (void) const;
+    bool IsLocked() const;
 
     /** Create an object of this inner class to prevent updates due to model
         changes.
@@ -145,8 +145,8 @@ public:
     class ModelChangeLock
     {public:
         ModelChangeLock (SlideSorterController& rController);
-        ~ModelChangeLock (void);
-        void Release (void);
+        ~ModelChangeLock();
+        void Release();
     private:
         SlideSorterController* mpController;
     };
@@ -158,14 +158,14 @@ public:
         This method is a convenience function that simply calls
         PreModelChange() and then PostModelChange().
     */
-    void HandleModelChange (void);
+    void HandleModelChange();
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
     /** Update the display of all pages.  This involves a redraw and
         releasing previews and caches.
     */
-    void UpdateAllPages (void);
+    void UpdateAllPages();
 
     /** This factory method creates a selection function.
     */
@@ -175,13 +175,13 @@ public:
         selection function then return a reference to it.  Otherwise return
         an empty reference.
     */
-    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction (void);
+    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction();
 
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when
         later changing back to the current edit mode.
     */
-    void PrepareEditModeChange (void);
+    void PrepareEditModeChange();
 
     /** Set a new edit mode and return whether the edit mode really
         has been changed.  For proper saving and restoring of the selection
@@ -196,7 +196,7 @@ public:
     /** Finish the change of the edit mode.  Here we may select a page or
         restore a previously saved selection.
     */
-    void FinishEditModeChange (void);
+    void FinishEditModeChange();
 
     /** Call this method when the name of one of the pages has changed.
         This is then notified to the accessibility object, when that exists.
@@ -215,12 +215,12 @@ public:
 
     /** Return an Animator object.
     */
-    ::boost::shared_ptr<Animator> GetAnimator (void) const { return mpAnimator;}
+    ::boost::shared_ptr<Animator> GetAnimator() const { return mpAnimator;}
 
-    VisibleAreaManager& GetVisibleAreaManager (void) const;
+    VisibleAreaManager& GetVisibleAreaManager() const;
 
-    void CheckForMasterPageAssignment (void);
-    void CheckForSlideTransitionAssignment (void);
+    void CheckForMasterPageAssignment();
+    void CheckForSlideTransitionAssignment();
 
 private:
     SlideSorter& mrSlideSorter;
@@ -295,26 +295,26 @@ private:
         called.  Ciritcal operations like releasing references to pages that
         do not exist anymore are executed.
     */
-    void LockModelChange (void);
+    void LockModelChange();
 
     /** Further calls to HandleModelChange() will result in a full featured
         update of model, view, and controller.  When HandleModelChange() has
         been called since the last LockModelChange() then this is done right
         away to bring the view up-to-date.
     */
-    void UnlockModelChange (void);
+    void UnlockModelChange();
 
     /** Prepare for a model change.  This method does all the things that
         need to be done _before_ the model changes, e.g. because they need
         access to the model data before the change.
     */
-    void PreModelChange (void);
+    void PreModelChange();
 
     /** Complete a model change.  This includes the recreation of data
         structures that depend on the model and the request for a repaint to
         show the changes.
     */
-    void PostModelChange (void);
+    void PostModelChange();
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -45,7 +45,7 @@ AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
 {
 }
 
-AccessibleTitleBar::~AccessibleTitleBar (void)
+AccessibleTitleBar::~AccessibleTitleBar()
 {
 }
 

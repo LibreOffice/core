@@ -36,8 +36,8 @@ class Enterable : public uno_Enterable
 public:
     /* These methods need to be implemented in a derived class.
      */
-    virtual void v_enter     (void)                                      = 0;
-    virtual void v_leave     (void)                                      = 0;
+    virtual void v_enter()                                      = 0;
+    virtual void v_leave()                                      = 0;
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) = 0;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) = 0;
     virtual bool v_isValid   (rtl::OUString * pReason)                   = 0;
@@ -45,10 +45,10 @@ public:
     virtual ~Enterable() {}
 
 public:
-    inline explicit Enterable(void);
+    inline explicit Enterable();
 
-    inline void enter(void) {m_enter(this);}
-    inline void leave(void) {m_leave(this);}
+    inline void enter() {m_enter(this);}
+    inline void leave() {m_leave(this);}
 
     inline void callInto_v(uno_EnvCallee * pCallee, va_list * pParam) {m_callInto_v(this, pCallee, pParam);}
     inline void callOut_v (uno_EnvCallee * pCallee, va_list * pParam) {m_callOut_v (this, pCallee, pParam);}
@@ -73,7 +73,7 @@ extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** 
     {return static_cast<Enterable *>(context)->v_isValid(reinterpret_cast<rtl::OUString *>(pReason));}
 
 
-Enterable::Enterable(void)
+Enterable::Enterable()
 {
     m_enter      = Enterable_call_enter;
     m_leave      = Enterable_call_leave;

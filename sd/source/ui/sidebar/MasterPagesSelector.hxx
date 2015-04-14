@@ -62,9 +62,9 @@ public:
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~MasterPagesSelector (void);
+    virtual ~MasterPagesSelector();
 
-    virtual void LateInit (void);
+    virtual void LateInit();
 
     /** Return the height that this control needs to show all of its lines.
     */
@@ -93,15 +93,15 @@ public:
         the currently used master pages by default and thus is not
         influenced by its changes.
     */
-    virtual void UpdateSelection (void);
+    virtual void UpdateSelection();
 
-    void FillPageSet (void);
+    void FillPageSet();
 
     /** Make the selector empty.  This method clear the value set from any
         entries. Override this method to add functionality, especially to
         destroy objects set as data items at the value set.
     */
-    void ClearPageSet (void);
+    void ClearPageSet();
 
     void SetHelpId( const OString& aId );
 
@@ -115,7 +115,7 @@ public:
     */
     void InvalidatePreview (const SdPage* pPage);
 
-    void UpdateAllPreviews (void);
+    void UpdateAllPreviews();
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
@@ -137,7 +137,7 @@ protected:
     */
     ::std::queue<sal_uInt16> maPreviewUpdateQueue;
 
-    SdPage* GetSelectedMasterPage (void);
+    SdPage* GetSelectedMasterPage();
 
     /** Assign the given master page to all slides of the document.
         @param pMasterPage
@@ -166,7 +166,7 @@ protected:
     sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
     typedef ::std::vector<MasterPageContainer::Token> ItemList;
     void UpdateItemList (::std::unique_ptr<ItemList> && pList);
-    void Clear (void);
+    void Clear();
     /** Invalidate the specified item so that on the next Fill() this item
         is updated.
     */
@@ -184,14 +184,14 @@ protected:
     */
     void UpdateLocks (const ItemList& rItemList);
 
-    void Fill (void);
+    void Fill();
     virtual void Fill (ItemList& rItemList) = 0;
 
     /** Give derived classes the opportunity to provide their own context
         menu.  If they do then they probably have to provide their own
         Execute() and GetState() methods as well.
     */
-    virtual ResId GetContextMenuResId (void) const;
+    virtual ResId GetContextMenuResId() const;
 
     virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 

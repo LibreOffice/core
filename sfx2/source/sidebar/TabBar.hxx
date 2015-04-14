@@ -67,13 +67,13 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider);
-    virtual ~TabBar (void);
+    virtual ~TabBar();
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) SAL_OVERRIDE;
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
-    static sal_Int32 GetDefaultWidth (void);
+    static sal_Int32 GetDefaultWidth();
 
     void SetDecks (
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
@@ -87,7 +87,7 @@ public:
         const sal_Int32 nFirstIndex);
     const ::rtl::OUString GetDeckIdForIndex (const sal_Int32 nIndex) const;
     void ToggleHideFlag (const sal_Int32 nIndex);
-    void RestoreHideFlags (void);
+    void RestoreHideFlags();
 
     void UpdateFocusManager (FocusManager& rFocusManager);
 
@@ -112,11 +112,11 @@ private:
 
     RadioButton* CreateTabItem (const DeckDescriptor& rDeckDescriptor);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
-    void Layout (void);
-    void UpdateButtonIcons (void);
+    void Layout();
+    void UpdateButtonIcons();
 
-    ::boost::shared_ptr<PopupMenu> CreatePopupMenu (void) const;
-    void ShowPopupMenu (void) const;
+    ::boost::shared_ptr<PopupMenu> CreatePopupMenu() const;
+    void ShowPopupMenu() const;
     DECL_LINK(OnToolboxClicked, void*);
 
 };

@@ -1426,7 +1426,7 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
         EndActivationListening();
 }
 
-sal_Int16 ScTabViewObj::GetZoom(void) const
+sal_Int16 ScTabViewObj::GetZoom() const
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1463,7 +1463,7 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
     }
 }
 
-sal_Int16 ScTabViewObj::GetZoomType(void) const
+sal_Int16 ScTabViewObj::GetZoomType() const
 {
     sal_Int16 aZoomType = view::DocumentZoomType::OPTIMAL;
     ScTabViewShell* pViewSh = GetViewShell();

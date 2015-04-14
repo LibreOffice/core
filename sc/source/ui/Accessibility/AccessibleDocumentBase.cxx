@@ -32,7 +32,7 @@ ScAccessibleDocumentBase::ScAccessibleDocumentBase(
 {
 }
 
-ScAccessibleDocumentBase::~ScAccessibleDocumentBase(void)
+ScAccessibleDocumentBase::~ScAccessibleDocumentBase()
 {
 }
 

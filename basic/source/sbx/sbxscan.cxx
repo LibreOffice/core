@@ -563,7 +563,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 }
 
 
-ResMgr* implGetResMgr( void )
+ResMgr* implGetResMgr()
 {
     static ResMgr* pResMgr = NULL;
     if( !pResMgr )

@@ -87,7 +87,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::cppu::OComponentHelper
-    virtual void SAL_CALL disposing(void);
+    virtual void SAL_CALL disposing();
 
 private:
 

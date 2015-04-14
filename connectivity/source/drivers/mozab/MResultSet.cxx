@@ -117,7 +117,7 @@ OResultSet::~OResultSet()
 }
 
 
-void OResultSet::disposing(void)
+void OResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

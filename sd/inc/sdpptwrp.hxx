@@ -30,7 +30,7 @@ public:
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
         bool bShowProgress);
-    virtual ~SdPPTFilter (void);
+    virtual ~SdPPTFilter();
 
     /// these methods are necessary for the export to PowerPoint
     bool        Import();

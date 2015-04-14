@@ -44,7 +44,7 @@ class FuPage
     const SfxItemSet* ExecuteDialog( vcl::Window* pParent );
 
 protected:
-    virtual ~FuPage (void);
+    virtual ~FuPage();
 
 private:
     FuPage (

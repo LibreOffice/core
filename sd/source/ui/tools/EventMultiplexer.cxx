@@ -65,7 +65,7 @@ class EventMultiplexer::Implementation
 {
 public:
     Implementation (ViewShellBase& rBase);
-    virtual ~Implementation (void);
+    virtual ~Implementation();
 
     void AddEventListener (
         Link& rCallback,
@@ -111,7 +111,7 @@ public:
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 protected:
     virtual void Notify (
@@ -140,10 +140,10 @@ private:
         ::com::sun::star::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
 
-    void ReleaseListeners (void);
+    void ReleaseListeners();
 
-    void ConnectToController (void);
-    void DisconnectFromController (void);
+    void ConnectToController();
+    void DisconnectFromController();
 
     void CallListeners (
         EventMultiplexerEvent::EventId eId,
@@ -152,7 +152,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
     DECL_LINK(SlideSorterSelectionChangeListener, void*);
@@ -169,7 +169,7 @@ EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
     mpImpl->acquire();
 }
 
-EventMultiplexer::~EventMultiplexer (void)
+EventMultiplexer::~EventMultiplexer()
 {
     try
     {
@@ -278,13 +278,13 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     }
 }
 
-EventMultiplexer::Implementation::~Implementation (void)
+EventMultiplexer::Implementation::~Implementation()
 {
     DBG_ASSERT( !mbListeningToFrame,
         "sd::EventMultiplexer::Implementation::~Implementation(), disposing was not called!" );
 }
 
-void EventMultiplexer::Implementation::ReleaseListeners (void)
+void EventMultiplexer::Implementation::ReleaseListeners()
 {
     if (mbListeningToFrame)
     {
@@ -359,7 +359,7 @@ void EventMultiplexer::Implementation::RemoveEventListener (
     }
 }
 
-void EventMultiplexer::Implementation::ConnectToController (void)
+void EventMultiplexer::Implementation::ConnectToController()
 {
     // Just in case that we missed some event we now disconnect from the old
     // controller.
@@ -421,7 +421,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
     }
 }
 
-void EventMultiplexer::Implementation::DisconnectFromController (void)
+void EventMultiplexer::Implementation::DisconnectFromController()
 {
     if (mbListeningToController)
     {
@@ -629,13 +629,13 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
 
 }
 
-void SAL_CALL EventMultiplexer::Implementation::disposing (void)
+void SAL_CALL EventMultiplexer::Implementation::disposing()
 {
     CallListeners (EventMultiplexerEvent::EID_DISPOSING);
     ReleaseListeners();
 }
 
-void EventMultiplexer::Implementation::ThrowIfDisposed (void)
+void EventMultiplexer::Implementation::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

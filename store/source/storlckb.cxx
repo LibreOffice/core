@@ -44,7 +44,7 @@ const sal_uInt32 OStoreLockBytes::m_nTypeId = sal_uInt32(0x94190310);
 /*
  * OStoreLockBytes.
  */
-OStoreLockBytes::OStoreLockBytes (void)
+OStoreLockBytes::OStoreLockBytes()
     : m_xManager   (),
       m_xNode      (),
       m_bWriteable (false)
@@ -54,7 +54,7 @@ OStoreLockBytes::OStoreLockBytes (void)
 /*
  * ~OStoreLockBytes.
  */
-OStoreLockBytes::~OStoreLockBytes (void)
+OStoreLockBytes::~OStoreLockBytes()
 {
     if (m_xManager.is() && m_xNode.is())
     {
@@ -351,7 +351,7 @@ storeError OStoreLockBytes::writeAt (
 /*
  * flush.
  */
-storeError OStoreLockBytes::flush (void)
+storeError OStoreLockBytes::flush()
 {
     if (!m_xManager.is())
         return store_E_InvalidAccess;

@@ -38,13 +38,13 @@ SelectionObserver::Context::Context (SlideSorter& rSlideSorter)
         mpSelectionObserver->StartObservation();
 }
 
-SelectionObserver::Context::~Context(void)
+SelectionObserver::Context::~Context()
 {
     if (mpSelectionObserver)
         mpSelectionObserver->EndObservation();
 }
 
-void SelectionObserver::Context::Abort(void)
+void SelectionObserver::Context::Abort()
 {
     if (mpSelectionObserver)
     {
@@ -63,7 +63,7 @@ SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
 {
 }
 
-SelectionObserver::~SelectionObserver (void)
+SelectionObserver::~SelectionObserver()
 {
 }
 
@@ -89,7 +89,7 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
     }
 }
 
-void SelectionObserver::StartObservation (void)
+void SelectionObserver::StartObservation()
 {
     OSL_ASSERT(!mbIsOvservationActive);
     maInsertedPages.clear();
@@ -97,7 +97,7 @@ void SelectionObserver::StartObservation (void)
     mbIsOvservationActive = true;
 }
 
-void SelectionObserver::AbortObservation (void)
+void SelectionObserver::AbortObservation()
 {
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
@@ -105,7 +105,7 @@ void SelectionObserver::AbortObservation (void)
     maDeletedPages.clear();
 }
 
-void SelectionObserver::EndObservation (void)
+void SelectionObserver::EndObservation()
 {
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;

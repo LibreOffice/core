@@ -79,7 +79,7 @@ namespace CPPU_CURRENT_NAMESPACE
         __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
-extern "C" void privateSnippetExecutor(void);
+extern "C" void privateSnippetExecutor();
 
 namespace arm
 {

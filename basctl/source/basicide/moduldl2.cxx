@@ -1041,7 +1041,7 @@ void LibPage::InsertLib()
     }
 }
 
-void LibPage::Export( void )
+void LibPage::Export()
 {
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
     OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );

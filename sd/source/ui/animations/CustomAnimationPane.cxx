@@ -803,7 +803,7 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
     UpdateLook();
 }
 
-void CustomAnimationPane::UpdateLook (void)
+void CustomAnimationPane::UpdateLook()
 {
     const Wallpaper aBackground (
         ::sfx2::sidebar::Theme::GetWallpaper(
@@ -2199,7 +2199,7 @@ void CustomAnimationPane::onSelect()
     markShapesFromSelectedEffects();
 }
 
-const CustomAnimationPresets& CustomAnimationPane::getPresets (void)
+const CustomAnimationPresets& CustomAnimationPane::getPresets()
 {
     if (mpCustomAnimationPresets == NULL)
         mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();

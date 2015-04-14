@@ -45,10 +45,10 @@ public:
         : CacheCompactor(rCache, nMaximalCacheSize)
     {}
 
-    virtual void RequestCompaction (void) SAL_OVERRIDE { /* Ignored */ };
+    virtual void RequestCompaction() SAL_OVERRIDE { /* Ignored */ };
 
 protected:
-    virtual void Run (void) SAL_OVERRIDE { /* Do nothing */ };
+    virtual void Run() SAL_OVERRIDE { /* Do nothing */ };
 };
 
 /** This implementation of the CacheCompactor interface class uses one of
@@ -67,7 +67,7 @@ public:
         const ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
 
 protected:
-    virtual void Run (void) SAL_OVERRIDE;
+    virtual void Run() SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;
@@ -114,7 +114,7 @@ namespace sd { namespace slidesorter { namespace cache {
     return pCompactor;
 }
 
-void CacheCompactor::RequestCompaction (void)
+void CacheCompactor::RequestCompaction()
 {
     if ( ! mbIsCompactionRunning && ! maCompactionTimer.IsActive())
         maCompactionTimer.Start();
@@ -166,7 +166,7 @@ CacheCompactionByCompression::CacheCompactionByCompression (
 {
 }
 
-void CacheCompactionByCompression::Run (void)
+void CacheCompactionByCompression::Run()
 {
     if (mrCache.GetSize() > mnMaximalCacheSize)
     {

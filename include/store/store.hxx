@@ -37,13 +37,13 @@ class OStoreStream
 public:
     /** Construction.
      */
-    inline OStoreStream (void)
+    inline OStoreStream()
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreStream (void)
+    inline ~OStoreStream()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -81,7 +81,7 @@ public:
 
     /** Conversion into Stream Handle.
      */
-    inline operator storeStreamHandle (void) const
+    inline operator storeStreamHandle() const
     {
         return m_hImpl;
     }
@@ -89,7 +89,7 @@ public:
     /** Check for a valid Stream Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const
+    inline bool isValid() const
     {
         return (m_hImpl != 0);
     }
@@ -114,7 +114,7 @@ public:
     /** Close the stream.
         @see store_closeStream()
      */
-    inline void close (void)
+    inline void close()
     {
         if (m_hImpl)
         {
@@ -156,7 +156,7 @@ public:
     /** Flush the stream.
         @see store_flushStream()
      */
-    inline storeError flush (void) const
+    inline storeError flush() const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -202,13 +202,13 @@ class OStoreDirectory
 public:
     /** Construction.
      */
-    inline OStoreDirectory (void)
+    inline OStoreDirectory()
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreDirectory (void)
+    inline ~OStoreDirectory()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -246,7 +246,7 @@ public:
 
     /** Conversion into Directory Handle.
      */
-    inline operator storeDirectoryHandle(void) const
+    inline operator storeDirectoryHandle() const
     {
         return m_hImpl;
     }
@@ -254,7 +254,7 @@ public:
     /** Check for a valid Directory Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const
+    inline bool isValid() const
     {
         return (m_hImpl != 0);
     }
@@ -279,7 +279,7 @@ public:
     /** Close the directory.
         @see store_closeDirectory()
      */
-    inline void close (void)
+    inline void close()
     {
         if (m_hImpl)
         {
@@ -332,13 +332,13 @@ class OStoreFile
 public:
     /** Construction.
      */
-    inline OStoreFile (void)
+    inline OStoreFile()
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreFile (void)
+    inline ~OStoreFile()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -376,7 +376,7 @@ public:
 
     /** Conversion into File Handle.
      */
-    inline operator storeFileHandle (void) const
+    inline operator storeFileHandle() const
     {
         return m_hImpl;
     }
@@ -384,7 +384,7 @@ public:
     /** Check for a valid File Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const
+    inline bool isValid() const
     {
         return (m_hImpl != 0);
     }
@@ -422,7 +422,7 @@ public:
     /** Close the file.
         @see store_closeFile()
      */
-    inline void close (void)
+    inline void close()
     {
         if (m_hImpl)
         {
@@ -434,7 +434,7 @@ public:
     /** Flush the file.
         @see store_flushFile()
      */
-    inline storeError flush (void) const
+    inline storeError flush() const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;

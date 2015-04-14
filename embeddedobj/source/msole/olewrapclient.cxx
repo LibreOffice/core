@@ -112,7 +112,7 @@ STDMETHODIMP OleWrapperClientSite::GetContainer( LPOLECONTAINER* ppContainer )
     return E_NOTIMPL;
 }
 
-STDMETHODIMP OleWrapperClientSite::ShowObject(void)
+STDMETHODIMP OleWrapperClientSite::ShowObject()
 {
     return S_OK;
 }
@@ -140,7 +140,7 @@ STDMETHODIMP OleWrapperClientSite::OnShowWindow( BOOL bShow )
     return S_OK;
 }
 
-STDMETHODIMP OleWrapperClientSite::RequestNewObjectLayout(void)
+STDMETHODIMP OleWrapperClientSite::RequestNewObjectLayout()
 {
     return E_NOTIMPL;
 }

@@ -39,14 +39,14 @@ struct StyleData
 
 static char buffer[MAXSTYLENAME + 1];
 
-HWPStyle::HWPStyle(void)
+HWPStyle::HWPStyle()
 {
     nstyles = 0;
     style = 0;
 }
 
 
-HWPStyle::~HWPStyle(void)
+HWPStyle::~HWPStyle()
 {
     delete[]DATA;
     nstyles = 0;

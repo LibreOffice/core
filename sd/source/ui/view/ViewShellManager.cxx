@@ -58,8 +58,8 @@ public:
     ShellDescriptor (SfxShell* pShell, ShellId nId);
     ShellDescriptor (const ShellDescriptor& rDescriptor);
     ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
-    bool IsMainViewShell (void) const;
-    ::vcl::Window* GetWindow (void) const;
+    bool IsMainViewShell() const;
+    ::vcl::Window* GetWindow() const;
 };
 
 /** This functor can be used to search for a shell in an STL container when the
@@ -96,7 +96,7 @@ public:
     Implementation (
         ViewShellManager& rManager,
         ViewShellBase& rBase);
-    ~Implementation (void);
+    ~Implementation();
 
     void AddShellFactory (
         const SfxShell* pViewShell,
@@ -115,9 +115,9 @@ public:
     void DeactivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void MoveToTop (const SfxShell& rParentShell);
     SfxShell* GetShell (ShellId nId) const;
-    SfxShell* GetTopShell (void) const;
-    SfxShell* GetTopViewShell (void) const;
-    void Shutdown (void);
+    SfxShell* GetTopShell() const;
+    SfxShell* GetTopViewShell() const;
+    void Shutdown();
     void InvalidateAllSubShells (const SfxShell* pParentShell);
 
     /** Remove all shells from the SFX stack above and including the given
@@ -129,7 +129,7 @@ public:
     {
     public:
         UpdateLock (Implementation& rImpl) : mrImpl(rImpl) {mrImpl.LockUpdate();}
-        ~UpdateLock (void) {mrImpl.UnlockUpdate();};
+        ~UpdateLock() {mrImpl.UnlockUpdate();};
     private:
         Implementation& mrImpl;
     };
@@ -140,13 +140,13 @@ public:
         to the shell stack to prevent multiple rebuilds of the shell stack
         and resulting broadcasts.
     */
-    void LockUpdate (void);
+    void LockUpdate();
 
     /** Allow updates of the shell stack.  This method has to be called the
         same number of times as LockUpdate() to really allow a rebuild of
         the shell stack.
     */
-    void UnlockUpdate (void);
+    void UnlockUpdate();
 
 private:
     ViewShellBase& mrBase;
@@ -195,9 +195,9 @@ private:
     SfxShell* mpTopViewShell;
 
 
-    void UpdateShellStack (void);
+    void UpdateShellStack();
 
-    void CreateShells (void);
+    void CreateShells();
 
     /** This method rebuilds the stack of shells that are stacked upon the
         view shell base.
@@ -208,7 +208,7 @@ private:
 
 #if OSL_DEBUG_LEVEL >= 2
     void DumpShellStack (const ShellStack& rStack);
-    void DumpSfxShellStack (void);
+    void DumpSfxShellStack();
 #endif
 
     /** To be called before a shell is taken fom the SFX shell stack.  This
@@ -237,7 +237,7 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
 {
 }
 
-ViewShellManager::~ViewShellManager (void)
+ViewShellManager::~ViewShellManager()
 {
 }
 
@@ -322,7 +322,7 @@ SfxShell* ViewShellManager::GetShell (ShellId nId) const
         return NULL;
 }
 
-SfxShell* ViewShellManager::GetTopShell (void) const
+SfxShell* ViewShellManager::GetTopShell() const
 {
     if (mbValid)
         return mpImpl->GetTopShell();
@@ -330,7 +330,7 @@ SfxShell* ViewShellManager::GetTopShell (void) const
         return NULL;
 }
 
-SfxShell* ViewShellManager::GetTopViewShell (void) const
+SfxShell* ViewShellManager::GetTopViewShell() const
 {
     if (mbValid)
         return mpImpl->GetTopViewShell();
@@ -338,7 +338,7 @@ SfxShell* ViewShellManager::GetTopViewShell (void) const
         return NULL;
 }
 
-void ViewShellManager::Shutdown (void)
+void ViewShellManager::Shutdown()
 {
     if (mbValid)
     {
@@ -347,12 +347,12 @@ void ViewShellManager::Shutdown (void)
     }
 }
 
-void ViewShellManager::LockUpdate (void)
+void ViewShellManager::LockUpdate()
 {
     mpImpl->LockUpdate();
 }
 
-void ViewShellManager::UnlockUpdate (void)
+void ViewShellManager::UnlockUpdate()
 {
     mpImpl->UnlockUpdate();
 }
@@ -378,7 +378,7 @@ ViewShellManager::Implementation::Implementation (
     (void)rManager;
 }
 
-ViewShellManager::Implementation::~Implementation (void)
+ViewShellManager::Implementation::~Implementation()
 {
     Shutdown();
 }
@@ -712,23 +712,23 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
     return pShell;
 }
 
-SfxShell* ViewShellManager::Implementation::GetTopShell (void) const
+SfxShell* ViewShellManager::Implementation::GetTopShell() const
 {
     OSL_ASSERT(mpTopShell == mrBase.GetSubShell(0));
     return mpTopShell;
 }
 
-SfxShell* ViewShellManager::Implementation::GetTopViewShell (void) const
+SfxShell* ViewShellManager::Implementation::GetTopViewShell() const
 {
     return mpTopViewShell;
 }
 
-void ViewShellManager::Implementation::LockUpdate (void)
+void ViewShellManager::Implementation::LockUpdate()
 {
     mnUpdateLockCount++;
 }
 
-void ViewShellManager::Implementation::UnlockUpdate (void)
+void ViewShellManager::Implementation::UnlockUpdate()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -753,7 +753,7 @@ void ViewShellManager::Implementation::UnlockUpdate (void)
     6. Push all shells of the internal stack on the SFX shell stack that are
     not already present on the later.
 */
-void ViewShellManager::Implementation::UpdateShellStack (void)
+void ViewShellManager::Implementation::UpdateShellStack()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -916,7 +916,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
 #endif
 }
 
-void ViewShellManager::Implementation::CreateShells (void)
+void ViewShellManager::Implementation::CreateShells()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -1115,7 +1115,7 @@ void ViewShellManager::Implementation::InvalidateAllSubShells (const SfxShell* p
     }
 }
 
-void ViewShellManager::Implementation::Shutdown (void)
+void ViewShellManager::Implementation::Shutdown()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -1161,7 +1161,7 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
             SAL_INFO("sd.view", OSL_THIS_FUNC << "     null");
 }
 
-void ViewShellManager::Implementation::DumpSfxShellStack (void)
+void ViewShellManager::Implementation::DumpSfxShellStack()
 {
     ShellStack aSfxShellStack;
     sal_uInt16 nIndex (0);
@@ -1212,7 +1212,7 @@ void ViewShellManager::Implementation::SetFormShell (
 
 namespace {
 
-ShellDescriptor::ShellDescriptor (void)
+ShellDescriptor::ShellDescriptor()
     : mpShell(NULL),
       mnId(0),
       mpFactory(),
@@ -1250,7 +1250,7 @@ ShellDescriptor& ShellDescriptor::operator= (const ShellDescriptor& rDescriptor)
     return *this;
 }
 
-bool ShellDescriptor::IsMainViewShell (void) const
+bool ShellDescriptor::IsMainViewShell() const
 {
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(mpShell);
     if (pViewShell != NULL)
@@ -1259,7 +1259,7 @@ bool ShellDescriptor::IsMainViewShell (void) const
         return false;
 }
 
-vcl::Window* ShellDescriptor::GetWindow (void) const
+vcl::Window* ShellDescriptor::GetWindow() const
 {
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(mpShell);
     if (pViewShell != NULL)

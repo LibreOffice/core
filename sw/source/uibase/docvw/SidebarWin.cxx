@@ -1351,7 +1351,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GrabFocusToDocument();
 }
 
-SvxLanguageItem SwSidebarWin::GetLanguage(void)
+SvxLanguageItem SwSidebarWin::GetLanguage()
 {
     return SvxLanguageItem(SwLangHelper::GetLanguage(mrView.GetWrtShell(),RES_CHRATR_LANGUAGE),RES_CHRATR_LANGUAGE);
 }

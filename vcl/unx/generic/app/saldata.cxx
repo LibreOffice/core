@@ -290,11 +290,11 @@ void X11SalData::Init()
     pXLib_->Init();
 }
 
-void X11SalData::initNWF( void )
+void X11SalData::initNWF()
 {
 }
 
-void X11SalData::deInitNWF( void )
+void X11SalData::deInitNWF()
 {
 }
 
@@ -420,7 +420,7 @@ void SalXLib::Init()
 }
 
 extern "C" {
-void EmitFontpathWarning( void )
+void EmitFontpathWarning()
 {
     static Bool bOnce = False;
     if ( !bOnce )

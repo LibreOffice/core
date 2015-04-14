@@ -64,7 +64,7 @@ HWPInfo::HWPInfo()
     memset(bordermargin, 0, sizeof(bordermargin));
 }
 
-HWPInfo::~HWPInfo(void)
+HWPInfo::~HWPInfo()
 {
     delete[] info_block;
     info_block = 0;

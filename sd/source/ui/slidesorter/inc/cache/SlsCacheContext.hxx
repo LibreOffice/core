@@ -54,7 +54,7 @@ public:
     /** Called to determine whether the system is idle and a preview can be
         created without annoying the user.
     */
-    virtual bool IsIdle (void) = 0;
+    virtual bool IsIdle() = 0;
 
     /** This method is used to determine whether a page is currently visible
         or not.  It is called when the cache becomes to large and some
@@ -89,7 +89,7 @@ public:
         same model but have different preview sizes may access previews of
         each other in order to create fast previews of the previews.
     */
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void) = 0;
+    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() = 0;
 };
 
 typedef ::boost::shared_ptr<CacheContext> SharedCacheContext;

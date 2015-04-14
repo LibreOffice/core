@@ -47,9 +47,9 @@ class PresentationFactoryProvider
 {
 public:
     PresentationFactoryProvider (const Reference<XComponentContext>& rxContext);
-    virtual ~PresentationFactoryProvider (void);
+    virtual ~PresentationFactoryProvider();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XInitialization
 
@@ -71,14 +71,14 @@ class PresentationView
 public:
     PresentationView (const Reference<XResourceId>& rxViewId)
         : PresentationViewInterfaceBase(maMutex),mxResourceId(rxViewId) {};
-    virtual ~PresentationView (void) {};
+    virtual ~PresentationView() {};
 
     // XView
 
-    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Reference<XResourceId> SAL_CALL getResourceId() throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return mxResourceId; };
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL isAnchorOnly() throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return false; }
 
 private:
@@ -109,11 +109,11 @@ PresentationFactory::PresentationFactory (
     }
 }
 
-PresentationFactory::~PresentationFactory (void)
+PresentationFactory::~PresentationFactory()
 {
 }
 
-void SAL_CALL PresentationFactory::disposing (void)
+void SAL_CALL PresentationFactory::disposing()
 {
 }
 
@@ -171,7 +171,7 @@ void SAL_CALL PresentationFactory::disposing (
     (void)rEventObject;
 }
 
-void PresentationFactory::ThrowIfDisposed (void) const
+void PresentationFactory::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -192,11 +192,11 @@ PresentationFactoryProvider::PresentationFactoryProvider (
     (void)rxContext;
 }
 
-PresentationFactoryProvider::~PresentationFactoryProvider (void)
+PresentationFactoryProvider::~PresentationFactoryProvider()
 {
 }
 
-void PresentationFactoryProvider::disposing (void)
+void PresentationFactoryProvider::disposing()
 {
 }
 

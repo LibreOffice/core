@@ -172,7 +172,7 @@ void MacroEventListBox::Resize()
     maListBox.SetPosSizePixel( aPnt, aSize );
 }
 
-void MacroEventListBox::ConnectElements( void )
+void MacroEventListBox::ConnectElements()
 {
     Resize();
 

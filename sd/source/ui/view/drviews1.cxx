@@ -156,7 +156,7 @@ namespace
  * Called, if state of selection of view is changed
  */
 
-void DrawViewShell::SelectionHasChanged (void)
+void DrawViewShell::SelectionHasChanged()
 {
     Invalidate();
 

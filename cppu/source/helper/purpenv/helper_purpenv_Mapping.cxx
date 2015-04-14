@@ -60,15 +60,15 @@ public:
                       uno_Environment                 * pTo,
                       cppu::helper::purpenv::ProbeFun * probeFun,
                       void                            * pProbeContext);
-    virtual  ~Mapping(void);
+    virtual  ~Mapping();
 
     void mapInterface(
         uno_Interface                    ** ppOut,
         uno_Interface                     * pUnoI,
         typelib_InterfaceTypeDescription  * pTypeDescr);
 
-    void acquire(void);
-    void release(void);
+    void acquire();
+    void release();
 };
 
 static void SAL_CALL s_mapInterface(
@@ -135,9 +135,9 @@ Mapping::Mapping(uno_Environment                 * pFrom,
     uno_Mapping::mapInterface = (uno_MapInterfaceFunc)s_mapInterface;
 }
 
-Mapping::~Mapping(void)
+Mapping::~Mapping()
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::~Mapping(void)", this));
+    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::~Mapping()", this));
 }
 
 

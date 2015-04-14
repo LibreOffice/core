@@ -145,7 +145,7 @@ namespace accessibility
 
     // XServiceInfo - static methods
 
-    Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static(void) throw (RuntimeException)
+    Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static() throw (RuntimeException)
     {
         Sequence< OUString > aSupported(3);
         aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
@@ -154,7 +154,7 @@ namespace accessibility
         return aSupported;
     }
 
-    OUString AccessibleIconChoiceCtrl::getImplementationName_Static(void) throw (RuntimeException)
+    OUString AccessibleIconChoiceCtrl::getImplementationName_Static() throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
     }

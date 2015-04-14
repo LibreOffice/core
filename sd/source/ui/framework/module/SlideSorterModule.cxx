@@ -71,11 +71,11 @@ SlideSorterModule::SlideSorterModule (
     }
 }
 
-SlideSorterModule::~SlideSorterModule (void)
+SlideSorterModule::~SlideSorterModule()
 {
 }
 
-void SlideSorterModule::SaveResourceState (void)
+void SlideSorterModule::SaveResourceState()
 {
     SvtSlideSorterBarOptions().SetVisibleImpressView(IsResourceActive(FrameworkHelper::msImpressViewURL));
     SvtSlideSorterBarOptions().SetVisibleOutlineView(IsResourceActive(FrameworkHelper::msOutlineViewURL));

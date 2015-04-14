@@ -63,12 +63,12 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(pTransferable);
 }
 
-DragAndDropContext::~DragAndDropContext (void)
+DragAndDropContext::~DragAndDropContext()
 {
     SetTargetSlideSorter (NULL, Point(0,0), InsertionIndicatorHandler::UnknownMode, false);
 }
 
-void DragAndDropContext::Dispose (void)
+void DragAndDropContext::Dispose()
 {
     mnInsertionIndex = -1;
 }

@@ -104,13 +104,13 @@ Any SAL_CALL BufferedInputStream::queryInterface( const Type& rType ) throw( Run
 }
 
 
-void SAL_CALL BufferedInputStream::acquire( void ) throw()
+void SAL_CALL BufferedInputStream::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL BufferedInputStream::release( void ) throw()
+void SAL_CALL BufferedInputStream::release() throw()
 {
     OWeakObject::release();
 }
@@ -172,7 +172,7 @@ void SAL_CALL BufferedInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 
 
-sal_Int32 SAL_CALL BufferedInputStream::available( void )
+sal_Int32 SAL_CALL BufferedInputStream::available()
     throw( NotConnectedException,
            IOException,
            RuntimeException, std::exception )
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL BufferedInputStream::available( void )
 
 
 
-void SAL_CALL BufferedInputStream::closeInput( void )
+void SAL_CALL BufferedInputStream::closeInput()
     throw( NotConnectedException,
            IOException,
            RuntimeException, std::exception )
@@ -207,7 +207,7 @@ void SAL_CALL BufferedInputStream::seek( sal_Int64 location )
 
 
 
-sal_Int64 SAL_CALL BufferedInputStream::getPosition( void )
+sal_Int64 SAL_CALL BufferedInputStream::getPosition()
     throw( IOException,
            RuntimeException, std::exception )
 {
@@ -217,7 +217,7 @@ sal_Int64 SAL_CALL BufferedInputStream::getPosition( void )
 
 
 
-sal_Int64 SAL_CALL BufferedInputStream::getLength( void ) throw( IOException,RuntimeException, std::exception )
+sal_Int64 SAL_CALL BufferedInputStream::getLength() throw( IOException,RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_nBufferSize;

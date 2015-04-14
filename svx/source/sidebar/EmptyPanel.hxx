@@ -35,9 +35,9 @@ class EmptyPanel
 {
 public:
     EmptyPanel (vcl::Window* pParent);
-    virtual ~EmptyPanel (void);
+    virtual ~EmptyPanel();
 
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
 private:
     FixedText maMessageControl;

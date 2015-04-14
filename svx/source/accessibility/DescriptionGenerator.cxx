@@ -64,7 +64,7 @@ DescriptionGenerator::DescriptionGenerator (
 
 
 
-DescriptionGenerator::~DescriptionGenerator (void)
+DescriptionGenerator::~DescriptionGenerator()
 {
 }
 
@@ -202,7 +202,7 @@ void DescriptionGenerator::AppendString (const OUString& sString)
 
 
 
-void DescriptionGenerator::AddLineProperties (void)
+void DescriptionGenerator::AddLineProperties()
 {
     AddProperty ("LineColor", DescriptionGenerator::COLOR, SIP_XA_LINECOLOR);
     AddProperty ("LineDashName", DescriptionGenerator::STRING,
@@ -216,7 +216,7 @@ void DescriptionGenerator::AddLineProperties (void)
 /** The fill style is described by the property "FillStyle".  Depending on
     its value a hatch-, gradient-, or bitmap name is appended.
 */
-void DescriptionGenerator::AddFillProperties (void)
+void DescriptionGenerator::AddFillProperties()
 {
     AddProperty ("FillStyle", DescriptionGenerator::FILL_STYLE, SIP_XA_FILLSTYLE);
 }
@@ -224,7 +224,7 @@ void DescriptionGenerator::AddFillProperties (void)
 
 
 
-void DescriptionGenerator::Add3DProperties (void)
+void DescriptionGenerator::Add3DProperties()
 {
     AddProperty ("D3DMaterialColor", DescriptionGenerator::COLOR,
         RID_SVXSTR_A11Y_3D_MATERIAL_COLOR);
@@ -235,7 +235,7 @@ void DescriptionGenerator::Add3DProperties (void)
 
 
 
-void DescriptionGenerator::AddTextProperties (void)
+void DescriptionGenerator::AddTextProperties()
 {
     AddProperty ("CharColor", DescriptionGenerator::COLOR);
     AddFillProperties ();

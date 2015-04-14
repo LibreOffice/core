@@ -91,7 +91,7 @@ public:
         SdDrawDocument& rDrawDoc,
         OutputDevice* pOutDev,
         ViewShell* pViewSh=NULL);
-    virtual ~View (void);
+    virtual ~View();
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const ::vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
@@ -133,9 +133,9 @@ public:
 
     void                    UpdateSelectionClipboard( bool bForceDeselect );
 
-    inline DrawDocShell* GetDocSh(void) const { return mpDocSh; }
-    inline SdDrawDocument& GetDoc(void) const;
-    inline ViewShell* GetViewShell(void) const { return mpViewSh; }
+    inline DrawDocShell* GetDocSh() const { return mpDocSh; }
+    inline SdDrawDocument& GetDoc() const;
+    inline ViewShell* GetViewShell() const { return mpViewSh; }
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::vcl::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
@@ -297,7 +297,7 @@ private:
     OutlinerMasterViewFilter maMasterViewFilter;
 };
 
-SdDrawDocument& View::GetDoc (void) const
+SdDrawDocument& View::GetDoc() const
 {
     return mrDoc;
 }

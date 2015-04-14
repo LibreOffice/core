@@ -35,7 +35,7 @@ ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 {
 }
 
-ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration( void )
+ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration()
 {
 }
 

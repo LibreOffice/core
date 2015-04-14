@@ -62,12 +62,12 @@ private:
 
     sca::analysis::ScaAnyConverter aAnyConv;
 
-    ResMgr&                     GetResMgr( void ) throw( css::uno::RuntimeException );
+    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException );
     OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( css::uno::RuntimeException );
     OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
-    void                        InitDefLocales( void );
+    void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
-    void                        InitData( void );
+    void                        InitData();
 
                                 /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
     sal_Int32                   getDateMode(

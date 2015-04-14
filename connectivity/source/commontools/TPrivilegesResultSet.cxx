@@ -107,7 +107,7 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
     return ODatabaseMetaDataResultSet::getValue(columnIndex);
 }
 
-void SAL_CALL OResultSetPrivileges::disposing(void)
+void SAL_CALL OResultSetPrivileges::disposing()
 {
     ODatabaseMetaDataResultSet::disposing();
 m_xTables.clear();

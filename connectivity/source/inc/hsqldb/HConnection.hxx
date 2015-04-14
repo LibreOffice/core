@@ -64,7 +64,7 @@ namespace connectivity
             bool                                                                                        m_bReadOnly;
 
         protected:
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             virtual ~OHsqlConnection();
 
         public:

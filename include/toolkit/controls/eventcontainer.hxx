@@ -108,7 +108,7 @@ public:
 class ScriptEventContainer : public NameContainer_Impl
 {
 public:
-    ScriptEventContainer( void );
+    ScriptEventContainer();
 };
 
 

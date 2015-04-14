@@ -46,16 +46,16 @@ BasicToolBarFactory::BasicToolBarFactory (
     (void)rxContext;
 }
 
-BasicToolBarFactory::~BasicToolBarFactory (void)
+BasicToolBarFactory::~BasicToolBarFactory()
 {
 }
 
-void SAL_CALL BasicToolBarFactory::disposing (void)
+void SAL_CALL BasicToolBarFactory::disposing()
 {
     Shutdown();
 }
 
-void BasicToolBarFactory::Shutdown (void)
+void BasicToolBarFactory::Shutdown()
 {
     mpViewShellBase = NULL;
     Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
@@ -161,7 +161,7 @@ void SAL_CALL BasicToolBarFactory::releaseResource (
         xComponent->dispose();
 }
 
-void BasicToolBarFactory::ThrowIfDisposed (void) const
+void BasicToolBarFactory::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

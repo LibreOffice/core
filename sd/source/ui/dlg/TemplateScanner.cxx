@@ -165,7 +165,7 @@ class TemplateScanner::FolderDescriptorList
 {
 };
 
-TemplateScanner::TemplateScanner (void)
+TemplateScanner::TemplateScanner()
     : meState(INITIALIZE_SCANNING),
       maFolderContent(),
       mpTemplateDirectory(NULL),
@@ -182,7 +182,7 @@ TemplateScanner::TemplateScanner (void)
     //  empty;
 }
 
-TemplateScanner::~TemplateScanner (void)
+TemplateScanner::~TemplateScanner()
 {
     mpFolderDescriptors.reset();
 
@@ -194,7 +194,7 @@ TemplateScanner::~TemplateScanner (void)
             delete *I;
 }
 
-TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
+TemplateScanner::State TemplateScanner::GetTemplateRoot()
 {
     State eNextState (INITIALIZE_FOLDER_SCANNING);
 
@@ -205,7 +205,7 @@ TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
     return eNextState;
 }
 
-TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
+TemplateScanner::State TemplateScanner::InitializeEntryScanning()
 {
     State eNextState (SCAN_ENTRY);
 
@@ -231,7 +231,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
     return eNextState;
 }
 
-TemplateScanner::State TemplateScanner::ScanEntry (void)
+TemplateScanner::State TemplateScanner::ScanEntry()
 {
     State eNextState (ERROR);
 
@@ -290,7 +290,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
     return eNextState;
 }
 
-TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
+TemplateScanner::State TemplateScanner::InitializeFolderScanning()
 {
     State eNextState (ERROR);
 
@@ -322,7 +322,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
     return eNextState;
 }
 
-TemplateScanner::State TemplateScanner::GatherFolderList (void)
+TemplateScanner::State TemplateScanner::GatherFolderList()
 {
     State eNextState (ERROR);
 
@@ -354,7 +354,7 @@ TemplateScanner::State TemplateScanner::GatherFolderList (void)
     return eNextState;
 }
 
-TemplateScanner::State TemplateScanner::ScanFolder (void)
+TemplateScanner::State TemplateScanner::ScanFolder()
 {
     State eNextState (ERROR);
 
@@ -386,13 +386,13 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
     return eNextState;
 }
 
-void TemplateScanner::Scan (void)
+void TemplateScanner::Scan()
 {
     while (HasNextStep())
         RunNextStep();
 }
 
-void TemplateScanner::RunNextStep (void)
+void TemplateScanner::RunNextStep()
 {
     switch (meState)
     {
@@ -440,7 +440,7 @@ void TemplateScanner::RunNextStep (void)
     }
 }
 
-bool TemplateScanner::HasNextStep (void)
+bool TemplateScanner::HasNextStep()
 {
     switch (meState)
     {

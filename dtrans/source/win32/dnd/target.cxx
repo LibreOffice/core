@@ -410,7 +410,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
     return S_OK;
 }
 
-HRESULT DropTarget::DragLeave( void)
+HRESULT DropTarget::DragLeave()
 {
 #if defined DBG_CONSOLE_OUT
     printf("\nDropTarget::DragLeave");

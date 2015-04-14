@@ -102,7 +102,7 @@ uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
+uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -115,7 +115,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
 
     // #101929# prevent a newly created text cursor from running inside a table
     // because table cells have their own XText.
-    // Patterned after SwXTextFrame::createTextCursor(void).
+    // Patterned after SwXTextFrame::createTextCursor().
 
     // skip all tables at the beginning
     SwTableNode* pTableNode = pUnoCursor->GetNode().FindTableNode();
@@ -155,7 +155,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
     return xCursor;
 }
 
-uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
+uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -527,7 +527,7 @@ void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > xRet;
@@ -558,7 +558,7 @@ sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException, std::exception
     return 0 != pRedline->GetContentIdx();
 }
 
-uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pDoc)

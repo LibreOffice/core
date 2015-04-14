@@ -72,14 +72,14 @@ class BasicViewFactory::ViewShellContainer
     : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
 {
 public:
-    ViewShellContainer (void) {};
+    ViewShellContainer() {};
 };
 
 class BasicViewFactory::ViewCache
     : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
 {
 public:
-    ViewCache (void) {};
+    ViewCache() {};
 };
 
 //===== ViewFactory ===========================================================
@@ -98,11 +98,11 @@ BasicViewFactory::BasicViewFactory (
     (void)rxContext;
 }
 
-BasicViewFactory::~BasicViewFactory (void)
+BasicViewFactory::~BasicViewFactory()
 {
 }
 
-void SAL_CALL BasicViewFactory::disposing (void)
+void SAL_CALL BasicViewFactory::disposing()
 {
     // Disconnect from the frame view.
     if (mpFrameView != NULL)

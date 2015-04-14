@@ -92,7 +92,7 @@ public:
     DECLARE_XTYPEPROVIDER( )
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleSelection

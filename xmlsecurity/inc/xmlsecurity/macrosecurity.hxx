@@ -87,7 +87,7 @@ public:
         mpDlg = pTabDlg;
     }
 
-    virtual void        ClosePage( void ) = 0;
+    virtual void        ClosePage() = 0;
 };
 
 class MacroSecurityLevelTP : public MacroSecurityTP
@@ -106,7 +106,7 @@ protected:
 public:
                         MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
 
-    virtual void        ClosePage( void ) SAL_OVERRIDE;
+    virtual void        ClosePage() SAL_OVERRIDE;
 };
 
 
@@ -134,7 +134,7 @@ private:
     DECL_LINK(          TrustCertLBSelectHdl, void* );
     DECL_LINK(          TrustFileLocLBSelectHdl, void* );
 
-    void                FillCertLB( void );
+    void                FillCertLB();
     void                ImplCheckButtons();
 
 public:
@@ -142,7 +142,7 @@ public:
     virtual ~MacroSecurityTrustedSourcesTP();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual void        ClosePage( void ) SAL_OVERRIDE;
+    virtual void        ClosePage() SAL_OVERRIDE;
 };
 
 

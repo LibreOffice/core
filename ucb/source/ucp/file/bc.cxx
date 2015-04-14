@@ -137,7 +137,7 @@ BaseContent::~BaseContent( )
 
 
 void SAL_CALL
-BaseContent::acquire( void )
+BaseContent::acquire()
     throw()
 {
     OWeakObject::acquire();
@@ -145,7 +145,7 @@ BaseContent::acquire( void )
 
 
 void SAL_CALL
-BaseContent::release( void )
+BaseContent::release()
     throw()
 {
     OWeakObject::release();
@@ -292,7 +292,7 @@ XTYPEPROVIDER_IMPL_10( BaseContent,
 
 
 sal_Int32 SAL_CALL
-BaseContent::createCommandIdentifier( void )
+BaseContent::createCommandIdentifier()
     throw( RuntimeException, std::exception )
 {
     return m_pMyShell->getCommandId();
@@ -1265,7 +1265,7 @@ void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 
 
 ContentEventNotifier*
-BaseContent::cDEL( void )
+BaseContent::cDEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1307,7 +1307,7 @@ BaseContent::cEXC( const OUString& aNewName )
 
 
 ContentEventNotifier*
-BaseContent::cCEL( void )
+BaseContent::cCEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
     ContentEventNotifier* p = 0;
@@ -1321,7 +1321,7 @@ BaseContent::cCEL( void )
 }
 
 PropertySetInfoChangeNotifier*
-BaseContent::cPSL( void )
+BaseContent::cPSL()
 {
     osl::MutexGuard aGuard( m_aMutex );
     PropertySetInfoChangeNotifier* p = 0;
@@ -1336,7 +1336,7 @@ BaseContent::cPSL( void )
 
 
 PropertyChangeNotifier*
-BaseContent::cPCL( void )
+BaseContent::cPCL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1369,7 +1369,7 @@ BaseContent::cPCL( void )
 }
 
 
-OUString BaseContent::getKey( void )
+OUString BaseContent::getKey()
 {
     return m_aUncPath;
 }

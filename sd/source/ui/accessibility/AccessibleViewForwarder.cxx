@@ -50,17 +50,17 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
     }
 }
 
-AccessibleViewForwarder::~AccessibleViewForwarder (void)
+AccessibleViewForwarder::~AccessibleViewForwarder()
 {
     // empty
 }
 
-bool AccessibleViewForwarder::IsValid (void) const
+bool AccessibleViewForwarder::IsValid() const
 {
     return true;
 }
 
-Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
+Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {
     Rectangle aVisibleArea;
 

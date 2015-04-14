@@ -70,10 +70,10 @@ public: // XInputStream
         throw( NotConnectedException,
                BufferSizeExceededException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL available(void)
+    virtual sal_Int32 SAL_CALL available()
         throw( NotConnectedException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL closeInput(void)
+    virtual void SAL_CALL closeInput()
         throw( NotConnectedException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -83,11 +83,11 @@ public: // XOutputStream
         throw( NotConnectedException,
                BufferSizeExceededException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL flush(void)
+    virtual void SAL_CALL flush()
         throw( NotConnectedException,
                BufferSizeExceededException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput(void)
+    virtual void SAL_CALL closeOutput()
         throw( NotConnectedException,
                BufferSizeExceededException,
                RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -95,15 +95,15 @@ public: // XOutputStream
 public: // XConnectable
     virtual void SAL_CALL setPredecessor(const Reference< XConnectable >& aPredecessor)
         throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Reference< XConnectable > SAL_CALL getPredecessor(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< XConnectable > SAL_CALL getPredecessor() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setSuccessor(const Reference < XConnectable > & aSuccessor)
         throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE ;
+    virtual Reference < XConnectable > SAL_CALL getSuccessor() throw( RuntimeException, std::exception ) SAL_OVERRIDE ;
 
 
 public: // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
 
 private:
@@ -242,7 +242,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
 }
 
 
-sal_Int32 OPipeImpl::available(void)
+sal_Int32 OPipeImpl::available()
     throw( NotConnectedException,
            RuntimeException, std::exception )
  {
@@ -256,7 +256,7 @@ sal_Int32 OPipeImpl::available(void)
     return m_pFIFO->getSize();
 }
 
-void OPipeImpl::closeInput(void)
+void OPipeImpl::closeInput()
     throw( NotConnectedException,
            RuntimeException, std::exception)
 {
@@ -338,7 +338,7 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
 }
 
 
-void OPipeImpl::flush(void)
+void OPipeImpl::flush()
     throw( NotConnectedException,
            BufferSizeExceededException,
            RuntimeException, std::exception)
@@ -347,7 +347,7 @@ void OPipeImpl::flush(void)
     return;
 }
 
-void OPipeImpl::closeOutput(void)
+void OPipeImpl::closeOutput()
     throw( NotConnectedException,
            BufferSizeExceededException,
            RuntimeException, std::exception)
@@ -417,7 +417,7 @@ sal_Bool OPipeImpl::supportsService(const OUString& ServiceName) throw(std::exce
 }
 
 // XServiceInfo
-Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > OPipeImpl::getSupportedServiceNames() throw(std::exception  )
 {
     return OPipeImpl_getSupportedServiceNames();
 }
@@ -443,7 +443,7 @@ OUString    OPipeImpl_getImplementationName()
     return OUString( IMPLEMENTATION_NAME );
 }
 
-Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
+Sequence<OUString> OPipeImpl_getSupportedServiceNames()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = "com.sun.star.io.Pipe";

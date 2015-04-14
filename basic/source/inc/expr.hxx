@@ -116,7 +116,7 @@ class SbiExprNode {                  // operators (and operands)
     void  GenElement( SbiOpcode );
     void  BaseInit( SbiParser* p ); // help function for Ctor, from 17.12.95
 public:
-    SbiExprNode( void );
+    SbiExprNode();
     SbiExprNode( SbiParser*, double, SbxDataType );
     SbiExprNode( SbiParser*, const OUString& );
     SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );

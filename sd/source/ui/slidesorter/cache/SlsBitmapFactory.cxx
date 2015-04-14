@@ -38,12 +38,12 @@ class PageObjectViewObjectContact;
 
 namespace sd { namespace slidesorter { namespace cache {
 
-BitmapFactory::BitmapFactory (void)
+BitmapFactory::BitmapFactory()
     : maRenderer(NULL, false)
 {
 }
 
-BitmapFactory::~BitmapFactory (void)
+BitmapFactory::~BitmapFactory()
 {
 }
 

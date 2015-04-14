@@ -29,7 +29,7 @@ CellBorderStylePopup::CellBorderStylePopup (
 {
 }
 
-CellBorderStylePopup::~CellBorderStylePopup (void)
+CellBorderStylePopup::~CellBorderStylePopup()
 {
 }
 

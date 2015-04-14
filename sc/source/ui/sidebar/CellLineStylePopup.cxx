@@ -29,7 +29,7 @@ CellLineStylePopup::CellLineStylePopup (
 {
 }
 
-CellLineStylePopup::~CellLineStylePopup (void)
+CellLineStylePopup::~CellLineStylePopup()
 {
 }
 

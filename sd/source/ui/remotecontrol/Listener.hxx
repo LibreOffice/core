@@ -55,7 +55,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     virtual void SAL_CALL disposing (
         const com::sun::star::lang::EventObject& rEvent)
     throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

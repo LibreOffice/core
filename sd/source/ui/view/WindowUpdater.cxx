@@ -32,14 +32,14 @@
 
 namespace sd {
 
-WindowUpdater::WindowUpdater (void)
+WindowUpdater::WindowUpdater()
     : mpViewShell (NULL),
       mpDocument (NULL)
 {
     maCTLOptions.AddListener(this);
 }
 
-WindowUpdater::~WindowUpdater (void) throw ()
+WindowUpdater::~WindowUpdater() throw ()
 {
     maCTLOptions.RemoveListener(this);
 }

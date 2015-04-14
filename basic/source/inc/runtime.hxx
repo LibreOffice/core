@@ -69,7 +69,7 @@ struct SbiForStack {                // for/next stack:
     sal_Int32*          pArrayUpperBounds;
     css::uno::Reference< css::container::XEnumeration > xEnumeration;
 
-    SbiForStack( void )
+    SbiForStack()
         : pNext(NULL)
         , eForType(FOR_TO)
         , nCurCollectionIndex(0)
@@ -176,18 +176,18 @@ public:
     OUString  GetErrorMsg()           { return aErrorMsg; }
     sal_Int32 GetErl()             { return nErl; }
     void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
-    bool    IsReschedule( void ) { return bReschedule; }
+    bool    IsReschedule() { return bReschedule; }
     void    EnableCompatibility( bool bEnable ) { bCompatibility = bEnable; }
-    bool    IsCompatibility( void ) { return bCompatibility; }
+    bool    IsCompatibility() { return bCompatibility; }
 
-    ComponentVector_t& getComponentVector( void )  { return ComponentVector; }
+    ComponentVector_t& getComponentVector()  { return ComponentVector; }
 
     SbMethod* GetCaller( sal_uInt16 );
     SbModule* GetActiveModule();
 
     SbiIoSystem* GetIoSystem() { return pIosys; }
     SbiDdeControl* GetDdeControl() { return pDdeCtrl; }
-    StarBASIC* GetBasic( void ) { return pBasic; }
+    StarBASIC* GetBasic() { return pBasic; }
     SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
 
@@ -282,7 +282,7 @@ class SbiRuntime
         pItem->xRef = pVar;
         pRefSaveList = pItem;
     }
-    void ClearRefs( void )
+    void ClearRefs()
     {
         while( pRefSaveList )
         {
@@ -398,8 +398,8 @@ public:
     void DumpPCode();
     bool Step();                    // single step (one opcode)
     void Stop()            { bRun = false;   }
-    void block( void )     { bBlocked = true; }
-    void unblock( void )   { bBlocked = false; }
+    void block()     { bBlocked = true; }
+    void unblock()   { bBlocked = false; }
     SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }
     sal_uInt16 GetDebugFlags() { return nFlags;  }
@@ -437,12 +437,12 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic );
 // no DDE functionality, no DLLCALL) in basic because
 // of portal "virtual" users (portal user != UNIX user)
 // (Implemented in iosys.cxx)
-bool needSecurityRestrictions( void );
+bool needSecurityRestrictions();
 
 // Returns true if UNO is available, otherwise the old
 // file system implementation has to be used
 // (Implemented in iosys.cxx)
-bool hasUno( void );
+bool hasUno();
 
 // Converts possibly relative paths to absolute paths
 // according to the setting done by ChDir/ChDrive

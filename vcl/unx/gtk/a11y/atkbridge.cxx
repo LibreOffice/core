@@ -25,7 +25,7 @@
 #include "atkwindow.hxx"
 #include <stdio.h>
 
-bool InitAtkBridge(void)
+bool InitAtkBridge()
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     const char* pVersion = atk_get_toolkit_version();

@@ -51,9 +51,9 @@ namespace chelp {
         queryInterface( const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL acquire( void ) throw() SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
 
-        virtual void SAL_CALL release( void ) throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
 
         virtual sal_Int32 SAL_CALL readBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
@@ -76,12 +76,12 @@ namespace chelp {
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual sal_Int32 SAL_CALL available( void )
+        virtual sal_Int32 SAL_CALL available()
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL closeInput( void )
+        virtual void SAL_CALL closeInput()
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -91,11 +91,11 @@ namespace chelp {
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual sal_Int64 SAL_CALL getPosition( void )
+        virtual sal_Int64 SAL_CALL getPosition()
             throw( com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual sal_Int64 SAL_CALL getLength( void )
+        virtual sal_Int64 SAL_CALL getLength()
             throw( com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     };

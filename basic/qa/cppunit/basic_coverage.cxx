@@ -26,8 +26,8 @@ private:
     OUString m_sCurrentTest;
     void process_directory(const OUString& sDirName);
     void run_test(const OUString& sFileName);
-    void test_failed(void);
-    void test_success(void);
+    void test_failed();
+    void test_success();
     StringVec get_subdirnames( const OUString& sDirName );
 
 public:
@@ -136,7 +136,7 @@ void Coverage::process_directory(const OUString& sDirName)
     fprintf(stderr,"end process directory\n");
 }
 
-void Coverage::Coverage_Iterator(void)
+void Coverage::Coverage_Iterator()
 {
     OUString sDirName = getURLFromSrc("/basic/qa/basic_coverage/");
 

@@ -27,13 +27,13 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
-UpdateRequest::UpdateRequest (void)
+UpdateRequest::UpdateRequest()
     throw()
     : UpdateRequestInterfaceBase(MutexOwner::maMutex)
 {
 }
 
-UpdateRequest::~UpdateRequest (void) throw()
+UpdateRequest::~UpdateRequest() throw()
 {
 }
 
@@ -45,7 +45,7 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
     // becomes empty.
 }
 
-OUString SAL_CALL UpdateRequest::getName (void)
+OUString SAL_CALL UpdateRequest::getName()
     throw (RuntimeException, std::exception)
 {
     return OUString("UpdateRequest");

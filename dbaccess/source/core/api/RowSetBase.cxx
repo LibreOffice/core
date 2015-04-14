@@ -154,7 +154,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 }
 
 // OComponentHelper
-void SAL_CALL ORowSetBase::disposing(void)
+void SAL_CALL ORowSetBase::disposing()
 {
     MutexGuard aGuard(*m_pMutex);
 
@@ -1087,7 +1087,7 @@ void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeExceptio
         throwFunctionSequenceException(*m_pMySelf);
 }
 
-Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, RuntimeException, std::exception )
+Reference< XInterface >  ORowSetBase::getStatement() throw( SQLException, RuntimeException, std::exception )
 {
     return NULL;
 }

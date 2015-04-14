@@ -197,7 +197,7 @@ int xmlRegisterStreamInputCallbacks(
     return 0 ;
 }
 
-int xmlUnregisterStreamInputCallbacks( void )
+int xmlUnregisterStreamInputCallbacks()
 {
     if( ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         //Clear the uir-stream binding

@@ -21,7 +21,7 @@
 #include <sal/types.h>
 
 extern "C"
-SampleLib_Api* SAL_CALL initSampleLibApi(void)
+SampleLib_Api* SAL_CALL initSampleLibApi()
 {
     static SampleLib_Api aApi= {0,0};
     if (!aApi.funcA)

@@ -356,7 +356,7 @@ CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativ
 }
 
 OUString SAL_CALL
-CalendarImpl::getImplementationName(void) throw( RuntimeException, std::exception )
+CalendarImpl::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.CalendarImpl");
 }
@@ -368,7 +368,7 @@ CalendarImpl::supportsService(const OUString& rServiceName) throw( RuntimeExcept
 }
 
 Sequence< OUString > SAL_CALL
-CalendarImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+CalendarImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.i18n.LocaleCalendar";

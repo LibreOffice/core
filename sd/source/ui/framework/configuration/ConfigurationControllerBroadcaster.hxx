@@ -104,7 +104,7 @@ public:
         the list of registered listeners is empty.  Further calls to
         RemoveListener() are not necessary but do not result in an error.
     */
-    void DisposeAndClear (void);
+    void DisposeAndClear();
 
 private:
     css::uno::Reference<

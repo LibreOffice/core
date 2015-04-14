@@ -49,7 +49,7 @@ G_DEFINE_TYPE (GLOAction, g_lo_action, G_TYPE_OBJECT);
 #endif
 
 GLOAction*
-g_lo_action_new (void)
+g_lo_action_new()
 {
     return G_LO_ACTION (g_object_new (G_TYPE_LO_ACTION, NULL));
 }

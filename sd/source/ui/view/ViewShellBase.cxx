@@ -146,9 +146,9 @@ public:
     ::boost::shared_ptr<FormShellManager> mpFormShellManager;
 
     Implementation (ViewShellBase& rBase);
-    ~Implementation (void);
+    ~Implementation();
 
-    void LateInit (void);
+    void LateInit();
 
     /** Show or hide the ViewTabBar.
         @param bShow
@@ -182,7 +182,7 @@ public:
 
     void GetSlotState (SfxItemSet& rSet);
 
-    void ProcessRestoreEditingViewSlot (void);
+    void ProcessRestoreEditingViewSlot();
 
 private:
     ViewShellBase& mrBase;
@@ -203,7 +203,7 @@ class FocusForwardingWindow : public vcl::Window
 {
 public:
     FocusForwardingWindow (vcl::Window& rParentWindow, ViewShellBase& rBase);
-    virtual ~FocusForwardingWindow (void);
+    virtual ~FocusForwardingWindow();
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
     virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
@@ -262,7 +262,7 @@ ViewShellBase::ViewShellBase (
     (and/or being prepared to being destroyed) is important.  Change it only
     when you know what you are doing.
 */
-ViewShellBase::~ViewShellBase (void)
+ViewShellBase::~ViewShellBase()
 {
     // Tell the controller that the ViewShellBase is not available anymore.
     if (mpImpl->mpController.get() != NULL)
@@ -360,12 +360,12 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     }
 }
 
-::boost::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager (void) const
+::boost::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
 {
     return mpImpl->mpViewShellManager;
 }
 
-::boost::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell (void) const
+::boost::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
 {
     ::boost::shared_ptr<ViewShell> pMainViewShell (
         framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
@@ -418,7 +418,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-void ViewShellBase::InitializeFramework (void)
+void ViewShellBase::InitializeFramework()
 {
 }
 
@@ -465,7 +465,7 @@ void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
     mpImpl->ResizePixel (rOrigin, rSize, true);
 }
 
-void ViewShellBase::Rearrange (void)
+void ViewShellBase::Rearrange()
 {
     OSL_ASSERT(GetViewFrame()!=NULL);
 
@@ -497,7 +497,7 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
     return aResult;
 }
 
-Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
+Reference<view::XRenderable> ViewShellBase::GetRenderable()
 {
     // Create a new DocumentRenderer on every call.  It observes the life
     // time of this ViewShellBase object.
@@ -782,7 +782,7 @@ void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
         pShell->ReadUserData (rString);
 }
 
-SdrView* ViewShellBase::GetDrawView (void) const
+SdrView* ViewShellBase::GetDrawView() const
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
@@ -841,7 +841,7 @@ void ViewShellBase::ShowUIControls (bool bVisible)
         Rearrange();
 }
 
-OUString ViewShellBase::GetInitialViewShellType (void)
+OUString ViewShellBase::GetInitialViewShellType()
 {
     OUString sRequestedView (FrameworkHelper::msImpressViewURL);
 
@@ -912,7 +912,7 @@ void ViewShellBase::StartPresentation()
         GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 
-::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer (void)
+::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=NULL);
@@ -920,12 +920,12 @@ void ViewShellBase::StartPresentation()
     return mpImpl->mpEventMultiplexer;
 }
 
-const Rectangle& ViewShellBase::getClientRectangle (void) const
+const Rectangle& ViewShellBase::getClientRectangle() const
 {
     return mpImpl->maClientArea;
 }
 
-::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager (void) const
+::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
@@ -933,7 +933,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
     return mpImpl->mpToolBarManager;
 }
 
-::boost::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager (void) const
+::boost::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpFormShellManager.get()!=NULL);
@@ -941,7 +941,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
     return mpImpl->mpFormShellManager;
 }
 
-DrawController& ViewShellBase::GetDrawController (void) const
+DrawController& ViewShellBase::GetDrawController() const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -955,7 +955,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
-::vcl::Window* ViewShellBase::GetViewWindow (void)
+::vcl::Window* ViewShellBase::GetViewWindow()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -1023,7 +1023,7 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
 {
 }
 
-ViewShellBase::Implementation::~Implementation (void)
+ViewShellBase::Implementation::~Implementation()
 {
     mpController = NULL;
     mpViewTabBar = NULL;
@@ -1031,12 +1031,12 @@ ViewShellBase::Implementation::~Implementation (void)
     mpToolBarManager.reset();
 }
 
-void ViewShellBase::Implementation::LateInit (void)
+void ViewShellBase::Implementation::LateInit()
 {
     mpController = new DrawController(mrBase);
 }
 
-void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
+void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
     if (pViewShell != NULL)
@@ -1383,7 +1383,7 @@ FocusForwardingWindow::FocusForwardingWindow (
     SAL_INFO("sd.view", "created FocusForwardingWindow at " << this);
 }
 
-FocusForwardingWindow::~FocusForwardingWindow (void)
+FocusForwardingWindow::~FocusForwardingWindow()
 {
     SAL_INFO("sd.view", "destroyed FocusForwardingWindow at " << this);
 }

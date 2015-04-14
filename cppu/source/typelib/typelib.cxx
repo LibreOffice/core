@@ -826,7 +826,7 @@ void newTypeDescription(
         (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
     if( eTypeClass != typelib_TypeClass_VOID )
     {
-        // sizeof( void ) not allowed
+        // sizeof(void) not allowed
         (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
         (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
     }
@@ -884,7 +884,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     ::memcpy( pEnum->pEnumValues, pEnumValues, nEnumValues * sizeof(sal_Int32) );
 
     (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
-    // sizeof( void ) not allowed
+    // sizeof(void) not allowed
     (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
     (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
 }

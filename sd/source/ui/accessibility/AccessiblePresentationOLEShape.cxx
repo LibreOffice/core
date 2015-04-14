@@ -38,14 +38,14 @@ AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
 {
 }
 
-AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
+AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape()
 {
 }
 
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
-    AccessiblePresentationOLEShape::getImplementationName (void)
+    AccessiblePresentationOLEShape::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationOLEShape");
@@ -53,7 +53,7 @@ OUString SAL_CALL
 
 /// Set this object's name if it is different to the current name.
 OUString
-    AccessiblePresentationOLEShape::CreateAccessibleBaseName (void)
+    AccessiblePresentationOLEShape::CreateAccessibleBaseName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sName;
@@ -81,7 +81,7 @@ OUString
 }
 
 OUString
-    AccessiblePresentationOLEShape::CreateAccessibleDescription (void)
+    AccessiblePresentationOLEShape::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     //    return createAccessibleName();

@@ -92,10 +92,10 @@ class SwDropCapsPict : public Control
     Reference< css::i18n::XBreakIterator >   xBreak;
 
     virtual void    Paint(const Rectangle &rRect) SAL_OVERRIDE;
-    void            CheckScript( void );
-    Size            CalcTextSize( void );
-    inline void     InitPrinter( void );
-    void            _InitPrinter( void );
+    void            CheckScript();
+    Size            CalcTextSize();
+    inline void     InitPrinter();
+    void            _InitPrinter();
     void            GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
     void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
     bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
@@ -118,7 +118,7 @@ public:
 
     virtual ~SwDropCapsPict();
 
-    void UpdatePaintSettings( void );       // also invalidates control!
+    void UpdatePaintSettings();       // also invalidates control!
 
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -174,7 +174,7 @@ void SwDropCapsPict::SetValues( const OUString& rText, sal_uInt8 nLines, sal_uIn
     UpdatePaintSettings();
 }
 
-void SwDropCapsPict::InitPrinter( void )
+void SwDropCapsPict::InitPrinter()
 {
     if( !mpPrinter )
         _InitPrinter();
@@ -256,7 +256,7 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
     _rFont.SetCharSet(aFmtFont.GetCharSet());
 }
 
-void SwDropCapsPict::UpdatePaintSettings( void )
+void SwDropCapsPict::UpdatePaintSettings()
 {
     maBackColor = GetSettings().GetStyleSettings().GetWindowColor();
     maTextLineColor = Color( COL_LIGHTGRAY );
@@ -404,7 +404,7 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     mpPrinter->SetFont( aOldFont );
 }
 
-void SwDropCapsPict::CheckScript( void )
+void SwDropCapsPict::CheckScript()
 {
     if( maScriptText == maText )
         return;
@@ -437,7 +437,7 @@ void SwDropCapsPict::CheckScript( void )
     }
 }
 
-Size SwDropCapsPict::CalcTextSize( void )
+Size SwDropCapsPict::CalcTextSize()
 {
     InitPrinter();
 

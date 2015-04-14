@@ -139,7 +139,7 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
 }
 
 void PresenterTextView::SetTextChangeBroadcaster (
-    const ::boost::function<void(void)>& rBroadcaster)
+    const ::boost::function<void()>& rBroadcaster)
 {
     maTextChangeBroadcaster = rBroadcaster;
 }
@@ -166,7 +166,7 @@ void PresenterTextView::SetSize (const css::geometry::RealSize2D& rSize)
     RequestFormat();
 }
 
-double PresenterTextView::GetTotalTextHeight (void)
+double PresenterTextView::GetTotalTextHeight()
 {
     double nTotalHeight (0);
 
@@ -394,7 +394,7 @@ void PresenterTextView::Paint (
     }
 }
 
-SharedPresenterTextCaret PresenterTextView::GetCaret (void) const
+SharedPresenterTextCaret PresenterTextView::GetCaret() const
 {
     return mpCaret;
 }
@@ -413,12 +413,12 @@ awt::Rectangle PresenterTextView::GetCaretBounds (
 
 //----- private ---------------------------------------------------------------
 
-void PresenterTextView::RequestFormat (void)
+void PresenterTextView::RequestFormat()
 {
     mbIsFormatPending = true;
 }
 
-void PresenterTextView::Format (void)
+void PresenterTextView::Format()
 {
     mbIsFormatPending = false;
 
@@ -437,7 +437,7 @@ void PresenterTextView::Format (void)
         maTextChangeBroadcaster();
 }
 
-sal_Int32 PresenterTextView::GetParagraphCount (void) const
+sal_Int32 PresenterTextView::GetParagraphCount() const
 {
     return maParagraphs.size();
 }
@@ -668,7 +668,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
         return maWordBoundaries[nIndex];
 }
 
-sal_Int32 PresenterTextParagraph::GetCaretPosition (void) const
+sal_Int32 PresenterTextParagraph::GetCaretPosition() const
 {
     if (mpCaret && mpCaret->GetParagraphIndex()==mnParagraphIndex)
         return mpCaret->GetCharacterIndex();
@@ -688,14 +688,14 @@ void PresenterTextParagraph::SetOrigin (const double nXOrigin, const double nYOr
     mnYOrigin = nYOrigin;
 }
 
-awt::Point PresenterTextParagraph::GetRelativeLocation (void) const
+awt::Point PresenterTextParagraph::GetRelativeLocation() const
 {
     return awt::Point(
         sal_Int32(mnXOrigin),
         sal_Int32(mnYOrigin + mnVerticalOffset));
 }
 
-awt::Size PresenterTextParagraph::GetSize (void)
+awt::Size PresenterTextParagraph::GetSize()
 {
     return awt::Size(
         sal_Int32(mnWidth),
@@ -763,7 +763,7 @@ void PresenterTextParagraph::AddLine (
     rCurrentLine.startPos = rCurrentLine.endPos;
 }
 
-double PresenterTextParagraph::GetTotalTextHeight (void)
+double PresenterTextParagraph::GetTotalTextHeight()
 {
     return maLines.size() * mnLineHeight;
 }
@@ -773,7 +773,7 @@ void PresenterTextParagraph::SetCharacterOffset (const sal_Int32 nCharacterOffse
     mnCharacterOffset = nCharacterOffset;
 }
 
-sal_Int32 PresenterTextParagraph::GetCharacterCount (void) const
+sal_Int32 PresenterTextParagraph::GetCharacterCount() const
 {
     return msParagraphText.getLength();
 }
@@ -792,7 +792,7 @@ sal_Unicode PresenterTextParagraph::GetCharacter (
     }
 }
 
-OUString PresenterTextParagraph::GetText (void) const
+OUString PresenterTextParagraph::GetText() const
 {
     return msParagraphText;
 }
@@ -998,7 +998,7 @@ sal_Int32 PresenterTextParagraph::GetIndexAtPoint (const awt::Point& rPoint) con
     return -1;
 }
 
-sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
+sal_Int8 PresenterTextParagraph::GetTextDirection() const
 {
     // Find first portion that has a non-neutral text direction.
     sal_Int32 nPosition (0);
@@ -1046,7 +1046,7 @@ sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
     return nTextDirection;
 }
 
-bool PresenterTextParagraph::IsTextReferencePointLeft (void) const
+bool PresenterTextParagraph::IsTextReferencePointLeft() const
 {
     return mnWritingMode != text::WritingMode2::RL_TB;
 }
@@ -1103,12 +1103,12 @@ PresenterTextCaret::PresenterTextCaret (
 {
 }
 
-PresenterTextCaret::~PresenterTextCaret (void)
+PresenterTextCaret::~PresenterTextCaret()
 {
     HideCaret();
 }
 
-void PresenterTextCaret::ShowCaret (void)
+void PresenterTextCaret::ShowCaret()
 {
     if (mnCaretBlinkTaskId == 0)
     {
@@ -1120,7 +1120,7 @@ void PresenterTextCaret::ShowCaret (void)
     mbIsCaretVisible = true;
 }
 
-void PresenterTextCaret::HideCaret (void)
+void PresenterTextCaret::HideCaret()
 {
     if (mnCaretBlinkTaskId != 0)
     {
@@ -1175,12 +1175,12 @@ void PresenterTextCaret::SetCaretMotionBroadcaster (
     maBroadcaster = rBroadcaster;
 }
 
-css::awt::Rectangle PresenterTextCaret::GetBounds (void) const
+css::awt::Rectangle PresenterTextCaret::GetBounds() const
 {
     return maCaretBounds;
 }
 
-void PresenterTextCaret::InvertCaret (void)
+void PresenterTextCaret::InvertCaret()
 {
     mbIsCaretVisible = !mbIsCaretVisible;
     if (mnParagraphIndex >= 0)
@@ -1213,7 +1213,7 @@ PresenterTextParagraph::Line::Line (
 {
 }
 
-void PresenterTextParagraph::Line::ProvideCellBoxes (void)
+void PresenterTextParagraph::Line::ProvideCellBoxes()
 {
     if ( ! IsEmpty() && maCellBoxes.getLength()==0)
     {
@@ -1245,7 +1245,7 @@ void PresenterTextParagraph::Line::ProvideLayoutedLine (
     }
 }
 
-bool PresenterTextParagraph::Line::IsEmpty (void) const
+bool PresenterTextParagraph::Line::IsEmpty() const
 {
     return mnLineStartCharacterIndex >= mnLineEndCharacterIndex;
 }

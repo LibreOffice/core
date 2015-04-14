@@ -62,7 +62,7 @@ struct RegistryTypeWriter_Api
 
 /** the API initialization function.
 */
-REG_DLLPUBLIC RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void);
+REG_DLLPUBLIC RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api();
 
 #ifdef __cplusplus
 }

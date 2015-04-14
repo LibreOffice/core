@@ -209,7 +209,7 @@ OUString findUserInDescription( const OUString& aDescription )
     return user;
 }
 
-bool needSecurityRestrictions( void )
+bool needSecurityRestrictions()
 {
     static bool bNeedInit = true;
     static bool bRetVal = true;
@@ -276,7 +276,7 @@ bool needSecurityRestrictions( void )
 // Returns sal_True if UNO is available, otherwise the old file
 // system implementation has to be used
 // #89378 New semantic: Don't just ask for UNO but for UCB
-bool hasUno( void )
+bool hasUno()
 {
     static bool bNeedInit = true;
     static bool bRetVal = true;
@@ -929,7 +929,7 @@ SbiStream* SbiIoSystem::GetStream( short nChannel ) const
     return pRet;
 }
 
-void SbiIoSystem::CloseAll(void)
+void SbiIoSystem::CloseAll()
 {
     for( short i = 1; i < CHANNELS; i++ )
     {

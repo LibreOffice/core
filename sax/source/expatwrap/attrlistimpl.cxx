@@ -57,7 +57,7 @@ struct AttributeList_impl
 
 
 
-sal_Int16 AttributeList::getLength(void) throw (RuntimeException, std::exception)
+sal_Int16 AttributeList::getLength() throw (RuntimeException, std::exception)
 {
     return static_cast<sal_Int16>(m_pImpl->vecAttribute.size());
 }

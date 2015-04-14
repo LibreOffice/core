@@ -39,7 +39,7 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 #endif
 }
 
-MenuButton::~MenuButton (void)
+MenuButton::~MenuButton()
 {
 }
 

@@ -44,7 +44,7 @@ public:
     SdUnoDrawView (
         DrawViewShell& rViewShell,
         View& rView) throw();
-    virtual ~SdUnoDrawView (void) throw();
+    virtual ~SdUnoDrawView() throw();
 
     // XSelectionSupplier
 
@@ -54,7 +54,7 @@ public:
                css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Any SAL_CALL getSelection (void)
+    virtual css::uno::Any SAL_CALL getSelection()
         throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
@@ -73,7 +73,7 @@ public:
         throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XFastPropertySet
@@ -99,9 +99,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    bool getMasterPageMode(void) const throw();
+    bool getMasterPageMode() const throw();
     void setMasterPageMode(bool MasterPageMode_) throw();
-    bool getLayerMode(void) const throw();
+    bool getLayerMode() const throw();
     void setLayerMode(bool LayerMode_) throw();
 public:
     /** Return a reference to the active layer object.
@@ -109,7 +109,7 @@ public:
             The returned value may be empty when the internal state of this
             view is not valid (like during destruction.)
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> getActiveLayer (void) throw ();
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> getActiveLayer() throw ();
 protected:
     /** Make the specified object the active layer.
         @param rxLayer
@@ -118,7 +118,7 @@ protected:
     void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException);
 
     void SetZoom( sal_Int16 nZoom );
-    sal_Int16 GetZoom(void) const;
+    sal_Int16 GetZoom() const;
 
     void SetViewOffset(const com::sun::star::awt::Point& rWinPos );
     com::sun::star::awt::Point GetViewOffset() const;
@@ -131,7 +131,7 @@ private:
     DrawViewShell& mrDrawViewShell;
     sd::View& mrView;
 
-    SdXImpressDocument* GetModel (void) const throw();
+    SdXImpressDocument* GetModel() const throw();
 };
 
 } // end of namespace sd

@@ -42,7 +42,7 @@ namespace sfx2 { namespace sidebar {
 Deck::Deck (
     const DeckDescriptor& rDeckDescriptor,
     vcl::Window* pParentWindow,
-    const ::boost::function<void(void)>& rCloserAction)
+    const ::boost::function<void()>& rCloserAction)
     : Window(pParentWindow, 0),
       msId(rDeckDescriptor.msId),
       maIcon(),
@@ -73,7 +73,7 @@ Deck::Deck (
 #endif
 }
 
-Deck::~Deck (void)
+Deck::~Deck()
 {
     Dispose();
 
@@ -83,7 +83,7 @@ Deck::~Deck (void)
     maPanels.clear();
 }
 
-void Deck::Dispose (void)
+void Deck::Dispose()
 {
     SharedPanelContainer aPanels;
     aPanels.swap(maPanels);
@@ -106,12 +106,12 @@ void Deck::Dispose (void)
     mpVerticalScrollBar.reset();
 }
 
-DeckTitleBar* Deck::GetTitleBar (void) const
+DeckTitleBar* Deck::GetTitleBar() const
 {
     return mpTitleBar.get();
 }
 
-Rectangle Deck::GetContentArea (void) const
+Rectangle Deck::GetContentArea() const
 {
     const Size aWindowSize (GetSizePixel());
     const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
@@ -217,7 +217,7 @@ void Deck::SetPanels (const SharedPanelContainer& rPanels)
     RequestLayout();
 }
 
-void Deck::RequestLayout (void)
+void Deck::RequestLayout()
 {
     mnMinimalWidth = 0;
 
@@ -232,7 +232,7 @@ void Deck::RequestLayout (void)
         *mpVerticalScrollBar);
 }
 
-vcl::Window* Deck::GetPanelParentWindow (void)
+vcl::Window* Deck::GetPanelParentWindow()
 {
     return mpScrollContainer.get();
 }
@@ -297,7 +297,7 @@ void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
         PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation+1);
 }
 
-void Deck::PrintWindowTree (void)
+void Deck::PrintWindowTree()
 {
     PrintWindowSubTree(this, 0);
 }
@@ -323,7 +323,7 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #endif
 }
 
-Deck::ScrollContainerWindow::~ScrollContainerWindow (void)
+Deck::ScrollContainerWindow::~ScrollContainerWindow()
 {
 }
 

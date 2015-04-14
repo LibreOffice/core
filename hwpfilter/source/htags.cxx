@@ -56,7 +56,7 @@ EmPicture::EmPicture(size_t tsize)
 #ifdef WIN32
 #define unlink _unlink
 #endif
-EmPicture::~EmPicture(void)
+EmPicture::~EmPicture()
 {
     if (data)
         delete[]data;

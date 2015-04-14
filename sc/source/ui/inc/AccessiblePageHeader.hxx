@@ -77,11 +77,11 @@ public:
     void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Rectangle GetBoundingBoxOnScreen() const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Rectangle GetBoundingBox() const throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ScPreviewShell*     mpViewShell;

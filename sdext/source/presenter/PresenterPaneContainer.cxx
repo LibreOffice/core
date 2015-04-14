@@ -47,7 +47,7 @@ PresenterPaneContainer::PresenterPaneContainer (
     }
 }
 
-PresenterPaneContainer::~PresenterPaneContainer (void)
+PresenterPaneContainer::~PresenterPaneContainer()
 {
 }
 
@@ -101,7 +101,7 @@ void PresenterPaneContainer::PreparePane (
     }
 }
 
-void SAL_CALL PresenterPaneContainer::disposing (void)
+void SAL_CALL PresenterPaneContainer::disposing()
 {
     PaneList::iterator iPane (maPanes.begin());
     PaneList::const_iterator iEnd (maPanes.end());

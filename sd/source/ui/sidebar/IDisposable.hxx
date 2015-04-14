@@ -29,7 +29,7 @@ namespace sd { namespace sidebar {
 class IDisposable
 {
 public:
-    virtual void Dispose (void) = 0;
+    virtual void Dispose() = 0;
     virtual ~IDisposable();
 };
 

@@ -131,7 +131,7 @@ PageMarginControl::PageMarginControl(
     FreeResource();
 }
 
-PageMarginControl::~PageMarginControl(void)
+PageMarginControl::~PageMarginControl()
 {
     delete mpMarginValueSet;
 

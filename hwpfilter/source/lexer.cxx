@@ -1757,7 +1757,7 @@ YY_BUFFER_STATE new_buffer;
 
 
 #ifdef YY_USE_PROTOS
-void yy_load_buffer_state( void )
+void yy_load_buffer_state()
 #else
 void yy_load_buffer_state()
 #endif

@@ -47,7 +47,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    void FreeResource (void);
+    void FreeResource();
 
 private:
     const std::unique_ptr<SfxTemplateDialog_Impl> pImpl;

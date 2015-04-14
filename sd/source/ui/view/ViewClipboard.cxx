@@ -41,7 +41,7 @@ ViewClipboard::ViewClipboard (::sd::View& rView)
 {
 }
 
-ViewClipboard::~ViewClipboard (void)
+ViewClipboard::~ViewClipboard()
 {
 }
 

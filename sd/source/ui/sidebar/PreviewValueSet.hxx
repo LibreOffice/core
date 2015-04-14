@@ -31,10 +31,10 @@ class PreviewValueSet
 {
 public:
     PreviewValueSet (vcl::Window* pParent);
-    virtual ~PreviewValueSet (void);
+    virtual ~PreviewValueSet();
 
     void SetRightMouseClickHandler (const Link& rLink);
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     void SetPreviewSize (const Size& rSize);
 

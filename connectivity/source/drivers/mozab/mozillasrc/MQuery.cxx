@@ -592,13 +592,13 @@ MQuery::getRealRowCount()
 //  false
 
 sal_Bool
-MQuery::queryComplete( void )
+MQuery::queryComplete()
 {
     return hadError() || m_aQueryHelper->queryComplete();
 }
 
 sal_Bool
-MQuery::waitForQueryComplete( void )
+MQuery::waitForQueryComplete()
 {
     if( m_aQueryHelper->waitForQueryComplete( ) )
         return sal_True;

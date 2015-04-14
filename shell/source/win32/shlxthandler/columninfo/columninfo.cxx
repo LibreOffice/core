@@ -84,14 +84,14 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
 
 
 
-ULONG STDMETHODCALLTYPE CColumnInfo::AddRef(void)
+ULONG STDMETHODCALLTYPE CColumnInfo::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
 
-ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
+ULONG STDMETHODCALLTYPE CColumnInfo::Release()
 {
     long refcnt = InterlockedDecrement(&m_RefCnt);
 

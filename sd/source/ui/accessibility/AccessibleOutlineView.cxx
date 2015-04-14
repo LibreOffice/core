@@ -90,12 +90,12 @@ AccessibleOutlineView::AccessibleOutlineView (
     }
 }
 
-AccessibleOutlineView::~AccessibleOutlineView (void)
+AccessibleOutlineView::~AccessibleOutlineView()
 {
     OSL_TRACE ("~AccessibleOutlineView");
 }
 
-void AccessibleOutlineView::Init (void)
+void AccessibleOutlineView::Init()
 {
     // Set event source _before_ starting to listen
     maTextHelper.SetEventSource(this);
@@ -114,7 +114,7 @@ void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL
-    AccessibleOutlineView::getAccessibleChildCount (void)
+    AccessibleOutlineView::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -135,7 +135,7 @@ uno::Reference<XAccessible> SAL_CALL
 #include <drawdoc.hxx>
 
 OUString SAL_CALL
-    AccessibleOutlineView::getAccessibleName(void)
+    AccessibleOutlineView::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -183,7 +183,7 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
-    AccessibleOutlineView::getImplementationName (void)
+    AccessibleOutlineView::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOutlineView");
@@ -200,7 +200,7 @@ void SAL_CALL
 
 //=====  protected internal  ==================================================
 
-void AccessibleOutlineView::Activated (void)
+void AccessibleOutlineView::Activated()
 {
     SolarMutexGuard aGuard;
 
@@ -208,7 +208,7 @@ void AccessibleOutlineView::Activated (void)
     maTextHelper.SetFocus(true);
 }
 
-void AccessibleOutlineView::Deactivated (void)
+void AccessibleOutlineView::Deactivated()
 {
     SolarMutexGuard aGuard;
 
@@ -216,7 +216,7 @@ void AccessibleOutlineView::Deactivated (void)
     maTextHelper.SetFocus(false);
 }
 
-void SAL_CALL AccessibleOutlineView::disposing (void)
+void SAL_CALL AccessibleOutlineView::disposing()
 {
     // dispose children
     maTextHelper.Dispose();
@@ -261,7 +261,7 @@ void SAL_CALL
 
 /// Create a name for this view.
 OUString
-    AccessibleOutlineView::CreateAccessibleName (void)
+    AccessibleOutlineView::CreateAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -273,7 +273,7 @@ OUString
     if a description is not available.
 */
 OUString
-    AccessibleOutlineView::CreateAccessibleDescription (void)
+    AccessibleOutlineView::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

@@ -54,7 +54,7 @@ void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
     mpLinkedUndoManager = pLinkedUndoManager;
 }
 
-void UndoManager::ClearLinkedRedoActions (void)
+void UndoManager::ClearLinkedRedoActions()
 {
     if (mpLinkedUndoManager != NULL)
         mpLinkedUndoManager->ClearRedo();

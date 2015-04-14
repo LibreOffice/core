@@ -93,7 +93,7 @@ LwpRowLayout::~LwpRowLayout()
  * @param
  * @return
  */
-void LwpRowLayout::SetRowMap(void)
+void LwpRowLayout::SetRowMap()
 {
     LwpObjectID& rCellID= GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());

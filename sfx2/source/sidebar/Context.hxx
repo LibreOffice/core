@@ -31,7 +31,7 @@ public:
     ::rtl::OUString msApplication;
     ::rtl::OUString msContext;
 
-    Context (void);
+    Context();
     Context (
         const ::rtl::OUString& rsApplication,
         const ::rtl::OUString& rsContext);

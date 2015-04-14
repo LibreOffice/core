@@ -62,7 +62,7 @@ QueueProcessor::QueueProcessor (
     maTimer.SetTimeout (10);
 }
 
-QueueProcessor::~QueueProcessor (void)
+QueueProcessor::~QueueProcessor()
 {
 }
 
@@ -80,18 +80,18 @@ void QueueProcessor::Start (int nPriorityClass)
     }
 }
 
-void QueueProcessor::Stop (void)
+void QueueProcessor::Stop()
 {
     if (maTimer.IsActive())
         maTimer.Stop();
 }
 
-void QueueProcessor::Pause (void)
+void QueueProcessor::Pause()
 {
     mbIsPaused = true;
 }
 
-void QueueProcessor::Resume (void)
+void QueueProcessor::Resume()
 {
     mbIsPaused = false;
     if ( ! mrQueue.IsEmpty())
@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl)
     return 1;
 }
 
-void QueueProcessor::ProcessRequests (void)
+void QueueProcessor::ProcessRequests()
 {
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 

@@ -192,7 +192,7 @@ namespace fileaccess {
         // Members
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >      m_xContext;
 
-        void SAL_CALL initProperties( void );
+        void SAL_CALL initProperties();
         osl::Mutex   m_aMutex;
         OUString m_HostName;
         OUString m_HomeDirectory;

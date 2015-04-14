@@ -35,8 +35,8 @@ namespace sd { namespace presenter {
 class PresenterPreviewCache::PresenterCacheContext : public CacheContext
 {
 public:
-    PresenterCacheContext (void);
-    virtual ~PresenterCacheContext (void);
+    PresenterCacheContext();
+    virtual ~PresenterCacheContext();
 
     void SetDocumentSlides (
         const Reference<container::XIndexAccess>& rxSlides,
@@ -52,12 +52,12 @@ public:
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
         const Bitmap& rPreview) SAL_OVERRIDE;
-    virtual bool IsIdle (void) SAL_OVERRIDE;
+    virtual bool IsIdle() SAL_OVERRIDE;
     virtual bool IsVisible (CacheKey aKey) SAL_OVERRIDE;
     virtual const SdrPage* GetPage (CacheKey aKey) SAL_OVERRIDE;
     virtual ::boost::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) SAL_OVERRIDE;
     virtual sal_Int32 GetPriority (CacheKey aKey) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() SAL_OVERRIDE;
 
 private:
     Reference<container::XIndexAccess> mxSlides;
@@ -81,7 +81,7 @@ PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>
     (void)rxContext;
 }
 
-PresenterPreviewCache::~PresenterPreviewCache (void)
+PresenterPreviewCache::~PresenterPreviewCache()
 {
 }
 
@@ -171,7 +171,7 @@ void SAL_CALL PresenterPreviewCache::removePreviewCreationNotifyListener (
     mpCacheContext->RemovePreviewCreationNotifyListener(rxListener);
 }
 
-void SAL_CALL PresenterPreviewCache::pause (void)
+void SAL_CALL PresenterPreviewCache::pause()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -179,7 +179,7 @@ void SAL_CALL PresenterPreviewCache::pause (void)
     mpCache->Pause();
 }
 
-void SAL_CALL PresenterPreviewCache::resume (void)
+void SAL_CALL PresenterPreviewCache::resume()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -187,7 +187,7 @@ void SAL_CALL PresenterPreviewCache::resume (void)
     mpCache->Resume();
 }
 
-void PresenterPreviewCache::ThrowIfDisposed (void)
+void PresenterPreviewCache::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -199,7 +199,7 @@ void PresenterPreviewCache::ThrowIfDisposed (void)
 
 //===== PresenterPreviewCache::PresenterCacheContext ==========================
 
-PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext (void)
+PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext()
     : mxSlides(),
       mxDocument(),
       mnFirstVisibleSlideIndex(-1),
@@ -208,7 +208,7 @@ PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext (void)
 {
 }
 
-PresenterPreviewCache::PresenterCacheContext::~PresenterCacheContext (void)
+PresenterPreviewCache::PresenterCacheContext::~PresenterCacheContext()
 {
 }
 
@@ -274,7 +274,7 @@ void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
             CallListeners(nIndex);
 }
 
-bool PresenterPreviewCache::PresenterCacheContext::IsIdle (void)
+bool PresenterPreviewCache::PresenterCacheContext::IsIdle()
 {
     return true;
 }
@@ -337,7 +337,7 @@ sal_Int32 PresenterPreviewCache::PresenterCacheContext::GetPriority (CacheKey aK
     return 0;
 }
 
-Reference<XInterface> PresenterPreviewCache::PresenterCacheContext::GetModel (void)
+Reference<XInterface> PresenterPreviewCache::PresenterCacheContext::GetModel()
 {
     return mxDocument;
 }

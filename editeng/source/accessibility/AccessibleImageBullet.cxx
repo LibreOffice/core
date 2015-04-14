@@ -357,7 +357,7 @@ namespace accessibility
         return static_cast<sal_Int32>( aColor.GetColor() );
     }
 
-    OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException, std::exception)
+    OUString SAL_CALL AccessibleImageBullet::getImplementationName() throw (uno::RuntimeException, std::exception)
     {
 
         return OUString("AccessibleImageBullet");
@@ -369,7 +369,7 @@ namespace accessibility
         return cppu::supportsService(this, sServiceName);
     }
 
-    uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames (void) throw (uno::RuntimeException, std::exception)
+    uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
     {
 
         const OUString sServiceName ("com.sun.star.accessibility.AccessibleContext");

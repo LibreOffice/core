@@ -44,7 +44,7 @@ public:
         used by the currently selected page of the document in the
         center pane.
     */
-    virtual void UpdateSelection (void) SAL_OVERRIDE;
+    virtual void UpdateSelection() SAL_OVERRIDE;
 
     /** Copy all master pages that are to be shown into the given list.
     */
@@ -53,7 +53,7 @@ public:
     using MasterPagesSelector::Fill;
 
 protected:
-    virtual ResId GetContextMenuResId (void) const SAL_OVERRIDE;
+    virtual ResId GetContextMenuResId() const SAL_OVERRIDE;
 
     virtual void ProcessPopupMenu (Menu& rMenu) SAL_OVERRIDE;
     virtual void ExecuteCommand (const sal_Int32 nCommandId) SAL_OVERRIDE;
@@ -67,9 +67,9 @@ private:
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~CurrentMasterPagesSelector (void);
+    virtual ~CurrentMasterPagesSelector();
 
-    virtual void LateInit (void) SAL_OVERRIDE;
+    virtual void LateInit() SAL_OVERRIDE;
 
     DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent*);
 };

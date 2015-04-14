@@ -47,30 +47,30 @@ class UnsafeBridge : public cppu::Enterable
     sal_Int32           m_count;
     oslThreadIdentifier m_threadId;
 
-    virtual  ~UnsafeBridge(void);
+    virtual  ~UnsafeBridge();
 
 public:
-    explicit UnsafeBridge(void);
+    explicit UnsafeBridge();
 
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
 
-    virtual void v_enter(void) SAL_OVERRIDE;
-    virtual void v_leave(void) SAL_OVERRIDE;
+    virtual void v_enter() SAL_OVERRIDE;
+    virtual void v_leave() SAL_OVERRIDE;
 
     virtual bool v_isValid(rtl::OUString * pReason) SAL_OVERRIDE;
 };
 
-UnsafeBridge::UnsafeBridge(void)
+UnsafeBridge::UnsafeBridge()
     : m_count   (0),
       m_threadId(0)
 {
     LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::UnsafeBridge(uno_Environment * pEnv)", this));
 }
 
-UnsafeBridge::~UnsafeBridge(void)
+UnsafeBridge::~UnsafeBridge()
 {
-    LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::~UnsafeBridge(void)", this));
+    LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::~UnsafeBridge()", this));
 
     SAL_WARN_IF(m_count < 0, "cppu.unsafebridge", "m_count is less than 0");
 }
@@ -94,7 +94,7 @@ void UnsafeBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
         m_threadId = osl::Thread::getCurrentIdentifier();
 }
 
-void UnsafeBridge::v_enter(void)
+void UnsafeBridge::v_enter()
 {
     m_mutex.acquire();
 
@@ -106,7 +106,7 @@ void UnsafeBridge::v_enter(void)
     ++ m_count;
 }
 
-void UnsafeBridge::v_leave(void)
+void UnsafeBridge::v_leave()
 {
     SAL_WARN_IF(m_count <= 0, "cppu.unsafebridge", "m_count is less than or equal to 0");
 

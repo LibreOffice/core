@@ -49,7 +49,7 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     }
 }
 
-FramePainter::~FramePainter (void)
+FramePainter::~FramePainter()
 {
 }
 

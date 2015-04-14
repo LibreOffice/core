@@ -71,7 +71,7 @@ const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibElementFileExtension()
 const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
 
 // Ctor for service
-SfxDialogLibraryContainer::SfxDialogLibraryContainer( void )
+SfxDialogLibraryContainer::SfxDialogLibraryContainer()
 {
     // all initialisation has to be done
     // by calling XInitialization::initialize
@@ -340,7 +340,7 @@ void SAL_CALL SfxDialogLibraryContainer::importFromOldStorage( const OUString& )
     // Nothing to do here, old dialogs cannot be imported
 }
 
-SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl( void )
+SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl()
 {
     return new SfxDialogLibraryContainer();
 }
@@ -495,7 +495,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BA
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
 
 // Provide modify state including resources
-bool SfxDialogLibrary::isModified( void )
+bool SfxDialogLibrary::isModified()
 {
     bool bRet = implIsModified();
 
@@ -506,7 +506,7 @@ bool SfxDialogLibrary::isModified( void )
     return bRet;
 }
 
-void SfxDialogLibrary::storeResources( void )
+void SfxDialogLibrary::storeResources()
 {
     if( m_xStringResourcePersistence.is() )
         m_xStringResourcePersistence->store();

@@ -93,7 +93,7 @@ const AllocatorTraits::signature_type ScalarTraits::g_signature = "new()  ";
 
 // Allocator
 
-static void default_handler (void)
+static void default_handler()
 {
     // Multithreading race in 'std::set_new_handler()' call sequence below.
     throw std::bad_alloc();

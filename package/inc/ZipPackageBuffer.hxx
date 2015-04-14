@@ -37,7 +37,7 @@ protected:
     bool m_bMustInitBuffer;
 public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
-    virtual ~ZipPackageBuffer(void);
+    virtual ~ZipPackageBuffer();
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
     inline const sal_Int8 * getConstArray () const { return m_aBuffer.getConstArray(); }

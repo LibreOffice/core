@@ -61,7 +61,7 @@ namespace stoc_connector
 
     public: // XServiceInfo
                 virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
     };
 
@@ -197,7 +197,7 @@ namespace stoc_connector
         return cppu::supportsService(this, ServiceName);
     }
 
-        Sequence< OUString > OConnector::getSupportedServiceNames(void) throw(std::exception)
+        Sequence< OUString > OConnector::getSupportedServiceNames() throw(std::exception)
     {
         return connector_getSupportedServiceNames();
     }

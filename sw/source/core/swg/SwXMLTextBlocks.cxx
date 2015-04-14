@@ -537,7 +537,7 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
     return bRet;
 }
 
-short SwXMLTextBlocks::GetFileType ( void ) const
+short SwXMLTextBlocks::GetFileType() const
 {
     return SWBLK_XML;
 }

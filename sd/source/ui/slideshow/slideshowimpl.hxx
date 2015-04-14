@@ -316,7 +316,7 @@ private:
         its return value, wait for a certain amount of time before another
         call to update() is scheduled.
     */
-    sal_Int32 updateSlideShow (void);
+    sal_Int32 updateSlideShow();
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
     rtl::Reference<sd::SlideShowView> mxView;

@@ -153,7 +153,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename( LPMONIKER pMoniker )
     }
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave()
 {
     if ( m_pListener )
     {
@@ -161,7 +161,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
     }
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose()
 {
     if ( m_pListener )
     {

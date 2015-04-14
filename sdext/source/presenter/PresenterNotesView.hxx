@@ -70,9 +70,9 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterNotesView (void);
+    virtual ~PresenterNotesView();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Typically called from setCurrentSlide() with the notes page that is
         associed with the slide given to setCurrentSlide().
@@ -85,7 +85,7 @@ public:
 
     void ChangeFontSize (const sal_Int32 nSizeChange);
 
-    ::boost::shared_ptr<PresenterTextView> GetTextView (void) const;
+    ::boost::shared_ptr<PresenterTextView> GetTextView() const;
 
     // lang::XEventListener
 
@@ -114,10 +114,10 @@ public:
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDrawView
@@ -126,7 +126,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XKeyListener
@@ -158,20 +158,20 @@ private:
     void CreateToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    void Layout (void);
+    void Layout();
     void Paint (const css::awt::Rectangle& rUpdateBox);
     void PaintToolBar (const css::awt::Rectangle& rUpdateBox);
     void PaintText (const css::awt::Rectangle& rUpdateBox);
-    void Invalidate (void);
+    void Invalidate();
     void Scroll (const double nDistance);
     void SetTop (const double nTop);
-    void UpdateScrollBar (void);
+    void UpdateScrollBar();
     void MoveCaret (const sal_Int32 nDistance);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

@@ -89,7 +89,7 @@ public:
         */
         ::boost::shared_ptr<ToolBarManagerLock> mpSelf;
         ToolBarManagerLock (const ::boost::shared_ptr<sd::ToolBarManager>& rpManager);
-        ~ToolBarManagerLock (void);
+        ~ToolBarManagerLock();
 
         class Deleter;
         friend class Deleter;
@@ -99,7 +99,7 @@ public:
     ::boost::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
     Implementation (ViewShell& rViewShell);
-    ~Implementation (void);
+    ~Implementation();
 
     /** Process the SID_MODIFY slot.
     */
@@ -136,14 +136,14 @@ public:
         configuration that has in the center pane a view shell of the same
         type as mrViewShell.
     */
-    sal_uInt16 GetViewId (void);
+    sal_uInt16 GetViewId();
 
     /** Return a pointer to the image map dialog that is displayed in some
         child window.
         @return
             Returns <NULL/> when the image map dialog is not available.
     */
-    static SvxIMapDlg* GetImageMapDialog (void);
+    static SvxIMapDlg* GetImageMapDialog();
 
 private:
     ViewShell& mrViewShell;

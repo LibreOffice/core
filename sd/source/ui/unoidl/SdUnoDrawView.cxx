@@ -63,7 +63,7 @@ SdUnoDrawView::~SdUnoDrawView() throw()
 {
 }
 
-bool SdUnoDrawView::getMasterPageMode(void) const throw()
+bool SdUnoDrawView::getMasterPageMode() const throw()
 {
     return (mrDrawViewShell.GetEditMode() == EM_MASTERPAGE);
 }
@@ -78,7 +78,7 @@ void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
     }
 }
 
-bool SdUnoDrawView::getLayerMode(void) const throw()
+bool SdUnoDrawView::getLayerMode() const throw()
 {
     return mrDrawViewShell.IsLayerModeActive();
 }
@@ -93,7 +93,7 @@ void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
     }
 }
 
-Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
+Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() throw ()
 {
     Reference<drawing::XLayer> xCurrentLayer;
 
@@ -456,7 +456,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     return xPage;
 }
 
-sal_Int16 SdUnoDrawView::GetZoom(void) const
+sal_Int16 SdUnoDrawView::GetZoom() const
 {
     if (mrDrawViewShell.GetActiveWindow() )
     {
@@ -533,7 +533,7 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
     }
 }
 
-SdXImpressDocument* SdUnoDrawView::GetModel (void) const throw()
+SdXImpressDocument* SdUnoDrawView::GetModel() const throw()
 {
     if (mrView.GetDocSh()!=NULL)
     {

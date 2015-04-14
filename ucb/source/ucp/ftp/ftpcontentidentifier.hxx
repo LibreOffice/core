@@ -56,9 +56,9 @@ namespace ftp {
         queryInterface( const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL acquire( void ) throw() SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
 
-        virtual void SAL_CALL release( void ) throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
         // XTypeProvider
 

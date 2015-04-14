@@ -79,7 +79,7 @@ void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
     }
 }
 
-void ContentEventNotifier::notifyDeleted( void )
+void ContentEventNotifier::notifyDeleted()
 {
 
     ContentEvent aEvt( m_xCreatorContent,

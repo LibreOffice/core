@@ -56,7 +56,7 @@ public:
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_DRAW);
 
-    virtual ~GraphicDocShell (void);
+    virtual ~GraphicDocShell();
 };
 
 } // end of namespace sd

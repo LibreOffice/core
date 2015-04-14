@@ -79,20 +79,20 @@ public:
         SfxViewFrame *pFrame,
         SfxViewShell* pOldShell);
 
-    virtual ~ViewShellBase (void);
+    virtual ~ViewShellBase();
 
     /** This method is part of the object construction.  It HAS to be called
         after the constructor has created a new object.
     */
     void LateInit (const OUString& rsDefaultView);
 
-    ::boost::shared_ptr<ViewShellManager> GetViewShellManager (void) const;
+    ::boost::shared_ptr<ViewShellManager> GetViewShellManager() const;
 
     /** Return the main view shell stacked on the called ViewShellBase
         object.  This is usually the view shell displayed in the center
         pane.
     */
-    ::boost::shared_ptr<ViewShell> GetMainViewShell (void) const;
+    ::boost::shared_ptr<ViewShell> GetMainViewShell() const;
 
     /** When given a view frame this static method returns the
         corresponding sd::ViewShellBase object.
@@ -102,8 +102,8 @@ public:
     */
     static ViewShellBase* GetViewShellBase (SfxViewFrame* pFrame);
 
-    DrawDocShell* GetDocShell (void) const { return mpDocShell;}
-    SdDrawDocument* GetDocument (void) const { return mpDocument;}
+    DrawDocShell* GetDocShell() const { return mpDocShell;}
+    SdDrawDocument* GetDocument() const { return mpDocument;}
 
     /** Callback function for general slot calls.  At the moment these are
         slots for switching the pane docking windows on and off.
@@ -131,7 +131,7 @@ public:
     /** Return a new renderer that can be used for example for printing the
         document.
     */
-    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable() SAL_OVERRIDE;
 
     /// Forwarded to the print manager.
     virtual SfxPrinter* GetPrinter (bool bCreate = false) SAL_OVERRIDE;
@@ -166,7 +166,7 @@ public:
     virtual bool PrepareClose (bool bUI = true) SAL_OVERRIDE;
     virtual void WriteUserData (OUString&, bool bBrowse = false) SAL_OVERRIDE;
     virtual void ReadUserData (const OUString&, bool bBrowse = false) SAL_OVERRIDE;
-    virtual SdrView* GetDrawView (void) const SAL_OVERRIDE;
+    virtual SdrView* GetDrawView() const SAL_OVERRIDE;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize) SAL_OVERRIDE;
 
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
@@ -181,7 +181,7 @@ public:
 
         This method is like ResizePixel() with no arguments.
     */
-    void Rearrange (void);
+    void Rearrange();
 
     /** Update the border that is set with SfxViewShell::SetBorderPixel().
         This is done by adding the border used by the ViewShellBase itself
@@ -206,17 +206,17 @@ public:
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
-    ::boost::shared_ptr<tools::EventMultiplexer> GetEventMultiplexer (void);
+    ::boost::shared_ptr<tools::EventMultiplexer> GetEventMultiplexer();
 
     /** returns the complete area of the current view relative to the frame
         window
     */
     const Rectangle& getClientRectangle() const;
 
-    ::boost::shared_ptr<ToolBarManager> GetToolBarManager (void) const;
-    ::boost::shared_ptr<FormShellManager> GetFormShellManager (void) const;
+    ::boost::shared_ptr<ToolBarManager> GetToolBarManager() const;
+    ::boost::shared_ptr<FormShellManager> GetFormShellManager() const;
 
-    DrawController& GetDrawController (void) const;
+    DrawController& GetDrawController() const;
 
     void SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar);
 
@@ -224,7 +224,7 @@ public:
         view and other UI elements, like scroll bars and rulers.  Ownership
         of that window remains with the called ViewShellBase object.
     */
-    vcl::Window* GetViewWindow (void);
+    vcl::Window* GetViewWindow();
 
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
@@ -235,7 +235,7 @@ protected:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-    virtual void InitializeFramework (void);
+    virtual void InitializeFramework();
 
 private:
     class Implementation;
@@ -249,7 +249,7 @@ private:
         we check that the right type is active and change again if that is
         not the case because something went wrong.
     */
-    OUString GetInitialViewShellType (void);
+    OUString GetInitialViewShellType();
 };
 
 OUString ImplRetrieveLabelFromCommand( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& aCmdURL );

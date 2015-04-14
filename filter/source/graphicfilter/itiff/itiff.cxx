@@ -112,7 +112,7 @@ private:
     sal_uLong   GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_uLong nBitsCount );
         // fetches BitsCount bits from pSrc[..] at the position nBitsPos
 
-    void    MakePalCol( void );
+    void    MakePalCol();
         // Create the bitmap from the temporary bitmap pMap
         // and partly deletes pMap while doing this.
 
@@ -1069,7 +1069,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
 
 
 
-void TIFFReader::MakePalCol( void )
+void TIFFReader::MakePalCol()
 {
     if ( nDstBitsPerPixel <= 8 )
     {

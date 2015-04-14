@@ -114,7 +114,7 @@ public:
     /** Return the value of the edit mode as it was when the document was
         loaded.
     */
-    EditMode GetViewShEditModeOnLoad (void) const { return meEditModeOnLoad;}
+    EditMode GetViewShEditModeOnLoad() const { return meEditModeOnLoad;}
 
     void SetLayerMode(bool bMode)
                  { mbLayerMode = bMode; }
@@ -141,14 +141,14 @@ public:
     /** Return the type of the view shell previously associated with this
         frame view.
     */
-    ViewShell::ShellType GetPreviousViewShellType (void) const { return mePreviousViewShellType;}
+    ViewShell::ShellType GetPreviousViewShellType() const { return mePreviousViewShellType;}
 
     /** Remember the type of the view shell at the time when the document is
         loaded or, rather, when the ViewShellBase is constructed.
     */
     void SetViewShellTypeOnLoad (ViewShell::ShellType eType);
 
-    ViewShell::ShellType GetViewShellTypeOnLoad (void) const { return meViewShellTypeOnLoad;}
+    ViewShell::ShellType GetViewShellTypeOnLoad() const { return meViewShellTypeOnLoad;}
 
     void SetPresentationViewShellId(sal_uInt16 nId)
                  { mnPresViewShellId = nId; }
@@ -164,7 +164,7 @@ public:
     sal_uLong GetDrawMode() const { return mnDrawMode; };
 
     void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
-    bool IsNavigatorShowingAllShapes (void) const { return mbIsNavigatorShowingAllShapes;}
+    bool IsNavigatorShowingAllShapes() const { return mbIsNavigatorShowingAllShapes;}
 
     void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
     void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );

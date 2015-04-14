@@ -122,7 +122,7 @@ private:
         'general' tab page depending on whether there is at least one
         document.
     */
-    void UpdateCompatibilityControls (void);
+    void UpdateCompatibilityControls();
 
 protected:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -140,13 +140,13 @@ public:
         and arrange the visible controls.  Do not call this method or the
         <member>SetImpressMode()</member> method more than once.
     */
-    void SetDrawMode (void);
+    void SetDrawMode();
 
     /** Hide Draw specific controls, make Impress specific controls visible
         and arrange the visible controls.  Do not call this method or the
         <member>SetDrawMode()</member> method more than once.
     */
-    void SetImpressMode (void);
+    void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;

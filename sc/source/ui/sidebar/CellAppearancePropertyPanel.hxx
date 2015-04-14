@@ -139,11 +139,11 @@ private:
 
     // for CellLineStyle popup
     svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
-    void EndCellLineStylePopupMode(void);
+    void EndCellLineStylePopupMode();
 
     // for CellBorderStyle popup
     svx::sidebar::PopupControl* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
-    void EndCellBorderStylePopupMode(void);
+    void EndCellBorderStylePopupMode();
 
     // constructor/destuctor
     CellAppearancePropertyPanel(

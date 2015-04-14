@@ -863,7 +863,7 @@ void AquaSalFrame::SetPointerPos( long nX, long nY )
     CGDisplayMoveCursorToPoint( mainDisplayID, aPoint );
 }
 
-void AquaSalFrame::Flush( void )
+void AquaSalFrame::Flush()
 {
     if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
         return;

@@ -91,9 +91,9 @@ public:
         const OUString& rsEventType,
         const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
-    virtual ~CallbackCaller (void);
+    virtual ~CallbackCaller();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -126,9 +126,9 @@ class LifetimeController
 {
 public:
     explicit LifetimeController (::sd::ViewShellBase& rBase);
-    virtual ~LifetimeController (void);
+    virtual ~LifetimeController();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** XEventListener.  This method is called when the frame::XController
         is being destroyed.
@@ -149,7 +149,7 @@ private:
         mbListeningToController members were modified then call this method
         to either dispose or release the associated FrameworkHelper.
     */
-    void Update (void);
+    void Update();
 };
 
 } // end of anonymous namespace
@@ -279,7 +279,7 @@ class FrameworkHelper::ViewURLMap
           OUStringHash>
 {
 public:
-    ViewURLMap (void) {}
+    ViewURLMap() {}
 };
 
 //----- Framework::DiposeListener ---------------------------------------------
@@ -296,9 +296,9 @@ class FrameworkHelper::DisposeListener
 {
 public:
     DisposeListener (const ::boost::shared_ptr<FrameworkHelper>& rpHelper);
-    virtual ~DisposeListener (void);
+    virtual ~DisposeListener();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing (const lang::EventObject& rEventObject)
         throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -384,23 +384,23 @@ FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
     new LifetimeController(mrBase);
 }
 
-void FrameworkHelper::Initialize (void)
+void FrameworkHelper::Initialize()
 {
     mxDisposeListener = new DisposeListener(shared_from_this());
 }
 
-FrameworkHelper::~FrameworkHelper (void)
+FrameworkHelper::~FrameworkHelper()
 {
 }
 
-void FrameworkHelper::Dispose (void)
+void FrameworkHelper::Dispose()
 {
     if (mxDisposeListener.is())
         mxDisposeListener->dispose();
     mxConfigurationController = NULL;
 }
 
-bool FrameworkHelper::IsValid (void)
+bool FrameworkHelper::IsValid()
 {
     return mxConfigurationController.is();
 }
@@ -659,7 +659,7 @@ private:
     bool& mrFlag;
 };
 
-void FrameworkHelper::RequestSynchronousUpdate (void)
+void FrameworkHelper::RequestSynchronousUpdate()
 {
     rtl::Reference<ConfigurationController> pCC (
         dynamic_cast<ConfigurationController*>(mxConfigurationController.get()));
@@ -689,7 +689,7 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
     }
 }
 
-void FrameworkHelper::WaitForUpdate (void) const
+void FrameworkHelper::WaitForUpdate() const
 {
     WaitForEvent(msConfigurationUpdateEndEvent);
 }
@@ -708,7 +708,7 @@ void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
         mxConfigurationController = NULL;
 }
 
-void FrameworkHelper::UpdateConfiguration (void)
+void FrameworkHelper::UpdateConfiguration()
 {
     if (mxConfigurationController.is())
     {
@@ -784,11 +784,11 @@ FrameworkHelper::DisposeListener::DisposeListener (
         xComponent->addEventListener(this);
 }
 
-FrameworkHelper::DisposeListener::~DisposeListener (void)
+FrameworkHelper::DisposeListener::~DisposeListener()
 {
 }
 
-void SAL_CALL FrameworkHelper::DisposeListener::disposing (void)
+void SAL_CALL FrameworkHelper::DisposeListener::disposing()
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
@@ -856,11 +856,11 @@ CallbackCaller::CallbackCaller (
     }
 }
 
-CallbackCaller::~CallbackCaller (void)
+CallbackCaller::~CallbackCaller()
 {
 }
 
-void CallbackCaller::disposing (void)
+void CallbackCaller::disposing()
 {
     try
     {
@@ -933,12 +933,12 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
     }
 }
 
-LifetimeController::~LifetimeController (void)
+LifetimeController::~LifetimeController()
 {
     OSL_ASSERT(!mbListeningToController && !mbListeningToViewShellBase);
 }
 
-void LifetimeController::disposing (void)
+void LifetimeController::disposing()
 {
 }
 
@@ -962,7 +962,7 @@ void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rH
     }
 }
 
-void LifetimeController::Update (void)
+void LifetimeController::Update()
 {
     if (mbListeningToViewShellBase && mbListeningToController)
     {

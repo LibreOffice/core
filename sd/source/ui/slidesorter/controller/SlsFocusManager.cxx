@@ -45,7 +45,7 @@ FocusManager::FocusManager (SlideSorter& rSlideSorter)
         mnPageIndex = 0;
 }
 
-FocusManager::~FocusManager (void)
+FocusManager::~FocusManager()
 {
 }
 
@@ -159,13 +159,13 @@ void FocusManager::ShowFocus (const bool bScrollToFocus)
     ShowFocusIndicator(GetFocusedPageDescriptor(), bScrollToFocus);
 }
 
-void FocusManager::HideFocus (void)
+void FocusManager::HideFocus()
 {
     mbPageIsFocused = false;
     HideFocusIndicator(GetFocusedPageDescriptor());
 }
 
-bool FocusManager::ToggleFocus (void)
+bool FocusManager::ToggleFocus()
 {
     if (mnPageIndex >= 0)
     {
@@ -177,12 +177,12 @@ bool FocusManager::ToggleFocus (void)
     return mbPageIsFocused;
 }
 
-bool FocusManager::HasFocus (void) const
+bool FocusManager::HasFocus() const
 {
     return mrSlideSorter.GetContentWindow()->HasFocus();
 }
 
-model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor (void) const
+model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor() const
 {
     return mrSlideSorter.GetModel().GetPageDescriptor(mnPageIndex);
 }
@@ -202,12 +202,12 @@ void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
     mnPageIndex = nPageIndex;
 }
 
-void FocusManager::SetFocusedPageToCurrentPage (void)
+void FocusManager::SetFocusedPageToCurrentPage()
 {
     SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
-bool FocusManager::IsFocusShowing (void) const
+bool FocusManager::IsFocusShowing() const
 {
     return HasFocus() && mbPageIsFocused;
 }
@@ -258,7 +258,7 @@ void FocusManager::RemoveFocusChangeListener (const Link& rListener)
         ::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener));
 }
 
-void FocusManager::NotifyFocusChangeListeners (void) const
+void FocusManager::NotifyFocusChangeListeners() const
 {
     // Create a copy of the listener list to be safe when that is modified.
     ::std::vector<Link> aListeners (maFocusChangeListeners);
@@ -279,7 +279,7 @@ FocusManager::FocusHider::FocusHider (FocusManager& rManager)
     mrManager.HideFocus();
 }
 
-FocusManager::FocusHider::~FocusHider (void)
+FocusManager::FocusHider::~FocusHider()
 {
     if (mbFocusVisible)
         mrManager.ShowFocus();

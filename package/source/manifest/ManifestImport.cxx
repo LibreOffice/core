@@ -94,7 +94,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
     aStack.reserve( 10 );
 }
 
-ManifestImport::~ManifestImport ( void )
+ManifestImport::~ManifestImport()
 {
 }
 

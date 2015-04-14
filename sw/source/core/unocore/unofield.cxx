@@ -2671,7 +2671,7 @@ const SwField*  SwXTextField::Impl::GetField() const
     return 0;
 }
 
-OUString SwXTextFieldMasters::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextFieldMasters::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextFieldMasters");
 }
@@ -2681,7 +2681,7 @@ sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) thro
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -2808,7 +2808,7 @@ bool SwXTextFieldMasters::getInstanceName(
     return true;
 }
 
-uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
+uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -2857,13 +2857,13 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     return bRet;
 }
 
-uno::Type  SwXTextFieldMasters::getElementType(void) throw( uno::RuntimeException, std::exception )
+uno::Type  SwXTextFieldMasters::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 
 }
 
-sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldMasters::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2882,7 +2882,7 @@ public:
     Impl() : m_RefreshListeners(m_Mutex) { }
 };
 
-OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextFieldTypes::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextFieldTypes");
 }
@@ -2892,7 +2892,7 @@ sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw(
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -2917,7 +2917,7 @@ void SwXTextFieldTypes::Invalidate()
     m_pImpl->m_RefreshListeners.disposeAndClear(ev);
 }
 
-uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(void)
+uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -2926,12 +2926,12 @@ uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(
     return new SwXFieldEnumeration(*GetDoc());
 }
 
-uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException, std::exception )
+uno::Type  SwXTextFieldTypes::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<text::XDependentTextField>::get();
 }
 
-sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldTypes::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())

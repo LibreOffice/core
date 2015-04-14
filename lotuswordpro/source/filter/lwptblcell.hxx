@@ -231,19 +231,19 @@ private:
 class LwpRowColumnQualifier
 {
 public:
-    LwpRowColumnQualifier(void);
+    LwpRowColumnQualifier();
     ~LwpRowColumnQualifier(){}
 
-    inline void SetAbsolute(void);
-    inline void ClearAbsolute(void);
-    bool IsAbsolute(void);
+    inline void SetAbsolute();
+    inline void ClearAbsolute();
+    bool IsAbsolute();
 
-    inline void SetAfter(void);
-    inline void ClearAfter(void);
-    bool IsAfter(void);
+    inline void SetAfter();
+    inline void ClearAfter();
+    bool IsAfter();
 
     void SetBad(bool Bad);
-    bool IsBad(void);
+    bool IsBad();
 
     void QuickRead(LwpObjectStream *pStrm);
 
@@ -258,25 +258,25 @@ private:
 };
 
 inline void
-LwpRowColumnQualifier::SetAbsolute(void)
+LwpRowColumnQualifier::SetAbsolute()
 {
     cFlags |= REF_ABSOLUTE;
 }
 
 inline void
-LwpRowColumnQualifier::ClearAbsolute(void)
+LwpRowColumnQualifier::ClearAbsolute()
 {
     cFlags &= ~REF_ABSOLUTE;
 }
 
 inline void
-LwpRowColumnQualifier::SetAfter(void)
+LwpRowColumnQualifier::SetAfter()
 {
     cFlags |= REF_AFTER;
 }
 
 inline void
-LwpRowColumnQualifier::ClearAfter(void)
+LwpRowColumnQualifier::ClearAfter()
 {
     cFlags &= ~REF_AFTER;
 }
@@ -311,7 +311,7 @@ LwpRowColumnQualifier::IsAbsolute()
 class LwpRowSpecifier
 {
 public:
-    LwpRowSpecifier(void)
+    LwpRowSpecifier()
         : cRow(0)
         {}
     ~LwpRowSpecifier(){}
@@ -320,18 +320,18 @@ public:
     OUString ToString(sal_uInt16 nFormulaRow);
 
     sal_uInt16 RowID(sal_uInt16 FormulaRow);
-    sal_uInt16 &Row(void);
+    sal_uInt16 &Row();
 
-    void SetAbsolute(void);
-    void ClearAbsolute(void);
-    bool IsAbsolute(void);
+    void SetAbsolute();
+    void ClearAbsolute();
+    bool IsAbsolute();
 
-    void SetAfter(void);
-    void ClearAfter(void);
-    bool IsAfter(void);
+    void SetAfter();
+    void ClearAfter();
+    bool IsAfter();
 
     void SetBad(bool Bad);
-    bool IsBad(void);
+    bool IsBad();
     void SetRowDelta(sal_uInt16 ReferenceRowID, sal_uInt16 FormulaRowID);
 
 private:
@@ -361,13 +361,13 @@ LwpRowSpecifier::Row()
 }
 
 inline void
-LwpRowSpecifier::SetAbsolute(void)
+LwpRowSpecifier::SetAbsolute()
 {
     cQualifier.SetAbsolute();
 }
 
 inline void
-LwpRowSpecifier::ClearAbsolute(void)
+LwpRowSpecifier::ClearAbsolute()
 {
     cQualifier.ClearAbsolute();
 }
@@ -379,13 +379,13 @@ LwpRowSpecifier::IsAbsolute()
 }
 
 inline void
-LwpRowSpecifier::SetAfter(void)
+LwpRowSpecifier::SetAfter()
 {
     cQualifier.SetAfter();
 }
 
 inline void
-LwpRowSpecifier::ClearAfter(void)
+LwpRowSpecifier::ClearAfter()
 {
     cQualifier.ClearAfter();
 }
@@ -414,7 +414,7 @@ LwpRowSpecifier::IsBad()
 class LwpColumnSpecifier
 {
 public:
-    LwpColumnSpecifier(void)
+    LwpColumnSpecifier()
         : cColumn(0)
         {}
     ~LwpColumnSpecifier()
@@ -425,14 +425,14 @@ public:
     OUString ToString(sal_uInt8 nFormulaCol);
 
     sal_uInt8 ColumnID(sal_uInt8 FormulaColumn);
-    void SetAbsolute(void);
-    void ClearAbsolute(void);
-    bool IsAbsolute(void);
-    void SetAfter(void);
-    void ClearAfter(void);
-    bool IsAfter(void);
+    void SetAbsolute();
+    void ClearAbsolute();
+    bool IsAbsolute();
+    void SetAfter();
+    void ClearAfter();
+    bool IsAfter();
     void SetBad(bool Bad);
-    bool IsBad(void);
+    bool IsBad();
     void SetColumnDelta(sal_uInt8 ReferenceColumnID, sal_uInt8 FormulaColumnID);
 
 private:
@@ -455,13 +455,13 @@ LwpColumnSpecifier::ColumnID(sal_uInt8 FormulaColumn)
 }
 
 inline void
-LwpColumnSpecifier::SetAbsolute(void)
+LwpColumnSpecifier::SetAbsolute()
 {
     cQualifier.SetAbsolute();
 }
 
 inline void
-LwpColumnSpecifier::ClearAbsolute(void)
+LwpColumnSpecifier::ClearAbsolute()
 {
     cQualifier.ClearAbsolute();
 }
@@ -473,13 +473,13 @@ LwpColumnSpecifier::IsAbsolute()
 }
 
 inline void
-LwpColumnSpecifier::SetAfter(void)
+LwpColumnSpecifier::SetAfter()
 {
     cQualifier.SetAfter();
 }
 
 inline void
-LwpColumnSpecifier::ClearAfter(void)
+LwpColumnSpecifier::ClearAfter()
 {
     cQualifier.ClearAfter();
 }

@@ -210,7 +210,7 @@ class SvKeyValue
 public:
     /** Construction.
     */
-    SvKeyValue (void)
+    SvKeyValue()
     {}
 
     SvKeyValue (const OUString &rKey, const OUString &rValue)
@@ -232,8 +232,8 @@ public:
 
     /** Operation.
     */
-    const OUString& GetKey   (void) const { return m_aKey; }
-    const OUString& GetValue (void) const { return m_aValue; }
+    const OUString& GetKey() const { return m_aKey; }
+    const OUString& GetValue() const { return m_aValue; }
 
     void SetKey   (const OUString &rKey  ) { m_aKey = rKey; }
     void SetValue (const OUString &rValue) { m_aValue = rValue; }

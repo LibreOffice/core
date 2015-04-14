@@ -69,11 +69,11 @@ PanelFactory::PanelFactory(
 {
 }
 
-PanelFactory::~PanelFactory (void)
+PanelFactory::~PanelFactory()
 {
 }
 
-void SAL_CALL PanelFactory::disposing (void)
+void SAL_CALL PanelFactory::disposing()
 {
 }
 

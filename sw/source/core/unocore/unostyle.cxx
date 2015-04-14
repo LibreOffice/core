@@ -146,7 +146,7 @@ public:
     SwDoc* getDoc() const { return pDoc; }
 };
 
-OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXStyleFamilies::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamilies");
 }
@@ -156,7 +156,7 @@ sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( 
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -211,7 +211,7 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXStyleFamilies::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aNames(STYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
@@ -235,7 +235,7 @@ sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeEx
         return sal_False;
 }
 
-sal_Int32 SwXStyleFamilies::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXStyleFamilies::getCount() throw( uno::RuntimeException, std::exception )
 {
     return STYLE_FAMILY_COUNT;
 }
@@ -311,14 +311,14 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SwXStyleFamilies::getElementType(void)
+uno::Type SwXStyleFamilies::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<container::XNameContainer>::get();
 
 }
 
-sal_Bool SwXStyleFamilies::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXStyleFamilies::hasElements() throw( uno::RuntimeException, std::exception )
 {
     return sal_True;
 }
@@ -374,7 +374,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         throw uno::RuntimeException();
 }
 
-uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
+uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -389,7 +389,7 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     return aSeq;
 }
 
-OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXStyleFamily::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamily");
 }
@@ -399,7 +399,7 @@ sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( un
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -575,7 +575,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
     return nCount;
 }
 
-sal_Int32 SwXStyleFamily::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXStyleFamily::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return lcl_GetCountOrName ( *pDocShell->GetDoc(), eFamily, NULL );
@@ -763,7 +763,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
 
 }
 
-uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXStyleFamily::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     std::vector< OUString > aRet;
@@ -802,13 +802,13 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExc
 
 }
 
-uno::Type SwXStyleFamily::getElementType(void) throw( uno::RuntimeException, std::exception )
+uno::Type SwXStyleFamily::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<style::XStyle>::get();
 
 }
 
-sal_Bool SwXStyleFamily::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXStyleFamily::hasElements() throw( uno::RuntimeException, std::exception )
 {
     if(!pBasePool)
         throw uno::RuntimeException();
@@ -1161,7 +1161,7 @@ sal_Int64 SAL_CALL SwXStyle::getSomething( const uno::Sequence< sal_Int8 >& rId 
 
 TYPEINIT1(SwXStyle, SfxListener);
 
-OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXStyle::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyle");
 }
@@ -1171,7 +1171,7 @@ sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::Run
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXStyle::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     long nCount = 1;
     if(SFX_STYLE_FAMILY_PARA == eFamily)
@@ -1326,7 +1326,7 @@ void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-OUString SwXStyle::getName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXStyle::getName() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -1366,7 +1366,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std:
         m_sStyleName = rName;
 }
 
-sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXStyle::isUserDefined() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1383,7 +1383,7 @@ sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException, std::except
     return bRet;
 }
 
-sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXStyle::isInUse() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1399,7 +1399,7 @@ sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException, std::exception )
     return bRet;
 }
 
-OUString SwXStyle::getParentStyle(void) throw( uno::RuntimeException, std::exception )
+OUString SwXStyle::getParentStyle() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OUString aString;
@@ -1532,7 +1532,7 @@ static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyl
     return xRet;
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
+uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo()
     throw( uno::RuntimeException, std::exception )
 {
     return lcl_getPropertySetInfo( eFamily, bIsConditional );
@@ -4014,7 +4014,7 @@ SwXAutoStyles::~SwXAutoStyles()
 {
 }
 
-sal_Int32 SwXAutoStyles::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXAutoStyles::getCount() throw( uno::RuntimeException, std::exception )
 {
     return AUTOSTYLE_FAMILY_COUNT;
 }
@@ -4090,7 +4090,7 @@ uno::Any SwXAutoStyles::getByName(const OUString& Name)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
+uno::Sequence< OUString > SwXAutoStyles::getElementNames()
             throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);

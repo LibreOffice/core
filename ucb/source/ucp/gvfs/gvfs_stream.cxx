@@ -40,7 +40,7 @@ Stream::Stream( GnomeVFSHandle         *handle,
     gnome_vfs_file_info_copy (&m_info, aInfo);
 }
 
-Stream::~Stream( void )
+Stream::~Stream()
 {
     if (m_handle) {
         gnome_vfs_close (m_handle);
@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL Stream::available(  )
     return 0; // cf. filinpstr.cxx
 }
 
-void SAL_CALL Stream::closeInput( void )
+void SAL_CALL Stream::closeInput()
         throw( NotConnectedException,
                    IOException,
                    RuntimeException )
@@ -241,7 +241,7 @@ sal_Int64 SAL_CALL Stream::getLength()
 //                            XTruncate
 
 
-void SAL_CALL Stream::truncate( void )
+void SAL_CALL Stream::truncate()
     throw( com::sun::star::io::IOException,
            com::sun::star::uno::RuntimeException )
 {
@@ -281,13 +281,13 @@ void SAL_CALL Stream::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 
     }
 }
 
-void SAL_CALL Stream::flush( void )
+void SAL_CALL Stream::flush()
     throw( NotConnectedException, BufferSizeExceededException,
            IOException, RuntimeException )
 {
 }
 
-void SAL_CALL Stream::closeOutput( void )
+void SAL_CALL Stream::closeOutput()
     throw( com::sun::star::io::NotConnectedException,
            com::sun::star::io::IOException,
            com::sun::star::uno::RuntimeException )
@@ -303,7 +303,7 @@ void SAL_CALL Stream::closeOutput( void )
 //                            Misc.
 
 
-void Stream::closeStream( void )
+void Stream::closeStream()
     throw( ::com::sun::star::io::NotConnectedException,
            ::com::sun::star::io::IOException,
            ::com::sun::star::uno::RuntimeException )

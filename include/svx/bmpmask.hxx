@@ -160,7 +160,7 @@ private:
         like the source color checkboxes which initially have no name and
         for which the description would be read by AT.
     */
-    SVX_DLLPRIVATE void SetAccessibleNames (void);
+    SVX_DLLPRIVATE void SetAccessibleNames();
 };
 
 #endif // INCLUDED_SVX_BMPMASK_HXX

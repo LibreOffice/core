@@ -40,7 +40,7 @@ class SFX2_DLLPUBLIC SidebarToolBox
 {
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
-    virtual ~SidebarToolBox (void);
+    virtual ~SidebarToolBox();
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
@@ -87,7 +87,7 @@ private:
         const sal_uInt16 nItemId,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const sal_Int32 nItemWidth = 0);
-    void RegisterHandlers (void);
+    void RegisterHandlers();
 };
 
 

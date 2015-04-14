@@ -187,9 +187,9 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  getFormatsSupplier(void) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  getFormatsSupplier() const;
     void    setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier);
-    sal_Int32   getFormatKey(void) const;
+    sal_Int32   getFormatKey() const;
     void    setFormatKey(sal_Int32 nKey);
 
     void    SetValue(const ::com::sun::star::uno::Any& rValue);

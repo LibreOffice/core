@@ -97,7 +97,7 @@ public:
     OUString GetFileName() const {return aFile;}      /// Return physical file name
     void SetName( const OUString& rName )             /// Logic name
         { aName = rName; bInfoChanged = true; }
-    OUString GetName( void )
+    OUString GetName()
         { return aName; }
 
     OUString            GetBaseURL() const { return sBaseURL;}

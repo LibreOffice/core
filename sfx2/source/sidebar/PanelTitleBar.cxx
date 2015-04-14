@@ -58,7 +58,7 @@ PanelTitleBar::PanelTitleBar (
 #endif
 }
 
-PanelTitleBar::~PanelTitleBar (void)
+PanelTitleBar::~PanelTitleBar()
 {
 }
 
@@ -129,12 +129,12 @@ void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
     }
 }
 
-Paint PanelTitleBar::GetBackgroundPaint (void)
+Paint PanelTitleBar::GetBackgroundPaint()
 {
     return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
 }
 
-Color PanelTitleBar::GetTextColor (void)
+Color PanelTitleBar::GetTextColor()
 {
     return Theme::GetColor(Theme::Color_PanelTitleFont);
 }
@@ -159,7 +159,7 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
         }
 }
 
-Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
+Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible()
 {
     const ::rtl::OUString sAccessibleName(msAccessibleNamePrefix + msTitle);
     SetAccessibleName(sAccessibleName);

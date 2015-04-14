@@ -141,7 +141,7 @@ PageSizeControl::PageSizeControl(
     FreeResource();
 }
 
-PageSizeControl::~PageSizeControl(void)
+PageSizeControl::~PageSizeControl()
 {
     delete mpSizeValueSet;
 }

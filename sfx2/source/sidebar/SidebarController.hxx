@@ -76,7 +76,7 @@ public:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual ~SidebarController (void);
+    virtual ~SidebarController();
 
     /** Return the SidebarController object that is associated with
         the given XFrame.
@@ -104,10 +104,10 @@ public:
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ui::XSidebar
-    virtual void SAL_CALL requestLayout (void)
+    virtual void SAL_CALL requestLayout()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    void NotifyResize (void);
+    void NotifyResize();
 
     /** In some situations it is necessary to force an update of the
         current deck and its panels.  One reason is a change of the
@@ -125,17 +125,17 @@ public:
 
     /** Show only the tab bar, not the deck.
     */
-    void RequestCloseDeck (void);
+    void RequestCloseDeck();
 
     /** Open the deck area and restore the parent window to its old width.
     */
-    void RequestOpenDeck (void);
+    void RequestOpenDeck();
 
     /** Returns true when the given deck is the currently visible deck
      */
     bool IsDeckVisible (const ::rtl::OUString& rsDeckId);
 
-    FocusManager& GetFocusManager (void) { return maFocusManager;}
+    FocusManager& GetFocusManager() { return maFocusManager;}
 
 private:
     typedef ::std::map<
@@ -191,7 +191,7 @@ private:
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
     /** Make maRequestedContext the current context.
     */
-    void UpdateConfigurations (void);
+    void UpdateConfigurations();
 
     css::uno::Reference<css::ui::XUIElement> CreateUIElement (
         const css::uno::Reference<css::awt::XWindowPeer>& rxWindow,
@@ -214,13 +214,13 @@ private:
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     DECL_LINK(OnMenuItemSelected, Menu*);
-    void BroadcastPropertyChange (void);
+    void BroadcastPropertyChange();
 
     /** The close of the deck changes the width of the child window.
         That is only possible if there is no other docking window docked above or below the sidebar.
         Return whether the width of the child window can be modified.
     */
-    bool CanModifyChildWindowWidth (void);
+    bool CanModifyChildWindowWidth();
 
     /** Set the child window container to a new width.
         Return the old width.
@@ -231,11 +231,11 @@ private:
         the panels.  This is called once when a deck is created and
         every time when a data change event is processed.
     */
-    void UpdateTitleBarIcons (void);
+    void UpdateTitleBarIcons();
 
-    void UpdateDeckOpenState (void);
+    void UpdateDeckOpenState();
     void RestrictWidth (sal_Int32 nWidth);
-    SfxSplitWindow* GetSplitWindow (void);
+    SfxSplitWindow* GetSplitWindow();
     void ProcessNewWidth (const sal_Int32 nNewWidth);
     void UpdateCloseIndicator (const bool bIsIndicatorVisible);
 
@@ -245,9 +245,9 @@ private:
     */
     void ShowPanel (const Panel& rPanel);
 
-    Context GetCurrentContext (void) const { return maCurrentContext;}
+    Context GetCurrentContext() const { return maCurrentContext;}
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 };
 
 } } // end of namespace sfx2::sidebar

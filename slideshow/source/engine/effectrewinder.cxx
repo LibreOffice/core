@@ -44,12 +44,12 @@ namespace {
 class RewinderEventHandler : public EventHandler
 {
 public:
-    typedef ::boost::function<bool(void)> Action;
+    typedef ::boost::function<bool()> Action;
     RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
-    virtual ~RewinderEventHandler (void) {}
+    virtual ~RewinderEventHandler() {}
 private:
     const Action maAction;
-    virtual bool handleEvent (void) SAL_OVERRIDE { return maAction(); }
+    virtual bool handleEvent() SAL_OVERRIDE { return maAction(); }
 };
 
 
@@ -59,7 +59,7 @@ class RewinderAnimationEventHandler : public AnimationEventHandler
 public:
     typedef ::boost::function<bool(const AnimationNodeSharedPtr& rpNode)> Action;
     RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
-    virtual ~RewinderAnimationEventHandler (void) {}
+    virtual ~RewinderAnimationEventHandler() {}
 private:
     const Action maAction;
     virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) SAL_OVERRIDE
@@ -94,7 +94,7 @@ EffectRewinder::EffectRewinder (
 
 
 
-void EffectRewinder::initialize (void)
+void EffectRewinder::initialize()
 {
     // Add some event handlers so that we are informed when
     // a) an animation is started (we then check whether that belongs to a
@@ -121,7 +121,7 @@ void EffectRewinder::initialize (void)
 
 
 
-EffectRewinder::~EffectRewinder (void)
+EffectRewinder::~EffectRewinder()
 {
     dispose();
 }
@@ -129,7 +129,7 @@ EffectRewinder::~EffectRewinder (void)
 
 
 
-void EffectRewinder::dispose (void)
+void EffectRewinder::dispose()
 {
     if (mpAsynchronousRewindEvent)
     {
@@ -170,8 +170,8 @@ void EffectRewinder::setRootAnimationNode (
 
 bool EffectRewinder::rewind (
     const ::boost::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
-    const ::boost::function<void(void)>& rSlideRewindFunctor,
-    const ::boost::function<void(void)>& rPreviousSlideFunctor)
+    const ::boost::function<void()>& rSlideRewindFunctor,
+    const ::boost::function<void()>& rPreviousSlideFunctor)
 {
     mpPaintLock = rpPaintLock;
 
@@ -227,7 +227,7 @@ bool EffectRewinder::rewind (
 
 
 
-void EffectRewinder::skipAllMainSequenceEffects (void)
+void EffectRewinder::skipAllMainSequenceEffects()
 {
     // Do not allow nested rewinds.
     if (mpAsynchronousRewindEvent)
@@ -243,7 +243,7 @@ void EffectRewinder::skipAllMainSequenceEffects (void)
             this,
             nTotalMainSequenceEffectCount,
             false,
-            ::boost::function<void(void)>()),
+            ::boost::function<void()>()),
         "EffectRewinder::asynchronousRewind");
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
@@ -251,7 +251,7 @@ void EffectRewinder::skipAllMainSequenceEffects (void)
 
 
 
-sal_Int32 EffectRewinder::countMainSequenceEffects (void)
+sal_Int32 EffectRewinder::countMainSequenceEffects()
 {
     // Determine the number of main sequence effects.
     sal_Int32 nMainSequenceNodeCount (0);
@@ -294,7 +294,7 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
 
 
 
-void EffectRewinder::skipSingleMainSequenceEffects (void)
+void EffectRewinder::skipSingleMainSequenceEffects()
 {
     // This basically just starts the next effect and then skips over its
     // animation.
@@ -307,7 +307,7 @@ void EffectRewinder::skipSingleMainSequenceEffects (void)
 
 
 
-bool EffectRewinder::resetEffectCount (void)
+bool EffectRewinder::resetEffectCount()
 {
     mnMainSequenceEffectCount = 0;
     return false;
@@ -354,7 +354,7 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 void EffectRewinder::asynchronousRewind (
     sal_Int32 nEffectCount,
     const bool bRedisplayCurrentSlide,
-    const boost::function<void(void)>& rSlideRewindFunctor)
+    const boost::function<void()>& rSlideRewindFunctor)
 {
     OSL_ASSERT(mpAsynchronousRewindEvent);
 
@@ -398,7 +398,7 @@ void EffectRewinder::asynchronousRewind (
 
 
 void EffectRewinder::asynchronousRewindToPreviousSlide (
-    const ::boost::function<void(void)>& rSlideRewindFunctor)
+    const ::boost::function<void()>& rSlideRewindFunctor)
 {
     OSL_ASSERT(mpAsynchronousRewindEvent);
 

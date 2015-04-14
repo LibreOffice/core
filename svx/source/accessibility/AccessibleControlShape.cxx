@@ -125,7 +125,7 @@ AccessibleControlShape::AccessibleControlShape (
     osl_atomic_decrement( &m_refCount );
 }
 
-AccessibleControlShape::~AccessibleControlShape (void)
+AccessibleControlShape::~AccessibleControlShape()
 {
     m_pChildManager->release();
     m_pChildManager = NULL;
@@ -279,12 +279,12 @@ void AccessibleControlShape::Init()
     }
 }
 
-Reference< XAccessibleContext > SAL_CALL AccessibleControlShape::getAccessibleContext(void) throw (RuntimeException, std::exception)
+Reference< XAccessibleContext > SAL_CALL AccessibleControlShape::getAccessibleContext() throw (RuntimeException, std::exception)
 {
     return AccessibleShape::getAccessibleContext ();
 }
 
-void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::grabFocus()  throw (RuntimeException, std::exception)
 {
     if ( !m_xUnoControl.is() || !isAliveMode( m_xUnoControl ) )
     {
@@ -300,12 +300,12 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException, 
     }
 }
 
-OUString SAL_CALL AccessibleControlShape::getImplementationName(void) throw (RuntimeException, std::exception)
+OUString SAL_CALL AccessibleControlShape::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.accessibility.AccessibleControlShape" );
 }
 
-OUString AccessibleControlShape::CreateAccessibleBaseName(void) throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleBaseName() throw (RuntimeException)
 {
     OUString sName;
 
@@ -329,7 +329,7 @@ OUString AccessibleControlShape::CreateAccessibleBaseName(void) throw (RuntimeEx
 
 
 OUString
-    AccessibleControlShape::CreateAccessibleDescription (void)
+    AccessibleControlShape::CreateAccessibleDescription()
     throw (RuntimeException)
 {
     DescriptionGenerator aDG (mxShape);
@@ -608,7 +608,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     return xSet;
 }
 
-OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleName() throw (RuntimeException)
 {
     ensureControlModelAccess();
 
@@ -640,7 +640,7 @@ OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeExcep
     return sName;
 }
 
-void SAL_CALL AccessibleControlShape::disposing (void)
+void SAL_CALL AccessibleControlShape::disposing()
 {
     // ensure we're not listening
     m_bListeningForName = ensureListeningState( m_bListeningForName, false, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );

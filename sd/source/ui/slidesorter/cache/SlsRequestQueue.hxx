@@ -77,27 +77,27 @@ public:
 
     /** Get the request with the highest priority int the highest priority class.
     */
-    CacheKey GetFront (void);
+    CacheKey GetFront();
 
     // For debugging.
-    RequestPriorityClass GetFrontPriorityClass (void);
+    RequestPriorityClass GetFrontPriorityClass();
 
     /** Really a synonym for RemoveRequest(GetFront());
     */
-    void PopFront (void);
+    void PopFront();
 
     /** Returns <TRUE/> when there is no element in the queue.
     */
-    bool IsEmpty (void);
+    bool IsEmpty();
 
     /** Remove all requests from the queue.  This resets the minimum and
         maximum priorities to their default values.
     */
-    void Clear (void);
+    void Clear();
 
     /** Return the mutex that guards the access to the priority queue.
     */
-    ::osl::Mutex& GetMutex (void) { return maMutex;}
+    ::osl::Mutex& GetMutex() { return maMutex;}
 
     /** Ensure we don't hand out a page deleted before anyone got a
         chance to process it

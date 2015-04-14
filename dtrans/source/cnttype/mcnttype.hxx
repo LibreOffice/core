@@ -51,17 +51,17 @@ public:
 
 private:
     void SAL_CALL init( const OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );
-    void SAL_CALL getSym( void );
+    void SAL_CALL getSym();
     void SAL_CALL acceptSym( const OUString& pSymTlb );
-    void SAL_CALL skipSpaces( void );
-    void SAL_CALL type( void );
-    void SAL_CALL subtype( void );
-    void SAL_CALL trailer( void );
+    void SAL_CALL skipSpaces();
+    void SAL_CALL type();
+    void SAL_CALL subtype();
+    void SAL_CALL trailer();
     OUString SAL_CALL pName( );
     OUString SAL_CALL pValue( );
     OUString SAL_CALL quotedPValue( );
     OUString SAL_CALL nonquotedPValue( );
-    void SAL_CALL comment( void );
+    void SAL_CALL comment();
     static bool SAL_CALL isInRange( const OUString& aChr, const OUString& aRange );
 
 private:

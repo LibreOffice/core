@@ -46,7 +46,7 @@ struct HelpProcessingErrorInfo
     OUString                   m_aXMLParsingFile;
     sal_Int32                       m_nXMLParsingLine;
 
-    HelpProcessingErrorInfo( void )
+    HelpProcessingErrorInfo()
         : m_eErrorClass( HELPPROCESSING_NO_ERROR )
         , m_nXMLParsingLine( -1 )
     {}
