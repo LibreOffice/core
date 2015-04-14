@@ -113,9 +113,8 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
     OUString aTempFileBase;
     OUString aTempFileName;
 
-    oslFileHandle pHandle;
     osl::FileBase::RC rc =
-        osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
+        osl::FileBase::createTempFile(nullptr, nullptr, &aTempFileBase);
     if (osl::FileBase::E_None != rc)
     {
         SAL_WARN("svx", "ExternalToolEdit::Edit: cannot create temp file");
