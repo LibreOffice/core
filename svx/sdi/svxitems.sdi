@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 enum SvxCellHorJustifyEnum
 {
     SVX_HOR_JUSTIFY_STANDARD,
@@ -36,8 +35,6 @@ enum SvxCellVerJustifyEnum
     SVX_VER_JUSTIFY_BOTTOM
 };
 item SvxCellVerJustifyEnum SvxCellVerJustifyEnumItem;
-
-
 
 enum SvxCellOrientationEnum
 {
@@ -76,10 +73,8 @@ enum SvxChooseControlEnum
     SVX_SNAP_PATTERNFIELD,
     SVX_SNAP_FILECONTROL,
     SVX_SNAP_TREECONTROL
-}
+};
 item SvxChooseControlEnum SvxChooseControlItem;
-
-
 
 enum SvxDrawToolEnum
 {
@@ -99,10 +94,8 @@ enum SvxDrawToolEnum
     SVX_SNAP_DRAW_TEXT_MARQUEE,
     SVX_SNAP_DRAW_CAPTION,
     SVX_SNAP_DRAW_CAPTION_VERTICAL
-}
+};
 item SvxDrawToolEnum SvxDrawToolEnumItem;
-
-
 
 enum SvxDrawAlignEnum
 {
@@ -112,10 +105,8 @@ enum SvxDrawAlignEnum
     SVX_OBJECT_ALIGN_UP,
     SVX_OBJECT_ALIGN_MIDDLE,
     SVX_OBJECT_ALIGN_DOWN
-}
+};
 item SvxDrawAlignEnum SvxDrawAlignEnumItem;
-
-
 
 enum SvxDrawBezierEnum
 {
@@ -129,7 +120,7 @@ enum SvxDrawBezierEnum
     SVX_BEZIER_SYMMTR,
     SVX_BEZIER_CLOSE,
     SVX_BEZIER_ELIMINATE_POINTS
-}
+};
 item SvxDrawBezierEnum SvxDrawBezierEnumItem;
 
 enum SvxAdjust
@@ -150,8 +141,6 @@ struct SvxAdjustStruct
 };
 item SvxAdjustStruct SvxAdjustItem;
 
-
-
 enum SvxCaseMap
 {
     SVX_CASEMAP_NOT_MAPPED,
@@ -162,8 +151,6 @@ enum SvxCaseMap
     SVX_CASEMAP_END
 };
 item SvxCaseMap SvxCaseMapItem;
-
-
 
 enum CharSet
 {
@@ -180,8 +167,6 @@ enum CharSet
     CHARSET_SYMBOL
 };
 
-
-
 enum FontFamily
 {
     FAMILY_DONTKNOW,
@@ -193,16 +178,12 @@ enum FontFamily
     FAMILY_SYSTEM
 };
 
-
-
 enum FontPitch
 {
     PITCH_DONTKNOW,
     PITCH_FIXED,
     PITCH_VARIABLE
 };
-
-
 
 struct SvxFont
 {
@@ -213,8 +194,6 @@ struct SvxFont
     String      FamilyName  MID_FONT_FAMILY_NAME;
 };
 item SvxFont SvxFontItem;
-
-
 
 enum FontWeight
 {
@@ -232,8 +211,6 @@ enum FontWeight
 };
 item FontWeight SvxWeightItem;
 
-
-
 enum FontUnderline
 {
     UNDERLINE_NONE,
@@ -242,16 +219,12 @@ enum FontUnderline
     UNDERLINE_DOTTED
 };
 
-
-
 enum FontStrikeout
 {
     STRIKEOUT_NONE,
     STRIKEOUT_SINGLE,
     STRIKEOUT_DOUBLE
 };
-
-
 
 enum FontItalic
 {
@@ -261,8 +234,6 @@ enum FontItalic
 };
 item FontItalic SvxPostureItem;
 
-
-
 enum SvxDbType
 {
     DBTYPE_STARBASE,
@@ -270,8 +241,6 @@ enum SvxDbType
     DBTYPE_WATCOM
 };
 item SvxDbType SvxDbTypeItem;
-
-
 
 enum SvxLineSpace
 {
@@ -282,8 +251,6 @@ enum SvxLineSpace
 };
 item SvxLineSpace SvxLineSpaceItem;
 
-
-
 enum SvxInterLineSpace
 {
     SVX_INTER_LINE_SPACE_OFF,
@@ -292,8 +259,6 @@ enum SvxInterLineSpace
     SVX_INTER_LINE_SPACE_END
 };
 item SvxInterLineSpace SvxInterLineSpaceItem;
-
-
 
 enum SvxBreak
 {
@@ -307,8 +272,6 @@ enum SvxBreak
     SVX_BREAK_END
 };
 item SvxBreak SvxBreakItem;
-
-
 
 enum BrushStyle
 {
@@ -327,8 +290,6 @@ enum BrushStyle
 };
 item BrushStyle BrushStyleItem;
 
-
-
 enum SvxNumType
 {
     SVX_CHARS_UPPER_LETTER,
@@ -342,8 +303,6 @@ enum SvxNumType
 };
 item SvxNumType SvxNumTypeItem;
 
-
-
 enum SvxShadowLocation
 {
     SVX_SHADOW_NONE,
@@ -354,8 +313,6 @@ enum SvxShadowLocation
     SVX_SHADOW_END
 };
 item SvxShadowLocation      SvxShadowLocationItem;
-
-
 
 item INT16                  SvxCharScaleWidthItem;
 item INT16                  SvxParaVertAlignItem;
@@ -407,8 +364,6 @@ item String                 avmedia_MediaItem;
 
 item BYTE                   SfxGlobalNameItem;
 
-
-
 struct SvxCrossedOut
 {
     FontStrikeout   Kind        MID_CROSS_OUT;
@@ -433,8 +388,6 @@ struct SvxBrush
 };
 item SvxBrush SvxBrushItem;
 
-
-
 struct SvxEscapement
 {
     INT16       Escapement      MID_ESC;
@@ -443,8 +396,6 @@ struct SvxEscapement
 };
 item SvxEscapement SvxEscapementItem;
 
-
-
 struct SvxFontHeight
 {
     float       Height      MID_FONTHEIGHT;         // may be converted to INT32
@@ -452,8 +403,6 @@ struct SvxFontHeight
     float       Diff        MID_FONTHEIGHT_DIFF;    // may be converted to INT32
 };
 item SvxFontHeight SvxFontHeightItem;
-
-
 
 struct SvxHyphenZone
 {
@@ -464,7 +413,6 @@ struct SvxHyphenZone
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 
-
 struct SvxLine
 {
     INT32      LineFGColor     MID_FG_COLOR;
@@ -473,8 +421,6 @@ struct SvxLine
     INT32      LineDistance    MID_DISTANCE;
 };
 item SvxLine SvxLineItem;
-
-
 
 struct SvxLRSpace
 {
@@ -489,16 +435,12 @@ struct SvxLRSpace
 };
 item SvxLRSpace SvxLRSpaceItem;
 
-
-
 struct SvxLineSpacing
 {
     INT16               Mode        MID_LINESPACE;
     INT16               Height      MID_HEIGHT;
 };
 item SvxLineSpacing SvxLineSpacingItem;
-
-
 
 struct SvxPage
 {
@@ -508,18 +450,14 @@ struct SvxPage
 };
 item SvxPage SvxPageItem;
 
-
-
 struct SvxPagePosSize
 {
-    INT32               XPos            MID_X;          // ???
-    INT32               YPos            MID_Y;          // ???
-    INT32               Width           MID_WIDTH;      // ???
-    INT32               Height          MID_HEIGHT;     // ???
+    INT32 XPos   MID_X;          // ???
+    INT32 YPos   MID_Y;          // ???
+    INT32 Width  MID_WIDTH;      // ???
+    INT32 Height MID_HEIGHT;     // ???
 };
 item SvxPagePosSize SvxPagePosSizeItem;
-
-
 
 struct SvxShadow
 {
@@ -529,9 +467,6 @@ struct SvxShadow
     INT32               Color           MID_BG_COLOR;
 };
 item SvxShadow SvxShadowItem;
-
-
-
 
 struct SvxULSpace
 {
@@ -543,25 +478,19 @@ struct SvxULSpace
 };
 item SvxULSpace SvxULSpaceItem
 
-
-
 struct SvxLongLRSpace
 {
-    INT32           Left        MID_LEFT;   // ???
-    INT32           Right       MID_RIGHT;  // ???
+    INT32 Left   MID_LEFT;   // ???
+    INT32 Right  MID_RIGHT;  // ???
 };
 item SvxLongLRSpace SvxLongLRSpaceItem;
 
-
-
 struct SvxLongULSpace
 {
-    INT32           Upper       MID_UPPER;  // ???
-    INT32           Lower       MID_LOWER;  // ???
+    INT32 Upper MID_UPPER;  // ???
+    INT32 Lower MID_LOWER;  // ???
 };
 item SvxLongULSpace SvxLongULSpaceItem;
-
-
 
 struct SvxHyperlink
 {
@@ -572,8 +501,6 @@ struct SvxHyperlink
     INT32   Type    MID_HLINK_TYPE;
 };
 item SvxHyperlink SvxHyperlinkItem;
-
-
 
 struct PageModel
 {
@@ -650,9 +577,9 @@ struct SvxCharRotate
 };
 item SvxCharRotate SvxCharRotateItem;
 
-item String                 SfxSetItem;  // dummy
-item INT16                  SvxRotateModeItem;  // enum
-item INT16                  SvxOrientationItem;  // enum
+item String SfxSetItem;  // dummy
+item INT16  SvxRotateModeItem;  // enum
+item INT16  SvxOrientationItem;  // enum
 
 struct SvxMargin
 {
@@ -669,10 +596,9 @@ struct SvxEmphasisMark
 };
 item SvxEmphasisMark SvxEmphasisMarkItem;
 
-item String SvxSmartTagItem;                 // dummy for sequence
+item String SvxSmartTagItem; // dummy for sequence
 
-
-item String Points;                 // dummy for sequence
+item String Points; // dummy for sequence
 struct ZoomSlider
 {
     INT16  CurrentZoom          MID_ZOOMSLIDER_CURRENTZOOM;
