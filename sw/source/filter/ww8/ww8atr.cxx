@@ -4211,9 +4211,6 @@ void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGra
 WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     sal_uInt16 nDist, bool bShadow)
 {
-    // M.M. This function writes out border lines to the word format similar to
-    // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
-    // would be nice if all this functionality was in the one place
     sal_uInt32 nColBGR = 0;
     sal_uInt16 nWidth = ::editeng::ConvertBorderWidthToWord(
             rLine.GetBorderLineStyle(), rLine.GetWidth());
