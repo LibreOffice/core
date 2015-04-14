@@ -732,7 +732,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         nSelEntryPos == APPLY_NUMBERING)
     {
         ScopedVclPtrInstance< SvxCharacterMap > pMapDlg(this);
-        ImpUserData* pUserData = (ImpUserData*)m_pCheckLB->FirstSelected()->GetUserData();
+        ImpUserData* pUserData = static_cast<ImpUserData*>(m_pCheckLB->FirstSelected()->GetUserData());
         pMapDlg->SetCharFont(*pUserData->pFont);
         pMapDlg->SetChar( (*pUserData->pString)[0] );
         if(RET_OK == pMapDlg->Execute())
