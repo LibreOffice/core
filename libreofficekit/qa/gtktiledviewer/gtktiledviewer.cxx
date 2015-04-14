@@ -135,7 +135,7 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
         if (g_aCommandNameToolItems.find(aKey) != g_aCommandNameToolItems.end())
         {
             GtkToolItem* pItem = g_aCommandNameToolItems[aKey];
-            bool bEdit = aValue == "true";
+            gboolean bEdit = aValue == "true";
             if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
             {
                 // Avoid invoking lok_docview_post_command().
