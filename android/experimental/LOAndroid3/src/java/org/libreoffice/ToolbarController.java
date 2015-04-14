@@ -38,6 +38,19 @@ public class ToolbarController {
         switchToViewMode();
     }
 
+    public void disableMenuItem(final int menuItemId, final boolean disabled) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                MenuItem menuItem = mOptionsMenu.findItem(menuItemId);
+                if (menuItem != null) {
+                    menuItem.setEnabled(!disabled);
+                } else {
+                    Log.e(LOGTAG, "MenuItem not found.");
+                }
+            }
+        });
+    }
+
     public void onToggleStateChanged(int type, boolean pressed) {
         MenuItem menuItem = null;
         Bitmap icon = null;

@@ -70,6 +70,11 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         mToolbarController.setOptionMenu(menu);
+
+        if (mTempFile != null) {
+            mToolbarController.disableMenuItem(R.id.action_save, true);
+            Toast.makeText(this, getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -124,6 +129,12 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         mMainHandler = new Handler();
 
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbar);
+
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
@@ -137,12 +148,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         } else {
             mInputFile = DEFAULT_DOC_PATH;
         }
-
-        setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
