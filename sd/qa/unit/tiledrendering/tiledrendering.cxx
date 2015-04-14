@@ -43,6 +43,7 @@ public:
     void testPostKeyEvent();
     void testPostMouseEvent();
     void testSetTextSelection();
+    void testSetGraphicSelection();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
+    CPPUNIT_TEST(testSetGraphicSelection);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -219,6 +221,28 @@ void SdTiledRenderingTest::testSetTextSelection()
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
 }
+
+void SdTiledRenderingTest::testSetGraphicSelection()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pPage->GetObj(0);
+    // Make sure the rectangle has 8 handles: at each corner and at the center of each edge.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(8), pObject->GetHdlCount());
+    // Take the bottom center one.
+    SdrHdl* pHdl = pObject->GetHdl(6);
+    CPPUNIT_ASSERT_EQUAL(HDL_LOWER, pHdl->GetKind());
+    Rectangle aShapeBefore = pObject->GetSnapRect();
+    // Resize.
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY() + 1000));
+    Rectangle aShapeAfter = pObject->GetSnapRect();
+    // Check that a resize happened, but aspect ratio is not kept.
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
+    CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+}
+
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
