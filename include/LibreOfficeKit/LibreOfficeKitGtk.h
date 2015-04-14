@@ -38,6 +38,7 @@ struct _LOKDocViewClass
 {
   GtkScrolledWindowClass parent_class;
   void (* edit_changed)  (LOKDocView* pView, gboolean was_edit);
+  void (* command_changed) (LOKDocView* pView, char* new_state);
 };
 
 guint           lok_docview_get_type        (void);

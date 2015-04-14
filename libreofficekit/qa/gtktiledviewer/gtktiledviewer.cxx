@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <string>
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -31,6 +32,7 @@ static int help()
 static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
+bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
@@ -107,12 +109,42 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing), bEdit);
 }
 
+/// LOKDocView changed command state -> inform the tool button.
+static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+{
+    std::string aPayload(pPayload);
+    size_t nPosition = aPayload.find("=");
+    if (nPosition != std::string::npos)
+    {
+        std::string aKey = aPayload.substr(0, nPosition);
+        std::string aValue = aPayload.substr(nPosition + 1);
+        g_info("signalCommand: '%s' is '%s'", aKey.c_str(), aValue.c_str());
+
+        GtkToolItem* pItem = 0;
+        if (aKey == ".uno:Bold")
+            pItem = pBold;
+
+        if (pItem)
+        {
+            bool bEdit = aValue == "true";
+            if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
+            {
+                // Avoid invoking lok_docview_post_command().
+                g_bToolItemBroadcast = false;
+                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
+                g_bToolItemBroadcast = true;
+            }
+        }
+    }
+}
+
 /// User clicked on the 'Bold' button -> inform LOKDocView.
 void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
 
-    lok_docview_post_command(pLOKDocView, ".uno:Bold");
+    if (g_bToolItemBroadcast)
+        lok_docview_post_command(pLOKDocView, ".uno:Bold");
 }
 
 // GtkComboBox requires gtk 2.24 or later
@@ -265,6 +297,7 @@ int main( int argc, char* argv[] )
     // Docview
     pDocView = lok_docview_new( pOffice );
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(lok_docview_post_key), pDocView);

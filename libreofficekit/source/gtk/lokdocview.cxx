@@ -182,6 +182,8 @@ struct LOKDocView_Impl
     static void callbackWorker(int nType, const char* pPayload, void* pData);
     /// Implementation of the callback worder handler, invoked by callbackWorker().
     void callbackWorkerImpl(int nType, const char* pPayload);
+    /// Command state (various buttons like bold are toggled or not) is changed.
+    void commandChanged(const std::string& rPayload);
 };
 
 LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPayload, LOKDocView* pDocView)
@@ -941,7 +943,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     }
     case LOK_CALLBACK_STATE_CHANGED:
     {
-        g_info("%s", pCallback->m_aPayload.c_str());
+        commandChanged(pCallback->m_aPayload);
     }
     break;
     default:
@@ -971,10 +973,16 @@ void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
 enum
 {
     EDIT_CHANGED,
+    COMMAND_CHANGED,
     LAST_SIGNAL
 };
 
 static guint docview_signals[LAST_SIGNAL] = { 0 };
+
+void LOKDocView_Impl::commandChanged(const std::string& rString)
+{
+    g_signal_emit(m_pDocView, docview_signals[COMMAND_CHANGED], 0, rString.c_str());
+}
 
 static void lok_docview_class_init( gpointer ptr )
 {
@@ -990,6 +998,16 @@ static void lok_docview_class_init( gpointer ptr )
                      g_cclosure_marshal_VOID__BOOLEAN,
                      G_TYPE_NONE, 1,
                      G_TYPE_BOOLEAN);
+    pClass->command_changed = NULL;
+    docview_signals[COMMAND_CHANGED] =
+        g_signal_new("command-changed",
+                     G_TYPE_FROM_CLASS(gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(LOKDocViewClass, command_changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
 }
 
 static void lok_docview_init( GTypeInstance* pInstance, gpointer )
