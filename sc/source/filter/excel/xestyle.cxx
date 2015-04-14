@@ -1089,6 +1089,8 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
     if (maDxfData.pFontAttr)
     {
         OUString aFontName = (*maDxfData.pFontAttr)->GetFamilyName();
+
+        aFontName = XclTools::GetXclFontName(aFontName);
         if (!aFontName.isEmpty())
         {
             rStyleSheet->singleElement(XML_name,
