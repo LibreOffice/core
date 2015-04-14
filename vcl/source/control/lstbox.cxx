@@ -132,19 +132,19 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 }
         }
 
-        mpFloatWin = new ImplListBoxFloatingWindow( this );
+        mpFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
         mpFloatWin->SetAutoWidth( true );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ListBox, ImplPopupModeEndHdl ) );
         mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
 
-        mpImplWin = new ImplWin( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
+        mpImplWin = VclPtr<ImplWin>::Create( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
         mpImplWin->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
         mpImplWin->userDrawSignal.connect( boost::bind( &ListBox::ImplUserDrawHandler, this, _1 ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
         mpImplWin->SetEdgeBlending(GetEdgeBlending());
 
-        mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
+        mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
         mpBtn->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
@@ -154,7 +154,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     vcl::Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
-    mpImplLB = new ImplListBox( pLBParent, nStyle&(~WB_BORDER) );
+    mpImplLB = VclPtr<ImplListBox>::Create( pLBParent, nStyle&(~WB_BORDER) );
     mpImplLB->SetSelectHdl( LINK( this, ListBox, ImplSelectHdl ) );
     mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );

@@ -45,6 +45,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
+    /// These functions return a vcl::Window with a reference count of one.
     typedef vcl::Window* (*customMakeWidget)(vcl::Window *pParent, stringmap &rVec);
 
 public:
@@ -340,12 +341,12 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 private:
-    vcl::Window *insertObject(vcl::Window *pParent,
+    VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
                     stringmap &rProps, stringmap &rPangoAttributes,
                     stringmap &rAtkProps);
 
-    vcl::Window *makeObject(vcl::Window *pParent,
+    VclPtr<vcl::Window> makeObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
                     stringmap &rVec);
 
@@ -364,7 +365,7 @@ private:
     void        handleTranslations(xmlreader::XmlReader &reader);
 
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
-    vcl::Window* handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
+    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);

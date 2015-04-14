@@ -1266,7 +1266,7 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
+VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
@@ -1308,7 +1308,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     }
 
     if (bIsPlaceHolder || name == "GtkTreeSelection")
-        return NULL;
+        return nullptr;
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
@@ -1703,7 +1703,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
 
             m_pParserState->m_nLastToolbarId = nItemId;
 
-            return NULL; // no widget to be created
+            return nullptr; // no widget to be created
         }
     }
     else if (name == "GtkSeparatorToolItem")
@@ -1712,7 +1712,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
         if (pToolBox)
         {
             pToolBox->InsertSeparator();
-            return NULL; // no widget to be created
+            return nullptr; // no widget to be created
         }
     }
     else if (name == "GtkWindow")
@@ -1780,7 +1780,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             pWindow->GetHelpId().getStr());
         m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
-    return pWindow;
+    return VclPtr<vcl::Window>(pWindow, SAL_NO_ACQUIRE);
 }
 
 namespace
@@ -1815,10 +1815,10 @@ void VclBuilder::set_properties(vcl::Window *pWindow, const stringmap &rProps)
     }
 }
 
-vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
+VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
     const OString &rID, stringmap &rProps, stringmap &rPango, stringmap &rAtk)
 {
-    vcl::Window *pCurrentChild = NULL;
+    VclPtr<vcl::Window> pCurrentChild;
 
     if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
@@ -1829,13 +1829,13 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         //initialize the dialog.
         if (pParent && pParent->IsSystemWindow())
         {
-            SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
+            SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild.get());
             pSysWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
         else if (pParent && pParent->IsDockingWindow())
         {
-            DockingWindow *pDockWin = static_cast<DockingWindow*>(pCurrentChild);
+            DockingWindow *pDockWin = static_cast<DockingWindow*>(pCurrentChild.get());
             pDockWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
@@ -2843,7 +2843,7 @@ template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringma
     return true;
 }
 
-vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
+VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
@@ -2875,22 +2875,22 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
     if (sClass == "GtkListStore")
     {
         handleListStore(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "GtkMenu")
     {
         handleMenu(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "GtkSizeGroup")
     {
         handleSizeGroup(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "AtkObject")
     {
         handleAtkObject(reader, sID, pParent);
-        return NULL;
+        return nullptr;
     }
 
     int nLevel = 1;
@@ -2901,7 +2901,7 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
-    vcl::Window *pCurrentChild = NULL;
+    VclPtr<vcl::Window> pCurrentChild;
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
