@@ -691,10 +691,6 @@ private:
 
 };
 
-struct XclDxfStyle
-{
-};
-
 class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
 {
 public:
