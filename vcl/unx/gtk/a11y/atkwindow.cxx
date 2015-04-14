@@ -273,7 +273,7 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 /*****************************************************************************/
 
 GType
-ooo_window_wrapper_get_type (void)
+ooo_window_wrapper_get_type()
 {
     static GType type = 0;
 
@@ -310,7 +310,7 @@ ooo_window_wrapper_get_type (void)
     return type;
 }
 
-void restore_gail_window_vtable (void)
+void restore_gail_window_vtable()
 {
     AtkObjectClass *atk_class;
     gpointer data;

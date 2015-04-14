@@ -53,7 +53,7 @@ public:
                         ImportTyp( ScDocument*, rtl_TextEncoding eSrc );
     virtual             ~ImportTyp();
 
-    virtual FltError    Read( void );
+    virtual FltError    Read();
 };
 
 class XclImpOutlineDataBuffer : protected XclImpRoot
@@ -141,69 +141,69 @@ protected:
     void                    ReadRk();
 
     void                    Window1();
-    void                    Formula25( void );              // 0x06     -> excform.cxx
-    void                    Row25( void );                  // 0x08
-    void                    Bof2( void );                   // 0x09
-    void                    Eof( void );                    // 0x0A
-    void                    DocProtect( void );             // 0x12
-    void                    SheetProtect( void );           // 0x12 Sheet Protection
-    void                    DocPasssword( void );           // 0x13 document password
-    void                    SheetPassword( void );               // 0x13 sheet password
-    void                    Externsheet( void );            // 0x17
-    void                    WinProtection( void );          // 0x19
-    void                    Columndefault( void );          // 0x20
-    void                    Array25( void );                // 0x21
-    void                    Rec1904( void );                // 0x22
-    void                    Externname25( void );           // 0x23
-    void                    Colwidth( void );               // 0x24
-    void                    Defrowheight2( void );          // 0x25
-//      void                Window1( void );                // 0x3D
-    void                    Codepage( void );               // 0x42
-    void                    Ixfe( void );                   // 0x44
-    void                    DefColWidth( void );            // 0x55
-    void                    Colinfo( void );                // 0x7D
-    void                    Wsbool( void );                 // 0x81
-    void                    Boundsheet( void );             // 0x85
-    void                    Country( void );                // 0x8C
-    void                    Hideobj( void );                // 0x8D
-    void                    Standardwidth( void );          // 0x99
-    void                    Shrfmla( void );                // 0xBC
-    void                    Mulrk( void );                  // 0xBD
-    void                    Mulblank( void );               // 0xBE
-    void                    Rstring( void );                // 0xD6
-    void                    Cellmerging( void );            // 0xE5
-    void                    Olesize( void );                // 0xDE
+    void                    Formula25();              // 0x06     -> excform.cxx
+    void                    Row25();                  // 0x08
+    void                    Bof2();                   // 0x09
+    void                    Eof();                    // 0x0A
+    void                    DocProtect();             // 0x12
+    void                    SheetProtect();           // 0x12 Sheet Protection
+    void                    DocPasssword();           // 0x13 document password
+    void                    SheetPassword();               // 0x13 sheet password
+    void                    Externsheet();            // 0x17
+    void                    WinProtection();          // 0x19
+    void                    Columndefault();          // 0x20
+    void                    Array25();                // 0x21
+    void                    Rec1904();                // 0x22
+    void                    Externname25();           // 0x23
+    void                    Colwidth();               // 0x24
+    void                    Defrowheight2();          // 0x25
+//      void                Window1();                // 0x3D
+    void                    Codepage();               // 0x42
+    void                    Ixfe();                   // 0x44
+    void                    DefColWidth();            // 0x55
+    void                    Colinfo();                // 0x7D
+    void                    Wsbool();                 // 0x81
+    void                    Boundsheet();             // 0x85
+    void                    Country();                // 0x8C
+    void                    Hideobj();                // 0x8D
+    void                    Standardwidth();          // 0x99
+    void                    Shrfmla();                // 0xBC
+    void                    Mulrk();                  // 0xBD
+    void                    Mulblank();               // 0xBE
+    void                    Rstring();                // 0xD6
+    void                    Cellmerging();            // 0xE5
+    void                    Olesize();                // 0xDE
     void                    ReadUsesElfs();                 // 0x0160
-    void                    Formula3( void );               // 0x0206       -> excform.cxx
+    void                    Formula3();               // 0x0206       -> excform.cxx
                                                             // 0x0207 -> 0x07
-    void                    Row34( void );                  // 0x0208
-    void                    Bof3( void );                   // 0x0209
-    void                    Array34( void );                // 0x0221
-    void                    Defrowheight345( void );        // 0x0225
-    void                    TableOp( void );                // 0x0236
-    //void                  Rk( void );                     // 0x027E -> 0x7E
-    void                    Formula4( void );               // 0x0406       -> excform.cxx
-    void                    Bof4( void );                   // 0x0409
-    void                    Bof5( void );                   // 0x0809
+    void                    Row34();                  // 0x0208
+    void                    Bof3();                   // 0x0209
+    void                    Array34();                // 0x0221
+    void                    Defrowheight345();        // 0x0225
+    void                    TableOp();                // 0x0236
+    //void                  Rk();                     // 0x027E -> 0x7E
+    void                    Formula4();               // 0x0406       -> excform.cxx
+    void                    Bof4();                   // 0x0409
+    void                    Bof5();                   // 0x0809
 
     void Formula(
         const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla);
                                             //      -> excform.cxx
 
-    virtual void            EndSheet( void );
-    void                    NewTable( void );
+    virtual void            EndSheet();
+    void                    NewTable();
     const ScTokenArray*     ErrorToFormula( bool bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 
     void            AdjustRowHeight();
-    virtual void            PostDocLoad( void );
+    virtual void            PostDocLoad();
 
 public:
                             ImportExcel( XclImpRootData& rImpData, SvStream& rStrm );
 
-    virtual                 ~ImportExcel( void );
+    virtual                 ~ImportExcel();
 
-    virtual FltError        Read( void ) SAL_OVERRIDE;
+    virtual FltError        Read() SAL_OVERRIDE;
 };
 
 #endif

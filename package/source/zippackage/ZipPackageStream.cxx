@@ -113,7 +113,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     aEntry.nExtraLen    = -1;
 }
 
-ZipPackageStream::~ZipPackageStream( void )
+ZipPackageStream::~ZipPackageStream()
 {
 }
 

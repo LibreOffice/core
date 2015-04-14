@@ -37,7 +37,7 @@ public:
         vcl::Window* pParent,
         PagePropertyPanel& rPanel,
         const bool bLandscape );
-    virtual ~PageOrientationControl(void);
+    virtual ~PageOrientationControl();
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpOrientationValueSet;

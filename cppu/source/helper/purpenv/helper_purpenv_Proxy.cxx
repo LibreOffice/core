@@ -255,7 +255,7 @@ Proxy::~Proxy()
     typelib_typedescription_release(&m_pTypeDescr->aBase);
 }
 
-static uno::TypeDescription getAcquireMethod(void)
+static uno::TypeDescription getAcquireMethod()
 {
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
@@ -270,7 +270,7 @@ static uno::TypeDescription getAcquireMethod(void)
     return acquire;
 }
 
-static uno::TypeDescription getReleaseMethod(void)
+static uno::TypeDescription getReleaseMethod()
 {
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
@@ -288,7 +288,7 @@ static uno::TypeDescription getReleaseMethod(void)
 static uno::TypeDescription s_acquireMethod(getAcquireMethod());
 static uno::TypeDescription s_releaseMethod(getReleaseMethod());
 
-void Proxy::acquire(void)
+void Proxy::acquire()
 {
     if (m_probeFun)
         m_probeFun(true,
@@ -328,7 +328,7 @@ void Proxy::acquire(void)
 
 }
 
-void Proxy::release(void)
+void Proxy::release()
 {
     cppu::helper::purpenv::ProbeFun * probeFun = m_probeFun;
     void                            * pProbeContext = m_pProbeContext;

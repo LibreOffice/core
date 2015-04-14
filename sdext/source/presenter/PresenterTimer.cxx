@@ -42,7 +42,7 @@ public:
         const TimeValue& rDueTime,
         const sal_Int64 nRepeatIntervall,
         const sal_Int32 nTaskId);
-    ~TimerTask (void) {}
+    ~TimerTask() {}
 
     PresenterTimer::Task maTask;
     TimeValue maDueTime;
@@ -71,7 +71,7 @@ class TimerScheduler
       public ::osl::Thread
 {
 public:
-    static ::boost::shared_ptr<TimerScheduler> Instance (void);
+    static ::boost::shared_ptr<TimerScheduler> Instance();
     static SharedTimerTask CreateTimerTask (
         const PresenterTimer::Task& rTask,
         const TimeValue& rDueTime,
@@ -102,13 +102,13 @@ private:
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
 
-    TimerScheduler (void);
-    virtual ~TimerScheduler (void);
+    TimerScheduler();
+    virtual ~TimerScheduler();
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
 
-    virtual void SAL_CALL run (void) SAL_OVERRIDE;
-    virtual void SAL_CALL onTerminated (void) SAL_OVERRIDE { mpLateDestroy.reset(); }
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE { mpLateDestroy.reset(); }
 };
 
 } // end of anonymous namespace
@@ -146,7 +146,7 @@ void PresenterTimer::CancelTask (const sal_Int32 nTaskId)
 ::osl::Mutex TimerScheduler::maInstanceMutex;
 sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 
-::boost::shared_ptr<TimerScheduler> TimerScheduler::Instance (void)
+::boost::shared_ptr<TimerScheduler> TimerScheduler::Instance()
 {
     ::osl::MutexGuard aGuard (maInstanceMutex);
     if (mpInstance.get() == NULL)
@@ -157,7 +157,7 @@ sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
     return mpInstance;
 }
 
-TimerScheduler::TimerScheduler (void)
+TimerScheduler::TimerScheduler()
     : maTaskContainerMutex(),
       maScheduledTasks(),
       maCurrentTaskMutex(),
@@ -165,7 +165,7 @@ TimerScheduler::TimerScheduler (void)
 {
 }
 
-TimerScheduler::~TimerScheduler (void)
+TimerScheduler::~TimerScheduler()
 {
 }
 
@@ -222,7 +222,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // Let the main-loop cleanup in it's own time
 }
 
-void SAL_CALL TimerScheduler::run (void)
+void SAL_CALL TimerScheduler::run()
 {
     osl_setThreadName("sdext::presenter::TimerScheduler");
 
@@ -393,7 +393,7 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
             UNO_QUERY_THROW);
 }
 
-PresenterClockTimer::~PresenterClockTimer (void)
+PresenterClockTimer::~PresenterClockTimer()
 {
     if (mnTimerTaskId != PresenterTimer::NotAValidTaskId)
     {
@@ -445,7 +445,7 @@ void PresenterClockTimer::RemoveListener (const SharedListener& rListener)
     }
 }
 
-oslDateTime PresenterClockTimer::GetCurrentTime (void)
+oslDateTime PresenterClockTimer::GetCurrentTime()
 {
     TimeValue aCurrentTime;
     TimerScheduler::GetCurrentTime(aCurrentTime);

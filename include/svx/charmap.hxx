@@ -61,8 +61,8 @@ public:
     static sal_uInt32& getSelectedChar();
 
     ::svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
-    int                         FirstInView( void) const;
-    int                         LastInView( void) const;
+    int                         FirstInView() const;
+    int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
     void                        SelectIndex( int index, bool bFocus = false );
     void                        DeSelect();

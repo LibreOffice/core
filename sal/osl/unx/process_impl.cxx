@@ -156,7 +156,7 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
 /***************************************
  osl_getCommandArgCount().
  **************************************/
-sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
+sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
     sal_uInt32 result = 0;
 

@@ -44,7 +44,7 @@ SdUnoSlideView::SdUnoSlideView (
 {
 }
 
-SdUnoSlideView::~SdUnoSlideView (void) throw()
+SdUnoSlideView::~SdUnoSlideView() throw()
 {
 }
 
@@ -84,7 +84,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
     return bOk;
 }
 
-Any SAL_CALL SdUnoSlideView::getSelection (void)
+Any SAL_CALL SdUnoSlideView::getSelection()
       throw(RuntimeException, std::exception)
 {
     Any aResult;
@@ -141,7 +141,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
 }
 
 css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
-    SdUnoSlideView::getCurrentPage (void)
+    SdUnoSlideView::getCurrentPage()
     throw(css::uno::RuntimeException, std::exception)
 {
     return mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide()->GetXDrawPage();

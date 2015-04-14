@@ -56,10 +56,10 @@ public:
                    rtl::OUString                    const & rOId,
                    cppu::helper::purpenv::ProbeFun        * probeFun,
                    void                                   * pProbeContext);
-    ~Proxy(void);
+    ~Proxy();
 
-    void acquire(void);
-    void release(void);
+    void acquire();
+    void release();
 
     void dispatch(
         typelib_TypeDescriptionReference  * pReturnTypeRef,

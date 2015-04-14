@@ -43,17 +43,17 @@ Pane::Pane (
 {
 }
 
-Pane::~Pane (void)
+Pane::~Pane()
 {
 }
 
-void Pane::disposing (void)
+void Pane::disposing()
 {
     mxWindow = NULL;
     mpWindow = NULL;
 }
 
-::vcl::Window* Pane::GetWindow (void)
+::vcl::Window* Pane::GetWindow()
 {
     if (mxWindow.is())
         return mpWindow;
@@ -63,7 +63,7 @@ void Pane::disposing (void)
 
 //----- XPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL Pane::getWindow (void)
+Reference<awt::XWindow> SAL_CALL Pane::getWindow()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -71,7 +71,7 @@ Reference<awt::XWindow> SAL_CALL Pane::getWindow (void)
     return mxWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
+Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -85,7 +85,7 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
 
 //----- XPane2 ----------------------------------------------------------------
 
-sal_Bool SAL_CALL Pane::isVisible (void)
+sal_Bool SAL_CALL Pane::isVisible()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -107,7 +107,7 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
         pWindow->Show(bIsVisible);
 }
 
-Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
+Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -130,7 +130,7 @@ void SAL_CALL Pane::setAccessible (
 
 //----- XResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL Pane::getResourceId (void)
+Reference<XResourceId> SAL_CALL Pane::getResourceId()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -138,7 +138,7 @@ Reference<XResourceId> SAL_CALL Pane::getResourceId (void)
     return mxPaneId;
 }
 
-sal_Bool SAL_CALL Pane::isAnchorOnly (void)
+sal_Bool SAL_CALL Pane::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return true;
@@ -151,7 +151,7 @@ namespace
     class thePaneUnoTunnelId : public rtl::Static< UnoTunnelIdInit, thePaneUnoTunnelId > {};
 }
 
-const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
+const Sequence<sal_Int8>& Pane::getUnoTunnelId()
 {
     return thePaneUnoTunnelId::get().getSeq();
 }
@@ -170,7 +170,7 @@ sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
     return nResult;
 }
 
-Reference<rendering::XCanvas> Pane::CreateCanvas (void)
+Reference<rendering::XCanvas> Pane::CreateCanvas()
     throw (RuntimeException)
 {
     Reference<rendering::XCanvas> xCanvas;
@@ -186,7 +186,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     return xCanvas;
 }
 
-void Pane::ThrowIfDisposed (void) const
+void Pane::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

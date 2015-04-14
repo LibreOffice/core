@@ -74,7 +74,7 @@ class AllMasterPagesSelector::SortedMasterPageDescriptorList
     : public ::std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
 {
 public:
-    SortedMasterPageDescriptorList (void) {}
+    SortedMasterPageDescriptorList() {}
 };
 
 MasterPagesSelector* AllMasterPagesSelector::Create (
@@ -113,7 +113,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     MasterPagesSelector::Fill();
 }
 
-AllMasterPagesSelector::~AllMasterPagesSelector (void)
+AllMasterPagesSelector::~AllMasterPagesSelector()
 {
 }
 
@@ -146,7 +146,7 @@ void AllMasterPagesSelector::NotifyContainerChangeEvent (
     }
 }
 
-void AllMasterPagesSelector::UpdateMasterPageList (void)
+void AllMasterPagesSelector::UpdateMasterPageList()
 {
     mpSortedMasterPages->clear();
     int nTokenCount = mpContainer->GetTokenCount();

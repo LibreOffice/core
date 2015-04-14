@@ -162,7 +162,7 @@ void ExcDummyRec::Save( XclExpStream& rStrm )
     rStrm.Write( GetData(), GetLen() );        // raw write mode
 }
 
-sal_uInt16 ExcDummyRec::GetNum( void ) const
+sal_uInt16 ExcDummyRec::GetNum() const
 {
     return 0x0000;
 }
@@ -174,7 +174,7 @@ void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16)(bVal ? 0x0001 : 0x0000);
 }
 
-sal_Size ExcBoolRecord::GetLen( void ) const
+sal_Size ExcBoolRecord::GetLen() const
 {
     return 2;
 }
@@ -191,7 +191,7 @@ ExcBof_Base::ExcBof_Base()
 
 //-------------------------------------------------------------- class ExcBof -
 
-ExcBof::ExcBof( void )
+ExcBof::ExcBof()
 {
     nDocType = 0x0010;
     nVers = 0x0500;
@@ -202,19 +202,19 @@ void ExcBof::SaveCont( XclExpStream& rStrm )
     rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
 
-sal_uInt16 ExcBof::GetNum( void ) const
+sal_uInt16 ExcBof::GetNum() const
 {
     return 0x0809;
 }
 
-sal_Size ExcBof::GetLen( void ) const
+sal_Size ExcBof::GetLen() const
 {
     return 8;
 }
 
 //------------------------------------------------------------- class ExcBofW -
 
-ExcBofW::ExcBofW( void )
+ExcBofW::ExcBofW()
 {
     nDocType = 0x0005;
     nVers = 0x0500;
@@ -225,58 +225,58 @@ void ExcBofW::SaveCont( XclExpStream& rStrm )
     rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
 
-sal_uInt16 ExcBofW::GetNum( void ) const
+sal_uInt16 ExcBofW::GetNum() const
 {
     return 0x0809;
 }
 
-sal_Size ExcBofW::GetLen( void ) const
+sal_Size ExcBofW::GetLen() const
 {
     return 8;
 }
 
 //-------------------------------------------------------------- class ExcEof -
 
-sal_uInt16 ExcEof::GetNum( void ) const
+sal_uInt16 ExcEof::GetNum() const
 {
     return 0x000A;
 }
 
-sal_Size ExcEof::GetLen( void ) const
+sal_Size ExcEof::GetLen() const
 {
     return 0;
 }
 
 //--------------------------------------------------------- class ExcDummy_00 -
 
-sal_Size ExcDummy_00::GetLen( void ) const
+sal_Size ExcDummy_00::GetLen() const
 {
     return nMyLen;
 }
 
-const sal_uInt8* ExcDummy_00::GetData( void ) const
+const sal_uInt8* ExcDummy_00::GetData() const
 {
     return pMyData;
 }
 
 //-------------------------------------------------------- class ExcDummy_04x -
 
-sal_Size ExcDummy_040::GetLen( void ) const
+sal_Size ExcDummy_040::GetLen() const
 {
     return nMyLen;
 }
 
-const sal_uInt8* ExcDummy_040::GetData( void ) const
+const sal_uInt8* ExcDummy_040::GetData() const
 {
     return pMyData;
 }
 
-sal_Size ExcDummy_041::GetLen( void ) const
+sal_Size ExcDummy_041::GetLen() const
 {
     return nMyLen;
 }
 
-const sal_uInt8* ExcDummy_041::GetData( void ) const
+const sal_uInt8* ExcDummy_041::GetData() const
 {
     return pMyData;
 }
@@ -290,7 +290,7 @@ Exc1904::Exc1904( ScDocument& rDoc )
     bDateCompatibility = pDate && !( *pDate == Date( 30, 12, 1899 ));
 }
 
-sal_uInt16 Exc1904::GetNum( void ) const
+sal_uInt16 Exc1904::GetNum() const
 {
     return 0x0022;
 }
@@ -340,7 +340,7 @@ void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
     rStrm.EnableEncryption();
 }
 
-sal_uInt16 ExcBundlesheetBase::GetNum( void ) const
+sal_uInt16 ExcBundlesheetBase::GetNum() const
 {
     return 0x0085;
 }
@@ -368,12 +368,12 @@ sal_Size ExcBundlesheet::GetLen() const
 
 //--------------------------------------------------------- class ExcDummy_02 -
 
-sal_Size ExcDummy_02a::GetLen( void ) const
+sal_Size ExcDummy_02a::GetLen() const
 {
     return nMyLen;
 }
 
-const sal_uInt8* ExcDummy_02a::GetData( void ) const
+const sal_uInt8* ExcDummy_02a::GetData() const
 {
     return pMyData;
 }

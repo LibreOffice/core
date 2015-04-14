@@ -96,7 +96,7 @@ public:
     sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    void SAL_CALL endDocument(void)
+    void SAL_CALL endDocument()
         throw( ::com::sun::star::xml::sax::SAXException,
         ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 

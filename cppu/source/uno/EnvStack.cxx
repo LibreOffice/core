@@ -86,7 +86,7 @@ static void s_setCurrent(uno_Environment * pEnv)
     }
 }
 
-static uno_Environment * s_getCurrent(void)
+static uno_Environment * s_getCurrent()
 {
     uno_Environment * pEnv = NULL;
 

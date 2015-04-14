@@ -67,7 +67,7 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCa
 
 }
 
-void SAL_CALL OAdoTable::disposing(void)
+void SAL_CALL OAdoTable::disposing()
 {
     OTable_TYPEDEF::disposing();
     m_aTable.clear();

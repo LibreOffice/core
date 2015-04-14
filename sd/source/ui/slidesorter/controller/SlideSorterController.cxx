@@ -136,7 +136,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
     }
 }
 
-void SlideSorterController::Init (void)
+void SlideSorterController::Init()
 {
     mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
@@ -159,7 +159,7 @@ void SlideSorterController::Init (void)
     GetSelectionManager()->SelectionHasChanged();
 }
 
-SlideSorterController::~SlideSorterController (void)
+SlideSorterController::~SlideSorterController()
 {
     try
     {
@@ -177,7 +177,7 @@ SlideSorterController::~SlideSorterController (void)
     // to shut down cleanly.
 }
 
-void SlideSorterController::Dispose (void)
+void SlideSorterController::Dispose()
 {
     mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
     mpClipboard.reset();
@@ -214,50 +214,50 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
     return pDescriptorAtPoint;
 }
 
-PageSelector& SlideSorterController::GetPageSelector (void)
+PageSelector& SlideSorterController::GetPageSelector()
 {
     OSL_ASSERT(mpPageSelector.get()!=NULL);
     return *mpPageSelector.get();
 }
 
-FocusManager& SlideSorterController::GetFocusManager (void)
+FocusManager& SlideSorterController::GetFocusManager()
 {
     OSL_ASSERT(mpFocusManager.get()!=NULL);
     return *mpFocusManager.get();
 }
 
-Clipboard& SlideSorterController::GetClipboard (void)
+Clipboard& SlideSorterController::GetClipboard()
 {
     OSL_ASSERT(mpClipboard.get()!=NULL);
     return *mpClipboard.get();
 }
 
-ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
+ScrollBarManager& SlideSorterController::GetScrollBarManager()
 {
     OSL_ASSERT(mpScrollBarManager.get()!=NULL);
     return *mpScrollBarManager.get();
 }
 
-::boost::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager (void) const
+::boost::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager() const
 {
     OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
     return mpCurrentSlideManager;
 }
 
-::boost::shared_ptr<SlotManager> SlideSorterController::GetSlotManager (void) const
+::boost::shared_ptr<SlotManager> SlideSorterController::GetSlotManager() const
 {
     OSL_ASSERT(mpSlotManager.get()!=NULL);
     return mpSlotManager;
 }
 
-::boost::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager (void) const
+::boost::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager() const
 {
     OSL_ASSERT(mpSelectionManager.get()!=NULL);
     return mpSelectionManager;
 }
 
 ::boost::shared_ptr<InsertionIndicatorHandler>
-    SlideSorterController::GetInsertionIndicatorHandler (void) const
+    SlideSorterController::GetInsertionIndicatorHandler() const
 {
     OSL_ASSERT(mpInsertionIndicatorHandler.get()!=NULL);
     return mpInsertionIndicatorHandler;
@@ -464,12 +464,12 @@ bool SlideSorterController::Command (
     return bEventHasBeenHandled;
 }
 
-void SlideSorterController::LockModelChange (void)
+void SlideSorterController::LockModelChange()
 {
     mnModelChangeLockCount += 1;
 }
 
-void SlideSorterController::UnlockModelChange (void)
+void SlideSorterController::UnlockModelChange()
 {
     mnModelChangeLockCount -= 1;
     if (mnModelChangeLockCount==0 && mbPostModelChangePending)
@@ -478,7 +478,7 @@ void SlideSorterController::UnlockModelChange (void)
     }
 }
 
-void SlideSorterController::PreModelChange (void)
+void SlideSorterController::PreModelChange()
 {
     // Prevent PreModelChange to execute more than once per model lock.
     if (mbPostModelChangePending)
@@ -497,7 +497,7 @@ void SlideSorterController::PreModelChange (void)
     mbPostModelChangePending = true;
 }
 
-void SlideSorterController::PostModelChange (void)
+void SlideSorterController::PostModelChange()
 {
     mbPostModelChangePending = false;
     mrModel.Resync();
@@ -523,7 +523,7 @@ void SlideSorterController::PostModelChange (void)
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 }
 
-void SlideSorterController::HandleModelChange (void)
+void SlideSorterController::HandleModelChange()
 {
     // Ignore this call when the document is not in a valid state, i.e. has
     // not the same number of regular and notes pages.
@@ -680,7 +680,7 @@ void SlideSorterController::GetAttrState (SfxItemSet& rSet)
     mpSlotManager->GetAttrState (rSet);
 }
 
-void SlideSorterController::UpdateAllPages (void)
+void SlideSorterController::UpdateAllPages()
 {
     // Do a redraw.
     mrSlideSorter.GetContentWindow()->Invalidate();
@@ -760,13 +760,13 @@ rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxReques
     return xFunc;
 }
 
-::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction (void)
+::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction()
 {
     rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
     return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));
 }
 
-void SlideSorterController::PrepareEditModeChange (void)
+void SlideSorterController::PrepareEditModeChange()
 {
     //  Before we throw away the page descriptors we prepare for selecting
     //  descriptors in the other mode and for restoring the current
@@ -814,7 +814,7 @@ bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
     return bResult;
 }
 
-void SlideSorterController::FinishEditModeChange (void)
+void SlideSorterController::FinishEditModeChange()
 {
     if (mrModel.GetEditMode() == EM_MASTERPAGE)
     {
@@ -912,13 +912,13 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
     }
 }
 
-VisibleAreaManager& SlideSorterController::GetVisibleAreaManager (void) const
+VisibleAreaManager& SlideSorterController::GetVisibleAreaManager() const
 {
     OSL_ASSERT(mpVisibleAreaManager);
     return *mpVisibleAreaManager;
 }
 
-void SlideSorterController::CheckForMasterPageAssignment (void)
+void SlideSorterController::CheckForMasterPageAssignment()
 {
     if (mrModel.GetPageCount()%2==0)
         return;
@@ -935,7 +935,7 @@ void SlideSorterController::CheckForMasterPageAssignment (void)
     }
 }
 
-void SlideSorterController::CheckForSlideTransitionAssignment (void)
+void SlideSorterController::CheckForSlideTransitionAssignment()
 {
     if (mrModel.GetPageCount()%2==0)
         return;
@@ -961,12 +961,12 @@ SlideSorterController::ModelChangeLock::ModelChangeLock (
     mpController->LockModelChange();
 }
 
-SlideSorterController::ModelChangeLock::~ModelChangeLock (void)
+SlideSorterController::ModelChangeLock::~ModelChangeLock()
 {
     Release();
 }
 
-void SlideSorterController::ModelChangeLock::Release (void)
+void SlideSorterController::ModelChangeLock::Release()
 {
     if (mpController != NULL)
     {

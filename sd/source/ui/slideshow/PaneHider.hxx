@@ -42,7 +42,7 @@ public:
 
     /** Restore the original visibility of the side panes.
     */
-    ~PaneHider (void);
+    ~PaneHider();
 
 private:
     const ViewShell& mrViewShell;

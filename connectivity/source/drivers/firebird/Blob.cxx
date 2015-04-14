@@ -107,7 +107,7 @@ void Blob::closeBlob()
     }
 }
 
-void SAL_CALL Blob::disposing(void)
+void SAL_CALL Blob::disposing()
 {
     try
     {

@@ -980,7 +980,7 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
     FT_Done_Glyph( pGlyphFT );
 }
 
-bool ServerFont::GetAntialiasAdvice( void ) const
+bool ServerFont::GetAntialiasAdvice() const
 {
     if( GetFontSelData().mbNonAntialiased || (mnPrioAntiAlias<=0) )
         return false;

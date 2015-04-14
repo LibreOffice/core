@@ -60,7 +60,7 @@ namespace slideshow
 
             /** Return whether the sound play back is enabled.
             */
-            virtual bool isSoundEnabled (void) const = 0;
+            virtual bool isSoundEnabled() const = 0;
 
             /** Tell the view whether it may play sounds.  Disabling this
                 can be used to prevent different views to play the same

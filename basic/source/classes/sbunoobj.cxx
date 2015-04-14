@@ -169,14 +169,14 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 }
 
 // save CoreReflection statically
-Reference< XIdlReflection > getCoreReflection_Impl( void )
+Reference< XIdlReflection > getCoreReflection_Impl()
 {
     return css::reflection::theCoreReflection::get(
         comphelper::getProcessComponentContext());
 }
 
 // save CoreReflection statically
-Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl( void )
+Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl()
 {
     static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
 
@@ -193,7 +193,7 @@ Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Im
 }
 
 // Hold TypeProvider statically
-Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
+Reference< XHierarchicalNameAccess > getTypeProvider_Impl()
 {
     static Reference< XHierarchicalNameAccess > xAccess;
 
@@ -219,7 +219,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
 }
 
 // Hold TypeConverter statically
-Reference< XTypeConverter > getTypeConverter_Impl( void )
+Reference< XTypeConverter > getTypeConverter_Impl()
 {
     static Reference< XTypeConverter > xTypeConverter;
 
@@ -465,7 +465,7 @@ struct ObjectItem
 typedef std::vector< ObjectItem > NativeObjectWrapperVector;
 class GaNativeObjectWrapperVector : public rtl::Static<NativeObjectWrapperVector, GaNativeObjectWrapperVector> {};
 
-void clearNativeObjectWrapperVector( void )
+void clearNativeObjectWrapperVector()
 {
     GaNativeObjectWrapperVector::get().clear();
 }
@@ -2426,7 +2426,7 @@ SbUnoObject::~SbUnoObject()
 
 
 // pass the introspection on Demand
-void SbUnoObject::doIntrospection( void )
+void SbUnoObject::doIntrospection()
 {
     if( !bNeedIntrospection )
         return;
@@ -2523,7 +2523,7 @@ void clearUnoMethodsForBasic( StarBASIC* pBasic )
     }
 }
 
-void clearUnoMethods( void )
+void clearUnoMethods()
 {
     SbUnoMethod* pMeth = pFirst;
     while( pMeth )
@@ -2596,7 +2596,7 @@ SbxInfo* SbUnoMethod::GetInfo()
     return pInfo;
 }
 
-const Sequence<ParamInfo>& SbUnoMethod::getParamInfos( void )
+const Sequence<ParamInfo>& SbUnoMethod::getParamInfos()
 {
     if (!pParamInfoSeq)
     {
@@ -2800,7 +2800,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
 
 
 // help method to create the dbg_-Properties
-void SbUnoObject::implCreateDbgProperties( void )
+void SbUnoObject::implCreateDbgProperties()
 {
     Property aProp;
 
@@ -2817,7 +2817,7 @@ void SbUnoObject::implCreateDbgProperties( void )
     QuickInsert( (SbxVariable*)xVarRef );
 }
 
-void SbUnoObject::implCreateAll( void )
+void SbUnoObject::implCreateAll()
 {
     // throw away all existing methods and properties
     pMethods   = new SbxArray;
@@ -2882,7 +2882,7 @@ void SbUnoObject::implCreateAll( void )
 
 
 // output the value
-Any SbUnoObject::getUnoAny( void )
+Any SbUnoObject::getUnoAny()
 {
     Any aRetAny;
     if( bNeedIntrospection ) doIntrospection();
@@ -3770,7 +3770,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 static SbUnoServiceCtor* pFirstCtor = NULL;
 
-void clearUnoServiceCtors( void )
+void clearUnoServiceCtors()
 {
     SbUnoServiceCtor* pCtor = pFirstCtor;
     while( pCtor )
@@ -4006,7 +4006,7 @@ public:
         const Reference< XAllListener >& AllListener, const Any& Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
         throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
@@ -4057,7 +4057,7 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 }
 
 
-Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection(void)
+Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection()
     throw( RuntimeException, std::exception )
 {
     return Reference< XIntrospectionAccess >();
@@ -4899,7 +4899,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
 }
 
 // help method to create the dbg_-Properties
-void SbUnoStructRefObject::implCreateDbgProperties( void )
+void SbUnoStructRefObject::implCreateDbgProperties()
 {
     Property aProp;
 
@@ -4944,7 +4944,7 @@ void SbUnoStructRefObject::implCreateAll()
 }
 
  // output the value
-Any SbUnoStructRefObject::getUnoAny( void )
+Any SbUnoStructRefObject::getUnoAny()
 {
     return maMemberInfo.getValue();
 }

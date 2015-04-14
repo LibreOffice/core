@@ -56,9 +56,9 @@ public:
 public:
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual void SAL_CALL flush(void)
+    virtual void SAL_CALL flush()
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual void SAL_CALL closeOutput(void)
+    virtual void SAL_CALL closeOutput()
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
 private:
     char m_pcFile[256];
@@ -77,13 +77,13 @@ void OFileWriter::writeBytes(const Sequence< sal_Int8 >& aData)
 }
 
 
-void OFileWriter::flush(void)
+void OFileWriter::flush()
     throw  (NotConnectedException, BufferSizeExceededException, RuntimeException)
 {
     fflush( m_f );
 }
 
-void OFileWriter::closeOutput(void)
+void OFileWriter::closeOutput()
     throw  (NotConnectedException, BufferSizeExceededException, RuntimeException)
 {
     fclose( m_f );
@@ -115,11 +115,11 @@ public:
         sal_Int32 hTestHandle)
         throw  (    IllegalArgumentException,RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void)
+    virtual sal_Bool SAL_CALL testPassed()
         throw  (    RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw  (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)             throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException);
+    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings()             throw  (RuntimeException);
 
 private:
     void testSimple( const Reference< XExtendedDocumentHandler > &r );
@@ -152,7 +152,7 @@ public:
     ~AttributeListImpl();
 
 public:
-    virtual sal_Int16 SAL_CALL getLength(void) throw  (RuntimeException);
+    virtual sal_Int16 SAL_CALL getLength() throw  (RuntimeException);
     virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw  (RuntimeException);
     virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw  (RuntimeException);
     virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw  (RuntimeException);
@@ -199,7 +199,7 @@ struct AttributeListImpl_impl
 
 
 
-sal_Int16 AttributeListImpl::getLength(void) throw  (RuntimeException)
+sal_Int16 AttributeListImpl::getLength() throw  (RuntimeException)
 {
     return m_pImpl->vecAttribute.size();
 }
@@ -411,25 +411,25 @@ sal_Int32 OSaxWriterTest::test(
 
 
 
-sal_Bool OSaxWriterTest::testPassed(void)                   throw  (RuntimeException)
+sal_Bool OSaxWriterTest::testPassed()                   throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OSaxWriterTest::getErrors(void) throw  (RuntimeException)
+Sequence< OUString > OSaxWriterTest::getErrors() throw  (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OSaxWriterTest::getErrorExceptions(void)                    throw  (RuntimeException)
+Sequence< Any > OSaxWriterTest::getErrorExceptions()                    throw  (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OSaxWriterTest::getWarnings(void)                      throw  (RuntimeException)
+Sequence< OUString > OSaxWriterTest::getWarnings()                      throw  (RuntimeException)
 {
     return m_seqWarnings;
 }

@@ -52,8 +52,8 @@ class MediatorMapping : public uno_Mapping
     uno::Environment    m_to;
 
 public:
-    void acquire(void);
-    void release(void);
+    void acquire();
+    void release();
 
     void mapInterface(void                            ** ppOut,
                       void                             * pInterface,
@@ -113,14 +113,14 @@ MediatorMapping::~MediatorMapping()
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 }
 
-void MediatorMapping::acquire(void)
+void MediatorMapping::acquire()
 {
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 
     osl_atomic_increment(&m_refCount);
 }
 
-void MediatorMapping::release(void)
+void MediatorMapping::release()
 {
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 

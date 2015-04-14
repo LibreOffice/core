@@ -139,13 +139,13 @@ com::sun::star::uno::Any SAL_CALL
     return aReturn;
 }
 void SAL_CALL
-    ScAccessibleEditObject::acquire (void)
+    ScAccessibleEditObject::acquire()
     throw ()
 {
     ScAccessibleContextBase::acquire ();
 }
 void SAL_CALL
-    ScAccessibleEditObject::release (void)
+    ScAccessibleEditObject::release()
     throw ()
 {
     ScAccessibleContextBase::release ();
@@ -171,7 +171,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     return xRet;
 }
 
-Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen(void) const
+Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
         throw (uno::RuntimeException, std::exception)
 {
     Rectangle aScreenBounds;
@@ -200,7 +200,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen(void) const
     return aScreenBounds;
 }
 
-Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
+Rectangle ScAccessibleEditObject::GetBoundingBox() const
         throw (uno::RuntimeException, std::exception)
 {
     Rectangle aBounds( GetBoundingBoxOnScreen() );
@@ -235,7 +235,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
-    ScAccessibleEditObject::getAccessibleChildCount(void)
+    ScAccessibleEditObject::getAccessibleChildCount()
                     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -258,7 +258,7 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleEditObject::getAccessibleStateSet(void)
+    ScAccessibleEditObject::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -286,7 +286,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleEditObject::createAccessibleDescription(void)
+    ScAccessibleEditObject::createAccessibleDescription()
     throw (uno::RuntimeException)
 {
 //    OSL_FAIL("Should never be called, because is set in the constructor.")
@@ -294,7 +294,7 @@ OUString SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleEditObject::createAccessibleName(void)
+    ScAccessibleEditObject::createAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("Should never be called, because is set in the constructor.");
@@ -329,7 +329,7 @@ void SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
+OUString SAL_CALL ScAccessibleEditObject::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleEditObject");
@@ -338,7 +338,7 @@ OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleEditObject::getImplementationId(void)
+    ScAccessibleEditObject::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

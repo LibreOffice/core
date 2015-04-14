@@ -137,7 +137,7 @@ SlideSorterViewShell::SlideSorterViewShell (
     pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }
 
-SlideSorterViewShell::~SlideSorterViewShell (void)
+SlideSorterViewShell::~SlideSorterViewShell()
 {
     DisposeFunctions();
 
@@ -161,7 +161,7 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
     GetFrameView()->Disconnect();
 }
 
-void SlideSorterViewShell::Initialize (void)
+void SlideSorterViewShell::Initialize()
 {
     mpSlideSorter = SlideSorter::CreateSlideSorter(
         *this,
@@ -230,7 +230,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
     return pViewShell;
 }
 
-Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController (void)
+Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController()
 {
     Reference<drawing::XDrawSubController> xSubController;
 
@@ -286,7 +286,7 @@ void SlideSorterViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference<
     }
 }
 
-SlideSorter& SlideSorterViewShell::GetSlideSorter (void) const
+SlideSorter& SlideSorterViewShell::GetSlideSorter() const
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return *mpSlideSorter;
@@ -307,7 +307,7 @@ bool SlideSorterViewShell::RelocateToParentWindow (::vcl::Window* pParentWindow)
     return bSuccess;
 }
 
-::svl::IUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* SlideSorterViewShell::ImpGetUndoManager() const
 {
     SfxShell* pObjectBar = GetViewShellBase().GetViewShellManager()->GetTopShell();
     if (pObjectBar != NULL)
@@ -325,7 +325,7 @@ bool SlideSorterViewShell::RelocateToParentWindow (::vcl::Window* pParentWindow)
     }
 }
 
-SdPage* SlideSorterViewShell::getCurrentPage(void) const
+SdPage* SlideSorterViewShell::getCurrentPage() const
 {
     // since SlideSorterViewShell::GetActualPage() currently also
     // returns master pages, which is a wrong behaviour for GetActualPage(),
@@ -333,7 +333,7 @@ SdPage* SlideSorterViewShell::getCurrentPage(void) const
     return const_cast<SlideSorterViewShell*>(this)->GetActualPage();
 }
 
-SdPage* SlideSorterViewShell::GetActualPage (void)
+SdPage* SlideSorterViewShell::GetActualPage()
 {
     SdPage* pCurrentPage = NULL;
 
@@ -453,7 +453,7 @@ void SlideSorterViewShell::Paint (
         mpSlideSorter->GetController().Paint(rBBox,pWindow);
 }
 
-void SlideSorterViewShell::ArrangeGUIElements (void)
+void SlideSorterViewShell::ArrangeGUIElements()
 {
     if (IsActive())
     {
@@ -552,7 +552,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     }
 }
 
-void SlideSorterViewShell::WriteFrameViewData (void)
+void SlideSorterViewShell::WriteFrameViewData()
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     if (mpFrameView != NULL)
@@ -629,7 +629,7 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-void SlideSorterViewShell::UpdateScrollBars (void)
+void SlideSorterViewShell::UpdateScrollBars()
 {
     // Do not call the overwritten method of the base class: We do all the
     // scroll bar setup by ourselves.
@@ -679,7 +679,7 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
 }
 
 ::boost::shared_ptr<SlideSorterViewShell::PageSelection>
-    SlideSorterViewShell::GetPageSelection (void) const
+    SlideSorterViewShell::GetPageSelection() const
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetPageSelector().GetPageSelection();

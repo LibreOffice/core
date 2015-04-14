@@ -35,7 +35,7 @@ class ViewClipboard
 {
 public:
     ViewClipboard (::sd::View& rView);
-    virtual ~ViewClipboard (void);
+    virtual ~ViewClipboard();
 
     /** Handle the drop of a drag-and-drop action where the transferable
         contains a set of pages.

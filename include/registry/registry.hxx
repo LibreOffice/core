@@ -74,7 +74,7 @@ struct Registry_Api
 
 /** the API initialization function.
 */
-REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
+REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api();
 
 #ifdef __cplusplus
 }

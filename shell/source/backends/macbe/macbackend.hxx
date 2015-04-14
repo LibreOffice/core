@@ -53,14 +53,14 @@ public:
 
        @return   implementation name
     */
-    static OUString SAL_CALL getBackendName(void);
+    static OUString SAL_CALL getBackendName();
 
     /**
        Provides the supported services names
 
        @return   service names
     */
-    static uno::Sequence<OUString> SAL_CALL getBackendServiceNames(void);
+    static uno::Sequence<OUString> SAL_CALL getBackendServiceNames();
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -123,7 +123,7 @@ protected:
     MacOSXBackend();
 
     /** Destructor */
-    virtual ~MacOSXBackend(void);
+    virtual ~MacOSXBackend();
 };
 
 #endif // INCLUDED_SHELL_SOURCE_BACKENDS_MACBE_MACBACKEND_HXX

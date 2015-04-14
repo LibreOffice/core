@@ -21,7 +21,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-PanelDescriptor::PanelDescriptor (void)
+PanelDescriptor::PanelDescriptor()
     : msTitle(),
       mbIsTitleBarOptional(false),
       msId(),
@@ -53,7 +53,7 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
 {
 }
 
-PanelDescriptor::~PanelDescriptor (void)
+PanelDescriptor::~PanelDescriptor()
 {
 }
 

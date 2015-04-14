@@ -117,7 +117,7 @@ try
 /** destructor.
 */
 
-CMetaInfoReader::~CMetaInfoReader( void )
+CMetaInfoReader::~CMetaInfoReader()
 {
     delete m_pKeywords_Builder;
     delete m_pSimple_Builder;

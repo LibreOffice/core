@@ -64,7 +64,7 @@ OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException,
     return OUString("com.sun.star.comp.report.Group");
 }
 
-uno::Sequence< OUString> OGroup::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
+uno::Sequence< OUString> OGroup::getSupportedServiceNames_Static() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_GROUP;

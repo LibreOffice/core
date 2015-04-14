@@ -104,7 +104,7 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aRet(SC_LINKTARGETTYPE_COUNT);
     OUString* pArray = aRet.getArray();
@@ -124,12 +124,12 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( 
 
 // container::XElementAccess
 
-uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType(void) throw( uno::RuntimeException, std::exception )
+uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements() throw( uno::RuntimeException, std::exception )
 {
     return sal_True;
 }
@@ -159,7 +159,7 @@ void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // document::XLinkTargetSupplier
 
-uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks() throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< container::XNameAccess >  xCollection;
 
@@ -190,7 +190,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
 
 // beans::XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() ));
@@ -270,7 +270,7 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
 //    return uno::Any();
 }
 
-uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     return xCollection->getElementNames();
 }
@@ -282,12 +282,12 @@ sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName) throw( uno:
 
 // container::XElementAccess
 
-uno::Type SAL_CALL ScLinkTargetsObj::getElementType(void) throw( uno::RuntimeException, std::exception )
+uno::Type SAL_CALL ScLinkTargetsObj::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScLinkTargetsObj::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL ScLinkTargetsObj::hasElements() throw( uno::RuntimeException, std::exception )
 {
     return xCollection->hasElements();
 }

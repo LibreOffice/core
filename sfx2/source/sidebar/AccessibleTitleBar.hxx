@@ -37,7 +37,7 @@ protected:
 
 private:
     AccessibleTitleBar (VCLXWindow* pWindow);
-    virtual ~AccessibleTitleBar (void);
+    virtual ~AccessibleTitleBar();
 };
 
 } } // end of namespace sfx2::sidebar

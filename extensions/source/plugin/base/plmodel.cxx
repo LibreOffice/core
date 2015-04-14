@@ -54,7 +54,7 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException, s
 
 
 // XPluginManager_Impl
-Sequence< OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
+Sequence< OUString > PluginModel::getSupportedServiceNames_Static() throw()
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.plugin.PluginModel";
@@ -170,7 +170,7 @@ void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::dispose(void) throw(std::exception)
+void PluginModel::dispose() throw(std::exception)
 {
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;

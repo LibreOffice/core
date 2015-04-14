@@ -124,7 +124,7 @@ public:
 
     // IUnknown
     virtual ULONG STDMETHODCALLTYPE AddRef();
-    virtual ULONG STDMETHODCALLTYPE Release( void);
+    virtual ULONG STDMETHODCALLTYPE Release();
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject);
 
     // IStream
@@ -134,7 +134,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER libNewSize);
     virtual HRESULT STDMETHODCALLTYPE CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
     virtual HRESULT STDMETHODCALLTYPE Commit(DWORD grfCommitFlags);
-    virtual HRESULT STDMETHODCALLTYPE Revert(void);
+    virtual HRESULT STDMETHODCALLTYPE Revert();
     virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType);
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType);
     virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG *pstatstg, DWORD grfStatFlag);
@@ -155,12 +155,12 @@ StreamOnZipBuffer::StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buff
 
 // IUnknown methods
 
-ULONG STDMETHODCALLTYPE StreamOnZipBuffer::AddRef(void)
+ULONG STDMETHODCALLTYPE StreamOnZipBuffer::AddRef()
 {
     return InterlockedIncrement(&ref_count_);
 }
 
-ULONG STDMETHODCALLTYPE StreamOnZipBuffer::Release( void)
+ULONG STDMETHODCALLTYPE StreamOnZipBuffer::Release()
 {
     long refcnt = InterlockedDecrement(&ref_count_);
 
@@ -275,7 +275,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::CopyTo(IStream *, ULARGE_INTEGER, U
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Commit(DWORD)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Revert(void)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Revert()
 { return E_NOTIMPL; }
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
@@ -339,12 +339,12 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::QueryInterface(REFIID riid, void __RPC_F
     return E_NOINTERFACE;
 }
 
-ULONG STDMETHODCALLTYPE CThumbviewer::AddRef(void)
+ULONG STDMETHODCALLTYPE CThumbviewer::AddRef()
 {
     return InterlockedIncrement(&ref_count_);
 }
 
-ULONG STDMETHODCALLTYPE CThumbviewer::Release( void)
+ULONG STDMETHODCALLTYPE CThumbviewer::Release()
 {
     long refcnt = InterlockedDecrement(&ref_count_);
 

@@ -155,7 +155,7 @@ hyper_link_class_init (AtkHyperlinkClass *klass)
 }
 
 static GType
-hyper_link_get_type (void)
+hyper_link_get_type()
 {
     static GType type = 0;
 

@@ -83,7 +83,7 @@ namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
 namespace connectivity { namespace hsqldb
 {
-    void SAL_CALL OHsqlConnection::disposing(void)
+    void SAL_CALL OHsqlConnection::disposing()
     {
         m_aFlushListeners.disposeAndClear( EventObject( *this ) );
         OHsqlConnection_BASE::disposing();

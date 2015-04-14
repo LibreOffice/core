@@ -33,7 +33,7 @@ VisualState::VisualState (const sal_Int32 nPageId)
 {
 }
 
-VisualState::~VisualState (void)
+VisualState::~VisualState()
 {
     if (mnStateAnimationId != controller::Animator::NotAnAnimationId
          || mnLocationAnimationId != controller::Animator::NotAnAnimationId)

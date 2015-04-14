@@ -691,13 +691,13 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
     return pRetItem;
 }
 
-void StringResourceImpl::implModified( void )
+void StringResourceImpl::implModified()
 {
     m_bModified = true;
     implNotifyListeners();
 }
 
-void StringResourceImpl::implNotifyListeners( void )
+void StringResourceImpl::implNotifyListeners()
 {
     EventObject aEvent;
     aEvent.Source = static_cast< XInterface* >( (OWeakObject*)this );
@@ -729,13 +729,13 @@ bool StringResourceImpl::loadLocale( LocaleItem* pLocaleItem )
     return true;
 }
 
-void StringResourceImpl::implLoadAllLocales( void )
+void StringResourceImpl::implLoadAllLocales()
 {
     // Base implementation has nothing to load
 }
 
 
-Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory( void )
+Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1477,13 +1477,13 @@ public:
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
 
     void seek( sal_Int32 nPos );
-    sal_Int32 getPosition( void ) const
+    sal_Int32 getPosition() const
         { return m_nCurPos; }
 
-    sal_Int16 readInt16( void );
-    sal_Int32 readInt32( void );
-    sal_Unicode readUnicodeChar( void );
-    OUString readString( void );
+    sal_Int16 readInt16();
+    sal_Int32 readInt32();
+    sal_Unicode readUnicodeChar();
+    OUString readString();
 };
 
 BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XMultiComponentFactory > xMCF,
@@ -1527,7 +1527,7 @@ void BinaryInput::seek( sal_Int32 nPos )
 }
 
 
-sal_Int16 BinaryInput::readInt16( void )
+sal_Int16 BinaryInput::readInt16()
 {
     sal_Int16 nRet = 0;
     if( m_nCurPos + 2 <= m_nSize )
@@ -1541,7 +1541,7 @@ sal_Int16 BinaryInput::readInt16( void )
     return nRet;
 }
 
-sal_Int32 BinaryInput::readInt32( void )
+sal_Int32 BinaryInput::readInt32()
 {
     sal_Int32 nRet = 0;
     if( m_nCurPos + 4 <= m_nSize )
@@ -1559,7 +1559,7 @@ sal_Int32 BinaryInput::readInt32( void )
     return nRet;
 }
 
-sal_Unicode BinaryInput::readUnicodeChar( void )
+sal_Unicode BinaryInput::readUnicodeChar()
 {
     sal_uInt16 nRet = 0;
     if( m_nCurPos + 2 <= m_nSize )
@@ -1574,7 +1574,7 @@ sal_Unicode BinaryInput::readUnicodeChar( void )
     return cRet;
 }
 
-OUString BinaryInput::readString( void )
+OUString BinaryInput::readString()
 {
     OUStringBuffer aBuf;
     sal_Unicode c;
@@ -1697,7 +1697,7 @@ bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
     return bSuccess;
 }
 
-void StringResourcePersistenceImpl::implLoadAllLocales( void )
+void StringResourcePersistenceImpl::implLoadAllLocales()
 {
     for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
@@ -1770,7 +1770,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
 }
 
 // Scan locale properties files
-void StringResourcePersistenceImpl::implScanLocales( void )
+void StringResourcePersistenceImpl::implScanLocales()
 {
     // Dummy implementation, method not called for this
     // base class, but pure virtual not possible-
@@ -2542,7 +2542,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
 
 // Scan locale properties files
-void StringResourceWithStorageImpl::implScanLocales( void )
+void StringResourceWithStorageImpl::implScanLocales()
 {
     Reference< container::XNameAccess > xNameAccess( m_xStorage, UNO_QUERY );
     if( xNameAccess.is() )
@@ -2897,7 +2897,7 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
 
 
 // Scan locale properties files
-void StringResourceWithLocationImpl::implScanLocales( void )
+void StringResourceWithLocationImpl::implScanLocales()
 {
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     if( xFileAccess.is() && xFileAccess->isFolder( m_aLocation ) )
@@ -2935,7 +2935,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     return bSuccess;
 }
 
-const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFileAccess( void )
+const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFileAccess()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 

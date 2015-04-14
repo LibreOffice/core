@@ -63,11 +63,11 @@ PresenterPaneBase::PresenterPaneBase (
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
-PresenterPaneBase::~PresenterPaneBase (void)
+PresenterPaneBase::~PresenterPaneBase()
 {
 }
 
-void PresenterPaneBase::disposing (void)
+void PresenterPaneBase::disposing()
 {
     if (mxBorderWindow.is())
     {
@@ -116,13 +116,13 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-OUString PresenterPaneBase::GetTitle (void) const
+OUString PresenterPaneBase::GetTitle() const
 {
     return msTitle;
 }
 
 Reference<drawing::framework::XPaneBorderPainter>
-    PresenterPaneBase::GetPaneBorderPainter (void) const
+    PresenterPaneBase::GetPaneBorderPainter() const
 {
     return mxBorderPainter;
 }
@@ -156,7 +156,7 @@ void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
+awt::Point PresenterPaneBase::GetCalloutAnchor() const
 {
     return maCalloutAnchor;
 }
@@ -260,14 +260,14 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxPaneId;
 }
 
-sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return true;
@@ -338,12 +338,12 @@ void PresenterPaneBase::CreateWindows (
     }
 }
 
-Reference<awt::XWindow> PresenterPaneBase::GetBorderWindow (void) const
+Reference<awt::XWindow> PresenterPaneBase::GetBorderWindow() const
 {
     return mxBorderWindow;
 }
 
-void PresenterPaneBase::ToTop (void)
+void PresenterPaneBase::ToTop()
 {
     if (mxPresenterHelper.is())
         mxPresenterHelper->toTop(mxContentWindow);
@@ -411,7 +411,7 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
     }
 }
 
-void PresenterPaneBase::LayoutContextWindow (void)
+void PresenterPaneBase::LayoutContextWindow()
 {
     OSL_ASSERT(mxPaneId.is());
     OSL_ASSERT(mxBorderWindow.is());
@@ -432,7 +432,7 @@ void PresenterPaneBase::LayoutContextWindow (void)
     }
 }
 
-bool PresenterPaneBase::IsVisible (void) const
+bool PresenterPaneBase::IsVisible() const
 {
     Reference<awt::XWindow2> xWindow2 (mxBorderPainter, UNO_QUERY);
     if (xWindow2.is())
@@ -441,7 +441,7 @@ bool PresenterPaneBase::IsVisible (void) const
     return false;
 }
 
-void PresenterPaneBase::ThrowIfDisposed (void)
+void PresenterPaneBase::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

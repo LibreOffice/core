@@ -82,9 +82,9 @@ private:
 public:
                         DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, rtl_TextEncoding );
 
-    TOPIC               GetNextTopic( void );
+    TOPIC               GetNextTopic();
 
-    DATASET             GetNextDataset( void );
+    DATASET             GetNextDataset();
 
     const sal_Unicode*  ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet );
     bool                ScanFloatVal( const sal_Unicode* pStart );
@@ -94,7 +94,7 @@ public:
 
     static inline bool  IsV( const sal_Unicode* pRef );
 
-    inline bool         IsPlain( void ) const;
+    inline bool         IsPlain() const;
 };
 
 inline bool DifParser::IsBOT( const sal_Unicode* pRef )
@@ -137,7 +137,7 @@ inline bool DifParser::IsNumberEnding( const sal_Unicode cChar )
     return ( cChar == 0x00 );
 }
 
-inline bool DifParser::IsPlain( void ) const
+inline bool DifParser::IsPlain() const
 {
     return bPlain;
 }

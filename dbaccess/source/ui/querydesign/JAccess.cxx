@@ -41,7 +41,7 @@ namespace dbaui
     {
         return getImplementationName_Static();
     }
-    OUString OJoinDesignViewAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OJoinDesignViewAccess::getImplementationName_Static() throw( RuntimeException )
     {
         return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
     }

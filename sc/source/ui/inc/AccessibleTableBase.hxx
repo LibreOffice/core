@@ -198,7 +198,7 @@ public:
     /// Return the number of currently visible children.
     /// override to calculate this on demand
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount(void)
+        getAccessibleChildCount()
                     throw (::com::sun::star::uno::RuntimeException,
                            std::exception) SAL_OVERRIDE;
 
@@ -225,7 +225,7 @@ public:
 protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
-        createAccessibleDescription(void)
+        createAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Return the object's current name.
@@ -238,14 +238,14 @@ public:
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet(void)
+        getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the set of current states.
     // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet(void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XAccessibleSelection  ===========================================
@@ -291,7 +291,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName(void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XTypeProvider  ===================================================
@@ -304,7 +304,7 @@ public:
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:

@@ -50,8 +50,8 @@ public:
     void Save();
 
     // #29955 service for-loop-level
-    void IncForLevel( void ) { nForLevel++; }
-    void DecForLevel( void ) { nForLevel--; }
+    void IncForLevel() { nForLevel++; }
+    void DecForLevel() { nForLevel--; }
 
     static sal_uInt32 calcNewOffSet( sal_uInt8* pCode, sal_uInt16 nOffset );
     static sal_uInt16 calcLegacyOffSet( sal_uInt8* pCode, sal_uInt32 nOffset );

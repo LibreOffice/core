@@ -166,7 +166,7 @@ public:
     virtual void            SetPointerPos( long nX, long nY ) = 0;
 
     // flush output buffer
-    virtual void            Flush( void) = 0;
+    virtual void            Flush() = 0;
     virtual void            Flush( const Rectangle& );
     // flush output buffer, wait till outstanding operations are done
     virtual void            Sync() = 0;

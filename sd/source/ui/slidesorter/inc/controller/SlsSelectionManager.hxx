@@ -53,7 +53,7 @@ public:
     */
     SelectionManager (SlideSorter& rSlideSorter);
 
-    ~SelectionManager (void);
+    ~SelectionManager();
 
     /** Delete the currently selected slides.  When this method returns the
         selection is empty.
@@ -96,14 +96,14 @@ public:
         position of the associated insertion marker is stored here and reset
         the next time the selection changes.
     */
-    sal_Int32 GetInsertionPosition (void) const;
+    sal_Int32 GetInsertionPosition() const;
 
     /** Store an insertion position temporarily.  It is reset when the
         selection changes the next time.
     */
     void SetInsertionPosition (const sal_Int32 nInsertionPosition);
 
-    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver (void) const { return mpSelectionObserver;}
+    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver() const { return mpSelectionObserver;}
 
 private:
     SlideSorter& mrSlideSorter;

@@ -50,14 +50,14 @@ VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
 
 
 
-VCLXAccessibleListBox::~VCLXAccessibleListBox (void)
+VCLXAccessibleListBox::~VCLXAccessibleListBox()
 {
 }
 
 
 
 
-bool VCLXAccessibleListBox::IsValid (void) const
+bool VCLXAccessibleListBox::IsValid() const
 {
     return static_cast<ListBox*>(GetWindow()) != NULL;
 
@@ -76,7 +76,7 @@ void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindow
 
 //=====  XServiceInfo  ========================================================
 
-OUString VCLXAccessibleListBox::getImplementationName (void)
+OUString VCLXAccessibleListBox::getImplementationName()
     throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
@@ -85,7 +85,7 @@ OUString VCLXAccessibleListBox::getImplementationName (void)
 
 
 
-Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();

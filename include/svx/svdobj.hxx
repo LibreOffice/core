@@ -500,7 +500,7 @@ public:
     // @return
     //     If no navigation position has been explicitly defined then the
     //     result of GetOrdNum() is returned.
-    sal_uInt32 GetNavigationPosition (void);
+    sal_uInt32 GetNavigationPosition();
 
     // Set the position in the navigation position to the given value.
     // This method is typically used only by the model after a change to

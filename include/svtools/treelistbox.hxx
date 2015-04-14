@@ -764,10 +764,10 @@ public:
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
     void            InitStartEntry();
 
-    virtual PopupMenu* CreateContextMenu( void );
+    virtual PopupMenu* CreateContextMenu();
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
-    void            EnableContextMenuHandling( void );
+    void            EnableContextMenuHandling();
 
     void            EnableList( bool _bEnable );
 

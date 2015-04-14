@@ -74,7 +74,7 @@ public:
 
     void                SetFontWidthScale( sal_uInt16 nScaleInPercent );
 
-    void                AutoCorrectFontColor( void );
+    void                AutoCorrectFontColor();
 
     void                SetPreviewText( const OUString& rString );
     void                SetFontNameAsPreviewText();

@@ -495,7 +495,7 @@ void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (Runt
         pFormShell->SetDesignMode( _DesignMode );
 }
 
-uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(GetView())
@@ -511,7 +511,7 @@ uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw(
         throw uno::RuntimeException();
 }
 
-uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(m_pView)
@@ -844,7 +844,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
     OSL_FAIL("not implemented");
 }
 
-OUString SwXTextView::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextView::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextView");
 }
@@ -854,7 +854,7 @@ sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( Runti
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextView::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -898,7 +898,7 @@ bool SwXTextViewCursor::IsTextSelection( bool bAllowTables ) const
     return bRes;
 }
 
-sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextViewCursor::isVisible() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
@@ -911,7 +911,7 @@ void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeExc
     OSL_FAIL("not implemented");
 }
 
-awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException, std::exception )
+awt::Point SwXTextViewCursor::getPosition() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     awt::Point aRet;
@@ -1265,7 +1265,7 @@ sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeExcep
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextViewCursor::jumpToNextPage() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1276,7 +1276,7 @@ sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException, s
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToPreviousPage(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextViewCursor::jumpToPreviousPage() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1287,7 +1287,7 @@ sal_Bool SwXTextViewCursor::jumpToPreviousPage(void) throw( uno::RuntimeExceptio
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToEndOfPage(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextViewCursor::jumpToEndOfPage() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1298,7 +1298,7 @@ sal_Bool SwXTextViewCursor::jumpToEndOfPage(void) throw( uno::RuntimeException, 
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToStartOfPage(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextViewCursor::jumpToStartOfPage() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1716,7 +1716,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 }
 
-OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextViewCursor::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextViewCursor");
 }
@@ -1726,7 +1726,7 @@ sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw(
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();

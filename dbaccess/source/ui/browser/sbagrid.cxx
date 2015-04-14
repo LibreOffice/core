@@ -127,7 +127,7 @@ OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException
     return OUString("com.sun.star.comp.dbu.SbaXGridControl");
 }
 
-Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(3);
     aSupported[0] = "com.sun.star.form.control.InteractionGridControl";
@@ -264,7 +264,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
     pMultiplexer->removeInterface( _rxListener );
 }
 
-void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::dispose() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -298,7 +298,7 @@ SbaXGridPeer::~SbaXGridPeer()
 {
 }
 
-void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::dispose() throw( RuntimeException, std::exception )
 {
     EventObject aEvt(*this);
 

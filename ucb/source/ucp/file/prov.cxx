@@ -425,7 +425,7 @@ XPropertySetInfoImpl2::hasPropertyByName(
 
 
 
-void SAL_CALL FileProvider::initProperties( void )
+void SAL_CALL FileProvider::initProperties()
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_xPropertySetInfo.is() )

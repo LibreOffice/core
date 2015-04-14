@@ -57,13 +57,13 @@ public:
         sal_uInt16 nChildWindowId,
         ViewShellBase& rViewShellBase,
         ::std::unique_ptr<SfxShell> && pShell);
-    virtual ~ChildWindowPane (void);
+    virtual ~ChildWindowPane();
 
     /** Hide the pane.  To make the pane visible again, call GetWindow().
     */
-    void Hide (void);
+    void Hide();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** This returns the content window when the child window is already
         visible.  Otherwise <NULL/> is returned.  In that case a later call
@@ -72,13 +72,13 @@ public:
         Note that GetWindow() may return different Window pointers when
         Hide() is called in between.
     */
-    virtual vcl::Window* GetWindow (void) SAL_OVERRIDE;
+    virtual vcl::Window* GetWindow() SAL_OVERRIDE;
 
     /** The local getWindow() first calls GetWindow() to provide a valid
         window pointer before forwarding the call to the base class.
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>
-        SAL_CALL getWindow (void)
+        SAL_CALL getWindow()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     DECLARE_XINTERFACE()

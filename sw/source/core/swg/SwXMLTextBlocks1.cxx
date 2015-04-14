@@ -416,7 +416,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
     return nRes;
 }
 
-void SwXMLTextBlocks::ReadInfo( void )
+void SwXMLTextBlocks::ReadInfo()
 {
     try
     {
@@ -466,7 +466,7 @@ void SwXMLTextBlocks::ReadInfo( void )
     {
     }
 }
-void SwXMLTextBlocks::WriteInfo( void )
+void SwXMLTextBlocks::WriteInfo()
 {
     if ( xBlkRoot.is() || 0 == OpenFile ( false ) )
     {

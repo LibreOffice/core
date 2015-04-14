@@ -316,8 +316,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw() SAL_OVERRIDE;
     virtual OUString SAL_CALL getImplementationName() throw() SAL_OVERRIDE;
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  ) SAL_OVERRIDE;
-    static Sequence< OUString > getSupportedServiceNames_Static(void) throw(  );
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  ) SAL_OVERRIDE;
+    static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
     static OUString                getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */

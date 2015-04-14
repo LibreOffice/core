@@ -55,7 +55,7 @@ private:
         outline view seems to have a bug.  Therefore this method is called
         whenever a new undo action is added.
     */
-    void ClearLinkedRedoActions (void);
+    void ClearLinkedRedoActions();
 };
 
 }

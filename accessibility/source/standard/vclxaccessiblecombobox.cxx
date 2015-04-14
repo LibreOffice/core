@@ -39,14 +39,14 @@ VCLXAccessibleComboBox::VCLXAccessibleComboBox (VCLXWindow* pVCLWindow)
 
 
 
-VCLXAccessibleComboBox::~VCLXAccessibleComboBox (void)
+VCLXAccessibleComboBox::~VCLXAccessibleComboBox()
 {
 }
 
 
 
 
-bool VCLXAccessibleComboBox::IsValid (void) const
+bool VCLXAccessibleComboBox::IsValid() const
 {
     return static_cast<ComboBox*>(GetWindow()) != NULL;
 
@@ -65,7 +65,7 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 
 //=====  XServiceInfo  ========================================================
 
-OUString VCLXAccessibleComboBox::getImplementationName (void)
+OUString VCLXAccessibleComboBox::getImplementationName()
     throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleComboBox" );
@@ -74,7 +74,7 @@ OUString VCLXAccessibleComboBox::getImplementationName (void)
 
 
 
-Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();

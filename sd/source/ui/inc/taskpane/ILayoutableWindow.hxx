@@ -33,7 +33,7 @@ public:
     /** This method is called by layoutable controls when they have to be
         resized.
     */
-    virtual void RequestResize (void) = 0;
+    virtual void RequestResize() = 0;
 
 protected:
     ~ILayouter() {}
@@ -45,14 +45,14 @@ protected:
 class ILayoutableWindow
 {
 public:
-    virtual ~ILayoutableWindow (void) {};
+    virtual ~ILayoutableWindow() {};
 
     /** Return the preferred size without constraints on either the
         height or the width.
         The size the window will later be set to may but does not have
         to be equal to this size.
     */
-    virtual Size GetPreferredSize (void) = 0;
+    virtual Size GetPreferredSize() = 0;
 
     /** Return the preferred width with the constraint, that the
         window will be set to the given height.
@@ -73,18 +73,18 @@ public:
         the return value of this method determines whether the height
         may be modified as well.
     */
-    virtual bool IsResizable (void) = 0;
+    virtual bool IsResizable() = 0;
 
     /** Return the window so that its size and position can be set.
         @return
             Returns the window which is layouted or NULL to indicate
             that the object is in an invalid state.
     */
-    virtual vcl::Window* GetWindow (void) = 0;
+    virtual vcl::Window* GetWindow() = 0;
 
     /** Return the minimal width of the window.
     */
-    virtual sal_Int32 GetMinimumWidth (void) = 0;
+    virtual sal_Int32 GetMinimumWidth() = 0;
 };
 
 } } // end of namespace ::sd::toolpanel

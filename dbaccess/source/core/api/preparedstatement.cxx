@@ -139,7 +139,7 @@ void OPreparedStatement::disposing()
 }
 
 // ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getColumns(void) throw( RuntimeException, std::exception )
+Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getColumns() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -173,7 +173,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
 }
 
 // XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQLException, RuntimeException, std::exception )
+Reference< XResultSetMetaData > OPreparedStatement::getMetaData() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -220,7 +220,7 @@ sal_Bool OPreparedStatement::execute() throw( SQLException, RuntimeException, st
     return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->execute();
 }
 
-Reference< XConnection > OPreparedStatement::getConnection(void) throw( SQLException, RuntimeException, std::exception )
+Reference< XConnection > OPreparedStatement::getConnection() throw( SQLException, RuntimeException, std::exception )
 {
     return Reference< XConnection > (m_xParent, UNO_QUERY);
 }

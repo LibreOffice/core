@@ -62,7 +62,7 @@ SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter()
 {
 }
 
-OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

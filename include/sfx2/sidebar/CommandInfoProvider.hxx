@@ -43,7 +43,7 @@ public:
 
         Lifetime control should work but could be more elegant.
     */
-    static CommandInfoProvider& Instance (void);
+    static CommandInfoProvider& Instance();
 
     /** Return a label for the given command.
         @param rsCommandName
@@ -71,13 +71,13 @@ public:
     ::rtl::OUString msCachedModuleIdentifier;
     css::uno::Reference<css::lang::XComponent> mxFrameListener;
 
-    CommandInfoProvider (void);
-    ~CommandInfoProvider (void);
+    CommandInfoProvider();
+    ~CommandInfoProvider();
 
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration (void);
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration (void);
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration(void);
-    ::rtl::OUString GetModuleIdentifier (void);
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
+    ::rtl::OUString GetModuleIdentifier();
     ::rtl::OUString GetCommandShortcut (const ::rtl::OUString& rCommandName);
     css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const ::rtl::OUString& rsCommandName);

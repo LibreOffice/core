@@ -44,26 +44,26 @@ public:
         const PanelDescriptor& rPanelDescriptor,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
-        const ::boost::function<void(void)>& rDeckLayoutTrigger,
-        const ::boost::function<Context(void)>& rContextAccess);
-    virtual ~Panel (void);
+        const ::boost::function<void()>& rDeckLayoutTrigger,
+        const ::boost::function<Context()>& rContextAccess);
+    virtual ~Panel();
 
-    void Dispose (void);
+    void Dispose();
 
-    PanelTitleBar* GetTitleBar (void) const;
-    bool IsTitleBarOptional (void) const { return mbIsTitleBarOptional;}
+    PanelTitleBar* GetTitleBar() const;
+    bool IsTitleBarOptional() const { return mbIsTitleBarOptional;}
     void SetUIElement (const css::uno::Reference<css::ui::XUIElement>& rxElement);
-    css::uno::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const { return mxPanelComponent;}
-    css::uno::Reference<css::awt::XWindow> GetElementWindow (void);
+    css::uno::Reference<css::ui::XSidebarPanel> GetPanelComponent() const { return mxPanelComponent;}
+    css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded (const bool bIsExpanded);
-    bool IsExpanded (void) const { return mbIsExpanded;}
+    bool IsExpanded() const { return mbIsExpanded;}
     bool HasIdPredicate (const ::rtl::OUString& rsId) const;
-    const ::rtl::OUString& GetId (void) const { return msPanelId;}
+    const ::rtl::OUString& GetId() const { return msPanelId;}
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual void Activate (void) SAL_OVERRIDE;
+    virtual void Activate() SAL_OVERRIDE;
 
 private:
     const ::rtl::OUString msPanelId;
@@ -72,8 +72,8 @@ private:
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
-    const ::boost::function<void(void)> maDeckLayoutTrigger;
-    const ::boost::function<Context(void)> maContextAccess;
+    const ::boost::function<void()> maDeckLayoutTrigger;
+    const ::boost::function<Context()> maContextAccess;
 };
 typedef ::boost::shared_ptr<Panel> SharedPanel;
 typedef ::std::vector<SharedPanel> SharedPanelContainer;

@@ -61,7 +61,7 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
 
     Point       aRelPos;
 
-    void InitColors_Impl( void );
+    void InitColors_Impl();
     void InitAllRects_Impl();
     void CalcBoundRect_Impl(Rectangle &rRect);
     Rectangle DrawInnerFrame_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);

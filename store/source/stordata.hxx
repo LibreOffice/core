@@ -306,7 +306,7 @@ struct OStorePageNameBlock
 
     /** initialize.
     */
-    void initialize (void)
+    void initialize()
     {
         m_aGuard  = G();
         m_aKey    = K();
@@ -316,7 +316,7 @@ struct OStorePageNameBlock
 
     /** Construction.
     */
-    OStorePageNameBlock (void)
+    OStorePageNameBlock()
         : m_aGuard(), m_aKey(), m_nAttrib (0)
     {
         memset (m_pData, 0, sizeof(m_pData));
@@ -373,7 +373,7 @@ struct OStoreDirectoryDataBlock
 
         /** Construction.
         */
-        LinkDescriptor (void)
+        LinkDescriptor()
             : m_nIndex0 ((sal_uInt16)(~0)),
               m_nIndex1 ((sal_uInt16)(~0)),
               m_nIndex2 ((sal_uInt16)(~0)),
@@ -394,7 +394,7 @@ struct OStoreDirectoryDataBlock
 
         /** initialize.
         */
-        void initialize (void)
+        void initialize()
         {
           memset(m_pDirect, STORE_PAGE_NULL, sizeof(m_pDirect));
           memset(m_pSingle, STORE_PAGE_NULL, sizeof(m_pSingle));
@@ -404,7 +404,7 @@ struct OStoreDirectoryDataBlock
 
         /** Construction.
         */
-        LinkTable (void)
+        LinkTable()
         {
           initialize();
         }
@@ -422,7 +422,7 @@ struct OStoreDirectoryDataBlock
 
     /** initialize.
     */
-    void initialize (void)
+    void initialize()
     {
         m_aGuard = G();
         m_aTable.initialize();
@@ -431,7 +431,7 @@ struct OStoreDirectoryDataBlock
 
     /** Construction.
     */
-    OStoreDirectoryDataBlock (void)
+    OStoreDirectoryDataBlock()
         : m_aGuard(), m_aTable(), m_nDataLen (0)
     {}
 
@@ -575,7 +575,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
 
     /** initialize.
     */
-    void initialize (void)
+    void initialize()
     {
         base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
         base::m_aDescr.m_nUsed  = store::htons(self::thePageSize);
@@ -687,7 +687,7 @@ public:
 
     /** attrib.
     */
-    sal_uInt32 attrib (void) const
+    sal_uInt32 attrib() const
     {
         return store::ntohl(PAGE().m_aNameBlock.m_nAttrib);
     }
@@ -699,7 +699,7 @@ public:
 
     /** key.
     */
-    OStorePageKey key (void) const
+    OStorePageKey key() const
     {
         return PAGE().m_aNameBlock.m_aKey;
     }
@@ -711,7 +711,7 @@ public:
 
     /** path.
     */
-    sal_uInt32 path (void) const
+    sal_uInt32 path() const
     {
         page const & rPage = PAGE();
         const sal_Char * pszName = rPage.m_aNameBlock.m_pData;
@@ -729,7 +729,7 @@ public:
 
     /** dataLength.
     */
-    sal_uInt32 dataLength (void) const
+    sal_uInt32 dataLength() const
     {
         return store::ntohl(PAGE().m_aDataBlock.m_nDataLen);
     }

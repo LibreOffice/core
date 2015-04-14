@@ -39,7 +39,7 @@ LineWidthValueSet::LineWidthValueSet (
 
 
 
-LineWidthValueSet::~LineWidthValueSet (void)
+LineWidthValueSet::~LineWidthValueSet()
 {
     delete pVDev;
     delete[] strUnit;

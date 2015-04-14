@@ -38,7 +38,7 @@ class IAccessibleParent
 public:
     /** Allow for a virtual destructor.
     */
-    virtual ~IAccessibleParent (void){};
+    virtual ~IAccessibleParent(){};
 
     /** A call to this method requests the implementor to replace one child
         with another and send the appropriate notifications.  That are two

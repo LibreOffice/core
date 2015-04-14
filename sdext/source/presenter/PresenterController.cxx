@@ -187,11 +187,11 @@ PresenterController::PresenterController (
     }
 }
 
-PresenterController::~PresenterController (void)
+PresenterController::~PresenterController()
 {
 }
 
-void PresenterController::disposing (void)
+void PresenterController::disposing()
 {
     maInstances.erase(mxController->getFrame());
 
@@ -320,7 +320,7 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
     }
 }
 
-void PresenterController::UpdatePaneTitles (void)
+void PresenterController::UpdatePaneTitles()
 {
     if ( ! mxSlideShowController.is())
         return;
@@ -415,7 +415,7 @@ void PresenterController::UpdatePaneTitles (void)
     }
 }
 
-void PresenterController::UpdateViews (void)
+void PresenterController::UpdateViews()
 {
     // Tell all views about the slides they should display.
     PresenterPaneContainer::PaneList::const_iterator iPane;
@@ -449,43 +449,43 @@ PresenterTheme::SharedFontDescriptor
     return PresenterTheme::SharedFontDescriptor();
 }
 
-::boost::shared_ptr<PresenterTheme> PresenterController::GetTheme (void) const
+::boost::shared_ptr<PresenterTheme> PresenterController::GetTheme() const
 {
     return mpTheme;
 }
 
-::rtl::Reference<PresenterWindowManager> PresenterController::GetWindowManager (void) const
+::rtl::Reference<PresenterWindowManager> PresenterController::GetWindowManager() const
 {
     return mpWindowManager;
 }
 
 Reference<presentation::XSlideShowController>
-    PresenterController::GetSlideShowController(void) const
+    PresenterController::GetSlideShowController() const
 {
     return mxSlideShowController;
 }
 
-rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer (void) const
+rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer() const
 {
     return mpPaneContainer;
 }
 
-::rtl::Reference<PresenterPaneBorderPainter> PresenterController::GetPaneBorderPainter (void) const
+::rtl::Reference<PresenterPaneBorderPainter> PresenterController::GetPaneBorderPainter() const
 {
     return mpPaneBorderPainter;
 }
 
-::boost::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper (void) const
+::boost::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper() const
 {
     return mpCanvasHelper;
 }
 
-Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper (void) const
+Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper() const
 {
     return mxPresenterHelper;
 }
 
-::boost::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager (void) const
+::boost::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager() const
 {
     return mpPaintManager;
 }
@@ -568,12 +568,12 @@ util::URL PresenterController::CreateURLFromString (const OUString& rsURL) const
 }
 
 Reference<drawing::framework::XConfigurationController>
-    PresenterController::GetConfigurationController (void) const
+    PresenterController::GetConfigurationController() const
 {
     return mxConfigurationController;
 }
 
-Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
+Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide() const
 {
     return mxCurrentSlide;
 }
@@ -1142,7 +1142,7 @@ void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
         mpTheme.reset(new PresenterTheme(mxComponentContext, OUString(), rxPane->getCanvas()));
 }
 
-double PresenterController::GetSlideAspectRatio (void) const
+double PresenterController::GetSlideAspectRatio() const
 {
     double nSlideAspectRatio (28.0/21.0);
 
@@ -1203,7 +1203,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
             0));
 }
 
-void PresenterController::ThrowIfDisposed (void) const
+void PresenterController::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1214,7 +1214,7 @@ void PresenterController::ThrowIfDisposed (void) const
     }
 }
 
-void PresenterController::SwitchMonitors (void)
+void PresenterController::SwitchMonitors()
 {
     Reference<lang::XEventListener> xScreen( mxScreen );
     if (!xScreen.is())

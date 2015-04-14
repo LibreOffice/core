@@ -81,7 +81,7 @@ class BasicPaneFactory::PaneContainer
     : public ::std::vector<PaneDescriptor>
 {
 public:
-    PaneContainer (void) {}
+    PaneContainer() {}
 };
 
 //===== PaneFactory ===========================================================
@@ -96,11 +96,11 @@ BasicPaneFactory::BasicPaneFactory (
 {
 }
 
-BasicPaneFactory::~BasicPaneFactory (void)
+BasicPaneFactory::~BasicPaneFactory()
 {
 }
 
-void SAL_CALL BasicPaneFactory::disposing (void)
+void SAL_CALL BasicPaneFactory::disposing()
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
@@ -427,7 +427,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     return xPane;
 }
 
-void BasicPaneFactory::ThrowIfDisposed (void) const
+void BasicPaneFactory::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

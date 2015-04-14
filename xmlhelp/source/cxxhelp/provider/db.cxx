@@ -122,7 +122,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
     }
 }
 
-void Hdf::releaseHashMap( void )
+void Hdf::releaseHashMap()
 {
     if( m_pStringToDataMap != NULL )
     {
@@ -205,7 +205,7 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
     return bSuccess;
 }
 
-bool Hdf::startIteration( void )
+bool Hdf::startIteration()
 {
     bool bSuccess = false;
 
@@ -246,7 +246,7 @@ bool Hdf::getNextKeyAndValue( HDFData& rKey, HDFData& rValue )
     return bSuccess;
 }
 
-void Hdf::stopIteration( void )
+void Hdf::stopIteration()
 {
     m_aItData = Sequence<sal_Int8>();
     m_pItData = NULL;

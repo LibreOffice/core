@@ -172,7 +172,7 @@ class SwFrmPage: public SfxTabPage
     void setOptimalFrmWidth();
     void setOptimalRelWidth();
 
-    void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
+    void            EnableGraficMode();   // hides auto check boxes and re-org controls for "Real Size" button
 
     SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmPage();
@@ -195,7 +195,7 @@ public:
     void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFmt);
     void            SetFrmType(const OUString &rType) { sDlgType  = rType; }
-    inline bool     IsInGraficMode( void ) { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
+    inline bool     IsInGraficMode() { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 

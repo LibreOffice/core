@@ -54,7 +54,7 @@ class InsertionIndicatorOverlay
 {
 public:
     InsertionIndicatorOverlay (SlideSorter& rSlideSorter);
-    virtual ~InsertionIndicatorOverlay (void);
+    virtual ~InsertionIndicatorOverlay();
 
     virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator) SAL_OVERRIDE;
 
@@ -66,17 +66,17 @@ public:
     */
     void SetLocation (const Point& rPosition);
 
-    Size GetSize (void) const;
+    Size GetSize() const;
 
     virtual void Paint (
         OutputDevice& rDevice,
         const Rectangle& rRepaintArea) SAL_OVERRIDE;
 
-    bool IsVisible (void) const { return mbIsVisible;}
-    void Hide (void);
-    void Show (void);
+    bool IsVisible() const { return mbIsVisible;}
+    void Hide();
+    void Show();
 
-    Rectangle GetBoundingBox (void) const;
+    Rectangle GetBoundingBox() const;
 
 private:
     SlideSorter& mrSlideSorter;

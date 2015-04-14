@@ -177,7 +177,7 @@ bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
-void CoreTextFontData::ReadOs2Table( void ) const
+void CoreTextFontData::ReadOs2Table() const
 {
     // read this only once per font
     if( mbOs2Read )
@@ -204,7 +204,7 @@ void CoreTextFontData::ReadOs2Table( void ) const
     // TODO: also analyze panose info, etc.
 }
 
-void CoreTextFontData::ReadMacCmapEncoding( void ) const
+void CoreTextFontData::ReadMacCmapEncoding() const
 {
     // read this only once per font
     if( mbCmapEncodingRead )

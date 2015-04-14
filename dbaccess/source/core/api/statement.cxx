@@ -160,7 +160,7 @@ void OStatementBase::disposing()
 }
 
 // XCloseable
-void OStatementBase::close(void) throw( SQLException, RuntimeException, std::exception )
+void OStatementBase::close() throw( SQLException, RuntimeException, std::exception )
 {
     {
         MutexGuard aGuard( m_aMutex );
@@ -287,7 +287,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 }
 
 // XWarningsSupplier
-Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException, std::exception )
+Any OStatementBase::getWarnings() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -295,7 +295,7 @@ Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException, std
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
 }
 
-void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException, std::exception )
+void OStatementBase::clearWarnings() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -304,7 +304,7 @@ void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException, 
 }
 
 // ::com::sun::star::util::XCancellable
-void OStatementBase::cancel(void) throw( RuntimeException, std::exception )
+void OStatementBase::cancel() throw( RuntimeException, std::exception )
 {
     // no blocking as cancel is typically called from a different thread
     ClearableMutexGuard aCancelGuard(m_aCancelMutex);
@@ -528,7 +528,7 @@ Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeEx
 }
 
 
-Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException, std::exception )
+Reference< XConnection > OStatement::getConnection() throw( SQLException, RuntimeException, std::exception )
 {
     return Reference< XConnection >( m_xParent, UNO_QUERY );
 }

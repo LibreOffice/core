@@ -55,7 +55,7 @@ class PresenterPaneBorderPainter
 public:
     PresenterPaneBorderPainter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPaneBorderPainter (void);
+    virtual ~PresenterPaneBorderPainter();
 
     /** Transform the bounding box of the window content to the outer
         bounding box of the border that is painted around it.
@@ -136,9 +136,9 @@ private:
     */
     bool ProvideTheme (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    bool ProvideTheme (void);
+    bool ProvideTheme();
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 

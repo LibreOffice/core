@@ -91,7 +91,7 @@ public:
     HRESULT DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
-    BOOL IsThemeActive( void );
+    BOOL IsThemeActive();
 };
 
 static VisualStylesAPI vsAPI;
@@ -174,7 +174,7 @@ HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, 
         return S_FALSE;
 }
 
-BOOL VisualStylesAPI::IsThemeActive( void )
+BOOL VisualStylesAPI::IsThemeActive()
 {
     if(lpfnIsThemeActive)
         return (*lpfnIsThemeActive) ();
@@ -185,7 +185,7 @@ BOOL VisualStylesAPI::IsThemeActive( void )
 /*********************************************************
  * Initialize XP theming and local stuff
  *********************************************************/
-void SalData::initNWF( void )
+void SalData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -196,7 +196,7 @@ void SalData::initNWF( void )
 // *********************************************************
 // * Release theming handles
 // ********************************************************
-void SalData::deInitNWF( void )
+void SalData::deInitNWF()
 {
     ThemeMap::iterator iter = aThemeMap.begin();
     while( iter != aThemeMap.end() )

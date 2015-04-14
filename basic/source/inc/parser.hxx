@@ -88,7 +88,7 @@ public:
 
     // from 31.3.1996, search symbol in the runtime-library
     SbiSymDef* CheckRTLForSym( const OUString& rSym, SbxDataType eType );
-    void AddConstants( void );
+    void AddConstants();
 
     bool HasGlobalCode();
 

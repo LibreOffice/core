@@ -148,7 +148,7 @@ private:
     DECL_LINK( RotationHdl, void * );
     DECL_LINK( FlipHdl, ToolBox * );
 
-    void SetupIcons(void);
+    void SetupIcons();
     void Initialize();
     void executePosX();
     void executePosY();

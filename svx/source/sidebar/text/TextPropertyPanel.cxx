@@ -114,7 +114,7 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     mlKerning = 0;
 }
 
-TextPropertyPanel::~TextPropertyPanel (void)
+TextPropertyPanel::~TextPropertyPanel()
 {
 }
 
@@ -168,12 +168,12 @@ void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
     SetupToolboxItems();
 }
 
-void TextPropertyPanel::EndSpacingPopupMode (void)
+void TextPropertyPanel::EndSpacingPopupMode()
 {
     maCharSpacePopup.Hide();
 }
 
-void TextPropertyPanel::EndUnderlinePopupMode (void)
+void TextPropertyPanel::EndUnderlinePopupMode()
 {
     maUnderlinePopup.Hide();
 }
@@ -194,7 +194,7 @@ void TextPropertyPanel::InitToolBoxSpacing()
     mpToolBoxSpacing->SetSelectHdl( aLink );
 }
 
-void TextPropertyPanel::SetupToolboxItems (void)
+void TextPropertyPanel::SetupToolboxItems()
 {
     maUnderlineControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_UNDERLINE));
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, mpToolBoxSpacing->GetItemId(UNO_SPACING));

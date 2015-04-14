@@ -35,7 +35,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarDialControl(vcl
     return new SidebarDialControl(pParent, WB_TABSTOP);
 }
 
-SidebarDialControl::~SidebarDialControl (void)
+SidebarDialControl::~SidebarDialControl()
 {
 }
 

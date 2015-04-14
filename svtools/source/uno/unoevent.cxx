@@ -151,7 +151,7 @@ sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames(void)
+Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSequence(1);

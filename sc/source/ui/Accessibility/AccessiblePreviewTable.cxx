@@ -603,7 +603,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 //====  internal  =========================================================
 
-OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription()
                     throw (uno::RuntimeException)
 {
     OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));

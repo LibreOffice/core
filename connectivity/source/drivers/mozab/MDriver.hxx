@@ -74,7 +74,7 @@ namespace connectivity
             MozabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -92,7 +92,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException);
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        & getMSFactory(void) const { return m_xMSFactory; }
+                        & getMSFactory() const { return m_xMSFactory; }
 
         private:
             EDriverType impl_classifyURL( const OUString& url );

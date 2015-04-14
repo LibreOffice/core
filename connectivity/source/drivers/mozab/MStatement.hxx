@@ -155,7 +155,7 @@ namespace connectivity
             using OCommonStatement_IBASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
 
             // XInterface
             virtual void SAL_CALL release() throw();

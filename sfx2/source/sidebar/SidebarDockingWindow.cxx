@@ -51,12 +51,12 @@ SidebarDockingWindow::SidebarDockingWindow(
     }
 }
 
-SidebarDockingWindow::~SidebarDockingWindow (void)
+SidebarDockingWindow::~SidebarDockingWindow()
 {
     DoDispose();
 }
 
-void SidebarDockingWindow::DoDispose (void)
+void SidebarDockingWindow::DoDispose()
 {
     Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpSidebarController.get()), UNO_QUERY);
     mpSidebarController.clear();
@@ -75,7 +75,7 @@ void SidebarDockingWindow::GetFocus()
 }
 
 // fdo#87217
-bool SidebarDockingWindow::Close (void)
+bool SidebarDockingWindow::Close()
 {
     return SfxDockingWindow::Close();
 }

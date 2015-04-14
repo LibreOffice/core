@@ -55,9 +55,9 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterHelpView (void);
+    virtual ~PresenterHelpView();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // lang::XEventListener
 
@@ -86,10 +86,10 @@ public:
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -107,22 +107,22 @@ private:
     sal_Int32 mnSeparatorY;
     sal_Int32 mnMaximalWidth;
 
-    void ProvideCanvas (void);
-    void Resize (void);
+    void ProvideCanvas();
+    void Resize();
     void Paint (const css::awt::Rectangle& rRedrawArea);
-    void ReadHelpStrings (void);
+    void ReadHelpStrings();
     void ProcessString (
         const css::uno::Reference<css::beans::XPropertySet>& rsProperties);
 
     /** Find a font size, so that all text can be displayed at the same
         time.
     */
-    void CheckFontSize (void);
+    void CheckFontSize();
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

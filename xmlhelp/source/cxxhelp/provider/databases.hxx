@@ -346,7 +346,7 @@ namespace chelp {
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, const OUString& aInitialModule,
             const OUString& aLanguage );
-        void init( void );
+        void init();
 
     private:
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage

@@ -102,8 +102,8 @@ public:
     bool            operator== (const ScRangeData& rData) const;
 
     void            GetName( OUString& rName ) const  { rName = aName; }
-    const OUString&   GetName( void ) const           { return aName; }
-    const OUString&   GetUpperName( void ) const      { return aUpperName; }
+    const OUString&   GetName() const           { return aName; }
+    const OUString&   GetUpperName() const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }

@@ -72,7 +72,7 @@ class OTextInputStream : public TextInputStreamHelper
     sal_Int32 mnCharsInBuffer;
     bool mbReachedEOF;
 
-    void implResizeBuffer( void );
+    void implResizeBuffer();
     OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
         bool bRemoveDelimiter, bool bFindLineEnd )
             throw(IOException, RuntimeException);
@@ -111,7 +111,7 @@ public:
 
     // Methods XServiceInfo
         virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 };
 
@@ -138,7 +138,7 @@ OTextInputStream::~OTextInputStream()
     delete[] mpBuffer;
 }
 
-void OTextInputStream::implResizeBuffer( void )
+void OTextInputStream::implResizeBuffer()
 {
     sal_Int32 mnNewBufferSize = mnBufferSize * 2;
     sal_Unicode* pNewBuffer = new sal_Unicode[ mnNewBufferSize ];
@@ -461,7 +461,7 @@ sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) throw(st
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > OTextInputStream::getSupportedServiceNames(void) throw(std::exception)
+Sequence< OUString > OTextInputStream::getSupportedServiceNames() throw(std::exception)
 {
     return TextInputStream_getSupportedServiceNames();
 }

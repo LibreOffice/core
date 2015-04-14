@@ -1045,7 +1045,7 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
     return OUString();
 }
 
-OUString DefaultNumberingProvider::getImplementationName(void)
+OUString DefaultNumberingProvider::getImplementationName()
                 throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.text.DefaultNumberingProvider");
@@ -1057,7 +1057,7 @@ sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
+Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
                 throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);

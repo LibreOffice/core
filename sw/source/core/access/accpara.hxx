@@ -247,25 +247,25 @@ public:
     virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
 
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void)     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getAccessibleRole()     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
 
     // Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void)
+        getAccessibleDescription()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return the parents locale or throw exception if this object has no
     // parent yet/anymore.
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale (void)
+        getLocale()
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet (void)
+        getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleComponent
@@ -282,7 +282,7 @@ public:
 
     // Returns an identifier for the implementation of this object.
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return whether the specified service is supported by this class.
@@ -293,7 +293,7 @@ public:
     // Returns a list of all supported services.  In this case that is just
     // the AccessibleContext service.
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInterface

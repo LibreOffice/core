@@ -45,11 +45,11 @@ PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
     }
 }
 
-PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver (void)
+PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver()
 {
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::disposing (void)
+void SAL_CALL PresenterCurrentSlideObserver::disposing()
 {
     // Disconnect form the slide show controller.
     if(mxSlideShowController.is())
@@ -83,12 +83,12 @@ void SAL_CALL PresenterCurrentSlideObserver::repeat (
     (void)rNode;
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::paused (void)
+void SAL_CALL PresenterCurrentSlideObserver::paused()
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::resumed (void)
+void SAL_CALL PresenterCurrentSlideObserver::resumed()
     throw (css::uno::RuntimeException, std::exception)
 {
 }
@@ -110,19 +110,19 @@ void SAL_CALL PresenterCurrentSlideObserver::hyperLinkClicked (const OUString &)
 {
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::slideTransitionStarted (void)
+void SAL_CALL PresenterCurrentSlideObserver::slideTransitionStarted()
     throw (css::uno::RuntimeException, std::exception)
 {
     if( mpPresenterController.is() )
         mpPresenterController->UpdateCurrentSlide(0);
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::slideTransitionEnded (void)
+void SAL_CALL PresenterCurrentSlideObserver::slideTransitionEnded()
     throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::slideAnimationsEnded (void)
+void SAL_CALL PresenterCurrentSlideObserver::slideAnimationsEnded()
     throw (css::uno::RuntimeException, std::exception)
 {
 }

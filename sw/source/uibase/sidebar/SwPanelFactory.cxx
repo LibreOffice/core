@@ -53,8 +53,8 @@ class SwPanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    SwPanelFactory(void);
-    virtual ~SwPanelFactory(void);
+    SwPanelFactory();
+    virtual ~SwPanelFactory();
 
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
@@ -78,12 +78,12 @@ public:
     { return css::uno::Sequence<OUString>{"com.sun.star.ui.UIElementFactory"}; }
 };
 
-SwPanelFactory::SwPanelFactory (void)
+SwPanelFactory::SwPanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
-SwPanelFactory::~SwPanelFactory (void)
+SwPanelFactory::~SwPanelFactory()
 {
 }
 

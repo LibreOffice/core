@@ -46,23 +46,23 @@ namespace {
 class CachablePresenterView
 {
 public:
-    virtual void ActivatePresenterView (void);
+    virtual void ActivatePresenterView();
 
     /** Called when the view is put into a cache.  The view must not paint
         itself while being deactive.
     */
-    virtual void DeactivatePresenterView (void);
+    virtual void DeactivatePresenterView();
 
     /** Called before the view is disposed.  This gives the view the
         opportunity to trigger actions that may lead to (synchronous)
         callbacks that do not result in DisposedExceptions.
     */
-    virtual void ReleaseView (void);
+    virtual void ReleaseView();
 
 protected:
     bool mbIsPresenterViewActive;
 
-    CachablePresenterView (void);
+    CachablePresenterView();
 
     ~CachablePresenterView() {}
 };
@@ -96,14 +96,14 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterViewFactory (void);
+    virtual ~PresenterViewFactory();
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-    virtual void SAL_CALL disposing (void)
+    virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XResourceFactory
@@ -163,7 +163,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane);
 
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 } }

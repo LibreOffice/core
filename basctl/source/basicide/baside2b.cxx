@@ -1733,11 +1733,11 @@ struct WatchItem
         maMemberList.clear();
     }
 
-    WatchItem* GetRootItem( void );
-    SbxDimArray* GetRootArray( void );
+    WatchItem* GetRootItem();
+    SbxDimArray* GetRootArray();
 };
 
-WatchItem* WatchItem::GetRootItem( void )
+WatchItem* WatchItem::GetRootItem()
 {
     WatchItem* pItem = mpArrayParentItem;
     while( pItem )
@@ -1749,7 +1749,7 @@ WatchItem* WatchItem::GetRootItem( void )
     return pItem;
 }
 
-SbxDimArray* WatchItem::GetRootArray( void )
+SbxDimArray* WatchItem::GetRootArray()
 {
     WatchItem* pRootItem = GetRootItem();
     SbxDimArray* pRet = NULL;

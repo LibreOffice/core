@@ -45,7 +45,7 @@ class ModuleController::ResourceToFactoryMap
     OUStringHash>
 {
 public:
-    ResourceToFactoryMap (void) {}
+    ResourceToFactoryMap() {}
 };
 
 class ModuleController::LoadedFactoryContainer
@@ -55,7 +55,7 @@ class ModuleController::LoadedFactoryContainer
     OUStringHash>
 {
 public:
-    LoadedFactoryContainer (void) {}
+    LoadedFactoryContainer() {}
 };
 
 //===== ModuleController ======================================================
@@ -76,11 +76,11 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
     LoadFactories(rxContext);
 }
 
-ModuleController::~ModuleController (void) throw()
+ModuleController::~ModuleController() throw()
 {
 }
 
-void SAL_CALL ModuleController::disposing (void)
+void SAL_CALL ModuleController::disposing()
 {
     // Break the cyclic reference back to DrawController object
     mpLoadedFactories.reset();
@@ -142,7 +142,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     }
 }
 
-void ModuleController::InstantiateStartupServices (void)
+void ModuleController::InstantiateStartupServices()
 {
     try
     {

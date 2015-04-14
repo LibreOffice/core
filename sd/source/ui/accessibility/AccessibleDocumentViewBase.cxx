@@ -89,13 +89,13 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     mpViewShell = pViewShell;
 }
 
-AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
+AccessibleDocumentViewBase::~AccessibleDocumentViewBase()
 {
     // At this place we should be disposed.  You may want to add a
     // corresponding assertion into the destructor of a derived class.
 }
 
-void AccessibleDocumentViewBase::Init (void)
+void AccessibleDocumentViewBase::Init()
 {
     // Finish the initialization of the shape tree info container.
     maShapeTreeInfo.SetDocumentWindow (this);
@@ -226,7 +226,7 @@ void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessi
 //=====  XAccessibleContext  ==================================================
 
 Reference<XAccessible> SAL_CALL
-       AccessibleDocumentViewBase::getAccessibleParent (void)
+       AccessibleDocumentViewBase::getAccessibleParent()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -235,7 +235,7 @@ Reference<XAccessible> SAL_CALL
 }
 
 sal_Int32 SAL_CALL
-    AccessibleDocumentViewBase::getAccessibleChildCount (void)
+    AccessibleDocumentViewBase::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -305,7 +305,7 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 awt::Rectangle SAL_CALL
-    AccessibleDocumentViewBase::getBounds (void)
+    AccessibleDocumentViewBase::getBounds()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -341,7 +341,7 @@ awt::Rectangle SAL_CALL
 }
 
 awt::Point SAL_CALL
-    AccessibleDocumentViewBase::getLocation (void)
+    AccessibleDocumentViewBase::getLocation()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -350,7 +350,7 @@ awt::Point SAL_CALL
 }
 
 awt::Point SAL_CALL
-    AccessibleDocumentViewBase::getLocationOnScreen (void)
+    AccessibleDocumentViewBase::getLocationOnScreen()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -360,7 +360,7 @@ awt::Point SAL_CALL
 }
 
 awt::Size SAL_CALL
-    AccessibleDocumentViewBase::getSize (void)
+    AccessibleDocumentViewBase::getSize()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -402,14 +402,14 @@ uno::Any SAL_CALL
 }
 
 void SAL_CALL
-    AccessibleDocumentViewBase::acquire (void)
+    AccessibleDocumentViewBase::acquire()
     throw ()
 {
     AccessibleContextBase::acquire ();
 }
 
 void SAL_CALL
-    AccessibleDocumentViewBase::release (void)
+    AccessibleDocumentViewBase::release()
     throw ()
 {
     AccessibleContextBase::release ();
@@ -418,14 +418,14 @@ void SAL_CALL
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
-    AccessibleDocumentViewBase::getImplementationName (void)
+    AccessibleDocumentViewBase::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDocumentViewBase");
 }
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-    AccessibleDocumentViewBase::getSupportedServiceNames (void)
+    AccessibleDocumentViewBase::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -435,7 +435,7 @@ OUString SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-    AccessibleDocumentViewBase::getTypes (void)
+    AccessibleDocumentViewBase::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -626,7 +626,7 @@ void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEv
 //=====  protected internal  ==================================================
 
 // This method is called from the component helper base class while disposing.
-void SAL_CALL AccessibleDocumentViewBase::disposing (void)
+void SAL_CALL AccessibleDocumentViewBase::disposing()
 {
     impl_dispose();
 
@@ -635,7 +635,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 
 /// Create a name for this view.
 OUString
-    AccessibleDocumentViewBase::CreateAccessibleName (void)
+    AccessibleDocumentViewBase::CreateAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return OUString ("AccessibleDocumentViewBase");
@@ -645,7 +645,7 @@ OUString
     if a description is not available.
 */
 OUString
-    AccessibleDocumentViewBase::CreateAccessibleDescription (void)
+    AccessibleDocumentViewBase::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sDescription;
@@ -666,12 +666,12 @@ OUString
     return sDescription;
 }
 
-void AccessibleDocumentViewBase::Activated (void)
+void AccessibleDocumentViewBase::Activated()
 {
     // Empty.  Overwrite to do something useful.
 }
 
-void AccessibleDocumentViewBase::Deactivated (void)
+void AccessibleDocumentViewBase::Deactivated()
 {
     // Empty.  Overwrite to do something useful.
 }

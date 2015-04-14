@@ -176,7 +176,7 @@ public:
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XPropertySet
-    virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(void)
+    virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
         throw( beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -384,7 +384,7 @@ void SAL_CALL UpdateCheckUI::disposing(const lang::EventObject&)
 }
 
 
-uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo(void)
+uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo()
     throw ( uno::RuntimeException, std::exception )
 {
     return NULL;

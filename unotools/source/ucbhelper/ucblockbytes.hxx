@@ -107,7 +107,7 @@ class UcbLockBytes : public virtual SvLockBytes
 
                             UcbLockBytes( UcbLockBytesHandler* pHandler );
 protected:
-    virtual                 ~UcbLockBytes (void);
+    virtual                 ~UcbLockBytes();
 
 public:
                             // properties: Referer, PostMimeType
@@ -145,7 +145,7 @@ public:
     bool                    setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
                                                  bool bSetXSeekable = true );
     bool                    setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
-    void                    terminate_Impl (void);
+    void                    terminate_Impl();
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream_Impl() const
                             {

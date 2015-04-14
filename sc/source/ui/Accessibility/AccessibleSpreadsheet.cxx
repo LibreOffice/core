@@ -1039,7 +1039,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 
     //=====  XAccessibleContext  ==============================================
 
-uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet(void)
+uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
@@ -1051,7 +1051,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAcce
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleSpreadsheet::getAccessibleStateSet(void)
+    ScAccessibleSpreadsheet::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1308,14 +1308,14 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 
     //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName(void)
+OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleSpreadsheet");
 }
 
 uno::Sequence< OUString> SAL_CALL
-    ScAccessibleSpreadsheet::getSupportedServiceNames (void)
+    ScAccessibleSpreadsheet::getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
@@ -1330,7 +1330,7 @@ uno::Sequence< OUString> SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleSpreadsheet::getImplementationId(void)
+    ScAccessibleSpreadsheet::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

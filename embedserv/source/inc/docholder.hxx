@@ -138,14 +138,14 @@ public:
     BOOL isActive() const;
     void DisableInplaceActivation(BOOL);
     HRESULT InPlaceActivate(LPOLECLIENTSITE,BOOL);
-    void InPlaceDeactivate(void);
+    void InPlaceDeactivate();
     HRESULT UIActivate();
     void UIDeactivate();
-    BOOL InPlaceMenuCreate(void);
-    BOOL InPlaceMenuDestroy(void);
+    BOOL InPlaceMenuCreate();
+    BOOL InPlaceMenuDestroy();
 
-    void OpenIntoWindow(void);
-    BOOL Undo(void);
+    void OpenIntoWindow();
+    BOOL Undo();
 
     // further methods
 

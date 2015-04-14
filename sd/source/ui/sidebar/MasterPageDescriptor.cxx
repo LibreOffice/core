@@ -73,7 +73,7 @@ MasterPageDescriptor::MasterPageDescriptor (const MasterPageDescriptor& rDescrip
 {
 }
 
-MasterPageDescriptor::~MasterPageDescriptor (void)
+MasterPageDescriptor::~MasterPageDescriptor()
 {
 }
 
@@ -251,7 +251,7 @@ bool MasterPageDescriptor::UpdatePreview (
     return bModified;
 }
 
-MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassification (void)
+MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassification()
 {
     if (meURLClassification == URLCLASS_UNDETERMINED)
     {

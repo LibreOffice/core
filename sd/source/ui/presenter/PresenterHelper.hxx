@@ -46,7 +46,7 @@ class PresenterHelper
 {
 public:
     PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterHelper (void);
+    virtual ~PresenterHelper();
 
     // XInitialize
 

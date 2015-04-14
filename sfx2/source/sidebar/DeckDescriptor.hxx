@@ -40,9 +40,9 @@ public:
     bool mbIsEnabled;
     sal_Int32 mnOrderIndex;
 
-    DeckDescriptor (void);
+    DeckDescriptor();
     DeckDescriptor (const DeckDescriptor& rOther);
-    ~DeckDescriptor (void);
+    ~DeckDescriptor();
 };
 
 } } // end of namespace sfx2::sidebar

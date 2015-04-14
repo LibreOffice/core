@@ -78,7 +78,7 @@ public:
 
     XGradient GetGradient (const css::awt::GradientStyle eStyle) const;
     void SetGradient (const XGradient& rGradient);
-    sal_Int32 GetSelectedTransparencyTypeIndex (void) const;
+    sal_Int32 GetSelectedTransparencyTypeIndex() const;
 
 private:
     sal_uInt16                                          meLastXFS;
@@ -151,9 +151,9 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~AreaPropertyPanel(void);
+    virtual ~AreaPropertyPanel();
 
-    void SetupIcons(void);
+    void SetupIcons();
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();

@@ -154,7 +154,7 @@ Any IUnknownWrapper_Impl::queryInterface(const Type& t)
         XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >::queryInterface(t);
 }
 
-Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(void)
+Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection()
     throw (RuntimeException )
 {
     Reference<XIntrospectionAccess> ret;

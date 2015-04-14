@@ -56,12 +56,12 @@ STDMETHODIMP CIIAObj::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 }
 
 
-STDMETHODIMP_(ULONG) CIIAObj::AddRef(void)
+STDMETHODIMP_(ULONG) CIIAObj::AddRef()
 {
     return osl_atomic_increment( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) CIIAObj::Release(void)
+STDMETHODIMP_(ULONG) CIIAObj::Release()
 {
     sal_Int32 nCount = osl_atomic_decrement( &m_refCount);
     if ( nCount == 0 )

@@ -169,7 +169,7 @@ public:
 
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() throw (std::exception) SAL_OVERRIDE;
-    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames() throw (std::exception) SAL_OVERRIDE;
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception) SAL_OVERRIDE;
 
 private:
@@ -366,19 +366,19 @@ public:
     }
 
 public: //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (std::exception) SAL_OVERRIDE
+    virtual sal_Int32 SAL_CALL getColumnNumber() throw (std::exception) SAL_OVERRIDE
     {
         return XML_GetCurrentColumnNumber( m_pParser->getEntity().pParser );
     }
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (std::exception) SAL_OVERRIDE
+    virtual sal_Int32 SAL_CALL getLineNumber() throw (std::exception) SAL_OVERRIDE
     {
         return XML_GetCurrentLineNumber( m_pParser->getEntity().pParser );
     }
-    virtual OUString SAL_CALL getPublicId(void) throw (std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getPublicId() throw (std::exception) SAL_OVERRIDE
     {
         return m_pParser->getEntity().structSource.sPublicId;
     }
-    virtual OUString SAL_CALL getSystemId(void) throw (std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getSystemId() throw (std::exception) SAL_OVERRIDE
     {
         return m_pParser->getEntity().structSource.sSystemId;
     }
@@ -603,7 +603,7 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw (std
 }
 
 // XServiceInfo
-css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw (std::exception)
+css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames() throw (std::exception)
 {
     css::uno::Sequence<OUString> seq(1);
     seq[0] = "com.sun.star.xml.sax.Parser";

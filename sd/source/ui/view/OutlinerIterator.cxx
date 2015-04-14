@@ -36,7 +36,7 @@ namespace sd { namespace outliner {
 
 //===== IteratorPosition ======================================================
 
-IteratorPosition::IteratorPosition (void)
+IteratorPosition::IteratorPosition()
 : mnText(0)
 , mnPageIndex(-1)
 , mePageKind(PK_STANDARD)
@@ -53,7 +53,7 @@ IteratorPosition::IteratorPosition (const IteratorPosition& aPosition)
 {
 }
 
-IteratorPosition::~IteratorPosition (void)
+IteratorPosition::~IteratorPosition()
 {
 }
 
@@ -145,7 +145,7 @@ bool Iterator::operator!= (const Iterator& rIterator)
     return ! operator==(rIterator);
 }
 
-void Iterator::Reverse (void)
+void Iterator::Reverse()
 {
     if (mpIterator != NULL)
         mpIterator->Reverse();
@@ -158,17 +158,17 @@ OutlinerContainer::OutlinerContainer (Outliner* pOutliner)
 {
 }
 
-Iterator OutlinerContainer::begin (void)
+Iterator OutlinerContainer::begin()
 {
     return CreateIterator (BEGIN);
 }
 
-Iterator OutlinerContainer::end (void)
+Iterator OutlinerContainer::end()
 {
     return CreateIterator (END);
 }
 
-Iterator OutlinerContainer::current (void)
+Iterator OutlinerContainer::current()
 {
     return CreateIterator (CURRENT);
 }
@@ -398,7 +398,7 @@ IteratorImplBase::IteratorImplBase( SdDrawDocument* pDocument,
     maPosition.meEditMode = eEditMode;
 }
 
-IteratorImplBase::~IteratorImplBase (void)
+IteratorImplBase::~IteratorImplBase()
 {}
 
 bool IteratorImplBase::operator== (const IteratorImplBase& rIterator) const
@@ -414,7 +414,7 @@ bool IteratorImplBase::IsEqual (const IteratorImplBase& rIterator, IteratorType 
     return maPosition == rIterator.maPosition;
 }
 
-const IteratorPosition& IteratorImplBase::GetPosition (void)
+const IteratorPosition& IteratorImplBase::GetPosition()
 {
     return maPosition;
 }
@@ -431,7 +431,7 @@ IteratorImplBase* IteratorImplBase::Clone (IteratorImplBase* pObject) const
     return pObject;
 }
 
-void IteratorImplBase::Reverse (void)
+void IteratorImplBase::Reverse()
 {
     mbDirectionIsForward = ! mbDirectionIsForward;
 }
@@ -450,7 +450,7 @@ SelectionIteratorImpl::SelectionIteratorImpl (
 {
 }
 
-SelectionIteratorImpl::~SelectionIteratorImpl (void)
+SelectionIteratorImpl::~SelectionIteratorImpl()
 {}
 
 IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
@@ -462,7 +462,7 @@ IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
     return pIterator;
 }
 
-void SelectionIteratorImpl::GotoNextText (void)
+void SelectionIteratorImpl::GotoNextText()
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get() );
     if (mbDirectionIsForward)
@@ -510,7 +510,7 @@ void SelectionIteratorImpl::GotoNextText (void)
     }
 }
 
-const IteratorPosition& SelectionIteratorImpl::GetPosition (void)
+const IteratorPosition& SelectionIteratorImpl::GetPosition()
 {
     maPosition.mxObject = mrObjectList.at(mnObjectIndex);
 
@@ -567,7 +567,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     SetPage (nPageIndex);
 }
 
-ViewIteratorImpl::~ViewIteratorImpl (void)
+ViewIteratorImpl::~ViewIteratorImpl()
 {
 }
 
@@ -596,7 +596,7 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
     return pIterator;
 }
 
-void ViewIteratorImpl::GotoNextText(void)
+void ViewIteratorImpl::GotoNextText()
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get() );
     if( pTextObj )
@@ -700,7 +700,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 
 }
 
-void ViewIteratorImpl::Reverse (void)
+void ViewIteratorImpl::Reverse()
 {
     IteratorImplBase::Reverse ();
 
@@ -740,7 +740,7 @@ DocumentIteratorImpl::DocumentIteratorImpl (
         mnPageCount = pDocument->GetMasterSdPageCount(ePageKind);
 }
 
-DocumentIteratorImpl::~DocumentIteratorImpl (void)
+DocumentIteratorImpl::~DocumentIteratorImpl()
 {}
 
 IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
@@ -754,7 +754,7 @@ IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
     return ViewIteratorImpl::Clone (pIterator);
 }
 
-void DocumentIteratorImpl::GotoNextText (void)
+void DocumentIteratorImpl::GotoNextText()
 {
     bool bSetToOnePastLastPage = false;
     bool bViewChanged = false;

@@ -81,12 +81,12 @@ public:
     static ::boost::weak_ptr<Implementation> mpInstance;
     MasterPageContainerType maContainer;
 
-    static ::boost::shared_ptr<Implementation> Instance (void);
+    static ::boost::shared_ptr<Implementation> Instance();
 
-    void LateInit (void);
+    void LateInit();
     void AddChangeListener (const Link& rLink);
     void RemoveChangeListener (const Link& rLink);
-    void UpdatePreviewSizePixel (void);
+    void UpdatePreviewSizePixel();
     Size GetPreviewSizePixel (PreviewSize eSize) const;
 
     bool HasToken (Token aToken) const;
@@ -100,8 +100,8 @@ public:
     PreviewState GetPreviewState (Token aToken) const;
     bool RequestPreview (Token aToken);
 
-    Reference<frame::XModel> GetModel (void);
-    SdDrawDocument* GetDocument (void);
+    Reference<frame::XModel> GetModel();
+    SdDrawDocument* GetDocument();
 
     void FireContainerChange (
         MasterPageContainerChangeEvent::EventType eType,
@@ -119,11 +119,11 @@ public:
     /** Called by the MasterPageContainerFiller to notify that all master
         pages from template documents have been added.
     */
-    virtual void FillingDone (void) SAL_OVERRIDE;
+    virtual void FillingDone() SAL_OVERRIDE;
 
 private:
-    Implementation (void);
-    virtual ~Implementation (void);
+    Implementation();
+    virtual ~Implementation();
 
     class Deleter { public:
         void operator() (Implementation* pObject) { delete pObject; }
@@ -175,7 +175,7 @@ private:
 
     Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
-    void CleanContainer (void);
+    void CleanContainer();
 };
 
 //===== MasterPageContainer ===================================================
@@ -184,7 +184,7 @@ private:
     MasterPageContainer::Implementation::mpInstance;
 
 ::boost::shared_ptr<MasterPageContainer::Implementation>
-    MasterPageContainer::Implementation::Instance (void)
+    MasterPageContainer::Implementation::Instance()
 {
     ::boost::shared_ptr<MasterPageContainer::Implementation> pInstance;
 
@@ -217,14 +217,14 @@ private:
     return pInstance;
 }
 
-MasterPageContainer::MasterPageContainer (void)
+MasterPageContainer::MasterPageContainer()
     : mpImpl(Implementation::Instance()),
       mePreviewSize(SMALL)
 {
     mpImpl->LateInit();
 }
 
-MasterPageContainer::~MasterPageContainer (void)
+MasterPageContainer::~MasterPageContainer()
 {
 }
 
@@ -246,7 +246,7 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
         NIL_TOKEN);
 }
 
-Size MasterPageContainer::GetPreviewSizePixel (void) const
+Size MasterPageContainer::GetPreviewSizePixel() const
 {
     return mpImpl->GetPreviewSizePixel(mePreviewSize);
 }
@@ -290,7 +290,7 @@ void MasterPageContainer::ReleaseToken (Token aToken)
     }
 }
 
-int MasterPageContainer::GetTokenCount (void) const
+int MasterPageContainer::GetTokenCount() const
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
@@ -483,7 +483,7 @@ bool MasterPageContainer::RequestPreview (Token aToken)
 
 //==== Implementation ================================================
 
-MasterPageContainer::Implementation::Implementation (void)
+MasterPageContainer::Implementation::Implementation()
     : maMutex(),
       maContainer(),
       meInitializationState(NOT_INITIALIZED),
@@ -505,7 +505,7 @@ MasterPageContainer::Implementation::Implementation (void)
     UpdatePreviewSizePixel();
 }
 
-MasterPageContainer::Implementation::~Implementation (void)
+MasterPageContainer::Implementation::~Implementation()
 {
     // When the initializer or filler tasks are still running then we have
     // to stop them now in order to prevent them from calling us back.
@@ -527,7 +527,7 @@ MasterPageContainer::Implementation::~Implementation (void)
     mxModel = NULL;
 }
 
-void MasterPageContainer::Implementation::LateInit (void)
+void MasterPageContainer::Implementation::LateInit()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -569,7 +569,7 @@ void MasterPageContainer::Implementation::RemoveChangeListener (const Link& rLin
         maChangeListeners.erase(iListener);
 }
 
-void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
+void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -835,7 +835,7 @@ bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
         return false;
 }
 
-Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
+Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -887,7 +887,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
     return mxModel;
 }
 
-SdDrawDocument* MasterPageContainer::Implementation::GetDocument (void)
+SdDrawDocument* MasterPageContainer::Implementation::GetDocument()
 {
     GetModel();
     return mpDocument;
@@ -937,7 +937,7 @@ Image MasterPageContainer::Implementation::GetPreviewSubstitution (
     return aPreview;
 }
 
-void MasterPageContainer::Implementation::CleanContainer (void)
+void MasterPageContainer::Implementation::CleanContainer()
 {
     // Remove the empty elements at the end of the container.  The empty
     // elements in the middle can not be removed because that would
@@ -1031,7 +1031,7 @@ void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
     }
 }
 
-void MasterPageContainer::Implementation::FillingDone (void)
+void MasterPageContainer::Implementation::FillingDone()
 {
     mpRequestQueue->ProcessAllRequests();
 }

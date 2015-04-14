@@ -247,7 +247,7 @@ throw(RuntimeException, std::exception)
 
     // XServiceInfo - static methods
 
-    Sequence< OUString > AccessibleIconChoiceCtrlEntry::getSupportedServiceNames_Static(void) throw( RuntimeException )
+    Sequence< OUString > AccessibleIconChoiceCtrlEntry::getSupportedServiceNames_Static() throw( RuntimeException )
     {
         Sequence< OUString > aSupported(3);
         aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
@@ -256,7 +256,7 @@ throw(RuntimeException, std::exception)
         return aSupported;
     }
 
-    OUString AccessibleIconChoiceCtrlEntry::getImplementationName_Static(void) throw( RuntimeException )
+    OUString AccessibleIconChoiceCtrlEntry::getImplementationName_Static() throw( RuntimeException )
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry" );
     }

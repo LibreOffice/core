@@ -36,14 +36,14 @@ namespace XmlSec
     static ResMgr*          pResMgr = 0;
     static SvtSysLocale*    pSysLocale = 0;
 
-    ResMgr* GetResMgr( void )
+    ResMgr* GetResMgr()
     {
         if (!pResMgr)
             pResMgr = ResMgr::CreateResMgr("xmlsec");
         return pResMgr;
     }
 
-    const LocaleDataWrapper&    GetLocaleData( void )
+    const LocaleDataWrapper&    GetLocaleData()
     {
         if (!pSysLocale)
             pSysLocale = new SvtSysLocale;

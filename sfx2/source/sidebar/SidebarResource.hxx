@@ -26,8 +26,8 @@
 class SidebarResource : public Resource
 {
 public:
-    SidebarResource (void) : Resource(SfxResId(RID_SIDEBAR_RESOURCE)){}
-    ~SidebarResource (void) { FreeResource(); }
+    SidebarResource() : Resource(SfxResId(RID_SIDEBAR_RESOURCE)){}
+    ~SidebarResource() { FreeResource(); }
 };
 
 #endif

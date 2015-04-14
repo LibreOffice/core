@@ -26,7 +26,7 @@
 #include <boost/scoped_array.hpp>
 
 // Implementation SbxDecimal
-SbxDecimal::SbxDecimal( void )
+SbxDecimal::SbxDecimal()
 {
     setInt( 0 );
     mnRefCount = 0;
@@ -118,14 +118,14 @@ bool SbxDecimal::operator *= ( const SbxDecimal &r )
     return bRet;
 }
 
-bool SbxDecimal::neg( void )
+bool SbxDecimal::neg()
 {
     HRESULT hResult = VarDecNeg( &maDec, &maDec );
     bool bRet = ( hResult == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::isZero( void )
+bool SbxDecimal::isZero()
 {
     SbxDecimal aZeroDec;
     aZeroDec.setLong( 0 );
@@ -306,12 +306,12 @@ bool SbxDecimal::operator *= ( const SbxDecimal &r )
     return false;
 }
 
-bool SbxDecimal::neg( void )
+bool SbxDecimal::neg()
 {
     return false;
 }
 
-bool SbxDecimal::isZero( void )
+bool SbxDecimal::isZero()
 {
     return false;
 }

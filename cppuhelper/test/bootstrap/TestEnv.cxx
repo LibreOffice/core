@@ -46,8 +46,8 @@ public:
     explicit  TestEnv();
 
 protected:
-    virtual void v_enter(void);
-    virtual void v_leave(void);
+    virtual void v_enter();
+    virtual void v_leave();
 
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
@@ -61,9 +61,9 @@ TestEnv::TestEnv()
     LOG_LIFECYCLE_TestEnv_emit(fprintf(stderr, "LIFE: %s -> %p\n", "TestEnv::TestEnv(...)", this));
 }
 
-TestEnv::~TestEnv(void)
+TestEnv::~TestEnv()
 {
-    LOG_LIFECYCLE_TestEnv_emit(fprintf(stderr, "LIFE: %s -> %p\n", "TestEnv::~TestEnv(void)", this));
+    LOG_LIFECYCLE_TestEnv_emit(fprintf(stderr, "LIFE: %s -> %p\n", "TestEnv::~TestEnv()", this));
 }
 
 
@@ -81,12 +81,12 @@ void TestEnv::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
     ++ m_inCount;
 }
 
-void TestEnv::v_enter(void)
+void TestEnv::v_enter()
 {
     ++ m_inCount;
 }
 
-void TestEnv::v_leave(void)
+void TestEnv::v_leave()
 {
     -- m_inCount;
 }

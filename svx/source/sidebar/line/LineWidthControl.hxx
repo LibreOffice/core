@@ -37,7 +37,7 @@ class LineWidthControl
 {
 public:
     LineWidthControl (vcl::Window* pParent, LinePropertyPanel& rPanel);
-    virtual ~LineWidthControl (void);
+    virtual ~LineWidthControl();
 
     virtual void GetFocus() SAL_OVERRIDE;
     virtual void Paint(const Rectangle& rect) SAL_OVERRIDE;

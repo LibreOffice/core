@@ -34,7 +34,7 @@ public:
         const ::rtl::OUString& rsTitle,
         vcl::Window* pParentWindow,
         const sidebar::Paint& rInitialBackgroundPaint);
-    virtual ~TitleBar (void);
+    virtual ~TitleBar();
 
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
@@ -48,8 +48,8 @@ public:
         long nHeight,
         sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
 
-    ToolBox& GetToolBox (void) { return maToolBox;}
-    const ToolBox& GetToolBox (void) const { return maToolBox;}
+    ToolBox& GetToolBox() { return maToolBox;}
+    const ToolBox& GetToolBox() const { return maToolBox;}
 
 protected:
     SidebarToolBox maToolBox;
@@ -58,10 +58,10 @@ protected:
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) = 0;
     void PaintFocus (const Rectangle& rFocusBox);
-    virtual sidebar::Paint GetBackgroundPaint (void) = 0;
-    virtual Color GetTextColor (void) = 0;
+    virtual sidebar::Paint GetBackgroundPaint() = 0;
+    virtual Color GetTextColor() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 private:
     Image maIcon;

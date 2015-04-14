@@ -121,7 +121,7 @@ namespace basegfx
 
             @return The Length of the 3D Vector
         */
-        double getLength(void) const
+        double getLength() const
         {
             double fLen(scalar(*this));
             if((0.0 == fLen) || (1.0 == fLen))
@@ -133,7 +133,7 @@ namespace basegfx
 
             @return The XY-Plane Length of the 3D Vector
         */
-        double getXYLength(void) const
+        double getXYLength() const
         {
             double fLen((mfX * mfX) + (mfY * mfY));
             if((0.0 == fLen) || (1.0 == fLen))
@@ -145,7 +145,7 @@ namespace basegfx
 
             @return The XZ-Plane Length of the 3D Vector
         */
-        double getXZLength(void) const
+        double getXZLength() const
         {
             double fLen((mfX * mfX) + (mfZ * mfZ)); // #i73040#
             if((0.0 == fLen) || (1.0 == fLen))
@@ -157,7 +157,7 @@ namespace basegfx
 
             @return The YZ-Plane Length of the 3D Vector
         */
-        double getYZLength(void) const
+        double getYZLength() const
         {
             double fLen((mfY * mfY) + (mfZ * mfZ));
             if((0.0 == fLen) || (1.0 == fLen))

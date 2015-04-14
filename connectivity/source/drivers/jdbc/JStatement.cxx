@@ -106,7 +106,7 @@ jclass java_sql_Statement_Base::getMyClass() const
     return theClass;
 }
 
-void SAL_CALL java_sql_Statement_Base::disposing(void)
+void SAL_CALL java_sql_Statement_Base::disposing()
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_CLOSING_STATEMENT );
     java_sql_Statement_BASE::disposing();

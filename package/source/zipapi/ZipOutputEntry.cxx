@@ -71,7 +71,7 @@ ZipOutputEntry::ZipOutputEntry(
     }
 }
 
-ZipOutputEntry::~ZipOutputEntry( void )
+ZipOutputEntry::~ZipOutputEntry()
 {
 }
 

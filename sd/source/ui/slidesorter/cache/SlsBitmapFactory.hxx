@@ -34,8 +34,8 @@ namespace sd { namespace slidesorter { namespace cache {
 class BitmapFactory
 {
 public:
-    BitmapFactory (void);
-    ~BitmapFactory (void);
+    BitmapFactory();
+    ~BitmapFactory();
 
     Bitmap CreateBitmap (
         const SdPage& rPage,

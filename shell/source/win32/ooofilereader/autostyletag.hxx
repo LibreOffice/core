@@ -49,7 +49,7 @@ class CAutoStyleTag : public ITag
 
         void setStyle( ::std::wstring const & Style );
         void setLocale(const LocaleSet_t& Locale);
-        void clearStyleLocalePair( void );
+        void clearStyleLocalePair();
         inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; };
         inline bool isFull() const
         {

@@ -112,7 +112,7 @@ namespace connectivity
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual void SAL_CALL release() throw();
 

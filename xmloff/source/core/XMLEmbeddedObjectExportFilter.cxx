@@ -35,13 +35,13 @@ XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
 {
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument( void )
+void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
     // do nothing, filter this
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument( void )
+void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument()
     throw( SAXException, RuntimeException, std::exception)
 {
     // do nothing, filter this
@@ -90,14 +90,14 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::setDocumentLocator(
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL XMLEmbeddedObjectExportFilter::startCDATA( void )
+void SAL_CALL XMLEmbeddedObjectExportFilter::startCDATA()
     throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->startCDATA();
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::endCDATA( void )
+void SAL_CALL XMLEmbeddedObjectExportFilter::endCDATA()
     throw(RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
@@ -111,7 +111,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::comment( const OUString& rComment )
         xExtHandler->comment( rComment );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::allowLineBreak( void )
+void SAL_CALL XMLEmbeddedObjectExportFilter::allowLineBreak()
     throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )

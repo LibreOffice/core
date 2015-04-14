@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 #define INVAL_SEL       0xFFFF
 
-sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
+sal_uInt16 CertificateChooser::GetSelectedEntryPos() const
 {
     sal_uInt16  nSel = INVAL_SEL;
 

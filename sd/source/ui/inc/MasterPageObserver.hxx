@@ -43,7 +43,7 @@ public:
 
     /** Return the single instance of this class.
     */
-    static MasterPageObserver& Instance (void);
+    static MasterPageObserver& Instance();
 
     /** The master page observer will listen to events of this document and
         detect changes of the use of master pages.
@@ -77,8 +77,8 @@ private:
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
 
-    MasterPageObserver (void);
-    virtual ~MasterPageObserver (void);
+    MasterPageObserver();
+    virtual ~MasterPageObserver();
 
     MasterPageObserver (const MasterPageObserver&) SAL_DELETED_FUNCTION;
 

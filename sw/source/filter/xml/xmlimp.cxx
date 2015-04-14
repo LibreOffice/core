@@ -703,7 +703,7 @@ void SwXMLImport::startDocument()
     }
 }
 
-void SwXMLImport::endDocument( void )
+void SwXMLImport::endDocument()
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );

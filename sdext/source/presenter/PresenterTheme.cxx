@@ -47,7 +47,7 @@ class BorderSize
 public:
     const static sal_Int32 mnInvalidValue = -10000;
 
-    BorderSize (void) : mnLeft(mnInvalidValue),
+    BorderSize() : mnLeft(mnInvalidValue),
                         mnTop(mnInvalidValue),
                         mnRight(mnInvalidValue),
                         mnBottom(mnInvalidValue) {}
@@ -57,7 +57,7 @@ public:
     sal_Int32 mnRight;
     sal_Int32 mnBottom;
 
-    vector<sal_Int32> ToVector (void)
+    vector<sal_Int32> ToVector()
     {
         vector<sal_Int32> aSequence (4);
         aSequence[0] = mnLeft == mnInvalidValue ? 0 : mnLeft;
@@ -94,7 +94,7 @@ public:
     ReadContext (
         const Reference<XComponentContext>& rxContext,
         const Reference<rendering::XCanvas>& rxCanvas);
-    ~ReadContext (void);
+    ~ReadContext();
 
     /** Read data describing a font from the node that can be reached from
         the given root via the given path.
@@ -126,8 +126,8 @@ private:
 class PaneStyle
 {
 public:
-    PaneStyle (void);
-    ~PaneStyle (void);
+    PaneStyle();
+    ~PaneStyle();
 
     const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
@@ -138,7 +138,7 @@ public:
     BorderSize maOuterBorderSize;
     ::boost::shared_ptr<PresenterBitmapContainer> mpBitmaps;
 
-    PresenterTheme::SharedFontDescriptor GetFont (void) const;
+    PresenterTheme::SharedFontDescriptor GetFont() const;
 };
 
 typedef ::boost::shared_ptr<PaneStyle> SharedPaneStyle;
@@ -167,12 +167,12 @@ private:
 class ViewStyle
 {
 public:
-    ViewStyle (void);
-    ~ViewStyle (void);
+    ViewStyle();
+    ~ViewStyle();
 
     const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
-    PresenterTheme::SharedFontDescriptor GetFont (void) const;
+    PresenterTheme::SharedFontDescriptor GetFont() const;
 
     OUString msStyleName;
     ::boost::shared_ptr<ViewStyle> mpParentStyle;
@@ -235,7 +235,7 @@ public:
         const OUString& rsName,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot,
         const OUString& rsNodeName);
-    ~Theme (void);
+    ~Theme();
 
     void Read (
         PresenterConfigurationAccess& rConfiguration,
@@ -279,11 +279,11 @@ PresenterTheme::PresenterTheme (
     mpTheme = ReadTheme();
 }
 
-PresenterTheme::~PresenterTheme (void)
+PresenterTheme::~PresenterTheme()
 {
 }
 
-::boost::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme (void)
+::boost::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 {
     ReadContext aReadContext(mxContext, mxCanvas);
 
@@ -295,7 +295,7 @@ PresenterTheme::~PresenterTheme (void)
     return aReadContext.ReadTheme(aConfiguration, msThemeName);
 }
 
-bool PresenterTheme::HasCanvas (void) const
+bool PresenterTheme::HasCanvas() const
 {
     return mxCanvas.is();
 }
@@ -461,7 +461,7 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
     return SharedBitmapDescriptor();
 }
 
-::boost::shared_ptr<PresenterBitmapContainer> PresenterTheme::GetBitmapContainer (void) const
+::boost::shared_ptr<PresenterBitmapContainer> PresenterTheme::GetBitmapContainer() const
 {
     if (mpTheme.get() != NULL)
         return mpTheme->mpIconContainer;
@@ -601,7 +601,7 @@ PresenterTheme::Theme::Theme (
 {
 }
 
-PresenterTheme::Theme::~Theme (void)
+PresenterTheme::Theme::~Theme()
 {
 }
 
@@ -713,7 +713,7 @@ ReadContext::ReadContext (
     }
 }
 
-ReadContext::~ReadContext (void)
+ReadContext::~ReadContext()
 {
 }
 
@@ -940,7 +940,7 @@ SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) c
 
 //===== PaneStyle =============================================================
 
-PaneStyle::PaneStyle (void)
+PaneStyle::PaneStyle()
     : msStyleName(),
       mpParentStyle(),
       mpFont(),
@@ -950,7 +950,7 @@ PaneStyle::PaneStyle (void)
 {
 }
 
-PaneStyle::~PaneStyle (void)
+PaneStyle::~PaneStyle()
 {
 }
 
@@ -969,7 +969,7 @@ const SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName)
         return SharedBitmapDescriptor();
 }
 
-PresenterTheme::SharedFontDescriptor PaneStyle::GetFont (void) const
+PresenterTheme::SharedFontDescriptor PaneStyle::GetFont() const
 {
     if (mpFont.get() != NULL)
         return mpFont;
@@ -1060,7 +1060,7 @@ SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) c
 
 //===== ViewStyle =============================================================
 
-ViewStyle::ViewStyle (void)
+ViewStyle::ViewStyle()
     : msStyleName(),
       mpParentStyle(),
       mpFont(),
@@ -1068,7 +1068,7 @@ ViewStyle::ViewStyle (void)
 {
 }
 
-ViewStyle::~ViewStyle (void)
+ViewStyle::~ViewStyle()
 {
 }
 
@@ -1080,7 +1080,7 @@ const SharedBitmapDescriptor ViewStyle::GetBitmap (const OUString& rsBitmapName)
         return SharedBitmapDescriptor();
 }
 
-PresenterTheme::SharedFontDescriptor ViewStyle::GetFont (void) const
+PresenterTheme::SharedFontDescriptor ViewStyle::GetFont() const
 {
     if (mpFont.get() != NULL)
         return mpFont;

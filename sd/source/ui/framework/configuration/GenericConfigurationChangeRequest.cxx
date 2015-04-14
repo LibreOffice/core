@@ -38,7 +38,7 @@ GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
         throw ::com::sun::star::lang::IllegalArgumentException();
 }
 
-GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest (void) throw()
+GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw()
 {
 }
 
@@ -61,7 +61,7 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
     }
 }
 
-OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
+OUString SAL_CALL GenericConfigurationChangeRequest::getName()
     throw (RuntimeException, std::exception)
 {
     return "GenericConfigurationChangeRequest "

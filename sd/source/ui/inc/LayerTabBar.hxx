@@ -38,19 +38,19 @@ public:
     LayerTabBar (
         DrawViewShell* pDrViewSh,
         vcl::Window* pParent);
-    virtual ~LayerTabBar (void);
+    virtual ~LayerTabBar();
 
     /** Inform all listeners of this control that the current layer has been
         activated.  Call this method after switching the current layer and is
         not done elsewhere (like when using ctrl + page up/down keys).
     */
-    void SendActivatePageEvent (void);
+    void SendActivatePageEvent();
 
     /** Inform all listeners of this control that the current layer has been
         deactivated.  Call this method before switching the current layer
         and is not done elsewhere (like when using ctrl page up/down keys).
     */
-    void SendDeactivatePageEvent (void);
+    void SendDeactivatePageEvent();
 
 protected:
     DrawViewShell* pDrViewSh;

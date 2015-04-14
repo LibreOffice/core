@@ -54,7 +54,7 @@ private:
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException );
 
-    void closeStream( void )
+    void closeStream()
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException );
@@ -67,10 +67,10 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
         throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire( void )
+    virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE
             { OWeakObject::acquire(); }
-    virtual void SAL_CALL release( void )
+    virtual void SAL_CALL release()
         throw() SAL_OVERRIDE
             { OWeakObject::release(); }
 
@@ -104,12 +104,12 @@ public:
                           ::com::sun::star::io::IOException,
                           ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL available( void )
+    virtual sal_Int32 SAL_CALL available()
                 throw( ::com::sun::star::io::NotConnectedException,
                           ::com::sun::star::io::IOException,
                           ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL closeInput( void )
+    virtual void SAL_CALL closeInput()
                 throw( ::com::sun::star::io::NotConnectedException,
                           ::com::sun::star::io::IOException,
                           ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
@@ -135,20 +135,20 @@ public:
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
-    virtual void SAL_CALL flush( void )
+    virtual void SAL_CALL flush()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 
-        virtual void SAL_CALL closeOutput( void )
+        virtual void SAL_CALL closeOutput()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     // XTruncate
-    virtual void SAL_CALL truncate( void )
+    virtual void SAL_CALL truncate()
         throw( com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 };

@@ -1445,7 +1445,7 @@ void ScAccessibleDocument::Init()
         mpChildrenShapes = new ScChildrenShapes(this, mpViewShell, meSplitPos);
 }
 
-ScAccessibleDocument::~ScAccessibleDocument(void)
+ScAccessibleDocument::~ScAccessibleDocument()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
@@ -1780,7 +1780,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
 
     /// Return the number of currently visible children.
 sal_Int32 SAL_CALL
-    ScAccessibleDocument::getAccessibleChildCount(void)
+    ScAccessibleDocument::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1829,7 +1829,7 @@ uno::Reference<XAccessible> SAL_CALL
 
     /// Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleDocument::getAccessibleStateSet(void)
+    ScAccessibleDocument::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1856,7 +1856,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleDocument::getAccessibleName(void)
+    ScAccessibleDocument::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -2068,14 +2068,14 @@ void SAL_CALL
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL
-    ScAccessibleDocument::getImplementationName(void)
+    ScAccessibleDocument::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleDocument");
 }
 
 uno::Sequence< OUString> SAL_CALL
-    ScAccessibleDocument::getSupportedServiceNames(void)
+    ScAccessibleDocument::getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
@@ -2096,7 +2096,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleDocument::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleDocument::getImplementationId(void)
+    ScAccessibleDocument::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
@@ -2104,7 +2104,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-bool ScAccessibleDocument::IsValid (void) const
+bool ScAccessibleDocument::IsValid() const
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2198,7 +2198,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 }
 
 OUString SAL_CALL
-    ScAccessibleDocument::createAccessibleDescription(void)
+    ScAccessibleDocument::createAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_DOC_DESCR));
@@ -2206,7 +2206,7 @@ OUString SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleDocument::createAccessibleName(void)
+    ScAccessibleDocument::createAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

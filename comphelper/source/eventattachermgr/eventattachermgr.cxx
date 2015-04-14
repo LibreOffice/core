@@ -120,7 +120,7 @@ public:
         throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methods of XPersistObject
-    virtual OUString SAL_CALL getServiceName(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -744,7 +744,7 @@ void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XS
 
 
 // Methods of XPersistObject
-OUString SAL_CALL ImplEventAttacherManager::getServiceName(void)
+OUString SAL_CALL ImplEventAttacherManager::getServiceName()
     throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.uno.script.EventAttacherManager" );

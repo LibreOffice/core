@@ -108,7 +108,7 @@ namespace connectivity
             using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE {
+            virtual void SAL_CALL disposing() SAL_OVERRIDE {
                 disposeResultSet();
                 OStatementCommonBase_Base::disposing();
             }

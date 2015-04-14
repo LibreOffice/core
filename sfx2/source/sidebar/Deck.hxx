@@ -45,18 +45,18 @@ public:
     Deck (
         const DeckDescriptor& rDeckDescriptor,
         vcl::Window* pParentWindow,
-        const ::boost::function<void(void)>& rCloserAction);
-    virtual ~Deck (void);
+        const ::boost::function<void()>& rCloserAction);
+    virtual ~Deck();
 
-    void Dispose (void);
+    void Dispose();
 
-    const ::rtl::OUString& GetId (void) const { return msId;}
-    DeckTitleBar* GetTitleBar (void) const;
-    Rectangle GetContentArea (void) const;
+    const ::rtl::OUString& GetId() const { return msId;}
+    DeckTitleBar* GetTitleBar() const;
+    Rectangle GetContentArea() const;
     void SetPanels (const SharedPanelContainer& rPanels);
-    const SharedPanelContainer& GetPanels (void) const { return maPanels;}
-    void RequestLayout (void);
-    vcl::Window* GetPanelParentWindow (void);
+    const SharedPanelContainer& GetPanels() const { return maPanels;}
+    void RequestLayout();
+    vcl::Window* GetPanelParentWindow();
 
     /** Try to make the panel completely visible.
         When the whole panel does not fit then make its top visible
@@ -77,7 +77,7 @@ public:
     {
     public:
         ScrollContainerWindow (vcl::Window* pParentWindow);
-        virtual ~ScrollContainerWindow (void);
+        virtual ~ScrollContainerWindow();
         virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
     private:

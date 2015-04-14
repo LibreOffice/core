@@ -115,7 +115,7 @@ XStream_impl::getOutputStream(  )
 }
 
 
-void SAL_CALL XStream_impl::truncate(void)
+void SAL_CALL XStream_impl::truncate()
     throw( io::IOException, uno::RuntimeException, std::exception )
 {
     if (osl::FileBase::E_None != m_aFile.setSize(0))

@@ -77,7 +77,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
 }
 
-ShowWindow::~ShowWindow(void)
+ShowWindow::~ShowWindow()
 {
     maPauseTimer.Stop();
     maMouseTimer.Stop();
@@ -621,7 +621,7 @@ void ShowWindow::AddWindowToPaintView()
 // Override the sd::Window's CreateAccessible to create a different accessible object
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-    ShowWindow::CreateAccessible (void)
+    ShowWindow::CreateAccessible()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())

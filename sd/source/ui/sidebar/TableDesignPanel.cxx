@@ -34,7 +34,7 @@ TableDesignPanel::TableDesignPanel (
 #endif
 }
 
-TableDesignPanel::~TableDesignPanel (void)
+TableDesignPanel::~TableDesignPanel()
 {
 }
 

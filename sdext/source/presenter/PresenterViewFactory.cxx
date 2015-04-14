@@ -74,7 +74,7 @@ public:
         : PresenterSlidePreview(rxContext, rxViewId, rxAnchorPane, rpPresenterController)
     {
     }
-    virtual ~NextSlidePreview (void) {}
+    virtual ~NextSlidePreview() {}
     virtual void SAL_CALL setCurrentPage (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -176,11 +176,11 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-PresenterViewFactory::~PresenterViewFactory (void)
+PresenterViewFactory::~PresenterViewFactory()
 {
 }
 
-void SAL_CALL PresenterViewFactory::disposing (void)
+void SAL_CALL PresenterViewFactory::disposing()
     throw (RuntimeException)
 {
     if (mxConfigurationController.is())
@@ -514,7 +514,7 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
         mpPresenterController));
 }
 
-void PresenterViewFactory::ThrowIfDisposed (void) const
+void PresenterViewFactory::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -528,22 +528,22 @@ void PresenterViewFactory::ThrowIfDisposed (void) const
 
 //===== CachablePresenterView =================================================
 
-CachablePresenterView::CachablePresenterView (void)
+CachablePresenterView::CachablePresenterView()
     : mbIsPresenterViewActive(true)
 {
 }
 
-void CachablePresenterView::ActivatePresenterView (void)
+void CachablePresenterView::ActivatePresenterView()
 {
     mbIsPresenterViewActive = true;
 }
 
-void CachablePresenterView::DeactivatePresenterView (void)
+void CachablePresenterView::DeactivatePresenterView()
 {
     mbIsPresenterViewActive = false;
 }
 
-void CachablePresenterView::ReleaseView (void)
+void CachablePresenterView::ReleaseView()
 {
 }
 

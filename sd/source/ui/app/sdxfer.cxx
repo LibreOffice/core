@@ -744,7 +744,7 @@ void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
     maUserData.push_back(rpData);
 }
 
-sal_Int32 SdTransferable::GetUserDataCount (void) const
+sal_Int32 SdTransferable::GetUserDataCount() const
 {
     return maUserData.size();
 }

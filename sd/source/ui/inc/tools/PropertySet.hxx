@@ -46,15 +46,15 @@ class PropertySet
       public PropertySetInterfaceBase
 {
 public:
-    explicit PropertySet (void);
-    virtual ~PropertySet (void);
+    explicit PropertySet();
+    virtual ~PropertySet();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XPropertySet
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo (void)
+        SAL_CALL getPropertySetInfo()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setPropertyValue (
@@ -130,7 +130,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

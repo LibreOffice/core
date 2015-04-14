@@ -62,12 +62,12 @@ FTPContentIdentifier::queryInterface(
 }
 
 
-void SAL_CALL FTPContentIdentifier::acquire( void ) throw() {
+void SAL_CALL FTPContentIdentifier::acquire() throw() {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL FTPContentIdentifier::release( void ) throw() {
+void SAL_CALL FTPContentIdentifier::release() throw() {
     OWeakObject::release();
 }
 

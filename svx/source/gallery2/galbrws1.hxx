@@ -94,7 +94,7 @@ private:
     Image                   aImgImported;
 
     ::boost::function<sal_Bool(const KeyEvent&,Window*)> maKeyInputHandler;
-    ::boost::function<void(void)> maThemeSlectionHandler;
+    ::boost::function<void()> maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
     sal_uIntPtr                 ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
@@ -125,7 +125,7 @@ public:
                                 vcl::Window* pParent,
                                 Gallery* pGallery,
                                 const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
-                                const ::boost::function<void(void)>& rThemeSlectionHandler);
+                                const ::boost::function<void()>& rThemeSlectionHandler);
                             virtual ~GalleryBrowser1();
 
     void                    SelectTheme( const OUString& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }

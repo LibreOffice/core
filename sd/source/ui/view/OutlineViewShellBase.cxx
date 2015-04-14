@@ -59,7 +59,7 @@ OutlineViewShellBase::OutlineViewShellBase (
 {
 }
 
-OutlineViewShellBase::~OutlineViewShellBase (void)
+OutlineViewShellBase::~OutlineViewShellBase()
 {
 }
 

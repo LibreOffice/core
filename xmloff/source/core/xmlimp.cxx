@@ -877,11 +877,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL SvXMLImport::startCDATA( void ) throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SvXMLImport::startCDATA() throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvXMLImport::endCDATA( void ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL SvXMLImport::endCDATA() throw(uno::RuntimeException, std::exception)
 {
 }
 
@@ -890,7 +890,7 @@ void SAL_CALL SvXMLImport::comment( const OUString& )
 {
 }
 
-void SAL_CALL SvXMLImport::allowLineBreak( void )
+void SAL_CALL SvXMLImport::allowLineBreak()
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }

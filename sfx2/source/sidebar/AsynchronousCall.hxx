@@ -32,14 +32,14 @@ namespace sfx2 { namespace sidebar {
 class AsynchronousCall
 {
 public:
-    typedef ::boost::function<void(void)> Action;
+    typedef ::boost::function<void()> Action;
 
-    AsynchronousCall (void);
+    AsynchronousCall();
     AsynchronousCall (const Action& rAction);
-    ~AsynchronousCall (void);
+    ~AsynchronousCall();
 
-    void RequestCall (void);
-    void CancelRequest (void);
+    void RequestCall();
+    void CancelRequest();
 
 private:
     Action maAction;

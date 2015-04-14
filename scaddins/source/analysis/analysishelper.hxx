@@ -188,18 +188,18 @@ public:
                             FuncData( const FuncDataBase& rBaseData, ResMgr& );
     virtual                 ~FuncData();
 
-    inline sal_uInt16       GetUINameID( void ) const;
-    inline sal_uInt16       GetDescrID( void ) const;
-    inline bool         IsDouble( void ) const;
-    inline bool         HasIntParam( void ) const;
+    inline sal_uInt16       GetUINameID() const;
+    inline sal_uInt16       GetDescrID() const;
+    inline bool         IsDouble() const;
+    inline bool         HasIntParam() const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
     inline bool         Is( const OUString& rCompareTo ) const;
 
     inline const std::vector<OUString> &
-                            GetCompNameList( void ) const;
+                            GetCompNameList() const;
 
-    inline FDCategory       GetCategory( void ) const;
+    inline FDCategory       GetCategory() const;
 };
 
 
@@ -378,35 +378,35 @@ public:
     static bool             ParseString( const OUString& rComplexAsString, Complex& rReturn );
     OUString                GetString() const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    inline double           Real( void ) const;
-    inline double           Imag( void ) const;
+    inline double           Real() const;
+    inline double           Imag() const;
 
-    double                  Arg( void ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    inline double           Abs( void ) const;
+    double                  Arg() const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    inline double           Abs() const;
 
     // following functions change the complex number itself to avoid unnecessary copy actions!
     void                    Power( double fPower ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Sqrt( void );
-    void                    Sin( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Cos( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sqrt();
+    void                    Sin() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cos() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     void                    Div( const Complex& rDivisor ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Exp( void );
-    inline void             Conjugate( void );
-    void                    Ln( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Log10( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Log2( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Exp();
+    inline void             Conjugate();
+    void                    Ln() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Log10() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Log2() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     inline void             Mult( double fFact );
     inline void             Mult( const Complex& rMult );
     inline void             Sub( const Complex& rMult );
     inline void             Add( const Complex& rAdd );
-    void                    Tan( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Sec( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Csc( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Cot( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Sinh( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Cosh( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Sech( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Csch( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Tan() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sec() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Csc() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cot() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sinh() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cosh() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sech() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Csch() throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 };
 
@@ -428,9 +428,9 @@ public:
 
     inline const Complex*   Get( sal_uInt32 nIndex ) const;
 
-    inline bool             empty( void ) const
+    inline bool             empty() const
                                 { return maVector.empty(); }
-    inline sal_uInt32       Count( void ) const
+    inline sal_uInt32       Count() const
                                 { return maVector.size(); }
 
     inline void             Append( Complex* pNew );
@@ -482,8 +482,8 @@ public:
     virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
-    inline ConvertDataClass Class( void ) const;
-    inline bool         IsPrefixSupport( void ) const;
+    inline ConvertDataClass Class() const;
+    inline bool         IsPrefixSupport() const;
 };
 
 class ConvertDataLinear : public ConvertData
@@ -514,7 +514,7 @@ class ConvertDataList
 private:
     std::vector<ConvertData*> maVector;
 public:
-                            ConvertDataList( void );
+                            ConvertDataList();
     virtual                 ~ConvertDataList();
 
     double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
@@ -554,25 +554,25 @@ inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
 }
 
 
-inline sal_uInt16 FuncData::GetUINameID( void ) const
+inline sal_uInt16 FuncData::GetUINameID() const
 {
     return nUINameID;
 }
 
 
-inline sal_uInt16 FuncData::GetDescrID( void ) const
+inline sal_uInt16 FuncData::GetDescrID() const
 {
     return nDescrID;
 }
 
 
-inline bool FuncData::IsDouble( void ) const
+inline bool FuncData::IsDouble() const
 {
     return bDouble;
 }
 
 
-inline bool FuncData::HasIntParam( void ) const
+inline bool FuncData::HasIntParam() const
 {
     return bWithOpt;
 }
@@ -584,13 +584,13 @@ inline bool FuncData::Is( const OUString& r ) const
 }
 
 
-inline const std::vector<OUString> & FuncData::GetCompNameList( void ) const
+inline const std::vector<OUString> & FuncData::GetCompNameList() const
 {
     return aCompList;
 }
 
 
-inline FDCategory FuncData::GetCategory( void ) const
+inline FDCategory FuncData::GetCategory() const
 {
     return eCat;
 }
@@ -614,25 +614,25 @@ inline Complex::Complex( double fReal, double fImag, sal_Unicode cC ) :
 }
 
 
-inline double Complex::Real( void ) const
+inline double Complex::Real() const
 {
     return r;
 }
 
 
-inline double Complex::Imag( void ) const
+inline double Complex::Imag() const
 {
     return i;
 }
 
 
-inline double Complex::Abs( void ) const
+inline double Complex::Abs() const
 {
     return sqrt( r * r + i * i );
 }
 
 
-void Complex::Conjugate( void )
+void Complex::Conjugate()
 {
     i = -i;
 }
@@ -685,12 +685,12 @@ inline void ComplexList::Append( Complex* p )
 }
 
 
-inline ConvertDataClass ConvertData::Class( void ) const
+inline ConvertDataClass ConvertData::Class() const
 {
     return eClass;
 }
 
-inline bool ConvertData::IsPrefixSupport( void ) const
+inline bool ConvertData::IsPrefixSupport() const
 {
     return bPrefixSupport;
 }

@@ -227,12 +227,12 @@ OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 {
 }
 
-void SAL_CALL OReadMenuDocumentHandler::startDocument(void)
+void SAL_CALL OReadMenuDocumentHandler::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
+void SAL_CALL OReadMenuDocumentHandler::endDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_nElementDepth > 0 )
@@ -303,12 +303,12 @@ OReadMenuBarHandler::~OReadMenuBarHandler()
 {
 }
 
-void SAL_CALL OReadMenuBarHandler::startDocument(void)
+void SAL_CALL OReadMenuBarHandler::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadMenuBarHandler::endDocument(void)
+void SAL_CALL OReadMenuBarHandler::endDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
 }
@@ -444,12 +444,12 @@ OReadMenuHandler::~OReadMenuHandler()
 {
 }
 
-void SAL_CALL OReadMenuHandler::startDocument(void)
+void SAL_CALL OReadMenuHandler::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadMenuHandler::endDocument(void)
+void SAL_CALL OReadMenuHandler::endDocument()
     throw( SAXException, RuntimeException, std::exception)
 {
 }
@@ -522,12 +522,12 @@ OReadMenuPopupHandler::~OReadMenuPopupHandler()
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::startDocument(void)
+void SAL_CALL OReadMenuPopupHandler::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::endDocument(void)
+void SAL_CALL OReadMenuPopupHandler::endDocument()
     throw( SAXException, RuntimeException, std::exception)
 {
 }

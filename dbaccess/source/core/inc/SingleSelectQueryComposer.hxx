@@ -207,7 +207,7 @@ namespace dbaccess
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rContext);
 
 
-        void SAL_CALL disposing(void) SAL_OVERRIDE;
+        void SAL_CALL disposing() SAL_OVERRIDE;
 
         virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

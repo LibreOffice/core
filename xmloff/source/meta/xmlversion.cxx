@@ -109,7 +109,7 @@ XMLVersionListImport::XMLVersionListImport(
                                   xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
-XMLVersionListImport::~XMLVersionListImport( void ) throw()
+XMLVersionListImport::~XMLVersionListImport() throw()
 {}
 
 SvXMLImportContext *XMLVersionListImport::CreateContext(
@@ -141,7 +141,7 @@ XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
 {
 }
 
-XMLVersionListContext::~XMLVersionListContext( void )
+XMLVersionListContext::~XMLVersionListContext()
 {}
 
 SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -216,7 +216,7 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
     aList[nLength] = aInfo;
 }
 
-XMLVersionContext::~XMLVersionContext( void )
+XMLVersionContext::~XMLVersionContext()
 {}
 
 bool XMLVersionContext::ParseISODateTimeString(

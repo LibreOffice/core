@@ -104,8 +104,8 @@ void ForAllRectangles (const vcl::Region& rRegion, ::boost::function<void(const 
 class Layer : private ::boost::noncopyable
 {
 public:
-    Layer (void);
-    ~Layer (void);
+    Layer();
+    ~Layer();
 
     void Initialize (const SharedSdWindow& rpTargetWindow);
     void InvalidateRectangle (const Rectangle& rInvalidationBox);
@@ -117,8 +117,8 @@ public:
     void Resize (const Size& rSize);
     void AddPainter (const SharedILayerPainter& rpPainter);
     void RemovePainter (const SharedILayerPainter& rpPainter);
-    bool HasPainter (void) const;
-    void Dispose (void);
+    bool HasPainter() const;
+    void Dispose();
 
 private:
     ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
@@ -168,7 +168,7 @@ LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
 
-LayeredDevice::~LayeredDevice (void)
+LayeredDevice::~LayeredDevice()
 {
 }
 
@@ -290,20 +290,20 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
     }
 }
 
-void LayeredDevice::Resize (void)
+void LayeredDevice::Resize()
 {
     const Size aSize (mpTargetWindow->GetSizePixel());
     mpBackBuffer->SetOutputSizePixel(aSize);
     ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Resize, _1, aSize));
 }
 
-void LayeredDevice::Dispose (void)
+void LayeredDevice::Dispose()
 {
     ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Dispose, _1));
     mpLayers->clear();
 }
 
-bool LayeredDevice::HandleMapModeChange (void)
+bool LayeredDevice::HandleMapModeChange()
 {
     const MapMode& rMapMode (mpTargetWindow->GetMapMode());
     if (maSavedMapMode == rMapMode)
@@ -368,14 +368,14 @@ bool LayeredDevice::HandleMapModeChange (void)
 
 //===== Layer =================================================================
 
-Layer::Layer (void)
+Layer::Layer()
     : mpLayerDevice(),
       maPainters(),
       maInvalidationRegion()
 {
 }
 
-Layer::~Layer (void)
+Layer::~Layer()
 {
 }
 
@@ -485,12 +485,12 @@ void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
     }
 }
 
-bool Layer::HasPainter (void) const
+bool Layer::HasPainter() const
 {
     return !maPainters.empty();
 }
 
-void Layer::Dispose (void)
+void Layer::Dispose()
 {
     maPainters.clear();
 }

@@ -56,8 +56,8 @@ public:
 
     ::sfx2::sidebar::ControllerItem& GetSpaceController() { return maSpacingControl;}
     long GetSelFontSize();
-    void EndSpacingPopupMode (void);
-    void EndUnderlinePopupMode (void);
+    void EndSpacingPopupMode();
+    void EndUnderlinePopupMode();
     Color& GetUnderlineColor() { return meUnderlineColor;}
 
 
@@ -102,7 +102,7 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
-    virtual ~TextPropertyPanel (void);
+    virtual ~TextPropertyPanel();
 
 
     PopupControl* CreateCharacterSpacingControl (PopupContainer* pParent);
@@ -110,7 +110,7 @@ private:
     DECL_LINK(SpacingClickHdl, ToolBox*);
     DECL_LINK(UnderlineClickHdl, ToolBox* );
 
-    void SetupToolboxItems (void);
+    void SetupToolboxItems();
     void InitToolBoxFont();
     void InitToolBoxSpacing();
 };

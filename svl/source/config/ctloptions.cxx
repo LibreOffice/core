@@ -71,7 +71,7 @@ public:
     bool            IsCTLSequenceChecking() const { return m_bCTLSequenceChecking;}
 
     void            SetCTLSequenceCheckingRestricted( bool _bEnable );
-    bool            IsCTLSequenceCheckingRestricted( void ) const   { return m_bCTLRestricted; }
+    bool            IsCTLSequenceCheckingRestricted() const   { return m_bCTLRestricted; }
 
     void            SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
     bool            IsCTLSequenceCheckingTypeAndReplace() const { return m_bCTLTypeAndReplace; }
@@ -439,7 +439,7 @@ void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
     pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
 }
 
-bool SvtCTLOptions::IsCTLSequenceCheckingRestricted( void ) const
+bool SvtCTLOptions::IsCTLSequenceCheckingRestricted() const
 {
     assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsCTLSequenceCheckingRestricted();

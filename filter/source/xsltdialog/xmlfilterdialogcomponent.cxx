@@ -213,7 +213,7 @@ OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::s
 
 namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
-Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId( void ) throw( RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId() throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }

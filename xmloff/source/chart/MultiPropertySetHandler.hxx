@@ -123,7 +123,7 @@ public:
     */
     MultiPropertySetHandler (::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface> xObject);
-    ~MultiPropertySetHandler    (void);
+    ~MultiPropertySetHandler();
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
             the PropertyWrapper template class.
@@ -143,7 +143,7 @@ public:
         @return If none of the two interfaces is supported or using them both
             fails then sal_False is returned.  Else True is returned.
     */
-    inline  bool    GetProperties   (void);
+    inline  bool    GetProperties();
 
 private:
     /** @descr  Try to use the XMultiPropertySet interface to get the property
@@ -180,14 +180,14 @@ MultiPropertySetHandler::MultiPropertySetHandler (::com::sun::star::uno::Referen
 {
 }
 
-MultiPropertySetHandler::~MultiPropertySetHandler (void)
+MultiPropertySetHandler::~MultiPropertySetHandler()
 {
     ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
     for (I=aPropertyList.begin(); I!=aPropertyList.end(); ++I)
         delete I->second;
 }
 
-bool    MultiPropertySetHandler::GetProperties  (void)
+bool    MultiPropertySetHandler::GetProperties()
 {
     ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
     ::com::sun::star::uno::Sequence< OUString> aNameList (aPropertyList.size());

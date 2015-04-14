@@ -83,11 +83,11 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     }
 }
 
-PresenterConfigurationAccess::~PresenterConfigurationAccess (void)
+PresenterConfigurationAccess::~PresenterConfigurationAccess()
 {
 }
 
-bool PresenterConfigurationAccess::IsValid (void) const
+bool PresenterConfigurationAccess::IsValid() const
 {
     return mxRoot.is();
 }
@@ -176,7 +176,7 @@ Reference<beans::XPropertySet> PresenterConfigurationAccess::GetNodeProperties (
     return Reference<beans::XPropertySet>(GetConfigurationNode(rxNode, rsPathToNode), UNO_QUERY);
 }
 
-void PresenterConfigurationAccess::CommitChanges (void)
+void PresenterConfigurationAccess::CommitChanges()
 {
     Reference<util::XChangesBatch> xConfiguration (mxRoot, UNO_QUERY);
     if (xConfiguration.is())

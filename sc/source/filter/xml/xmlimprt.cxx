@@ -2973,7 +2973,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
 }
 
 // ::com::sun::star::xml::sax::XDocumentHandler
-void SAL_CALL ScXMLImport::startDocument(void)
+void SAL_CALL ScXMLImport::startDocument()
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ScXMLImport::MutexGuard aGuard(*this);

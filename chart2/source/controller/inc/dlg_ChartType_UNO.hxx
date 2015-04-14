@@ -37,8 +37,8 @@ public:
     ChartTypeUnoDlg( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
     // XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void);
-    static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
+    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
 private:
     virtual ~ChartTypeUnoDlg();
 

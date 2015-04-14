@@ -66,7 +66,7 @@ namespace dbaccess
         return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, false );
     }
 
-    void SAL_CALL OPrivateColumns::disposing(void)
+    void SAL_CALL OPrivateColumns::disposing()
     {
         m_aColumns = NULL;
         clear_NoDispose();

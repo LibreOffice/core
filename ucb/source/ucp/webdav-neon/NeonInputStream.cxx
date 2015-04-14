@@ -37,13 +37,13 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace webdav_ucp;
 
-NeonInputStream::NeonInputStream( void )
+NeonInputStream::NeonInputStream()
 : mLen( 0 ),
   mPos( 0 )
 {
 }
 
-NeonInputStream::~NeonInputStream( void )
+NeonInputStream::~NeonInputStream()
 {
 }
 
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL NeonInputStream::available(  )
     return sal::static_int_cast<sal_Int32>(mLen - mPos);
 }
 
-void SAL_CALL NeonInputStream::closeInput( void )
+void SAL_CALL NeonInputStream::closeInput()
          throw( ::com::sun::star::io::NotConnectedException,
                   ::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException, std::exception )

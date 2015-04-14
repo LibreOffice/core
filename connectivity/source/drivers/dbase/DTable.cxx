@@ -716,7 +716,7 @@ void ODbaseTable::refreshIndexes()
 }
 
 
-void SAL_CALL ODbaseTable::disposing(void)
+void SAL_CALL ODbaseTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

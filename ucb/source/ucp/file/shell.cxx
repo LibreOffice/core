@@ -3051,14 +3051,14 @@ shell::getScheme( OUString& Scheme )
 }
 
 OUString SAL_CALL
-shell::getImplementationName_static( void )
+shell::getImplementationName_static()
 {
   return OUString("com.sun.star.comp.ucb.FileProvider");
 }
 
 
 uno::Sequence< OUString > SAL_CALL
-shell::getSupportedServiceNames_static( void )
+shell::getSupportedServiceNames_static()
 {
   OUString Supported("com.sun.star.ucb.FileContentProvider");
   com::sun::star::uno::Sequence< OUString > Seq( &Supported,1 );

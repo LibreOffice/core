@@ -47,11 +47,11 @@ NavigatorWrapper::NavigatorWrapper (
     maNavigator.Show();
 }
 
-NavigatorWrapper::~NavigatorWrapper (void)
+NavigatorWrapper::~NavigatorWrapper()
 {
 }
 
-void NavigatorWrapper::Resize (void)
+void NavigatorWrapper::Resize()
 {
     maNavigator.SetSizePixel(GetSizePixel());
 }
@@ -63,12 +63,12 @@ css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32 nWidth)
     return css::ui::LayoutSize(-1,-1,-1);
 }
 
-void NavigatorWrapper::UpdateNavigator (void)
+void NavigatorWrapper::UpdateNavigator()
 {
     maNavigator.InitTreeLB(mrViewShellBase.GetDocument());
 }
 
-void NavigatorWrapper::GetFocus (void)
+void NavigatorWrapper::GetFocus()
 {
     maNavigator.GrabFocus();
 }

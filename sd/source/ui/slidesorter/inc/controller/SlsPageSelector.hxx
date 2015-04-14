@@ -55,19 +55,19 @@ class PageSelector : private ::boost::noncopyable
 public:
     PageSelector (SlideSorter& rSlideSorter);
 
-    void SelectAllPages (void);
-    void DeselectAllPages (void);
+    void SelectAllPages();
+    void DeselectAllPages();
 
     /** Update the selection state of all page descriptors to be the same as
         that of the corresponding pages of the SdPage objects and issue
         redraw requests where necessary.
     */
-    void GetCoreSelection (void);
+    void GetCoreSelection();
 
     /** Update the selection state of the SdPage objects to be the same as
         that of the correspinding page descriptors.
     */
-    void SetCoreSelection (void);
+    void SetCoreSelection();
 
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
@@ -106,15 +106,15 @@ public:
         that it is self contained for iterating over all pages to select or
         deselect them.
     */
-    int GetPageCount (void) const;
-    int GetSelectedPageCount (void) const { return mnSelectedPageCount;}
+    int GetPageCount() const;
+    int GetSelectedPageCount() const { return mnSelectedPageCount;}
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
         @return
             The returned anchor may be NULL.
     */
-    model::SharedPageDescriptor GetSelectionAnchor (void) const { return mpSelectionAnchor;}
+    model::SharedPageDescriptor GetSelectionAnchor() const { return mpSelectionAnchor;}
 
     typedef ::std::vector<SdPage*> PageSelection;
 
@@ -125,7 +125,7 @@ public:
             even if pages are exchanged a later call to SetPageSelection()
             is valid.
     */
-    ::boost::shared_ptr<PageSelection> GetPageSelection (void) const;
+    ::boost::shared_ptr<PageSelection> GetPageSelection() const;
 
     /** Restore a page selection according to the given selection object.
         @param rSelection
@@ -148,7 +148,7 @@ public:
     /** Call this method after the model has changed to set the number
         of selected pages.
     */
-    void CountSelectedPages (void);
+    void CountSelectedPages();
 
     /** Use the UpdateLock whenever you do a complex selection, i.e. call
         more than one method in a row.  An active lock prevents intermediate
@@ -159,8 +159,8 @@ public:
     public:
         UpdateLock (SlideSorter& rSlideSorter);
         UpdateLock (PageSelector& rPageSelector);
-        ~UpdateLock (void);
-        void Release (void);
+        ~UpdateLock();
+        void Release();
     private:
         PageSelector* mpSelector;
     };
@@ -170,7 +170,7 @@ public:
     public:
         BroadcastLock (SlideSorter& rSlideSorter);
         BroadcastLock (PageSelector& rPageSelector);
-        ~BroadcastLock (void);
+        ~BroadcastLock();
     private:
         PageSelector& mrSelector;
     };
@@ -195,17 +195,17 @@ private:
         DisableBroadcasting() was called before and the selection has been
         changed in the mean time, this change will be broadcasted.
     */
-    void EnableBroadcasting (void);
+    void EnableBroadcasting();
 
     /** Disable the broadcasting of selection change events.  Subsequent
         changes of the selection will set a flag that triggers the sending
         of events when EnableBroadcasting() is called.
     */
-    void DisableBroadcasting (void);
+    void DisableBroadcasting();
 
     void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
 
-    void CheckConsistency (void) const;
+    void CheckConsistency() const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

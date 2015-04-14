@@ -61,7 +61,7 @@ PageDescriptor::PageDescriptor (
     }
 }
 
-PageDescriptor::~PageDescriptor (void)
+PageDescriptor::~PageDescriptor()
 {
 }
 
@@ -71,7 +71,7 @@ void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
     maVisualState.mnPageId = nNewIndex;
 }
 
-bool PageDescriptor::UpdateMasterPage (void)
+bool PageDescriptor::UpdateMasterPage()
 {
     const SdrPage* pMaster = NULL;
     if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
@@ -85,7 +85,7 @@ bool PageDescriptor::UpdateMasterPage (void)
         return false;
 }
 
-bool PageDescriptor::UpdateTransitionFlag (void)
+bool PageDescriptor::UpdateTransitionFlag()
 {
     bool bHasSlideTransition (false);
     if (mpPage != NULL)
@@ -188,7 +188,7 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
     return bModified;
 }
 
-bool PageDescriptor::GetCoreSelection (void)
+bool PageDescriptor::GetCoreSelection()
 {
     if (mpPage!=NULL && mpPage->IsSelected() != mbIsSelected)
         return SetState(ST_Selected, !mbIsSelected);
@@ -196,7 +196,7 @@ bool PageDescriptor::GetCoreSelection (void)
         return false;
 }
 
-void PageDescriptor::SetCoreSelection (void)
+void PageDescriptor::SetCoreSelection()
 {
     if (mpPage != NULL)
         if (HasState(ST_Selected))
@@ -209,7 +209,7 @@ void PageDescriptor::SetCoreSelection (void)
     }
 }
 
-Rectangle PageDescriptor::GetBoundingBox (void) const
+Rectangle PageDescriptor::GetBoundingBox() const
 {
     Rectangle aBox (maBoundingBox);
     const Point aOffset (maVisualState.GetLocationOffset());

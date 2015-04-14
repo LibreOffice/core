@@ -47,12 +47,12 @@ class PresenterProtocolHandler
 {
 public:
     PresenterProtocolHandler (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterProtocolHandler (void);
+    virtual ~PresenterProtocolHandler();
 
-    void SAL_CALL disposing (void) SAL_OVERRIDE;
+    void SAL_CALL disposing() SAL_OVERRIDE;
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
@@ -89,7 +89,7 @@ private:
     class Dispatch;
     ::rtl::Reference<PresenterController> mpPresenterController;
 
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 } }

@@ -35,7 +35,7 @@ class ToolTip
 {
 public:
     ToolTip (SlideSorter& rSlideSorter);
-    ~ToolTip (void);
+    ~ToolTip();
 
     /** Set a new page.  This modifies the default help text.  After a page
         change a timer is started to delay the display of the tool tip for
@@ -50,7 +50,7 @@ public:
             Returns whether the tool tip was visible at the time this method
             was called.
     */
-    bool Hide (void);
+    bool Hide();
 
 private:
     SlideSorter& mrSlideSorter;
@@ -66,7 +66,7 @@ private:
             is shown after a short delay.
     */
     void Show (const bool bForce);
-    void DoShow (void);
+    void DoShow();
 
     DECL_LINK(DelayTrigger, void*);
 };

@@ -71,7 +71,7 @@ public:
         vcl::Window* pParentWindow,
         const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
     virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void ActivatePage (void) SAL_OVERRIDE;
+    virtual void ActivatePage() SAL_OVERRIDE;
 private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 };
@@ -134,11 +134,11 @@ ViewTabBar::ViewTabBar (
     }
 }
 
-ViewTabBar::~ViewTabBar (void)
+ViewTabBar::~ViewTabBar()
 {
 }
 
-void ViewTabBar::disposing (void)
+void ViewTabBar::disposing()
 {
     if (mpViewShellBase != NULL
         && mxViewTabBarId->isBoundToURL(
@@ -295,7 +295,7 @@ sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     return HasTabBarButton(rButton);
 }
 
-Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
+Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
@@ -304,13 +304,13 @@ Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
 
 //----- XResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId (void)
+Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId()
     throw (RuntimeException, std::exception)
 {
     return mxViewTabBarId;
 }
 
-sal_Bool SAL_CALL ViewTabBar::isAnchorOnly (void)
+sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -323,7 +323,7 @@ namespace
     class theViewTabBarUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewTabBarUnoTunnelId > {};
 }
 
-const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
+const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
 {
     return theViewTabBarUnoTunnelId::get().getSeq();
 }
@@ -342,7 +342,7 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
     return nResult;
 }
 
-bool ViewTabBar::ActivatePage (void)
+bool ViewTabBar::ActivatePage()
 {
     try
     {
@@ -395,7 +395,7 @@ bool ViewTabBar::ActivatePage (void)
     return false;
 }
 
-int ViewTabBar::GetHeight (void)
+int ViewTabBar::GetHeight()
 {
     int nHeight (0);
 
@@ -499,7 +499,7 @@ bool ViewTabBar::HasTabBarButton (
 }
 
 ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
-    ViewTabBar::GetTabBarButtons (void)
+    ViewTabBar::GetTabBarButtons()
 {
     sal_uInt32 nCount (maTabBarButtons.size());
     ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
@@ -511,7 +511,7 @@ bool ViewTabBar::HasTabBarButton (
     return aList;
 }
 
-void ViewTabBar::UpdateActiveButton (void)
+void ViewTabBar::UpdateActiveButton()
 {
     Reference<XView> xView;
     if (mpViewShellBase != NULL)
@@ -532,7 +532,7 @@ void ViewTabBar::UpdateActiveButton (void)
     }
 }
 
-void ViewTabBar::UpdateTabBarButtons (void)
+void ViewTabBar::UpdateTabBarButtons()
 {
     TabBarButtonList::const_iterator iTab;
     sal_uInt16 nPageCount (mpTabControl->GetPageCount());
@@ -584,7 +584,7 @@ void TabBarControl::Paint (const Rectangle& rRect)
     SetLineColor (aOriginalLineColor);
 }
 
-void TabBarControl::ActivatePage (void)
+void TabBarControl::ActivatePage()
 {
     if (mpViewTabBar->ActivatePage())
     {

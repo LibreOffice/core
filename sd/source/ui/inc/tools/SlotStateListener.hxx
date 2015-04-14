@@ -59,7 +59,7 @@ public:
     /** The constructor de-registers all remaining listeners.  Usually a prior
         dispose() call should have done that already.
     */
-    virtual ~SlotStateListener (void);
+    virtual ~SlotStateListener();
 
     /** Set the callback to the given value.  Whenever one of the observed
         slots changes its state this callback is informed about it.
@@ -108,7 +108,7 @@ protected:
         reaction to a XComponent::dispose() call.  It releases all currently
         active listeners.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
     Link maCallback;
@@ -124,12 +124,12 @@ private:
 
     /** Deregister all currently active state change listeners.
     */
-    void ReleaseListeners (void);
+    void ReleaseListeners();
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
     /** Transform the given string into a URL object.

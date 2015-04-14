@@ -67,19 +67,19 @@ public:
     */
     ScrollBarManager (SlideSorter& rSlideSorter);
 
-    ~ScrollBarManager (void);
+    ~ScrollBarManager();
 
     /** Register listeners at the scroll bars.  This method is called after
         startup of a new slide sorter object or after a reactivation of a
         slide sorter that for example is taken from a cache.
     */
-    void Connect (void);
+    void Connect();
 
     /** Remove listeners from the scroll bars.  This method is called when
         the slide sorter is destroyed or when it is suspended, e.g. put
         into a cache for later reuse.
     */
-    void Disconnect (void);
+    void Disconnect();
 
     /** Set up the scroll bar, i.e. thumb size and position.  Call this
         method when the content of the browser window changed, i.e. pages
@@ -129,7 +129,7 @@ public:
            Returns 0 when the vertical scroll bar is not shown or does not
            exist, otherwise its width in pixel is returned.
     */
-    int GetVerticalScrollBarWidth (void) const;
+    int GetVerticalScrollBarWidth() const;
 
     /** Return the height of the horizontal scroll bar, which--when
         shown--should be fixed in contrast to its width.
@@ -137,7 +137,7 @@ public:
            Returns 0 when the vertical scroll bar is not shown or does not
            exist, otherwise its height in pixel is returned.
     */
-    int GetHorizontalScrollBarHeight (void) const;
+    int GetHorizontalScrollBarHeight() const;
 
     /** Call this method to scroll a window while the mouse is in dragging a
         selection.  If the mouse is near the window border or is outside the
@@ -152,9 +152,9 @@ public:
     */
     bool AutoScroll (
         const Point& rMouseWindowPosition,
-        const ::boost::function<void(void)>& rAutoScrollFunctor);
+        const ::boost::function<void()>& rAutoScrollFunctor);
 
-    void StopAutoScroll (void);
+    void StopAutoScroll();
 
     void clearAutoScrollFunctor();
 
@@ -215,7 +215,7 @@ private:
     */
     SharedSdWindow mpContentWindow;
 
-    ::boost::function<void(void)> maAutoScrollFunctor;
+    ::boost::function<void()> maAutoScrollFunctor;
 
     void SetWindowOrigin (
         double nHorizontalPosition,
@@ -250,7 +250,7 @@ private:
         const Rectangle& rAvailableArea);
 
     void CalcAutoScrollOffset (const Point& rMouseWindowPosition);
-    bool RepeatAutoScroll (void);
+    bool RepeatAutoScroll();
 
     DECL_LINK(HorizontalScrollBarHandler, ScrollBar*);
     DECL_LINK(VerticalScrollBarHandler, ScrollBar*);

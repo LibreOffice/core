@@ -38,14 +38,14 @@ public:
     inline PageEnumerationImpl (
         const SlideSorterModel& rModel,
         const PageEnumeration::PagePredicate& rPredicate);
-    virtual ~PageEnumerationImpl (void);
+    virtual ~PageEnumerationImpl();
     /** Create a copy of the called enumeration object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() SAL_OVERRIDE;
 
-    virtual bool HasMoreElements (void) const SAL_OVERRIDE;
-    virtual SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
-    virtual void Rewind (void) SAL_OVERRIDE;
+    virtual bool HasMoreElements() const SAL_OVERRIDE;
+    virtual SharedPageDescriptor GetNextElement() SAL_OVERRIDE;
+    virtual void Rewind() SAL_OVERRIDE;
 
 private:
     const SlideSorterModel& mrModel;
@@ -64,7 +64,7 @@ private:
     /** Skip all elements that do not fulfill Predicate starting with the
         one pointed to by mnIndex.
     */
-    inline void AdvanceToNextValidElement (void);
+    inline void AdvanceToNextValidElement();
 };
 
 } // end of anonymouse namespace
@@ -106,7 +106,7 @@ PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
     mpImpl = rEnumeration.mpImpl->Clone();
 }
 
-PageEnumeration::~PageEnumeration (void)
+PageEnumeration::~PageEnumeration()
 {
 }
 
@@ -117,23 +117,23 @@ PageEnumeration& PageEnumeration::operator= (
     return *this;
 }
 
-::std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone (void)
+::std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone()
 {
     return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumeration (*this, true));
 }
 
-bool PageEnumeration::HasMoreElements (void) const
+bool PageEnumeration::HasMoreElements() const
 {
     return mpImpl->HasMoreElements();
 }
 
-SharedPageDescriptor PageEnumeration::GetNextElement (void)
+SharedPageDescriptor PageEnumeration::GetNextElement()
 {
     return mpImpl->GetNextElement();
 }
 
-void PageEnumeration::Rewind (void)
+void PageEnumeration::Rewind()
 {
     return mpImpl->Rewind();
 }
@@ -162,23 +162,23 @@ PageEnumerationImpl::PageEnumerationImpl (
 {
 }
 
-PageEnumerationImpl::~PageEnumerationImpl (void)
+PageEnumerationImpl::~PageEnumerationImpl()
 {
 }
 
 ::std::unique_ptr<Enumeration<SharedPageDescriptor> >
-    PageEnumerationImpl::Clone (void)
+    PageEnumerationImpl::Clone()
 {
     return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(mrModel,maPredicate,mnIndex));
 }
 
-bool PageEnumerationImpl::HasMoreElements (void) const
+bool PageEnumerationImpl::HasMoreElements() const
 {
     return (mnIndex < mrModel.GetPageCount());
 }
 
-SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
+SharedPageDescriptor PageEnumerationImpl::GetNextElement()
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
@@ -189,14 +189,14 @@ SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
     return pDescriptor;
 }
 
-void PageEnumerationImpl::Rewind (void)
+void PageEnumerationImpl::Rewind()
 {
     // Go to first valid element.
     mnIndex = 0;
     AdvanceToNextValidElement();
 }
 
-void PageEnumerationImpl::AdvanceToNextValidElement (void)
+void PageEnumerationImpl::AdvanceToNextValidElement()
 {
     while (mnIndex < mrModel.GetPageCount())
     {

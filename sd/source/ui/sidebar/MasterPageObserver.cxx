@@ -92,7 +92,7 @@ MasterPageObserver* MasterPageObserver::Implementation::mpInstance = NULL;
 
 //===== MasterPageObserver ====================================================
 
-MasterPageObserver&  MasterPageObserver::Instance (void)
+MasterPageObserver&  MasterPageObserver::Instance()
 {
     if (Implementation::mpInstance == NULL)
     {
@@ -138,11 +138,11 @@ void MasterPageObserver::RemoveEventListener (const Link& rEventListener)
     mpImpl->RemoveEventListener (rEventListener);
 }
 
-MasterPageObserver::MasterPageObserver (void)
+MasterPageObserver::MasterPageObserver()
     : mpImpl (new Implementation())
 {}
 
-MasterPageObserver::~MasterPageObserver (void)
+MasterPageObserver::~MasterPageObserver()
 {}
 
 //===== MasterPageObserver::Implementation ====================================

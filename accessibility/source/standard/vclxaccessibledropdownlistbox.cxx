@@ -59,7 +59,7 @@ VCLXAccessibleDropDownListBox::~VCLXAccessibleDropDownListBox()
 
 
 
-bool VCLXAccessibleDropDownListBox::IsValid (void) const
+bool VCLXAccessibleDropDownListBox::IsValid() const
 {
     return static_cast<ListBox*>(GetWindow()) != NULL;
 
@@ -87,7 +87,7 @@ OUString VCLXAccessibleDropDownListBox::getImplementationName()
 
 
 
-Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();

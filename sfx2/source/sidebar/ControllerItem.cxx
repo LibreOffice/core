@@ -55,10 +55,10 @@ namespace
             if (mxFrame.is())
                 mxFrame->addFrameActionListener(this);
         }
-        virtual ~FrameActionListener (void)
+        virtual ~FrameActionListener()
         {
         }
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE
+        virtual void SAL_CALL disposing() SAL_OVERRIDE
         {
             SolarMutexGuard g;
             if (mxFrame.is())
@@ -115,7 +115,7 @@ ControllerItem::ControllerItem (
 {
 }
 
-ControllerItem::~ControllerItem (void)
+ControllerItem::~ControllerItem()
 {
     if (mxFrameActionListener.is())
         mxFrameActionListener->dispose();
@@ -153,31 +153,31 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
         return true;
 }
 
-void ControllerItem::RequestUpdate (void)
+void ControllerItem::RequestUpdate()
 {
     SfxPoolItem* pState = NULL;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
 }
 
-void ControllerItem::NotifyFrameContextChange (void)
+void ControllerItem::NotifyFrameContextChange()
 {
     RequestUpdate();
 }
 
-void ControllerItem::ResetFrame (void)
+void ControllerItem::ResetFrame()
 {
     mxFrame = NULL;
 }
 
-::rtl::OUString ControllerItem::GetLabel (void) const
+::rtl::OUString ControllerItem::GetLabel() const
 {
     return CommandInfoProvider::Instance().GetLabelForCommand(
         ".uno:" + msCommandName,
         mxFrame);
 }
 
-::rtl::OUString ControllerItem::GetHelpText (void) const
+::rtl::OUString ControllerItem::GetHelpText() const
 {
     Help* pHelp = Application::GetHelp();
     if (pHelp != NULL)
@@ -191,7 +191,7 @@ void ControllerItem::ResetFrame (void)
     return ::rtl::OUString();
 }
 
-Image ControllerItem::GetIcon (void) const
+Image ControllerItem::GetIcon() const
 {
     return GetImage(mxFrame, ".uno:" + msCommandName, false);
 }

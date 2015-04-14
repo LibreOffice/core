@@ -52,7 +52,7 @@ class ConfigurationUpdaterLock
 public:
     ConfigurationUpdaterLock (ConfigurationUpdater& rUpdater)
         : mrUpdater(rUpdater) { mrUpdater.LockUpdates(); }
-    ~ConfigurationUpdaterLock(void) { mrUpdater.UnlockUpdates(); }
+    ~ConfigurationUpdaterLock() { mrUpdater.UnlockUpdates(); }
 private:
     ConfigurationUpdater& mrUpdater;
 };
@@ -82,7 +82,7 @@ ConfigurationUpdater::ConfigurationUpdater (
     SetControllerManager(rxControllerManager);
 }
 
-ConfigurationUpdater::~ConfigurationUpdater (void)
+ConfigurationUpdater::~ConfigurationUpdater()
 {
     maUpdateTimer.Stop();
 }
@@ -118,7 +118,7 @@ void ConfigurationUpdater::RequestUpdate (
     }
 }
 
-bool ConfigurationUpdater::IsUpdatePossible (void)
+bool ConfigurationUpdater::IsUpdatePossible()
 {
     return ! mbUpdateBeingProcessed
         && mxControllerManager.is()
@@ -127,7 +127,7 @@ bool ConfigurationUpdater::IsUpdatePossible (void)
         && mxCurrentConfiguration.is();
 }
 
-void ConfigurationUpdater::UpdateConfiguration (void)
+void ConfigurationUpdater::UpdateConfiguration()
 {
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration update");
     SetUpdateBeingProcessed(true);
@@ -192,7 +192,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration end");
 }
 
-void ConfigurationUpdater::CleanRequestedConfiguration (void)
+void ConfigurationUpdater::CleanRequestedConfiguration()
 {
     if (mxControllerManager.is())
     {
@@ -211,7 +211,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
     }
 }
 
-void ConfigurationUpdater::CheckUpdateSuccess (void)
+void ConfigurationUpdater::CheckUpdateSuccess()
 {
     // When the two configurations differ then start the timer to call
     // another update later.
@@ -341,12 +341,12 @@ void ConfigurationUpdater::CheckPureAnchors (
     }
 }
 
-void ConfigurationUpdater::LockUpdates (void)
+void ConfigurationUpdater::LockUpdates()
 {
     ++mnLockCount;
 }
 
-void ConfigurationUpdater::UnlockUpdates (void)
+void ConfigurationUpdater::UnlockUpdates()
 {
     --mnLockCount;
     if (mnLockCount == 0 && mbUpdatePending)
@@ -355,7 +355,7 @@ void ConfigurationUpdater::UnlockUpdates (void)
     }
 }
 
-::boost::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock (void)
+::boost::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock()
 {
     return ::boost::shared_ptr<ConfigurationUpdaterLock>(new ConfigurationUpdaterLock(*this));
 }

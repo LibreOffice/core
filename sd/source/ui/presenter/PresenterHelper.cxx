@@ -51,7 +51,7 @@ PresenterHelper::PresenterHelper (
 {
 }
 
-PresenterHelper::~PresenterHelper (void)
+PresenterHelper::~PresenterHelper()
 {
 }
 

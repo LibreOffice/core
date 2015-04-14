@@ -73,7 +73,7 @@ ViewShell::Implementation::Implementation (ViewShell& rViewShell)
 {
 }
 
-ViewShell::Implementation::~Implementation (void)
+ViewShell::Implementation::~Implementation()
 {
     if ( ! mpUpdateLockForMouse.expired())
     {
@@ -281,7 +281,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     }
 }
 
-sal_uInt16 ViewShell::Implementation::GetViewId (void)
+sal_uInt16 ViewShell::Implementation::GetViewId()
 {
     switch (mrViewShell.GetShellType())
     {
@@ -312,7 +312,7 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
     }
 }
 
-SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog (void)
+SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog()
 {
     SvxIMapDlg* pDialog = NULL;
     SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
@@ -376,7 +376,7 @@ void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
     }
 }
 
-ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock (void)
+ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock()
 {
     mpLock.reset();
 }

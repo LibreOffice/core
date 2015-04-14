@@ -40,10 +40,10 @@ class AnimatorAccess
 public:
     virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
     virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
-    virtual model::SlideSorterModel& GetModel (void) const = 0;
-    virtual view::SlideSorterView& GetView (void) const = 0;
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
-    virtual SharedSdWindow GetContentWindow (void) = 0;
+    virtual model::SlideSorterModel& GetModel() const = 0;
+    virtual view::SlideSorterView& GetView() const = 0;
+    virtual ::boost::shared_ptr<controller::Animator> GetAnimator() = 0;
+    virtual SharedSdWindow GetContentWindow() = 0;
 
 protected:
     ~AnimatorAccess() {}
@@ -60,7 +60,7 @@ public:
         const sal_Int32 nRunIndex,
         const sal_Int32 nStartIndex,
         const sal_Int32 nEndIndex);
-    ~PageObjectRun (void);
+    ~PageObjectRun();
 
     void operator () (const double nTime);
 
@@ -99,7 +99,7 @@ private:
     AnimatorAccess& mrAnimatorAccess;
     ::boost::function<double(double)> maAccelerationFunction;
 
-    void RestartAnimation (void);
+    void RestartAnimation();
 };
 typedef ::boost::shared_ptr<PageObjectRun> SharedPageObjectRun;
 
@@ -116,7 +116,7 @@ class InsertAnimator::Implementation : public AnimatorAccess
 {
 public:
     Implementation (SlideSorter& rSlideSorter);
-    virtual ~Implementation (void);
+    virtual ~Implementation();
 
     void SetInsertPosition (
         const InsertPosition& rInsertPosition,
@@ -125,10 +125,10 @@ public:
     virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
     virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
 
-    virtual model::SlideSorterModel& GetModel (void) const SAL_OVERRIDE { return mrModel; }
-    virtual view::SlideSorterView& GetView (void) const SAL_OVERRIDE { return mrView; }
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) SAL_OVERRIDE { return mpAnimator; }
-    virtual SharedSdWindow GetContentWindow (void) SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
+    virtual model::SlideSorterModel& GetModel() const SAL_OVERRIDE { return mrModel; }
+    virtual view::SlideSorterView& GetView() const SAL_OVERRIDE { return mrView; }
+    virtual ::boost::shared_ptr<controller::Animator> GetAnimator() SAL_OVERRIDE { return mpAnimator; }
+    virtual SharedSdWindow GetContentWindow() SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;
@@ -175,7 +175,7 @@ InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
 {
 }
 
-InsertAnimator::Implementation::~Implementation (void)
+InsertAnimator::Implementation::~Implementation()
 {
     SetInsertPosition(InsertPosition(), controller::Animator::AM_Immediate);
 }
@@ -321,7 +321,7 @@ PageObjectRun::PageObjectRun (
     maEndOffset.resize(nEndIndex - nStartIndex + 1);
 }
 
-PageObjectRun::~PageObjectRun (void)
+PageObjectRun::~PageObjectRun()
 {
 }
 
@@ -385,7 +385,7 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
         mrAnimatorAccess.RemoveRun(shared_from_this());
 }
 
-void PageObjectRun::RestartAnimation (void)
+void PageObjectRun::RestartAnimation()
 {
     // Stop the current animation.
     if (mnAnimationId != controller::Animator::NotAnAnimationId)

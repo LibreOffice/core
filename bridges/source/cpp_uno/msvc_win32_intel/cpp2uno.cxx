@@ -354,7 +354,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
  * is called on incoming vtable calls
  * (called by asm snippets)
  */
-static __declspec(naked) void __cdecl cpp_vtable_call(void)
+static __declspec(naked) void __cdecl cpp_vtable_call()
 {
 __asm
     {

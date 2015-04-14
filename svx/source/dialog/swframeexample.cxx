@@ -66,7 +66,7 @@ SvxSwFrameExample::~SvxSwFrameExample()
 {
 }
 
-void SvxSwFrameExample::InitColors_Impl( void )
+void SvxSwFrameExample::InitColors_Impl()
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );

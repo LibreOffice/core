@@ -90,7 +90,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 
 // Used to determine whether the DLL can be unloaded by OLE
 
-STDAPI DllCanUnloadNow(void)
+STDAPI DllCanUnloadNow()
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
@@ -658,7 +658,7 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 
 // DllRegisterServer - regsvr32 entry point
 
-STDAPI DllRegisterServer( void )
+STDAPI DllRegisterServer()
 {
     char pProgramPath[1024];
     HRESULT aResult = E_FAIL;
@@ -691,7 +691,7 @@ STDAPI DllRegisterServer( void )
 
 // DllUnregisterServer - regsvr32 entry point
 
-STDAPI DllUnregisterServer( void )
+STDAPI DllUnregisterServer()
 {
     DllUnregisterServerDoc( 63, FALSE, bX64 );
     DllUnregisterServerNative( 63, FALSE, bX64 );

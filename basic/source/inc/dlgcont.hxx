@@ -59,7 +59,7 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
 
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
 
-    virtual SfxLibraryContainer* createInstanceImpl( void ) SAL_OVERRIDE;
+    virtual SfxLibraryContainer* createInstanceImpl() SAL_OVERRIDE;
 
     virtual void onNewRootStorage() SAL_OVERRIDE;
 
@@ -69,7 +69,7 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
     virtual const sal_Char* SAL_CALL    getLibrariesDir() const SAL_OVERRIDE;
 
 public:
-    SfxDialogLibraryContainer( void );
+    SfxDialogLibraryContainer();
     SfxDialogLibraryContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     // Methods XStorageBasedLibraryContainer
@@ -107,8 +107,8 @@ class SfxDialogLibrary  :public SfxLibrary
     OUString                                                 m_aName;
 
     // Provide modify state including resources
-    virtual bool isModified( void ) SAL_OVERRIDE;
-    virtual void storeResources( void ) SAL_OVERRIDE;
+    virtual bool isModified() SAL_OVERRIDE;
+    virtual void storeResources() SAL_OVERRIDE;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler  ) SAL_OVERRIDE;
@@ -142,11 +142,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
         SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    OUString getName( void )
+    OUString getName()
         { return m_aName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
-        getStringResourcePersistence( void )
+        getStringResourcePersistence()
     {
         return m_xStringResourcePersistence;
     }

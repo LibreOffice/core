@@ -47,7 +47,7 @@ class SbxVariableImpl
     Reference< XInterface >     m_xComListener;
     StarBASIC*                  m_pComListenerParentBasic;
 
-    SbxVariableImpl( void )
+    SbxVariableImpl()
         : m_pComListenerParentBasic( NULL )
     {}
     SbxVariableImpl( const SbxVariableImpl& r )
@@ -430,7 +430,7 @@ void SbxVariable::SetParent( SbxObject* p )
     pParent = p;
 }
 
-SbxVariableImpl* SbxVariable::getImpl( void )
+SbxVariableImpl* SbxVariable::getImpl()
 {
     if( mpSbxVariableImpl == NULL )
     {
@@ -439,7 +439,7 @@ SbxVariableImpl* SbxVariable::getImpl( void )
     return mpSbxVariableImpl;
 }
 
-const OUString& SbxVariable::GetDeclareClassName( void )
+const OUString& SbxVariable::GetDeclareClassName()
 {
     SbxVariableImpl* pImpl = getImpl();
     return pImpl->m_aDeclareClassName;
@@ -462,7 +462,7 @@ void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::
 #endif
 }
 
-void SbxVariable::ClearComListener( void )
+void SbxVariable::ClearComListener()
 {
     SbxVariableImpl* pImpl = getImpl();
     pImpl->m_xComListener.clear();

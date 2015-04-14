@@ -48,7 +48,7 @@ public:
         const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
 
-    ~GenericPageCache (void);
+    ~GenericPageCache();
 
     /** Change the size of the preview bitmaps.  This may be caused by a
         resize of the slide sorter window or a change of the number of
@@ -124,8 +124,8 @@ public:
     */
     void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
 
-    void Pause (void);
-    void Resume (void);
+    void Pause();
+    void Resume();
 
 private:
     ::boost::shared_ptr<BitmapCache> mpBitmapCache;
@@ -145,7 +145,7 @@ private:
     /** Both bitmap cache and queue processor are created on demand by this
         method.
     */
-    void ProvideCacheAndProcessor (void);
+    void ProvideCacheAndProcessor();
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

@@ -47,7 +47,7 @@ namespace sd { namespace framework {
 
 WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
 
-ResourceId::ResourceId (void)
+ResourceId::ResourceId()
     : ResourceIdInterfaceBase(),
       maResourceURLs(0),
       mpURL()
@@ -102,13 +102,13 @@ ResourceId::ResourceId (
     ParseResourceURL();
 }
 
-ResourceId::~ResourceId (void)
+ResourceId::~ResourceId()
 {
     mpURL.reset();
 }
 
 OUString SAL_CALL
-    ResourceId::getResourceURL (void)
+    ResourceId::getResourceURL()
     throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty())
@@ -118,7 +118,7 @@ OUString SAL_CALL
 }
 
 util::URL SAL_CALL
-    ResourceId::getFullResourceURL (void)
+    ResourceId::getFullResourceURL()
  throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     if (mpURL.get() != NULL)
@@ -140,14 +140,14 @@ util::URL SAL_CALL
 }
 
 sal_Bool SAL_CALL
-    ResourceId::hasAnchor (void)
+    ResourceId::hasAnchor()
     throw (RuntimeException, std::exception)
 {
     return maResourceURLs.size()>1;
 }
 
 Reference<XResourceId> SAL_CALL
-    ResourceId::getAnchor (void)
+    ResourceId::getAnchor()
     throw (RuntimeException, std::exception)
 {
     ::rtl::Reference<ResourceId> rResourceId (new ResourceId());
@@ -162,7 +162,7 @@ Reference<XResourceId> SAL_CALL
 }
 
 Sequence<OUString> SAL_CALL
-    ResourceId::getAnchorURLs (void)
+    ResourceId::getAnchorURLs()
     throw (RuntimeException, std::exception)
 {
     const sal_Int32 nAnchorCount (maResourceURLs.size() - 1);
@@ -178,7 +178,7 @@ Sequence<OUString> SAL_CALL
 }
 
 OUString SAL_CALL
-    ResourceId::getResourceTypePrefix (void)
+    ResourceId::getResourceTypePrefix()
     throw (RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty() )
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL
 }
 
 Reference<XResourceId> SAL_CALL
-    ResourceId::clone (void)
+    ResourceId::clone()
     throw(RuntimeException, std::exception)
 {
     return new ResourceId(maResourceURLs);
@@ -492,7 +492,7 @@ bool ResourceId::IsBoundToAnchor (
     return true;
 }
 
-void ResourceId::ParseResourceURL (void)
+void ResourceId::ParseResourceURL()
 {
     ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
     Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);

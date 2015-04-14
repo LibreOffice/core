@@ -93,7 +93,7 @@ class ViewShellObjectBarFactory
 {
 public:
     ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
-    virtual ~ViewShellObjectBarFactory (void);
+    virtual ~ViewShellObjectBarFactory();
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,
         vcl::Window* pParentWindow,
@@ -111,13 +111,13 @@ private:
 
 namespace sd {
 
-bool ViewShell::IsPageFlipMode(void) const
+bool ViewShell::IsPageFlipMode() const
 {
     return this->ISA(DrawViewShell) && mpContentWindow.get() != NULL &&
         mpContentWindow->GetVisibleHeight() >= 1.0;
 }
 
-SfxViewFrame* ViewShell::GetViewFrame (void) const
+SfxViewFrame* ViewShell::GetViewFrame() const
 {
     const SfxViewShell* pViewShell = GetViewShell();
     if (pViewShell != NULL)
@@ -170,7 +170,7 @@ ViewShell::~ViewShell()
 /**
  * common initialization part of both constructors
  */
-void ViewShell::construct(void)
+void ViewShell::construct()
 {
     mbHasRulers = false;
     mpActiveWindow = 0;
@@ -237,7 +237,7 @@ void ViewShell::construct(void)
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
 }
 
-void ViewShell::doShow(void)
+void ViewShell::doShow()
 {
     mpContentWindow->Show();
     static_cast< vcl::Window*>(mpContentWindow.get())->Resize();
@@ -270,7 +270,7 @@ void ViewShell::Init (bool bIsMainViewShell)
         SetActiveWindow (mpContentWindow.get());
 }
 
-void ViewShell::Exit (void)
+void ViewShell::Exit()
 {
     sd::View* pView = GetView();
     if (pView!=NULL && pView->IsTextEdit())
@@ -394,7 +394,7 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     SfxShell::Deactivate(bIsMDIActivate);
 }
 
-void ViewShell::Shutdown (void)
+void ViewShell::Shutdown()
 {
     Exit ();
 }
@@ -778,7 +778,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
     return bDone;
 }
 
-void ViewShell::SetupRulers (void)
+void ViewShell::SetupRulers()
 {
     if(mbHasRulers && (mpContentWindow.get() != NULL) && !SlideShow::IsRunning(GetViewShellBase()))
     {
@@ -887,7 +887,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
     return pTmpItem;
 }
 
-void ViewShell::Resize (void)
+void ViewShell::Resize()
 {
     SetupRulers ();
 
@@ -946,7 +946,7 @@ SvBorder ViewShell::GetBorder (bool )
     return aBorder;
 }
 
-void ViewShell::ArrangeGUIElements (void)
+void ViewShell::ArrangeGUIElements()
 {
     if (mpImpl->mbArrangeActive)
         return;
@@ -1090,7 +1090,7 @@ void ViewShell::UpdatePreview (SdPage*, bool )
     // useful is still done.
 }
 
-::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* ViewShell::ImpGetUndoManager() const
 {
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
@@ -1329,27 +1329,27 @@ ViewShell::CreateAccessibleDocumentView (::sd::Window* )
         ::com::sun::star::accessibility::XAccessible> ();
 }
 
-::sd::WindowUpdater* ViewShell::GetWindowUpdater (void) const
+::sd::WindowUpdater* ViewShell::GetWindowUpdater() const
 {
     return mpWindowUpdater.get();
 }
 
-ViewShellBase& ViewShell::GetViewShellBase (void) const
+ViewShellBase& ViewShell::GetViewShellBase() const
 {
     return *static_cast<ViewShellBase*>(GetViewShell());
 }
 
-ViewShell::ShellType ViewShell::GetShellType (void) const
+ViewShell::ShellType ViewShell::GetShellType() const
 {
     return meShellType;
 }
 
-DrawDocShell* ViewShell::GetDocSh (void) const
+DrawDocShell* ViewShell::GetDocSh() const
 {
     return GetViewShellBase().GetDocShell();
 }
 
-SdDrawDocument* ViewShell::GetDoc (void) const
+SdDrawDocument* ViewShell::GetDoc() const
 {
     return GetViewShellBase().GetDocument();
 }
@@ -1430,7 +1430,7 @@ void ViewShell::DisposeFunctions()
     }
 }
 
-bool ViewShell::IsMainViewShell (void) const
+bool ViewShell::IsMainViewShell() const
 {
     return mpImpl->mbIsMainViewShell;
 }
@@ -1545,7 +1545,7 @@ ViewShellObjectBarFactory::ViewShellObjectBarFactory (
 {
 }
 
-ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
+ViewShellObjectBarFactory::~ViewShellObjectBarFactory()
 {
     for (ShellCache::iterator aI(maShellCache.begin());
          aI!=maShellCache.end();

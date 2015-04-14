@@ -51,7 +51,7 @@ public:
         OutputDevice* pTemplate = NULL,
         const bool bPaintFrame = true);
 
-    virtual ~PreviewRenderer (void);
+    virtual ~PreviewRenderer();
 
     /** Render a page with the given pixel size.
         Use this version when only the width of the preview is known to the
@@ -139,12 +139,12 @@ private:
         const SdPage* pPage,
         const Size& rPixelSize,
         const bool bObeyHighContrastMode);
-    void Cleanup (void);
+    void Cleanup();
     void PaintPage (
         const SdPage* pPage,
         const bool bDisplayPresentationObjects);
     void PaintSubstitutionText (const OUString& rSubstitutionText);
-    void PaintFrame (void);
+    void PaintFrame();
 
     /** Set up the map mode so that the given page is renderer into a bitmap
         with the specified width.

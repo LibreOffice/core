@@ -22,11 +22,11 @@
 
 #include <sal/types.h>
 
-extern "C" const sal_Unicode* SAL_CALL getUserProfile( void );
+extern "C" const sal_Unicode* SAL_CALL getUserProfile();
 
-extern "C" const sal_Char* SAL_CALL getPabDescription( void );
+extern "C" const sal_Char* SAL_CALL getPabDescription();
 
-extern "C" const sal_Char* SAL_CALL getHisDescription( void );
+extern "C" const sal_Char* SAL_CALL getHisDescription();
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCONFIGACCESS_HXX
 

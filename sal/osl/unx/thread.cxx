@@ -98,7 +98,7 @@ struct osl_thread_priority_st
 };
 
 #define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
-static void osl_thread_priority_init_Impl (void);
+static void osl_thread_priority_init_Impl();
 
 struct osl_thread_textencoding_st
 {
@@ -107,7 +107,7 @@ struct osl_thread_textencoding_st
 };
 
 #define OSL_THREAD_TEXTENCODING_INITIALIZER { 0, RTL_TEXTENCODING_DONTKNOW }
-static void osl_thread_textencoding_init_Impl (void);
+static void osl_thread_textencoding_init_Impl();
 
 struct osl_thread_global_st
 {
@@ -123,9 +123,9 @@ static struct osl_thread_global_st g_thread =
     OSL_THREAD_TEXTENCODING_INITIALIZER
 };
 
-static void osl_thread_init_Impl (void);
+static void osl_thread_init_Impl();
 
-static Thread_Impl* osl_thread_construct_Impl (void);
+static Thread_Impl* osl_thread_construct_Impl();
 static void         osl_thread_destruct_Impl (Thread_Impl ** ppImpl);
 
 static void* osl_thread_start_Impl (void * pData);
@@ -139,13 +139,13 @@ static sal_uInt16 insertThreadId (pthread_t hThread);
 static sal_uInt16 lookupThreadId (pthread_t hThread);
 static void       removeThreadId (pthread_t hThread);
 
-static void osl_thread_init_Impl (void)
+static void osl_thread_init_Impl()
 {
     osl_thread_priority_init_Impl();
     osl_thread_textencoding_init_Impl();
 }
 
-Thread_Impl* osl_thread_construct_Impl (void)
+Thread_Impl* osl_thread_construct_Impl()
 {
     Thread_Impl* pImpl = new Thread_Impl;
     if (pImpl)
@@ -692,7 +692,7 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
     to have the "normal" priority.
 
 *****************************************************************************/
-static void osl_thread_priority_init_Impl (void)
+static void osl_thread_priority_init_Impl()
 {
 #ifndef NO_PTHREAD_PRIORITY
     struct sched_param param;
@@ -994,7 +994,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 /*****************************************************************************/
 /* Thread Local Text Encoding */
 /*****************************************************************************/
-static void osl_thread_textencoding_init_Impl (void)
+static void osl_thread_textencoding_init_Impl()
 {
     rtl_TextEncoding defaultEncoding;
 

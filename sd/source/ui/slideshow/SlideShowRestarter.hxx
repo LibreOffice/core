@@ -51,7 +51,7 @@ public:
     SlideShowRestarter (
         const ::rtl::Reference<SlideShow>& rpSlideShow,
         ViewShellBase* pViewShellBase);
-    virtual ~SlideShowRestarter (void);
+    virtual ~SlideShowRestarter();
 
     /** Restarting the slide show is an asynchronous multi step process
         which is started by calling this method.
@@ -73,14 +73,14 @@ private:
         displays has changed and thus whether restarting the slide show is
         really necessary.
     */
-    sal_Int32 GetDisplayCount (void);
+    sal_Int32 GetDisplayCount();
 
     DECL_LINK(EndPresentation, void*);
 
     /** Restart the presentation on the slide last shown before the restart
         was initiated.
     */
-    void StartPresentation (void);
+    void StartPresentation();
 };
 
 } // end of namespace sd

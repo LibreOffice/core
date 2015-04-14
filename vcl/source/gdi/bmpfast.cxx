@@ -32,7 +32,7 @@ class BasePixelPtr
 public:
             BasePixelPtr( PIXBYTE* p = NULL ) : mpPixel( p ) {}
     void    SetRawPtr( PIXBYTE* pRawPtr )               { mpPixel = pRawPtr; }
-    PIXBYTE* GetRawPtr( void ) const                    { return mpPixel; }
+    PIXBYTE* GetRawPtr() const                    { return mpPixel; }
     void    AddByteOffset( int nByteOffset )            { mpPixel += nByteOffset; }
 
 protected:

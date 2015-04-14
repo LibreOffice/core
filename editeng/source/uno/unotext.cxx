@@ -306,7 +306,7 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
 
 // Interface XTextRange ( XText )
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -335,7 +335,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
     return xRange;
 }
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -363,7 +363,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
     return xRet;
 }
 
-OUString SAL_CALL SvxUnoTextRangeBase::getString(void)
+OUString SAL_CALL SvxUnoTextRangeBase::getString()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -409,7 +409,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
 }
 
 // Interface beans::XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextRangeBase::getPropertySetInfo(void)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextRangeBase::getPropertySetInfo()
     throw( uno::RuntimeException, std::exception )
 {
     return mpPropSet->getPropertySetInfo();
@@ -1352,7 +1352,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( con
 }
 
 // internal
-void SvxUnoTextRangeBase::CollapseToStart(void) throw()
+void SvxUnoTextRangeBase::CollapseToStart() throw()
 {
     CheckSelection( maSelection, mpEditSource );
 
@@ -1360,7 +1360,7 @@ void SvxUnoTextRangeBase::CollapseToStart(void) throw()
     maSelection.nEndPos  = maSelection.nStartPos;
 }
 
-void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
+void SvxUnoTextRangeBase::CollapseToEnd() throw()
 {
     CheckSelection( maSelection, mpEditSource );
 
@@ -1368,7 +1368,7 @@ void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
     maSelection.nStartPos  = maSelection.nEndPos;
 }
 
-bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
+bool SvxUnoTextRangeBase::IsCollapsed() throw()
 {
     CheckSelection( maSelection, mpEditSource );
 

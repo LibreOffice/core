@@ -60,7 +60,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     }
 }
 
-PresenterFrameworkObserver::~PresenterFrameworkObserver (void)
+PresenterFrameworkObserver::~PresenterFrameworkObserver()
 {
 }
 
@@ -75,19 +75,19 @@ void PresenterFrameworkObserver::RunOnUpdateEnd (
         rAction);
 }
 
-bool PresenterFrameworkObserver::True (void)
+bool PresenterFrameworkObserver::True()
 {
     return true;
 }
 
-void SAL_CALL PresenterFrameworkObserver::disposing (void)
+void SAL_CALL PresenterFrameworkObserver::disposing()
 {
     if ( ! maAction.empty())
         maAction(false);
     Shutdown();
 }
 
-void PresenterFrameworkObserver::Shutdown (void)
+void PresenterFrameworkObserver::Shutdown()
 {
     maAction = Action();
     maPredicate = Predicate();

@@ -26,7 +26,7 @@
     #define MAIN main
 #endif
 
-int MAIN (void)
+int MAIN()
 {
     //oslProcess Process;
     sal_uInt32 nArgCount;

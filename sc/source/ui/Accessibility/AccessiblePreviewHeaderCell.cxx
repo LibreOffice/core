@@ -322,7 +322,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePreviewHeaderCell::getImplementationId(void)
+    ScAccessiblePreviewHeaderCell::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

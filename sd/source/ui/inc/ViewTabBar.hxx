@@ -63,13 +63,13 @@ public:
             com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController>& rxController);
-    virtual ~ViewTabBar (void);
+    virtual ~ViewTabBar();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    ::boost::shared_ptr< ::TabControl> GetTabControl (void) const { return mpTabControl;}
+    ::boost::shared_ptr< ::TabControl> GetTabControl() const { return mpTabControl;}
 
-    bool ActivatePage (void);
+    bool ActivatePage();
 
     //----- drawing::framework::XConfigurationChangeListener ------------------
 
@@ -108,16 +108,16 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
-        SAL_CALL getTabBarButtons (void)
+        SAL_CALL getTabBarButtons()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+        ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XUnoTunnel --------------------------------------------------------
@@ -134,7 +134,7 @@ public:
         To be on the safe side wait for this control to become visible and
         the call this method again.
     */
-    int GetHeight (void);
+    int GetHeight();
 
     void AddTabBarButton (
         const ::com::sun::star::drawing::framework::TabBarButton& rButton,
@@ -146,7 +146,7 @@ public:
     bool HasTabBarButton (
         const ::com::sun::star::drawing::framework::TabBarButton& rButton);
     ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
-        GetTabBarButtons (void);
+        GetTabBarButtons();
 
 private:
     ::boost::shared_ptr< ::TabControl> mpTabControl;
@@ -161,11 +161,11 @@ private:
         ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
 
-    void UpdateActiveButton (void);
+    void UpdateActiveButton();
     void AddTabBarButton (
         const ::com::sun::star::drawing::framework::TabBarButton& rButton,
         sal_Int32 nPosition);
-    void UpdateTabBarButtons (void);
+    void UpdateTabBarButtons();
 
     /** This method is called from the constructor to get the window for an
         anchor ResourceId and pass it to our base class.  It has to be
@@ -177,7 +177,7 @@ private:
             ::com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController>& rxController);
-    const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
+    const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
 
 } // end of namespace sd

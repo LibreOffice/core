@@ -287,13 +287,13 @@ void LayerTabBar::ActivatePage()
     }
 }
 
-void LayerTabBar::SendActivatePageEvent (void)
+void LayerTabBar::SendActivatePageEvent()
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
 }
 
-void LayerTabBar::SendDeactivatePageEvent (void)
+void LayerTabBar::SendDeactivatePageEvent()
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));

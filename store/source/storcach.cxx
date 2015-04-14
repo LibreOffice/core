@@ -276,7 +276,7 @@ public:
 
 protected:
     // Destruction
-    virtual ~PageCache_Impl (void);
+    virtual ~PageCache_Impl();
 };
 
 } // namespace store

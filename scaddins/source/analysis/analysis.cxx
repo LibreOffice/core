@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     return pRet;
 }
 
-ResMgr& AnalysisAddIn::GetResMgr( void ) throw( uno::RuntimeException )
+ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException )
 {
     if( !pResMgr )
     {
@@ -119,7 +119,7 @@ OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex
     return aRet;
 }
 
-void AnalysisAddIn::InitData( void )
+void AnalysisAddIn::InitData()
 {
     delete pResMgr;
     pResMgr = ResMgr::CreateResMgr("analysis", LanguageTag(aFuncLoc));
@@ -394,7 +394,7 @@ static const sal_Char*      pLang[] = { "de", "en" };
 static const sal_Char*      pCoun[] = { "DE", "US" };
 static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
-void AnalysisAddIn::InitDefLocales( void )
+void AnalysisAddIn::InitDefLocales()
 {
     pDefLocales = new lang::Locale[ nNumOfLoc ];
 

@@ -66,15 +66,15 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlidePreview (void);
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual ~PresenterSlidePreview();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XWindowListener
@@ -106,7 +106,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
@@ -146,12 +146,12 @@ private:
 
     /** React to a resize of the anchor pane.
     */
-    void Resize (void);
+    void Resize();
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void) throw (css::lang::DisposedException);
+    void ThrowIfDisposed() throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sd::presenter

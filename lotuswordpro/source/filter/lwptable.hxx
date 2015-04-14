@@ -184,7 +184,7 @@ public:
     virtual ~LwpGlossary();
 protected:
     void Read() SAL_OVERRIDE;
-    sal_uInt16 GetNumIndexRows(void);
+    sal_uInt16 GetNumIndexRows();
 };
 
 #endif

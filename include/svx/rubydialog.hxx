@@ -155,7 +155,7 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void                GetCurrentText(OUString& rBase, OUString& rRuby);
 
-    void                UpdateColors( void );
+    void                UpdateColors();
 protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:

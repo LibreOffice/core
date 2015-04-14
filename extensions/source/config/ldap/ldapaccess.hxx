@@ -79,9 +79,9 @@ class LdapConnection
 public:
 
     /** Default constructor */
-    LdapConnection(void) : mConnection(NULL),mLdapDefinition() {}
+    LdapConnection() : mConnection(NULL),mLdapDefinition() {}
     /** Destructor, releases the connection */
-    ~LdapConnection(void) ;
+    ~LdapConnection() ;
     /** Make connection to LDAP server */
     void  connectSimple(const LdapDefinition& aDefinition)
         throw (ldap::LdapConnectionException,
@@ -118,7 +118,7 @@ private:
       Indicates whether the connection is in a valid state.
       @return   sal_True if connection is valid, sal_False otherwise
       */
-    bool isValid(void) const { return mConnection != NULL ; }
+    bool isValid() const { return mConnection != NULL ; }
 
     void  connectSimple()
         throw (ldap::LdapConnectionException,

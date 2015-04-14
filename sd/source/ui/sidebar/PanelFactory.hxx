@@ -52,15 +52,15 @@ class PanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    static ::rtl::OUString SAL_CALL getImplementationName (void);
+    static ::rtl::OUString SAL_CALL getImplementationName();
     static css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance (
         const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
-    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames (void);
+    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames();
 
     PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PanelFactory (void);
+    virtual ~PanelFactory();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XUIElementFactory
 

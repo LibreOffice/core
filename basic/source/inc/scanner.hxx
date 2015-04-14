@@ -82,8 +82,8 @@ public:
     sal_Int32 GetCol2()             { return nCol2;   }
     void  SetCol1( sal_Int32 n )    { nCol1 = n;      }
     StarBASIC* GetBasic()           { return pBasic;  }
-    void  SaveLine(void)            { pSaveLine = pLine; }
-    void  RestoreLine(void)         { pLine = pSaveLine; }
+    void  SaveLine()            { pSaveLine = pLine; }
+    void  RestoreLine()         { pLine = pSaveLine; }
     void  LockColumn();
     void  UnlockColumn();
     bool  DoesColonFollow();

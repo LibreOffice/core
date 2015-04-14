@@ -553,7 +553,7 @@ namespace
    */
 //  static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpregptr, void** fpregptr, void** ovrflw)
 //  static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpregptr, void** ovrflw)
-  static void cpp_vtable_call(void)
+  static void cpp_vtable_call()
   {
     int nFunctionIndex;
     int vTableOffset;

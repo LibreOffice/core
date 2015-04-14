@@ -30,7 +30,7 @@ namespace sd {
 class SdGlobalResource
 {
 public:
-    virtual ~SdGlobalResource (void) {};
+    virtual ~SdGlobalResource() {};
 };
 
 /** The purpose of this container is to hold references to resources that
@@ -58,7 +58,7 @@ public:
 class SdGlobalResourceContainer
 {
 public:
-    static SdGlobalResourceContainer& Instance (void);
+    static SdGlobalResourceContainer& Instance();
 
     /** Add a resource to the container.  The ownership of the resource is
         transferred to the container.  The resource is destroyed when the
@@ -89,8 +89,8 @@ protected:
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
 
-    SdGlobalResourceContainer (void);
-    ~SdGlobalResourceContainer (void);
+    SdGlobalResourceContainer();
+    ~SdGlobalResourceContainer();
 };
 
 } // end of namespace sd

@@ -91,7 +91,7 @@ PresenterSlideShowView::PresenterSlideShowView (
     }
 }
 
-void PresenterSlideShowView::LateInit (void)
+void PresenterSlideShowView::LateInit()
 {
     mxSlideShow = Reference<presentation::XSlideShow> (
         mxSlideShowController->getSlideShow(), UNO_QUERY_THROW);
@@ -175,11 +175,11 @@ void PresenterSlideShowView::LateInit (void)
         >>= msClickToExitPresentationTitle;
 }
 
-PresenterSlideShowView::~PresenterSlideShowView (void)
+PresenterSlideShowView::~PresenterSlideShowView()
 {
 }
 
-void PresenterSlideShowView::disposing (void)
+void PresenterSlideShowView::disposing()
 {
     // Tell all listeners that we are disposed.
     lang::EventObject aEvent;
@@ -296,7 +296,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
     }
 }
 
-css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::getCurrentPage (void)
+css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::getCurrentPage()
     throw (css::uno::RuntimeException, std::exception)
 {
     return mxCurrentSlide;
@@ -304,7 +304,7 @@ css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::ge
 
 //----- CachablePresenterView -------------------------------------------------
 
-void PresenterSlideShowView::ReleaseView (void)
+void PresenterSlideShowView::ReleaseView()
 {
     if (mxSlideShow.is() && mbIsViewAdded)
     {
@@ -315,7 +315,7 @@ void PresenterSlideShowView::ReleaseView (void)
 
 //----- XSlideShowView --------------------------------------------------------
 
-Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas (void)
+Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -323,7 +323,7 @@ Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas (
     return Reference<rendering::XSpriteCanvas>(mxViewCanvas, UNO_QUERY);
 }
 
-void SAL_CALL PresenterSlideShowView::clear (void)
+void SAL_CALL PresenterSlideShowView::clear()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -351,7 +351,7 @@ void SAL_CALL PresenterSlideShowView::clear (void)
     }
 }
 
-geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (void)
+geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -378,7 +378,7 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (voi
     }
 }
 
-geometry::IntegerSize2D SAL_CALL PresenterSlideShowView::getTranslationOffset(void)
+geometry::IntegerSize2D SAL_CALL PresenterSlideShowView::getTranslationOffset()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -655,13 +655,13 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEv
 
 //----- XView -----------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId()
     throw(RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -669,7 +669,7 @@ sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly (void)
 
 //----- CachablePresenterView -------------------------------------------------
 
-void PresenterSlideShowView::ActivatePresenterView (void)
+void PresenterSlideShowView::ActivatePresenterView()
 {
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
@@ -678,7 +678,7 @@ void PresenterSlideShowView::ActivatePresenterView (void)
     }
 }
 
-void PresenterSlideShowView::DeactivatePresenterView (void)
+void PresenterSlideShowView::DeactivatePresenterView()
 {
     if (mxSlideShow.is() && mbIsViewAdded)
     {
@@ -877,7 +877,7 @@ Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
         rxViewWindow);
 }
 
-void PresenterSlideShowView::Resize (void)
+void PresenterSlideShowView::Resize()
 {
     if ( ! mxWindow.is() || ! mxViewWindow.is())
         return;
@@ -933,7 +933,7 @@ void PresenterSlideShowView::Resize (void)
         mbIsForcedPaintPending = true;
 }
 
-void PresenterSlideShowView::ForceRepaint (void)
+void PresenterSlideShowView::ForceRepaint()
 {
     if (mxSlideShow.is() && mbIsViewAdded)
     {
@@ -942,7 +942,7 @@ void PresenterSlideShowView::ForceRepaint (void)
     }
 }
 
-void PresenterSlideShowView::CreateBackgroundPolygons (void)
+void PresenterSlideShowView::CreateBackgroundPolygons()
 {
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     const awt::Rectangle aViewWindowBox (mxViewWindow->getPosSize());
@@ -989,7 +989,7 @@ void PresenterSlideShowView::CreateBackgroundPolygons (void)
     }
 }
 
-void PresenterSlideShowView::ThrowIfDisposed (void)
+void PresenterSlideShowView::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

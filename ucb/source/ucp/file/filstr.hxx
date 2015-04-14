@@ -73,7 +73,7 @@ class XStream_impl :  public cppu::WeakImplHelper6<
 
         // XTruncate
 
-        virtual void SAL_CALL truncate( void )
+        virtual void SAL_CALL truncate()
             throw( com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 

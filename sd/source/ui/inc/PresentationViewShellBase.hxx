@@ -38,10 +38,10 @@ public:
         macros.
     */
     PresentationViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~PresentationViewShellBase (void);
+    virtual ~PresentationViewShellBase();
 
 protected:
-    virtual void InitializeFramework (void) SAL_OVERRIDE;
+    virtual void InitializeFramework() SAL_OVERRIDE;
 };
 
 } // end of namespace sd

@@ -133,11 +133,11 @@ PresenterNotesView::PresenterNotesView (
     }
 }
 
-PresenterNotesView::~PresenterNotesView (void)
+PresenterNotesView::~PresenterNotesView()
 {
 }
 
-void SAL_CALL PresenterNotesView::disposing (void)
+void SAL_CALL PresenterNotesView::disposing()
 {
     if (mxParentWindow.is())
     {
@@ -332,13 +332,13 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterNotesView::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterNotesView::getResourceId()
     throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterNotesView::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterNotesView::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -364,7 +364,7 @@ void SAL_CALL PresenterNotesView::setCurrentPage (const Reference<drawing::XDraw
     SetSlide(mxCurrentNotesPage);
 }
 
-Reference<drawing::XDrawPage> SAL_CALL PresenterNotesView::getCurrentPage (void)
+Reference<drawing::XDrawPage> SAL_CALL PresenterNotesView::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
     return NULL;
@@ -422,7 +422,7 @@ void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
 
 
 
-void PresenterNotesView::Layout (void)
+void PresenterNotesView::Layout()
 {
     if ( ! mxParentWindow.is())
         return;
@@ -604,7 +604,7 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-void PresenterNotesView::Invalidate (void)
+void PresenterNotesView::Invalidate()
 {
     mpPresenterController->GetPaintManager()->Invalidate(
         mxParentWindow,
@@ -674,12 +674,12 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
     }
 }
 
-::boost::shared_ptr<PresenterTextView> PresenterNotesView::GetTextView (void) const
+::boost::shared_ptr<PresenterTextView> PresenterNotesView::GetTextView() const
 {
     return mpTextView;
 }
 
-void PresenterNotesView::UpdateScrollBar (void)
+void PresenterNotesView::UpdateScrollBar()
 {
     if (mpScrollBar.get() != NULL)
     {
@@ -700,7 +700,7 @@ void PresenterNotesView::UpdateScrollBar (void)
     }
 }
 
-void PresenterNotesView::ThrowIfDisposed (void)
+void PresenterNotesView::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

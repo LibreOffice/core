@@ -144,11 +144,11 @@ PresenterButton::PresenterButton (
     }
 }
 
-PresenterButton::~PresenterButton (void)
+PresenterButton::~PresenterButton()
 {
 }
 
-void SAL_CALL PresenterButton::disposing (void)
+void SAL_CALL PresenterButton::disposing()
 {
     if (mxCanvas.is())
     {
@@ -222,7 +222,7 @@ void PresenterButton::SetCanvas (
     }
 }
 
-css::geometry::IntegerSize2D PresenterButton::GetSize (void)
+css::geometry::IntegerSize2D PresenterButton::GetSize()
 {
     if (maButtonSize.Width < 0)
         CalculateButtonSize();
@@ -363,7 +363,7 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
 
 
 
-css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize (void)
+css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize()
 {
     if (mpFont.get()!=NULL && !mpFont->mxFont.is() && mxCanvas.is())
         mpFont->PrepareFont(mxCanvas);
@@ -421,7 +421,7 @@ void PresenterButton::RenderButton (
         aRenderState);
 }
 
-void PresenterButton::Invalidate (void)
+void PresenterButton::Invalidate()
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
@@ -439,7 +439,7 @@ Reference<rendering::XBitmap> PresenterButton::GetBitmap (
     }
 }
 
-void PresenterButton::SetupButtonBitmaps (void)
+void PresenterButton::SetupButtonBitmaps()
 {
     if ( ! mxCanvas.is())
         return;
@@ -503,7 +503,7 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
         UNO_QUERY);
 }
 
-void PresenterButton::ThrowIfDisposed (void) const
+void PresenterButton::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

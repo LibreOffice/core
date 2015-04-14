@@ -38,7 +38,7 @@ PreviewValueSet::PreviewValueSet (vcl::Window* pParent)
     SetExtraSpacing (2);
 }
 
-PreviewValueSet::~PreviewValueSet (void)
+PreviewValueSet::~PreviewValueSet()
 {
 }
 
@@ -62,7 +62,7 @@ void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
 
 }
 
-void PreviewValueSet::Resize (void)
+void PreviewValueSet::Resize()
 {
     ValueSet::Resize ();
 

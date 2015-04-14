@@ -60,7 +60,7 @@ winwrap::CWindow::CWindow(HINSTANCE hInst)
     return;
 }
 
-winwrap::CWindow::~CWindow(void)
+winwrap::CWindow::~CWindow()
 {
     if (IsWindow(m_hWnd))
         DestroyWindow(m_hWnd);
@@ -80,7 +80,7 @@ winwrap::CWindow::~CWindow(void)
  *  HWND            Window handle for this object
  */
 
-HWND winwrap::CWindow::Window(void)
+HWND winwrap::CWindow::Window()
 {
     return m_hWnd;
 }
@@ -97,7 +97,7 @@ HWND winwrap::CWindow::Window(void)
  *  HINSTANCE       Instance handle of the module stored here.
  */
 
-HINSTANCE winwrap::CWindow::Instance(void)
+HINSTANCE winwrap::CWindow::Instance()
 {
     return m_hInst;
 }
@@ -177,7 +177,7 @@ CHatchWin::CHatchWin(HINSTANCE hInst,const DocumentHolder* pDocHolder)
 }
 
 
-CHatchWin::~CHatchWin(void)
+CHatchWin::~CHatchWin()
 {
     /*
      * Chances are this was already destroyed when a document
@@ -255,7 +255,7 @@ HWND CHatchWin::HwndAssociateSet(HWND hWndAssoc)
 }
 
 
-HWND CHatchWin::HwndAssociateGet(void)
+HWND CHatchWin::HwndAssociateGet()
 {
     return m_hWndAssociate;
 }

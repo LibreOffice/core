@@ -114,7 +114,7 @@ AccessibleShape::AccessibleShape (
     UpdateNameAndDescription();
 }
 
-AccessibleShape::~AccessibleShape (void)
+AccessibleShape::~AccessibleShape()
 {
     delete mpChildrenManager;
     delete mpText;
@@ -125,7 +125,7 @@ AccessibleShape::~AccessibleShape (void)
     // broadcasters would still hold a strong reference to this object.
 }
 
-void AccessibleShape::Init (void)
+void AccessibleShape::Init()
 {
     // Update the OPAQUE and SELECTED shape.
     UpdateStates ();
@@ -194,7 +194,7 @@ void AccessibleShape::Init (void)
 
 
 
-void AccessibleShape::UpdateStates (void)
+void AccessibleShape::UpdateStates()
 {
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
@@ -313,7 +313,7 @@ bool AccessibleShape::GetState (sal_Int16 aState)
 }
 
 // OverWrite the parent's getAccessibleName method
-OUString SAL_CALL AccessibleShape::getAccessibleName (void)
+OUString SAL_CALL AccessibleShape::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
         ThrowIfDisposed ();
@@ -323,7 +323,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleName (void)
         return CreateAccessibleName();
 }
 
-OUString SAL_CALL AccessibleShape::getAccessibleDescription (void)
+OUString SAL_CALL AccessibleShape::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -391,7 +391,7 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-    AccessibleShape::getAccessibleRelationSet (void)
+    AccessibleShape::getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -418,7 +418,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         VISIBLE
 */
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    AccessibleShape::getAccessibleStateSet (void)
+    AccessibleShape::getAccessibleStateSet()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -552,7 +552,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 
 
-awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
+awt::Rectangle SAL_CALL AccessibleShape::getBounds()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -667,7 +667,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
 
 
 
-awt::Point SAL_CALL AccessibleShape::getLocation (void)
+awt::Point SAL_CALL AccessibleShape::getLocation()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -678,7 +678,7 @@ awt::Point SAL_CALL AccessibleShape::getLocation (void)
 
 
 
-awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
+awt::Point SAL_CALL AccessibleShape::getLocationOnScreen()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -703,7 +703,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
 
 
 
-awt::Size SAL_CALL AccessibleShape::getSize (void)
+awt::Size SAL_CALL AccessibleShape::getSize()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -714,7 +714,7 @@ awt::Size SAL_CALL AccessibleShape::getSize (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
+sal_Int32 SAL_CALL AccessibleShape::getForeground()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -740,7 +740,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
+sal_Int32 SAL_CALL AccessibleShape::getBackground()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -833,7 +833,7 @@ com::sun::star::uno::Any SAL_CALL
 
 
 void SAL_CALL
-    AccessibleShape::acquire (void)
+    AccessibleShape::acquire()
     throw ()
 {
     AccessibleContextBase::acquire ();
@@ -843,7 +843,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleShape::release (void)
+    AccessibleShape::release()
     throw ()
 {
     AccessibleContextBase::release ();
@@ -965,7 +965,7 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
 
 // XServiceInfo
 OUString SAL_CALL
-    AccessibleShape::getImplementationName (void)
+    AccessibleShape::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleShape");
@@ -975,7 +975,7 @@ OUString SAL_CALL
 
 
 uno::Sequence<OUString> SAL_CALL
-    AccessibleShape::getSupportedServiceNames (void)
+    AccessibleShape::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -993,7 +993,7 @@ uno::Sequence<OUString> SAL_CALL
 
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
-    AccessibleShape::getTypes (void)
+    AccessibleShape::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -1146,14 +1146,14 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 // protected internal
 // Set this object's name if is different to the current name.
-OUString AccessibleShape::CreateAccessibleBaseName (void)
+OUString AccessibleShape::CreateAccessibleBaseName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }
 
 
-OUString AccessibleShape::CreateAccessibleName (void)
+OUString AccessibleShape::CreateAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return GetFullAccessibleName(this);
@@ -1196,7 +1196,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
 }
 
 OUString
-    AccessibleShape::CreateAccessibleDescription (void)
+    AccessibleShape::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     DescriptionGenerator aDG (mxShape);
@@ -1266,7 +1266,7 @@ OUString
 
 
 // protected
-void AccessibleShape::disposing (void)
+void AccessibleShape::disposing()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -1311,7 +1311,7 @@ void AccessibleShape::disposing (void)
 }
 
 sal_Int32 SAL_CALL
-       AccessibleShape::getAccessibleIndexInParent (void)
+       AccessibleShape::getAccessibleIndexInParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -1326,7 +1326,7 @@ sal_Int32 SAL_CALL
 
 
 
-void AccessibleShape::UpdateNameAndDescription (void)
+void AccessibleShape::UpdateNameAndDescription()
 {
     // Ignore missing title, name, or description.  There are fallbacks for
     // them.
@@ -1359,7 +1359,7 @@ void AccessibleShape::UpdateNameAndDescription (void)
 }
 
 //  Return this object's role.
-sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole (void)
+sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int16 nAccessibleRole =  AccessibleRole::SHAPE ;

@@ -152,7 +152,7 @@ static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
     return static_cast<sal_uInt16>(nNew);
 }
 
-bool TokenPool::GrowString( void )
+bool TokenPool::GrowString()
 {
     sal_uInt16 nP_StrNew = lcl_canGrow( nP_Str);
     if (!nP_StrNew)
@@ -176,7 +176,7 @@ bool TokenPool::GrowString( void )
     return true;
 }
 
-bool TokenPool::GrowDouble( void )
+bool TokenPool::GrowDouble()
 {
     sal_uInt16 nP_DblNew = lcl_canGrow( nP_Dbl);
     if (!nP_DblNew)
@@ -198,7 +198,7 @@ bool TokenPool::GrowDouble( void )
 
 /* TODO: in case we had FormulaTokenArray::AddError() */
 #if 0
-void TokenPool::GrowError( void )
+void TokenPool::GrowError()
 {
     sal_uInt16 nP_ErrNew = lcl_canGrow( nP_Err);
     if (!nP_ErrNew)
@@ -243,7 +243,7 @@ bool TokenPool::GrowTripel( sal_uInt16 nByMin )
     return true;
 }
 
-bool TokenPool::GrowId( void )
+bool TokenPool::GrowId()
 {
     sal_uInt16 nP_IdNew = lcl_canGrow( nP_Id);
     if (!nP_IdNew)
@@ -263,7 +263,7 @@ bool TokenPool::GrowId( void )
     return true;
 }
 
-bool TokenPool::GrowElement( void )
+bool TokenPool::GrowElement()
 {
     sal_uInt16 nElementNew = lcl_canGrow( nElement);
     if (!nElementNew)
@@ -298,7 +298,7 @@ bool TokenPool::GrowElement( void )
     return true;
 }
 
-bool TokenPool::GrowExt( void )
+bool TokenPool::GrowExt()
 {
     sal_uInt16 nNewSize = lcl_canGrow( nP_Ext);
     if (!nNewSize)
@@ -317,7 +317,7 @@ bool TokenPool::GrowExt( void )
     return true;
 }
 
-bool TokenPool::GrowNlf( void )
+bool TokenPool::GrowNlf()
 {
     sal_uInt16 nNewSize = lcl_canGrow( nP_Nlf);
     if (!nNewSize)
@@ -336,7 +336,7 @@ bool TokenPool::GrowNlf( void )
     return true;
 }
 
-bool TokenPool::GrowMatrix( void )
+bool TokenPool::GrowMatrix()
 {
     sal_uInt16 nNewSize = lcl_canGrow( nP_Matrix);
     if (!nNewSize)
@@ -874,7 +874,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
     return static_cast<const TokenId>(nElementAkt);
 }
 
-void TokenPool::Reset( void )
+void TokenPool::Reset()
 {
     nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
     maRangeNames.clear();

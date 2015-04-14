@@ -132,24 +132,24 @@ public:
     /** Set the current time as the time at which the current frame is
         displayed.  From this the target time of the next frame is derived.
     */
-    void MarkCurrentFrame (void);
+    void MarkCurrentFrame();
 
     /** When there is time left until the next frame is due then wait.
         Otherwise return without delay.
     */
-    void Synchronize (void);
+    void Synchronize();
 
     /** Activate frame synchronization when an animation is active and
         frames are to be displayed in a steady rate.  While active
         Synchronize() will wait until the frame duration time has passed.
     */
-    void Activate (void);
+    void Activate();
 
     /** Deactivate frame sychronization when no animation is active and the
         time between frames depends on user actions and other external
         sources.  While deactivated Synchronize() will return without delay.
     */
-    void Deactivate (void);
+    void Deactivate();
 
 private:
     /** The timer that is used for synchronization is independent from the
@@ -337,7 +337,7 @@ private:
         change takes place.  Furthermore it does not show the slide
         transition.
     */
-    void redisplayCurrentSlide (void);
+    void redisplayCurrentSlide();
 
 protected:
     // WeakComponentImplHelperBase
@@ -403,13 +403,13 @@ private:
 
         Do not call this method directly.  Use WaitSymbolLock instead.
     */
-    void requestWaitSymbol (void);
-    void releaseWaitSymbol (void);
+    void requestWaitSymbol();
+    void releaseWaitSymbol();
 
     class WaitSymbolLock {public:
         WaitSymbolLock(SlideShowImpl& rSlideShowImpl) : mrSlideShowImpl(rSlideShowImpl)
             { mrSlideShowImpl.requestWaitSymbol(); }
-        ~WaitSymbolLock(void)
+        ~WaitSymbolLock()
             { mrSlideShowImpl.releaseWaitSymbol(); }
     private: SlideShowImpl& mrSlideShowImpl;
     };
@@ -420,7 +420,7 @@ private:
     /** This method is called asynchronously to finish the rewinding of an
         effect to the previous slide that was initiated earlier.
     */
-    void rewindEffectToPreviousSlide (void);
+    void rewindEffectToPreviousSlide();
 
     /// all registered views
     UnoViewContainer                        maViewContainer;
@@ -943,7 +943,7 @@ SlideSharedPtr SlideShowImpl::makeSlide(
     return pSlide;
 }
 
-void SlideShowImpl::requestWaitSymbol (void)
+void SlideShowImpl::requestWaitSymbol()
 {
     ++mnWaitSymbolRequestCount;
     OSL_ASSERT(mnWaitSymbolRequestCount>0);
@@ -960,7 +960,7 @@ void SlideShowImpl::requestWaitSymbol (void)
     }
 }
 
-void SlideShowImpl::releaseWaitSymbol (void)
+void SlideShowImpl::releaseWaitSymbol()
 {
     --mnWaitSymbolRequestCount;
     OSL_ASSERT(mnWaitSymbolRequestCount>=0);
@@ -1201,7 +1201,7 @@ void SlideShowImpl::displaySlide(
         maEffectRewinder.skipAllMainSequenceEffects();
 }
 
-void SlideShowImpl::redisplayCurrentSlide (void)
+void SlideShowImpl::redisplayCurrentSlide()
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -1267,7 +1267,7 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException, std::exce
     }
 }
 
-void SlideShowImpl::rewindEffectToPreviousSlide (void)
+void SlideShowImpl::rewindEffectToPreviousSlide()
 {
     // Show the wait symbol now and prevent it from showing temporary slide
     // content while effects are played back.
@@ -2434,12 +2434,12 @@ FrameSynchronization::FrameSynchronization (const double nFrameDuration)
     MarkCurrentFrame();
 }
 
-void FrameSynchronization::MarkCurrentFrame (void)
+void FrameSynchronization::MarkCurrentFrame()
 {
     mnNextFrameTargetTime = maTimer.getElapsedTime() + mnFrameDuration;
 }
 
-void FrameSynchronization::Synchronize (void)
+void FrameSynchronization::Synchronize()
 {
     if (mbIsActive)
     {
@@ -2451,12 +2451,12 @@ void FrameSynchronization::Synchronize (void)
     MarkCurrentFrame();
 }
 
-void FrameSynchronization::Activate (void)
+void FrameSynchronization::Activate()
 {
     mbIsActive = true;
 }
 
-void FrameSynchronization::Deactivate (void)
+void FrameSynchronization::Deactivate()
 {
     mbIsActive = false;
 }

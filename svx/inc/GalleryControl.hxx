@@ -43,7 +43,7 @@ public:
     GalleryControl (
         SfxBindings* pBindings,
         vcl::Window* pParentWindow);
-    virtual ~GalleryControl (void);
+    virtual ~GalleryControl();
 
     bool GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow);
 
@@ -55,15 +55,15 @@ private:
     Size maLastSize;
     bool mbIsInitialResize;
 
-    void InitSettings (void);
+    void InitSettings();
 
-    virtual void Resize (void) SAL_OVERRIDE;
-    virtual void GetFocus (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
     DECL_LINK(SplitHdl, void*);
 
 protected:
-    void ThemeSelectionHasChanged (void);
+    void ThemeSelectionHasChanged();
 };
 
 } } // end of namespace svx::sidebar

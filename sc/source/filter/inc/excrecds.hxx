@@ -101,7 +101,7 @@ protected:
 public:
     inline                  ExcBoolRecord( const bool bDefault ) : bVal( bDefault ) {}
 
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //--------------------------------------------------------- class ExcBof_Base -
@@ -115,7 +115,7 @@ protected:
     sal_uInt16                  nRupBuild;
     sal_uInt16                  nRupYear;
 public:
-                            ExcBof_Base( void );
+                            ExcBof_Base();
 };
 
 //-------------------------------------------------------------- class ExcBof -
@@ -126,10 +126,10 @@ class ExcBof : public ExcBof_Base
 private:
     virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 public:
-                            ExcBof( void );
+                            ExcBof();
 
-    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //------------------------------------------------------------- class ExcBofW -
@@ -140,10 +140,10 @@ class ExcBofW : public ExcBof_Base
 private:
     virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 public:
-                            ExcBofW( void );
+                            ExcBofW();
 
-    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //-------------------------------------------------------------- class ExcEof -
@@ -152,8 +152,8 @@ class ExcEof : public ExcRecord
 {
 private:
 public:
-    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //--------------------------------------------------------- class ExcDummy_00 -
@@ -165,8 +165,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
-    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData() const SAL_OVERRIDE;
 };
 
 // EXC_ID_WINDOWPROTECTION
@@ -215,8 +215,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
-    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData() const SAL_OVERRIDE;
 };
 
 class ExcDummy_041 : public ExcDummyRec
@@ -225,8 +225,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
-    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData() const SAL_OVERRIDE;
 };
 
 //------------------------------------------------------------- class Exc1904 -
@@ -235,7 +235,7 @@ class Exc1904 : public ExcBoolRecord
 {
 public:
                             Exc1904( ScDocument& rDoc );
-    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
@@ -284,8 +284,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
-    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData() const SAL_OVERRIDE;
 };
 
 /** This record contains the Windows country IDs for the UI and document language. */

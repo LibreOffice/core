@@ -46,7 +46,7 @@ ChildrenManager::ChildrenManager (
 
 
 
-ChildrenManager::~ChildrenManager (void)
+ChildrenManager::~ChildrenManager()
 {
     if (mpImpl != NULL)
         mpImpl->dispose();
@@ -55,7 +55,7 @@ ChildrenManager::~ChildrenManager (void)
     OSL_TRACE ("~ChildrenManager");
 }
 
-long ChildrenManager::GetChildCount (void) const throw ()
+long ChildrenManager::GetChildCount() const throw ()
 {
     assert(mpImpl != NULL);
     return mpImpl->GetChildCount();
@@ -104,7 +104,7 @@ void ChildrenManager::AddAccessibleShape (css::uno::Reference<css::accessibility
     mpImpl->AddAccessibleShape (shape);
 }
 
-void ChildrenManager::ClearAccessibleShapeList (void)
+void ChildrenManager::ClearAccessibleShapeList()
 {
     assert(mpImpl != NULL);
     mpImpl->ClearAccessibleShapeList ();
@@ -116,19 +116,19 @@ void ChildrenManager::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
     mpImpl->SetInfo (rShapeTreeInfo);
 }
 
-void ChildrenManager::UpdateSelection (void)
+void ChildrenManager::UpdateSelection()
 {
     assert(mpImpl != NULL);
     mpImpl->UpdateSelection ();
 }
 
-bool ChildrenManager::HasFocus (void)
+bool ChildrenManager::HasFocus()
 {
     assert(mpImpl != NULL);
     return mpImpl->HasFocus ();
 }
 
-void ChildrenManager::RemoveFocus (void)
+void ChildrenManager::RemoveFocus()
 {
     assert(mpImpl != NULL);
     mpImpl->RemoveFocus ();

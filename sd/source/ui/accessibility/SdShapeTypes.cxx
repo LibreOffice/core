@@ -58,7 +58,7 @@ AccessibleShape*
     }
 }
 
-void RegisterImpressShapeTypes (void)
+void RegisterImpressShapeTypes()
 {
     /** List of shape type descriptors corresponding to the
         <type>SdShapeTypes</type> enum.

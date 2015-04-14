@@ -33,20 +33,20 @@ class OleWrapperClientSite : public IOleClientSite
 
 public:
     OleWrapperClientSite( OleComponent* pOleComp );
-    virtual ~OleWrapperClientSite(void);
+    virtual ~OleWrapperClientSite();
 
     void disconnectOleComponent();
 
     STDMETHODIMP QueryInterface(REFIID, void**);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
-    STDMETHODIMP SaveObject(void);
+    STDMETHODIMP SaveObject();
     STDMETHODIMP GetMoniker(DWORD, DWORD, LPMONIKER *);
     STDMETHODIMP GetContainer(LPOLECONTAINER *);
-    STDMETHODIMP ShowObject(void);
+    STDMETHODIMP ShowObject();
     STDMETHODIMP OnShowWindow(BOOL);
-    STDMETHODIMP RequestNewObjectLayout(void);
+    STDMETHODIMP RequestNewObjectLayout();
 };
 
 #endif

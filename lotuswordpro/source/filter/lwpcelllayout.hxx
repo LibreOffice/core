@@ -100,7 +100,7 @@ public:
     LwpObjectID * GetPreviousCellStory();
     virtual LwpPara* GetLastParaOfPreviousStory() SAL_OVERRIDE;
     LwpTableLayout * GetTableLayout();
-    virtual void SetCellMap(void);
+    virtual void SetCellMap();
     double GetActualWidth();
     OUString GetNumfmtName(){return m_NumfmtName;}
 protected:
@@ -154,7 +154,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE {}
-    virtual void SetCellMap(void) SAL_OVERRIDE;
+    virtual void SetCellMap() SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
     LwpObjectID cconnectedlayout;
@@ -174,7 +174,7 @@ public:
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     sal_uInt16 GetNumrows(){return m_nRealrowspan;}
     sal_uInt8 GetNumcols(){return m_nRealcolspan;}
-    virtual void SetCellMap(void) SAL_OVERRIDE;
+    virtual void SetCellMap() SAL_OVERRIDE;
     void SetNumrows(sal_uInt16 nVal){m_nRealrowspan = nVal;}
     void SetNumcols(sal_uInt8 nVal){m_nRealcolspan = nVal;}
 protected:

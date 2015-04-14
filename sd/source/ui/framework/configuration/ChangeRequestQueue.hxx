@@ -37,7 +37,7 @@ class ChangeRequestQueue
 public:
     /** Create an empty queue.
     */
-    ChangeRequestQueue (void);
+    ChangeRequestQueue();
 };
 
 } } // end of namespace sd::framework

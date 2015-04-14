@@ -70,9 +70,9 @@ public:
             of 1.)  When the timer is already running it is not modified.
     */
     void Start (int nPriorityClass = 0);
-    void Stop (void);
-    void Pause (void);
-    void Resume (void);
+    void Stop();
+    void Pause();
+    void Resume();
 
     void SetPreviewSize (
         const Size& rSize,
@@ -103,7 +103,7 @@ private:
     BitmapFactory maBitmapFactory;
     bool mbIsPaused;
 
-    void ProcessRequests (void);
+    void ProcessRequests();
     void ProcessOneRequest (
         CacheKey aKey,
         const RequestPriorityClass ePriorityClass);

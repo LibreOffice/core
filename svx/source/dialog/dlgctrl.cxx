@@ -59,7 +59,7 @@ using namespace ::com::sun::star::accessibility;
 // Control for display and selection of the corner points and
 // mid point of an object
 
-Bitmap& SvxRectCtl::GetRectBitmap( void )
+Bitmap& SvxRectCtl::GetRectBitmap()
 {
     if( !pBitmap )
         InitRectBitmap();
@@ -162,7 +162,7 @@ void SvxRectCtl::Resize_Impl()
 }
 
 
-void SvxRectCtl::InitRectBitmap( void )
+void SvxRectCtl::InitRectBitmap()
 {
     delete pBitmap;
 
@@ -675,12 +675,12 @@ void SvxRectCtl::SetState( CTL_STATE nState )
         static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
 }
 
-sal_uInt8 SvxRectCtl::GetNumOfChildren( void ) const
+sal_uInt8 SvxRectCtl::GetNumOfChildren() const
 {
     return ( eCS == CS_ANGLE )? 8 : 9;
 }
 
-Rectangle SvxRectCtl::CalculateFocusRectangle( void ) const
+Rectangle SvxRectCtl::CalculateFocusRectangle() const
 {
     Size        aDstBtnSize( PixelToLogic( Size( 15, 15 ) ) );
     return Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
@@ -1696,7 +1696,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineEndLB(vcl::Window 
     return pListBox;
 }
 
-LineEndLB::~LineEndLB(void)
+LineEndLB::~LineEndLB()
 {
 }
 

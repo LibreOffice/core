@@ -57,7 +57,7 @@ public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
     virtual ~AccessibleTableShape( );
 
-    virtual void Init (void) SAL_OVERRIDE;
+    virtual void Init() SAL_OVERRIDE;
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -71,7 +71,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleChildCount( ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleTable
     virtual sal_Int32 SAL_CALL getAccessibleRowCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -140,7 +140,7 @@ public:
     AccessibleCell* GetActiveAccessibleCell();
 
 protected:
-    virtual OUString CreateAccessibleBaseName(void) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString CreateAccessibleBaseName() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     sdr::table::SvxTableController* getTableController();
 

@@ -716,7 +716,7 @@ void SvxRubyDialog::AssertOneEntry()
 
 
 
-void SvxRubyDialog::UpdateColors( void )
+void SvxRubyDialog::UpdateColors()
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     svtools::ColorConfig        aColorConfig;

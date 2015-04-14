@@ -243,7 +243,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
  *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject(void)
+XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 {
     //flag
     unsigned char BinSignature[2];
@@ -304,7 +304,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject(void)
  * @descr   Create the XF-drawing objects according to the object type read from bento stream.
  * @return   the created XF-drawing objects.
  */
-XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject(void)
+XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 {
     //record type
     unsigned char recType;

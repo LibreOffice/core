@@ -65,7 +65,7 @@ ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         mpViewShell->AddAccessibilityObject(*this);
 }
 
-ScAccessiblePageHeaderArea::~ScAccessiblePageHeaderArea(void)
+ScAccessiblePageHeaderArea::~ScAccessiblePageHeaderArea()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
@@ -136,7 +136,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
-    ScAccessiblePageHeaderArea::getAccessibleChildCount(void)
+    ScAccessiblePageHeaderArea::getAccessibleChildCount()
                     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -159,7 +159,7 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessiblePageHeaderArea::getAccessibleStateSet(void)
+    ScAccessiblePageHeaderArea::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -187,14 +187,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
-       ScAccessiblePageHeaderArea::getImplementationName(void)
+       ScAccessiblePageHeaderArea::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessiblePageHeaderArea");
 }
 
 uno::Sequence< OUString> SAL_CALL
-       ScAccessiblePageHeaderArea::getSupportedServiceNames(void)
+       ScAccessiblePageHeaderArea::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
@@ -209,14 +209,14 @@ uno::Sequence< OUString> SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePageHeaderArea::getImplementationId(void)
+    ScAccessiblePageHeaderArea::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 //===== internal ==============================================================
-OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
     throw(uno::RuntimeException)
 {
     OUString sDesc;
@@ -238,7 +238,7 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
     return sDesc;
 }
 
-OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
+OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
     OUString sName;
@@ -260,7 +260,7 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
     return sName;
 }
 
-Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
+Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
@@ -277,7 +277,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
     return aRect;
 }
 
-Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
+Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Rectangle aRect;

@@ -259,12 +259,12 @@ namespace fileaccess {
 
         // Notifier
 
-        ContentEventNotifier*          cDEL( void ) SAL_OVERRIDE;
+        ContentEventNotifier*          cDEL() SAL_OVERRIDE;
         ContentEventNotifier*          cEXC( const OUString& aNewName ) SAL_OVERRIDE;
-        ContentEventNotifier*          cCEL( void ) SAL_OVERRIDE;
-        PropertySetInfoChangeNotifier* cPSL( void ) SAL_OVERRIDE;
-        PropertyChangeNotifier*        cPCL( void ) SAL_OVERRIDE;
-        OUString                  getKey( void ) SAL_OVERRIDE;
+        ContentEventNotifier*          cCEL() SAL_OVERRIDE;
+        PropertySetInfoChangeNotifier* cPSL() SAL_OVERRIDE;
+        PropertyChangeNotifier*        cPCL() SAL_OVERRIDE;
+        OUString                  getKey() SAL_OVERRIDE;
 
     private:
         // Data members

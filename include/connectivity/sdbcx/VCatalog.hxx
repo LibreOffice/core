@@ -103,7 +103,7 @@ namespace connectivity
             // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             void SAL_CALL acquire() throw() SAL_OVERRIDE;
             void SAL_CALL release() throw() SAL_OVERRIDE;

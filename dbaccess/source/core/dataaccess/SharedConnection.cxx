@@ -39,7 +39,7 @@ OSharedConnection::~OSharedConnection()
 {
 }
 
-void SAL_CALL OSharedConnection::disposing(void)
+void SAL_CALL OSharedConnection::disposing()
 {
     OSharedConnection_BASE::disposing();
     OConnectionWrapper::disposing();

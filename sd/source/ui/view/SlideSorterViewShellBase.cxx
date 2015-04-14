@@ -61,7 +61,7 @@ SlideSorterViewShellBase::SlideSorterViewShellBase (
 {
 }
 
-SlideSorterViewShellBase::~SlideSorterViewShellBase (void)
+SlideSorterViewShellBase::~SlideSorterViewShellBase()
 {
 }
 

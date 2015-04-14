@@ -72,7 +72,7 @@ void OViews::impl_refresh(  ) throw(RuntimeException)
     static_cast<OMySQLCatalog&>(m_rParent).refreshTables();
 }
 
-void OViews::disposing(void)
+void OViews::disposing()
 {
 m_xMetaData.clear();
     OCollection::disposing();

@@ -177,7 +177,7 @@ OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeExceptio
     return OUString("com.sun.star.comp.report.Section");
 }
 
-uno::Sequence< OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
+uno::Sequence< OUString> OSection::getSupportedServiceNames_Static() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_SECTION;

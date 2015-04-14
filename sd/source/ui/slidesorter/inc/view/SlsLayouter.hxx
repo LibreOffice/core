@@ -66,9 +66,9 @@ public:
     Layouter (
         const SharedSdWindow& rpWindow,
         const ::boost::shared_ptr<Theme>& rpTheme);
-    ~Layouter (void);
+    ~Layouter();
 
-    ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
+    ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter() const;
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount
@@ -107,16 +107,16 @@ public:
 
     /** Return the number of columns.
     */
-    sal_Int32 GetColumnCount (void) const;
+    sal_Int32 GetColumnCount() const;
 
     sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 
     /** Return the scale factor that can be set at the map mode of the
         output window.
     */
-    Fraction GetScaleFactor (void) const;
+    Fraction GetScaleFactor() const;
 
-    Size GetPageObjectSize (void) const;
+    Size GetPageObjectSize() const;
 
     /** Return the bounding box in window coordinates of the nIndex-th page
         object.
@@ -128,7 +128,7 @@ public:
     /** Return the bounding box in model coordinates of the page that
         contains the given amount of page objects.
     */
-    Rectangle GetTotalBoundingBox (void) const;
+    Rectangle GetTotalBoundingBox() const;
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
@@ -185,8 +185,8 @@ public:
         const Size& rIndicatorSize,
         model::SlideSorterModel& rModel) const;
 
-    Range GetValidHorizontalSizeRange (void) const;
-    Range GetValidVerticalSizeRange (void) const;
+    Range GetValidHorizontalSizeRange() const;
+    Range GetValidVerticalSizeRange() const;
 
     class Implementation;
 
@@ -201,7 +201,7 @@ private:
 class InsertPosition
 {
 public:
-    InsertPosition (void);
+    InsertPosition();
     InsertPosition& operator= (const InsertPosition& rInsertPosition);
     bool operator== (const InsertPosition& rInsertPosition) const;
     bool operator!= (const InsertPosition& rInsertPosition) const;
@@ -218,15 +218,15 @@ public:
         const Point& rLeadingOffset,
         const Point& rTrailingOffset);
 
-    sal_Int32 GetRow (void) const { return mnRow; }
-    sal_Int32 GetColumn (void) const { return mnColumn; }
-    sal_Int32 GetIndex (void) const { return mnIndex; }
-    Point GetLocation (void) const { return maLocation; }
-    Point GetLeadingOffset (void) const { return maLeadingOffset; }
-    Point GetTrailingOffset (void) const { return maTrailingOffset; }
-    bool IsAtRunStart (void) const { return mbIsAtRunStart; }
-    bool IsAtRunEnd (void) const { return mbIsAtRunEnd; }
-    bool IsExtraSpaceNeeded (void) const { return mbIsExtraSpaceNeeded; }
+    sal_Int32 GetRow() const { return mnRow; }
+    sal_Int32 GetColumn() const { return mnColumn; }
+    sal_Int32 GetIndex() const { return mnIndex; }
+    Point GetLocation() const { return maLocation; }
+    Point GetLeadingOffset() const { return maLeadingOffset; }
+    Point GetTrailingOffset() const { return maTrailingOffset; }
+    bool IsAtRunStart() const { return mbIsAtRunStart; }
+    bool IsAtRunEnd() const { return mbIsAtRunEnd; }
+    bool IsExtraSpaceNeeded() const { return mbIsExtraSpaceNeeded; }
 
 private:
     sal_Int32 mnRow;

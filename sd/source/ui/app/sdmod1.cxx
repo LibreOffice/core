@@ -80,7 +80,7 @@ public:
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
         SvLockBytes& rBytes);
-    virtual ~OutlineToImpressFinalizer (void) {};
+    virtual ~OutlineToImpressFinalizer() {};
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;

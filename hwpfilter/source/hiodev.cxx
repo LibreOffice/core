@@ -135,14 +135,14 @@ bool HStreamIODev::open()
 }
 
 
-void HStreamIODev::flush(void)
+void HStreamIODev::flush()
 {
     if (_gzfp)
         gz_flush(_gzfp, Z_FINISH);
 }
 
 
-void HStreamIODev::close(void)
+void HStreamIODev::close()
 {
 /* 플러시한 후 닫는다. */
     this->flush();
@@ -152,7 +152,7 @@ void HStreamIODev::close(void)
 }
 
 
-int HStreamIODev::state(void) const
+int HStreamIODev::state() const
 {
     return 0;
 }
@@ -290,17 +290,17 @@ bool HMemIODev::open()
 }
 
 
-void HMemIODev::flush(void)
+void HMemIODev::flush()
 {
 }
 
 
-void HMemIODev::close(void)
+void HMemIODev::close()
 {
 }
 
 
-int HMemIODev::state(void) const
+int HMemIODev::state() const
 {
     if (pos <= length)
         return 0;

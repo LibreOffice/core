@@ -443,7 +443,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 }
 
 OUString SAL_CALL
-BreakIterator_Unicode::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+BreakIterator_Unicode::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString::createFromAscii(cBreakIterator);
 }
@@ -455,7 +455,7 @@ BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno:
 }
 
 uno::Sequence< OUString > SAL_CALL
-BreakIterator_Unicode::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+BreakIterator_Unicode::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(cBreakIterator);

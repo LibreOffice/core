@@ -57,7 +57,7 @@ SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
 }
 
 // container::XEnumeration
-sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements(void)
+sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -67,7 +67,7 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements(void)
         return sal_False;
 }
 
-uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+uno::Any SvxUnoTextContentEnumeration::nextElement() throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -626,7 +626,7 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
 }
 
 // text::XTextRange (rest in SvxTextRange)
-uno::Reference< text::XText > SAL_CALL SvxUnoTextCursor::getText(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< text::XText > SAL_CALL SvxUnoTextCursor::getText() throw( uno::RuntimeException, std::exception )
 {
     return mxParentText;
 }

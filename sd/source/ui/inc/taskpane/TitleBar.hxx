@@ -55,21 +55,21 @@ public:
         const OUString& rsTitle,
         TitleBarType eType,
         bool bIsExpandable);
-    virtual ~TitleBar (void);
+    virtual ~TitleBar();
 
-    virtual Size GetPreferredSize (void);
+    virtual Size GetPreferredSize();
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-    virtual bool IsResizable (void);
-    virtual vcl::Window* GetWindow (void);
-    virtual sal_Int32 GetMinimumWidth (void);
+    virtual bool IsResizable();
+    virtual vcl::Window* GetWindow();
+    virtual sal_Int32 GetMinimumWidth();
 
     virtual void Paint (const Rectangle& rBoundingBox);
     virtual bool Expand (bool bFlag = true);
-    virtual bool IsExpanded (void) const;
+    virtual bool IsExpanded() const;
     virtual void SetEnabledState(bool bFlag);
-    virtual void GetFocus (void);
-    virtual void LoseFocus (void);
+    virtual void GetFocus();
+    virtual void LoseFocus();
 
     virtual void MouseMove(const MouseEvent& rEvent);
     /** Empty implementation prevents forwarding to docking window.
@@ -101,7 +101,7 @@ private:
         bitmap.  It is safe to call GetExpansionIndicator() when this method
         returns <FALSE/> but unnecessary.
     */
-    bool HasExpansionIndicator (void) const;
+    bool HasExpansionIndicator() const;
 
     /** Return the image of the expansion indicator.
         @return
@@ -109,7 +109,7 @@ private:
             then an empty Image is returned.  You better call
             HasExpansionIndicator() to prevent this.
     */
-    Image GetExpansionIndicator (void) const;
+    Image GetExpansionIndicator() const;
 
     /** Calculate the bounding box of the title text.  This takes into
         account indentation due to an expansion indicator and the given
@@ -130,7 +130,7 @@ private:
         const Rectangle& rTextBox,
         int nTitleBarWidth);
 
-    void PaintSubPanelHeadLineBar (void);
+    void PaintSubPanelHeadLineBar();
 
     void PaintBackground (const Rectangle& rTextBox);
 
@@ -141,12 +141,12 @@ private:
 
     void PaintText (const Rectangle& rTextBox);
 
-    sal_uInt16 GetTextStyle (void);
+    sal_uInt16 GetTextStyle();
 
     const static int snIndentationWidth;
 
     // Default constructor, copy constructor, and assignment are not supported.
-    TitleBar (void);
+    TitleBar();
     TitleBar (const TitleBar&);
     TitleBar& operator= (const TitleBar&);
 

@@ -81,10 +81,10 @@ private:
     LwpGraphicObject* m_pGraphicObj;
 public:
     LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
-    ~LwpSdwFileLoader(void);
+    ~LwpSdwFileLoader();
 public:
-//  void LoadObjectList(void);
-//  void RegisterStyle(void);
+//  void LoadObjectList();
+//  void RegisterStyle();
 
     // add by  ,03/25/2005
     void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);

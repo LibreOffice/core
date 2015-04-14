@@ -82,7 +82,7 @@ inline void OfaMemoryOptionsPage::SetNfGraphicCacheVal( long nSizeInBytes )
     m_pNfGraphicCache->SetValue( nSizeInBytes >> 20 );
 }
 
-long OfaMemoryOptionsPage::GetNfGraphicObjectCacheVal( void ) const
+long OfaMemoryOptionsPage::GetNfGraphicObjectCacheVal() const
 {
     return long( ::rtl::math::round( double( m_pNfGraphicObjectCache->GetValue() ) * NF2BYTES ) );
 }

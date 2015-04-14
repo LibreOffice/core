@@ -196,7 +196,7 @@ public:
 };
 
 
-Sequence< Property > ImplPropertySetInfo::getProperties(void)
+Sequence< Property > ImplPropertySetInfo::getProperties()
     throw( RuntimeException )
 {
     static Sequence<Property> * pSeq = NULL;
@@ -300,7 +300,7 @@ class ImplIntroTest : public ImplIntroTestHelper
     Reference< XVetoableChangeListener > aVetoPropChangeListener;
     OUString aVetoPropChangeListenerStr;
 
-    void Init( void );
+    void Init();
 
 public:
     ImplIntroTest( const Reference< XMultiServiceFactory > & xMgr )
@@ -420,7 +420,7 @@ public:
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 };
 
-void ImplIntroTest::Init( void )
+void ImplIntroTest::Init()
 {
     // set unique name
     static sal_Int32 nObjCount = 0;
@@ -525,7 +525,7 @@ Any ImplIntroTest::getPropertyValue( const OUString& PropertyName )
     return Any();
 }
 
-OUString ImplIntroTest::getFirstName(void)
+OUString ImplIntroTest::getFirstName()
     throw(RuntimeException)
 {
     return OUString( OUString("Markus") );

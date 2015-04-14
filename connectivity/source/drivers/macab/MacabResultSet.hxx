@@ -104,7 +104,7 @@ namespace connectivity
             void setTableName(const OUString& _sTableName);
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

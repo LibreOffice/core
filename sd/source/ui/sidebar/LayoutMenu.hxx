@@ -72,21 +72,21 @@ public:
         vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~LayoutMenu (void);
+    virtual ~LayoutMenu();
 
-    void Dispose (void);
+    void Dispose();
 
     /** Return a numerical value representing the currently selected
         layout.
     */
-    AutoLayout GetSelectedAutoLayout (void);
+    AutoLayout GetSelectedAutoLayout();
 
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
     // From vcl::Window
     virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     /** Show a context menu when the right mouse button is pressed.
     */
@@ -96,7 +96,7 @@ public:
         anymore.  It will re-assemble this set according to the current
         settings.
     */
-    void InvalidateContent (void);
+    void InvalidateContent();
 
     // DragSourceHelper
     virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel) SAL_OVERRIDE;
@@ -146,11 +146,11 @@ private:
     /** Fill the value set with the layouts that are applicable to the
         current main view shell.
     */
-    void Fill (void);
+    void Fill();
 
     /** Remove all items from the value set.
     */
-    void Clear (void);
+    void Clear();
 
     /** Assign the given layout to all selected slides of a slide sorter.
         If no slide sorter is active then this call is ignored.  The slide
@@ -180,7 +180,7 @@ private:
 
     /** Select the layout that is used by the current page.
     */
-    void UpdateSelection (void);
+    void UpdateSelection();
 
     // internal ctor
     void    implConstruct( DrawDocShell& rDocumentShell );

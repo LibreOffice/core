@@ -39,12 +39,12 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
-    virtual ~SpellDialogChildWindow (void);
+    virtual ~SpellDialogChildWindow();
 
     /** This method makes the one from the base class public so that
         it can be called from the view shell when one is created.
     */
-    void InvalidateSpellDialog (void);
+    void InvalidateSpellDialog();
 
     SFX_DECL_CHILDWINDOW_WITHID(SpellDialogChildWindow);
 
@@ -59,8 +59,8 @@ protected:
         spelling dialog back into the document.
     */
     virtual void ApplyChangedSentence(const ::svx::SpellPortions& rChanged, bool bRecheck) SAL_OVERRIDE;
-    virtual void GetFocus (void) SAL_OVERRIDE;
-    virtual void LoseFocus (void) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
 private:
     /** This outliner is used to do the main work of iterating over a
@@ -78,7 +78,7 @@ private:
         deletion/release of formerly created/obtained one prior to
         construction/obtaining of a new one.
     */
-    void ProvideOutliner (void);
+    void ProvideOutliner();
 };
 
 } // end of namespace ::sd

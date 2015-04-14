@@ -767,7 +767,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
     return pMemory;
 }
 
-static void force_c_locale(void)
+static void force_c_locale()
 {
     // force locale (and resource files loaded) to en-US
     OUString aLangISO("en-US");

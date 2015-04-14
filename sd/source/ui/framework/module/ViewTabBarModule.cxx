@@ -77,11 +77,11 @@ ViewTabBarModule::ViewTabBarModule (
     }
 }
 
-ViewTabBarModule::~ViewTabBarModule (void)
+ViewTabBarModule::~ViewTabBarModule()
 {
 }
 
-void SAL_CALL ViewTabBarModule::disposing (void)
+void SAL_CALL ViewTabBarModule::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);

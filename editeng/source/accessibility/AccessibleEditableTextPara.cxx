@@ -2813,7 +2813,7 @@ namespace accessibility
 
 
     // XServiceInfo
-    OUString SAL_CALL AccessibleEditableTextPara::getImplementationName (void) throw (uno::RuntimeException, std::exception)
+    OUString SAL_CALL AccessibleEditableTextPara::getImplementationName() throw (uno::RuntimeException, std::exception)
     {
 
         return OUString("AccessibleEditableTextPara");
@@ -2825,7 +2825,7 @@ namespace accessibility
         return cppu::supportsService(this, sServiceName);
     }
 
-    uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames (void) throw (uno::RuntimeException, std::exception)
+    uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
     {
 
         const OUString sServiceName( getServiceName() );
@@ -2833,7 +2833,7 @@ namespace accessibility
     }
 
     // XServiceName
-    OUString SAL_CALL AccessibleEditableTextPara::getServiceName (void) throw (uno::RuntimeException)
+    OUString SAL_CALL AccessibleEditableTextPara::getServiceName() throw (uno::RuntimeException)
     {
 
         // #105185# Using correct service now

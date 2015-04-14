@@ -100,7 +100,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
 
 ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
 
-void ImplServerFontEntry::HandleFontOptions( void )
+void ImplServerFontEntry::HandleFontOptions()
 {
     if( !mpServerFont )
         return;

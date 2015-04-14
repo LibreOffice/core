@@ -311,7 +311,7 @@ class SwMarkPreview : public vcl::Window
 
     void            Paint(const Rectangle&) SAL_OVERRIDE;
     void            PaintPage(const Rectangle &rRect);
-    void            InitColors( void );
+    void            InitColors();
 
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

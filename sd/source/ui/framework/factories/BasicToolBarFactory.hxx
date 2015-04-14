@@ -58,9 +58,9 @@ class BasicToolBarFactory
 public:
     BasicToolBarFactory (
         const css::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
-    virtual ~BasicToolBarFactory (void);
+    virtual ~BasicToolBarFactory();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ToolBarFactory
 
@@ -93,9 +93,9 @@ private:
     css::uno::Reference<css::frame::XController> mxController;
     ViewShellBase* mpViewShellBase;
 
-    void Shutdown (void);
+    void Shutdown();
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 

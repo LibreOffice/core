@@ -51,7 +51,7 @@ public:
 
     static MasterPageContainerQueue* Create (
         const ::boost::weak_ptr<ContainerAdapter>& rpContainer);
-    virtual ~MasterPageContainerQueue (void);
+    virtual ~MasterPageContainerQueue();
 
     /** This method is typically called for entries in the container for
         which GetPreviewState() returns OS_CREATABLE.  The creation of the
@@ -68,14 +68,14 @@ public:
 
     /** Return <TRUE/> when there is at least one request in the queue.
     */
-    bool IsEmpty (void) const;
+    bool IsEmpty() const;
 
     /** After this call the queue does not wait anymore for requests with
         higher priority when only a small number of requests with lower
         priority are present.  This method should be called when all
         templates are inserted into the MasterPageContainer.
     */
-    void ProcessAllRequests (void);
+    void ProcessAllRequests();
 
 private:
     ::boost::weak_ptr<ContainerAdapter> mpWeakContainer;
@@ -116,7 +116,7 @@ private:
     static sal_uInt32 snWaitForMoreRequestsCount;
 
     MasterPageContainerQueue (const ::boost::weak_ptr<ContainerAdapter>& rpContainer);
-    void LateInit (void);
+    void LateInit();
 
     /** Calculate the priority that defines the order in which requests
         are processed.

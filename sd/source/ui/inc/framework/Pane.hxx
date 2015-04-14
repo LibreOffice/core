@@ -76,16 +76,16 @@ public:
             com::sun::star::drawing::framework::XResourceId>& rxPaneId,
         vcl::Window* pWindow)
         throw ();
-    virtual ~Pane (void);
+    virtual ~Pane();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     /** This method is typically used together with the XUnoTunnel to obtain
         a Window pointer from an XPane object.
     */
-    virtual vcl::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow();
 
     //----- XPane -------------------------------------------------------------
 
@@ -94,22 +94,22 @@ public:
         in the window of the pane.
     */
     virtual css::uno::Reference<css::awt::XWindow>
-        SAL_CALL getWindow (void)
+        SAL_CALL getWindow()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::rendering::XCanvas>
-        SAL_CALL getCanvas (void)
+        SAL_CALL getCanvas()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XPane2 -------------------------------------------------------------
 
-    virtual sal_Bool SAL_CALL isVisible (void)
+    virtual sal_Bool SAL_CALL isVisible()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
+    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAccessible (
@@ -119,13 +119,13 @@ public:
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
-        SAL_CALL getResourceId (void)
+        SAL_CALL getResourceId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** For the typical pane it makes no sense to be dislayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
     */
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XUnoTunnel --------------------------------------------------------
@@ -143,14 +143,14 @@ protected:
         different canvas.
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
-        CreateCanvas (void)
+        CreateCanvas()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Throw DisposedException when the object has already been disposed or
         is currently being disposed.  Otherwise this method returns
         normally.
     */
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (::com::sun::star::lang::DisposedException);
 };
 
