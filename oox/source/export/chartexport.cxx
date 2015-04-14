@@ -45,6 +45,7 @@
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -905,7 +906,42 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
             XML_val, "1",
             FSEND );
 
+    exportMissingValueTreatment(Reference<beans::XPropertySet>(mxDiagram, uno::UNO_QUERY));
+
     pFS->endElement( FSNS( XML_c, XML_chart ) );
+}
+
+void ChartExport::exportMissingValueTreatment(uno::Reference<beans::XPropertySet> xPropSet)
+{
+    if (!xPropSet.is())
+        return;
+
+    sal_Int32 nVal = 0;
+    uno::Any aAny = xPropSet->getPropertyValue("MissingValueTreatment");
+    if (!(aAny >>= nVal))
+        return;
+
+    const char* pVal = NULL;
+    switch (nVal)
+    {
+        case cssc::MissingValueTreatment::LEAVE_GAP:
+            pVal = "gap";
+        break;
+        case cssc::MissingValueTreatment::USE_ZERO:
+            pVal = "zero";
+        break;
+        case cssc::MissingValueTreatment::CONTINUE:
+            pVal = "span";
+        break;
+        default:
+            SAL_WARN("oox", "unknown MissingValueTreatment value");
+        break;
+    }
+
+    FSHelperPtr pFS = GetFS();
+    pFS->singleElement( FSNS(XML_c, XML_dispBlanksAs),
+            XML_val, pVal,
+            FSEND);
 }
 
 void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
