@@ -30,13 +30,15 @@
 
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/enumarray.hxx>
+#include <vector>
 
-#define LOCKFILE_OOOUSERNAME_ID   0
-#define LOCKFILE_SYSUSERNAME_ID   1
-#define LOCKFILE_LOCALHOST_ID     2
-#define LOCKFILE_EDITTIME_ID      3
-#define LOCKFILE_USERURL_ID       4
-#define LOCKFILE_ENTRYSIZE        5
+enum class LockFileComponent
+{
+    OOOUSERNAME, SYSUSERNAME, LOCALHOST, EDITTIME, USERURL, LAST=USERURL
+};
+
+typedef o3tl::enumarray<LockFileComponent,OUString> LockFileEntry;
 
 namespace svt {
 
@@ -53,13 +55,13 @@ public:
     LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix );
     ~LockFileCommon();
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );
-    static ::com::sun::star::uno::Sequence< OUString > ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
+    static void ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > &rOutput );
+    static LockFileEntry ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
     static OUString ParseName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
     static OUString EscapeCharacters( const OUString& aSource );
     static OUString GetOOOUserName();
     static OUString GetCurrentLocalTime();
-    static ::com::sun::star::uno::Sequence< OUString > GenerateOwnEntry();
+    static LockFileEntry GenerateOwnEntry();
 };
 
 }

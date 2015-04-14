@@ -29,13 +29,8 @@
 #include <com/sun/star/io/XTruncate.hpp>
 
 #include <svl/lockfilecommon.hxx>
-
-#define SHARED_OOOUSERNAME_ID   LOCKFILE_OOOUSERNAME_ID
-#define SHARED_SYSUSERNAME_ID   LOCKFILE_SYSUSERNAME_ID
-#define SHARED_LOCALHOST_ID     LOCKFILE_LOCALHOST_ID
-#define SHARED_EDITTIME_ID      LOCKFILE_EDITTIME_ID
-#define SHARED_USERURL_ID       LOCKFILE_USERURL_ID
-#define SHARED_ENTRYSIZE        LOCKFILE_ENTRYSIZE
+#include <o3tl/enumarray.hxx>
+#include <vector>
 
 namespace svt {
 
@@ -47,7 +42,7 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xSeekable;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate > m_xTruncate;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > m_aUsersData;
+    std::vector< LockFileEntry > m_aUsersData;
 
     void OpenStream();
     void Close();
@@ -62,11 +57,12 @@ public:
     ShareControlFile( const OUString& aOrigURL );
     ~ShareControlFile();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > GetUsersData();
-    void SetUsersDataAndStore( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >& aUserNames );
-    ::com::sun::star::uno::Sequence< OUString > InsertOwnEntry();
+    std::vector< LockFileEntry > GetUsersData();
+    void SetUsersDataAndStore( const std::vector< LockFileEntry >& aUserNames );
+    LockFileEntry InsertOwnEntry();
     bool HasOwnEntry();
-    void RemoveEntry( const ::com::sun::star::uno::Sequence< OUString >& aOptionalSpecification = ::com::sun::star::uno::Sequence< OUString >() );
+    void RemoveEntry( const LockFileEntry& aOptionalSpecification );
+    void RemoveEntry();
     void RemoveFile();
 };
 

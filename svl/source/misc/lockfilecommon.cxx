@@ -30,6 +30,7 @@
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
 #include <osl/file.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -95,35 +96,26 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 }
 
 
-uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer )
+void LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > & aResult )
 {
     sal_Int32 nCurPos = 0;
-    sal_Int32 nCurEntry = 0;
-    uno::Sequence< uno::Sequence< OUString > > aResult( 10 );
-
     while ( nCurPos < aBuffer.getLength() )
     {
-        if ( nCurEntry >= aResult.getLength() )
-            aResult.realloc( nCurEntry + 10 );
-        aResult[nCurEntry] = ParseEntry( aBuffer, nCurPos );
-        nCurEntry++;
+        aResult.push_back( ParseEntry( aBuffer, nCurPos ) );
     }
-
-    aResult.realloc( nCurEntry );
-    return aResult;
 }
 
 
-uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
+LockFileEntry LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
-    uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
+    LockFileEntry aResult;
 
-    for ( int nInd = 0; nInd < LOCKFILE_ENTRYSIZE; nInd++ )
+    for ( LockFileComponent nInd : o3tl::enumrange<LockFileComponent>() )
     {
         aResult[nInd] = ParseName( aBuffer, io_nCurPos );
         if ( io_nCurPos >= aBuffer.getLength()
-          || ( nInd < LOCKFILE_ENTRYSIZE - 1 && aBuffer[io_nCurPos++] != ',' )
-          || ( nInd == LOCKFILE_ENTRYSIZE - 1 && aBuffer[io_nCurPos++] != ';' ) )
+          || ( nInd < LockFileComponent::LAST && aBuffer[io_nCurPos++] != ',' )
+          || ( nInd == LockFileComponent::LAST && aBuffer[io_nCurPos++] != ';' ) )
             throw io::WrongFormatException();
     }
 
@@ -220,20 +212,20 @@ OUString LockFileCommon::GetCurrentLocalTime()
 }
 
 
-uno::Sequence< OUString > LockFileCommon::GenerateOwnEntry()
+LockFileEntry LockFileCommon::GenerateOwnEntry()
 {
-    uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
+    LockFileEntry aResult;
 
-    aResult[LOCKFILE_OOOUSERNAME_ID] = GetOOOUserName();
+    aResult[LockFileComponent::OOOUSERNAME] = GetOOOUserName();
 
     ::osl::Security aSecurity;
-    aSecurity.getUserName( aResult[LOCKFILE_SYSUSERNAME_ID] );
+    aSecurity.getUserName( aResult[LockFileComponent::SYSUSERNAME] );
 
-    aResult[LOCKFILE_LOCALHOST_ID] = ::osl::SocketAddr::getLocalHostname();
+    aResult[LockFileComponent::LOCALHOST] = ::osl::SocketAddr::getLocalHostname();
 
-    aResult[LOCKFILE_EDITTIME_ID] = GetCurrentLocalTime();
+    aResult[LockFileComponent::EDITTIME] = GetCurrentLocalTime();
 
-    ::utl::Bootstrap::locateUserInstallation( aResult[LOCKFILE_USERURL_ID] );
+    ::utl::Bootstrap::locateUserInstallation( aResult[LockFileComponent::USERURL] );
 
 
     return aResult;

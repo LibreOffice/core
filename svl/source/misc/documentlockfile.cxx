@@ -30,6 +30,7 @@
 #include <osl/time.h>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -64,16 +65,16 @@ DocumentLockFile::~DocumentLockFile()
 }
 
 
-void DocumentLockFile::WriteEntryToStream( const uno::Sequence< OUString >& aEntry, uno::Reference< io::XOutputStream > xOutput )
+void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, uno::Reference< io::XOutputStream > xOutput )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     OUStringBuffer aBuffer;
 
-    for ( sal_Int32 nEntryInd = 0; nEntryInd < aEntry.getLength(); nEntryInd++ )
+    for ( LockFileComponent lft : o3tl::enumrange<LockFileComponent>() )
     {
-        aBuffer.append( EscapeCharacters( aEntry[nEntryInd] ) );
-        if ( nEntryInd < aEntry.getLength() - 1 )
+        aBuffer.append( EscapeCharacters( aEntry[lft] ) );
+        if ( lft < LockFileComponent::LAST )
             aBuffer.append( ',' );
         else
             aBuffer.append( ';' );
@@ -102,7 +103,7 @@ bool DocumentLockFile::CreateOwnLockFile()
         if ( !xInput.is() || !xOutput.is() )
             throw uno::RuntimeException();
 
-        uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
+        LockFileEntry aNewEntry = GenerateOwnEntry();
         WriteEntryToStream( aNewEntry, xOutput );
         xOutput->closeOutput();
 
@@ -132,7 +133,7 @@ bool DocumentLockFile::CreateOwnLockFile()
 }
 
 
-uno::Sequence< OUString > DocumentLockFile::GetLockData()
+LockFileEntry DocumentLockFile::GetLockData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -176,7 +177,7 @@ bool DocumentLockFile::OverwriteOwnLockFile()
         uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
-        uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
+        LockFileEntry aNewEntry = GenerateOwnEntry();
 
         uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
         uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
@@ -200,15 +201,12 @@ void DocumentLockFile::RemoveFile()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
-    uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
-    uno::Sequence< OUString > aFileData = GetLockData();
+    LockFileEntry aNewEntry = GenerateOwnEntry();
+    LockFileEntry aFileData = GetLockData();
 
-    if ( aFileData.getLength() < LOCKFILE_ENTRYSIZE )
-        throw io::WrongFormatException();
-
-    if ( !aFileData[LOCKFILE_SYSUSERNAME_ID].equals( aNewEntry[LOCKFILE_SYSUSERNAME_ID] )
-      || !aFileData[LOCKFILE_LOCALHOST_ID].equals( aNewEntry[LOCKFILE_LOCALHOST_ID] )
-      || !aFileData[LOCKFILE_USERURL_ID].equals( aNewEntry[LOCKFILE_USERURL_ID] ) )
+    if ( !aFileData[LockFileComponent::SYSUSERNAME].equals( aNewEntry[LockFileComponent::SYSUSERNAME] )
+      || !aFileData[LockFileComponent::LOCALHOST].equals( aNewEntry[LockFileComponent::LOCALHOST] )
+      || !aFileData[LockFileComponent::USERURL].equals( aNewEntry[LockFileComponent::USERURL] ) )
         throw io::IOException(); // not the owner, access denied
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
