@@ -32,6 +32,7 @@ static int help()
 static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
+static GtkToolItem* pItalic;
 bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
@@ -123,6 +124,8 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
         GtkToolItem* pItem = 0;
         if (aKey == ".uno:Bold")
             pItem = pBold;
+        else if (aKey == ".uno:Italic")
+            pItem = pItalic;
 
         if (pItem)
         {
@@ -145,6 +148,15 @@ void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 
     if (g_bToolItemBroadcast)
         lok_docview_post_command(pLOKDocView, ".uno:Bold");
+}
+
+/// User clicked on the 'Italic' button -> inform LOKDocView.
+void toggleItalic(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+
+    if (g_bToolItemBroadcast)
+        lok_docview_post_command(pLOKDocView, ".uno:Italic");
 }
 
 // GtkComboBox requires gtk 2.24 or later
@@ -291,6 +303,10 @@ int main( int argc, char* argv[] )
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pBold), "Bold");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
     g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleBold), NULL);
+    pItalic = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItalic), "Italic");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
+    g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleItalic), NULL);
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
