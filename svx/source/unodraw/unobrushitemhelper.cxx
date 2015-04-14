@@ -50,19 +50,8 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
 
     const sal_uInt8 nTransparency(rBrush.GetColor().GetTransparency());
 
-    if(0xff != nTransparency)
-    {
-        // we have a color fill
-        const Color aColor(rBrush.GetColor().GetRGBColor());
-
-        rToSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-        rToSet.Put(XFillColorItem(OUString(), aColor));
-
-        // #125189# nTransparency is in range [0..254], convert to [0..100] which is used in
-        // XFillTransparenceItem (caution with the range which is in an *item-specific* range)
-        rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 254));
-    }
-    else if(GPOS_NONE != rBrush.GetGraphicPos())
+    // tdf#89478 check for image first
+    if (GPOS_NONE != rBrush.GetGraphicPos())
     {
         // we have a graphic fill, set fill style
         rToSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
@@ -130,6 +119,18 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
             // nGraphicTransparency is in range [0..100]
             rToSet.Put(XFillTransparenceItem(nGraphicTransparency));
         }
+    }
+    else if (0xff != nTransparency)
+    {
+        // we have a color fill
+        const Color aColor(rBrush.GetColor().GetRGBColor());
+
+        rToSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+        rToSet.Put(XFillColorItem(OUString(), aColor));
+
+        // #125189# nTransparency is in range [0..254], convert to [0..100] which is used in
+        // XFillTransparenceItem (caution with the range which is in an *item-specific* range)
+        rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 254));
     }
     else
     {
