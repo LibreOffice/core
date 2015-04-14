@@ -271,10 +271,14 @@ writer_constructor_list = [
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
     "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
 # sw/util/swd.component
     "com_sun_star_comp_writer_FormatDetector_get_implementation",
 # writerfilter/util/writerfilter.component
