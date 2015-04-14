@@ -784,6 +784,11 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
         WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
+    //write style
+    pFS->startElementNS( mnXmlNamespace, XML_style, FSEND );
+    WriteShapeStyle( xShapeProps );
+    pFS->endElementNS( mnXmlNamespace, XML_style );
+
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
