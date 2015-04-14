@@ -98,7 +98,6 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
     aHeaderBar.SetSelectHdl(LINK( this, SvSimpleTable, HeaderBarClick));
     aHeaderBar.SetDoubleClickHdl(LINK( this, SvSimpleTable, HeaderBarDblClick));
 
-    GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
 
     EnableCellFocus();
     DisableTransientChildren();
@@ -280,6 +279,9 @@ void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
             aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_UPARROW);
             GetModel()->SetSortMode(SortDescending);
         }
+
+        GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
+
         if(nSortCol == nCol)
         {
             GetModel()->Reverse();
