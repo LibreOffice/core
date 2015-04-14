@@ -848,7 +848,7 @@ private:
         const SwFrmFmt* frame;
         const Point* point;
     };
-    std::list< PostponedDrawing >* m_postponedVMLDrawing;
+    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedVMLDrawings;
     std::list< PostponedDrawing >* m_postponedDMLDrawing;
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;
 

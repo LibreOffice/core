@@ -1602,8 +1602,8 @@ void DocxAttributeOutput::StartRunProperties()
     OSL_ASSERT( !m_pPostponedDiagrams );
     m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>());
 
-    OSL_ASSERT( m_postponedVMLDrawing == NULL );
-    m_postponedVMLDrawing = new std::list< PostponedDrawing >;
+    OSL_ASSERT( !m_pPostponedVMLDrawings );
+    m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>());
 
     assert(!m_postponedDMLDrawing);
     m_postponedDMLDrawing = new std::list< PostponedDrawing >;
@@ -4710,17 +4710,16 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
  */
 void DocxAttributeOutput::WritePostponedVMLDrawing()
 {
-    if(m_postponedVMLDrawing == NULL)
+    if (!m_pPostponedVMLDrawings)
         return;
 
-    for( std::list< PostponedDrawing >::iterator it = m_postponedVMLDrawing->begin();
-         it != m_postponedVMLDrawing->end();
+    for( std::list< PostponedDrawing >::iterator it = m_pPostponedVMLDrawings->begin();
+         it != m_pPostponedVMLDrawings->end();
          ++it )
     {
         m_rExport.SdrExporter().writeVMLDrawing(it->object, *(it->frame), *(it->point));
     }
-    delete m_postponedVMLDrawing;
-    m_postponedVMLDrawing = NULL;
+    m_pPostponedVMLDrawings.reset(0);
 }
 
 void DocxAttributeOutput::WritePostponedCustomShape()
@@ -8282,7 +8281,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
-      m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
