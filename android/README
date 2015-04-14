@@ -145,7 +145,7 @@ Overlay
 Overlay elements like cursor and selections aren't drawn by the LO core, instead the core
 only provides data (cursor position, selection rectangles) and the app needs to draw them.
 DocumentOverlay (org.libreoffice.overlay.DocumentOverlay) and DocumentOverlayView
-(org.libreoffice.overlay.DocumentOverlayView) are the classes that provide the overlay over 
+(org.libreoffice.overlay.DocumentOverlayView) are the classes that provide the overlay over
 the document, where selections and the cursor is drawn.
 
 Emulator and debugging notes
@@ -238,6 +238,24 @@ started debuggable application.
         jdb -sourcepath src/java/ -attach localhost:7777
 
 Assuming that you're already in the LOAndroid3 directory in your shell.
+
+* Debugging the missing services
+
+Android library only include essential services that are compiled for
+LibreOffice in order to reduce the size of the apk. When developing,
+some services might become useful and we should add those services
+to the combined library.
+
+In order to identify missing services, we need to be able to receive
+SAL_INFO from cppuhelper/source/shlib.cxx in logcat and therefore identify
+what services are missing. To do so, you may want add the following
+when configuring the build.
+
+    --enable-selective-debuginfo="cppuhelper/ sal/"
+
+Which services are combined in the android lib is determined by
+
+    solenv/bin/native-code.py
 
 * Common Errors / Gotchas
 
