@@ -2205,8 +2205,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         pTableTextNodeInfoInner->getTableBoxesOfRow();
     // number of cell written
     sal_uInt32 nBoxes = pTableBoxes->size();
-    if (nBoxes > ww8::MAXTABLECELLS)
-        nBoxes = ww8::MAXTABLECELLS;
+    assert(nBoxes <= ww8::MAXTABLECELLS);
 
     // sprm header
     m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTable );
@@ -2272,14 +2271,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     ww8::TableBoxVector::const_iterator aIt;
     ww8::TableBoxVector::const_iterator aItEnd = pTableBoxes->end();
 
-#if OSL_DEBUG_LEVEL > 1
-    size_t nRowSpans = pRowSpans->size();
-    size_t nTableBoxes = pTableBoxes->size();
-    (void) nRowSpans;
-    (void) nTableBoxes;
-#endif
-
-    for( aIt = pTableBoxes->begin(); aIt != aItEnd; ++aIt, ++aItRowSpans)
+    for (aIt = pTableBoxes->begin(); aIt != aItEnd; ++aIt, ++aItRowSpans)
     {
         sal_uInt16 npOCount = m_rWW8Export.pO->size();
 

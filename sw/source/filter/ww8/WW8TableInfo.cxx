@@ -144,6 +144,8 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow()
         const SwTableBoxes & rTblBoxes = pTabLine->GetTabBoxes();
 
         sal_uInt8 nBoxes = rTblBoxes.size();
+        if (nBoxes > MAXTABLECELLS)
+            nBoxes = MAXTABLECELLS;
         for ( sal_uInt8 n = 0; n < nBoxes; n++ )
         {
             pResult->push_back(rTblBoxes[n]);
@@ -244,7 +246,7 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
             const SwTableLine *pCurrentLine = rTableLines[nLineIndex];
             const SwTableBoxes & rTabBoxes = pCurrentLine->GetTabBoxes();
             size_t nBoxes = rTabBoxes.size();
-            if ( nBoxes > MAXTABLECELLS )
+            if (nBoxes > MAXTABLECELLS)
                 nBoxes = MAXTABLECELLS;
 
             sal_uInt32 nSeparatorPosition = 0;
@@ -298,7 +300,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
         pWidths = WidthsPtr(new Widths);
         // number of cell written
         sal_uInt32 nBoxes = rTabBoxes.size();
-        if ( nBoxes > MAXTABLECELLS )
+        if (nBoxes > MAXTABLECELLS)
             nBoxes = MAXTABLECELLS;
 
         for (sal_uInt32 n = 0; n < nBoxes; n++)
@@ -1432,6 +1434,8 @@ CellInfoMultiSet::const_iterator WW8TableCellGridRow::end() const
 
 void WW8TableCellGridRow::setTableBoxVector(TableBoxVectorPtr pTableBoxVector)
 {
+    if (pTableBoxVector->size() > MAXTABLECELLS)
+        pTableBoxVector->resize(MAXTABLECELLS);
     m_pTableBoxVector = pTableBoxVector;
 }
 
