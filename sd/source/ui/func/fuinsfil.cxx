@@ -138,15 +138,6 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // get cross filter
-                pFilter = SfxFilter::GetDefaultFilterFromFactory( aOtherCont );
-                if( pFilter )
-                {
-                    pFilter = aMatch.GetFilter4Extension( pFilter->GetDefaultExtension() );
-                    if ( pFilter )
-                        xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-                }
-
                 // get template filter
                 if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
@@ -154,6 +145,13 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     pFilter = GraphicDocShell::Factory().GetTemplateFilter();
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                // get cross filter
+                pFilter = SfxFilter::GetDefaultFilterFromFactory( aOtherCont );
+                if( pFilter )
+                {
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                }
 
                 // get Powerpoint filter
                 OUString aExt = ".ppt";
