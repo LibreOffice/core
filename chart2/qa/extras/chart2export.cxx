@@ -81,6 +81,7 @@ public:
     void testDataLabelDefaultLineChartDOCX();
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
+    void testDispBlanksAsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
+    CPPUNIT_TEST(testDispBlanksAsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1207,6 +1209,14 @@ void Chart2ExportTest::testAutoTitleDelXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:autoTitleDeleted", "val", "0");
+}
+
+void Chart2ExportTest::testDispBlanksAsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "dispBlanksAs_2007.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "gap");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
