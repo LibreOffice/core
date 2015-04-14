@@ -34,6 +34,8 @@ static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
 static GtkToolItem* pItalic;
+static GtkToolItem* pUnderline;
+static GtkToolItem* pStrikethrough;
 std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
 std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
 bool g_bToolItemBroadcast = true;
@@ -153,6 +155,7 @@ void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = g_aToolItemCommandNames[pItem];
+        g_info("toggleToolItem: lok_docview_post_command('%s')", rString.c_str());
         lok_docview_post_command(pLOKDocView, rString.c_str());
     }
 }
@@ -307,6 +310,16 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
     g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pItalic, ".uno:Italic");
+    pUnderline = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pUnderline), "Underline");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pUnderline, -1);
+    g_signal_connect(G_OBJECT(pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(pUnderline, ".uno:Underline");
+    pStrikethrough = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pStrikethrough), "Strikethrough");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pStrikethrough, -1);
+    g_signal_connect(G_OBJECT(pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(pStrikethrough, ".uno:Strikeout");
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
