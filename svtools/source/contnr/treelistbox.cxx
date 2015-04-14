@@ -2221,10 +2221,9 @@ void SvTreeListBox::LoseFocus()
 {
     //If there is no item in the tree, delete visual focus.
     if( !First())
-    {
         Invalidate();
-    }
-    pImp->LoseFocus();
+    if( pImp )
+        pImp->LoseFocus();
     Control::LoseFocus();
 }
 

@@ -349,11 +349,11 @@ public:
 
     sal_uLong GetEntryCount() const
     {
-        return pModel->GetEntryCount();
+        return pModel ? pModel->GetEntryCount() : 0;
     }
     SvTreeListEntry* First() const
     {
-        return pModel->First();
+        return pModel ? pModel->First() : NULL;
     }
     SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
     {
@@ -365,7 +365,7 @@ public:
     }
     SvTreeListEntry* Last() const
     {
-        return pModel->Last();
+        return pModel ? pModel->Last() : NULL;
     }
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
