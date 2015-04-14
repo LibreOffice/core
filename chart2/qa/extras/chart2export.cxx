@@ -80,6 +80,7 @@ public:
     void testDataLabelAreaChartDOCX();
     void testDataLabelDefaultLineChartDOCX();
     void testFdo83058dlblPos();
+    void testAutoTitleDelXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testDataLabelAreaChartDOCX);
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
+    CPPUNIT_TEST(testAutoTitleDelXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1197,6 +1199,14 @@ void Chart2ExportTest::testFdo83058dlblPos()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls[1]/c:dLbl[3]/c:dLblPos", "val", "outEnd");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls[1]/c:dLbl[4]/c:dLblPos", "val", "outEnd");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls[1]/c:dLbl[5]/c:dLblPos", "val", "outEnd");
+}
+
+void Chart2ExportTest::testAutoTitleDelXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "autotitledel_2007.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:autoTitleDeleted", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
