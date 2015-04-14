@@ -44,6 +44,7 @@ public:
     void testPostMouseEvent();
     void testSetTextSelection();
     void testSetGraphicSelection();
+    void testResetSelection();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
+    CPPUNIT_TEST(testResetSelection);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -241,6 +243,30 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+}
+
+void SdTiledRenderingTest::testResetSelection()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString("Aaa bbb.");
+    // Create a selection on the second word.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    ESelection aWordSelection(0, 4, 0, 7);
+    rEditView.SetSelection(aWordSelection);
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
+
+    // Now use resetSelection() to reset the selection.
+    pXImpressDocument->resetSelection();
+    CPPUNIT_ASSERT(!pView->GetTextEditObject());
 }
 
 #endif
