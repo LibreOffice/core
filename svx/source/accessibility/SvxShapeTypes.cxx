@@ -84,7 +84,7 @@ AccessibleShape* CreateSvxAccessibleShape (
     }
 }
 
-void RegisterDrawShapeTypes (void)
+void RegisterDrawShapeTypes()
 {
     /** List of shape type descriptors corresponding to the
         <type>SvxShapeTypes</type> enum.

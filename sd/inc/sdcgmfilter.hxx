@@ -30,7 +30,7 @@ public:
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
         bool bShowProgress );
-    virtual ~SdCGMFilter (void);
+    virtual ~SdCGMFilter();
 
     bool        Import();
     bool        Export() SAL_OVERRIDE;

@@ -51,11 +51,11 @@ namespace {
     class LineDescriptor
     {
     public:
-        LineDescriptor(void);
+        LineDescriptor();
         void AddPart (
             const OUString& rsLine,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont);
-        bool IsEmpty (void) const;
+        bool IsEmpty() const;
 
         OUString msLine;
         geometry::RealSize2D maSize;
@@ -83,7 +83,7 @@ namespace {
             const rendering::ViewState& rViewState,
             rendering::RenderState& rRenderState,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont) const;
-        double GetHeight (void) const;
+        double GetHeight() const;
 
     private:
         const OUString msText;
@@ -182,11 +182,11 @@ PresenterHelpView::PresenterHelpView (
     }
 }
 
-PresenterHelpView::~PresenterHelpView (void)
+PresenterHelpView::~PresenterHelpView()
 {
 }
 
-void SAL_CALL PresenterHelpView::disposing (void)
+void SAL_CALL PresenterHelpView::disposing()
 {
     mxViewId = NULL;
 
@@ -353,7 +353,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-void PresenterHelpView::ReadHelpStrings (void)
+void PresenterHelpView::ReadHelpStrings()
 {
     mpTextContainer.reset(new TextContainer());
     PresenterConfigurationAccess aConfiguration (
@@ -383,7 +383,7 @@ void PresenterHelpView::ProcessString (
             new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
 }
 
-void PresenterHelpView::CheckFontSize (void)
+void PresenterHelpView::CheckFontSize()
 {
     if (mpFont.get() == NULL)
         return;
@@ -449,14 +449,14 @@ void PresenterHelpView::CheckFontSize (void)
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -464,7 +464,7 @@ sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly (void)
 
 
 
-void PresenterHelpView::ProvideCanvas (void)
+void PresenterHelpView::ProvideCanvas()
 {
     if ( ! mxCanvas.is() && mxPane.is())
     {
@@ -480,7 +480,7 @@ void PresenterHelpView::ProvideCanvas (void)
     }
 }
 
-void PresenterHelpView::Resize (void)
+void PresenterHelpView::Resize()
 {
     if (mpCloseButton.get() != NULL && mxWindow.is())
     {
@@ -499,7 +499,7 @@ void PresenterHelpView::Resize (void)
     }
 }
 
-void PresenterHelpView::ThrowIfDisposed (void)
+void PresenterHelpView::ThrowIfDisposed()
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -514,7 +514,7 @@ void PresenterHelpView::ThrowIfDisposed (void)
 
 namespace {
 
-LineDescriptor::LineDescriptor (void)
+LineDescriptor::LineDescriptor()
     : msLine(),
       maSize(0,0),
       mnVerticalOffset(0)
@@ -530,7 +530,7 @@ void LineDescriptor::AddPart (
     CalculateSize(rxFont);
 }
 
-bool LineDescriptor::IsEmpty (void) const
+bool LineDescriptor::IsEmpty() const
 {
     return msLine.isEmpty();
 }
@@ -610,7 +610,7 @@ double LineDescriptorList::Paint(
     return nY - rBBox.Y1;
 }
 
-double LineDescriptorList::GetHeight (void) const
+double LineDescriptorList::GetHeight() const
 {
     double nHeight (0);
     vector<LineDescriptor>::const_iterator iLine (mpLineDescriptors->begin());

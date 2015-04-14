@@ -961,7 +961,7 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
     return table;
 }
 
-TrueTypeTable *TrueTypeTableNew_loca(void)
+TrueTypeTable *TrueTypeTableNew_loca()
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
     table->data = smalloc(sizeof(tdata_loca));
@@ -990,7 +990,7 @@ TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
     return table;
 }
 
-TrueTypeTable *TrueTypeTableNew_glyf(void)
+TrueTypeTable *TrueTypeTableNew_glyf()
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
     list l = listNewEmpty();
@@ -1006,7 +1006,7 @@ TrueTypeTable *TrueTypeTableNew_glyf(void)
     return table;
 }
 
-TrueTypeTable *TrueTypeTableNew_cmap(void)
+TrueTypeTable *TrueTypeTableNew_cmap()
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
     table_cmap* cmap = static_cast<table_cmap*>(smalloc(sizeof(table_cmap)));
@@ -1527,7 +1527,7 @@ _inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
     return (a << 24) | (b << 16) | (c << 8) | d;
 }
 
-int main(void)
+int main()
 {
     TrueTypeCreator *ttcr;
     sal_uInt8 *t1, *t2, *t3, *t4, *t5, *t6, *t7;

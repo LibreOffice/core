@@ -119,7 +119,7 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
     }
 }
 
-void ODatabaseMetaDataResultSet::disposing(void)
+void ODatabaseMetaDataResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

@@ -82,7 +82,7 @@ public:
         , mxImplMeth( pImplMeth )
     {}
     virtual ~SbIfaceMapperMethod();
-    SbMethod* getImplMethod( void )
+    SbMethod* getImplMethod()
         { return mxImplMeth; }
 };
 

@@ -1430,7 +1430,7 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     return t;
 }
 
-RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
+RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api()
 {
     static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)

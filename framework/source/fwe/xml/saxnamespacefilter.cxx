@@ -49,12 +49,12 @@ SaxNamespaceFilter::~SaxNamespaceFilter()
 }
 
 // XDocumentHandler
-void SAL_CALL SaxNamespaceFilter::startDocument(void)
+void SAL_CALL SaxNamespaceFilter::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL SaxNamespaceFilter::endDocument(void)
+void SAL_CALL SaxNamespaceFilter::endDocument()
     throw(  SAXException, RuntimeException, std::exception )
 {
 }

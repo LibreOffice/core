@@ -55,13 +55,13 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
 
           @return   implementation name
           */
-        static OUString SAL_CALL getBackendName(void) ;
+        static OUString SAL_CALL getBackendName() ;
         /**
           Provides the supported services names
 
           @return   service names
           */
-        static uno::Sequence<OUString> SAL_CALL getBackendServiceNames(void) ;
+        static uno::Sequence<OUString> SAL_CALL getBackendServiceNames() ;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -123,17 +123,17 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
         LocaleBackend();
 
         /** Destructor */
-        virtual ~LocaleBackend(void) ;
+        virtual ~LocaleBackend() ;
 
     private:
         // Returns the user locale
-        static OUString getLocale(void);
+        static OUString getLocale();
 
         // Returns the user UI locale
-        static OUString getUILocale(void);
+        static OUString getUILocale();
 
         // Returns the system default locale
-        static OUString getSystemLocale(void);
+        static OUString getSystemLocale();
 } ;
 
 

@@ -136,13 +136,13 @@ Listener::Listener (
     }
 }
 
-Listener::~Listener (void)
+Listener::~Listener()
 {
     DBG_ASSERT( !mbListeningToDocument && !mbListeningToUNODocument && !mbListeningToFrame,
         "sd::Listener::~Listener(), disposing() was not called, ask DBO!" );
 }
 
-void Listener::ReleaseListeners (void)
+void Listener::ReleaseListeners()
 {
     if (mbListeningToDocument)
     {
@@ -196,7 +196,7 @@ void Listener::ReleaseListeners (void)
     }
 }
 
-void Listener::ConnectToController (void)
+void Listener::ConnectToController()
 {
     ViewShell* pShell = mrSlideSorter.GetViewShell();
 
@@ -241,7 +241,7 @@ void Listener::ConnectToController (void)
     }
 }
 
-void Listener::DisconnectFromController (void)
+void Listener::DisconnectFromController()
 {
     if (mbListeningToController)
     {
@@ -527,12 +527,12 @@ void SAL_CALL Listener::notifyEvent (
 {
 }
 
-void SAL_CALL Listener::disposing (void)
+void SAL_CALL Listener::disposing()
 {
     ReleaseListeners();
 }
 
-void Listener::UpdateEditMode (void)
+void Listener::UpdateEditMode()
 {
     // When there is a new controller then the edit mode may have changed at
     // the same time.
@@ -631,7 +631,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     }
 }
 
-void Listener::ThrowIfDisposed (void)
+void Listener::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

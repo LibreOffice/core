@@ -80,26 +80,26 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() SAL_OVERRIDE;
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
     /** Return <TRUE/> when the enumeration has more elements, i.e. it is
         save to call GetNextElement() at least one more time.
     */
-    virtual bool HasMoreElements (void) const SAL_OVERRIDE;
+    virtual bool HasMoreElements() const SAL_OVERRIDE;
 
     /** Return the next element of the enumeration.  Call the
         HasMoreElements() before to make sure that there exists at least one
         more element.  Calling this method with HasMoreElements() returning
         <FALSE/> is an error.
     */
-    virtual SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
+    virtual SharedPageDescriptor GetNextElement() SAL_OVERRIDE;
 
     /** Rewind the enumeration so that the next call to GetNextElement()
         will return its first element.
     */
-    virtual void Rewind (void) SAL_OVERRIDE;
+    virtual void Rewind() SAL_OVERRIDE;
 
 private:
     /// Implementation object.
@@ -111,7 +111,7 @@ private:
     PageEnumeration (::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
 
     // Default constructor not implemented.
-    PageEnumeration (void);
+    PageEnumeration();
 };
 
 } } } // end of namespace ::sd::slidesorter::model

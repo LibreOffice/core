@@ -217,7 +217,7 @@ void SAXHelper::setCurrentNode(const xmlNodePtr pNode)
 /**
  * XDocumentHandler -- start an xml document
  */
-void SAXHelper::startDocument( void )
+void SAXHelper::startDocument()
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     if( m_pParserCtxt == NULL)
@@ -246,7 +246,7 @@ void SAXHelper::startDocument( void )
 /**
  * XDocumentHandler -- end an xml document
  */
-void SAXHelper::endDocument( void )
+void SAXHelper::endDocument()
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     m_pSaxHandler->endDocument( m_pParserCtxt ) ;

@@ -38,7 +38,7 @@ FileList::~FileList()
     ClearAll();
 }
 
-void FileList::ClearAll( void )
+void FileList::ClearAll()
 {
     aStrList.clear();
 }
@@ -147,7 +147,7 @@ OUString FileList::GetFile( size_t i ) const
     return aStr;
 }
 
-size_t FileList::Count( void ) const
+size_t FileList::Count() const
 {
     return aStrList.size();
 }

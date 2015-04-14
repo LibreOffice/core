@@ -677,7 +677,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 }
 
 
-bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
+bool SvxTextAttrPage::IsTextDirectionLeftToRight() const
 {
     // Determine the text writing direction with left to right as default.
     bool bLeftToRightDirection = true;

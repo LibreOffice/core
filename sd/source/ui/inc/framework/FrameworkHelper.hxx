@@ -159,7 +159,7 @@ public:
         @return
             When the object has already been disposed then <FALSE/> is returned.
     */
-    bool IsValid (void);
+    bool IsValid();
 
     /** Return a pointer to the view shell that is displayed in the
         specified pane.  See GetView() for a variant that returns a
@@ -244,7 +244,7 @@ public:
 
         Do not use this method until there is absolutely no other way.
     */
-    void RequestSynchronousUpdate (void);
+    void RequestSynchronousUpdate();
 
     /** Block until the specified event is notified by the configuration
         controller.  When the configuration controller is not processing any
@@ -255,7 +255,7 @@ public:
     /** This is a short cut for WaitForEvent(msConfigurationUpdateEndEvent).
         Call this method to execute the pending requests.
     */
-    void WaitForUpdate (void) const;
+    void WaitForUpdate() const;
 
     /** Explicit request for an update of the current configuration.  Call
         this method when one of the resources managed by the sd framework
@@ -263,7 +263,7 @@ public:
         framework itself.  An example for this is a click on the closer
         button of one of the side panes.
     */
-    void UpdateConfiguration (void);
+    void UpdateConfiguration();
 
     /** Return a string representation of the given XResourceId object.
     */
@@ -297,7 +297,7 @@ public:
                     css::drawing::framework::XResourceId>& rxAnchor);
 
     css::uno::Reference<css::drawing::framework::XConfigurationController>
-        GetConfigurationController (void) const { return mxConfigurationController;}
+        GetConfigurationController() const { return mxConfigurationController;}
 
 private:
     typedef ::std::map<
@@ -321,13 +321,13 @@ private:
 
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper) SAL_DELETED_FUNCTION;
-    virtual ~FrameworkHelper (void);
+    virtual ~FrameworkHelper();
     class Deleter; friend class Deleter;
     FrameworkHelper& operator= (const FrameworkHelper& rHelper) SAL_DELETED_FUNCTION;
 
-    void Initialize (void);
+    void Initialize();
 
-    void Dispose (void);
+    void Dispose();
 
     /** Run the given callback when an event of the specified type is
         received from the ConfigurationController or when the

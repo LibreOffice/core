@@ -165,7 +165,7 @@ PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxA
 /*
  * ~OStorePageObject.
  */
-OStorePageObject::~OStorePageObject (void)
+OStorePageObject::~OStorePageObject()
 {
 }
 

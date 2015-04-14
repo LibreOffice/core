@@ -64,7 +64,7 @@ public:
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
 
-    const OUString& GetDescription (void) const { return msDescription; }
+    const OUString& GetDescription() const { return msDescription; }
 
 private:
     const OUString msDescription;

@@ -39,8 +39,8 @@ public:
     Size maOriginalSize;
 
     DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
-    virtual ~DummyReplacement(void) {}
-    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
+    virtual ~DummyReplacement() {}
+    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
 };
 
 ::boost::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
@@ -53,7 +53,7 @@ Bitmap NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) co
     return dynamic_cast<const DummyReplacement&>(rBitmapData).maPreview;
 }
 
-bool NoBitmapCompression::IsLossless (void) const
+bool NoBitmapCompression::IsLossless() const
 {
     return true;
 }
@@ -72,7 +72,7 @@ Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
     return Bitmap();
 }
 
-bool CompressionByDeletion::IsLossless (void) const
+bool CompressionByDeletion::IsLossless() const
 {
     return false;
 }
@@ -88,14 +88,14 @@ public:
     Size maOriginalSize;
 
     virtual ~ResolutionReducedReplacement();
-    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE;
+    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE;
 };
 
 ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement()
 {
 }
 
-sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize (void) const
+sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() const
 {
     return maPreview.GetSizeBytes();
 }
@@ -133,7 +133,7 @@ Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) co
     return aResult;
 }
 
-bool ResolutionReduction::IsLossless (void) const
+bool ResolutionReduction::IsLossless() const
 {
     return false;
 }
@@ -146,16 +146,16 @@ public:
     void* mpData;
     sal_Int32 mnDataSize;
     Size maImageSize;
-    PngReplacement (void)
+    PngReplacement()
         : mpData(NULL),
           mnDataSize(0),
           maImageSize(0,0)
     {}
-    virtual ~PngReplacement (void)
+    virtual ~PngReplacement()
     {
         delete [] static_cast<char*>(mpData);
     }
-    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE
+    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE
     {
         return mnDataSize;
     }
@@ -191,7 +191,7 @@ Bitmap PngCompression::Decompress (
     return aResult;
 }
 
-bool PngCompression::IsLossless (void) const
+bool PngCompression::IsLossless() const
 {
     return true;
 }

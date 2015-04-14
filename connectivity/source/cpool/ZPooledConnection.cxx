@@ -44,7 +44,7 @@ OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnectio
 }
 
 // OComponentHelper
-void SAL_CALL OPooledConnection::disposing(void)
+void SAL_CALL OPooledConnection::disposing()
 {
     MutexGuard aGuard(m_aMutex);
     if (m_xComponent.is())

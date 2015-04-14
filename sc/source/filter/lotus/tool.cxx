@@ -337,7 +337,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     return new SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nHandle );
 }
 
-void LotusRange::MakeHash( void )
+void LotusRange::MakeHash()
 {
     // 33222222222211111111110000000000
     // 10987654321098765432109876543210

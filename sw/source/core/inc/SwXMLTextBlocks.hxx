@@ -67,7 +67,7 @@ public:
     virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) SAL_OVERRIDE;
     virtual sal_uLong MakeBlockList() SAL_OVERRIDE;
 
-    virtual short GetFileType ( void ) const SAL_OVERRIDE;
+    virtual short GetFileType() const SAL_OVERRIDE;
     virtual sal_uLong OpenFile( bool bReadOnly = true ) SAL_OVERRIDE;
     virtual void  CloseFile() SAL_OVERRIDE;
 

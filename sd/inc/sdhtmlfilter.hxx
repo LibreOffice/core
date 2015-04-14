@@ -31,7 +31,7 @@ public:
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
         bool bShowProgress);
-    virtual ~SdHTMLFilter (void);
+    virtual ~SdHTMLFilter();
 
     virtual bool        Export() SAL_OVERRIDE;
 

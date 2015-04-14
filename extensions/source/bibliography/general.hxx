@@ -125,7 +125,7 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
                                             const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*>& rChildren );
 
 protected:
-    void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
+    void                        InitFixedTexts();     // create mnemonics and set text an all fixed texts
 
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);

@@ -77,7 +77,7 @@ void PluginControl_Impl::removeEventListener( const Reference< ::com::sun::star:
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginControl_Impl::dispose(void)
+void PluginControl_Impl::dispose()
     throw( RuntimeException, std::exception )
 {
     // send disposing events
@@ -106,7 +106,7 @@ void PluginControl_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWi
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
-::com::sun::star::awt::Rectangle PluginControl_Impl::getPosSize(void)
+::com::sun::star::awt::Rectangle PluginControl_Impl::getPosSize()
     throw( RuntimeException, std::exception )
 {
     return _xPeerWindow->getPosSize();
@@ -131,7 +131,7 @@ void PluginControl_Impl::setEnable( sal_Bool bEnable )
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
-void PluginControl_Impl::setFocus(void) throw( RuntimeException, std::exception )
+void PluginControl_Impl::setFocus() throw( RuntimeException, std::exception )
 {
     if (_xPeerWindow.is())
         _xPeerWindow->setFocus();

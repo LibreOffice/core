@@ -490,7 +490,7 @@ PopupControl* AreaPropertyPanel::CreateTransparencyGradientControl (PopupContain
 
 
 
-void AreaPropertyPanel::SetupIcons(void)
+void AreaPropertyPanel::SetupIcons()
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {
@@ -1262,7 +1262,7 @@ void AreaPropertyPanel::SetGradient (const XGradient& rGradient)
 
 
 
-sal_Int32 AreaPropertyPanel::GetSelectedTransparencyTypeIndex (void) const
+sal_Int32 AreaPropertyPanel::GetSelectedTransparencyTypeIndex() const
 {
     return mpLBTransType->GetSelectEntryPos();
 }

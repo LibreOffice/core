@@ -93,7 +93,7 @@ namespace dbaccess
                         );
         virtual ~ORowSetDataColumns();
         // only the name is identical to ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector);
     };
 }

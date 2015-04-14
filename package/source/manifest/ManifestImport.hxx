@@ -122,7 +122,7 @@ protected:
 
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
-    virtual ~ManifestImport( void );
+    virtual ~ManifestImport();
     virtual void SAL_CALL startDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument(  )

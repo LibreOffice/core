@@ -1185,7 +1185,7 @@ public:
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL startDocument(void)
+    virtual void SAL_CALL startDocument()
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument()
         throw(::com::sun::star::xml::sax::SAXException,

@@ -162,7 +162,7 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
     m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
-ZipPackage::~ZipPackage( void )
+ZipPackage::~ZipPackage()
 {
     delete m_pZipFile;
 
@@ -1656,7 +1656,7 @@ uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::
 
 namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
-Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
+Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId()
     throw ( RuntimeException )
 {
     ::cppu::OImplementationId &rId = lcl_ImplId::get();

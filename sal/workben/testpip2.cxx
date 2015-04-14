@@ -38,7 +38,7 @@ void fail( const char * pszText, int retval )
  * Teste die Pipe-Implementation in osl
  */
 
-int main (void)
+int main()
 {
     char    szBuffer[ 256 ];
     rtl_uString* ustrPipeName=0;

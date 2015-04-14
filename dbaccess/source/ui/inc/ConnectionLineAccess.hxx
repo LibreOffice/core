@@ -59,7 +59,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
-        static OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( com::sun::star::uno::RuntimeException );
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

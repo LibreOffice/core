@@ -901,7 +901,7 @@ namespace svx
 
 
 
-    void HangulHanjaOptionsDialog::Init( void )
+    void HangulHanjaOptionsDialog::Init()
     {
         if( !m_xConversionDictionaryList.is() )
         {
@@ -1204,7 +1204,7 @@ namespace svx
         // index of the internal iterator, used for First() and Next() methods
         sal_uInt16          m_nAct;
 
-        const OUString*       _Next( void );
+        const OUString*       _Next();
     public:
                             SuggestionList();
                             ~SuggestionList();
@@ -1212,12 +1212,12 @@ namespace svx
         bool                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
         bool                Reset( sal_uInt16 _nNumOfElement );
         const OUString*     Get( sal_uInt16 _nNumOfElement ) const;
-        void                Clear( void );
+        void                Clear();
 
-        const OUString*     First( void );
-        const OUString*     Next( void );
+        const OUString*     First();
+        const OUString*     Next();
 
-        inline sal_uInt16   GetCount( void ) const { return m_nNumOfEntries; }
+        inline sal_uInt16   GetCount() const { return m_nNumOfEntries; }
     };
 
     SuggestionList::SuggestionList() :
@@ -1271,7 +1271,7 @@ namespace svx
         return NULL;
     }
 
-    void SuggestionList::Clear( void )
+    void SuggestionList::Clear()
     {
         if( m_nNumOfEntries )
         {
@@ -1286,7 +1286,7 @@ namespace svx
         }
     }
 
-    const OUString* SuggestionList::_Next( void )
+    const OUString* SuggestionList::_Next()
     {
         const OUString*   pRet = NULL;
         while( m_nAct < m_vElements.size() && !pRet )
@@ -1299,13 +1299,13 @@ namespace svx
         return pRet;
     }
 
-    const OUString* SuggestionList::First( void )
+    const OUString* SuggestionList::First()
     {
         m_nAct = 0;
         return _Next();
     }
 
-    const OUString* SuggestionList::Next( void )
+    const OUString* SuggestionList::Next()
     {
         const OUString*   pRet;
 
@@ -1599,7 +1599,7 @@ namespace svx
         UpdateButtonStates();
     }
 
-    void HangulHanjaEditDictDialog::UpdateOriginalLB( void )
+    void HangulHanjaEditDictDialog::UpdateOriginalLB()
     {
         m_aOriginalLB->Clear();
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
@@ -1632,7 +1632,7 @@ namespace svx
         m_aDeletePB->Enable(!m_bModifiedOriginal && bHaveValidOriginalString);
     }
 
-    void HangulHanjaEditDictDialog::UpdateSuggestions( void )
+    void HangulHanjaEditDictDialog::UpdateSuggestions()
     {
         Sequence< OUString > aEntries;
         bool bFound = GetConversions( m_rDictList[ m_nCurrentDict ], m_aOriginal, aEntries );
@@ -1773,7 +1773,7 @@ namespace svx
             delete m_pSuggestions;
     }
 
-    void HangulHanjaEditDictDialog::UpdateScrollbar( void )
+    void HangulHanjaEditDictDialog::UpdateScrollbar()
     {
         sal_uInt16  nPos = sal_uInt16( m_aScrollSB->GetThumbPos() );
         m_nTopPos = nPos;

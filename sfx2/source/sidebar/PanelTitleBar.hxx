@@ -36,7 +36,7 @@ public:
         const ::rtl::OUString& rsTitle,
         vcl::Window* pParentWindow,
         Panel* pPanel );
-    virtual ~PanelTitleBar (void);
+    virtual ~PanelTitleBar();
 
     void SetMoreOptionsCommand (
         const ::rtl::OUString& rsCommandName,
@@ -49,10 +49,10 @@ public:
 protected:
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
-    virtual sidebar::Paint GetBackgroundPaint (void) SAL_OVERRIDE;
-    virtual Color GetTextColor (void) SAL_OVERRIDE;
+    virtual sidebar::Paint GetBackgroundPaint() SAL_OVERRIDE;
+    virtual Color GetTextColor() SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 private:
     bool mbIsLeftButtonDown;

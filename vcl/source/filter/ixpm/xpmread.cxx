@@ -539,7 +539,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 // mnStringSize contains the size of the string read.
 // Comments like '//' and '/*....*/' are skipped.
 
-bool XPMReader::ImplGetString( void )
+bool XPMReader::ImplGetString()
 {
     sal_uInt8       sID[] = "/* XPM */";
     sal_uInt8*      pString = mpStringBuf;

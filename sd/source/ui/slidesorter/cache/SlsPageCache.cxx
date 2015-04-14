@@ -41,7 +41,7 @@ PageCache::PageCache (
 {
 }
 
-PageCache::~PageCache (void)
+PageCache::~PageCache()
 {
 }
 
@@ -98,12 +98,12 @@ void PageCache::SetPreciousFlag (
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }
 
-void PageCache::Pause (void)
+void PageCache::Pause()
 {
     mpImplementation->Pause();
 }
 
-void PageCache::Resume (void)
+void PageCache::Resume()
 {
     mpImplementation->Resume();
 }

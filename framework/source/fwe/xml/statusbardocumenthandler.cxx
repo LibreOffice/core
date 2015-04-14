@@ -179,12 +179,12 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadStatusBarDocumentHandler::startDocument(void)
+void SAL_CALL OReadStatusBarDocumentHandler::startDocument()
 throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::endDocument(void)
+void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
 throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;

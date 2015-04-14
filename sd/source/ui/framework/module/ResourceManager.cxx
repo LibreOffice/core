@@ -42,7 +42,7 @@ class ResourceManager::MainViewContainer
     : public ::std::set<OUString>
 {
 public:
-    MainViewContainer (void) {}
+    MainViewContainer() {}
 };
 
 //===== ResourceManager =======================================================
@@ -80,7 +80,7 @@ ResourceManager::ResourceManager (
     }
 }
 
-ResourceManager::~ResourceManager (void)
+ResourceManager::~ResourceManager()
 {
 }
 
@@ -96,11 +96,11 @@ bool ResourceManager::IsResourceActive (
     return (mpActiveMainViewContainer->find(rsMainViewURL) != mpActiveMainViewContainer->end());
 }
 
-void ResourceManager::SaveResourceState (void)
+void ResourceManager::SaveResourceState()
 {
 }
 
-void SAL_CALL ResourceManager::disposing (void)
+void SAL_CALL ResourceManager::disposing()
 {
     if (mxConfigurationController.is())
     {
@@ -165,7 +165,7 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
     }
 }
 
-void ResourceManager::UpdateForMainViewShell (void)
+void ResourceManager::UpdateForMainViewShell()
 {
     if (mxConfigurationController.is())
     {

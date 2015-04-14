@@ -28,8 +28,8 @@ namespace {
 class ConverterCache
 {
 public:
-    explicit    ConverterCache( void );
-                ~ConverterCache( void );
+    explicit    ConverterCache();
+                ~ConverterCache();
     sal_uInt16  convertOne( int nSelect, sal_Unicode );
     void        convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount );
 protected:
@@ -39,7 +39,7 @@ private:
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
 };
 
-ConverterCache::ConverterCache( void)
+ConverterCache::ConverterCache()
 {
     for( int i = 0; i <= MAX_CVT_SELECT; ++i)
     {
@@ -48,7 +48,7 @@ ConverterCache::ConverterCache( void)
     }
 }
 
-ConverterCache::~ConverterCache( void)
+ConverterCache::~ConverterCache()
 {
     for( int i = 0; i <= MAX_CVT_SELECT; ++i)
     {

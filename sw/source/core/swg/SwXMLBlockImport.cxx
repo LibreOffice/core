@@ -51,7 +51,7 @@ private:
 public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-    virtual ~SwXMLBlockListContext ( void );
+    virtual ~SwXMLBlockListContext();
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
@@ -63,7 +63,7 @@ class SwXMLBlockContext : public SvXMLImportContext
 public:
     SwXMLBlockContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-    virtual ~SwXMLBlockContext ( void );
+    virtual ~SwXMLBlockContext();
 };
 
 class SwXMLTextBlockDocumentContext : public SvXMLImportContext
@@ -79,7 +79,7 @@ public:
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    virtual ~SwXMLTextBlockDocumentContext ( void );
+    virtual ~SwXMLTextBlockDocumentContext();
 };
 
 class SwXMLTextBlockBodyContext : public SvXMLImportContext
@@ -95,7 +95,7 @@ public:
         sal_Int32, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    virtual ~SwXMLTextBlockBodyContext ( void );
+    virtual ~SwXMLTextBlockBodyContext();
 };
 
 class SwXMLTextBlockTextContext : public SvXMLImportContext
@@ -112,7 +112,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    virtual ~SwXMLTextBlockTextContext ( void );
+    virtual ~SwXMLTextBlockTextContext();
 };
 
 class SwXMLTextBlockParContext : public SvXMLImportContext
@@ -127,7 +127,7 @@ public:
     virtual void SAL_CALL characters( const OUString & aChars )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    virtual ~SwXMLTextBlockParContext ( void );
+    virtual ~SwXMLTextBlockParContext();
 };
 
 SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler()
@@ -197,7 +197,7 @@ SwXMLBlockListContext::SwXMLBlockListContext(
         rImport.getBlockList().SetName( xAttrList->getValue( SwXMLBlockListToken::LIST_NAME ) );
 }
 
-SwXMLBlockListContext::~SwXMLBlockListContext ( void )
+SwXMLBlockListContext::~SwXMLBlockListContext()
 {
 }
 
@@ -241,7 +241,7 @@ SwXMLBlockContext::SwXMLBlockContext(
     rImport.getBlockList().AddName( aShort, aLong, aPackageName, bTextOnly);
 }
 
-SwXMLBlockContext::~SwXMLBlockContext ( void )
+SwXMLBlockContext::~SwXMLBlockContext()
 {
 }
 
@@ -265,7 +265,7 @@ SwXMLTextBlockDocumentContext::createFastChildContext( sal_Int32 Element,
         return new SvXMLImportContext( rLocalRef );
 }
 
-SwXMLTextBlockDocumentContext::~SwXMLTextBlockDocumentContext ( void )
+SwXMLTextBlockDocumentContext::~SwXMLTextBlockDocumentContext()
 {
 }
 
@@ -289,7 +289,7 @@ SwXMLTextBlockTextContext::createFastChildContext( sal_Int32 Element,
         return new SvXMLImportContext( rLocalRef );
 }
 
-SwXMLTextBlockTextContext::~SwXMLTextBlockTextContext ( void )
+SwXMLTextBlockTextContext::~SwXMLTextBlockTextContext()
 {
 }
 
@@ -315,7 +315,7 @@ SwXMLTextBlockBodyContext::createFastChildContext( sal_Int32 Element,
         return new SvXMLImportContext( rLocalRef );
 }
 
-SwXMLTextBlockBodyContext::~SwXMLTextBlockBodyContext ( void )
+SwXMLTextBlockBodyContext::~SwXMLTextBlockBodyContext()
 {
 }
 
@@ -334,7 +334,7 @@ void SAL_CALL SwXMLTextBlockParContext::characters( const OUString & aChars )
     rLocalRef.m_rText += aChars;
 }
 
-SwXMLTextBlockParContext::~SwXMLTextBlockParContext ( void )
+SwXMLTextBlockParContext::~SwXMLTextBlockParContext()
 {
     if (rLocalRef.bTextOnly)
         rLocalRef.m_rText += "\015";
@@ -354,7 +354,7 @@ SwXMLBlockListImport::SwXMLBlockListImport(
 {
 }
 
-SwXMLBlockListImport::~SwXMLBlockListImport ( void )
+SwXMLBlockListImport::~SwXMLBlockListImport()
     throw ()
 {
 }
@@ -380,7 +380,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
 {
 }
 
-SwXMLTextBlockImport::~SwXMLTextBlockImport ( void )
+SwXMLTextBlockImport::~SwXMLTextBlockImport()
     throw()
 {
 }
@@ -395,7 +395,7 @@ SvXMLImportContext* SwXMLTextBlockImport::CreateFastContext( sal_Int32 Element,
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
-void SAL_CALL SwXMLTextBlockImport::endDocument(void)
+void SAL_CALL SwXMLTextBlockImport::endDocument()
         throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }

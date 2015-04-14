@@ -43,7 +43,7 @@ struct IncludesCollection;
 extern "C" {
 #endif
 
-struct IncludesCollection * create_IncludesCollection(void);
+struct IncludesCollection * create_IncludesCollection();
 void delete_IncludesCollection(struct IncludesCollection *);
 
 int call_IncludesCollection_exists(struct IncludesCollection* m, const char* filePath);

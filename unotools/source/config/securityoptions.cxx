@@ -153,7 +153,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         void                    SetProperty( sal_Int32 nHandle, const Any& rValue, bool bReadOnly );
-        void                    LoadAuthors( void );
+        void                    LoadAuthors();
         static sal_Int32        GetHandle( const OUString& rPropertyName );
         bool                    GetOption( SvtSecurityOptions::EOption eOption, bool*& rpValue, bool*& rpRO );
 
@@ -406,7 +406,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
     }
 }
 
-void SvtSecurityOptions_Impl::LoadAuthors( void )
+void SvtSecurityOptions_Impl::LoadAuthors()
 {
     m_seqTrustedAuthors.realloc( 0 );       // first clear
     Sequence< OUString >    lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );

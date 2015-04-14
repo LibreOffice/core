@@ -47,7 +47,7 @@ public:
 
     /** Return the one instance of the PageCacheManager class.
     */
-    static ::boost::shared_ptr<PageCacheManager> Instance (void);
+    static ::boost::shared_ptr<PageCacheManager> Instance();
 
     /** Look up the cache for the given model in which the previews have the
         specified size.  If no such cache exists, then one is created.  When
@@ -96,7 +96,7 @@ public:
         those that are not.  This is used for example when the high contrast
         mode is turned on or off.
     */
-    void InvalidateAllCaches (void);
+    void InvalidateAllCaches();
 
     /** Call this method when a page has been deleted and its preview
         is not needed anymore.
@@ -125,8 +125,8 @@ private:
     */
     const sal_uInt32 mnMaximalRecentlyCacheCount;
 
-    PageCacheManager (void);
-    ~PageCacheManager (void);
+    PageCacheManager();
+    ~PageCacheManager();
 
     class Deleter;
     friend class Deleter;

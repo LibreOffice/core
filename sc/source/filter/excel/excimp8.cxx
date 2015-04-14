@@ -209,35 +209,35 @@ ImportExcel8::~ImportExcel8()
 {
 }
 
-void ImportExcel8::Calccount( void )
+void ImportExcel8::Calccount()
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
     aOpt.SetIterCount( aIn.ReaduInt16() );
     pD->SetDocOptions( aOpt );
 }
 
-void ImportExcel8::Precision( void )
+void ImportExcel8::Precision()
 {
     ScDocOptions aOpt = pD->GetDocOptions();
     aOpt.SetCalcAsShown( aIn.ReaduInt16() == 0 );
     pD->SetDocOptions( aOpt );
 }
 
-void ImportExcel8::Delta( void )
+void ImportExcel8::Delta()
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
     aOpt.SetIterEps( aIn.ReadDouble() );
     pD->SetDocOptions( aOpt );
 }
 
-void ImportExcel8::Iteration( void )
+void ImportExcel8::Iteration()
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
     pD->SetDocOptions( aOpt );
 }
 
-void ImportExcel8::Boundsheet( void )
+void ImportExcel8::Boundsheet()
 {
     sal_uInt8           nLen;
     sal_uInt16          nGrbit;
@@ -270,7 +270,7 @@ void ImportExcel8::Boundsheet( void )
     nBdshtTab++;
 }
 
-void ImportExcel8::Scenman( void )
+void ImportExcel8::Scenman()
 {
     sal_uInt16              nLastDispl;
 
@@ -280,12 +280,12 @@ void ImportExcel8::Scenman( void )
     maScenList.nLastScenario = nLastDispl;
 }
 
-void ImportExcel8::Scenario( void )
+void ImportExcel8::Scenario()
 {
     maScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
 }
 
-void ImportExcel8::Labelsst( void )
+void ImportExcel8::Labelsst()
 {
     XclAddress aXclPos;
     sal_uInt16 nXF;
@@ -305,7 +305,7 @@ void ImportExcel8::Labelsst( void )
     }
 }
 
-void ImportExcel8::FeatHdr( void )
+void ImportExcel8::FeatHdr()
 {
     if (!readFrtHeader( aIn, 0x0867))
         return;
@@ -322,7 +322,7 @@ void ImportExcel8::FeatHdr( void )
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
 
-void ImportExcel8::Feat( void )
+void ImportExcel8::Feat()
 {
     if (!readFrtHeader( aIn, 0x0868))
         return;
@@ -370,7 +370,7 @@ void ImportExcel8::Feat( void )
     GetSheetProtectBuffer().AppendEnhancedProtection( aProt, GetCurrScTab() );
 }
 
-void ImportExcel8::ReadBasic( void )
+void ImportExcel8::ReadBasic()
 {
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
@@ -423,14 +423,14 @@ void ImportExcel8::ReadBasic( void )
     }
 }
 
-void ImportExcel8::EndSheet( void )
+void ImportExcel8::EndSheet()
 {
     ImportExcel::EndSheet();
     GetCondFormatManager().Apply();
     GetValidationManager().Apply();
 }
 
-void ImportExcel8::PostDocLoad( void )
+void ImportExcel8::PostDocLoad()
 {
 #if HAVE_FEATURE_SCRIPTING
     // reading basic has been delayed until sheet objects (codenames etc.) are read
@@ -483,7 +483,7 @@ void ImportExcel8::LoadDocumentProperties()
 
 // autofilter
 
-void ImportExcel8::FilterMode( void )
+void ImportExcel8::FilterMode()
 {
     // The FilterMode record exists: if either the AutoFilter
     // record exists or an Advanced Filter is saved and stored
@@ -496,7 +496,7 @@ void ImportExcel8::FilterMode( void )
         pData->SetAutoOrAdvanced();
 }
 
-void ImportExcel8::AutoFilterInfo( void )
+void ImportExcel8::AutoFilterInfo()
 {
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
@@ -508,7 +508,7 @@ void ImportExcel8::AutoFilterInfo( void )
     }
 }
 
-void ImportExcel8::AutoFilter( void )
+void ImportExcel8::AutoFilter()
 {
     if( !pExcRoot->pAutoFilterBuffer ) return;
 

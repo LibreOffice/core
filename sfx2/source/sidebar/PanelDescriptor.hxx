@@ -41,9 +41,9 @@ public:
     bool mbShowForReadOnlyDocuments;
     bool mbWantsCanvas;
 
-    PanelDescriptor (void);
+    PanelDescriptor();
     PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
-    ~PanelDescriptor (void);
+    ~PanelDescriptor();
 };
 
 } } // end of namespace sfx2::sidebar

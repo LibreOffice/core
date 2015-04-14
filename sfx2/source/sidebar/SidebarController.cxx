@@ -153,7 +153,7 @@ SidebarController::SidebarController (
             xWeakController));
 }
 
-SidebarController::~SidebarController (void)
+SidebarController::~SidebarController()
 {
 }
 
@@ -171,7 +171,7 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
     return dynamic_cast<SidebarController*>(xController.get());
 }
 
-void SAL_CALL SidebarController::disposing (void)
+void SAL_CALL SidebarController::disposing()
 {
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
     if (iEntry != maSidebarControllerContainer.end())
@@ -269,7 +269,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
     }
 }
 
-void SAL_CALL SidebarController::requestLayout (void)
+void SAL_CALL SidebarController::requestLayout()
     throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nMinimalWidth = 0;
@@ -281,14 +281,14 @@ void SAL_CALL SidebarController::requestLayout (void)
     RestrictWidth(nMinimalWidth);
 }
 
-void SidebarController::BroadcastPropertyChange (void)
+void SidebarController::BroadcastPropertyChange()
 {
     DataChangedEvent aEvent (DataChangedEventType::USER);
     mpParentWindow->NotifyAllChildren(aEvent);
     mpParentWindow->Invalidate(INVALIDATE_CHILDREN);
 }
 
-void SidebarController::NotifyResize (void)
+void SidebarController::NotifyResize()
 {
     if (mpTabBar == 0)
     {
@@ -419,7 +419,7 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     }
 }
 
-void SidebarController::UpdateConfigurations (void)
+void SidebarController::UpdateConfigurations()
 {
     if (maCurrentContext != maRequestedContext
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
@@ -958,7 +958,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
     return 1;
 }
 
-void SidebarController::RequestCloseDeck (void)
+void SidebarController::RequestCloseDeck()
 {
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
@@ -967,7 +967,7 @@ void SidebarController::RequestCloseDeck (void)
     mpTabBar->RemoveDeckHighlight();
 }
 
-void SidebarController::RequestOpenDeck (void)
+void SidebarController::RequestOpenDeck()
 {
     mbIsDeckRequestedOpen = true;
     UpdateDeckOpenState();
@@ -978,7 +978,7 @@ bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
     return mbIsDeckOpen && mbIsDeckOpen.get() && msCurrentDeckId == rsDeckId;
 }
 
-void SidebarController::UpdateDeckOpenState (void)
+void SidebarController::UpdateDeckOpenState()
 {
     if ( ! mbIsDeckRequestedOpen)
         // No state requested.
@@ -1014,7 +1014,7 @@ void SidebarController::UpdateDeckOpenState (void)
     }
 }
 
-bool SidebarController::CanModifyChildWindowWidth (void)
+bool SidebarController::CanModifyChildWindowWidth()
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     if (pSplitWindow == NULL)
@@ -1069,7 +1069,7 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
     }
 }
 
-SfxSplitWindow* SidebarController::GetSplitWindow (void)
+SfxSplitWindow* SidebarController::GetSplitWindow()
 {
     if (mpParentWindow != NULL)
     {
@@ -1125,7 +1125,7 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
     }
 }
 
-void SidebarController::UpdateTitleBarIcons (void)
+void SidebarController::UpdateTitleBarIcons()
 {
     if ( ! mpCurrentDeck)
         return;

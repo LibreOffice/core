@@ -400,7 +400,7 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
     return nRet;
 }
 
-OUString SmModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SmModel::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.Math.FormulaDocument");
 }
@@ -410,7 +410,7 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SmModel::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return uno::Sequence<OUString>{
         "com.sun.star.document.OfficeDocument",

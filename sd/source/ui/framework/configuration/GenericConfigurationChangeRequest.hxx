@@ -70,7 +70,7 @@ public:
         const Mode eMode)
         throw (::com::sun::star::lang::IllegalArgumentException);
 
-    virtual ~GenericConfigurationChangeRequest (void) throw();
+    virtual ~GenericConfigurationChangeRequest() throw();
 
     // XConfigurationChangeOperation
 
@@ -91,7 +91,7 @@ public:
     /** Return a human readable string representation.  This is used for
         debugging purposes.
     */
-    virtual OUString SAL_CALL getName (void)
+    virtual OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This call is ignored because the XNamed interface is (mis)used to

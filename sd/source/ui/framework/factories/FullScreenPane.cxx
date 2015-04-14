@@ -97,11 +97,11 @@ FullScreenPane::FullScreenPane (
     mpWindow->GrabFocus();
 }
 
-FullScreenPane::~FullScreenPane (void) throw()
+FullScreenPane::~FullScreenPane() throw()
 {
 }
 
-void SAL_CALL FullScreenPane::disposing (void)
+void SAL_CALL FullScreenPane::disposing()
 {
     // We have created the window pointed to by mpWindow, we delete it.
     if (mpWindow != NULL)
@@ -121,7 +121,7 @@ void SAL_CALL FullScreenPane::disposing (void)
 
 //----- XPane -----------------------------------------------------------------
 
-sal_Bool SAL_CALL FullScreenPane::isVisible (void)
+sal_Bool SAL_CALL FullScreenPane::isVisible()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -143,7 +143,7 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
         mpWorkWindow->Show(bIsVisible);
 }
 
-Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
+Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -195,7 +195,7 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
     return 1;
 }
 
-Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
+Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
     throw (RuntimeException)
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);

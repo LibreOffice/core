@@ -117,7 +117,7 @@ class PageCacheManager::PageCacheContainer
                              CacheDescriptor::Equal>
 {
 public:
-    PageCacheContainer (void) {}
+    PageCacheContainer() {}
 
     /** Compare entries in the cache container with respect to the cache
         address only.
@@ -162,7 +162,7 @@ public:
 
 ::boost::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
 
-::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance (void)
+::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance()
 {
     ::boost::shared_ptr<PageCacheManager> pInstance;
 
@@ -180,14 +180,14 @@ public:
     return pInstance;
 }
 
-PageCacheManager::PageCacheManager (void)
+PageCacheManager::PageCacheManager()
     : mpPageCaches(new PageCacheContainer()),
       mpRecentlyUsedPageCaches(new RecentlyUsedPageCaches()),
       mnMaximalRecentlyCacheCount(2)
 {
 }
 
-PageCacheManager::~PageCacheManager (void)
+PageCacheManager::~PageCacheManager()
 {
 }
 
@@ -368,7 +368,7 @@ void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
     }
 }
 
-void PageCacheManager::InvalidateAllCaches (void)
+void PageCacheManager::InvalidateAllCaches()
 {
     // Iterate over all caches that are currently in use and invalidate
     // them.

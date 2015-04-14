@@ -49,8 +49,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject );
-    virtual ULONG STDMETHODCALLTYPE AddRef( void );
-    virtual ULONG STDMETHODCALLTYPE Release( void );
+    virtual ULONG STDMETHODCALLTYPE AddRef();
+    virtual ULONG STDMETHODCALLTYPE Release();
 
 
     // IPropertyStore
@@ -92,8 +92,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
-    virtual ULONG STDMETHODCALLTYPE AddRef( void );
-    virtual ULONG STDMETHODCALLTYPE Release( void );
+    virtual ULONG STDMETHODCALLTYPE AddRef();
+    virtual ULONG STDMETHODCALLTYPE Release();
 
 
     // IClassFactory methods

@@ -39,7 +39,7 @@ protected:
     virtual void    Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
 
     // Liste loeschen;
-    void            ClearAll( void );
+    void            ClearAll();
 
 public:
 
@@ -57,7 +57,7 @@ public:
     // Liste fuellen/abfragen
     void AppendFile( const OUString& rStr );
     OUString GetFile( size_t i ) const;
-    size_t Count( void ) const;
+    size_t Count() const;
 
 };
 

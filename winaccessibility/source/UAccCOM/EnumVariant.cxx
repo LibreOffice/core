@@ -111,7 +111,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
    * @param
    * @return Result.
    */
-HRESULT STDMETHODCALLTYPE CEnumVariant::Reset( void)
+HRESULT STDMETHODCALLTYPE CEnumVariant::Reset()
 {
     SolarMutexGuard g;
 

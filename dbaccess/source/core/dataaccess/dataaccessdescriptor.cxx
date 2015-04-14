@@ -225,8 +225,8 @@ namespace dbaccess
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static versions
-        static Sequence< OUString >  getSupportedServiceNames_static(void) throw( RuntimeException );
-        static OUString              getImplementationName_static(void) throw( RuntimeException );
+        static Sequence< OUString >  getSupportedServiceNames_static() throw( RuntimeException );
+        static OUString              getImplementationName_static() throw( RuntimeException );
         static Reference< XInterface >      Create(const Reference< XComponentContext >& _rxContext);
         static OUString              getSingletonName_static();
 

@@ -64,12 +64,12 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    ConfigurationController (void) throw();
-    virtual ~ConfigurationController (void) throw();
+    ConfigurationController() throw();
+    virtual ~ConfigurationController() throw();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    void ProcessEvent (void);
+    void ProcessEvent();
 
     /** Normally the requested changes of the configuration are executed
         asynchronously.  However, there is at least one situation (searching
@@ -80,7 +80,7 @@ public:
 
         Do not use this method until there is absolutely no other way.
     */
-    void RequestSynchronousUpdate (void);
+    void RequestSynchronousUpdate();
 
     // XConfigurationController
 
@@ -88,7 +88,7 @@ public:
         throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL unlock (void)
+    virtual void SAL_CALL unlock()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL requestResourceActivation (
@@ -106,17 +106,17 @@ public:
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL update (void)
+    virtual void SAL_CALL update()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual  css::uno::Reference<
         css::drawing::framework::XConfiguration>
-        SAL_CALL getRequestedConfiguration (void)
+        SAL_CALL getRequestedConfiguration()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual  css::uno::Reference<
         css::drawing::framework::XConfiguration>
-        SAL_CALL getCurrentConfiguration (void)
+        SAL_CALL getCurrentConfiguration()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL restoreConfiguration (
@@ -145,7 +145,7 @@ public:
 
     // XConfigurationRequestQueue
 
-    virtual sal_Bool SAL_CALL hasPendingRequests (void)
+    virtual sal_Bool SAL_CALL hasPendingRequests()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL postChangeRequest (
@@ -187,7 +187,7 @@ public:
     public:
         Lock (const css::uno::Reference<
             css::drawing::framework::XConfigurationController>& rxController);
-        ~Lock (void);
+        ~Lock();
     private:
         css::uno::Reference<
             css::drawing::framework::XConfigurationController> mxController;

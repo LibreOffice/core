@@ -101,7 +101,7 @@ namespace io_stm {
 
     public: // XServiceInfo
         virtual OUString    SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
         virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
     };
 
@@ -447,7 +447,7 @@ sal_Bool Pump::supportsService(const OUString& ServiceName) throw(std::exception
 }
 
 // XServiceInfo
-Sequence< OUString > Pump::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > Pump::getSupportedServiceNames() throw(std::exception  )
 {
     return OPumpImpl_getSupportedServiceNames();
 }
@@ -465,7 +465,7 @@ OUString OPumpImpl_getImplementationName()
     return OUString("com.sun.star.comp.io.Pump");
 }
 
-Sequence<OUString> OPumpImpl_getSupportedServiceNames(void)
+Sequence<OUString> OPumpImpl_getSupportedServiceNames()
 {
     OUString s("com.sun.star.io.Pump");
     Sequence< OUString > seq( &s , 1 );

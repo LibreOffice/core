@@ -140,7 +140,7 @@ namespace desktop {
         }
     }
 
-    bool Lockfile::isStale( void ) const
+    bool Lockfile::isStale() const
     {
         // this checks whether the lockfile was created on the same
         // host by the same user. Should this be the case it is safe
@@ -169,7 +169,7 @@ namespace desktop {
         return false;
     }
 
-    void Lockfile::syncToFile( void ) const
+    void Lockfile::syncToFile() const
     {
         OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
@@ -195,7 +195,7 @@ namespace desktop {
         aConfig.Flush( );
     }
 
-    Lockfile::~Lockfile( void )
+    Lockfile::~Lockfile()
     {
         // unlock userdata by removing file
         if ( m_bRemove )

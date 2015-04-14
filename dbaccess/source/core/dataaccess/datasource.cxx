@@ -1039,7 +1039,7 @@ void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, Ru
     m_pImpl->m_nLoginTimeout = seconds;
 }
 
-sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeException, std::exception )
+sal_Int32 ODatabaseSource::getLoginTimeout() throw( SQLException, RuntimeException, std::exception )
 {
     ModelMethodGuard aGuard( *this );
     return m_pImpl->m_nLoginTimeout;

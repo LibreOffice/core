@@ -529,7 +529,7 @@ void SAL_CALL ToolbarMenuAcc::deselectAccessibleChild( sal_Int32 nChildIndex ) t
 
 
 
-void SAL_CALL ToolbarMenuAcc::disposing (void)
+void SAL_CALL ToolbarMenuAcc::disposing()
 {
     EventListenerVector aListenerListCopy;
 
@@ -563,7 +563,7 @@ void SAL_CALL ToolbarMenuAcc::disposing (void)
     }
 }
 
-void ToolbarMenuAcc::ThrowIfDisposed (void) throw (DisposedException)
+void ToolbarMenuAcc::ThrowIfDisposed() throw (DisposedException)
 {
     if(rBHelper.bDisposed || rBHelper.bInDispose || !mpParent)
     {
@@ -589,7 +589,7 @@ ToolbarMenuEntryAcc::~ToolbarMenuEntryAcc()
 
 
 
-void SAL_CALL ToolbarMenuEntryAcc::disposing (void)
+void SAL_CALL ToolbarMenuEntryAcc::disposing()
 {
     EventListenerVector aListenerListCopy;
 

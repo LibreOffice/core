@@ -49,7 +49,7 @@ ScAccessibleContextBase::ScAccessibleContextBase(
 {
 }
 
-ScAccessibleContextBase::~ScAccessibleContextBase(void)
+ScAccessibleContextBase::~ScAccessibleContextBase()
 {
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
@@ -140,7 +140,7 @@ void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 //=====  XAccessible  =========================================================
 
 uno::Reference< XAccessibleContext> SAL_CALL
-    ScAccessibleContextBase::getAccessibleContext(void)
+    ScAccessibleContextBase::getAccessibleContext()
     throw (uno::RuntimeException, std::exception)
 {
     return this;
@@ -258,14 +258,14 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 uno::Reference<XAccessible> SAL_CALL
-       ScAccessibleContextBase::getAccessibleParent(void)
+       ScAccessibleContextBase::getAccessibleParent()
     throw (uno::RuntimeException, std::exception)
 {
     return mxParent;
 }
 
 sal_Int32 SAL_CALL
-       ScAccessibleContextBase::getAccessibleIndexInParent(void)
+       ScAccessibleContextBase::getAccessibleIndexInParent()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -299,14 +299,14 @@ sal_Int32 SAL_CALL
 }
 
 sal_Int16 SAL_CALL
-    ScAccessibleContextBase::getAccessibleRole(void)
+    ScAccessibleContextBase::getAccessibleRole()
     throw (uno::RuntimeException, std::exception)
 {
     return maRole;
 }
 
 OUString SAL_CALL
-       ScAccessibleContextBase::getAccessibleDescription(void)
+       ScAccessibleContextBase::getAccessibleDescription()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -332,7 +332,7 @@ OUString SAL_CALL
 }
 
 OUString SAL_CALL
-       ScAccessibleContextBase::getAccessibleName(void)
+       ScAccessibleContextBase::getAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -366,14 +366,14 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-        ScAccessibleContextBase::getAccessibleStateSet(void)
+        ScAccessibleContextBase::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference<XAccessibleStateSet>();
 }
 
 lang::Locale SAL_CALL
-       ScAccessibleContextBase::getLocale(void)
+       ScAccessibleContextBase::getLocale()
     throw (IllegalAccessibleComponentStateException,
         uno::RuntimeException, std::exception)
 {
@@ -454,7 +454,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 }
 
 //=====  XServiceInfo  ========================================================
-OUString SAL_CALL ScAccessibleContextBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleContextBase");
@@ -467,7 +467,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServ
 }
 
 uno::Sequence< OUString> SAL_CALL
-       ScAccessibleContextBase::getSupportedServiceNames(void)
+       ScAccessibleContextBase::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aServiceNames(2);
@@ -490,7 +490,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleContextBase::getImplementationId(void)
+    ScAccessibleContextBase::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
@@ -499,7 +499,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 //=====  internal  ============================================================
 
 OUString SAL_CALL
-    ScAccessibleContextBase::createAccessibleDescription(void)
+    ScAccessibleContextBase::createAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OSL_FAIL("should be implemented in the abrevated class");

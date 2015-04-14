@@ -37,7 +37,7 @@ public:
         DrawDocShell* pDocSh,
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
-    virtual ~ClientView (void);
+    virtual ~ClientView();
 
     virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 

@@ -47,19 +47,19 @@ public:
     PresenterPane (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterPane (void);
+    virtual ~PresenterPane();
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
     // XPane
 
-    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
+    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XWindowListener
@@ -93,7 +93,7 @@ private:
 
     void Invalidate (
         const css::awt::Rectangle& rRepaintBox);
-    void UpdateBoundingBox (void);
+    void UpdateBoundingBox();
 };
 
 } } // end of namespace ::sd::presenter

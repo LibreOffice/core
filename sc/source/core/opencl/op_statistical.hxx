@@ -19,35 +19,35 @@ class OpStandard: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Standard"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Standard"; }
 };
 class OpExponDist: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ExponDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "ExponDist"; }
 };
 class OpVar: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Var"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Var"; }
 };
 class OpSTEYX: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "STEYX"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "STEYX"; }
 };
 class OpVarP: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "VarP"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "VarP"; }
 };
 class OpZTest: public Normal
 {
@@ -55,14 +55,14 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ZTest"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "ZTest"; }
 };
 class OpStDevP: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "StDevP"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "StDevP"; }
 };
 
 class OpStDev: public Normal
@@ -70,28 +70,28 @@ class OpStDev: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "StDev"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "StDev"; }
 };
 class OpSkewp: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Skewp"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Skewp"; }
 };
 class OpSlope: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Slope"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Slope"; }
 };
 class OpWeibull: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Weibull"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Weibull"; }
 };
 class OpFdist: public Normal
 {
@@ -99,14 +99,14 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Fdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Fdist"; }
 };
 class OpTDist: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "TDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "TDist"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
 };
 class OpTInv: public Normal
@@ -114,7 +114,7 @@ class OpTInv: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "TInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "TInv"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
 };
 class OpTTest: public Normal
@@ -122,7 +122,7 @@ class OpTTest: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "TTest"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "TTest"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
 };
 class OpSkew: public Normal
@@ -130,14 +130,14 @@ class OpSkew: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Skew"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Skew"; }
 };
 class OpFisher: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Fisher"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Fisher"; }
 };
 
 class OpFisherInv: public Normal
@@ -145,7 +145,7 @@ class OpFisherInv: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "FisherInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "FisherInv"; }
 };
 
 class OpGamma: public Normal
@@ -153,7 +153,7 @@ class OpGamma: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Gamma"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Gamma"; }
 };
 
 class OpCorrel: public Normal
@@ -161,7 +161,7 @@ class OpCorrel: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Correl"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Correl"; }
 };
 
 class OpNegbinomdist: public Normal
@@ -169,7 +169,7 @@ class OpNegbinomdist: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpNegbinomdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpNegbinomdist"; }
 };
 
 class OpPearson: public Normal
@@ -177,7 +177,7 @@ class OpPearson: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPearson"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpPearson"; }
 };
 
 class OpGammaLn: public Normal
@@ -185,7 +185,7 @@ class OpGammaLn: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "GammaLn"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "GammaLn"; }
 };
 
 class OpGauss: public Normal
@@ -195,17 +195,17 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
        virtual void BinInlineFun(std::set<std::string>& ,
         std::set<std::string>& ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Gauss"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Gauss"; }
 };
 
 class OpGeoMean: public CheckVariables
 {
 public:
-    OpGeoMean(void): CheckVariables(), mNeedReductionKernel(true) {}
+    OpGeoMean(): CheckVariables(), mNeedReductionKernel(true) {}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "GeoMean"; }
-    bool NeedReductionKernel(void) const { return mNeedReductionKernel; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "GeoMean"; }
+    bool NeedReductionKernel() const { return mNeedReductionKernel; }
 protected:
     bool mNeedReductionKernel;
 };
@@ -215,7 +215,7 @@ class OpHarMean: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "HarMean"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "HarMean"; }
 };
 
 class OpRsq: public Normal
@@ -223,124 +223,124 @@ class OpRsq: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpRsq"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpRsq"; }
 };
 class OpNormdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpNormdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpNormdist"; }
 };
 class OpMedian:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpMedian"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpMedian"; }
 };
 class OpNormsdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpNormsdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpNormsdist"; }
 };
 class OpNorminv:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpNorminv"; }
+     virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpNorminv"; }
 };
 class OpNormsinv:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpNormsinv"; }
+     virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpNormsinv"; }
 };
 class OpPhi:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPhi"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpPhi"; }
 };
 class OpKurt: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Kurt"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Kurt"; }
 };
 class OpCovar: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Covar"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Covar"; }
 };
 
 class OpPermut:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPermut"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpPermut"; }
 };
 class OpPermutationA:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPermutationA";}
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpPermutationA";}
 };
 
 class OpConfidence: public Normal
 {
 public:
-    virtual std::string GetBottom(void) SAL_OVERRIDE { return "0"; }
+    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
 
     virtual void GenSlidingWindowFunction(std::stringstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,
         std::set<std::string>& ) SAL_OVERRIDE;
 
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Confidence"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Confidence"; }
 };
 class OpIntercept: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Intercept"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Intercept"; }
 };
 class OpLogInv: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "LogInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "LogInv"; }
 };
 class OpCritBinom: public Normal
 {
 public:
-    virtual std::string GetBottom(void) SAL_OVERRIDE { return "0"; }
+    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
 
     virtual void GenSlidingWindowFunction(std::stringstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,
         std::set<std::string>& ) SAL_OVERRIDE;
 
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "CritBinom"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "CritBinom"; }
 };
 class OpForecast: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Forecast"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Forecast"; }
 };
 class OpLogNormDist: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "LogNormdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "LogNormdist"; }
 };
 class OpGammaDist: public Normal
 {
@@ -348,34 +348,34 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "GammaDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "GammaDist"; }
 };
 class OpHypGeomDist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpHypGeomDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpHypGeomDist"; }
 };
 class OpChiDist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpChiDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpChiDist"; }
 };
 class OpBinomdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpBinomdist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpBinomdist"; }
 };
 class OpChiSqDist: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ChiSqDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "ChiSqDist"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) SAL_OVERRIDE;
 };
 
@@ -384,7 +384,7 @@ class OpChiSqInv: public CheckVariables
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ChiSqInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "ChiSqInv"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) SAL_OVERRIDE;
 };
 class OpChiInv:public Normal{
@@ -392,14 +392,14 @@ class OpChiInv:public Normal{
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpChiInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpChiInv"; }
 };
 class OpPoisson:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPoisson"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpPoisson"; }
 };
 
 class OpGammaInv: public Normal
@@ -409,7 +409,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs
 ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "GammaInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "GammaInv"; }
 };
 class OpFInv: public Normal
 {
@@ -418,7 +418,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs
 ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "FInv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "FInv"; }
 };
 class OpFTest: public Normal
 {
@@ -427,14 +427,14 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs
 ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "FTest"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "FTest"; }
 };
 class OpDevSq: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "DevSq"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "DevSq"; }
 };
 class OpB: public Normal
 {
@@ -443,7 +443,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs
 ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "B"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "B"; }
 };
 class OpBetaDist: public Normal
 {
@@ -452,21 +452,21 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs
 ) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "BetaDist"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "BetaDist"; }
 };
 class OpBetainv:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpBetainv"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpBetainv"; }
 };
 class OpMinA: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpMinA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpMinA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -475,7 +475,7 @@ class OpCountA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpCountA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpCountA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -484,7 +484,7 @@ class OpMaxA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpMaxA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpMaxA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -493,7 +493,7 @@ class OpVarA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpVarA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpVarA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -502,7 +502,7 @@ class OpVarPA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpVarPA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpVarPA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -511,7 +511,7 @@ class OpStDevPA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpStDevPA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpStDevPA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -520,7 +520,7 @@ class OpAverageA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpAverageA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpAverageA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -529,7 +529,7 @@ class OpStDevA: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpStDevA"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "OpStDevA"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -538,7 +538,7 @@ class OpAveDev: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "AveDev"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "AveDev"; }
 };
 
 }}

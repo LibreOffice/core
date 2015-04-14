@@ -50,8 +50,8 @@ class UpdateRequest
       public UpdateRequestInterfaceBase
 {
 public:
-    UpdateRequest (void) throw();
-    virtual ~UpdateRequest (void) throw();
+    UpdateRequest() throw();
+    virtual ~UpdateRequest() throw();
 
     // XConfigurationChangeOperation
 
@@ -65,7 +65,7 @@ public:
     /** Return a human readable string representation.  This is used for
         debugging purposes.
     */
-    virtual OUString SAL_CALL getName (void)
+    virtual OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This call is ignored because the XNamed interface is (mis)used to

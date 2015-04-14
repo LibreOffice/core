@@ -87,7 +87,7 @@ public:
             ::com::sun::star::accessibility::XAccessible>& rxParent,
         sal_Int32 nIndex = -1);
 
-    ~AccessibleShapeInfo (void);
+    ~AccessibleShapeInfo();
 
     AccessibleShapeInfo (const AccessibleShapeInfo&);
 private:

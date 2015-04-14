@@ -122,7 +122,7 @@ namespace svxform
     }
 
 
-    Reference< XDispatchProvider> SAL_CALL DispatchInterceptionMultiplexer::getMasterDispatchProvider(void) throw( RuntimeException, std::exception )
+    Reference< XDispatchProvider> SAL_CALL DispatchInterceptionMultiplexer::getMasterDispatchProvider() throw( RuntimeException, std::exception )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xMasterDispatcher;

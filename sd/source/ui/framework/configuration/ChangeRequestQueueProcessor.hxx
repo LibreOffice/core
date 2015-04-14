@@ -57,7 +57,7 @@ public:
     ChangeRequestQueueProcessor (
         const ::rtl::Reference<ConfigurationController>& rxController,
         const ::boost::shared_ptr<ConfigurationUpdater>& rpUpdater);
-    ~ChangeRequestQueueProcessor (void);
+    ~ChangeRequestQueueProcessor();
 
     /** Sets the configuration who will be changed by subsequent change
         requests.  This method should be called only by the configuration
@@ -76,25 +76,25 @@ public:
 
     /** Returns </sal_True> when the queue is empty.
     */
-    bool IsEmpty (void) const;
+    bool IsEmpty() const;
 
     /** Process all events in the queue synchronously.
 
         <p>This method is typically called when the framework is shut down
         to establish an empty configuration.</p>
     */
-    void ProcessUntilEmpty (void);
+    void ProcessUntilEmpty();
 
     /** Process the first event in queue.
     */
-    void ProcessOneEvent (void);
+    void ProcessOneEvent();
 
     /** Remove all events from the queue.
 
         <p>This method is typically called when the framework is shut down
         to avoid the processing of still pending activation requests.</p>
     */
-    void Clear (void);
+    void Clear();
 
 private:
     mutable ::osl::Mutex maMutex;
@@ -117,7 +117,7 @@ private:
     /** Initiate the processing of the entries in the queue.  The actual
         processing starts asynchronously.
     */
-    void StartProcessing (void);
+    void StartProcessing();
 
     /** Callback function for the PostUserEvent() call.
     */

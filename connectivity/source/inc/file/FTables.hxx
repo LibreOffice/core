@@ -45,7 +45,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
         };
     }
 }

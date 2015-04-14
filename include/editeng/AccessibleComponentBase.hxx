@@ -43,8 +43,8 @@ class EDITENG_DLLPUBLIC AccessibleComponentBase
 {
 public:
     //=====  internal  ========================================================
-    AccessibleComponentBase (void);
-    virtual ~AccessibleComponentBase (void);
+    AccessibleComponentBase();
+    virtual ~AccessibleComponentBase();
 
 
     //=====  XAccessibleComponent  ================================================
@@ -67,25 +67,25 @@ public:
 
     /** The default implementation returns an empty rectangle.
     */
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the location.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation returns an empty position, i.e. the
     * result of the default constructor of com::sun::star::awt::Point.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the size.
     */
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation ignores this call.
@@ -103,33 +103,33 @@ public:
 
     /** The default implementation does nothing.
     */
-    virtual void SAL_CALL grabFocus (void)
+    virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns black as the default foreground color.
     */
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns white as the default background color.
     */
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XAccessibleExtendedComponent  ====================================
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
-        getFont (void)
+        getFont()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getTitledBorderText (void)
+    virtual OUString SAL_CALL getTitledBorderText()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getToolTipText (void)
+    virtual OUString SAL_CALL getToolTipText()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };

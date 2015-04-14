@@ -34,18 +34,18 @@ class VisibleAreaManager
 {
 public:
     VisibleAreaManager (SlideSorter& rSlideSorter);
-    ~VisibleAreaManager (void);
+    ~VisibleAreaManager();
 
-    void ActivateCurrentSlideTracking (void);
-    void DeactivateCurrentSlideTracking (void);
-    bool IsCurrentSlideTrackingActive (void) const { return mbIsCurrentSlideTrackingActive;}
+    void ActivateCurrentSlideTracking();
+    void DeactivateCurrentSlideTracking();
+    bool IsCurrentSlideTrackingActive() const { return mbIsCurrentSlideTrackingActive;}
 
     /** Request the current slide to be moved into the visible area.
         This request is only obeyed when the current slide tracking is
         active.
         @see ActivateCurrentSlideTracking() and DeactivateCurrentSlideTracking()
     */
-    void RequestCurrentSlideVisible (void);
+    void RequestCurrentSlideVisible();
 
     /** Request to make the specified page object visible.
     */
@@ -59,7 +59,7 @@ public:
     {
     public:
         TemporaryDisabler (SlideSorter& rSlideSorter);
-        ~TemporaryDisabler (void);
+        ~TemporaryDisabler();
     private:
         VisibleAreaManager& mrVisibleAreaManager;
     };
@@ -82,8 +82,8 @@ private:
     bool mbIsCurrentSlideTrackingActive;
     int  mnDisableCount;
 
-    void MakeVisible (void);
-    ::boost::optional<Point> GetRequestedTopLeft (void) const;
+    void MakeVisible();
+    ::boost::optional<Point> GetRequestedTopLeft() const;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

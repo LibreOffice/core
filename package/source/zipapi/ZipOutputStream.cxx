@@ -47,7 +47,7 @@ ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xO
 {
 }
 
-ZipOutputStream::~ZipOutputStream( void )
+ZipOutputStream::~ZipOutputStream()
 {
 }
 

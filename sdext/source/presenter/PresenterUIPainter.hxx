@@ -34,8 +34,8 @@ class PresenterUIPainter
     : ::boost::noncopyable
 {
 public:
-    PresenterUIPainter (void);
-    ~PresenterUIPainter (void);
+    PresenterUIPainter();
+    ~PresenterUIPainter();
 
     static void PaintHorizontalBitmapComposite (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,

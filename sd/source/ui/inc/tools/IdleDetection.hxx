@@ -69,11 +69,11 @@ public:
 private:
     /** Check whether there are input events pending.
     */
-    static sal_Int32 CheckInputPending (void);
+    static sal_Int32 CheckInputPending();
 
     /** Check whether a slide show is running full screen or in a window.
     */
-    static sal_Int32 CheckSlideShowRunning (void);
+    static sal_Int32 CheckSlideShowRunning();
 
     static sal_Int32 CheckWindowPainting (const vcl::Window& rWindow);
 };

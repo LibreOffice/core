@@ -575,7 +575,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
                      ( isReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
 }
 
-OUString SwXFieldmark::getFieldType(void)
+OUString SwXFieldmark::getFieldType()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

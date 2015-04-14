@@ -86,7 +86,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     mindy: gethostbyname( "localhost" ), on Linux, it returns the hostname in /etc/hosts + domain name,
     if no entry in /etc/hosts, it returns "localhost" + domain name
 */
-::rtl::OUString getHost( void )
+::rtl::OUString getHost()
 {
     struct hostent *hptr;
 
@@ -99,7 +99,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 
 /** get the full host name of the current processor, such as "aegean.prc.sun.com" --mindyliu
 */
-::rtl::OUString getThisHostname( void )
+::rtl::OUString getThisHostname()
 {
     ::rtl::OUString aUString;
 #ifdef WNT

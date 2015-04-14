@@ -75,7 +75,7 @@ PageColumnControl::PageColumnControl(
     FreeResource();
 }
 
-PageColumnControl::~PageColumnControl(void)
+PageColumnControl::~PageColumnControl()
 {
     delete mpColumnValueSet;
 }

@@ -21,7 +21,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-DeckDescriptor::DeckDescriptor (void)
+DeckDescriptor::DeckDescriptor()
     : msTitle(),
       msId(),
       msIconURL(),
@@ -51,7 +51,7 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
 {
 }
 
-DeckDescriptor::~DeckDescriptor (void)
+DeckDescriptor::~DeckDescriptor()
 {
 }
 

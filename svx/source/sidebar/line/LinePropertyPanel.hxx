@@ -80,7 +80,7 @@ public:
     void SetWidthIcon(int n);
     void SetWidthIcon();
 
-    void EndLineWidthPopupMode (void);
+    void EndLineWidthPopupMode();
 
 private:
     //ui controls
@@ -136,7 +136,7 @@ private:
     /// bitfield
     bool                mbWidthValuable : 1;
 
-    void SetupIcons(void);
+    void SetupIcons();
     void Initialize();
     void FillLineEndList();
     void FillLineStyleList();
@@ -157,7 +157,7 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~LinePropertyPanel(void);
+    virtual ~LinePropertyPanel();
 
     PopupControl* CreateLineWidthPopupControl (PopupContainer* pParent);
 };

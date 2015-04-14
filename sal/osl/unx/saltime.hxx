@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-void sal_initGlobalTimer(void);
+void sal_initGlobalTimer();
 
 #endif
 

@@ -38,7 +38,7 @@ public:
         macros.
     */
     SlideSorterViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~SlideSorterViewShellBase (void);
+    virtual ~SlideSorterViewShellBase();
 };
 
 } // end of namespace sd

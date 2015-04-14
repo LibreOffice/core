@@ -62,7 +62,7 @@ namespace io_acceptor
 
     public: // XServiceInfo
                 virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
     private:
@@ -294,7 +294,7 @@ namespace io_acceptor
         return cppu::supportsService(this, ServiceName);
     }
 
-        Sequence< OUString > OAcceptor::getSupportedServiceNames(void) throw(std::exception)
+        Sequence< OUString > OAcceptor::getSupportedServiceNames() throw(std::exception)
     {
         return acceptor_getSupportedServiceNames();
     }

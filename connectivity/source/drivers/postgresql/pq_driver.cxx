@@ -147,7 +147,7 @@ sal_Bool Driver::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > Driver::getSupportedServiceNames(void)
+Sequence< OUString > Driver::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return DriverGetSupportedServiceNames();
@@ -225,7 +225,7 @@ public:
                 return sal_True;
         return sal_False;
     }
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return m_serviceNames;

@@ -133,7 +133,7 @@ void OIndex::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),     PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     cppu::UnoType<bool>::get());
 }
 
-void OIndex::disposing(void)
+void OIndex::disposing()
 {
     OPropertySetHelper::disposing();
 

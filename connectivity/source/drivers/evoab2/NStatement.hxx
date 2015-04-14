@@ -196,7 +196,7 @@ namespace connectivity
             OCommonStatement( OEvoabConnection* _pConnection );
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             virtual void SAL_CALL release() throw() SAL_OVERRIDE;
             virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;

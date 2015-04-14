@@ -41,7 +41,7 @@ public:
     InsertPropertyPanel (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual ~InsertPropertyPanel (void);
+    virtual ~InsertPropertyPanel();
 
 private:
     ToolBox*        mpStandardShapesToolBox;

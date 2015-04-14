@@ -36,7 +36,7 @@ static const sal_Int32 gaRightGripPadding (3);
 DeckTitleBar::DeckTitleBar (
     const ::rtl::OUString& rsTitle,
     vcl::Window* pParentWindow,
-    const ::boost::function<void(void)>& rCloserAction)
+    const ::boost::function<void()>& rCloserAction)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mnCloserItemIndex(1),
       maCloserAction(rCloserAction),
@@ -52,7 +52,7 @@ DeckTitleBar::DeckTitleBar (
 #endif
 }
 
-DeckTitleBar::~DeckTitleBar (void)
+DeckTitleBar::~DeckTitleBar()
 {
 }
 
@@ -92,12 +92,12 @@ void DeckTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
     (void)rTitleBarBox;
 }
 
-sidebar::Paint DeckTitleBar::GetBackgroundPaint (void)
+sidebar::Paint DeckTitleBar::GetBackgroundPaint()
 {
     return Theme::GetPaint(Theme::Paint_DeckTitleBarBackground);
 }
 
-Color DeckTitleBar::GetTextColor (void)
+Color DeckTitleBar::GetTextColor()
 {
     return Theme::GetColor(Theme::Color_DeckTitleFont);
 }
@@ -109,7 +109,7 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
             maCloserAction();
 }
 
-css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible (void)
+css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible()
 {
     const ::rtl::OUString sAccessibleName(msTitle);
     SetAccessibleName(sAccessibleName);

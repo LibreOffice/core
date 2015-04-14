@@ -49,7 +49,7 @@ public:
     class BitmapDescriptor
     {
     public:
-        BitmapDescriptor (void);
+        BitmapDescriptor();
         BitmapDescriptor (const ::boost::shared_ptr<BitmapDescriptor>& rpDefault);
 
         enum Mode {Normal, MouseOver, ButtonDown, Disabled, Mask};
@@ -99,7 +99,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = NULL);
-    ~PresenterBitmapContainer (void);
+    ~PresenterBitmapContainer();
 
     void Initialize (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext);

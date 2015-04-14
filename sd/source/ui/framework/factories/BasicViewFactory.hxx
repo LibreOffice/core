@@ -73,9 +73,9 @@ class BasicViewFactory
 public:
     BasicViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~BasicViewFactory (void);
+    virtual ~BasicViewFactory();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XViewFactory
 

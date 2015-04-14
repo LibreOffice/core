@@ -64,7 +64,7 @@ LineWidthControl::LineWidthControl (
 
 
 
-LineWidthControl::~LineWidthControl (void)
+LineWidthControl::~LineWidthControl()
 {
     delete[] rStr;
 }

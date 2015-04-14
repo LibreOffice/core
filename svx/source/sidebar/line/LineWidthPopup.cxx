@@ -38,7 +38,7 @@ LineWidthPopup::LineWidthPopup (
     SetPopupModeEndHandler(::boost::bind(&LineWidthPopup::PopupModeEndCallback, this));
 }
 
-LineWidthPopup::~LineWidthPopup (void)
+LineWidthPopup::~LineWidthPopup()
 {
 }
 
@@ -51,7 +51,7 @@ void LineWidthPopup::SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMa
         pControl->SetWidthSelect(lValue, bValuable, eMapUnit);
 }
 
-void LineWidthPopup::PopupModeEndCallback (void)
+void LineWidthPopup::PopupModeEndCallback()
 {
     LineWidthControl* pControl = dynamic_cast<LineWidthControl*>(mxControl.get());
     if (pControl != NULL)

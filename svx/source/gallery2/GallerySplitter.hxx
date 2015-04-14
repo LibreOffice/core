@@ -28,13 +28,13 @@ public:
     GallerySplitter(
         vcl::Window* pParent,
         WinBits nStyle,
-        const ::boost::function<void(void)>& rDataChangeFunctor);
+        const ::boost::function<void()>& rDataChangeFunctor);
 
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
-    ::boost::function<void(void)> maDataChangeFunctor;
+    ::boost::function<void()> maDataChangeFunctor;
 };
 
 

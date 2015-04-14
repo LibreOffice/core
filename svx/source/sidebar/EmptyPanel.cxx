@@ -46,14 +46,14 @@ EmptyPanel::EmptyPanel (vcl::Window* pParent)
 
 
 
-EmptyPanel::~EmptyPanel (void)
+EmptyPanel::~EmptyPanel()
 {
 }
 
 
 
 
-void EmptyPanel::Resize (void)
+void EmptyPanel::Resize()
 {
     const Size aSize (GetSizePixel());
     maMessageControl.SetSizePixel(aSize);

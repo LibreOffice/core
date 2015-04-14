@@ -70,9 +70,9 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlideSorter (void);
+    virtual ~PresenterSlideSorter();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     static void SetActiveState (const bool bIsActive);
 
@@ -125,10 +125,10 @@ public:
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertyChangeListener
@@ -149,7 +149,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -179,7 +179,7 @@ private:
     ::boost::shared_ptr<CurrentSlideFrameRenderer> mpCurrentSlideFrameRenderer;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxPreviewFrame;
 
-    void UpdateLayout (void);
+    void UpdateLayout();
     css::geometry::RealRectangle2D PlaceScrollBars (
         const css::geometry::RealRectangle2D& rUpperBox);
     void PlaceCloseButton (
@@ -189,7 +189,7 @@ private:
     void ClearBackground (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRedrawArea);
-    double GetSlideAspectRatio (void) const;
+    double GetSlideAspectRatio() const;
     css::uno::Reference<css::rendering::XBitmap> GetPreview (const sal_Int32 nSlideIndex);
     void PaintPreview (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -199,12 +199,12 @@ private:
     void SetHorizontalOffset (const double nXOffset);
     void SetVerticalOffset (const double nYOffset);
     void GotoSlide (const sal_Int32 nSlideIndex);
-    bool ProvideCanvas (void);
+    bool ProvideCanvas();
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

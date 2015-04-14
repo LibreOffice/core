@@ -42,7 +42,7 @@ class InsertionIndicatorHandler
 {
 public:
     InsertionIndicatorHandler (SlideSorter& rSlideSorter);
-    ~InsertionIndicatorHandler (void);
+    ~InsertionIndicatorHandler();
 
     enum Mode { CopyMode, MoveMode, UnknownMode };
     static Mode GetModeFromDndAction (const sal_Int8 nDndAction);
@@ -63,7 +63,7 @@ public:
     {
     public:
         ForceShowContext (const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler);
-        ~ForceShowContext (void);
+        ~ForceShowContext();
     private:
         const ::boost::shared_ptr<InsertionIndicatorHandler> mpHandler;
     };
@@ -84,12 +84,12 @@ public:
 
     /** Return whether the insertion marker is active.
     */
-    bool IsActive (void) const { return mbIsActive;}
+    bool IsActive() const { return mbIsActive;}
 
     /** Return the insertion index that corresponds with the current
         graphical location of the insertion indicator.
     */
-    sal_Int32 GetInsertionPageIndex (void) const;
+    sal_Int32 GetInsertionPageIndex() const;
 
     /** Determine whether moving the current selection to the current
         position of the insertion marker would alter the document.  This
@@ -121,7 +121,7 @@ private:
     void SetPosition (
         const Point& rPoint,
         const Mode eMode);
-    ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator (void);
+    ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator();
 
     /** Make the insertion indicator visible (that is the show part) and
         keep it visible, even when the mouse leaves the window (that is the
@@ -131,8 +131,8 @@ private:
 
         In effect all calls to End() are ignored until ForceEnd() is called.
     */
-    void ForceShow (void);
-    void ForceEnd (void);
+    void ForceShow();
+    void ForceEnd();
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

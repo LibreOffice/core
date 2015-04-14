@@ -1170,7 +1170,7 @@ sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uIn
     return m_aFileStream.Read( buffer, size );
 }
 
-void PluginInputStream::flush(void) throw(std::exception)
+void PluginInputStream::flush() throw(std::exception)
 {
 }
 

@@ -59,7 +59,7 @@
 
 #define HWCAP_ARM_VFP 64
 
-int hasVFP(void)
+int hasVFP()
 {
     int fd = open ("/proc/self/auxv", O_RDONLY);
     if (fd == -1)

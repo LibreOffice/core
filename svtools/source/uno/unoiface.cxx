@@ -1025,7 +1025,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier(void) const
+::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier() const
 {
     return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > (m_pCurrentSupplier);
 }
@@ -1337,7 +1337,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
 }
 
 
-sal_Int32 SVTXFormattedField::getFormatKey(void) const
+sal_Int32 SVTXFormattedField::getFormatKey() const
 {
     FormattedField* pField = GetFormattedField();
     return pField ? pField->GetFormatKey() : 0;

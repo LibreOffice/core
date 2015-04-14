@@ -48,7 +48,7 @@ public:
 //                          SMART_UNO_DECLARATION( ScTestAddIn, UsrObject );
 //  friend Reflection *     ScTestAddIn_getReflection();
 //  virtual BOOL            queryInterface( Uik, XInterfaceRef& );
-//  virtual XIdlClassRef    getIdlClass(void);
+//  virtual XIdlClassRef    getIdlClass();
 
     static UString          getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();

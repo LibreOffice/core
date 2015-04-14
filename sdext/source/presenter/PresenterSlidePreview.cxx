@@ -105,11 +105,11 @@ PresenterSlidePreview::PresenterSlidePreview (
     Resize();
 }
 
-PresenterSlidePreview::~PresenterSlidePreview (void)
+PresenterSlidePreview::~PresenterSlidePreview()
 {
 }
 
-void SAL_CALL PresenterSlidePreview::disposing (void)
+void SAL_CALL PresenterSlidePreview::disposing()
 {
     if (mxWindow.is())
     {
@@ -126,13 +126,13 @@ void SAL_CALL PresenterSlidePreview::disposing (void)
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlidePreview::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterSlidePreview::getResourceId()
     throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -209,7 +209,7 @@ void SAL_CALL PresenterSlidePreview::setCurrentPage (const Reference<drawing::XD
     SetSlide(rxSlide);
 }
 
-Reference<drawing::XDrawPage> SAL_CALL PresenterSlidePreview::getCurrentPage (void)
+Reference<drawing::XDrawPage> SAL_CALL PresenterSlidePreview::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -365,7 +365,7 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-void PresenterSlidePreview::Resize (void)
+void PresenterSlidePreview::Resize()
 {
     if (mxPreviewRenderer.is() && mxPreview.is())
     {
@@ -386,7 +386,7 @@ void PresenterSlidePreview::Resize (void)
     SetSlide(mxCurrentSlide);
 }
 
-void PresenterSlidePreview::ThrowIfDisposed (void)
+void PresenterSlidePreview::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)

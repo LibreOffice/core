@@ -91,21 +91,21 @@ public:
     /** Force the controller item to call its NotifyItemUpdate
         callback with up-to-date data.
     */
-    void RequestUpdate (void);
+    void RequestUpdate();
 
     /** Return the label for the command.  It contains the keyboard
         accelerator when one exists.
     */
-    ::rtl::OUString GetLabel (void) const;
+    ::rtl::OUString GetLabel() const;
 
     /** Return the extended help text for the command.
         Returns an empty string when the UNO command name is not available.
     */
-    ::rtl::OUString GetHelpText (void) const;
+    ::rtl::OUString GetHelpText() const;
 
     /** Return the icon for the command.
     */
-    Image GetIcon (void) const;
+    Image GetIcon() const;
 
     /** Convenience method for setting all relevant properties for the
         slot/command represented by the called object at the given tool
@@ -116,11 +116,11 @@ public:
     /** Do not call.  Used by local class only.  Should be a member of
         a local and hidden interface.
     */
-    void NotifyFrameContextChange (void);
+    void NotifyFrameContextChange();
     /** Do not call.  Used by local class only.  Should be a member of
         a local and hidden interface.
     */
-    void ResetFrame (void);
+    void ResetFrame();
 
 protected:
 

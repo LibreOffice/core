@@ -170,7 +170,7 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
     delete m_pSpellState;
 }
 
-SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
+SfxChildWinInfo SwSpellDialogChildWindow::GetInfo() const
 {
     SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
     aInfo.bVisible = false;

@@ -37,7 +37,7 @@ SlideTransitionPanel::SlideTransitionPanel (
 #endif
 }
 
-SlideTransitionPanel::~SlideTransitionPanel (void)
+SlideTransitionPanel::~SlideTransitionPanel()
 {
 }
 

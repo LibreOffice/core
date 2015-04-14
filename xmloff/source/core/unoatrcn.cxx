@@ -50,13 +50,13 @@ SvUnoAttributeContainer::~SvUnoAttributeContainer()
 }
 
 // container::XElementAccess
-uno::Type SAL_CALL SvUnoAttributeContainer::getElementType(void)
+uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<xml::AttributeData>::get();
 }
 
-sal_Bool SAL_CALL SvUnoAttributeContainer::hasElements(void)
+sal_Bool SAL_CALL SvUnoAttributeContainer::hasElements()
     throw( uno::RuntimeException, std::exception )
 {
     return mpContainer->GetAttrCount() != 0;
@@ -131,7 +131,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
     return aAny;
 }
 
-uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
@@ -248,12 +248,12 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 }
 
 //XServiceInfo
-OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL SvUnoAttributeContainer::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString( "SvUnoAttributeContainer" );
 }
 
-uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void)
+uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
     OUString aSN( "com.sun.star.xml.AttributeContainer" );

@@ -520,7 +520,7 @@ sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >&
     return 0;
 }
 
-OUString SwXTextSearch::getSearchString(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextSearch::getSearchString() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return sSearchText;
@@ -533,7 +533,7 @@ void SwXTextSearch::setSearchString(const OUString& rString)
     sSearchText = rString;
 }
 
-OUString SwXTextSearch::getReplaceString(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextSearch::getReplaceString() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return sReplaceText;
@@ -545,7 +545,7 @@ void SwXTextSearch::setReplaceString(const OUString& rReplaceString) throw( uno:
     sReplaceText = rReplaceString;
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropSet->getPropertySetInfo();
     return aRef;
@@ -641,7 +641,7 @@ void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName
     OSL_FAIL("not implemented");
 }
 
-sal_Bool SwXTextSearch::getValueSearch(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextSearch::getValueSearch() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return bIsValueSearch;
@@ -653,7 +653,7 @@ void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_) throw( uno::RuntimeExc
     bIsValueSearch = ValueSearch_;
 }
 
-uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes() throw( uno::RuntimeException, std::exception )
 {
     return  pSearchProperties->GetProperties();
 }
@@ -664,7 +664,7 @@ void SwXTextSearch::setSearchAttributes(const uno::Sequence< beans::PropertyValu
     pSearchProperties->SetProperties(rSearchAttribs);
 }
 
-uno::Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes(void)
+uno::Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes()
     throw( uno::RuntimeException, std::exception )
 {
     return pReplaceProperties->GetProperties();
@@ -696,7 +696,7 @@ bool    SwXTextSearch::HasReplaceAttributes() const
     return pReplaceProperties->HasAttributes();
 }
 
-OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextSearch::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextSearch");
 }
@@ -706,7 +706,7 @@ sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();

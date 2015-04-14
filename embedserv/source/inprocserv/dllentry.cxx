@@ -205,7 +205,7 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
 }
 
 
-STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
+STDAPI INPROC_DLLPUBLIC DllRegisterServer()
 {
     HMODULE aCurModule = GetModuleHandleA( "inprocserv.dll" );
     if( aCurModule )
@@ -223,7 +223,7 @@ STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
 }
 
 
-STDAPI INPROC_DLLPUBLIC DllUnregisterServer( void )
+STDAPI INPROC_DLLPUBLIC DllUnregisterServer()
 {
     return WriteLibraryToRegistry( "ole32.dll", 10 );
 }

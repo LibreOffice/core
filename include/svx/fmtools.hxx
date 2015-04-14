@@ -136,13 +136,13 @@ public:
     { return m_xMoveOperations->queryInterface(type); }
 
     // css::uno::Reference< css::sdbcx::XRowLocate>
-    css::uno::Any getBookmark(void)
+    css::uno::Any getBookmark()
         throw( css::sdbc::SQLException, css::uno::RuntimeException )
     { return m_xBookmarkOperations->getBookmark(); }
     bool moveToBookmark(const css::uno::Any& bookmark) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
     bool moveRelativeToBookmark(const css::uno::Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveRelativeToBookmark(bookmark, rows); }
     sal_Int32 compareBookmarks(const css::uno::Any& lhs, const css::uno::Any& rhs) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(lhs, rhs); }
-    sal_Int32 hasOrderedBookmarks(void) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
+    sal_Int32 hasOrderedBookmarks() const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
     sal_Int32 hashBookmark(const css::uno::Any& bookmark) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
     // css::sdbc::XResultSet

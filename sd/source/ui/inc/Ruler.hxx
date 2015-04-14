@@ -40,7 +40,7 @@ public:
         sal_uInt16 nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
-    virtual ~Ruler (void);
+    virtual ~Ruler();
 
     void SetNullOffset(const Point& rOffset);
 

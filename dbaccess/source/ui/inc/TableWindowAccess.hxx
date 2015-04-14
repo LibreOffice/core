@@ -66,8 +66,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
-        static com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( com::sun::star::uno::RuntimeException );
-        static OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
+        static com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( com::sun::star::uno::RuntimeException );
 
         // XAccessible
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

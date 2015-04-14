@@ -91,7 +91,7 @@ RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
 {
 }
 
-RequestQueue::~RequestQueue (void)
+RequestQueue::~RequestQueue()
 {
     Clear();
 }
@@ -199,7 +199,7 @@ void RequestQueue::ChangeClass (
     }
 }
 
-CacheKey RequestQueue::GetFront (void)
+CacheKey RequestQueue::GetFront()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -210,7 +210,7 @@ CacheKey RequestQueue::GetFront (void)
     return mpRequestQueue->begin()->maKey;
 }
 
-RequestPriorityClass RequestQueue::GetFrontPriorityClass (void)
+RequestPriorityClass RequestQueue::GetFrontPriorityClass()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -221,7 +221,7 @@ RequestPriorityClass RequestQueue::GetFrontPriorityClass (void)
     return mpRequestQueue->begin()->meClass;
 }
 
-void RequestQueue::PopFront (void)
+void RequestQueue::PopFront()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -243,13 +243,13 @@ void RequestQueue::PopFront (void)
     }
 }
 
-bool RequestQueue::IsEmpty (void)
+bool RequestQueue::IsEmpty()
 {
     ::osl::MutexGuard aGuard (maMutex);
     return mpRequestQueue->empty();
 }
 
-void RequestQueue::Clear (void)
+void RequestQueue::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
 

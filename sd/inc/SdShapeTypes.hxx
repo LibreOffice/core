@@ -29,7 +29,7 @@ namespace accessibility {
 /** Register the SD presentation shape types with the ShapeTypeHandler singleton.
     This method is usually called while loading the sd library.
 */
-void RegisterImpressShapeTypes (void);
+void RegisterImpressShapeTypes();
 
 /** Enum describing all shape types known in the SD project.
 */

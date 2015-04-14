@@ -64,20 +64,20 @@ public:
     const OUString msTopRelativePropertyName;
     const OUString msTotalHeightPropertyName;
 
-    Implementation (void);
-    ~Implementation (void);
+    Implementation();
+    ~Implementation();
 
     void SetCanvas (const cppcanvas::CanvasSharedPtr& rCanvas);
     void SetSize (const Size aSize);
     void SetBackgroundColor (const Color aColor);
     void SetTextColor (const Color aColor);
     void SetFontDescriptor (const awt::FontDescriptor& rFontDescriptor);
-    sal_Int32 GetTop (void) const { return mnTop;}
+    sal_Int32 GetTop() const { return mnTop;}
     void SetTop (const sal_Int32 nTop);
     void SetText (const OUString& Text);
     sal_Int32 ParseDistance (const OUString& rsDistance) const;
-    Reference<rendering::XBitmap> GetBitmap (void);
-    sal_Int32 GetTotalHeight (void);
+    Reference<rendering::XBitmap> GetBitmap();
+    sal_Int32 GetTotalHeight();
 
 private:
     Reference<rendering::XBitmap> mxBitmap;
@@ -92,9 +92,9 @@ private:
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
 
-    EditEngine * GetEditEngine (void);
-    EditEngine* CreateEditEngine (void);
-    void CheckTop (void);
+    EditEngine * GetEditEngine();
+    EditEngine* CreateEditEngine();
+    void CheckTop();
 };
 
 // PresenterTextView
@@ -105,11 +105,11 @@ PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxCont
     (void)rxContext;
 }
 
-PresenterTextView::~PresenterTextView (void)
+PresenterTextView::~PresenterTextView()
 {
 }
 
-void SAL_CALL PresenterTextView::disposing (void)
+void SAL_CALL PresenterTextView::disposing()
 {
     mpImplementation.reset();
 }
@@ -217,7 +217,7 @@ Any PresenterTextView::SetPropertyValue (
     return aOldValue;
 }
 
-void PresenterTextView::ThrowIfDisposed (void)
+void PresenterTextView::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (PresenterTextViewInterfaceBase::rBHelper.bDisposed
@@ -230,7 +230,7 @@ void PresenterTextView::ThrowIfDisposed (void)
 }
 
 // PresenterTextView::Implementation
-PresenterTextView::Implementation::Implementation (void)
+PresenterTextView::Implementation::Implementation()
     : msTextPropertyName("Text"),
       msBitmapPropertyName("Bitmap"),
       msSizePropertyName("Size"),
@@ -257,21 +257,21 @@ PresenterTextView::Implementation::Implementation (void)
     GetEditEngine();
 }
 
-PresenterTextView::Implementation::~Implementation (void)
+PresenterTextView::Implementation::~Implementation()
 {
     delete mpEditEngine;
     SfxItemPool::Free(mpEditEngineItemPool);
     delete mpOutputDevice;
 }
 
-EditEngine * PresenterTextView::Implementation::GetEditEngine (void)
+EditEngine * PresenterTextView::Implementation::GetEditEngine()
 {
     if (mpEditEngine == NULL)
         mpEditEngine = CreateEditEngine ();
     return mpEditEngine;
 }
 
-EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
+EditEngine* PresenterTextView::Implementation::CreateEditEngine()
 {
     EditEngine* pEditEngine = mpEditEngine;
     if (pEditEngine == NULL)
@@ -447,7 +447,7 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
     return nDistance;
 }
 
-Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void)
+Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
 
@@ -484,7 +484,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
     return mxBitmap;
 }
 
-sal_Int32 PresenterTextView::Implementation::GetTotalHeight (void)
+sal_Int32 PresenterTextView::Implementation::GetTotalHeight()
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
 
@@ -497,7 +497,7 @@ sal_Int32 PresenterTextView::Implementation::GetTotalHeight (void)
     return mnTotalHeight;
 }
 
-void PresenterTextView::Implementation::CheckTop (void)
+void PresenterTextView::Implementation::CheckTop()
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
 

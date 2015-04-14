@@ -138,7 +138,7 @@ namespace connectivity
 
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();

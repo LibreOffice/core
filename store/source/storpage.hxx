@@ -45,7 +45,7 @@ class OStorePageManager : public store::OStorePageBIOS
 public:
     /** Construction.
      */
-    OStorePageManager (void);
+    OStorePageManager();
 
     /** Initialization (two-phase construction).
      */
@@ -58,7 +58,7 @@ public:
      *  @return sal_True  upon successful initialization,
      *          sal_False otherwise.
      */
-    inline bool isValid (void) const;
+    inline bool isValid() const;
 
     /** DirectoryPage I/O (managed).
      */
@@ -135,7 +135,7 @@ public:
 protected:
     /** Destruction.
     */
-    virtual ~OStorePageManager (void);
+    virtual ~OStorePageManager();
 
 private:
     /** Implementation.
@@ -188,7 +188,7 @@ private:
     OStorePageManager& operator= (const OStorePageManager&) SAL_DELETED_FUNCTION;
 };
 
-inline bool OStorePageManager::isValid (void) const
+inline bool OStorePageManager::isValid() const
 {
     return (base::isValid() /* @@@ NYI && (m_aRoot.is()) */);
 }

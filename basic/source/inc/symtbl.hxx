@@ -145,7 +145,7 @@ public:
     void       SetDefinedAs()   { bAs = true;       }
     void       SetGlobal(bool b){ bGlobal = b;  }
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
-    sal_uInt16 GetDefaultId( void ) { return nDefaultId; }
+    sal_uInt16 GetDefaultId() { return nDefaultId; }
     bool       IsOptional() const{ return bOpt;     }
     bool       IsParamArray() const{ return bParamArray; }
     bool       IsWithEvents() const{ return bWithEvents; }
@@ -155,7 +155,7 @@ public:
     bool       IsNew() const    { return bNew;      }
     bool       IsDefinedAs() const { return bAs;    }
     bool       IsGlobal() const { return bGlobal;   }
-    short      GetFixedStringLength( void ) const { return nFixedStringLength; }
+    short      GetFixedStringLength() const { return nFixedStringLength; }
     void       SetFixedStringLength( short n ) { nFixedStringLength = n; }
 
     SbiSymPool& GetPool();

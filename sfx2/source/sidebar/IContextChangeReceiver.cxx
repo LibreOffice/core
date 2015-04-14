@@ -20,7 +20,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-IContextChangeReceiver::~IContextChangeReceiver (void)
+IContextChangeReceiver::~IContextChangeReceiver()
 {
 }
 

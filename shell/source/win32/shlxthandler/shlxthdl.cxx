@@ -397,7 +397,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     return S_OK;
 }
 
-extern "C" STDAPI DllCanUnloadNow(void)
+extern "C" STDAPI DllCanUnloadNow()
 {
     if (CClassFactory::IsLocked() || g_DllRefCnt > 0)
         return S_FALSE;

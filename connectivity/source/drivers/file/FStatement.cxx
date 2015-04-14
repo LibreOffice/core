@@ -300,7 +300,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLExc
 }
 
 
-void SAL_CALL OStatement_Base::disposing(void)
+void SAL_CALL OStatement_Base::disposing()
 {
     if(m_aEvaluateRow.is())
     {

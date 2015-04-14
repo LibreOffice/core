@@ -75,7 +75,7 @@ InsertPropertyPanel::InsertPropertyPanel (
 
 
 
-InsertPropertyPanel::~InsertPropertyPanel (void)
+InsertPropertyPanel::~InsertPropertyPanel()
 {
     // Remove window child listener.
     vcl::Window* pTopWindow = this;

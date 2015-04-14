@@ -55,13 +55,13 @@ public:
     virtual void Deactivate() SAL_OVERRIDE;
 
     /// Forward to the clipboard manager.
-    virtual void DoCut (void) SAL_OVERRIDE;
+    virtual void DoCut() SAL_OVERRIDE;
 
     /// Forward to the clipboard manager.
-    virtual void DoCopy (void) SAL_OVERRIDE;
+    virtual void DoCopy() SAL_OVERRIDE;
 
     /// Forward to the clipboard manager.
-    virtual void DoPaste (void) SAL_OVERRIDE;
+    virtual void DoPaste() SAL_OVERRIDE;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -78,12 +78,12 @@ public:
 
     /** Turn of substitution display and insertion indicator.
     */
-    void NotifyDragFinished (void);
+    void NotifyDragFinished();
 
     /** Call when drag-and-drop or multi selection is started or stopped in
         order to update permission of mouse over indication.
     */
-    void UpdateMouseOverIndicationPermission (void);
+    void UpdateMouseOverIndicationPermission();
 
     class EventDescriptor;
     class ModeHandler;
@@ -95,17 +95,17 @@ public:
         DragAndDropMode,
         ButtonMode
     };
-    void SwitchToNormalMode (void);
+    void SwitchToNormalMode();
     void SwitchToDragAndDropMode(const Point& rMousePosition);
     void SwitchToMultiSelectionMode (const Point& rMousePosition, const sal_uInt32 nEventCode);
 
-    void ResetShiftKeySelectionAnchor (void);
+    void ResetShiftKeySelectionAnchor();
     /** Special case handling for when the context menu is hidden.  This
         method will reinitialize the current mouse position to prevent the
         mouse motion during the time the context menu is displayed from
         being interpreted as drag-and-drop start.
     */
-    void ResetMouseAnchor (void);
+    void ResetMouseAnchor();
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -172,7 +172,7 @@ private:
         const bool bIsShiftDown,
         const bool bIsControlDown);
 
-    void StopDragAndDrop (void);
+    void StopDragAndDrop();
 
     void SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler);
 };

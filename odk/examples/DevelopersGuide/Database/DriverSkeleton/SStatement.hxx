@@ -103,7 +103,7 @@ namespace connectivity
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing(){OStatement_BASE::disposing();}
             // XInterface
             virtual void SAL_CALL release() throw();
             virtual void SAL_CALL acquire() throw();
@@ -144,7 +144,7 @@ namespace connectivity
             OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
                                     OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual void SAL_CALL release() throw();
         };

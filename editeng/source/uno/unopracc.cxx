@@ -101,7 +101,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementati
 }
 
 // XServiceInfo
-OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName (void) throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SvxAccessibleTextPropertySet");
 }
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString&
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames (void) throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     // TODO
     return SvxUnoTextRangeBase::getSupportedServiceNames();

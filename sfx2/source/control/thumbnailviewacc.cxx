@@ -94,7 +94,7 @@ ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno
     }
 }
 
-void ThumbnailViewAcc::GetFocus (void)
+void ThumbnailViewAcc::GetFocus()
 {
     mbIsFocused = true;
 
@@ -106,7 +106,7 @@ void ThumbnailViewAcc::GetFocus (void)
         aOldState, aNewState);
 }
 
-void ThumbnailViewAcc::LoseFocus (void)
+void ThumbnailViewAcc::LoseFocus()
 {
     mbIsFocused = false;
 
@@ -536,7 +536,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8
     return nRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::disposing (void)
+void SAL_CALL ThumbnailViewAcc::disposing()
 {
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
@@ -571,7 +571,7 @@ void SAL_CALL ThumbnailViewAcc::disposing (void)
     }
 }
 
-sal_uInt16 ThumbnailViewAcc::getItemCount (void) const
+sal_uInt16 ThumbnailViewAcc::getItemCount() const
 {
     return mpParent->ImplGetVisibleItemCount();
 }
@@ -581,7 +581,7 @@ ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
     return mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
 }
 
-void ThumbnailViewAcc::ThrowIfDisposed (void)
+void ThumbnailViewAcc::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

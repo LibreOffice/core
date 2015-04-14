@@ -636,7 +636,7 @@ void OCalcTable::refreshIndexes()
 }
 
 
-void SAL_CALL OCalcTable::disposing(void)
+void SAL_CALL OCalcTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

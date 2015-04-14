@@ -656,7 +656,7 @@ atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
 } // extern "C"
 
 GType
-atk_object_wrapper_get_type (void)
+atk_object_wrapper_get_type()
 {
   static GType type = 0;
 

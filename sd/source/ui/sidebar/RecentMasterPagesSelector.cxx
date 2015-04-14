@@ -66,13 +66,13 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
 {
 }
 
-RecentMasterPagesSelector::~RecentMasterPagesSelector (void)
+RecentMasterPagesSelector::~RecentMasterPagesSelector()
 {
     RecentlyUsedMasterPages::Instance().RemoveEventListener (
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
 
-void RecentMasterPagesSelector::LateInit (void)
+void RecentMasterPagesSelector::LateInit()
 {
     MasterPagesSelector::LateInit();
 

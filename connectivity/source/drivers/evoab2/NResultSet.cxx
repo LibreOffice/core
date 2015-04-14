@@ -706,7 +706,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 }
 
 
-void OEvoabResultSet::disposing(void)
+void OEvoabResultSet::disposing()
 {
     ::comphelper::OPropertyContainer::disposing();
 

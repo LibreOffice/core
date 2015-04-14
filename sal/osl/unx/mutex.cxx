@@ -159,7 +159,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
 
 static oslMutexImpl globalMutexImpl;
 
-static void globalMutexInitImpl(void) {
+static void globalMutexInitImpl() {
     pthread_mutexattr_t attr;
     if (pthread_mutexattr_init(&attr) != 0 ||
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) ||

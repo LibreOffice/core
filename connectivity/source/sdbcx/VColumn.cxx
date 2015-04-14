@@ -172,7 +172,7 @@ void OColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),       PROPERTY_ID_TABLENAME,          nAttrib, &m_TableName,       cppu::UnoType<decltype(m_TableName)>::get());
 }
 
-void OColumn::disposing(void)
+void OColumn::disposing()
 {
     OPropertySetHelper::disposing();
 

@@ -29,13 +29,13 @@ namespace sax
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endDocument();
         }
@@ -121,13 +121,13 @@ namespace sax
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endDocument();
         }
@@ -174,12 +174,12 @@ namespace sax
         }
         // XExtendedDocumentHandler
         virtual void SAL_CALL
-        startCDATA(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        startCDATA() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startCDATA();
         }
         virtual void SAL_CALL
-        endCDATA(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        endCDATA() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endCDATA();
         }
@@ -195,7 +195,7 @@ namespace sax
             m_handler->unknown(sString);
         }
         virtual void SAL_CALL
-        allowLineBreak(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        allowLineBreak() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->allowLineBreak();
         }

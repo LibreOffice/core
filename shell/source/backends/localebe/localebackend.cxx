@@ -211,7 +211,7 @@ LocaleBackend::LocaleBackend()
 
 
 
-LocaleBackend::~LocaleBackend(void)
+LocaleBackend::~LocaleBackend()
 {
 }
 
@@ -224,7 +224,7 @@ LocaleBackend* LocaleBackend::createInstance()
 
 
 
-OUString LocaleBackend::getLocale(void)
+OUString LocaleBackend::getLocale()
 {
 #if defined WNT
     return ImplGetLocale( GetUserDefaultLCID() );
@@ -237,7 +237,7 @@ OUString LocaleBackend::getLocale(void)
 
 
 
-OUString LocaleBackend::getUILocale(void)
+OUString LocaleBackend::getUILocale()
 {
 #if defined WNT
     return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
@@ -250,7 +250,7 @@ OUString LocaleBackend::getUILocale(void)
 
 
 
-OUString LocaleBackend::getSystemLocale(void)
+OUString LocaleBackend::getSystemLocale()
 {
 // note: the implementation differs from getLocale() only on Windows
 #if defined WNT
@@ -302,17 +302,17 @@ css::uno::Any LocaleBackend::getPropertyValue(
 
 
 
-OUString SAL_CALL LocaleBackend::getBackendName(void) {
+OUString SAL_CALL LocaleBackend::getBackendName() {
     return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
 }
 
-OUString SAL_CALL LocaleBackend::getImplementationName(void)
+OUString SAL_CALL LocaleBackend::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
     return getBackendName() ;
 }
 
-uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames()
 {
     uno::Sequence<OUString> aServiceNameList(1);
     aServiceNameList[0] = "com.sun.star.configuration.backend.LocaleBackend";
@@ -325,7 +325,7 @@ sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
     return getBackendServiceNames() ;

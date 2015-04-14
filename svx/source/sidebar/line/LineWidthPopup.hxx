@@ -35,12 +35,12 @@ public :
     LineWidthPopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    virtual ~LineWidthPopup (void);
+    virtual ~LineWidthPopup();
 
     void SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMapUnit);
 
 private:
-    void PopupModeEndCallback (void);
+    void PopupModeEndCallback();
 };
 
 } } // end of namespace svx::sidebar

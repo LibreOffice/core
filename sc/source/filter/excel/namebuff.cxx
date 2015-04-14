@@ -182,17 +182,17 @@ bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUStr
     return true;
 }
 
-void ExtSheetBuffer::Reset( void )
+void ExtSheetBuffer::Reset()
 {
     maEntries.clear();
 }
 
-bool ExtName::IsDDE( void ) const
+bool ExtName::IsDDE() const
 {
     return ( nFlags & 0x0001 ) != 0;
 }
 
-bool ExtName::IsOLE( void ) const
+bool ExtName::IsOLE() const
 {
     return ( nFlags & 0x0002 ) != 0;
 }
@@ -228,7 +228,7 @@ const ExtName* ExtNameBuff::GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameI
     return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : 0;
 }
 
-void ExtNameBuff::Reset( void )
+void ExtNameBuff::Reset()
 {
     maExtNames.clear();
 }

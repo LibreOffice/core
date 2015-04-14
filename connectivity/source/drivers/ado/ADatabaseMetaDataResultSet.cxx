@@ -82,7 +82,7 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
         m_pRecordSet->Release();
 }
 
-void ODatabaseMetaDataResultSet::disposing(void)
+void ODatabaseMetaDataResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

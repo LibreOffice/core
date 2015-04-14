@@ -218,7 +218,7 @@ namespace svx
         DECL_LINK( EditDictHdl, void* );
         DECL_LINK( DeleteDictHdl, void* );
 
-        void                Init( void );       ///< reads settings from core and init controls
+        void                Init();       ///< reads settings from core and init controls
     public:
                             HangulHanjaOptionsDialog( vcl::Window* _pParent );
         virtual             ~HangulHanjaOptionsDialog();
@@ -299,8 +299,8 @@ namespace svx
         DECL_LINK( DeletePBPushHdl, void* );
 
         void            InitEditDictDialog( sal_uInt32 _nSelDict );
-        void            UpdateOriginalLB( void );
-        void            UpdateSuggestions( void );
+        void            UpdateOriginalLB();
+        void            UpdateSuggestions();
         void            UpdateButtonStates();
 
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
@@ -313,7 +313,7 @@ namespace svx
                         HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
                         virtual ~HangulHanjaEditDictDialog();
 
-        void            UpdateScrollbar( void );
+        void            UpdateScrollbar();
     };
 
 

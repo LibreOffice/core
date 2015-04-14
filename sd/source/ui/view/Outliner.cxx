@@ -89,13 +89,13 @@ public:
     */
     EditMode meOriginalEditMode;
 
-    Implementation (void);
-    ~Implementation (void);
+    Implementation();
+    ~Implementation();
 
     /** Return the OutlinerView that was provided by the last call to
         ProvideOutlinerView() (or NULL when there was no such call.)
     */
-    OutlinerView* GetOutlinerView (void) { return mpOutlineView;}
+    OutlinerView* GetOutlinerView() { return mpOutlineView;}
 
     /** Provide in the member mpOutlineView an instance of OutlinerView that
         is either taken from the ViewShell, when it is an OutlineViewShell,
@@ -108,7 +108,7 @@ public:
 
     /** This method is called when the OutlinerView is no longer used.
     */
-    void ReleaseOutlinerView (void);
+    void ReleaseOutlinerView();
 
 private:
     /** Flag that specifies whether we own the outline view pointed to by
@@ -221,7 +221,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
 }
 
 /// Nothing spectecular in the destructor.
-Outliner::~Outliner (void)
+Outliner::~Outliner()
 {
     mpImpl.reset();
 }
@@ -246,7 +246,7 @@ Outliner::~Outliner (void)
     directly operate on it.  No switching into other views takes place.</li>
     </ol>
 */
-void Outliner::PrepareSpelling (void)
+void Outliner::PrepareSpelling()
 {
     mbPrepareSpellingPending = false;
 
@@ -277,7 +277,7 @@ void Outliner::PrepareSpelling (void)
     ClearModifyFlag();
 }
 
-void Outliner::StartSpelling (void)
+void Outliner::StartSpelling()
 {
     meMode = SPELL;
     mbDirectionIsForward = true;
@@ -293,7 +293,7 @@ void Outliner::StartSpelling(EditView& rView, unsigned char c)
 /** Free all resources acquired during the search/spell check.  After a
     spell check the start position is restored here.
 */
-void Outliner::EndSpelling (void)
+void Outliner::EndSpelling()
 {
     // Keep old view shell alive until we release the outliner view.
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
@@ -390,7 +390,7 @@ bool Outliner::SpellNextDocument()
 /**
  * check next text object
  */
-::svx::SpellPortions Outliner::GetNextSpellSentence (void)
+::svx::SpellPortions Outliner::GetNextSpellSentence()
 {
     ::svx::SpellPortions aResult;
 
@@ -580,7 +580,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
     maLastValidPosition = *::sd::outliner::OutlinerContainer(this).current();
 }
 
-bool Outliner::SearchAndReplaceAll (void)
+bool Outliner::SearchAndReplaceAll()
 {
     // Save the current position to be restored after having replaced all
     // matches.
@@ -628,7 +628,7 @@ bool Outliner::SearchAndReplaceAll (void)
     return true;
 }
 
-bool Outliner::SearchAndReplaceOnce (void)
+bool Outliner::SearchAndReplaceOnce()
 {
     DetectChange ();
 
@@ -722,7 +722,7 @@ bool Outliner::SearchAndReplaceOnce (void)
 /** Try to detect whether the document or the view (shell) has changed since
     the last time <member>StartSearchAndReplace()</member> has been called.
 */
-void Outliner::DetectChange (void)
+void Outliner::DetectChange()
 {
     ::sd::outliner::IteratorPosition aPosition (maCurrentPosition);
 
@@ -929,7 +929,7 @@ void Outliner::RestoreStartPosition()
     expressed by setting one of the flags <member>mbFoundObject</member> or
     <member>mbEndOfSearch</member> to <TRUE/>.
 */
-void Outliner::ProvideNextTextObject (void)
+void Outliner::ProvideNextTextObject()
 {
     mbEndOfSearch = false;
     mbFoundObject = false;
@@ -998,7 +998,7 @@ void Outliner::ProvideNextTextObject (void)
     while ( ! (mbFoundObject || mbEndOfSearch));
 }
 
-void Outliner::EndOfSearch (void)
+void Outliner::EndOfSearch()
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
@@ -1048,7 +1048,7 @@ void Outliner::EndOfSearch (void)
     }
 }
 
-void Outliner::ShowEndOfSearchDialog (void)
+void Outliner::ShowEndOfSearchDialog()
 {
     OUString aString;
     if (meMode == SEARCH)
@@ -1075,7 +1075,7 @@ void Outliner::ShowEndOfSearchDialog (void)
     mbWholeDocumentProcessed = true;
 }
 
-bool Outliner::ShowWrapArroundDialog (void)
+bool Outliner::ShowWrapArroundDialog()
 {
     bool bDoWrapArround = false;
 
@@ -1148,7 +1148,7 @@ void Outliner::PutTextIntoOutliner()
     }
 }
 
-void Outliner::PrepareSpellCheck (void)
+void Outliner::PrepareSpellCheck()
 {
     EESpellState eState = HasSpellErrors();
     DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
@@ -1181,7 +1181,7 @@ void Outliner::PrepareSpellCheck (void)
     }
 }
 
-void Outliner::PrepareSearchAndReplace (void)
+void Outliner::PrepareSearchAndReplace()
 {
     if (HasText( *mpSearchItem ))
     {
@@ -1326,7 +1326,7 @@ IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 }
 IMPL_LINK_INLINE_END( Outliner, SpellError, void *, nLang )
 
-ESelection Outliner::GetSearchStartPosition (void)
+ESelection Outliner::GetSearchStartPosition()
 {
     ESelection aPosition;
     if (mbDirectionIsForward)
@@ -1352,7 +1352,7 @@ ESelection Outliner::GetSearchStartPosition (void)
     return aPosition;
 }
 
-bool Outliner::HasNoPreviousMatch (void)
+bool Outliner::HasNoPreviousMatch()
 {
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
 
@@ -1363,7 +1363,7 @@ bool Outliner::HasNoPreviousMatch (void)
     return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ());
 }
 
-bool Outliner::HandleFailedSearch (void)
+bool Outliner::HandleFailedSearch()
 {
     bool bContinueSearch = false;
 
@@ -1429,7 +1429,7 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
     }
 }
 
-void Outliner::HandleChangedSelection (void)
+void Outliner::HandleChangedSelection()
 {
     maMarkListCopy.clear();
     mbRestrictSearchToSelection = mpView->AreObjectsMarked();
@@ -1482,7 +1482,7 @@ void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLan
 /** Prepare to do a text conversion on the current text object. This
     includes putting it into edit mode.
 */
-void Outliner::PrepareConversion (void)
+void Outliner::PrepareConversion()
 {
     SetUpdateMode(true);
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
@@ -1503,7 +1503,7 @@ void Outliner::PrepareConversion (void)
     }
 }
 
-void Outliner::BeginConversion (void)
+void Outliner::BeginConversion()
 {
     SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
@@ -1617,14 +1617,14 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 
 //===== Outliner::Implementation ==============================================
 
-Outliner::Implementation::Implementation (void)
+Outliner::Implementation::Implementation()
     : meOriginalEditMode(EM_PAGE),
       mbOwnOutlineView(false),
       mpOutlineView(NULL)
 {
 }
 
-Outliner::Implementation::~Implementation (void)
+Outliner::Implementation::~Implementation()
 {
     if (mbOwnOutlineView && mpOutlineView!=NULL)
     {
@@ -1698,7 +1698,7 @@ void Outliner::Implementation::ProvideOutlinerView (
     }
 }
 
-void Outliner::Implementation::ReleaseOutlinerView (void)
+void Outliner::Implementation::ReleaseOutlinerView()
 {
     if (mbOwnOutlineView)
     {

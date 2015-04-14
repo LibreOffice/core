@@ -52,9 +52,9 @@ public:
     PresenterCurrentSlideObserver (
         const ::rtl::Reference<PresenterController>& rxPresenterController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController);
-    virtual ~PresenterCurrentSlideObserver (void);
+    virtual ~PresenterCurrentSlideObserver();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XSlideShowListener
     virtual void SAL_CALL paused(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

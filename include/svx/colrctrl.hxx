@@ -91,7 +91,7 @@ private:
         the focus to the color value set so that it can be controlled with
         the keyboard.
     */
-    virtual void GetFocus (void) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
 protected:
     virtual bool    Close() SAL_OVERRIDE;

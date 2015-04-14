@@ -275,7 +275,7 @@ bool LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
 *   @return.
 */
 sal_uInt16
-LwpNumericFormat::GetDecimalPlaces(void)
+LwpNumericFormat::GetDecimalPlaces()
 {
     if (IsDecimalPlacesOverridden())
         return cDecimalPlaces;

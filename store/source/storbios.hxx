@@ -45,7 +45,7 @@ class OStorePageBIOS : public store::OStoreObject
 public:
     /** Construction.
      */
-    OStorePageBIOS (void);
+    OStorePageBIOS();
 
     /** Conversion into Mutex&
      */
@@ -79,11 +79,11 @@ public:
 
     /** isWriteable.
      */
-    inline bool isWriteable (void) const;
+    inline bool isWriteable() const;
 
     /** isValid.
      */
-    inline bool isValid (void) const;
+    inline bool isValid() const;
 
     /** Page Access.
      */
@@ -92,7 +92,7 @@ public:
 
     storeError releasePage (const OStorePageDescriptor& rDescr);
 
-    sal_uInt32 getRefererCount (void);
+    sal_uInt32 getRefererCount();
 
     /** Page Allocation.
      */
@@ -119,12 +119,12 @@ public:
     /** close.
      *  @return store_E_None upon success.
      */
-    storeError close (void);
+    storeError close();
 
     /** flush.
      *  @return store_E_None upon success.
      */
-    storeError flush (void);
+    storeError flush();
 
     /** size.
      */
@@ -142,11 +142,11 @@ public:
 
         /** Construction.
          */
-        inline ScanContext (void);
+        inline ScanContext();
 
         /** isValid.
          */
-        inline bool isValid (void) const;
+        inline bool isValid() const;
     };
 
     /** scanBegin.
@@ -164,7 +164,7 @@ public:
 protected:
     /** Destruction (OReference).
      */
-    virtual ~OStorePageBIOS (void);
+    virtual ~OStorePageBIOS();
 
 private:
     /** Representation.
@@ -227,20 +227,20 @@ inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
     return (osl::Mutex&)m_aMutex;
 }
-inline bool OStorePageBIOS::isWriteable (void) const
+inline bool OStorePageBIOS::isWriteable() const
 {
     return m_bWriteable;
 }
-inline bool OStorePageBIOS::isValid (void) const
+inline bool OStorePageBIOS::isValid() const
 {
     return m_xLockBytes.is();
 }
 
-inline OStorePageBIOS::ScanContext::ScanContext (void)
+inline OStorePageBIOS::ScanContext::ScanContext()
     : m_aDescr (0, 0, 0), m_nSize (0), m_nMagic (0)
 {
 }
-inline bool OStorePageBIOS::ScanContext::isValid (void) const
+inline bool OStorePageBIOS::ScanContext::isValid() const
 {
     return (m_aDescr.m_nAddr < m_nSize);
 }

@@ -563,7 +563,7 @@ namespace
     }
 }
 
-PopupMenu* DBTreeListBox::CreateContextMenu( void )
+PopupMenu* DBTreeListBox::CreateContextMenu()
 {
     ::std::unique_ptr< PopupMenu > pContextMenu;
 

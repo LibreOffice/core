@@ -44,7 +44,7 @@ public:
     void AddAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
 
     // ::com::sun::star::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength(void)
+    virtual sal_Int16 SAL_CALL getLength()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual OUString SAL_CALL getNameByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

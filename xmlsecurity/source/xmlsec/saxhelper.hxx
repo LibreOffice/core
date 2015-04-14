@@ -45,10 +45,10 @@ class SAXHelper
         void setCurrentNode(const xmlNodePtr pNode);
         xmlDocPtr getDocument() { return m_pParserCtxt->myDoc;}
 
-        void startDocument( void )
+        void startDocument()
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
-        void endDocument( void )
+        void endDocument()
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
         void startElement(

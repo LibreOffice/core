@@ -34,19 +34,19 @@ protected:
 
 public:
     OleWrapperAdviseSink( OleComponent* pOleComp );
-    OleWrapperAdviseSink(void);
+    OleWrapperAdviseSink();
     virtual ~OleWrapperAdviseSink();
 
     void disconnectOleComponent();
     STDMETHODIMP QueryInterface(REFIID, void**);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
-    STDMETHODIMP_(void)  OnDataChange(LPFORMATETC, LPSTGMEDIUM);
-    STDMETHODIMP_(void)  OnViewChange(DWORD, LONG);
-    STDMETHODIMP_(void)  OnRename(LPMONIKER);
-    STDMETHODIMP_(void)  OnSave(void);
-    STDMETHODIMP_(void)  OnClose(void);
+    STDMETHODIMP_()  OnDataChange(LPFORMATETC, LPSTGMEDIUM);
+    STDMETHODIMP_()  OnViewChange(DWORD, LONG);
+    STDMETHODIMP_()  OnRename(LPMONIKER);
+    STDMETHODIMP_()  OnSave();
+    STDMETHODIMP_()  OnClose();
 };
 
 #endif

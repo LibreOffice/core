@@ -62,9 +62,9 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const OUString& rsThemeName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    ~PresenterTheme (void);
+    ~PresenterTheme();
 
-    bool HasCanvas (void) const;
+    bool HasCanvas() const;
     void ProvideCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
     OUString GetStyleName (const OUString& rsResourceURL) const;
@@ -106,7 +106,7 @@ public:
     SharedBitmapDescriptor GetBitmap (
         const OUString& rsBitmapName) const;
 
-    ::boost::shared_ptr<PresenterBitmapContainer> GetBitmapContainer (void) const;
+    ::boost::shared_ptr<PresenterBitmapContainer> GetBitmapContainer() const;
 
     SharedFontDescriptor GetFont (
         const OUString& rsStyleName) const;
@@ -130,7 +130,7 @@ private:
     ::boost::shared_ptr<PresenterBitmapContainer> mpBitmapContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 
-    ::boost::shared_ptr<Theme> ReadTheme (void);
+    ::boost::shared_ptr<Theme> ReadTheme();
 };
 
 } } // end of namespace ::sd::presenter

@@ -84,7 +84,7 @@ PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBas
     meShellType = ST_PRESENTATION;
 }
 
-PresentationViewShell::~PresentationViewShell (void)
+PresentationViewShell::~PresentationViewShell()
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !maOldVisArea.IsEmpty() )
         GetDocSh()->SetVisArea( maOldVisArea );
@@ -148,7 +148,7 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
         xSlideShow->paint(rRect);
 }
 
-void PresentationViewShell::Resize (void)
+void PresentationViewShell::Resize()
 {
     ViewShell::Resize(); // do not call DrawViewShell here!
 

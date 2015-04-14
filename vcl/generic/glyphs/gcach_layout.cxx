@@ -270,7 +270,7 @@ static hb_bool_t getGlyphContourPoint(hb_font_t* /*font*/, void* pFontData,
     return ret;
 }
 
-static hb_font_funcs_t* getFontFuncs(void)
+static hb_font_funcs_t* getFontFuncs()
 {
     static hb_font_funcs_t* funcs = hb_font_funcs_create();
 
@@ -296,7 +296,7 @@ static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/
     return 0;
 }
 
-static hb_unicode_funcs_t* getUnicodeFuncs(void)
+static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
     hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, NULL, NULL);

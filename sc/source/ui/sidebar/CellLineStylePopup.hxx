@@ -30,7 +30,7 @@ public :
     CellLineStylePopup(
         vcl::Window* pParent,
         const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
-    virtual ~CellLineStylePopup(void);
+    virtual ~CellLineStylePopup();
 
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
 };

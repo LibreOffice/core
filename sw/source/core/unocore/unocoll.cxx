@@ -847,7 +847,7 @@ SwXTextTables::~SwXTextTables()
 
 }
 
-sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXTextTables::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
@@ -906,7 +906,7 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXTextTables::getElementNames(void)
+uno::Sequence< OUString > SwXTextTables::getElementNames()
         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -957,7 +957,7 @@ uno::Type SAL_CALL
     return cppu::UnoType<XTextTable>::get();
 }
 
-sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextTables::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -965,7 +965,7 @@ sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException, std::exc
     return 0 != GetDoc()->GetTblFrmFmtCount(true);
 }
 
-OUString SwXTextTables::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SwXTextTables::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextTables");
 }
@@ -975,7 +975,7 @@ sal_Bool SwXTextTables::supportsService(const OUString& rServiceName) throw( uno
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArr = aRet.getArray();
@@ -1069,13 +1069,13 @@ namespace
             SwXFrameEnumeration(const SwDoc* const pDoc);
 
             //XEnumeration
-            virtual sal_Bool SAL_CALL hasMoreElements(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-            virtual Any SAL_CALL nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+            virtual sal_Bool SAL_CALL hasMoreElements() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+            virtual Any SAL_CALL nextElement() throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
             //XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+            virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
             virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-            virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+            virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     };
 }
 
@@ -1111,14 +1111,14 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
 }
 
 template<FlyCntType T>
-sal_Bool SwXFrameEnumeration<T>::hasMoreElements(void) throw( RuntimeException, std::exception )
+sal_Bool SwXFrameEnumeration<T>::hasMoreElements() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return !m_aFrames.empty();
 }
 
 template<FlyCntType T>
-Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
+Any SwXFrameEnumeration<T>::nextElement() throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(m_aFrames.empty())
@@ -1129,7 +1129,7 @@ Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, Wra
 }
 
 template<FlyCntType T>
-OUString SwXFrameEnumeration<T>::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXFrameEnumeration<T>::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXFrameEnumeration");
 }
@@ -1141,12 +1141,12 @@ sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName) th
 }
 
 template<FlyCntType T>
-Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
 }
 
-OUString SwXFrames::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXFrames::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXFrames");
 }
@@ -1156,7 +1156,7 @@ sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( Runtime
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SwXFrames::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence<OUString> SwXFrames::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return ::comphelper::makeSequence(OUString("com.sun.star.text.TextFrames"));
 }
@@ -1169,7 +1169,7 @@ SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
 SwXFrames::~SwXFrames()
 {}
 
-uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw(uno::RuntimeException, std::exception)
+uno::Reference<container::XEnumeration> SwXFrames::createEnumeration() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1190,7 +1190,7 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw
     }
 }
 
-sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException, std::exception)
+sal_Int32 SwXFrames::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1238,7 +1238,7 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     return lcl_UnoWrapFrame(const_cast<SwFrmFmt*>(pFmt), eType);
 }
 
-uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXFrames::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1287,7 +1287,7 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException, std:
     }
 }
 
-sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException, std::exception)
+sal_Bool SwXFrames::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1296,7 +1296,7 @@ sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException, std::exceptio
 }
 
 
-OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextFrames::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextFrames");
 }
@@ -1306,7 +1306,7 @@ sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( Run
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextFrames::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1323,7 +1323,7 @@ SwXTextFrames::~SwXTextFrames()
 {
 }
 
-OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextGraphicObjects::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextGraphicObjects");
 }
@@ -1333,7 +1333,7 @@ sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) th
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1350,7 +1350,7 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 {
 }
 
-OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextEmbeddedObjects::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextEmbeddedObjects");
 }
@@ -1360,7 +1360,7 @@ sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) t
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1377,7 +1377,7 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 {
 }
 
-OUString SwXTextSections::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextSections::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextSections");
 }
@@ -1387,7 +1387,7 @@ sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( R
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextSections::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1404,7 +1404,7 @@ SwXTextSections::~SwXTextSections()
 {
 }
 
-sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXTextSections::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1480,7 +1480,7 @@ uno::Any SwXTextSections::getByName(const OUString& rName)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXTextSections::getElementNames(void)
+uno::Sequence< OUString > SwXTextSections::getElementNames()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1545,7 +1545,7 @@ uno::Type SAL_CALL SwXTextSections::getElementType() throw(uno::RuntimeException
     return cppu::UnoType<XTextSection>::get();
 }
 
-sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextSections::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     size_t nCount = 0;
@@ -1564,7 +1564,7 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
     return SwXTextSection::CreateXTextSection(&rFmt);
 }
 
-OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXBookmarks::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXBookmarks");
 }
@@ -1574,7 +1574,7 @@ sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( Runt
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXBookmarks::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.text.Bookmarks";
@@ -1588,7 +1588,7 @@ SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
 SwXBookmarks::~SwXBookmarks()
 { }
 
-sal_Int32 SwXBookmarks::getCount(void)
+sal_Int32 SwXBookmarks::getCount()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1661,7 +1661,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
+uno::Sequence< OUString > SwXBookmarks::getElementNames()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1700,7 +1700,7 @@ uno::Type SAL_CALL SwXBookmarks::getElementType()
     return cppu::UnoType<XTextContent>::get();
 }
 
-sal_Bool SwXBookmarks::hasElements(void)
+sal_Bool SwXBookmarks::hasElements()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1730,7 +1730,7 @@ SwXNumberingRulesCollection::~SwXNumberingRulesCollection()
 {
 }
 
-sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXNumberingRulesCollection::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1765,7 +1765,7 @@ uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType() throw(uno::Runt
     return cppu::UnoType<XIndexReplace>::get();
 }
 
-sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXNumberingRulesCollection::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1773,7 +1773,7 @@ sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeExcep
     return !GetDoc()->GetNumRuleTbl().empty();
 }
 
-OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXFootnotes::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXFootnotes");
 }
@@ -1783,7 +1783,7 @@ sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( Runt
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXFootnotes::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1801,7 +1801,7 @@ SwXFootnotes::~SwXFootnotes()
 {
 }
 
-sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXFootnotes::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1860,7 +1860,7 @@ uno::Type SAL_CALL SwXFootnotes::getElementType() throw(uno::RuntimeException, s
     return cppu::UnoType<XFootnote>::get();
 }
 
-sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXFootnotes::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1873,7 +1873,7 @@ Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rF
     return SwXFootnote::CreateXFootnote(rDoc, &const_cast<SwFmtFtn&>(rFmt));
 }
 
-OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXReferenceMarks::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXReferenceMarks");
 }
@@ -1883,7 +1883,7 @@ sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw(
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1900,7 +1900,7 @@ SwXReferenceMarks::~SwXReferenceMarks()
 {
 }
 
-sal_Int32 SwXReferenceMarks::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXReferenceMarks::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1954,7 +1954,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXReferenceMarks::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence<OUString> aRet;
@@ -1985,7 +1985,7 @@ uno::Type SAL_CALL SwXReferenceMarks::getElementType() throw(uno::RuntimeExcepti
     return cppu::UnoType<XTextContent>::get();
 }
 
-sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXReferenceMarks::hasElements() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())

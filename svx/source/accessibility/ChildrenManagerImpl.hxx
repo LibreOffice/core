@@ -107,18 +107,18 @@ public:
     /** If there still are managed children these are disposed and
         released.
     */
-    virtual ~ChildrenManagerImpl (void);
+    virtual ~ChildrenManagerImpl();
 
     /** Do that part of the initialization that you can not or should not do
         in the constructor like registering at broadcasters.
     */
-    void Init (void);
+    void Init();
 
     /** Return the number of currently visible accessible children.
         @return
             If there are no children a 0 is returned.
     */
-    long GetChildCount (void) const throw ();
+    long GetChildCount() const throw ();
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape> GetChildShape(long nIndex)
@@ -214,7 +214,7 @@ public:
     /** Clear the lists of accessible shapes and that of visible accessible
         shapes.  The list of UNO shapes is not modified.
     */
-    void ClearAccessibleShapeList (void);
+    void ClearAccessibleShapeList();
 
     /** Set a new event shape tree info.  Call this method to inform the
         children manager of a change of the info bundle.
@@ -227,7 +227,7 @@ public:
         according to the given selection.  This includes setting
         <em>and</em> resetting the states.
     */
-    void UpdateSelection (void);
+    void UpdateSelection();
 
     /** Return whether one of the shapes managed by this object has
         currently the focus.
@@ -235,13 +235,13 @@ public:
             Returns <true/> when there is a shape that has the focus and
             <false/> when there is no such shape.
     */
-    bool HasFocus (void);
+    bool HasFocus();
 
     /** When there is a shape that currently has the focus,
         i.e. <member>HasFocus()</member> returns <true/> then remove the
         focus from that shape.  Otherwise nothing changes.
     */
-    void RemoveFocus (void);
+    void RemoveFocus();
 
     // lang::XEventListener
     virtual void SAL_CALL
@@ -352,9 +352,9 @@ protected:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    void impl_dispose (void);
+    void impl_dispose();
 
 private:
     /** Names of new accessible objects are disambiguated with this index.
@@ -487,7 +487,7 @@ public:
             shape is empty or it can not be transformed into a pointer to
             the desired class.
     */
-    AccessibleShape* GetAccessibleShape (void) const;
+    AccessibleShape* GetAccessibleShape() const;
 
     /** set the index _nIndex at the accessible shape
         @param  _nIndex
@@ -515,7 +515,7 @@ public:
     explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
 
-    ~ChildDescriptor (void);
+    ~ChildDescriptor();
 
     /** Dispose the accessible object of this descriptor.  If that object
         does not exist then do nothing.

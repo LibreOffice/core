@@ -331,14 +331,14 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 
 //====  internal  =========================================================
 
-OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription()
                     throw (uno::RuntimeException)
 {
     OUString sDesc(SC_RESSTR(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
     return sDesc.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 
-OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
+OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName()
                     throw (uno::RuntimeException, std::exception)
 {
     OUString sName(SC_RESSTR(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));

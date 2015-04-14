@@ -52,7 +52,7 @@ void ReferenceCasting::run()
 // (CompoundStmt 0x205d430 </noel-extra1/libo-clang/compilerplugins/clang/noel1.cxx:17:1, line:20:1>
 //   (DeclStmt 0x20580a8 <line:18:5, col:32>
 //     (0x20530e0 "css::uno::Reference<B> refB =
-//       (CXXConstructExpr 0x2058078 <col:28> 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>''void (void)')"))
+//       (CXXConstructExpr 0x2058078 <col:28> 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>''void()')"))
 //   (DeclStmt 0x205d418 <line:19:5, col:59>
 //     (0x2058310 "css::uno::Reference<A> refA =
 //       (CXXConstructExpr 0x205d3d8 <col:28, col:58> 'css::uno::Reference<A>':'class com::sun::star::uno::Reference<class A>''void (const class com::sun::star::uno::BaseReference &, enum com::sun::star::uno::UnoReference_Query)'
@@ -76,7 +76,7 @@ void ReferenceCasting::run()
 // static void example_method2() (CompoundStmt 0x2a7a650 </noel-extra1/libo-clang/compilerplugins/clang/noel1.cxx:21:1, line:24:1>
 //  (DeclStmt 0x2a7a1a8 <line:22:5, col:32>
 //    (0x2a751e0 "css::uno::Reference<B> refB =
-//      (CXXConstructExpr 0x2a7a178 <col:28> 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>''void (void)')"))
+//      (CXXConstructExpr 0x2a7a178 <col:28> 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>''void()')"))
 //  (ExprWithCleanups 0x2a7a638 <line:23:5, col:70> 'void'
 //    (CallExpr 0x2a7a570 <col:5, col:70> 'void'
 //      (ImplicitCastExpr 0x2a7a558 <col:5> 'void (*)(css::uno::Reference<A>)' <FunctionToPointerDecay>

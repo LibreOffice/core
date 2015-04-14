@@ -287,13 +287,13 @@ class WidgetPainter
 
         @see m_pPushButton
     */
-    WidgetPainter( void );
+    WidgetPainter();
 
     /** Destructor.
 
         Destruct all the cached widgets.
     */
-    virtual ~WidgetPainter( void );
+    virtual ~WidgetPainter();
 
     /** Paints the specified widget to the X window.
 
@@ -444,7 +444,7 @@ class WidgetPainter
     static QRect region2QRect( const Rectangle& rControlRegion );
 };
 
-WidgetPainter::WidgetPainter( void )
+WidgetPainter::WidgetPainter()
     : m_pPushButton( NULL ),
       m_pRadioButton( NULL ),
       m_pCheckBox( NULL ),
@@ -476,7 +476,7 @@ WidgetPainter::WidgetPainter( void )
 {
 }
 
-WidgetPainter::~WidgetPainter( void )
+WidgetPainter::~WidgetPainter()
 {
     delete m_pPushButton, m_pPushButton = NULL;
     delete m_pRadioButton, m_pRadioButton = NULL;

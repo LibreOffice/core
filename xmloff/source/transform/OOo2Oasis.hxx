@@ -94,7 +94,7 @@ public:
     void SAL_CALL Initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument(void)
+    virtual void SAL_CALL startDocument()
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString GetEventName( const OUString& rName,

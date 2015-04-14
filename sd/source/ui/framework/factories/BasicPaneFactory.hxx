@@ -67,9 +67,9 @@ class BasicPaneFactory
 public:
     BasicPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~BasicPaneFactory (void);
+    virtual ~BasicPaneFactory();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XInitialization
 
@@ -138,7 +138,7 @@ private:
                 css::drawing::framework::XResourceId>& rxPaneId,
             const PaneDescriptor& rDescriptor);
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 

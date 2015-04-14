@@ -135,13 +135,13 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // aus get/setPropertyValue gerufen:
-    OUString         getFileName(void) const;
+    OUString         getFileName() const;
     void                    setFileName(const OUString& FileName);
-    OUString         getFilter(void) const;
+    OUString         getFilter() const;
     void                    setFilter(const OUString& Filter);
-    OUString         getFilterOptions(void) const;
+    OUString         getFilterOptions() const;
     void                    setFilterOptions(const OUString& FilterOptions);
-    sal_Int32               getRefreshDelay(void) const;
+    sal_Int32               getRefreshDelay() const;
     void                    setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XServiceInfo
@@ -286,13 +286,13 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // called from get/setPropertyValue:
-    OUString         getFileName(void) const;
+    OUString         getFileName() const;
     void                    setFileName(const OUString& FileName);
-    OUString         getFilter(void) const;
+    OUString         getFilter() const;
     void                    setFilter(const OUString& Filter);
-    OUString         getFilterOptions(void) const;
+    OUString         getFilterOptions() const;
     void                    setFilterOptions(const OUString& FilterOptions);
-    sal_Int32               getRefreshDelay(void) const;
+    sal_Int32               getRefreshDelay() const;
     void                    setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XAreaLink

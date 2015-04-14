@@ -303,7 +303,7 @@ static void lt_db_initialize() { }
 static void lt_db_finalize() { }
 static void lt_db_set_datadir( const char* /* dir */ ) { }
 
-static lt_tag_t* lt_tag_new(void)
+static lt_tag_t* lt_tag_new()
 {
     return new lt_tag_t;
 }

@@ -27,7 +27,7 @@ PopupContainer::PopupContainer (vcl::Window* pParent)
 {
 }
 
-PopupContainer::~PopupContainer (void)
+PopupContainer::~PopupContainer()
 {
 }
 

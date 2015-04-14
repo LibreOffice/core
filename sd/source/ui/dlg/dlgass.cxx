@@ -95,9 +95,9 @@ class NextButton
 public:
     NextButton (vcl::Window* pParent);
 
-    void ForceFocusEventBroadcast (void);
+    void ForceFocusEventBroadcast();
     void SetClickHdl (const Link& rLink);
-    bool IsEnabled (void);
+    bool IsEnabled();
     void Enable (bool bEnable);
 
 private:
@@ -123,7 +123,7 @@ public:
     /** Extract form the history list of recently used files the impress
         files and insert them into a listbox.
     */
-    void    ScanDocmenu         (void);
+    void    ScanDocmenu();
     /** Flag that is set to sal_True after the recently used files have been
         scanned.
     */
@@ -136,7 +136,7 @@ public:
         <member>maPresentList</member>.  Note that the first call to this
         method after installing a new Office may take some time.
     */
-    void ProvideTemplates (void);
+    void ProvideTemplates();
 
     /** This method transfers the template folders from the template scanner
         to the internal structures of this class.  On termination it sets
@@ -683,7 +683,7 @@ void AssistentDlgImpl::EndDialog( long )
     mpWindow = NULL;
 }
 
-void    AssistentDlgImpl::ScanDocmenu   (void)
+void    AssistentDlgImpl::ScanDocmenu()
 {
     if( mbRecentDocumentsReady )
         return;
@@ -761,7 +761,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     }
 }
 
-void AssistentDlgImpl::ProvideTemplates (void)
+void AssistentDlgImpl::ProvideTemplates()
 {
     if ( ! mbTemplatesReady)
     {
@@ -1836,7 +1836,7 @@ NextButton::NextButton (vcl::Window* pParent) :
     mpNextButton2->Hide();
 }
 
-void NextButton::ForceFocusEventBroadcast (void)
+void NextButton::ForceFocusEventBroadcast()
 {
     // Hide the currently visible button and show and focus the other one.
     if (mbIsFirstButtonActive)
@@ -1863,7 +1863,7 @@ void NextButton::SetClickHdl (const Link& rLink)
     mpNextButton2->SetClickHdl(rLink);
 }
 
-bool NextButton::IsEnabled (void)
+bool NextButton::IsEnabled()
 {
     // Because the buttons are both either enabled or disabled, it is
     // sufficient to ask one to determine the state.

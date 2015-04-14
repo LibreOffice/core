@@ -49,11 +49,11 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleOutlineView  (void);
+    virtual ~AccessibleOutlineView();
 
     /** Complete the initialization begun in the constructor.
     */
-    virtual void Init (void) SAL_OVERRIDE;
+    virtual void Init() SAL_OVERRIDE;
 
     //=====  IAccessibleViewForwarderListener  ================================
 
@@ -63,14 +63,14 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
-        getAccessibleName(void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //=====  XAccessibleEventBroadcaster  ========================================
 
@@ -91,7 +91,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  lang::XEventListener  ============================================
@@ -109,17 +109,17 @@ public:
 protected:
 
     // overridden to detect focus changes
-    virtual void Activated (void) SAL_OVERRIDE;
+    virtual void Activated() SAL_OVERRIDE;
 
     // overridden to detect focus changes
-    virtual void Deactivated (void) SAL_OVERRIDE;
+    virtual void Deactivated() SAL_OVERRIDE;
 
     // declared, but not defined
     AccessibleOutlineView( const AccessibleOutlineView& );
     AccessibleOutlineView& operator= ( const AccessibleOutlineView& );
 
     // This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString

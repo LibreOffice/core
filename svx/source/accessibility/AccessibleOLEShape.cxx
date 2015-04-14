@@ -41,12 +41,12 @@ AccessibleOLEShape::AccessibleOLEShape (
 
 
 
-AccessibleOLEShape::~AccessibleOLEShape (void)
+AccessibleOLEShape::~AccessibleOLEShape()
 {
 }
 
 // XAccessibleAction
-sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
+sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 0;
@@ -96,7 +96,7 @@ com::sun::star::uno::Any SAL_CALL
 
 
 void SAL_CALL
-    AccessibleOLEShape::acquire (void)
+    AccessibleOLEShape::acquire()
     throw ()
 {
     AccessibleShape::acquire ();
@@ -105,7 +105,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleOLEShape::release (void)
+    AccessibleOLEShape::release()
     throw ()
 {
     AccessibleShape::release ();
@@ -113,7 +113,7 @@ void SAL_CALL
 
 // XServiceInfo
 OUString SAL_CALL
-    AccessibleOLEShape::getImplementationName (void)
+    AccessibleOLEShape::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOLEShape");
@@ -123,7 +123,7 @@ OUString SAL_CALL
 
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-    AccessibleOLEShape::getSupportedServiceNames (void)
+    AccessibleOLEShape::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -141,7 +141,7 @@ OUString SAL_CALL
 
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
-    AccessibleOLEShape::getTypes (void)
+    AccessibleOLEShape::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...
@@ -173,7 +173,7 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
 
 /// Set this object's name if is different to the current name.
 OUString
-    AccessibleOLEShape::CreateAccessibleBaseName (void)
+    AccessibleOLEShape::CreateAccessibleBaseName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sName;
@@ -207,7 +207,7 @@ OUString
 
 
 OUString
-    AccessibleOLEShape::CreateAccessibleDescription (void)
+    AccessibleOLEShape::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return CreateAccessibleName ();

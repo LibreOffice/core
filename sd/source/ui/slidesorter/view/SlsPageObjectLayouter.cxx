@@ -91,7 +91,7 @@ PageObjectLayouter::PageObjectLayouter (
         aIconSize);
 }
 
-PageObjectLayouter::~PageObjectLayouter(void)
+PageObjectLayouter::~PageObjectLayouter()
 {
 }
 

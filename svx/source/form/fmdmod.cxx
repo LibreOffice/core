@@ -61,7 +61,7 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 SAL_WNOUNREACHABLE_CODE_POP
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     static const OUString aSvxComponentServiceNameList[] =
     {

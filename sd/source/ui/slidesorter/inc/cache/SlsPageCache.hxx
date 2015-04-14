@@ -77,7 +77,7 @@ public:
         const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
 
-    ~PageCache (void);
+    ~PageCache();
 
     void ChangeSize(
         const Size& rPreviewSize,
@@ -148,8 +148,8 @@ public:
     */
     void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
 
-    void Pause (void);
-    void Resume (void);
+    void Pause();
+    void Resume();
 
 private:
     ::boost::scoped_ptr<GenericPageCache> mpImplementation;

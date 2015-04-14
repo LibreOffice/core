@@ -58,7 +58,7 @@ protected:
 public:
     ZipEntry aEntry;
     ZipPackageEntry();
-    virtual ~ZipPackageEntry( void );
+    virtual ~ZipPackageEntry();
 
     const OUString& GetMediaType () const { return msMediaType; }
     void SetMediaType ( const OUString & sNewType) { msMediaType = sNewType; }
@@ -73,7 +73,7 @@ public:
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             const rtlRandomPool &rRandomPool ) = 0;
 
-    void clearParent ( void )
+    void clearParent()
     {
         // xParent.clear();
         mpParent = NULL;

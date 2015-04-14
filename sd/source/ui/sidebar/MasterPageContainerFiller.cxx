@@ -51,11 +51,11 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     mrContainerAdapter.PutMasterPage(pDescriptor);
 }
 
-MasterPageContainerFiller::~MasterPageContainerFiller (void)
+MasterPageContainerFiller::~MasterPageContainerFiller()
 {
 }
 
-void MasterPageContainerFiller::RunNextStep (void)
+void MasterPageContainerFiller::RunNextStep()
 {
     switch (meState)
     {
@@ -95,7 +95,7 @@ void MasterPageContainerFiller::RunNextStep (void)
     }
 }
 
-bool MasterPageContainerFiller::HasNextStep (void)
+bool MasterPageContainerFiller::HasNextStep()
 {
     switch (meState)
     {
@@ -108,7 +108,7 @@ bool MasterPageContainerFiller::HasNextStep (void)
     }
 }
 
-MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate (void)
+MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate()
 {
     State eState (ERROR);
 
@@ -135,7 +135,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate (void)
     return eState;
 }
 
-MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
+MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
 {
     if (mpLastAddedEntry != NULL)
     {

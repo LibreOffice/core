@@ -192,13 +192,13 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     GetParent()->AddEventListener(aWindowEventHandlerLink);
 }
 
-LayoutMenu::~LayoutMenu (void)
+LayoutMenu::~LayoutMenu()
 {
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
 }
 
-void LayoutMenu::Dispose (void)
+void LayoutMenu::Dispose()
 {
     if (mbIsDisposed)
         return;
@@ -219,7 +219,7 @@ void LayoutMenu::Dispose (void)
     GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
 
-AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
+AutoLayout LayoutMenu::GetSelectedAutoLayout()
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;
 
@@ -266,7 +266,7 @@ void LayoutMenu::Paint (const Rectangle& rRect)
     ValueSet::Paint (rRect);
 }
 
-void LayoutMenu::Resize (void)
+void LayoutMenu::Resize()
 {
     Size aWindowSize = GetOutputSizePixel();
     if (IsVisible() && aWindowSize.Width() > 0)
@@ -337,7 +337,7 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     UpdateSelection();
 }
 
-void LayoutMenu::InvalidateContent (void)
+void LayoutMenu::InvalidateContent()
 {
     // Throw away the current set and fill the menu anew according to the
     // current settings (this includes the support for vertical writing.)
@@ -493,7 +493,7 @@ SfxRequest LayoutMenu::CreateRequest (
     return aRequest;
 }
 
-void LayoutMenu::Fill (void)
+void LayoutMenu::Fill()
 {
     SvtLanguageOptions aLanguageOptions;
     bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
@@ -559,7 +559,7 @@ void LayoutMenu::Fill (void)
     mbSelectionUpdatePending = true;
 }
 
-void LayoutMenu::Clear (void)
+void LayoutMenu::Clear()
 {
     for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
@@ -661,7 +661,7 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
     return 0;
 }
 
-void LayoutMenu::UpdateSelection (void)
+void LayoutMenu::UpdateSelection()
 {
     bool bItemSelected = false;
 

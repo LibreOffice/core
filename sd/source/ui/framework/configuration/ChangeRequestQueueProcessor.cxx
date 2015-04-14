@@ -62,7 +62,7 @@ ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
 {
 }
 
-ChangeRequestQueueProcessor::~ChangeRequestQueueProcessor (void)
+ChangeRequestQueueProcessor::~ChangeRequestQueueProcessor()
 {
     if (mnUserEventId != 0)
         Application::RemoveUserEvent(mnUserEventId);
@@ -97,7 +97,7 @@ void ChangeRequestQueueProcessor::AddRequest (
     StartProcessing();
 }
 
-void ChangeRequestQueueProcessor::StartProcessing (void)
+void ChangeRequestQueueProcessor::StartProcessing()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -130,7 +130,7 @@ IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
     return 0;
 }
 
-void ChangeRequestQueueProcessor::ProcessOneEvent (void)
+void ChangeRequestQueueProcessor::ProcessOneEvent()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -169,18 +169,18 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
     }
 }
 
-bool ChangeRequestQueueProcessor::IsEmpty (void) const
+bool ChangeRequestQueueProcessor::IsEmpty() const
 {
     return maQueue.empty();
 }
 
-void ChangeRequestQueueProcessor::ProcessUntilEmpty (void)
+void ChangeRequestQueueProcessor::ProcessUntilEmpty()
 {
     while ( ! IsEmpty())
         ProcessOneEvent();
 }
 
-void ChangeRequestQueueProcessor::Clear (void)
+void ChangeRequestQueueProcessor::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
     maQueue.clear();

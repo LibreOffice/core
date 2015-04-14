@@ -35,7 +35,7 @@ InputStream::InputStream(GFileInputStream *pStream) : Seekable(G_SEEKABLE(pStrea
         throw io::NotConnectedException();
 }
 
-InputStream::~InputStream( void )
+InputStream::~InputStream()
 {
     closeInput();
 }

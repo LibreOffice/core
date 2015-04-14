@@ -120,7 +120,7 @@ OResultSet::~OResultSet()
         m_pRecordSet->Release();
 }
 
-void OResultSet::disposing(void)
+void OResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

@@ -400,7 +400,7 @@ void ControlConverter::convertAxBackground( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_PaintTransparent, !bOpaque );
             // run-through intended!
         case API_TRANSPARENCY_VOID:
-            // keep transparency by leaving the (void) default property value
+            // keep transparency by leaving the() default property value
             if( bOpaque )
                 convertColor( rPropMap, PROP_BackgroundColor, nBackColor );
         break;

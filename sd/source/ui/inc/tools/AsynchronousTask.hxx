@@ -33,13 +33,13 @@ public:
     /** Run the next step of the task.  After HasNextStep() returns false
         this method should ignore further calls.
     */
-    virtual void RunNextStep (void) = 0;
+    virtual void RunNextStep() = 0;
 
     /** Return <TRUE/> when there is at least one more step to execute.
         When the task has been executed completely then <FALSE/> is
         returned.
     */
-    virtual bool HasNextStep (void) = 0;
+    virtual bool HasNextStep() = 0;
 
 protected:
     ~AsynchronousTask() {}

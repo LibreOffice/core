@@ -38,7 +38,7 @@ PopupControl::PopupControl (
 
 
 
-PopupControl::~PopupControl (void)
+PopupControl::~PopupControl()
 {
 }
 

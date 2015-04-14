@@ -48,9 +48,9 @@ public:
     /** Create a new asynchronous call.  Each object of this class processes
         one (semantical) type of call.
     */
-    AsynchronousCall (void);
+    AsynchronousCall();
 
-    ~AsynchronousCall (void);
+    ~AsynchronousCall();
 
     /** Post a function object that is to be executed asynchronously.  When
         this method is called while the current function object has not bee

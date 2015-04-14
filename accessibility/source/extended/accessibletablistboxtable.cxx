@@ -320,7 +320,7 @@ namespace accessibility
 
     // XServiceInfo
 
-    OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException, std::exception)
+    OUString AccessibleTabListBoxTable::getImplementationName() throw (RuntimeException, std::exception)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" );
     }

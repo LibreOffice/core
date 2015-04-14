@@ -1504,7 +1504,7 @@ SwMarkPreview::~SwMarkPreview()
 {
 }
 
-void SwMarkPreview::InitColors( void )
+void SwMarkPreview::InitColors()
 {
     // m_aTransCol and m_aMarkCol are _not_ changed because they are set from outside!
 

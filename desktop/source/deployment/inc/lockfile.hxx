@@ -68,7 +68,7 @@ namespace desktop {
         bool check( fpExecWarning execWarning );
 
         // removes the lockfile
-        ~Lockfile(void);
+        ~Lockfile();
 
     private:
         bool m_bIPCserver;
@@ -81,8 +81,8 @@ namespace desktop {
         OUString m_aId;
         OUString m_aDate;
         // access to data in file
-        void syncToFile(void) const;
-        bool isStale(void) const;
+        void syncToFile() const;
+        bool isStale() const;
         friend bool Lockfile_execWarning( Lockfile * that );
 
     };

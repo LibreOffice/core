@@ -58,7 +58,7 @@ class INetURLHistory_Impl: private boost::noncopyable
 
         /** Initialization.
         */
-        void initialize (void)
+        void initialize()
         {
             m_nMagic = INETHIST_MAGIC_HEAD;
             m_nNext  = 0;
@@ -121,7 +121,7 @@ class INetURLHistory_Impl: private boost::noncopyable
 
     /** Initialization.
     */
-    void initialize (void);
+    void initialize();
 
     static sal_uInt16 capacity()
     {
@@ -159,8 +159,8 @@ class INetURLHistory_Impl: private boost::noncopyable
     }
 
 public:
-    INetURLHistory_Impl (void);
-    ~INetURLHistory_Impl (void);
+    INetURLHistory_Impl();
+    ~INetURLHistory_Impl();
 
     /** putUrl/queryUrl.
     */
@@ -168,16 +168,16 @@ public:
     bool queryUrl (const OUString &rUrl);
 };
 
-INetURLHistory_Impl::INetURLHistory_Impl (void)
+INetURLHistory_Impl::INetURLHistory_Impl()
 {
     initialize();
 }
 
-INetURLHistory_Impl::~INetURLHistory_Impl (void)
+INetURLHistory_Impl::~INetURLHistory_Impl()
 {
 }
 
-void INetURLHistory_Impl::initialize (void)
+void INetURLHistory_Impl::initialize()
 {
     m_aHead.initialize();
 

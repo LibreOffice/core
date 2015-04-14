@@ -973,7 +973,7 @@ OUString ORptFilter::convertFormula(const OUString& _sFormula)
     return _sFormula;
 }
 
-void SAL_CALL ORptFilter::startDocument( void )
+void SAL_CALL ORptFilter::startDocument()
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
@@ -987,7 +987,7 @@ void SAL_CALL ORptFilter::startDocument( void )
     }
 }
 
-void ORptFilter::endDocument( void )
+void ORptFilter::endDocument()
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );

@@ -19,7 +19,7 @@ class OpVLookup: public CheckVariables
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "VLookup"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "VLookup"; }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
 };
 

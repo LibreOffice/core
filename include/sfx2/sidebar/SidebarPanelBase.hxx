@@ -75,20 +75,20 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUIElement
-    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame (void)
+    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getResourceURL (void)
+    virtual ::rtl::OUString SAL_CALL getResourceURL()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getType (void)
+    virtual sal_Int16 SAL_CALL getType()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface (void)
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XToolPanel
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible (
         const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSidebarPanel
@@ -105,9 +105,9 @@ protected:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         vcl::Window* pWindow,
         const css::ui::LayoutSize& rLayoutSize);
-    virtual ~SidebarPanelBase (void);
+    virtual ~SidebarPanelBase();
 
-    virtual void SAL_CALL disposing (void)
+    virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:

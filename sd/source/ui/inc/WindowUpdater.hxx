@@ -53,8 +53,8 @@ class SD_DLLPUBLIC WindowUpdater
     : public utl::ConfigurationListener
 {
 public:
-    explicit WindowUpdater (void);
-    virtual ~WindowUpdater (void) throw();
+    explicit WindowUpdater();
+    virtual ~WindowUpdater() throw();
 
     /** Add the given device to the list of devices which will be updated
         when one of the monitored values changes.

@@ -65,7 +65,7 @@ Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 //===== IconCache =============================================================
 
 //static
-IconCache& IconCache::Instance (void)
+IconCache& IconCache::Instance()
 {
     if (Implementation::mpInstance == NULL)
     {
@@ -95,12 +95,12 @@ Image IconCache::GetIcon (sal_uInt16 nResourceId)
     return mpImpl->GetIcon (nResourceId);
 }
 
-IconCache::IconCache (void)
+IconCache::IconCache()
     : mpImpl (new Implementation())
 {
 }
 
-IconCache::~IconCache (void)
+IconCache::~IconCache()
 {
     // empty
 }

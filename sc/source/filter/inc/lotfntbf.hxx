@@ -37,7 +37,7 @@ private:
         SvxFontHeightItem*  pHeight;
         SvxColorItem*       pColor;
         sal_Int32               nType;      // < 0 -> undefiniert
-        inline              ENTRY( void )
+        inline              ENTRY()
                             {
                                 pTmpName = NULL;
                                 pFont = NULL;

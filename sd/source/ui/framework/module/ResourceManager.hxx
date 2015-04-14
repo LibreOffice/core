@@ -53,16 +53,16 @@ public:
             ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxResourceId);
-    virtual ~ResourceManager (void);
+    virtual ~ResourceManager();
 
     /** Remember the given URL as one of a center pane view for which to
         activate the resource managed by the called object.
     */
     void AddActiveMainView (const OUString& rsMainViewURL);
     bool IsResourceActive (const OUString& rsMainViewURL);
-    virtual void SaveResourceState (void);
+    virtual void SaveResourceState();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfigurationChangeListener
 
@@ -101,7 +101,7 @@ private:
         bool bActivation,
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
-    void UpdateForMainViewShell (void);
+    void UpdateForMainViewShell();
 };
 
 } } // end of namespace sd::framework

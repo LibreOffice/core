@@ -83,7 +83,7 @@ protected:
     void            ClearPrivateVars();
     void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
     void            GlobalRunInit( bool bBasicStart );  // for all modules
-    void            GlobalRunDeInit( void );
+    void            GlobalRunDeInit();
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
                                     bool bFollowJumps, const SbiImage* pImg=NULL ) const;
@@ -158,11 +158,11 @@ public:
 
     virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 
-    SbModule* getClassModule( void )
+    SbModule* getClassModule()
         { return mpClassModule; }
 
-    void triggerInitializeEvent( void );
-    void triggerTerminateEvent( void );
+    void triggerInitializeEvent();
+    void triggerTerminateEvent();
 };
 
 #endif

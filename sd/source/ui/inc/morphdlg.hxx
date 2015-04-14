@@ -38,7 +38,7 @@ public:
         vcl::Window* pParent,
         const SdrObject* pObj1,
         const SdrObject* pObj2);
-    virtual ~MorphDlg (void);
+    virtual ~MorphDlg();
 
     void            SaveSettings() const;
     sal_uInt16      GetFadeSteps() const { return (sal_uInt16) m_pMtfSteps->GetValue(); }

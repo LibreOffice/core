@@ -44,11 +44,11 @@ GraphicViewShell::GraphicViewShell (
     ConstructGraphicViewShell();
 }
 
-GraphicViewShell::~GraphicViewShell (void)
+GraphicViewShell::~GraphicViewShell()
 {
 }
 
-void GraphicViewShell::ConstructGraphicViewShell(void)
+void GraphicViewShell::ConstructGraphicViewShell()
 {
     meShellType = ST_DRAW;
 
@@ -69,7 +69,7 @@ void GraphicViewShell::ChangeEditMode (
     DrawViewShell::ChangeEditMode (eMode, true);
 }
 
-void GraphicViewShell::ArrangeGUIElements (void)
+void GraphicViewShell::ArrangeGUIElements()
 {
     if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
     {

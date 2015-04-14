@@ -68,12 +68,12 @@
 class LwpDLList
 {
 public:
-    LwpDLList(void);
+    LwpDLList();
     virtual ~LwpDLList();
     void insert(LwpDLList*, LwpDLList*);
-    void remove(void);
-    LwpDLList* GetNext(void);
-    LwpDLList* GetPrevious(void);
+    void remove();
+    LwpDLList* GetNext();
+    LwpDLList* GetPrevious();
     void SetNext(LwpDLList*);
     void SetPrevious(LwpDLList*);
 private:
@@ -81,7 +81,7 @@ private:
     LwpDLList* m_pPrevious;
 };
 
-inline LwpDLList* LwpDLList::GetNext(void)
+inline LwpDLList* LwpDLList::GetNext()
 {
     return m_pNext;
 }
@@ -91,7 +91,7 @@ inline void LwpDLList::SetNext(LwpDLList* Next)
     m_pNext = Next;
 }
 
-inline LwpDLList* LwpDLList::GetPrevious(void)
+inline LwpDLList* LwpDLList::GetPrevious()
 {
     return m_pPrevious;
 }

@@ -33,7 +33,7 @@ OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::
 }
 
 /** the base implementation has no supported services */
-::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< OUString> aSeq(0);
     return aSeq;

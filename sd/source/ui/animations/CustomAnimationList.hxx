@@ -71,7 +71,7 @@ public:
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

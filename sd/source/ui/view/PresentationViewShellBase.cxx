@@ -80,11 +80,11 @@ PresentationViewShellBase::PresentationViewShellBase (
     }
 }
 
-PresentationViewShellBase::~PresentationViewShellBase (void)
+PresentationViewShellBase::~PresentationViewShellBase()
 {
 }
 
-void PresentationViewShellBase::InitializeFramework (void)
+void PresentationViewShellBase::InitializeFramework()
 {
     com::sun::star::uno::Reference<com::sun::star::frame::XController>
         xController (GetController());

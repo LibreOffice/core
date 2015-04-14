@@ -31,7 +31,7 @@ namespace sd { namespace slidesorter { namespace view {
 
 FontProvider* FontProvider::mpInstance = NULL;
 
-FontProvider& FontProvider::Instance (void)
+FontProvider& FontProvider::Instance()
 {
     if (mpInstance == NULL)
     {
@@ -62,17 +62,17 @@ FontProvider& FontProvider::Instance (void)
     return *mpInstance;
 }
 
-FontProvider::FontProvider (void)
+FontProvider::FontProvider()
     : maFont(),
       maMapMode()
 {
 }
 
-FontProvider::~FontProvider (void)
+FontProvider::~FontProvider()
 {
 }
 
-void FontProvider::Invalidate (void)
+void FontProvider::Invalidate()
 {
     maFont.reset();
 }

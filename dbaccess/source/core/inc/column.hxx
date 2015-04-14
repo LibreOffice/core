@@ -93,7 +93,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // cppu::OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -229,7 +229,7 @@ namespace dbaccess
         void append(const OUString& rName, OColumn*);
         void clearColumns();
         // only the name is identical to ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     private:
         using OColumns_BASE::setParent;

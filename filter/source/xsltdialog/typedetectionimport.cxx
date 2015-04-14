@@ -50,7 +50,7 @@ TypeDetectionImporter::TypeDetectionImporter()
 {
 }
 
-TypeDetectionImporter::~TypeDetectionImporter (void )
+TypeDetectionImporter::~TypeDetectionImporter()
 {
 }
 

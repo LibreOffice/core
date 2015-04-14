@@ -364,7 +364,7 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleTableBase::createAccessibleDescription(void)
+    ScAccessibleTableBase::createAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
@@ -382,7 +382,7 @@ OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-    ScAccessibleTableBase::getAccessibleRelationSet(void)
+    ScAccessibleTableBase::getAccessibleRelationSet()
     throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
@@ -390,7 +390,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleTableBase::getAccessibleStateSet(void)
+    ScAccessibleTableBase::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
@@ -449,7 +449,7 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSele
 
     //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleTableBase");
@@ -464,7 +464,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleTableBase::getImplementationId(void)
+    ScAccessibleTableBase::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

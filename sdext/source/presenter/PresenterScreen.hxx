@@ -60,12 +60,12 @@ class PresenterScreenJob
       public PresenterScreenJobInterfaceBase
 {
 public:
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XJob
 
@@ -77,7 +77,7 @@ public:
 
 private:
     PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterScreenJob (void);
+    virtual ~PresenterScreenJob();
 
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
@@ -102,25 +102,25 @@ public:
     PresenterScreen (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XModel2>& rxModel);
-    virtual ~PresenterScreen (void);
+    virtual ~PresenterScreen();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     static bool isPresenterScreenEnabled(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     /** Make the presenter screen visible.
     */
-    void InitializePresenterScreen (void);
+    void InitializePresenterScreen();
 
     /** Do not call ShutdownPresenterScreen() directly.  Call
         RequestShutdownPresenterScreen() instead.  It will issue an
         asynchronous call to ShutdownPresenterScreen() when that is safe.
     */
-    void RequestShutdownPresenterScreen (void);
+    void RequestShutdownPresenterScreen();
 
     /** Switch / converse monitors between presenter view and slide output
      */
-    void SwitchMonitors (void);
+    void SwitchMonitors();
 
     // XEventListener
 
@@ -155,7 +155,7 @@ private:
     typedef ::std::map<OUString,ViewDescriptor> ViewDescriptorContainer;
     ViewDescriptorContainer maViewDescriptors;
 
-    void ShutdownPresenterScreen (void);
+    void ShutdownPresenterScreen();
 
     /** Create and initialize the factory for presenter view specific panes.
     */

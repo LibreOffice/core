@@ -102,7 +102,7 @@ MasterPagesSelector::MasterPagesSelector (
     mpContainer->AddChangeListener(aChangeListener);
 }
 
-MasterPagesSelector::~MasterPagesSelector (void)
+MasterPagesSelector::~MasterPagesSelector()
 {
     Clear();
     UpdateLocks(ItemList());
@@ -111,7 +111,7 @@ MasterPagesSelector::~MasterPagesSelector (void)
     mpContainer->RemoveChangeListener(aChangeListener);
 }
 
-void MasterPagesSelector::LateInit (void)
+void MasterPagesSelector::LateInit()
 {
 }
 
@@ -149,7 +149,7 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
     maLockedMasterPages.swap(aNewLockList);
 }
 
-void MasterPagesSelector::Fill (void)
+void MasterPagesSelector::Fill()
 {
     ::std::unique_ptr<ItemList> pItemList (new ItemList());
 
@@ -159,7 +159,7 @@ void MasterPagesSelector::Fill (void)
     UpdateItemList(std::move(pItemList));
 }
 
-ResId MasterPagesSelector::GetContextMenuResId (void) const
+ResId MasterPagesSelector::GetContextMenuResId() const
 {
     return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
 }
@@ -332,7 +332,7 @@ IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChang
     return 0;
 }
 
-SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
+SdPage* MasterPagesSelector::GetSelectedMasterPage()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -483,7 +483,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
     }
 }
 
-void MasterPagesSelector::UpdateSelection (void)
+void MasterPagesSelector::UpdateSelection()
 {
 }
 
@@ -582,7 +582,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
     }
 }
 
-void MasterPagesSelector::UpdateAllPreviews (void)
+void MasterPagesSelector::UpdateAllPreviews()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -602,7 +602,7 @@ void MasterPagesSelector::UpdateAllPreviews (void)
     PreviewValueSet::Rearrange(true);
 }
 
-void MasterPagesSelector::ClearPageSet (void)
+void MasterPagesSelector::ClearPageSet()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -633,7 +633,7 @@ sal_Int32 MasterPagesSelector::GetIndexForToken (MasterPageContainer::Token aTok
         return -1;
 }
 
-void MasterPagesSelector::Clear (void)
+void MasterPagesSelector::Clear()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 

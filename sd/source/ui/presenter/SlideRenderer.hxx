@@ -51,8 +51,8 @@ class SlideRenderer
 {
 public:
     explicit SlideRenderer (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~SlideRenderer (void);
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual ~SlideRenderer();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XInitialization
 
@@ -100,7 +100,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void) throw (css::lang::DisposedException);
+    void ThrowIfDisposed() throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sd::presenter

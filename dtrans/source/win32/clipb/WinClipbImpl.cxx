@@ -181,7 +181,7 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
     OSL_ENSURE( !m_pCurrentClipContent, "Clipboard was not flushed before shutdown!" );
 }
 
-void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
+void WINAPI CWinClipbImpl::onClipboardContentChanged()
 {
     MutexGuard aGuard( s_aMutex );
 

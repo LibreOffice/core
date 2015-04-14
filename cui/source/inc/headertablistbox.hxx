@@ -48,7 +48,7 @@ public:
         return maHeaderBar;
     }
 
-    void                        ConnectElements( void );/**< should be called after all manipulations on elements are done
+    void                        ConnectElements();/**< should be called after all manipulations on elements are done
                                                              calcs real sizes depending on sizes of this */
     void                        Show( bool bVisible = true, sal_uInt16 nFlags = 0 );    ///< same meaning as Windows::Show()
     void                        Enable( bool bEnable = true, bool bChild = true );  ///< same meaning as Windows::Enable()

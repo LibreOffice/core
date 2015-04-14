@@ -54,7 +54,7 @@ namespace connectivity
             virtual ~OEvoabDriver();
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
             // XInterface
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -75,7 +75,7 @@ namespace connectivity
 
         public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        & getMSFactory(void) const { return  m_xFactory; }
+                        & getMSFactory() const { return  m_xFactory; }
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         getComponentContext( ) const { return comphelper::getComponentContext( m_xFactory ); }
 

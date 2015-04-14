@@ -36,14 +36,14 @@ PanelBase::PanelBase (
 #endif
 }
 
-PanelBase::~PanelBase (void)
+PanelBase::~PanelBase()
 {
     OSL_TRACE("deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
     OSL_TRACE("deleting PanelBase at %p from parent %p", this, GetParent());
 }
 
-void PanelBase::Dispose (void)
+void PanelBase::Dispose()
 {
     OSL_TRACE("PanelBase::DisposeL: deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
@@ -57,7 +57,7 @@ css::ui::LayoutSize PanelBase::GetHeightForWidth (const sal_Int32 /*nWidth*/)
     return css::ui::LayoutSize(nHeight,nHeight,nHeight);
 }
 
-void PanelBase::Resize (void)
+void PanelBase::Resize()
 {
     if (ProvideWrappedControl())
     {
@@ -73,7 +73,7 @@ void PanelBase::SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSide
         mxSidebar->requestLayout();
 }
 
-bool PanelBase::ProvideWrappedControl (void)
+bool PanelBase::ProvideWrappedControl()
 {
     if ( ! mpWrappedControl)
     {

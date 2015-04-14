@@ -426,7 +426,7 @@ inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 }
 #endif
 
-inline ::rtl::OUString getCurrentPID( void );
+inline ::rtl::OUString getCurrentPID();
 
 // Beginning of the test cases for FileBase class
 

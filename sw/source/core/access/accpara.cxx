@@ -926,7 +926,7 @@ bool SwAccessibleParagraph::GetTextBoundary(
     return bRet;
 }
 
-OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -940,7 +940,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
     return sDesc;
 }
 
-lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
+lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
         throw (IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -3825,7 +3825,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     return bRet;
 }
 
-sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

@@ -31,7 +31,7 @@ class SdGRFFilter : public SdFilter
 public:
     SdGRFFilter ( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell );
 
-    virtual ~SdGRFFilter (void);
+    virtual ~SdGRFFilter();
 
     bool    Import();
     bool    Export() SAL_OVERRIDE;

@@ -71,14 +71,14 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterPaneFactory (void);
+    virtual ~PresenterPaneFactory();
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-    virtual void SAL_CALL disposing (void)
+    virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XResourceFactory
@@ -119,7 +119,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
         const bool bIsSpritePane);
 
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 } }

@@ -230,7 +230,7 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceNa
 }
 
 ::com::sun::star::uno::Sequence< OUString >
-    SAL_CALL ScIndexEnumeration::getSupportedServiceNames(void)
+    SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);

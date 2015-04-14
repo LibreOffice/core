@@ -58,8 +58,8 @@ public:
     typedef int Token;
     static const Token NIL_TOKEN = -1;
 
-    MasterPageContainer (void);
-    virtual ~MasterPageContainer (void);
+    MasterPageContainer();
+    virtual ~MasterPageContainer();
 
     void AddChangeListener (const Link& rLink);
     void RemoveChangeListener (const Link& rLink);
@@ -75,11 +75,11 @@ public:
 
     /** Returns the preview size.
     */
-    PreviewSize GetPreviewSize (void) const { return mePreviewSize;}
+    PreviewSize GetPreviewSize() const { return mePreviewSize;}
 
     /** Return the preview size in pixels.
     */
-    Size GetPreviewSizePixel (void) const;
+    Size GetPreviewSizePixel() const;
 
     enum PreviewState { PS_AVAILABLE, PS_CREATABLE, PS_PREPARING, PS_NOT_AVAILABLE };
     PreviewState GetPreviewState (Token aToken);
@@ -115,7 +115,7 @@ public:
     /** This and the GetTokenForIndex() methods can be used to iterate over
         all members of the container.
     */
-    int GetTokenCount (void) const;
+    int GetTokenCount() const;
 
     /** Determine whether the container has a member for the given token.
     */

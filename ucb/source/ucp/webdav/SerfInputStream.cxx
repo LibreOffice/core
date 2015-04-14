@@ -32,7 +32,7 @@ using namespace http_dav_ucp;
 
 // Constructor
 
-SerfInputStream::SerfInputStream( void )
+SerfInputStream::SerfInputStream()
 : mLen( 0 ),
   mPos( 0 )
 {
@@ -41,7 +41,7 @@ SerfInputStream::SerfInputStream( void )
 
 // Destructor
 
-SerfInputStream::~SerfInputStream( void )
+SerfInputStream::~SerfInputStream()
 {
 }
 
@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL SerfInputStream::available(  )
 
 // closeInput
 
-void SAL_CALL SerfInputStream::closeInput( void )
+void SAL_CALL SerfInputStream::closeInput()
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException )

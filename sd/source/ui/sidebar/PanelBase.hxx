@@ -44,12 +44,12 @@ public:
     PanelBase (
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
-    virtual ~PanelBase (void);
+    virtual ~PanelBase();
 
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     // IDisposable
-    virtual void Dispose (void) SAL_OVERRIDE;
+    virtual void Dispose() SAL_OVERRIDE;
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
@@ -67,7 +67,7 @@ private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     ViewShellBase& mrViewShellBase;
 
-    bool ProvideWrappedControl (void);
+    bool ProvideWrappedControl();
 };
 
 } } // end of namespace sd::sidebar

@@ -56,9 +56,9 @@ public:
     */
     ToolBarModule (
         const css::uno::Reference<css::frame::XController>& rxController);
-    virtual ~ToolBarModule (void);
+    virtual ~ToolBarModule();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfigurationChangeListener
 
@@ -79,8 +79,8 @@ private:
     ::boost::scoped_ptr<ToolBarManager::UpdateLock> mpToolBarManagerLock;
     bool mbMainViewSwitchUpdatePending;
 
-    void HandleUpdateStart (void);
-    void HandleUpdateEnd (void);
+    void HandleUpdateStart();
+    void HandleUpdateEnd();
 };
 
 } } // end of namespace sd::framework

@@ -212,19 +212,19 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 }
 
 
-OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
+OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName() {
     return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
 
 
-OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
+OUString SAL_CALL LdapUserProfileBe::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
     return getLdapUserProfileBeName() ;
 }
 
 
-uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames()
 {
     uno::Sequence<OUString> aServices(1) ;
     aServices[0] = "com.sun.star.configuration.backend.LdapUserProfileBe";
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceNam
 }
 
 uno::Sequence<OUString>
-SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
+SAL_CALL LdapUserProfileBe::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
     return getLdapUserProfileBeServiceNames() ;

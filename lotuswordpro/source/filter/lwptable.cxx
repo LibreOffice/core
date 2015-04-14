@@ -190,7 +190,7 @@ LwpGlossary::LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpParalle
 LwpGlossary::~LwpGlossary()
 {
 }
-sal_uInt16 LwpGlossary::GetNumIndexRows(void)
+sal_uInt16 LwpGlossary::GetNumIndexRows()
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
         return GetRow() - 1;    // Minus one row for repeated heading.

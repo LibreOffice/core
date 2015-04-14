@@ -86,7 +86,7 @@ namespace connectivity
             // XServiceInfo
             DECLARE_SERVICE_INFO();
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual void SAL_CALL release() throw();
 

@@ -67,12 +67,12 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription() throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sLclName = SwAccessibleDocumentBase::getAccessibleName();
     sLclName += " ";

@@ -32,7 +32,7 @@ namespace desktop
     class CmdlineHelpDialog : public ModalDialog
     {
     public:
-        CmdlineHelpDialog ( void );
+        CmdlineHelpDialog();
 
         FixedText*   m_pftHead;
         FixedText*   m_pftLeft;

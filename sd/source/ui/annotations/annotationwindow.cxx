@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(AnnotationWindow, ModifyHdl)
     return 0;
 }
 
-SvxLanguageItem AnnotationWindow::GetLanguage(void)
+SvxLanguageItem AnnotationWindow::GetLanguage()
 {
     return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );
 }

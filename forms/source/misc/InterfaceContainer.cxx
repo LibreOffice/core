@@ -983,7 +983,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     if (xSet.is())
         xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
-    // give the old element a new (void) parent
+    // give the old element a new() parent
     Reference<XChild>  xChild(xOldElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(InterfaceRef ());

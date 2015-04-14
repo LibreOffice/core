@@ -89,7 +89,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED);
 }
 
-CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
+CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 {
     if (mrDocument.GetDocSh() != NULL)
     {
@@ -104,7 +104,7 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
 
-void CurrentMasterPagesSelector::LateInit (void)
+void CurrentMasterPagesSelector::LateInit()
 {
     MasterPagesSelector::LateInit();
     MasterPagesSelector::Fill();
@@ -157,12 +157,12 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
     }
 }
 
-ResId CurrentMasterPagesSelector::GetContextMenuResId (void) const
+ResId CurrentMasterPagesSelector::GetContextMenuResId() const
 {
     return SdResId(RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP);
 }
 
-void CurrentMasterPagesSelector::UpdateSelection (void)
+void CurrentMasterPagesSelector::UpdateSelection()
 {
     // Iterate over all pages and for the selected ones put the name of
     // their master page into a set.

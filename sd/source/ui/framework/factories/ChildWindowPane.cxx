@@ -88,11 +88,11 @@ ChildWindowPane::ChildWindowPane (
     }
 }
 
-ChildWindowPane::~ChildWindowPane (void)
+ChildWindowPane::~ChildWindowPane()
 {
 }
 
-void ChildWindowPane::Hide (void)
+void ChildWindowPane::Hide()
 {
     SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
     if (pViewFrame != NULL)
@@ -105,7 +105,7 @@ void ChildWindowPane::Hide (void)
     mxWindow = NULL;
 }
 
-void SAL_CALL ChildWindowPane::disposing (void)
+void SAL_CALL ChildWindowPane::disposing()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -120,7 +120,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
     Pane::disposing();
 }
 
-::vcl::Window* ChildWindowPane::GetWindow (void)
+::vcl::Window* ChildWindowPane::GetWindow()
 {
     do
     {
@@ -185,7 +185,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
     return mpWindow;
 }
 
-Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow (void)
+Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow()
     throw (RuntimeException, std::exception)
 {
     if (mpWindow == NULL || ! mxWindow.is())

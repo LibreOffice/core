@@ -70,7 +70,7 @@ public:
     /** This constructor is used when a PresenterCanvas object is created as
         a service.
     */
-    PresenterCanvas (void);
+    PresenterCanvas();
 
     /** This constructor is used when a PresenterCanvas object is created
         directly, typically by the PresenterCanvasFactory.
@@ -105,9 +105,9 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
-    virtual ~PresenterCanvas (void);
+    virtual ~PresenterCanvas();
 
-    virtual void SAL_CALL disposing (void)
+    virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
@@ -119,7 +119,7 @@ public:
         const css::rendering::ViewState& rViewState,
         const css::awt::Point& raOffset);
 
-    css::uno::Reference<css::rendering::XCanvas> GetSharedCanvas (void) const;
+    css::uno::Reference<css::rendering::XCanvas> GetSharedCanvas() const;
 
     /** This method is typically called by CanvasPane objects to set the
         repaint rectangle of a windowPaint() call as clip rectangle.  When
@@ -160,7 +160,7 @@ public:
 
     // XCanvas
 
-    virtual void SAL_CALL clear (void)
+    virtual void SAL_CALL clear()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL drawPoint (
@@ -305,7 +305,7 @@ public:
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
-        getDevice (void)
+        getDevice()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSpriteCanvas
@@ -358,10 +358,10 @@ public:
 
     // XBitmap
 
-    virtual css::geometry::IntegerSize2D SAL_CALL getSize (void)
+    virtual css::geometry::IntegerSize2D SAL_CALL getSize()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL hasAlpha (void)
+    virtual sal_Bool SAL_CALL hasAlpha()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
@@ -411,7 +411,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

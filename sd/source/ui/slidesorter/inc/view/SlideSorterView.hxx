@@ -74,23 +74,23 @@ public:
 
     */
     SlideSorterView (SlideSorter& rSlideSorter);
-    void Init (void);
+    void Init();
 
-    virtual ~SlideSorterView (void);
-    void Dispose (void);
+    virtual ~SlideSorterView();
+    void Dispose();
 
     /** Set the general way of layouting the page objects.  Note that this
         method does not trigger any repaints or layouts.
     */
     bool SetOrientation (const Layouter::Orientation eOrientation);
-    Layouter::Orientation GetOrientation (void) const { return meOrientation;}
+    Layouter::Orientation GetOrientation() const { return meOrientation;}
 
-    void RequestRepaint (void);
+    void RequestRepaint();
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
     void RequestRepaint (const Rectangle& rRepaintBox);
     void RequestRepaint (const ::vcl::Region& rRepaintRegion);
 
-    Rectangle GetModelArea (void);
+    Rectangle GetModelArea();
 
     /** Return the index of the page that is rendered at the given position.
         @param rPosition
@@ -101,9 +101,9 @@ public:
     */
     sal_Int32 GetPageIndexAtPoint (const Point& rPosition) const;
 
-    view::Layouter& GetLayouter (void);
+    view::Layouter& GetLayouter();
 
-    virtual void ModelHasChanged (void) SAL_OVERRIDE;
+    virtual void ModelHasChanged() SAL_OVERRIDE;
 
     /** This method is typically called before a model change takes place.
         All references to model data are released.  PostModelChange() has to
@@ -111,22 +111,22 @@ public:
         calls to Pre- and PostModelChange() are very close to each other you
         may call HandleModelChange() instead.
     */
-    void PreModelChange (void);
+    void PreModelChange();
 
     /** This method is typically called after a model change took place.
         References to model data are re-allocated.  Call this method only
         after PreModelChange() has been called.
     */
-    void PostModelChange (void);
+    void PostModelChange();
 
     /** This method is a convenience function that simply calls
         PreModelChange() and then PostModelChange().
     */
-    void HandleModelChange (void);
+    void HandleModelChange();
 
-    void HandleDrawModeChange (void);
+    void HandleDrawModeChange();
 
-    void Resize (void);
+    void Resize();
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const ::vcl::Region& rPaintArea,
@@ -137,19 +137,19 @@ public:
         utl::ConfigurationBroadcaster* pBroadcaster,
         sal_uInt32 nHint) SAL_OVERRIDE;
 
-    void HandleDataChangeEvent (void);
+    void HandleDataChangeEvent();
 
-    void Layout (void);
+    void Layout();
     /** This tells the view that it has to re-determine the visibility of
         the page objects before painting them the next time.
     */
-    void InvalidatePageObjectVisibilities (void);
+    void InvalidatePageObjectVisibilities();
 
     /** Return the window to which this view renders its output.
     */
-    //    ::boost::shared_ptr<sd::Window> GetWindow (void) const;
+    //    ::boost::shared_ptr<sd::Window> GetWindow() const;
 
-    ::boost::shared_ptr<cache::PageCache> GetPreviewCache (void);
+    ::boost::shared_ptr<cache::PageCache> GetPreviewCache();
 
     /** Set the bounding box of the insertion marker in model coordinates.
 
@@ -177,7 +177,7 @@ public:
             The returned pair of page object indices is empty when the
             second index is lower than the first.
     */
-    Pair GetVisiblePageRange (void);
+    Pair GetVisiblePageRange();
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
@@ -211,26 +211,26 @@ public:
         const model::PageDescriptor::State eState,
         const bool bStateValue);
 
-    void UpdateOrientation (void);
+    void UpdateOrientation();
 
-    ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
-    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const { return mpLayeredDevice;}
+    ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter();
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice() const { return mpLayeredDevice;}
 
     class DrawLock
     {
     public:
         DrawLock (SlideSorter& rSlideSorter);
-        ~DrawLock (void);
+        ~DrawLock();
         /** When the DrawLock is disposed then it will not request a repaint
             on destruction.
         */
-        void Dispose (void);
+        void Dispose();
     private:
         view::SlideSorterView& mrView;
         SharedSdWindow mpWindow;
     };
 
-    ToolTip& GetToolTip (void) const;
+    ToolTip& GetToolTip() const;
 
     virtual void DragFinished (sal_Int8 nDropAction) SAL_OVERRIDE;
 
@@ -263,11 +263,11 @@ private:
 
     /** Determine the visibility of all page objects.
     */
-    void DeterminePageObjectVisibilities (void);
+    void DeterminePageObjectVisibilities();
 
-    void UpdatePreciousFlags (void);
-    void RequestRearrange (void);
-    void Rearrange (void);
+    void UpdatePreciousFlags();
+    void RequestRearrange();
+    void Rearrange();
 };
 
 } } } // end of namespace ::sd::slidesorter::view

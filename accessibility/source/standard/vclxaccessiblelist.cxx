@@ -96,7 +96,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
 }
 
 
-VCLXAccessibleList::~VCLXAccessibleList (void)
+VCLXAccessibleList::~VCLXAccessibleList()
 {
     delete m_pListBoxHelper;
 }
@@ -108,7 +108,7 @@ void VCLXAccessibleList::SetIndexInParent (sal_Int32 nIndex)
 }
 
 
-void SAL_CALL VCLXAccessibleList::disposing (void)
+void SAL_CALL VCLXAccessibleList::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
@@ -561,7 +561,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleList, VCLXAccessibleComponent, VC
 //=====  XAccessible  =========================================================
 
 Reference<XAccessibleContext> SAL_CALL
-    VCLXAccessibleList::getAccessibleContext (void)
+    VCLXAccessibleList::getAccessibleContext()
     throw (RuntimeException, std::exception)
 {
     return this;
@@ -570,7 +570,7 @@ Reference<XAccessibleContext> SAL_CALL
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
+sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -614,7 +614,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
     return m_xParent;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
+sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
@@ -623,20 +623,20 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
         return VCLXAccessibleComponent::getAccessibleIndexInParent();
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole (void)
+sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole()
     throw (RuntimeException, std::exception)
 {
     return AccessibleRole::LIST;
 }
 
 //===== XServiceInfo ==========================================================
-OUString VCLXAccessibleList::getImplementationName (void)
+OUString VCLXAccessibleList::getImplementationName()
     throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleList" );
 }
 
-Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();

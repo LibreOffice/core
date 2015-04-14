@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {
 
-PresenterCanvasHelper::PresenterCanvasHelper (void)
+PresenterCanvasHelper::PresenterCanvasHelper()
     : maDefaultViewState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL),
@@ -42,7 +42,7 @@ PresenterCanvasHelper::PresenterCanvasHelper (void)
 {
 }
 
-PresenterCanvasHelper::~PresenterCanvasHelper (void)
+PresenterCanvasHelper::~PresenterCanvasHelper()
 {
 }
 

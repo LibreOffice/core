@@ -92,7 +92,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 }
 
 // XFormsSupplier
-::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  xForms;
 
@@ -104,7 +104,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 }
 
 // XFormsSupplier2
-sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL SvxFmDrawPage::hasForms() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     bool bHas = false;
     FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetSdrPage() );
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::Ru
 }
 
 // ::com::sun::star::lang::XServiceInfo
-::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return SvxDrawPage::getSupportedServiceNames();
 }

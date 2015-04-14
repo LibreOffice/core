@@ -63,7 +63,7 @@ namespace {
             }
         }
 
-        ~DeactivateUpdateMode( void )
+        ~DeactivateUpdateMode()
         {
             if ( mbUpdateMode )
             {

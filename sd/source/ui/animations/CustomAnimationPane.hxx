@@ -113,7 +113,7 @@ private:
 
     ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
-    void UpdateLook (void);
+    void UpdateLook();
 
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK(implPropertyHdl, void *);
@@ -168,7 +168,7 @@ private:
     /** This method initializes the mpCustomAnimationPresets on demand and
         returns a reference to the list.
     */
-    const CustomAnimationPresets& getPresets (void);
+    const CustomAnimationPresets& getPresets();
 
     MotionPathTagVector maMotionPathTags;
 

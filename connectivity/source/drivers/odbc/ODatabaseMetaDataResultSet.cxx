@@ -86,7 +86,7 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
     delete [] m_pRowStatusArray;
 }
 
-void ODatabaseMetaDataResultSet::disposing(void)
+void ODatabaseMetaDataResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

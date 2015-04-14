@@ -23,7 +23,7 @@
 #include "hfont.h"
 /* 이 함수는 HWP 파일을 해석하는 부분이다. */
 
-HWPFont::HWPFont(void)
+HWPFont::HWPFont()
 {
     for (int ii = 0; ii < NLanguage; ii++)
     {
@@ -33,7 +33,7 @@ HWPFont::HWPFont(void)
 }
 
 
-HWPFont::~HWPFont(void)
+HWPFont::~HWPFont()
 {
     for (int ii = 0; ii < NLanguage; ii++)
     {

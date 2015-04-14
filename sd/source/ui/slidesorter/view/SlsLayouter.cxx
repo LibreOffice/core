@@ -78,7 +78,7 @@ public:
         const Implementation& rImplementation,
         const Layouter::Orientation eOrientation);
 
-    virtual Layouter::Orientation GetOrientation (void) const = 0;
+    virtual Layouter::Orientation GetOrientation() const = 0;
 
     bool Rearrange (
         const Size& rWindowSize,
@@ -172,8 +172,8 @@ public:
         model::SlideSorterModel& rModel,
         const sal_Int32 nIndex) const;
 
-    Range GetValidHorizontalSizeRange (void) const;
-    Range GetValidVerticalSizeRange (void) const;
+    Range GetValidHorizontalSizeRange() const;
+    Range GetValidVerticalSizeRange() const;
 
     Range GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const;
     sal_Int32 GetIndex (
@@ -194,9 +194,9 @@ public:
         const sal_Int32 nRow,
         const sal_Int32 nColumn) const;
 
-    Rectangle GetTotalBoundingBox (void) const;
+    Rectangle GetTotalBoundingBox() const;
 
-    virtual ~Implementation (void);
+    virtual ~Implementation();
 
 protected:
     Implementation (
@@ -227,7 +227,7 @@ class VerticalImplementation : public Layouter::Implementation
 public:
     VerticalImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
@@ -249,7 +249,7 @@ class HorizontalImplementation : public Layouter::Implementation
 public:
     HorizontalImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
@@ -275,7 +275,7 @@ public:
         const ::boost::shared_ptr<view::Theme>& rpTheme);
     GridImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
@@ -299,11 +299,11 @@ Layouter::Layouter (
 {
 }
 
-Layouter::~Layouter (void)
+Layouter::~Layouter()
 {
 }
 
-::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter (void) const
+::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter() const
 {
     return mpImplementation->mpPageObjectLayouter;
 }
@@ -333,7 +333,7 @@ bool Layouter::Rearrange (
     return mpImplementation->Rearrange(rWindowSize, rPageSize, nPageCount);
 }
 
-sal_Int32 Layouter::GetColumnCount (void) const
+sal_Int32 Layouter::GetColumnCount() const
 {
     return mpImplementation->mnColumnCount;
 }
@@ -343,7 +343,7 @@ sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) con
     return mpImplementation->GetIndex(nRow,nColumn,true);
 }
 
-Size Layouter::GetPageObjectSize (void) const
+Size Layouter::GetPageObjectSize() const
 {
     return mpImplementation->maPageObjectSize;
 }
@@ -355,7 +355,7 @@ Rectangle Layouter::GetPageObjectBox (
     return mpImplementation->GetPageObjectBox(nIndex, bIncludeBorderAndGap);
 }
 
-Rectangle Layouter::GetTotalBoundingBox (void) const
+Rectangle Layouter::GetTotalBoundingBox() const
 {
     return mpImplementation->GetTotalBoundingBox();
 }
@@ -377,12 +377,12 @@ InsertPosition Layouter::GetInsertPosition (
     return aPosition;
 }
 
-Range Layouter::GetValidHorizontalSizeRange (void) const
+Range Layouter::GetValidHorizontalSizeRange() const
 {
     return mpImplementation->GetValidHorizontalSizeRange();
 }
 
-Range Layouter::GetValidVerticalSizeRange (void) const
+Range Layouter::GetValidVerticalSizeRange() const
 {
     return mpImplementation->GetValidVerticalSizeRange();
 }
@@ -484,7 +484,7 @@ Layouter::Implementation::Implementation (const Implementation& rImplementation)
 {
 }
 
-Layouter::Implementation::~Implementation (void)
+Layouter::Implementation::~Implementation()
 {
 }
 
@@ -813,14 +813,14 @@ Rectangle Layouter::Implementation::GetInnerBoundingBox (
             PageObjectLayouter::ModelCoordinateSystem, true);
 }
 
-Range Layouter::Implementation::GetValidHorizontalSizeRange (void) const
+Range Layouter::Implementation::GetValidHorizontalSizeRange() const
 {
     return Range(
         mnLeftBorder + maMinimalSize.Width() + mnRightBorder,
         mnLeftBorder + maMaximalSize.Width() + mnRightBorder);
 }
 
-Range Layouter::Implementation::GetValidVerticalSizeRange (void) const
+Range Layouter::Implementation::GetValidVerticalSizeRange() const
 {
     return Range(
         mnTopBorder + maMinimalSize.Height() + mnBottomBorder,
@@ -962,7 +962,7 @@ Rectangle Layouter::Implementation::AddBorderAndGap (
     return aBoundingBox;
 }
 
-Rectangle Layouter::Implementation::GetTotalBoundingBox (void) const
+Rectangle Layouter::Implementation::GetTotalBoundingBox() const
 {
     sal_Int32 nHorizontalSize = 0;
     sal_Int32 nVerticalSize = 0;
@@ -1012,7 +1012,7 @@ HorizontalImplementation::HorizontalImplementation (const Implementation& rImple
 {
 }
 
-Layouter::Orientation HorizontalImplementation::GetOrientation (void) const
+Layouter::Orientation HorizontalImplementation::GetOrientation() const
 {
     return Layouter::HORIZONTAL;
 }
@@ -1063,7 +1063,7 @@ VerticalImplementation::VerticalImplementation (const Implementation& rImplement
 {
 }
 
-Layouter::Orientation VerticalImplementation::GetOrientation (void) const
+Layouter::Orientation VerticalImplementation::GetOrientation() const
 {
     return Layouter::VERTICAL;
 }
@@ -1113,7 +1113,7 @@ GridImplementation::GridImplementation (const Implementation& rImplementation)
 {
 }
 
-Layouter::Orientation GridImplementation::GetOrientation (void) const
+Layouter::Orientation GridImplementation::GetOrientation() const
 {
     return Layouter::GRID;
 }
@@ -1186,7 +1186,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
 
 //===== InsertPosition ========================================================
 
-InsertPosition::InsertPosition (void)
+InsertPosition::InsertPosition()
     : mnRow(-1),
       mnColumn(-1),
       mnIndex(-1),

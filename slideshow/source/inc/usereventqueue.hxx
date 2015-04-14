@@ -222,7 +222,7 @@ public:
         or key presses that trigger the next effect.  This method allows the
         skipping of effects to be triggered programatically.
     */
-    void callSkipEffectEventHandler (void);
+    void callSkipEffectEventHandler();
 
 private:
     /** Generically register an event on one of the handlers.

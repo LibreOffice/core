@@ -196,9 +196,9 @@ private:
     bool                                    bFilteredRangeSelection;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
-    sal_Int16                   GetZoom(void) const;
+    sal_Int16                   GetZoom() const;
     void                    SetZoom(sal_Int16 Zoom);
-    sal_Int16                   GetZoomType(void) const;
+    sal_Int16                   GetZoomType() const;
     void                    SetZoomType(sal_Int16 ZoomType);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetClickedObject(const Point& rPoint) const;

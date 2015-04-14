@@ -311,7 +311,7 @@ AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInf
 
 
 
-AccessibleTableShape::~AccessibleTableShape (void)
+AccessibleTableShape::~AccessibleTableShape()
 {
 }
 
@@ -380,20 +380,20 @@ void SAL_CALL AccessibleTableShape::release(  ) throw ()
 // XAccessible
 
 
-Reference< XAccessibleContext > SAL_CALL AccessibleTableShape::getAccessibleContext(void) throw (RuntimeException, std::exception)
+Reference< XAccessibleContext > SAL_CALL AccessibleTableShape::getAccessibleContext() throw (RuntimeException, std::exception)
 {
     return AccessibleShape::getAccessibleContext ();
 }
 
 
-OUString SAL_CALL AccessibleTableShape::getImplementationName(void) throw (RuntimeException, std::exception)
+OUString SAL_CALL AccessibleTableShape::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.accessibility.AccessibleTableShape" );
 }
 
 
 
-OUString AccessibleTableShape::CreateAccessibleBaseName(void) throw (RuntimeException)
+OUString AccessibleTableShape::CreateAccessibleBaseName() throw (RuntimeException)
 {
     return OUString("TableShape");
 }
@@ -423,14 +423,14 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableShape::getAccessible
 
 
 
-sal_Int16 SAL_CALL AccessibleTableShape::getAccessibleRole (void) throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL AccessibleTableShape::getAccessibleRole() throw (RuntimeException, std::exception)
 {
     return AccessibleRole::TABLE;
 }
 
 
 
-void SAL_CALL AccessibleTableShape::disposing (void)
+void SAL_CALL AccessibleTableShape::disposing()
 {
     mxImpl->dispose();
 
@@ -1037,13 +1037,13 @@ AccessibleTableHeaderShape::AccessibleTableHeaderShape( AccessibleTableShape* pT
     mbRow = bRow;
 }
 
-AccessibleTableHeaderShape::~AccessibleTableHeaderShape (void)
+AccessibleTableHeaderShape::~AccessibleTableHeaderShape()
 {
     mpTable = NULL;
 }
 
 // XAccessible
-Reference< XAccessibleContext > SAL_CALL AccessibleTableHeaderShape::getAccessibleContext(void) throw (RuntimeException, std::exception)
+Reference< XAccessibleContext > SAL_CALL AccessibleTableHeaderShape::getAccessibleContext() throw (RuntimeException, std::exception)
 {
     return this;
 }
@@ -1059,43 +1059,43 @@ Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleChild
     return mpTable->getAccessibleChild( i );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleParent (void) throw (RuntimeException, std::exception)
+Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleParent() throw (RuntimeException, std::exception)
 {
     Reference< XAccessible > XParent;
     return XParent;
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleIndexInParent (void) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleIndexInParent() throw (RuntimeException, std::exception)
 {
     return -1;
 }
 
-sal_Int16 SAL_CALL AccessibleTableHeaderShape::getAccessibleRole (void) throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL AccessibleTableHeaderShape::getAccessibleRole() throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleRole();
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleDescription (void) throw (RuntimeException, std::exception)
+OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleDescription() throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleDescription();
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleName (void) throw (RuntimeException, std::exception)
+OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleName() throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleName();
 }
 
-Reference< XAccessibleStateSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet (void) throw (RuntimeException, std::exception)
+Reference< XAccessibleStateSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet() throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleStateSet();
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleRelationSet (void) throw (RuntimeException, std::exception)
+Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleRelationSet() throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleRelationSet();
 }
 
-Locale SAL_CALL AccessibleTableHeaderShape::getLocale (void) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
+Locale SAL_CALL AccessibleTableHeaderShape::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     return mpTable->getLocale();
 }
@@ -1111,37 +1111,37 @@ Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleAtPoi
     return mpTable->getAccessibleAtPoint( aPoint );
 }
 
-::com::sun::star::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds (void) throw (RuntimeException, std::exception)
+::com::sun::star::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds() throw (RuntimeException, std::exception)
 {
     return mpTable->getBounds();
 }
 
-::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation (void) throw (RuntimeException, std::exception)
+::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation() throw (RuntimeException, std::exception)
 {
     return mpTable->getLocation();
 }
 
-::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen (void) throw (RuntimeException, std::exception)
+::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen() throw (RuntimeException, std::exception)
 {
     return mpTable->getLocationOnScreen();
 }
 
-::com::sun::star::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize (void) throw (RuntimeException, std::exception)
+::com::sun::star::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize() throw (RuntimeException, std::exception)
 {
     return mpTable->getSize();
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getForeground (void) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleTableHeaderShape::getForeground() throw (RuntimeException, std::exception)
 {
     return mpTable->getForeground();
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getBackground (void) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleTableHeaderShape::getBackground() throw (RuntimeException, std::exception)
 {
     return mpTable->getBackground();
 }
 
-void SAL_CALL AccessibleTableHeaderShape::grabFocus (void) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleTableHeaderShape::grabFocus() throw (RuntimeException, std::exception)
 {
     mpTable->grabFocus();
 }

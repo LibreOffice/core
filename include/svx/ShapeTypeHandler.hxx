@@ -63,7 +63,7 @@ struct ShapeTypeDescriptor
         msServiceName (sName),
            maCreateFunction (aFunction)
     {}
-    ShapeTypeDescriptor (void)
+    ShapeTypeDescriptor()
     :   mnShapeTypeId (-1),
         msServiceName (),
            maCreateFunction (NULL)
@@ -85,7 +85,7 @@ public:
         @return
             Returns a reference to a ShapeTypeHandler object.
      */
-    static ShapeTypeHandler& Instance (void);
+    static ShapeTypeHandler& Instance();
 
     /**  Determines the type id of a shape with the given service name.
          @param aServiceName
@@ -161,14 +161,14 @@ protected:
     // Declare default constructor, copy constructor, destructor, and
     // assignment operation protected so that no one accidentally creates a
     // second instance of this singleton class or deletes it.
-    ShapeTypeHandler (void);
+    ShapeTypeHandler();
     ShapeTypeHandler (const ShapeTypeHandler& aHandler);             // never implemented, this is a singleton class
     ShapeTypeHandler& operator= (const ShapeTypeHandler& aHandler); // never implemented, this is a singleton class
 
     /** This destructor is never called at the moment.  But because this
         class is a singleton this is not a problem.
     */
-    virtual ~ShapeTypeHandler (void);
+    virtual ~ShapeTypeHandler();
 
 private:
     /// Pointer to the only instance of this class.

@@ -1416,7 +1416,7 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
     }
 }
 
-void StarBASIC::ClearAllModuleVars( void )
+void StarBASIC::ClearAllModuleVars()
 {
     // Initialise the own module
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
@@ -1470,7 +1470,7 @@ void SbModule::GlobalRunInit( bool bBasicStart )
     }
 }
 
-void SbModule::GlobalRunDeInit( void )
+void SbModule::GlobalRunDeInit()
 {
     StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());
     if( pBasic )
@@ -2519,20 +2519,20 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
     }
 }
 
-void SbUserFormModule::triggerActivateEvent( void )
+void SbUserFormModule::triggerActivateEvent()
 {
     SAL_INFO("basic", "**** entering SbUserFormModule::triggerActivate");
     triggerMethod( "UserForm_Activate" );
     SAL_INFO("basic", "**** leaving SbUserFormModule::triggerActivate");
 }
 
-void SbUserFormModule::triggerDeactivateEvent( void )
+void SbUserFormModule::triggerDeactivateEvent()
 {
     SAL_INFO("basic", "**** SbUserFormModule::triggerDeactivate");
     triggerMethod( "Userform_Deactivate" );
 }
 
-void SbUserFormModule::triggerInitializeEvent( void )
+void SbUserFormModule::triggerInitializeEvent()
 {
     if ( mbInit )
         return;
@@ -2541,19 +2541,19 @@ void SbUserFormModule::triggerInitializeEvent( void )
     mbInit = true;
 }
 
-void SbUserFormModule::triggerTerminateEvent( void )
+void SbUserFormModule::triggerTerminateEvent()
 {
     SAL_INFO("basic", "**** SbUserFormModule::triggerTerminateEvent");
     triggerMethod(OUString( "Userform_Terminate" ));
     mbInit=false;
 }
 
-void SbUserFormModule::triggerLayoutEvent( void )
+void SbUserFormModule::triggerLayoutEvent()
 {
     triggerMethod(OUString( "Userform_Layout" ));
 }
 
-void SbUserFormModule::triggerResizeEvent( void )
+void SbUserFormModule::triggerResizeEvent()
 {
     triggerMethod(OUString("Userform_Resize"));
 }

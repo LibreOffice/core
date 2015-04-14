@@ -42,7 +42,7 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-TabItem::~TabItem (void)
+TabItem::~TabItem()
 {
 }
 

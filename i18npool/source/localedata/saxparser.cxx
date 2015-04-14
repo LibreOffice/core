@@ -200,7 +200,7 @@ public: // ExtendedDocumentHandler
     stack<LocaleNode *> currentNode ;
     LocaleNode * rootNode;
 
-    virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE
     {
     printf( "parsing document %s started\n", theLocale);
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
@@ -208,7 +208,7 @@ public: // ExtendedDocumentHandler
     of.writeAsciiString("extern \"C\" {\n\n");
     }
 
-    virtual void SAL_CALL endDocument(void) throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         if (rootNode)
         {
@@ -289,10 +289,10 @@ public: // ExtendedDocumentHandler
         return source;
     }
 
-    virtual void SAL_CALL startCDATA(void) throw (SAXException,RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL startCDATA() throw (SAXException,RuntimeException, std::exception) SAL_OVERRIDE
     {
     }
-    virtual void SAL_CALL endCDATA(void) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL endCDATA() throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
     }
     virtual void SAL_CALL comment(const OUString& /*sComment*/) throw (SAXException,RuntimeException, std::exception) SAL_OVERRIDE
@@ -302,7 +302,7 @@ public: // ExtendedDocumentHandler
     {
     }
 
-    virtual void SAL_CALL allowLineBreak( void) throw (SAXException, RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL allowLineBreak() throw (SAXException, RuntimeException, std::exception ) SAL_OVERRIDE
     {
 
     }

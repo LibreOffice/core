@@ -126,28 +126,28 @@ struct OStoreBTreeNodeData : public store::OStorePageData
 
     /** capacity.
     */
-    sal_uInt16 capacity (void) const
+    sal_uInt16 capacity() const
     {
         return (store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
     }
 
     /** capacityCount (must be even).
     */
-    sal_uInt16 capacityCount (void) const
+    sal_uInt16 capacityCount() const
     {
         return sal_uInt16(capacity() / sizeof(T));
     }
 
     /** usage.
     */
-    sal_uInt16 usage (void) const
+    sal_uInt16 usage() const
     {
         return (store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
     }
 
     /** usageCount.
     */
-    sal_uInt16 usageCount (void) const
+    sal_uInt16 usageCount() const
     {
         return sal_uInt16(usage() / sizeof(T));
     }
@@ -186,7 +186,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
 
     /** depth.
     */
-    sal_uInt32 depth (void) const
+    sal_uInt32 depth() const
     {
         return store::ntohl(self::m_aGuard.m_nMagic);
     }
@@ -204,7 +204,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
 
     /** querySplit.
     */
-    bool querySplit (void) const
+    bool querySplit() const
     {
         return (!(usageCount() < capacityCount()));
     }

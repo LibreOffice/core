@@ -254,7 +254,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XTypeConverter
@@ -281,7 +281,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw(
 }
 
 // XServiceInfo
-Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > seqNames(1);
     seqNames.getArray()[0] = "com.sun.star.script.Converter";

@@ -509,7 +509,7 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
     return 0;
 }
 
-void SdTpOptionsMisc::SetImpressMode (void)
+void SdTpOptionsMisc::SetImpressMode()
 {
 #ifndef ENABLE_SDREMOTE_BLUETOOTH
     m_pCbxEnableSdremote->Hide();
@@ -570,7 +570,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     return true;
 }
 
-void SdTpOptionsMisc::UpdateCompatibilityControls (void)
+void SdTpOptionsMisc::UpdateCompatibilityControls()
 {
     // Disable the compatibility controls by default.  Enable them only when
     // there is at least one open document.

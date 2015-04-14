@@ -117,7 +117,7 @@ namespace dbaui
         {
             return OUString("org.openoffice.comp.dbu.OViewDesign");
         }
-        static Sequence< OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
+        static Sequence< OUString > getSupportedServiceNames_Static() throw( RuntimeException )
         {
             Sequence< OUString> aSupported(1);
             aSupported.getArray()[0] = "com.sun.star.sdb.ViewDesign";
@@ -308,7 +308,7 @@ OUString OQueryController::getImplementationName_Static() throw( RuntimeExceptio
     return OUString("org.openoffice.comp.dbu.OQueryDesign");
 }
 
-Sequence< OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OQueryController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = "com.sun.star.sdb.QueryDesign";

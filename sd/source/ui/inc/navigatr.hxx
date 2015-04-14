@@ -82,7 +82,7 @@ class SdNavigatorWin
     : public vcl::Window
 {
 public:
-    typedef ::boost::function<void(void)> UpdateRequestFunctor;
+    typedef ::boost::function<void()> UpdateRequestFunctor;
 
     /** Create a new instance of the navigator.
         @param bUseActiveUpdate

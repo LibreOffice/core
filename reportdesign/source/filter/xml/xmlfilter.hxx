@@ -122,8 +122,8 @@ public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
@@ -136,9 +136,9 @@ public:
     ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_pReportModel; }
     void FinishStyles();
 
-    virtual void SAL_CALL startDocument(void)
+    virtual void SAL_CALL startDocument()
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL endDocument(void)
+    virtual void SAL_CALL endDocument()
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     const SvXMLTokenMap& GetDocElemTokenMap() const;

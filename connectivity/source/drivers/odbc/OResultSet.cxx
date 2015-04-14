@@ -181,7 +181,7 @@ void OResultSet::construct()
     osl_atomic_decrement( &m_refCount );
 }
 
-void OResultSet::disposing(void)
+void OResultSet::disposing()
 {
     SQLRETURN nRet = N3SQLCloseCursor(m_aStatementHandle);
     OSL_UNUSED( nRet );

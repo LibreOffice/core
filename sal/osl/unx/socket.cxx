@@ -466,7 +466,7 @@ void __osl_destroySocketImpl(oslSocket Socket)
 #endif
 }
 
-static oslSocketAddr __osl_createSocketAddr(void)
+static oslSocketAddr __osl_createSocketAddr()
 {
     oslSocketAddr pAddr = static_cast<oslSocketAddr>(rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl )));
 #if OSL_DEBUG_LEVEL > 1

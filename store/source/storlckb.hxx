@@ -45,7 +45,7 @@ class OStoreLockBytes : public store::OStoreObject
 public:
     /** Construction.
      */
-    OStoreLockBytes (void);
+    OStoreLockBytes();
 
     /** create (two-phase construction).
      *  @param  pManager [in]
@@ -89,7 +89,7 @@ public:
     /** flush.
      *  @return store_E_None upon success
      */
-    storeError flush (void);
+    storeError flush();
 
     /** setSize.
      *  @param  nSize [in]
@@ -110,7 +110,7 @@ public:
 protected:
     /** Destruction (OReference).
      */
-    virtual ~OStoreLockBytes (void);
+    virtual ~OStoreLockBytes();
 
 private:
     /** IStoreHandle TypeId.

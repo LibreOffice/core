@@ -67,7 +67,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclImpRoot*         pIR;
     XclExpRoot*         pER;
 
-                        RootData( void );       // -> exctools.cxx
+                        RootData();       // -> exctools.cxx
                         ~RootData();            // -> exctools.cxx
 };
 

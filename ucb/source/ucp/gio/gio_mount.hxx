@@ -53,7 +53,7 @@ struct OOoMountOperationClass
 };
 
 
-GType            ooo_mount_operation_get_type   (void);
+GType            ooo_mount_operation_get_type();
 GMountOperation *ooo_mount_operation_new(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rEnv);
 
 G_END_DECLS

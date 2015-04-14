@@ -41,7 +41,7 @@ static ContextVector maContextVector;
 const sal_Int32 EnumContext::NoMatch = 4;
 const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor context name is "any".
 
-EnumContext::EnumContext (void)
+EnumContext::EnumContext()
     : meApplication(Application_None),
       meContext(Context_Unknown)
 {
@@ -63,12 +63,12 @@ EnumContext::EnumContext (
 {
 }
 
-sal_Int32 EnumContext::GetCombinedContext_DI (void) const
+sal_Int32 EnumContext::GetCombinedContext_DI() const
 {
     return CombinedEnumContext(GetApplication_DI(), meContext);
 }
 
-EnumContext::Application EnumContext::GetApplication_DI (void) const
+EnumContext::Application EnumContext::GetApplication_DI() const
 {
      switch (meApplication)
      {
@@ -110,7 +110,7 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eAp
     maApplicationVector[eApplication]=rsName;
 }
 
-void EnumContext::ProvideApplicationContainers (void)
+void EnumContext::ProvideApplicationContainers()
 {
     if (maApplicationMap.empty())
     {
@@ -162,7 +162,7 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplic
     maContextVector[eApplication] = rsName;
 }
 
-void EnumContext::ProvideContextContainers (void)
+void EnumContext::ProvideContextContainers()
 {
     if (maContextMap.empty())
     {

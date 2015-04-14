@@ -29,7 +29,7 @@ class SfxShell;
 // static ----------------------------------------------------------------
 
 bool            EnableSSO();
-CreateTabPage   GetSSOCreator( void );
+CreateTabPage   GetSSOCreator();
 
 // struct OrderedEntry ---------------------------------------------------
 

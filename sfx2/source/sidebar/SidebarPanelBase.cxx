@@ -74,11 +74,11 @@ SidebarPanelBase::SidebarPanelBase (
     }
 }
 
-SidebarPanelBase::~SidebarPanelBase (void)
+SidebarPanelBase::~SidebarPanelBase()
 {
 }
 
-void SAL_CALL SidebarPanelBase::disposing (void)
+void SAL_CALL SidebarPanelBase::disposing()
     throw (css::uno::RuntimeException)
 {
     if (mpControl != NULL)
@@ -124,25 +124,25 @@ void SAL_CALL SidebarPanelBase::disposing (
     mpControl = NULL;
 }
 
-css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
+css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame()
     throw(css::uno::RuntimeException, std::exception)
 {
     return mxFrame;
 }
 
-::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL (void)
+::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL()
     throw(css::uno::RuntimeException, std::exception)
 {
     return msResourceURL;
 }
 
-sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
+sal_Int16 SAL_CALL SidebarPanelBase::getType()
     throw(css::uno::RuntimeException, std::exception)
 {
     return ui::UIElementType::TOOLPANEL;
 }
 
-Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface (void)
+Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface()
     throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(this));
@@ -158,7 +158,7 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
     return NULL;
 }
 
-Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
+Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
     throw(css::uno::RuntimeException, std::exception)
 {
     if (mpControl != NULL)

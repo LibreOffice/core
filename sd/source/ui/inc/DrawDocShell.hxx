@@ -195,7 +195,7 @@ public:
         @return
             Returns NULL when the current document has no reference device.
     */
-    virtual OutputDevice* GetDocumentRefDev (void) SAL_OVERRIDE;
+    virtual OutputDevice* GetDocumentRefDev() SAL_OVERRIDE;
 
     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 

@@ -70,15 +70,15 @@ protected:
 
 public:
     INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
-    virtual ~INetMessageIStream (void);
+    virtual ~INetMessageIStream();
 
     TOOLS_DLLPUBLIC int Read (sal_Char *pData, sal_uIntPtr nSize);
 
-    INetMIMEMessage *GetSourceMessage (void) const { return pSourceMsg; }
+    INetMIMEMessage *GetSourceMessage() const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
 
     void SetHeaderGenerated() { bHeaderGenerated = true; }
-    bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
+    bool IsHeaderGenerated() const { return bHeaderGenerated; }
 };
 
 /// Message Parser Interface.
@@ -98,16 +98,16 @@ protected:
     virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
 
 public:
-    INetMessageOStream (void);
-    virtual ~INetMessageOStream (void);
+    INetMessageOStream();
+    virtual ~INetMessageOStream();
 
     int Write (const sal_Char *pData, sal_uIntPtr nSize);
 
-    INetMIMEMessage *GetTargetMessage (void) const { return pTargetMsg; }
+    INetMIMEMessage *GetTargetMessage() const { return pTargetMsg; }
     void SetTargetMessage (INetMIMEMessage *pMsg) { pTargetMsg = pMsg; }
 
     void ParseHeader (bool bParse = true) { bHeaderParsed = !bParse; }
-    bool IsHeaderParsed (void) const { return bHeaderParsed; }
+    bool IsHeaderParsed() const { return bHeaderParsed; }
 };
 
 enum INetMessageEncoding
@@ -145,7 +145,7 @@ protected:
 
 public:
     INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
-    virtual ~INetMIMEMessageStream (void);
+    virtual ~INetMIMEMessageStream();
 };
 
 #endif

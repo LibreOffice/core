@@ -73,7 +73,7 @@ void MacabTables::impl_refresh(  ) throw(RuntimeException)
     static_cast<MacabCatalog&>(m_rParent).refreshTables();
 }
 
-void MacabTables::disposing(void)
+void MacabTables::disposing()
 {
 m_xMetaData.clear();
     OCollection::disposing();

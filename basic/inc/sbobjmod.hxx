@@ -78,7 +78,7 @@ public:
     void triggerLayoutEvent();
     void triggerResizeEvent();
 
-    bool getInitState( void )
+    bool getInitState()
         { return mbInit; }
     void setInitState( bool bInit )
         { mbInit = bInit; }

@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
     return 0;
 }
 
-void MacroSecurityLevelTP::ClosePage( void )
+void MacroSecurityLevelTP::ClosePage()
 {
     mpDlg->maSecOptions.SetMacroSecurityLevel( mnCurLevel );
 }
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl)
     return 0;
 }
 
-void MacroSecurityTrustedSourcesTP::FillCertLB( void )
+void MacroSecurityTrustedSourcesTP::FillCertLB()
 {
     m_pTrustCertLB->Clear();
 
@@ -403,7 +403,7 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
     FillCertLB();
 }
 
-void MacroSecurityTrustedSourcesTP::ClosePage( void )
+void MacroSecurityTrustedSourcesTP::ClosePage()
 {
     sal_Int32  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
     if( nEntryCnt )

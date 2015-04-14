@@ -293,7 +293,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16       nHash;             // Hash-ID for search
 
-    BASIC_DLLPRIVATE SbxVariableImpl* getImpl( void );
+    BASIC_DLLPRIVATE SbxVariableImpl* getImpl();
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
@@ -340,11 +340,11 @@ public:
     SbxObject* GetParent() { return pParent;}
     virtual void SetParent( SbxObject* );
 
-    const OUString& GetDeclareClassName( void );
+    const OUString& GetDeclareClassName();
     void SetDeclareClassName( const OUString& );
     void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
                          StarBASIC* pParentBasic );
-    void ClearComListener( void );
+    void ClearComListener();
 
     static sal_uInt16 MakeHashCode( const OUString& rName );
 };
