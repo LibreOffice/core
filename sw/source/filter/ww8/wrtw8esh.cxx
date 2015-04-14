@@ -367,30 +367,35 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
     OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return false;
-    bool bHack = false;
     const SdrObject *pObject = rFrmFmt.FindRealSdrObject();
-    if (pObject && pObject->GetObjInventor() == FmFormInventor)
+    if (!pObject || pObject->GetObjInventor() != FmFormInventor)
+        return false;
+
+    const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject);
+    if (!pFormObj)
+        return false;
+
+    uno::Reference< awt::XControlModel > xControlModel =
+        pFormObj->GetUnoControlModel();
+    uno::Reference< lang::XServiceInfo > xInfo(xControlModel,
+        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
+    if (!xInfo.is())
+        return false;
+
+    if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
     {
-        if (const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
-        {
-            uno::Reference< awt::XControlModel > xControlModel =
-                pFormObj->GetUnoControlModel();
-            uno::Reference< lang::XServiceInfo > xInfo(xControlModel,
-                uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
-            if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
-            {
-                DoComboBox(xPropSet);
-                bHack = true;
-            }
-            else if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
-            {
-                DoCheckBox(xPropSet);
-                bHack = true;
-            }
-        }
+        DoComboBox(xPropSet);
+        return true;
     }
-    return bHack;
+
+    if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
+    {
+        DoCheckBox(xPropSet);
+        return true;
+    }
+
+    return false;
 }
 
 void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
