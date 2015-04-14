@@ -32,7 +32,7 @@
 
 namespace sd { namespace sidebar {
 
-MasterPagesSelector* RecentMasterPagesSelector::Create (
+VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -43,13 +43,14 @@ MasterPagesSelector* RecentMasterPagesSelector::Create (
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
-    MasterPagesSelector* pSelector(
+    VclPtr<MasterPagesSelector> pSelector(
         new RecentMasterPagesSelector (
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar));
+            rxSidebar),
+        SAL_NO_ACQUIRE);
     pSelector->LateInit();
     pSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_RECENT);
 

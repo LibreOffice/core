@@ -218,7 +218,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
+VclPtr<vcl::Window> AlignmentPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -230,10 +230,10 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", NULL, 2);
 
-    return new AlignmentPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+                new AlignmentPropertyPanel(
+                        pParent, rxFrame, pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 void AlignmentPropertyPanel::DataChanged(

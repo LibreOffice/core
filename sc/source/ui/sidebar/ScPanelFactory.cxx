@@ -108,51 +108,31 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 "PanelFactory::createUIElement called without SfxBindings",
                 NULL);
 
+        sal_Int32 nMinimumSize = -1;
+        VclPtr<vcl::Window> pPanel;
         if (rsResourceURL.endsWith("/AlignmentPropertyPanel"))
-        {
-            AlignmentPropertyPanel* pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                rsResourceURL,
-                xFrame,
-                pPanel,
-                ui::LayoutSize(-1,-1,-1));
-        }
+            pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
-        {
-            CellAppearancePropertyPanel* pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                rsResourceURL,
-                xFrame,
-                pPanel,
-                ui::LayoutSize(-1,-1,-1));
-        }
+            pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NumberFormatPropertyPanel"))
-        {
-            NumberFormatPropertyPanel* pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                rsResourceURL,
-                xFrame,
-                pPanel,
-                ui::LayoutSize(-1,-1,-1));
-        }
+            pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NavigatorPanel"))
         {
-            vcl::Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                rsResourceURL,
-                xFrame,
-                pPanel,
-                ui::LayoutSize(0,-1,-1));
+            pPanel = VclPtr<vcl::Window>(new ScNavigatorDlg(pBindings, NULL, pParentWindow, false), SAL_NO_ACQUIRE);
+            nMinimumSize = 0;
         }
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
-            vcl::Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
+            pPanel = VclPtr<vcl::Window>(new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX)), SAL_NO_ACQUIRE);;
+            nMinimumSize = 0;
+        }
+
+        if (pPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
                 pPanel,
-                ui::LayoutSize(0,-1,-1));
-        }
+                ui::LayoutSize(nMinimumSize,-1,-1));
     }
     catch (const uno::RuntimeException &)
     {

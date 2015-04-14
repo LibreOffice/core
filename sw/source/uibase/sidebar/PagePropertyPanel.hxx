@@ -55,7 +55,7 @@ namespace sw { namespace sidebar {
           public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
-        static PagePropertyPanel* Create(
+        static VclPtr<vcl::Window> Create(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );

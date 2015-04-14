@@ -119,7 +119,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 
     if (rsResourceURL.endsWith("/PagePropertyPanel"))
     {
-        sw::sidebar::PagePropertyPanel* pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -128,7 +128,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/WrapPropertyPanel"))
     {
-        sw::sidebar::WrapPropertyPanel* pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -137,7 +137,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
-        vcl::Window* pPanel = new SwNavigationPI(pBindings, NULL, pParentWindow);
+        VclPtr<vcl::Window> pPanel( new SwNavigationPI(pBindings, NULL, pParentWindow), SAL_NO_ACQUIRE );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -146,7 +146,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
-        vcl::Window* pPanel = new SwRedlineAcceptPanel(pParentWindow, xFrame);
+        VclPtr<vcl::Window> pPanel( new SwRedlineAcceptPanel(pParentWindow, xFrame), SAL_NO_ACQUIRE );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,

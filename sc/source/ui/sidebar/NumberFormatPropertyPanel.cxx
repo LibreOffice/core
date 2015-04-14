@@ -178,7 +178,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
     return 0L;
 }
 
-NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
+VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -190,10 +190,10 @@ NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to NumberFormatPropertyPanel::Create", NULL, 2);
 
-    return new NumberFormatPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+                new NumberFormatPropertyPanel(
+                        pParent, rxFrame, pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 void NumberFormatPropertyPanel::DataChanged(

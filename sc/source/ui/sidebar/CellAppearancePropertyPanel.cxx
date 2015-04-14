@@ -235,7 +235,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
+VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -247,10 +247,10 @@ CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to CellAppearancePropertyPanel::Create", NULL, 2);
 
-    return new CellAppearancePropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+                new CellAppearancePropertyPanel(
+                        pParent, rxFrame, pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 void CellAppearancePropertyPanel::DataChanged(

@@ -83,7 +83,7 @@ namespace {
 
 namespace sw { namespace sidebar {
 
-PagePropertyPanel* PagePropertyPanel::Create (
+VclPtr<vcl::Window> PagePropertyPanel::Create (
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -95,10 +95,12 @@ PagePropertyPanel* PagePropertyPanel::Create (
     if (pBindings == NULL)
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return new PagePropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+                new PagePropertyPanel(
+                        pParent,
+                        rxFrame,
+                        pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 PagePropertyPanel::PagePropertyPanel(

@@ -30,7 +30,7 @@ class RecentMasterPagesSelector
     : public MasterPagesSelector
 {
 public:
-    static MasterPagesSelector* Create (
+    static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);

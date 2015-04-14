@@ -42,7 +42,7 @@ const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
 
 namespace sw { namespace sidebar {
 
-WrapPropertyPanel* WrapPropertyPanel::Create (
+VclPtr<vcl::Window> WrapPropertyPanel::Create (
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
@@ -54,10 +54,12 @@ WrapPropertyPanel* WrapPropertyPanel::Create (
     if (pBindings == NULL)
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
 
-    return new WrapPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<vcl::Window>(
+                new WrapPropertyPanel(
+                        pParent,
+                        rxFrame,
+                        pBindings),
+                SAL_NO_ACQUIRE);
 }
 
 WrapPropertyPanel::WrapPropertyPanel(
