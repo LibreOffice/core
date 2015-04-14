@@ -329,6 +329,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         return false;
     }
 
+    /**
+     * Change the handle document position.
+     * @param type - the type of the handle
+     * @param position - the new document position
+     */
     public void positionHandle(SelectionHandle.HandleType type, RectF position) {
         SelectionHandle handle = getHandleForType(type);
         if (RectUtils.fuzzyEquals(handle.mDocumentPosition, position)) {
@@ -341,6 +346,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
+    /**
+     * Hide the handle.
+     * @param type - type of the handle
+     */
     public void hideHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
         if (handle.isVisible()) {
@@ -349,6 +358,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Show the handle.
+     * @param type - type of the handle
+     */
     public void showHandle(SelectionHandle.HandleType type) {
         SelectionHandle handle = getHandleForType(type);
         if (!handle.isVisible()) {
@@ -357,6 +370,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Returns the handle instance for the input type.
+     */
     private SelectionHandle getHandleForType(SelectionHandle.HandleType type) {
         switch(type) {
             case START:

@@ -13,11 +13,11 @@ public class SelectionHandleMiddle extends SelectionHandle {
         super(getBitmapForDrawable(context, R.drawable.handle_middle));
     }
 
-    @Override
     /**
      * Change the position of the handle on the screen. Take into account the
      * handle alignment to the center.
      */
+    @Override
     public void reposition(float x, float y) {
         super.reposition(x, y);
         // align to the center

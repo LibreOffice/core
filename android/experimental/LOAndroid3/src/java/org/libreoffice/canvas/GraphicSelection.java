@@ -252,10 +252,16 @@ public class GraphicSelection extends CommonCanvasElement {
         }
     }
 
+    /**
+     * When a single press (no dragging happend) was performed.
+     */
     private void onSinglePress(PointF screenPosition) {
         sendGraphicSelection("LongPress", screenPosition);
     }
 
+    /**
+     * Set the visibility of the graphic selection.
+     */
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);

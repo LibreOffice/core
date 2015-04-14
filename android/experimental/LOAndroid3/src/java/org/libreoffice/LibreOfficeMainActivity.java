@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.libreoffice.overlay.DocumentOverlay;
-
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -178,8 +177,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
-
-
     }
 
     private boolean copyFileToTemp() {

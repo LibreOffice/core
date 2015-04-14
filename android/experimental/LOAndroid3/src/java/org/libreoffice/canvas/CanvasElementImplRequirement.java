@@ -2,6 +2,10 @@ package org.libreoffice.canvas;
 
 import android.graphics.Canvas;
 
+/**
+ * The interface defines a set of method that a typical CanvasElement
+ * implementation should implement.
+ */
 interface CanvasElementImplRequirement {
 
     /**

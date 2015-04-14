@@ -16,6 +16,9 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * Create thumbnails for the parts of the document.
+ */
 public class ThumbnailCreator {
     private static final String LOG_TAG = ThumbnailCreator.class.getSimpleName();
     private static final int THUMBNAIL_SIZE = 256;

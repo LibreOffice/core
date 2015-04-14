@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import java.io.File;
 
+/**
+ * The about dialog.
+ */
 public class LOAbout {
 
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";

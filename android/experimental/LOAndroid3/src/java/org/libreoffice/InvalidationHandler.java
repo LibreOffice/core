@@ -415,10 +415,16 @@ public class InvalidationHandler implements Document.MessageCallback {
         return mState;
     }
 
+    /**
+     * A key event happend (i.e. user started typing.
+     */
     public void keyEvent() {
         mKeyEvent = true;
     }
 
+    /**
+     * The states the overlay.
+     */
     public enum OverlayState {
         /**
          * State where the overlay is empty

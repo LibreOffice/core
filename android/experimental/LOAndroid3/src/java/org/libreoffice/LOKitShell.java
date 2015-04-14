@@ -21,7 +21,9 @@ import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.LayerView;
 
-
+/**
+ * Common static LOKit functions, functions to send events.
+ */
 public class LOKitShell {
     private static final String LOGTAG = LOKitShell.class.getSimpleName();
 
