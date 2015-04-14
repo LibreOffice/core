@@ -28,7 +28,7 @@
 #include "dx_bitmap.hxx"
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
-
+#include <vcl/outdev.hxx>
 #include <boost/utility.hpp>
 
 class OutputDevice;
@@ -105,7 +105,7 @@ namespace dxcanvas
          */
         com::sun::star::rendering::XGraphicDevice* mpDevice;
         HDC                                        mnHDC;
-        VclPtr<OutputDevice> mpOutDev;
+        VclPtr<OutputDevice>                       mpOutDev;
     };
 
     typedef ::rtl::Reference< com::sun::star::rendering::XGraphicDevice > DeviceRef;

@@ -769,6 +769,8 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     delete pIdle;
     if ( m_pDeletionWatcher )
         m_pDeletionWatcher->signal();
+    aFmtLb.disposeAndClear();
+    aFilterLb.disposeAndClear();
 }
 
 namespace SfxTemplate
@@ -2064,8 +2066,8 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     : SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
       m_pFloat          ( pDlgWindow ),
       m_bZoomIn         ( false ),
-      m_aActionTbL      ( new DropToolBox_Impl(pDlgWindow, this) ),
-      m_aActionTbR      ( new ToolBox(pDlgWindow, SfxResId( TB_ACTION )) )
+      m_aActionTbL      ( VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this) ),
+      m_aActionTbR      ( VclPtrInstance<ToolBox> (pDlgWindow, SfxResId( TB_ACTION )  ) )
 {
     pDlgWindow->FreeResource();
     Initialize();
@@ -2160,6 +2162,9 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
+    m_pFloat.clear();
+    m_aActionTbL.disposeAndClear();
+    m_aActionTbR.disposeAndClear();
 }
 
 void SfxTemplateDialog_Impl::LoadedFamilies()

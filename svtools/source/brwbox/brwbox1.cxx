@@ -66,7 +66,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     pDataWin = 0;
     pVScroll = 0;
 
-    pDataWin = new BrowserDataWin( this );
+    pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
     pCols = new BrowserColumns;
     m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
@@ -117,7 +117,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( new ScrollBar(this, WinBits( WB_HSCROLL )) )
+    ,aHScroll( VclPtr<ScrollBar>::Create(this, WinBits( WB_HSCROLL )) )
 {
     ConstructImpl( nMode );
 }
@@ -153,7 +153,7 @@ void BrowseBox::dispose()
     Hide();
     getDataWindow()->pHeaderBar.disposeAndClear();
     getDataWindow()->pCornerWin.disposeAndClear();
-    pDataWin.clear();
+    pDataWin.disposeAndClear();
     pVScroll.disposeAndClear();
     aHScroll.disposeAndClear();
 
@@ -2282,10 +2282,12 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     WinBits nVScrollWinBits =
         WB_VSCROLL | ( ( nMode & BROWSER_THUMBDRAGGING ) ? WB_DRAG : 0 );
-    pVScroll = ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
+    pVScroll = VclPtr<ScrollBar>(
+                ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
                 ? new BrowserScrollBar( this, nVScrollWinBits,
                                         static_cast<BrowserDataWin*>( pDataWin.get() ) )
-                : new ScrollBar( this, nVScrollWinBits );
+                : new ScrollBar( this, nVScrollWinBits ),
+                SAL_NO_ACQUIRE);
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
