@@ -149,7 +149,7 @@ void SwModelessRedlineAcceptDlg::dispose()
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder,
                                        vcl::Window *pContentArea, bool bAutoFmt) :
     pParentDlg      (pParent),
-    aTabPagesCTRL   (new SvxAcceptChgCtr(pContentArea, pBuilder)),
+    aTabPagesCTRL   (VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
     sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
@@ -221,6 +221,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 {
+    aTabPagesCTRL.disposeAndClear();
 }
 
 void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
