@@ -1513,9 +1513,17 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 
 void DrawingML::WriteRun( Reference< XTextRange > rRun )
 {
+    Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
+    sal_Int16 nLevel = -1;
+    GET( nLevel, NumberingLevel );
+
     const char* sFieldType;
     bool bIsField = false;
     OUString sText = rRun->getString();
+
+    //if there is no text following the bullet, add a space after the bullet
+    if (nLevel !=-1 && sText.isEmpty() )
+         sText=" ";
 
     if( sText.isEmpty())
     {
