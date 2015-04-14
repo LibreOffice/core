@@ -823,7 +823,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 // not for some URL scheme belongs in UCB, not here.
 
 
-sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& aData, bool bIsLoading, bool bOwnLock )
+sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock )
 {
     sal_Int8 nResult = LOCK_UI_NOLOCK;
 
@@ -838,27 +838,23 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
 
         if ( bOwnLock )
         {
-            if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
-                aInfo = aData[LOCKFILE_EDITTIME_ID];
+            aInfo = aData[LockFileComponent::EDITTIME];
 
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
                 document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
         else /*logically therefore bIsLoading is set */
         {
-            if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
-            {
-                if ( !aData[LOCKFILE_OOOUSERNAME_ID].isEmpty() )
-                    aInfo = aData[LOCKFILE_OOOUSERNAME_ID];
-                else
-                    aInfo = aData[LOCKFILE_SYSUSERNAME_ID];
+            if ( !aData[LockFileComponent::OOOUSERNAME].isEmpty() )
+                aInfo = aData[LockFileComponent::OOOUSERNAME];
+            else
+                aInfo = aData[LockFileComponent::SYSUSERNAME];
 
-                if ( !aInfo.isEmpty() && !aData[LOCKFILE_EDITTIME_ID].isEmpty() )
-                {
-                    aInfo +=  " ( " ;
-                    aInfo += aData[LOCKFILE_EDITTIME_ID];
-                    aInfo += " )";
-                }
+            if ( !aInfo.isEmpty() && !aData[LockFileComponent::EDITTIME].isEmpty() )
+            {
+                aInfo +=  " ( " ;
+                aInfo += aData[LockFileComponent::EDITTIME];
+                aInfo += " )";
             }
 
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
@@ -1104,7 +1100,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
                             if ( !bResult )
                             {
-                                uno::Sequence< OUString > aData;
+                                LockFileEntry aData;
                                 try
                                 {
                                     // impossibility to get data is no real problem
@@ -1118,14 +1114,12 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
                                 if ( !bHandleSysLocked )
                                 {
-                                    uno::Sequence< OUString > aOwnData = svt::LockFileCommon::GenerateOwnEntry();
-                                    bOwnLock = ( aData.getLength() > LOCKFILE_USERURL_ID
-                                              && aOwnData.getLength() > LOCKFILE_USERURL_ID
-                                              && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] ) );
+                                    LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+                                    bOwnLock = aOwnData[LockFileComponent::SYSUSERNAME].equals( aData[LockFileComponent::SYSUSERNAME] );
 
                                     if ( bOwnLock
-                                      && aOwnData[LOCKFILE_LOCALHOST_ID].equals( aData[LOCKFILE_LOCALHOST_ID] )
-                                      && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
+                                      && aOwnData[LockFileComponent::LOCALHOST].equals( aData[LockFileComponent::LOCALHOST] )
+                                      && aOwnData[LockFileComponent::USERURL].equals( aData[LockFileComponent::USERURL] ) )
                                     {
                                         // this is own lock from the same installation, it could remain because of crash
                                         bResult = true;

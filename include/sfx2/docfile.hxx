@@ -24,6 +24,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
+#include <svl/lockfilecommon.hxx>
 #include <sal/types.h>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -160,7 +161,7 @@ public:
     bool                Commit();
     bool                IsStorage();
 
-    sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< OUString >& aData, bool bIsLoading, bool bOwnLock );
+    sal_Int8            ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock );
     void                LockOrigFileOnDemand( bool bLoading, bool bNoUI );
     void                UnlockFile( bool bReleaseLockStream );
 

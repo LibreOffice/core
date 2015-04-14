@@ -997,17 +997,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         try
                                         {
                                             ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
-                                            uno::Sequence< OUString > aData = aLockFile.GetLockData();
-                                            if ( aData.getLength() > LOCKFILE_SYSUSERNAME_ID )
+                                            LockFileEntry aData = aLockFile.GetLockData();
+                                            if ( !aData[LockFileComponent::OOOUSERNAME].isEmpty() )
                                             {
-                                                if ( !aData[LOCKFILE_OOOUSERNAME_ID].isEmpty() )
-                                                {
-                                                    aUserName = aData[LOCKFILE_OOOUSERNAME_ID];
-                                                }
-                                                else if ( !aData[LOCKFILE_SYSUSERNAME_ID].isEmpty() )
-                                                {
-                                                    aUserName = aData[LOCKFILE_SYSUSERNAME_ID];
-                                                }
+                                                aUserName = aData[LockFileComponent::OOOUSERNAME];
+                                            }
+                                            else if ( !aData[LockFileComponent::SYSUSERNAME].isEmpty() )
+                                            {
+                                                aUserName = aData[LockFileComponent::SYSUSERNAME];
                                             }
                                         }
                                         catch ( uno::Exception& )

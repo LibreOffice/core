@@ -30,6 +30,7 @@
 #include <osl/time.h>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -150,19 +151,19 @@ void ShareControlFile::Close()
         m_xOutputStream = uno::Reference< io::XOutputStream >();
         m_xSeekable = uno::Reference< io::XSeekable >();
         m_xTruncate = uno::Reference< io::XTruncate >();
-        m_aUsersData.realloc( 0 );
+        m_aUsersData.clear();
     }
 }
 
 
-uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
+std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::GetUsersData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !IsValid() )
         throw io::NotConnectedException();
 
-    if ( !m_aUsersData.getLength() )
+    if ( m_aUsersData.empty() )
     {
         sal_Int64 nLength = m_xSeekable->getLength();
         if ( nLength > SAL_MAX_INT32 )
@@ -185,14 +186,14 @@ uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
             nLength -= nRead;
         }
 
-        m_aUsersData = ParseList( aBuffer );
+        ParseList( aBuffer, m_aUsersData );
     }
 
     return m_aUsersData;
 }
 
 
-void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence< OUString > >& aUsersData )
+void ShareControlFile::SetUsersDataAndStore( const std::vector< LockFileEntry >& aUsersData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -206,15 +207,12 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
     m_xSeekable->seek( 0 );
 
     OUStringBuffer aBuffer;
-    for ( sal_Int32 nInd = 0; nInd < aUsersData.getLength(); nInd++ )
+    for ( size_t nInd = 0; nInd < aUsersData.size(); nInd++ )
     {
-        if ( aUsersData[nInd].getLength() != SHARED_ENTRYSIZE )
-            throw lang::IllegalArgumentException();
-
-        for ( sal_Int32 nEntryInd = 0; nEntryInd < SHARED_ENTRYSIZE; nEntryInd++ )
+        for ( LockFileComponent nEntryInd : o3tl::enumrange<LockFileComponent>() )
         {
             aBuffer.append( EscapeCharacters( aUsersData[nInd][nEntryInd] ) );
-            if ( nEntryInd < SHARED_ENTRYSIZE - 1 )
+            if ( nEntryInd < LockFileComponent::LAST )
                 aBuffer.append( ',' );
             else
                 aBuffer.append( ';' );
@@ -228,7 +226,7 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
 }
 
 
-uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
+LockFileEntry ShareControlFile::InsertOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -236,38 +234,34 @@ uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
         throw io::NotConnectedException();
 
     GetUsersData();
-    uno::Sequence< ::uno::Sequence< OUString > > aNewData( m_aUsersData.getLength() + 1 );
-    uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
+    std::vector< LockFileEntry > aNewData( m_aUsersData );
+    LockFileEntry aNewEntry = GenerateOwnEntry();
 
     bool bExists = false;
     sal_Int32 nNewInd = 0;
-    for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); nInd++ )
+    for ( size_t nInd = 0; nInd < m_aUsersData.size(); nInd++ )
     {
-        if ( m_aUsersData[nInd].getLength() == SHARED_ENTRYSIZE )
+        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] == aNewEntry[LockFileComponent::LOCALHOST]
+             && m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] == aNewEntry[LockFileComponent::SYSUSERNAME]
+             && m_aUsersData[nInd][LockFileComponent::USERURL] == aNewEntry[LockFileComponent::USERURL] )
         {
-            if ( m_aUsersData[nInd][SHARED_LOCALHOST_ID] == aNewEntry[SHARED_LOCALHOST_ID]
-              && m_aUsersData[nInd][SHARED_SYSUSERNAME_ID] == aNewEntry[SHARED_SYSUSERNAME_ID]
-              && m_aUsersData[nInd][SHARED_USERURL_ID] == aNewEntry[SHARED_USERURL_ID] )
+            if ( !bExists )
             {
-                if ( !bExists )
-                {
-                    aNewData[nNewInd] = aNewEntry;
-                    bExists = true;
-                }
+                aNewData[nNewInd] = aNewEntry;
+                bExists = true;
             }
-            else
-            {
-                aNewData[nNewInd] = m_aUsersData[nInd];
-            }
-
-            nNewInd++;
         }
+        else
+        {
+            aNewData[nNewInd] = m_aUsersData[nInd];
+        }
+
+        nNewInd++;
     }
 
     if ( !bExists )
-        aNewData[nNewInd++] = aNewEntry;
+        aNewData.push_back( aNewEntry );
 
-    aNewData.realloc( nNewInd );
     SetUsersDataAndStore( aNewData );
 
     return aNewEntry;
@@ -284,14 +278,13 @@ bool ShareControlFile::HasOwnEntry()
     }
 
     GetUsersData();
-    uno::Sequence< OUString > aEntry = GenerateOwnEntry();
+    LockFileEntry aEntry = GenerateOwnEntry();
 
-    for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); ++nInd )
+    for ( size_t nInd = 0; nInd < m_aUsersData.size(); ++nInd )
     {
-        if ( m_aUsersData[nInd].getLength() == SHARED_ENTRYSIZE &&
-             m_aUsersData[nInd][SHARED_LOCALHOST_ID] == aEntry[SHARED_LOCALHOST_ID] &&
-             m_aUsersData[nInd][SHARED_SYSUSERNAME_ID] == aEntry[SHARED_SYSUSERNAME_ID] &&
-             m_aUsersData[nInd][SHARED_USERURL_ID] == aEntry[SHARED_USERURL_ID] )
+        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] == aEntry[LockFileComponent::LOCALHOST] &&
+             m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] == aEntry[LockFileComponent::SYSUSERNAME] &&
+             m_aUsersData[nInd][LockFileComponent::USERURL] == aEntry[LockFileComponent::USERURL] )
         {
             return true;
         }
@@ -301,7 +294,12 @@ bool ShareControlFile::HasOwnEntry()
 }
 
 
-void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
+void ShareControlFile::RemoveEntry()
+{
+    RemoveEntry(GenerateOwnEntry());
+}
+
+void ShareControlFile::RemoveEntry( const LockFileEntry& aEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -310,31 +308,21 @@ void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
 
     GetUsersData();
 
-    uno::Sequence< OUString > aEntry = aArgEntry;
-    if ( aEntry.getLength() != SHARED_ENTRYSIZE )
-        aEntry = GenerateOwnEntry();
+    std::vector< LockFileEntry > aNewData;
 
-    uno::Sequence< ::uno::Sequence< OUString > > aNewData( m_aUsersData.getLength() + 1 );
-
-    sal_Int32 nNewInd = 0;
-    for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); nInd++ )
+    for ( size_t nInd = 0; nInd < m_aUsersData.size(); nInd++ )
     {
-        if ( m_aUsersData[nInd].getLength() == SHARED_ENTRYSIZE )
+        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] != aEntry[LockFileComponent::LOCALHOST]
+             || m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] != aEntry[LockFileComponent::SYSUSERNAME]
+             || m_aUsersData[nInd][LockFileComponent::USERURL] != aEntry[LockFileComponent::USERURL] )
         {
-            if ( m_aUsersData[nInd][SHARED_LOCALHOST_ID] != aEntry[SHARED_LOCALHOST_ID]
-              || m_aUsersData[nInd][SHARED_SYSUSERNAME_ID] != aEntry[SHARED_SYSUSERNAME_ID]
-              || m_aUsersData[nInd][SHARED_USERURL_ID] != aEntry[SHARED_USERURL_ID] )
-            {
-                aNewData[nNewInd] = m_aUsersData[nInd];
-                nNewInd++;
-            }
+            aNewData.push_back( m_aUsersData[nInd] );
         }
     }
 
-    aNewData.realloc( nNewInd );
     SetUsersDataAndStore( aNewData );
 
-    if ( !nNewInd )
+    if ( aNewData.empty() )
     {
         // try to remove the file if it is empty
         RemoveFile();

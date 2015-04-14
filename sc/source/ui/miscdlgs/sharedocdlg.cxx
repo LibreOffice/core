@@ -135,9 +135,8 @@ void ScShareDocumentDlg::UpdateView()
         try
         {
             ::svt::ShareControlFile aControlFile( mpDocShell->GetSharedFileURL() );
-            uno::Sequence< uno::Sequence< OUString > > aUsersData = aControlFile.GetUsersData();
-            const uno::Sequence< OUString >* pUsersData = aUsersData.getConstArray();
-            sal_Int32 nLength = aUsersData.getLength();
+            std::vector<LockFileEntry> aUsersData = aControlFile.GetUsersData();
+            sal_Int32 nLength = aUsersData.size();
 
             if ( nLength > 0 )
             {
@@ -145,24 +144,24 @@ void ScShareDocumentDlg::UpdateView()
 
                 for ( sal_Int32 i = 0; i < nLength; ++i )
                 {
-                    if ( pUsersData[i].getLength() > SHARED_EDITTIME_ID )
+                    if ( !aUsersData[i][LockFileComponent::EDITTIME].isEmpty() )
                     {
                         OUString aUser;
-                        if ( !pUsersData[i][SHARED_OOOUSERNAME_ID].isEmpty() )
+                        if ( !aUsersData[i][LockFileComponent::OOOUSERNAME].isEmpty() )
                         {
-                            aUser = pUsersData[i][SHARED_OOOUSERNAME_ID];
+                            aUser = aUsersData[i][LockFileComponent::OOOUSERNAME];
                         }
-                        else if ( !pUsersData[i][SHARED_SYSUSERNAME_ID].isEmpty() )
+                        else if ( !aUsersData[i][LockFileComponent::SYSUSERNAME].isEmpty() )
                         {
-                            aUser = pUsersData[i][SHARED_SYSUSERNAME_ID];
+                            aUser = aUsersData[i][LockFileComponent::SYSUSERNAME];
                         }
                         else
                         {
-                            aUser = OUString(m_aStrUnknownUser) + " " + OUString::number( nUnknownUser++ );
+                            aUser = m_aStrUnknownUser + " " + OUString::number( nUnknownUser++ );
                         }
 
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"
-                        OUString aDateTimeStr = pUsersData[i][SHARED_EDITTIME_ID];
+                        OUString aDateTimeStr = aUsersData[i][LockFileComponent::EDITTIME];
                         sal_Int32 nIndex = 0;
                         OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );

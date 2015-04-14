@@ -39,14 +39,14 @@ class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenStream();
 
-    void WriteEntryToStream( const ::com::sun::star::uno::Sequence< OUString >& aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
+    void WriteEntryToStream( const LockFileEntry& aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
 
 public:
     DocumentLockFile( const OUString& aOrigURL );
     ~DocumentLockFile();
 
     bool CreateOwnLockFile();
-    ::com::sun::star::uno::Sequence< OUString > GetLockData();
+    LockFileEntry GetLockData();
     bool OverwriteOwnLockFile();
     void RemoveFile();
 
