@@ -1170,7 +1170,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
 
 sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 {
-    sal_uInt16 nZoom = 0; // Ergebnis
+    sal_uInt16 nZoom = 100;
 
     switch ( eType )
     {
@@ -1298,7 +1298,9 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         //  (with frozen panes, the size of the individual parts
                         //  depends on the scale that is to be calculated)
 
-                        if ( !pGridWin[SC_SPLIT_BOTTOMLEFT] ) return 0;
+                        if (!pGridWin[SC_SPLIT_BOTTOMLEFT])
+                            return nZoom;
+
                         Size aWinSize = pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutputSizePixel();
                         ScSplitMode eHMode = aViewData.GetHSplitMode();
                         if ( eHMode != SC_SPLIT_NONE && pGridWin[SC_SPLIT_BOTTOMRIGHT] )
@@ -1338,19 +1340,18 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                ( aPageSize.Width() * nPPTX ) );
                         long nZoomY = (long) ( aWinSize.Height() * 100 /
                                                ( aPageSize.Height() * nPPTY ) );
-                        long nNew = nZoomX;
 
-                        if (eType == SvxZoomType::WHOLEPAGE && nZoomY < nNew)
-                            nNew = nZoomY;
+                        if (nZoomX > 0)
+                            nZoom = static_cast<sal_uInt16>(nZoomX);
 
-                        nZoom = (sal_uInt16) nNew;
+                        if (eType == SvxZoomType::WHOLEPAGE && nZoomY > 0 && nZoomY < nZoom)
+                            nZoom = static_cast<sal_uInt16>(nZoomY);
                     }
                 }
                 break;
 
         default:
             OSL_FAIL("Unknown Zoom-Revision");
-            nZoom = 0;
     }
 
     return nZoom;
