@@ -449,20 +449,24 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             }
         }
 
-        if(pXFillTransparenceItem)
+        if (pXFillTransparenceItem)
         {
-            const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
             XFillTransparenceItem aXFillTransparenceItem;
-
             aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
             rToSet.Put(aXFillTransparenceItem);
         }
-        else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && pColTrans)
+        else if (pColTrans)
         {
-            // Fill style is set to solid, but no fill transparency is given.
-            // On the other hand, we have a BackColorTransparency, so use that.
-            aBrush.PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
-            setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+            // No fill transparency is given.  On the other hand, we have a
+            // BackColorTransparency, so use that.
+            sal_Int8 nGraphicTransparency(0);
+            *pColTrans >>= nGraphicTransparency;
+            rToSet.Put(XFillTransparenceItem(nGraphicTransparency));
+            if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID)
+            {
+                aBrush.PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+                setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+            }
         }
 
         if(pXGradientStepCountItem)

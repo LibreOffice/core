@@ -559,7 +559,7 @@ DECLARE_ODFIMPORT_TEST(fdo81223, "fdo81223.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xfeffffff), nValue);
 }
 
-DECLARE_ODFIMPORT_TEST(fdo90130, "fdo90130.odt")
+DECLARE_ODFIMPORT_TEST(fdo90130_1, "fdo90130-1.odt")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -567,6 +567,16 @@ DECLARE_ODFIMPORT_TEST(fdo90130, "fdo90130.odt")
     sal_Int32 nValue(0);
     xFrame->getPropertyValue("BackColor") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff3333), nValue);
+}
+
+DECLARE_ODFIMPORT_TEST(fdo90130_2, "fdo90130-2.odt")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xFrame->getPropertyValue("BackColorTransparency") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), nValue);
 }
 
 DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
