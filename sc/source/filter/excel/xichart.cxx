@@ -830,35 +830,38 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
 {
     Reference< XDataSequence > xDataSeq;
     Reference< XDataProvider > xDataProv = GetDataProvider();
-    if( xDataProv.is() && mxTokenArray )
+    if( xDataProv.is() )
     {
-        ScCompiler aComp( GetDocPtr(), ScAddress(), *mxTokenArray );
-        aComp.SetGrammar(GetDoc().GetGrammar());
-        OUStringBuffer aRangeRep;
-        aComp.CreateStringFromTokenArray( aRangeRep );
-        try
+        if ( mxTokenArray )
         {
-            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aRangeRep.makeStringAndClear() );
-            // set sequence role
-            ScfPropertySet aSeqProp( xDataSeq );
-            aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
+            ScCompiler aComp( GetDocPtr(), ScAddress(), *mxTokenArray );
+            aComp.SetGrammar(GetDoc().GetGrammar());
+            OUStringBuffer aRangeRep;
+            aComp.CreateStringFromTokenArray( aRangeRep );
+            try
+            {
+                xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aRangeRep.makeStringAndClear() );
+                // set sequence role
+                ScfPropertySet aSeqProp( xDataSeq );
+                aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
+            }
+            catch( Exception& )
+            {
+    //            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
+            }
         }
-        catch( Exception& )
+        else if( rRole == EXC_CHPROP_ROLE_LABEL && mxString && !mxString->GetText().isEmpty() )
         {
-//            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
+            try
+            {
+                OUString aString("\"");
+                xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aString + mxString->GetText() + aString );
+                // set sequence role
+                ScfPropertySet aSeqProp( xDataSeq );
+                aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
+            }
+            catch( Exception& ) { }
         }
-    }
-    else if( rRole == EXC_CHPROP_ROLE_LABEL && mxString && !mxString->GetText().isEmpty() )
-    {
-        try
-        {
-            OUString aString("\"");
-            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aString + mxString->GetText() + aString );
-            // set sequence role
-            ScfPropertySet aSeqProp( xDataSeq );
-            aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
-        }
-        catch( Exception& ) { }
     }
     return xDataSeq;
 }
