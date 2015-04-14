@@ -136,9 +136,12 @@ public class _XChartDataArray extends MultiMethodTest {
         bResult = true;
         double[][] _data = oObj.getData();
         data = _data;
-
-        for (int i = 0; i < rowDscs.length; i++) {
-            for (int j = 0; j < colDscs.length; j++)
+        if(rowDscs.length != 0 && rowDscs.length != data.length)
+            bResult = false;
+        if(colDscs.length != 0 && colDscs.length != data[0].length)
+            bResult = false;
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++)
                 data[i][j] = i * (j + 1);
         }
         oObj.setData(data);
@@ -211,8 +214,12 @@ public class _XChartDataArray extends MultiMethodTest {
 
         double[][] _data = oObj.getData();
         data = _data;
-        for (int i = 0; i < rowDscs.length; i++) {
-            for (int j = 0; j < colDscs.length; j++) {
+        if(rowDscs.length != 0 && rowDscs.length != data.length)
+            bResult = false;
+        if(colDscs.length != 0 && colDscs.length != data[0].length)
+            bResult = false;
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
                 bResult &= data[i][j] == _data[i][j];
             }
         }
