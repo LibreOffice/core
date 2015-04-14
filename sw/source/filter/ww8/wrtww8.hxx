@@ -477,7 +477,7 @@ public:
     sal_uInt16 nUniqueList;         ///< current number for creating unique list names
     unsigned int mnHdFtIndex;
 
-    sal_uInt16 mnRedlineMode;       ///< Remember the original redline mode
+    RedlineMode_t mnOrigRedlineMode;   ///< Remember the original redline mode
 
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
