@@ -510,6 +510,17 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     return 0;
 }
 
+SwScrollNaviToolBox::~SwScrollNaviToolBox()
+{
+    disposeOnce();
+}
+
+void SwScrollNaviToolBox::dispose()
+{
+    m_pNaviPopup.disposeAndClear();
+    ToolBox::dispose();
+}
+
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
@@ -522,7 +533,6 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
     SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(true));
     SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(false));
     ToolBox::RequestHelp( rHEvt );
-
 }
 
 OUString SwScrollNaviPopup::GetQuickHelpText(bool bNext)

@@ -114,7 +114,7 @@ class SwScrollNaviPopup;
 
 class SwScrollNaviToolBox : public ToolBox
 {
-    SwScrollNaviPopup *m_pNaviPopup;
+    VclPtr<SwScrollNaviPopup> m_pNaviPopup;
 
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -125,6 +125,8 @@ public:
         , m_pNaviPopup(pNaviPopup)
     {
     }
+    virtual ~SwScrollNaviToolBox();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SwScrollNaviPopup : public SfxPopupWindow
