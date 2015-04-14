@@ -278,6 +278,14 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     sal_uInt16          HitPageBreak( const Point& rMouse, ScRange* pSource = NULL,
                                     SCCOLROW* pBreak = NULL, SCCOLROW* pPrev = NULL );
 
+    /** The cell may be covered by text that overflows from a previous cell.
+
+        @return if true, the given cell is covered by (overflowing) text and
+        rTextStartPosX returns the column where the text that overflows
+        starts.
+    */
+    bool            IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, SCsCOL &rTextStartPosX);
+
     void            PasteSelection( const Point& rPosPixel );
 
     void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
