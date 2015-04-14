@@ -294,29 +294,24 @@ int main( int argc, char* argv[] )
 #endif
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
-    pEnableEditing = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pEnableEditing), "Editing");
+    pEnableEditing = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_EDIT);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
-    pBold = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pBold), "Bold");
+    pBold = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_BOLD);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
     g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pBold, ".uno:Bold");
-    pItalic = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItalic), "Italic");
+    pItalic = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_ITALIC);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
     g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pItalic, ".uno:Italic");
-    pUnderline = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pUnderline), "Underline");
+    pUnderline = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_UNDERLINE);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pUnderline, -1);
     g_signal_connect(G_OBJECT(pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pUnderline, ".uno:Underline");
-    pStrikethrough = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pStrikethrough), "Strikethrough");
+    pStrikethrough = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_STRIKETHROUGH);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pStrikethrough, -1);
     g_signal_connect(G_OBJECT(pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pStrikethrough, ".uno:Strikeout");
