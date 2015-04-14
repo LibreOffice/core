@@ -27,11 +27,7 @@
 
 class Gradient;
 
-
-// class XGradient
-
-
-class SVX_DLLPUBLIC XGradient
+class SVX_DLLPUBLIC SAL_WARN_UNUSED XGradient
 {
 protected:
     css::awt::GradientStyle  eStyle;
