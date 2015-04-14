@@ -23,7 +23,7 @@ functionality as in LibreOfficeKit.h.)
 
 An example program (currently using the older shim.c/static library
 integration) can be seen on:
-https://github.com/ojwb/lloconv	
+https://github.com/ojwb/lloconv
 
 Tiled Rendering
 ---------------
@@ -85,6 +85,22 @@ it's recommended that the core part is developed against gtktiledviewer, and
 once a feature works there, then implement the Android part, with its slower
 development iteration (slow uploading to the device, the need to link all
 object files into a single .so, etc).
+
+* Debugging with gdb and gtktiledviewer
+
+To run gtktiledviewer:
+
+    bin/run gtktiledviewer $PWD/instdir/program path/to/test.odt
+
+To receive all incoming evetns from core use G_MESSAGES_DEBUG=all
+
+    G_MESSAGES_DEBUG=all bin/run gtktiledviewer $PWD/instdir/program ../test.odt
+
+To debug with gdb:
+
+    export LO_TRACE='gdb --tui --args'
+
+before bin/run, this will run gtktiledviewer in the debugger instead.
 
 LibreOfficeKitGtk
 *****************
