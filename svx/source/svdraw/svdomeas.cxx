@@ -544,7 +544,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     }
 }
 
-basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol) const
+basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol)
 {
     basegfx::B2DPolyPolygon aRetval;
     basegfx::B2DPolygon aPartPolyA;

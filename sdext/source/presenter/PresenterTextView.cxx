@@ -992,12 +992,6 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
     return awt::Rectangle(sal_Int32(nX+0.5), sal_Int32(nY+0.5), 0, 0);
 }
 
-sal_Int32 PresenterTextParagraph::GetIndexAtPoint (const awt::Point& rPoint) const
-{
-    (void)rPoint;
-    return -1;
-}
-
 sal_Int8 PresenterTextParagraph::GetTextDirection() const
 {
     // Find first portion that has a non-neutral text direction.

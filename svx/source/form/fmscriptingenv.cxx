@@ -112,7 +112,7 @@ namespace svxform
             @return
                 <TRUE/> if and only if the method is declared <code>oneway</code>, i.e. can be called asynchronously
         */
-        bool    impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName ) const;
+        static bool impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName );
 
         /** determines whether the instance is already disposed
         */
@@ -178,7 +178,7 @@ namespace svxform
     }
 
 
-    bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName ) const
+    bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName )
     {
         // This used to be implemented as:
         // is (_rListenerType + "::" + _rMethodName) a oneway function?

@@ -153,7 +153,7 @@ private:
         SfxBindings* pBindings);
     virtual ~AreaPropertyPanel();
 
-    void SetupIcons();
+    static void SetupIcons();
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();

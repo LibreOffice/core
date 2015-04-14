@@ -171,7 +171,7 @@ namespace svx
                         );
 
         /// creates SfxPoolItes for all features in the given set, and puts them into the given SfxAllItemSet
-        void            transferFeatureStatesToItemSet(
+        static void     transferFeatureStatesToItemSet(
                             ControlFeatures& _rDispatchers,
                             SfxAllItemSet& _rSet,
                             bool _bTranslateLatin = false

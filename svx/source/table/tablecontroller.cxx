@@ -399,7 +399,7 @@ void SvxTableController::onSelectionHasChanged()
         /* fdo#46186 Selecting the table means selecting the entire cells */
         if (!hasSelectedCells() && pTableObj)
         {
-            maCursorFirstPos = pTableObj->getFirstCell();
+            maCursorFirstPos = SdrTableObj::getFirstCell();
             maCursorLastPos = pTableObj->getLastCell();
             mbCellSelectionMode=true;
         }
@@ -1460,7 +1460,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         if( !bMod1 && !bMod2 && !bTextEdit )
         {
             // when not already editing, return starts text edit
-            setSelectionStart( pTableObj->getFirstCell() );
+            setSelectionStart( SdrTableObj::getFirstCell() );
             nAction = ACTION_EDIT_CELL;
         }
         break;
@@ -1483,7 +1483,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         else
         {
             // f2 with no selection and no text edit starts text edit
-            setSelectionStart( pTableObj->getFirstCell() );
+            setSelectionStart( SdrTableObj::getFirstCell() );
             nAction = ACTION_EDIT_CELL;
         }
         break;
@@ -1621,7 +1621,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
     {
     case ACTION_GOTO_FIRST_CELL:
     {
-        gotoCell( pTableObj->getFirstCell(), bSelect, pWindow, nAction );
+        gotoCell( SdrTableObj::getFirstCell(), bSelect, pWindow, nAction );
         break;
     }
 
@@ -1645,7 +1645,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
 
     case ACTION_GOTO_FIRST_COLUMN:
     {
-        CellPos aPos( pTableObj->getFirstCell().mnCol, getSelectionEnd().mnRow );
+        CellPos aPos( SdrTableObj::getFirstCell().mnCol, getSelectionEnd().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
@@ -1659,7 +1659,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
 
     case ACTION_GOTO_FIRST_ROW:
     {
-        CellPos aPos( getSelectionEnd().mnCol, pTableObj->getFirstCell().mnRow );
+        CellPos aPos( getSelectionEnd().mnCol, SdrTableObj::getFirstCell().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
@@ -2765,7 +2765,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
                         xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
 
                     SdrText* pText = static_cast< SdrText* >( xCell.get() );
-                    mpView->ApplyFormatPaintBrushToText( rFormatSet, *pTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
+                    SdrObjEditView::ApplyFormatPaintBrushToText( rFormatSet, *pTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
                 }
             }
         }

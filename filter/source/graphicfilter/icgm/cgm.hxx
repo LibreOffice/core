@@ -94,11 +94,11 @@ class CGM
         sal_uInt32              mnElementSize;  // full parameter size for the latest action
 
         sal_uInt32          ImplGetUI16( sal_uInt32 nAlign = 0 );
-        sal_uInt8           ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision );
+        static sal_uInt8    ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision );
         sal_Int32           ImplGetI( sal_uInt32 nPrecision );
         sal_uInt32          ImplGetUI( sal_uInt32 nPrecision );
-        void                ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest );
-        void                ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest );
+        static void         ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest );
+        static void         ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest );
         double              ImplGetFloat( RealPrecision, sal_uInt32 nRealSize );
         sal_uInt32          ImplGetBitmapColor( bool bDirectColor = false );
         void                ImplSetMapMode();
@@ -115,8 +115,8 @@ class CGM
         void                ImplGetRectangle( FloatRect&, bool bMap = false );
         void                ImplGetRectangleNS( FloatRect& );
         void                ImplGetVector( double* );
-        double              ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint );
-        void                ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle );
+        static double       ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint );
+        static void         ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle );
         bool                ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rOrientation );
 
         void                ImplDefaultReplacement();

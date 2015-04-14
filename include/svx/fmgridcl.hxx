@@ -177,7 +177,7 @@ protected:
     virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) SAL_OVERRIDE;
 
             // some kind of impl version (for one single column) of our version of InitColumnsByFields
-            void InitColumnByField(
+            static void InitColumnByField(
                     DbGridColumn* _pColumn,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumnModel,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxFieldsByNames,

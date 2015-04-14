@@ -159,7 +159,7 @@ private:
     PopupMenu                       m_aMenu;
 
     void            ReleaseFocus();
-    Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
+    static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     void            SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice *pDevice, const OUString &rStyleName, bool bIsNotSelected);
     bool            AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);

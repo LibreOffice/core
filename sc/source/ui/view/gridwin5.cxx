@@ -426,7 +426,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         SdrPageView* pPV = pDrView->GetSdrPageView();
         OSL_ENSURE( pPV, "SdrPageView* ist NULL" );
         if (pPV)
-            bDone = static_cast<ScDrawPage*>(pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
+            bDone = FmFormPage::RequestHelp( this, pDrView, rHEvt );
     }
 
     //  Wenn QuickHelp fuer AutoFill angezeigt wird, nicht wieder wegnehmen lassen

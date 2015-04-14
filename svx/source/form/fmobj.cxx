@@ -653,7 +653,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }
 
-                rPage.GetImpl().setUniqueName( xContent, xParentForm );
+                FmFormPageImpl::setUniqueName( xContent, xParentForm );
 
                 if ( xFormToInsertInto.is() )
                     xFormToInsertInto->insertByIndex( xFormToInsertInto->getCount(), makeAny( xContent ) );

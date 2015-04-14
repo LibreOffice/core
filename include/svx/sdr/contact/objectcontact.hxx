@@ -81,7 +81,7 @@ private:
     bool                                            mbIsPreviewRenderer : 1;
 
     // method to create a EventHandler. Needs to give a result.
-    sdr::event::TimerEventHandler* CreateEventHandler();
+    static sdr::event::TimerEventHandler* CreateEventHandler();
 
 protected:
     // Interface to allow derivates to travel over the registered VOC's

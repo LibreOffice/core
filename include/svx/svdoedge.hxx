@@ -198,14 +198,14 @@ public:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-    XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter) const;
+    static XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter);
     void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs
     XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
     XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
         const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=NULL);
-    sal_uInt16 ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2) const;
+    static sal_uInt16 ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2);
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
     void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time

@@ -255,7 +255,7 @@ public:
     rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
 
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
-    bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const;
+    static bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
 
     /** returns a format paint brush set from the current selection */
     bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
@@ -267,7 +267,7 @@ public:
     void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
-    void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    static void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );

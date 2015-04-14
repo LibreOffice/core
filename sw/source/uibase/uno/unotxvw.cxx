@@ -474,7 +474,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
-        xController = pFormShell->GetFormController( _Form, *pDrawView, *pWindow );
+        xController = FmFormShell::GetFormController( _Form, *pDrawView, *pWindow );
     return xController;
 }
 

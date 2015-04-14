@@ -149,7 +149,7 @@ void SdrGluePoint::SetAlignAngle(long nAngle)
     else if (nAngle<33750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM;
 }
 
-long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
+long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc)
 {
     switch (nEsc) {
         case SDRESC_RIGHT : return 0;
@@ -160,7 +160,7 @@ long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
     return 0;
 }
 
-sal_uInt16 SdrGluePoint::EscAngleToDir(long nAngle) const
+sal_uInt16 SdrGluePoint::EscAngleToDir(long nAngle)
 {
     nAngle=NormAngle360(nAngle);
     if (nAngle>=31500 || nAngle<4500)

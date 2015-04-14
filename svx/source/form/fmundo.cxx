@@ -428,7 +428,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                     nPos = xNewParent->getCount();
                 }
 
-                rPage.GetImpl().setUniqueName( xContent, xForm );
+                FmFormPageImpl::setUniqueName( xContent, xForm );
                 xNewParent->insertByIndex( nPos, makeAny( xContent ) );
 
                 Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );

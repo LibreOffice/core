@@ -74,7 +74,7 @@ public:
     virtual OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sdr::table::CellRef getCellRef() { return mxCell;}
     void UpdateChildren();
-    OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
+    static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
 
     // XAccessibleComponent
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

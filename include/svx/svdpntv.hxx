@@ -395,7 +395,7 @@ protected:
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow );
 
-    vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
+    static vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 
 public:
     bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht

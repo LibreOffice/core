@@ -1267,7 +1267,7 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, Sdr
 {
     CellPos aStart, aEnd;
 
-    aStart = pTableObject->getFirstCell();
+    aStart = SdrTableObj::getFirstCell();
     aEnd = pTableObject->getLastCell();
 
     sal_Int32 nColCount = pTableObject->getColumnCount();

@@ -1003,7 +1003,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 GradTransGradient aGradTransGradient;
 
                 aGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
-                aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
+                GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                 // build handles
                 const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
@@ -1045,7 +1045,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     Size aHdlSize(15, 15);
 
                     aGradTransGradient.aGradient = static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
-                    aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
+                    GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles
                     const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));

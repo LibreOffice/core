@@ -85,7 +85,7 @@ protected:
 
 protected:
 
-    ::comphelper::PropertySetInfo* createPropertySetInfo();
+    static ::comphelper::PropertySetInfo* createPropertySetInfo();
 
 private:
 

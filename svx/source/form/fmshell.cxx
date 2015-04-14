@@ -1377,7 +1377,7 @@ namespace
 }
 
 
-::std::unique_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
+::std::unique_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
 {
     ::std::unique_ptr< ::svx::ISdrObjectFilter > pFilter;
 
@@ -1431,7 +1431,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 }
 
 
-Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice )
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )

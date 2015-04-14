@@ -111,7 +111,7 @@ private:
         // counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps
         // have to be set to 0 at the beginning, since this method is recursive)
 
-    Polygon PolyPolygonToPolygon(const tools::PolyPolygon & rPoly);
+    static Polygon PolyPolygonToPolygon(const tools::PolyPolygon & rPoly);
         // generates a relatively sane polygon on the basis of a PolyPolygon
 
     Rectangle MapRectangle( const Rectangle& rRect );
@@ -123,8 +123,8 @@ private:
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
 
-    void ConvertLinePattern(PictPattern & rPat, bool bVisible) const;
-    void ConvertFillPattern(PictPattern & rPat, bool bVisible) const;
+    static void ConvertLinePattern(PictPattern & rPat, bool bVisible);
+    static void ConvertFillPattern(PictPattern & rPat, bool bVisible);
 
     void WriteOpcode_TxFace(const vcl::Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
@@ -415,7 +415,7 @@ void PictWriter::WriteArcAngles(const Rectangle & rRect, const Point & rStartPt,
 }
 
 
-void PictWriter::ConvertLinePattern(PictPattern & rPat, bool bVisible) const
+void PictWriter::ConvertLinePattern(PictPattern & rPat, bool bVisible)
 {
     if( bVisible )
     {
@@ -429,7 +429,7 @@ void PictWriter::ConvertLinePattern(PictPattern & rPat, bool bVisible) const
     }
 }
 
-void PictWriter::ConvertFillPattern(PictPattern & rPat, bool bVisible) const
+void PictWriter::ConvertFillPattern(PictPattern & rPat, bool bVisible)
 {
     if( bVisible )
     {

@@ -542,7 +542,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
         FormControlFactory aControlFactory;
         aControlFactory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
-        aControlFactory.initializeFieldDependentProperties( xField, xCol, xNumberFormats );
+        FormControlFactory::initializeFieldDependentProperties( xField, xCol, xNumberFormats );
 
         xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
         if ( xSecondCol.is() )

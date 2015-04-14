@@ -1290,7 +1290,7 @@ bool View::ShouldToggleOn(
             }
             else
             {
-                aStart = pTableObj->getFirstCell();
+                aStart = SdrTableObj::getFirstCell();
                 aEnd = pTableObj->getLastCell();
             }
             sal_Int32 nColCount = pTableObj->getColumnCount();
@@ -1364,7 +1364,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
             }
             else
             {
-                aStart = pTableObj->getFirstCell();
+                aStart = SdrTableObj::getFirstCell();
                 aEnd = pTableObj->getLastCell();
             }
             sal_Int32 nColCount = pTableObj->getColumnCount();

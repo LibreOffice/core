@@ -148,7 +148,7 @@ private:
     DECL_LINK( RotationHdl, void * );
     DECL_LINK( FlipHdl, ToolBox * );
 
-    void SetupIcons();
+    static void SetupIcons();
     void Initialize();
     void executePosX();
     void executePosY();
@@ -163,7 +163,7 @@ private:
     virtual ~PosSizePropertyPanel();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
-    FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
+    static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
     void SetPosXYMinMax();
 

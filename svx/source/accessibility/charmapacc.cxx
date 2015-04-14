@@ -526,7 +526,7 @@ Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleRows(  ) 
     OExternalLockGuard aGuard( this );
     ensureAlive();
     Sequence< sal_Int32 > aSel(1);
-    aSel[0] = m_pParent->getCharSetControl()->GetRowPos(m_pParent->getCharSetControl()->GetSelectIndexId());
+    aSel[0] = SvxShowCharSet::GetRowPos(m_pParent->getCharSetControl()->GetSelectIndexId());
     return aSel;
 }
 
@@ -535,7 +535,7 @@ Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleColumns( 
     OExternalLockGuard aGuard( this );
     ensureAlive();
     Sequence< sal_Int32 > aSel(1);
-    aSel[0] = m_pParent->getCharSetControl()->GetColumnPos(m_pParent->getCharSetControl()->GetSelectIndexId());
+    aSel[0] = SvxShowCharSet::GetColumnPos(m_pParent->getCharSetControl()->GetSelectIndexId());
     return aSel;
 }
 
@@ -543,14 +543,14 @@ sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow ) t
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetRowPos(m_pParent->getCharSetControl()->GetSelectIndexId()) == nRow;
+    return SvxShowCharSet::GetRowPos(m_pParent->getCharSetControl()->GetSelectIndexId()) == nRow;
 }
 
 sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleColumnSelected( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetColumnPos(m_pParent->getCharSetControl()->GetSelectIndexId()) == nColumn;
+    return SvxShowCharSet::GetColumnPos(m_pParent->getCharSetControl()->GetSelectIndexId()) == nColumn;
 }
 
 Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -590,14 +590,14 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRow( sal_Int32 nChildIndex ) 
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetRowPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
+    return SvxShowCharSet::GetRowPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetColumnPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
+    return SvxShowCharSet::GetColumnPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
 }
 
 

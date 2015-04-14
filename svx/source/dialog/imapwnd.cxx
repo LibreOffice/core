@@ -449,7 +449,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
     return pObj;
 }
 
-IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj ) const
+IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj )
 {
     IMapObject* pIMapObj = NULL;
 

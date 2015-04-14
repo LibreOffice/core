@@ -327,7 +327,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pFormShell || !pDrawView || !pWindow )
                     break;
 
-                std::unique_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
+                std::unique_ptr< ::svx::ISdrObjectFilter > pFilter( FmFormShell::CreateFocusableControlFilter(
                     *pDrawView, *pWindow ) );
                 if ( !pFilter.get() )
                     break;

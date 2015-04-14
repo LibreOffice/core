@@ -70,7 +70,7 @@ public:
 public:
     const OUString&     GetName() const { return m_sPageName; }
     void                SetName( const OUString& rName ) { m_sPageName = rName; }
-    bool                RequestHelp(
+    static bool         RequestHelp(
                             vcl::Window* pWin,
                             SdrView* pView,
                             const HelpEvent& rEvt );

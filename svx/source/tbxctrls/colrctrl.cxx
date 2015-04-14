@@ -230,10 +230,10 @@ SvxColorDockingWindow::SvxColorDockingWindow
         }
     }
 
-    aItemSize = aColorSet.CalcItemSizePixel(Size(aColorSet.getEntryEdgeLength(), aColorSet.getEntryEdgeLength()));
-    aItemSize.Width() = aItemSize.Width() + aColorSet.getEntryEdgeLength();
+    aItemSize = aColorSet.CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    aItemSize.Width() = aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength();
     aItemSize.Width() /= 2;
-    aItemSize.Height() = aItemSize.Height() + aColorSet.getEntryEdgeLength();
+    aItemSize.Height() = aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength();
     aItemSize.Height() /= 2;
 
     SetSize();
@@ -267,7 +267,7 @@ void SvxColorDockingWindow::FillValueSet()
         aColorSet.Clear();
 
         // create the first entry for 'invisible/none'
-        const Size aColorSize(aColorSet.getEntryEdgeLength(), aColorSet.getEntryEdgeLength());
+        const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
         long nPtX = aColorSize.Width() - 1;
         long nPtY = aColorSize.Height() - 1;
         VirtualDevice aVD;

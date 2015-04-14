@@ -197,8 +197,8 @@ public:
     void Inserted(SdrObject* pObj);
     void Removed(SdrObject* pObj);
 
-    void Inserted(FmFormObj* pObj);
-    void Removed(FmFormObj* pObj);
+    static void Inserted(FmFormObj* pObj);
+    static void Removed(FmFormObj* pObj);
 };
 
 

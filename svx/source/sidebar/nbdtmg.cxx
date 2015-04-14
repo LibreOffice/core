@@ -830,8 +830,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[0]->nIndex = 0+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[0]->nIndexDefault = 2;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[0]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[0]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[0]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[0]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[0]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[0]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[0]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[0]->pBullets)->eType = eNBType::BULLETS;
@@ -842,8 +842,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[1]->nIndex = 1+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[1]->nIndexDefault = 3;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[1]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[1]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[1]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[1]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[1]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[1]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[1]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[1]->pBullets)->eType = eNBType::BULLETS;
@@ -854,8 +854,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[2]->nIndex = 2+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[2]->nIndexDefault = 4;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[2]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[2]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[2]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[2]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[2]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[2]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[2]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[2]->pBullets)->eType = eNBType::BULLETS;
@@ -866,8 +866,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[3]->nIndex = 3+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[3]->nIndexDefault = 5;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[3]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[3]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[3]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[3]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[3]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[3]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[3]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[3]->pBullets)->eType = eNBType::BULLETS;
@@ -878,8 +878,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[4]->nIndex = 4+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[4]->nIndexDefault = 6;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[4]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[4]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[4]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[4]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[4]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[4]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[4]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[4]->pBullets)->eType = eNBType::BULLETS;
@@ -890,8 +890,8 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[5]->nIndex = 5+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[5]->nIndexDefault = 8;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[5]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->cBulletChar = rBTMgr.GetBulChar(pActualBullets[5]->nIndexDefault-1);
-        static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->aFont = rBTMgr.GetBulCharFont(pActualBullets[5]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->cBulletChar = BulletsTypeMgr::GetBulChar(pActualBullets[5]->nIndexDefault-1);
+        static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->aFont = BulletsTypeMgr::GetBulCharFont(pActualBullets[5]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->sDescription = rBTMgr.GetDescription(pActualBullets[5]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[5]->nIndexDefault-1);
         static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->eType = eNBType::BULLETS;

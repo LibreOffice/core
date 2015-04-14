@@ -340,7 +340,7 @@ private:
     OUString            maStringNoLine;
 
 protected:
-    Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
+    static Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
     virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
 
 public:

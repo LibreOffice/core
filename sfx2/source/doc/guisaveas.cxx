@@ -317,7 +317,7 @@ public:
 
     bool ShowDocumentInfoDialog();
 
-    OUString GetRecommendedExtension( const OUString& aTypeName );
+    static OUString GetRecommendedExtension( const OUString& aTypeName );
     OUString GetRecommendedDir( const OUString& aSuggestedDir );
     OUString GetRecommendedName( const OUString& aSuggestedName,
                                         const OUString& aTypeName );

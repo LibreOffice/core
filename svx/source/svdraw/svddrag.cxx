@@ -89,7 +89,7 @@ void SdrDragStat::PrevPoint()
     }
 }
 
-Point SdrDragStat::KorregPos(const Point& rNow, const Point& /*rPrev*/) const
+Point SdrDragStat::KorregPos(const Point& rNow, const Point& /*rPrev*/)
 {
     Point aRet(rNow);
     return aRet;

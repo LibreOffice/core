@@ -125,7 +125,7 @@ protected:
     void                ClearTargetList();
 
     SdrObject*          CreateObj( const IMapObject* pIMapObj );
-    IMapObject*         GetIMapObj( const SdrObject* pSdrObj ) const;
+    static IMapObject*  GetIMapObj( const SdrObject* pSdrObj );
     SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 
     void                UpdateInfo( bool bNewObj );

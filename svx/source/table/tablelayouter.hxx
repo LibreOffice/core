@@ -111,7 +111,7 @@ private:
     inline bool isValid( const CellPos& rPos ) const { return isValidColumn( rPos.mnCol ) && isValidRow( rPos.mnRow ); }
 
     void ClearBorderLayout();
-    void ClearBorderLayout(BorderLineMap& rMap);
+    static void ClearBorderLayout(BorderLineMap& rMap);
     void ResizeBorderLayout();
     void ResizeBorderLayout( BorderLineMap& rMap );
 
@@ -130,7 +130,7 @@ private:
     };
     typedef std::vector< Layout > LayoutVector;
 
-    sal_Int32 distribute( LayoutVector& rLayouts, sal_Int32 nDistribute );
+    static sal_Int32 distribute( LayoutVector& rLayouts, sal_Int32 nDistribute );
 
     TableModelRef mxTable;
     LayoutVector maRows;

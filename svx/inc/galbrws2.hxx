@@ -175,7 +175,7 @@ public:
     void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint = NULL );
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame() const;
+    static com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame();
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > GetUNOContext() const { return m_xContext; }
     com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
 

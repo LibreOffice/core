@@ -224,7 +224,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF, bool isDefault=false,bool isResetSize=false)=0;
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false)=0;
         virtual bool IsCustomized(sal_uInt16 nIndex)=0;
-        sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
+        static sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
         const SfxItemSet* GetItems() { return pSet;}
         // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
@@ -257,8 +257,8 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,bool isDefault=false,bool isResetSize=false) SAL_OVERRIDE;
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) SAL_OVERRIDE;
         virtual bool IsCustomized(sal_uInt16 nIndex) SAL_OVERRIDE;
-        sal_Unicode GetBulChar(sal_uInt16 nIndex);
-        vcl::Font GetBulCharFont(sal_uInt16 nIndex);
+        static sal_Unicode GetBulChar(sal_uInt16 nIndex);
+        static vcl::Font GetBulCharFont(sal_uInt16 nIndex);
         static BulletsTypeMgr& GetInstance();
 };
 

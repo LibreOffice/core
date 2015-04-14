@@ -320,7 +320,7 @@ void SdrObjList::SetRectsDirty()
     if (pUpList!=NULL) pUpList->SetRectsDirty();
 }
 
-void SdrObjList::impChildInserted(SdrObject& rChild) const
+void SdrObjList::impChildInserted(SdrObject& rChild)
 {
     sdr::contact::ViewContact* pParent = rChild.GetViewContact().GetParentContact();
 

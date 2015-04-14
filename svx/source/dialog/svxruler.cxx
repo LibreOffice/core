@@ -2626,7 +2626,7 @@ void SvxRuler::Click()
 
 bool SvxRuler::CalcLimits ( long& nMax1,    // minimum value to be set
                             long& nMax2,    // minimum value to be set
-                            bool ) const
+                            bool )
 {
     /*
        Default implementation of the virtual function; the application can be

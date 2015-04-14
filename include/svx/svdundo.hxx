@@ -159,7 +159,7 @@ protected:
     SdrUndoGroup*               pUndoGroup;
 
     // Helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
-    void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
+    static void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
 
 public:
     SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1 = false, bool bSaveText = false);
@@ -558,7 +558,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 n=0, bool bRepeat = false) const;
+    static void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 n=0, bool bRepeat = false);
 };
 
 /**
@@ -748,7 +748,7 @@ public:
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
     // Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
-    SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
+    static SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     const OUString& sOldStr,
                                                     const OUString& sNewStr );

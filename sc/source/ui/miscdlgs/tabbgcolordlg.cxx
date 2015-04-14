@@ -47,7 +47,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
 {
     get(m_pTabBgColorSet, "colorset");
     m_pTabBgColorSet->SetDialog(this);
-    m_pTabBgColorSet->SetColCount(m_pTabBgColorSet->getColumnCount());
+    m_pTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
     get(m_pBtnOk, "ok");
 
     SetHelpId( sHelpId );
@@ -95,9 +95,9 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     }
 
     //lock down a preferred size
-    const sal_uInt32 nColCount = m_pTabBgColorSet->getColumnCount();
+    const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
     const sal_uInt32 nRowCount(ceil(double(nColorCount)/nColCount));
-    const sal_uInt32 nLength = m_pTabBgColorSet->getEntryEdgeLength();
+    const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
     Size aSize(m_pTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
     m_pTabBgColorSet->set_width_request(aSize.Width()+8);
     m_pTabBgColorSet->set_height_request(aSize.Height()+8);

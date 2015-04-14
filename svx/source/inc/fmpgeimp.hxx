@@ -116,7 +116,7 @@ protected:
     );
 
 public:
-    OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
+    static OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );

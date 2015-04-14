@@ -1324,7 +1324,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar) const
+void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar)
 {
     bool bNeg = nAngle < 0;
 
@@ -1355,7 +1355,7 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar) const
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar)
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());

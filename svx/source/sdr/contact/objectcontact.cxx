@@ -153,7 +153,7 @@ sdr::event::TimerEventHandler& ObjectContact::GetEventHandler() const
 {
     if(!HasEventHandler())
     {
-        const_cast< ObjectContact* >(this)->mpEventHandler = const_cast< ObjectContact* >(this)->CreateEventHandler();
+        const_cast< ObjectContact* >(this)->mpEventHandler = sdr::contact::ObjectContact::CreateEventHandler();
         DBG_ASSERT(mpEventHandler, "ObjectContact::GetEventHandler(): Got no EventHandler (!)");
     }
 

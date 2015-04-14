@@ -269,11 +269,11 @@ public:
     XPolygon GetFormPoly() const;
     bool CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
     XPolygon GetBezierPoly() const;
-    XPolygon GetCurvePoly() const { return XPolygon(); }
+    static XPolygon GetCurvePoly() { return XPolygon(); }
     bool CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetCirclePoly() const;
     bool CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
-    Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView* pView) const;
+    static Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView* pView);
     XPolygon GetLinePoly() const;
     bool CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetRectPoly() const;
@@ -387,7 +387,7 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
     }
 }
 
-Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView* pView) const
+Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView* pView)
 {
     long x=aCsr.X(),x1=x,x2=x;
     long y=aCsr.Y(),y1=y,y2=y;
@@ -529,14 +529,14 @@ public:
     Pointer GetCreatePointer() const;
 
     // helping stuff
-    bool IsClosed(SdrObjKind eKind) const { return eKind==OBJ_POLY || eKind==OBJ_PATHPOLY || eKind==OBJ_PATHFILL || eKind==OBJ_FREEFILL || eKind==OBJ_SPLNFILL; }
-    bool IsFreeHand(SdrObjKind eKind) const { return eKind==OBJ_FREELINE || eKind==OBJ_FREEFILL; }
-    bool IsBezier(SdrObjKind eKind) const { return eKind==OBJ_PATHLINE || eKind==OBJ_PATHFILL; }
+    static bool IsClosed(SdrObjKind eKind) { return eKind==OBJ_POLY || eKind==OBJ_PATHPOLY || eKind==OBJ_PATHFILL || eKind==OBJ_FREEFILL || eKind==OBJ_SPLNFILL; }
+    static bool IsFreeHand(SdrObjKind eKind) { return eKind==OBJ_FREELINE || eKind==OBJ_FREEFILL; }
+    static bool IsBezier(SdrObjKind eKind) { return eKind==OBJ_PATHLINE || eKind==OBJ_PATHFILL; }
     bool IsCreating() const { return mbCreating; }
 
     // get the polygon
     basegfx::B2DPolyPolygon TakeObjectPolyPolygon(const SdrDragStat& rDrag) const;
-    basegfx::B2DPolyPolygon TakeDragPolyPolygon(const SdrDragStat& rDrag) const;
+    static basegfx::B2DPolyPolygon TakeDragPolyPolygon(const SdrDragStat& rDrag);
     basegfx::B2DPolyPolygon getModifiedPolyPolygon() const { return  aPathPolygon.getB2DPolyPolygon(); }
 };
 
@@ -957,7 +957,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         if(pU->bCircle)
         {
-            mrSdrPathObject.GetModel()->TakeAngleStr(std::abs(pU->nCircRelAngle), aMetr);
+            SdrModel::TakeAngleStr(std::abs(pU->nCircRelAngle), aMetr);
             aStr += aMetr;
             aStr += " r=";
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, true);
@@ -981,7 +981,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
             sal_Int32 nAngle(GetAngle(aNow));
             aStr += " ";
-            mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
+            SdrModel::TakeAngleStr(nAngle, aMetr);
             aStr += aMetr;
         }
 
@@ -1074,7 +1074,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                 sal_Int32 nAngle(GetAngle(aNow));
                 aStr += " ";
-                mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
+                SdrModel::TakeAngleStr(nAngle, aMetr);
                 aStr += aMetr;
             }
             else if(nPointCount > 1)
@@ -1120,7 +1120,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nAngle(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
+                    SdrModel::TakeAngleStr(nAngle, aMetr);
                     aStr += aMetr;
                 }
 
@@ -1141,7 +1141,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nAngle(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
+                    SdrModel::TakeAngleStr(nAngle, aMetr);
                     aStr += aMetr;
                 }
             }
@@ -1605,7 +1605,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
     return aRetval;
 }
 
-basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDragStat& rDrag) const
+basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDragStat& rDrag)
 {
     basegfx::B2DPolyPolygon aRetval;
     SdrView* pView = rDrag.GetView();
@@ -2308,7 +2308,7 @@ basegfx::B2DPolyPolygon SdrPathObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     if(mpDAC)
     {
         aRetval = mpDAC->TakeObjectPolyPolygon(rDrag);
-        aRetval.append(mpDAC->TakeDragPolyPolygon(rDrag));
+        aRetval.append(ImpPathForDragAndCreate::TakeDragPolyPolygon(rDrag));
     }
 
     return aRetval;
@@ -2333,7 +2333,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getDragPolyPolygon(const SdrDragStat& rDrag)
 
     if(mpDAC)
     {
-        aRetval = mpDAC->TakeDragPolyPolygon(rDrag);
+        aRetval = ImpPathForDragAndCreate::TakeDragPolyPolygon(rDrag);
     }
 
     return aRetval;

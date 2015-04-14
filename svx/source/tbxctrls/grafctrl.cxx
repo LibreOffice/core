@@ -318,7 +318,7 @@ private:
     virtual void    Select() SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void            ImplReleaseFocus();
+    static void     ImplReleaseFocus();
 
 public:
 

@@ -712,7 +712,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
     uno::Reference< form::runtime::XFormController > xController( NULL );
     if ( pFormShell && pSdrView && pWindow )
-        xController = pFormShell->GetFormController( Form, *pSdrView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow );
     return xController;
 }
 

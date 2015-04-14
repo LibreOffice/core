@@ -1632,15 +1632,11 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterCount()
 }
 
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
-    const css::awt::Point& rPoint)
+    const css::awt::Point& )
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-
     sal_Int32 nIndex (-1);
-    if (mpParagraph)
-        nIndex = mpParagraph->GetIndexAtPoint(rPoint);
-
     return nIndex;
 }
 

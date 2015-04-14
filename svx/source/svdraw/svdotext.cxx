@@ -412,7 +412,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
     return eRet;
 } // defaults: TOP for text frame, CENTER for captions of drawing objects
 
-void SdrTextObj::ImpJustifyRect(Rectangle& rRect) const
+void SdrTextObj::ImpJustifyRect(Rectangle& rRect)
 {
     if (!rRect.IsEmpty()) {
         rRect.Justify();
@@ -878,7 +878,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     return pPara;
 }
 
-void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const
+void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg)
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
     bool bNoStretching(false);

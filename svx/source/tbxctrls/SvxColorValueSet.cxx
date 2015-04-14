@@ -40,21 +40,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxColorValueSet(vcl::
     return new SvxColorValueSet(pParent, nWinBits);
 }
 
-sal_uInt32 SvxColorValueSet::getMaxRowCount() const
+sal_uInt32 SvxColorValueSet::getMaxRowCount()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     return rStyleSettings.GetColorValueSetMaximumRowCount();
 }
 
-sal_uInt32 SvxColorValueSet::getEntryEdgeLength() const
+sal_uInt32 SvxColorValueSet::getEntryEdgeLength()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     return rStyleSettings.GetListBoxPreviewDefaultPixelSize().Height() + 1;
 }
 
-sal_uInt32 SvxColorValueSet::getColumnCount() const
+sal_uInt32 SvxColorValueSet::getColumnCount()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 

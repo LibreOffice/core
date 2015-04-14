@@ -99,7 +99,7 @@ bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< 
                 {
                     OUString aTitle( pObj->GetTitle() );
                     rList.push_back( aTitle );
-                    pTheme->ReleaseObject( pObj );
+                    GalleryTheme::ReleaseObject( pObj );
                 }
             }
             pGal->ReleaseTheme( pTheme, aListener );

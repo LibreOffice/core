@@ -381,7 +381,7 @@ namespace svxform
                                               bool bAlterModel = false );
         void Remove( FmEntryData* pEntryData, bool bAlterModel = false );
 
-        bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
+        static bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
 
         void Clear();
         void SetModified( bool bMod=true );
@@ -392,7 +392,7 @@ namespace svxform
         FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
         FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs=true );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -481,7 +481,7 @@ namespace svxform
         void UnlockSelectionHandling() { --m_nSelectLock; }
         bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
 
-        bool IsHiddenControl(FmEntryData* pEntryData);
+        static bool IsHiddenControl(FmEntryData* pEntryData);
 
         DECL_LINK( OnEdit, void* );
         DECL_LINK( OnDropActionTimer, void* );
@@ -508,8 +508,8 @@ namespace svxform
         void MarkViewObj( FmControlData* pControlData, bool bMarkHandles, bool bMark );
         void UnmarkAllViewObj();
 
-        bool IsFormEntry( SvTreeListEntry* pEntry );
-        bool IsFormComponentEntry( SvTreeListEntry* pEntry );
+        static bool IsFormEntry( SvTreeListEntry* pEntry );
+        static bool IsFormComponentEntry( SvTreeListEntry* pEntry );
 
         OUString GenerateName( FmEntryData* pEntryData );
 

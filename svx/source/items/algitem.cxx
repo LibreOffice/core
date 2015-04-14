@@ -109,7 +109,7 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 
 
-OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal )
 {
     DBG_ASSERT( nVal <= SVX_ORIENTATION_STACKED, "enum overflow!" );
     return SVX_RESSTR(RID_SVXITEMS_ORI_STANDARD + nVal);

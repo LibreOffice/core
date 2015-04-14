@@ -45,9 +45,9 @@ class GradTransformer
 public:
     GradTransformer() {}
 
-    void GradToVec(GradTransGradient& rG, GradTransVector& rV,
+    static void GradToVec(GradTransGradient& rG, GradTransVector& rV,
         const SdrObject* pObj);
-    void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
+    static void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
         GradTransGradient& rGOld, const SdrObject* pObj, bool bMoveSingle, bool bMoveFirst);
 };
 

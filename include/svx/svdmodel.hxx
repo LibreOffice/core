@@ -413,8 +413,8 @@ public:
 
     static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    void             TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar = false) const;
-    void             TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false) const;
+    static void      TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar = false);
+    static void      TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false);
 
     // RecalcPageNums is ordinarily only called by the Page.
     bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };

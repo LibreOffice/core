@@ -123,7 +123,6 @@ public:
     css::awt::Rectangle GetCharacterBounds (
         sal_Int32 nGlobalCharacterIndex,
         const bool bCaretBox);
-    sal_Int32 GetIndexAtPoint (const css::awt::Point& rPoint) const;
     void SetupCellArray (
         const PresenterTheme::SharedFontDescriptor& rpFont);
     void Format (

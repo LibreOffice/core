@@ -333,7 +333,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                     if( pObj )
                     {
                         *pValue <<= OUString( pObj->GetTitle() );
-                        pGalTheme->ReleaseObject( pObj );
+                        ::GalleryTheme::ReleaseObject( pObj );
                     }
                 }
             }
@@ -357,7 +357,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                             aThumbnail = pObj->GetThumbMtf();
 
                         *pValue <<= aThumbnail.GetXGraphic();
-                        pGalTheme->ReleaseObject( pObj );
+                        ::GalleryTheme::ReleaseObject( pObj );
                     }
                 }
             }

@@ -1031,7 +1031,7 @@ bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 
         if (pPage)
         {
-            bReturn = pPage->RequestHelp(mpWindow, mpView, rHEvt);
+            bReturn = FmFormPage::RequestHelp(mpWindow, mpView, rHEvt);
         }
     }
 

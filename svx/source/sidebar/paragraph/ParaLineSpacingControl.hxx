@@ -56,7 +56,7 @@ private:
     void ExecuteLineSpace();
 
     /// Set one particular value.
-    void SetLineSpace(SvxLineSpacingItem& rLineSpace, int eSpace, long lValue = 0);
+    static void SetLineSpace(SvxLineSpacingItem& rLineSpace, int eSpace, long lValue = 0);
 
     /// For the buttons - set the values, and close the popup.
     void ExecuteLineSpacing(sal_uInt16 aEntry);

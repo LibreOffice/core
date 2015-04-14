@@ -406,7 +406,7 @@ void SvxColorTabPage::ImpColorCountChanged()
 {
     if (!pColorList.is())
         return;
-    m_pValSetColorList->SetColCount(m_pValSetColorList->getColumnCount());
+    m_pValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
 

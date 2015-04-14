@@ -97,8 +97,8 @@ public:
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
     long         GetAlignAngle() const;
     void         SetAlignAngle(long nAngle);
-    long         EscDirToAngle(sal_uInt16 nEsc) const;
-    sal_uInt16       EscAngleToDir(long nAngle) const;
+    static long  EscDirToAngle(sal_uInt16 nEsc);
+    static sal_uInt16 EscAngleToDir(long nAngle);
     void         Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
     void         Shear (const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj);

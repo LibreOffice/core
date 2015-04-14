@@ -1923,7 +1923,7 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
     return nLevel;
 }
 
-bool SdrObjEditView::SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const
+bool SdrObjEditView::SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier )
 {
     if( nObjectInventor != SdrInventor && nObjectInventor != E3dInventor )
         return false;

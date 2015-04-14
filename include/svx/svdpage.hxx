@@ -106,7 +106,7 @@ protected:
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
-    void impChildInserted(SdrObject& rChild) const;
+    static void impChildInserted(SdrObject& rChild);
 public:
     TYPEINFO();
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=NULL);

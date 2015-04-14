@@ -49,7 +49,7 @@ private:
     bool                    bThemeNameFromResource;
 
                             GalleryThemeEntry();
-    INetURLObject           ImplGetURLIgnoreCase( const INetURLObject& rURL ) const;
+    static INetURLObject    ImplGetURLIgnoreCase( const INetURLObject& rURL );
 
 public:
 

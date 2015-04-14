@@ -120,7 +120,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::table::XTable > getTable() const;
 
     bool isValid( const sdr::table::CellPos& rPos ) const;
-    CellPos getFirstCell() const;
+    static CellPos getFirstCell();
     CellPos getLastCell() const;
     CellPos getLeftCell( const CellPos& rPos, bool bEdgeTravel ) const;
     CellPos getRightCell( const CellPos& rPos, bool bEdgeTravel  ) const;

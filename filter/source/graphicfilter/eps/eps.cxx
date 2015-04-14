@@ -224,10 +224,10 @@ private:
     inline void         ImplWriteTextColor( sal_uLong nMode = PS_RET );
     void                ImplWriteColor( sal_uLong nMode );
 
-    double              ImplGetScaling( const MapMode& );
+    static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
-    bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
-    sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
+    static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
+    static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
                         // LZW methods
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );

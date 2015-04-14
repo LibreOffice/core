@@ -109,7 +109,7 @@ public:
     void ConvertMarkedObjTo3D(bool bExtrude=true, const basegfx::B2DPoint& rPnt1 = basegfx::B2DPoint(0.0, 0.0), const basegfx::B2DPoint& rPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Means to create all Extrudes in a certain depth order.
-    void DoDepthArrange(E3dScene* pScene, double fDepth);
+    static void DoDepthArrange(E3dScene* pScene, double fDepth);
     void ConvertMarkedToPolyObj(bool bLineToArea);
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();

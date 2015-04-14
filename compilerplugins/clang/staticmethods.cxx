@@ -147,7 +147,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || aParentName == "SvtAccessibilityOptions" || aParentName == "svtools::ColorConfig"
         || aParentName == "SvtOptionsDrawinglayer" || aParentName == "SvtMenuOptions"
         || aParentName == "SvtToolPanelOptions" || aParentName == "SvtSlideSorterBarOptions"
-        || aParentName == "connectivity::SharedResources" )
+        || aParentName == "connectivity::SharedResources"
+        || aParentName == "svxform::OParseContextClient" )
     {
         return true;
     }

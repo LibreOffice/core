@@ -204,7 +204,7 @@ class OLEObjCache
     AutoTimer*          pTimer;
 
     void UnloadOnDemand();
-    bool UnloadObj( SdrOle2Obj* pObj );
+    static bool UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, AutoTimer* );
 
 public:

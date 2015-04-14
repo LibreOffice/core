@@ -214,7 +214,7 @@ namespace
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& mrShadowDecomposition;  // destination primitive list for shadow
         Reference < com::sun::star::i18n::XBreakIterator >          mxBreak;                // break iterator
 
-        double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        static double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);

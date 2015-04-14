@@ -390,7 +390,7 @@ public:
     // Get the Hdl (handle) of a marked GluePoint. Non-marked
     // GluePoints don`t have handles
     SdrHdl* GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const;
-    bool IsGluePoint(const SdrHdl& rHdl) const { return rHdl.GetKind()==HDL_GLUE; }
+    static bool IsGluePoint(const SdrHdl& rHdl) { return rHdl.GetKind()==HDL_GLUE; }
 
     // Mark all points within this rectangular (View coordinates)
     bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,false); }

@@ -235,7 +235,7 @@ bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_
 {
     if( mxItemSet.get() == 0 )
         return false;
-    if( !mpView || (!mpView->SupportsFormatPaintbrush( nObjectInventor, nObjectIdentifier) ) )
+    if( !mpView || (!SdrObjEditView::SupportsFormatPaintbrush( nObjectInventor, nObjectIdentifier) ) )
         return false;
     return true;
 }
@@ -276,7 +276,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( pObj && rDrawViewShell.GetDrawView()->SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
+        if( pObj && SdrObjEditView::SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
             return;
     }
     rSet.DisableItem( SID_FORMATPAINTBRUSH );

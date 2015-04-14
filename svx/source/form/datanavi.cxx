@@ -766,7 +766,7 @@ namespace svxform
         m_pNaviWin->DisableNotify( false );
         EnableMenuItems( NULL );
         if ( bIsDocModified )
-            m_pNaviWin->SetDocModified();
+            svxform::DataNavigatorWindow::SetDocModified();
         return bHandled;
     }
 

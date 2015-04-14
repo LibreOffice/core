@@ -76,7 +76,7 @@ namespace svxform
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                 );
 
-        void    initializeFieldDependentProperties(
+        static void initializeFieldDependentProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatabaseField,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats

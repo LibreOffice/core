@@ -110,11 +110,11 @@ public:
     bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
     bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
-    bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    static bool     Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    bool            Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    static bool     Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    bool            Paste( vcl::Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    static bool     Paste( vcl::Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
     bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
 };
 

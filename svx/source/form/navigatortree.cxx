@@ -1398,11 +1398,7 @@ namespace svxform
 
 
         // set name
-        FmFormView*     pFormView       = GetNavModel()->GetFormShell()->GetFormView();
-        SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        FmFormPage*     pPage           = static_cast<FmFormPage*>(pPageView->GetPage());
-
-        OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
+        OUString sName = FmFormPageImpl::setUniqueName( xNewComponent, xParentForm );
 
         pNewFormControlData->SetText( sName );
 
@@ -1465,7 +1461,7 @@ namespace svxform
 
         GrabFocus();
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
-        bool bRes = GetNavModel()->Rename( pEntryData, rNewText);
+        bool bRes = NavigatorTreeModel::Rename( pEntryData, rNewText);
         if( !bRes )
         {
             m_pEditEntry = pEntry;

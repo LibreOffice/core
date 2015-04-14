@@ -373,7 +373,7 @@ namespace svxform
         DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
         virtual ~DataNavigatorWindow();
 
-        void                        SetDocModified();
+        static void                 SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
         void                        AddContainerBroadcaster( const XContainer_ref& xContainer );
         void                        AddEventBroadcaster( const XEventTarget_ref& xTarget );

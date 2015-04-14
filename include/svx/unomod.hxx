@@ -42,7 +42,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createTextField( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     // internal
-    ::com::sun::star::uno::Sequence< OUString >
+    static ::com::sun::star::uno::Sequence< OUString >
         concatServiceNames( ::com::sun::star::uno::Sequence< OUString >& rServices1,
                             ::com::sun::star::uno::Sequence< OUString >& rServices2 ) throw();
 

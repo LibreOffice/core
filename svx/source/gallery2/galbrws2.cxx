@@ -118,7 +118,7 @@ private:
     typedef std::map< int, CommandInfo > CommandInfoMap;
     CommandInfoMap   m_aCommandInfo;
 
-    void Execute( const CommandInfo &rCmdInfo,
+    static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
     DECL_LINK( MenuSelectHdl, Menu* pMenu );
@@ -295,7 +295,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
 
     // update status
     css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
-        mpBrowser->GetFrame(), css::uno::UNO_QUERY );
+        GalleryBrowser2::GetFrame(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
     for ( CommandInfoMap::iterator it = m_aCommandInfo.begin();
@@ -789,7 +789,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpPreview->Hide();
                 mpPreview->SetGraphic( Graphic() );
-                mpPreview->PreviewMedia( INetURLObject() );
+                GalleryPreview::PreviewMedia( INetURLObject() );
 
                 mpIconView->Show();
 
@@ -807,7 +807,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpPreview->Hide();
                 mpPreview->SetGraphic( Graphic() );
-                mpPreview->PreviewMedia( INetURLObject() );
+                GalleryPreview::PreviewMedia( INetURLObject() );
 
                 mpListView->Show();
 
@@ -839,7 +839,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                      mpPreview->Show();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
-                        mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
+                        GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     maViewBox.EnableItem( TBX_ID_ICON, false );
                     maViewBox.EnableItem( TBX_ID_LIST, false );
@@ -912,7 +912,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
                     mpPreview->SetGraphic( aGraphic );
 
                     if( SGA_OBJ_SOUND == mpCurTheme->GetObjectKind( nPos ) )
-                        mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
+                        GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     mpPreview->Invalidate();
                 }
@@ -1023,7 +1023,7 @@ void GalleryBrowser2::ImplSelectItemId( sal_uIntPtr nItemId )
 }
 
 css::uno::Reference< css::frame::XFrame >
-GalleryBrowser2::GetFrame() const
+GalleryBrowser2::GetFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
     SfxViewFrame* pCurrentViewFrame = SfxViewFrame::Current();
@@ -1191,7 +1191,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                             }
                         }
 
-                        mpCurTheme->ReleaseObject( pObj );
+                        GalleryTheme::ReleaseObject( pObj );
                     }
                 }
             }

@@ -639,7 +639,7 @@ void SdrHdl::CreateB2dIAObject()
     }
 }
 
-BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
+BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd)
 {
     BitmapMarkerKind eRetval(eKnd);
 
@@ -1262,7 +1262,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
         aOldGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
 
     // transform vector data to gradient
-    aGradTransformer.VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);
+    GradTransformer::VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);
 
     if(bSetItemOnObject)
     {
@@ -1293,7 +1293,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     }
 
     // back transformation, set values on pIAOHandle
-    aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, _pObj);
+    GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, _pObj);
 
     SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
     Set2ndPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));

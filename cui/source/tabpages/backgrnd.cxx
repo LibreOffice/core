@@ -1144,7 +1144,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 
     const WinBits nBits(m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
     m_pBackgroundColorSet->SetStyle(nBits);
-    m_pBackgroundColorSet->SetColCount(m_pBackgroundColorSet->getColumnCount());
+    m_pBackgroundColorSet->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
 

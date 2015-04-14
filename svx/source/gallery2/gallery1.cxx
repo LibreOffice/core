@@ -107,7 +107,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL ) const
+INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )
 {
     INetURLObject   aURL( rURL );
 

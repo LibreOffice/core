@@ -563,7 +563,7 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
     }
 }
 
-bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
+bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj)
 {
     // new condition IsLine() to be able to combine simple Lines
     bool bIsLine(false);
@@ -581,7 +581,7 @@ bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
     return (aInfo.bCanConvToPath || aInfo.bCanConvToPoly || bIsLine);
 }
 
-bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
+bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj)
 {
     SdrObjList* pOL = pObj->GetSubList();
 
@@ -611,7 +611,7 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
     return true;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine) const
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine)
 {
     basegfx::B2DPolyPolygon aRetval;
     const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
@@ -660,7 +660,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, b
     return aRetval;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine) const
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine)
 {
     SdrObjList* pOL = pObj->GetSubList();
 
@@ -683,7 +683,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bo
     }
 }
 
-basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon) const
+basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
@@ -1348,7 +1348,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 // Dismantle
 
 
-bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, bool bMakeLines) const
+bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, bool bMakeLines)
 {
     bool bCan(false);
     const sal_uInt32 nPolygonCount(rPpolyPolygon.count());
@@ -1373,7 +1373,7 @@ bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, 
     return bCan;
 }
 
-bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const
+bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines)
 {
     bool bOtherObjs(false);    // true=objects other than PathObj's existent
     bool bMin1PolyPoly(false); // true=at least 1 tools::PolyPolygon with more than one Polygon existent

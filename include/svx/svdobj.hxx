@@ -393,7 +393,7 @@ public:
 protected:
 
     // override if the class inherits from SdrObjPlusData:
-    SdrObjPlusData* NewPlusData() const;
+    static SdrObjPlusData* NewPlusData();
 
 protected:
     /// A derived class must override these 3 methods if it has own geometric
@@ -839,7 +839,7 @@ public:
     // when there is no filled new polygon created from line-to-polygon conversion,
     // specially used for XLINE_DASH and 3D conversion
     SdrObject* ConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
-    SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
+    static SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false);
 
     // if true, reference onto an object
     bool IsVirtualObj() const { return bVirtObj;}

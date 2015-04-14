@@ -113,12 +113,12 @@ public:
         PresenterConfigurationAccess& rConfiguration,
         const OUString& rsThemeName);
 
-    BorderSize ReadBorderSize (const Reference<container::XNameAccess>& rxNode);
+    static BorderSize ReadBorderSize (const Reference<container::XNameAccess>& rxNode);
 
 private:
-    Any GetByName (
+    static Any GetByName (
         const Reference<container::XNameAccess>& rxNode,
-        const OUString& rsName) const;
+        const OUString& rsName);
 };
 
 /** A PaneStyle describes how a pane is rendered.
@@ -766,7 +766,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
 
 Any ReadContext::GetByName (
     const Reference<container::XNameAccess>& rxNode,
-    const OUString& rsName) const
+    const OUString& rsName)
 {
     OSL_ASSERT(rxNode.is());
     if (rxNode->hasByName(rsName))
@@ -903,9 +903,9 @@ void PaneStyleContainer::ProcessPaneStyle(
         xFontNode, "", PresenterTheme::SharedFontDescriptor());
 
     Reference<container::XNameAccess> xInnerBorderSizeNode (rValues[3], UNO_QUERY);
-    pStyle->maInnerBorderSize = rReadContext.ReadBorderSize(xInnerBorderSizeNode);
+    pStyle->maInnerBorderSize = ReadContext::ReadBorderSize(xInnerBorderSizeNode);
     Reference<container::XNameAccess> xOuterBorderSizeNode (rValues[4], UNO_QUERY);
-    pStyle->maOuterBorderSize = rReadContext.ReadBorderSize(xOuterBorderSizeNode);
+    pStyle->maOuterBorderSize = ReadContext::ReadBorderSize(xOuterBorderSizeNode);
 
     if (pStyle->mpParentStyle.get() != NULL)
     {

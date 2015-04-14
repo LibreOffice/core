@@ -559,7 +559,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     return pNewObj;
 }
 
-void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) const throw()
+void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) throw()
 {
     sal_uInt32 nTempType = UHashMap::getId( aName );
 

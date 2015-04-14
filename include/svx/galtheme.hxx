@@ -138,7 +138,7 @@ public:
     SAL_DLLPRIVATE size_t       GetObjectCount() const { return aObjectList.size(); }
 
     SgaObject*                  AcquireObject( size_t nPos );
-    void                        ReleaseObject( SgaObject* pObj );
+    static void                 ReleaseObject( SgaObject* pObj );
 
     bool                        InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = CONTAINER_APPEND );
     bool                        RemoveObject( size_t nPos );

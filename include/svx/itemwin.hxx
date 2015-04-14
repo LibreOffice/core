@@ -72,7 +72,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     Size            aLogicalSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    void            ReleaseFocus_Impl();
+    static void     ReleaseFocus_Impl();
 
 protected:
     virtual void    Modify() SAL_OVERRIDE;
@@ -114,7 +114,7 @@ private:
     bool            bSelect;
     bool            bRelease;
 
-    void            ReleaseFocus_Impl();
+    static void     ReleaseFocus_Impl();
 };
 
 // class SvxFillAttrBox --------------------------------------------------
@@ -136,7 +136,7 @@ private:
     sal_uInt16      nCurPos;
     bool            bRelease;
 
-    void            ReleaseFocus_Impl();
+    static void     ReleaseFocus_Impl();
 };
 
 #endif // INCLUDED_SVX_ITEMWIN_HXX

@@ -80,7 +80,7 @@ namespace
     class FormComponentInfo
     {
     public:
-        size_t childCount( const Reference< XInterface >& _component ) const
+        static size_t childCount( const Reference< XInterface >& _component )
         {
             Reference< XIndexAccess > xContainer( _component, UNO_QUERY );
             if ( xContainer.is() )
@@ -88,7 +88,7 @@ namespace
             return 0;
         }
 
-        Reference< XInterface > getChild( const Reference< XInterface >& _component, size_t _index ) const
+        static Reference< XInterface > getChild( const Reference< XInterface >& _component, size_t _index )
         {
             Reference< XIndexAccess > xContainer( _component, UNO_QUERY_THROW );
             return Reference< XInterface >( xContainer->getByIndex( _index ), UNO_QUERY );
@@ -104,24 +104,22 @@ namespace
         {
         }
 
-        size_t childCount( const FormComponentPair& _components ) const
+        static size_t childCount( const FormComponentPair& _components )
         {
-            size_t lhsCount = m_aComponentInfo.childCount( _components.first );
-            size_t rhsCount = m_aComponentInfo.childCount( _components.second );
+            size_t lhsCount = FormComponentInfo::childCount( _components.first );
+            size_t rhsCount = FormComponentInfo::childCount( _components.second );
             if  ( lhsCount != rhsCount )
                 throw RuntimeException( "Found inconsistent form component hierarchies (1)!" );
             return lhsCount;
         }
 
-        FormComponentPair getChild( const FormComponentPair& _components, size_t _index ) const
+        static FormComponentPair getChild( const FormComponentPair& _components, size_t _index )
         {
             return FormComponentPair(
-                m_aComponentInfo.getChild( _components.first, _index ),
-                m_aComponentInfo.getChild( _components.second, _index )
+                FormComponentInfo::getChild( _components.first, _index ),
+                FormComponentInfo::getChild( _components.second, _index )
             );
         }
-    private:
-        FormComponentInfo   m_aComponentInfo;
     };
 
     typedef ::std::map< Reference< XControlModel >, Reference< XControlModel >, ::comphelper::OInterfaceCompare< XControlModel > > MapControlModels;

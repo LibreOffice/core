@@ -328,7 +328,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     SdrView* pSdrView( NULL );
     FmFormShell* pFormShell( NULL );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
-        xController = pFormShell->GetFormController( _Form, *pSdrView, *pWindow );
+        xController = FmFormShell::GetFormController( _Form, *pSdrView, *pWindow );
 
     return xController;
 }

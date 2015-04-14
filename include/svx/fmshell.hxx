@@ -143,11 +143,11 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _out_rxControl
     ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController(
+    static ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
         const SdrView& _rView,
         const OutputDevice& _rDevice
-    ) const;
+    );
 
     /** puts the focus into the document window, if current a form control has the focus. Otherwise, moves the focus
         to the control belonging to the given SdrUnoObj.
@@ -158,11 +158,11 @@ public:
               OutputDevice& i_rDevice
     ) const;
 
-    ::std::unique_ptr< ::svx::ISdrObjectFilter >
+    static ::std::unique_ptr< ::svx::ISdrObjectFilter >
             CreateFocusableControlFilter(
                 const SdrView& i_rView,
                 const OutputDevice& i_rDevice
-            ) const;
+            );
 
     virtual bool IsDesignMode() const SAL_OVERRIDE { return m_bDesignMode; }
     void         SetDesignMode( bool _bDesignMode );

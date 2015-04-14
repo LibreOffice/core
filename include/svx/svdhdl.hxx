@@ -183,7 +183,7 @@ protected:
         const basegfx::B2DPoint& rPos,
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
         OutputDevice& rOutDev, Point aMoveOutsideOffset = Point());
-    BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd) const;
+    static BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd);
 
 public:
     SdrHdl();

@@ -97,8 +97,8 @@ private:
     ::boost::function<void()> maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
-    sal_uIntPtr                 ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
-    void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
+    sal_uIntPtr             ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
+    static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     void                    ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec);
     void                    ImplExecute( sal_uInt16 nId );
     void                    ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew );

@@ -412,7 +412,7 @@ void SdrObject::Free( SdrObject*& _rpObject )
     delete pObject;
 }
 
-SdrObjPlusData* SdrObject::NewPlusData() const
+SdrObjPlusData* SdrObject::NewPlusData()
 {
     return new SdrObjPlusData;
 }
@@ -686,7 +686,7 @@ void SdrObject::SetName(const OUString& rStr)
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
-                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                    SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::OBJ_NAME,
                                                     GetName(),
@@ -730,7 +730,7 @@ void SdrObject::SetTitle(const OUString& rStr)
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
-                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                    SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::OBJ_TITLE,
                                                     GetTitle(),
@@ -774,7 +774,7 @@ void SdrObject::SetDescription(const OUString& rStr)
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
-                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                    SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::OBJ_DESCRIPTION,
                                                     GetDescription(),
@@ -1085,7 +1085,7 @@ OUString SdrObject::GetAngleStr(long nAngle, bool bNoDegChar) const
 {
     OUString aStr;
     if (pModel!=NULL) {
-        pModel->TakeAngleStr(nAngle,aStr,bNoDegChar);
+        SdrModel::TakeAngleStr(nAngle,aStr,bNoDegChar);
     }
     return aStr;
 }
@@ -2407,7 +2407,7 @@ void extractLineContourFromPrimitive2DSequence(
 
 
 
-SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
+SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash)
 {
     bool bNoChange(true);
 

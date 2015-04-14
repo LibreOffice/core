@@ -61,7 +61,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
+    static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
 private:
     // UI controls

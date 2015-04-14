@@ -134,19 +134,19 @@ protected:
     void ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) const;
 
     // for CombineMarkedObjects
-    bool ImpCanConvertForCombine1(const SdrObject* pObj) const;
-    bool ImpCanConvertForCombine(const SdrObject* pObj) const;
-    basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine) const;
-    basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine) const;
-    basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    static bool ImpCanConvertForCombine1(const SdrObject* pObj);
+    static bool ImpCanConvertForCombine(const SdrObject* pObj);
+    static basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine);
+    static basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine);
+    static basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // for DismantleMarkedObjects
-    bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines) const;
-    bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const;
+    static bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines);
+    static bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines);
     void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines);
-    void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
+    static void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
         bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect);
-    void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
+    static void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
     bool ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const;
     void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
 

@@ -68,8 +68,8 @@ public:
     void                        DeSelect();
     inline bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
     inline sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
-    sal_uInt16                  GetRowPos(sal_uInt16 _nPos) const;
-    sal_uInt16                  GetColumnPos(sal_uInt16 _nPos) const;
+    static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
+    static sal_uInt16           GetColumnPos(sal_uInt16 _nPos);
 
     ScrollBar&                  getScrollBar() { return aVscrollSB;}
     void                        ReleaseAccessible();

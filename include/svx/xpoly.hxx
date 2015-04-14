@@ -58,7 +58,7 @@ protected:
     void    GenBezArc(const Point& rCenter, long nRx, long nRy,
                       long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
-    bool    CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
+    static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
 
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );

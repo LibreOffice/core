@@ -559,7 +559,7 @@ protected:
 
     OUString GetCurrentRowCellText(DbGridColumn* pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();
-    bool IsValid(const DbGridRowRef& _xRow) const {return _xRow && _xRow->IsValid();}
+    static bool IsValid(const DbGridRowRef& _xRow) { return _xRow && _xRow->IsValid(); }
 
     // row which is currently being appended
     bool IsCurrentAppending() const;

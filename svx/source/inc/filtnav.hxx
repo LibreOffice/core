@@ -185,7 +185,7 @@ public:
     void SetCurrentController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController);
 
     void Remove(FmFilterData* pFilterItem);
-    void AppendFilterItems( FmFormItem& _rItem );
+    static void AppendFilterItems( FmFormItem& _rItem );
     void EnsureEmptyFilterRows( FmParentData& _rItem );
 
 protected:

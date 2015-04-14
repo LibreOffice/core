@@ -814,7 +814,7 @@ bool SdrTableObj::isValid( const CellPos& rPos ) const
 
 
 
-CellPos SdrTableObj::getFirstCell() const
+CellPos SdrTableObj::getFirstCell()
 {
     return CellPos( 0,0 );
 }

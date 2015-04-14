@@ -32,9 +32,9 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
 
-    sal_uInt32 getMaxRowCount() const;
-    sal_uInt32 getEntryEdgeLength() const;
-    sal_uInt32 getColumnCount() const;
+    static sal_uInt32 getMaxRowCount();
+    static sal_uInt32 getEntryEdgeLength();
+    static sal_uInt32 getColumnCount();
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
     void addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix, sal_uInt32 nStartIndex = 1);

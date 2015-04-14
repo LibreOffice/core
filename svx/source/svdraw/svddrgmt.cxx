@@ -1808,7 +1808,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
             if(!bEqual)
                 rStr += "x=";
 
-            getSdrDragView().GetModel()->TakePercentStr(aXFact, aStr);
+            SdrModel::TakePercentStr(aXFact, aStr);
             rStr += aStr;
         }
 
@@ -1818,7 +1818,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
                 rStr += " ";
 
             rStr += "y=";
-            getSdrDragView().GetModel()->TakePercentStr(aYFact, aStr);
+            SdrModel::TakePercentStr(aYFact, aStr);
             rStr += aStr;
         }
 
@@ -2134,7 +2134,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
     }
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeAngleStr(nTmpAngle, aStr);
+    SdrModel::TakeAngleStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2270,7 +2270,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     nTmpAngle = NormAngle180(nTmpAngle);
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeAngleStr(nTmpAngle, aStr);
+    SdrModel::TakeAngleStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2856,7 +2856,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
 
         nVal = std::abs(nVal);
         OUString aStr;
-        getSdrDragView().GetModel()->TakeAngleStr(nVal, aStr);
+        SdrModel::TakeAngleStr(nVal, aStr);
         rStr += aStr + ")";
     }
 
@@ -3356,7 +3356,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
             const Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
             const bool bLocalRotate(!bContortion && eMode == SDRCROOK_ROTATE && getSdrDragView().IsRotateAllowed(false));
 
-            getSdrDragView().ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
+            SdrEditView::ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
         }
     }
 }
@@ -3595,7 +3595,7 @@ void SdrDragDistort::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
     if (bDoDistort)
     {
-        getSdrDragView().ImpDistortObj(&rTarget, aMarkRect, aDistortedRect, !bContortion);
+        SdrEditView::ImpDistortObj(&rTarget, aMarkRect, aDistortedRect, !bContortion);
     }
 }
 

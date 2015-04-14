@@ -77,7 +77,7 @@ public:
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );
-    void                PreviewMedia( const INetURLObject& rURL );
+    static void         PreviewMedia( const INetURLObject& rURL );
 };
 
 class GalleryIconView : public ValueSet, public DropTargetHelper, public DragSourceHelper

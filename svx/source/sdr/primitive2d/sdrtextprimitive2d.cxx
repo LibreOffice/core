@@ -93,7 +93,7 @@ namespace drawinglayer
         // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
         // for slideshow. This uses TextHierarchyBlockPrimitive2D to mark a text block.
         // ATM there is only one text block per SdrObject, this may get more in the future
-        Primitive2DSequence SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DSequence& rCandidate) const
+        Primitive2DSequence SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DSequence& rCandidate)
         {
             Primitive2DReference xReference(new TextHierarchyBlockPrimitive2D(rCandidate));
             Primitive2DSequence xRetval(&xReference, 1);

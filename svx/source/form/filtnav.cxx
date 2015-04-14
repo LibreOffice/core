@@ -302,7 +302,7 @@ public:
 
     void AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd );
 
-    void setText(sal_Int32 nPos,
+    static void setText(sal_Int32 nPos,
         const FmFilterItem* pFilterItem,
         const OUString& rText);
 };
@@ -807,7 +807,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
                 {
                     ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
                     FmFilterItem* pFilterItem = PTR_CAST( FmFilterItem, *removePos );
-                    m_pAdapter->setText( nPos, pFilterItem, OUString() );
+                    FmFilterAdapter::setText( nPos, pFilterItem, OUString() );
                     Remove( removePos );
                 }
             }
@@ -837,7 +837,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
             // EmptyText removes the filter
-            m_pAdapter->setText(nParentPos, pFilterItem, OUString());
+            FmFilterAdapter::setText(nParentPos, pFilterItem, OUString());
             Remove( i );
         }
     }
@@ -914,7 +914,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
     ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
 
-    m_pAdapter->setText(nParentPos, pItem, rText);
+    FmFilterAdapter::setText(nParentPos, pItem, rText);
 
     if (rText.isEmpty())
         Remove(pItem);

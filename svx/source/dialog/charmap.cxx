@@ -196,14 +196,14 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 
 
 
-sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos) const
+sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
 {
     return _nPos / COLUMN_COUNT ;
 }
 
 
 
-sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos) const
+sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos)
 {
     return _nPos % COLUMN_COUNT ;
 }

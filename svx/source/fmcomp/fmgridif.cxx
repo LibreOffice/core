@@ -1788,7 +1788,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     Reference< XIndexAccess > xColumnsByIndex( xColumnsByName, UNO_QUERY );
 
     if ( xColumnsByIndex.is() )
-        pGrid->InitColumnByField( pCol, xNewColumn, xColumnsByName, xColumnsByIndex );
+        FmGridControl::InitColumnByField( pCol, xNewColumn, xColumnsByName, xColumnsByIndex );
     else
         // the simple version, applies when the grid is not yet connected to a data source
         pCol->setModel(xNewColumn);

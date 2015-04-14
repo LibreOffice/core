@@ -1103,7 +1103,7 @@ namespace
             rPage.GetImpl().findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
             UNO_SET_THROW );
 
-        rPage.GetImpl().setUniqueName( xFormComponent, xTargetForm );
+        FmFormPageImpl::setUniqueName( xFormComponent, xTargetForm );
 
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
         xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
@@ -1647,8 +1647,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 
     if ( _rxField.is() )
     {
-        FormControlFactory aControlFactory;
-        aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+        FormControlFactory::initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
     }
 
     _rpLabel = pLabel.release();

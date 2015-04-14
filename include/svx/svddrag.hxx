@@ -140,7 +140,7 @@ public:
     bool         IsMouseDown() const                  { return !bMouseIsUp; }
     void         SetMouseDown(bool bDown)         { bMouseIsUp=!bDown; }
 
-    Point KorregPos(const Point& rNow, const Point& rPrev) const;
+    static Point KorregPos(const Point& rNow, const Point& rPrev);
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
     void  NextPoint(bool bSaveReal=false);
