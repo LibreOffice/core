@@ -1138,7 +1138,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 aFile = aFile.replaceAll( "/", "\\" );
                                 aTarget = aFile;
                             }
-                            else if ( pFieldEntry->aFieldUrl[0] == '#' )
+                            else if ( pFieldEntry->aFieldUrl.startsWith("#") )
                             {
                                 OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
                                 aPage = aPage.copy( 1 );
