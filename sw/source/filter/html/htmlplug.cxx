@@ -1283,18 +1283,25 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         if (xStorable.is() && !aFilter.isEmpty())
         {
-            SvMemoryStream aStream;
-            uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-            utl::MediaDescriptor aMediaDescriptor;
-            aMediaDescriptor["FilterName"] <<= aFilter;
-            aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
-            aMediaDescriptor["OutputStream"] <<= xOutputStream;
-            xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-            OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
-            // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
-            rWrt.Strm().WriteCharPtr(aData.getStr());
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false);
+            try
+            {
+                // FIXME: exception for the simplest test document, too
+                SvMemoryStream aStream;
+                uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+                utl::MediaDescriptor aMediaDescriptor;
+                aMediaDescriptor["FilterName"] <<= aFilter;
+                aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
+                aMediaDescriptor["OutputStream"] <<= xOutputStream;
+                xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+                OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
+                // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
+                rWrt.Strm().WriteCharPtr(aData.getStr());
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false);
+            }
+            catch ( uno::Exception& )
+            {
+            }
         }
 
         return rWrt;
