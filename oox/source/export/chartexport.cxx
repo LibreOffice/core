@@ -860,7 +860,12 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
     {
         Reference< drawing::XShape > xShape = rChartDoc->getTitle();
         if( xShape.is() )
+        {
             exportTitle( xShape );
+            pFS->singleElement( FSNS(XML_c, XML_autoTitleDeleted),
+                    XML_val, "0",
+                    FSEND);
+        }
     }
     InitPlotArea( );
     if( mbIs3DChart )
