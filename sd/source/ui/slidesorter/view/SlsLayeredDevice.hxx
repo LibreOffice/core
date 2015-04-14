@@ -46,7 +46,7 @@ class LayeredDevice
 {
 public:
     LayeredDevice (const SharedSdWindow& rpTargetWindow);
-    ~LayeredDevice (void);
+    ~LayeredDevice();
 
     void Invalidate (
         const Rectangle& rInvalidationBox,
@@ -64,12 +64,12 @@ public:
         const SharedILayerPainter& rPainter,
         const sal_Int32 nLayer);
 
-    bool HandleMapModeChange (void);
+    bool HandleMapModeChange();
     void Repaint (const vcl::Region& rRepaintRegion);
 
-    void Resize (void);
+    void Resize();
 
-    void Dispose (void);
+    void Dispose();
 
 private:
     SharedSdWindow mpTargetWindow;

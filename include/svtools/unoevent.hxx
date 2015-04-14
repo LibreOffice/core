@@ -126,7 +126,7 @@ public:
 
     // XServiceInfo
     /// must be implemented in subclass
-    virtual OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     // XServiceInfo
@@ -135,7 +135,7 @@ public:
 
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames(void)
+        getSupportedServiceNames()
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
@@ -263,7 +263,7 @@ public:
     virtual ~SvDetachedEventDescriptor();
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:

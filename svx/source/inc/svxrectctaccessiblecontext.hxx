@@ -83,7 +83,7 @@ protected:
 public:
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleContext() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleComponent
     virtual sal_Bool SAL_CALL
@@ -117,35 +117,35 @@ public:
 
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleChildCount() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild( sal_Int32 nIndex )
             throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleParent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleIndexInParent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleRole() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleDescription( void ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleName( void ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
-        getAccessibleRelationSet( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleRelationSet() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
-        getAccessibleStateSet( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleStateSet() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale( void )
+        getLocale()
             throw(  ::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception ) SAL_OVERRIDE;
 
@@ -162,17 +162,17 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL
-        getImplementationName( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleSelection
     virtual void SAL_CALL
@@ -232,10 +232,10 @@ public:
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.
-    Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBoxOnScreen() throw( ::com::sun::star::uno::RuntimeException );
 
     /// @Return the object's current bounding box relative to the parent object.
-    Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBox() throw( ::com::sun::star::uno::RuntimeException );
 
     /// Calls all Listener to tell they the change.
     void CommitChange( const com::sun::star::accessibility::AccessibleEventObject& rEvent );
@@ -243,13 +243,13 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /// @returns true if it's disposed or in disposing
-    inline bool IsAlive( void ) const;
+    inline bool IsAlive() const;
 
     /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive( void ) const;
+    inline bool IsNotAlive() const;
 
     /// throws the exception DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
+    void ThrowExceptionIfNotAlive() throw( ::com::sun::star::lang::DisposedException );
 
 private:
     /** Description of this object.  This is not a constant because it can
@@ -281,12 +281,12 @@ private:
     bool                            mbAngleMode;
 };
 
-inline bool SvxRectCtlAccessibleContext::IsAlive( void ) const
+inline bool SvxRectCtlAccessibleContext::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline bool SvxRectCtlAccessibleContext::IsNotAlive( void ) const
+inline bool SvxRectCtlAccessibleContext::IsNotAlive() const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
@@ -315,7 +315,7 @@ protected:
 public:
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleContext() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleComponent
     virtual sal_Bool SAL_CALL
@@ -346,35 +346,35 @@ public:
 
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleChildCount() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getAccessibleChild( sal_Int32 nIndex )
             throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
-        getAccessibleParent( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleParent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleIndexInParent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleRole() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleDescription( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleDescription() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleName( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
-        getAccessibleRelationSet( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleRelationSet() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
-        getAccessibleStateSet( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getAccessibleStateSet() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale( void )
+        getLocale()
             throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleEventBroadcaster
@@ -408,17 +408,17 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XServiceInfo
     virtual OUString SAL_CALL
-        getImplementationName( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // internal
     /// Sets the checked status
@@ -426,22 +426,22 @@ public:
     void FireFocusEvent();
 
 protected:
-    Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBoxOnScreen() throw( ::com::sun::star::uno::RuntimeException );
 
-    Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBox() throw( ::com::sun::star::uno::RuntimeException );
 
     void CommitChange( const com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /// @returns true if it's disposed or in disposing
-    inline bool IsAlive( void ) const;
+    inline bool IsAlive() const;
 
     /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive( void ) const;
+    inline bool IsNotAlive() const;
 
     /// throws the exception DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
+    void ThrowExceptionIfNotAlive() throw( ::com::sun::star::lang::DisposedException );
 
     /// Mutex guarding this object.
     ::osl::Mutex                        maMutex;
@@ -479,12 +479,12 @@ private:
     bool                            mbIsChecked;
 };
 
-inline bool SvxRectCtlChildAccessibleContext::IsAlive( void ) const
+inline bool SvxRectCtlChildAccessibleContext::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline bool SvxRectCtlChildAccessibleContext::IsNotAlive( void ) const
+inline bool SvxRectCtlChildAccessibleContext::IsNotAlive() const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }

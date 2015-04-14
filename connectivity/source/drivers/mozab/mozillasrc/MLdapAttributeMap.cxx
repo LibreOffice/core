@@ -246,7 +246,7 @@ namespace connectivity { namespace mozab {
     }
 
 
-    NS_IMETHODIMP MLdapAttributeMap::CheckState(void)
+    NS_IMETHODIMP MLdapAttributeMap::CheckState()
     {
         // we do not allow modifying the map, so we're always in a valid state
         return NS_OK;

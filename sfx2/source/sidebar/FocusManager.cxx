@@ -46,24 +46,24 @@ FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPa
 {
 }
 
-FocusManager::~FocusManager (void)
+FocusManager::~FocusManager()
 {
     Clear();
 }
 
-void FocusManager::GrabFocus (void)
+void FocusManager::GrabFocus()
 {
     FocusDeckTitle();
 }
 
-void FocusManager::Clear (void)
+void FocusManager::Clear()
 {
     SetDeckTitle(NULL);
     ClearPanels();
     ClearButtons();
 }
 
-void FocusManager::ClearPanels (void)
+void FocusManager::ClearPanels()
 {
     ::std::vector<Panel*> aPanels;
     aPanels.swap(maPanels);
@@ -82,7 +82,7 @@ void FocusManager::ClearPanels (void)
     }
 }
 
-void FocusManager::ClearButtons (void)
+void FocusManager::ClearButtons()
 {
     ::std::vector<Button*> aButtons;
     aButtons.swap(maButtons);
@@ -184,7 +184,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     return FocusLocation(PC_None, -1);
 }
 
-void FocusManager::FocusDeckTitle (void)
+void FocusManager::FocusDeckTitle()
 {
     if (mpDeckTitleBar != NULL)
     {
@@ -205,7 +205,7 @@ void FocusManager::FocusDeckTitle (void)
         FocusPanel(0, false);
 }
 
-bool FocusManager::IsDeckTitleVisible (void) const
+bool FocusManager::IsDeckTitleVisible() const
 {
     return mpDeckTitleBar != NULL && mpDeckTitleBar->IsVisible();
 }

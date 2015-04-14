@@ -59,9 +59,9 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<
             css::drawing::framework::XResourceId>& rxViewTabBarId);
-    virtual ~ViewTabBarModule (void);
+    virtual ~ViewTabBarModule();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfigurationChangeListener
 

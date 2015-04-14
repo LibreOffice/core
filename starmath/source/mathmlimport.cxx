@@ -493,7 +493,7 @@ throw(uno::RuntimeException, std::exception)
     return SvXMLImport::getSomething( rId );
 }
 
-void SmXMLImport::endDocument(void)
+void SmXMLImport::endDocument()
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //Set the resulted tree into the SmDocShell where it belongs
@@ -1666,7 +1666,7 @@ public:
 };
 
 
-void SmXMLNoneContext_Impl::EndElement(void)
+void SmXMLNoneContext_Impl::EndElement()
 {
     SmToken aToken;
     aToken.cMathChar = '\0';

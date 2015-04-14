@@ -72,7 +72,7 @@ PaneChildWindow::PaneChildWindow (
     }
 }
 
-PaneChildWindow::~PaneChildWindow (void)
+PaneChildWindow::~PaneChildWindow()
 {
     ViewShellBase* pBase = NULL;
     PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);

@@ -95,7 +95,7 @@ protected:
      */
     virtual void SetGrammarChecking(bool bOn);
 
-    SfxBindings& GetBindings (void) const;
+    SfxBindings& GetBindings() const;
     /** Set the spell dialog into the 'resume' state. This method should be called
         to notify the SpellDialog about changes in the document that invalidate the
         current state which results in disabling most of the dialog controls and presenting

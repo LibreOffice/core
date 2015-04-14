@@ -57,7 +57,7 @@ public:
     */
     ControlContainer (TreeNode* pNode);
 
-    virtual ~ControlContainer (void);
+    virtual ~ControlContainer();
 
     /** This is function makes sure that all children are deleted.  Call
         this function from the destructor of a sub class to have all child
@@ -65,7 +65,7 @@ public:
         sub class is called.  When that other base class is some kind of a
         window it would otherwise complain that there are living children.
     */
-    void DeleteChildren (void);
+    void DeleteChildren();
 
     /** Add the given control to the set of controls managed by the
         container.  This control is then expanded.
@@ -97,11 +97,11 @@ public:
 
     /** Return the number of controls in the container.
     */
-    sal_uInt32 GetControlCount (void) const;
+    sal_uInt32 GetControlCount() const;
 
     /** Return the number of visible controls in the container.
     */
-    sal_uInt32 GetVisibleControlCount (void) const;
+    sal_uInt32 GetVisibleControlCount() const;
 
     /** Return the control with the specified index regardless of whether
         that control is hidden or visible.
@@ -159,7 +159,7 @@ public:
         empty.  Overwrite this method in derived classes in order to react to
         such changes.
     */
-    virtual void ListHasChanged (void);
+    virtual void ListHasChanged();
 
 private:
     osl::Mutex maMutex;

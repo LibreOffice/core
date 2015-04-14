@@ -43,11 +43,11 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     SetHideNotDelete(true);
 }
 
-SpellDialogChildWindow::~SpellDialogChildWindow (void)
+SpellDialogChildWindow::~SpellDialogChildWindow()
 {
 }
 
-SfxBindings& SpellDialogChildWindow::GetBindings (void) const
+SfxBindings& SpellDialogChildWindow::GetBindings() const
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     return m_pAbstractSpellDialog->GetBindings();

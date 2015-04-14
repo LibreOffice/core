@@ -76,11 +76,11 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     }
 }
 
-ShellStackGuard::~ShellStackGuard (void)
+ShellStackGuard::~ShellStackGuard()
 {
 }
 
-void SAL_CALL ShellStackGuard::disposing (void)
+void SAL_CALL ShellStackGuard::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
@@ -142,7 +142,7 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Idle*, pIdle)
     return 0;
 }
 
-bool ShellStackGuard::IsPrinting (void) const
+bool ShellStackGuard::IsPrinting() const
 {
     if (mpBase != NULL)
     {

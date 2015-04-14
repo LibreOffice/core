@@ -47,8 +47,8 @@ public:
         const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
     static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames_static();
 
-    ScPanelFactory(void);
-    virtual ~ScPanelFactory(void);
+    ScPanelFactory();
+    virtual ~ScPanelFactory();
 
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(

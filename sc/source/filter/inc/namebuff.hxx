@@ -45,14 +45,14 @@ private:
     static sal_uInt32   MakeHashCode( const OUString& );
 public:
     inline          StringHashEntry( const OUString& );
-    inline          StringHashEntry( void );
+    inline          StringHashEntry();
     inline void     operator =( const sal_Char* );
     inline void     operator =( const OUString& );
     inline void     operator =( const StringHashEntry& );
     inline bool     operator ==( const StringHashEntry& ) const;
 };
 
-inline StringHashEntry::StringHashEntry( void )
+inline StringHashEntry::StringHashEntry()
 {
 }
 
@@ -245,7 +245,7 @@ public:
     bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
     bool            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
-    void            Reset( void );
+    void            Reset();
 };
 
 inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
@@ -260,8 +260,8 @@ struct ExtName
 
     inline          ExtName( const OUString& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
-    bool            IsDDE( void ) const;
-    bool            IsOLE( void ) const;
+    bool            IsDDE() const;
+    bool            IsOLE() const;
 };
 
 class ExtNameBuff : protected XclImpRoot

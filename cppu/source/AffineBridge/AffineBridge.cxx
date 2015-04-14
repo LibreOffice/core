@@ -68,24 +68,24 @@ public:
     osl::Condition        m_outerCondition;
     OuterThread         * m_pOuterThread;
 
-    explicit  AffineBridge(void);
-    virtual  ~AffineBridge(void);
+    explicit  AffineBridge();
+    virtual  ~AffineBridge();
 
     virtual void  v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
     virtual void  v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
 
-    virtual void  v_enter(void) SAL_OVERRIDE;
-    virtual void  v_leave(void) SAL_OVERRIDE;
+    virtual void  v_enter() SAL_OVERRIDE;
+    virtual void  v_leave() SAL_OVERRIDE;
 
     virtual bool v_isValid(rtl::OUString * pReason) SAL_OVERRIDE;
 
-    void innerDispatch(void);
+    void innerDispatch();
     void outerDispatch(int loop);
 };
 
 class InnerThread : public osl::Thread
 {
-    virtual void SAL_CALL run(void) SAL_OVERRIDE;
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     AffineBridge * m_pAffineBridge;
 
@@ -97,7 +97,7 @@ public:
         }
 };
 
-void InnerThread::run(void)
+void InnerThread::run()
 {
     osl_setThreadName("UNO AffineBridge InnerThread");
 
@@ -108,7 +108,7 @@ void InnerThread::run(void)
 
 class OuterThread : public osl::Thread
 {
-    virtual void SAL_CALL run(void) SAL_OVERRIDE;
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     AffineBridge * m_pAffineBridge;
 
@@ -122,7 +122,7 @@ OuterThread::OuterThread(AffineBridge * threadEnvironment)
     create();
 }
 
-void OuterThread::run(void)
+void OuterThread::run()
 {
     osl_setThreadName("UNO AffineBridge OuterThread");
 
@@ -137,7 +137,7 @@ void OuterThread::run(void)
 }
 
 
-AffineBridge::AffineBridge(void)
+AffineBridge::AffineBridge()
     : m_message      (CB_DONE),
       m_pCallee      (0),
       m_pParam       (0),
@@ -150,9 +150,9 @@ AffineBridge::AffineBridge(void)
     LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::AffineBridge(uno_Environment * pEnv)", this));
 }
 
-AffineBridge::~AffineBridge(void)
+AffineBridge::~AffineBridge()
 {
-    LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::~AffineBridge(void)", this));
+    LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::~AffineBridge()", this));
 
     if (m_pInnerThread && osl::Thread::getCurrentIdentifier() != m_innerThreadId)
     {
@@ -211,7 +211,7 @@ void AffineBridge::outerDispatch(int loop)
     while(mm != CB_DONE && loop);
 }
 
-void AffineBridge::innerDispatch(void)
+void AffineBridge::innerDispatch()
 {
     OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
     OSL_ASSERT(m_innerThreadId != m_outerThreadId);
@@ -303,7 +303,7 @@ void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
     innerDispatch();
 }
 
-void AffineBridge::v_enter(void)
+void AffineBridge::v_enter()
 {
     m_innerMutex.acquire();
 
@@ -315,7 +315,7 @@ void AffineBridge::v_enter(void)
     ++ m_enterCount;
 }
 
-void AffineBridge::v_leave(void)
+void AffineBridge::v_leave()
 {
     OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
 

@@ -67,10 +67,10 @@ namespace {
         PresenterScreenListener (
             const css::uno::Reference<css::uno::XComponentContext>& rxContext,
             const css::uno::Reference<css::frame::XModel2>& rxModel);
-        virtual ~PresenterScreenListener (void);
+        virtual ~PresenterScreenListener();
 
-        void Initialize (void);
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+        void Initialize();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // document::XEventListener
 
@@ -85,18 +85,18 @@ namespace {
         css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
         rtl::Reference<PresenterScreen> mpPresenterScreen;
 
-        void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
+        void ThrowIfDisposed() const throw (::com::sun::star::lang::DisposedException);
     };
 }
 
 //----- Service ---------------------------------------------------------------
 
-OUString PresenterScreenJob::getImplementationName_static (void)
+OUString PresenterScreenJob::getImplementationName_static()
 {
     return OUString("org.libreoffice.comp.PresenterScreenJob");
 }
 
-Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
+Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static()
 {
     return Sequence<OUString>();
 }
@@ -114,11 +114,11 @@ PresenterScreenJob::PresenterScreenJob (const Reference<XComponentContext>& rxCo
 {
 }
 
-PresenterScreenJob::~PresenterScreenJob (void)
+PresenterScreenJob::~PresenterScreenJob()
 {
 }
 
-void SAL_CALL PresenterScreenJob::disposing (void)
+void SAL_CALL PresenterScreenJob::disposing()
 {
     mxComponentContext = NULL;
 }
@@ -182,7 +182,7 @@ PresenterScreenListener::PresenterScreenListener (
 {
 }
 
-void PresenterScreenListener::Initialize (void)
+void PresenterScreenListener::Initialize()
 {
     Reference< document::XEventListener > xDocListener(
         static_cast< document::XEventListener* >(this), UNO_QUERY);
@@ -191,11 +191,11 @@ void PresenterScreenListener::Initialize (void)
         xDocBroadcaster->addEventListener(xDocListener);
 }
 
-PresenterScreenListener::~PresenterScreenListener (void)
+PresenterScreenListener::~PresenterScreenListener()
 {
 }
 
-void SAL_CALL PresenterScreenListener::disposing (void)
+void SAL_CALL PresenterScreenListener::disposing()
 {
     Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
     if( xDocBroadcaster.is() )
@@ -246,7 +246,7 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& 
     }
 }
 
-void PresenterScreenListener::ThrowIfDisposed (void) const throw (
+void PresenterScreenListener::ThrowIfDisposed() const throw (
     ::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -282,7 +282,7 @@ PresenterScreen::PresenterScreen (
 {
 }
 
-PresenterScreen::~PresenterScreen (void)
+PresenterScreen::~PresenterScreen()
 {
 }
 
@@ -297,7 +297,7 @@ bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::un
             >>= dEnablePresenterScreen;
         return dEnablePresenterScreen;
 }
-void SAL_CALL PresenterScreen::disposing (void)
+void SAL_CALL PresenterScreen::disposing()
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is() && mxSavedConfiguration.is())
@@ -327,7 +327,7 @@ void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
 
 
 
-void PresenterScreen::InitializePresenterScreen (void)
+void PresenterScreen::InitializePresenterScreen()
 {
     try
     {
@@ -567,7 +567,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
                 + OUString::number(nScreen));
 }
 
-void PresenterScreen::RequestShutdownPresenterScreen (void)
+void PresenterScreen::RequestShutdownPresenterScreen()
 {
     // Restore the configuration that was active before the presenter screen
     // has been activated.  Now, that the presenter screen is displayed in
@@ -593,7 +593,7 @@ void PresenterScreen::RequestShutdownPresenterScreen (void)
     }
 }
 
-void PresenterScreen::ShutdownPresenterScreen (void)
+void PresenterScreen::ShutdownPresenterScreen()
 {
     Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
     if (xViewFactoryComponent.is())

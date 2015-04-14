@@ -26,7 +26,7 @@ ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
 , aIterator(rEntryHash.begin())
 {
 }
-ZipEnumeration::~ZipEnumeration( void )
+ZipEnumeration::~ZipEnumeration()
 {
 }
 bool SAL_CALL ZipEnumeration::hasMoreElements()

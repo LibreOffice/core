@@ -253,7 +253,7 @@ public:
 private:
     friend class SerfLockStore;
 
-    void Init( void )
+    void Init()
         throw ( DAVException );
 
     void Init( const DAVRequestEnvironment & rEnv )

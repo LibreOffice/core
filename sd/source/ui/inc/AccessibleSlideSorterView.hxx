@@ -69,19 +69,19 @@ public:
 
     void Init();
 
-    virtual ~AccessibleSlideSorterView (void);
+    virtual ~AccessibleSlideSorterView();
 
     /** This method acts like a dispose call.  It sends a disposing to all
         of its listeners.  It may be called twice.
     */
-    void Destroyed (void);
+    void Destroyed();
 
     void FireAccessibleEvent (
         short nEventId,
         const ::com::sun::star::uno::Any& rOldValue,
         const ::com::sun::star::uno::Any& rNewValue);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Return the implementation object of the specified child.
         @param nIndex
@@ -102,7 +102,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext (void)
+        getAccessibleContext()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== XAccessibleEventBroadcaster =======================================
@@ -122,7 +122,7 @@ public:
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or throw exception.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
@@ -131,46 +131,46 @@ public:
 
     /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent (void)
+        getAccessibleParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent (void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole (void)
+        getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void)
+        getAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        getAccessibleName (void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet (void)
+        getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale (void)
+        getLocale()
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception) SAL_OVERRIDE;
 
@@ -194,40 +194,40 @@ public:
 
     /** The default implementation returns an empty rectangle.
     */
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the location.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation returns an empty position, i.e. the
     * result of the default constructor of <type>com::sun::star::awt::Point</type>.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the size.
     */
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** The default implementation does nothing.
     */
-    virtual void SAL_CALL grabFocus (void)
+    virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns black as the default foreground color.
     */
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns white as the default background color.
     */
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== XAccessibleSelection ==============================================
@@ -270,7 +270,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return whether the specified service is supported by this class.
@@ -282,10 +282,10 @@ public:
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    void SwitchViewActivated (void);
+    void SwitchViewActivated();
 private:
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
@@ -304,7 +304,7 @@ private:
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
@@ -313,7 +313,7 @@ private:
         @return sal_True, if the object is disposed or in the course
         of being disposed. Otherwise, sal_False is returned.
     */
-    bool IsDisposed (void);
+    bool IsDisposed();
 };
 
 } // end of namespace ::accessibility

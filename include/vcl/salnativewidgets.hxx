@@ -294,10 +294,10 @@ class VCL_DLLPUBLIC ImplControlValue
 
         ControlType getType() const { return mType; }
 
-        inline ButtonValue      getTristateVal( void ) const { return mTristate; }
+        inline ButtonValue      getTristateVal() const { return mTristate; }
         inline void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
 
-        inline long         getNumericVal( void ) const { return mNumber; }
+        inline long         getNumericVal() const { return mNumber; }
         inline void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
 };
 

@@ -28,7 +28,7 @@ SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
     get(mpNumColumns, "columns");
 }
 
-short SvxNewTableDialog::Execute(void)
+short SvxNewTableDialog::Execute()
 {
     return ModalDialog::Execute();
 }

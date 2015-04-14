@@ -157,7 +157,7 @@ namespace fileaccess
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
             throw( com::sun::star::ucb::DuplicateCommandIdentifierException );
 
-        sal_Int32 SAL_CALL getCommandId( void );
+        sal_Int32 SAL_CALL getCommandId();
         void SAL_CALL abort( sal_Int32 CommandId );
 
 

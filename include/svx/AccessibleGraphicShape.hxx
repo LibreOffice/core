@@ -41,17 +41,17 @@ public:
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
-    virtual ~AccessibleGraphicShape (void);
+    virtual ~AccessibleGraphicShape();
 
     //=====  XAccessibleImage  ================================================
 
-    OUString SAL_CALL getAccessibleImageDescription (void)
+    OUString SAL_CALL getAccessibleImageDescription()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Int32 SAL_CALL getAccessibleImageHeight (void)
+    sal_Int32 SAL_CALL getAccessibleImageHeight()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Int32 SAL_CALL getAccessibleImageWidth (void)
+    sal_Int32 SAL_CALL getAccessibleImageWidth()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XInterface  ======================================================
@@ -61,11 +61,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire()
         throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        release (void)
+        release()
         throw () SAL_OVERRIDE;
 
     //=====  XServiceInfo  ====================================================
@@ -73,20 +73,20 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString

@@ -49,7 +49,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     ProvideOutliner();
 }
 
-SpellDialogChildWindow::~SpellDialogChildWindow (void)
+SpellDialogChildWindow::~SpellDialogChildWindow()
 {
     if (mpSdOutliner != NULL)
         mpSdOutliner->EndSpelling();
@@ -58,12 +58,12 @@ SpellDialogChildWindow::~SpellDialogChildWindow (void)
         delete mpSdOutliner;
 }
 
-SfxChildWinInfo SpellDialogChildWindow::GetInfo (void) const
+SfxChildWinInfo SpellDialogChildWindow::GetInfo() const
 {
     return ::svx::SpellDialogChildWindow::GetInfo();
 }
 
-void SpellDialogChildWindow::InvalidateSpellDialog (void)
+void SpellDialogChildWindow::InvalidateSpellDialog()
 {
     ::svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
@@ -106,7 +106,7 @@ void SpellDialogChildWindow::ApplyChangedSentence (
     }
 }
 
-void SpellDialogChildWindow::GetFocus (void)
+void SpellDialogChildWindow::GetFocus()
 {
     // In order to detect a cursor movement we could compare the
     // currently selected text shape with the one that was selected
@@ -119,7 +119,7 @@ void SpellDialogChildWindow::LoseFocus()
 {
 }
 
-void SpellDialogChildWindow::ProvideOutliner (void)
+void SpellDialogChildWindow::ProvideOutliner()
 {
     ViewShellBase* pViewShellBase = PTR_CAST (ViewShellBase, SfxViewShell::Current());
 

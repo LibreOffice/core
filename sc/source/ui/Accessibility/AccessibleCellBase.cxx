@@ -196,7 +196,7 @@ void SAL_CALL ScAccessibleCellBase::release()
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32
-    ScAccessibleCellBase::getAccessibleIndexInParent(void)
+    ScAccessibleCellBase::getAccessibleIndexInParent()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -205,7 +205,7 @@ sal_Int32
 }
 
 OUString SAL_CALL
-    ScAccessibleCellBase::createAccessibleDescription(void)
+    ScAccessibleCellBase::createAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_CELL_DESCR));
@@ -214,7 +214,7 @@ OUString SAL_CALL
 }
 
 OUString SAL_CALL
-    ScAccessibleCellBase::createAccessibleName(void)
+    ScAccessibleCellBase::createAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
     // Document not needed, because only the cell address, but not the tablename is needed
@@ -285,7 +285,7 @@ uno::Any SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleCellBase::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleCellBase");
@@ -300,7 +300,7 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleCellBase::getImplementationId(void)
+    ScAccessibleCellBase::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
@@ -315,7 +315,7 @@ bool ScAccessibleCellBase::IsEditable(
     return bEditable;
 }
 
-OUString SAL_CALL ScAccessibleCellBase::GetNote(void)
+OUString SAL_CALL ScAccessibleCellBase::GetNote()
                                 throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -364,7 +364,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote(void)
 
 #include <com/sun/star/table/ShadowFormat.hpp>
 
-OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs(void)
+OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
                                         throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -447,7 +447,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs(void)
 
 #include <com/sun/star/table/BorderLine.hpp>
 
-OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs(void)
+OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
                                         throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -597,7 +597,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs(void)
 }
 //end of cell attributes
 
-OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote(void)
+OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString strNote;

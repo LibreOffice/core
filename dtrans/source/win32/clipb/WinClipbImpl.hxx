@@ -76,7 +76,7 @@ protected:
     void SAL_CALL registerClipboardViewer( );
     void SAL_CALL unregisterClipboardViewer( );
 
-    static void WINAPI onClipboardContentChanged( void );
+    static void WINAPI onClipboardContentChanged();
 
 private:
     void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );

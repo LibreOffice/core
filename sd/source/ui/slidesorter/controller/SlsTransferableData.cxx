@@ -62,7 +62,7 @@ TransferableData::TransferableData (
         StartListening(*mpViewShell);
 }
 
-TransferableData::~TransferableData (void)
+TransferableData::~TransferableData()
 {
     if (mpViewShell != NULL)
         EndListening(*mpViewShell);

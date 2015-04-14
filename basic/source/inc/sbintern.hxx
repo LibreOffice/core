@@ -53,10 +53,10 @@ struct SbClassData
     // needed for initialization order of class modules
     StringVector    maRequiredTypes;
 
-    SbClassData( void );
-    ~SbClassData( void )
+    SbClassData();
+    ~SbClassData()
         { clear(); }
-    void clear( void );
+    void clear();
 };
 
 // #115824: Factory class to create class objects (type command)
@@ -66,7 +66,7 @@ class BASIC_DLLPUBLIC SbClassFactory : public SbxFactory
     SbxObjectRef    xClassModules;
 
 public:
-    SbClassFactory( void );
+    SbClassFactory();
     virtual ~SbClassFactory();
 
     void AddClassModule( SbModule* pClassModule );

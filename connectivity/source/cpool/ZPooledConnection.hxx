@@ -43,7 +43,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         OPooledConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory);

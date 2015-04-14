@@ -53,7 +53,7 @@ public :
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
         const ::rtl::OUString& rsAccessibleName);
-    virtual ~Popup (void);
+    virtual ~Popup();
 
     /** Show the popup.
         @rToolBox
@@ -68,12 +68,12 @@ public :
         application can call Hide() when the popup should be closed
         for other, non-standard reasons.
     */
-    void Hide (void);
+    void Hide();
 
     /** If you want to be informed when the popup closes then add a
         callback that is called after that.
     */
-    void SetPopupModeEndHandler (const ::boost::function<void(void)>& rCallback);
+    void SetPopupModeEndHandler (const ::boost::function<void()>& rCallback);
 
 protected:
     std::unique_ptr<PopupControl> mxControl;
@@ -81,17 +81,17 @@ protected:
     /** Make sure that both PopupContainer and PopupControl objects
         exist.  Calls the maControlCreator functor if necessary.
     */
-    void ProvideContainerAndControl (void);
+    void ProvideContainerAndControl();
 
     /** A derived specialisation class can override this method to do
         additional work.
     */
-    void CreateContainerAndControl (void);
+    void CreateContainerAndControl();
 
 private:
     vcl::Window* mpParent;
     ::boost::function<PopupControl*(PopupContainer*)> maControlCreator;
-    ::boost::function<void(void)> maPopupModeEndCallback;
+    ::boost::function<void()> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
     std::unique_ptr<PopupContainer> mxContainer;
 

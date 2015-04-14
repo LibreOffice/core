@@ -365,7 +365,7 @@ public:
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
     virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
     virtual void                SetMenu( SalMenu *pSalMenu ) SAL_OVERRIDE;
-    SalMenu*                    GetMenu( void );
+    SalMenu*                    GetMenu();
     virtual void                DrawMenuBar() SAL_OVERRIDE;
     void                        EnsureAppMenuWatch();
 
@@ -457,7 +457,7 @@ public:
 
 extern "C" {
 
-GType ooo_fixed_get_type( void );
+GType ooo_fixed_get_type();
 
 } // extern "C"
 

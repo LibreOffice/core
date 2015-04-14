@@ -52,12 +52,12 @@ class SlideSorterCacheDisplay
 {
 public:
     SlideSorterCacheDisplay (const SdDrawDocument* pDocument);
-    virtual ~SlideSorterCacheDisplay (void);
+    virtual ~SlideSorterCacheDisplay();
 
     void SetParentWindow (vcl::Window* pParentWindow);
 
     virtual void Paint (const Rectangle& rBoundingBox);
-    virtual void Resize (void);
+    virtual void Resize();
 
     static SlideSorterCacheDisplay* Instance (const SdDrawDocument* pDocument);
 
@@ -73,13 +73,13 @@ public:
     void SetPageVisibility (sal_Int32 nPageIndex, bool bVisible);
     void SetUpToDate (sal_Int32 nPageIndex, bool bUpToDate);
 
-    virtual Size GetPreferredSize (void);
+    virtual Size GetPreferredSize();
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-    virtual vcl::Window* GetWindow (void);
-    virtual bool IsResizable (void);
-    virtual bool IsExpandable (void) const;
-    virtual bool IsExpanded (void) const;
+    virtual vcl::Window* GetWindow();
+    virtual bool IsResizable();
+    virtual bool IsExpandable() const;
+    virtual bool IsExpanded() const;
 
 private:
     static ::std::map<const SdDrawDocument*, SlideSorterCacheDisplay*> maDisplays;

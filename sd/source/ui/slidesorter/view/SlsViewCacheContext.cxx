@@ -41,7 +41,7 @@ ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
 {
 }
 
-ViewCacheContext::~ViewCacheContext (void)
+ViewCacheContext::~ViewCacheContext()
 {
 }
 
@@ -63,7 +63,7 @@ void ViewCacheContext::NotifyPreviewCreation (
     }
 }
 
-bool ViewCacheContext::IsIdle (void)
+bool ViewCacheContext::IsIdle()
 {
     sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow().get()));
     if (nIdleState == tools::IdleDetection::IDET_IDLE)
@@ -112,7 +112,7 @@ model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKe
     return mrModel.GetPageDescriptor(nPageIndex);
 }
 
-::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ViewCacheContext::GetModel (void)
+::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ViewCacheContext::GetModel()
 {
     if (mrModel.GetDocument() == NULL)
         return NULL;

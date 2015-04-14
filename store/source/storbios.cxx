@@ -89,11 +89,11 @@ struct OStoreSuperBlock
 
     /** unused(Count|Head|Insert|Remove|Reset).
      */
-    sal_uInt32 unusedCount (void) const
+    sal_uInt32 unusedCount() const
     {
         return store::ntohl(m_nUnused);
     }
-    const L& unusedHead (void) const
+    const L& unusedHead() const
     {
         return m_aUnused;
     }
@@ -109,7 +109,7 @@ struct OStoreSuperBlock
         m_nUnused = store::htonl(nUnused - 1);
         m_aUnused = rLink;
     }
-    void unusedReset (void)
+    void unusedReset()
     {
         m_nUnused = store::htonl(0);
         m_aUnused = L(0);
@@ -528,7 +528,7 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
 /*
  * OStorePageBIOS.
  */
-OStorePageBIOS::OStorePageBIOS (void)
+OStorePageBIOS::OStorePageBIOS()
     : m_xLockBytes (NULL),
       m_pSuper     (NULL),
       m_bWriteable (false)
@@ -538,7 +538,7 @@ OStorePageBIOS::OStorePageBIOS (void)
 /*
  * ~OStorePageBIOS.
  */
-OStorePageBIOS::~OStorePageBIOS (void)
+OStorePageBIOS::~OStorePageBIOS()
 {
     cleanup_Impl();
 }
@@ -786,7 +786,7 @@ storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
  * getRefererCount.
  * Precond: none.
  */
-sal_uInt32 OStorePageBIOS::getRefererCount (void)
+sal_uInt32 OStorePageBIOS::getRefererCount()
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
@@ -971,7 +971,7 @@ storeError OStorePageBIOS::close()
  * flush.
  * Precond: initialized.
  */
-storeError OStorePageBIOS::flush (void)
+storeError OStorePageBIOS::flush()
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);

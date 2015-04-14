@@ -121,7 +121,7 @@ OUString OTableController::getImplementationName_Static() throw( RuntimeExceptio
     return OUString("org.openoffice.comp.dbu.OTableDesign");
 }
 
-Sequence< OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OTableController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.TableDesign";

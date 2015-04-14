@@ -69,12 +69,12 @@ public:
     /** Called by the corresponding ValueSet when it gets the focus.
         Stores the new focus state and broadcasts a state change event.
     */
-    void GetFocus (void);
+    void GetFocus();
 
     /** Called by the corresponding ValueSet when it loses the focus.
         Stores the new focus state and broadcasts a state change event.
     */
-    void LoseFocus (void);
+    void LoseFocus();
 
     // XComponent
     virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -139,11 +139,11 @@ private:
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Return the number of items.  This takes the None-Item into account.
     */
-    sal_uInt16 getItemCount (void) const;
+    sal_uInt16 getItemCount() const;
 
     /** Return the item associated with the given index.  The None-Item is
         taken into account which, when present, is taken to be the first
@@ -161,7 +161,7 @@ private:
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 };
 

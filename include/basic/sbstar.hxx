@@ -129,8 +129,8 @@ public:
     SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
-    void            DeInitAllModules( void );
-    void            ClearAllModuleVars( void );
+    void            DeInitAllModules();
+    void            ClearAllModuleVars();
 
     // Calls for error and break handler
     static sal_uInt16 GetLine();
@@ -157,7 +157,7 @@ public:
     Link            GetBreakHdl() const { return aBreakHdl; }
     void            SetBreakHdl( const Link& r ) { aBreakHdl = r; }
 
-    SbxArrayRef     getUnoListeners( void );
+    SbxArrayRef     getUnoListeners();
 
     static SbxBase* FindSBXInCurrentScope( const OUString& rName );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
@@ -165,7 +165,7 @@ public:
     void SetVBAEnabled( bool bEnabled );
     bool isVBAEnabled();
 
-    SbxObjectRef getRTL( void ) { return pRtl; }
+    SbxObjectRef getRTL() { return pRtl; }
     bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );

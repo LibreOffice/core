@@ -1800,7 +1800,7 @@ OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalA
 }
 
 
-double Complex::Arg( void ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+double Complex::Arg() const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( r == 0.0 && i == 0.0 )
         throw lang::IllegalArgumentException();
@@ -1843,7 +1843,7 @@ void Complex::Power( double fPower ) throw( uno::RuntimeException, lang::Illegal
 }
 
 
-void Complex::Sqrt( void )
+void Complex::Sqrt()
 {
     static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
     double  p = Abs();
@@ -1854,7 +1854,7 @@ void Complex::Sqrt( void )
 }
 
 
-void Complex::Sin( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sin() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -1872,7 +1872,7 @@ void Complex::Sin( void ) throw( uno::RuntimeException, lang::IllegalArgumentExc
 }
 
 
-void Complex::Cos( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cos() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
 	if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -1909,7 +1909,7 @@ void Complex::Div( const Complex& z ) throw( uno::RuntimeException, lang::Illega
 }
 
 
-void Complex::Exp( void )
+void Complex::Exp()
 {
     double  fE = exp( r );
     r = fE * cos( i );
@@ -1917,7 +1917,7 @@ void Complex::Exp( void )
 }
 
 
-void Complex::Ln( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Ln() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( r == 0.0 && i == 0.0 )
         throw lang::IllegalArgumentException();
@@ -1934,21 +1934,21 @@ void Complex::Ln( void ) throw( uno::RuntimeException, lang::IllegalArgumentExce
 }
 
 
-void Complex::Log10( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Log10() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
     Mult( 0.434294481903251828 );   // * log10( e )
 }
 
 
-void Complex::Log2( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Log2() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
     Mult( 1.442695040888963407 );   // * log2( e )
 }
 
 
-void Complex::Tan(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Tan() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
@@ -1967,7 +1967,7 @@ void Complex::Tan(void) throw( uno::RuntimeException, lang::IllegalArgumentExcep
 }
 
 
-void Complex::Sec( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sec() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( i )
     {
@@ -1988,7 +1988,7 @@ void Complex::Sec( void ) throw( uno::RuntimeException, lang::IllegalArgumentExc
 }
 
 
-void Complex::Csc( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Csc() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( i )
     {
@@ -2009,7 +2009,7 @@ void Complex::Csc( void ) throw( uno::RuntimeException, lang::IllegalArgumentExc
 }
 
 
-void Complex::Cot(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cot() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
@@ -2028,7 +2028,7 @@ void Complex::Cot(void) throw( uno::RuntimeException, lang::IllegalArgumentExcep
 }
 
 
-void Complex::Sinh( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sinh() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -2045,7 +2045,7 @@ void Complex::Sinh( void ) throw( uno::RuntimeException, lang::IllegalArgumentEx
 }
 
 
-void Complex::Cosh( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cosh() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -2062,7 +2062,7 @@ void Complex::Cosh( void ) throw( uno::RuntimeException, lang::IllegalArgumentEx
 }
 
 
-void Complex::Sech(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sech() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
@@ -2083,7 +2083,7 @@ void Complex::Sech(void) throw( uno::RuntimeException, lang::IllegalArgumentExce
 }
 
 
-void Complex::Csch(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Csch() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
@@ -2386,7 +2386,7 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 }
 
 
-ConvertDataList::ConvertDataList( void )
+ConvertDataList::ConvertDataList()
 {
 #define NEWD(str,unit,cl)   maVector.push_back(new ConvertData(str,unit,cl))
 #define NEWDP(str,unit,cl)  maVector.push_back(new ConvertData(str,unit,cl,true))

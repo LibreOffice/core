@@ -356,7 +356,7 @@ void FileDialogHelper_Impl::SaveLastUsedFilter( const OUString& _rContextIdentif
                         makeAny( getFilterWithExtension( getFilter() ) ) );
 }
 
-void FileDialogHelper_Impl::SaveLastUsedFilter( void )
+void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
     const OUString* pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )

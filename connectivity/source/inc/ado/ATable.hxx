@@ -46,7 +46,7 @@ namespace connectivity
             virtual void refreshIndexes();
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
 
         public:
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);

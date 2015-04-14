@@ -89,11 +89,11 @@ public:
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext (void)
+        getAccessibleContext()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
@@ -105,17 +105,17 @@ public:
     /** The index returned as index in parent is always the one set with the
         <member>SetIndexInParent()</member> method.
     */
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent (void)
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void)
+    virtual sal_Int16 SAL_CALL getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Return list specific services.
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleSelection
@@ -154,12 +154,12 @@ protected:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible>
         m_xSelectedItem;
 
-    virtual ~VCLXAccessibleList (void);
+    virtual ~VCLXAccessibleList();
 
     /** This function is called from the implementation helper during a
         XComponent::dispose call.  Free the list of items and the items themselves.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** This method adds the states
         <const>AccessibleStateType::FOCUSABLE</const> and possibly
@@ -200,7 +200,7 @@ private:
     */
     void clearItems();
 
-    void UpdateEntryRange_Impl (void);
+    void UpdateEntryRange_Impl();
 protected:
     void UpdateSelection_Impl (sal_uInt16 nPos = 0);
     bool checkEntrySelected(sal_uInt16 _nPos,

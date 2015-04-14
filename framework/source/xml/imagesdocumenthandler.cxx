@@ -140,12 +140,12 @@ OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadImagesDocumentHandler::startDocument(void)
+void SAL_CALL OReadImagesDocumentHandler::startDocument()
 throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::endDocument(void)
+void SAL_CALL OReadImagesDocumentHandler::endDocument()
 throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;

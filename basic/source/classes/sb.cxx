@@ -802,7 +802,7 @@ SbxVariable* SbClassModuleObject::Find( const OUString& rName, SbxClassType t )
     return pRes;
 }
 
-void SbClassModuleObject::triggerInitializeEvent( void )
+void SbClassModuleObject::triggerInitializeEvent()
 {
     if( mbInitializeEventDone )
     {
@@ -820,7 +820,7 @@ void SbClassModuleObject::triggerInitializeEvent( void )
     }
 }
 
-void SbClassModuleObject::triggerTerminateEvent( void )
+void SbClassModuleObject::triggerTerminateEvent()
 {
     if( !mbInitializeEventDone || GetSbData()->bRunInit )
     {
@@ -836,18 +836,18 @@ void SbClassModuleObject::triggerTerminateEvent( void )
 }
 
 
-SbClassData::SbClassData( void )
+SbClassData::SbClassData()
 {
     mxIfaces = new SbxArray();
 }
 
-void SbClassData::clear( void )
+void SbClassData::clear()
 {
     mxIfaces->Clear();
     maRequiredTypes.clear();
 }
 
-SbClassFactory::SbClassFactory( void )
+SbClassFactory::SbClassFactory()
 {
     OUString aDummyName;
     xClassModules = new SbxObject( aDummyName );
@@ -1164,7 +1164,7 @@ struct ClassModuleRunInitItem
     bool            m_bProcessing;
     bool            m_bRunInitDone;
 
-    ClassModuleRunInitItem( void )
+    ClassModuleRunInitItem()
         : m_pModule( NULL )
         , m_bProcessing( false )
         , m_bRunInitDone( false )
@@ -1286,7 +1286,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 
 // #88329 Put modules back to not initialised state to
 // force reinitialisation at next start
-void StarBASIC::DeInitAllModules( void )
+void StarBASIC::DeInitAllModules()
 {
     // Deinit own modules
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
@@ -1637,7 +1637,7 @@ struct BasicStringList_Impl : private Resource
     ~BasicStringList_Impl() { FreeResource(); }
 
     OUString GetString(){ return aResId.toString(); }
-    bool IsErrorTextAvailable( void )
+    bool IsErrorTextAvailable()
         { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 };
 
@@ -1853,7 +1853,7 @@ void StarBASIC::SetGlobalBreakHdl( const Link& rLink )
     GetSbData()->aBreakHdl = rLink;
 }
 
-SbxArrayRef StarBASIC::getUnoListeners( void )
+SbxArrayRef StarBASIC::getUnoListeners()
 {
     if( !xUnoListeners.Is() )
     {

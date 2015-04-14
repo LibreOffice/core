@@ -60,7 +60,7 @@ class Clipboard
 {
 public:
     Clipboard (SlideSorter& rSlideSorter);
-    virtual ~Clipboard (void);
+    virtual ~Clipboard();
 
     /** Create a slide sorter transferable from the given sd
         transferable.  The returned transferable is set up with all
@@ -96,7 +96,7 @@ public:
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
-    void Abort (void);
+    void Abort();
 
 protected:
     virtual sal_uInt16 DetermineInsertPosition (

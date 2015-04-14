@@ -62,7 +62,7 @@ SbPropertyValues::~SbPropertyValues()
 
 
 
-Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException, std::exception )
+Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     // create on demand?
     if (!m_xInfo.is())
@@ -159,7 +159,7 @@ void SbPropertyValues::removeVetoableChangeListener(
 
 
 
-Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Sequence<PropertyValue> aRet( m_aPropVals.size() );
     for (size_t n = 0; n < m_aPropVals.size(); ++n)
@@ -244,7 +244,7 @@ SbPropertySetInfo::~SbPropertySetInfo()
 
 
 
-Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeException, std::exception )
+Sequence< Property > SbPropertySetInfo::getProperties() throw( RuntimeException, std::exception )
 {
     return aImpl.getProperties();
 }

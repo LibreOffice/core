@@ -29,7 +29,7 @@ using ::rtl::OString;
 
 /** get dll file URL.
 */
-inline ::rtl::OUString getDllURL( void )
+inline ::rtl::OUString getDllURL()
 {
 #if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
     ::rtl::OUString libPath( "test_Module_DLL.dll" );

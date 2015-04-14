@@ -32,8 +32,8 @@ namespace vcl { struct _TrueTypeFont; } ///< SFT's idea of a TTF font
 class VCL_DLLPUBLIC FontSubsetInfo
 {
 public:
-    explicit    FontSubsetInfo( void );
-    virtual     ~FontSubsetInfo( void );
+    explicit    FontSubsetInfo();
+    virtual     ~FontSubsetInfo();
 
     enum FontType {
         NO_FONT     = 0,

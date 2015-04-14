@@ -55,7 +55,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Wi
     return new SidebarToolBox(pParent);
 }
 
-SidebarToolBox::~SidebarToolBox (void)
+SidebarToolBox::~SidebarToolBox()
 {
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
@@ -207,7 +207,7 @@ sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubTool
     return 0;
 }
 
-void SidebarToolBox::RegisterHandlers (void)
+void SidebarToolBox::RegisterHandlers()
 {
     if ( ! mbAreHandlersRegistered)
     {

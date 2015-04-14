@@ -130,7 +130,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();

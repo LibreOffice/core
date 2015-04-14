@@ -70,18 +70,18 @@ public:
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent(void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
-        createAccessibleDescription(void)
+        createAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        createAccessibleName(void)
+        createAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
@@ -109,7 +109,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName(void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XTypeProvider  ===================================================
@@ -122,7 +122,7 @@ public:
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
@@ -137,14 +137,14 @@ private:
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
-    OUString SAL_CALL GetNote(void)
+    OUString SAL_CALL GetNote()
         throw (::com::sun::star::uno::RuntimeException);
 
-    OUString SAL_CALL GetAllDisplayNote(void)
+    OUString SAL_CALL GetAllDisplayNote()
         throw (::com::sun::star::uno::RuntimeException);
-    OUString SAL_CALL getShadowAttrs(void)
+    OUString SAL_CALL getShadowAttrs()
         throw (::com::sun::star::uno::RuntimeException);
-    OUString SAL_CALL getBorderAttrs(void)
+    OUString SAL_CALL getBorderAttrs()
         throw (::com::sun::star::uno::RuntimeException);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }

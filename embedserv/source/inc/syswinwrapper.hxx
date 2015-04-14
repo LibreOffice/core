@@ -52,11 +52,11 @@ namespace winwrap {
     public:
         //Standard Class Functions
         CWindow(HINSTANCE);
-        ~CWindow(void);
+        ~CWindow();
 
         //Just returns members.  No need to modify
-        HWND        Window(void);
-        HINSTANCE   Instance(void);
+        HWND        Window();
+        HINSTANCE   Instance();
     };
 
 
@@ -155,12 +155,12 @@ protected:
 
     public:
         CHatchWin(HINSTANCE,const DocumentHolder*);
-        ~CHatchWin(void);
+        ~CHatchWin();
 
         BOOL        Init(HWND, UINT, HWND);
 
         HWND        HwndAssociateSet(HWND);
-        HWND        HwndAssociateGet(void);
+        HWND        HwndAssociateGet();
 
         void        RectsSet(LPRECT, LPRECT);
         void        ChildSet(HWND);

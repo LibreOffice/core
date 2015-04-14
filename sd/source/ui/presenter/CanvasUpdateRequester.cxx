@@ -68,7 +68,7 @@ CanvasUpdateRequester::CanvasUpdateRequester (
     }
 }
 
-CanvasUpdateRequester::~CanvasUpdateRequester (void)
+CanvasUpdateRequester::~CanvasUpdateRequester()
 {
     if (mnUserEventId != 0)
         Application::RemoveUserEvent(mnUserEventId);

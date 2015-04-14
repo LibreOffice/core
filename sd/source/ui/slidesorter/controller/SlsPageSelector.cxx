@@ -62,7 +62,7 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
     CountSelectedPages ();
 }
 
-void PageSelector::SelectAllPages (void)
+void PageSelector::SelectAllPages()
 {
     VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
     PageSelector::UpdateLock aLock (*this);
@@ -72,7 +72,7 @@ void PageSelector::SelectAllPages (void)
         SelectPage(nPageIndex);
 }
 
-void PageSelector::DeselectAllPages (void)
+void PageSelector::DeselectAllPages()
 {
     VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
     PageSelector::UpdateLock aLock (*this);
@@ -87,7 +87,7 @@ void PageSelector::DeselectAllPages (void)
     mpSelectionAnchor.reset();
 }
 
-void PageSelector::GetCoreSelection (void)
+void PageSelector::GetCoreSelection()
 {
     PageSelector::UpdateLock aLock (*this);
 
@@ -118,7 +118,7 @@ void PageSelector::GetCoreSelection (void)
     }
 }
 
-void PageSelector::SetCoreSelection (void)
+void PageSelector::SetCoreSelection()
 {
     model::PageEnumeration aAllPages (
         model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
@@ -199,7 +199,7 @@ void PageSelector::DeselectPage (
     }
 }
 
-void PageSelector::CheckConsistency (void) const
+void PageSelector::CheckConsistency() const
 {
     int nSelectionCount (0);
     for (int nPageIndex=0,nPageCount=mrModel.GetPageCount(); nPageIndex<nPageCount; nPageIndex++)
@@ -228,12 +228,12 @@ bool PageSelector::IsPageSelected (int nPageIndex)
         return false;
 }
 
-int PageSelector::GetPageCount (void) const
+int PageSelector::GetPageCount() const
 {
     return mrModel.GetPageCount();
 }
 
-void PageSelector::CountSelectedPages (void)
+void PageSelector::CountSelectedPages()
 {
     mnSelectedPageCount = 0;
     model::PageEnumeration aSelectedPages (
@@ -245,7 +245,7 @@ void PageSelector::CountSelectedPages (void)
     }
 }
 
-void PageSelector::EnableBroadcasting (void)
+void PageSelector::EnableBroadcasting()
 {
     if (mnBroadcastDisableLevel > 0)
         mnBroadcastDisableLevel --;
@@ -256,12 +256,12 @@ void PageSelector::EnableBroadcasting (void)
     }
 }
 
-void PageSelector::DisableBroadcasting (void)
+void PageSelector::DisableBroadcasting()
 {
     mnBroadcastDisableLevel ++;
 }
 
-::boost::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection (void) const
+::boost::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection() const
 {
     ::boost::shared_ptr<PageSelection> pSelection (new PageSelection());
     pSelection->reserve(GetSelectedPageCount());
@@ -346,12 +346,12 @@ PageSelector::UpdateLock::UpdateLock (PageSelector& rSelector)
     ++mpSelector->mnUpdateLockCount;
 }
 
-PageSelector::UpdateLock::~UpdateLock (void)
+PageSelector::UpdateLock::~UpdateLock()
 {
     Release();
 }
 
-void PageSelector::UpdateLock::Release (void)
+void PageSelector::UpdateLock::Release()
 {
     if (mpSelector != NULL)
     {
@@ -378,7 +378,7 @@ PageSelector::BroadcastLock::BroadcastLock (PageSelector& rSelector)
     mrSelector.DisableBroadcasting();
 }
 
-PageSelector::BroadcastLock::~BroadcastLock (void)
+PageSelector::BroadcastLock::~BroadcastLock()
 {
     mrSelector.EnableBroadcasting();
 }

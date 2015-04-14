@@ -112,7 +112,7 @@ public:
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void)
+        getAccessibleDescription()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleTable
@@ -202,7 +202,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return whether the specified service is supported by this class.
@@ -215,7 +215,7 @@ public:
         the AccessibleContext service.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // C++ interface
@@ -309,7 +309,7 @@ public:
     // XAccessibleContext
 
     /// Return the number of currently visible children.
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or NULL if index is invalid.
@@ -334,7 +334,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };

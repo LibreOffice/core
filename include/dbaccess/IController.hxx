@@ -115,7 +115,7 @@ namespace dbaui
             the controller does not have an own model.
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                getXController(void) throw( ::com::sun::star::uno::RuntimeException ) = 0;
+                getXController() throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
         /** allows interception of user input, aka mouse clicks and key events
         */

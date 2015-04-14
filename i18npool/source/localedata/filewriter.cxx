@@ -171,7 +171,7 @@ void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAscii
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::closeOutput(void) const
+void OFileWriter::closeOutput() const
 {
     if(m_f)
     {

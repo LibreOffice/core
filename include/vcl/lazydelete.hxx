@@ -277,7 +277,7 @@ namespace vcl
             addDeinitContainer( this ); }
         virtual ~DeleteUnoReferenceOnDeinit() {}
 
-        ::com::sun::star::uno::Reference<I> get (void) { return m_xI; }
+        ::com::sun::star::uno::Reference<I> get() { return m_xI; }
 
         void set (const ::com::sun::star::uno::Reference<I>& r_xNew )
         {

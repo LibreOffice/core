@@ -293,7 +293,7 @@ void OCollection::clear_NoDispose()
 }
 
 
-void OCollection::disposing(void)
+void OCollection::disposing()
 {
     m_aContainerListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));
     m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));

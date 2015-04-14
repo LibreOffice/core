@@ -67,13 +67,13 @@ public:
     TransferableData (
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
-    virtual ~TransferableData (void);
+    virtual ~TransferableData();
 
-    const ::std::vector<Representative>& GetRepresentatives (void) const { return maRepresentatives;}
+    const ::std::vector<Representative>& GetRepresentatives() const { return maRepresentatives;}
 
     /** Return the view shell for which the transferable was created.
     */
-    SlideSorterViewShell* GetSourceViewShell (void) const { return mpViewShell;}
+    SlideSorterViewShell* GetSourceViewShell() const { return mpViewShell;}
 
 private:
     SlideSorterViewShell* mpViewShell;

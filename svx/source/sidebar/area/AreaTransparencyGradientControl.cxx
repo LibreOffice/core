@@ -108,7 +108,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
 
 
 
-AreaTransparencyGradientControl::~AreaTransparencyGradientControl (void)
+AreaTransparencyGradientControl::~AreaTransparencyGradientControl()
 {
 }
 

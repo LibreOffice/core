@@ -50,7 +50,7 @@ class Configuration::ResourceContainer
     : public ::std::set<Reference<XResourceId>, XResourceIdLess>
 {
 public:
-    ResourceContainer (void) {}
+    ResourceContainer() {}
 };
 
 //===== Configuration =========================================================
@@ -76,11 +76,11 @@ Configuration::Configuration (
 {
 }
 
-Configuration::~Configuration (void)
+Configuration::~Configuration()
 {
 }
 
-void SAL_CALL Configuration::disposing (void)
+void SAL_CALL Configuration::disposing()
 {
     ::osl::MutexGuard aGuard (maMutex);
     mpResourceContainer->clear();
@@ -188,7 +188,7 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
 
 //----- XCloneable ------------------------------------------------------------
 
-Reference<util::XCloneable> SAL_CALL Configuration::createClone (void)
+Reference<util::XCloneable> SAL_CALL Configuration::createClone()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -204,7 +204,7 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone (void)
 
 //----- XNamed ----------------------------------------------------------------
 
-OUString SAL_CALL Configuration::getName (void)
+OUString SAL_CALL Configuration::getName()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -280,7 +280,7 @@ void Configuration::PostEvent (
     }
 }
 
-void Configuration::ThrowIfDisposed (void) const
+void Configuration::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

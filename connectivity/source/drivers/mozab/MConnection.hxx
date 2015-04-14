@@ -134,7 +134,7 @@ namespace connectivity
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual void SAL_CALL release() throw();
 
@@ -193,9 +193,9 @@ namespace connectivity
             // Get whether use ssl to connect to ldap
             sal_Bool getUseSSL() const {return m_bUseSSL;}
 
-            sal_Bool usesFactory(void) const { return (m_eSDBCAddressType == SDBCAddress::Outlook) || (m_eSDBCAddressType == SDBCAddress::OutlookExp); }
-            sal_Bool isLDAP(void) const { return m_eSDBCAddressType == SDBCAddress::LDAP; }
-            sal_Bool isThunderbird(void) const { return m_eSDBCAddressType == SDBCAddress::ThunderBird; }
+            sal_Bool usesFactory() const { return (m_eSDBCAddressType == SDBCAddress::Outlook) || (m_eSDBCAddressType == SDBCAddress::OutlookExp); }
+            sal_Bool isLDAP() const { return m_eSDBCAddressType == SDBCAddress::LDAP; }
+            sal_Bool isThunderbird() const { return m_eSDBCAddressType == SDBCAddress::ThunderBird; }
 
             sal_Bool    isOutlookExpress() const { return m_eSDBCAddressType == SDBCAddress::OutlookExp;}
             sal_Int32   getMaxResultRecords() const { return m_nMaxResultRecords; }

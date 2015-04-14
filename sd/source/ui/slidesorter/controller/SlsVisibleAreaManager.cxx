@@ -59,16 +59,16 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
 {
 }
 
-VisibleAreaManager::~VisibleAreaManager (void)
+VisibleAreaManager::~VisibleAreaManager()
 {
 }
 
-void VisibleAreaManager::ActivateCurrentSlideTracking (void)
+void VisibleAreaManager::ActivateCurrentSlideTracking()
 {
     mbIsCurrentSlideTrackingActive = true;
 }
 
-void VisibleAreaManager::DeactivateCurrentSlideTracking (void)
+void VisibleAreaManager::DeactivateCurrentSlideTracking()
 {
     mbIsCurrentSlideTrackingActive = false;
 }
@@ -92,14 +92,14 @@ void VisibleAreaManager::RequestVisible (
     }
 }
 
-void VisibleAreaManager::RequestCurrentSlideVisible (void)
+void VisibleAreaManager::RequestCurrentSlideVisible()
 {
     if (mbIsCurrentSlideTrackingActive && mnDisableCount==0)
         RequestVisible(
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
-void VisibleAreaManager::MakeVisible (void)
+void VisibleAreaManager::MakeVisible()
 {
     if (maVisibleRequests.empty())
         return;
@@ -146,7 +146,7 @@ void VisibleAreaManager::MakeVisible (void)
     meRequestedAnimationMode = Animator::AM_Immediate;
 }
 
-::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft (void) const
+::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft() const
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if ( ! pWindow)
@@ -208,7 +208,7 @@ VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSor
     ++mrVisibleAreaManager.mnDisableCount;
 }
 
-VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler (void)
+VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler()
 {
     --mrVisibleAreaManager.mnDisableCount;
 }

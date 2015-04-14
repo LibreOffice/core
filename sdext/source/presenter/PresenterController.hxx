@@ -87,9 +87,9 @@ public:
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
         const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
-    virtual ~PresenterController (void);
+    virtual ~PresenterController();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     void UpdateCurrentSlide (const sal_Int32 nOffset);
 
@@ -97,34 +97,34 @@ public:
         GetViewBackground (const OUString& rsViewURL) const;
     PresenterTheme::SharedFontDescriptor
         GetViewFont (const OUString& rsViewURL) const;
-    ::boost::shared_ptr<PresenterTheme> GetTheme (void) const;
-    ::rtl::Reference<PresenterWindowManager> GetWindowManager (void) const;
+    ::boost::shared_ptr<PresenterTheme> GetTheme() const;
+    ::rtl::Reference<PresenterWindowManager> GetWindowManager() const;
     css::uno::Reference<css::presentation::XSlideShowController>
-        GetSlideShowController (void) const;
-    rtl::Reference<PresenterPaneContainer> GetPaneContainer (void) const;
-    ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter (void) const;
-    ::boost::shared_ptr<PresenterCanvasHelper> GetCanvasHelper (void) const;
-    css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper (void) const;
-    ::boost::shared_ptr<PresenterPaintManager> GetPaintManager (void) const;
-    void HideSlideSorter (void);
-    double GetSlideAspectRatio (void) const;
+        GetSlideShowController() const;
+    rtl::Reference<PresenterPaneContainer> GetPaneContainer() const;
+    ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter() const;
+    ::boost::shared_ptr<PresenterCanvasHelper> GetCanvasHelper() const;
+    css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper() const;
+    ::boost::shared_ptr<PresenterPaintManager> GetPaintManager() const;
+    void HideSlideSorter();
+    double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
     void HideView (const OUString& rsViewURL);
-    void SwitchMonitors (void);
+    void SwitchMonitors();
     void DispatchUnoCommand (const OUString& rsCommand) const;
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
     css::util::URL CreateURLFromString (const OUString& rsURL) const;
     css::uno::Reference<css::drawing::framework::XConfigurationController>
-        GetConfigurationController (void) const;
-    css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide (void) const;
+        GetConfigurationController() const;
+    css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide() const;
     static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     void SetAccessibilityActiveState (const bool bIsActive);
-    bool IsAccessibilityActive (void) const { return mbIsAccessibilityActive;}
+    bool IsAccessibilityActive() const { return mbIsAccessibilityActive;}
 
     void HandleMouseClick (const css::awt::MouseEvent& rEvent);
-    void UpdatePaneTitles (void);
+    void UpdatePaneTitles();
 
     /** Request activation or deactivation of (some of) the views according
         to the given parameters.
@@ -218,10 +218,10 @@ private:
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
     bool mbIsAccessibilityActive;
 
-    void InitializePresenterScreen (void);
+    void InitializePresenterScreen();
     void InitializeSlideShowView (const css::uno::Reference<css::uno::XInterface>& rxView);
     void GetSlides (const sal_Int32 nOffset);
-    void UpdateViews (void);
+    void UpdateViews();
     void InitializeMainPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void LoadTheme (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void UpdatePendingSlideNumber (const sal_Int32 nPendingSlideNumber);
@@ -238,7 +238,7 @@ private:
     */
     void HandleNumericKeyPress (const sal_Int32 nKey, const sal_Int32 nModifiers);
 
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sdext::presenter

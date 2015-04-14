@@ -67,7 +67,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     RegisterAtCenterPane();
 }
 
-FormShellManager::~FormShellManager (void)
+FormShellManager::~FormShellManager()
 {
     SetFormShell(NULL);
     UnregisterAtCenterPane();
@@ -126,7 +126,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
     }
 }
 
-void FormShellManager::RegisterAtCenterPane (void)
+void FormShellManager::RegisterAtCenterPane()
 {
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell == NULL)
@@ -156,7 +156,7 @@ void FormShellManager::RegisterAtCenterPane (void)
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
 }
 
-void FormShellManager::UnregisterAtCenterPane (void)
+void FormShellManager::UnregisterAtCenterPane()
 {
     if (mpMainViewShellWindow != NULL)
     {

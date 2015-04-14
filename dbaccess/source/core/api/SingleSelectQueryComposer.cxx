@@ -276,7 +276,7 @@ OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 }
 
 // OComponentHelper
-void SAL_CALL OSingleSelectQueryComposer::disposing(void)
+void SAL_CALL OSingleSelectQueryComposer::disposing()
 {
     OSubComponent::disposing();
 

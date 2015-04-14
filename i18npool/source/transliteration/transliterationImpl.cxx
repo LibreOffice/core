@@ -657,7 +657,7 @@ TransliterationImpl::supportsService(const OUString& rServiceName) throw( Runtim
 }
 
 Sequence< OUString > SAL_CALL
-TransliterationImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+TransliterationImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.i18n.Transliteration";

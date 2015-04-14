@@ -30,7 +30,7 @@ class LocalResource : public Resource
 {
 public:
     LocalResource (const sal_uInt16 nResourceId) : Resource(SdResId(nResourceId)){}
-    ~LocalResource (void) { FreeResource(); }
+    ~LocalResource() { FreeResource(); }
 };
 
 } } } // end of namespace ::sd::slidesorter::view

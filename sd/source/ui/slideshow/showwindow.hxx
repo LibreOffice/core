@@ -50,7 +50,7 @@ class ShowWindow
 
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, vcl::Window* pParent );
-    virtual ~ShowWindow (void);
+    virtual ~ShowWindow();
 
     bool         SetEndMode();
     bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
@@ -80,7 +80,7 @@ public:
     /// Override the sd::Window's CreateAccessible to create a different accessible object
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible (void) SAL_OVERRIDE;
+        CreateAccessible() SAL_OVERRIDE;
 
     void            TerminateShow();
     void            RestartShow();

@@ -183,7 +183,7 @@ static const TokenTable aTokTable_Basic [] = {
 
 
 // #i109076
-TokenLabelInfo::TokenLabelInfo( void )
+TokenLabelInfo::TokenLabelInfo()
 {
     m_pTokenCanBeLabelTab = new bool[VBASUPPORT+1];
     for( int i = 0 ; i <= VBASUPPORT ; ++i )

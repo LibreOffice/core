@@ -86,11 +86,11 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
     }
 }
 
-CenterViewFocusModule::~CenterViewFocusModule (void)
+CenterViewFocusModule::~CenterViewFocusModule()
 {
 }
 
-void SAL_CALL CenterViewFocusModule::disposing (void)
+void SAL_CALL CenterViewFocusModule::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);

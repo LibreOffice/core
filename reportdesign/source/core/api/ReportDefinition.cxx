@@ -2198,7 +2198,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     return m_pImpl->m_pReportModel->createShape(aServiceSpecifier,xShape);
 }
 
-uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames() throw( uno::RuntimeException, std::exception )
 {
     static const OUString aSvxComponentServiceNameList[] =
     {

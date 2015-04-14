@@ -44,12 +44,12 @@ class RecentlyUsedMasterPages
 public:
     /** Return the single instance of this class.
     */
-    static RecentlyUsedMasterPages& Instance (void);
+    static RecentlyUsedMasterPages& Instance();
 
     void AddEventListener (const Link& rEventListener);
     void RemoveEventListener (const Link& rEventListener);
 
-    int GetMasterPageCount (void) const;
+    int GetMasterPageCount() const;
     MasterPageContainer::Token GetTokenForIndex (sal_uInt32 nIndex) const;
 
 private:
@@ -91,18 +91,18 @@ private:
     unsigned long int mnMaxListSize;
     ::boost::shared_ptr<MasterPageContainer> mpContainer;
 
-    RecentlyUsedMasterPages (void);
-    virtual ~RecentlyUsedMasterPages (void);
+    RecentlyUsedMasterPages();
+    virtual ~RecentlyUsedMasterPages();
 
     /** Call this method after a new object has been created.
     */
-    void LateInit (void);
+    void LateInit();
 
     RecentlyUsedMasterPages (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
 
     RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
 
-    void SendEvent (void);
+    void SendEvent();
     DECL_LINK(MasterPageChangeListener, MasterPageObserverEvent*);
     DECL_LINK(MasterPageContainerChangeListener, MasterPageContainerChangeEvent*);
 
@@ -123,14 +123,14 @@ private:
     /** Load the list of recently used master pages from the registry where
         it was saved to make it persistent.
     */
-    void LoadPersistentValues (void);
+    void LoadPersistentValues();
 
     /** Save the list of recently used master pages to the registry to make
         it presistent.
     */
-    void SavePersistentValues (void);
+    void SavePersistentValues();
 
-    void ResolveList (void);
+    void ResolveList();
 };
 
 } } // end of namespace sd::sidebar

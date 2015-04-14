@@ -47,7 +47,7 @@ typedef std::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
 
 namespace {
 static ::boost::shared_ptr<FactoryMap> spFactoryMap;
-::boost::shared_ptr<FactoryMap> GetFactoryMap (void)
+::boost::shared_ptr<FactoryMap> GetFactoryMap()
 {
     if (spFactoryMap.get() == NULL)
     {

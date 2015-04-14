@@ -172,7 +172,7 @@ void SwAccessibleNoTextFrame::Dispose( bool bRecursive )
 }
 
 // #i73249#
-OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
+OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -187,7 +187,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
     return SwAccessibleFrameBase::getAccessibleName();
 }
 
-OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

@@ -53,9 +53,9 @@ class ContextChangeEventMultiplexer
 {
 public:
     ContextChangeEventMultiplexer();
-    virtual ~ContextChangeEventMultiplexer (void);
+    virtual ~ContextChangeEventMultiplexer();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XContextChangeEventMultiplexer
     virtual void SAL_CALL addContextChangeEventListener (
@@ -75,12 +75,12 @@ public:
         throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService  (
         const ::rtl::OUString& rsServiceName)
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void)
+    virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames()
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
@@ -120,11 +120,11 @@ ContextChangeEventMultiplexer::ContextChangeEventMultiplexer()
 {
 }
 
-ContextChangeEventMultiplexer::~ContextChangeEventMultiplexer (void)
+ContextChangeEventMultiplexer::~ContextChangeEventMultiplexer()
 {
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::disposing (void)
+void SAL_CALL ContextChangeEventMultiplexer::disposing()
 {
     ListenerMap aListeners;
     aListeners.swap(maListeners);

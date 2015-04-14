@@ -106,33 +106,33 @@ class SD_DLLPUBLIC TemplateScanner
 public:
     /** Create a new template scanner and prepare but do not execute the scanning.
     */
-    TemplateScanner (void);
+    TemplateScanner();
 
     /** The destructor deletes any remaining entries of the local list of
         templates.
     */
-    virtual ~TemplateScanner (void);
+    virtual ~TemplateScanner();
 
     /** Execute the actual scanning of templates.  When this method
         terminates the result can be obtained by calling the
         <member>GetTemplateList</member> method.
     */
-    void Scan (void);
+    void Scan();
 
     /** Return the list of template folders.  It lies in the responsibility
         of the caller to take ownership of some or all entries and remove
         them from the returned list.  All entries that remain until the
         destructor is called will be destroyed.
     */
-    std::vector<TemplateDir*>& GetFolderList (void) { return maFolderList;}
+    std::vector<TemplateDir*>& GetFolderList() { return maFolderList;}
 
     /** Implementation of the AsynchronousTask interface method.
     */
-    virtual void RunNextStep (void) SAL_OVERRIDE;
+    virtual void RunNextStep() SAL_OVERRIDE;
 
     /** Implementation of the AsynchronousTask interface method.
     */
-    virtual bool HasNextStep (void) SAL_OVERRIDE;
+    virtual bool HasNextStep() SAL_OVERRIDE;
 
     /** Return the TemplateDir object that was last added to
         mpTemplateDirectory.
@@ -140,7 +140,7 @@ public:
             <NULL/> is returned either before the template scanning is
             started or after it has ended.
     */
-    const TemplateEntry* GetLastAddedEntry (void) const { return mpLastAddedEntry;}
+    const TemplateEntry* GetLastAddedEntry() const { return mpLastAddedEntry;}
 
     /** Set whether to sort the template entries inside the regions.
     */
@@ -198,40 +198,40 @@ private:
     /** Obtain the root folder of the template folder hierarchy.  The result
         is stored in mxTemplateRoot for later use.
     */
-    State GetTemplateRoot (void);
+    State GetTemplateRoot();
 
     /** Initialize the scanning of folders.  This is called exactly once.
         @return
             Returns one of the two states ERROR or GATHER_FOLDER_LIST.
     */
-    State InitializeFolderScanning (void);
+    State InitializeFolderScanning();
 
     /** Collect all available top-level folders in an ordered list which can
         then be processed by ScanFolder().
         @return
             Returns one of the two states ERROR or SCAN_FOLDER.
     */
-    State GatherFolderList (void);
+    State GatherFolderList();
 
     /** From the list of top-level folders collected by GatherFolderList()
         the one with highest priority is processed.
         @return
             Returns one of the states ERROR, DONE, or INITILIZE_ENTRY_SCAN.
     */
-    State ScanFolder (void);
+    State ScanFolder();
 
     /** Initialize the scanning of entries of a top-level folder.
         @return
             Returns one of the states ERROR or SCAN_ENTRY.
     */
-    State InitializeEntryScanning (void);
+    State InitializeEntryScanning();
 
     /** Scan one entry.  When this entry matches the recognized template
         types it is appended to the result set.
         @return
             Returns one of the states ERROR, SCAN_ENTRY, or SCAN_FOLDER.
     */
-    State ScanEntry (void);
+    State ScanEntry();
 };
 
 } // end of namespace sd

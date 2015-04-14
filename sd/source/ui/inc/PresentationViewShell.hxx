@@ -41,7 +41,7 @@ private:
 
 public:
     PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView = NULL);
-    virtual ~PresentationViewShell (void);
+    virtual ~PresentationViewShell();
 
     /** This method is used by a simple class that passes some
         arguments from the creator of the new view shell to the new view
@@ -52,7 +52,7 @@ public:
     */
     void FinishInitialization( FrameView* pFrameView );
 
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
 protected:
     virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) SAL_OVERRIDE;

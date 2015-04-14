@@ -41,7 +41,7 @@ sal_Int32 IdleDetection::GetIdleState (const vcl::Window* pWindow)
     return nResult;
 }
 
-sal_Int32 IdleDetection::CheckInputPending (void)
+sal_Int32 IdleDetection::CheckInputPending()
 {
     if (Application::AnyInput(VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT))
         return IDET_SYSTEM_EVENT_PENDING;
@@ -49,7 +49,7 @@ sal_Int32 IdleDetection::CheckInputPending (void)
         return IDET_IDLE;
 }
 
-sal_Int32 IdleDetection::CheckSlideShowRunning (void)
+sal_Int32 IdleDetection::CheckSlideShowRunning()
 {
     sal_Int32 eResult (IDET_IDLE);
 

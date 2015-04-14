@@ -71,14 +71,14 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
 
 
 
-ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
+ULONG STDMETHODCALLTYPE CClassFactory::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
 
-ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
+ULONG STDMETHODCALLTYPE CClassFactory::Release()
 {
     long refcnt = InterlockedDecrement(&m_RefCnt);
 

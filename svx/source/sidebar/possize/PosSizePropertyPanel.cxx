@@ -199,7 +199,7 @@ void PosSizePropertyPanel::Initialize()
 
 
 
-void PosSizePropertyPanel::SetupIcons(void)
+void PosSizePropertyPanel::SetupIcons()
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {

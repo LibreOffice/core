@@ -812,7 +812,7 @@ sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
     return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
-bool LineListBox::UpdatePaintLineColor( void )
+bool LineListBox::UpdatePaintLineColor()
 {
     const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
     Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );

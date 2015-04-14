@@ -67,7 +67,7 @@ public:
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 protected:
-    virtual ~ScAccessibleDocument(void);
+    virtual ~ScAccessibleDocument();
 
     using ScAccessibleDocumentBase::IsDefunc;
 
@@ -103,7 +103,7 @@ public:
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount(void)
+        getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or NULL if index is invalid.
@@ -115,11 +115,11 @@ public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet(void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleName(void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
@@ -172,13 +172,13 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName(void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames(void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XTypeProvider  ===================================================
@@ -191,7 +191,7 @@ public:
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  IAccessibleViewForwarder  ========================================
@@ -202,7 +202,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual bool IsValid (void) const SAL_OVERRIDE;
+    virtual bool IsValid() const SAL_OVERRIDE;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
@@ -270,20 +270,20 @@ public:
 protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
-        createAccessibleDescription(void)
+        createAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        createAccessibleName(void)
+        createAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void) const
+    virtual Rectangle GetBoundingBoxOnScreen() const
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void) const
+    virtual Rectangle GetBoundingBox() const
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:

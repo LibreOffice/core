@@ -53,7 +53,7 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NU
     printf("%s\n", aString.getStr( ) );
 }
 
-inline ::rtl::OUString getModulePath( void )
+inline ::rtl::OUString getModulePath()
 {
     ::rtl::OUString suDirPath;
     ::osl::Module::getUrlFromAddress(

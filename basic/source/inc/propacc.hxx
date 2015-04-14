@@ -51,7 +51,7 @@ public:
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL   setPropertyValue(
                                 const OUString& aPropertyName,
                                 const ::com::sun::star::uno::Any& aValue)
@@ -82,7 +82,7 @@ public:
                                 throw (std::exception) SAL_OVERRIDE;
 
     // XPropertyAccess
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValues(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& PropertyValues_) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
@@ -104,7 +104,7 @@ public:
     PropertySetInfoImpl( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProps );
 
     // XPropertySetInfo
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) throw () { return _aProps;}
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() throw () { return _aProps;}
     ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
         throw( ::com::sun::star::uno::RuntimeException );
     bool SAL_CALL hasPropertyByName(const OUString& Name)
@@ -120,7 +120,7 @@ public:
     virtual                 ~SbPropertySetInfo();
 
     // XPropertySetInfo
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void)
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

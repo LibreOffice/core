@@ -89,7 +89,7 @@ namespace {
     {
     public:
         Painter (SlideSorterView& rView) : mrView(rView) {}
-        virtual ~Painter (void) {}
+        virtual ~Painter() {}
 
         virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) SAL_OVERRIDE
         {
@@ -109,7 +109,7 @@ class BackgroundPainter
 {
 public:
     BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
-    virtual ~BackgroundPainter (void) {}
+    virtual ~BackgroundPainter() {}
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) SAL_OVERRIDE
     {
@@ -176,7 +176,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     mpLayeredDevice->RegisterPainter(pPainter, 1);
 }
 
-SlideSorterView::~SlideSorterView (void)
+SlideSorterView::~SlideSorterView()
 {
     if ( ! mbIsDisposed)
     {
@@ -185,12 +185,12 @@ SlideSorterView::~SlideSorterView (void)
     }
 }
 
-void SlideSorterView::Init (void)
+void SlideSorterView::Init()
 {
     HandleModelChange();
 }
 
-void SlideSorterView::Dispose (void)
+void SlideSorterView::Dispose()
 {
     mpSelectionPainter.reset();
 
@@ -229,24 +229,24 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) co
     return nIndex;
 }
 
-Layouter& SlideSorterView::GetLayouter (void)
+Layouter& SlideSorterView::GetLayouter()
 {
     return *mpLayouter.get();
 }
 
-void SlideSorterView::ModelHasChanged (void)
+void SlideSorterView::ModelHasChanged()
 {
     // Ignore this call.  Rely on hints sent by the model to get informed of
     // model changes.
 }
 
-void SlideSorterView::PreModelChange (void)
+void SlideSorterView::PreModelChange()
 {
     // Reset the slide under the mouse.  It will be re-set in PostModelChange().
     SetPageUnderMouse(SharedPageDescriptor());
 }
 
-void SlideSorterView::PostModelChange (void)
+void SlideSorterView::PostModelChange()
 {
     // In PreModelChange() the page objects have been released.  Here we
     // create new ones.
@@ -265,13 +265,13 @@ void SlideSorterView::PostModelChange (void)
     describe the type of change so that existing page objects can be
     reused.
 */
-void SlideSorterView::HandleModelChange (void)
+void SlideSorterView::HandleModelChange()
 {
     PreModelChange ();
     PostModelChange();
 }
 
-void SlideSorterView::HandleDrawModeChange (void)
+void SlideSorterView::HandleDrawModeChange()
 {
     // Replace the preview cache with a new and empty one.  The
     // PreviewRenderer that is used by the cache is replaced by this as
@@ -282,7 +282,7 @@ void SlideSorterView::HandleDrawModeChange (void)
     RequestRepaint();
 }
 
-void SlideSorterView::HandleDataChangeEvent (void)
+void SlideSorterView::HandleDataChangeEvent()
 {
     GetPageObjectPainter()->SetTheme(mrSlideSorter.GetTheme());
 
@@ -295,7 +295,7 @@ void SlideSorterView::HandleDataChangeEvent (void)
     RequestRepaint();
 }
 
-void SlideSorterView::Resize (void)
+void SlideSorterView::Resize()
 {
     UpdateOrientation();
 
@@ -303,13 +303,13 @@ void SlideSorterView::Resize (void)
     RequestRearrange();
 }
 
-void SlideSorterView::RequestRearrange (void)
+void SlideSorterView::RequestRearrange()
 {
     mbIsRearrangePending = true;
     Rearrange();
 }
 
-void SlideSorterView::Rearrange (void)
+void SlideSorterView::Rearrange()
 {
     if ( ! mbIsRearrangePending)
         return;
@@ -338,7 +338,7 @@ void SlideSorterView::Rearrange (void)
     }
 }
 
-void SlideSorterView::UpdateOrientation (void)
+void SlideSorterView::UpdateOrientation()
 {
     // The layout of slides depends on whether the slide sorter is
     // displayed in the center or the side pane.
@@ -443,12 +443,12 @@ void SlideSorterView::Layout ()
     InvalidatePageObjectVisibilities ();
 }
 
-void SlideSorterView::InvalidatePageObjectVisibilities (void)
+void SlideSorterView::InvalidatePageObjectVisibilities()
 {
     mbPageObjectVisibilitiesValid = false;
 }
 
-void SlideSorterView::DeterminePageObjectVisibilities (void)
+void SlideSorterView::DeterminePageObjectVisibilities()
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
@@ -502,7 +502,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
     }
 }
 
-void SlideSorterView::UpdatePreciousFlags (void)
+void SlideSorterView::UpdatePreciousFlags()
 {
     if (mbPreciousFlagUpdatePending)
     {
@@ -545,7 +545,7 @@ bool SlideSorterView::SetOrientation (const Layouter::Orientation eOrientation)
         return false;
 }
 
-void SlideSorterView::RequestRepaint (void)
+void SlideSorterView::RequestRepaint()
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
@@ -584,7 +584,7 @@ void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
     }
 }
 
-Rectangle SlideSorterView::GetModelArea (void)
+Rectangle SlideSorterView::GetModelArea()
 {
     return mpLayouter->GetTotalBoundingBox();
 }
@@ -698,7 +698,7 @@ void SlideSorterView::ConfigurationChanged (
 
 }
 
-::boost::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache (void)
+::boost::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache()
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow && mpPreviewCache.get() == NULL)
@@ -713,7 +713,7 @@ void SlideSorterView::ConfigurationChanged (
     return mpPreviewCache;
 }
 
-Pair SlideSorterView::GetVisiblePageRange (void)
+Pair SlideSorterView::GetVisiblePageRange()
 {
     if ( ! mbPageObjectVisibilitiesValid)
         DeterminePageObjectVisibilities();
@@ -740,7 +740,7 @@ void SlideSorterView::RemoveVisibilityChangeListener(const Link&rListener)
             rListener));
 }
 
-ToolTip& SlideSorterView::GetToolTip (void) const
+ToolTip& SlideSorterView::GetToolTip() const
 {
     OSL_ASSERT(mpToolTip);
     return *mpToolTip;
@@ -841,7 +841,7 @@ bool SlideSorterView::SetState (
     return bModified;
 }
 
-::boost::shared_ptr<PageObjectPainter> SlideSorterView::GetPageObjectPainter (void)
+::boost::shared_ptr<PageObjectPainter> SlideSorterView::GetPageObjectPainter()
 {
     if ( ! mpPageObjectPainter)
         mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));
@@ -859,7 +859,7 @@ SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
     ++mrView.mnLockRedrawSmph;
 }
 
-SlideSorterView::DrawLock::~DrawLock (void)
+SlideSorterView::DrawLock::~DrawLock()
 {
     OSL_ASSERT(mrView.mnLockRedrawSmph>0);
     --mrView.mnLockRedrawSmph;
@@ -871,7 +871,7 @@ SlideSorterView::DrawLock::~DrawLock (void)
         }
 }
 
-void SlideSorterView::DrawLock::Dispose (void)
+void SlideSorterView::DrawLock::Dispose()
 {
     mpWindow.reset();
 }

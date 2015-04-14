@@ -142,7 +142,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
 
 
 
-void ValueSetAcc::GetFocus (void)
+void ValueSetAcc::GetFocus()
 {
     mbIsFocused = true;
 
@@ -156,7 +156,7 @@ void ValueSetAcc::GetFocus (void)
 
 
 
-void ValueSetAcc::LoseFocus (void)
+void ValueSetAcc::LoseFocus()
 {
     mbIsFocused = false;
 
@@ -674,7 +674,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& r
 
 
 
-void SAL_CALL ValueSetAcc::disposing (void)
+void SAL_CALL ValueSetAcc::disposing()
 {
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
@@ -710,7 +710,7 @@ void SAL_CALL ValueSetAcc::disposing (void)
 }
 
 
-sal_uInt16 ValueSetAcc::getItemCount (void) const
+sal_uInt16 ValueSetAcc::getItemCount() const
 {
     sal_uInt16 nCount = mpParent->ImplGetVisibleItemCount();
     // When the None-Item is visible then increase the number of items by
@@ -743,7 +743,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 
 
 
-void ValueSetAcc::ThrowIfDisposed (void)
+void ValueSetAcc::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

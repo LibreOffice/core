@@ -36,8 +36,8 @@
 //#define DBG_TRACE_PROFILING
 
 #ifdef DBG_TRACE_BASIC
-void dbg_InitTrace( void );
-void dbg_DeInitTrace( void );
+void dbg_InitTrace();
+void dbg_DeInitTrace();
 void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl );
 void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, bool bLeave = false );
 void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, INT32 nCallLvl );

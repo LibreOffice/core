@@ -228,7 +228,7 @@ void OColumns::clearColumns()
     disposing();
 }
 
-void SAL_CALL OColumns::disposing(void)
+void SAL_CALL OColumns::disposing()
 {
     MutexGuard aGuard(m_rMutex);
     m_xDrvColumns = NULL;

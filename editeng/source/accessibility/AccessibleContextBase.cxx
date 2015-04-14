@@ -81,7 +81,7 @@ AccessibleContextBase::AccessibleContextBase (
     mxRelationSet = pRelationSet;
 }
 
-AccessibleContextBase::~AccessibleContextBase(void)
+AccessibleContextBase::~AccessibleContextBase()
 {
 }
 
@@ -188,7 +188,7 @@ void AccessibleContextBase::SetRelationSet (
 //=====  XAccessible  =========================================================
 
 uno::Reference< XAccessibleContext> SAL_CALL
-    AccessibleContextBase::getAccessibleContext (void)
+    AccessibleContextBase::getAccessibleContext()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -203,7 +203,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 /** No children.
 */
 sal_Int32 SAL_CALL
-       AccessibleContextBase::getAccessibleChildCount (void)
+       AccessibleContextBase::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -230,7 +230,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 uno::Reference<XAccessible> SAL_CALL
-       AccessibleContextBase::getAccessibleParent (void)
+       AccessibleContextBase::getAccessibleParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -241,7 +241,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 sal_Int32 SAL_CALL
-       AccessibleContextBase::getAccessibleIndexInParent (void)
+       AccessibleContextBase::getAccessibleIndexInParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -277,7 +277,7 @@ sal_Int32 SAL_CALL
 
 
 sal_Int16 SAL_CALL
-    AccessibleContextBase::getAccessibleRole (void)
+    AccessibleContextBase::getAccessibleRole()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -288,7 +288,7 @@ sal_Int16 SAL_CALL
 
 
 OUString SAL_CALL
-       AccessibleContextBase::getAccessibleDescription (void)
+       AccessibleContextBase::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -300,7 +300,7 @@ OUString SAL_CALL
 
 
 OUString SAL_CALL
-       AccessibleContextBase::getAccessibleName (void)
+       AccessibleContextBase::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -322,7 +322,7 @@ OUString SAL_CALL
 /** Return a copy of the relation set.
 */
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-       AccessibleContextBase::getAccessibleRelationSet (void)
+       AccessibleContextBase::getAccessibleRelationSet()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -349,7 +349,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         VISIBLE
 */
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    AccessibleContextBase::getAccessibleStateSet (void)
+    AccessibleContextBase::getAccessibleStateSet()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::utl::AccessibleStateSetHelper* pStateSet = NULL;
@@ -389,7 +389,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
 
 lang::Locale SAL_CALL
-       AccessibleContextBase::getLocale (void)
+       AccessibleContextBase::getLocale()
     throw (IllegalAccessibleComponentStateException,
         ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -457,7 +457,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 }
 
 //=====  XServiceInfo  ========================================================
-OUString SAL_CALL AccessibleContextBase::getImplementationName (void)
+OUString SAL_CALL AccessibleContextBase::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -471,7 +471,7 @@ sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServi
 }
 
 uno::Sequence< OUString > SAL_CALL
-       AccessibleContextBase::getSupportedServiceNames (void)
+       AccessibleContextBase::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -488,7 +488,7 @@ uno::Sequence< OUString > SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence< ::com::sun::star::uno::Type>
-    AccessibleContextBase::getTypes (void)
+    AccessibleContextBase::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -499,7 +499,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
-    AccessibleContextBase::getImplementationId (void)
+    AccessibleContextBase::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
@@ -507,7 +507,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-void SAL_CALL AccessibleContextBase::disposing (void)
+void SAL_CALL AccessibleContextBase::disposing()
 {
     SetState (AccessibleStateType::DEFUNC);
 
@@ -574,7 +574,7 @@ void AccessibleContextBase::SetAccessibleName (
 
 
 
-OUString AccessibleContextBase::CreateAccessibleDescription (void)
+OUString AccessibleContextBase::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return OUString("Empty Description");
@@ -583,7 +583,7 @@ OUString AccessibleContextBase::CreateAccessibleDescription (void)
 
 
 
-OUString AccessibleContextBase::CreateAccessibleName (void)
+OUString AccessibleContextBase::CreateAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return OUString("Empty Name");
@@ -624,7 +624,7 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 
 
 
-void AccessibleContextBase::ThrowIfDisposed (void)
+void AccessibleContextBase::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -637,7 +637,7 @@ void AccessibleContextBase::ThrowIfDisposed (void)
 
 
 
-bool AccessibleContextBase::IsDisposed (void)
+bool AccessibleContextBase::IsDisposed()
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }

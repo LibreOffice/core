@@ -46,12 +46,12 @@
 extern "C"
 {
     #define GET_YIELD_MUTEX() static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
-    static void GdkThreadsEnter( void )
+    static void GdkThreadsEnter()
     {
         GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
         pYieldMutex->ThreadsEnter();
     }
-    static void GdkThreadsLeave( void )
+    static void GdkThreadsLeave()
     {
         GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
         pYieldMutex->ThreadsLeave();

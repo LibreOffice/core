@@ -63,7 +63,7 @@ class XResultSet_impl : public Notifier,
 
         virtual ~XResultSet_impl();
 
-        virtual ContentEventNotifier*        cDEL( void ) SAL_OVERRIDE
+        virtual ContentEventNotifier*        cDEL() SAL_OVERRIDE
         {
             return 0;
         }
@@ -73,22 +73,22 @@ class XResultSet_impl : public Notifier,
             return 0;
         }
 
-        virtual ContentEventNotifier*          cCEL( void ) SAL_OVERRIDE
+        virtual ContentEventNotifier*          cCEL() SAL_OVERRIDE
         {
             return 0;
         }
 
-        virtual PropertySetInfoChangeNotifier* cPSL( void ) SAL_OVERRIDE
+        virtual PropertySetInfoChangeNotifier* cPSL() SAL_OVERRIDE
         {
             return 0;
         }
 
-        virtual PropertyChangeNotifier*        cPCL( void ) SAL_OVERRIDE
+        virtual PropertyChangeNotifier*        cPCL() SAL_OVERRIDE
         {
             return 0;
         }
 
-        virtual OUString                  getKey( void ) SAL_OVERRIDE
+        virtual OUString                  getKey() SAL_OVERRIDE
         {
             return m_aBaseDirectory;
         }
@@ -628,7 +628,7 @@ class XResultSet_impl : public Notifier,
         sal_Int32                                          m_nMinorErrorCode;
 
         // Methods
-        bool SAL_CALL OneMore( void )
+        bool SAL_CALL OneMore()
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
 

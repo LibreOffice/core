@@ -42,7 +42,7 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     return cppu::supportsService(this, ServiceName);                                \
 }                                                                                    \
 ::com::sun::star::uno::Sequence< OUString >                                   \
-    SAL_CALL ClassName::getSupportedServiceNames(void)                           \
+    SAL_CALL ClassName::getSupportedServiceNames()                           \
     throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     ::com::sun::star::uno::Sequence< OUString > aRet(1);                      \

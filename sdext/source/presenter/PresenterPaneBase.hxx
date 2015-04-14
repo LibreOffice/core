@@ -67,17 +67,17 @@ public:
     PresenterPaneBase (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterPaneBase (void);
+    virtual ~PresenterPaneBase();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    css::uno::Reference<css::awt::XWindow> GetBorderWindow (void) const;
+    css::uno::Reference<css::awt::XWindow> GetBorderWindow() const;
     void SetBackground (const SharedBitmapDescriptor& rpBackground);
     void SetTitle (const OUString& rsTitle);
-    OUString GetTitle (void) const;
-    css::uno::Reference<css::drawing::framework::XPaneBorderPainter> GetPaneBorderPainter (void) const;
+    OUString GetTitle() const;
+    css::uno::Reference<css::drawing::framework::XPaneBorderPainter> GetPaneBorderPainter() const;
     void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
-    css::awt::Point GetCalloutAnchor (void) const;
+    css::awt::Point GetCalloutAnchor() const;
 
     // XInitialization
 
@@ -86,10 +86,10 @@ public:
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XWindowListener
@@ -138,14 +138,14 @@ protected:
         const css::awt::Rectangle& rCenterBox,
         const css::awt::Rectangle& rUpdateBox);
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
-    void ToTop (void);
-    void LayoutContextWindow (void);
-    bool IsVisible (void) const;
+    void ToTop();
+    void LayoutContextWindow();
+    bool IsVisible() const;
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

@@ -55,13 +55,13 @@ class SlideSorterModel
 public:
     SlideSorterModel (SlideSorter& rSlideSorter);
 
-    virtual ~SlideSorterModel (void);
-    void Dispose (void);
+    virtual ~SlideSorterModel();
+    void Dispose();
 
     /** This method is present to let the view create a ShowView for
         displaying slides.
     */
-    SdDrawDocument* GetDocument (void);
+    SdDrawDocument* GetDocument();
 
     /** Set a new edit mode and return whether the edit mode really
         has been changed.  When the edit mode is changed then the
@@ -76,16 +76,16 @@ public:
 
     /** Set the edit mode to that currently used by the controller.
     */
-    bool SetEditModeFromController (void);
-    EditMode GetEditMode (void) const { return meEditMode;}
-    PageKind GetPageType (void) const { return mePageKind;}
+    bool SetEditModeFromController();
+    EditMode GetEditMode() const { return meEditMode;}
+    PageKind GetPageType() const { return mePageKind;}
 
     /** Return the number of slides in the document regardless of whether
         they are visible or not or whether they are hidden or not.
         The number of slides depends on the set of slides available through
         the XIndexAccess given to SetDocumentSlides().
     */
-    sal_Int32 GetPageCount (void) const;
+    sal_Int32 GetPageCount() const;
 
     /** Return a page descriptor for the page with the specified index.
         Page descriptors are created on demand.  The page descriptor is
@@ -145,26 +145,26 @@ public:
         is especially important for previews of complex pages that take some
         time to create.
     */
-    void Resync (void);
+    void Resync();
 
     /** Delete all descriptors that currently are in the container.  The size
         of the container, however, is not altered.  Use the AdaptSize
         method for that.
     */
-    void ClearDescriptorList (void);
+    void ClearDescriptorList();
 
     /** Set the selection of the document to exactly that of the called model.
     */
-    void SynchronizeDocumentSelection (void);
+    void SynchronizeDocumentSelection();
 
     /** Set the selection of the called model to exactly that of the document.
     */
-    void SynchronizeModelSelection (void);
+    void SynchronizeModelSelection();
 
     /** Return the mutex so that the caller can lock it and then safely
         access the model.
     */
-    ::osl::Mutex& GetMutex (void) { return maMutex;}
+    ::osl::Mutex& GetMutex() { return maMutex;}
 
     /** Set the XIndexAccess from which the called SlideSorterModel takes
         its pages.
@@ -177,20 +177,20 @@ public:
 
     /** Return the set of pages that is currently displayed by the slide sorter.
     */
-    css::uno::Reference<css::container::XIndexAccess> GetDocumentSlides (void) const;
+    css::uno::Reference<css::container::XIndexAccess> GetDocumentSlides() const;
 
     /** This method is called when the edit mode has changed.  It calls
         SetDocumentSlides() with the set of slides or master pages obtained
         from the model of the XController.
     */
-    void UpdatePageList (void);
+    void UpdatePageList();
 
-    bool IsReadOnly (void) const;
+    bool IsReadOnly() const;
 
     /** The current selection is saved by copying the ST_Selected state into
         ST_WasSelected for slides.
     */
-    void SaveCurrentSelection (void);
+    void SaveCurrentSelection();
 
     /** The current selection is restored from the ST_WasSelected state from
         the slides.
@@ -198,7 +198,7 @@ public:
             The returned region has to be repainted to reflect the updated
             selection states.
     */
-    ::vcl::Region RestoreSelection (void);
+    ::vcl::Region RestoreSelection();
 
     /** Typically called from controller::Listener this method handles the
         insertion and deletion of single pages.
@@ -220,7 +220,7 @@ private:
     /** Resize the descriptor container according to current values of
         page kind and edit mode.
     */
-    void AdaptSize (void);
+    void AdaptSize();
 
     SdPage* GetPage (const sal_Int32 nCoreIndex) const;
     void InsertSlide (SdPage* pPage);

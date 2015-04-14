@@ -172,7 +172,7 @@ SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, boo
 {
 }
 
-SdXMLFilter::~SdXMLFilter(void)
+SdXMLFilter::~SdXMLFilter()
 {
 }
 

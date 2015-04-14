@@ -66,14 +66,14 @@ namespace {
     class Text
     {
     public:
-        Text (void);
+        Text();
         Text (
             const OUString& rsText,
             const PresenterTheme::SharedFontDescriptor& rpFont);
 
         void SetText (const OUString& rsText);
-        OUString GetText (void) const;
-        PresenterTheme::SharedFontDescriptor GetFont (void) const;
+        OUString GetText() const;
+        PresenterTheme::SharedFontDescriptor GetFont() const;
 
         void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
@@ -93,7 +93,7 @@ namespace {
         : private ::boost::noncopyable
     {
     public:
-        ElementMode (void);
+        ElementMode();
 
         SharedBitmapDescriptor mpIcon;
         OUString msAction;
@@ -132,16 +132,16 @@ namespace {
     {
     public:
         Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~Element (void);
+        virtual ~Element();
 
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         virtual void SetModes (
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
             const SharedElementMode& rpDisabledMode);
-        void CurrentSlideHasChanged (void);
+        void CurrentSlideHasChanged();
         void SetLocation (const awt::Point& rLocation);
         void SetSize (const geometry::RealSize2D& rSize);
         virtual void Paint (
@@ -149,12 +149,12 @@ namespace {
             const rendering::ViewState& rViewState) = 0;
         awt::Size GetBoundingSize (
             const Reference<rendering::XCanvas>& rxCanvas);
-        awt::Rectangle GetBoundingBox (void) const;
+        awt::Rectangle GetBoundingBox() const;
         virtual bool SetState (const bool bIsOver, const bool bIsPressed);
         void Invalidate (const bool bSynchronous = true);
         bool IsOutside (const awt::Rectangle& rBox);
-        virtual bool IsFilling (void) const;
-        void UpdateState (void);
+        virtual bool IsFilling() const;
+        void UpdateState();
 
         // lang::XEventListener
 
@@ -187,7 +187,7 @@ namespace {
         virtual awt::Size CreateBoundingSize (
             const Reference<rendering::XCanvas>& rxCanvas) = 0;
 
-        bool IsEnabled (void) const { return mbIsEnabled;}
+        bool IsEnabled() const { return mbIsEnabled;}
     private:
         bool mbIsEnabled;
     };
@@ -209,8 +209,8 @@ namespace {
         static ::rtl::Reference<Element> Create (
             const ::rtl::Reference<PresenterToolBar>& rpToolBar);
 
-        virtual ~Button (void);
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+        virtual ~Button();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
@@ -229,12 +229,12 @@ namespace {
         bool mbIsListenerRegistered;
 
         Button (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        void Initialize (void);
+        void Initialize();
         void PaintIcon (
             const Reference<rendering::XCanvas>& rxCanvas,
             const sal_Int32 nTextHeight,
             const rendering::ViewState& rViewState);
-        PresenterBitmapDescriptor::Mode GetMode (void) const;
+        PresenterBitmapDescriptor::Mode GetMode() const;
     };
 
 //===== Label =================================================================
@@ -260,7 +260,7 @@ namespace {
     class TimeFormatter
     {
     public:
-        TimeFormatter (void);
+        TimeFormatter();
         OUString FormatTime (const oslDateTime& rTime);
     private:
         bool mbIs24HourFormat;
@@ -271,19 +271,19 @@ namespace {
     class TimeLabel : public Label
     {
     public:
-        void ConnectToTimer (void);
+        void ConnectToTimer();
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) = 0;
     protected:
         TimeLabel(const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         using Element::disposing;
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
     private:
         class Listener : public PresenterClockTimer::Listener
         {
         public:
             Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
                 : mxLabel(rxLabel) {}
-            virtual ~Listener (void) {}
+            virtual ~Listener() {}
             virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE
             { if (mxLabel.is()) mxLabel->TimeHasChanged(rCurrentTime); }
         private:
@@ -305,7 +305,7 @@ namespace {
     private:
         TimeFormatter maTimeFormatter;
         CurrentTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~CurrentTimeLabel (void);
+        virtual ~CurrentTimeLabel();
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE;
     };
 
@@ -323,7 +323,7 @@ namespace {
         TimeFormatter maTimeFormatter;
         TimeValue maStartTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~PresentationTimeLabel (void);
+        virtual ~PresentationTimeLabel();
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE;
     };
 
@@ -334,7 +334,7 @@ namespace {
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
             const rendering::ViewState& rViewState) SAL_OVERRIDE;
-        virtual bool IsFilling (void) const SAL_OVERRIDE;
+        virtual bool IsFilling() const SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
@@ -348,7 +348,7 @@ namespace {
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
             const rendering::ViewState& rViewState) SAL_OVERRIDE;
-        virtual bool IsFilling (void) const SAL_OVERRIDE;
+        virtual bool IsFilling() const SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
@@ -413,11 +413,11 @@ void PresenterToolBar::Initialize (
     }
 }
 
-PresenterToolBar::~PresenterToolBar (void)
+PresenterToolBar::~PresenterToolBar()
 {
 }
 
-void SAL_CALL PresenterToolBar::disposing (void)
+void SAL_CALL PresenterToolBar::disposing()
 {
     if (mxWindow.is())
     {
@@ -466,7 +466,7 @@ void PresenterToolBar::InvalidateArea (
         bSynchronous);
 }
 
-void PresenterToolBar::RequestLayout (void)
+void PresenterToolBar::RequestLayout()
 {
     mbIsLayoutPending = true;
 
@@ -477,19 +477,19 @@ void PresenterToolBar::RequestLayout (void)
     xManager->Invalidate(mxWindow);
 }
 
-geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
+geometry::RealSize2D PresenterToolBar::GetMinimalSize()
 {
     if (mbIsLayoutPending)
         Layout(mxCanvas);
     return maMinimalSize;
 }
 
-::rtl::Reference<PresenterController> PresenterToolBar::GetPresenterController (void) const
+::rtl::Reference<PresenterController> PresenterToolBar::GetPresenterController() const
 {
     return mpPresenterController;
 }
 
-Reference<XComponentContext> PresenterToolBar::GetComponentContext (void) const
+Reference<XComponentContext> PresenterToolBar::GetComponentContext() const
 {
     return mxComponentContext;
 }
@@ -613,7 +613,7 @@ void SAL_CALL PresenterToolBar::setCurrentPage (const Reference<drawing::XDrawPa
     }
 }
 
-Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage (void)
+Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
     return mxCurrentSlide;
@@ -1000,7 +1000,7 @@ void PresenterToolBar::Paint (
     }
 }
 
-void PresenterToolBar::UpdateSlideNumber (void)
+void PresenterToolBar::UpdateSlideNumber()
 {
     if( mxSlideShowController.is() )
     {
@@ -1053,7 +1053,7 @@ void PresenterToolBar::CheckMouseOver (
     }
 }
 
-void PresenterToolBar::ThrowIfDisposed (void) const
+void PresenterToolBar::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1115,11 +1115,11 @@ PresenterToolBarView::PresenterToolBarView (
     }
 }
 
-PresenterToolBarView::~PresenterToolBarView (void)
+PresenterToolBarView::~PresenterToolBarView()
 {
 }
 
-void SAL_CALL PresenterToolBarView::disposing (void)
+void SAL_CALL PresenterToolBarView::disposing()
 {
     Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
     mpToolBar = NULL;
@@ -1139,7 +1139,7 @@ void SAL_CALL PresenterToolBarView::disposing (void)
 
 }
 
-::rtl::Reference<PresenterToolBar> PresenterToolBarView::GetPresenterToolBar (void) const
+::rtl::Reference<PresenterToolBar> PresenterToolBarView::GetPresenterToolBar() const
 {
     return mpToolBar;
 }
@@ -1169,13 +1169,13 @@ void SAL_CALL PresenterToolBarView::disposing (const lang::EventObject& rEventOb
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterToolBarView::getResourceId (void)
+Reference<XResourceId> SAL_CALL PresenterToolBarView::getResourceId()
     throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly (void)
+sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -1191,7 +1191,7 @@ void SAL_CALL PresenterToolBarView::setCurrentPage (const Reference<drawing::XDr
         xToolBar->setCurrentPage(rxSlide);
 }
 
-Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage (void)
+Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
     return NULL;
@@ -1224,7 +1224,7 @@ Element::Element (
     }
 }
 
-Element::~Element (void)
+Element::~Element()
 {
 }
 
@@ -1241,7 +1241,7 @@ void Element::SetModes (
     mpMode = rpNormalMode;
 }
 
-void Element::disposing (void)
+void Element::disposing()
 {
 }
 
@@ -1252,12 +1252,12 @@ awt::Size Element::GetBoundingSize (
     return maSize;
 }
 
-awt::Rectangle Element::GetBoundingBox (void) const
+awt::Rectangle Element::GetBoundingBox() const
 {
     return awt::Rectangle(maLocation.X,maLocation.Y, maSize.Width, maSize.Height);
 }
 
-void Element::CurrentSlideHasChanged (void)
+void Element::CurrentSlideHasChanged()
 {
     UpdateState();
 }
@@ -1344,12 +1344,12 @@ bool Element::IsOutside (const awt::Rectangle& rBox)
 }
 
 
-bool Element::IsFilling (void) const
+bool Element::IsFilling() const
 {
     return false;
 }
 
-void Element::UpdateState (void)
+void Element::UpdateState()
 {
     OSL_ASSERT(mpToolBar.get() != NULL);
     OSL_ASSERT(mpToolBar->GetPresenterController().get() != NULL);
@@ -1407,7 +1407,7 @@ void SAL_CALL Element::statusChanged (const css::frame::FeatureStateEvent& rEven
 
 namespace {
 
-ElementMode::ElementMode (void)
+ElementMode::ElementMode()
     : mpIcon(),
       msAction(),
       maText()
@@ -1494,17 +1494,17 @@ Button::Button (
     OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
 }
 
-Button::~Button (void)
+Button::~Button()
 {
 }
 
-void Button::Initialize (void)
+void Button::Initialize()
 {
     mpToolBar->GetPresenterController()->GetWindowManager()->AddLayoutListener(this);
     mbIsListenerRegistered = true;
 }
 
-void Button::disposing (void)
+void Button::disposing()
 {
     OSL_ASSERT(mpToolBar.get() != NULL);
     if (mpToolBar.get() != NULL
@@ -1609,7 +1609,7 @@ void Button::PaintIcon (
     }
 }
 
-PresenterBitmapDescriptor::Mode Button::GetMode (void) const
+PresenterBitmapDescriptor::Mode Button::GetMode() const
 {
     if ( ! IsEnabled())
         return PresenterBitmapDescriptor::Disabled;
@@ -1697,7 +1697,7 @@ bool Label::SetState (const bool bIsOver, const bool bIsPressed)
 
 namespace {
 
-Text::Text (void)
+Text::Text()
     : msText(),
       mpFont()
 {
@@ -1716,12 +1716,12 @@ void Text::SetText (const OUString& rsText)
     msText = rsText;
 }
 
-OUString Text::GetText (void) const
+OUString Text::GetText() const
 {
     return msText;
 }
 
-PresenterTheme::SharedFontDescriptor Text::GetFont (void) const
+PresenterTheme::SharedFontDescriptor Text::GetFont() const
 {
     return mpFont;
 }
@@ -1791,7 +1791,7 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
 
 //===== TimeFormatter =========================================================
 
-TimeFormatter::TimeFormatter (void)
+TimeFormatter::TimeFormatter()
     : mbIs24HourFormat(true),
       mbIsAmPmFormat(false),
       mbIsShowSeconds(true)
@@ -1847,13 +1847,13 @@ TimeLabel::TimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 {
 }
 
-void SAL_CALL TimeLabel::disposing (void)
+void SAL_CALL TimeLabel::disposing()
 {
     PresenterClockTimer::Instance(mpToolBar->GetComponentContext())->RemoveListener(mpListener);
     mpListener.reset();
 }
 
-void TimeLabel::ConnectToTimer (void)
+void TimeLabel::ConnectToTimer()
 {
     mpListener.reset(new Listener(this));
     PresenterClockTimer::Instance(mpToolBar->GetComponentContext())->AddListener(mpListener);
@@ -1869,7 +1869,7 @@ void TimeLabel::ConnectToTimer (void)
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-CurrentTimeLabel::~CurrentTimeLabel (void)
+CurrentTimeLabel::~CurrentTimeLabel()
 {
 }
 
@@ -1906,7 +1906,7 @@ void CurrentTimeLabel::SetModes (
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-PresentationTimeLabel::~PresentationTimeLabel (void)
+PresentationTimeLabel::~PresentationTimeLabel()
 {
 }
 
@@ -2010,7 +2010,7 @@ awt::Size VerticalSeparator::CreateBoundingSize (
     return awt::Size(1,20);
 }
 
-bool VerticalSeparator::IsFilling (void) const
+bool VerticalSeparator::IsFilling() const
 {
     return true;
 }
@@ -2061,7 +2061,7 @@ awt::Size HorizontalSeparator::CreateBoundingSize (
     return awt::Size(20,1);
 }
 
-bool HorizontalSeparator::IsFilling (void) const
+bool HorizontalSeparator::IsFilling() const
 {
     return true;
 }

@@ -26,7 +26,7 @@
 #endif
 #include "sallayout.hxx"
 
-SystemFontList* GetCoretextFontList(void);
+SystemFontList* GetCoretextFontList();
 ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef, bool* );
 
 #endif // INCLUDED_VCL_QUARTZ_CTFONTS_HXX

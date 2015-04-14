@@ -98,7 +98,7 @@ void OStatement_Base::disposeResultSet()
     m_xResultSet.clear();
 }
 
-void SAL_CALL OStatement_Base::disposing(void)
+void SAL_CALL OStatement_Base::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

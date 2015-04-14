@@ -73,14 +73,14 @@ public:
     // XServiceInfo
     OUString                                     SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
     sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
-    static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException )
+    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
     {
         return OUString("com.sun.star.comp.report.ORptTypeDetection");
     }
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 

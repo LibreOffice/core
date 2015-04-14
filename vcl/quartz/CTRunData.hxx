@@ -34,7 +34,7 @@ public:
     const CFIndex* m_pStringIndices;
     CGPoint* m_pAdjPositions;
     CTRunData(CTRunRef pRun, int start);
-   ~CTRunData(void);
+   ~CTRunData();
 };
 
 #endif /* NDef CTRunData_Included */

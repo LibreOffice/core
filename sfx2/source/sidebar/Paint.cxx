@@ -24,7 +24,7 @@ using namespace css;
 
 namespace sfx2 { namespace sidebar {
 
-Paint::Paint (void)
+Paint::Paint()
     : meType(NoPaint)
 {
 }
@@ -54,7 +54,7 @@ Paint Paint::Create (const css::uno::Any& rValue)
     return Paint();
 }
 
-const Color& Paint::GetColor (void) const
+const Color& Paint::GetColor() const
 {
     if (meType != ColorPaint)
     {
@@ -66,7 +66,7 @@ const Color& Paint::GetColor (void) const
         return ::boost::get<Color>(maValue);
 }
 
-const Gradient& Paint::GetGradient (void) const
+const Gradient& Paint::GetGradient() const
 {
     if (meType != GradientPaint)
     {
@@ -78,7 +78,7 @@ const Gradient& Paint::GetGradient (void) const
         return ::boost::get<Gradient>(maValue);
 }
 
-Wallpaper Paint::GetWallpaper (void) const
+Wallpaper Paint::GetWallpaper() const
 {
     switch (meType)
     {

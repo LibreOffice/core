@@ -120,12 +120,12 @@ public:
         search mode, may be restored after finishing searching/spell
         checking.
     */
-    void PrepareSpelling (void);
+    void PrepareSpelling();
 
     /** Initialize a spell check but do not start it yet.  This method
         is a better candidate for the name PrepareSpelling.
     */
-    void StartSpelling (void);
+    void StartSpelling();
 
     /** Proxy for method from base class to avoid compiler warning */
     void StartSpelling(EditView&, unsigned char);
@@ -142,15 +142,15 @@ public:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    ::svx::SpellPortions GetNextSpellSentence (void);
+    ::svx::SpellPortions GetNextSpellSentence();
 
     /** Release all resources that have been created during the find&replace
         or spell check.
     */
-    void EndSpelling (void);
+    void EndSpelling();
 
     /** callback for textconversion */
-    bool ConvertNextDocument (void) SAL_OVERRIDE;
+    bool ConvertNextDocument() SAL_OVERRIDE;
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
@@ -161,10 +161,10 @@ public:
         The position of current view mode/page/object/caret position
         is remembered and will be restored after conversion.
     */
-    void BeginConversion (void);
+    void BeginConversion();
 
     /** Release all resources that have been created during the conversion */
-    void EndConversion (void);
+    void EndConversion();
 
     DECL_LINK( SpellError, void * );
 
@@ -354,14 +354,14 @@ private:
 
     /** Do search and replace for whole document.
     */
-    bool SearchAndReplaceAll (void);
+    bool SearchAndReplaceAll();
 
     /** Do search and replace for next match.
         @return
             The return value specifies whether the search ended (</sal_True>) or
             another call to this method is required (</sal_False>).
     */
-    bool SearchAndReplaceOnce (void);
+    bool SearchAndReplaceOnce();
 
     /** Detect changes of the document or view and react accordingly.  Such
         changes may occur because different calls to
@@ -370,50 +370,50 @@ private:
         button but may include any other action some of which affect the
         search.
     */
-    void DetectChange (void);
+    void DetectChange();
 
     /** Detect whether the selection has changed.
         @return
             Return <TRUE/> when the selection has been changed since the
             last call to this method.
     */
-    bool DetectSelectionChange (void);
+    bool DetectSelectionChange();
 
     /** Remember the current edited object/caret position/page/view mode
         when starting to search/spell check so that it can be restored on
         termination.
     */
-    void RememberStartPosition (void);
+    void RememberStartPosition();
 
     /** Restore the position stored in the last call of
         <member>RememberStartPositiony</member>.
     */
-    void RestoreStartPosition (void);
+    void RestoreStartPosition();
 
     /** Provide next object to search or spell check as text object in edit
         mode on the current page.  This skips all objects that do not
         match or are no text object.
     */
-    void ProvideNextTextObject (void);
+    void ProvideNextTextObject();
 
     /** Handle the situation that the iterator has reached the last object.
         This may result in setting the <member>mbEndOfSearch</member> flag
         back to </sal_False>.  This method may show either the end-of-search
         dialog or the wrap-around dialog.
     */
-    void EndOfSearch (void);
+    void EndOfSearch();
 
     /** Show a dialog that tells the user that the search has ended either
         because there are no more matches after finding at least one or that
         no match has been found at all.
     */
-    void ShowEndOfSearchDialog (void);
+    void ShowEndOfSearchDialog();
 
     /** Show a dialog that asks the user whether to wrap around to the
         beginning/end of the document and continue with the search/spell
         check.
     */
-    bool ShowWrapArroundDialog (void);
+    bool ShowWrapArroundDialog();
 
     /** Check whether the object pointed to by the iterator is a valid text
         object.
@@ -425,23 +425,23 @@ private:
     /** Put text of current text object into outliner so that the text can
         be searched/spell checked.
     */
-    void PutTextIntoOutliner (void);
+    void PutTextIntoOutliner();
 
     /** Prepare to do spell checking on the current text object.  This
         includes putting it into edit mode.  Under certain conditions this
         method sets <member>mbEndOfSearch</member> to <TRUE/>.
     */
-    void PrepareSpellCheck (void);
+    void PrepareSpellCheck();
 
     /** Prepare to search and replace on the current text object.  This
         includes putting it into edit mode.
     */
-    void PrepareSearchAndReplace (void);
+    void PrepareSearchAndReplace();
 
     /** Prepare to do a text conversion on the current text
         object. This includes putting it into edit mode.
     */
-    void PrepareConversion (void);
+    void PrepareConversion();
 
     /** Switch to a new view mode.  Try to restore the original edit mode
         before doing so.
@@ -470,7 +470,7 @@ private:
             The position mentioned above in form of a selection with start
             equals end.
     */
-    ESelection GetSearchStartPosition (void);
+    ESelection GetSearchStartPosition();
 
     /** Detect whether there exists a previous match.  Note that only the
         absence of such a match can be detected reliably.  An existing match
@@ -481,7 +481,7 @@ private:
             Returns </True> when there is no previous match and </False>
             when there may be one.
     */
-    bool HasNoPreviousMatch (void);
+    bool HasNoPreviousMatch();
 
     /** Handle a failed search (with or without replace) for the outline
         mode.  Show message boxes when the search failed completely,
@@ -492,7 +492,7 @@ private:
             search shall take place.  If that is so, then it is the caller's
             responsibility to set the cursor position accordingly.
     */
-    bool HandleFailedSearch (void);
+    bool HandleFailedSearch();
 
     /** Take a position as returned by an object iterator and switch to the
         view and page on which the object specified by this position is
@@ -516,7 +516,7 @@ private:
         a copy of the current selection and reassigns the object iterator to
         the current() iterator.
     */
-    void HandleChangedSelection (void);
+    void HandleChangedSelection();
 
     /** Initiate the spell check of the next relevant text object.
         When the outline view is active then this method is called
@@ -526,7 +526,7 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual bool SpellNextDocument (void) SAL_OVERRIDE;
+    virtual bool SpellNextDocument() SAL_OVERRIDE;
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application

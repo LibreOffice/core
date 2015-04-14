@@ -78,7 +78,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     virtual void                    DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
-    SdDrawDocument*                 GetSourceDoc (void) const { return mpSourceDoc;}
+    SdDrawDocument*                 GetSourceDoc() const { return mpSourceDoc;}
 
     /** User data objects can be used to store information temporarily
         at the transferable.  The slide sorter uses this to store
@@ -94,7 +94,7 @@ public:
 
     /** Return the number of user data objects.
     */
-    sal_Int32 GetUserDataCount (void) const;
+    sal_Int32 GetUserDataCount() const;
 
     /** Return the specified user data object.  When the index is not
         valid, ie not in the range [0,count) then an empty pointer is

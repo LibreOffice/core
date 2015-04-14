@@ -52,7 +52,7 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
 
 public:
     INetMessageEncodeQPStream_Impl(sal_uIntPtr nMsgBufferSize = 1024);
-    virtual ~INetMessageEncodeQPStream_Impl(void);
+    virtual ~INetMessageEncodeQPStream_Impl();
 };
 
 /** Quoted-Printable Decoding */
@@ -67,8 +67,8 @@ class INetMessageDecodeQPStream_Impl : public INetMessageOStream
     virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
-    INetMessageDecodeQPStream_Impl(void);
-    virtual ~INetMessageDecodeQPStream_Impl(void);
+    INetMessageDecodeQPStream_Impl();
+    virtual ~INetMessageDecodeQPStream_Impl();
 };
 
 /** Base64 Encoding */
@@ -92,7 +92,7 @@ class INetMessageEncode64Stream_Impl : public INetMessageIStream
 
 public:
     INetMessageEncode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 2048);
-    virtual ~INetMessageEncode64Stream_Impl(void);
+    virtual ~INetMessageEncode64Stream_Impl();
 };
 
 /** Base64 Decoding */
@@ -109,7 +109,7 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
 
 public:
     INetMessageDecode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 128);
-    virtual ~INetMessageDecode64Stream_Impl(void);
+    virtual ~INetMessageDecode64Stream_Impl();
 };
 
 // INetMessageIStream
@@ -128,7 +128,7 @@ INetMessageIStream::INetMessageIStream(sal_uIntPtr nBufferSize)
     pRead = pWrite = pBuffer;
 }
 
-INetMessageIStream::~INetMessageIStream(void)
+INetMessageIStream::~INetMessageIStream()
 {
     delete [] pBuffer;
     delete pMsgBuffer;
@@ -246,7 +246,7 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 
 // INetMessageOStream
 
-INetMessageOStream::INetMessageOStream(void)
+INetMessageOStream::INetMessageOStream()
     : pTargetMsg    (NULL),
       bHeaderParsed (false),
       eOState       (INETMSG_EOL_BEGIN),
@@ -254,7 +254,7 @@ INetMessageOStream::INetMessageOStream(void)
 {
 }
 
-INetMessageOStream::~INetMessageOStream(void)
+INetMessageOStream::~INetMessageOStream()
 {
     if (pMsgBuffer->Tell() > 0)
         PutMsgLine(static_cast<const sal_Char*>(pMsgBuffer->GetData()), pMsgBuffer->Tell());
@@ -434,7 +434,7 @@ INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl( sal_uIntPtr nMsg
     pTokRead = pTokWrite = pTokBuffer;
 }
 
-INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl(void)
+INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl()
 {
     delete pMsgStrm;
     delete [] pMsgBuffer;
@@ -634,7 +634,7 @@ static const sal_uInt8 pr2hex[128] = {
     0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
 };
 
-INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl(void)
+INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl()
     : INetMessageOStream(),
       eState     (INETMSG_EOL_BEGIN),
       pMsgBuffer (new SvMemoryStream),
@@ -643,7 +643,7 @@ INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl(void)
     ParseHeader(false);
 }
 
-INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl(void)
+INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl()
 {
     delete pMsgBuffer;
 }
@@ -756,7 +756,7 @@ INetMessageEncode64Stream_Impl::INetMessageEncode64Stream_Impl(
     pTokRead = pTokWrite = pTokBuffer;
 }
 
-INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl(void)
+INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl()
 {
     delete pMsgStrm;
     delete [] pMsgBuffer;
@@ -943,7 +943,7 @@ INetMessageDecode64Stream_Impl::INetMessageDecode64Stream_Impl(
     pMsgRead = pMsgWrite = pMsgBuffer;
 }
 
-INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl(void)
+INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl()
 {
     delete [] pMsgBuffer;
 }
@@ -1058,7 +1058,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize)
 {
 }
 
-INetMIMEMessageStream::~INetMIMEMessageStream(void)
+INetMIMEMessageStream::~INetMIMEMessageStream()
 {
     delete pChildStrm;
     delete pEncodeStrm;

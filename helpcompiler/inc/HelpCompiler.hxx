@@ -57,7 +57,7 @@
 
 namespace fs
 {
-    rtl_TextEncoding getThreadTextEncoding( void );
+    rtl_TextEncoding getThreadTextEncoding();
 
     enum convert { native };
     class path

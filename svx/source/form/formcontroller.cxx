@@ -666,7 +666,7 @@ OUString SAL_CALL FormController::getImplementationName() throw( RuntimeExceptio
     return OUString("org.openoffice.comp.svx.FormController");
 }
 
-Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
@@ -693,7 +693,7 @@ void SAL_CALL FormController::resetted(const EventObject& rEvent) throw( Runtime
 }
 
 
-Sequence< OUString> FormController::getSupportedServiceNames_Static(void)
+Sequence< OUString> FormController::getSupportedServiceNames_Static()
 {
     static Sequence< OUString> aServices;
     if (!aServices.getLength())
@@ -1065,14 +1065,14 @@ void SAL_CALL FormController::setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (In
 
 // XElementAccess
 
-sal_Bool SAL_CALL FormController::hasElements(void) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FormController::hasElements() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return !m_aChildren.empty();
 }
 
 
-Type SAL_CALL  FormController::getElementType(void) throw( RuntimeException, std::exception )
+Type SAL_CALL  FormController::getElementType() throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XFormController>::get();
 
@@ -1080,7 +1080,7 @@ Type SAL_CALL  FormController::getElementType(void) throw( RuntimeException, std
 
 // XEnumerationAccess
 
-Reference< XEnumeration > SAL_CALL  FormController::createEnumeration(void) throw( RuntimeException, std::exception )
+Reference< XEnumeration > SAL_CALL  FormController::createEnumeration() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return new ::comphelper::OEnumerationByIndex(this);
@@ -1088,7 +1088,7 @@ Reference< XEnumeration > SAL_CALL  FormController::createEnumeration(void) thro
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL FormController::getCount(void) throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL FormController::getCount() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_aChildren.size();
@@ -1150,7 +1150,7 @@ void FormController::disposeAllFeaturesAndDispatchers()
 }
 
 
-void FormController::disposing(void)
+void FormController::disposing()
 {
     EventObject aEvt( *this );
 
@@ -2108,7 +2108,7 @@ Reference< XControlContainer >  FormController::getContainer() throw( RuntimeExc
 }
 
 
-Sequence< Reference< XControl > > FormController::getControls(void) throw( RuntimeException, std::exception )
+Sequence< Reference< XControl > > FormController::getControls() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -2957,7 +2957,7 @@ Reference< XFormOperations > SAL_CALL FormController::getFormOperations() throw 
 }
 
 
-Reference< XControl> SAL_CALL FormController::getCurrentControl(void) throw( RuntimeException, std::exception )
+Reference< XControl> SAL_CALL FormController::getCurrentControl() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3481,7 +3481,7 @@ void FormController::setMode(const OUString& Mode) throw( NoSupportException, Ru
 }
 
 
-OUString SAL_CALL FormController::getMode(void) throw( RuntimeException, std::exception )
+OUString SAL_CALL FormController::getMode() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3490,7 +3490,7 @@ OUString SAL_CALL FormController::getMode(void) throw( RuntimeException, std::ex
 }
 
 
-Sequence< OUString > SAL_CALL FormController::getSupportedModes(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL FormController::getSupportedModes() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();

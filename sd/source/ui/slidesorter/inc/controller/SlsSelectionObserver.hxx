@@ -41,12 +41,12 @@ class SelectionObserver
 {
 public:
     SelectionObserver (SlideSorter& rSlideSorter);
-    virtual ~SelectionObserver (void);
+    virtual ~SelectionObserver();
 
     void NotifyPageEvent (const SdrPage* pPage);
-    void StartObservation (void);
-    void AbortObservation (void);
-    void EndObservation (void);
+    void StartObservation();
+    void AbortObservation();
+    void EndObservation();
 
     /** Use this little class instead of calling StartObservation and
         EndObservation directly so that EndObservation is not forgotten or
@@ -57,8 +57,8 @@ public:
     {
     public:
         Context (SlideSorter& rSlideSorter);
-        ~Context(void);
-        void Abort (void);
+        ~Context();
+        void Abort();
     private:
         ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
     };

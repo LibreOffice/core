@@ -1451,12 +1451,12 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     return aResult;
 }
 
-void SAL_CALL SdStyleSheetPool::acquire (void) throw ()
+void SAL_CALL SdStyleSheetPool::acquire() throw ()
 {
     SdStyleSheetPoolBase::acquire();
 }
 
-void SAL_CALL SdStyleSheetPool::release (void) throw ()
+void SAL_CALL SdStyleSheetPool::release() throw ()
 {
     SdStyleSheetPoolBase::release();
 }

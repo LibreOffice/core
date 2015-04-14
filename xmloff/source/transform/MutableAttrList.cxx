@@ -88,7 +88,7 @@ sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
     return 0;
 }
 
-sal_Int16 SAL_CALL XMLMutableAttributeList::getLength(void)
+sal_Int16 SAL_CALL XMLMutableAttributeList::getLength()
         throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getLength();

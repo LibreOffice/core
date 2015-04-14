@@ -53,7 +53,7 @@ public:
         const ::boost::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
         const css::uno::Reference<
             css::drawing::framework::XControllerManager>& rxControllerManager);
-    ~ConfigurationUpdater (void);
+    ~ConfigurationUpdater();
 
     /** This method is typically called once, when the controller manager is
         accessible to the caller.
@@ -72,14 +72,14 @@ public:
         css::drawing::framework::XConfiguration>& rxRequestedConfiguration);
 
     css::uno::Reference<
-        css::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const { return mxCurrentConfiguration;}
+        css::drawing::framework::XConfiguration> GetCurrentConfiguration() const { return mxCurrentConfiguration;}
 
     friend class ConfigurationUpdaterLock;
     /** Return a lock of the called ConfigurationUpdater.  While the
         returned object exists no update of the current configuration is
         made.
     */
-    ::boost::shared_ptr<ConfigurationUpdaterLock> GetLock (void);
+    ::boost::shared_ptr<ConfigurationUpdaterLock> GetLock();
 
 private:
     /** A reference to the XControllerManager is kept so that
@@ -146,7 +146,7 @@ private:
         and tells them to update their active resources.  It notifies
         listeners about the start and end of the configuration update.
     */
-    void UpdateConfiguration (void);
+    void UpdateConfiguration();
 
     /** Basically calls UpdaterStart() andUpdateEnd() and makes some debug
         output.
@@ -167,12 +167,12 @@ private:
         because without the actual resource the 'pureness' of an anchor can
         not be determined.
     */
-    void CleanRequestedConfiguration (void);
+    void CleanRequestedConfiguration();
 
     /** Check the success of a recently executed configuration update.
         When the update failed then start the timer.
     */
-    void CheckUpdateSuccess (void);
+    void CheckUpdateSuccess();
 
     /** This method sets the mbUpdateBeingProcessed member that is used to
         prevent reentrance problems.  This method allows function objects
@@ -185,17 +185,17 @@ private:
         executed, the lock count, and whether the configuration controller
         is still valid.
     */
-    bool IsUpdatePossible (void);
+    bool IsUpdatePossible();
 
     /** Lock updates of the current configuration.  For intermediate requests
         for updates mbUpdatePending is set to <TRUE/>.
     */
-    void LockUpdates (void);
+    void LockUpdates();
 
     /** When an update was requested since the last LockUpdates() call then
         RequestUpdate() is called.
     */
-    void UnlockUpdates (void);
+    void UnlockUpdates();
 
     DECL_LINK(TimeoutHandler, void *);
 };

@@ -65,9 +65,9 @@ class ShellStackGuard
 {
 public:
     ShellStackGuard (css::uno::Reference<css::frame::XController>& rxController);
-    virtual ~ShellStackGuard (void);
+    virtual ~ShellStackGuard();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfigurationChangeListener
 
@@ -93,7 +93,7 @@ private:
         the printer is not printing, or there is no printer, or something
         else went wrong.
     */
-    bool IsPrinting (void) const;
+    bool IsPrinting() const;
 };
 
 } } // end of namespace sd::framework

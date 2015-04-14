@@ -493,7 +493,7 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
     UpdateLook();
 }
 
-void SlideTransitionPane::UpdateLook (void)
+void SlideTransitionPane::UpdateLook()
 {
     SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
     mpFT_SPEED->SetBackground(Wallpaper());
@@ -510,7 +510,7 @@ void SlideTransitionPane::onChangeCurrentPage()
     updateControls();
 }
 
-::sd::slidesorter::SharedPageSelection SlideTransitionPane::getSelectedPages (void) const
+::sd::slidesorter::SharedPageSelection SlideTransitionPane::getSelectedPages() const
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
         = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);

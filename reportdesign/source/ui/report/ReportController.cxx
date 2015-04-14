@@ -266,7 +266,7 @@ OUString OReportController::getImplementationName_Static() throw( RuntimeExcepti
     return OUString("com.sun.star.report.comp.ReportDesign");
 }
 
-Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OReportController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.ReportDesign";
@@ -2736,7 +2736,7 @@ void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<rep
 }
 
 
-uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException, std::exception )
+uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -3002,7 +3002,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     return xModel;
 }
 
-uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel() throw( uno::RuntimeException, std::exception )
 {
     return m_xReportDefinition.get();
 }

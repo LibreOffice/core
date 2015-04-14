@@ -915,17 +915,17 @@ public: // XActiveDataSource
                    e.WrappedException);
         }
     }
-    virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
+    virtual Reference< XOutputStream >  SAL_CALL getOutputStream()
         throw(RuntimeException, std::exception) SAL_OVERRIDE
     {
         return m_out;
     }
 
 public: // XDocumentHandler
-    virtual void SAL_CALL startDocument(void)
+    virtual void SAL_CALL startDocument()
         throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL endDocument(void)
+    virtual void SAL_CALL endDocument()
         throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL startElement(const OUString& aName,
@@ -947,18 +947,18 @@ public: // XDocumentHandler
         throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA(void) throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL endCDATA(void) throw(SAXException,RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL startCDATA() throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL endCDATA() throw(SAXException,RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL comment(const OUString& sComment)
         throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL unknown(const OUString& sString)
         throw(SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL allowLineBreak(void)
+    virtual void SAL_CALL allowLineBreak()
         throw(SAXException,RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
 private:
@@ -1008,7 +1008,7 @@ sal_Bool SAXWriter::supportsService(const OUString& ServiceName) throw(std::exce
 }
 
 // XServiceInfo
-Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw (std::exception)
+Sequence< OUString > SAXWriter::getSupportedServiceNames() throw (std::exception)
 {
     Sequence<OUString> seq(1);
     seq[0] = "com.sun.star.xml.sax.Writer";
@@ -1025,7 +1025,7 @@ void SAXWriter::startDocument()                     throw(SAXException, RuntimeE
 }
 
 
-void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeException, std::exception)
+void SAXWriter::endDocument()                   throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted )
     {
@@ -1272,7 +1272,7 @@ void SAXWriter::setDocumentLocator(const Reference< XLocator >&)
 
 }
 
-void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException, std::exception)
+void SAXWriter::startCDATA() throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || m_bIsCDATA)
     {
@@ -1289,7 +1289,7 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException, std::exce
     m_bIsCDATA = true;
 }
 
-void SAXWriter::endCDATA(void) throw (SAXException,RuntimeException, std::exception)
+void SAXWriter::endCDATA() throw (SAXException,RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || ! m_bIsCDATA)
     {

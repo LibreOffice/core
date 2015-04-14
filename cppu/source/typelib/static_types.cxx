@@ -398,7 +398,7 @@ void init(
 
                 typelib_TypeDescription * pReg = &pComp->aBase;
                 pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
-                // sizeof( void ) not allowed
+                // sizeof(void) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = adjustAlignment( pReg->nAlignment );
                 pReg->bComplete = sal_False;
@@ -495,7 +495,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
 
                 typelib_TypeDescription * pReg = &pIface->aBase;
                 pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
-                // sizeof( void ) not allowed
+                // sizeof(void) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
 
                 pReg->nAlignment = adjustAlignment( pReg->nAlignment );
@@ -536,7 +536,7 @@ void SAL_CALL typelib_static_enum_type_init(
                 pEnum->nDefaultEnumValue = nDefaultValue;
 
                 pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
-                // sizeof( void ) not allowed
+                // sizeof(void) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = ::adjustAlignment( pReg->nAlignment );
                 pReg->bComplete = sal_False;

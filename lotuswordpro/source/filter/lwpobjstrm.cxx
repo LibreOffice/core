@@ -393,7 +393,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
 /**
  * @descr  quick read string with 1252
  */
-OUString LwpObjectStream::QuickReadStringPtr(void)
+OUString LwpObjectStream::QuickReadStringPtr()
 {
     sal_uInt16 diskSize;
 

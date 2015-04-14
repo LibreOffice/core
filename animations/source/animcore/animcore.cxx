@@ -144,7 +144,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
     // XChild
@@ -568,7 +568,7 @@ OUString getImplementationName_SET()
     return OUString( "animcore::AnimateSet" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR(void)
+Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = "com.sun.star.animations.AnimateColor";
@@ -580,7 +580,7 @@ OUString getImplementationName_ANIMATECOLOR()
     return OUString( "animcore::AnimateColor" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION(void)
+Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = "com.sun.star.animations.AnimateMotion";
@@ -881,7 +881,7 @@ sal_Bool AnimationNode::supportsService(const OUString& ServiceName) throw(std::
 }
 
 // XServiceInfo
-Sequence< OUString > AnimationNode::getSupportedServiceNames(void) throw(std::exception)
+Sequence< OUString > AnimationNode::getSupportedServiceNames() throw(std::exception)
 {
     switch( mnNodeType )
     {

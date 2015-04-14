@@ -387,7 +387,7 @@ void DrawViewShell::Init (bool bIsMainViewShell)
     StartListening (*GetDocSh());
 }
 
-void DrawViewShell::Shutdown (void)
+void DrawViewShell::Shutdown()
 {
     ViewShell::Shutdown();
 
@@ -398,7 +398,7 @@ void DrawViewShell::Shutdown (void)
     }
 }
 
-css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController (void)
+css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController()
 {
     css::uno::Reference<css::drawing::XDrawSubController> xSubController;
 
@@ -799,7 +799,7 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
         mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 
-::rtl::OUString DrawViewShell::GetSidebarContextName (void) const
+::rtl::OUString DrawViewShell::GetSidebarContextName() const
 {
     ::svx::sidebar::SelectionAnalyzer::ViewType eViewType (::svx::sidebar::SelectionAnalyzer::VT_Standard);
     switch (mePageKind)

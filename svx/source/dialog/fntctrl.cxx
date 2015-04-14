@@ -838,7 +838,7 @@ void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
 
 
 
-void SvxFontPrevWindow::AutoCorrectFontColor( void )
+void SvxFontPrevWindow::AutoCorrectFontColor()
 {
     Color   aFontColor( GetTextColor() );
 

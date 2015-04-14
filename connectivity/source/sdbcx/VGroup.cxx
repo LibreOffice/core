@@ -67,7 +67,7 @@ Sequence< Type > SAL_CALL OGroup::getTypes(  ) throw(RuntimeException, std::exce
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OGroup_BASE::getTypes());
 }
 
-void OGroup::disposing(void)
+void OGroup::disposing()
 {
     OPropertySetHelper::disposing();
 

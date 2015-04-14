@@ -62,7 +62,7 @@ class TypeDetectionImporter : public cppu::WeakImplHelper1 < com::sun::star::xml
 {
 public:
     TypeDetectionImporter();
-    virtual ~TypeDetectionImporter( void );
+    virtual ~TypeDetectionImporter();
 
     static void doImport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xOS, XMLFilterVector& rFilters );
 

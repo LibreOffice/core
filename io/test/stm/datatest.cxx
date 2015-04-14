@@ -79,10 +79,10 @@ public:
         throw ( IllegalArgumentException,
                 RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void)                              throw ( RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)                 throw (RuntimeException);
+    virtual sal_Bool SAL_CALL testPassed()                              throw ( RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getErrors()               throw (RuntimeException);
+    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings()                 throw (RuntimeException);
 
 private:
     void testSimple( const Reference < XDataInputStream > & , const Reference < XDataOutputStream > &);
@@ -222,25 +222,25 @@ sal_Int32 ODataStreamTest::test(
 
 
 
-sal_Bool ODataStreamTest::testPassed(void)                                      throw (RuntimeException)
+sal_Bool ODataStreamTest::testPassed()                                      throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > ODataStreamTest::getErrors(void)                           throw (RuntimeException)
+Sequence< OUString > ODataStreamTest::getErrors()                           throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > ODataStreamTest::getErrorExceptions(void)                   throw (RuntimeException)
+Sequence< Any > ODataStreamTest::getErrorExceptions()                   throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > ODataStreamTest::getWarnings(void)                         throw (RuntimeException)
+Sequence< OUString > ODataStreamTest::getWarnings()                         throw (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -384,7 +384,7 @@ public:
 
 
 public:
-    virtual OUString SAL_CALL getServiceName(void)  throw (RuntimeException);
+    virtual OUString SAL_CALL getServiceName()  throw (RuntimeException);
     virtual void SAL_CALL write( const Reference< XObjectOutputStream >& OutStream )
         throw (IOException, RuntimeException);
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream)
@@ -392,7 +392,7 @@ public:
 
 public:
 
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(void)
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw (RuntimeException);
 
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const Any& aValue)
@@ -446,7 +446,7 @@ public:
 
 
 
-Reference <XPropertySetInfo > MyPersistObject::getPropertySetInfo(void)
+Reference <XPropertySetInfo > MyPersistObject::getPropertySetInfo()
     throw (RuntimeException)
 {
     return Reference< XPropertySetInfo >();

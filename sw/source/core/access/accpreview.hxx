@@ -42,7 +42,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return whether the specified service is supported by this class.
@@ -55,14 +55,14 @@ public:
         the AccessibleContext service.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    OUString SAL_CALL getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    OUString SAL_CALL getAccessibleDescription() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void _InvalidateFocus() SAL_OVERRIDE;
 };
 

@@ -116,7 +116,7 @@ struct BasicManagerImpl
     boost::ptr_vector<BasicLibInfo> aLibs;
     OUString         aBasicLibPath;
 
-    BasicManagerImpl( void )
+    BasicManagerImpl()
         : mpManagerStream( NULL )
         , mppLibStreams( NULL )
         , mnLibStreamCount( 0 )
@@ -429,7 +429,7 @@ public:
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
-    uno::Reference< script::XLibraryContainer > GetLibraryContainer( void )
+    uno::Reference< script::XLibraryContainer > GetLibraryContainer()
         { return mxScriptCont; }
     void SetLibraryContainer( const uno::Reference< script::XLibraryContainer >& xScriptCont )
         { mxScriptCont = xScriptCont; }

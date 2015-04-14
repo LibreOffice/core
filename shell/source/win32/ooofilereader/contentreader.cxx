@@ -79,7 +79,7 @@ try
 /** destructor.
 */
 
-CContentReader::~CContentReader( void )
+CContentReader::~CContentReader()
 {
 }
 
@@ -119,7 +119,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
 
 /** get style of the current content.
 */
-::std::wstring CContentReader::getCurrentContentStyle( void )
+::std::wstring CContentReader::getCurrentContentStyle()
 {
     assert( !m_TagBuilderStack.empty() );
     ITag* pTagBuilder = m_TagBuilderStack.top();

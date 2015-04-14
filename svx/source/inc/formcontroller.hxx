@@ -230,7 +230,7 @@ namespace svxform
         virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XChild
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL getParent(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL getParent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL setParent(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Parent) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XEventListener
@@ -266,11 +266,11 @@ namespace svxform
         virtual void SAL_CALL setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL hasElements(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasElements() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XEnumerationAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration> SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration> SAL_CALL createEnumeration() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XContainerListener
         virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -286,12 +286,12 @@ namespace svxform
 
     // XModeSelector
         virtual void SAL_CALL setMode(const OUString& Mode) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getMode(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getMode() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsMode(const OUString& Mode) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getCount() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 Index) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XModifyBroadcaster
@@ -331,7 +331,7 @@ namespace svxform
 
     // XFormController
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL addChildController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _ChildController ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
@@ -342,7 +342,7 @@ namespace svxform
         virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _interactionHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTabController
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> > SAL_CALL getControls(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> > SAL_CALL getControls() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel>& Model) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel> SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -398,7 +398,7 @@ namespace svxform
     // XServiceInfo
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XResetListener
         virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -409,7 +409,7 @@ namespace svxform
         virtual void SAL_CALL invalidateAllFeatures(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // method for registration
-        static  ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static(void);
+        static  ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static();
 
         // comphelper::OPropertyArrayUsageHelper
         virtual void fillProperties(

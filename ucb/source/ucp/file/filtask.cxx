@@ -147,7 +147,7 @@ void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
 
 
 sal_Int32 SAL_CALL
-TaskManager::getCommandId( void )
+TaskManager::getCommandId()
 {
     osl::MutexGuard aGuard( m_aMutex );
     return ++m_nCommandId;

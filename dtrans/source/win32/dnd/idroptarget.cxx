@@ -57,12 +57,12 @@ HRESULT STDMETHODCALLTYPE IDropTargetImpl::QueryInterface( REFIID riid, void  **
 
 }
 
-ULONG STDMETHODCALLTYPE IDropTargetImpl::AddRef( void)
+ULONG STDMETHODCALLTYPE IDropTargetImpl::AddRef()
 {
     return InterlockedIncrement( &m_nRefCount);
 }
 
-ULONG STDMETHODCALLTYPE IDropTargetImpl::Release( void)
+ULONG STDMETHODCALLTYPE IDropTargetImpl::Release()
 {
     LONG count= InterlockedDecrement( &m_nRefCount);
     if( m_nRefCount == 0 )
@@ -86,7 +86,7 @@ STDMETHODIMP IDropTargetImpl::DragOver( DWORD grfKeyState,
     return m_rDropTarget.DragOver( grfKeyState, pt, pdwEffect);
 }
 
-STDMETHODIMP IDropTargetImpl::DragLeave( void)
+STDMETHODIMP IDropTargetImpl::DragLeave()
 {
     return m_rDropTarget.DragLeave();
 }

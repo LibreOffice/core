@@ -49,7 +49,7 @@ namespace dbaccess
                               , public OSharedConnection_BASE2
     {
     protected:
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         virtual ~OSharedConnection();
     public:
         OSharedConnection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection);

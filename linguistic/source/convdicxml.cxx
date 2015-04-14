@@ -373,7 +373,7 @@ void ConvDicXMLExport::_ExportContent()
     }
 }
 
-void SAL_CALL ConvDicXMLImport::startDocument(void)
+void SAL_CALL ConvDicXMLImport::startDocument()
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     // register namespace at first possible opportunity
@@ -382,7 +382,7 @@ void SAL_CALL ConvDicXMLImport::startDocument(void)
     SvXMLImport::startDocument();
 }
 
-void SAL_CALL ConvDicXMLImport::endDocument(void)
+void SAL_CALL ConvDicXMLImport::endDocument()
     throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     SvXMLImport::endDocument();

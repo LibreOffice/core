@@ -278,7 +278,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     Engine()->GetUndoManager().Clear();
 }
 
-SvxLanguageItem SwAnnotationWin::GetLanguage(void)
+SvxLanguageItem SwAnnotationWin::GetLanguage()
 {
     // set initial language for outliner
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );

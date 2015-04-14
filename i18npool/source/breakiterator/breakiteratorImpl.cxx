@@ -600,7 +600,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
 }
 
 OUString SAL_CALL
-BreakIteratorImpl::getImplementationName(void) throw( RuntimeException, std::exception )
+BreakIteratorImpl::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.BreakIterator");
 }
@@ -612,7 +612,7 @@ BreakIteratorImpl::supportsService(const OUString& rServiceName) throw( RuntimeE
 }
 
 Sequence< OUString > SAL_CALL
-BreakIteratorImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+BreakIteratorImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.i18n.BreakIterator";

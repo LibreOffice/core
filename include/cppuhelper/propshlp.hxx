@@ -77,7 +77,7 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) = 0;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() = 0;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.
@@ -157,7 +157,7 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() SAL_OVERRIDE;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.

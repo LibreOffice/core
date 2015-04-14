@@ -55,8 +55,8 @@ class ConfigHandler : public ::cppu::WeakAggImplHelper1<XDocumentHandler>
 {
 public:
     // XDocumentHandler
-    virtual void SAL_CALL startDocument(void) throw( SAXException, RuntimeException );
-    virtual void SAL_CALL endDocument(void) throw( SAXException, RuntimeException );
+    virtual void SAL_CALL startDocument() throw( SAXException, RuntimeException );
+    virtual void SAL_CALL endDocument() throw( SAXException, RuntimeException );
     virtual void SAL_CALL startElement(const OUString& aName, const Reference< XAttributeList > & xAttribs) throw( SAXException, RuntimeException );
     virtual void SAL_CALL endElement(const OUString& aName) throw( SAXException, RuntimeException );
     virtual void SAL_CALL characters(const OUString& aChars) throw( SAXException, RuntimeException );
@@ -147,11 +147,11 @@ OUString ConfigHandler::getAttribute( const Reference< XAttributeList > & xAttri
     return OUString();
 }
 
-void SAL_CALL ConfigHandler::startDocument(void) throw( SAXException, RuntimeException )
+void SAL_CALL ConfigHandler::startDocument() throw( SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL ConfigHandler::endDocument(void) throw( SAXException, RuntimeException )
+void SAL_CALL ConfigHandler::endDocument() throw( SAXException, RuntimeException )
 {
 }
 

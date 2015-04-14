@@ -68,19 +68,19 @@ public:
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);
-    virtual ~ToolPanelViewShell (void);
+    virtual ~ToolPanelViewShell();
 
-    void GetFocus (void);
-    void LoseFocus (void);
+    void GetFocus();
+    void LoseFocus();
     void KeyInput (const KeyEvent& rEvent);
     using sd::ViewShell::KeyInput;
 
-    virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
-    virtual SdPage* getCurrentPage (void) const SAL_OVERRIDE;
+    virtual SdPage* GetActualPage() SAL_OVERRIDE;
+    virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
 
-    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() SAL_OVERRIDE;
 
-    TaskPaneShellManager& GetSubShellManager (void) const;
+    TaskPaneShellManager& GetSubShellManager() const;
 
     /** deactivates the given panel, bypassing the configuration controller. Only valid for tool panels which are
         not under the drawing framework's control.
@@ -97,13 +97,13 @@ public:
             When the view shell is not placed in a docking window, e.g. when
             shown in the center pane, then <NULL?> is returned.
     */
-    DockingWindow* GetDockingWindow (void);
+    DockingWindow* GetDockingWindow();
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
 
     /** Relocate all toplevel controls to the given parent window.
     */
@@ -143,7 +143,7 @@ private:
         before.  If mbIsInitialized is already set to <TRUE/> then this
         method returns immediately.
     */
-    void Initialize (void);
+    void Initialize();
 };
 
 } } // end of namespace ::sd::toolpanel

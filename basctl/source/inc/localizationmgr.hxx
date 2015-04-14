@@ -58,11 +58,11 @@ class LocalizationMgr
             xStringResourceManager, ::com::sun::star::uno::Reference< ::com::sun::star::resource::
             XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode );
 
-    void enableResourceForAllLibraryDialogs( void )
+    void enableResourceForAllLibraryDialogs()
     {
         implEnableDisableResourceForAllLibraryDialogs( SET_IDS );
     }
-    void disableResourceForAllLibraryDialogs( void )
+    void disableResourceForAllLibraryDialogs()
     {
         implEnableDisableResourceForAllLibraryDialogs( RESET_IDS );
     }
@@ -73,14 +73,14 @@ public:
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
     ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourceManager >getStringResourceManager( void )
+        < ::com::sun::star::resource::XStringResourceManager >getStringResourceManager()
     {
         return m_xStringResourceManager;
     }
 
-    bool isLibraryLocalized( void );
+    bool isLibraryLocalized();
 
-    void handleTranslationbar( void );
+    void handleTranslationbar();
 
     void handleAddLocales( const ::com::sun::star::uno::Sequence
         < ::com::sun::star::lang::Locale >& aLocaleSeq );
@@ -92,9 +92,9 @@ public:
 
     void handleSetCurrentLocale(const css::lang::Locale& rLocale);
 
-    void handleBasicStarted( void );
+    void handleBasicStarted();
 
-    void handleBasicStopped( void );
+    void handleBasicStopped();
 
     static void setControlResourceIDsForNewEditorObject(DlgEditor* pEditor,
         const css::uno::Any& rControlAny, const OUString& aCtrlName);

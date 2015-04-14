@@ -95,8 +95,8 @@ public:
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw();
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw();
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw();
+    Sequence< OUString >        SAL_CALL getSupportedServiceNames() throw();
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw();
 
 private:
 //  static XIdlClassRef     getStaticIdlClass();
@@ -144,7 +144,7 @@ sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw
 
 // Test_Manager_Impl::getSupportedServiceNames
 
-Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
+Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames() throw ()
 {
     return getSupportedServiceNames_Static();
 }
@@ -152,7 +152,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 
 // Test_Manager_Impl::getSupportedServiceNames_Static
 
-Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
+Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw ()
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = SERVICE_NAME;

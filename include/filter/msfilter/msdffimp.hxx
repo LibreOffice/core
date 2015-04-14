@@ -683,10 +683,10 @@ public:
                           const Rectangle& rClientRect,
                           const Rectangle& rGlobalChildRect );
 
-    inline const SvxMSDffShapeInfos_ById* GetShapeInfos( void ) const
+    inline const SvxMSDffShapeInfos_ById* GetShapeInfos() const
         { return m_xShapeInfosById.get(); }
 
-    inline SvxMSDffShapeOrders* GetShapeOrders( void ) const
+    inline SvxMSDffShapeOrders* GetShapeOrders() const
         { return pShapeOrders; }
 
     void StoreShapeOrder(sal_uLong      nId,

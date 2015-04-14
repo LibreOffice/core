@@ -78,7 +78,7 @@ void HViews::impl_refresh(  ) throw(RuntimeException)
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }
 
-void HViews::disposing(void)
+void HViews::disposing()
 {
 m_xMetaData.clear();
     OCollection::disposing();

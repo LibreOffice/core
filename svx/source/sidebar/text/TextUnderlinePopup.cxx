@@ -32,7 +32,7 @@ TextUnderlinePopup::TextUnderlinePopup (
 {
 }
 
-TextUnderlinePopup::~TextUnderlinePopup (void)
+TextUnderlinePopup::~TextUnderlinePopup()
 {
 }
 

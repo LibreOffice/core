@@ -376,7 +376,7 @@ public:
             When this method returns <TRUE/> for a master page then this
             master page should not be deleted automatically.
     */
-    bool IsPrecious (void) const { return mbIsPrecious; }
+    bool IsPrecious() const { return mbIsPrecious; }
 
     void createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
     void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );

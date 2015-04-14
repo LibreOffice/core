@@ -47,7 +47,7 @@ class PresenterPreviewCache
 {
 public:
     PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPreviewCache (void);
+    virtual ~PresenterPreviewCache();
 
     // XInitialize
 
@@ -87,10 +87,10 @@ public:
         const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL pause (void)
+    virtual void SAL_CALL pause()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL resume (void)
+    virtual void SAL_CALL resume()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -103,7 +103,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void) throw (css::lang::DisposedException);
+    void ThrowIfDisposed() throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sd::presenter

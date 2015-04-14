@@ -154,14 +154,14 @@ com::sun::star::uno::Any SAL_CALL
 }
 
 void SAL_CALL
-    SwAccessibleTextFrame::acquire (void)
+    SwAccessibleTextFrame::acquire()
     throw ()
 {
     SwAccessibleContext::acquire ();
 }
 
 void SAL_CALL
-    SwAccessibleTextFrame::release (void)
+    SwAccessibleTextFrame::release()
     throw ()
 {
     SwAccessibleContext::release ();
@@ -249,7 +249,7 @@ void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
 }
 
 // #i73249#
-OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
+OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -264,7 +264,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
     return SwAccessibleFrameBase::getAccessibleName();
 }
 
-OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

@@ -879,7 +879,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (R
 
 // XComponent
 
-void SAL_CALL SlideShow::disposing (void)
+void SAL_CALL SlideShow::disposing()
 {
     SolarMutexGuard aGuard;
 

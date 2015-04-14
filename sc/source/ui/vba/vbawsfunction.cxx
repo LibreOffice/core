@@ -72,7 +72,7 @@ ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xPar
 }
 
 uno::Reference< beans::XIntrospectionAccess >
-ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException, std::exception)
+ScVbaWSFunction::getIntrospection()  throw(uno::RuntimeException, std::exception)
 {
     return uno::Reference<beans::XIntrospectionAccess>();
 }

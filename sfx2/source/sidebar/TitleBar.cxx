@@ -50,7 +50,7 @@ TitleBar::TitleBar (
     maToolBox.SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
 
-TitleBar::~TitleBar (void)
+TitleBar::~TitleBar()
 {
 }
 
@@ -113,7 +113,7 @@ void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
     // Any real processing has to be done in derived class.
 }
 
-css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
+css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible()
 {
     SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
     return AccessibleTitleBar::Create(*this);

@@ -99,11 +99,11 @@ class ObjectStack
 #if defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
-extern "C" int  yylex( void );
+extern "C" int  yylex();
 #else
 int yyparse();              // forward Deklaration fuer erzeugte Funktion
 void yyerror( char * );
-int  yylex( void );
+int  yylex();
 #endif
 
 class RscTypCont;

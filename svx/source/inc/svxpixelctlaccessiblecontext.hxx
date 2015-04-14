@@ -138,16 +138,16 @@ public:
     void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBoxOnScreen() throw( ::com::sun::star::uno::RuntimeException );
 
-    Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBox() throw( ::com::sun::star::uno::RuntimeException );
 
     /// @returns true if it's disposed or in disposing
-    inline bool IsAlive( void ) const;
+    inline bool IsAlive() const;
     /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive( void ) const;
+    inline bool IsNotAlive() const;
     /// throws the exception DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
+    void ThrowExceptionIfNotAlive() throw( ::com::sun::star::lang::DisposedException );
 
 
     void CheckChild();
@@ -245,9 +245,9 @@ public:
     void LoseFocus();
 
     /// @returns true if it's disposed or in disposing
-    inline bool IsAlive( void ) const;
+    inline bool IsAlive() const;
     /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive( void ) const;
+    inline bool IsNotAlive() const;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> m_xCurChild;
@@ -255,22 +255,22 @@ public:
     void NotifyChild(long nIndex, bool bSelect, bool bCheck);
 };
 
-inline bool SvxPixelCtlAccessible::IsAlive( void ) const
+inline bool SvxPixelCtlAccessible::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline bool SvxPixelCtlAccessible::IsNotAlive( void ) const
+inline bool SvxPixelCtlAccessible::IsNotAlive() const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
-inline bool SvxPixelCtlAccessibleChild::IsAlive( void ) const
+inline bool SvxPixelCtlAccessibleChild::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline bool SvxPixelCtlAccessibleChild::IsNotAlive( void ) const
+inline bool SvxPixelCtlAccessibleChild::IsNotAlive() const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }

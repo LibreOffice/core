@@ -126,7 +126,7 @@ protected:
 
     // Return the context's MultiComponentFactory
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >
-        getMultiComponentFactory( void );
+        getMultiComponentFactory();
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed
@@ -140,8 +140,8 @@ protected:
         bool FindClosestMatch, bool bUseDefaultIfNoMatch )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    void implModified( void );
-    void implNotifyListeners( void );
+    void implModified();
+    void implNotifyListeners();
 
     //=== Impl methods for ...ForLocale methods ===
     OUString SAL_CALL implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem )
@@ -157,7 +157,7 @@ protected:
     // successful. Default implementation in base class just returns true.
     virtual bool loadLocale( LocaleItem* pLocaleItem );
 
-    virtual void implLoadAllLocales( void );
+    virtual void implLoadAllLocales();
 
 public:
     StringResourceImpl(
@@ -250,7 +250,7 @@ protected:
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // Scan locale properties files
-    virtual void implScanLocales( void );
+    virtual void implScanLocales();
 
     // Method to load a locale if necessary, returns true if loading was successful
     virtual bool loadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
@@ -258,7 +258,7 @@ protected:
     // does the actual loading
     virtual bool implLoadLocale( LocaleItem* pLocaleItem );
 
-    virtual void implLoadAllLocales( void ) SAL_OVERRIDE;
+    virtual void implLoadAllLocales() SAL_OVERRIDE;
 
     void implScanLocaleNames( const ::com::sun::star::uno::Sequence< OUString >& aContentSeq );
     static OUString implGetFileNameForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase );
@@ -418,7 +418,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >       m_xStorage;
     bool                                                                        m_bStorageChanged;
 
-    virtual void implScanLocales( void ) SAL_OVERRIDE;
+    virtual void implScanLocales() SAL_OVERRIDE;
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
 
 public:
@@ -542,9 +542,9 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
     com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFI;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > getFileAccess( void );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > getFileAccess();
 
-    virtual void implScanLocales( void ) SAL_OVERRIDE;
+    virtual void implScanLocales() SAL_OVERRIDE;
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
 
 public:

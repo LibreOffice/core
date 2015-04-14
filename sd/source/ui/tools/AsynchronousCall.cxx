@@ -23,7 +23,7 @@
 
 namespace sd { namespace tools {
 
-AsynchronousCall::AsynchronousCall (void)
+AsynchronousCall::AsynchronousCall()
     : maTimer(),
       mpFunction()
 {
@@ -31,7 +31,7 @@ AsynchronousCall::AsynchronousCall (void)
     maTimer.SetTimeoutHdl(aCallback);
 }
 
-AsynchronousCall::~AsynchronousCall (void)
+AsynchronousCall::~AsynchronousCall()
 {
     mpFunction.reset();
     maTimer.Stop();

@@ -42,7 +42,7 @@ ValueSetWithTextControl::ValueSetWithTextControl(
 }
 
 
-ValueSetWithTextControl::~ValueSetWithTextControl(void)
+ValueSetWithTextControl::~ValueSetWithTextControl()
 {
 }
 

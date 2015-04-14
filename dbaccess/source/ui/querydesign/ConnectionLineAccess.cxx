@@ -61,7 +61,7 @@ namespace dbaui
         return getImplementationName_Static();
     }
     // XServiceInfo - static methods
-    OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OConnectionLineAccess::getImplementationName_Static() throw( RuntimeException )
     {
         return OUString("org.openoffice.comp.dbu.ConnectionLineAccessibility");
     }

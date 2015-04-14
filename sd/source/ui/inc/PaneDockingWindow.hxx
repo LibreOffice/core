@@ -65,7 +65,7 @@ public:
         VerticalOrientation.
         Otherwise UnknownOrientation is returned.
     */
-    Orientation GetOrientation (void) const;
+    Orientation GetOrientation() const;
 };
 
 } // end of namespace ::sd

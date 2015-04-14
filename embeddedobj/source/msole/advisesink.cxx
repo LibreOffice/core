@@ -74,12 +74,12 @@ void OleWrapperAdviseSink::disconnectOleComponent()
     m_pOleComp = NULL;
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
+STDMETHODIMP_() OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
 {
     // Unused for now ( no registration for IDataObject events )
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
+STDMETHODIMP_() OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
 {
     ::rtl::Reference< OleComponent > xLockComponent;
 
@@ -93,19 +93,19 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
         xLockComponent->OnViewChange_Impl( dwAspect );
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
+STDMETHODIMP_() OleWrapperAdviseSink::OnRename(LPMONIKER)
 {
     // handled by default inprocess handler
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
+STDMETHODIMP_() OleWrapperAdviseSink::OnSave()
 {
     // TODO: ???
     // The object knows about document saving already since it contolls it as ClienSite
     // other interested listeners must be registered for the object
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
+STDMETHODIMP_() OleWrapperAdviseSink::OnClose()
 {
     ::rtl::Reference< OleComponent > xLockComponent;
 

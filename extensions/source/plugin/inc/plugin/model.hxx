@@ -101,7 +101,7 @@ class PluginModel : public BroadcasterHelperHolder,
 
     // com::sun::star::lang::XTypeProvider
 
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw(  );
     static OUString SAL_CALL getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */

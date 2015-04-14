@@ -110,7 +110,7 @@ namespace connectivity
             virtual void refreshKeys();
             virtual void refreshIndexes();
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XPropertySet
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XColumnsSupplier
@@ -121,7 +121,7 @@ namespace connectivity
             virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XDataDescriptorFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor( void ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XIndexesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XRename

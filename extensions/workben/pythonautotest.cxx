@@ -58,7 +58,7 @@ public:
     void*               getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public:
-    XIntrospectionAccessRef getIntrospection(void) const        THROWS( (UsrSystemException) )
+    XIntrospectionAccessRef getIntrospection() const        THROWS( (UsrSystemException) )
                 { return XIntrospectionAccessRef();  }
 
     UsrAny                  invoke( const UString& FunctionName,
@@ -348,7 +348,7 @@ class PythonCodeLibrary :
         return FALSE;
     }
 
-    virtual Sequence< UString > getModuleNames(void)                THROWS( (UsrSystemException) )
+    virtual Sequence< UString > getModuleNames()                THROWS( (UsrSystemException) )
     {
         return Sequence<UString> ();
     }

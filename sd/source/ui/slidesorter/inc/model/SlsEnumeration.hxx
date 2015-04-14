@@ -33,12 +33,12 @@ class Enumeration
 public:
     virtual ~Enumeration() {}
 
-    virtual bool HasMoreElements (void) const = 0;
+    virtual bool HasMoreElements() const = 0;
     /** Returns T instead of T& so that it can handle shared pointers.
     */
-    virtual T GetNextElement (void) = 0;
-    virtual void Rewind (void) = 0;
-    virtual ::std::unique_ptr<Enumeration<T> > Clone (void) = 0;
+    virtual T GetNextElement() = 0;
+    virtual void Rewind() = 0;
+    virtual ::std::unique_ptr<Enumeration<T> > Clone() = 0;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

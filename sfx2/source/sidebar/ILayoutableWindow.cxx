@@ -20,7 +20,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-ILayoutableWindow::~ILayoutableWindow (void)
+ILayoutableWindow::~ILayoutableWindow()
 {
 }
 

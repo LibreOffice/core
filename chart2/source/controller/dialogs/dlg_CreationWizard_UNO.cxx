@@ -157,7 +157,7 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     return aTypeList;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException, std::exception )
+uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId() throw( uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }

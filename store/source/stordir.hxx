@@ -45,7 +45,7 @@ class OStoreDirectory_Impl : public store::OStoreObject
 public:
     /** Construction.
      */
-    OStoreDirectory_Impl (void);
+    OStoreDirectory_Impl();
 
     /** create (two-phase construction).
      *  @param  pManager [in]
@@ -75,7 +75,7 @@ public:
 protected:
     /** Destruction.
      */
-    virtual ~OStoreDirectory_Impl (void);
+    virtual ~OStoreDirectory_Impl();
 
 private:
     /** IStoreHandle TypeId.

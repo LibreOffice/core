@@ -101,7 +101,7 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalA
     type();
 }
 
-void SAL_CALL CMimeContentType::getSym( void )
+void SAL_CALL CMimeContentType::getSym()
 {
     if ( m_nPos < m_ContentType.getLength( ) )
     {
@@ -121,13 +121,13 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
     getSym();
 }
 
-void SAL_CALL CMimeContentType::skipSpaces( void )
+void SAL_CALL CMimeContentType::skipSpaces()
 {
     while (m_nxtSym == SPACE)
         getSym( );
 }
 
-void SAL_CALL CMimeContentType::type( void )
+void SAL_CALL CMimeContentType::type()
 {
     skipSpaces( );
 
@@ -156,7 +156,7 @@ void SAL_CALL CMimeContentType::type( void )
     subtype( );
 }
 
-void SAL_CALL CMimeContentType::subtype( void )
+void SAL_CALL CMimeContentType::subtype()
 {
     skipSpaces( );
 
@@ -182,7 +182,7 @@ void SAL_CALL CMimeContentType::subtype( void )
     trailer();
 }
 
-void SAL_CALL CMimeContentType::trailer( void )
+void SAL_CALL CMimeContentType::trailer()
 {
     OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
@@ -325,7 +325,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     return pvalue;
 }
 
-void SAL_CALL CMimeContentType::comment( void )
+void SAL_CALL CMimeContentType::comment()
 {
     while ( !m_nxtSym.isEmpty( ) )
     {

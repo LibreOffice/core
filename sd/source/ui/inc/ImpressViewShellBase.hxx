@@ -38,14 +38,14 @@ public:
         macros.
     */
     ImpressViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~ImpressViewShellBase (void);
+    virtual ~ImpressViewShellBase();
 
     /** Callback function for general slot calls.
     */
     virtual void Execute (SfxRequest& rRequest) SAL_OVERRIDE;
 
 protected:
-    virtual void InitializeFramework (void) SAL_OVERRIDE;
+    virtual void InitializeFramework() SAL_OVERRIDE;
 };
 
 } // end of namespace sd

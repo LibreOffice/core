@@ -31,7 +31,7 @@ class CTLayout : public SalLayout
 {
 public:
     explicit        CTLayout( const CoreTextStyle* );
-    virtual         ~CTLayout( void );
+    virtual         ~CTLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
@@ -48,15 +48,15 @@ public:
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
 
-    virtual void    InitFont( void) const SAL_OVERRIDE;
+    virtual void    InitFont() const SAL_OVERRIDE;
     virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
     virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
     virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
 private:
     void            drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const;
-    CGPoint         GetTextDrawPosition(void) const;
-    bool            CacheGlyphLayout(void) const;
+    CGPoint         GetTextDrawPosition() const;
+    bool            CacheGlyphLayout() const;
     void            ApplyDXArray( ImplLayoutArgs& rArgs);
 
     const CoreTextStyle* const    mpTextStyle;
@@ -312,7 +312,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 // We continue using GetDrawPosition() for non-right aligned text, to minimize
 // any unforeseen side effects.
-CGPoint CTLayout::GetTextDrawPosition(void) const
+CGPoint CTLayout::GetTextDrawPosition() const
 {
     CGFloat fPosX, fPosY;
 
@@ -587,7 +587,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     drawCTLine(rAquaGraphics, mpCTLine, mpTextStyle);
 }
 
-bool CTLayout::CacheGlyphLayout(void) const // eew!
+bool CTLayout::CacheGlyphLayout() const // eew!
 {
     m_vRunData.release();
     if(!mpCTLine)
@@ -891,7 +891,7 @@ void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
 void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
-SalLayout* CoreTextStyle::GetTextLayout( void ) const
+SalLayout* CoreTextStyle::GetTextLayout() const
 {
     return new CTLayout( this);
 }

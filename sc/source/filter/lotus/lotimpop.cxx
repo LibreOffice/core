@@ -86,7 +86,7 @@ ImportLotus::~ImportLotus()
     aLotImpSemaphore.release();
 }
 
-void ImportLotus::Bof( void )
+void ImportLotus::Bof()
 {
     sal_uInt16  nFileCode, nFileSub, nSaveCnt;
     sal_uInt8   nMajorId, nMinorId, nFlags;
@@ -114,7 +114,7 @@ void ImportLotus::Bof( void )
     }
 }
 
-bool ImportLotus::BofFm3( void )
+bool ImportLotus::BofFm3()
 {
     sal_uInt16  nFileCode, nFileSub;
 
@@ -181,7 +181,7 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     }
 }
 
-void ImportLotus::Userrange( void )
+void ImportLotus::Userrange()
 {
     sal_uInt16      nRangeType;
     ScRange     aScRange;
@@ -199,7 +199,7 @@ void ImportLotus::Userrange( void )
     rContext.pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
 }
 
-void ImportLotus::Errcell( void )
+void ImportLotus::Errcell()
 {
     ScAddress   aA;
 
@@ -211,7 +211,7 @@ void ImportLotus::Errcell( void )
     pD->SetString(aA, "#ERR!", &aParam);
 }
 
-void ImportLotus::Nacell( void )
+void ImportLotus::Nacell()
 {
     ScAddress   aA;
 
@@ -223,7 +223,7 @@ void ImportLotus::Nacell( void )
     pD->SetString(aA, "#NA!", &aParam);
 }
 
-void ImportLotus::Labelcell( void )
+void ImportLotus::Labelcell()
 {
     ScAddress   aA;
     OUString    aLabel;
@@ -239,7 +239,7 @@ void ImportLotus::Labelcell( void )
     pD->SetString(aA, aLabel, &aParam);
 }
 
-void ImportLotus::Numbercell( void )
+void ImportLotus::Numbercell()
 {
     ScAddress   aAddr;
     double      fVal;
@@ -251,7 +251,7 @@ void ImportLotus::Numbercell( void )
     pD->SetValue(aAddr, fVal);
 }
 
-void ImportLotus::Smallnumcell( void )
+void ImportLotus::Smallnumcell()
 {
     ScAddress   aAddr;
     sal_Int16       nVal;
@@ -328,7 +328,7 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
     }
 }
 
-void ImportLotus::NamedSheet( void )
+void ImportLotus::NamedSheet()
 {
     sal_uInt16 nTmpTab(0);
     Read(nTmpTab);
@@ -343,7 +343,7 @@ void ImportLotus::NamedSheet( void )
         pD->InsertTab(nLTab, aName);
 }
 
-void ImportLotus::Font_Face( void )
+void ImportLotus::Font_Face()
 {
     sal_uInt8   nNum;
     OUString    aName;
@@ -359,7 +359,7 @@ void ImportLotus::Font_Face( void )
     rContext.pLotusRoot->pFontBuff->SetName( nNum, aName );
 }
 
-void ImportLotus::Font_Type( void )
+void ImportLotus::Font_Type()
 {
     LotusContext &rContext = aConv.getContext();
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
@@ -370,7 +370,7 @@ void ImportLotus::Font_Type( void )
     }
 }
 
-void ImportLotus::Font_Ysize( void )
+void ImportLotus::Font_Ysize()
 {
     LotusContext &rContext = aConv.getContext();
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )

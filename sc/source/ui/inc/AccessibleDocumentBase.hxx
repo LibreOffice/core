@@ -32,7 +32,7 @@ public:
         ::com::sun::star::accessibility::XAccessible>& rxParent);
     virtual void SwitchViewFireFocus();
 protected:
-    virtual ~ScAccessibleDocumentBase   (void);
+    virtual ~ScAccessibleDocumentBase();
 };
 
 #endif

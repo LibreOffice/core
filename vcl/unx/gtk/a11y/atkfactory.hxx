@@ -26,7 +26,7 @@
 
 extern "C" {
 
-GType wrapper_factory_get_type (void);
+GType wrapper_factory_get_type();
 
 } // extern "C"
 

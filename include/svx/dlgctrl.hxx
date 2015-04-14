@@ -65,8 +65,8 @@ class SVX_DLLPUBLIC SvxRectCtl : public Control
 {
 private:
     SVX_DLLPRIVATE void             InitSettings( bool bForeground, bool bBackground );
-    SVX_DLLPRIVATE void             InitRectBitmap( void );
-    SVX_DLLPRIVATE Bitmap&          GetRectBitmap( void );
+    SVX_DLLPRIVATE void             InitRectBitmap();
+    SVX_DLLPRIVATE Bitmap&          GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl();
 
 protected:
@@ -115,9 +115,9 @@ public:
 
     void                SetState( CTL_STATE nState );
 
-    sal_uInt8               GetNumOfChildren( void ) const;   // returns number of usable radio buttons
+    sal_uInt8               GetNumOfChildren() const;   // returns number of usable radio buttons
 
-    Rectangle           CalculateFocusRectangle( void ) const;
+    Rectangle           CalculateFocusRectangle() const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
@@ -341,7 +341,7 @@ class SVX_DLLPUBLIC LineEndLB : public ListBox
 
 public:
     LineEndLB( vcl::Window* pParent, WinBits aWB );
-    virtual ~LineEndLB (void);
+    virtual ~LineEndLB();
 
     void Fill( const XLineEndListRef &pList, bool bStart = true );
 

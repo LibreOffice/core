@@ -82,9 +82,9 @@ private:
     void addListener();
     void removeListener();
 
-    ::sd::slidesorter::SharedPageSelection getSelectedPages (void) const;
+    ::sd::slidesorter::SharedPageSelection getSelectedPages() const;
 
-    void UpdateLook (void);
+    void UpdateLook();
 
     DECL_LINK( ApplyToAllButtonClicked, void * );
     DECL_LINK( PlayButtonClicked, void * );

@@ -40,7 +40,7 @@ Popup::Popup (
     OSL_ASSERT(maControlCreator);
 }
 
-Popup::~Popup (void)
+Popup::~Popup()
 {
     mxControl.reset();
     mxContainer.reset();
@@ -77,21 +77,21 @@ void Popup::Show (ToolBox& rToolBox)
     }
 }
 
-void Popup::Hide (void)
+void Popup::Hide()
 {
     if (mxContainer)
         if (mxContainer->IsInPopupMode())
             mxContainer->EndPopupMode();
 }
 
-void Popup::SetPopupModeEndHandler (const ::boost::function<void(void)>& rCallback)
+void Popup::SetPopupModeEndHandler (const ::boost::function<void()>& rCallback)
 {
     maPopupModeEndCallback = rCallback;
     if (mxContainer)
         mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
 }
 
-void Popup::ProvideContainerAndControl (void)
+void Popup::ProvideContainerAndControl()
 {
     if ( ! (mxContainer && mxControl)
         && mpParent!=NULL
@@ -101,7 +101,7 @@ void Popup::ProvideContainerAndControl (void)
     }
 }
 
-void Popup::CreateContainerAndControl (void)
+void Popup::CreateContainerAndControl()
 {
     mxContainer.reset(new PopupContainer(mpParent));
     mxContainer->SetAccessibleName(msAccessibleName);

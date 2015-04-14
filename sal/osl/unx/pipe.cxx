@@ -73,7 +73,7 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
     return PipeError[i].error;
 }
 
-oslPipe __osl_createPipeImpl(void)
+oslPipe __osl_createPipeImpl()
 {
     oslPipe pPipeImpl;
 

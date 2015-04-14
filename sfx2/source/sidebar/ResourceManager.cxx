@@ -38,13 +38,13 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-ResourceManager& ResourceManager::Instance (void)
+ResourceManager& ResourceManager::Instance()
 {
     static ResourceManager maInstance;
     return maInstance;
 }
 
-ResourceManager::ResourceManager (void)
+ResourceManager::ResourceManager()
     : maDecks(),
       maPanels(),
       maProcessedApplications()
@@ -53,7 +53,7 @@ ResourceManager::ResourceManager (void)
     ReadPanelList();
 }
 
-ResourceManager::~ResourceManager (void)
+ResourceManager::~ResourceManager()
 {
     maPanels.clear();
     maDecks.clear();
@@ -192,7 +192,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
     return rPanelIds;
 }
 
-void ResourceManager::ReadDeckList (void)
+void ResourceManager::ReadDeckList()
 {
     const ::utl::OConfigurationTreeRoot aDeckRootNode (
         ::comphelper::getProcessComponentContext(),
@@ -244,7 +244,7 @@ void ResourceManager::ReadDeckList (void)
         maDecks.resize(nWriteIndex);
 }
 
-void ResourceManager::ReadPanelList (void)
+void ResourceManager::ReadPanelList()
 {
     const ::utl::OConfigurationTreeRoot aPanelRootNode (
         ::comphelper::getProcessComponentContext(),

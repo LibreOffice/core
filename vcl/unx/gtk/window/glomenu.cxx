@@ -165,7 +165,7 @@ g_lo_menu_insert_in_section (GLOMenu     *menu,
 }
 
 GLOMenu *
-g_lo_menu_new (void)
+g_lo_menu_new()
 {
     return G_LO_MENU( g_object_new (G_TYPE_LO_MENU, NULL) );
 }

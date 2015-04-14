@@ -484,7 +484,7 @@ void SvxColorDockingWindow::Resize()
 
 
 
-void SvxColorDockingWindow::GetFocus (void)
+void SvxColorDockingWindow::GetFocus()
 {
     SfxDockingWindow::GetFocus();
     // Grab the focus to the color value set so that it can be controlled

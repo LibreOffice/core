@@ -23,12 +23,12 @@ using ::rtl::OUString;
 
 namespace sfx2 { namespace sidebar {
 
-ContextList::ContextList (void)
+ContextList::ContextList()
     : maEntries()
 {
 }
 
-ContextList::~ContextList (void)
+ContextList::~ContextList()
 {
 }
 

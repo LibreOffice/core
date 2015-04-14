@@ -116,7 +116,7 @@ GalleryBrowser1::GalleryBrowser1(
     vcl::Window* pParent,
     Gallery* pGallery,
     const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
-    const ::boost::function<void(void)>& rThemeSlectionHandler)
+    const ::boost::function<void()>& rThemeSlectionHandler)
     :
     Control               ( pParent, WB_TABSTOP ),
     maNewTheme            ( this, WB_3DLOOK ),

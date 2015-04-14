@@ -52,7 +52,7 @@ namespace accessibility {
 class IAccessibleViewForwarder
 {
 public:
-    virtual ~IAccessibleViewForwarder (void){};
+    virtual ~IAccessibleViewForwarder(){};
 
     /** This method informs you about the state of the forwarder.  Do not
         use it when the returned value is <false/>.
@@ -60,7 +60,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual bool IsValid (void) const = 0;
+    virtual bool IsValid() const = 0;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.

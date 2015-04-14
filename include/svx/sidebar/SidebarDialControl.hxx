@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SidebarDialControl : public svx::DialControl
 {
 public:
     SidebarDialControl (vcl::Window* pParent, WinBits nBits = 0);
-    virtual ~SidebarDialControl (void);
+    virtual ~SidebarDialControl();
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void MouseButtonDown (const MouseEvent& rMEvt) SAL_OVERRIDE;

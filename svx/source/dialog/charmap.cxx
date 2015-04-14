@@ -210,7 +210,7 @@ sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos) const
 
 
 
-int SvxShowCharSet::FirstInView( void ) const
+int SvxShowCharSet::FirstInView() const
 {
     int nIndex = 0;
     if( aVscrollSB.IsVisible() )
@@ -220,7 +220,7 @@ int SvxShowCharSet::FirstInView( void ) const
 
 
 
-int SvxShowCharSet::LastInView( void ) const
+int SvxShowCharSet::LastInView() const
 {
     sal_uIntPtr nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;

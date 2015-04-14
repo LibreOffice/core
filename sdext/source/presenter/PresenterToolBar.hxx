@@ -76,7 +76,7 @@ class PresenterToolBar
       public CachablePresenterView
 {
 public:
-    typedef ::boost::function<void(void)> Action;
+    typedef ::boost::function<void()> Action;
 
     enum Anchor { Left, Center, Right };
 
@@ -86,21 +86,21 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const ::rtl::Reference<PresenterController>& rpPresenterController,
         const Anchor eAnchor);
-    virtual ~PresenterToolBar (void);
+    virtual ~PresenterToolBar();
 
     void Initialize (
         const OUString& rsConfigurationPath);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     void InvalidateArea (
         const css::awt::Rectangle& rRepaintBox,
         const bool bSynchronous);
 
-    void RequestLayout (void);
-    css::geometry::RealSize2D GetMinimalSize (void);
-    ::rtl::Reference<PresenterController> GetPresenterController (void) const;
-    css::uno::Reference<css::uno::XComponentContext> GetComponentContext (void) const;
+    void RequestLayout();
+    css::geometry::RealSize2D GetMinimalSize();
+    ::rtl::Reference<PresenterController> GetPresenterController() const;
+    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const;
 
     // lang::XEventListener
 
@@ -155,7 +155,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     class Context;
@@ -201,7 +201,7 @@ private:
         const css::awt::Rectangle& rUpdateBox,
         const css::rendering::ViewState& rViewState);
 
-    void UpdateSlideNumber (void);
+    void UpdateSlideNumber();
 
     void CheckMouseOver (
         const css::awt::MouseEvent& rEvent,
@@ -215,7 +215,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 
@@ -232,11 +232,11 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterToolBarView (void);
+    virtual ~PresenterToolBarView();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    ::rtl::Reference<PresenterToolBar> GetPresenterToolBar (void) const;
+    ::rtl::Reference<PresenterToolBar> GetPresenterToolBar() const;
 
     // XPaintListener
 
@@ -251,10 +251,10 @@ public:
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDrawView
@@ -263,7 +263,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:

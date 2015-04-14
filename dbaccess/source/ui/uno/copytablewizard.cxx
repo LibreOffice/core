@@ -154,8 +154,8 @@ namespace dbaui
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
-        static Sequence< OUString >  getSupportedServiceNames_Static(void) throw( RuntimeException );
-        static OUString              getImplementationName_Static(void) throw( RuntimeException );
+        static Sequence< OUString >  getSupportedServiceNames_Static() throw( RuntimeException );
+        static OUString              getImplementationName_Static() throw( RuntimeException );
         static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
 
         // XCopyTableWizard

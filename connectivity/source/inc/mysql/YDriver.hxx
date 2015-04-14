@@ -103,7 +103,7 @@ namespace connectivity
             /// dtor
             virtual ~ODriverDelegator();
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
         };
     }
 

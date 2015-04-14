@@ -120,7 +120,7 @@ class TokenLabelInfo
     bool* m_pTokenCanBeLabelTab;
 
 public:
-    TokenLabelInfo( void );
+    TokenLabelInfo();
     TokenLabelInfo( const TokenLabelInfo& rInfo )
         : m_pTokenCanBeLabelTab( NULL )
             { (void)rInfo; }

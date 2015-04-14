@@ -138,7 +138,7 @@ namespace connectivity
             }
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);

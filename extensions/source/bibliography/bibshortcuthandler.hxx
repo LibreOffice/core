@@ -40,14 +40,14 @@ public:
     virtual                 ~BibShortCutHandler();
     virtual bool            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 
-    inline vcl::Window*          GetWindow( void );
+    inline vcl::Window*          GetWindow();
 };
 
 inline BibShortCutHandler::BibShortCutHandler( vcl::Window* _pBaseClass ) : pBaseClass( _pBaseClass )
 {
 }
 
-inline vcl::Window* BibShortCutHandler::GetWindow( void )
+inline vcl::Window* BibShortCutHandler::GetWindow()
 {
     return pBaseClass;
 }

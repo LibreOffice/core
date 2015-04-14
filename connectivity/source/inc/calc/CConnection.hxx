@@ -55,7 +55,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
             // XConnection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

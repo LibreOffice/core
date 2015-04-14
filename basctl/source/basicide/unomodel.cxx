@@ -78,7 +78,7 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeEx
     return aTypes;
 }
 
-OUString SIDEModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
+OUString SIDEModel::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -92,12 +92,12 @@ sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::Ru
 {
     return cppu::supportsService(this, rServiceName);
 }
-uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SIDEModel::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
+uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();

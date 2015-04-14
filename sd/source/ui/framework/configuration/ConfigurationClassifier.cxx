@@ -38,7 +38,7 @@ ConfigurationClassifier::ConfigurationClassifier (
 {
 }
 
-bool ConfigurationClassifier::Partition (void)
+bool ConfigurationClassifier::Partition()
 {
     maC1minusC2.clear();
     maC2minusC1.clear();

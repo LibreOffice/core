@@ -228,7 +228,7 @@ SfxActionListBox::SfxActionListBox(SfxCommonTemplateDialog_Impl* pParent, WinBit
     EnableContextMenuHandling();
 }
 
-PopupMenu* SfxActionListBox::CreateContextMenu( void )
+PopupMenu* SfxActionListBox::CreateContextMenu()
 {
 
     if( !( GetSelectionCount() > 0 ) )
@@ -251,7 +251,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
     SetStyle(GetStyle() & ~WB_DOCKABLE);
 }
 
-SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
+SfxTemplatePanelControl::~SfxTemplatePanelControl()
 {
 }
 
@@ -274,7 +274,7 @@ void SfxTemplatePanelControl::Resize()
     DockingWindow::Resize();
 }
 
-void SfxTemplatePanelControl::FreeResource (void)
+void SfxTemplatePanelControl::FreeResource()
 {
     DockingWindow::FreeResource();
 }
@@ -2033,7 +2033,7 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     EnableItem(nId, bEnable);
 }
 
-PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
+PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu()
 {
     if ( bBindingUpdate )
     {
@@ -2064,7 +2064,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     Initialize();
 }
 
-void SfxTemplateDialog_Impl::Initialize (void)
+void SfxTemplateDialog_Impl::Initialize()
 {
     SfxCommonTemplateDialog_Impl::Initialize();
 

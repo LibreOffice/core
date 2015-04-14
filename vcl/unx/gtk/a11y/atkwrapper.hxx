@@ -72,7 +72,7 @@ struct _AtkObjectWrapperClass
     AtkObjectClass aParentClass;
 };
 
-GType                  atk_object_wrapper_get_type (void) G_GNUC_CONST;
+GType                  atk_object_wrapper_get_type() G_GNUC_CONST;
 AtkObject *            atk_object_wrapper_ref(
     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
     bool create = true );

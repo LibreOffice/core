@@ -103,7 +103,7 @@ namespace connectivity
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing();
         };
     }
 }

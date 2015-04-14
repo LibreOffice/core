@@ -54,7 +54,7 @@ public:
     AccessibleRelationSetHelper ();
     AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
 protected:
-    virtual ~AccessibleRelationSetHelper    (void);
+    virtual ~AccessibleRelationSetHelper();
 public:
 
     //=====  XAccessibleRelationSet  ==========================================
@@ -124,13 +124,13 @@ public:
     /** Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId (void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:

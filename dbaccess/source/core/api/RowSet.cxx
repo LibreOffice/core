@@ -2907,7 +2907,7 @@ void ORowSetClone::disposing()
 }
 
 // XCloseable
-void ORowSetClone::close(void) throw( SQLException, RuntimeException, std::exception )
+void ORowSetClone::close() throw( SQLException, RuntimeException, std::exception )
 {
     {
         MutexGuard aGuard( m_aMutex );

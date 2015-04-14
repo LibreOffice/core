@@ -72,7 +72,7 @@ class SlideSorter
 {
     friend class controller::SlotManager;
 public:
-    virtual ~SlideSorter (void);
+    virtual ~SlideSorter();
 
     /** Return whether the called SlideSorter object is valid and calling
         its Get(Model,View,Controller) methods is safe.  When <FALSE/> is
@@ -80,7 +80,7 @@ public:
         Calling this method should be necessary only during startup and
         shutdown (when that can be detected).
     */
-    bool IsValid (void) const { return mbIsValid;}
+    bool IsValid() const { return mbIsValid;}
 
     /** Create a new slide sorter that is strongly coupled to the given view
         shell.  Use this function for a slide sorter in the left pane.
@@ -120,44 +120,44 @@ public:
 
     /** Return the control of the vertical scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetVerticalScrollBar (void) const { return mpVerticalScrollBar;}
+    ::boost::shared_ptr<ScrollBar> GetVerticalScrollBar() const { return mpVerticalScrollBar;}
 
     /** Return the control of the horizontal scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetHorizontalScrollBar (void) const { return mpHorizontalScrollBar;}
+    ::boost::shared_ptr<ScrollBar> GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
 
     /** Return the scroll bar filler that paints the little square that is
         enclosed by the two scroll bars.
     */
-    ::boost::shared_ptr<ScrollBarBox> GetScrollBarFiller (void) const { return mpScrollBarBox;}
+    ::boost::shared_ptr<ScrollBarBox> GetScrollBarFiller() const { return mpScrollBarBox;}
 
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
     */
-    SharedSdWindow GetContentWindow (void) const { return mpContentWindow;}
+    SharedSdWindow GetContentWindow() const { return mpContentWindow;}
 
-    model::SlideSorterModel& GetModel (void) const;
+    model::SlideSorterModel& GetModel() const;
 
-    view::SlideSorterView& GetView (void) const;
+    view::SlideSorterView& GetView() const;
 
-    controller::SlideSorterController& GetController (void) const;
+    controller::SlideSorterController& GetController() const;
 
     /** Return the view shell that was given at construction.
         @return
             May be empty.
     */
-    ViewShell* GetViewShell (void) const { return mpViewShell;}
+    ViewShell* GetViewShell() const { return mpViewShell;}
 
     /** Return the XController object of the main view.
     */
     ::com::sun::star::uno::Reference<com::sun::star::frame::XController>
-        GetXController (void) const;
+        GetXController() const;
 
     /** Return the ViewShellBase object.
         @return
             May be empty.
     */
-    ViewShellBase* GetViewShellBase (void) const { return mpViewShellBase;}
+    ViewShellBase* GetViewShellBase() const { return mpViewShellBase;}
 
     void Paint (const Rectangle& rRepaintArea);
 
@@ -180,11 +180,11 @@ public:
     /** Return a collection of properties that are used throughout the slide
         sorter.
     */
-    ::boost::shared_ptr<controller::Properties> GetProperties (void) const;
+    ::boost::shared_ptr<controller::Properties> GetProperties() const;
 
     /** Return the active theme which gives access to colors and fonts.
     */
-    ::boost::shared_ptr<view::Theme> GetTheme (void) const;
+    ::boost::shared_ptr<view::Theme> GetTheme() const;
 
 protected:
     /** This virtual method makes it possible to create a specialization of
@@ -193,25 +193,25 @@ protected:
         calls the CreateModel(), CreateView(), and CreateController()
         methods in this order.
     */
-    void CreateModelViewController (void);
+    void CreateModelViewController();
 
     /** Create the model for the view shell.  When called from the default
         implementation of CreateModelViewController() then neither view nor
         controller do exist.  Test their pointers when in doubt.
     */
-    model::SlideSorterModel* CreateModel (void);
+    model::SlideSorterModel* CreateModel();
 
     /** Create the view for the view shell.  When called from the default
         implementation of CreateModelViewController() then the model but not
         the controller does exist.  Test their pointers when in doubt.
     */
-    view::SlideSorterView* CreateView (void);
+    view::SlideSorterView* CreateView();
 
     /** Create the controller for the view shell.  When called from the default
         implementation of CreateModelViewController() then both the view and
         the controller do exist.  Test their pointers when in doubt.
     */
-    controller::SlideSorterController* CreateController (void);
+    controller::SlideSorterController* CreateController();
 
 private:
     bool mbIsValid;
@@ -249,7 +249,7 @@ private:
         ViewShell* pViewShell,
         ::vcl::Window& rParentWindow);
 
-    void Init (void);
+    void Init();
     /** Create the controls for the slide sorter.  This are the tab bar
        for switching the edit mode, the scroll bar, and the actual
        slide sorter view window.
@@ -261,11 +261,11 @@ private:
     /** This method is usually called exactly one time from the
         constructor.
     */
-    void SetupListeners (void);
+    void SetupListeners();
 
     /** Release the listeners that have been installed in SetupListeners().
     */
-    void ReleaseListeners (void);
+    void ReleaseListeners();
 };
 
 } } // end of namespace ::sd::slidesorter

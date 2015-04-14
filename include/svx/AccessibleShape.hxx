@@ -106,9 +106,9 @@ public:
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
      //Solution: Overwrite the object's current name.
-    virtual OUString SAL_CALL    getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getAccessibleDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 //=====  XAccessibleSelection  ============================================
 
     virtual void SAL_CALL selectAccessibleChild(
@@ -144,7 +144,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
     throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //=====  XAccessibleGroupPosition  =========================================
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
         getGroupPosition( const ::com::sun::star::uno::Any& rAny )
@@ -154,12 +154,12 @@ public:
     /** The destructor releases its children manager and text engine if
         still existent.  These are responsible to send appropriate events.
     */
-    virtual ~AccessibleShape (void);
+    virtual ~AccessibleShape();
 
     /** Initialize a new shape.  See the documentation of the constructor
         for the reason of this method's existence.
     */
-    virtual void Init (void);
+    virtual void Init();
 
     /** Compare two accessible shapes using object identity
         @param rShape
@@ -215,7 +215,7 @@ public:
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return the specified child.
@@ -236,12 +236,12 @@ public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent (void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XAccessibleComponent  ============================================
@@ -251,22 +251,22 @@ public:
         getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XAccessibleEventBroadcaster  =====================================
@@ -304,11 +304,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire()
         throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        release (void)
+        release()
         throw () SAL_OVERRIDE;
 
 
@@ -317,17 +317,17 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  IAccessibleViewForwarderListener  ================================
@@ -429,24 +429,24 @@ protected:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Create a base name string that contains the accessible name.
     */
     virtual OUString
-        CreateAccessibleBaseName (void)
+        CreateAccessibleBaseName()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
     */
     virtual OUString
-        CreateAccessibleName (void)
+        CreateAccessibleName()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
-        CreateAccessibleDescription (void)
+        CreateAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     OUString
        GetFullAccessibleName(AccessibleShape *shape)
@@ -456,7 +456,7 @@ protected:
         ::com::sun::star::accessibility::XAccessibleStateSet > &xStateSet);
     /** Update the <const>OPAQUE</const> and <const>SELECTED</const> state.
     */
-    void UpdateStates (void);
+    void UpdateStates();
 
 private:
     AccessibleShape (const AccessibleShape&) SAL_DELETED_FUNCTION;
@@ -469,7 +469,7 @@ private:
         This method adapts the name and description members of the
         AccessibleContextBase base class.
     */
-    void UpdateNameAndDescription (void);
+    void UpdateNameAndDescription();
 };
 
 } // end of namespace accessibility

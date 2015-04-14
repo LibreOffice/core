@@ -71,7 +71,7 @@ SwAccessibleFootnote::~SwAccessibleFootnote()
 {
 }
 
-OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

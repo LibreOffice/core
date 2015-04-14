@@ -64,9 +64,9 @@ private:
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~RecentMasterPagesSelector (void);
+    virtual ~RecentMasterPagesSelector();
 
-    virtual void LateInit (void) SAL_OVERRIDE;
+    virtual void LateInit() SAL_OVERRIDE;
 };
 
 } } // end of namespace sd::sidebar

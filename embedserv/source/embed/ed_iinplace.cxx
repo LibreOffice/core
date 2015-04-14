@@ -37,7 +37,7 @@ STDMETHODIMP EmbedDocument_Impl::ContextSensitiveHelp(BOOL)
     return NOERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate(void)
+STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
     if ( m_bIsInVerbHandling )
@@ -54,7 +54,7 @@ STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate(void)
     return NOERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::UIDeactivate(void)
+STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
     if ( m_bIsInVerbHandling )
@@ -79,7 +79,7 @@ STDMETHODIMP EmbedDocument_Impl::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
     return m_pDocHolder->SetObjectRects(aRect,aClip);
 }
 
-STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo(void)
+STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo()
 {
     return E_NOTIMPL;
 }

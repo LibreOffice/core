@@ -41,8 +41,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    LeftImpressPaneShell (void);
-    virtual ~LeftImpressPaneShell (void);
+    LeftImpressPaneShell();
+    virtual ~LeftImpressPaneShell();
 };
 
 /** Shell that displays the left pane for Draw.  The shell does not do
@@ -60,8 +60,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    LeftDrawPaneShell (void);
-    virtual ~LeftDrawPaneShell (void);
+    LeftDrawPaneShell();
+    virtual ~LeftDrawPaneShell();
 };
 
 /** Shell that displays the right pane for both Impress and Draw.  The shell

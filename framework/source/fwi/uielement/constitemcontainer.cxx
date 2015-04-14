@@ -61,7 +61,7 @@ public:
     OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-Methoden
-    virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< Property > SAL_CALL getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
@@ -78,7 +78,7 @@ OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< Property > OPropertySetHelperInfo_Impl::getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return aInfos;
 }

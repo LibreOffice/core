@@ -95,7 +95,7 @@ public:
         if (mbIsCurrentSlideTrackingActive)
             mrController.GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    ~TemporarySlideTrackingDeactivator (void)
+    ~TemporarySlideTrackingDeactivator()
     {
         if (mbIsCurrentSlideTrackingActive)
             mrController.GetVisibleAreaManager().ActivateCurrentSlideTracking();
@@ -125,7 +125,7 @@ public:
         }
     }
 
-    ~UndoContext (void)
+    ~UndoContext()
     {
         if (mpDocument!=NULL && mpDocument->IsUndoEnabled())
             mpDocument->EndUndo();
@@ -154,7 +154,7 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
 {
 }
 
-Clipboard::~Clipboard (void)
+Clipboard::~Clipboard()
 {
     if (mnDragFinishedUserEventId != 0)
         Application::RemoveUserEvent(mnDragFinishedUserEventId);
@@ -795,7 +795,7 @@ bool Clipboard::IsInsertionTrivial (
     return mrController.GetInsertionIndicatorHandler()->IsInsertionTrivial(nDndAction);
 }
 
-void Clipboard::Abort (void)
+void Clipboard::Abort()
 {
     if (mxSelectionObserverContext)
     {

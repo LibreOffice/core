@@ -84,11 +84,11 @@ ToolBarModule::ToolBarModule (
     }
 }
 
-ToolBarModule::~ToolBarModule (void)
+ToolBarModule::~ToolBarModule()
 {
 }
 
-void SAL_CALL ToolBarModule::disposing (void)
+void SAL_CALL ToolBarModule::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
@@ -133,7 +133,7 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
     }
 }
 
-void ToolBarModule::HandleUpdateStart (void)
+void ToolBarModule::HandleUpdateStart()
 {
     // Lock the ToolBarManager and tell it to lock the ViewShellManager as
     // well.  This way the ToolBarManager can optimize the releasing of
@@ -147,7 +147,7 @@ void ToolBarModule::HandleUpdateStart (void)
     }
 }
 
-void ToolBarModule::HandleUpdateEnd (void)
+void ToolBarModule::HandleUpdateEnd()
 {
     if (mbMainViewSwitchUpdatePending)
     {

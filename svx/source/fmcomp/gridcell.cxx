@@ -3710,7 +3710,7 @@ OUString SAL_CALL FmXEditCell::getText() throw( RuntimeException, std::exception
 }
 
 
-OUString SAL_CALL FmXEditCell::getSelectedText( void ) throw( RuntimeException, std::exception )
+OUString SAL_CALL FmXEditCell::getSelectedText() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3733,7 +3733,7 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
 }
 
 
-::com::sun::star::awt::Selection SAL_CALL FmXEditCell::getSelection( void ) throw( RuntimeException, std::exception )
+::com::sun::star::awt::Selection SAL_CALL FmXEditCell::getSelection() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3745,7 +3745,7 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
 }
 
 
-sal_Bool SAL_CALL FmXEditCell::isEditable( void ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FmXEditCell::isEditable() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4653,7 +4653,7 @@ OUString SAL_CALL FmXFilterCell::getText() throw( RuntimeException, std::excepti
 }
 
 
-OUString SAL_CALL FmXFilterCell::getSelectedText( void ) throw( RuntimeException, std::exception )
+OUString SAL_CALL FmXFilterCell::getSelectedText() throw( RuntimeException, std::exception )
 {
     return getText();
 }
@@ -4664,13 +4664,13 @@ void SAL_CALL FmXFilterCell::setSelection( const ::com::sun::star::awt::Selectio
 }
 
 
-::com::sun::star::awt::Selection SAL_CALL FmXFilterCell::getSelection( void ) throw( RuntimeException, std::exception )
+::com::sun::star::awt::Selection SAL_CALL FmXFilterCell::getSelection() throw( RuntimeException, std::exception )
 {
     return ::com::sun::star::awt::Selection();
 }
 
 
-sal_Bool SAL_CALL FmXFilterCell::isEditable( void ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FmXFilterCell::isEditable() throw( RuntimeException, std::exception )
 {
     return sal_True;
 }

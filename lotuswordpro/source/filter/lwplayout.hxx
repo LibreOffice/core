@@ -303,18 +303,18 @@ public:
     bool GetUsePrinterSettings();
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj().get());}
-        sal_uInt16 GetScaleMode(void);
-    sal_uInt16 GetScaleTile(void);
-    sal_uInt16 GetScaleCenter(void);
-    sal_uInt32 GetScalePercentage(void);
-    double GetScaleWidth(void);
-    double GetScaleHeight(void);
+        sal_uInt16 GetScaleMode();
+    sal_uInt16 GetScaleTile();
+    sal_uInt16 GetScaleCenter();
+    sal_uInt32 GetScalePercentage();
+    double GetScaleWidth();
+    double GetScaleHeight();
 
-    bool CanSizeRight(void);
+    bool CanSizeRight();
     virtual double GetWidth() SAL_OVERRIDE;
     sal_Int32 GetMinimumWidth();
-    bool IsSizeRightToContent(void);
-    bool IsSizeRightToContainer(void);
+    bool IsSizeRightToContent();
+    bool IsSizeRightToContainer();
     sal_Int32 DetermineWidth();
     virtual double GetHeight();
     LwpPoint GetOrigin();

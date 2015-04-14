@@ -92,7 +92,7 @@ Window::Window(vcl::Window* pParent)
     EnableRTL(false);
 }
 
-Window::~Window (void)
+Window::~Window()
 {
     if (mpViewShell != NULL)
     {
@@ -178,7 +178,7 @@ void Window::SetMaxZoom (long int nMax)
     mnMaxZoom = (sal_uInt16) nMax;
 }
 
-long Window::GetZoom (void) const
+long Window::GetZoom() const
 {
     if( GetMapMode().GetScaleX().GetDenominator() )
     {
@@ -567,7 +567,7 @@ void Window::UpdateMapOrigin(bool bInvalidate)
         Invalidate();
 }
 
-void Window::UpdateMapMode (void)
+void Window::UpdateMapMode()
 {
     maWinPos -= maViewOrigin;
     Size aPix(maWinPos.X(), maWinPos.Y());
@@ -943,7 +943,7 @@ void Window::DropScroll(const Point& rMousePos)
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-    Window::CreateAccessible (void)
+    Window::CreateAccessible()
 {
     // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
     if (mpViewShell && mpViewShell->ISA(PresentationViewShell))

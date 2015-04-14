@@ -81,9 +81,9 @@ public:
     Configuration (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents);
-    virtual ~Configuration (void);
+    virtual ~Configuration();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XConfiguration
 
@@ -113,7 +113,7 @@ public:
     // XCloneable
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
-        SAL_CALL createClone (void)
+        SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNamed
@@ -121,7 +121,7 @@ public:
     /** Return a human readable string representation.  This is used for
         debugging purposes.
     */
-    virtual OUString SAL_CALL getName (void)
+    virtual OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This call is ignored because the XNamed interface is (mis)used to
@@ -184,7 +184,7 @@ private:
     /** When the called object has already been disposed this method throws
         an exception and does not return.
     */
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (::com::sun::star::lang::DisposedException);
 };
 

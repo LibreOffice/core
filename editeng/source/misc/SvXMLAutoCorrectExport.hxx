@@ -36,7 +36,7 @@ public:
         const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SvXMLAutoCorrectExport ( void ) {}
+    virtual ~SvXMLAutoCorrectExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
     void _ExportAutoStyles() SAL_OVERRIDE {}
     void _ExportMasterStyles () SAL_OVERRIDE {}
@@ -56,7 +56,7 @@ public:
         const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SvXMLExceptionListExport ( void ) {}
+    virtual ~SvXMLExceptionListExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
     void _ExportAutoStyles() SAL_OVERRIDE {}
     void _ExportMasterStyles () SAL_OVERRIDE {}

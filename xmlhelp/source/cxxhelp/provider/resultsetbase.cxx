@@ -436,14 +436,14 @@ public:
     {
     }
 
-    void SAL_CALL acquire( void )
+    void SAL_CALL acquire()
         throw() SAL_OVERRIDE
     {
         OWeakObject::acquire();
     }
 
 
-    void SAL_CALL release( void )
+    void SAL_CALL release()
         throw() SAL_OVERRIDE
     {
         OWeakObject::release();

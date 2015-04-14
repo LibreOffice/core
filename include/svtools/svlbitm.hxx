@@ -99,7 +99,7 @@ public:
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
                                 // set images according to the color scheeme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
-    bool                    HasDefaultImages( void ) const;
+    bool                    HasDefaultImages() const;
 };
 
 // **********************************************************************

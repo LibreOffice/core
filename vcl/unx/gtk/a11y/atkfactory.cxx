@@ -49,7 +49,7 @@ atk_noop_object_wrapper_class_init(AtkNoOpObjectClass *klass)
 }
 
 static GType
-atk_noop_object_wrapper_get_type(void)
+atk_noop_object_wrapper_get_type()
 {
     static GType type = 0;
 
@@ -93,7 +93,7 @@ atk_noop_object_wrapper_new()
  */
 
 static GType
-wrapper_factory_get_accessible_type(void)
+wrapper_factory_get_accessible_type()
 {
   return atk_object_wrapper_get_type();
 }
@@ -148,7 +148,7 @@ wrapper_factory_class_init( AtkObjectFactoryClass *klass )
 }
 
 GType
-wrapper_factory_get_type (void)
+wrapper_factory_get_type()
 {
   static GType t = 0;
 

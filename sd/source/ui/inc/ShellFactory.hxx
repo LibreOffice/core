@@ -39,7 +39,7 @@ public:
     /** This abstract virtual class needs a destructor so that the
         destructors of derived classes are called.
     */
-    virtual ~ShellFactory (void) {};
+    virtual ~ShellFactory() {};
 
     /** Create a new instance of a view shell for the given id that will
         be stacked onto the given view shell base.

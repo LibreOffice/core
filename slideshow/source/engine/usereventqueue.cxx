@@ -247,7 +247,7 @@ public:
     { mbSkipTriggersNextEffect = bSkipTriggersNextEffect; }
 
     ///  Skip the current effect but do not trigger the next effect.
-    void skipEffect (void) { handleEvent_impl(false); }
+    void skipEffect() { handleEvent_impl(false); }
 
 private:
     virtual bool handleEvent_impl() SAL_OVERRIDE
@@ -804,7 +804,7 @@ void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
                                 0.0 /* default prio */ ) );
 }
 
-void UserEventQueue::callSkipEffectEventHandler (void)
+void UserEventQueue::callSkipEffectEventHandler()
 {
     ::boost::shared_ptr<SkipEffectEventHandler> pHandler (
         ::boost::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));

@@ -128,7 +128,7 @@ bool SfxScriptLibraryContainer::hasLibraryPassword( const OUString& rLibraryName
 }
 
 // Ctor for service
-SfxScriptLibraryContainer::SfxScriptLibraryContainer( void )
+SfxScriptLibraryContainer::SfxScriptLibraryContainer()
     :maScriptLanguage( "StarBasic"  )
 {
     // all initialisation has to be done
@@ -160,7 +160,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aN
     return pRet;
 }
 
-Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement( void )
+Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement()
 {
     OUString aMod;
     Any aRetAny;
@@ -354,7 +354,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     return aRetAny;
 }
 
-SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl( void )
+SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl()
 {
     return new SfxScriptLibraryContainer();
 }
@@ -1237,12 +1237,12 @@ bool SfxScriptLibrary::isLoadedStorable()
 }
 
 // Provide modify state including resources
-bool SfxScriptLibrary::isModified( void )
+bool SfxScriptLibrary::isModified()
 {
     return implIsModified();    // No resources
 }
 
-void SfxScriptLibrary::storeResources( void )
+void SfxScriptLibrary::storeResources()
 {
     // No resources
 }

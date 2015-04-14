@@ -43,11 +43,11 @@ SdUnoOutlineView::SdUnoOutlineView(
 {
 }
 
-SdUnoOutlineView::~SdUnoOutlineView (void) throw()
+SdUnoOutlineView::~SdUnoOutlineView() throw()
 {
 }
 
-void SAL_CALL SdUnoOutlineView::disposing (void)
+void SAL_CALL SdUnoOutlineView::disposing()
 {
 }
 
@@ -94,7 +94,7 @@ void SAL_CALL SdUnoOutlineView::setCurrentPage (
         mrOutlineViewShell.SetCurrentPage(pSdPage);
 }
 
-Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
+Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
     throw(RuntimeException, std::exception)
 {
     Reference<drawing::XDrawPage>  xPage;

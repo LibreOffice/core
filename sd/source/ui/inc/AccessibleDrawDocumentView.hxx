@@ -48,11 +48,11 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleDrawDocumentView (void);
+    virtual ~AccessibleDrawDocumentView();
 
     /** Complete the initialization begun in the constructor.
     */
-    virtual void Init (void) SAL_OVERRIDE;
+    virtual void Init() SAL_OVERRIDE;
 
     //=====  IAccessibleViewForwarderListener  ================================
 
@@ -62,7 +62,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
@@ -71,7 +71,7 @@ public:
             ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getAccessibleName(void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  lang::XEventListener  ============================================
@@ -92,11 +92,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire()
         throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        release (void)
+        release()
         throw () SAL_OVERRIDE;
 
     //=====  XAccessibleGroupPosition  =========================================
@@ -113,11 +113,11 @@ protected:
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual bool
@@ -152,11 +152,11 @@ protected:
 
     // This method is called from the component helper base class while
     // disposing.
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Create a shape the represents the page as seen on the screen.
     */
-    rtl::Reference<AccessiblePageShape> CreateDrawPageShape (void);
+    rtl::Reference<AccessiblePageShape> CreateDrawPageShape();
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString
@@ -173,14 +173,14 @@ protected:
     /** Make sure that the currently focused shape sends a FOCUSED state
         change event indicating that it has (regained) the focus.
     */
-    virtual void Activated (void) SAL_OVERRIDE;
+    virtual void Activated() SAL_OVERRIDE;
 
     /** Make sure that the currently focused shape sends a FOCUSED state
         change event indicating that it has lost the focus.
     */
-    virtual void Deactivated (void) SAL_OVERRIDE;
+    virtual void Deactivated() SAL_OVERRIDE;
 
-    virtual void impl_dispose (void) SAL_OVERRIDE;
+    virtual void impl_dispose() SAL_OVERRIDE;
 
     //=====  XAccessibleGetAccFromXShape  ============================================
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
@@ -190,7 +190,7 @@ protected:
         GetSelAccContextInTable();
 
 private:
-    void UpdateAccessibleName (void);
+    void UpdateAccessibleName();
 };
 
 } // end of namespace accessibility

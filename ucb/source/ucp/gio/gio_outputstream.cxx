@@ -35,7 +35,7 @@ OutputStream::OutputStream(GFileOutputStream *pStream) : Seekable(G_SEEKABLE(pSt
         throw io::NotConnectedException();
 }
 
-OutputStream::~OutputStream( void )
+OutputStream::~OutputStream()
 {
     closeOutput();
 }
@@ -52,7 +52,7 @@ void SAL_CALL OutputStream::writeBytes( const com::sun::star::uno::Sequence< sal
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
-void SAL_CALL OutputStream::flush( void )
+void SAL_CALL OutputStream::flush()
     throw( io::NotConnectedException, io::BufferSizeExceededException,
            io::IOException, uno::RuntimeException, std::exception )
 {
@@ -64,7 +64,7 @@ void SAL_CALL OutputStream::flush( void )
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
-void SAL_CALL OutputStream::closeOutput( void )
+void SAL_CALL OutputStream::closeOutput()
     throw( io::NotConnectedException, io::IOException,
            uno::RuntimeException, std::exception )
 {

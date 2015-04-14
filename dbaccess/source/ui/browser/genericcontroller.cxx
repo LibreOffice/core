@@ -686,7 +686,7 @@ Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const 
     return aReturn;
 }
 
-Reference< XDispatchProvider >  OGenericUnoController::getSlaveDispatchProvider(void) throw( RuntimeException, std::exception )
+Reference< XDispatchProvider >  OGenericUnoController::getSlaveDispatchProvider() throw( RuntimeException, std::exception )
 {
     return m_xSlaveDispatcher;
 }
@@ -696,7 +696,7 @@ void OGenericUnoController::setSlaveDispatchProvider(const Reference< XDispatchP
     m_xSlaveDispatcher = _xNewProvider;
 }
 
-Reference< XDispatchProvider >  OGenericUnoController::getMasterDispatchProvider(void) throw( RuntimeException, std::exception )
+Reference< XDispatchProvider >  OGenericUnoController::getMasterDispatchProvider() throw( RuntimeException, std::exception )
 {
     return m_xMasterDispatcher;
 }
@@ -1047,7 +1047,7 @@ IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask)
     return 0L;
 }
 
-Any SAL_CALL OGenericUnoController::getViewData(void) throw( RuntimeException, std::exception )
+Any SAL_CALL OGenericUnoController::getViewData() throw( RuntimeException, std::exception )
 {
     return Any();
 }
@@ -1056,12 +1056,12 @@ void SAL_CALL OGenericUnoController::restoreViewData(const Any& /*Data*/) throw(
 {
 }
 
-Reference< XModel > SAL_CALL OGenericUnoController::getModel(void) throw( RuntimeException, std::exception )
+Reference< XModel > SAL_CALL OGenericUnoController::getModel() throw( RuntimeException, std::exception )
 {
     return Reference< XModel >();
 }
 
-Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( RuntimeException, std::exception )
+Reference< XFrame > SAL_CALL OGenericUnoController::getFrame() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_aCurrentFrame.getFrame();

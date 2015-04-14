@@ -85,7 +85,7 @@ public:
         This call is ignored when the called ConfigurationAccess object was
         not create with read-write mode.
     */
-    void CommitChanges (void);
+    void CommitChanges();
 
     /** This functor is typically called for every item in a set.  Its two
         parameters are the name of key item (often of no further interest)

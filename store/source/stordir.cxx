@@ -68,7 +68,7 @@ const sal_uInt32 OStoreDirectory_Impl::m_nTypeId = sal_uInt32(0x89191107);
 /*
  * OStoreDirectory_Impl.
  */
-OStoreDirectory_Impl::OStoreDirectory_Impl (void)
+OStoreDirectory_Impl::OStoreDirectory_Impl()
     : m_xManager (),
       m_aDescr   (0, 0, 0),
       m_nPath    (0),
@@ -78,7 +78,7 @@ OStoreDirectory_Impl::OStoreDirectory_Impl (void)
 /*
  * ~OStoreDirectory_Impl.
  */
-OStoreDirectory_Impl::~OStoreDirectory_Impl (void)
+OStoreDirectory_Impl::~OStoreDirectory_Impl()
 {
     if (m_xManager.is())
     {

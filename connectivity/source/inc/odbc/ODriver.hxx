@@ -56,7 +56,7 @@ namespace connectivity
             // only possibility to get the odbc functions
             virtual oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const = 0;
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);

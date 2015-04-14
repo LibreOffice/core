@@ -52,7 +52,7 @@ public:
             immediate return.  Positive values stand for higher costs.
             Negative values are not supported.
     */
-    virtual int GetCostIndex (void) = 0;
+    virtual int GetCostIndex() = 0;
 
     virtual bool operator== (const PageObjectProvider& rProvider) = 0;
 
@@ -83,12 +83,12 @@ public:
         is the preview creation.  Return 0 when the preview is already
         present and can be returned immediately.
     */
-    virtual int GetCostIndex (void) = 0;
+    virtual int GetCostIndex() = 0;
 
     /** Return whether the page object passed is necessary to create a
         preview.
     */
-    virtual bool NeedsPageObject (void) = 0;
+    virtual bool NeedsPageObject() = 0;
 
 protected:
     ~PreviewProvider() {}
@@ -99,11 +99,11 @@ protected:
 class PagePreviewProvider : public PreviewProvider
 {
 public:
-    PagePreviewProvider (void);
+    PagePreviewProvider();
     virtual ~PagePreviewProvider() {}
     virtual Image operator () (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) SAL_OVERRIDE;
-    virtual int GetCostIndex (void) SAL_OVERRIDE;
-    virtual bool NeedsPageObject (void) SAL_OVERRIDE;
+    virtual int GetCostIndex() SAL_OVERRIDE;
+    virtual bool NeedsPageObject() SAL_OVERRIDE;
 private:
 };
 
@@ -114,9 +114,9 @@ class TemplatePageObjectProvider : public PageObjectProvider
 {
 public:
     TemplatePageObjectProvider (const OUString& rsURL);
-    virtual ~TemplatePageObjectProvider (void) {};
+    virtual ~TemplatePageObjectProvider() {};
     virtual SdPage* operator () (SdDrawDocument* pDocument) SAL_OVERRIDE;
-    virtual int GetCostIndex (void) SAL_OVERRIDE;
+    virtual int GetCostIndex() SAL_OVERRIDE;
     virtual bool operator== (const PageObjectProvider& rProvider) SAL_OVERRIDE;
 private:
     OUString msURL;
@@ -131,10 +131,10 @@ class TemplatePreviewProvider : public PreviewProvider
 {
 public:
     TemplatePreviewProvider (const OUString& rsURL);
-    virtual ~TemplatePreviewProvider (void) {};
+    virtual ~TemplatePreviewProvider() {};
     virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) SAL_OVERRIDE;
-    virtual int GetCostIndex (void) SAL_OVERRIDE;
-    virtual bool NeedsPageObject (void) SAL_OVERRIDE;
+    virtual int GetCostIndex() SAL_OVERRIDE;
+    virtual bool NeedsPageObject() SAL_OVERRIDE;
 private:
     OUString msURL;
 };
@@ -144,10 +144,10 @@ private:
 class DefaultPageObjectProvider : public PageObjectProvider
 {
 public:
-    DefaultPageObjectProvider (void);
+    DefaultPageObjectProvider();
     virtual ~DefaultPageObjectProvider() {}
     virtual SdPage* operator () (SdDrawDocument* pDocument) SAL_OVERRIDE;
-    virtual int GetCostIndex (void) SAL_OVERRIDE;
+    virtual int GetCostIndex() SAL_OVERRIDE;
     virtual bool operator== (const PageObjectProvider& rProvider) SAL_OVERRIDE;
 };
 
@@ -160,7 +160,7 @@ public:
     ExistingPageProvider (SdPage* pPage);
     virtual ~ExistingPageProvider() {}
     virtual SdPage* operator() (SdDrawDocument* pDocument) SAL_OVERRIDE;
-    virtual int GetCostIndex (void) SAL_OVERRIDE;
+    virtual int GetCostIndex() SAL_OVERRIDE;
     virtual bool operator== (const PageObjectProvider& rProvider) SAL_OVERRIDE;
 private:
     SdPage* mpPage;

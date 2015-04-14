@@ -213,7 +213,7 @@ Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentCont
     return *( new ODatabaseContext( _rxContext ) );
 }
 
-Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static(void) throw( RuntimeException )
+Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdb.DatabaseContext";
@@ -585,7 +585,7 @@ Type ODatabaseContext::getElementType(  ) throw(RuntimeException, std::exception
     return cppu::UnoType<XDataSource>::get();
 }
 
-sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException, std::exception )
+sal_Bool ODatabaseContext::hasElements() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -594,7 +594,7 @@ sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException, std::excep
 }
 
 // ::com::sun::star::container::XEnumerationAccess
-Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration(void) throw( RuntimeException, std::exception )
+Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByName(static_cast<XNameAccess*>(this));
@@ -651,7 +651,7 @@ Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementExce
     }
 }
 
-Sequence< OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > ODatabaseContext::getElementNames() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);

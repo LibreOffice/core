@@ -261,7 +261,7 @@ NumberFormatCodeMapper::createLocaleDataObject() {
 }
 
 OUString SAL_CALL
-NumberFormatCodeMapper::getImplementationName(void)
+NumberFormatCodeMapper::getImplementationName()
                 throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServi
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+NumberFormatCodeMapper::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.i18n.NumberFormatMapper";

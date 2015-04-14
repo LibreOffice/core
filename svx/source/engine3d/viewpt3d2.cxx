@@ -67,7 +67,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 
 // Calculate View transformations matrix
 
-void Viewport3D::MakeTransform(void)
+void Viewport3D::MakeTransform()
 {
     if ( !bTfValid )
     {

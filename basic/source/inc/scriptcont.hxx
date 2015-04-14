@@ -59,7 +59,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
 
-    virtual SfxLibraryContainer* createInstanceImpl( void ) SAL_OVERRIDE;
+    virtual SfxLibraryContainer* createInstanceImpl() SAL_OVERRIDE;
 
 
     // Password encryption
@@ -92,7 +92,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual const sal_Char* SAL_CALL    getLibrariesDir() const SAL_OVERRIDE;
 
 public:
-    SfxScriptLibraryContainer( void );
+    SfxScriptLibraryContainer();
     SfxScriptLibraryContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
 
@@ -139,8 +139,8 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
     ModuleInfoMap mModuleInfos;
 
     // Provide modify state including resources
-    virtual bool isModified( void ) SAL_OVERRIDE;
-    virtual void storeResources( void ) SAL_OVERRIDE;
+    virtual bool isModified() SAL_OVERRIDE;
+    virtual void storeResources() SAL_OVERRIDE;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) SAL_OVERRIDE;

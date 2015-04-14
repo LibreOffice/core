@@ -21,7 +21,7 @@
 #include <typeinfo>
 #include "samplelibrtti.hxx"
 
-int main( void )
+int main()
 {
     MyClassB b;
     MyClassA* pA= &b;

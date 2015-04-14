@@ -61,7 +61,7 @@ PageOrientationControl::PageOrientationControl(
     FreeResource();
 }
 
-PageOrientationControl::~PageOrientationControl(void)
+PageOrientationControl::~PageOrientationControl()
 {
     delete mpOrientationValueSet;
 }

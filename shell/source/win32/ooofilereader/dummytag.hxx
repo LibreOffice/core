@@ -41,7 +41,7 @@ class CDummyTag : public ITag
 
         virtual void addAttributes(const XmlTagAttributes_t& /*attributes*/){};
 
-        virtual std::wstring getTagContent( void )
+        virtual std::wstring getTagContent()
         {
             return EMPTY_STRING;
         };

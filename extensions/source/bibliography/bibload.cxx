@@ -99,7 +99,7 @@ public:
     // XServiceInfo
     OUString               SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
-    Sequence< OUString >   SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >   SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
     static OUString                getImplementationName_Static() throw(  )
 
                             {
@@ -110,15 +110,15 @@ public:
 
     //XNameAccess
     virtual Any SAL_CALL getByName(const OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getElementNames() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //XElementAccess
-    virtual Type  SAL_CALL getElementType(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Type  SAL_CALL getElementType() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //XPropertySet
-    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -126,7 +126,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static(void) throw(  );
+    static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static() throw(  );
 
     friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
 
@@ -134,7 +134,7 @@ public:
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
                                 const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void            SAL_CALL cancel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 BibliographyLoader::BibliographyLoader() :
@@ -173,13 +173,13 @@ sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName) throw(
 }
 
 // XServiceInfo
-Sequence< OUString > BibliographyLoader::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > BibliographyLoader::getSupportedServiceNames() throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
 
 // ORegistryServiceManager_Static
-Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static() throw(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = "com.sun.star.frame.FrameLoader";
@@ -213,7 +213,7 @@ extern "C"
 
 }
 
-void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibliographyLoader::cancel() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     //!
     //!
@@ -498,7 +498,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
     return aRet;
 }
 
-Sequence< OUString > BibliographyLoader::getElementNames(void) throw ( RuntimeException, std::exception )
+Sequence< OUString > BibliographyLoader::getElementNames() throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(10);
     int nRealNameCount = 0;
@@ -562,19 +562,19 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
     return bRet;
 }
 
-Type  BibliographyLoader::getElementType(void) throw ( RuntimeException, std::exception )
+Type  BibliographyLoader::getElementType() throw ( RuntimeException, std::exception )
 {
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
-sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException, std::exception )
+sal_Bool BibliographyLoader::hasElements() throw ( RuntimeException, std::exception )
 {
     Reference< XResultSet >  xCursor = GetDataCursor();
     Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
 }
 
-Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) throw
+Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo() throw
                                             ( RuntimeException, std::exception )
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =

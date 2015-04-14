@@ -53,7 +53,7 @@ public:
         value is used by the caller of Decompress() to decide whether to use
         the returned bitmap as is or if a new preview has to be created.
     */
-    virtual bool IsLossless (void) const = 0;
+    virtual bool IsLossless() const = 0;
 
 protected:
     ~BitmapCompressor() {}
@@ -66,7 +66,7 @@ protected:
 class BitmapReplacement
 {
 public:
-    virtual sal_Int32 GetMemorySize (void) const { return 0; }
+    virtual sal_Int32 GetMemorySize() const { return 0; }
 
 protected:
     ~BitmapReplacement() {}
@@ -84,7 +84,7 @@ public:
     virtual ~NoBitmapCompression() {}
     virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const SAL_OVERRIDE;
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless (void) const SAL_OVERRIDE;
+    virtual bool IsLossless() const SAL_OVERRIDE;
 };
 
 /** This is another trivial bitmap compressor.  Instead of compressing a
@@ -99,7 +99,7 @@ public:
     virtual ~CompressionByDeletion() {}
     virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless (void) const SAL_OVERRIDE;
+    virtual bool IsLossless() const SAL_OVERRIDE;
 };
 
 /** Compress a preview bitmap by reducing its resolution.  While the aspect
@@ -118,7 +118,7 @@ public:
     /** Scale the replacement bitmap up to the original size.
     */
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless (void) const SAL_OVERRIDE;
+    virtual bool IsLossless() const SAL_OVERRIDE;
 };
 
 /** Compress preview bitmaps using the PNG format.
@@ -132,7 +132,7 @@ public:
     virtual ~PngCompression() {}
     virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless (void) const SAL_OVERRIDE;
+    virtual bool IsLossless() const SAL_OVERRIDE;
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

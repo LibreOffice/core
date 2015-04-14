@@ -50,7 +50,7 @@ class PresenterTextView
 {
 public:
     explicit PresenterTextView (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterTextView (void);
+    virtual ~PresenterTextView();
 
     // XInitialization
 
@@ -58,7 +58,7 @@ public:
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     virtual css::uno::Any GetPropertyValue (
         const OUString& rsPropertyName) SAL_OVERRIDE;
@@ -73,7 +73,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void) throw (css::lang::DisposedException);
+    void ThrowIfDisposed() throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sd::presenter

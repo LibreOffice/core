@@ -1542,7 +1542,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 
 // IOleInPlaceObject methods
 
-STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
+STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate()
 {
     if ( CheckDefHandler() )
     {
@@ -1558,7 +1558,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
 }
 
 
-STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
+STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate()
 {
     if ( CheckDefHandler() )
     {
@@ -1590,7 +1590,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCR
 }
 
 
-STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
+STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo()
 {
     if ( CheckDefHandler() )
     {

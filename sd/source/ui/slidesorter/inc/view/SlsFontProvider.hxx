@@ -41,14 +41,14 @@ public:
     /** Return the single instance of this class.  Throws a RuntimeException
         when no instance can be created.
     */
-    static FontProvider& Instance (void);
+    static FontProvider& Instance();
 
     /** Call this method to tell an object to release its currently used
         font.  The next call to GetFont() will then create a new one.
         Typically called after a DataChange event when for instance a system
         font has been modified.
     */
-    void Invalidate (void);
+    void Invalidate();
 
 private:
     static FontProvider* mpInstance;
@@ -62,8 +62,8 @@ private:
     */
     MapMode maMapMode;
 
-    FontProvider (void);
-    virtual ~FontProvider (void);
+    FontProvider();
+    virtual ~FontProvider();
 
     FontProvider (const FontProvider&) SAL_DELETED_FUNCTION;
     FontProvider& operator= (const FontProvider&) SAL_DELETED_FUNCTION;

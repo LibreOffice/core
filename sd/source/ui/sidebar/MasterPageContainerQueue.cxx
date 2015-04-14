@@ -76,7 +76,7 @@ class MasterPageContainerQueue::RequestQueue
     : public ::std::set<PreviewCreationRequest,PreviewCreationRequest::Compare>
 {
 public:
-    RequestQueue (void) {}
+    RequestQueue() {}
 };
 
 //===== MasterPageContainerQueue ==============================================
@@ -98,14 +98,14 @@ MasterPageContainerQueue::MasterPageContainerQueue (
 {
 }
 
-MasterPageContainerQueue::~MasterPageContainerQueue (void)
+MasterPageContainerQueue::~MasterPageContainerQueue()
 {
     maDelayedPreviewCreationTimer.Stop();
     while ( ! mpRequestQueue->empty())
         mpRequestQueue->erase(mpRequestQueue->begin());
 }
 
-void MasterPageContainerQueue::LateInit (void)
+void MasterPageContainerQueue::LateInit()
 {
     // Set up the timer for the delayed creation of preview bitmaps.
     maDelayedPreviewCreationTimer.SetTimeout (snDelayedCreationTimeout);
@@ -248,12 +248,12 @@ bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) co
     return (iRequest != mpRequestQueue->end());
 }
 
-bool MasterPageContainerQueue::IsEmpty (void) const
+bool MasterPageContainerQueue::IsEmpty() const
 {
     return mpRequestQueue->empty();
 }
 
-void MasterPageContainerQueue::ProcessAllRequests (void)
+void MasterPageContainerQueue::ProcessAllRequests()
 {
     snWaitForMoreRequestsCount = 0;
     if (mpRequestQueue->size() > 0)

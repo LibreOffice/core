@@ -61,9 +61,9 @@ class PresenterPaneContainer
 public:
     PresenterPaneContainer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPaneContainer (void);
+    virtual ~PresenterPaneContainer();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     typedef ::boost::function1<void, const css::uno::Reference<css::drawing::framework::XView>&>
         ViewInitializationFunction;

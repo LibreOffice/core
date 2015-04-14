@@ -28,7 +28,7 @@ const sal_Int32 Context::ApplicationWildcardMatch = 1;
 const sal_Int32 Context::ContextWildcardMatch = 2;
 const sal_Int32 Context::OptimalMatch = 0;  // Neither application nor context name is "any".
 
-Context::Context (void)
+Context::Context()
     : msApplication(AnyApplicationName),
       msContext(AnyContextName)
 {

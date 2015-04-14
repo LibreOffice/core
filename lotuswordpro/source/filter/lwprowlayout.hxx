@@ -84,7 +84,7 @@ public:
     sal_uInt16 GetRowID() { return crowid;}
     virtual void RegisterStyle() SAL_OVERRIDE;
     inline LwpTableLayout * GetParentTableLayout(){return dynamic_cast<LwpTableLayout *>(GetParent().obj().get());}
-    void SetRowMap(void);
+    void SetRowMap();
 protected:
     void Read() SAL_OVERRIDE;
     sal_uInt16 crowid;

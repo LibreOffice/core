@@ -48,11 +48,11 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks );
 
-    SwXMLTextBlocks& getBlockList ( void )
+    SwXMLTextBlocks& getBlockList()
     {
         return rBlockList;
     }
-    virtual ~SwXMLBlockListImport ( void )
+    virtual ~SwXMLBlockListImport()
         throw();
 };
 
@@ -74,13 +74,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks, OUString &rNewText, bool bNewTextOnly );
 
-    SwXMLTextBlocks& getBlockList ( void )
+    SwXMLTextBlocks& getBlockList()
     {
         return rBlockList;
     }
-    virtual ~SwXMLTextBlockImport ( void )
+    virtual ~SwXMLTextBlockImport()
         throw();
-    virtual void SAL_CALL endDocument(void)
+    virtual void SAL_CALL endDocument()
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 

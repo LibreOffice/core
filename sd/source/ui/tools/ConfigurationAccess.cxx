@@ -123,7 +123,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     return Any();
 }
 
-void ConfigurationAccess::CommitChanges (void)
+void ConfigurationAccess::CommitChanges()
 {
     Reference<util::XChangesBatch> xConfiguration (mxRoot, UNO_QUERY);
     if (xConfiguration.is())

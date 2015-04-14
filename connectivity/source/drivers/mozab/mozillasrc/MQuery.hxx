@@ -234,10 +234,10 @@ namespace connectivity
 
             void                            setMaxNrOfReturns( const sal_Int32);
 
-            sal_Int32                       getRowCount( void );
-            sal_uInt32                      getRealRowCount( void );
-            sal_Bool                        queryComplete( void );
-            sal_Bool                        waitForQueryComplete( void );
+            sal_Int32                       getRowCount();
+            sal_uInt32                      getRealRowCount();
+            sal_Bool                        queryComplete();
+            sal_Bool                        waitForQueryComplete();
             sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,

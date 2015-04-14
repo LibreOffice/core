@@ -42,14 +42,14 @@ class PresenterFrameworkObserver
       public PresenterFrameworkObserverInterfaceBase
 {
 public:
-    typedef ::boost::function<bool(void)> Predicate;
+    typedef ::boost::function<bool()> Predicate;
     typedef ::boost::function<void(bool)> Action;
 
     static void RunOnUpdateEnd (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const Action& rAction);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyConfigurationChange (
@@ -77,13 +77,13 @@ private:
         const OUString& rsEventName,
         const Predicate& rPredicate,
         const Action& rAction);
-    virtual ~PresenterFrameworkObserver (void);
+    virtual ~PresenterFrameworkObserver();
 
-    void Shutdown (void);
+    void Shutdown();
 
     /** Predicate that always returns true.
     */
-    static bool True (void);
+    static bool True();
 };
 
 } }  // end of namespace ::sdext::presenter

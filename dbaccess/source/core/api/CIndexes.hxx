@@ -41,7 +41,7 @@ namespace dbaccess
             ,m_xIndexes(_rxIndexes)
         {}
 
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
     };
 }
 

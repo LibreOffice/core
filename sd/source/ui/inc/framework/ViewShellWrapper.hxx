@@ -72,18 +72,18 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxViewId,
         const ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>& rxWindow);
-    virtual ~ViewShellWrapper (void);
+    virtual ~ViewShellWrapper();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     /** This method is typically used together with the XUnoTunnel interface
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
-    ::boost::shared_ptr<ViewShell> GetViewShell (void) { return mpViewShell;}
+    ::boost::shared_ptr<ViewShell> GetViewShell() { return mpViewShell;}
 
     // XUnoTunnel
 
@@ -93,10 +93,10 @@ public:
     // XResource
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
-        SAL_CALL getResourceId (void)
+        SAL_CALL getResourceId()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSelectionSupplier

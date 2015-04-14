@@ -168,7 +168,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
     GetActiveWindow()->SetUniqueId( HID_SDOUTLINEVIEWSHELL );
 }
 
-Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (void)
+Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController()
 {
     Reference<drawing::XDrawSubController> xSubController;
 
@@ -231,7 +231,7 @@ OutlineViewShell::~OutlineViewShell()
     }
 }
 
-void OutlineViewShell::Shutdown (void)
+void OutlineViewShell::Shutdown()
 {
     ViewShell::Shutdown();
 

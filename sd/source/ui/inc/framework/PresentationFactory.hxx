@@ -58,9 +58,9 @@ public:
 
     PresentationFactory (
         const css::uno::Reference<css::frame::XController>& rxController);
-    virtual ~PresentationFactory (void);
+    virtual ~PresentationFactory();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XResourceFactory
 
@@ -91,7 +91,7 @@ private:
         mxConfigurationController;
     css::uno::Reference<css::frame::XController> mxController;
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 

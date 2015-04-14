@@ -72,7 +72,7 @@ public:
             const css::uno::Reference<css::uno::XComponentContext>&
             rxContext);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XModuleController
 
@@ -98,7 +98,7 @@ private:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         throw (std::exception);
     ModuleController (const ModuleController&) SAL_DELETED_FUNCTION;
-    virtual ~ModuleController (void) throw();
+    virtual ~ModuleController() throw();
 
     /** Load a list of URL to service mappings from the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
@@ -116,7 +116,7 @@ private:
         configuration entry.  This method is called once when a new
         ModuleController object is created.
     */
-    void InstantiateStartupServices (void);
+    void InstantiateStartupServices();
 
     /** Called for one entry in the StartupServices configuration list this
         method instantiates the service described by the entry.  It does not

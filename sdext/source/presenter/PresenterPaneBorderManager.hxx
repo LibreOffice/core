@@ -66,12 +66,12 @@ public:
     PresenterPaneBorderManager (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterPaneBorderManager (void);
+    virtual ~PresenterPaneBorderManager();
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing();
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
@@ -141,7 +141,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 

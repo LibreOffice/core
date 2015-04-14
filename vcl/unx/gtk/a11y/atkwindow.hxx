@@ -24,8 +24,8 @@
 
 #define OOO_TYPE_WINDOW_WRAPPER ooo_window_wrapper_get_type()
 
-GType ooo_window_wrapper_get_type (void);
-void restore_gail_window_vtable (void);
+GType ooo_window_wrapper_get_type();
+void restore_gail_window_vtable();
 
 #endif
 

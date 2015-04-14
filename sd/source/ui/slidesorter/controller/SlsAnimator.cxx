@@ -37,7 +37,7 @@ public:
         const double nGlobalTime,
         const Animator::AnimationId nAnimationId,
         const Animator::FinishFunctor& rFinishFunctor);
-    ~Animation (void);
+    ~Animation();
     /** Run next animation step.  If animation has reached its end it is
         expired.
     */
@@ -47,8 +47,8 @@ public:
         Animator::Disposed().  The finish functor is called and the
         animation is marked as expired to prevent another run.
     */
-    void Expire (void);
-    bool IsExpired (void) { return mbIsExpired;}
+    void Expire();
+    bool IsExpired() { return mbIsExpired;}
 
     Animator::AnimationFunctor maAnimation;
     Animator::FinishFunctor maFinishFunctor;
@@ -72,7 +72,7 @@ Animator::Animator (SlideSorter& rSlideSorter)
     maIdle.SetIdleHdl(LINK(this,Animator,TimeoutHandler));
 }
 
-Animator::~Animator (void)
+Animator::~Animator()
 {
     if ( ! mbIsDisposed)
     {
@@ -81,7 +81,7 @@ Animator::~Animator (void)
     }
 }
 
-void Animator::Dispose (void)
+void Animator::Dispose()
 {
     mbIsDisposed = true;
 
@@ -154,7 +154,7 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
     }
 }
 
-void Animator::RemoveAllAnimations (void)
+void Animator::RemoveAllAnimations()
 {
     ::std::for_each(
         maAnimations.begin(),
@@ -188,7 +188,7 @@ bool Animator::ProcessAnimations (const double nTime)
     return bExpired;
 }
 
-void Animator::CleanUpAnimationList (void)
+void Animator::CleanUpAnimationList()
 {
     OSL_ASSERT( ! mbIsDisposed);
     if (mbIsDisposed)
@@ -256,7 +256,7 @@ Animator::Animation::Animation (
     Run(nGlobalTime);
 }
 
-Animator::Animation::~Animation (void)
+Animator::Animation::~Animation()
 {
 }
 
@@ -286,7 +286,7 @@ bool Animator::Animation::Run (const double nGlobalTime)
     return mbIsExpired;
 }
 
-void Animator::Animation::Expire (void)
+void Animator::Animation::Expire()
 {
     if ( ! mbIsExpired)
     {

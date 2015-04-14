@@ -31,18 +31,18 @@ Accessible::Accessible (
 {
 }
 
-Accessible::~Accessible (void)
+Accessible::~Accessible()
 {
 }
 
-void SAL_CALL Accessible::disposing (void)
+void SAL_CALL Accessible::disposing()
 {
     Reference<XComponent> xComponent (mxContext, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 }
 
-Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext (void)
+Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext()
     throw (css::uno::RuntimeException, std::exception)
 {
     return mxContext;

@@ -45,18 +45,18 @@ public:
             rCharacterBoundsAccess,
         const ::boost::function<void(const css::awt::Rectangle&)>&
             rInvalidator);
-    ~PresenterTextCaret (void);
+    ~PresenterTextCaret();
 
-    void ShowCaret (void);
-    void HideCaret (void);
+    void ShowCaret();
+    void HideCaret();
 
-    sal_Int32 GetParagraphIndex (void) const { return mnParagraphIndex;}
-    sal_Int32 GetCharacterIndex (void) const { return mnCharacterIndex;}
+    sal_Int32 GetParagraphIndex() const { return mnParagraphIndex;}
+    sal_Int32 GetCharacterIndex() const { return mnCharacterIndex;}
     void SetPosition (
         const sal_Int32 nParagraphIndex,
         const sal_Int32 nCharacterIndex);
 
-    bool IsVisible (void) const { return mbIsCaretVisible;}
+    bool IsVisible() const { return mbIsCaretVisible;}
 
     /** Set a (possibly empty) functor that broadcasts changes of the caret
         position.  This is used when a PresenterTextView object is set at
@@ -66,7 +66,7 @@ public:
     void SetCaretMotionBroadcaster (
         const ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
 
-    css::awt::Rectangle GetBounds (void) const;
+    css::awt::Rectangle GetBounds() const;
 
 private:
     sal_Int32 mnParagraphIndex;
@@ -78,7 +78,7 @@ private:
     ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)> maBroadcaster;
     css::awt::Rectangle maCaretBounds;
 
-    void InvertCaret (void);
+    void InvertCaret();
 };
 typedef ::boost::shared_ptr<PresenterTextCaret> SharedPresenterTextCaret;
 
@@ -104,12 +104,12 @@ public:
         const double nClipTop,
         const double nClipBottom);
 
-    double GetTotalTextHeight (void);
+    double GetTotalTextHeight();
 
     void SetCharacterOffset (const sal_Int32 nCharacterOffset);
-    sal_Int32 GetCharacterCount (void) const;
+    sal_Int32 GetCharacterCount() const;
     sal_Unicode GetCharacter (const sal_Int32 nGlobalCharacterIndex) const;
-    OUString GetText (void) const;
+    OUString GetText() const;
     css::accessibility::TextSegment GetTextSegment (
         const sal_Int32 nOffset,
         const sal_Int32 nGlobalCharacterIndex,
@@ -133,11 +133,11 @@ public:
     sal_Int32 GetWordBoundary(
         const sal_Int32 nLocalCharacterIndex,
         const sal_Int32 nDistance);
-    sal_Int32 GetCaretPosition (void) const;
+    sal_Int32 GetCaretPosition() const;
     void SetCaretPosition (const sal_Int32 nPosition) const;
     void SetOrigin (const double nXOrigin, const double nYOrigin);
-    css::awt::Point GetRelativeLocation (void) const;
-    css::awt::Size GetSize (void);
+    css::awt::Point GetRelativeLocation() const;
+    css::awt::Size GetSize();
 
 private:
     OUString msParagraphText;
@@ -175,8 +175,8 @@ private:
             const OUString& rsParagraphText,
             const PresenterTheme::SharedFontDescriptor& rpFont,
             const sal_Int8 nTextDirection);
-        void ProvideCellBoxes (void);
-        bool IsEmpty (void) const;
+        void ProvideCellBoxes();
+        bool IsEmpty() const;
     };
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
@@ -206,8 +206,8 @@ private:
         const PresenterTheme::SharedFontDescriptor& rpFont);
     void AddLine (
         css::i18n::Boundary& rCurrentLine);
-    sal_Int8 GetTextDirection (void) const;
-    bool IsTextReferencePointLeft (void) const;
+    sal_Int8 GetTextDirection() const;
+    bool IsTextReferencePointLeft() const;
 };
 typedef ::boost::shared_ptr<PresenterTextParagraph> SharedPresenterTextParagraph;
 
@@ -222,11 +222,11 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator);
     void SetText (const css::uno::Reference<css::text::XText>& rxText);
-    void SetTextChangeBroadcaster (const ::boost::function<void(void)>& rBroadcaster);
+    void SetTextChangeBroadcaster (const ::boost::function<void()>& rBroadcaster);
 
     void SetLocation (const css::geometry::RealPoint2D& rLocation);
     void SetSize (const css::geometry::RealSize2D& rSize);
-    double GetTotalTextHeight (void);
+    double GetTotalTextHeight();
 
     void SetFont (const PresenterTheme::SharedFontDescriptor& rpFont);
 
@@ -248,9 +248,9 @@ public:
 
     void Paint (const css::awt::Rectangle& rUpdateBox);
 
-    SharedPresenterTextCaret GetCaret (void) const;
+    SharedPresenterTextCaret GetCaret() const;
 
-    sal_Int32 GetParagraphCount (void) const;
+    sal_Int32 GetParagraphCount() const;
     SharedPresenterTextParagraph GetParagraph (const sal_Int32 nParagraphIndex) const;
 
 private:
@@ -268,10 +268,10 @@ private:
     const ::boost::function<void(const css::awt::Rectangle&)> maInvalidator;
     bool mbIsFormatPending;
     sal_Int32 mnCharacterCount;
-    ::boost::function<void(void)> maTextChangeBroadcaster;
+    ::boost::function<void()> maTextChangeBroadcaster;
 
-    void RequestFormat (void);
-    void Format (void);
+    void RequestFormat();
+    void Format();
     SharedPresenterTextParagraph GetParagraphForCharacterIndex (const sal_Int32 nCharacterIndex) const;
     css::awt::Rectangle GetCaretBounds (
         const sal_Int32 nParagraphIndex,

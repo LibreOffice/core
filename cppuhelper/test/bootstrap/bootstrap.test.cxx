@@ -144,7 +144,7 @@ static void s_test__loadSharedLibComponentFactory__purpose_purpose()
     s_test__loadSharedLibComponentFactory(":testenv", ":testenv");
 }
 
-static rtl::OUString s_getSDrive(void)
+static rtl::OUString s_getSDrive()
 {
     rtl::OUString path;//("file://");
 
@@ -180,14 +180,14 @@ static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
     }
 }
 
-static void s_test__createSimpleRegistry__free(void)
+static void s_test__createSimpleRegistry__free()
 {
     s_comment += "\ts_test__createSimpleRegistry__free\n";
 
     s_test__createSimpleRegistry(rtl::OUString());
 }
 
-static void s_test__createSimpleRegistry__purpose(void)
+static void s_test__createSimpleRegistry__purpose()
 {
     s_comment += "\ts_test__createSimpleRegistry__purpose\n";
 
@@ -226,14 +226,14 @@ static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clie
     xComponent->dispose();
 }
 
-static void s_test__bootstrap_InitialComponentContext__free(void)
+static void s_test__bootstrap_InitialComponentContext__free()
 {
     s_comment += "\ts_test__bootstrap_InitialComponentContext__free\n";
 
     s_test__bootstrap_InitialComponentContext(rtl::OUString());
 }
 
-static void s_test__bootstrap_InitialComponentContext__purpose(void)
+static void s_test__bootstrap_InitialComponentContext__purpose()
 {
     s_comment += "\ts_test__bootstrap_InitialComponentContext__purpose\n";
 

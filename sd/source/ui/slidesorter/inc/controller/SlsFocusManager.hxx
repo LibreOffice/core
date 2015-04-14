@@ -47,7 +47,7 @@ public:
     */
     FocusManager (SlideSorter& rSlideSorter);
 
-    ~FocusManager (void);
+    ~FocusManager();
 
     enum FocusMoveDirection
     {
@@ -83,25 +83,25 @@ public:
 
     /** Hide the focus indicator.
     */
-    void HideFocus (void);
+    void HideFocus();
 
     /** Toggle the focused state of the current slide.
         @return
             Returns the focused state of the focus page after the call.
     */
-    bool ToggleFocus (void);
+    bool ToggleFocus();
 
     /** Return whether the window managed by the called focus manager has
         the input focus of the application.
     */
-    bool HasFocus (void) const;
+    bool HasFocus() const;
 
     /** Return the descriptor of the page that currently has the focus.
         @return
             When there is no page that currently has the focus then NULL is
             returned.
     */
-    model::SharedPageDescriptor GetFocusedPageDescriptor (void) const;
+    model::SharedPageDescriptor GetFocusedPageDescriptor() const;
 
     /** Return the index of the page that currently has the focus as it is
         accepted by the slide sorter model.
@@ -109,7 +109,7 @@ public:
             When there is no page that currently has the focus then -1 is
             returned.
     */
-    sal_Int32 GetFocusedPageIndex (void) const { return mnPageIndex;}
+    sal_Int32 GetFocusedPageIndex() const { return mnPageIndex;}
 
     /** Set the focused page to the one described by the given page
         descriptor.  The visibility of the focus indicator is not modified.
@@ -126,7 +126,7 @@ public:
     */
     void SetFocusedPage (sal_Int32 nPageIndex);
 
-    void SetFocusedPageToCurrentPage (void);
+    void SetFocusedPageToCurrentPage();
 
     /** Return <TRUE/> when the focus inidcator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
@@ -134,7 +134,7 @@ public:
         HasFocus().  It is not necessary that the focus indicator is
         visible.  It may have been scrolled outside the visible area.
     */
-    bool IsFocusShowing (void) const;
+    bool IsFocusShowing() const;
 
     /** Add a listener that is called when the focus is shown or hidden or
         set to another page object.
@@ -160,7 +160,7 @@ public:
     {
     public:
         FocusHider (FocusManager&);
-        ~FocusHider (void);
+        ~FocusHider();
     private:
         bool mbFocusVisible;
         FocusManager& mrManager;
@@ -211,7 +211,7 @@ private:
         happened.  The focus may be hidden or shown or moved from one page
         object to another.
     */
-    void NotifyFocusChangeListeners (void) const;
+    void NotifyFocusChangeListeners() const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

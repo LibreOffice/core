@@ -113,7 +113,7 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~ParaPropertyPanel (void);
+    virtual ~ParaPropertyPanel();
 
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);

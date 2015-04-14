@@ -291,7 +291,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
                                     sal_uInt16 nStyle, Bitmap& rBmp );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
-    bool            UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
+    bool            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            UpdateEntries( long nOldWidth );
@@ -347,7 +347,7 @@ public:
 
 protected:
 
-    inline const Color&    GetPaintColor( void ) const;
+    inline const Color&    GetPaintColor() const;
     Color   GetColorLine1( sal_Int32  nPos = 0 );
     Color   GetColorLine2( sal_Int32  nPos = 0 );
     Color   GetColorDist( sal_Int32  nPos = 0 );
@@ -366,7 +366,7 @@ inline void LineListBox::SetColor( const Color& rColor )
     UpdateEntries( m_nWidth );
 }
 
-const Color& LineListBox::GetPaintColor( void ) const
+const Color& LineListBox::GetPaintColor() const
 {
     return maPaintCol;
 }

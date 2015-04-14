@@ -71,7 +71,7 @@ private:
     /** Return whether the text direction is from left to right (</sal_True>) or
         top to bottom (</sal_False>).
     */
-    bool IsTextDirectionLeftToRight (void) const;
+    bool IsTextDirectionLeftToRight() const;
 
 public:
 

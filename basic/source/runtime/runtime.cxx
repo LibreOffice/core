@@ -1771,7 +1771,7 @@ struct DimAsNewRecoverItem
     SbxObject*      m_pObjParent;
     SbModule*       m_pClassModule;
 
-    DimAsNewRecoverItem( void )
+    DimAsNewRecoverItem()
         : m_pObjParent( NULL )
         , m_pClassModule( NULL )
     {}

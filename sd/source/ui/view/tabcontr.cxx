@@ -351,13 +351,13 @@ bool TabControl::DeactivatePage()
     return pDrViewSh->IsSwitchPageAllowed();
 }
 
-void TabControl::SendActivatePageEvent (void)
+void TabControl::SendActivatePageEvent()
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
 }
 
-void TabControl::SendDeactivatePageEvent (void)
+void TabControl::SendDeactivatePageEvent()
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));

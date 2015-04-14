@@ -35,11 +35,11 @@ Seekable::Seekable(GSeekable *pStream) : mpStream(pStream)
         throw io::NotConnectedException();
 }
 
-Seekable::~Seekable( void )
+Seekable::~Seekable()
 {
 }
 
-void SAL_CALL Seekable::truncate( void )
+void SAL_CALL Seekable::truncate()
     throw( io::IOException, uno::RuntimeException, std::exception )
 {
     if (!mpStream)

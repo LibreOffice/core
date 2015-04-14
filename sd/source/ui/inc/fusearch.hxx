@@ -42,7 +42,7 @@ public:
     ::sd::Outliner* GetOutliner() const { return pSdOutliner; }
 
 protected:
-    virtual ~FuSearch (void);
+    virtual ~FuSearch();
 
     ::sd::Outliner* pSdOutliner;
     bool bOwnOutliner;

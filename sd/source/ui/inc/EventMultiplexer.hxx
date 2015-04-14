@@ -159,7 +159,7 @@ public:
     /** Create new EventMultiplexer for the given ViewShellBase object.
     */
     EventMultiplexer (ViewShellBase& rBase);
-    ~EventMultiplexer (void);
+    ~EventMultiplexer();
 
     /** Some constants that make it easier to remove a listener for all
         event types at once.

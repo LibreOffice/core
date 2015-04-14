@@ -56,9 +56,9 @@ class PresenterScrollBar
 {
 public:
     typedef ::boost::function<void(double)> ThumbMotionListener;
-    virtual ~PresenterScrollBar (void);
+    virtual ~PresenterScrollBar();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     void SetVisible (const bool bIsVisible);
 
@@ -75,7 +75,7 @@ public:
         double nPosition,
         const bool bAsynchronousRepaint);
 
-    double GetThumbPosition (void) const { return mnThumbPosition;}
+    double GetThumbPosition() const { return mnThumbPosition;}
 
     /** Set the upper border of the slider range.
     */
@@ -86,10 +86,10 @@ public:
             A value not larger than the last value given to SetTotalSize().
     */
     void SetThumbSize (const double nThumbSize);
-    double GetThumbSize (void) const { return mnThumbSize;}
+    double GetThumbSize() const { return mnThumbSize;}
 
     void SetLineHeight (const double nLineHeight);
-    double GetLineHeight (void) const { return mnLineHeight;}
+    double GetLineHeight() const { return mnLineHeight;}
 
     /** Set the canvas that is used for painting the scroll bar.
     */
@@ -100,7 +100,7 @@ public:
     /** Call this after changing total size or thumb position or size to
         move the thumb to a valid position.
     */
-    void CheckValues (void);
+    void CheckValues();
 
     /** On some occasions it is necessary to trigger the painting of a
         scrollbar from the outside.
@@ -109,7 +109,7 @@ public:
         const css::awt::Rectangle& rUpdateBox,
         bool bNoClip = false);
 
-    virtual sal_Int32 GetSize (void) const = 0;
+    virtual sal_Int32 GetSize() const = 0;
 
     // XWindowListener
 
@@ -193,8 +193,8 @@ protected:
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const = 0;
     virtual double GetMinor (const double nX, const double nY) const = 0;
-    virtual void UpdateBorders (void) = 0;
-    virtual void UpdateBitmaps (void) = 0;
+    virtual void UpdateBorders() = 0;
+    virtual void UpdateBitmaps() = 0;
     virtual void PaintComposite(
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
@@ -217,7 +217,7 @@ protected:
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
         const SharedBitmapDescriptor& rpBitmaps);
-    void NotifyThumbPositionChange (void);
+    void NotifyThumbPositionChange();
     void UpdateWidthOrHeight (sal_Int32& rSize,
         const SharedBitmapDescriptor& rpDescriptor);
     css::uno::Reference<css::rendering::XBitmap> GetBitmap (
@@ -252,16 +252,16 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::boost::function<void(double)>& rThumbMotionListener);
-    virtual ~PresenterVerticalScrollBar (void);
-    virtual sal_Int32 GetSize (void) const SAL_OVERRIDE;
+    virtual ~PresenterVerticalScrollBar();
+    virtual sal_Int32 GetSize() const SAL_OVERRIDE;
 
 protected:
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const SAL_OVERRIDE;
     virtual void UpdateDragAnchor (const double nDragDistance) SAL_OVERRIDE;
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const SAL_OVERRIDE;
     virtual double GetMinor (const double nX, const double nY) const SAL_OVERRIDE;
-    virtual void UpdateBorders (void) SAL_OVERRIDE;
-    virtual void UpdateBitmaps (void) SAL_OVERRIDE;
+    virtual void UpdateBorders() SAL_OVERRIDE;
+    virtual void UpdateBitmaps() SAL_OVERRIDE;
     virtual void PaintComposite(
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,

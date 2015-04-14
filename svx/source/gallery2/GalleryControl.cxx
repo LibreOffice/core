@@ -65,11 +65,11 @@ GalleryControl::GalleryControl (
     InitSettings();
 }
 
-GalleryControl::~GalleryControl (void)
+GalleryControl::~GalleryControl()
 {
 }
 
-void GalleryControl::InitSettings (void)
+void GalleryControl::InitSettings()
 {
     SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
     SetControlBackground( GALLERY_DLG_COLOR );
@@ -93,7 +93,7 @@ void GalleryControl::InitSettings (void)
     mpBrowser2->SetBackground(aBackground);
 }
 
-void GalleryControl::Resize (void)
+void GalleryControl::Resize()
 {
     // call parent
     Window::Resize();
@@ -203,13 +203,13 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* )
     return bRet;
 }
 
-void GalleryControl::GetFocus (void)
+void GalleryControl::GetFocus()
 {
     Window::GetFocus();
     mpBrowser1->GrabFocus();
 }
 
-void GalleryControl::ThemeSelectionHasChanged (void)
+void GalleryControl::ThemeSelectionHasChanged()
 {
     mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme());
 }

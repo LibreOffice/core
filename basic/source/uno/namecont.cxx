@@ -376,7 +376,7 @@ bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScri
 }
 
 // Ctor
-SfxLibraryContainer::SfxLibraryContainer( void )
+SfxLibraryContainer::SfxLibraryContainer()
     : SfxLibraryContainer_BASE( maMutex )
 
     , maVBAScriptListeners( maMutex )
@@ -1265,7 +1265,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     }
 }
 
-void SfxLibraryContainer::implScanExtensions( void )
+void SfxLibraryContainer::implScanExtensions()
 {
 #if HAVE_FEATURE_EXTENSIONS
     ScriptExtensionIterator aScriptIt;
@@ -3284,7 +3284,7 @@ void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListen
 #define sBasicLibMediaType "application/vnd.sun.star.basic-library"
 #define sDialogLibMediaType "application/vnd.sun.star.dialog-library"
 
-ScriptExtensionIterator::ScriptExtensionIterator( void )
+ScriptExtensionIterator::ScriptExtensionIterator()
     : m_xContext( comphelper::getProcessComponentContext() )
     , m_eState( USER_EXTENSIONS )
     , m_bUserPackagesLoaded( false )

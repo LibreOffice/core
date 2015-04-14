@@ -139,7 +139,7 @@ namespace sfx2
 
         void                    LoadLastUsedFilter( const OUString& _rContextIdentifier );
         void                    SaveLastUsedFilter( const OUString& _rContextIdentifier );
-        void                    SaveLastUsedFilter( void );
+        void                    SaveLastUsedFilter();
 
         void                    implInitializeFileName( );
 

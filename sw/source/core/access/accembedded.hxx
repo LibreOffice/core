@@ -42,18 +42,18 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire()
         throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        release (void)
+        release()
         throw () SAL_OVERRIDE;
 
     // XServiceInfo
 
     // Returns an identifier for the implementation of this object.
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return whether the specified service is supported by this class.
@@ -64,7 +64,7 @@ public:
     // Returns a list of all supported services.  In this case that is just
     // the AccessibleContext service.
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider

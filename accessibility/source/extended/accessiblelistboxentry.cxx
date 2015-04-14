@@ -273,7 +273,7 @@ namespace accessibility
 
     // XServiceInfo - static methods
 
-    Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static(void) throw( RuntimeException )
+    Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static() throw( RuntimeException )
     {
         Sequence< OUString > aSupported(3);
         aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
@@ -282,7 +282,7 @@ namespace accessibility
         return aSupported;
     }
 
-    OUString AccessibleListBoxEntry::getImplementationName_Static(void) throw( RuntimeException )
+    OUString AccessibleListBoxEntry::getImplementationName_Static() throw( RuntimeException )
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
     }

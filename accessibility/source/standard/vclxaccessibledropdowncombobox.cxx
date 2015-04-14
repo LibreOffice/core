@@ -53,13 +53,13 @@ VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCL
 
 
 
-VCLXAccessibleDropDownComboBox::~VCLXAccessibleDropDownComboBox (void)
+VCLXAccessibleDropDownComboBox::~VCLXAccessibleDropDownComboBox()
 {
 }
 
 
 
-bool VCLXAccessibleDropDownComboBox::IsValid (void) const
+bool VCLXAccessibleDropDownComboBox::IsValid() const
 {
     return static_cast<ComboBox*>(GetWindow()) != NULL;
 
@@ -97,7 +97,7 @@ OUString VCLXAccessibleDropDownComboBox::getImplementationName()
 
 
 
-Sequence< OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();

@@ -42,11 +42,11 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
         virtual ~ReadMenuDocumentHandlerBase();
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
         throw ( ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
@@ -103,11 +103,11 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
         virtual ~OReadMenuDocumentHandler();
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
         throw ( ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -141,11 +141,11 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         virtual ~OReadMenuBarHandler();
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
         throw ( ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -178,11 +178,11 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
         virtual ~OReadMenuHandler();
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
         throw ( ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -215,11 +215,11 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
         virtual ~OReadMenuPopupHandler();
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
             throw ( ::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
             throw ( ::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 

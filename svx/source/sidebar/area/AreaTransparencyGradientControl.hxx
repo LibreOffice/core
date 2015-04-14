@@ -41,7 +41,7 @@ public:
     AreaTransparencyGradientControl (
         vcl::Window* pParent,
         AreaPropertyPanel& rPanel);
-    virtual ~AreaTransparencyGradientControl (void);
+    virtual ~AreaTransparencyGradientControl();
 
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);

@@ -29,32 +29,32 @@ namespace sd { namespace slidesorter { namespace controller {
 class Properties
 {
 public:
-    Properties (void);
-    ~Properties (void);
+    Properties();
+    ~Properties();
 
     /** Call this method after receiving a VCLEVENT_APPLICATION_DATACHANGED
         event.
     */
-    void HandleDataChangeEvent (void);
+    void HandleDataChangeEvent();
 
     /** When this method returns <TRUE/> then the current slide is
         highlighted in the view.  The default value is <FALSE/>.
     */
-    bool IsHighlightCurrentSlide (void) const { return mbIsHighlightCurrentSlide;}
+    bool IsHighlightCurrentSlide() const { return mbIsHighlightCurrentSlide;}
     void SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide);
 
     /** When this method returns <TRUE/> then the selection is indicated in
         the view (typically by drawing rectangles around the selected
         slides.)  The default value is <TRUE/>.
     */
-    bool IsShowSelection (void) const { return mbIsShowSelection;}
+    bool IsShowSelection() const { return mbIsShowSelection;}
     void SetShowSelection (const bool bIsShowSelection);
 
     /** When this method returns <TRUE/> then the focusdselection is indicated in
         the view (typically by drawing dotted rectangles around the selected
         slides.)  The default value is <TRUE/>.
     */
-    bool IsShowFocus (void) const { return mbIsShowFocus;}
+    bool IsShowFocus() const { return mbIsShowFocus;}
     void SetShowFocus (const bool bIsShowFocus);
 
     /** When this method returns <TRUE/> then on a selection change the
@@ -62,54 +62,54 @@ public:
         centered in the view.  This can be used to center the current slide
         by selecting only the current slide.  The default value is <FALSE/>.
     */
-    bool IsCenterSelection (void) const { return mbIsCenterSelection;}
+    bool IsCenterSelection() const { return mbIsCenterSelection;}
     void SetCenterSelection (const bool bIsCenterSelection);
 
     /** When this mehod returns <TRUE/> then the view may try to change the
         visible area by scrolling it smoothly on the screen.  Experimental.
         Default value is <FALSE/>.
     */
-    bool IsSmoothSelectionScrolling (void) const { return mbIsSmoothSelectionScrolling;}
+    bool IsSmoothSelectionScrolling() const { return mbIsSmoothSelectionScrolling;}
     void SetSmoothSelectionScrolling (const bool bIsSmoothSelectionScrolling);
 
     /** When this method returns <TRUE/> then during a full screen
         presentation the previews in a slide sorter are not updated.
         Default value is <TRUE/>.
     */
-    bool IsSuspendPreviewUpdatesDuringFullScreenPresentation (void) const { return mbIsSuspendPreviewUpdatesDuringFullScreenPresentation;}
+    bool IsSuspendPreviewUpdatesDuringFullScreenPresentation() const { return mbIsSuspendPreviewUpdatesDuringFullScreenPresentation;}
     void SetSuspendPreviewUpdatesDuringFullScreenPresentation (const bool bFlag);
 
     /** Return the background color.
     */
-    Color GetBackgroundColor (void) const { return maBackgroundColor;}
+    Color GetBackgroundColor() const { return maBackgroundColor;}
     void SetBackgroundColor (const Color& rColor);
 
     /** Return the text color.
     */
-    Color GetTextColor (void) const { return maTextColor;}
+    Color GetTextColor() const { return maTextColor;}
     void SetTextColor (const Color& rColor);
 
     /** Return the color in which selections are to be painted.
     */
-    Color GetSelectionColor (void) const { return maSelectionColor;}
+    Color GetSelectionColor() const { return maSelectionColor;}
     void SetSelectionColor (const Color& rColor);
 
     /** Return the color used for highlighting e.g. the current slide.
     */
-    Color GetHighlightColor (void) const { return maHighlightColor;}
+    Color GetHighlightColor() const { return maHighlightColor;}
     void SetHighlightColor (const Color& rColor);
 
     /** The UI can be set to be read only indepently from the model status.
         Used for instance in the presenter view.
     */
-    bool IsUIReadOnly (void) const { return mbIsUIReadOnly;}
+    bool IsUIReadOnly() const { return mbIsUIReadOnly;}
     void SetUIReadOnly (const bool bIsUIReadOnly);
 
     /** The mouse over effect (and whether a mouse motion starts a multi
         selection or a drag-and-drop) can be triggered by just the preview
         area or the whole page object area.
     */
-    bool IsOnlyPreviewTriggersMouseOver (void) const { return mbIsOnlyPreviewTriggersMouseOver;}
+    bool IsOnlyPreviewTriggersMouseOver() const { return mbIsOnlyPreviewTriggersMouseOver;}
 
 private:
     bool mbIsHighlightCurrentSlide;
