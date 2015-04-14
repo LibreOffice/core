@@ -15,7 +15,7 @@
 #include <connectivity/sqlnode.hxx>
 
 OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, bool bInternational);
-int SQLyyparse (void);
+int SQLyyparse();
 void setParser( ::connectivity::OSQLParser* );
 
 #endif // INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX

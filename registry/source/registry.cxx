@@ -401,7 +401,7 @@ static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
 
 //  initRegistry_Api
 
-Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
+Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
 {
     static Registry_Api aApi= {&acquire,
                                &release,

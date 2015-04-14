@@ -32,7 +32,7 @@ AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
 {
 }
 
-AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup (void)
+AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
 {
 }
 

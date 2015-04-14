@@ -40,7 +40,7 @@ class SdUnoSlideView
 public:
     SdUnoSlideView (
         slidesorter::SlideSorter& rSlideSorter) throw();
-    virtual ~SdUnoSlideView (void) throw();
+    virtual ~SdUnoSlideView() throw();
 
     // XSelectionSupplier
 
@@ -48,7 +48,7 @@ public:
         throw(::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection (void)
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addSelectionChangeListener (
@@ -66,7 +66,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
-        getCurrentPage (void)
+        getCurrentPage()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XFastPropertySet

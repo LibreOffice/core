@@ -58,7 +58,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual MenuButton* CreateMenuButton() SAL_OVERRIDE;
 
     private:
-        virtual SvxLanguageItem GetLanguage(void) SAL_OVERRIDE;
+        virtual SvxLanguageItem GetLanguage() SAL_OVERRIDE;
         sal_uInt32 CountFollowing();
 
         SwFmtFld*       mpFmtFld;

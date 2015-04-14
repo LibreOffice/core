@@ -1935,7 +1935,7 @@ void SAL_CALL OOo2OasisTransformer::initialize(
     Initialize( rArguments );
 }
 
-void SAL_CALL OOo2OasisTransformer::startDocument( void )
+void SAL_CALL OOo2OasisTransformer::startDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
     if( !GetDocHandler().is() )

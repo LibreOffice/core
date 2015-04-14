@@ -74,12 +74,12 @@ OUString OReadAccelatorDocumentHandler::getErrorLineString()
         return OUString();
 }
 
-void SAL_CALL OReadAccelatorDocumentHandler::startDocument(void)
+void SAL_CALL OReadAccelatorDocumentHandler::startDocument()
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
+void SAL_CALL OReadAccelatorDocumentHandler::endDocument()
     throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_nElementDepth > 0 )

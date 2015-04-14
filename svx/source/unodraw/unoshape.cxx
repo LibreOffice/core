@@ -4183,7 +4183,7 @@ void SAL_CALL SvxShapeRect::release() throw()
 
 // XServiceInfo
 
-uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShape::getSupportedServiceNames();
 }

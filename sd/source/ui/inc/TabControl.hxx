@@ -40,19 +40,19 @@ class TabControl
     sal_uInt16    RrePageID;
 public:
     TabControl (DrawViewShell* pDrViewSh, vcl::Window* pParent);
-    virtual ~TabControl (void);
+    virtual ~TabControl();
 
     /** Inform all listeners of this control that the current page has been
         activated.  Call this method after switching the current page and is
         not done elsewhere (like when using page up/down keys).
     */
-    void SendActivatePageEvent (void);
+    void SendActivatePageEvent();
 
     /** Inform all listeners of this control that the current page has been
         deactivated.  Call this method before switching the current page and
         is not done elsewhere (like when using page up/down keys).
     */
-    void SendDeactivatePageEvent (void);
+    void SendDeactivatePageEvent();
 
 protected:
     DrawViewShell*  pDrViewSh;

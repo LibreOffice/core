@@ -56,7 +56,7 @@ CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppeara
     FreeResource();
 }
 
-CellBorderStyleControl::~CellBorderStyleControl(void)
+CellBorderStyleControl::~CellBorderStyleControl()
 {
     delete[] mpImageList;
 }

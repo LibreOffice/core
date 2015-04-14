@@ -32,11 +32,11 @@ FrameWindowPane::FrameWindowPane (
 {
 }
 
-FrameWindowPane::~FrameWindowPane (void) throw()
+FrameWindowPane::~FrameWindowPane() throw()
 {
 }
 
-sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly (void)
+sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;

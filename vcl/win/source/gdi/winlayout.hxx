@@ -43,7 +43,7 @@ public:
                         WinLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
-    HFONT               DisableFontScaling( void) const;
+    HFONT               DisableFontScaling() const;
 
     SCRIPT_CACHE&       GetScriptCache() const;
 

@@ -42,7 +42,7 @@ public:
     ResourceFactoryManager (
         const css::uno::Reference<css::drawing::framework::XControllerManager>& rxManager);
 
-    ~ResourceFactoryManager (void);
+    ~ResourceFactoryManager();
 
     /** Register a resource factory for one type of resource.
         @param rsURL

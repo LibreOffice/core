@@ -60,7 +60,7 @@ using namespace com::sun::star;
 class SdPageObjsTLB::IconProvider
 {
 public:
-    IconProvider (void);
+    IconProvider();
 
     // Regular icons.
     Image maImgPage;
@@ -1600,7 +1600,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
 
 //===== IconProvider ==========================================================
 
-SdPageObjsTLB::IconProvider::IconProvider (void)
+SdPageObjsTLB::IconProvider::IconProvider()
     : maImgPage( BitmapEx( SdResId( BMP_PAGE ) ) ),
       maImgPageExcl( BitmapEx( SdResId( BMP_PAGE_EXCLUDED ) ) ),
       maImgPageObjsExcl( BitmapEx( SdResId( BMP_PAGEOBJS_EXCLUDED ) ) ),

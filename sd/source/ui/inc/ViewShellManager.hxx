@@ -61,14 +61,14 @@ public:
     /** Before the destructor is called the method Shutdown() has to have
         been called.
     */
-    ~ViewShellManager (void);
+    ~ViewShellManager();
 
     /** Tell a ViewShellManager object to prepare to be deleted, i.e. to
         destroy all of its resources and to ignore all following calls.
         Use this when the owner of the view shell manager is about being
         destroyed but the view shell manager itself can not yet be deleted.
     */
-    void Shutdown (void);
+    void Shutdown();
 
     /** Set the factory for sub shells of the specified view shell.
     */
@@ -162,11 +162,11 @@ public:
     /** Return the top-most shell on the SFX shell stack regardless of
         whether that is a view shell or a sub shell.
     */
-    SfxShell* GetTopShell (void) const;
+    SfxShell* GetTopShell() const;
 
     /** Return the top-most active view shell on the internal shell stack.
     */
-    SfxShell* GetTopViewShell (void) const;
+    SfxShell* GetTopViewShell() const;
 
     /** Use this class to safely lock updates of the view shell stack.
     */
@@ -175,7 +175,7 @@ public:
     public:
         UpdateLock (const ::boost::shared_ptr<ViewShellManager>& rpManager)
             : mpManager(rpManager) {mpManager->LockUpdate();}
-        ~UpdateLock (void) {mpManager->UnlockUpdate();};
+        ~UpdateLock() {mpManager->UnlockUpdate();};
     private:
         ::boost::shared_ptr<ViewShellManager> mpManager;
     };
@@ -186,8 +186,8 @@ private:
     ::std::unique_ptr<ViewShellManager::Implementation> mpImpl;
     bool mbValid;
 
-    void LockUpdate (void);
-    void UnlockUpdate (void);
+    void LockUpdate();
+    void UnlockUpdate();
 };
 
 } // end of namespace sd

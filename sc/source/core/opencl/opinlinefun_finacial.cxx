@@ -272,18 +272,18 @@ std::string DateToDays_new=
 "}\n";
 
 std::string GetNullDateDecl=
-"int GetNullDate(void);\n";
+"int GetNullDate();\n";
 
 std::string GetNullDate=
-"int GetNullDate(void)\n"
+"int GetNullDate()\n"
 "{\n"
 "    return DateToDays(30,12,1899 );\n"
 "}\n";
 std::string GetNullDate_newDecl=
-"int GetNullDate_new(void);\n";
+"int GetNullDate_new();\n";
 
 std::string GetNullDate_new=
-"int GetNullDate_new(void)\n"
+"int GetNullDate_new()\n"
 "{\n"
 "    return DateToDays_new(30,12,1899 );\n"
 "}\n";

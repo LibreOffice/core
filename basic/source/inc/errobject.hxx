@@ -31,7 +31,7 @@ class SbxErrObject : public SbUnoObject
     SbxErrObject( const OUString& aName_, const com::sun::star::uno::Any& aUnoObj_ );
     virtual ~SbxErrObject();
 
-    class ErrObject* getImplErrObject( void )
+    class ErrObject* getImplErrObject()
         { return m_pErrObject; }
 
 public:

@@ -54,9 +54,9 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
             const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(void)
+        virtual void SAL_CALL startDocument()
             throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL endDocument(void)
+        virtual void SAL_CALL endDocument()
             throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL startElement(
             const OUString& aName,

@@ -62,22 +62,22 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController,
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
-    virtual ~PresenterAccessible (void);
+    virtual ~PresenterAccessible();
 
     void SetAccessibleParent (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleParent);
 
-    void UpdateAccessibilityHierarchy (void);
+    void UpdateAccessibilityHierarchy();
 
     void NotifyCurrentSlideChange (
         const sal_Int32 nCurrentSlideIndex,
         const sal_Int32 nSlideCount);
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     //----- XAccessible -------------------------------------------------------
 
     virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext (void)
+        getAccessibleContext()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XFocusListener ----------------------------------------------------
@@ -123,7 +123,7 @@ private:
         const css::uno::Reference<css::awt::XWindow>& rxNotesContentWindow,
         const css::uno::Reference<css::awt::XWindow>& rxNotesBorderWindow,
         const ::boost::shared_ptr<PresenterTextView>& rpNotesTextView);
-    PresenterPaneContainer::SharedPaneDescriptor GetPreviewPane (void) const;
+    PresenterPaneContainer::SharedPaneDescriptor GetPreviewPane() const;
 };
 
 } } // end of namespace ::sd::presenter

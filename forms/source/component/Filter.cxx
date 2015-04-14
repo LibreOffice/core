@@ -679,7 +679,7 @@ namespace frm
     }
 
 
-    OUString SAL_CALL OFilterControl::getSelectedText( void ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL OFilterControl::getSelectedText() throw(RuntimeException, std::exception)
     {
         OUString aSelected;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -698,7 +698,7 @@ namespace frm
     }
 
 
-    ::com::sun::star::awt::Selection SAL_CALL OFilterControl::getSelection( void ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    ::com::sun::star::awt::Selection SAL_CALL OFilterControl::getSelection() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ::com::sun::star::awt::Selection aSel;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -708,7 +708,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL OFilterControl::isEditable( void ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL OFilterControl::isEditable() throw(RuntimeException, std::exception)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() && xText->isEditable();

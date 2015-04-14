@@ -31,7 +31,7 @@ using namespace ZipUtils;
  * library.
  */
 
-Deflater::~Deflater(void)
+Deflater::~Deflater()
 {
     end();
 }

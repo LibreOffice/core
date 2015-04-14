@@ -416,7 +416,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-void * ImplCreateUnicodeToIso2022CnContext(void)
+void * ImplCreateUnicodeToIso2022CnContext()
 {
     ImplUnicodeToIso2022CnContext * pContext =
         new ImplUnicodeToIso2022CnContext;

@@ -49,7 +49,7 @@ namespace helpdatafileproxy {
         void copyToBuffer( const char* pSrcData, int nSize );
 
     public:
-        HDFData( void )
+        HDFData()
             : m_nSize( 0 )
             , m_pBuffer( NULL )
         {}
@@ -101,13 +101,13 @@ namespace helpdatafileproxy {
             { releaseHashMap(); }
 
         void createHashMap( bool bOptimizeForPerformance = false );
-        void releaseHashMap( void );
+        void releaseHashMap();
 
         bool getValueForKey( const OString& rKey, HDFData& rValue );
 
-        bool startIteration( void );
+        bool startIteration();
         bool getNextKeyAndValue( HDFData& rKey, HDFData& rValue );
-        void stopIteration( void );
+        void stopIteration();
     };
 }
 

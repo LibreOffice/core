@@ -247,7 +247,7 @@ public:
                 ::com::sun::star::text::XTextRange > & xTextRange)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getFieldType(void)
+    virtual OUString SAL_CALL getFieldType()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setFieldType(const OUString& description )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

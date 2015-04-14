@@ -400,7 +400,7 @@ void ScDrawShell::Activate (const bool bMDI)
             GetSidebarContextName()));
 }
 
-::rtl::OUString ScDrawShell::GetSidebarContextName (void)
+::rtl::OUString ScDrawShell::GetSidebarContextName()
 {
     return sfx2::sidebar::EnumContext::GetContextName(
         ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(

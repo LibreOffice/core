@@ -36,14 +36,14 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
-AccessibleComponentBase::AccessibleComponentBase (void)
+AccessibleComponentBase::AccessibleComponentBase()
 {
 }
 
 
 
 
-AccessibleComponentBase::~AccessibleComponentBase (void)
+AccessibleComponentBase::~AccessibleComponentBase()
 {
 }
 
@@ -77,7 +77,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 
 
-awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds (void)
+awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds()
     throw (uno::RuntimeException, std::exception)
 {
     return awt::Rectangle();
@@ -86,7 +86,7 @@ awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds (void)
 
 
 
-awt::Point SAL_CALL AccessibleComponentBase::getLocation (void)
+awt::Point SAL_CALL AccessibleComponentBase::getLocation()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
@@ -96,7 +96,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocation (void)
 
 
 
-awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
+awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return awt::Point();
@@ -105,7 +105,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
 
 
 
-::com::sun::star::awt::Size SAL_CALL AccessibleComponentBase::getSize (void)
+::com::sun::star::awt::Size SAL_CALL AccessibleComponentBase::getSize()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
@@ -136,7 +136,7 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
 
 
 
-void SAL_CALL AccessibleComponentBase::grabFocus (void)
+void SAL_CALL AccessibleComponentBase::grabFocus()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessibleContext> xContext (this, uno::UNO_QUERY);
@@ -153,7 +153,7 @@ void SAL_CALL AccessibleComponentBase::grabFocus (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleComponentBase::getForeground (void)
+sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Color(COL_BLACK).GetColor();
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getForeground (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
+sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Color(COL_WHITE).GetColor();
@@ -174,7 +174,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 //=====  XAccessibleExtendedComponent  ========================================
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
-        AccessibleComponentBase::getFont (void)
+        AccessibleComponentBase::getFont()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return uno::Reference<awt::XFont>();
@@ -183,14 +183,14 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 
 
 
-OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
+OUString SAL_CALL AccessibleComponentBase::getTitledBorderText()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 
-OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
+OUString SAL_CALL AccessibleComponentBase::getToolTipText()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString();
@@ -202,7 +202,7 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
 //=====  XTypeProvider  ===================================================
 
 uno::Sequence<uno::Type> SAL_CALL
-    AccessibleComponentBase::getTypes (void)
+    AccessibleComponentBase::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...

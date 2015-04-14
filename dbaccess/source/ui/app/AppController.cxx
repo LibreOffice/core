@@ -168,7 +168,7 @@ OUString OApplicationController::getImplementationName_Static() throw( RuntimeEx
     return OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
 }
 
-Sequence< OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OApplicationController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.application.DefaultViewController";
@@ -2547,7 +2547,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( RuntimeException, std::exception )
+Reference< XModel >  SAL_CALL OApplicationController::getModel() throw( RuntimeException, std::exception )
 {
     return m_xModel;
 }

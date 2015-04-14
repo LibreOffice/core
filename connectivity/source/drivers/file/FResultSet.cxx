@@ -137,7 +137,7 @@ void OResultSet::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::cppu::UnoType<sal_Int32>::get());
 }
 
-void OResultSet::disposing(void)
+void OResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 

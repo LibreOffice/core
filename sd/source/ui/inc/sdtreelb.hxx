@@ -84,7 +84,7 @@ public:
             internally in the navigator for reordering entries.  Its
             lifetime ends with the office application.
         */
-        static SotClipboardFormatId GetListBoxDropFormatId (void);
+        static SotClipboardFormatId GetListBoxDropFormatId();
 
     private:
         /** Temporary drop flavor id that is used internally in the
@@ -201,7 +201,7 @@ public:
     void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
-    bool                    GetShowAllShapes (void) const { return mbShowAllShapes;}
+    bool                    GetShowAllShapes() const { return mbShowAllShapes;}
     bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );

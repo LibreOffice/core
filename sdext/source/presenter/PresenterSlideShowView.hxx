@@ -69,28 +69,28 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlideShowView (void);
+    virtual ~PresenterSlideShowView();
 
-    void LateInit (void);
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    void LateInit();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // CachablePresenterView
 
-    virtual void ReleaseView (void) SAL_OVERRIDE;
+    virtual void ReleaseView() SAL_OVERRIDE;
 
     // XSlideShowView
 
     virtual css::uno::Reference<
-        css::rendering::XSpriteCanvas > SAL_CALL getCanvas (void)
+        css::rendering::XSpriteCanvas > SAL_CALL getCanvas()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL clear (void)
+    virtual void SAL_CALL clear()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::geometry::AffineMatrix2D SAL_CALL getTransformation (void)
+    virtual css::geometry::AffineMatrix2D SAL_CALL getTransformation()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::geometry::IntegerSize2D SAL_CALL getTranslationOffset(void)
+    virtual css::geometry::IntegerSize2D SAL_CALL getTranslationOffset()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addTransformationChangedListener(
@@ -185,10 +185,10 @@ public:
     // XView
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL
-        getResourceId (void)
+        getResourceId()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+    virtual sal_Bool SAL_CALL isAnchorOnly()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDrawView
@@ -197,14 +197,14 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // CachablePresenterView
 
-    virtual void ActivatePresenterView (void) SAL_OVERRIDE;
+    virtual void ActivatePresenterView() SAL_OVERRIDE;
 
-    virtual void DeactivatePresenterView (void) SAL_OVERRIDE;
+    virtual void DeactivatePresenterView() SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
@@ -253,7 +253,7 @@ private:
     css::uno::Reference<css::rendering::XCanvas> CreateViewCanvas (
         const css::uno::Reference<css::awt::XWindow>& rxWindow) const;
 
-    void Resize (void);
+    void Resize();
 
     void PaintOuterWindow (const css::awt::Rectangle& rRepaintBox);
     void PaintInnerWindow (const css::awt::PaintEvent& rEvent);
@@ -265,14 +265,14 @@ private:
         Call this method when the back buffer may have changed its content,
         like when the window has been moved but not resized.
     */
-    void ForceRepaint (void);
+    void ForceRepaint();
 
-    void CreateBackgroundPolygons (void);
+    void CreateBackgroundPolygons();
 
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 
     void impl_addAndConfigureView();

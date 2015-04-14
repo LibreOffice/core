@@ -1089,7 +1089,7 @@ sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
 }
 
 Sequence< OUString > SAL_CALL
-TextSearch::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+TextSearch::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = getServiceName_Static();

@@ -778,13 +778,13 @@ void LocalizationMgr::handleSetCurrentLocale(const css::lang::Locale& rLocale)
     }
 }
 
-void LocalizationMgr::handleBasicStarted( void )
+void LocalizationMgr::handleBasicStarted()
 {
     if( m_xStringResourceManager.is() )
         m_aLocaleBeforeBasicStart = m_xStringResourceManager->getCurrentLocale();
 }
 
-void LocalizationMgr::handleBasicStopped( void )
+void LocalizationMgr::handleBasicStopped()
 {
     try
     {

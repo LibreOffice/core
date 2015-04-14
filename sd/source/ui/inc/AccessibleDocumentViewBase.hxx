@@ -116,13 +116,13 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleDocumentViewBase (void);
+    virtual ~AccessibleDocumentViewBase();
 
     /** Initialize a new object.  Call this method directly after creating a
         new object.  It finished the initialization begun in the constructor
         but which needs a fully created object.
      */
-    virtual void Init (void);
+    virtual void Init();
 
     /** Define callback for listening to window child events of VCL.
         Listen for creation or destruction of OLE objects.
@@ -143,14 +143,14 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent (void)
+        getAccessibleParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This implementation returns either 1 or 0 depending on whether there
         is an active accessible OLE object or not.
     */
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This implementation either returns the active accessible OLE object
@@ -169,16 +169,16 @@ public:
         getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XInterface  ======================================================
@@ -188,11 +188,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire()
         throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        release (void)
+        release()
         throw () SAL_OVERRIDE;
 
     //=====  XServiceInfo  ====================================================
@@ -200,17 +200,17 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  lang::XEventListener  ============================================
@@ -309,7 +309,7 @@ protected:
 
     // This method is called from the component helper base class while
     // disposing.
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Create a name string.  The current name is not modified and,
         therefore, no events are send.  This method is usually called once
@@ -339,7 +339,7 @@ protected:
         Note: Currently used as a substitute for FocusGained.  Should be
         renamed in the future.
     */
-    virtual void Activated (void);
+    virtual void Activated();
 
     /** This method is called when (before or after?) the frame containing
         this document has been deactivated.  Can be used to send FOCUSED
@@ -348,7 +348,7 @@ protected:
         Note: Currently used as a substitute for FocusLost.  Should be
         renamed in the future.
     */
-    virtual void Deactivated (void);
+    virtual void Deactivated();
 
     /** Set or remove the currently active accessible OLE object.
         @param xOLEObject
@@ -369,13 +369,13 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 public:
-    void SwitchViewActivated (void) { Activated(); }
+    void SwitchViewActivated() { Activated(); }
      virtual sal_Int32 SAL_CALL getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL getBackground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void impl_dispose (void);
+    virtual void impl_dispose();
 };
 
 } // end of namespace accessibility

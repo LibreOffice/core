@@ -48,7 +48,7 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
     mxURLTransformer = util::URLTransformer::create(xContext);
 }
 
-ResourceFactoryManager::~ResourceFactoryManager (void)
+ResourceFactoryManager::~ResourceFactoryManager()
 {
     Reference<lang::XComponent> xComponent (mxURLTransformer, UNO_QUERY);
     if (xComponent.is())

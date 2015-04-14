@@ -124,7 +124,7 @@ protected:
 
 public:
     ZipPackage( const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &xContext );
-    virtual ~ZipPackage( void );
+    virtual ~ZipPackage();
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }
 

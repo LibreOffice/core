@@ -67,7 +67,7 @@ public:
         const OUString& rsRootName,
         WriteMode eMode);
 
-    ~PresenterConfigurationAccess (void);
+    ~PresenterConfigurationAccess();
 
     /** Return a configuration node below the root of the called object.
         @param rsPathToNode
@@ -81,7 +81,7 @@ public:
         GoToChild() left the called PresenterConfigurationAccess object in a
         valid state.
     */
-    bool IsValid (void) const;
+    bool IsValid() const;
 
     /** Move the focused node to the (possibly indirect) child specified by the given path.
     */
@@ -119,7 +119,7 @@ public:
         This call is ignored when the called ConfigurationAccess object was
         not create with read-write mode.
     */
-    void CommitChanges (void);
+    void CommitChanges();
 
     typedef ::boost::function<void(
         const OUString&,

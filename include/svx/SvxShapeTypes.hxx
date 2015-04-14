@@ -28,7 +28,7 @@ namespace accessibility {
 /** Register the SVX draw shape types with the ShapeTypeHandler singleton.
     This method is usually called from the shape type handler constructor.
 */
-void RegisterDrawShapeTypes (void);
+void RegisterDrawShapeTypes();
 
 /** Enum describing all shape types known in the SVX project.
 */

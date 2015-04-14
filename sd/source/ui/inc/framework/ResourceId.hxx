@@ -53,7 +53,7 @@ class ResourceId
 public:
     /** Create a new, empty resource id.
     */
-    ResourceId (void);
+    ResourceId();
 
     /** Create a new resource id that is described by the given URLs.
         @param rsResourceURLs
@@ -99,38 +99,38 @@ public:
         const OUString& rsFirstAnchorURL,
         const css::uno::Sequence<OUString>& rAnchorURLs);
 
-    virtual ~ResourceId (void);
+    virtual ~ResourceId();
 
     /** Return the list of URLs of both the resource URL and the anchor
         URLs.
     */
-    const ::std::vector<OUString>& GetResourceURLs (void) const;
+    const ::std::vector<OUString>& GetResourceURLs() const;
 
     //===== XResourceId =======================================================
 
     virtual OUString SAL_CALL
-        getResourceURL (void)
+        getResourceURL()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::util::URL SAL_CALL
-        getFullResourceURL (void)
+        getFullResourceURL()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
-        hasAnchor (void)
+        hasAnchor()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<
         css::drawing::framework::XResourceId> SAL_CALL
-        getAnchor (void)
+        getAnchor()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence<OUString> SAL_CALL
-        getAnchorURLs (void)
+        getAnchorURLs()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
-        getResourceTypePrefix (void)
+        getResourceTypePrefix()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int16 SAL_CALL
@@ -153,7 +153,7 @@ public:
 
     virtual css::uno::Reference<
         css::drawing::framework::XResourceId> SAL_CALL
-        clone (void)
+        clone()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== XInitialization ===================================================
@@ -226,7 +226,7 @@ private:
         const ::std::vector<OUString>& rResourceURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
-    void ParseResourceURL (void);
+    void ParseResourceURL();
 };
 
 } } // end of namespace sd::framework

@@ -45,11 +45,11 @@ public:
         sd::ViewShellBase& rViewShellBase,
         SfxBindings* pBindings);
 
-    virtual ~NavigatorWrapper (void);
+    virtual ~NavigatorWrapper();
 
     // Control
-    virtual void Resize (void) SAL_OVERRIDE;
-    virtual void GetFocus (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
@@ -58,7 +58,7 @@ private:
     ViewShellBase& mrViewShellBase;
     SdNavigatorWin maNavigator;
 
-    void UpdateNavigator (void);
+    void UpdateNavigator();
 };
 
 } } // end of namespace sd::sidebar

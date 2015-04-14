@@ -39,27 +39,27 @@ class LogBridge : public cppu::Enterable
     sal_Int32           m_count;
     oslThreadIdentifier m_threadId;
 
-    virtual  ~LogBridge(void);
+    virtual  ~LogBridge();
 
 public:
-    explicit LogBridge(void);
+    explicit LogBridge();
 
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
 
-    virtual void v_enter(void) SAL_OVERRIDE;
-    virtual void v_leave(void) SAL_OVERRIDE;
+    virtual void v_enter() SAL_OVERRIDE;
+    virtual void v_leave() SAL_OVERRIDE;
 
     virtual bool v_isValid(rtl::OUString * pReason) SAL_OVERRIDE;
 };
 
-LogBridge::LogBridge(void)
+LogBridge::LogBridge()
     : m_count   (0)
       ,m_threadId(0)
 {
 }
 
-LogBridge::~LogBridge(void)
+LogBridge::~LogBridge()
 {
     OSL_ASSERT(m_count >= 0);
 }
@@ -83,7 +83,7 @@ void LogBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
         m_threadId = osl::Thread::getCurrentIdentifier();
 }
 
-void LogBridge::v_enter(void)
+void LogBridge::v_enter()
 {
     m_mutex.acquire();
 
@@ -95,7 +95,7 @@ void LogBridge::v_enter(void)
     ++ m_count;
 }
 
-void LogBridge::v_leave(void)
+void LogBridge::v_leave()
 {
     OSL_ASSERT(m_count > 0);
 

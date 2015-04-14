@@ -101,7 +101,7 @@ OUString ORelationController::getImplementationName_Static() throw( RuntimeExcep
     return OUString("org.openoffice.comp.dbu.ORelationDesign");
 }
 
-Sequence< OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> ORelationController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.RelationDesign";

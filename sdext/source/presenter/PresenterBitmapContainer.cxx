@@ -96,7 +96,7 @@ void PresenterBitmapContainer::Initialize (
     }
 }
 
-PresenterBitmapContainer::~PresenterBitmapContainer (void)
+PresenterBitmapContainer::~PresenterBitmapContainer()
 {
     maIconContainer.clear();
 }
@@ -280,7 +280,7 @@ PresenterBitmapContainer::BitmapDescriptor::TexturingMode
 
 //===== PresenterBitmapContainer::BitmapSet ===================================
 
-PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (void)
+PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor()
     : mnWidth(0),
       mnHeight(0),
       mnXOffset(0),

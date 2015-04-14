@@ -566,9 +566,9 @@ public:
                                 getItems() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // only called from property-functions:
-    com::sun::star::sheet::DataPilotFieldOrientation getOrientation(void) const;
+    com::sun::star::sheet::DataPilotFieldOrientation getOrientation() const;
     void setOrientation(com::sun::star::sheet::DataPilotFieldOrientation Orientation);
-    com::sun::star::sheet::GeneralFunction getFunction(void) const;
+    com::sun::star::sheet::GeneralFunction getFunction() const;
     void setFunction(com::sun::star::sheet::GeneralFunction Function);
     com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction > getSubtotals() const;
     void setSubtotals(const com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction >& rFunctions);

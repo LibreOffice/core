@@ -202,7 +202,7 @@ OutlineView::~OutlineView()
     }
 }
 
-void OutlineView::ConnectToApplication (void)
+void OutlineView::ConnectToApplication()
 {
     // When the mode is switched to outline the main view shell grabs focus.
     // This is done for getting cut/copy/paste commands on slides in the left
@@ -216,7 +216,7 @@ void OutlineView::ConnectToApplication (void)
     Application::AddEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 
-void OutlineView::DisconnectFromApplication (void)
+void OutlineView::DisconnectFromApplication()
 {
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }

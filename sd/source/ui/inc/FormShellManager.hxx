@@ -51,7 +51,7 @@ class FormShellManager
 {
 public:
     FormShellManager (ViewShellBase& rBase);
-    virtual ~FormShellManager (void);
+    virtual ~FormShellManager();
 
     /** Typically called by a ShellFactory.  It tells the
         FormShellManager which form shell to manage.
@@ -66,7 +66,7 @@ public:
             The result may be <NULL/> when the SetFormShell() method has not
             yet been called or was last called with <NULL/>.
     */
-    FmFormShell* GetFormShell (void) { return mpFormShell;}
+    FmFormShell* GetFormShell() { return mpFormShell;}
 
 private:
     ViewShellBase& mrBase;
@@ -96,12 +96,12 @@ private:
         the deselection of the form shell.  The later informs about its
         selection.
     */
-    void RegisterAtCenterPane (void);
+    void RegisterAtCenterPane();
 
     /** Unregister the listeners that were registered in
         RegisterAtCenterPane().
     */
-    void UnregisterAtCenterPane (void);
+    void UnregisterAtCenterPane();
 
     /** This call back is called by the application window (among others)
         when the window gets the focus.  In this case the form shell is

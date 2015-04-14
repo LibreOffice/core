@@ -99,7 +99,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 
 
 
-ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
+ULONG STDMETHODCALLTYPE CPropertySheet::AddRef()
 {
     OutputDebugStringFormat("CPropertySheet::AddRef [%d]", m_RefCnt );
     return InterlockedIncrement(&m_RefCnt);
@@ -107,7 +107,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 
 
 
-ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
+ULONG STDMETHODCALLTYPE CPropertySheet::Release()
 {
     OutputDebugStringFormat("CPropertySheet::Release [%d]", m_RefCnt );
     long refcnt = InterlockedDecrement(&m_RefCnt);

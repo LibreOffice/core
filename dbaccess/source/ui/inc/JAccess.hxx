@@ -44,7 +44,7 @@ namespace dbaui
         DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo - static methods
-        static OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( com::sun::star::uno::RuntimeException );
 
         virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

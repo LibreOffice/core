@@ -202,7 +202,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNam
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePreviewCell::getImplementationId(void)
+    ScAccessiblePreviewCell::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

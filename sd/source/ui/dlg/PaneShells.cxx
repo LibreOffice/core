@@ -45,13 +45,13 @@ void LeftImpressPaneShell::InitInterface_Impl()
 
 TYPEINIT1(LeftImpressPaneShell, SfxShell);
 
-LeftImpressPaneShell::LeftImpressPaneShell (void)
+LeftImpressPaneShell::LeftImpressPaneShell()
     : SfxShell()
 {
     SetName(OUString("LeftImpressPane"));
 }
 
-LeftImpressPaneShell::~LeftImpressPaneShell (void)
+LeftImpressPaneShell::~LeftImpressPaneShell()
 {
 }
 
@@ -71,13 +71,13 @@ void LeftDrawPaneShell::InitInterface_Impl()
 
 TYPEINIT1(LeftDrawPaneShell, SfxShell);
 
-LeftDrawPaneShell::LeftDrawPaneShell (void)
+LeftDrawPaneShell::LeftDrawPaneShell()
     : SfxShell()
 {
     SetName(OUString("LeftDrawPane"));
 }
 
-LeftDrawPaneShell::~LeftDrawPaneShell (void)
+LeftDrawPaneShell::~LeftDrawPaneShell()
 {
 }
 

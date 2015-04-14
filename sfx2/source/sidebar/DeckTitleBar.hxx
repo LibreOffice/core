@@ -32,8 +32,8 @@ public:
     DeckTitleBar (
         const ::rtl::OUString& rsTitle,
         vcl::Window* pParentWindow,
-        const ::boost::function<void(void)>& rCloserAction);
-    virtual ~DeckTitleBar (void);
+        const ::boost::function<void()>& rCloserAction);
+    virtual ~DeckTitleBar();
 
     void SetCloserVisible (const bool bIsCloserVisible);
 
@@ -42,14 +42,14 @@ public:
 protected:
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
-    virtual sidebar::Paint GetBackgroundPaint (void) SAL_OVERRIDE;
-    virtual Color GetTextColor (void) SAL_OVERRIDE;
+    virtual sidebar::Paint GetBackgroundPaint() SAL_OVERRIDE;
+    virtual Color GetTextColor() SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 private:
     const sal_uInt16 mnCloserItemIndex;
-    const ::boost::function<void(void)> maCloserAction;
+    const ::boost::function<void()> maCloserAction;
     bool mbIsCloserVisible;
 };
 

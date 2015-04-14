@@ -138,7 +138,7 @@ protected:
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
 
-    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:
@@ -307,7 +307,7 @@ protected:
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*);
 
-    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:

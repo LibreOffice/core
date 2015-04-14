@@ -92,11 +92,11 @@ public:
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
 
-    virtual ~DrawViewShell (void);
+    virtual ~DrawViewShell();
 
     virtual void Init (bool bIsMainViewShell) SAL_OVERRIDE;
 
-    virtual void Shutdown (void) SAL_OVERRIDE;
+    virtual void Shutdown() SAL_OVERRIDE;
 
     void PrePaint() SAL_OVERRIDE;
     virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
@@ -126,7 +126,7 @@ public:
         the enclosing window and current sizes of buttons, rulers, and
         sliders.
     */
-    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() SAL_OVERRIDE;
 
     void            HidePage();
 
@@ -136,7 +136,7 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) SAL_OVERRIDE;
 
-    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
@@ -289,7 +289,7 @@ public:
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
-    bool IsLayerModeActive (void) const { return mbIsLayerModeActive;}
+    bool IsLayerModeActive() const { return mbIsLayerModeActive;}
 
     sal_uInt16*         GetSlotArray() const { return mpSlotArray; }
 
@@ -322,7 +322,7 @@ public:
             returned value is independent of whether the layer modus is
             currently active and the tab control is visible.
     */
-    int GetTabLayerCount (void) const;
+    int GetTabLayerCount() const;
 
     /** Return the numerical id of the currently active layer as seen by the
         layer tab control.
@@ -331,7 +331,7 @@ public:
             number of layers as returned by the
             <member>GetTabLayerCount</member> method (exclusive).
     */
-    int GetActiveTabLayerIndex (void) const;
+    int GetActiveTabLayerIndex() const;
 
     /** Set the active layer at the layer tab control and update the control
         accordingly to reflect the change on screen.
@@ -345,11 +345,11 @@ public:
 
     /** Return a pointer to the tab control for pages.
     */
-    TabControl& GetPageTabControl (void) { return maTabControl;}
+    TabControl& GetPageTabControl() { return maTabControl;}
 
     /** Return a pointer to the tab control for layers.
     */
-    LayerTabBar* GetLayerTabControl (void);
+    LayerTabBar* GetLayerTabControl();
 
     /** Renames the given slide using an SvxNameDialog
 
@@ -365,7 +365,7 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const OUString& rLayerName, const OUString& rLayerTitle, const OUString& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
 
     DrawView*   GetDrawView() const { return mpDrawView; }
 
@@ -374,7 +374,7 @@ public:
     */
     virtual bool RelocateToParentWindow (::vcl::Window* pParentWindow) SAL_OVERRIDE;
 
-    OUString GetSidebarContextName (void) const;
+    OUString GetSidebarContextName() const;
 
     //move this method to ViewShell.
     //void  NotifyAccUpdate();

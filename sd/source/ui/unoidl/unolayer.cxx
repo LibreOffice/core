@@ -388,7 +388,7 @@ void SdLayer::set( LayerAttribute what, bool flag ) throw()
 }
 
 // ::com::sun::star::container::XChild
-uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
+uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

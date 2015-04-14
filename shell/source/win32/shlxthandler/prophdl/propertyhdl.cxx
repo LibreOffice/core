@@ -117,13 +117,13 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
 }
 
 
-ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef( void )
+ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef()
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
 
-ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
+ULONG STDMETHODCALLTYPE CPropertyHdl::Release()
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
 
@@ -343,13 +343,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC
 }
 
 
-ULONG STDMETHODCALLTYPE CClassFactory::AddRef( void )
+ULONG STDMETHODCALLTYPE CClassFactory::AddRef()
 {
     return InterlockedIncrement( &m_RefCnt );
 }
 
 
-ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
+ULONG STDMETHODCALLTYPE CClassFactory::Release()
 {
     long refcnt = InterlockedDecrement( &m_RefCnt );
 
@@ -423,7 +423,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 }
 
 
-extern "C" STDAPI DllCanUnloadNow( void )
+extern "C" STDAPI DllCanUnloadNow()
 {
     OutputDebugStringFormat( "DllCanUnloadNow.\n" );
     if (CClassFactory::IsLocked() || g_DllRefCnt > 0)

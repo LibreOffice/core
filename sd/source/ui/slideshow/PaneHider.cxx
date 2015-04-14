@@ -80,7 +80,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
     }
 }
 
-PaneHider::~PaneHider (void)
+PaneHider::~PaneHider()
 {
     if (mxConfiguration.is() && mxConfigurationController.is())
     {

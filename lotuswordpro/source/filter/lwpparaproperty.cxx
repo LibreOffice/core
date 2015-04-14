@@ -151,11 +151,11 @@ LwpParaAlignProperty::LwpParaAlignProperty(LwpObjectStream* pFile)
 
 }
 
-LwpParaAlignProperty::~LwpParaAlignProperty(void)
+LwpParaAlignProperty::~LwpParaAlignProperty()
 {
 }
 
-sal_uInt32  LwpParaAlignProperty::GetType(void)
+sal_uInt32  LwpParaAlignProperty::GetType()
 {
     return PP_LOCAL_ALIGN;
 }
@@ -168,11 +168,11 @@ LwpParaIndentProperty::LwpParaIndentProperty(LwpObjectStream* pFile)
     m_pIndent = pIndentPiece ? dynamic_cast<LwpIndentOverride*>(pIndentPiece->GetOverride()) : NULL;
 }
 
-LwpParaIndentProperty::~LwpParaIndentProperty(void)
+LwpParaIndentProperty::~LwpParaIndentProperty()
 {
 }
 
-sal_uInt32 LwpParaIndentProperty::GetType(void)
+sal_uInt32 LwpParaIndentProperty::GetType()
 {
     return PP_LOCAL_INDENT;
 }
@@ -186,11 +186,11 @@ LwpParaSpacingProperty::LwpParaSpacingProperty(LwpObjectStream* pFile)
     m_pSpacing = pSpacingPiece ? dynamic_cast<LwpSpacingOverride*>(pSpacingPiece->GetOverride()) : NULL;
 }
 
-LwpParaSpacingProperty::~LwpParaSpacingProperty(void)
+LwpParaSpacingProperty::~LwpParaSpacingProperty()
 {
 }
 
-sal_uInt32 LwpParaSpacingProperty::GetType(void)
+sal_uInt32 LwpParaSpacingProperty::GetType()
 {
     return PP_LOCAL_SPACING;
 }

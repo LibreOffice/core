@@ -70,7 +70,7 @@ namespace dbaccess
             ::osl::Mutex& _rMutex
         );
 
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
     };
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
 
@@ -95,7 +95,7 @@ namespace dbaccess
                         ,m_aTables(_rTables)
         {
         }
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE
+        virtual void SAL_CALL disposing() SAL_OVERRIDE
         {
             clear_NoDispose();
                 // we're not owner of the objects we're holding, instead the object we got in our ctor is

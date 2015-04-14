@@ -61,8 +61,8 @@ public:
         const Reference<rendering::XCustomSprite>& rxSprite,
         const Reference<awt::XWindow>& rxBaseWindow,
         const css::geometry::RealSize2D& rSpriteSize);
-    virtual ~PresenterCustomSprite (void);
-    virtual void SAL_CALL disposing (void)
+    virtual ~PresenterCustomSprite();
+    virtual void SAL_CALL disposing()
         throw (RuntimeException) SAL_OVERRIDE;
 
     // XSprite
@@ -84,15 +84,15 @@ public:
     virtual void SAL_CALL setPriority (double nPriority)
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL show (void)
+    virtual void SAL_CALL show()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL hide (void)
+    virtual void SAL_CALL hide()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCustomSprite
 
-    virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
+    virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -102,13 +102,13 @@ private:
     geometry::RealPoint2D maPosition;
     geometry::RealSize2D maSpriteSize;
 
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };
 
 //===== PresenterCanvas =======================================================
 
-PresenterCanvas::PresenterCanvas (void)
+PresenterCanvas::PresenterCanvas()
     : PresenterCanvasInterfaceBase(m_aMutex),
       mxUpdateCanvas(),
       mxSharedCanvas(),
@@ -145,11 +145,11 @@ PresenterCanvas::PresenterCanvas (
         mpUpdateRequester = CanvasUpdateRequester::Instance(mxUpdateCanvas);
 }
 
-PresenterCanvas::~PresenterCanvas (void)
+PresenterCanvas::~PresenterCanvas()
 {
 }
 
-void SAL_CALL PresenterCanvas::disposing (void)
+void SAL_CALL PresenterCanvas::disposing()
     throw (css::uno::RuntimeException)
 {
     if (mxWindow.is())
@@ -234,7 +234,7 @@ css::uno::Sequence<OUString> PresenterCanvas::getSupportedServiceNames()
 
 //----- XCanvas ---------------------------------------------------------------
 
-void SAL_CALL PresenterCanvas::clear (void)
+void SAL_CALL PresenterCanvas::clear()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -470,7 +470,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
 }
 
 css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
-        PresenterCanvas::getDevice (void)
+        PresenterCanvas::getDevice()
         throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -612,7 +612,7 @@ void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEven
 
 //----- XBitmap ---------------------------------------------------------------
 
-geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
+geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -626,7 +626,7 @@ geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
         return geometry::IntegerSize2D(0,0);
 }
 
-sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
+sal_Bool SAL_CALL PresenterCanvas::hasAlpha()
     throw (RuntimeException, std::exception)
 {
     Reference<rendering::XBitmap> xBitmap (mxSharedCanvas, UNO_QUERY);
@@ -856,7 +856,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     return xPolygon;
 }
 
-void PresenterCanvas::ThrowIfDisposed (void)
+void PresenterCanvas::ThrowIfDisposed()
     throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose || ! mxSharedCanvas.is())
@@ -882,11 +882,11 @@ PresenterCustomSprite::PresenterCustomSprite (
 {
 }
 
-PresenterCustomSprite::~PresenterCustomSprite (void)
+PresenterCustomSprite::~PresenterCustomSprite()
 {
 }
 
-void SAL_CALL PresenterCustomSprite::disposing (void)
+void SAL_CALL PresenterCustomSprite::disposing()
     throw (RuntimeException)
 {
     Reference<XComponent> xComponent (mxSprite, UNO_QUERY);
@@ -948,14 +948,14 @@ void SAL_CALL PresenterCustomSprite::setPriority (const double nPriority)
     mxSprite->setPriority(nPriority);
 }
 
-void SAL_CALL PresenterCustomSprite::show (void)
+void SAL_CALL PresenterCustomSprite::show()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->show();
 }
 
-void SAL_CALL PresenterCustomSprite::hide (void)
+void SAL_CALL PresenterCustomSprite::hide()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -964,14 +964,14 @@ void SAL_CALL PresenterCustomSprite::hide (void)
 
 //----- XCustomSprite ---------------------------------------------------------
 
-Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
+Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSprite->getContentCanvas();
 }
 
-void PresenterCustomSprite::ThrowIfDisposed (void)
+void PresenterCustomSprite::ThrowIfDisposed()
     throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose || ! mxSprite.is())

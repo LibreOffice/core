@@ -145,7 +145,7 @@ namespace connectivity
             virtual void construct(const OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             //      virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) = 0;
             virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
@@ -175,7 +175,7 @@ namespace connectivity
             OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
                                     connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             virtual void SAL_CALL release() throw() SAL_OVERRIDE;
         };

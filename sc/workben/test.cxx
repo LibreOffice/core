@@ -95,7 +95,7 @@ public:
                             SMART_UNO_DECLARATION( ScTestListener, UsrObject );
 
     virtual XInterface *    queryInterface( UsrUik );
-    virtual XIdlClassRef    getIdlClass(void);
+    virtual XIdlClassRef    getIdlClass();
 
     virtual void            disposing(const EventObject& Source);
 
@@ -124,7 +124,7 @@ XInterface* ScTestListener::queryInterface( UsrUik aUIK )
     return UsrObject::queryInterface( aUIK );
 }
 
-XIdlClassRef ScTestListener::getIdlClass(void)
+XIdlClassRef ScTestListener::getIdlClass()
 {
     static XIdlClassRef xClass = createStandardClass( L"ScTestListener",
         UsrObject::getUsrObjectIdlClass(),

@@ -97,7 +97,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }
 
-void OTables::disposing(void)
+void OTables::disposing()
 {
 m_xMetaData.clear();
     OCollection::disposing();

@@ -93,7 +93,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
   return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-oneToOneMapping& widthfolding::getfull2halfTable(void)
+oneToOneMapping& widthfolding::getfull2halfTable()
 {
     static oneToOneMappingWithFlag table(full2half, sizeof(full2half), FULL2HALF_NORMAL);
     table.makeIndex();
@@ -198,7 +198,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-oneToOneMapping& widthfolding::gethalf2fullTable(void)
+oneToOneMapping& widthfolding::gethalf2fullTable()
 {
     static oneToOneMappingWithFlag table(half2full, sizeof(half2full), HALF2FULL_NORMAL);
     table.makeIndex();

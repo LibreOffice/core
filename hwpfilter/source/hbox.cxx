@@ -46,7 +46,7 @@ HBox::~HBox()
 }
 
 
-int HBox::WSize(void)
+int HBox::WSize()
 {
     static const int wsize[32] =
     {
@@ -85,7 +85,7 @@ SkipData::SkipData(hchar hch)
 {
 }
 
-SkipData::~SkipData(void)
+SkipData::~SkipData()
 {
     delete[]data_block;
 }
@@ -105,7 +105,7 @@ FieldCode::FieldCode()
     reserved2 = new char[22];
 }
 
-FieldCode::~FieldCode(void)
+FieldCode::~FieldCode()
 {
     delete[] str1;
     delete[] str2;
@@ -124,7 +124,7 @@ Bookmark::Bookmark()
 {
 }
 
-Bookmark::~Bookmark(void)
+Bookmark::~Bookmark()
 {
 }
 
@@ -353,7 +353,7 @@ TxtBox::TxtBox()
     reserved[0] = reserved[1] = 0;
 }
 
-TxtBox::~TxtBox(void)
+TxtBox::~TxtBox()
 {
     delete[]cell;
 
@@ -401,7 +401,7 @@ Picture::Picture()
 {
 }
 
-Picture::~Picture(void)
+Picture::~Picture()
 {
     delete[]follow;
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
@@ -430,7 +430,7 @@ hunit Picture::Height(CharShape * sty)
 
 // line(14)
 // hidden(15)
-Hidden::~Hidden(void)
+Hidden::~Hidden()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
@@ -442,7 +442,7 @@ Hidden::~Hidden(void)
 
 
 // header/footer(16)
-HeaderFooter::~HeaderFooter(void)
+HeaderFooter::~HeaderFooter()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
@@ -454,7 +454,7 @@ HeaderFooter::~HeaderFooter(void)
 
 
 // footnote(17)
-Footnote::~Footnote(void)
+Footnote::~Footnote()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)

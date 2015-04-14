@@ -146,21 +146,21 @@ public:
     static sal_Int32 GetInteger (const ThemeItem eItem);
     static bool GetBoolean (const ThemeItem eItem);
 
-    static bool IsHighContrastMode (void);
+    static bool IsHighContrastMode();
 
-    static void HandleDataChange (void);
+    static void HandleDataChange();
 
     void InitializeTheme();
 
-    Theme (void);
-    virtual ~Theme (void);
+    Theme();
+    virtual ~Theme();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    static css::uno::Reference<css::beans::XPropertySet> GetPropertySet (void);
+    static css::uno::Reference<css::beans::XPropertySet> GetPropertySet();
 
     // beans::XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo (void)
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue (
         const ::rtl::OUString& rsPropertyName,
@@ -199,7 +199,7 @@ public:
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // beans::XPropertySetInfo
-    virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties (void)
+    virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::beans::Property SAL_CALL getPropertyByName (const ::rtl::OUString& rsName)
         throw(css::beans::UnknownPropertyException,
@@ -244,8 +244,8 @@ private:
         PT_Invalid
     };
 
-    void SetupPropertyMaps (void);
-    void UpdateTheme (void);
+    void SetupPropertyMaps();
+    void UpdateTheme();
     static PropertyType GetPropertyType (const ThemeItem eItem);
     static css::uno::Type GetCppuType (const PropertyType eType);
     static sal_Int32 GetIndex (

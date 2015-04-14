@@ -42,7 +42,7 @@ public:
         vcl::Window* pWindow,
         const SfxItemSet& rInAttrs);
 
-    virtual ~SdPresLayoutDlg (void);
+    virtual ~SdPresLayoutDlg();
 
     void                GetAttr(SfxItemSet& rOutAttrs);
 

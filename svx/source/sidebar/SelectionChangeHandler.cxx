@@ -33,7 +33,7 @@ using namespace sfx2::sidebar;
 namespace svx { namespace sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
-    const boost::function<rtl::OUString(void)>& rSelectionChangeCallback,
+    const boost::function<rtl::OUString()>& rSelectionChangeCallback,
     const Reference<frame::XController>& rxController,
     const EnumContext::Context eDefaultContext)
     : SelectionChangeHandlerInterfaceBase(m_aMutex),
@@ -47,7 +47,7 @@ SelectionChangeHandler::SelectionChangeHandler (
 
 
 
-SelectionChangeHandler::~SelectionChangeHandler (void)
+SelectionChangeHandler::~SelectionChangeHandler()
 {
 }
 
@@ -80,7 +80,7 @@ void SAL_CALL SelectionChangeHandler::disposing (const lang::EventObject&)
 
 
 
-void SAL_CALL SelectionChangeHandler::disposing (void)
+void SAL_CALL SelectionChangeHandler::disposing()
     throw (uno::RuntimeException)
 {
     if (mbIsConnected)
@@ -90,7 +90,7 @@ void SAL_CALL SelectionChangeHandler::disposing (void)
 
 
 
-void SelectionChangeHandler::Connect (void)
+void SelectionChangeHandler::Connect()
 {
     uno::Reference<view::XSelectionSupplier> xSupplier (mxController, uno::UNO_QUERY);
     if (xSupplier.is())
@@ -103,7 +103,7 @@ void SelectionChangeHandler::Connect (void)
 
 
 
-void SelectionChangeHandler::Disconnect (void)
+void SelectionChangeHandler::Disconnect()
 {
     uno::Reference<view::XSelectionSupplier> xSupplier (mxController, uno::UNO_QUERY);
     if (xSupplier.is())

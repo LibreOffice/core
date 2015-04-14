@@ -151,7 +151,7 @@ inline Details_UserDatat::Details_UserDatat( const OUString& _rTxt, bool _bFixed
 }
 
 
-void CertificateViewerDetailsTP::Clear( void )
+void CertificateViewerDetailsTP::Clear()
 {
     m_pValueDetails->SetText( OUString() );
     sal_uLong           i = 0;
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
     return 0;
 }
 
-void CertificateViewerCertPathTP::Clear( void )
+void CertificateViewerCertPathTP::Clear()
 {
     mpCertStatusML->SetText( OUString() );
     sal_uLong           i = 0;

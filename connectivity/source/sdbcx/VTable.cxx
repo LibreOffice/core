@@ -145,7 +145,7 @@ Sequence< Type > SAL_CALL OTable::getTypes(  ) throw(RuntimeException, std::exce
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OTableDescriptor_BASE::getTypes(),OTable_BASE::getTypes());
 }
 
-void SAL_CALL OTable::disposing(void)
+void SAL_CALL OTable::disposing()
 {
     ODescriptor::disposing();
 

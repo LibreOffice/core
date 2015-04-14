@@ -99,7 +99,7 @@ public:
     */
     DrawController (ViewShellBase& rBase) throw();
 
-    virtual ~DrawController (void) throw();
+    virtual ~DrawController() throw();
 
     /** Replace the currently used sub controller with the given one.  This
         new sub controller is used from now on for the view (that is the
@@ -120,7 +120,7 @@ public:
 
     /** Call this method when the selection has changed.
     */
-    void FireSelectionChangeListener (void) throw();
+    void FireSelectionChangeListener() throw();
 
     /** Call this method when the edit mode has changed.
     */
@@ -137,7 +137,7 @@ public:
     /** Broadcast a sidebar context change that is caused by a view
         switch.
     */
-    void BroadcastContextChange (void) const;
+    void BroadcastContextChange() const;
     void NotifyAccUpdate();
     void fireChangeLayer( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* pCurrentLayer ) throw();
     // change the parameter to int
@@ -152,16 +152,16 @@ public:
             The returned pointer is <NULL/> after a call to
             ReleaseViewShellBase().
     */
-    ViewShellBase* GetViewShellBase (void) { return mpBase;}
+    ViewShellBase* GetViewShellBase() { return mpBase;}
 
     /** This method is typically called from the destructor of ViewShellBase
         to tell the DrawController that it and its members must not access
         the ViewShellBase anymore.
         After this call the DrawController is semi-disposed.
     */
-    void ReleaseViewShellBase (void);
+    void ReleaseViewShellBase();
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -205,7 +205,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XDrawPage > SAL_CALL
-        getCurrentPage (void)
+        getCurrentPage()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
@@ -221,11 +221,11 @@ public:
     // XControllerManager
 
     virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
-        getConfigurationController (void)
+        getConfigurationController()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
-        getModuleController (void)
+        getModuleController()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUnoTunnel
@@ -282,7 +282,7 @@ protected:
     /** When the called object has been disposed already this method throws
         a Disposed exception and does not return.
     */
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (::com::sun::star::lang::DisposedException);
 
     using cppu::OPropertySetHelper::disposing;
@@ -327,8 +327,8 @@ private:
         const ::com::sun::star::uno::Any& rNewValue,
         const ::com::sun::star::uno::Any& rOldValue);
 
-    void ProvideFrameworkControllers (void);
-    void DisposeFrameworkControllers (void);
+    void ProvideFrameworkControllers();
+    void DisposeFrameworkControllers();
 };
 
 } // end of namespace sd

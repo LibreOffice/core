@@ -51,7 +51,7 @@ private:
 };
 
 // static
-SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
+SdGlobalResourceContainer& SdGlobalResourceContainer::Instance()
 {
     DBG_ASSERT(Implementation::mpInstance!=NULL,
         "SdGlobalResourceContainer::Instance(): instance has been deleted");
@@ -125,13 +125,13 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
     }
 }
 
-SdGlobalResourceContainer::SdGlobalResourceContainer (void)
+SdGlobalResourceContainer::SdGlobalResourceContainer()
     : mpImpl (new SdGlobalResourceContainer::Implementation())
 {
     Implementation::mpInstance = this;
 }
 
-SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
+SdGlobalResourceContainer::~SdGlobalResourceContainer()
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 

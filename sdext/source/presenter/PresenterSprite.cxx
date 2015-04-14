@@ -30,7 +30,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 namespace sdext { namespace presenter {
 
-PresenterSprite::PresenterSprite (void)
+PresenterSprite::PresenterSprite()
     : mxSpriteFactory(),
       mxSprite(),
       maSize(0,0),
@@ -41,7 +41,7 @@ PresenterSprite::PresenterSprite (void)
 {
 }
 
-PresenterSprite::~PresenterSprite (void)
+PresenterSprite::~PresenterSprite()
 {
     if (mxSprite.is())
     {
@@ -65,7 +65,7 @@ void PresenterSprite::SetFactory (
     }
 }
 
-css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas (void)
+css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas()
 {
     ProvideSprite();
     if (mxSprite.is())
@@ -74,7 +74,7 @@ css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas (void)
         return NULL;
 }
 
-void PresenterSprite::Show (void)
+void PresenterSprite::Show()
 {
     mbIsVisible = true;
     if (mxSprite.is())
@@ -83,7 +83,7 @@ void PresenterSprite::Show (void)
         ProvideSprite();
 }
 
-void PresenterSprite::Hide (void)
+void PresenterSprite::Hide()
 {
     mbIsVisible = false;
     if (mxSprite.is())
@@ -116,13 +116,13 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
             );
 }
 
-void PresenterSprite::Update (void)
+void PresenterSprite::Update()
 {
     if (mxSpriteFactory.is())
         mxSpriteFactory->updateScreen(sal_False);
 }
 
-void PresenterSprite::ProvideSprite (void)
+void PresenterSprite::ProvideSprite()
 {
     if ( ! mxSprite.is()
         && mxSpriteFactory.is()
@@ -150,7 +150,7 @@ void PresenterSprite::ProvideSprite (void)
     }
 }
 
-void PresenterSprite::DisposeSprite (void)
+void PresenterSprite::DisposeSprite()
 {
     if (mxSprite.is())
     {

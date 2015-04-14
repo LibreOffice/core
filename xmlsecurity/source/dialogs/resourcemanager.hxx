@@ -34,9 +34,9 @@ class LocaleDataWrapper;
 
 namespace XmlSec
 {
-    ResMgr*         GetResMgr( void );
+    ResMgr*         GetResMgr();
 
-    const LocaleDataWrapper&    GetLocaleData( void );
+    const LocaleDataWrapper&    GetLocaleData();
     DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
     OUString        GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
     OUString        GetDateString( const ::com::sun::star::util::DateTime& _rDT );

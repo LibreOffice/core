@@ -716,7 +716,7 @@ private:
     virtual void _dispose() SAL_OVERRIDE;
     virtual uno::Reference<presentation::XSlideShowView> getUnoView()const SAL_OVERRIDE;
     virtual void setIsSoundEnabled (const bool bValue) SAL_OVERRIDE;
-    virtual bool isSoundEnabled (void) const SAL_OVERRIDE;
+    virtual bool isSoundEnabled() const SAL_OVERRIDE;
 
     // XEventListener:
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
@@ -1017,7 +1017,7 @@ void SlideView::setIsSoundEnabled (const bool bValue)
     mbIsSoundEnabled = bValue;
 }
 
-bool SlideView::isSoundEnabled (void) const
+bool SlideView::isSoundEnabled() const
 {
     return mbIsSoundEnabled;
 }

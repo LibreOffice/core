@@ -50,14 +50,14 @@ class PresenterScrollBar::MousePressRepeater
 {
 public:
     MousePressRepeater (const ::rtl::Reference<PresenterScrollBar>& rpScrollBar);
-    void Dispose (void);
+    void Dispose();
     void Start (const PresenterScrollBar::Area& reArea);
-    void Stop (void);
+    void Stop();
     void SetMouseArea (const PresenterScrollBar::Area& reArea);
 
 private:
     void Callback (const TimeValue& rCurrentTime);
-    void Execute (void);
+    void Execute();
 
     sal_Int32 mnMousePressRepeaterTaskId;
     ::rtl::Reference<PresenterScrollBar> mpScrollBar;
@@ -139,11 +139,11 @@ PresenterScrollBar::PresenterScrollBar (
     }
 }
 
-PresenterScrollBar::~PresenterScrollBar (void)
+PresenterScrollBar::~PresenterScrollBar()
 {
 }
 
-void SAL_CALL PresenterScrollBar::disposing (void)
+void SAL_CALL PresenterScrollBar::disposing()
 {
     mpMousePressRepeater->Dispose();
 
@@ -280,7 +280,7 @@ void PresenterScrollBar::SetBackground (const SharedBitmapDescriptor& rpBackgrou
     mpBackgroundBitmap = rpBackgroundBitmap;
 }
 
-void PresenterScrollBar::CheckValues (void)
+void PresenterScrollBar::CheckValues()
 {
     mnThumbPosition = ValidateThumbPosition(mnThumbPosition);
 }
@@ -540,7 +540,7 @@ void PresenterScrollBar::PaintBitmap(
     }
 }
 
-void PresenterScrollBar::NotifyThumbPositionChange (void)
+void PresenterScrollBar::NotifyThumbPositionChange()
 {
     if ( ! mbIsNotificationActive)
     {
@@ -636,7 +636,7 @@ PresenterVerticalScrollBar::PresenterVerticalScrollBar (
 {
 }
 
-PresenterVerticalScrollBar::~PresenterVerticalScrollBar (void)
+PresenterVerticalScrollBar::~PresenterVerticalScrollBar()
 {
 }
 
@@ -669,7 +669,7 @@ void PresenterVerticalScrollBar::UpdateDragAnchor (const double nDragDistance)
     maDragAnchor.Y += nDragDistance * nPagerHeight /  mnTotalSize;
 }
 
-sal_Int32 PresenterVerticalScrollBar::GetSize (void) const
+sal_Int32 PresenterVerticalScrollBar::GetSize() const
 {
     return mnScrollBarWidth;
 }
@@ -686,7 +686,7 @@ double PresenterVerticalScrollBar::GetMinor (const double nX, const double nY) c
     return nX;
 }
 
-void PresenterVerticalScrollBar::UpdateBorders (void)
+void PresenterVerticalScrollBar::UpdateBorders()
 {
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     double nBottom = aWindowBox.Height;
@@ -752,7 +752,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
         maBox[Pager]);
 }
 
-void PresenterVerticalScrollBar::UpdateBitmaps (void)
+void PresenterVerticalScrollBar::UpdateBitmaps()
 {
     if (mpBitmaps.get() != NULL)
     {
@@ -816,7 +816,7 @@ PresenterScrollBar::MousePressRepeater::MousePressRepeater (
 {
 }
 
-void PresenterScrollBar::MousePressRepeater::Dispose (void)
+void PresenterScrollBar::MousePressRepeater::Dispose()
 {
     Stop();
     mpScrollBar = NULL;
@@ -843,7 +843,7 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
     }
 }
 
-void PresenterScrollBar::MousePressRepeater::Stop (void)
+void PresenterScrollBar::MousePressRepeater::Stop()
 {
     if (mnMousePressRepeaterTaskId != PresenterTimer::NotAValidTaskId)
     {
@@ -877,7 +877,7 @@ void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrent
     Execute();
 }
 
-void PresenterScrollBar::MousePressRepeater::Execute (void)
+void PresenterScrollBar::MousePressRepeater::Execute()
 {
     const double nThumbPosition (mpScrollBar->GetThumbPosition());
     switch (meMouseArea)

@@ -63,22 +63,22 @@ class NeonUri
         bool operator!= ( const NeonUri & rOther ) const
         { return !operator==( rOther ); }
 
-        const OUString & GetURI( void ) const
+        const OUString & GetURI() const
                                             { return mURI; };
-        const OUString & GetScheme( void ) const
+        const OUString & GetScheme() const
                                             { return mScheme; };
-        const OUString & GetUserInfo( void ) const
+        const OUString & GetUserInfo() const
                                             { return mUserInfo; };
-        const OUString & GetHost( void ) const
+        const OUString & GetHost() const
                                             { return mHostName; };
-        sal_Int32       GetPort( void )     const
+        sal_Int32       GetPort()     const
                                             { return mPort; };
-        const OUString &     GetPath( void ) const
+        const OUString &     GetPath() const
                                             { return mPath; };
 
-        OUString GetPathBaseName ( void ) const;
+        OUString GetPathBaseName() const;
 
-        OUString GetPathBaseNameUnescaped ( void ) const;
+        OUString GetPathBaseNameUnescaped() const;
 
         void SetScheme (const OUString& scheme)
             { mScheme = scheme; calculateURI (); };

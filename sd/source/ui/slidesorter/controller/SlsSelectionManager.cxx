@@ -75,7 +75,7 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
 {
 }
 
-SelectionManager::~SelectionManager (void)
+SelectionManager::~SelectionManager()
 {
     if (mnAnimationId != Animator::NotAnAnimationId)
         mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
@@ -269,7 +269,7 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
             rListener));
 }
 
-sal_Int32 SelectionManager::GetInsertionPosition (void) const
+sal_Int32 SelectionManager::GetInsertionPosition() const
 {
     sal_Int32 nInsertionPosition (mnInsertionPosition);
     if (nInsertionPosition < 0)

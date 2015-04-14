@@ -28,7 +28,7 @@ int _cdecl main( int argc, char * argv[] )
     void test_int64();
     test_int64();
 
-    void test_profile(void);
+    void test_profile();
     test_profile();
 
     void test_OString();

@@ -32,8 +32,8 @@ namespace {
     {
     public:
         UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater, const bool bStartLocked);
-        virtual ~UpdateLock (void);
-        virtual void Activate (void) SAL_OVERRIDE;
+        virtual ~UpdateLock();
+        virtual void Activate() SAL_OVERRIDE;
     private:
         ::slideshow::internal::ScreenUpdater& mrUpdater;
         bool mbIsActivated;
@@ -200,13 +200,13 @@ namespace internal
                        boost::mem_fn(&View::updateScreen) );
     }
 
-    void ScreenUpdater::lockUpdates (void)
+    void ScreenUpdater::lockUpdates()
     {
         ++mpImpl->mnLockCount;
         OSL_ASSERT(mpImpl->mnLockCount>0);
     }
 
-    void ScreenUpdater::unlockUpdates (void)
+    void ScreenUpdater::unlockUpdates()
     {
         OSL_ASSERT(mpImpl->mnLockCount>0);
         if (mpImpl->mnLockCount > 0)
@@ -241,7 +241,7 @@ UpdateLock::UpdateLock (
 
 
 
-UpdateLock::~UpdateLock (void)
+UpdateLock::~UpdateLock()
 {
     if (mbIsActivated)
         mrUpdater.unlockUpdates();
@@ -250,7 +250,7 @@ UpdateLock::~UpdateLock (void)
 
 
 
-void UpdateLock::Activate (void)
+void UpdateLock::Activate()
 {
     if ( ! mbIsActivated)
     {

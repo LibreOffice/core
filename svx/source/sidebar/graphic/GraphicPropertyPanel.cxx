@@ -207,7 +207,7 @@ IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
 
 
 
-void GraphicPropertyPanel::SetupIcons(void)
+void GraphicPropertyPanel::SetupIcons()
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {

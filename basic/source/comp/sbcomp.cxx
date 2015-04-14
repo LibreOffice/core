@@ -348,7 +348,7 @@ struct FunctionItem
     bool        m_bBlockAll;
     bool        m_bBlockSteps;
 
-    FunctionItem( void )
+    FunctionItem()
         : m_dTotalTime( 0.0 )
         , m_dNetTime( 0.0 )
         , m_nCallCount( 0 )
@@ -367,7 +367,7 @@ bool compareFunctionNetTime( FunctionItem* p1, FunctionItem* p2 )
     return (p1->m_dNetTime > p2->m_dNetTime);
 }
 
-void lcl_printTimeOutput( void )
+void lcl_printTimeOutput()
 {
     // Overall time output
     lcl_lineOut( "" );
@@ -428,7 +428,7 @@ void lcl_printTimeOutput( void )
 
 static bool GbInitTraceAlreadyCalled = false;
 
-void dbg_InitTrace( void )
+void dbg_InitTrace()
 {
     if( GbInitOnlyAtOfficeStart && GbInitTraceAlreadyCalled )
     {
@@ -466,7 +466,7 @@ void dbg_InitTrace( void )
 #endif
 }
 
-void dbg_DeInitTrace( void )
+void dbg_DeInitTrace()
 {
     GbTraceOn = GbSavTraceOn;
 

@@ -159,7 +159,7 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
     }
 }
 
-bool SvLBoxButtonData::HasDefaultImages( void ) const
+bool SvLBoxButtonData::HasDefaultImages() const
 {
     return pImpl->bDefaultImages;
 }

@@ -56,7 +56,7 @@ Theme::Theme()
     SetupPropertyMaps();
 }
 
-Theme::~Theme (void)
+Theme::~Theme()
 {
 }
 
@@ -115,13 +115,13 @@ bool Theme::GetBoolean (const ThemeItem eItem)
     return rTheme.maBooleans[nIndex];
 }
 
-bool Theme::IsHighContrastMode (void)
+bool Theme::IsHighContrastMode()
 {
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.mbIsHighContrastMode;
 }
 
-void Theme::HandleDataChange (void)
+void Theme::HandleDataChange()
 {
     Theme& rTheme (GetCurrentTheme());
 
@@ -135,7 +135,7 @@ void Theme::HandleDataChange (void)
     GetCurrentTheme().UpdateTheme();
 }
 
-void Theme::InitializeTheme (void)
+void Theme::InitializeTheme()
 {
     setPropertyValue(
         maPropertyIdToNameMap[Bool_UseSymphonyIcons],
@@ -145,7 +145,7 @@ void Theme::InitializeTheme (void)
         Any(false));
 }
 
-void Theme::UpdateTheme (void)
+void Theme::UpdateTheme()
 {
     SidebarResource aLocalResource;
 
@@ -387,7 +387,7 @@ void Theme::UpdateTheme (void)
     }
 }
 
-void SAL_CALL Theme::disposing (void)
+void SAL_CALL Theme::disposing()
 {
     ChangeListeners aListeners;
     aListeners.swap(maChangeListeners);
@@ -417,12 +417,12 @@ void SAL_CALL Theme::disposing (void)
     }
 }
 
-Reference<beans::XPropertySet> Theme::GetPropertySet (void)
+Reference<beans::XPropertySet> Theme::GetPropertySet()
 {
     return Reference<beans::XPropertySet>(static_cast<XWeak*>(&GetCurrentTheme()), UNO_QUERY);
 }
 
-Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo (void)
+Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo()
     throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<beans::XPropertySetInfo>(this);
@@ -612,7 +612,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     }
 }
 
-css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
+css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
     throw(css::uno::RuntimeException, std::exception)
 {
     ::std::vector<beans::Property> aProperties;
@@ -672,7 +672,7 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyNam
     return sal_True;
 }
 
-void Theme::SetupPropertyMaps (void)
+void Theme::SetupPropertyMaps()
 {
     maPropertyIdToNameMap.resize(__Post_Rect);
     maImages.resize(__Image_Color - __Pre_Image - 1);

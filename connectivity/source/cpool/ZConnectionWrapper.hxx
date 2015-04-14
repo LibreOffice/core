@@ -42,7 +42,7 @@ namespace connectivity
     {
     protected:
         // OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         virtual ~OConnectionWeakWrapper();
     public:
         OConnectionWeakWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _xConnection);

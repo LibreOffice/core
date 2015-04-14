@@ -38,8 +38,8 @@ class PresenterCanvasHelper
     : ::boost::noncopyable
 {
 public:
-    PresenterCanvasHelper (void);
-    ~PresenterCanvasHelper (void);
+    PresenterCanvasHelper();
+    ~PresenterCanvasHelper();
 
     void Paint (
         const SharedBitmapDescriptor& rpBitmap,

@@ -49,7 +49,7 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray
     LibDescriptor* mpLibs;
     sal_Int32 mnLibCount;
 
-    LibDescriptorArray( void ) { mpLibs = NULL; mnLibCount = 0; }
+    LibDescriptorArray() { mpLibs = NULL; mnLibCount = 0; }
     LibDescriptorArray( sal_Int32 nLibCount );
 
     ~LibDescriptorArray();

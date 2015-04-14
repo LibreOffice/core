@@ -109,7 +109,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
 #endif
 }
 
-CoreTextStyle::~CoreTextStyle( void )
+CoreTextStyle::~CoreTextStyle()
 {
     if( mpStyleDict )
         CFRelease( mpStyleDict );
@@ -218,7 +218,7 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     return true;
 }
 
-PhysicalFontFace* CoreTextFontData::Clone( void ) const
+PhysicalFontFace* CoreTextFontData::Clone() const
 {
     return new CoreTextFontData( *this);
 }
@@ -432,7 +432,7 @@ CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
     return (*it).second;
 }
 
-bool SystemFontList::Init( void )
+bool SystemFontList::Init()
 {
     // enumerate available system fonts
     static const int nMaxDictEntries = 8;
@@ -450,7 +450,7 @@ bool SystemFontList::Init( void )
     return true;
 }
 
-SystemFontList* GetCoretextFontList( void )
+SystemFontList* GetCoretextFontList()
 {
     SystemFontList* pList = new SystemFontList();
     if( !pList->Init() ) {

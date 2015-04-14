@@ -21,7 +21,7 @@
 
 namespace sd { namespace framework {
 
-ChangeRequestQueue::ChangeRequestQueue (void)
+ChangeRequestQueue::ChangeRequestQueue()
 {
 }
 

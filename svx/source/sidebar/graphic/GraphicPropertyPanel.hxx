@@ -100,7 +100,7 @@ private:
         SfxBindings* pBindings);
     virtual ~GraphicPropertyPanel();
 
-    void SetupIcons(void);
+    void SetupIcons();
     void Initialize();
 };
 

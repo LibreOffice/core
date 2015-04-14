@@ -45,9 +45,9 @@ public:
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    virtual ULONG STDMETHODCALLTYPE AddRef( void);
+    virtual ULONG STDMETHODCALLTYPE AddRef();
 
-    virtual ULONG STDMETHODCALLTYPE Release( void);
+    virtual ULONG STDMETHODCALLTYPE Release();
 
 
     // IQueryInfo methods
@@ -67,7 +67,7 @@ public:
     // IPersistFile methods
 
 
-    virtual HRESULT STDMETHODCALLTYPE IsDirty(void);
+    virtual HRESULT STDMETHODCALLTYPE IsDirty();
 
     virtual HRESULT STDMETHODCALLTYPE Load(
             /* [in] */ LPCOLESTR pszFileName,

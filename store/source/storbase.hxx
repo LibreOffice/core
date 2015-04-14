@@ -794,13 +794,13 @@ public:
 
     /** State.
      */
-    inline bool dirty (void) const;
-    inline void clean (void);
-    inline void touch (void);
+    inline bool dirty() const;
+    inline void clean();
+    inline void touch();
 
     /** Location.
      */
-    inline sal_uInt32 location (void) const;
+    inline sal_uInt32 location() const;
     inline void       location (sal_uInt32 nAddr);
 
 protected:
@@ -817,7 +817,7 @@ protected:
 
     /** Destruction.
      */
-    virtual ~OStorePageObject (void);
+    virtual ~OStorePageObject();
 
 public:
     template< class U >
@@ -847,22 +847,22 @@ public:
     virtual storeError verify (sal_uInt32 nAddr) const = 0;
 };
 
-inline bool OStorePageObject::dirty (void) const
+inline bool OStorePageObject::dirty() const
 {
     return m_bDirty;
 }
 
-inline void OStorePageObject::clean (void)
+inline void OStorePageObject::clean()
 {
     m_bDirty = false;
 }
 
-inline void OStorePageObject::touch (void)
+inline void OStorePageObject::touch()
 {
     m_bDirty = true;
 }
 
-inline sal_uInt32 OStorePageObject::location (void) const
+inline sal_uInt32 OStorePageObject::location() const
 {
     return m_xPage->location();
 }

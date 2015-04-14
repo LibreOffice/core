@@ -131,9 +131,9 @@ class SdrGraphicUpdater : public ::osl::Thread
 {
 public:
     SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
-    virtual ~SdrGraphicUpdater( void );
+    virtual ~SdrGraphicUpdater();
 
-    void SAL_CALL Terminate( void );
+    void SAL_CALL Terminate();
 
     bool GraphicLinkChanged( const OUString& rFileName ){ return maFileName != rFileName;    };
 
@@ -142,12 +142,12 @@ protected:
     /** is called from the inherited create method and acts as the
         main function of this thread.
     */
-    virtual void SAL_CALL run(void) SAL_OVERRIDE;
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     /** Called after the thread is terminated via the terminate
         method.  Used to kill the thread by calling delete on this.
     */
-    virtual void SAL_CALL onTerminated(void) SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 private:
 
@@ -167,7 +167,7 @@ SdrGraphicUpdater::SdrGraphicUpdater( const OUString& rFileName, const OUString&
     create();
 }
 
-SdrGraphicUpdater::~SdrGraphicUpdater( void )
+SdrGraphicUpdater::~SdrGraphicUpdater()
 {
 }
 
@@ -176,12 +176,12 @@ void SdrGraphicUpdater::Terminate()
     mbIsTerminated = true;
 }
 
-void SAL_CALL SdrGraphicUpdater::onTerminated(void)
+void SAL_CALL SdrGraphicUpdater::onTerminated()
 {
     delete this;
 }
 
-void SAL_CALL SdrGraphicUpdater::run(void)
+void SAL_CALL SdrGraphicUpdater::run()
 {
     osl_setThreadName("SdrGraphicUpdater");
 

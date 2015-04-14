@@ -47,8 +47,8 @@ Panel::Panel (
     const PanelDescriptor& rPanelDescriptor,
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
-    const ::boost::function<void(void)>& rDeckLayoutTrigger,
-    const ::boost::function<Context(void)>& rContextAccess)
+    const ::boost::function<void()>& rDeckLayoutTrigger,
+    const ::boost::function<Context()>& rContextAccess)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
       mpTitleBar(new PanelTitleBar(
@@ -69,12 +69,12 @@ Panel::Panel (
 #endif
 }
 
-Panel::~Panel (void)
+Panel::~Panel()
 {
     Dispose();
 }
 
-void Panel::Dispose (void)
+void Panel::Dispose()
 {
     mxPanelComponent = NULL;
 
@@ -94,7 +94,7 @@ void Panel::Dispose (void)
     mpTitleBar.reset();
 }
 
-PanelTitleBar* Panel::GetTitleBar (void) const
+PanelTitleBar* Panel::GetTitleBar() const
 {
     return mpTitleBar.get();
 }
@@ -133,7 +133,7 @@ void Panel::Paint (const Rectangle& rUpdateArea)
     Window::Paint(rUpdateArea);
 }
 
-void Panel::Resize (void)
+void Panel::Resize()
 {
     Window::Resize();
 
@@ -151,7 +151,7 @@ void Panel::Resize (void)
     }
 }
 
-void Panel::Activate (void)
+void Panel::Activate()
 {
     Window::Activate();
 }
@@ -162,7 +162,7 @@ void Panel::DataChanged (const DataChangedEvent& rEvent)
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
-Reference<awt::XWindow> Panel::GetElementWindow (void)
+Reference<awt::XWindow> Panel::GetElementWindow()
 {
     if (mxElement.is())
     {

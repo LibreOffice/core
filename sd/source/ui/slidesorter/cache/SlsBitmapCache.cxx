@@ -40,28 +40,28 @@ class BitmapCache::CacheEntry
 public:
     CacheEntry(const Bitmap& rBitmap, sal_Int32 nLastAccessTime, bool bIsPrecious);
     CacheEntry(sal_Int32 nLastAccessTime, bool bIsPrecious);
-    ~CacheEntry (void) {};
+    ~CacheEntry() {};
     inline void Recycle (const CacheEntry& rEntry);
-    inline sal_Int32 GetMemorySize (void) const;
+    inline sal_Int32 GetMemorySize() const;
     void Compress (const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
-    inline void Decompress (void);
+    inline void Decompress();
 
-    bool IsUpToDate (void) const { return mbIsUpToDate; }
+    bool IsUpToDate() const { return mbIsUpToDate; }
     void SetUpToDate (bool bIsUpToDate) { mbIsUpToDate = bIsUpToDate; }
-    sal_Int32 GetAccessTime (void) const { return mnLastAccessTime; }
+    sal_Int32 GetAccessTime() const { return mnLastAccessTime; }
     void SetAccessTime (sal_Int32 nAccessTime) { mnLastAccessTime = nAccessTime; }
 
-    Bitmap GetPreview (void) const { return maPreview; }
+    Bitmap GetPreview() const { return maPreview; }
     inline void SetPreview (const Bitmap& rPreview);
-    bool HasPreview (void) const;
+    bool HasPreview() const;
 
-    Bitmap GetMarkedPreview (void) const { return maMarkedPreview; }
+    Bitmap GetMarkedPreview() const { return maMarkedPreview; }
     inline void SetMarkedPreview (const Bitmap& rMarkePreview);
 
-    bool HasReplacement (void) const { return (mpReplacement.get() != NULL); }
-    inline bool HasLosslessReplacement (void) const;
-    void Invalidate (void) { mpReplacement.reset(); mpCompressor.reset(); mbIsUpToDate = false; }
-    bool IsPrecious (void) const { return mbIsPrecious; }
+    bool HasReplacement() const { return (mpReplacement.get() != NULL); }
+    inline bool HasLosslessReplacement() const;
+    void Invalidate() { mpReplacement.reset(); mpCompressor.reset(); mbIsUpToDate = false; }
+    bool IsPrecious() const { return mbIsPrecious; }
     void SetPrecious (bool bIsPrecious) { mbIsPrecious = bIsPrecious; }
 
 private:
@@ -88,7 +88,7 @@ class BitmapCache::CacheBitmapContainer
     : public std::unordered_map<CacheKey, CacheEntry, CacheHash>
 {
 public:
-    CacheBitmapContainer (void) {}
+    CacheBitmapContainer() {}
 };
 
 namespace {
@@ -138,12 +138,12 @@ BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
     mpCacheCompactor = CacheCompactor::Create(*this,mnMaximalNormalCacheSize);
 }
 
-BitmapCache::~BitmapCache (void)
+BitmapCache::~BitmapCache()
 {
     Clear();
 }
 
-void BitmapCache::Clear (void)
+void BitmapCache::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -251,7 +251,7 @@ bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
         return false;
 }
 
-void BitmapCache::InvalidateCache (void)
+void BitmapCache::InvalidateCache()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -330,7 +330,7 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
     }
 }
 
-void BitmapCache::ReCalculateTotalCacheSize (void)
+void BitmapCache::ReCalculateTotalCacheSize()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -494,7 +494,7 @@ inline void BitmapCache::CacheEntry::Recycle (const CacheEntry& rEntry)
     }
 }
 
-inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize (void) const
+inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize() const
 {
     sal_Int32 nSize (0);
     nSize += maPreview.GetSizeBytes();
@@ -529,7 +529,7 @@ void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompress
     }
 }
 
-inline void BitmapCache::CacheEntry::Decompress (void)
+inline void BitmapCache::CacheEntry::Decompress()
 {
     if (mpReplacement.get()!=NULL && mpCompressor.get()!=NULL && maPreview.IsEmpty())
     {
@@ -548,7 +548,7 @@ inline void BitmapCache::CacheEntry::SetPreview (const Bitmap& rPreview)
     mpCompressor.reset();
 }
 
-bool BitmapCache::CacheEntry::HasPreview (void) const
+bool BitmapCache::CacheEntry::HasPreview() const
 {
     return ! maPreview.IsEmpty();
 }
@@ -558,7 +558,7 @@ inline void BitmapCache::CacheEntry::SetMarkedPreview (const Bitmap& rMarkedPrev
     maMarkedPreview = rMarkedPreview;
 }
 
-inline bool BitmapCache::CacheEntry::HasLosslessReplacement (void) const
+inline bool BitmapCache::CacheEntry::HasLosslessReplacement() const
 {
     return mpReplacement.get()!=NULL
         && mpCompressor.get()!=NULL

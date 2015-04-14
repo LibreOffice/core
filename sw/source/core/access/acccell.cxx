@@ -235,7 +235,7 @@ SwAccessibleCell::~SwAccessibleCell()
 {
 }
 
-OUString SAL_CALL SwAccessibleCell::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     return GetName();

@@ -42,7 +42,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-FltError ImportExcel::Read( void )
+FltError ImportExcel::Read()
 {
     XclImpPageSettings&     rPageSett       = GetPageSettings();
     XclImpTabViewSettings&  rTabViewSett    = GetTabViewSettings();
@@ -766,7 +766,7 @@ FltError ImportExcel::Read( void )
     return eLastErr;
 }
 
-FltError ImportExcel8::Read( void )
+FltError ImportExcel8::Read()
 {
 #ifdef EXC_INCL_DUMPER
     {

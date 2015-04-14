@@ -96,7 +96,7 @@ public:
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void) const
+    virtual Rectangle GetBoundingBoxOnScreen() const
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current bounding box relative to the parent object.
@@ -109,7 +109,7 @@ public:
     /// Return the number of currently visible children.
     /// override to calculate this on demand
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount(void)
+        getAccessibleChildCount()
                     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or NULL if index is invalid.
@@ -122,7 +122,7 @@ public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet(void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
@@ -135,13 +135,13 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName(void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames(void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()

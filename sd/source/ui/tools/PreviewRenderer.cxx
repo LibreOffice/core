@@ -51,8 +51,8 @@ namespace {
     class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
     {
     public:
-        ViewRedirector (void);
-        virtual ~ViewRedirector (void);
+        ViewRedirector();
+        virtual ~ViewRedirector();
         virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
             const sdr::contact::ViewObjectContact& rOriginal,
                 const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
@@ -81,7 +81,7 @@ PreviewRenderer::PreviewRenderer (
     }
 }
 
-PreviewRenderer::~PreviewRenderer (void)
+PreviewRenderer::~PreviewRenderer()
 {
     if (mpDocShellOfView != NULL)
         EndListening (*mpDocShellOfView);
@@ -282,7 +282,7 @@ bool PreviewRenderer::Initialize (
     return true;
 }
 
-void PreviewRenderer::Cleanup (void)
+void PreviewRenderer::Cleanup()
 {
     mpView->HideSdrPage();
 }
@@ -352,7 +352,7 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
     }
 }
 
-void PreviewRenderer::PaintFrame (void)
+void PreviewRenderer::PaintFrame()
 {
     if (mbHasFrame)
     {
@@ -505,11 +505,11 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 namespace {
 
-ViewRedirector::ViewRedirector (void)
+ViewRedirector::ViewRedirector()
 {
 }
 
-ViewRedirector::~ViewRedirector (void)
+ViewRedirector::~ViewRedirector()
 {
 }
 

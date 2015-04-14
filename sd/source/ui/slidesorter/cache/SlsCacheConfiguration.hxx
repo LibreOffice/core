@@ -38,7 +38,7 @@ public:
         seconds.  Subsequent calls to this function will create a new
         instance.
     */
-    static ::boost::shared_ptr<CacheConfiguration> Instance (void);
+    static ::boost::shared_ptr<CacheConfiguration> Instance();
 
     /** Look up the specified value in
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
@@ -55,7 +55,7 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameAccess> mxCacheNode;
 
-    CacheConfiguration (void);
+    CacheConfiguration();
 
     DECL_LINK(TimerCallback, void *);
 };

@@ -56,7 +56,7 @@ public:
     {}
     TYPEINFO_OVERRIDE();
 
-    bool isSet( void )
+    bool isSet()
         { return mbSet; }
     void setSet( bool bSet )
         { mbSet = bSet; }

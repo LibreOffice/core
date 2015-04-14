@@ -47,12 +47,12 @@ public:
     enum AnimationMode { AM_Animated, AM_Immediate };
 
     Animator (SlideSorter& rSlideSorter);
-    ~Animator (void);
+    ~Animator();
 
     /** When disposed the animator will stop its work immediately and not
         process any timer events anymore.
     */
-    void Dispose (void);
+    void Dispose();
 
     /** An animation object is called with values between 0 and 1 as single
         argument to its operator() method.
@@ -90,7 +90,7 @@ public:
         slidesorter when the slide sorter bar is put into a cache due to a
         change of the edit mode.
     */
-    void RemoveAllAnimations (void);
+    void RemoveAllAnimations();
 
 private:
     SlideSorter& mrSlideSorter;
@@ -118,7 +118,7 @@ private:
 
     /** Remove animations that have expired.
     */
-    void CleanUpAnimationList (void);
+    void CleanUpAnimationList();
 
     void RequestNextFrame (const double nFrameStart = 0);
 };

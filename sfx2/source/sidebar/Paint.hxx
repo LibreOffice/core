@@ -49,7 +49,7 @@ public:
     static Paint Create (const css::uno::Any& rValue);
 
     // Create paint with type NoPaint.
-    explicit Paint (void);
+    explicit Paint();
 
     // Create a Paint object for the given color.
     explicit Paint (const Color& rColor);
@@ -57,11 +57,11 @@ public:
     // Create a Paint object for the given gradient.
     explicit Paint (const Gradient& rGradient);
 
-    Type GetType (void) const { return meType;}
-    const Color& GetColor (void) const;
-    const Gradient& GetGradient (void) const;
+    Type GetType() const { return meType;}
+    const Color& GetColor() const;
+    const Gradient& GetGradient() const;
 
-    Wallpaper GetWallpaper (void) const;
+    Wallpaper GetWallpaper() const;
 
 private:
     Type meType;

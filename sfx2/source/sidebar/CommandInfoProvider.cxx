@@ -53,10 +53,10 @@ namespace
             if (mxFrame.is())
                 mxFrame->addEventListener(this);
         }
-        virtual ~FrameListener (void)
+        virtual ~FrameListener()
         {
         }
-        virtual void SAL_CALL disposing (void) SAL_OVERRIDE
+        virtual void SAL_CALL disposing() SAL_OVERRIDE
         {
             if (mxFrame.is())
                 mxFrame->removeEventListener(this);
@@ -77,13 +77,13 @@ namespace
 
 namespace sfx2 { namespace sidebar {
 
-CommandInfoProvider& CommandInfoProvider::Instance (void)
+CommandInfoProvider& CommandInfoProvider::Instance()
 {
     static CommandInfoProvider aProvider;
     return aProvider;
 }
 
-CommandInfoProvider::CommandInfoProvider (void)
+CommandInfoProvider::CommandInfoProvider()
     : mxContext(comphelper::getProcessComponentContext()),
       mxCachedDataFrame(),
       mxCachedDocumentAcceleratorConfiguration(),
@@ -94,7 +94,7 @@ CommandInfoProvider::CommandInfoProvider (void)
 {
 }
 
-CommandInfoProvider::~CommandInfoProvider (void)
+CommandInfoProvider::~CommandInfoProvider()
 {
     if (mxFrameListener.is())
     {
@@ -141,7 +141,7 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
     }
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceleratorConfiguration (void)
+Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceleratorConfiguration()
 {
     if ( ! mxCachedDocumentAcceleratorConfiguration.is())
     {
@@ -172,7 +172,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
     return mxCachedDocumentAcceleratorConfiguration;
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAcceleratorConfiguration (void)
+Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAcceleratorConfiguration()
 {
     if ( ! mxCachedModuleAcceleratorConfiguration.is())
     {
@@ -193,7 +193,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
     return mxCachedModuleAcceleratorConfiguration;
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration (void)
+Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration()
 {
     // Get the global accelerator configuration.
     if ( ! mxCachedGlobalAcceleratorConfiguration.is())
@@ -204,7 +204,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAccelerat
     return mxCachedGlobalAcceleratorConfiguration;
 }
 
-OUString CommandInfoProvider::GetModuleIdentifier (void)
+OUString CommandInfoProvider::GetModuleIdentifier()
 {
     if (msCachedModuleIdentifier.getLength() == 0)
     {

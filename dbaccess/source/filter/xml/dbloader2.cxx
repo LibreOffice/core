@@ -102,14 +102,14 @@ public:
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
     {
         return OUString("org.openoffice.comp.dbflt.DBTypeDetection");
     }
-    static Sequence< OUString> getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -200,13 +200,13 @@ sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) 
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames() throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
 
 // ORegistryServiceManager_Static
-Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
@@ -239,14 +239,14 @@ public:
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
     {
         return OUString("org.openoffice.comp.dbflt.DBContentLoader2");
     }
-    static Sequence< OUString > getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -254,7 +254,7 @@ public:
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancel(void) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw(std::exception) SAL_OVERRIDE;
 
 private:
     bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard );
@@ -291,13 +291,13 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) 
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames() throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
 
 // ORegistryServiceManager_Static
-Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static() throw(  )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.FrameLoader";
@@ -558,7 +558,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         ::comphelper::disposeComponent(xModel);
 }
 
-void DBContentLoader::cancel(void) throw(std::exception)
+void DBContentLoader::cancel() throw(std::exception)
 {
 }
 

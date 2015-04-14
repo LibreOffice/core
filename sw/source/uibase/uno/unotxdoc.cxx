@@ -465,7 +465,7 @@ void SwXTextDocument::GetNumberFormatter()
     }
 }
 
-Reference< XText >  SwXTextDocument::getText(void) throw( RuntimeException, std::exception )
+Reference< XText >  SwXTextDocument::getText() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -478,14 +478,14 @@ Reference< XText >  SwXTextDocument::getText(void) throw( RuntimeException, std:
     return xBodyText;
 }
 
-void SwXTextDocument::reformat(void) throw( RuntimeException, std::exception )
+void SwXTextDocument::reformat() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
 }
 
-void SwXTextDocument::lockControllers(void) throw( RuntimeException, std::exception )
+void SwXTextDocument::lockControllers() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(IsValid())
@@ -497,7 +497,7 @@ void SwXTextDocument::lockControllers(void) throw( RuntimeException, std::except
         throw RuntimeException();
 }
 
-void SwXTextDocument::unlockControllers(void) throw( RuntimeException, std::exception )
+void SwXTextDocument::unlockControllers() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!aActionArr.empty())
@@ -510,13 +510,13 @@ void SwXTextDocument::unlockControllers(void) throw( RuntimeException, std::exce
         throw RuntimeException();
 }
 
-sal_Bool SwXTextDocument::hasControllersLocked(void) throw( RuntimeException, std::exception )
+sal_Bool SwXTextDocument::hasControllersLocked() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return !aActionArr.empty();
 }
 
-Reference< frame::XController >  SwXTextDocument::getCurrentController(void) throw( RuntimeException, std::exception )
+Reference< frame::XController >  SwXTextDocument::getCurrentController() throw( RuntimeException, std::exception )
 {
     return SfxBaseModel::getCurrentController();
 }
@@ -555,12 +555,12 @@ sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< b
     return SfxBaseModel::attachResource(aURL, aArgs);
 }
 
-OUString SwXTextDocument::getURL(void) throw( RuntimeException, std::exception )
+OUString SwXTextDocument::getURL() throw( RuntimeException, std::exception )
 {
     return SfxBaseModel::getURL();
 }
 
-Sequence< beans::PropertyValue > SwXTextDocument::getArgs(void) throw( RuntimeException, std::exception )
+Sequence< beans::PropertyValue > SwXTextDocument::getArgs() throw( RuntimeException, std::exception )
 {
     return SfxBaseModel::getArgs();
 }
@@ -575,7 +575,7 @@ void SwXTextDocument::disconnectController(const Reference< frame::XController >
     SfxBaseModel::disconnectController(xController);
 }
 
-void SwXTextDocument::dispose(void) throw( RuntimeException, std::exception )
+void SwXTextDocument::dispose() throw( RuntimeException, std::exception )
 {
     SfxBaseModel::dispose();
 }
@@ -598,7 +598,7 @@ void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener 
     SfxBaseModel::removeEventListener(aListener);
 }
 
-Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
+Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
             throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -615,7 +615,7 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
     return *pxXLineNumberingProperties;
 }
 
-Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
+Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
                                     throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -629,7 +629,7 @@ Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
     return *pxXChapterNumbering;
 }
 
-Reference< XIndexAccess >  SwXTextDocument::getNumberingRules(void) throw( RuntimeException, std::exception )
+Reference< XIndexAccess >  SwXTextDocument::getNumberingRules() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -642,7 +642,7 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules(void) throw( Runti
     return *pxXNumberingRules;
 }
 
-Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeException, std::exception )
+Reference< XIndexAccess >  SwXTextDocument::getFootnotes() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -656,7 +656,7 @@ Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeExc
 }
 
 Reference< XPropertySet >  SAL_CALL
-        SwXTextDocument::getFootnoteSettings(void) throw( RuntimeException, std::exception )
+        SwXTextDocument::getFootnoteSettings() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -669,7 +669,7 @@ Reference< XPropertySet >  SAL_CALL
     return *pxXFootnoteSettings;
 }
 
-Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeException, std::exception )
+Reference< XIndexAccess >  SwXTextDocument::getEndnotes() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -682,7 +682,7 @@ Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeExce
     return *pxXEndnotes;
 }
 
-Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings(void) throw( RuntimeException, std::exception )
+Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -695,7 +695,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings(void) throw( Runt
     return *pxXEndnoteSettings;
 }
 
-Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(void)
+Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor()
     throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -789,7 +789,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
 
 }
 
-Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(void)
+Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor()
                                                     throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -986,7 +986,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     return xRet;
 }
 
-Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
+Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
     throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1216,7 +1216,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         throw RuntimeException();
 }
 
-Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
+Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
                                         throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1230,7 +1230,7 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
     return *pxXReferenceMarks;
 }
 
-Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( RuntimeException, std::exception )
+Reference< XEnumerationAccess >  SwXTextDocument::getTextFields() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1243,7 +1243,7 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( Run
     return *pxXTextFieldTypes;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
+Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters()
     throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1257,7 +1257,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
     return *pxXTextFieldMasters;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1270,7 +1270,7 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( Runti
     return *pxXEmbeddedObjects;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getBookmarks() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1283,7 +1283,7 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeExce
     return *pxXBookmarks;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getTextSections() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1296,7 +1296,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeE
     return *pxXTextSections;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getTextTables() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1309,7 +1309,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeExc
     return *pxXTextTables;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getGraphicObjects() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1322,7 +1322,7 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( Runtim
     return *pxXGraphicObjects;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getTextFrames() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1335,7 +1335,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeExc
     return *pxXTextFrames;
 }
 
-Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getStyleFamilies() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1363,7 +1363,7 @@ uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
 
 }
 
-Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( RuntimeException, std::exception )
+Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1741,7 +1741,7 @@ Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
     return create(ServiceSpecifier, &Arguments);
 }
 
-Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
+Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
                                         throw( RuntimeException, std::exception )
 {
     static Sequence< OUString > aServices;
@@ -1765,7 +1765,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
     return aServices;
 }
 
-OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextDocument::getImplementationName() throw( RuntimeException, std::exception )
 {
     return PTR_CAST(SwGlobalDocShell, pDocShell) != nullptr
         ? OUString("com.sun.star.comp.Writer.GlobalDocument")
@@ -1779,7 +1779,7 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextDocument::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
     bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
@@ -1801,7 +1801,7 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
     return aRet;
 }
 
-Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( RuntimeException, std::exception )
+Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1814,7 +1814,7 @@ Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( Runt
     return *pxXDocumentIndexes;
 }
 
-Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo(void) throw( RuntimeException, std::exception )
+Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
@@ -2185,7 +2185,7 @@ void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyNam
     OSL_FAIL("not implemented");
 }
 
-Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException, std::exception )
+Reference< XNameAccess >  SwXTextDocument::getLinks() throw( RuntimeException, std::exception )
 {
     if(!pxLinkTargetSupplier)
     {
@@ -2214,7 +2214,7 @@ void SwXTextDocument::NotifyRefreshListeners()
             & util::XRefreshListener::refreshed, ev);
 }
 
-void SwXTextDocument::refresh(void) throw( RuntimeException, std::exception )
+void SwXTextDocument::refresh() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -3567,7 +3567,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     return aRet;
 }
 
-Sequence< OUString > SwXLinkTargetSupplier::getElementNames(void)
+Sequence< OUString > SwXLinkTargetSupplier::getElementNames()
                                         throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(7);
@@ -3597,19 +3597,19 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
     return sal_False;
 }
 
-uno::Type  SwXLinkTargetSupplier::getElementType(void)
+uno::Type  SwXLinkTargetSupplier::getElementType()
                                     throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XPropertySet>::get();
 
 }
 
-sal_Bool SwXLinkTargetSupplier::hasElements(void) throw( RuntimeException, std::exception )
+sal_Bool SwXLinkTargetSupplier::hasElements() throw( RuntimeException, std::exception )
 {
     return 0 != pxDoc;
 }
 
-OUString SwXLinkTargetSupplier::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXLinkTargetSupplier::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXLinkTargetSupplier");
 }
@@ -3620,7 +3620,7 @@ sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
+Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
                                                 throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
@@ -3704,7 +3704,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     return aRet;
 }
 
-Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
+Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
                                     throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet;
@@ -3780,13 +3780,13 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     return bRet;
 }
 
-uno::Type  SwXLinkNameAccessWrapper::getElementType(void)
+uno::Type  SwXLinkNameAccessWrapper::getElementType()
                                 throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException, std::exception )
+sal_Bool SwXLinkNameAccessWrapper::hasElements() throw( RuntimeException, std::exception )
 {
     bool bRet = false;
     if(pxDoc)
@@ -3800,7 +3800,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException, st
     return bRet;
 }
 
-Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo(void)
+Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo()
                                         throw( RuntimeException, std::exception )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
@@ -3889,13 +3889,13 @@ void SwXLinkNameAccessWrapper::removeVetoableChangeListener(
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {}
 
-Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
+Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks()
                                     throw( RuntimeException, std::exception )
 {
     return (SwXLinkNameAccessWrapper*)this;
 }
 
-OUString SwXLinkNameAccessWrapper::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXLinkNameAccessWrapper::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXLinkNameAccessWrapper");
 }
@@ -3906,7 +3906,7 @@ sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
+Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
                                                     throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
@@ -3925,7 +3925,7 @@ SwXOutlineTarget::~SwXOutlineTarget()
 {
 }
 
-Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo(void) throw( RuntimeException, std::exception )
+Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
@@ -3974,7 +3974,7 @@ void SwXOutlineTarget::removeVetoableChangeListener(
 {
 }
 
-OUString SwXOutlineTarget::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXOutlineTarget::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXOutlineTarget");
 }
@@ -3984,7 +3984,7 @@ sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName) throw( R
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();

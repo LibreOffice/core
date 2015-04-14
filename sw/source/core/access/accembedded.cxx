@@ -59,14 +59,14 @@ com::sun::star::uno::Any SAL_CALL
 }
 
 void SAL_CALL
-    SwAccessibleEmbeddedObject::acquire (void)
+    SwAccessibleEmbeddedObject::acquire()
     throw ()
 {
     SwAccessibleNoTextFrame::acquire ();
 }
 
 void SAL_CALL
-    SwAccessibleEmbeddedObject::release (void)
+    SwAccessibleEmbeddedObject::release()
     throw ()
 {
     SwAccessibleNoTextFrame::release ();

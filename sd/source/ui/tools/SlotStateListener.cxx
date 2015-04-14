@@ -44,7 +44,7 @@ SlotStateListener::SlotStateListener (
     ObserveSlot(rSlotName);
 }
 
-SlotStateListener::~SlotStateListener (void)
+SlotStateListener::~SlotStateListener()
 {
     ReleaseListeners();
 }
@@ -86,7 +86,7 @@ void SlotStateListener::ObserveSlot (const OUString& rSlotName)
     }
 }
 
-void SlotStateListener::disposing (void)
+void SlotStateListener::disposing()
 {
     ReleaseListeners();
     mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(NULL);
@@ -126,7 +126,7 @@ void SlotStateListener::statusChanged (
         maCallback.Call(&sSlotName);
 }
 
-void SlotStateListener::ReleaseListeners (void)
+void SlotStateListener::ReleaseListeners()
 {
     if ( ! maRegisteredURLList.empty())
     {
@@ -151,7 +151,7 @@ void SAL_CALL SlotStateListener::disposing (
 {
 }
 
-void SlotStateListener::ThrowIfDisposed (void)
+void SlotStateListener::ThrowIfDisposed()
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

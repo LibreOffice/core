@@ -939,7 +939,7 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
  * @param:
  * @return:
 */
-sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
+sal_uInt16 LwpMiddleLayout::GetScaleMode()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return GetLayoutScale()->GetScaleMode();
@@ -949,7 +949,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
 
-sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
+sal_uInt16 LwpMiddleLayout::GetScaleTile()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::TILED)
@@ -960,7 +960,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
         return 0;
 }
 
-sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
+sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
@@ -971,7 +971,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
         return 0;
 }
 
-sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
+sal_uInt32 LwpMiddleLayout::GetScalePercentage()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return GetLayoutScale()->GetScalePercentage()/10;//m_nScalePercentage 1000 = 100%
@@ -981,7 +981,7 @@ sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
         return 100;
 }
 
-double LwpMiddleLayout::GetScaleWidth(void)
+double LwpMiddleLayout::GetScaleWidth()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleWidth());
@@ -991,7 +991,7 @@ double LwpMiddleLayout::GetScaleWidth(void)
         return 0;
 }
 
-double LwpMiddleLayout::GetScaleHeight(void)
+double LwpMiddleLayout::GetScaleHeight()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleHeight());
@@ -1000,7 +1000,7 @@ double LwpMiddleLayout::GetScaleHeight(void)
     else
         return 0;
 }
-bool LwpMiddleLayout::CanSizeRight(void)
+bool LwpMiddleLayout::CanSizeRight()
 {
     sal_uInt8 RelType = GetRelativeType();
 
@@ -1040,7 +1040,7 @@ sal_Int32 LwpMiddleLayout::DetermineWidth()
     }
     return 0;
 }
-bool LwpMiddleLayout::IsSizeRightToContainer(void)
+bool LwpMiddleLayout::IsSizeRightToContainer()
 {
     if (!CanSizeRight())
         return false;
@@ -1059,7 +1059,7 @@ bool LwpMiddleLayout::IsSizeRightToContainer(void)
     else
         return false;
 }
-bool LwpMiddleLayout::IsSizeRightToContent(void)
+bool LwpMiddleLayout::IsSizeRightToContent()
 {
     if (!CanSizeRight())
         return false;

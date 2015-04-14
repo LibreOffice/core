@@ -60,12 +60,12 @@ public:
 
     // #i73249# - Return the object's current name.
     virtual OUString SAL_CALL
-        getAccessibleName (void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void)
+        getAccessibleDescription()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInterface methods need to be implemented to disambiguate
@@ -136,7 +136,7 @@ public:
 public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet (void)
+        getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

@@ -176,7 +176,7 @@ public:
                             OUString const& rFmtString);
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
-    bool                IsUseStarFormat( void ) { return bUseStarFormat; }
+    bool                IsUseStarFormat() { return bUseStarFormat; }
 private:
     static const double     DEFAULT_NUMVALUE;
 

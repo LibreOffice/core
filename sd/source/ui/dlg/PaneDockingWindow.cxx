@@ -46,7 +46,7 @@ PaneDockingWindow::PaneDockingWindow(
     SetSizePixel(LogicToPixel(Size(80,200), MAP_APPFONT));
 }
 
-PaneDockingWindow::~PaneDockingWindow (void)
+PaneDockingWindow::~PaneDockingWindow()
 {
 }
 
@@ -116,7 +116,7 @@ void PaneDockingWindow::SetValidSizeRange (const Range& rValidSizeRange)
     }
 }
 
-PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation (void) const
+PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation() const
 {
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
     if (pSplitWindow == NULL)

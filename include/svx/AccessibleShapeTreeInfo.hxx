@@ -53,7 +53,7 @@ public:
     /** Use this constructor to create an empty object that is filled later
         with more meaningfull data.
     */
-    AccessibleShapeTreeInfo (void);
+    AccessibleShapeTreeInfo();
 
     /** Create a copy of the given shape info.
         @param rInfo
@@ -61,7 +61,7 @@ public:
     */
     AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo& rInfo);
 
-    ~AccessibleShapeTreeInfo (void);
+    ~AccessibleShapeTreeInfo();
 
     AccessibleShapeTreeInfo& operator= (const AccessibleShapeTreeInfo& rInfo);
 
@@ -74,7 +74,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleComponent>
-        GetDocumentWindow (void) const { return mxDocumentWindow;}
+        GetDocumentWindow() const { return mxDocumentWindow;}
 
     /** Deprecated.   Use the correctly named SetModelBroadcaster method
         instead.
@@ -86,7 +86,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XEventBroadcaster>
-        GetControllerBroadcaster (void) const { return mxModelBroadcaster;}
+        GetControllerBroadcaster() const { return mxModelBroadcaster;}
 
     /** Set a new broadcaster that sends events indicating shape changes.
         The broadcaster usually is or belongs to a document model.
@@ -104,7 +104,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XEventBroadcaster>
-        GetModelBroadcaster (void) const { return mxModelBroadcaster;}
+        GetModelBroadcaster() const { return mxModelBroadcaster;}
 
     /** Set the view that will be used to construct SvxTextEditSources which
         in turn are used to create accessible edit engines.
@@ -118,7 +118,7 @@ public:
         @return
             The returned value may be NULL.
     */
-    SdrView* GetSdrView (void) const { return mpView;}
+    SdrView* GetSdrView() const { return mpView;}
 
     /** Set a new controller.  This will usually but not necessarily
         correspond to the SdrView.
@@ -135,7 +135,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController>
-        GetController (void) const { return mxController;}
+        GetController() const { return mxController;}
 
     /** Set the window that is used to construct SvxTextEditSources which in
         turn is used to create accessible edit engines.
@@ -146,7 +146,7 @@ public:
         @return
             The returned value may be NULL.
     */
-    vcl::Window* GetWindow (void) const { return mpWindow;}
+    vcl::Window* GetWindow() const { return mpWindow;}
 
     /** The view forwarder allows the transformation between internal
         and pixel coordinates and can be asked for the visible area.
@@ -159,7 +159,7 @@ public:
         @return
             The returned pointer may be NULL.
     */
-    const IAccessibleViewForwarder* GetViewForwarder (void) const { return mpViewForwarder;}
+    const IAccessibleViewForwarder* GetViewForwarder() const { return mpViewForwarder;}
 
 private:
     /** Deprecated.

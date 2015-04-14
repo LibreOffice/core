@@ -21,7 +21,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-AsynchronousCall::AsynchronousCall (void)
+AsynchronousCall::AsynchronousCall()
     : maAction(),
       mnCallId(0)
 {
@@ -33,7 +33,7 @@ AsynchronousCall::AsynchronousCall (const Action& rAction)
 {
 }
 
-AsynchronousCall::~AsynchronousCall (void)
+AsynchronousCall::~AsynchronousCall()
 {
     CancelRequest();
 }

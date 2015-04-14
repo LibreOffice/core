@@ -38,7 +38,7 @@ private:
     SCCOL               nColEnd;
     SCROW               nRowEnd;
     LR_ID               nId;
-    void                MakeHash( void );
+    void                MakeHash();
     inline void         Copy( const LotusRange& );
     inline void         SetId( LR_ID nId );
 public:
@@ -48,7 +48,7 @@ public:
     inline LotusRange   &operator =( const LotusRange& );
     inline bool         operator ==( const LotusRange& ) const;
     inline bool         operator !=( const LotusRange& ) const;
-    inline bool         IsSingle( void ) const;
+    inline bool         IsSingle() const;
 };
 
 inline void LotusRange::Copy( const LotusRange& rCpy )
@@ -86,7 +86,7 @@ inline bool LotusRange::operator !=( const LotusRange& rRef ) const
         nRowEnd != rRef.nRowEnd );
 }
 
-inline bool LotusRange::IsSingle( void ) const
+inline bool LotusRange::IsSingle() const
 {
     return ( nColStart == nColEnd && nRowStart == nRowEnd );
 }
@@ -103,7 +103,7 @@ private:
 
 public:
     LotusRangeList(LOTUS_ROOT* pLotRoot);
-    ~LotusRangeList( void );
+    ~LotusRangeList();
     inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
     inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
     sal_uInt16              GetIndex( const LotusRange& );

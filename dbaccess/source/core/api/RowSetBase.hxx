@@ -235,7 +235,7 @@ namespace dbaccess
         virtual ~ORowSetBase();
 
     // OComponentHelper
-        virtual void SAL_CALL disposing(void);
+        virtual void SAL_CALL disposing();
 
     // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE

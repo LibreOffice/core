@@ -85,7 +85,7 @@ private:
     static MacAVObserverObject* mpMacAVObserverObject;
 public:
     virtual ~MacAVObserverHandler() {}
-    MacAVObserverObject* getObserver( void ) const;
+    MacAVObserverObject* getObserver() const;
     virtual bool handleObservation( NSString* pKeyPath ) = 0;
 };
 

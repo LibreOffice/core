@@ -119,8 +119,8 @@ namespace accessibility
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
-        static com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw(com::sun::star::uno::RuntimeException);
-        static OUString getImplementationName_Static(void) throw(com::sun::star::uno::RuntimeException);
+        static com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw(com::sun::star::uno::RuntimeException);
+        static OUString getImplementationName_Static() throw(com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

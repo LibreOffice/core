@@ -50,7 +50,7 @@ static oslSignalHandlerImpl*  SignalList;
 
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
-static sal_Bool InitSignal(void)
+static sal_Bool InitSignal()
 {
     HMODULE hFaultRep;
 
@@ -70,7 +70,7 @@ static sal_Bool InitSignal(void)
     return sal_True;
 }
 
-static sal_Bool DeInitSignal(void)
+static sal_Bool DeInitSignal()
 {
     SetUnhandledExceptionFilter(NULL);
 

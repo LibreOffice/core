@@ -64,7 +64,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
 }
 
 
-AccessibleShapeInfo::~AccessibleShapeInfo (void)
+AccessibleShapeInfo::~AccessibleShapeInfo()
 {
     // empty.
 }

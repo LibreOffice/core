@@ -34,7 +34,7 @@ class BitmapCache;
 class CacheCompactor
 {
 public:
-    virtual ~CacheCompactor (void) {};
+    virtual ~CacheCompactor() {};
 
     /** Create a new instance of the CacheCompactor interface class.  The
         type of compaction algorithm used depends on values from the
@@ -59,7 +59,7 @@ public:
     /** Request a compaction of the off-screen previews in the bitmap
         cache.  This calls via a timer the Run() method.
     */
-    virtual void RequestCompaction (void);
+    virtual void RequestCompaction();
 
 protected:
     BitmapCache& mrCache;
@@ -72,7 +72,7 @@ protected:
     /** This method actually tries to reduce the total number of bytes used
         by the off-screen preview bitmaps.
     */
-    virtual void Run (void) = 0;
+    virtual void Run() = 0;
 
 private:
     /** This timer is used to collect calles to RequestCompaction() and

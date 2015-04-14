@@ -40,7 +40,7 @@ class PageObjectPainter
 {
 public:
     PageObjectPainter (const SlideSorter& rSlideSorter);
-    ~PageObjectPainter (void);
+    ~PageObjectPainter();
 
     void PaintPageObject (
         OutputDevice& rDevice,
@@ -124,7 +124,7 @@ private:
         one owned by the general layouter.
         Return <TRUE/> when after the call we have a valid page object layouter.
     */
-    bool UpdatePageObjectLayouter (void);
+    bool UpdatePageObjectLayouter();
 };
 
 } } } // end of namespace sd::slidesorter::view

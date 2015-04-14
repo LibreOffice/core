@@ -64,15 +64,15 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const OUString& rsConfigurationName);
-    virtual ~PresenterButton (void);
+    virtual ~PresenterButton();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     void SetCenter (const css::geometry::RealPoint2D& rLocation);
     void SetCanvas (
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
-    css::geometry::IntegerSize2D GetSize (void);
+    css::geometry::IntegerSize2D GetSize();
 
     // XWindowListener
 
@@ -152,17 +152,17 @@ private:
         const SharedBitmapDescriptor& rpLeft,
         const SharedBitmapDescriptor& rpCenter,
         const SharedBitmapDescriptor& rpRight);
-    css::geometry::IntegerSize2D CalculateButtonSize (void);
-    void Invalidate (void);
+    css::geometry::IntegerSize2D CalculateButtonSize();
+    void Invalidate();
     static css::uno::Reference<css::rendering::XBitmap> GetBitmap (
         const SharedBitmapDescriptor& mpIcon,
         const PresenterBitmapDescriptor::Mode eMode);
-    void SetupButtonBitmaps (void);
+    void SetupButtonBitmaps();
     static css::uno::Reference<css::beans::XPropertySet> GetConfigurationProperties (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const OUString& rsConfgurationName);
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };
 

@@ -47,7 +47,7 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
+InsertionIndicatorHandler::~InsertionIndicatorHandler()
 {
 }
 
@@ -81,12 +81,12 @@ void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode e
     mpInsertionIndicatorOverlay.reset(new view::InsertionIndicatorOverlay(mrSlideSorter));
 }
 
-void InsertionIndicatorHandler::ForceShow (void)
+void InsertionIndicatorHandler::ForceShow()
 {
     mbIsForcedShow = true;
 }
 
-void InsertionIndicatorHandler::ForceEnd (void)
+void InsertionIndicatorHandler::ForceEnd()
 {
     mbIsForcedShow = false;
     End(Animator::AM_Immediate);
@@ -129,7 +129,7 @@ void InsertionIndicatorHandler::UpdatePosition (
     UpdatePosition(rMouseModelPosition, GetModeFromDndAction(nDndAction));
 }
 
-sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
+sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex() const
 {
     if (mbIsReadOnly)
         return -1;
@@ -171,7 +171,7 @@ void InsertionIndicatorHandler::SetPosition (
     }
 }
 
-::boost::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator (void)
+::boost::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator()
 {
     if ( ! mpInsertAnimator)
         mpInsertAnimator.reset(new view::InsertAnimator(mrSlideSorter));
@@ -240,7 +240,7 @@ InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
     mpHandler->ForceShow();
 }
 
-InsertionIndicatorHandler::ForceShowContext::~ForceShowContext (void)
+InsertionIndicatorHandler::ForceShowContext::~ForceShowContext()
 {
     mpHandler->ForceEnd();
 }

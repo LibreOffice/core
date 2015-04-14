@@ -191,12 +191,12 @@ OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadToolBoxDocumentHandler::startDocument(void)
+void SAL_CALL OReadToolBoxDocumentHandler::startDocument()
 throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::endDocument(void)
+void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
 throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;

@@ -47,7 +47,7 @@ GenericPageCache::GenericPageCache (
         "This may indicate an error.");
 }
 
-GenericPageCache::~GenericPageCache (void)
+GenericPageCache::~GenericPageCache()
 {
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Stop();
@@ -59,7 +59,7 @@ GenericPageCache::~GenericPageCache (void)
     mpBitmapCache.reset();
 }
 
-void GenericPageCache::ProvideCacheAndProcessor (void)
+void GenericPageCache::ProvideCacheAndProcessor()
 {
     if (mpBitmapCache.get() == NULL)
         mpBitmapCache = PageCacheManager::Instance()->GetCache(
@@ -274,14 +274,14 @@ void GenericPageCache::SetPreciousFlag (
     mpBitmapCache->SetPrecious(mpCacheContext->GetPage(aKey), bIsPrecious);
 }
 
-void GenericPageCache::Pause (void)
+void GenericPageCache::Pause()
 {
     ProvideCacheAndProcessor();
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Pause();
 }
 
-void GenericPageCache::Resume (void)
+void GenericPageCache::Resume()
 {
     ProvideCacheAndProcessor();
     if (mpQueueProcessor.get() != NULL)

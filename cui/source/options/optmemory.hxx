@@ -48,7 +48,7 @@ private:
     sal_Int32 GetNfGraphicCacheVal() const; // returns # of Bytes
     inline void         SetNfGraphicCacheVal( long nSizeInBytes );
 
-    long                GetNfGraphicObjectCacheVal( void ) const;           // returns # of Bytes
+    long                GetNfGraphicObjectCacheVal() const;           // returns # of Bytes
     void                SetNfGraphicObjectCacheVal( long nSizeInBytes );
     inline void         SetNfGraphicObjectCacheMax( long nSizeInBytes );
     inline void         SetNfGraphicObjectCacheLast( long nSizeInBytes );

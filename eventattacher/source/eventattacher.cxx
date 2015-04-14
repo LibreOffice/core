@@ -67,7 +67,7 @@ public:
         const Reference< XAllListener >& AllListener, const Any& Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
         throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
@@ -118,7 +118,7 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 }
 
 
-Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection(void)
+Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection()
     throw( RuntimeException, std::exception )
 {
     return Reference< XIntrospectionAccess >();

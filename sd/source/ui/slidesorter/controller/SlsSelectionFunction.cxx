@@ -133,7 +133,7 @@ private:
         whether the selection rectangle is visible or whether the page under
         the mouse or the one that has the focus is selected.
     */
-    sal_uInt32 EncodeState (void) const;
+    sal_uInt32 EncodeState() const;
 };
 
 //===== SelectionFunction::ModeHandler ========================================
@@ -145,10 +145,10 @@ public:
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction,
         const bool bIsMouseOverIndicatorAllowed);
-    virtual ~ModeHandler (void);
+    virtual ~ModeHandler();
 
-    virtual Mode GetMode (void) const = 0;
-    virtual void Abort (void) = 0;
+    virtual Mode GetMode() const = 0;
+    virtual void Abort() = 0;
     virtual void ProcessEvent (EventDescriptor& rDescriptor);
 
     /** Set the selection to exactly the specified page and also set it as
@@ -157,7 +157,7 @@ public:
     void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /// Deselect all pages.
-    void DeselectAllPages (void);
+    void DeselectAllPages();
     void SelectOnePage (const model::SharedPageDescriptor& rpDescriptor);
 
         /** When the view on which this selection function is working is the
@@ -169,7 +169,7 @@ public:
         const Point& rMousePosition,
         const InsertionIndicatorHandler::Mode eMode);
 
-    bool IsMouseOverIndicatorAllowed (void) const { return mbIsMouseOverIndicatorAllowed;}
+    bool IsMouseOverIndicatorAllowed() const { return mbIsMouseOverIndicatorAllowed;}
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -196,12 +196,12 @@ public:
     NormalModeHandler (
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction);
-    virtual ~NormalModeHandler (void);
+    virtual ~NormalModeHandler();
 
-    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
-    virtual void Abort (void) SAL_OVERRIDE;
+    virtual SelectionFunction::Mode GetMode() const SAL_OVERRIDE;
+    virtual void Abort() SAL_OVERRIDE;
 
-    void ResetButtonDownLocation (void);
+    void ResetButtonDownLocation();
 
 protected:
     virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
@@ -235,14 +235,14 @@ public:
         const Point& rMouseModelPosition,
         const sal_uInt32 nEventCode);
 #endif
-    virtual ~MultiSelectionModeHandler (void);
+    virtual ~MultiSelectionModeHandler();
 
 #ifndef MACOSX
     void Initialize(const sal_uInt32 nEventCode);
 #endif
 
-    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
-    virtual void Abort (void) SAL_OVERRIDE;
+    virtual SelectionFunction::Mode GetMode() const SAL_OVERRIDE;
+    virtual void Abort() SAL_OVERRIDE;
     virtual void ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
     enum SelectionMode { SM_Normal, SM_Add, SM_Toggle };
@@ -264,7 +264,7 @@ private:
     sal_Int32 mnSecondIndex;
 
     void UpdateModelPosition (const Point& rMouseModelPosition);
-    void UpdateSelection (void);
+    void UpdateSelection();
 
     /** Update the rectangle selection so that the given position becomes
         the new second point of the selection rectangle.
@@ -292,14 +292,14 @@ public:
         const Point& rMousePosition,
         ::vcl::Window* pWindow);
 #endif
-    virtual ~DragAndDropModeHandler (void);
+    virtual ~DragAndDropModeHandler();
 
 #ifndef MACOSX
     void Initialize(const Point& rMousePosition, ::vcl::Window* pWindow);
 #endif
 
-    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
-    virtual void Abort (void) SAL_OVERRIDE;
+    virtual SelectionFunction::Mode GetMode() const SAL_OVERRIDE;
+    virtual void Abort() SAL_OVERRIDE;
 
 protected:
     virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
@@ -332,7 +332,7 @@ SelectionFunction::SelectionFunction (
 {
 }
 
-SelectionFunction::~SelectionFunction (void)
+SelectionFunction::~SelectionFunction()
 {
     mpModeHandler.reset();
 }
@@ -376,7 +376,7 @@ bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     return true;
 }
 
-void SelectionFunction::NotifyDragFinished (void)
+void SelectionFunction::NotifyDragFinished()
 {
     SwitchToNormalMode();
 }
@@ -599,7 +599,7 @@ void SelectionFunction::Deactivate()
     FuPoor::Deactivate();
 }
 
-void SelectionFunction::DoCut (void)
+void SelectionFunction::DoCut()
 {
     if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
     {
@@ -607,12 +607,12 @@ void SelectionFunction::DoCut (void)
     }
 }
 
-void SelectionFunction::DoCopy (void)
+void SelectionFunction::DoCopy()
 {
     mrController.GetClipboard().DoCopy();
 }
 
-void SelectionFunction::DoPaste (void)
+void SelectionFunction::DoPaste()
 {
     if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
     {
@@ -620,7 +620,7 @@ void SelectionFunction::DoPaste (void)
     }
 }
 
-bool SelectionFunction::cancel (void)
+bool SelectionFunction::cancel()
 {
     mrController.GetFocusManager().ToggleFocus();
     return true;
@@ -694,7 +694,7 @@ bool Match (
     return (nEventCode & nPositivePattern)==nPositivePattern;
 }
 
-void SelectionFunction::SwitchToNormalMode (void)
+void SelectionFunction::SwitchToNormalMode()
 {
     if (mpModeHandler->GetMode() != NormalMode)
         SwitchMode(::boost::shared_ptr<ModeHandler>(
@@ -756,12 +756,12 @@ void SelectionFunction::SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHa
     mpModeHandler = rpHandler;
 }
 
-void SelectionFunction::ResetShiftKeySelectionAnchor (void)
+void SelectionFunction::ResetShiftKeySelectionAnchor()
 {
     mnShiftKeySelectionAnchor = -1;
 }
 
-void SelectionFunction::ResetMouseAnchor (void)
+void SelectionFunction::ResetMouseAnchor()
 {
     if (mpModeHandler && mpModeHandler->GetMode() == NormalMode)
     {
@@ -866,7 +866,7 @@ sal_uInt32 SelectionFunction::EventDescriptor::EncodeMouseEvent (
     return nEventCode;
 }
 
-sal_uInt32 SelectionFunction::EventDescriptor::EncodeState (void) const
+sal_uInt32 SelectionFunction::EventDescriptor::EncodeState() const
 {
     sal_uInt32 nEventCode (0);
 
@@ -894,7 +894,7 @@ SelectionFunction::ModeHandler::ModeHandler (
 {
 }
 
-SelectionFunction::ModeHandler::~ModeHandler (void)
+SelectionFunction::ModeHandler::~ModeHandler()
 {
 }
 
@@ -977,7 +977,7 @@ void SelectionFunction::ModeHandler::SetCurrentPage (
     mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(rpDescriptor);
 }
 
-void SelectionFunction::ModeHandler::DeselectAllPages (void)
+void SelectionFunction::ModeHandler::DeselectAllPages()
 {
     mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
     mrSelectionFunction.ResetShiftKeySelectionAnchor();
@@ -1039,16 +1039,16 @@ NormalModeHandler::NormalModeHandler (
 {
 }
 
-NormalModeHandler::~NormalModeHandler (void)
+NormalModeHandler::~NormalModeHandler()
 {
 }
 
-SelectionFunction::Mode NormalModeHandler::GetMode (void) const
+SelectionFunction::Mode NormalModeHandler::GetMode() const
 {
     return SelectionFunction::NormalMode;
 }
 
-void NormalModeHandler::Abort (void)
+void NormalModeHandler::Abort()
 {
 }
 
@@ -1259,7 +1259,7 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     }
 }
 
-void NormalModeHandler::ResetButtonDownLocation (void)
+void NormalModeHandler::ResetButtonDownLocation()
 {
     maButtonDownLocation = ::boost::optional<Point>();
 }
@@ -1294,7 +1294,7 @@ void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
     SetSelectionModeFromModifier(nEventCode);
 }
 
-MultiSelectionModeHandler::~MultiSelectionModeHandler (void)
+MultiSelectionModeHandler::~MultiSelectionModeHandler()
 {
     if (mbAutoScrollInstalled)
     {
@@ -1305,12 +1305,12 @@ MultiSelectionModeHandler::~MultiSelectionModeHandler (void)
     mrSlideSorter.GetContentWindow()->SetPointer(maSavedPointer);
 }
 
-SelectionFunction::Mode MultiSelectionModeHandler::GetMode (void) const
+SelectionFunction::Mode MultiSelectionModeHandler::GetMode() const
 {
     return SelectionFunction::MultiSelectionMode;
 }
 
-void MultiSelectionModeHandler::Abort (void)
+void MultiSelectionModeHandler::Abort()
 {
     mrSlideSorter.GetView().RequestRepaint(mrSlideSorter.GetModel().RestoreSelection());
 }
@@ -1470,7 +1470,7 @@ void MultiSelectionModeHandler::UpdateModelPosition (const Point& rMouseModelPos
     UpdateSelection();
 }
 
-void MultiSelectionModeHandler::UpdateSelection (void)
+void MultiSelectionModeHandler::UpdateSelection()
 {
     view::SlideSorterView::DrawLock aLock (mrSlideSorter);
 
@@ -1533,7 +1533,7 @@ void DragAndDropModeHandler::Initialize(const Point& rMousePosition, ::vcl::Wind
             && pDragTransferable->GetView()==&mrSlideSorter.GetView());
 }
 
-DragAndDropModeHandler::~DragAndDropModeHandler (void)
+DragAndDropModeHandler::~DragAndDropModeHandler()
 {
     if (mpDragAndDropContext)
     {
@@ -1544,12 +1544,12 @@ DragAndDropModeHandler::~DragAndDropModeHandler (void)
     mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
 }
 
-SelectionFunction::Mode DragAndDropModeHandler::GetMode (void) const
+SelectionFunction::Mode DragAndDropModeHandler::GetMode() const
 {
     return SelectionFunction::DragAndDropMode;
 }
 
-void DragAndDropModeHandler::Abort (void)
+void DragAndDropModeHandler::Abort()
 {
     mrSlideSorter.GetController().GetClipboard().Abort();
     if (mpDragAndDropContext)

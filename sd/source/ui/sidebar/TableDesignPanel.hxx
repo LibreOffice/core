@@ -30,7 +30,7 @@ public:
     TableDesignPanel (
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
-    virtual ~TableDesignPanel (void);
+    virtual ~TableDesignPanel();
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;

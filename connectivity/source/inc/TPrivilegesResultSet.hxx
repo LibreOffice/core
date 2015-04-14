@@ -38,7 +38,7 @@ namespace connectivity
             ,const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
         // XResultSet
         virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };

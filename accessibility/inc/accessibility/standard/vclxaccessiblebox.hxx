@@ -72,7 +72,7 @@ public:
         actual list.  The text field is not provided for non drop down list
         boxes.
     */
-    sal_Int32 SAL_CALL getAccessibleChildCount (void)
+    sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** For drop down list boxes the text field is a not editable
         <type>VCLXAccessibleTextField</type>, for combo boxes it is an
@@ -84,17 +84,17 @@ public:
     /** The role is always <const
         scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
     */
-    sal_Int16 SAL_CALL getAccessibleRole (void)
+    sal_Int16 SAL_CALL getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Int32 SAL_CALL getAccessibleIndexInParent (void)
+    sal_Int32 SAL_CALL getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount (void)
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
@@ -121,7 +121,7 @@ public:
     /** This method is called from the implementation helper during an
         XComponent::dispose() call.
     */
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     //=====  XAccessibleValue  ================================================
 
@@ -170,11 +170,11 @@ protected:
     */
     bool m_bHasListChild;
 
-    virtual ~VCLXAccessibleBox (void);
+    virtual ~VCLXAccessibleBox();
 
     /** Returns </true> when the object is valid.
     */
-    virtual bool IsValid (void) const = 0;
+    virtual bool IsValid() const = 0;
 
     virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;

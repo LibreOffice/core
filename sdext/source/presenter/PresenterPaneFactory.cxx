@@ -111,11 +111,11 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-PresenterPaneFactory::~PresenterPaneFactory (void)
+PresenterPaneFactory::~PresenterPaneFactory()
 {
 }
 
-void SAL_CALL PresenterPaneFactory::disposing (void)
+void SAL_CALL PresenterPaneFactory::disposing()
     throw (RuntimeException)
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
@@ -321,7 +321,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     return Reference<XResource>(static_cast<XWeak*>(xPane.get()), UNO_QUERY_THROW);
 }
 
-void PresenterPaneFactory::ThrowIfDisposed (void) const
+void PresenterPaneFactory::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

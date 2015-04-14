@@ -92,14 +92,14 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     UpdateAccessibleName();
 }
 
-AccessibleDrawDocumentView::~AccessibleDrawDocumentView (void)
+AccessibleDrawDocumentView::~AccessibleDrawDocumentView()
 {
     OSL_TRACE ("~AccessibleDrawDocumentView");
     DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
         "~AccessibleDrawDocumentView: object has not been disposed");
 }
 
-void AccessibleDrawDocumentView::Init (void)
+void AccessibleDrawDocumentView::Init()
 {
     AccessibleDocumentViewBase::Init ();
 
@@ -135,7 +135,7 @@ void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
 /**  The page shape is created on every call at the moment (provided that
      every thing goes well).
 */
-rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageShape (void)
+rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageShape()
 {
     rtl::Reference<AccessiblePageShape> xShape;
 
@@ -188,7 +188,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL
-    AccessibleDrawDocumentView::getAccessibleChildCount (void)
+    AccessibleDrawDocumentView::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -237,7 +237,7 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 OUString SAL_CALL
-    AccessibleDrawDocumentView::getAccessibleName(void)
+    AccessibleDrawDocumentView::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -394,14 +394,14 @@ void SAL_CALL
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
-    AccessibleDrawDocumentView::getImplementationName (void)
+    AccessibleDrawDocumentView::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDrawDocumentView");
 }
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-    AccessibleDrawDocumentView::getSupportedServiceNames (void)
+    AccessibleDrawDocumentView::getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -432,13 +432,13 @@ uno::Any SAL_CALL
 }
 
 void SAL_CALL
-    AccessibleDrawDocumentView::acquire (void)
+    AccessibleDrawDocumentView::acquire()
     throw ()
 {
     AccessibleDocumentViewBase::acquire ();
 }
 void SAL_CALL
-    AccessibleDrawDocumentView::release (void)
+    AccessibleDrawDocumentView::release()
     throw ()
 {
     AccessibleDocumentViewBase::release ();
@@ -553,7 +553,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
 }
 
 /// Create a name for this view.
-OUString AccessibleDrawDocumentView::CreateAccessibleName (void)
+OUString AccessibleDrawDocumentView::CreateAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sName;
@@ -606,7 +606,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName (void)
     if a description is not available.
 */
 OUString
-    AccessibleDrawDocumentView::CreateAccessibleDescription (void)
+    AccessibleDrawDocumentView::CreateAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sDescription;
@@ -785,7 +785,7 @@ void
     }
 }
 
-void AccessibleDrawDocumentView::Activated (void)
+void AccessibleDrawDocumentView::Activated()
 {
     if (mpChildrenManager != NULL)
     {
@@ -806,14 +806,14 @@ void AccessibleDrawDocumentView::Activated (void)
     }
 }
 
-void AccessibleDrawDocumentView::Deactivated (void)
+void AccessibleDrawDocumentView::Deactivated()
 {
     if (mpChildrenManager != NULL)
         mpChildrenManager->RemoveFocus();
     ResetState (AccessibleStateType::FOCUSED);
 }
 
-void AccessibleDrawDocumentView::impl_dispose (void)
+void AccessibleDrawDocumentView::impl_dispose()
 {
     if (mpChildrenManager != NULL)
     {
@@ -827,7 +827,7 @@ void AccessibleDrawDocumentView::impl_dispose (void)
 /** This method is called from the component helper base class while
     disposing.
 */
-void SAL_CALL AccessibleDrawDocumentView::disposing (void)
+void SAL_CALL AccessibleDrawDocumentView::disposing()
 {
 
     // Release resources.
@@ -994,7 +994,7 @@ uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable(
     return xRet;
 }
 
-void AccessibleDrawDocumentView::UpdateAccessibleName (void)
+void AccessibleDrawDocumentView::UpdateAccessibleName()
 {
     OUString sNewName (CreateAccessibleName());
     sNewName += ": ";

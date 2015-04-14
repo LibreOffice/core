@@ -69,7 +69,7 @@ public:
     virtual ~SwSequenceOptionDialog();
     virtual void Apply() SAL_OVERRIDE;
 
-    bool IsApplyBorderAndShadow( void ) { return m_pApplyBorderAndShadowCB->IsChecked(); }
+    bool IsApplyBorderAndShadow() { return m_pApplyBorderAndShadowCB->IsChecked(); }
     void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }
 
     //#i61007# order of captions

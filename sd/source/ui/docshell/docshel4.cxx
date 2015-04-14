@@ -1112,7 +1112,7 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                       STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
 }
 
-OutputDevice* DrawDocShell::GetDocumentRefDev (void)
+OutputDevice* DrawDocShell::GetDocumentRefDev()
 {
     OutputDevice* pReferenceDevice = SfxObjectShell::GetDocumentRefDev ();
     // Only when our parent does not have a reference device then we return

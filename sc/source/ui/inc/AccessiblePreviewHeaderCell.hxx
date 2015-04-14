@@ -112,12 +112,12 @@ public:
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual Rectangle GetBoundingBoxOnScreen() const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Rectangle GetBoundingBox() const throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

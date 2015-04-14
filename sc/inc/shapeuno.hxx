@@ -170,7 +170,7 @@ public:
                                       std::exception) SAL_OVERRIDE;
 
                             // XComponent
-    virtual void SAL_CALL   dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL   dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL   addEventListener(const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::lang::XEventListener > & aListener)
                                 throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

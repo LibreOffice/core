@@ -419,7 +419,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 }
 
 
-void DocumentHolder::InPlaceDeactivate(void)
+void DocumentHolder::InPlaceDeactivate()
 {
     m_bOnDeactivate = true;
 
@@ -531,7 +531,7 @@ void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
         SetMenuItemInfoW(hDest,(WORD)destPos,TRUE,&mi);
 }
 
-BOOL DocumentHolder::InPlaceMenuCreate(void)
+BOOL DocumentHolder::InPlaceMenuCreate()
 {
     HMENU               hMenu;
     UINT                i;
@@ -586,7 +586,7 @@ BOOL DocumentHolder::InPlaceMenuCreate(void)
     return TRUE;
 }
 
-BOOL DocumentHolder::InPlaceMenuDestroy(void)
+BOOL DocumentHolder::InPlaceMenuDestroy()
 {
     if( NULL == m_nMenuShared )
         return TRUE;
@@ -597,12 +597,12 @@ BOOL DocumentHolder::InPlaceMenuDestroy(void)
     return TRUE;
 }
 
-void DocumentHolder::OpenIntoWindow(void)
+void DocumentHolder::OpenIntoWindow()
 {
     // not implemented
 }
 
-BOOL DocumentHolder::Undo(void)
+BOOL DocumentHolder::Undo()
 {
     // not implemented
     return false;

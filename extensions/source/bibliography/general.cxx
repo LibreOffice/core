@@ -482,7 +482,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     return xCtrModel;
 }
 
-void BibGeneralPage::InitFixedTexts( void )
+void BibGeneralPage::InitFixedTexts()
 {
     aFixedTexts[0] = pIdentifierFT;
     aFixedTexts[1] = pAuthTypeFT;

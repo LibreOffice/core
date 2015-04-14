@@ -57,7 +57,7 @@ OUser::~OUser( )
     delete m_pGroups;
 }
 
-void OUser::disposing(void)
+void OUser::disposing()
 {
     OPropertySetHelper::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

@@ -35,7 +35,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
 {
 }
 
-SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void ) throw ()
+SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw ()
 {
 }
 
@@ -69,7 +69,7 @@ throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
         return new SvXMLImportContext( rLocalRef );
 }
 
-SvXMLWordListContext::~SvXMLWordListContext ( void )
+SvXMLWordListContext::~SvXMLWordListContext()
 {
 }
 
@@ -105,7 +105,7 @@ SvXMLWordContext::SvXMLWordContext(
     rLocalRef.pAutocorr_List->LoadEntry( sWrong, sRight, bOnlyTxt );
 }
 
-SvXMLWordContext::~SvXMLWordContext ( void )
+SvXMLWordContext::~SvXMLWordContext()
 {
 }
 
@@ -117,7 +117,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
 {
 }
 
-SvXMLExceptionListImport::~SvXMLExceptionListImport ( void ) throw ()
+SvXMLExceptionListImport::~SvXMLExceptionListImport() throw ()
 {
 }
 
@@ -150,7 +150,7 @@ com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExce
         return new SvXMLImportContext( rLocalRef );
 }
 
-SvXMLExceptionListContext::~SvXMLExceptionListContext ( void )
+SvXMLExceptionListContext::~SvXMLExceptionListContext()
 {
 }
 
@@ -172,7 +172,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
     rLocalRef.rList.insert( sWord );
 }
 
-SvXMLExceptionContext::~SvXMLExceptionContext ( void )
+SvXMLExceptionContext::~SvXMLExceptionContext()
 {
 }
 

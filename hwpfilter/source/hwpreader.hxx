@@ -173,7 +173,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XExtendedFilterDetection

@@ -105,7 +105,7 @@ sal_Bool testLineBreak( sal_Char *pCount , sal_uInt64 nLen , sal_uInt32 *cLineBr
 
 // Initialization
 
-sal_Bool Initialize( void )
+sal_Bool Initialize()
 {
     DirectoryItem   aItem;
     FileStatus      aStatus( osl_FileStatus_Mask_All );
@@ -258,7 +258,7 @@ sal_Bool Initialize( void )
 
 // Shutdown
 
-sal_Bool Shutdown( void )
+sal_Bool Shutdown()
 {
     sal_Bool        fSuccess=sal_True;
     FileBase::RC    rc;
@@ -425,7 +425,7 @@ TimeValue getSystemTime()
 
 // DirectoryOpenAndCloseTest
 
-void DirectoryOpenAndCloseTest( void )
+void DirectoryOpenAndCloseTest()
 {
     FileBase::RC    rc;
     Directory   *pDir;
@@ -536,7 +536,7 @@ void DirectoryOpenAndCloseTest( void )
 
 // DirectoryCreateAndRemoveTest
 
-void DirectoryCreateAndRemoveTest( void )
+void DirectoryCreateAndRemoveTest()
 {
     FileBase::RC    rc,rc1;
     Directory   *pDir;
@@ -614,7 +614,7 @@ void DirectoryCreateAndRemoveTest( void )
 
 // FileOpenAndCloseTest
 
-static void FileOpenAndCloseTest( void )
+static void FileOpenAndCloseTest()
 {
     FileBase::RC    rc;
 
@@ -720,7 +720,7 @@ void FileCreateAndRemoveTest()
 
 // FileWriteAndReadTest
 
-void FileWriteAndReadTest( void )
+void FileWriteAndReadTest()
 {
     FileBase::RC    rc;
 
@@ -804,7 +804,7 @@ void FileWriteAndReadTest( void )
 
 // FileCopyMoveTest
 
-void FileCopyAndMoveTest( void )
+void FileCopyAndMoveTest()
 {
     FileBase::RC    rc;
 
@@ -962,7 +962,7 @@ void FileCopyAndMoveTest( void )
 
 // FileSizeTest
 
-void FileSizeTest( void )
+void FileSizeTest()
 {
     FileBase::RC    rc;
     sal_uInt64      filesize;
@@ -1042,7 +1042,7 @@ void FileSizeTest( void )
 
 // FilePointerTest
 
-void FilePointerTest( void )
+void FilePointerTest()
 {
     FileBase::RC    rc;
     sal_uInt64 filepointer;
@@ -1114,7 +1114,7 @@ void FilePointerTest( void )
 
 // FileAttributesTest
 
-void verifyFileAttributes( void )
+void verifyFileAttributes()
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
@@ -1144,7 +1144,7 @@ void verifyFileAttributes( void )
 }
 
 #ifdef UNX
-void FileAttributesTest( void )
+void FileAttributesTest()
 {
     FileBase::RC    rc;
 
@@ -1249,7 +1249,7 @@ void FileAttributesTest( void )
 #endif
 
 #ifdef WNT
-void FileAttributesTest( void )
+void FileAttributesTest()
 {
     FileBase::RC    rc;
 
@@ -1299,7 +1299,7 @@ void FileAttributesTest( void )
 
 // FileTimeTest
 
-void FileTimeTest( void )
+void FileTimeTest()
 {
     FileBase::RC    rc;
 
@@ -1427,7 +1427,7 @@ void FileTimeTest( void )
 
 // DirectoryItemTest
 
-void DirectoryItemTest( void )
+void DirectoryItemTest()
 {
     FileBase::RC    rc;
     Directory       *pDir;
@@ -1743,7 +1743,7 @@ void FileStatusTest( FileStatus *pStatus )
 
 // DirectoryFileStatusTest
 
-void DirectoryFileStatusTest( void )
+void DirectoryFileStatusTest()
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
@@ -1779,7 +1779,7 @@ void DirectoryFileStatusTest( void )
 
 // FileFileStatusTest
 
-void FileFileStatusTest( void )
+void FileFileStatusTest()
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
@@ -1815,7 +1815,7 @@ void FileFileStatusTest( void )
 
 // VolumeFileStatusTest
 
-void VolumeFileStatusTest( void )
+void VolumeFileStatusTest()
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
@@ -1851,7 +1851,7 @@ void VolumeFileStatusTest( void )
 
 // VolumeInfoTest
 
-void VolumeInfoTest( void )
+void VolumeInfoTest()
 {
     FileBase::RC    rc;
 
@@ -2070,7 +2070,7 @@ void DoAbsolutePathTest(rtl::OUString strDirBase, rtl::OUString strRelative)
     return;
 }
 
-void AbsolutePathTest(void)
+void AbsolutePathTest()
 {
     printf( "--------------------------------------------\n" );
     printf( "AbsolutePath-Test\n" );
@@ -2092,7 +2092,7 @@ void AbsolutePathTest(void)
 
 // searchPathTest
 
-void SearchPathTest(void)
+void SearchPathTest()
 {
     FileBase::RC    rc;
 
@@ -2283,7 +2283,7 @@ void getCanonicalNameTest(rtl::OUString strPath)
     return;
 }
 
-void CanonicalNameTest(void)
+void CanonicalNameTest()
 {
     printf( "--------------------------------------------\n" );
     printf( "CanonicalName-Test\n" );

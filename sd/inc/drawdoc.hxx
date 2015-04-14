@@ -405,7 +405,7 @@ public:
             scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
             when formatting depends on the current printer metrics.
     */
-    SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout (void) { return mnPrinterIndependentLayout;}
+    SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout() { return mnPrinterIndependentLayout;}
 
     SAL_DLLPRIVATE void                SetOnlineSpell( bool bIn );
     SAL_DLLPRIVATE bool                GetOnlineSpell() const { return mbOnlineSpell; }

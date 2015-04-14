@@ -1712,7 +1712,7 @@ void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
     m_pSalMenu = pSalMenu;
 }
 
-SalMenu* GtkSalFrame::GetMenu( void )
+SalMenu* GtkSalFrame::GetMenu()
 {
     return m_pSalMenu;
 }

@@ -47,25 +47,25 @@ public:
         /** This method is called when all Impress templates have been added
             to the container via the PutMasterPage() method.
         */
-        virtual void FillingDone (void) = 0;
+        virtual void FillingDone() = 0;
 
     protected:
         ~ContainerAdapter() {}
     };
 
     MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);
-    virtual ~MasterPageContainerFiller (void);
+    virtual ~MasterPageContainerFiller();
 
     /** Run the next step of the task.  After HasNextStep() returns false
         this method should ignore further calls.
     */
-    virtual void RunNextStep (void) SAL_OVERRIDE;
+    virtual void RunNextStep() SAL_OVERRIDE;
 
     /** Return <TRUE/> when there is at least one more step to execute.
         When the task has been executed completely then <FALSE/> is
         returned.
     */
-    virtual bool HasNextStep (void) SAL_OVERRIDE;
+    virtual bool HasNextStep() SAL_OVERRIDE;
 
 private:
     ContainerAdapter& mrContainerAdapter;
@@ -81,8 +81,8 @@ private:
     const TemplateEntry* mpLastAddedEntry;
     int mnIndex;
 
-    State ScanTemplate (void);
-    State AddTemplate (void);
+    State ScanTemplate();
+    State AddTemplate();
 };
 
 } } // end of namespace sd::sidebar

@@ -77,14 +77,14 @@ namespace dbaui
         return getSupportedServiceNames_Static();
     }
     // XServiceInfo - static methods
-    Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
+    Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static() throw( RuntimeException )
     {
         Sequence< OUString > aSupported(2);
         aSupported[0] = "com.sun.star.accessibility.Accessible";
         aSupported[1] = "com.sun.star.accessibility.AccessibleContext";
         return aSupported;
     }
-    OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OTableWindowAccess::getImplementationName_Static() throw( RuntimeException )
     {
         return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }

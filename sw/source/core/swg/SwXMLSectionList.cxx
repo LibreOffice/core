@@ -45,7 +45,7 @@ SwXMLSectionList::SwXMLSectionList(
                             XML_NAMESPACE_TEXT );
 }
 
-SwXMLSectionList::~SwXMLSectionList ( void )
+SwXMLSectionList::~SwXMLSectionList()
     throw()
 {
 }
@@ -116,7 +116,7 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
     pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     return pContext;
 }
-SvXMLSectionListContext::~SvXMLSectionListContext ( void )
+SvXMLSectionListContext::~SvXMLSectionListContext()
 {
 }
 

@@ -76,7 +76,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
-    virtual ~AccessibleContextBase (void);
+    virtual ~AccessibleContextBase();
 
 
     /** Call all accessiblity event listeners to inform them about the
@@ -175,14 +175,14 @@ public:
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or throw exception.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
@@ -191,46 +191,46 @@ public:
 
     /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent (void)
+        getAccessibleParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent (void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole (void)
+        getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void)
+        getAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        getAccessibleName (void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet (void)
+        getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale (void)
+        getLocale()
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception) SAL_OVERRIDE;
 
@@ -254,7 +254,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return whether the specified service is supported by this class.
@@ -267,7 +267,7 @@ public:
         the AccessibleContext service.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
@@ -276,13 +276,13 @@ public:
     /** Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId (void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
@@ -298,7 +298,7 @@ protected:
         ::com::sun::star::accessibility::XAccessibleRelationSet> mxRelationSet;
 
     // This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     /** Create the accessible object's name.  This method may be called more
         than once for a single object.
@@ -306,7 +306,7 @@ protected:
             The returned string is a unique (among the accessible object's
             siblings) name.
     */
-    virtual OUString CreateAccessibleName (void)
+    virtual OUString CreateAccessibleName()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Create the accessible object's descriptive string.  May be called
@@ -315,7 +315,7 @@ protected:
             Descriptive string.  Not necessarily unique.
     */
     virtual OUString
-        CreateAccessibleDescription (void)
+        CreateAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException);
 
     void FireEvent (const ::com::sun::star::accessibility::AccessibleEventObject& aEvent);
@@ -325,7 +325,7 @@ protected:
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
@@ -334,7 +334,7 @@ protected:
         @return TRUE, if the object is disposed or in the course
         of being disposed. Otherwise, FALSE is returned.
     */
-    bool IsDisposed (void);
+    bool IsDisposed();
 
     /** sets the role as returned by XaccessibleContext::getAccessibleRole
 

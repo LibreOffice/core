@@ -54,7 +54,7 @@ private:
 
     bool                mbInitialized;
 
-    sal_uInt16              GetSelectedEntryPos( void ) const;
+    sal_uInt16              GetSelectedEntryPos() const;
     DECL_LINK(ViewButtonHdl, void *);
     DECL_LINK(          CertificateHighlightHdl, void* );
     DECL_LINK(          CertificateSelectHdl, void* );

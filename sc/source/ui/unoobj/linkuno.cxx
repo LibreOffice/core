@@ -273,7 +273,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSheetLinkObj )
 
 // internal:
 
-OUString ScSheetLinkObj::getFileName(void) const
+OUString ScSheetLinkObj::getFileName() const
 {
     SolarMutexGuard aGuard;
     return aFileName;
@@ -316,7 +316,7 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
     }
 }
 
-OUString ScSheetLinkObj::getFilter(void) const
+OUString ScSheetLinkObj::getFilter() const
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -337,7 +337,7 @@ void ScSheetLinkObj::setFilter(const OUString& Filter)
     }
 }
 
-OUString ScSheetLinkObj::getFilterOptions(void) const
+OUString ScSheetLinkObj::getFilterOptions() const
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -358,7 +358,7 @@ void ScSheetLinkObj::setFilterOptions(const OUString& FilterOptions)
     }
 }
 
-sal_Int32 ScSheetLinkObj::getRefreshDelay(void) const
+sal_Int32 ScSheetLinkObj::getRefreshDelay() const
 {
     SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
@@ -819,7 +819,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAreaLinkObj )
 
 //  internal:
 
-OUString ScAreaLinkObj::getFileName(void) const
+OUString ScAreaLinkObj::getFileName() const
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -835,7 +835,7 @@ void ScAreaLinkObj::setFileName(const OUString& rNewName)
     Modify_Impl( &rNewName, NULL, NULL, NULL, NULL );
 }
 
-OUString ScAreaLinkObj::getFilter(void) const
+OUString ScAreaLinkObj::getFilter() const
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -851,7 +851,7 @@ void ScAreaLinkObj::setFilter(const OUString& Filter)
     Modify_Impl( NULL, &Filter, NULL, NULL, NULL );
 }
 
-OUString ScAreaLinkObj::getFilterOptions(void) const
+OUString ScAreaLinkObj::getFilterOptions() const
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -867,7 +867,7 @@ void ScAreaLinkObj::setFilterOptions(const OUString& FilterOptions)
     Modify_Impl( NULL, NULL, &FilterOptions, NULL, NULL );
 }
 
-sal_Int32 ScAreaLinkObj::getRefreshDelay(void) const
+sal_Int32 ScAreaLinkObj::getRefreshDelay() const
 {
     SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;

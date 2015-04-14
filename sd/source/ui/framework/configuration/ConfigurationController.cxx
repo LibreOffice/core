@@ -52,7 +52,7 @@ public:
     Implementation (
         ConfigurationController& rController,
         const Reference<frame::XController>& rxController);
-    ~Implementation (void);
+    ~Implementation();
 
     Reference<XControllerManager> mxControllerManager;
 
@@ -97,7 +97,7 @@ ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& 
         mxController->lock();
 }
 
-ConfigurationController::Lock::~Lock (void)
+ConfigurationController::Lock::~Lock()
 {
     if (mxController.is())
         mxController->unlock();
@@ -105,18 +105,18 @@ ConfigurationController::Lock::~Lock (void)
 
 //===== ConfigurationController ===============================================
 
-ConfigurationController::ConfigurationController (void) throw()
+ConfigurationController::ConfigurationController() throw()
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex)
     , mpImplementation()
     , mbIsDisposed(false)
 {
 }
 
-ConfigurationController::~ConfigurationController (void) throw()
+ConfigurationController::~ConfigurationController() throw()
 {
 }
 
-void SAL_CALL ConfigurationController::disposing (void)
+void SAL_CALL ConfigurationController::disposing()
 {
     if (mpImplementation.get() == NULL)
         return;
@@ -148,7 +148,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     mpImplementation.reset();
 }
 
-void ConfigurationController::ProcessEvent (void)
+void ConfigurationController::ProcessEvent()
 {
     if (mpImplementation.get() != NULL)
     {
@@ -158,7 +158,7 @@ void ConfigurationController::ProcessEvent (void)
     }
 }
 
-void ConfigurationController::RequestSynchronousUpdate (void)
+void ConfigurationController::RequestSynchronousUpdate()
 {
     if (mpImplementation.get() == NULL)
         return;
@@ -217,7 +217,7 @@ void SAL_CALL ConfigurationController::lock()
             = mpImplementation->mpConfigurationUpdater->GetLock();
 }
 
-void SAL_CALL ConfigurationController::unlock (void)
+void SAL_CALL ConfigurationController::unlock()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -342,7 +342,7 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
     return aDescriptor.mxResource;
 }
 
-void SAL_CALL ConfigurationController::update (void)
+void SAL_CALL ConfigurationController::update()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -361,7 +361,7 @@ void SAL_CALL ConfigurationController::update (void)
     }
 }
 
-sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
+sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -380,7 +380,7 @@ void SAL_CALL ConfigurationController::postChangeRequest (
     mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
 }
 
-Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration (void)
+Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -393,7 +393,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
         return Reference<XConfiguration>();
 }
 
-Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration (void)
+Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration()
     throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -563,7 +563,7 @@ ConfigurationController::Implementation::Implementation (
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
 }
 
-ConfigurationController::Implementation::~Implementation (void)
+ConfigurationController::Implementation::~Implementation()
 {
 }
 

@@ -32,8 +32,8 @@ namespace sfx2 { namespace sidebar {
 class ContextList
 {
 public:
-    ContextList (void);
-    ~ContextList (void);
+    ContextList();
+    ~ContextList();
 
     class Entry
     {

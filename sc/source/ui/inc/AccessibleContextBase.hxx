@@ -76,7 +76,7 @@ public:
     virtual void Init();
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 protected:
-    virtual ~ScAccessibleContextBase(void);
+    virtual ~ScAccessibleContextBase();
 public:
 
     bool SAL_CALL isShowing(  )
@@ -103,7 +103,7 @@ public:
 
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -152,27 +152,27 @@ public:
 
     /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent(void)
+        getAccessibleParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent(void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole(void)
+        getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription(void)
+        getAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        getAccessibleName(void)
+        getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return NULL to indicate that an empty relation set.
@@ -184,14 +184,14 @@ public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet(void)
+        getAccessibleStateSet()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale(void)
+        getLocale()
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception) SAL_OVERRIDE;
 
@@ -229,7 +229,7 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName(void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Return whether the specified service is supported by this class.
@@ -242,7 +242,7 @@ public:
         the AccessibleContext and Accessible service.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames(void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XTypeProvider  ===================================================
@@ -255,18 +255,18 @@ public:
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
+        getImplementationId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
-        createAccessibleDescription(void)
+        createAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        createAccessibleName(void)
+        createAccessibleName()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
 

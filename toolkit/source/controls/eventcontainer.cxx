@@ -187,7 +187,7 @@ void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::R
 
 
 // Ctor
-ScriptEventContainer::ScriptEventContainer( void )
+ScriptEventContainer::ScriptEventContainer()
     : NameContainer_Impl( cppu::UnoType<ScriptEventDescriptor>::get())
 {
 }

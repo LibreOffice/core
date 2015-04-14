@@ -133,7 +133,7 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
     }
 }
 
-sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
+sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -166,13 +166,13 @@ uno::Reference< XAccessible> SAL_CALL
     return SwAccessibleContext::getAccessibleChild( nIndex );
 }
 
-uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
+uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent()
         throw (uno::RuntimeException, std::exception)
 {
     return mxParent;
 }
 
-sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
+sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -196,13 +196,13 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
     return -1L;
 }
 
-OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription()
     throw (uno::RuntimeException, std::exception)
 {
     return GetResource( STR_ACCESS_DOC_DESC );
 }
 
-OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName (void)
+OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;

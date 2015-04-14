@@ -118,7 +118,7 @@ public:
         ::vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
-    virtual ~ViewShell (void);
+    virtual ~ViewShell();
 
     /** The Init method has to be called from the outside directly
         after a new object of this class has been created.  It can be
@@ -138,27 +138,27 @@ public:
         view shell is still a valid object and can safely call methods that
         rely on that.
     */
-    void Exit (void);
+    void Exit();
 
     void Cancel();
 
     /** Return the window that is the parent of all controls of this view
         shell.  This may or may not be the window of the frame.
     */
-    inline ::vcl::Window* GetParentWindow (void) const { return mpParentWindow; }
+    inline ::vcl::Window* GetParentWindow() const { return mpParentWindow; }
 
-    inline ::sd::View* GetView (void) const { return mpView; }
-    inline SdrView* GetDrawView (void) const;
-    SD_DLLPUBLIC DrawDocShell* GetDocSh (void) const;
+    inline ::sd::View* GetView() const { return mpView; }
+    inline SdrView* GetDrawView() const;
+    SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
 
-    SdDrawDocument*  GetDoc (void) const;
+    SdDrawDocument*  GetDoc() const;
 
-    SD_DLLPUBLIC SfxViewFrame* GetViewFrame (void) const;
+    SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
     */
-    ::sd::Window* GetActiveWindow (void) const { return mpActiveWindow;}
+    ::sd::Window* GetActiveWindow() const { return mpActiveWindow;}
 
     /** Set the active window.  When the shell is displayed in the center
         pane then the window of the ViewShellBase is also set to the given
@@ -173,7 +173,7 @@ public:
             The rectangle is returned in screen coordinates, i.e. pixel
             values relative to the upper left corner of the screen?.
     */
-    const Rectangle& GetAllWindowRect (void);
+    const Rectangle& GetAllWindowRect();
 
     // Mouse- & Key-Events
     virtual void PrePaint();
@@ -193,14 +193,14 @@ public:
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 
-    bool HasRuler (void) { return mbHasRulers;}
+    bool HasRuler() { return mbHasRulers;}
     void SetRuler(bool bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
         position.  The external values like size and position of the scroll
         bar controls are not modified.
     */
-    virtual void UpdateScrollBars (void);
+    virtual void UpdateScrollBars();
     void    Scroll(long nX, long nY);
     void    ScrollLines(long nX, long nY);
     virtual void    SetZoom(long nZoom);
@@ -218,9 +218,9 @@ public:
 
     void    ExecReq( SfxRequest &rReq );
 
-    ZoomList* GetZoomList (void) { return mpZoomList;}
+    ZoomList* GetZoomList() { return mpZoomList;}
 
-    FrameView* GetFrameView (void) { return mpFrameView; }
+    FrameView* GetFrameView() { return mpFrameView; }
     /** Setting a frame view triggers ReadFrameViewData() for the new
         frame.
         @param pFrameView
@@ -265,10 +265,10 @@ public:
     void    SetStartShowWithDialog( bool bIn = true ) { mbStartShowWithDialog = bIn; }
     bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
-    sal_uInt16 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
+    sal_uInt16 GetPrintedHandoutPageNum() const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
-    sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
+    sal_uInt16 GetPrintedHandoutPageCount() const { return mnPrintedHandoutPageCount; }
     void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
     virtual bool PrepareClose( bool bUI = true );
@@ -312,7 +312,7 @@ public:
             In rare circumstances the returned pointer may be <null/>,
             i.e. when no memory is available anymore.
     */
-    ::sd::WindowUpdater* GetWindowUpdater (void) const;
+    ::sd::WindowUpdater* GetWindowUpdater() const;
 
     /** Return the border that is drawn around the actual document view.
         The border contains typically rulers and scroll bars.
@@ -332,7 +332,7 @@ public:
         The ViewShell places and resizes its UI elements accordingly.
         The new size can be obtained from the parent window.
     */
-    virtual void Resize (void);
+    virtual void Resize();
 
     /** Set the position and size of the area which contains the GUI
         elements like rulers, sliders, and buttons as well as the document
@@ -360,19 +360,19 @@ public:
         document view according to the position and size that were given
         with the last Resize() call.
     */
-    virtual void ArrangeGUIElements (void);
+    virtual void ArrangeGUIElements();
 
     //  virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
     //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
-    ViewShellBase& GetViewShellBase (void) const;
+    ViewShellBase& GetViewShellBase() const;
 
     /** Return <TRUE/> when the called view shell is the main sub shell of
         its ViewShellBase object, i.e. is display in the center pane.  This
         convenience function is equivalent to comparing the this pointer to
         the result of ViewShellBase::GetViewShell(PT_CENTER).
     */
-    bool IsMainViewShell (void) const;
+    bool IsMainViewShell() const;
 
     /** Set or reset the flag that indicates whether the called shell is the
         one displayed in the center pane.  By default this flag is set to
@@ -383,11 +383,11 @@ public:
     /** Return a sub controller that implements the view shell specific
         part of the DrawController.
     */
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) = 0;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() = 0;
 
     /** Return the type of the shell.
     */
-    ShellType GetShellType (void) const;
+    ShellType GetShellType() const;
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view
@@ -398,7 +398,7 @@ public:
         RemoveSubShell() comes to late when the view shell is not on the
         stack anymore.</p>
     */
-    virtual void Shutdown (void);
+    virtual void Shutdown();
 
     /** This function is called from the underlying ViewShellBase
         object to handle a verb execution request.
@@ -412,7 +412,7 @@ public:
         As a result the border is adapted.
     */
     virtual void ShowUIControls (bool bVisible = true);
-    bool IsPageFlipMode(void) const;
+    bool IsPageFlipMode() const;
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
@@ -521,7 +521,7 @@ protected:
     ::std::unique_ptr<Implementation> mpImpl;
 
     // Support methods for centralized UNDO/REDO
-    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
+    virtual ::svl::IUndoManager* ImpGetUndoManager() const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
     void ImpSidUndo(bool bDrawViewShell, SfxRequest& rReq);
@@ -578,16 +578,16 @@ private:
     /** Code common to all constructors.  It generally is a bad idea
         to call this function from outside a constructor.
     */
-    void construct (void);
+    void construct();
 
     DECL_LINK(FrameWindowEventListener, VclSimpleEvent*);
 
     /** Create the rulers.
     */
-    void SetupRulers (void);
+    void SetupRulers();
 };
 
-SdrView* ViewShell::GetDrawView (void) const
+SdrView* ViewShell::GetDrawView() const
 {
     return static_cast<SdrView*>(mpView);
 }

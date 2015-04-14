@@ -37,17 +37,17 @@ public:
     VCLXAccessibleListBox (VCLXWindow* pVCLXindow);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Return list box specific services.
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual ~VCLXAccessibleListBox (void);
+    virtual ~VCLXAccessibleListBox();
 
-    virtual bool IsValid (void) const SAL_OVERRIDE;
+    virtual bool IsValid() const SAL_OVERRIDE;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
 };
 

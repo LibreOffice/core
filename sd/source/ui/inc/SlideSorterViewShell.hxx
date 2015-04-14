@@ -56,7 +56,7 @@ public:
         FrameView* pFrameView,
         const bool bIsCenterPane);
 
-    virtual ~SlideSorterViewShell (void);
+    virtual ~SlideSorterViewShell();
 
     /** Late initialization that has to be called after a new instance has
         completed its construction.
@@ -72,7 +72,7 @@ public:
     */
     static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
 
-    virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
+    virtual SdPage* GetActualPage() SAL_OVERRIDE;
 
     /// inherited from sd::ViewShell
     virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
@@ -90,7 +90,7 @@ public:
     void GetClipboardState (SfxItemSet &rSet);
 
     virtual void ReadFrameViewData (FrameView* pView) SAL_OVERRIDE;
-    virtual void WriteFrameViewData (void) SAL_OVERRIDE;
+    virtual void WriteFrameViewData() SAL_OVERRIDE;
 
     /** Set the zoom factor.  The given value is clipped against an upper
         bound.
@@ -110,7 +110,7 @@ public:
         method when something has changed that for instance affects the
         visibility state of the scroll bars.
     */
-    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() SAL_OVERRIDE;
 
     virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
@@ -137,7 +137,7 @@ public:
 
     /** Return the set of selected pages.
     */
-    ::boost::shared_ptr<PageSelection> GetPageSelection (void) const;
+    ::boost::shared_ptr<PageSelection> GetPageSelection() const;
 
     void SetPageSelection (const ::boost::shared_ptr<PageSelection>& rSelection);
 
@@ -158,7 +158,7 @@ public:
     */
     void RemoveSelectionChangeListener (const Link& rListener);
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -173,7 +173,7 @@ public:
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
     virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc ) SAL_OVERRIDE;
 
-    SlideSorter& GetSlideSorter (void) const;
+    SlideSorter& GetSlideSorter() const;
 
     /** Try to relocate all toplevel window elements to the given parent
         window.
@@ -185,7 +185,7 @@ protected:
     /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const SAL_OVERRIDE;
+    virtual ::svl::IUndoManager* ImpGetUndoManager() const SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
@@ -196,13 +196,13 @@ private:
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);
-    void Initialize (void);
+    void Initialize();
 
     /** This method overwrites the one from our base class:  We do our own
         scroll bar and the base class call is thus unnecessary.  It simply
         calls UpdateScrollBars(false).
     */
-    virtual void UpdateScrollBars (void) SAL_OVERRIDE;
+    virtual void UpdateScrollBars() SAL_OVERRIDE;
 };
 
 typedef ::boost::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;

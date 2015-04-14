@@ -55,7 +55,7 @@ VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, boo
         m_bHasTextChild = true;
 }
 
-VCLXAccessibleBox::~VCLXAccessibleBox (void)
+VCLXAccessibleBox::~VCLXAccessibleBox()
 {
 }
 
@@ -271,7 +271,7 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount (void)
+sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -345,7 +345,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
     return xChild;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole (void) throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole() throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -359,7 +359,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole (void) throw (RuntimeExc
         return AccessibleRole::PANEL;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent (void)
+sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
@@ -451,7 +451,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBind
 
 //=====  XComponent  ==========================================================
 
-void SAL_CALL VCLXAccessibleBox::disposing (void)
+void SAL_CALL VCLXAccessibleBox::disposing()
 {
     VCLXAccessibleComponent::disposing();
 }

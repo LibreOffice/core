@@ -72,7 +72,7 @@ class Listener
 {
 public:
     Listener (SlideSorter& rSlideSorter);
-    virtual ~Listener (void);
+    virtual ~Listener();
 
     /** Connect to the current controller of the view shell as listener.
         This method is called once during initialization and every time a
@@ -80,7 +80,7 @@ public:
         When the connection is successful then the flag
         mbListeningToController is set to <TRUE/>.
     */
-    void ConnectToController (void);
+    void ConnectToController();
 
     /** Disconnect from the current controller of the view shell as
         listener.  This method is called once during initialization and
@@ -88,7 +88,7 @@ public:
         exchanged.  When this method terminates then mbListeningToController
         is <FALSE/>.
     */
-    void DisconnectFromController (void);
+    void DisconnectFromController();
 
     virtual void Notify (
         SfxBroadcaster& rBroadcaster,
@@ -127,7 +127,7 @@ public:
         frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
     SlideSorter& mrSlideSorter;
@@ -153,11 +153,11 @@ private:
     */
     ::boost::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;
 
-    void ReleaseListeners (void);
+    void ReleaseListeners();
 
     /** Called when the edit mode has changed.  Update model accordingly.
     */
-    void UpdateEditMode (void);
+    void UpdateEditMode();
 
     /** Handle a change in the order of slides or when the set of slides has
         changed, i.e. a slide has been created.
@@ -173,7 +173,7 @@ private:
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed (void)
+    void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
     DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent*);

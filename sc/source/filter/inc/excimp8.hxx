@@ -38,29 +38,29 @@ class ImportExcel8 : public ImportExcel
 {
 public:
                             ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
-    virtual                 ~ImportExcel8( void );
+    virtual                 ~ImportExcel8();
 
-    virtual FltError        Read( void ) SAL_OVERRIDE;
+    virtual FltError        Read() SAL_OVERRIDE;
 
-    void                    Calccount( void );              // 0x0C
-    void                    Precision( void );              // 0x0E
-    void                    Delta( void );                  // 0x10
-    void                    Iteration( void );              // 0x11
-    void                    Boundsheet( void );             // 0x85
-    void                    FilterMode( void );             // 0x9B
-    void                    AutoFilterInfo( void );         // 0x9D
-    void                    AutoFilter( void );             // 0x9E
-    void                    Scenman( void );                // 0xAE
-    void                    Scenario( void );               // 0xAF
-    void                    ReadBasic( void );              // 0xD3
-    void                    Labelsst( void );               // 0xFD
+    void                    Calccount();              // 0x0C
+    void                    Precision();              // 0x0E
+    void                    Delta();                  // 0x10
+    void                    Iteration();              // 0x11
+    void                    Boundsheet();             // 0x85
+    void                    FilterMode();             // 0x9B
+    void                    AutoFilterInfo();         // 0x9D
+    void                    AutoFilter();             // 0x9E
+    void                    Scenman();                // 0xAE
+    void                    Scenario();               // 0xAF
+    void                    ReadBasic();              // 0xD3
+    void                    Labelsst();               // 0xFD
 
-    void                    Hlink( void );                  // 0x01B8
-    void                    FeatHdr( void );                // 0x0867
-    void                    Feat( void );                   // 0x0868
+    void                    Hlink();                  // 0x01B8
+    void                    FeatHdr();                // 0x0867
+    void                    Feat();                   // 0x0868
 
-    virtual void            EndSheet( void ) SAL_OVERRIDE;
-    virtual void            PostDocLoad( void ) SAL_OVERRIDE;
+    virtual void            EndSheet() SAL_OVERRIDE;
+    virtual void            PostDocLoad() SAL_OVERRIDE;
 
 private:
     void                    LoadDocumentProperties();

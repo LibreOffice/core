@@ -47,7 +47,7 @@ public:
         const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
         const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
     MasterPageDescriptor (const MasterPageDescriptor& rDescriptor);
-    ~MasterPageDescriptor (void);
+    ~MasterPageDescriptor();
 
     void SetToken (MasterPageContainer::Token aToken);
 
@@ -137,7 +137,7 @@ public:
         URLCLASS_UNDETERMINED
     };
 
-    URLClassification GetURLClassification (void);
+    URLClassification GetURLClassification();
 
     /** The Token under which the MasterPageContainer gives access to the
         object.

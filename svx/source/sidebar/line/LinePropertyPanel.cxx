@@ -255,7 +255,7 @@ void LinePropertyPanel::Initialize()
     mpLBCapStyle->SetAccessibleName(OUString("Cap Style"));
 }
 
-void LinePropertyPanel::SetupIcons(void)
+void LinePropertyPanel::SetupIcons()
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {
@@ -755,7 +755,7 @@ PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pP
     return new LineWidthControl(pParent, *this);
 }
 
-void LinePropertyPanel::EndLineWidthPopupMode (void)
+void LinePropertyPanel::EndLineWidthPopupMode()
 {
     maLineWidthPopup.Hide();
 }

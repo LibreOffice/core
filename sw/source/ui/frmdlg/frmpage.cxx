@@ -824,7 +824,7 @@ SfxTabPage* SwFrmPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
     return new SwFrmPage( pParent, *rSet );
 }
 
-void SwFrmPage::EnableGraficMode( void )
+void SwFrmPage::EnableGraficMode()
 {
     // i#39692 - mustn't be called more than once
     if(!m_pRealSizeBT->IsVisible())

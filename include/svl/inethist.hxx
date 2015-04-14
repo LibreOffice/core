@@ -39,8 +39,8 @@ class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
 
     /** Construction/Destruction.
     */
-    SAL_DLLPRIVATE INetURLHistory (void);
-    SAL_DLLPRIVATE virtual ~INetURLHistory (void);
+    SAL_DLLPRIVATE INetURLHistory();
+    SAL_DLLPRIVATE virtual ~INetURLHistory();
 
     /** Implementation.
     */
@@ -57,7 +57,7 @@ class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
 public:
     /** GetOrCreate.
     */
-    static INetURLHistory* GetOrCreate (void);
+    static INetURLHistory* GetOrCreate();
 
     /** QueryProtocol.
     */

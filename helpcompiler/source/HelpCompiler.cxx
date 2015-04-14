@@ -507,7 +507,7 @@ bool HelpCompiler::compile()
 
 namespace fs
 {
-    rtl_TextEncoding getThreadTextEncoding( void )
+    rtl_TextEncoding getThreadTextEncoding()
     {
         static bool bNeedsInit = true;
         static rtl_TextEncoding nThreadTextEncoding;

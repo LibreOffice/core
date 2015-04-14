@@ -82,14 +82,14 @@ public:
     // XActiveDataControl.
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   start (void) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL   start() throw(RuntimeException, std::exception) SAL_OVERRIDE {}
+    virtual void SAL_CALL   terminate() throw(RuntimeException, std::exception) SAL_OVERRIDE
                             { m_xLockBytes->terminate_Impl(); }
 
     // XActiveDataSink.
     virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException, std::exception) SAL_OVERRIDE
                             { m_xLockBytes->setInputStream_Impl (rxInputStream); }
-    virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Reference<XInputStream> SAL_CALL getInputStream() throw(RuntimeException, std::exception) SAL_OVERRIDE
                             { return m_xLockBytes->getInputStream_Impl(); }
 };
 
@@ -109,8 +109,8 @@ public:
     // XActiveDataControl.
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   start (void) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL   start() throw(RuntimeException, std::exception) SAL_OVERRIDE {}
+    virtual void SAL_CALL   terminate() throw(RuntimeException, std::exception) SAL_OVERRIDE
                             { m_xLockBytes->terminate_Impl(); }
 
     // XActiveDataStreamer

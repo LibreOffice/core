@@ -50,7 +50,7 @@ public:
         const Size& rPreviewModelSize,
         const SharedSdWindow& rpWindow,
         const sal_Int32 nPageCount);
-    ~PageObjectLayouter(void);
+    ~PageObjectLayouter();
 
     enum Part {
         // The focus indicator is painted outside the actual page object.
@@ -115,8 +115,8 @@ public:
     /// the maximum size of each tile, also position independent
     Size GetGridMaxSize(const CoordinateSystem eCoordinateSystem);
 
-    Image GetTransitionEffectIcon (void) const { return maTransitionEffectIcon;}
-    Image GetCustomAnimationEffectIcon (void) const { return maCustomAnimationEffectIcon;}
+    Image GetTransitionEffectIcon() const { return maTransitionEffectIcon;}
+    Image GetCustomAnimationEffectIcon() const { return maCustomAnimationEffectIcon;}
 
 private:
     Rectangle GetBoundingBox (

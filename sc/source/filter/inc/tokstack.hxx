@@ -175,18 +175,18 @@ private:
 #endif
         ScTokenArray*               pScToken;   // Token array
 
-		bool						GrowString( void );
-		bool						GrowDouble( void );
+        bool                        GrowString();
+        bool                        GrowDouble();
 /* TODO: in case we had FormulaTokenArray::AddError() */
 #if 0
-        bool                        GrowError( void );
+        bool                        GrowError();
 #endif
 		bool						GrowTripel( sal_uInt16 nByMin = 1 );
-		bool						GrowId( void );
-		bool						GrowElement( void );
-		bool						GrowExt( void );
-		bool						GrowNlf( void );
-		bool						GrowMatrix( void );
+        bool                        GrowId();
+        bool                        GrowElement();
+        bool                        GrowExt();
+        bool                        GrowNlf();
+        bool                        GrowMatrix();
 		bool						GetElement( const sal_uInt16 nId );
 		bool						GetElementRek( const sal_uInt16 nId );
 public:
@@ -197,7 +197,7 @@ public:
         inline TokenPool&           operator <<( TokenStack& rStack );
         void                        operator >>( TokenId& rId );
         inline void                 operator >>( TokenStack& rStack );
-        inline const TokenId        Store( void );
+        inline const TokenId        Store();
         const TokenId               Store( const double& rDouble );
 
                                     // only for Range-Names
@@ -216,9 +216,9 @@ public:
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
-        inline const TokenId        LastId( void ) const;
+        inline const TokenId        LastId() const;
         inline const ScTokenArray*  operator []( const TokenId& rId );
-        void                        Reset( void );
+        void                        Reset();
         inline E_TYPE               GetType( const TokenId& rId ) const;
         bool                        IsSingleOp( const TokenId& rId, const DefTokenId eId ) const;
         const OUString*             GetExternal( const TokenId& rId ) const;
@@ -239,13 +239,13 @@ class TokenStack
         inline TokenStack&          operator <<( const TokenId& rNewId );
         inline void                 operator >>( TokenId &rId );
 
-        inline void                 Reset( void );
+        inline void                 Reset();
 
         inline bool                 HasMoreTokens() const { return nPos > 0; }
-        inline const TokenId        Get( void );
+        inline const TokenId        Get();
 };
 
-inline const TokenId TokenStack::Get( void )
+inline const TokenId TokenStack::Get()
 {
     OSL_ENSURE( nPos > 0,
         "*TokenStack::Get(): is empty, is empty, ..." );
@@ -286,7 +286,7 @@ inline void TokenStack::operator >>( TokenId& rId )
     }
 }
 
-inline void TokenStack::Reset( void )
+inline void TokenStack::Reset()
 {
     nPos = 0;
 }
@@ -343,7 +343,7 @@ inline void TokenPool::operator >>( TokenStack& rStack )
     rStack << nId;
 }
 
-inline const TokenId TokenPool::Store( void )
+inline const TokenId TokenPool::Store()
 {
     TokenId nId;
     *this >> nId;
@@ -355,7 +355,7 @@ inline const TokenId TokenPool::Store( const sal_Int16 nWert )
     return Store( ( double ) nWert );
 }
 
-inline const TokenId TokenPool::LastId( void ) const
+inline const TokenId TokenPool::LastId() const
 {
     return static_cast<TokenId>(nElementAkt); // correct, as Ausgabe with Offset 1!
 }

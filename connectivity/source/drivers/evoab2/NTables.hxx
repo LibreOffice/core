@@ -38,7 +38,7 @@ namespace connectivity
                     sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
                     m_xMetaData(_rMetaData)
                         {}
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
         };
     }
 }

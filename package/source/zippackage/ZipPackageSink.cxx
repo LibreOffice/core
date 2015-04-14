@@ -19,11 +19,11 @@
 
 #include <ZipPackageSink.hxx>
 
-ZipPackageSink::ZipPackageSink(void)
+ZipPackageSink::ZipPackageSink()
 : xStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > (NULL))
 {
 }
-ZipPackageSink::~ZipPackageSink(void)
+ZipPackageSink::~ZipPackageSink()
 {
 }
 void SAL_CALL ZipPackageSink::setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )

@@ -51,7 +51,7 @@ class ContentWindow : public ::sd::Window
 {
 public:
     ContentWindow(::vcl::Window& rParent, SlideSorter& rSlideSorter);
-    virtual ~ContentWindow (void);
+    virtual ~ContentWindow();
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
@@ -147,7 +147,7 @@ SlideSorter::SlideSorter (
 {
 }
 
-void SlideSorter::Init (void)
+void SlideSorter::Init()
 {
     if (mpViewShellBase != NULL)
         mxControllerWeak = mpViewShellBase->GetController();
@@ -191,7 +191,7 @@ void SlideSorter::Init (void)
     }
 }
 
-SlideSorter::~SlideSorter (void)
+SlideSorter::~SlideSorter()
 {
     mbIsValid = false;
 
@@ -225,25 +225,25 @@ SlideSorter::~SlideSorter (void)
     mpContentWindow.reset();
 }
 
-model::SlideSorterModel& SlideSorter::GetModel (void) const
+model::SlideSorterModel& SlideSorter::GetModel() const
 {
     OSL_ASSERT(mpSlideSorterModel.get()!=NULL);
     return *mpSlideSorterModel;
 }
 
-view::SlideSorterView& SlideSorter::GetView (void) const
+view::SlideSorterView& SlideSorter::GetView() const
 {
     OSL_ASSERT(mpSlideSorterView.get()!=NULL);
     return *mpSlideSorterView;
 }
 
-controller::SlideSorterController& SlideSorter::GetController (void) const
+controller::SlideSorterController& SlideSorter::GetController() const
 {
     OSL_ASSERT(mpSlideSorterController.get()!=NULL);
     return *mpSlideSorterController;
 }
 
-Reference<frame::XController> SlideSorter::GetXController (void) const
+Reference<frame::XController> SlideSorter::GetXController() const
 {
     Reference<frame::XController> xController(mxControllerWeak);
     return xController;
@@ -261,7 +261,7 @@ void SlideSorter::SetupControls (::vcl::Window* )
     GetVerticalScrollBar()->Show();
 }
 
-void SlideSorter::SetupListeners (void)
+void SlideSorter::SetupListeners()
 {
     SharedSdWindow pWindow (GetContentWindow());
     if (pWindow)
@@ -288,7 +288,7 @@ void SlideSorter::SetupListeners (void)
     mpSlideSorterController->GetScrollBarManager().Connect();
 }
 
-void SlideSorter::ReleaseListeners (void)
+void SlideSorter::ReleaseListeners()
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
@@ -313,7 +313,7 @@ void SlideSorter::ReleaseListeners (void)
             WindowEventHandler));
 }
 
-void SlideSorter::CreateModelViewController (void)
+void SlideSorter::CreateModelViewController()
 {
     mpSlideSorterModel.reset(CreateModel());
     DBG_ASSERT (mpSlideSorterModel.get()!=NULL,
@@ -333,7 +333,7 @@ void SlideSorter::CreateModelViewController (void)
     mpSlideSorterView->Init();
 }
 
-model::SlideSorterModel* SlideSorter::CreateModel (void)
+model::SlideSorterModel* SlideSorter::CreateModel()
 {
     // Get pointers to the document.
     ViewShellBase* pViewShellBase = GetViewShellBase();
@@ -347,12 +347,12 @@ model::SlideSorterModel* SlideSorter::CreateModel (void)
         return NULL;
 }
 
-view::SlideSorterView* SlideSorter::CreateView (void)
+view::SlideSorterView* SlideSorter::CreateView()
 {
     return new view::SlideSorterView (*this);
 }
 
-controller::SlideSorterController* SlideSorter::CreateController (void)
+controller::SlideSorterController* SlideSorter::CreateController()
 {
     controller::SlideSorterController* pController
         = new controller::SlideSorterController (*this);
@@ -431,13 +431,13 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
     }
 }
 
-::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties (void) const
+::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties() const
 {
     OSL_ASSERT(mpProperties);
     return mpProperties;
 }
 
-::boost::shared_ptr<view::Theme> SlideSorter::GetTheme (void) const
+::boost::shared_ptr<view::Theme> SlideSorter::GetTheme() const
 {
     OSL_ASSERT(mpTheme);
     return mpTheme;
@@ -458,7 +458,7 @@ ContentWindow::ContentWindow(
     SetStyle(GetStyle() | WB_NOPOINTERFOCUS);
 }
 
-ContentWindow::~ContentWindow (void)
+ContentWindow::~ContentWindow()
 {
 }
 

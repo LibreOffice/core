@@ -61,7 +61,7 @@ public:
         const ::boost::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
         const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster);
 
-    ~ConfigurationControllerResourceManager (void);
+    ~ConfigurationControllerResourceManager();
 
     /** Activate all the resources that are specified by resource ids in
         rResources.  The resource ids of activated resources are added to

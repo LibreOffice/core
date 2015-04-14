@@ -62,7 +62,7 @@ private:
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~AllMasterPagesSelector (void);
+    virtual ~AllMasterPagesSelector();
 
     void AddTemplate (const TemplateEntry& rEntry);
 
@@ -75,7 +75,7 @@ private:
     /** Update the internal list of master pages that are to show in the
         control.
     */
-    void UpdateMasterPageList (void);
+    void UpdateMasterPageList();
 
     using MasterPagesSelector::Fill;
 };

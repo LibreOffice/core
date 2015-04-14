@@ -51,17 +51,17 @@ class FocusManager
 {
 public:
     FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor);
-    ~FocusManager (void);
+    ~FocusManager();
 
     /** Forget all panels and buttons.  Remove all window listeners.
     */
-    void Clear (void);
+    void Clear();
 
     /** Transfer the focus into the sidebar tree of windows.  This is
         typically called from the SidebarChildWindow as result of
         pressing the F6 key.
     */
-    void GrabFocus (void);
+    void GrabFocus();
 
     void SetDeckTitle (DeckTitleBar* pDeckTitleBar);
     void SetPanels (const SharedPanelContainer& rPanels);
@@ -99,8 +99,8 @@ private:
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
     DECL_LINK(ChildEventListener, VclSimpleEvent*);
 
-    void ClearPanels (void);
-    void ClearButtons (void);
+    void ClearPanels();
+    void ClearButtons();
 
     /** Let the focus manager listen for window events for the given
         window.
@@ -112,8 +112,8 @@ private:
     */
     void RemoveWindow (vcl::Window& rWindow);
 
-    void FocusDeckTitle (void);
-    bool IsDeckTitleVisible (void) const;
+    void FocusDeckTitle();
+    bool IsDeckTitleVisible() const;
     bool IsPanelTitleVisible (const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the

@@ -24,7 +24,7 @@
 
 #define OOO_TYPE_ATK_UTIL ooo_atk_util_get_type()
 
-GType ooo_atk_util_get_type (void);
+GType ooo_atk_util_get_type();
 
 #endif
 

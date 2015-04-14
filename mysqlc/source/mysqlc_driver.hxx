@@ -79,7 +79,7 @@ namespace connectivity
             MysqlCDriver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
-            void SAL_CALL disposing(void) SAL_OVERRIDE;
+            void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             static rtl::OUString getImplementationName_Static()                  throw(RuntimeException);
             static Sequence< rtl::OUString > getSupportedServiceNames_Static()   throw(RuntimeException);

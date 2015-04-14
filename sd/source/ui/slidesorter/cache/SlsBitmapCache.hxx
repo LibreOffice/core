@@ -68,22 +68,22 @@ public:
 
     /** The destructor clears the cache and relases all bitmaps still in it.
     */
-    ~BitmapCache (void);
+    ~BitmapCache();
 
     /** Remove all preview bitmaps from the cache.  After this call the
         cache is empty.
     */
-    void Clear (void);
+    void Clear();
 
     /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
         to be run.
     */
-    bool IsFull (void) const { return mbIsFull;}
+    bool IsFull() const { return mbIsFull;}
 
     /** Return the memory size that is occupied by all non-precious bitmaps
         in the cache.
     */
-    sal_Int32 GetSize (void) { return mnNormalCacheSize;}
+    sal_Int32 GetSize() { return mnNormalCacheSize;}
 
     /** Return <TRUE/> when a preview bitmap exists for the given key.
     */
@@ -118,7 +118,7 @@ public:
 
     /** Mark all preview bitmaps as not being up-to-date anymore.
     */
-    void InvalidateCache (void);
+    void InvalidateCache();
 
     /** Add or replace a bitmap for the given key.
     */
@@ -142,7 +142,7 @@ public:
         the cache size is tracked with each modification of preview
         bitmaps.
     */
-    void ReCalculateTotalCacheSize (void);
+    void ReCalculateTotalCacheSize();
 
     /** Use the previews in the given cache to initialize missing previews.
     */

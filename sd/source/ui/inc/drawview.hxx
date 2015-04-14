@@ -39,7 +39,7 @@ public:
         DrawDocShell* pDocSh,
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
-    virtual ~DrawView (void);
+    virtual ~DrawView();
 
     virtual void MarkListHasChanged() SAL_OVERRIDE;
     void CompleteRedraw(OutputDevice* pOutDev, const ::vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;

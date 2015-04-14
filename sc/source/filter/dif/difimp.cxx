@@ -253,7 +253,7 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
         pNumFormatter = rDoc.GetFormatTable();
 }
 
-TOPIC DifParser::GetNextTopic( void )
+TOPIC DifParser::GetNextTopic()
 {
     enum STATE { S_VectorVal, S_Data, S_END, S_START, S_UNKNOWN, S_ERROR_L2 };
 
@@ -489,7 +489,7 @@ bool DifParser::LookAhead()
     return bValidStructure;
 }
 
-DATASET DifParser::GetNextDataset( void )
+DATASET DifParser::GetNextDataset()
 {
     DATASET eRet = D_UNKNOWN;
     OUString aLine;

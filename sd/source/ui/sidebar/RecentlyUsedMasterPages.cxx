@@ -63,7 +63,7 @@ namespace sd { namespace sidebar {
 
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
 
-RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
+RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
 {
     if (mpInstance == NULL)
     {
@@ -86,7 +86,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
     return *mpInstance;
 }
 
-RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
+RecentlyUsedMasterPages::RecentlyUsedMasterPages()
     : maListeners(),
       mvMasterPages(),
       mnMaxListSize(8),
@@ -94,7 +94,7 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
 {
 }
 
-RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
+RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
@@ -103,7 +103,7 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
 
-void RecentlyUsedMasterPages::LateInit (void)
+void RecentlyUsedMasterPages::LateInit()
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->AddChangeListener(aLink);
@@ -113,7 +113,7 @@ void RecentlyUsedMasterPages::LateInit (void)
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
 
-void RecentlyUsedMasterPages::LoadPersistentValues (void)
+void RecentlyUsedMasterPages::LoadPersistentValues()
 {
     try
     {
@@ -178,7 +178,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
     }
 }
 
-void RecentlyUsedMasterPages::SavePersistentValues (void)
+void RecentlyUsedMasterPages::SavePersistentValues()
 {
     try
     {
@@ -257,7 +257,7 @@ void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
             rEventListener));
 }
 
-int RecentlyUsedMasterPages::GetMasterPageCount (void) const
+int RecentlyUsedMasterPages::GetMasterPageCount() const
 {
     return mvMasterPages.size();
 }
@@ -270,7 +270,7 @@ MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32
         return MasterPageContainer::NIL_TOKEN;
 }
 
-void RecentlyUsedMasterPages::SendEvent (void)
+void RecentlyUsedMasterPages::SendEvent()
 {
     ::std::vector<Link>::iterator aLink (maListeners.begin());
     ::std::vector<Link>::iterator aEnd (maListeners.end());
@@ -361,7 +361,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
     }
 }
 
-void RecentlyUsedMasterPages::ResolveList (void)
+void RecentlyUsedMasterPages::ResolveList()
 {
     bool bNotify (false);
 

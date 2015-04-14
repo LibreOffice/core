@@ -82,7 +82,7 @@ void OEvoabTables::impl_refresh(  ) throw(RuntimeException)
     static_cast<OEvoabCatalog&>(m_rParent).refreshTables();
 }
 
-void OEvoabTables::disposing(void)
+void OEvoabTables::disposing()
 {
 m_xMetaData.clear();
     OCollection::disposing();

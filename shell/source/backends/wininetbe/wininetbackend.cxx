@@ -298,7 +298,7 @@ WinInetBackend::WinInetBackend()
 
 
 
-WinInetBackend::~WinInetBackend(void)
+WinInetBackend::~WinInetBackend()
 {
 }
 
@@ -362,19 +362,19 @@ css::uno::Any WinInetBackend::getPropertyValue(
 
 
 
-OUString SAL_CALL WinInetBackend::getBackendName(void) {
+OUString SAL_CALL WinInetBackend::getBackendName() {
     return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
 
 
-OUString SAL_CALL WinInetBackend::getImplementationName(void)
+OUString SAL_CALL WinInetBackend::getImplementationName()
     throw (uno::RuntimeException)
 {
     return getBackendName() ;
 }
 
-uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
+uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames()
 {
     uno::Sequence<OUString> aServiceNameList(1);
     aServiceNameList[0] = "com.sun.star.configuration.backend.WinInetBackend";
@@ -388,7 +388,7 @@ sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames(void)
+uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     return getBackendServiceNames() ;

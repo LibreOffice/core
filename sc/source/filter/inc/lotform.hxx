@@ -93,7 +93,7 @@ public:
                                     const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
     void                Reset( const ScAddress& rEingPos );
-    inline void         SetWK3( void );
+    inline void         SetWK3();
     LotusContext&       getContext() { return m_rContext; }
 
 private:
@@ -109,7 +109,7 @@ inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
     ReadSRD( rCRD.Ref2, nRelBit >> 3 );
 }
 
-inline void LotusToSc::SetWK3( void )
+inline void LotusToSc::SetWK3()
 {
         bWK3 = true;
 }

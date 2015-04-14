@@ -231,18 +231,18 @@ void FormViewPageWindowAdapter::dispose()
     m_aControllerList.clear();
 }
 
-sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements() throw( RuntimeException, std::exception )
 {
     return getCount() != 0;
 }
 
-Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException, std::exception )
+Type SAL_CALL  FormViewPageWindowAdapter::getElementType() throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XFormController>::get();
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount(void) throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount() throw( RuntimeException, std::exception )
 {
     return m_aControllerList.size();
 }

@@ -77,7 +77,7 @@ extern "C"
 
 // Used to determine whether the DLL can be unloaded by OLE
 
-STDAPI DllCanUnloadNow(void)
+STDAPI DllCanUnloadNow()
 {
     return (_Module.GetLockCount()==0) ? S_OK : E_FAIL;
 }

@@ -406,8 +406,8 @@ public: // Internal methods
     const char * GetNameCStr() { return csName.c_str(); }
 
     void SetPosition(BenContainerPos Pos) { cPos = Pos; }
-    BenContainerPos GetPosition(void) { return cPos; }
-    size_t GetLength(void) { return csName.length()+ 1; }
+    BenContainerPos GetPosition() { return cPos; }
+    size_t GetLength() { return csName.length()+ 1; }
     CBenNamedObjectListElmt& GetNameListElmt() { return cNameListElmt; }
 
 private: // Data

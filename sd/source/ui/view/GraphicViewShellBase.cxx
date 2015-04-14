@@ -61,7 +61,7 @@ GraphicViewShellBase::GraphicViewShellBase (
 {
 }
 
-GraphicViewShellBase::~GraphicViewShellBase (void)
+GraphicViewShellBase::~GraphicViewShellBase()
 {
 }
 
@@ -93,7 +93,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
 }
 
-void GraphicViewShellBase::InitializeFramework (void)
+void GraphicViewShellBase::InitializeFramework()
 {
     com::sun::star::uno::Reference<com::sun::star::frame::XController>
         xController (GetController());

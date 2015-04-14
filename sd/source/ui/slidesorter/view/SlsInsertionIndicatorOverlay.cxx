@@ -75,7 +75,7 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorOverlay::~InsertionIndicatorOverlay (void)
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
 {
     Hide();
 }
@@ -319,7 +319,7 @@ void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidat
         mpLayerInvalidator->Invalidate(GetBoundingBox());
 }
 
-void InsertionIndicatorOverlay::Show (void)
+void InsertionIndicatorOverlay::Show()
 {
     if ( ! mbIsVisible)
     {
@@ -336,7 +336,7 @@ void InsertionIndicatorOverlay::Show (void)
     }
 }
 
-void InsertionIndicatorOverlay::Hide (void)
+void InsertionIndicatorOverlay::Hide()
 {
     if (mbIsVisible)
     {
@@ -353,12 +353,12 @@ void InsertionIndicatorOverlay::Hide (void)
     }
 }
 
-Rectangle InsertionIndicatorOverlay::GetBoundingBox (void) const
+Rectangle InsertionIndicatorOverlay::GetBoundingBox() const
 {
     return Rectangle(maLocation, maIcon.GetSizePixel());
 }
 
-Size InsertionIndicatorOverlay::GetSize (void) const
+Size InsertionIndicatorOverlay::GetSize() const
 {
     return Size(
         maIcon.GetSizePixel().Width() + 10,

@@ -1204,7 +1204,7 @@ Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 n
 }
 
 OUString SAL_CALL
-Calendar_gregorian::getImplementationName(void) throw( RuntimeException, std::exception )
+Calendar_gregorian::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(cCalendar);
 }
@@ -1216,7 +1216,7 @@ Calendar_gregorian::supportsService(const OUString& rServiceName) throw( Runtime
 }
 
 Sequence< OUString > SAL_CALL
-Calendar_gregorian::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Calendar_gregorian::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(cCalendar);

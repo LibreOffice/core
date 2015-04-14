@@ -84,14 +84,14 @@ HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *
 
 
 
-ULONG STDMETHODCALLTYPE CInfoTip::AddRef(void)
+ULONG STDMETHODCALLTYPE CInfoTip::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
 
-ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
+ULONG STDMETHODCALLTYPE CInfoTip::Release()
 {
     long refcnt = InterlockedDecrement(&m_RefCnt);
 
@@ -347,7 +347,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
 
 
-HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty(void)
+HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty()
 {
     return E_NOTIMPL;
 }

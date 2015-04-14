@@ -81,7 +81,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     ProvideFrameworkControllers();
 }
 
-DrawController::~DrawController (void) throw()
+DrawController::~DrawController() throw()
 {
 }
 
@@ -106,7 +106,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(
 
 // XTypeProvider
 
-Sequence<Type> SAL_CALL DrawController::getTypes (void)
+Sequence<Type> SAL_CALL DrawController::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -127,7 +127,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(DrawController);
 
 // XComponent
 
-void SAL_CALL DrawController::dispose (void)
+void SAL_CALL DrawController::dispose()
     throw( RuntimeException, std::exception )
 {
     if( !mbDisposing )
@@ -219,7 +219,7 @@ sal_Bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName
     return cppu::supportsService(this, rsServiceName);
 }
 
-Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -325,7 +325,7 @@ void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPag
         mxSubController->setCurrentPage(xPage);
 }
 
-Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
+Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
     throw(RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -510,7 +510,7 @@ void DrawController::FirePropertyChange (
 
 }
 
-void DrawController::BroadcastContextChange (void) const
+void DrawController::BroadcastContextChange() const
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpBase->GetMainViewShell());
     if ( ! pViewShell)
@@ -553,7 +553,7 @@ void DrawController::BroadcastContextChange (void) const
     ContextChangeEventMultiplexer::NotifyContextChange(mpBase, eContext);
 }
 
-void DrawController::ReleaseViewShellBase (void)
+void DrawController::ReleaseViewShellBase()
 {
     DisposeFrameworkControllers();
     mpBase = NULL;
@@ -562,7 +562,7 @@ void DrawController::ReleaseViewShellBase (void)
 //===== XControllerManager ==============================================================
 
 Reference<XConfigurationController> SAL_CALL
-    DrawController::getConfigurationController (void)
+    DrawController::getConfigurationController()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -571,7 +571,7 @@ Reference<XConfigurationController> SAL_CALL
 }
 
 Reference<XModuleController> SAL_CALL
-    DrawController::getModuleController (void)
+    DrawController::getModuleController()
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
@@ -586,7 +586,7 @@ namespace
     class theDrawControllerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theDrawControllerUnoTunnelId> {};
 }
 
-const Sequence<sal_Int8>& DrawController::getUnoTunnelId (void)
+const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
 {
     return theDrawControllerUnoTunnelId::get().getSeq();
 }
@@ -825,7 +825,7 @@ void DrawController::getFastPropertyValue (
     }
 }
 
-void DrawController::ProvideFrameworkControllers (void)
+void DrawController::ProvideFrameworkControllers()
 {
     SolarMutexGuard aGuard;
     try
@@ -847,7 +847,7 @@ void DrawController::ProvideFrameworkControllers (void)
     }
 }
 
-void DrawController::DisposeFrameworkControllers (void)
+void DrawController::DisposeFrameworkControllers()
 {
     Reference<XComponent> xComponent (mxModuleController, UNO_QUERY);
     if (xComponent.is())
@@ -858,7 +858,7 @@ void DrawController::DisposeFrameworkControllers (void)
         xComponent->dispose();
 }
 
-void DrawController::ThrowIfDisposed (void) const
+void DrawController::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose || mbDisposing)

@@ -37,7 +37,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 
 
 /* XUnoTunnel */
-cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId( void )
+cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
     throw (cssu::RuntimeException)
 {
     static ::cppu::OImplementationId* pId = 0;

@@ -39,7 +39,7 @@ class ContextList;
 class ResourceManager
 {
 public:
-    static ResourceManager& Instance (void);
+    static ResourceManager& Instance();
 
     const DeckDescriptor* GetDeckDescriptor (
         const ::rtl::OUString& rsDeckId) const;
@@ -96,8 +96,8 @@ public:
         const Context& rContext);
 
 private:
-    ResourceManager (void);
-    ~ResourceManager (void);
+    ResourceManager();
+    ~ResourceManager();
 
     typedef ::std::vector<DeckDescriptor> DeckContainer;
     DeckContainer maDecks;
@@ -105,8 +105,8 @@ private:
     PanelContainer maPanels;
     mutable ::std::set<rtl::OUString> maProcessedApplications;
 
-    void ReadDeckList (void);
-    void ReadPanelList (void);
+    void ReadDeckList();
+    void ReadPanelList();
     void ReadContextList (
         const ::utl::OConfigurationNode& rNode,
         ContextList& rContextList,

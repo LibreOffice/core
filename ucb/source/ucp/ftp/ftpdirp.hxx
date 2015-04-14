@@ -67,7 +67,7 @@ namespace ftp {
         void SetSec(sal_uInt16 seconds) { Seconds = seconds; }
         void SetNanoSec(sal_uInt32 nanoSec) { NanoSeconds = nanoSec; }
 
-        sal_uInt16 GetMonth(void) { return Month; }
+        sal_uInt16 GetMonth() { return Month; }
     };
 
 
@@ -92,7 +92,7 @@ namespace ftp {
         sal_uInt32                          m_nMode;
         sal_uInt32                          m_nSize;
 
-        FTPDirentry(void)
+        FTPDirentry()
             : m_aDate(0,0,0,0,0,0,0),
               m_nMode(INETCOREFTP_FILEMODE_UNKNOWN),
               m_nSize((sal_uInt32)(-1)) { }

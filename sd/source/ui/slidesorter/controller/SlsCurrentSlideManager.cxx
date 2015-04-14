@@ -49,7 +49,7 @@ CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     maSwitchPageDelayTimer.SetTimeoutHdl(LINK(this,CurrentSlideManager,SwitchPageCallback));
 }
 
-CurrentSlideManager::~CurrentSlideManager (void)
+CurrentSlideManager::~CurrentSlideManager()
 {
 }
 
@@ -85,7 +85,7 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
     }
 }
 
-void CurrentSlideManager::ReleaseCurrentSlide (void)
+void CurrentSlideManager::ReleaseCurrentSlide()
 {
     if (mpCurrentSlide.get() != NULL)
         mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, false);
@@ -94,7 +94,7 @@ void CurrentSlideManager::ReleaseCurrentSlide (void)
     mnCurrentSlideIndex = -1;
 }
 
-bool CurrentSlideManager::IsCurrentSlideIsValid (void)
+bool CurrentSlideManager::IsCurrentSlideIsValid()
 {
     return mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex<mrSlideSorter.GetModel().GetPageCount();
 }
@@ -224,12 +224,12 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
     }
 }
 
-void CurrentSlideManager::PrepareModelChange (void)
+void CurrentSlideManager::PrepareModelChange()
 {
     mpCurrentSlide.reset();
 }
 
-void CurrentSlideManager::HandleModelChange (void)
+void CurrentSlideManager::HandleModelChange()
 {
     if (mnCurrentSlideIndex >= 0)
     {

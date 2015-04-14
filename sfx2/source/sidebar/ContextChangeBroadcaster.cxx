@@ -30,13 +30,13 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-ContextChangeBroadcaster::ContextChangeBroadcaster (void)
+ContextChangeBroadcaster::ContextChangeBroadcaster()
     : msContextName(),
       mbIsBroadcasterEnabled(true)
 {
 }
 
-ContextChangeBroadcaster::~ContextChangeBroadcaster (void)
+ContextChangeBroadcaster::~ContextChangeBroadcaster()
 {
 }
 

@@ -98,13 +98,13 @@ sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(std::exception  )
+Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames() throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
 
 // ORegistryServiceManager_Static
-Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";

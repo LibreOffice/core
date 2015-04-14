@@ -83,7 +83,7 @@ struct RegistryTypeReader_Api
 
 /** the API initialization function.
 */
-REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
+REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api();
 
 #ifdef __cplusplus
 }

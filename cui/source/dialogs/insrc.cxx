@@ -45,7 +45,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString&
     SetHelpId( sHelpId );
 }
 
-short SvxInsRowColDlg::Execute(void)
+short SvxInsRowColDlg::Execute()
 {
     return ModalDialog::Execute();
 }

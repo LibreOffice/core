@@ -31,8 +31,8 @@ namespace sfx2 { namespace sidebar {
 class ContextChangeBroadcaster
 {
 public:
-    ContextChangeBroadcaster (void);
-    ~ContextChangeBroadcaster (void);
+    ContextChangeBroadcaster();
+    ~ContextChangeBroadcaster();
 
     void Initialize (const ::rtl::OUString& rsContextName);
 

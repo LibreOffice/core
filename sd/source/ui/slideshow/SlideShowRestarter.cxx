@@ -47,7 +47,7 @@ SlideShowRestarter::SlideShowRestarter (
 {
 }
 
-SlideShowRestarter::~SlideShowRestarter (void)
+SlideShowRestarter::~SlideShowRestarter()
 {
 }
 
@@ -123,7 +123,7 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
     return 0;
 }
 
-void SlideShowRestarter::StartPresentation (void)
+void SlideShowRestarter::StartPresentation()
 {
     //rhbz#1091117 crash because we're exiting the application, and this is
     //being called during the configuration update event on exit. At this point

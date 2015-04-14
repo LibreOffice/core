@@ -98,13 +98,13 @@ public:
     /** If there still are managed children these are marked as DEFUNC and
         released.
     */
-    virtual ~ChildrenManager (void);
+    virtual ~ChildrenManager();
 
     /** Return the number of currently visible accessible children.
         @return
             If there are no children a 0 is returned.
     */
-    long GetChildCount (void) const throw ();
+    long GetChildCount() const throw ();
 
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
@@ -161,7 +161,7 @@ public:
     /** Clear the list of accessible shapes which have been added by
         previous calls to <member>AddAccessibleShape</member>.
     */
-    void ClearAccessibleShapeList (void);
+    void ClearAccessibleShapeList();
 
     /** Take a new event shape tree info.  Call this method to inform the
         children manager of a change of the info bundle.
@@ -174,7 +174,7 @@ public:
         according to the given selection.  This includes setting
         <em>and</em> resetting the states.
     */
-    void UpdateSelection (void);
+    void UpdateSelection();
 
     /** Return whether one of the shapes managed by this object has
         currently the focus.
@@ -182,13 +182,13 @@ public:
             Returns <true/> when there is a shape that has the focus and
             <false/> when there is no such shape.
     */
-    bool HasFocus (void);
+    bool HasFocus();
 
     /** When there is a shape that currently has the focus,
         i.e. <member>HasFocus()</member> returns <true/> then remove the
         focus from that shape.  Otherwise nothing changes.
     */
-    void RemoveFocus (void);
+    void RemoveFocus();
 
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;

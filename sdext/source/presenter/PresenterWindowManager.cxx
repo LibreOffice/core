@@ -90,11 +90,11 @@ PresenterWindowManager::PresenterWindowManager (
     UpdateWindowList();
 }
 
-PresenterWindowManager::~PresenterWindowManager (void)
+PresenterWindowManager::~PresenterWindowManager()
 {
 }
 
-void SAL_CALL PresenterWindowManager::disposing (void)
+void SAL_CALL PresenterWindowManager::disposing()
 {
     NotifyDisposing();
 
@@ -515,7 +515,7 @@ void PresenterWindowManager::SetViewMode (const ViewMode eMode)
     StoreViewMode(eMode);
 }
 
-PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode (void) const
+PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode() const
 {
     if (mbIsHelpViewActive)
         return VM_Help;
@@ -527,7 +527,7 @@ PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode (void) cons
         return VM_Standard;
 }
 
-void PresenterWindowManager::RestoreViewMode (void)
+void PresenterWindowManager::RestoreViewMode()
 {
     sal_Int32 nMode (0);
     PresenterConfigurationAccess aConfiguration (
@@ -608,7 +608,7 @@ void PresenterWindowManager::RemoveLayoutListener (
     }
 }
 
-void PresenterWindowManager::Layout (void)
+void PresenterWindowManager::Layout()
 {
     if (mxParentWindow.is() && ! mbIsLayouting)
     {
@@ -646,7 +646,7 @@ void PresenterWindowManager::Layout (void)
     }
 }
 
-void PresenterWindowManager::LayoutStandardMode (void)
+void PresenterWindowManager::LayoutStandardMode()
 {
     awt::Rectangle aBox = mxParentWindow->getPosSize();
 
@@ -703,7 +703,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
    LayoutToolBar();
 }
 
-void PresenterWindowManager::LayoutNotesMode (void)
+void PresenterWindowManager::LayoutNotesMode()
 {
     awt::Rectangle aBox = mxParentWindow->getPosSize();
 
@@ -788,7 +788,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
 
 }
 
-void PresenterWindowManager::LayoutSlideSorterMode (void)
+void PresenterWindowManager::LayoutSlideSorterMode()
 {
     const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
 
@@ -802,7 +802,7 @@ void PresenterWindowManager::LayoutSlideSorterMode (void)
         aToolBarBox.Y1 - 2*nGap);
 }
 
-void PresenterWindowManager::LayoutHelpMode (void)
+void PresenterWindowManager::LayoutHelpMode()
 {
     const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
 
@@ -818,7 +818,7 @@ void PresenterWindowManager::LayoutHelpMode (void)
         aToolBarBox.Y1 - 2*nGap);
 }
 
-geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar (void)
+geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar()
 {
     double nToolBarWidth (400);
     double nToolBarHeight (80);
@@ -898,7 +898,7 @@ awt::Size PresenterWindowManager::CalculatePaneSize (
     return awt::Size(aOuterBox.Width, aOuterBox.Height);
 }
 
-void PresenterWindowManager::NotifyLayoutModeChange (void)
+void PresenterWindowManager::NotifyLayoutModeChange()
 {
     document::EventObject aEvent;
     aEvent.Source = Reference<XInterface>(static_cast<XWeak*>(this));
@@ -925,7 +925,7 @@ void PresenterWindowManager::NotifyLayoutModeChange (void)
     }
 }
 
-void PresenterWindowManager::NotifyDisposing (void)
+void PresenterWindowManager::NotifyDisposing()
 {
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
@@ -1054,7 +1054,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     }
 }
 
-void PresenterWindowManager::ProvideBackgroundBitmap (void)
+void PresenterWindowManager::ProvideBackgroundBitmap()
 {
     if ( ! mxScaledBackgroundBitmap.is())
     {
@@ -1087,7 +1087,7 @@ void PresenterWindowManager::ProvideBackgroundBitmap (void)
     }
 }
 
-Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolygon (void) const
+Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolygon() const
 {
     // Create a clip polygon that includes the whole update area but has the
     // content windows as holes.
@@ -1125,7 +1125,7 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     return xPolyPolygon;
 }
 
-void PresenterWindowManager::UpdateWindowList (void)
+void PresenterWindowManager::UpdateWindowList()
 {
 #ifdef ENABLE_PANE_RESIZING
     try
@@ -1176,11 +1176,11 @@ void PresenterWindowManager::UpdateWindowList (void)
 #endif
 }
 
-void PresenterWindowManager::Invalidate (void)
+void PresenterWindowManager::Invalidate()
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
-void PresenterWindowManager::Update (void)
+void PresenterWindowManager::Update()
 {
     mxClipPolygon = NULL;
     mbIsLayoutPending = true;
@@ -1189,7 +1189,7 @@ void PresenterWindowManager::Update (void)
     Invalidate();
 }
 
-void PresenterWindowManager::ThrowIfDisposed (void) const
+void PresenterWindowManager::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

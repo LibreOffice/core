@@ -38,7 +38,7 @@ ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
 , m_bMustInitBuffer ( true )
 {
 }
-ZipPackageBuffer::~ZipPackageBuffer(void)
+ZipPackageBuffer::~ZipPackageBuffer()
 {
 }
 

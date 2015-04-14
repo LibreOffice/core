@@ -840,7 +840,7 @@ void SdrObject::SetGrabBagItem(const com::sun::star::uno::Any& rVal)
     BroadcastObjectChange();
 }
 
-sal_uInt32 SdrObject::GetNavigationPosition (void)
+sal_uInt32 SdrObject::GetNavigationPosition()
 {
     if (pObjList!=NULL && pObjList->RecalcNavigationPositions())
     {

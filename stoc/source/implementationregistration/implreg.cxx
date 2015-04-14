@@ -1206,7 +1206,7 @@ public:
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
@@ -1300,7 +1300,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 }
 
 // XServiceInfo
-Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw(RuntimeException, std::exception)
+Sequence< OUString > ImplementationRegistration::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     Sequence< OUString > seqNames(1);
     seqNames[0] = "com.sun.star.registry.ImplementationRegistration";

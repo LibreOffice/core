@@ -218,25 +218,25 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 
 // end of HIODev wrapper
 
-bool HWPFile::InfoRead(void)
+bool HWPFile::InfoRead()
 {
     return _hwpInfo.Read(*this);
 }
 
 
-bool HWPFile::FontRead(void)
+bool HWPFile::FontRead()
 {
     return _hwpFont.Read(*this);
 }
 
 
-bool HWPFile::StyleRead(void)
+bool HWPFile::StyleRead()
 {
     return _hwpStyle.Read(*this);
 }
 
 
-bool HWPFile::ParaListRead(void)
+bool HWPFile::ParaListRead()
 {
     return ReadParaList(plist);
 }
@@ -277,7 +277,7 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
     return true;
 }
 
-void HWPFile::TagsRead(void)
+void HWPFile::TagsRead()
 {
     while (true)
     {
@@ -696,7 +696,7 @@ int HWPFile::compareParaShape(ParaShape *shape)
 }
 
 
-HWPFile *GetCurrentDoc(void)
+HWPFile *GetCurrentDoc()
 {
     return HWPFile::cur_doc;
 }

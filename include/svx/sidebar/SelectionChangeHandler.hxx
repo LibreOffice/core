@@ -48,10 +48,10 @@ class SVX_DLLPUBLIC SelectionChangeHandler
 {
 public:
     SelectionChangeHandler (
-        const boost::function<rtl::OUString(void)>& rSelectionChangeCallback,
+        const boost::function<rtl::OUString()>& rSelectionChangeCallback,
         const css::uno::Reference<css::frame::XController>& rxController,
         const sfx2::sidebar::EnumContext::Context eDefaultContext);
-    virtual ~SelectionChangeHandler (void);
+    virtual ~SelectionChangeHandler();
 
     virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -59,17 +59,17 @@ public:
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing (void)
+    virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
-    void Connect (void);
-    void Disconnect (void);
+    void Connect();
+    void Disconnect();
 
 private:
     SelectionChangeHandler(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
     SelectionChangeHandler& operator=(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
 
-    const boost::function<rtl::OUString(void)> maSelectionChangeCallback;
+    const boost::function<rtl::OUString()> maSelectionChangeCallback;
     css::uno::Reference<css::frame::XController> mxController;
     const sfx2::sidebar::EnumContext::Context meDefaultContext;
     bool mbIsConnected;

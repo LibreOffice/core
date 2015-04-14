@@ -61,7 +61,7 @@ class OInterfaceA : public WeakImplHelper1< XInterfaceA >
 {
 public:
 
-    virtual void SAL_CALL methodA(void) throw (RuntimeException)
+    virtual void SAL_CALL methodA() throw (RuntimeException)
         {}
 
     virtual void SAL_CALL methodB(sal_Int16 /*aShort*/) throw (RuntimeException)

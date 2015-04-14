@@ -76,11 +76,11 @@ class Base : public cppu::Enterable
 public:
     explicit Base(uno_Environment * pEnv, cppu::Enterable * pEnterable);
 
-    void acquireWeak(void);
-    void releaseWeak(void);
+    void acquireWeak();
+    void releaseWeak();
     void harden     (uno_Environment ** ppHardEnv);
-    void acquire    (void);
-    void release    (void);
+    void acquire();
+    void release();
 
     void registerProxyInterface (void                                  ** ppProxy,
                                  uno_freeProxyFunc                        freeProxy,
@@ -100,8 +100,8 @@ public:
     void acquireInterface       (void                                   * pInterface);
     void releaseInterface       (void                                   * pInterface);
 
-    virtual void v_enter     (void) SAL_OVERRIDE;
-    virtual void v_leave     (void) SAL_OVERRIDE;
+    virtual void v_enter() SAL_OVERRIDE;
+    virtual void v_leave() SAL_OVERRIDE;
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
     virtual bool v_isValid   (rtl::OUString * pReason) SAL_OVERRIDE;
@@ -281,14 +281,14 @@ Base::~Base()
     m_pEnv->release(m_pEnv);
 }
 
-void Base::acquire(void)
+void Base::acquire()
 {
     m_env_acquire(m_pEnv);
 
     osl_atomic_increment(&m_nRef);
 }
 
-void Base::release(void)
+void Base::release()
 {
     if (osl_atomic_decrement(&m_nRef) == 0)
         delete this;
@@ -303,12 +303,12 @@ void Base::harden(uno_Environment ** ppHardEnv)
     osl_atomic_increment(&m_nRef);
 }
 
-void Base::acquireWeak(void)
+void Base::acquireWeak()
 {
     m_env_acquireWeak(m_pEnv);
 }
 
-void Base::releaseWeak(void)
+void Base::releaseWeak()
 {
     m_env_releaseWeak(m_pEnv);
 }
@@ -493,12 +493,12 @@ void Base::releaseInterface(void * pInterface)
                            m_env_releaseInterface);
 }
 
-void Base::v_enter(void)
+void Base::v_enter()
 {
     m_pEnterable->enter();
 }
 
-void Base::v_leave(void)
+void Base::v_leave()
 {
     m_pEnterable->leave();
 }

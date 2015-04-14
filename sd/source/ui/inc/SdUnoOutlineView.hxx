@@ -37,9 +37,9 @@ class SdUnoOutlineView
 public:
     SdUnoOutlineView (
         OutlineViewShell& rViewShell) throw();
-    virtual ~SdUnoOutlineView (void) throw();
+    virtual ~SdUnoOutlineView() throw();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XSelectionSupplier
 
@@ -48,7 +48,7 @@ public:
         throw(css::lang::IllegalArgumentException,
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Any SAL_CALL getSelection (void)
+    virtual css::uno::Any SAL_CALL getSelection()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addSelectionChangeListener (
@@ -65,7 +65,7 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage >& xPage)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XFastPropertySet

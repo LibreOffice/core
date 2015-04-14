@@ -186,7 +186,7 @@ namespace cppu_unourl
             }
         }
 
-        void testDescriptorKey(void)
+        void testDescriptorKey()
         {
             struct Test
             {

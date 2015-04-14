@@ -121,8 +121,8 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL acquire (void) throw () SAL_OVERRIDE;
-    virtual void SAL_CALL release (void) throw () SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 protected:
     void RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );

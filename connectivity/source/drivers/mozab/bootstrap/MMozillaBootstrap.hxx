@@ -51,7 +51,7 @@ namespace connectivity
             MozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -83,7 +83,7 @@ namespace connectivity
             virtual ::sal_Int32 SAL_CALL Run( const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        & getMSFactory(void) const { return m_xMSFactory; }
+                        & getMSFactory() const { return m_xMSFactory; }
 
         };
     }

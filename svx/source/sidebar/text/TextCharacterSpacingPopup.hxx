@@ -32,11 +32,11 @@ public :
     TextCharacterSpacingPopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    virtual ~TextCharacterSpacingPopup (void);
+    virtual ~TextCharacterSpacingPopup();
 
     void Rearrange (bool bLBAvailable,bool bAvailable, long nKerning);
 private:
-    void PopupModeEndCallback (void);
+    void PopupModeEndCallback();
 };
 
 } } // end of namespace svx::sidebar

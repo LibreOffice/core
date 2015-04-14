@@ -594,7 +594,7 @@ void SvxLineEndWindow::SetSize()
     //SetMinOutputSizePixel( aSize );
 }
 
-void SvxLineEndWindow::GetFocus (void)
+void SvxLineEndWindow::GetFocus()
 {
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled

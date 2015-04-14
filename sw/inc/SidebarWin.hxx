@@ -199,7 +199,7 @@ class SwSidebarWin : public vcl::Window
     private:
         SwSidebarWin*   GetTopReplyNote();
 
-        virtual SvxLanguageItem GetLanguage(void);
+        virtual SvxLanguageItem GetLanguage();
 
         SwPostItMgr&    mrMgr;
         SwView&         mrView;

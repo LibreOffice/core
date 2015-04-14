@@ -54,7 +54,7 @@ public:
     // XAccessibleContext
 
     // Return the number of currently visible children.
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return the specified child or NULL if index is invalid.
@@ -65,19 +65,19 @@ public:
 
     // Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent (void)
+        getAccessibleParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent (void)
+        getAccessibleIndexInParent()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getAccessibleDescription() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleComponent
     virtual sal_Bool SAL_CALL containsPoint(
@@ -135,7 +135,7 @@ public:
 
     // Returns an identifier for the implementation of this object.
     virtual OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Return whether the specified service is supported by this class.
@@ -146,7 +146,7 @@ public:
     // Returns a list of all supported services.  In this case that is just
     // the AccessibleContext service.
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInterface

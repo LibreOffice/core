@@ -56,7 +56,7 @@ public:
     /** Stop the execution of the task and release the shared pointer to
         itself so that it will eventually be destroyed.
     */
-    void Release (void);
+    void Release();
 
     /** Convenience method that calls Release() on the given task.  It
         checks the given weak_ptr for being expired and catches bad_weak_ptr
@@ -77,7 +77,7 @@ private:
         const ::boost::shared_ptr<AsynchronousTask>& rpTask,
         sal_uInt32 nMillisecondsBetweenSteps,
         sal_uInt32 nMaxTimePerStep);
-    ~TimerBasedTaskExecution (void);
+    ~TimerBasedTaskExecution();
     void SetSelf (const ::boost::shared_ptr<TimerBasedTaskExecution>& rpSelf);
 
     class Deleter;

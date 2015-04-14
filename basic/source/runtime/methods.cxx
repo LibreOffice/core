@@ -121,7 +121,7 @@ static void FilterWhiteSpace( OUString& rStr )
 
 static long GetDayDiff( const Date& rDate );
 
-static const CharClass& GetCharClass( void )
+static const CharClass& GetCharClass()
 {
     static bool bNeedsInit = true;
     static LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
@@ -161,7 +161,7 @@ OUString getFullPath( const OUString& aRelPath )
 }
 
 // TODO: -> SbiGlobals
-static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess( void )
+static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess()
 {
     static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
@@ -2379,7 +2379,7 @@ double Now_Impl()
     return aSerial;
 }
 
-// Date Now(void)
+// Date Now()
 
 RTLFUNC(Now)
 {
@@ -2388,7 +2388,7 @@ RTLFUNC(Now)
     rPar.Get(0)->PutDate( Now_Impl() );
 }
 
-// Date Time(void)
+// Date Time()
 
 RTLFUNC(Time)
 {

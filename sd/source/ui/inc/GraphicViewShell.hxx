@@ -62,15 +62,15 @@ public:
         vcl::Window* pParentWindow,
         FrameView* pFrameView = NULL);
 
-    virtual ~GraphicViewShell (void);
+    virtual ~GraphicViewShell();
 
     /** Override this method in order to have the layer mode always active.
     */
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) SAL_OVERRIDE;
 
 protected:
-    void ConstructGraphicViewShell (void);
-    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
+    void ConstructGraphicViewShell();
+    virtual void ArrangeGUIElements() SAL_OVERRIDE;
 };
 
 } // end of namespace sd

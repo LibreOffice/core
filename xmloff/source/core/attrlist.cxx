@@ -70,7 +70,7 @@ struct SvXMLAttributeList_Impl
 
 
 
-sal_Int16 SAL_CALL SvXMLAttributeList::getLength(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Int16 SAL_CALL SvXMLAttributeList::getLength() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return sal::static_int_cast< sal_Int16 >(m_pImpl->vecAttribute.size());
 }

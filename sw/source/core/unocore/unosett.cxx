@@ -262,7 +262,7 @@ const unsigned short aUnoToSvxAdjust[] =
     USHRT_MAX
 };
 
-OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXFootnoteProperties::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXFootnoteProperties");
 }
@@ -272,7 +272,7 @@ sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) th
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -291,7 +291,7 @@ SwXFootnoteProperties::~SwXFootnoteProperties()
 
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySetInfo(void)
+uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySetInfo()
                                                                 throw( uno::RuntimeException, std::exception )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
@@ -566,7 +566,7 @@ void SwXFootnoteProperties::removeVetoableChangeListener(
     OSL_FAIL("not implemented");
 }
 
-OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXEndnoteProperties::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXEndnoteProperties");
 }
@@ -576,7 +576,7 @@ sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) thr
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -594,7 +594,7 @@ SwXEndnoteProperties::~SwXEndnoteProperties()
 {
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
@@ -792,7 +792,7 @@ void SwXEndnoteProperties::removeVetoableChangeListener(const OUString& /*Proper
     OSL_FAIL("not implemented");
 }
 
-OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXLineNumberingProperties::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXLineNumberingProperties");
 }
@@ -802,7 +802,7 @@ sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -820,7 +820,7 @@ SwXLineNumberingProperties::~SwXLineNumberingProperties()
 {
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXLineNumberingProperties::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo >  SwXLineNumberingProperties::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
@@ -1088,7 +1088,7 @@ sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId
     return 0;
 }
 
-OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXNumberingRules::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXNumberingRules");
 }
@@ -1098,7 +1098,7 @@ sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw(
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXNumberingRules::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXNumberingRules::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -1243,7 +1243,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         throw uno::RuntimeException();
 }
 
-sal_Int32 SwXNumberingRules::getCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXNumberingRules::getCount() throw( uno::RuntimeException, std::exception )
 {
     return MAXLEVEL;
 }
@@ -1278,13 +1278,13 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
     return aVal;
 }
 
-uno::Type SwXNumberingRules::getElementType(void)
+uno::Type SwXNumberingRules::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SwXNumberingRules::hasElements(void) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXNumberingRules::hasElements() throw( uno::RuntimeException, std::exception )
 {
     return sal_True;
 }
@@ -2286,7 +2286,7 @@ void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
     }
 }
 
-OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXChapterNumbering::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXChapterNumbering");
 }
@@ -2296,7 +2296,7 @@ sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) thro
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXChapterNumbering::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXChapterNumbering::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -2314,7 +2314,7 @@ SwXChapterNumbering::~SwXChapterNumbering()
 {
 }
 
-OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SwXTextColumns::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextColumns");
 }
@@ -2324,7 +2324,7 @@ sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( Ru
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SwXTextColumns::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -2400,13 +2400,13 @@ SwXTextColumns::~SwXTextColumns()
 {
 }
 
-sal_Int32 SwXTextColumns::getReferenceValue(void) throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXTextColumns::getReferenceValue() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return nReference;
 }
 
-sal_Int16 SwXTextColumns::getColumnCount(void) throw( uno::RuntimeException, std::exception )
+sal_Int16 SwXTextColumns::getColumnCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return static_cast< sal_Int16>( aTextColumns.getLength() );
@@ -2433,7 +2433,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
     pCols[nColumns - 1].Width += nDiff;
 }
 
-uno::Sequence< TextColumn > SwXTextColumns::getColumns(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence< TextColumn > SwXTextColumns::getColumns() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return aTextColumns;

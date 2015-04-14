@@ -211,7 +211,7 @@ public:
                             }
 
     virtual void SAL_CALL   start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   end(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   end() throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setText(const OUString& aText) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   reset() throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -238,7 +238,7 @@ void SAL_CALL SfxStatusIndicator::start(const OUString& aText, sal_Int32 nRange)
     }
 }
 
-void SAL_CALL SfxStatusIndicator::end(void) throw(RuntimeException, std::exception)
+void SAL_CALL SfxStatusIndicator::end() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( xOwner.is() )

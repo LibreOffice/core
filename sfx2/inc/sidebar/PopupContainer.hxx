@@ -28,7 +28,7 @@ class SFX2_DLLPUBLIC PopupContainer : public FloatingWindow
 {
 public:
     PopupContainer (vcl::Window* pParent);
-    virtual ~PopupContainer (void);
+    virtual ~PopupContainer();
 
     virtual long Notify (NotifyEvent& rNEvt);
 };

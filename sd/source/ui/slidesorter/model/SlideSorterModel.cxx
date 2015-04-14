@@ -110,17 +110,17 @@ SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
 {
 }
 
-SlideSorterModel::~SlideSorterModel (void)
+SlideSorterModel::~SlideSorterModel()
 {
     ClearDescriptorList ();
 }
 
-void SlideSorterModel::Dispose (void)
+void SlideSorterModel::Dispose()
 {
     ClearDescriptorList ();
 }
 
-SdDrawDocument* SlideSorterModel::GetDocument (void)
+SdDrawDocument* SlideSorterModel::GetDocument()
 {
     if (mrSlideSorter.GetViewShellBase() != NULL)
         return mrSlideSorter.GetViewShellBase()->GetDocument();
@@ -140,7 +140,7 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
     return bEditModeChanged;
 }
 
-sal_Int32 SlideSorterModel::GetPageCount (void) const
+sal_Int32 SlideSorterModel::GetPageCount() const
 {
     return maPageDescriptors.size();
 }
@@ -273,7 +273,7 @@ sal_uInt16 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
     document: pages may have been deleted and others may have been created
     at the exact same memory locations.
 */
-void SlideSorterModel::Resync (void)
+void SlideSorterModel::Resync()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -311,7 +311,7 @@ void SlideSorterModel::Resync (void)
     CheckModel(*this);
 }
 
-void SlideSorterModel::ClearDescriptorList (void)
+void SlideSorterModel::ClearDescriptorList()
 {
     DescriptorContainer aDescriptors;
 
@@ -340,7 +340,7 @@ void SlideSorterModel::ClearDescriptorList (void)
     }
 }
 
-void SlideSorterModel::SynchronizeDocumentSelection (void)
+void SlideSorterModel::SynchronizeDocumentSelection()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -353,7 +353,7 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
     }
 }
 
-void SlideSorterModel::SynchronizeModelSelection (void)
+void SlideSorterModel::SynchronizeModelSelection()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -423,13 +423,13 @@ void SlideSorterModel::SetDocumentSlides (
     mrSlideSorter.GetController().GetSlotManager()->NotifyEditModeChange();
 }
 
-Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides (void) const
+Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides() const
 {
     ::osl::MutexGuard aGuard (maMutex);
     return mxSlides;
 }
 
-void SlideSorterModel::UpdatePageList (void)
+void SlideSorterModel::UpdatePageList()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -475,7 +475,7 @@ void SlideSorterModel::UpdatePageList (void)
     mrSlideSorter.GetController().SetDocumentSlides(xPages);
 }
 
-void SlideSorterModel::AdaptSize (void)
+void SlideSorterModel::AdaptSize()
 {
     if (mxSlides.is())
         maPageDescriptors.resize(mxSlides->getCount());
@@ -483,7 +483,7 @@ void SlideSorterModel::AdaptSize (void)
         maPageDescriptors.resize(0);
 }
 
-bool SlideSorterModel::IsReadOnly (void) const
+bool SlideSorterModel::IsReadOnly() const
 {
     if (mrSlideSorter.GetViewShellBase() != NULL
         && mrSlideSorter.GetViewShellBase()->GetDocShell())
@@ -492,7 +492,7 @@ bool SlideSorterModel::IsReadOnly (void) const
         return true;
 }
 
-void SlideSorterModel::SaveCurrentSelection (void)
+void SlideSorterModel::SaveCurrentSelection()
 {
     PageEnumeration aPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
     while (aPages.HasMoreElements())
@@ -504,7 +504,7 @@ void SlideSorterModel::SaveCurrentSelection (void)
     }
 }
 
-vcl::Region SlideSorterModel::RestoreSelection (void)
+vcl::Region SlideSorterModel::RestoreSelection()
 {
     vcl::Region aRepaintRegion;
     PageEnumeration aPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));

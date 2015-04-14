@@ -272,7 +272,7 @@ typedef struct tagDRIVEENUM
     LPCTSTR lpCurrent;
 } DRIVEENUM, * PDRIVEENUM, FAR * LPDRIVEENUM;
 
-static HANDLE WINAPI OpenLogicalDrivesEnum(void)
+static HANDLE WINAPI OpenLogicalDrivesEnum()
 {
     LPDRIVEENUM pEnum = (LPDRIVEENUM)HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) );
     if ( pEnum )

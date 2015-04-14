@@ -293,7 +293,7 @@ protected:
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) = 0;
+    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement() = 0;
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
@@ -331,11 +331,11 @@ protected:
 
     // #56666, Creates another library container
     //         instance of the same derived class
-    virtual SfxLibraryContainer* createInstanceImpl( void ) = 0;
+    virtual SfxLibraryContainer* createInstanceImpl() = 0;
 
 
     // Interface to get the BasicManager (Hack for password implementation)
-    BasicManager* getBasicManager( void );
+    BasicManager* getBasicManager();
     OUString createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName );
 
     void init( const OUString& rInitialDocumentURL,
@@ -375,10 +375,10 @@ protected:
 private:
     void init_Impl( const OUString& rInitialDocumentURL,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
-    void implScanExtensions( void );
+    void implScanExtensions();
 
 public:
-    SfxLibraryContainer( void );
+    SfxLibraryContainer();
     virtual ~SfxLibraryContainer();
 
 
@@ -600,8 +600,8 @@ private:
 
     // Additional functionality for localisation
     // Provide modify state including resources
-    virtual bool isModified( void ) = 0;
-    virtual void storeResources( void ) = 0;
+    virtual bool isModified() = 0;
+    virtual void storeResources() = 0;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) = 0;
     virtual void storeResourcesToURL( const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) = 0;
@@ -744,7 +744,7 @@ public:
 class ScriptExtensionIterator
 {
 public:
-    ScriptExtensionIterator( void );
+    ScriptExtensionIterator();
     OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
 
 protected:

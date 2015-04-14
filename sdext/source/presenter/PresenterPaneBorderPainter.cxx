@@ -49,7 +49,7 @@ namespace {
     class BorderSize
     {
     public:
-        BorderSize (void);
+        BorderSize();
         sal_Int32 mnLeft;
         sal_Int32 mnTop;
         sal_Int32 mnRight;
@@ -92,7 +92,7 @@ namespace {
         BorderSize maTotalBorderSize;
         enum Side { Left, Top, Right, Bottom };
     private:
-        void UpdateBorderSizes (void);
+        void UpdateBorderSizes();
         SharedBitmapDescriptor GetBitmap(
             const ::boost::shared_ptr<PresenterTheme>& rpTheme,
             const OUString& rsStyleName,
@@ -106,7 +106,7 @@ public:
     Renderer (
         const Reference<XComponentContext>& rxContext,
         const ::boost::shared_ptr<PresenterTheme>& rpTheme);
-    ~Renderer (void);
+    ~Renderer();
 
     void SetCanvas (const Reference<rendering::XCanvas>& rxCanvas);
     void PaintBorder (
@@ -163,7 +163,7 @@ PresenterPaneBorderPainter::PresenterPaneBorderPainter (
 {
 }
 
-PresenterPaneBorderPainter::~PresenterPaneBorderPainter (void)
+PresenterPaneBorderPainter::~PresenterPaneBorderPainter()
 {
 }
 
@@ -325,7 +325,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     return bModified;
 }
 
-bool PresenterPaneBorderPainter::ProvideTheme (void)
+bool PresenterPaneBorderPainter::ProvideTheme()
 {
     if (mpTheme.get() == NULL)
     {
@@ -375,7 +375,7 @@ awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
     return rOuterBox;
 }
 
-void PresenterPaneBorderPainter::ThrowIfDisposed (void) const
+void PresenterPaneBorderPainter::ThrowIfDisposed() const
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -414,7 +414,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     }
 }
 
-PresenterPaneBorderPainter::Renderer::~Renderer (void)
+PresenterPaneBorderPainter::Renderer::~Renderer()
 {
 }
 
@@ -783,7 +783,7 @@ namespace {
 
 //===== BorderSize ============================================================
 
-BorderSize::BorderSize (void)
+BorderSize::BorderSize()
     : mnLeft(0),
       mnTop(0),
       mnRight(0),
@@ -932,7 +932,7 @@ const Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     return mpFont->mxFont;
 }
 
-void RendererPaneStyle::UpdateBorderSizes (void)
+void RendererPaneStyle::UpdateBorderSizes()
 {
     maTotalBorderSize.mnLeft = maInnerBorderSize.mnLeft + maOuterBorderSize.mnLeft;
     maTotalBorderSize.mnTop = maInnerBorderSize.mnTop + maOuterBorderSize.mnTop;

@@ -85,7 +85,7 @@ enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
 class Iterator
 {
 public:
-    Iterator (void);
+    Iterator();
 
     /** The copy constructor creates a new iterator by copying the
         implementation object.
@@ -99,7 +99,7 @@ public:
     */
     explicit Iterator (IteratorImplBase* pObject);
 
-    ~Iterator (void);
+    ~Iterator();
 
     /** Assign the iterator from the given one.  The implementation object
         of this iterator will be a copy of the given iterator.
@@ -152,7 +152,7 @@ public:
     /** Reverse the direction of iteration.  The position of the iterator is
         not changed.  Thus calling this method twice returns to the old state.
     */
-    void Reverse (void);
+    void Reverse();
 
 private:
     /// The implementation object to which most of the methods are forwarded.
@@ -186,7 +186,7 @@ public:
             The returned iterator points either to the first (forward
             search) or to the last object (backward search) of the set.
     */
-    Iterator begin (void);
+    Iterator begin();
 
     /** Return an iterator that marks the end of the iteration.  This takes
         also into account the direction of iteration. The object pointed to
@@ -196,7 +196,7 @@ public:
             one (forward search) or to the one in front of the first
             (backward search).
     */
-    Iterator end (void);
+    Iterator end();
 
     /** Return an iterator that points to the current object of one of the
         sets described above.  This takes also into account the direction of
@@ -207,7 +207,7 @@ public:
             selected objects or of the current page if the search set spans
             more than one page.
     */
-    Iterator current (void);
+    Iterator current();
 
 private:
     /// The wrapped outliner that is represented as object container.
@@ -292,7 +292,7 @@ private:
 
     // Do not allow default constructor and copying of outliner containers.
     OutlinerContainer (const OutlinerContainer&) {};
-    OutlinerContainer (void) {};
+    OutlinerContainer() {};
     OutlinerContainer& operator= (const OutlinerContainer&) {return *this;};
 };
 
@@ -306,7 +306,7 @@ public:
         These values should not be accessed.  The only use of the object as
         it is as a marker in comparisons.
     */
-    IteratorPosition (void);
+    IteratorPosition();
     /** Create a new object with all data members set from the given
         position.
         @param aPosition
@@ -316,7 +316,7 @@ public:
     IteratorPosition (const IteratorPosition& aPosition);
 
     /// The destructor is a no-op at the moment.
-    ~IteratorPosition (void);
+    ~IteratorPosition();
     /** Assign the content of the given position to this one.
         @param aPosition
             This is the position object from which to take the values of all

@@ -1823,7 +1823,7 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
     return updateSlideShow();
 }
 
-sal_Int32 SlideshowImpl::updateSlideShow (void)
+sal_Int32 SlideshowImpl::updateSlideShow()
 {
     // prevent me from deletion when recursing (App::EnableYieldMode does)
     const rtl::Reference<SlideshowImpl> this_(this);

@@ -916,7 +916,7 @@ void SwAccessibleTable::ClearTableData()
     mpTableData = 0;
 }
 
-OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleTable::getAccessibleDescription()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1898,7 +1898,7 @@ uno::Any SAL_CALL SwAccessibleTableColHeaders::queryInterface( const uno::Type& 
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount(void)
+sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1964,7 +1964,7 @@ uno::Reference< XAccessibleTable >
 
 // XServiceInfo
 
-OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName (void)
+OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     static const sal_Char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";

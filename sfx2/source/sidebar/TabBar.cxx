@@ -62,7 +62,7 @@ TabBar::TabBar (
 #endif
 }
 
-TabBar::~TabBar (void)
+TabBar::~TabBar()
 {
 }
 
@@ -77,7 +77,7 @@ void TabBar::Paint (const Rectangle& rUpdateArea)
         Point(GetSizePixel().Width()-nHorizontalPadding, mnMenuSeparatorY));
 }
 
-sal_Int32 TabBar::GetDefaultWidth (void)
+sal_Int32 TabBar::GetDefaultWidth()
 {
     return Theme::GetInteger(Theme::Int_TabItemWidth)
         + Theme::GetInteger(Theme::Int_TabBarLeftPadding)
@@ -128,7 +128,7 @@ void TabBar::SetDecks (
     Layout();
 }
 
-void TabBar::UpdateButtonIcons (void)
+void TabBar::UpdateButtonIcons()
 {
     Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
     if ( mpMenuButton->GetDPIScaleFactor() > 1 )
@@ -162,7 +162,7 @@ void TabBar::UpdateButtonIcons (void)
     Invalidate();
 }
 
-void TabBar::Layout (void)
+void TabBar::Layout()
 {
     const SvBorder aPadding (
         Theme::GetInteger(Theme::Int_TabBarLeftPadding),
@@ -295,7 +295,7 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     }
 }
 
-void TabBar::RestoreHideFlags (void)
+void TabBar::RestoreHideFlags()
 {
     bool bNeedsLayout (false);
     for(ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());

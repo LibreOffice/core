@@ -54,7 +54,7 @@ AccessibleShape*
 
 
 
-ShapeTypeHandler& ShapeTypeHandler::Instance (void)
+ShapeTypeHandler& ShapeTypeHandler::Instance()
 {
     // Using double check pattern to make sure that exactly one instance of
     // the shape type handler is instantiated.
@@ -133,7 +133,7 @@ AccessibleShape*
 /** Create the single instance of this class and initialize its list of
     type descriptors with an entry of an unknown type.
 */
-ShapeTypeHandler::ShapeTypeHandler (void)
+ShapeTypeHandler::ShapeTypeHandler()
     : maShapeTypeDescriptorList (1)
 {
     // Make sure that at least the UNKNOWN entry is present.
@@ -147,7 +147,7 @@ ShapeTypeHandler::ShapeTypeHandler (void)
 
 
 
-ShapeTypeHandler::~ShapeTypeHandler (void)
+ShapeTypeHandler::~ShapeTypeHandler()
 {
     //  Because this class is a singleton and the only instance, whose
     //  destructor has just been called, is pointed to from instance,

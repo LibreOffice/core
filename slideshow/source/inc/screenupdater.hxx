@@ -102,7 +102,7 @@ namespace slideshow
 
             class UpdateLock {
             public:
-                virtual void Activate (void) = 0;
+                virtual void Activate() = 0;
 
             protected:
                 ~UpdateLock() {}
@@ -119,12 +119,12 @@ namespace slideshow
 
             /** Lock updates to prevent intermediate repaints.
             */
-            void lockUpdates (void);
+            void lockUpdates();
 
             /** When called as often as lockUpdates() then commitUpdates()
                 is called.
             */
-            void unlockUpdates (void);
+            void unlockUpdates();
 
         private:
             struct ImplScreenUpdater;

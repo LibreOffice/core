@@ -89,7 +89,7 @@ public:
     void AddListener (const SharedListener& rListener);
     void RemoveListener (const SharedListener& rListener);
 
-    static oslDateTime GetCurrentTime (void);
+    static oslDateTime GetCurrentTime();
 
     // XCallback
 
@@ -109,7 +109,7 @@ private:
 
     PresenterClockTimer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterClockTimer (void);
+    virtual ~PresenterClockTimer();
 
     void CheckCurrentTime (const TimeValue& rCurrentTime);
 };

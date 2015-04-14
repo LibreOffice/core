@@ -91,7 +91,7 @@ public:
 
     // Methods XServiceInfo
         virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 };
 
@@ -270,7 +270,7 @@ sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName) throw(s
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > OTextOutputStream::getSupportedServiceNames(void) throw(std::exception)
+Sequence< OUString > OTextOutputStream::getSupportedServiceNames() throw(std::exception)
 {
     return TextOutputStream_getSupportedServiceNames();
 }

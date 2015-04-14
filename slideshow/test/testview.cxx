@@ -277,7 +277,7 @@ public:
         mbDisposed = true;
     }
 
-    virtual bool isSoundEnabled (void) const
+    virtual bool isSoundEnabled() const
     {
         return true;
     }

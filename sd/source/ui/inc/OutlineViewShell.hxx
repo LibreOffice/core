@@ -59,9 +59,9 @@ public:
         ::vcl::Window* pParentWindow,
         FrameView* pFrameView = NULL);
 
-    virtual ~OutlineViewShell (void);
+    virtual ~OutlineViewShell();
 
-    virtual void Shutdown (void) SAL_OVERRIDE;
+    virtual void Shutdown() SAL_OVERRIDE;
 
     virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
 
@@ -70,7 +70,7 @@ public:
         the enclosing window and current sizes of buttons, rulers, and
         sliders.
     */
-    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() SAL_OVERRIDE;
 
     virtual bool PrepareClose( bool bUI = true ) SAL_OVERRIDE;
 
@@ -137,7 +137,7 @@ public:
     */
     virtual void UpdatePreview (SdPage* pPage, bool bInit = false) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
 
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the

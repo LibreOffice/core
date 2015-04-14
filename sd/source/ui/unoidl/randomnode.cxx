@@ -89,7 +89,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
     // XAnimationNode
@@ -559,7 +559,7 @@ sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName) throw
 }
 
 // XServiceInfo
-Sequence< OUString > RandomAnimationNode::getSupportedServiceNames(void) throw(std::exception)
+Sequence< OUString > RandomAnimationNode::getSupportedServiceNames() throw(std::exception)
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[0] = "com.sun.star.animations.ParallelTimeContainer";

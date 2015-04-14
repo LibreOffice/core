@@ -107,7 +107,7 @@ protected:
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
     */
-    virtual void GetFocus (void) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
 public:
     SvxLineEndWindow( sal_uInt16 nId,

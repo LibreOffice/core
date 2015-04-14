@@ -629,7 +629,7 @@ void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Refer
 // AF (Oct. 29 2002): Return black as constant foreground color.  This is an
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground (void)
+sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
@@ -638,7 +638,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground (void)
 // AF (Oct. 29 2002): Return white as constant background color.  This is an
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground (void)
+sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return COL_WHITE;

@@ -120,7 +120,7 @@ public:
     virtual void SAL_CALL release() throw( ) SAL_OVERRIDE;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // ::com::sun::star::container::XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

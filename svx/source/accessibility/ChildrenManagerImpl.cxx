@@ -73,7 +73,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
 
 
 
-ChildrenManagerImpl::~ChildrenManagerImpl (void)
+ChildrenManagerImpl::~ChildrenManagerImpl()
 {
     DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
         "~AccessibleDrawDocumentView: object has not been disposed");
@@ -82,7 +82,7 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 
 
 
-void ChildrenManagerImpl::Init (void)
+void ChildrenManagerImpl::Init()
 {
     // Register as view::XSelectionChangeListener.
     Reference<frame::XController> xController(maShapeTreeInfo.GetController());
@@ -106,7 +106,7 @@ void ChildrenManagerImpl::Init (void)
 
 
 
-long ChildrenManagerImpl::GetChildCount (void) const throw ()
+long ChildrenManagerImpl::GetChildCount() const throw ()
 {
     return maVisibleChildren.size();
 }
@@ -558,7 +558,7 @@ void ChildrenManagerImpl::AddAccessibleShape (css::uno::Reference<css::accessibi
 
 
 
-void ChildrenManagerImpl::ClearAccessibleShapeList (void)
+void ChildrenManagerImpl::ClearAccessibleShapeList()
 {
     // Copy the list of (visible) shapes to local lists and clear the
     // originals.
@@ -723,7 +723,7 @@ void  SAL_CALL
 
 
 
-void ChildrenManagerImpl::impl_dispose (void)
+void ChildrenManagerImpl::impl_dispose()
 {
     Reference<frame::XController> xController(maShapeTreeInfo.GetController());
     // Remove from broadcasters.
@@ -768,7 +768,7 @@ void ChildrenManagerImpl::impl_dispose (void)
 
 
 
-void SAL_CALL ChildrenManagerImpl::disposing (void)
+void SAL_CALL ChildrenManagerImpl::disposing()
 {
     impl_dispose();
 }
@@ -886,7 +886,7 @@ uno::Reference<XAccessible>
     unfocused.  If the controller's frame is not active then all shapes are
     unfocused.
 */
-void ChildrenManagerImpl::UpdateSelection (void)
+void ChildrenManagerImpl::UpdateSelection()
 {
     Reference<frame::XController> xController(maShapeTreeInfo.GetController());
     Reference<view::XSelectionSupplier> xSelectionSupplier (
@@ -1054,7 +1054,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
 
 
 
-bool ChildrenManagerImpl::HasFocus (void)
+bool ChildrenManagerImpl::HasFocus()
 {
     return mpFocusedShape != NULL;
 }
@@ -1062,7 +1062,7 @@ bool ChildrenManagerImpl::HasFocus (void)
 
 
 
-void ChildrenManagerImpl::RemoveFocus (void)
+void ChildrenManagerImpl::RemoveFocus()
 {
     if (mpFocusedShape != NULL)
     {
@@ -1120,14 +1120,14 @@ ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShap
 
 
 
-ChildDescriptor::~ChildDescriptor (void)
+ChildDescriptor::~ChildDescriptor()
 {
 }
 
 
 
 
-AccessibleShape* ChildDescriptor::GetAccessibleShape (void) const
+AccessibleShape* ChildDescriptor::GetAccessibleShape() const
 {
     return static_cast<AccessibleShape*> (mxAccessibleShape.get());
 }

@@ -39,7 +39,7 @@ CustomAnimationPanel::CustomAnimationPanel (
 #endif
 }
 
-CustomAnimationPanel::~CustomAnimationPanel (void)
+CustomAnimationPanel::~CustomAnimationPanel()
 {
 }
 

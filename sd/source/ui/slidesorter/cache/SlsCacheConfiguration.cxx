@@ -43,7 +43,7 @@ namespace
 ::boost::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
 Timer CacheConfiguration::maReleaseTimer;
 
-::boost::shared_ptr<CacheConfiguration> CacheConfiguration::Instance (void)
+::boost::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 {
     SolarMutexGuard aSolarGuard;
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
@@ -67,7 +67,7 @@ Timer CacheConfiguration::maReleaseTimer;
     return rInstancePtr;
 }
 
-CacheConfiguration::CacheConfiguration (void)
+CacheConfiguration::CacheConfiguration()
 {
     // Get the cache size from configuration.
     const OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");

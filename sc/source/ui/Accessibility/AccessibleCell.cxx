@@ -152,7 +152,7 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
     }
 }
 
-Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void) const
+Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
         throw (uno::RuntimeException, std::exception)
 {
     Rectangle aCellRect(GetBoundingBox());
@@ -214,7 +214,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
-    ScAccessibleCell::getAccessibleChildCount(void)
+    ScAccessibleCell::getAccessibleChildCount()
                     throw (uno::RuntimeException, std::exception)
 {
     return AccessibleStaticTextBase::getAccessibleChildCount();
@@ -229,7 +229,7 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleCell::getAccessibleStateSet(void)
+    ScAccessibleCell::getAccessibleStateSet()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -302,14 +302,14 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
+OUString SAL_CALL ScAccessibleCell::getImplementationName()
         throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleCell");
 }
 
 uno::Sequence< OUString> SAL_CALL
-    ScAccessibleCell::getSupportedServiceNames(void)
+    ScAccessibleCell::getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();

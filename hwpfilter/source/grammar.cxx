@@ -483,7 +483,7 @@ int yydebug;            /*  nonzero means print parse trace */
 #ifdef YYPARSE_PARAM
 int yyparse (void *);
 #else
-int yyparse (void);
+int yyparse();
 #endif
 #endif
 

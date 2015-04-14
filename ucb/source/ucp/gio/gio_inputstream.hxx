@@ -47,8 +47,8 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire( void ) throw () SAL_OVERRIDE { OWeakObject::acquire(); }
-    virtual void SAL_CALL release( void ) throw() SAL_OVERRIDE { OWeakObject::release(); }
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OWeakObject::release(); }
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
@@ -71,12 +71,12 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL available( void )
+    virtual sal_Int32 SAL_CALL available()
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL closeInput( void )
+    virtual void SAL_CALL closeInput()
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

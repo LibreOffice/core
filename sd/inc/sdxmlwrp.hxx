@@ -39,7 +39,7 @@ public:
         bool bShowProgress,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
         sal_uLong nStoreVer = SOFFICE_FILEFORMAT_8 );
-    virtual ~SdXMLFilter (void);
+    virtual ~SdXMLFilter();
 
     bool        Import( ErrCode& nError );
     bool        Export() SAL_OVERRIDE;

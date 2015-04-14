@@ -50,7 +50,7 @@ namespace {
         sal_Int32 mnPanelIndex;
         bool mbShowTitleBar;
 
-        LayoutItem (void)
+        LayoutItem()
             : mpPanel(),maLayoutSize(0,0,0),mnDistributedHeight(0),mnWeight(0),mnPanelIndex(0),mbShowTitleBar(true)
         {}
     };

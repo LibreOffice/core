@@ -55,7 +55,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateChild(sal_Int32 i);
 
 private:

@@ -64,26 +64,26 @@ public:
         SdPage* pPage,
         const sal_Int32 nIndex);
 
-    ~PageDescriptor (void);
+    ~PageDescriptor();
 
     /** Return the page that is represented by the descriptor as SdPage pointer .
     */
-    SdPage* GetPage (void) const { return mpPage;}
+    SdPage* GetPage() const { return mpPage;}
 
     /** Return the page that is represented by the descriptor as XDrawPage reference.
     */
-    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const { return mxPage;}
+    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage() const { return mxPage;}
 
     /** Returns the index of the page as it is displayed in the view as page
         number.  The value may differ from the index returned by the
         XDrawPage when there are hidden slides and the XIndexAccess used to
         access the model filters them out.
     */
-    sal_Int32 GetPageIndex (void) const { return mnIndex;}
+    sal_Int32 GetPageIndex() const { return mnIndex;}
     void SetPageIndex (const sal_Int32 nIndex);
 
-    bool UpdateMasterPage (void);
-    bool UpdateTransitionFlag (void);
+    bool UpdateMasterPage();
+    bool UpdateTransitionFlag();
 
     enum State { ST_Visible, ST_Selected, ST_WasSelected,
                  ST_Focused, ST_MouseOver, ST_Current, ST_Excluded };
@@ -101,16 +101,16 @@ public:
             returned.  When they were the same this method returns
             <FALSE/>.
     */
-    bool GetCoreSelection (void);
+    bool GetCoreSelection();
 
     /** Set the selection flags of the SdPage objects to the corresponding
         selection states of the page descriptors.
     */
-    void SetCoreSelection (void);
+    void SetCoreSelection();
 
-    VisualState& GetVisualState (void) { return maVisualState;}
+    VisualState& GetVisualState() { return maVisualState;}
 
-    Rectangle GetBoundingBox (void) const;
+    Rectangle GetBoundingBox() const;
     Point GetLocation (const bool bIgnoreLocation = false) const;
     void SetBoundingBox (const Rectangle& rBoundingBox);
 

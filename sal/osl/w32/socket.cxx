@@ -269,7 +269,7 @@ static oslSocketDialupImpl *pDialupImpl = NULL;
 /*
  * __osl_createSocketDialupImpl.
  */
-static oslSocketDialupImpl* __osl_createSocketDialupImpl (void)
+static oslSocketDialupImpl* __osl_createSocketDialupImpl()
 {
     oslSocketDialupImpl *pImpl;
     pImpl = (oslSocketDialupImpl*)rtl_allocateZeroMemory( sizeof (oslSocketDialupImpl));
@@ -343,7 +343,7 @@ static void __osl_destroySocketDialupImpl (oslSocketDialupImpl *pImpl)
 /*
  * __osl_querySocketDialupImpl.
  */
-static sal_Bool __osl_querySocketDialupImpl (void)
+static sal_Bool __osl_querySocketDialupImpl()
 {
     sal_Bool result;
 
@@ -371,7 +371,7 @@ static sal_Bool __osl_querySocketDialupImpl (void)
 /*
  * __osl_attemptSocketDialupImpl.
  */
-static sal_Bool __osl_attemptSocketDialupImpl (void)
+static sal_Bool __osl_attemptSocketDialupImpl()
 {
     sal_Bool result;
 

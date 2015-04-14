@@ -51,7 +51,7 @@ public:
     ~OMarkableOutputStreamTest();
 
 public: // implementation names
-    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
+    static Sequence< OUString >     getSupportedServiceNames_Static() throw ();
     static OUString                 getImplementationName_Static() throw ();
 
 public:
@@ -65,13 +65,13 @@ public:
                         const Reference < XInterface >& TestObject,
                         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException, RuntimeException);
-    virtual sal_Bool SAL_CALL testPassed(void)
+    virtual sal_Bool SAL_CALL testPassed()
         throw ( RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)
+    virtual Sequence< OUString > SAL_CALL getErrors()
         throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)
+    virtual Sequence< Any > SAL_CALL getErrorExceptions()
         throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)
+    virtual Sequence< OUString > SAL_CALL getWarnings()
         throw (RuntimeException);
 
 private:
@@ -174,25 +174,25 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
 
 
-sal_Bool OMarkableOutputStreamTest::testPassed(void)                        throw (RuntimeException)
+sal_Bool OMarkableOutputStreamTest::testPassed()                        throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OMarkableOutputStreamTest::getErrors(void)         throw (RuntimeException)
+Sequence< OUString > OMarkableOutputStreamTest::getErrors()         throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OMarkableOutputStreamTest::getErrorExceptions(void) throw (RuntimeException)
+Sequence< Any > OMarkableOutputStreamTest::getErrorExceptions() throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OMarkableOutputStreamTest::getWarnings(void)       throw (RuntimeException)
+Sequence< OUString > OMarkableOutputStreamTest::getWarnings()       throw (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -375,7 +375,7 @@ Reference < XInterface > SAL_CALL OMarkableOutputStreamTest_CreateInstance( cons
 
 
 
-Sequence<OUString> OMarkableOutputStreamTest_getSupportedServiceNames(void) throw ()
+Sequence<OUString> OMarkableOutputStreamTest_getSupportedServiceNames() throw ()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = OMarkableOutputStreamTest_getImplementationName();
@@ -410,7 +410,7 @@ public:
     ~OMarkableInputStreamTest();
 
 public: // implementation names
-    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw () ;
+    static Sequence< OUString >     getSupportedServiceNames_Static() throw () ;
     static OUString                 getImplementationName_Static() throw () ;
 
 public:
@@ -426,13 +426,13 @@ public:
         throw ( IllegalArgumentException,
                 RuntimeException) ;
 
-    virtual sal_Bool SAL_CALL testPassed(void)
+    virtual sal_Bool SAL_CALL testPassed()
         throw ( RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)
+    virtual Sequence< OUString > SAL_CALL getErrors()
         throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)
+    virtual Sequence< Any > SAL_CALL getErrorExceptions()
         throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)
+    virtual Sequence< OUString > SAL_CALL getWarnings()
         throw (RuntimeException);
 
 private:
@@ -541,25 +541,25 @@ sal_Int32 OMarkableInputStreamTest::test(
 
 
 
-sal_Bool OMarkableInputStreamTest::testPassed(void)                                         throw (RuntimeException)
+sal_Bool OMarkableInputStreamTest::testPassed()                                         throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OMarkableInputStreamTest::getErrors(void)                          throw (RuntimeException)
+Sequence< OUString > OMarkableInputStreamTest::getErrors()                          throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OMarkableInputStreamTest::getErrorExceptions(void)                  throw (RuntimeException)
+Sequence< Any > OMarkableInputStreamTest::getErrorExceptions()                  throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OMarkableInputStreamTest::getWarnings(void)                        throw (RuntimeException)
+Sequence< OUString > OMarkableInputStreamTest::getWarnings()                        throw (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -647,7 +647,7 @@ Reference < XInterface > SAL_CALL OMarkableInputStreamTest_CreateInstance( const
 
 
 
-Sequence<OUString> OMarkableInputStreamTest_getSupportedServiceNames(void) throw ()
+Sequence<OUString> OMarkableInputStreamTest_getSupportedServiceNames() throw ()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = OMarkableInputStreamTest_getImplementationName();

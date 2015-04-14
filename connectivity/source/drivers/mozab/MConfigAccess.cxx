@@ -175,7 +175,7 @@ namespace connectivity
 
 
 
-extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
+extern "C" const sal_Unicode* SAL_CALL getUserProfile()
 {
     static sal_Bool         bReadConfig = sal_False;
     static OUString  sUserProfile;
@@ -188,7 +188,7 @@ extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
     return sUserProfile.getStr();
 }
 
-extern "C" const sal_Char* SAL_CALL getPabDescription( void )
+extern "C" const sal_Char* SAL_CALL getPabDescription()
 {
     static sal_Bool         bReadConfig = sal_False;
     static OUString  usPabDescription;
@@ -208,7 +208,7 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 }
 
 
-extern "C" const sal_Char* SAL_CALL getHisDescription( void )
+extern "C" const sal_Char* SAL_CALL getHisDescription()
 {
     static sal_Bool         bReadConfig = sal_False;
     static OUString  usHisDescription;

@@ -46,7 +46,7 @@
 
 #include <vector>
 
-RootData::RootData( void )
+RootData::RootData()
 {
     eDateiTyp = BiffX;
     pExtSheetBuff = NULL;

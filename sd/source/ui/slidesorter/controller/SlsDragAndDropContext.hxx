@@ -43,13 +43,13 @@ public:
         when provided, the pages in the transferable.
     */
     DragAndDropContext (SlideSorter& rSlideSorter);
-    ~DragAndDropContext (void);
+    ~DragAndDropContext();
 
     /** Call this method (for example as reaction to ESC key press) to avoid
         processing (ie moving or inserting) the substition when the called
         DragAndDropContext object is destroyed.
     */
-    void Dispose (void);
+    void Dispose();
 
     /** Move the substitution display by the distance the mouse has
         travelled since the last call to this method or to

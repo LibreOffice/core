@@ -42,8 +42,8 @@ public:
 
     /* IUnknown methods */
     STDMETHODIMP QueryInterface(REFIID, LPVOID FAR * ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
     /* IOleInPlaceActiveObject methods */
     STDMETHODIMP GetWindow(HWND *);

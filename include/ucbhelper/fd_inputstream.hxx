@@ -77,13 +77,13 @@ namespace ucbhelper
                   css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Int32 SAL_CALL
-        available(void)
+        available()
             throw(css::io::NotConnectedException,
                   css::io::IOException,
                   css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL
-        closeInput(void)
+        closeInput()
             throw(css::io::NotConnectedException,
                   css::io::IOException,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -100,13 +100,13 @@ namespace ucbhelper
 
 
         virtual sal_Int64 SAL_CALL
-        getPosition(void)
+        getPosition()
             throw(css::io::IOException,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         virtual sal_Int64 SAL_CALL
-        getLength(void)
+        getLength()
             throw(css::io::IOException,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

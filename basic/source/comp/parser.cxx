@@ -849,7 +849,7 @@ inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pSt
     addStringConst( rPool, pSym, OUString::createFromAscii( pStr ) );
 }
 
-void SbiParser::AddConstants( void )
+void SbiParser::AddConstants()
 {
     // #113063 Create constant RTL symbols
     addStringConst( aPublics, "vbCr", "\x0D" );

@@ -67,11 +67,11 @@ ViewShellWrapper::ViewShellWrapper (
 {
 }
 
-ViewShellWrapper::~ViewShellWrapper (void)
+ViewShellWrapper::~ViewShellWrapper()
 {
 }
 
-void SAL_CALL ViewShellWrapper::disposing (void)
+void SAL_CALL ViewShellWrapper::disposing()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -107,13 +107,13 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
 
 //----- XResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
+Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId()
     throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
+sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
     return false;
@@ -236,7 +236,7 @@ namespace
     class theViewShellWrapperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewShellWrapperUnoTunnelId> {};
 }
 
-const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
+const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
 {
     return theViewShellWrapperUnoTunnelId::get().getSeq();
 }

@@ -26,23 +26,23 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace tools {
 
-PropertySet::PropertySet (void)
+PropertySet::PropertySet()
     : PropertySetInterfaceBase(m_aMutex),
       mpChangeListeners(new ChangeListenerContainer())
 {
 }
 
-PropertySet::~PropertySet (void)
+PropertySet::~PropertySet()
 {
 }
 
-void SAL_CALL PropertySet::disposing (void)
+void SAL_CALL PropertySet::disposing()
 {
 }
 
 //----- XPropertySet ----------------------------------------------------------
 
-Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo (void)
+Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo()
     throw(RuntimeException, std::exception)
 {
     return NULL;
@@ -173,7 +173,7 @@ void PropertySet::CallListeners (
     }
 }
 
-void PropertySet::ThrowIfDisposed (void)
+void PropertySet::ThrowIfDisposed()
     throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

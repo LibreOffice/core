@@ -583,9 +583,9 @@ namespace fileaccess {
 
         static void SAL_CALL getScheme( OUString& Scheme );
 
-        static OUString SAL_CALL getImplementationName_static( void );
+        static OUString SAL_CALL getImplementationName_static();
 
-        static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static( void );
+        static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
 
     };    // end class shell
 

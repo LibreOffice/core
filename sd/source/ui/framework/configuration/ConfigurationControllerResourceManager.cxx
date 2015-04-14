@@ -43,7 +43,7 @@ ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
 {
 }
 
-ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager (void)
+ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager()
 {
 }
 

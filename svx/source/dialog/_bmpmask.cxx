@@ -1128,7 +1128,7 @@ bool SvxBmpMask::IsEyedropping() const
 /** Set an accessible name for the source color check boxes.  Without this
     the lengthy description is read.
 */
-void SvxBmpMask::SetAccessibleNames (void)
+void SvxBmpMask::SetAccessibleNames()
 {
     OUString sSourceColor(BMP_RESID(RID_SVXDLG_BMPMASK_STR_SOURCECOLOR).toString());
     OUString sSourceColorN;

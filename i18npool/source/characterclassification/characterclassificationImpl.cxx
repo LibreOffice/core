@@ -192,7 +192,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
 }
 
 OUString SAL_CALL
-CharacterClassificationImpl::getImplementationName(void)
+CharacterClassificationImpl::getImplementationName()
                 throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.CharacterClassification");
@@ -206,7 +206,7 @@ CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 }
 
 Sequence< OUString > SAL_CALL
-CharacterClassificationImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+CharacterClassificationImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.i18n.CharacterClassification";

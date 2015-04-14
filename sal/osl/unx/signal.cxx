@@ -169,7 +169,7 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
     }
 }
 
-static bool is_soffice_Impl (void)
+static bool is_soffice_Impl()
 {
     sal_Int32    idx       = -1;
     rtl_String * strProgName = 0;
@@ -183,7 +183,7 @@ static bool is_soffice_Impl (void)
     return (idx != -1);
 }
 
-static bool InitSignal(void)
+static bool InitSignal()
 {
     int i;
     struct sigaction act;
@@ -272,7 +272,7 @@ static bool InitSignal(void)
     return true;
 }
 
-static bool DeInitSignal(void)
+static bool DeInitSignal()
 {
     int i;
     struct sigaction act;
@@ -380,7 +380,7 @@ void CallSystemHandler(int Signal)
 }
 
 #if defined HAVE_VALGRIND_HEADERS
-static void DUMPCURRENTALLOCS(void)
+static void DUMPCURRENTALLOCS()
 {
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
 

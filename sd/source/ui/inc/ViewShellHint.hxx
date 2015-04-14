@@ -47,7 +47,7 @@ public:
 
     ViewShellHint (HintId nHintId);
 
-    HintId GetHintId (void) const { return meHintId;}
+    HintId GetHintId() const { return meHintId;}
 
 private:
     HintId meHintId;

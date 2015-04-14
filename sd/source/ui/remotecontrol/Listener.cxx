@@ -85,12 +85,12 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
 
 //----- XSlideShowListener ----------------------------------------------------
 
-void SAL_CALL Listener::paused (void)
+void SAL_CALL Listener::paused()
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Listener::resumed (void)
+void SAL_CALL Listener::resumed()
     throw (css::uno::RuntimeException, std::exception)
 {
 }
@@ -106,7 +106,7 @@ void SAL_CALL Listener::hyperLinkClicked (const OUString &)
 {
 }
 
-void SAL_CALL Listener::slideTransitionStarted (void)
+void SAL_CALL Listener::slideTransitionStarted()
     throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
@@ -122,17 +122,17 @@ void SAL_CALL Listener::slideTransitionStarted (void)
     }
 }
 
-void SAL_CALL Listener::slideTransitionEnded (void)
+void SAL_CALL Listener::slideTransitionEnded()
     throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Listener::slideAnimationsEnded (void)
+void SAL_CALL Listener::slideAnimationsEnded()
     throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Listener::disposing (void)
+void SAL_CALL Listener::disposing()
 {
     pTransmitter = NULL;
     if ( mController.is() )

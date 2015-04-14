@@ -208,7 +208,7 @@ public:
 
     DECL_LINK(ResetQuickSearch_Impl, void *);
 
-    virtual PopupMenu*  CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
 };
 
@@ -717,7 +717,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 
 
-PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
+PopupMenu* ViewTabListBox_Impl::CreateContextMenu()
 {
     bool bEnableDelete = mbEnableDelete;
     bool bEnableRename = mbEnableRename;

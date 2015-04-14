@@ -47,7 +47,7 @@ public:
         const Paper ePaper,
         const bool bLandscape,
         const FieldUnit eFUnit );
-    virtual ~PageSizeControl(void);
+    virtual ~PageSizeControl();
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpSizeValueSet;
