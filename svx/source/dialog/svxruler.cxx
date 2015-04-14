@@ -502,7 +502,9 @@ void SvxRuler::UpdateFrame()
         lLogicNullOffset = mxColumnItem.get() ? mxColumnItem->GetLeft(): mxLRSpaceItem->GetLeft();
 
         if(bAppSetNullOffset)
+        {
             lAppNullOffset += lLogicNullOffset - nOld;
+        }
 
         if(!bAppSetNullOffset || lAppNullOffset == LONG_MAX)
         {
@@ -535,7 +537,9 @@ void SvxRuler::UpdateFrame()
         lLogicNullOffset = mxColumnItem.get() ? mxColumnItem->GetLeft() : mxULSpaceItem->GetUpper();
 
         if(bAppSetNullOffset)
+        {
             lAppNullOffset += lLogicNullOffset - nOld;
+        }
 
         if(!bAppSetNullOffset || lAppNullOffset == LONG_MAX)
         {
@@ -1022,6 +1026,8 @@ void SvxRuler::Update(const SvxPagePosSizeItem *pItem) // new value of page attr
 
 void SvxRuler::SetDefTabDist(long inDefTabDist)  // New distance for DefaultTabs in App-Metrics
 {
+    if (lAppNullOffset == LONG_MAX)
+        UpdateFrame(); // hack: try to get lAppNullOffset initialized
     /* New distance is set for DefaultTabs */
     lDefTabDist = inDefTabDist;
     UpdateTabs();
@@ -2046,7 +2052,9 @@ void SvxRuler::ApplyMargins()
         }
 
         if(bAppSetNullOffset)
+        {
             lAppNullOffset += lLogicNullOffset - lOldNull;
+        }
 
         long nRight;
         if(mxRulerImpl->lMaxRightLogic != -1
@@ -2080,7 +2088,9 @@ void SvxRuler::ApplyMargins()
                 ConvertVPosLogic(GetFrameLeft()) -
                 lAppNullOffset, mxULSpaceItem->GetUpper()));
         if(bAppSetNullOffset)
+        {
             lAppNullOffset += lLogicNullOffset - lOldNull;
+        }
         mxULSpaceItem->SetLower(
             PixelVAdjust(
                 std::max((long)0, mxPagePosItem->GetHeight() -
