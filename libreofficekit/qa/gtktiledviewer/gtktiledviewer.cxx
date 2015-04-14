@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
+#include <map>
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -33,6 +34,8 @@ static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
 static GtkToolItem* pItalic;
+std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
+std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
 bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
@@ -42,6 +45,12 @@ static GtkComboBoxText* pPartSelector;
 
 static LibreOfficeKit* pOffice;
 static char* pFileName;
+
+static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
+{
+    g_aToolItemCommandNames[pItem] = rName;
+    g_aCommandNameToolItems[rName] = pItem;
+}
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
@@ -121,14 +130,9 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
         std::string aValue = aPayload.substr(nPosition + 1);
         g_info("signalCommand: '%s' is '%s'", aKey.c_str(), aValue.c_str());
 
-        GtkToolItem* pItem = 0;
-        if (aKey == ".uno:Bold")
-            pItem = pBold;
-        else if (aKey == ".uno:Italic")
-            pItem = pItalic;
-
-        if (pItem)
+        if (g_aCommandNameToolItems.find(aKey) != g_aCommandNameToolItems.end())
         {
+            GtkToolItem* pItem = g_aCommandNameToolItems[aKey];
             bool bEdit = aValue == "true";
             if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
             {
@@ -141,22 +145,16 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
     }
 }
 
-/// User clicked on the 'Bold' button -> inform LOKDocView.
-void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+/// User clicked on a cmmand button -> inform LOKDocView.
+void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-
     if (g_bToolItemBroadcast)
-        lok_docview_post_command(pLOKDocView, ".uno:Bold");
-}
-
-/// User clicked on the 'Italic' button -> inform LOKDocView.
-void toggleItalic(GtkWidget* /*pButton*/, gpointer /*pItem*/)
-{
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-
-    if (g_bToolItemBroadcast)
-        lok_docview_post_command(pLOKDocView, ".uno:Italic");
+    {
+        LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+        GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
+        const std::string& rString = g_aToolItemCommandNames[pItem];
+        lok_docview_post_command(pLOKDocView, rString.c_str());
+    }
 }
 
 // GtkComboBox requires gtk 2.24 or later
@@ -302,11 +300,13 @@ int main( int argc, char* argv[] )
     pBold = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pBold), "Bold");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
-    g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleBold), NULL);
+    g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(pBold, ".uno:Bold");
     pItalic = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItalic), "Italic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
-    g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleItalic), NULL);
+    g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(pItalic, ".uno:Italic");
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
