@@ -255,6 +255,22 @@ void Window::dispose()
         OStringBuffer aErrorStr;
         bool        bError = false;
         vcl::Window*     pTempWin;
+
+        if ( mpWindowImpl->mpFirstChild )
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(") with live children destroyed: ");
+            pTempWin = mpWindowImpl->mpFirstChild;
+            while ( pTempWin )
+            {
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                pTempWin = pTempWin->mpWindowImpl->mpNext;
+            }
+            OSL_FAIL( aTempStr.getStr() );
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+        }
+
         if (mpWindowImpl->mpFrameData != 0)
         {
             pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
@@ -298,21 +314,6 @@ void Window::dispose()
             aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
-        }
-
-        if ( mpWindowImpl->mpFirstChild )
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(*this));
-            aTempStr.append(") with live children destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstChild;
-            while ( pTempWin )
-            {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
-                pTempWin = pTempWin->mpWindowImpl->mpNext;
-            }
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
