@@ -1070,6 +1070,72 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_GRID_SNAP_TO_CHARS), RES_TEXTGRID, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_GRID_SNAPTOCHARS},
                     { OUString(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    FILL_PROPERTIES_SW
+
+                    //UUUU Added DrawingLayer FillStyle Properties for Header. These need an own unique name,
+                    // but reuse the same WhichIDs as the regular fill. The implementation will decide to which
+                    // group of fill properties it belongs based on the start of the name (was already done in
+                    // the implementation partially), thus all SlotNames *have* to start with 'Header'
+                    { OUString(UNO_NAME_HEADER_FILLBMP_LOGICAL_SIZE),           XATTR_FILLBMP_SIZELOG,          cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_OFFSET_X),               XATTR_FILLBMP_TILEOFFSETX,      cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_OFFSET_Y),               XATTR_FILLBMP_TILEOFFSETY,      cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_POSITION_OFFSET_X),      XATTR_FILLBMP_POSOFFSETX,       cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_POSITION_OFFSET_Y),      XATTR_FILLBMP_POSOFFSETY,       cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_RECTANGLE_POINT),        XATTR_FILLBMP_POS,              cppu::UnoType<css::drawing::RectanglePoint>::get() , 0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_SIZE_X),                 XATTR_FILLBMP_SIZEX,            cppu::UnoType<sal_Int32>::get() ,          0,  SFX_METRIC_ITEM},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_SIZE_Y),                 XATTR_FILLBMP_SIZEY,            cppu::UnoType<sal_Int32>::get() ,          0,  SFX_METRIC_ITEM},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_STRETCH),                XATTR_FILLBMP_STRETCH,          cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_TILE),                   XATTR_FILLBMP_TILE,             cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBMP_MODE),                   OWN_ATTR_FILLBMP_MODE,          cppu::UnoType<css::drawing::BitmapMode>::get(),      0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLCOLOR),                      XATTR_FILLCOLOR,                cppu::UnoType<sal_Int32>::get(),           0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           cppu::UnoType<bool>::get(),         0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLBITMAP),                     XATTR_FILLBITMAP,               cppu::UnoType<css::awt::XBitmap>::get(),       0,  MID_BITMAP},
+                    { OUString(UNO_NAME_HEADER_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_HEADER_FILLBITMAPURL),                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),        0,  MID_GRAFURL },
+                    { OUString(UNO_NAME_HEADER_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),           0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLGRADIENT),                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(),        0,  MID_FILLGRADIENT},
+                    { OUString(UNO_NAME_HEADER_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_HEADER_FILLHATCH),                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(),           0,  MID_FILLHATCH},
+                    { OUString(UNO_NAME_HEADER_FILLHATCHNAME),                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_HEADER_FILLSTYLE),                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(),       0,  0},
+                    { OUString(UNO_NAME_HEADER_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(),           0,  0},
+                    { OUString(UNO_NAME_HEADER_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(),        0,  MID_FILLGRADIENT},
+                    { OUString(UNO_NAME_HEADER_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_HEADER_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(),           0,  0},
+
+                    //UUUU Added DrawingLayer FillStyle Properties for Footer, similar as for Header (see there)
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_LOGICAL_SIZE),           XATTR_FILLBMP_SIZELOG,          cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_OFFSET_X),               XATTR_FILLBMP_TILEOFFSETX,      cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_OFFSET_Y),               XATTR_FILLBMP_TILEOFFSETY,      cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_POSITION_OFFSET_X),      XATTR_FILLBMP_POSOFFSETX,       cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_POSITION_OFFSET_Y),      XATTR_FILLBMP_POSOFFSETY,       cppu::UnoType<sal_Int32>::get() ,          0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_RECTANGLE_POINT),        XATTR_FILLBMP_POS,              cppu::UnoType<css::drawing::RectanglePoint>::get() , 0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_SIZE_X),                 XATTR_FILLBMP_SIZEX,            cppu::UnoType<sal_Int32>::get() ,          0,  SFX_METRIC_ITEM},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_SIZE_Y),                 XATTR_FILLBMP_SIZEY,            cppu::UnoType<sal_Int32>::get() ,          0,  SFX_METRIC_ITEM},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_STRETCH),                XATTR_FILLBMP_STRETCH,          cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_TILE),                   XATTR_FILLBMP_TILE,             cppu::UnoType<bool>::get() ,        0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBMP_MODE),                   OWN_ATTR_FILLBMP_MODE,          cppu::UnoType<css::drawing::BitmapMode>::get(),      0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLCOLOR),                      XATTR_FILLCOLOR,                cppu::UnoType<sal_Int32>::get(),           0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           cppu::UnoType<bool>::get(),         0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLBITMAP),                     XATTR_FILLBITMAP,               cppu::UnoType<css::awt::XBitmap>::get(),       0,  MID_BITMAP},
+                    { OUString(UNO_NAME_FOOTER_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_FOOTER_FILLBITMAPURL),                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),        0,  MID_GRAFURL },
+                    { OUString(UNO_NAME_FOOTER_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),           0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLGRADIENT),                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(),        0,  MID_FILLGRADIENT},
+                    { OUString(UNO_NAME_FOOTER_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_FOOTER_FILLHATCH),                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(),           0,  MID_FILLHATCH},
+                    { OUString(UNO_NAME_FOOTER_FILLHATCHNAME),                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_FOOTER_FILLSTYLE),                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(),       0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(),           0,  0},
+                    { OUString(UNO_NAME_FOOTER_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(),        0,  MID_FILLGRADIENT},
+                    { OUString(UNO_NAME_FOOTER_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),        0,  MID_NAME },
+                    { OUString(UNO_NAME_FOOTER_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(),           0,  0},
+
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aPageStyleMap;

@@ -12,6 +12,8 @@
 #if !defined(WNT)
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
@@ -305,6 +307,15 @@ DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("forst"), xFooter1->getString());
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderText");
     CPPUNIT_ASSERT_EQUAL(OUString("second"), xFooter->getString());
+}
+
+DECLARE_ODFIMPORT_TEST(testPageBackground, "PageBackground.odt")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    // The background image was lost
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sky"), getProperty<OUString>(xPropertySet, "FillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPropertySet, "FillBitmapMode"));
 }
 
 DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
