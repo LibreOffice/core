@@ -25,6 +25,7 @@
 #include <unotools/fontcvt.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
+#include "fonthelper.hxx"
 
 namespace vcl { class Font; }
 class OutputDevice;
@@ -87,6 +88,8 @@ public:
                                         const SfxItemSet* pCondSet = NULL,
                                         sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL );
+
+    static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, sal_uInt8 nScript);
     /** Fills a font object from the own item set. */
     void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,

@@ -215,30 +215,11 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet
     return GetCellOrientation( GetItemSet(), pCondSet );
 }
 
-void ScPatternAttr::GetFont(
-        vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
-        OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, sal_uInt8 nScript,
-        const Color* pBackConfigColor, const Color* pTextConfigColor )
+namespace {
+
+void getFontIDsByScriptType(sal_uInt8 nScript,
+sal_uInt16& nFontId, sal_uInt16& nHeightId, sal_uInt16& nWeightId, sal_uInt16& nPostureId, sal_uInt16& nLangId)
 {
-    // Read items
-
-    const SvxFontItem* pFontAttr;
-    sal_uInt32 nFontHeight;
-    FontWeight eWeight;
-    FontItalic eItalic;
-    FontUnderline eUnder;
-    FontUnderline eOver;
-    bool bWordLine;
-    FontStrikeout eStrike;
-    bool bOutline;
-    bool bShadow;
-    FontEmphasisMark eEmphasis;
-    FontRelief eRelief;
-    Color aColor;
-    LanguageType eLang;
-
-    sal_uInt16 nFontId, nHeightId, nWeightId, nPostureId, nLangId;
     if ( nScript == SCRIPTTYPE_ASIAN )
     {
         nFontId    = ATTR_CJK_FONT;
@@ -263,6 +244,35 @@ void ScPatternAttr::GetFont(
         nPostureId = ATTR_FONT_POSTURE;
         nLangId    = ATTR_FONT_LANGUAGE;
     }
+}
+
+}
+
+void ScPatternAttr::GetFont(
+        vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
+        OutputDevice* pOutDev, const Fraction* pScale,
+        const SfxItemSet* pCondSet, sal_uInt8 nScript,
+        const Color* pBackConfigColor, const Color* pTextConfigColor )
+{
+    // Read items
+
+    const SvxFontItem* pFontAttr;
+    sal_uInt32 nFontHeight;
+    FontWeight eWeight;
+    FontItalic eItalic;
+    FontUnderline eUnder;
+    FontUnderline eOver;
+    bool bWordLine;
+    FontStrikeout eStrike;
+    bool bOutline;
+    bool bShadow;
+    FontEmphasisMark eEmphasis;
+    FontRelief eRelief;
+    Color aColor;
+    LanguageType eLang;
+
+    sal_uInt16 nFontId, nHeightId, nWeightId, nPostureId, nLangId;
+    getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);
 
     if ( pCondSet )
     {
@@ -487,6 +497,101 @@ void ScPatternAttr::GetFont(
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {
     GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
+}
+
+ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, sal_uInt8 nScript)
+{
+    sal_uInt16 nFontId, nHeightId, nWeightId, nPostureId, nLangId;
+    getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);
+    const SfxPoolItem* pItem;
+
+    ScDxfFont aReturn;
+
+    if ( rItemSet.GetItemState( nFontId, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( nFontId );
+        aReturn.pFontAttr = static_cast<const SvxFontItem*>(pItem);
+    }
+
+    if ( rItemSet.GetItemState( nHeightId, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( nHeightId );
+        aReturn.nFontHeight = static_cast<const SvxFontHeightItem*>(pItem)->GetHeight();
+    }
+
+    if ( rItemSet.GetItemState( nWeightId, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( nWeightId );
+        aReturn.eWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( nPostureId, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( nPostureId );
+        aReturn.eItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
+        aReturn.eUnder = (FontUnderline)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
+        aReturn.eOver = (FontUnderline)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
+        aReturn.bWordLine = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
+        aReturn.eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_CONTOUR );
+        aReturn.bOutline = static_cast<const SvxContourItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_SHADOWED, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_SHADOWED );
+        aReturn.bShadow = static_cast<const SvxShadowedItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_EMPHASISMARK, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_EMPHASISMARK );
+        aReturn.eEmphasis = static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_RELIEF, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_RELIEF );
+        aReturn.eRelief = (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( ATTR_FONT_COLOR, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_COLOR );
+        aReturn.aColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
+    }
+
+    if ( rItemSet.GetItemState( nLangId, true, &pItem ) == SfxItemState::SET )
+    {
+        pItem = &rItemSet.Get( nLangId );
+        aReturn.eLang = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
+    }
+
+    return aReturn;
 }
 
 void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )

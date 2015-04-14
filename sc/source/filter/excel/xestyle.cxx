@@ -37,6 +37,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -872,15 +873,12 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
     return nScript;
 }
 
-vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
+namespace {
+
+sal_uInt8 getCoreScriptType(sal_Int16 nScript)
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
-    // if WEAK is passed, guess script type from existing items in the item set
-    if( nScript == ApiScriptType::WEAK )
-        nScript = GetFirstUsedScript( rRoot, rItemSet );
-
-    // convert to core script type constants
     sal_uInt8 nScScript = SCRIPTTYPE_LATIN;
     switch( nScript )
     {
@@ -890,10 +888,35 @@ vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const S
         default:    OSL_FAIL( "XclExpFontHelper::GetFontFromItemSet - unknown script type" );
     }
 
+    return nScScript;
+}
+
+}
+
+vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
+{
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+
+    // if WEAK is passed, guess script type from existing items in the item set
+    if( nScript == ApiScriptType::WEAK )
+        nScript = GetFirstUsedScript( rRoot, rItemSet );
+
+    // convert to core script type constants
+    sal_uInt8 nScScript = getCoreScriptType(nScript);
+
     // fill the font object
     vcl::Font aFont;
     ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
     return aFont;
+}
+
+ScDxfFont XclExpFontHelper::GetDxfFontFromItemSet(const XclExpRoot& rRoot, const SfxItemSet& rItemSet)
+{
+    sal_Int16 nScript = GetFirstUsedScript(rRoot, rItemSet);
+
+    // convert to core script type constants
+    sal_uInt8 nScScript = getCoreScriptType(nScript);
+    return ScPatternAttr::GetDxfFont(rItemSet, nScScript);
 }
 
 bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
@@ -1004,6 +1027,151 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
             << maData.mnCharSet
             << sal_uInt8( 0 )
             << aFontName;
+}
+
+XclExpDxfFont::XclExpDxfFont(const XclExpRoot& rRoot,
+        const SfxItemSet& rItemSet):
+    XclExpRoot(rRoot)
+{
+    maDxfData = XclExpFontHelper::GetDxfFontFromItemSet(rRoot, rItemSet);
+}
+
+namespace {
+
+const char* getUnderlineOOXValue(FontUnderline eUnderline)
+{
+    switch (eUnderline)
+    {
+        case UNDERLINE_NONE:
+        case UNDERLINE_DONTKNOW:
+            return "none";
+        case UNDERLINE_DOUBLE:
+        case UNDERLINE_DOUBLEWAVE:
+            return "double";
+        default:
+            return "single";
+    }
+}
+
+const char* getFontFamilyOOXValue(FontFamily eValue)
+{
+    switch (eValue)
+    {
+        case FAMILY_DONTKNOW:
+            return "0";
+        break;
+        case FAMILY_SWISS:
+        case FAMILY_SYSTEM:
+            return "2";
+        case FAMILY_ROMAN:
+            return "1";
+        case FAMILY_SCRIPT:
+            return "4";
+        case FAMILY_MODERN:
+            return "3";
+        case FAMILY_DECORATIVE:
+            return "5";
+        default:
+            return "0";
+    }
+}
+
+}
+
+void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
+{
+    if (maDxfData.isEmpty())
+        return;
+
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement(XML_font, FSEND);
+
+    if (maDxfData.pFontAttr)
+    {
+        OUString aFontName = (*maDxfData.pFontAttr)->GetFamilyName();
+        if (!aFontName.isEmpty())
+        {
+            rStyleSheet->singleElement(XML_name,
+                    XML_val, XclXmlUtils::ToOString(aFontName).getStr(),
+                    FSEND);
+        }
+
+        rtl_TextEncoding eTextEnc = (*maDxfData.pFontAttr)->GetCharSet();
+        sal_uInt8 nExcelCharSet = rtl_getBestWindowsCharsetFromTextEncoding(eTextEnc);
+        if (nExcelCharSet)
+        {
+            rStyleSheet->singleElement(XML_charset,
+                    XML_val, OString::number(nExcelCharSet).getStr(),
+                    FSEND);
+        }
+
+        FontFamily eFamily = (*maDxfData.pFontAttr)->GetFamily();
+        const char* pVal = getFontFamilyOOXValue(eFamily);
+        if (pVal)
+        {
+            rStyleSheet->singleElement(XML_family,
+                    XML_val, pVal,
+                    FSEND);
+        }
+    }
+
+    if (maDxfData.eWeight)
+    {
+        rStyleSheet->singleElement(XML_b,
+                XML_val, XclXmlUtils::ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL),
+                FSEND);
+    }
+
+    if (maDxfData.eItalic)
+    {
+        bool bItalic = (maDxfData.eItalic.get() == ITALIC_OBLIQUE) || (maDxfData.eItalic.get() == ITALIC_NORMAL);
+        rStyleSheet->singleElement(XML_i,
+                XML_val, XclXmlUtils::ToPsz10(bItalic),
+                FSEND);
+    }
+
+    if (maDxfData.eStrike)
+    {
+        bool bStrikeout =
+            (maDxfData.eStrike.get() == STRIKEOUT_SINGLE) || (maDxfData.eStrike.get() == STRIKEOUT_DOUBLE) ||
+            (maDxfData.eStrike.get() == STRIKEOUT_BOLD)   || (maDxfData.eStrike.get() == STRIKEOUT_SLASH)  ||
+            (maDxfData.eStrike.get() == STRIKEOUT_X);
+
+        rStyleSheet->singleElement(XML_strike,
+                XML_val, XclXmlUtils::ToPsz10(bStrikeout),
+                FSEND);
+    }
+
+    if (maDxfData.bOutline)
+    {
+        rStyleSheet->singleElement(XML_outline,
+                XML_val, XclXmlUtils::ToPsz10(maDxfData.bOutline.get()),
+                FSEND);
+    }
+
+    if (maDxfData.bShadow)
+    {
+        rStyleSheet->singleElement(XML_shadow,
+                XML_val, XclXmlUtils::ToPsz10(maDxfData.bShadow.get()),
+                FSEND);
+    }
+
+    if (maDxfData.aColor)
+    {
+        rStyleSheet->singleElement(XML_color,
+                XML_rgb, XclXmlUtils::ToOString(maDxfData.aColor.get()).getStr(),
+                FSEND);
+    }
+
+    if (maDxfData.eUnder)
+    {
+        const char* pVal = getUnderlineOOXValue(maDxfData.eUnder.get());
+        rStyleSheet->singleElement(XML_u,
+                XML_val, pVal,
+                FSEND);
+    }
+
+    rStyleSheet->endElement(XML_font);
 }
 
 XclExpBlindFont::XclExpBlindFont( const XclExpRoot& rRoot ) :
@@ -2918,13 +3086,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             pColor = NULL;
                         }
 
-                        XclExpFont* pFont = NULL;
-                        // check if non default font is set and only export then
-                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SfxItemState::SET )
-                        {
-                            vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
-                            pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
-                        }
+                        XclExpDxfFont* pFont = new XclExpDxfFont(rRoot, rSet);
 
                         XclExpNumFmt* pNumFormat = NULL;
                         const SfxPoolItem *pPoolItem = NULL;
@@ -2972,7 +3134,7 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
+            XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
     : XclExpRoot( rRoot ),
     mpAlign(pAlign),
     mpBorder(pBorder),

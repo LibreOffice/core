@@ -29,6 +29,7 @@
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
 #include "conditio.hxx"
+#include "fonthelper.hxx"
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -143,6 +144,13 @@ namespace XclExpFontHelper
                             const SfxItemSet& rItemSet,
                             sal_Int16 nScript );
 
+    /**
+     * Get a dxf related font object from the item set.
+     * Only items that are explicitly set in the item set
+     * are also set in the returned object.
+     */
+    ScDxfFont GetDxfFontFromItemSet(const XclExpRoot& rRoot, const SfxItemSet& rSet);
+
     /** Returns true, if at least one font related item is set in the passed item set.
         @param bDeep  true = Searches in parent item sets too. */
     bool         CheckItems(
@@ -177,6 +185,17 @@ private:
     XclFontData         maData;         /// All font attributes.
     sal_uInt32          mnColorId;      /// Unique color ID for text color.
     sal_uInt32          mnHash;         /// Hash value for fast comparison.
+};
+
+class XclExpDxfFont : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpDxfFont(const XclExpRoot& rRoot, const SfxItemSet& rItemSet);
+
+    virtual void SaveXml(XclExpXmlStream& rStrm) SAL_OVERRIDE;
+private:
+
+    ScDxfFont maDxfData;
 };
 
 /** Used as placeholder for font index 4, which is not used in Excel. */
@@ -695,7 +714,7 @@ class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
+            XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
     virtual ~XclExpDxf();
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
@@ -703,7 +722,7 @@ public:
 private:
     boost::scoped_ptr<XclExpCellAlign> mpAlign;
     boost::scoped_ptr<XclExpCellBorder> mpBorder;
-    boost::scoped_ptr<XclExpFont> mpFont;
+    boost::scoped_ptr<XclExpDxfFont> mpFont;
     boost::scoped_ptr<XclExpNumFmt> mpNumberFmt;
     boost::scoped_ptr<XclExpCellProt> mpProt;
     boost::scoped_ptr<XclExpColor> mpColor;
