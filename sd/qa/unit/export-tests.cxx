@@ -85,6 +85,7 @@ public:
     void testImageWithSpecialID();
     void testTableCellFillProperties();
     void testBulletStartNumber();
+    void testLineStyle();
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTableCellFillProperties);
     CPPUNIT_TEST(testBulletStartNumber);
+    CPPUNIT_TEST(testLineStyle);
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
@@ -805,6 +807,26 @@ void SdExportTest::testBulletStartNumber()
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's start number is wrong!", sal_Int16(pNumFmt->GetNumRule()->GetLevel(0).GetStart()), sal_Int16(3) );
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testLineStyle()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/lineStyle.pptx"), PPTX);
+     xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    SdDrawDocument const* pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
+    SdrPage const* pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("no page", pPage != nullptr);
+    SdrObject const* pShape = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
+
+    const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+                pShape->GetMergedItem(XATTR_LINESTYLE));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style",drawing::LineStyle_SOLID, rStyleItem.GetValue());
+
+    xDocShRef->DoClose();
+
 }
 
 #if !defined WNT
