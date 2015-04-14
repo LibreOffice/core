@@ -567,7 +567,15 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
 {
     GetSelEngine().SetCurView( pView );
     GetSelEngine().SelMouseButtonUp( rMEvt );
-    bInSelection = false;
+
+    // in the tiled rendering case, setting bInSelection here has unexpected
+    // consequences - further tiles painting removes the selection
+    // FIXME I believe resetting bInSelection should not be here even in the
+    // non-tiled-rendering case, but it has been here since 2000 (and before)
+    // so who knows what corner case it was supposed to solve back then
+    if (!pView->pImpEditView->isTiledRendering())
+        bInSelection = false;
+
     // Special treatments
     EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
