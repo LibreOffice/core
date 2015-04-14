@@ -1201,13 +1201,17 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
             }
 
             XFParaStyle * pStyle = pXFStyleManager->FindParaStyle(pXFPara->GetStyleName());
-            if (pStyle->GetNumberRight()  || bColorMod)
+            if ((pStyle && pStyle->GetNumberRight()) || bColorMod)
             {
                 XFParaStyle* pOverStyle = new XFParaStyle;
-                *pOverStyle = *pStyle;
 
-                if (pStyle->GetNumberRight())
-                    pOverStyle->SetAlignType(enumXFAlignEnd);
+                if (pStyle)
+                {
+                    *pOverStyle = *pStyle;
+
+                    if (pStyle->GetNumberRight())
+                        pOverStyle->SetAlignType(enumXFAlignEnd);
+                }
 
                 if (bColorMod)
                 {
