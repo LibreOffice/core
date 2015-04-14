@@ -56,7 +56,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual bool    IsProtected() SAL_OVERRIDE;
 
     protected:
-        virtual MenuButton* CreateMenuButton() SAL_OVERRIDE;
+        virtual VclPtr<MenuButton> CreateMenuButton() SAL_OVERRIDE;
 
     private:
         virtual SvxLanguageItem GetLanguage(void) SAL_OVERRIDE;

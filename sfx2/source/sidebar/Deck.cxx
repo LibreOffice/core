@@ -48,11 +48,11 @@ Deck::Deck (
       maIcon(),
       mnMinimalWidth(0),
       maPanels(),
-      mpTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, this, rCloserAction)),
-      mpScrollClipWindow(new vcl::Window(this)),
-      mpScrollContainer(new ScrollContainerWindow(mpScrollClipWindow.get())),
-      mpFiller(new vcl::Window(this)),
-      mpVerticalScrollBar(new ScrollBar(this))
+      mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction)),
+      mpScrollClipWindow(VclPtr<vcl::Window>::Create(this)),
+      mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get())),
+      mpFiller(VclPtr<vcl::Window>::Create(this)),
+      mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
 {
     SetBackground(Wallpaper());
 
@@ -88,13 +88,12 @@ void Deck::dispose()
     // without updating maPanels.
     for (size_t i = 0; i < aPanels.size(); i++)
         aPanels[i].disposeAndClear();
-    maPanels.clear();
 
+    mpTitleBar.disposeAndClear();
     mpFiller.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();
     mpScrollContainer.disposeAndClear();
     mpScrollClipWindow.disposeAndClear();
-    mpTitleBar.disposeAndClear();
 
     vcl::Window::dispose();
 }

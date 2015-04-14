@@ -198,7 +198,7 @@ private:
         const ::rtl::OUString& rsImplementationURL,
         const bool bWantsCanvas,
         const Context& rContext);
-    Panel* CreatePanel (
+    VclPtr<Panel> CreatePanel (
         const ::rtl::OUString& rsPanelId,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,

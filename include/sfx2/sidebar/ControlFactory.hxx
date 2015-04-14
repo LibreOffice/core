@@ -22,6 +22,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/vclptr.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 class ToolBox;
 
@@ -39,9 +40,9 @@ class SFX2_DLLPUBLIC ControlFactory
 public:
     /** Create the menu button for the task bar.
     */
-    static CheckBox* CreateMenuButton (vcl::Window* pParentWindow);
+    static VclPtr<CheckBox> CreateMenuButton (vcl::Window* pParentWindow);
 
-    static ImageRadioButton* CreateTabItem (vcl::Window* pParentWindow);
+    static VclPtr<ImageRadioButton> CreateTabItem (vcl::Window* pParentWindow);
 };
 
 

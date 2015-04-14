@@ -95,7 +95,7 @@ SidebarController::SidebarController (
     : SidebarControllerInterfaceBase(m_aMutex),
       mpCurrentDeck(),
       mpParentWindow(pParentWindow),
-      mpTabBar(new TabBar(
+      mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
               ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
@@ -572,7 +572,7 @@ void SidebarController::SwitchToDeck (
     if ( ! mpCurrentDeck)
     {
         mpCurrentDeck.reset(
-            new Deck(
+            VclPtr<Deck>::Create(
                 rDeckDescriptor,
                 mpParentWindow,
                 ::boost::bind(&SidebarController::RequestCloseDeck, this)));
@@ -593,6 +593,7 @@ void SidebarController::SwitchToDeck (
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
     const SharedPanelContainer& rCurrentPanels (mpCurrentDeck->GetPanels());
+    // FIXME: concerns wrt. dispose / lifecycle when we re-use panels here...
     aNewPanels.resize(nNewPanelCount);
     sal_Int32 nWriteIndex (0);
     bool bHasPanelSetChanged (false);
@@ -640,6 +641,7 @@ void SidebarController::SwitchToDeck (
                 mpCurrentDeck->GetPanelParentWindow(),
                 rPanelContexDescriptor.mbIsInitiallyVisible,
                 rContext);
+            aNewPanels[nWriteIndex].disposeAndClear();
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != nullptr)
@@ -658,6 +660,7 @@ void SidebarController::SwitchToDeck (
         }
 
     }
+    // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
 
     // Activate the deck and the new set of panels.
@@ -683,7 +686,7 @@ void SidebarController::SwitchToDeck (
     UpdateTitleBarIcons();
 }
 
-Panel* SidebarController::CreatePanel (
+VclPtr<Panel> SidebarController::CreatePanel (
     const OUString& rsPanelId,
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
@@ -694,7 +697,7 @@ Panel* SidebarController::CreatePanel (
         return NULL;
 
     // Create the panel which is the parent window of the UIElement.
-    Panel *pPanel = new Panel(
+    VclPtr<Panel> pPanel = VclPtr<Panel>::Create(
         *pPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
@@ -714,7 +717,7 @@ Panel* SidebarController::CreatePanel (
     }
     else
     {
-        pPanel = NULL;
+        pPanel.disposeAndClear();
     }
 
     return pPanel;
@@ -1099,7 +1102,7 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
         // Make sure that the indicator exists.
         if ( ! mpCloseIndicator)
         {
-            mpCloseIndicator.reset(new FixedImage(mpParentWindow));
+            mpCloseIndicator.reset(VclPtr<FixedImage>::Create(mpParentWindow));
             FixedImage* pFixedImage = static_cast<FixedImage*>(mpCloseIndicator.get());
             const Image aImage (Theme::GetImage(Theme::Image_CloseIndicator));
             pFixedImage->SetImage(aImage);

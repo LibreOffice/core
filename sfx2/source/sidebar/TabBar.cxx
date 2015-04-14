@@ -69,6 +69,11 @@ TabBar::~TabBar()
 
 void TabBar::dispose()
 {
+    for(ItemContainer::iterator
+            iItem(maItems.begin()), iEnd(maItems.end());
+        iItem!=iEnd;
+        ++iItem)
+        iItem->mpButton.disposeAndClear();
     maItems.clear();
     mpMenuButton.disposeAndClear();
     vcl::Window::dispose();
@@ -254,12 +259,11 @@ bool TabBar::Notify (NotifyEvent&)
     return false;
 }
 
-RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
+VclPtr<RadioButton> TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 {
-    RadioButton* pItem = ControlFactory::CreateTabItem(this);
+    VclPtr<RadioButton> pItem = ControlFactory::CreateTabItem(this);
     pItem->SetHelpText(rDeckDescriptor.msHelpText);
     pItem->SetQuickHelpText(rDeckDescriptor.msHelpText);
-
     return pItem;
 }
 

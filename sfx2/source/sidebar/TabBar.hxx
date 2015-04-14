@@ -111,7 +111,7 @@ private:
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 
-    RadioButton* CreateTabItem (const DeckDescriptor& rDeckDescriptor);
+    VclPtr<RadioButton> CreateTabItem (const DeckDescriptor& rDeckDescriptor);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
     void Layout (void);
     void UpdateButtonIcons (void);

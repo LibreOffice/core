@@ -51,7 +51,7 @@ Panel::Panel (
     const ::boost::function<Context(void)>& rContextAccess)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
-      mpTitleBar(new PanelTitleBar(
+      mpTitleBar(VclPtr<PanelTitleBar>::Create(
               rPanelDescriptor.msTitle,
               pParentWindow,
               this)),

@@ -184,7 +184,7 @@ class SwSidebarWin : public vcl::Window
         virtual void    LoseFocus() SAL_OVERRIDE;
         virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
         virtual void    GetFocus() SAL_OVERRIDE;
-        virtual MenuButton* CreateMenuButton() = 0;
+        virtual VclPtr<MenuButton> CreateMenuButton() = 0;
 
         void        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         SfxItemSet  DefaultItem();

@@ -37,11 +37,11 @@ SidebarChildWindow::SidebarChildWindow (
     SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
 {
-    pWindow = new SidebarDockingWindow(
+    pWindow.reset(VclPtr<SidebarDockingWindow>::Create(
         pBindings,
         *this,
         pParentWindow,
-        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
+        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE));
     eChildAlignment = SfxChildAlignment::RIGHT;
 
     pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
