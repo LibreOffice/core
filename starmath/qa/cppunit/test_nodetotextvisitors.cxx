@@ -75,7 +75,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< uno::XComponentContext > m_context;
     SmDocShellRef xDocShRef;
     void parseandparseagain(const char *input, const char *test_name);
     void ParseAndCheck(const char *input, const char *expected, const char *test_name);
