@@ -299,6 +299,10 @@ public:
 
     void    DrawGrid( bool bGrid, bool bPage );
     void    DrawStrings( bool bPixelToLogic = false );
+
+    /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
+    Rectangle LayoutStrings(bool bPixelToLogic = false, bool bPaint = true, const ScAddress &rAddress = ScAddress());
+
     void    DrawDocumentBackground();
     void    DrawBackground();
     void    DrawShadow();

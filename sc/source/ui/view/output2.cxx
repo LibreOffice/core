@@ -1426,9 +1426,14 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
 
 void ScOutputData::DrawStrings( bool bPixelToLogic )
 {
+    LayoutStrings(bPixelToLogic, true);
+}
+
+Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
+{
     OSL_ENSURE( mpDev == mpRefDevice ||
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
-                "DrawStrings: unterschiedliche MapUnits ?!?!" );
+                "LayoutStrings: unterschiedliche MapUnits ?!?!" );
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
 
@@ -1469,9 +1474,9 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        if ( pThisRowInfo->bChanged )
+        SCROW nY = pThisRowInfo->nRowNo;
+        if ((bPaint && pThisRowInfo->bChanged) || (!bPaint && rAddress.Row() == nY))
         {
-            SCROW nY = pThisRowInfo->nRowNo;
             long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
@@ -2041,6 +2046,16 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                                 }
                             }
 
+                            // if we are not painting, it means we are interested in
+                            // the area of the text that covers the specified cell
+                            if (!bPaint && rAddress.Col() == nX)
+                            {
+                                Rectangle aRect;
+                                mpDev->GetTextBoundRect(aRect, aShort);
+                                aRect += aDrawTextPos;
+                                return aRect;
+                            }
+
                             if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
                             {
                                 size_t nLen = aShort.getLength();
@@ -2057,10 +2072,14 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                                         aDX[i] = static_cast<sal_Int32>(aDX[i] / fMul + 0.5);
                                 }
 
-                                mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
+                                if (bPaint)
+                                    mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
                             }
                             else
-                                mpDev->DrawText(aDrawTextPos, aShort);
+                            {
+                                if (bPaint)
+                                    mpDev->DrawText(aDrawTextPos, aShort);
+                            }
                         }
 
                         if ( bHClip || bVClip )
@@ -2073,7 +2092,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
                         // PDF: whole-cell hyperlink from formula?
                         bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
-                        if ( bHasURL )
+                        if (bPaint && bHasURL)
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
                             lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
@@ -2087,6 +2106,8 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
+
+    return Rectangle();
 }
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
