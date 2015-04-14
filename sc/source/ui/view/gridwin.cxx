@@ -1775,7 +1775,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if (bIsTiledRendering)
     {
         Point aPos(rMEvt.GetPosPixel());
-        SCsCOL nPosX, nNonEmptyX;
+        SCsCOL nPosX, nNonEmptyX(0);
         SCsROW nPosY;
         SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
