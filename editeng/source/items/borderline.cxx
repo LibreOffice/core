@@ -259,6 +259,7 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
 
         // Double lines
         case DOUBLE:
+        case DOUBLE_THIN:
             return fWidth / 3.0;
 
         case THINTHICK_MEDIUMGAP:
