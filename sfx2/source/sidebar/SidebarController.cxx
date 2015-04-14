@@ -641,7 +641,6 @@ void SidebarController::SwitchToDeck (
                 mpCurrentDeck->GetPanelParentWindow(),
                 rPanelContexDescriptor.mbIsInitiallyVisible,
                 rContext);
-            aNewPanels[nWriteIndex].disposeAndClear();
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != nullptr)
