@@ -1054,7 +1054,7 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "Italic" ||
         aEvent.FeatureURL.Path == "Underline" ||
-        aEvent.FeatureURL.Path == "StrikeOut")
+        aEvent.FeatureURL.Path == "Strikeout")
     {
 
         OUStringBuffer aBuffer;
