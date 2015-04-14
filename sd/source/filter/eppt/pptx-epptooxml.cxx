@@ -1093,7 +1093,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
         WriteAnimationCondition( pFS, aCondSeq[ i ], false, bMainSeqChild );
     } else
         WriteAnimationCondition( pFS, aAny, false, bMainSeqChild );
-    pFS->endElementNS( XML_p, XML_stCondLst );
+    pFS->endElementNS( XML_p, XML_endCondLst );
     }
 
     Reference< XEnumerationAccess > xEnumerationAccess( rXNode, UNO_QUERY );
