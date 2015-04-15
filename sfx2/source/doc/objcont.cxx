@@ -643,12 +643,14 @@ bool SfxObjectShell::IsModifyPasswordEntered()
     return pImp->m_bModifyPasswordEntered;
 }
 
-void SfxObjectShell::libreOfficeKitCallback(SAL_UNUSED_PARAMETER int nType, SAL_UNUSED_PARAMETER const char* pPayload) const {
-    SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+void SfxObjectShell::libreOfficeKitCallback(SAL_UNUSED_PARAMETER int nType, SAL_UNUSED_PARAMETER const char* pPayload) const
+{
+    SAL_INFO("tiled-rendering", "SfxObjectShell::libreOfficeKitCallback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
 }
 
-bool SfxObjectShell::isTiledRendering() const {
-    SAL_WARN("tiled-rendering", "LOK callback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+bool SfxObjectShell::isTiledRendering() const
+{
+    SAL_INFO("tiled-rendering", "SfxObjectShell::isTiledRendering interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
     return false;
 }
 
