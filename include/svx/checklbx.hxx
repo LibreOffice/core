@@ -26,7 +26,7 @@
 
 // class SvxCheckListBox -------------------------------------------------
 
-class SVX_DLLPUBLIC SvxCheckListBox : public SvTreeListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxCheckListBox : public SvTreeListBox
 {
     using Window::GetText;
 
@@ -70,7 +70,6 @@ public:
     virtual void    MouseButtonDown     ( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput            ( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
-
 
 #endif
 

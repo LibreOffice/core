@@ -35,7 +35,7 @@ class SvData;
 |*
 \************************************************************************/
 
-class SvxColorValueSet_docking : public SvxColorValueSet, public DragSourceHelper
+class SAL_WARN_UNUSED SvxColorValueSet_docking : public SvxColorValueSet, public DragSourceHelper
 {
 private:
     using SvxColorValueSet::StartDrag;
@@ -69,9 +69,9 @@ public:
 |*
 \************************************************************************/
 
-class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
+class SAL_WARN_UNUSED SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
 {
- friend class SvxColorChildWindow;
+friend class SvxColorChildWindow;
 
 private:
     XColorListRef       pColorList;

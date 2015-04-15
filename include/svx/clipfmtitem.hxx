@@ -26,7 +26,7 @@
 
 struct SvxClipboardFmtItem_Impl;
 
-class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipboardFmtItem : public SfxPoolItem
 {
     SvxClipboardFmtItem_Impl* pImpl;
 protected:
@@ -51,7 +51,6 @@ public:
     SotClipboardFormatId GetClipbrdFormatId( sal_uInt16 nPos ) const;
     const OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
 };
-
 
 #endif
 

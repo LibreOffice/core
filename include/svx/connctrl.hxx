@@ -32,7 +32,7 @@ class SdrObjList;
 |* SvxXConnectionPreview
 |*
 \************************************************************************/
-class SVX_DLLPUBLIC SvxXConnectionPreview : public Control
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXConnectionPreview : public Control
 {
  friend class SvxConnectionPage;
 
@@ -60,7 +60,6 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
-
 
 #endif // INCLUDED_SVX_CONNCTRL_HXX
 

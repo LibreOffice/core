@@ -22,8 +22,6 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-
-
 enum SvxChartStyle
 {
     CHSTYLE_2D_LINE,
@@ -164,8 +162,7 @@ enum SvxChartRegress
 
 #define CHREGRESS_COUNT (CHREGRESS_UNKNOWN + 1)
 
-
-class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartStyleItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -182,8 +179,7 @@ public:
 };
 
 
-
-class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartRegressItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -200,9 +196,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
-
-
-class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -217,9 +211,7 @@ public:
         { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
 };
 
-
-
-class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -239,9 +231,7 @@ public:
         { return (SvxChartTextOrder)SfxEnumItem::GetValue(); }
 };
 
-
-
-class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -256,9 +246,7 @@ public:
         { return (SvxChartTextOrient)SfxEnumItem::GetValue(); }
 };
 
-
-
-class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -277,9 +265,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
-
-
-class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartIndicateItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -298,9 +284,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
-
-
-class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDoubleItem : public SfxPoolItem
 {
     double fVal;
 

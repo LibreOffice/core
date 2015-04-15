@@ -43,7 +43,7 @@
 #define FLT_DATE_SAVE       5
 
 /// Struct for sorting data.
-class SVX_DLLPUBLIC RedlinData
+class SVX_DLLPUBLIC SAL_WARN_UNUSED RedlinData
 {
 public:
                     RedlinData();
@@ -54,7 +54,7 @@ public:
 };
 
 /// Entries for list.
-class SvxRedlinEntry : public SvTreeListEntry
+class SAL_WARN_UNUSED SvxRedlinEntry : public SvTreeListEntry
 {
 public:
                     SvxRedlinEntry();
@@ -62,7 +62,7 @@ public:
 };
 
 /// Class for the representation of Strings depending on the font.
-class SvLBoxColorString : public SvLBoxString
+class SAL_WARN_UNUSED SvLBoxColorString : public SvLBoxString
 {
 private:
 
@@ -84,7 +84,7 @@ public:
     SvLBoxItem*     Create() const SAL_OVERRIDE;
 };
 
-class SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRedlinTable : public SvSimpleTable
 {
     using SvTabListBox::InsertEntry;
 
@@ -167,7 +167,7 @@ public:
 };
 
 /// Tabpage with the filter text entries etc.
-class SVX_DLLPUBLIC SvxTPFilter: public TabPage
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPFilter: public TabPage
 {
 private:
 
@@ -294,7 +294,7 @@ public:
 };
 
 /// Tabpage with the redlining entries.
-class SVX_DLLPUBLIC SvxTPView: public TabPage
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPView : public TabPage
 {
 private:
 
@@ -364,9 +364,7 @@ public:
 
 
 //  Redlining - Control (Accept- Changes)
-
-
-class SVX_DLLPUBLIC SvxAcceptChgCtr
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxAcceptChgCtr
     : public TabControl
     , public VclBuilderContainer
 {

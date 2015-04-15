@@ -33,10 +33,9 @@
 
 class Graphic;
 
-class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlgChildWindow : public SfxChildWindow
 {
- public:
-
+public:
     SvxContourDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW_WITHID( SvxContourDlgChildWindow );
@@ -47,7 +46,7 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 
 class SvxSuperContourDlg;
 
-class SvxContourDlgItem : public SfxControllerItem
+class SAL_WARN_UNUSED SvxContourDlgItem : public SfxControllerItem
 {
     SvxSuperContourDlg& rDlg;
 
@@ -60,7 +59,7 @@ public:
                         SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
 
-class SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
 

@@ -30,8 +30,7 @@
 class PopupMenu;
 class SvxClipboardFmtItem;
 
-
-class SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
@@ -51,7 +50,6 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
-
 
 #endif
 

@@ -39,7 +39,7 @@ namespace svx
 
 // class SvxShowCharSet --------------------------------------------------
 
-class SVX_DLLPUBLIC SvxShowCharSet : public Control
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxShowCharSet : public Control
 {
 public:
                     SvxShowCharSet( vcl::Window* pParent );

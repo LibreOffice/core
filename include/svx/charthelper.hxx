@@ -28,7 +28,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-class SVX_DLLPUBLIC ChartHelper
+class SVX_DLLPUBLIC SAL_WARN_UNUSED ChartHelper
 {
 public:
     /// Check that the XDiagram is a real 3D chart.
@@ -56,8 +56,6 @@ public:
         bool bNoFillStyle = true,
         bool bNoLineStyle = true);
 };
-
-
 
 #endif // INCLUDED_SVX_CHARTHELPER_HXX
 
