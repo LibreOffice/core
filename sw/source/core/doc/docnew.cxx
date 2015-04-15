@@ -1241,8 +1241,10 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                     aSeenMarks.insert(pMark);
                 }
                 // And move them back.
-                for (sw::mark::IMark* pMark : aSeenMarks)
-                    pMarkAccess->repositionMark(pMark, aPaM);
+                std::set<sw::mark::IMark*>::iterator pMark;
+
+                for (pMark = aSeenMarks.begin(); pMark != aSeenMarks.end(); ++pMark)
+                    pMarkAccess->repositionMark(*pMark, aPaM);
             }
         }
     }
