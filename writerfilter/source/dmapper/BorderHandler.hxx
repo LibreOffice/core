@@ -65,7 +65,7 @@ private:
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
-    BorderHandler( bool bOOXML );
+    explicit BorderHandler( bool bOOXML );
     virtual ~BorderHandler();
 
     ::std::shared_ptr<PropertyMap>            getProperties();

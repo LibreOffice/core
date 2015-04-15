@@ -1305,7 +1305,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 class NamedPropertyValue {
     OUString m_aName;
 public:
-    NamedPropertyValue(const OUString& i_aStr)
+    explicit NamedPropertyValue(const OUString& i_aStr)
         : m_aName(i_aStr)   { }
     bool operator() (beans::PropertyValue& aVal)
     {   return aVal.Name == m_aName;    }
