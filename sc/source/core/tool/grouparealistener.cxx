@@ -190,11 +190,28 @@ void FormulaGroupAreaListener::collectFormulaCells(
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen <<
             ", col/tab " << mpColumn->GetCol() << "/" << mpColumn->GetTab());
 
-    ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
+    size_t nBlockSize = 0;
+    ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
     if (!pp)
     {
         SAL_WARN("sc", "GetFormulaCellBlockAddress not found");
         return;
+    }
+
+    /* FIXME: with tdf#89957 it happened that the actual block size in column
+     * AP (shifted from AO) of sheet 'w' was smaller than the remembered group
+     * length and correct. This is just a very ugly workaround, the real cause
+     * is yet unknown, but at least don't crash in such case. The intermediate
+     * cause is that not all affected group area listeners are destroyed and
+     * newly created, so mpColumn still points to the old column that then has
+     * the content of a shifted column. Effectively this workaround has the
+     * consequence that the group area listener is fouled up and not all
+     * formula cells are notified.. */
+    if (nBlockSize < static_cast<size_t>(mnGroupLen))
+    {
+        SAL_WARN("sc.core","FormulaGroupAreaListener::collectFormulaCells() nBlockSize " <<
+                nBlockSize << " < " << mnGroupLen << " mnGroupLen");
+        const_cast<FormulaGroupAreaListener*>(this)->mnGroupLen = static_cast<SCROW>(nBlockSize);
     }
 
     ScFormulaCell* const * ppEnd = pp + mnGroupLen;
@@ -285,7 +302,8 @@ ScAddress FormulaGroupAreaListener::getTopCellPos() const
 
 const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
 {
-    const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
+    size_t nBlockSize = 0;
+    const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
     SAL_WARN_IF(!pp, "sc", "GetFormulaCellBlockAddress not found");
     return pp ? *pp : NULL;
 }

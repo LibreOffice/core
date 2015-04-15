@@ -2712,26 +2712,37 @@ void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
     ApplyAttr(nRow, SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
 }
 
-ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow ) const
+ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow, size_t& rBlockSize ) const
 {
     if (!ValidRow(nRow))
+    {
+        rBlockSize = 0;
         return NULL;
+    }
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
     if (it == maCells.end())
+    {
+        rBlockSize = 0;
         return NULL;
+    }
 
     if (it->type != sc::element_type_formula)
+    {
         // Not a formula cell.
+        rBlockSize = 0;
         return NULL;
+    }
 
+    rBlockSize = it->size;
     return &sc::formula_block::at(*it->data, aPos.second);
 }
 
 const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
 {
-    ScFormulaCell const * const * pp = GetFormulaCellBlockAddress( nRow );
+    size_t nBlockSize = 0;
+    ScFormulaCell const * const * pp = GetFormulaCellBlockAddress( nRow, nBlockSize );
     return pp ? *pp : NULL;
 }
 
