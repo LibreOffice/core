@@ -1206,7 +1206,6 @@ SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent, SfxItemPool&,
     : SfxTabDialog(0, pParent, "TablePropertiesDialog",
         "modules/swriter/ui/tableproperties.ui", pItemSet)
     , pShell(pSh)
-    , m_nHtmlMode(::GetHtmlMode(pSh->GetView().GetDocShell()))
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
