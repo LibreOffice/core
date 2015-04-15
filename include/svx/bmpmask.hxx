@@ -31,27 +31,6 @@
 
 /*************************************************************************
 |*
-|*  class SvxBmpMaskSelectItem
-|*
-\************************************************************************/
-class SvxBmpMask;
-
-class SAL_WARN_UNUSED SvxBmpMaskSelectItem : public SfxControllerItem
-{
-private:
-    SvxBmpMask  &rBmpMask;
-
-protected:
-    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState ) SAL_OVERRIDE;
-
-public:
-    SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
-                          SfxBindings& rBindings );
-};
-
-/*************************************************************************
-|*
 |* Derivative from SfxChildWindow as 'container' for Float
 |*
 \************************************************************************/

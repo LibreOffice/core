@@ -337,27 +337,6 @@ void ColorWindow::Paint( const Rectangle &/*Rect*/ )
     SetFillColor( rOldFillColor );
 }
 
-SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
-                                            SfxBindings& rBindings ) :
-            SfxControllerItem   ( nId_, rBindings ),
-            rBmpMask            ( rMask)
-{
-}
-
-
-
-void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
-                                         const SfxPoolItem* pItem )
-{
-    if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
-    {
-        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
-        assert(pStateItem); //SfxBoolItem erwartet
-        if (pStateItem)
-            rBmpMask.SetExecState( pStateItem->GetValue() );
-    }
-}
-
 SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 nId,
                                              SfxBindings* pBindings,
                                              SfxChildWinInfo* pInfo)
