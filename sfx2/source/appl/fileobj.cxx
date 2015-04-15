@@ -47,7 +47,9 @@
 #define FILETYPE_OBJECT     3
 
 SvFileObject::SvFileObject()
-    : pOldParent(NULL)
+    : nPostUserEventId(0)
+    , pDelMed(NULL)
+    , pOldParent(NULL)
     , nType(FILETYPE_TEXT)
     , bLoadAgain(true)
     , bSynchron(false)
@@ -64,13 +66,15 @@ SvFileObject::SvFileObject()
 
 SvFileObject::~SvFileObject()
 {
-    if ( xMed.Is() )
+    if (xMed.Is())
     {
         xMed->SetDoneLink( Link() );
         xMed.Clear();
     }
+    if (nPostUserEventId)
+        Application::RemoveUserEvent(nPostUserEventId);
+    delete pDelMed;
 }
-
 
 bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const OUString & rMimeType,
@@ -482,10 +486,10 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
         if( pThis->xMed.Is() )
         {
             pThis->xMed->SetDoneLink( Link() );
-
-            Application::PostUserEvent(
+            pThis->pDelMed = new SfxMediumRef(pThis->xMed);
+            pThis->nPostUserEventId = Application::PostUserEvent(
                         STATIC_LINK( pThis, SvFileObject, DelMedium_Impl ),
-                        new SfxMediumRef( pThis->xMed ));
+                        pThis->pDelMed);
             pThis->xMed.Clear();
         }
     }
@@ -495,7 +499,9 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 
 IMPL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
 {
-    (void)pThis;
+    pThis->nPostUserEventId = 0;
+    assert(pThis->pDelMed == pDelMed);
+    pThis->pDelMed = NULL;
     delete pDelMed;
     return 0;
 }
