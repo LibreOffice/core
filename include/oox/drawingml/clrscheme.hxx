@@ -46,9 +46,6 @@ class OOX_DLLPUBLIC ClrScheme
 
 public:
 
-    ClrScheme();
-    ~ClrScheme();
-
     bool     getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
     void     setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
 };
