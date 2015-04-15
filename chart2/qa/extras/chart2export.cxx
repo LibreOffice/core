@@ -82,6 +82,7 @@ public:
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
     void testDispBlanksAsXLSX();
+    void testMarkerColorXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
     CPPUNIT_TEST(testDispBlanksAsXLSX);
+    CPPUNIT_TEST(testMarkerColorXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1217,6 +1219,14 @@ void Chart2ExportTest::testDispBlanksAsXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "gap");
+}
+
+void Chart2ExportTest::testMarkerColorXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "markerColor.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", "92d050");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
