@@ -41,10 +41,9 @@ using namespace oox;
 namespace writerfilter {
 namespace dmapper {
 
-    TablePropertiesHandler::TablePropertiesHandler( bool bOOXML ) :
+    TablePropertiesHandler::TablePropertiesHandler() :
         m_pCurrentInteropGrabBag(nullptr),
-        m_pTableManager( nullptr ),
-        m_bOOXML( bOOXML )
+        m_pTableManager( nullptr )
     {
     }
 
@@ -236,7 +235,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
+                    BorderHandlerPtr pBorderHandler(new BorderHandler(true));
                     if (m_pCurrentInteropGrabBag)
                         pBorderHandler->enableInteropGrabBag("tblBorders");
                     pProperties->resolve(*pBorderHandler);
@@ -266,7 +265,7 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     //in OOXML there's one set of borders at each cell (if there is any)
-                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler( m_bOOXML ));
+                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler(true));
                     if (m_pCurrentInteropGrabBag)
                         pTDefTableHandler->enableInteropGrabBag("tcBorders");
                     pProperties->resolve( *pTDefTableHandler );

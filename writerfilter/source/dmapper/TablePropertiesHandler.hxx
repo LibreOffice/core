@@ -41,10 +41,9 @@ private:
     PropertyMapPtr m_pCurrentProperties;
     std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
     TableManager* m_pTableManager;
-    bool m_bOOXML;
 
 public:
-    TablePropertiesHandler( bool bOOXML );
+    TablePropertiesHandler();
     virtual ~TablePropertiesHandler( );
 
     bool sprm(Sprm & sprm);

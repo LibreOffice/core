@@ -60,7 +60,7 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_nMaxFixedWidth(0),
-    m_pTablePropsHandler( new TablePropertiesHandler( true ) )
+    m_pTablePropsHandler(new TablePropertiesHandler())
 {
     m_pTablePropsHandler->SetTableManager( this );
 

@@ -32,7 +32,7 @@ namespace dmapper {
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
 LoggedProperties(dmapper_logger, "TblStylePrHandler"),
 m_rDMapper( rDMapper ),
-m_pTablePropsHandler( new TablePropertiesHandler( true ) ),
+m_pTablePropsHandler(new TablePropertiesHandler()),
 m_nType( TBL_STYLE_UNKNOWN ),
 m_pProperties( new PropertyMap )
 {
