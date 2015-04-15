@@ -1982,7 +1982,7 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
     pFS->startElement( FSNS( XML_c, XML_cat ),
             FSEND );
 
-    OUString aCellRange =  xValueSeq->getSourceRangeRepresentation();
+    OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
     aCellRange = parseFormula( aCellRange );
     // TODO: need to handle XML_multiLvlStrRef according to aCellRange
     pFS->startElement( FSNS( XML_c, XML_strRef ),
@@ -2025,7 +2025,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->startElement( FSNS( XML_c, nValueType ),
             FSEND );
 
-    OUString aCellRange =  xValueSeq->getSourceRangeRepresentation();
+    OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
     aCellRange = parseFormula( aCellRange );
     // TODO: need to handle XML_multiLvlStrRef according to aCellRange
     pFS->startElement( FSNS( XML_c, XML_numRef ),
