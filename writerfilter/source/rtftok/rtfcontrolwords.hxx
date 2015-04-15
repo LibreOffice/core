@@ -74,6 +74,7 @@ enum class Destination
     COMMENT,
     OBJECT,
     OBJDATA,
+    OBJCLASS,
     RESULT,
     ANNOTATIONDATE,
     ANNOTATIONAUTHOR,

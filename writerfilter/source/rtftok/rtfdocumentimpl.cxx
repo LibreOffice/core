@@ -1245,6 +1245,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case Destination::COMPANY:
     case Destination::COMMENT:
     case Destination::OBJDATA:
+    case Destination::OBJCLASS:
     case Destination::ANNOTATIONDATE:
     case Destination::ANNOTATIONAUTHOR:
     case Destination::ANNOTATIONREFERENCE:
@@ -1867,6 +1868,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             {
                 m_aStates.top().eDestination = Destination::OBJDATA;
             }
+            break;
+        case RTF_OBJCLASS:
+            m_aStates.top().eDestination = Destination::OBJCLASS;
             break;
         case RTF_RESULT:
             m_aStates.top().eDestination = Destination::RESULT;
@@ -5394,6 +5398,12 @@ RTFError RTFDocumentImpl::popState()
         m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
     }
     break;
+    case Destination::OBJCLASS:
+    {
+        auto pValue = std::make_shared<RTFValue>(m_aStates.top().pDestinationText->makeStringAndClear());
+        m_aOLEAttributes.set(NS_ooxml::LN_CT_OLEObject_ProgID, pValue);
+        break;
+    }
     case Destination::OBJECT:
     {
         if (!m_bObject)
