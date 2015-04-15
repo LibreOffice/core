@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da85f559_31e4303a",
+        "filename": "xmloff/source/style/GradientStyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2015-04-15T13:36:35Z",
+      "side": 1,
+      "message": "Such attribute does not exist in ODF 1.2, the document would not be valid.",
+      "range": {
+        "startLine": 291,
+        "startChar": 38,
+        "endLine": 291,
+        "endChar": 79
+      },
+      "revId": "c0b5bd6cc32403d1ab1b2a74af3ad97d4a30dd06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
