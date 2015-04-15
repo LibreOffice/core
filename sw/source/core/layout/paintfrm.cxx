@@ -1858,7 +1858,8 @@ bool DrawFillAttributes(
             rPaintRegion.GetOrigin().Right(),
             rPaintRegion.GetOrigin().Bottom());
 
-        if(!aPaintRange.isEmpty() &&
+        if (!aPaintRange.isEmpty() &&
+            !rPaintRegion.empty() &&
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
