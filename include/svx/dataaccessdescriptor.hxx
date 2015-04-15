@@ -61,7 +61,7 @@ namespace svx
 
     /** class encapsulating the com::sun::star::sdb::DataAccessDescriptor service.
     */
-    class SVX_DLLPUBLIC ODataAccessDescriptor
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessDescriptor
     {
     protected:
         ODADescriptorImpl*      m_pImpl;

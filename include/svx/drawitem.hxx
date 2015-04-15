@@ -29,7 +29,7 @@
 //  SvxColorListItem
 
 
-class SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxColorListItem: public SfxPoolItem
 {
     XColorListRef     pColorList;
 
@@ -54,12 +54,8 @@ public:
     void                    SetColorList( const XColorListRef &pTable ) { pColorList = pTable; }
 };
 
-
-
 //  SvxGradientListItem
-
-
-class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxGradientListItem : public SfxPoolItem
 {
     XGradientListRef  pGradientList;
 
@@ -89,7 +85,7 @@ public:
 
 //  SvxHatchListItem
 
-class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxHatchListItem : public SfxPoolItem
 {
     XHatchListRef     pHatchList;
 
@@ -120,7 +116,7 @@ public:
 
 //  SvxBitmapListItem
 
-class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapListItem : public SfxPoolItem
 {
     XBitmapListRef    pBitmapList;
 
@@ -151,7 +147,7 @@ public:
 
 //  SvxDashListItem
 
-class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDashListItem : public SfxPoolItem
 {
     XDashListRef      pDashList;
 
@@ -179,7 +175,7 @@ public:
 
 //  SvxLineEndListItem
 
-class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLineEndListItem : public SfxPoolItem
 {
     XLineEndListRef   pLineEndList;
 

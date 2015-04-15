@@ -40,7 +40,7 @@ namespace svx
 
     //= OColumnTransferable
 
-    class SVX_DLLPUBLIC OColumnTransferable : public TransferableHelper
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED OColumnTransferable : public TransferableHelper
     {
     protected:
         ODataAccessDescriptor   m_aDescriptor;
@@ -166,7 +166,7 @@ namespace svx
 
     /** class for transferring data access objects (tables, queries, statements ...)
     */
-    class SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessObjectTransferable : public TransferableHelper
     {
         ODataAccessDescriptor   m_aDescriptor;
         OUString         m_sCompatibleObjectDescription;
@@ -254,7 +254,7 @@ namespace svx
 
     /** class for transferring multiple columns
     */
-    class SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED OMultiColumnTransferable : public TransferableHelper
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aDescriptors;
 

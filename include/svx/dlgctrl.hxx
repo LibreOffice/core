@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 |* virtual method from the control.
 \************************************************************************/
 
-class SvxTabPage : public SfxTabPage
+class SAL_WARN_UNUSED SvxTabPage : public SfxTabPage
 {
 
 public:
@@ -61,7 +61,7 @@ typedef sal_uInt16 CTL_STATE;
 class SvxRectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
 
-class SVX_DLLPUBLIC SvxRectCtl : public Control
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRectCtl : public Control
 {
 private:
     SVX_DLLPRIVATE void             InitSettings( bool bForeground, bool bBackground );
@@ -133,7 +133,7 @@ public:
 |* Preview control for the display of bitmaps
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxBitmapCtl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapCtl
 {
 protected:
     Size            aSize;
@@ -157,7 +157,7 @@ public:
 |* Control for editing bitmaps
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxPixelCtl : public Control
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxPixelCtl : public Control
 {
 private:
     using OutputDevice::SetLineColor;
@@ -221,7 +221,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC ColorLB : public ColorListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED ColorLB : public ColorListBox
 {
 
 public:
@@ -236,7 +236,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC HatchingLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED HatchingLB : public ListBox
 {
     XHatchListRef mpList;
 public:
@@ -250,7 +250,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC GradientLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED GradientLB : public ListBox
 {
     XGradientListRef mpList;
 public:
@@ -266,7 +266,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC BitmapLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED BitmapLB : public ListBox
 {
 public:
     explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
@@ -285,7 +285,7 @@ private:
 
 /************************************************************************/
 
-class FillAttrLB : public ColorListBox
+class FillAttrLB SAL_WARN_UNUSED : public ColorListBox
 {
 private:
     BitmapEx        maBitmapEx;
@@ -301,7 +301,7 @@ public:
 
 /************************************************************************/
 
-class FillTypeLB : public ListBox
+class FillTypeLB SAL_WARN_UNUSED : public ListBox
 {
 
 public:
@@ -313,7 +313,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC LineLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED LineLB : public ListBox
 {
 private:
     /// bitfield
@@ -336,7 +336,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC LineEndLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED LineEndLB : public ListBox
 {
 
 public:
@@ -355,7 +355,7 @@ class SdrObject;
 class SdrPathObj;
 class SdrModel;
 
-class SvxPreviewBase : public Control
+class SAL_WARN_UNUSED SvxPreviewBase : public Control
 {
 private:
     SdrModel*                                       mpModel;
@@ -389,7 +389,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXLinePreview : public SvxPreviewBase
 {
 private:
     SdrPathObj*                                     mpLineObjA;
@@ -421,7 +421,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXRectPreview : public SvxPreviewBase
 {
 private:
     SdrObject*                                      mpRectangleObject;
@@ -442,7 +442,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXShadowPreview : public SvxPreviewBase
 {
 private:
     Point maShadowOffset;

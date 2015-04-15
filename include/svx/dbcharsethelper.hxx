@@ -30,7 +30,7 @@ namespace svxform
 
     //= ODataAccessCharsetHelper
 
-    class SVX_DLLPUBLIC ODataAccessCharsetHelper
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessCharsetHelper
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;

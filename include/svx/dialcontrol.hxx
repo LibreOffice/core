@@ -31,7 +31,7 @@ namespace svx {
 
 
 
-class DialControlBmp : public VirtualDevice
+class SAL_WARN_UNUSED DialControlBmp : public VirtualDevice
 {
 public:
     explicit            DialControlBmp( vcl::Window& rParent );
@@ -75,7 +75,7 @@ private:
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class SVX_DLLPUBLIC DialControl : public Control
+class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControl : public Control
 {
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
@@ -164,10 +164,8 @@ private:
     DECL_LINK( LinkedFieldModifyHdl, NumericField* );
 };
 
-
-
 /** Wrapper for usage of a DialControl in item connections. */
-class SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
+class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
 {
 public:
     explicit            DialControlWrapper( DialControl& rDial );
@@ -179,12 +177,8 @@ public:
     virtual void        SetControlValue( sal_Int32 nValue ) SAL_OVERRIDE;
 };
 
-
-
 /** An item<->control connection for a DialControl. */
 typedef sfx::ItemControlConnection< sfx::Int32ItemWrapper, DialControlWrapper > DialControlConnection;
-
-
 
 } // namespace svx
 

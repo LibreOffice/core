@@ -31,7 +31,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dDefaultAttributes
+class SVX_DLLPUBLIC SAL_WARN_UNUSED E3dDefaultAttributes
 {
 private:
     // Compound object
