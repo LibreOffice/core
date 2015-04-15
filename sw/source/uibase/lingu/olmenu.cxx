@@ -106,9 +106,9 @@ using namespace ::com::sun::star;
 ///     selected text. Or in other words, the language a spell checker would use.
 ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
 // check if nScriptType includes the script type associated to nLang
-static inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
+static inline bool lcl_checkScriptType( SvtScriptType nScriptType, LanguageType nLang )
 {
-    return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
+    return bool(nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
 void SwSpellPopup::fillLangPopupMenu(
@@ -125,7 +125,7 @@ void SwSpellPopup::fillLangPopupMenu(
     std::set< OUString > aLangItems;
 
     OUString    aCurLang( aSeq[0] );
-    sal_uInt16      nScriptType = static_cast< sal_Int16 >(aSeq[1].toInt32());
+    SvtScriptType  nScriptType = static_cast<SvtScriptType>(aSeq[1].toInt32());
     OUString    aKeyboardLang( aSeq[2] );
     OUString    aGuessedTextLang( aSeq[3] );
 
@@ -178,7 +178,7 @@ void SwSpellPopup::fillLangPopupMenu(
     const sal_Int16 nMaxCount = 7;
     if (xDocumentLanguages.is())
     {
-        uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( nScriptType, nMaxCount ) );
+        uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
         if (rLocales.getLength() > 0)
         {
             for (sal_uInt16 i = 0; i < rLocales.getLength(); ++i)
@@ -408,7 +408,7 @@ SwSpellPopup::SwSpellPopup(
 
     //ADD NEW LANGUAGE MENU ITEM
 
-    OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
+    OUString aScriptTypesInUse( OUString::number( static_cast<int>(pWrtSh->GetScriptType()) ) );
 
     // get keyboard language
     OUString aKeyboardLang;
@@ -557,7 +557,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
 
     //ADD NEW LANGUAGE MENU ITEM
 
-    OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
+    OUString aScriptTypesInUse( OUString::number( static_cast<int>(pWrtSh->GetScriptType()) ) );
 
     // get keyboard language
     OUString aKeyboardLang;

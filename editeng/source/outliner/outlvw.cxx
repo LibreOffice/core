@@ -1440,7 +1440,7 @@ SfxItemSet OutlinerView::GetAttribs()
     return pEditView->GetAttribs();
 }
 
-sal_uInt16 OutlinerView::GetSelectedScriptType() const
+SvtScriptType OutlinerView::GetSelectedScriptType() const
 {
     return pEditView->GetSelectedScriptType();
 }
@@ -1462,15 +1462,15 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 
 namespace {
 
-bool isSingleScriptType( sal_uInt16 nScriptType )
+bool isSingleScriptType( SvtScriptType nScriptType )
 {
     sal_uInt8 nScriptCount = 0;
 
-    if (nScriptType & SCRIPTTYPE_LATIN)
+    if (nScriptType & SvtScriptType::LATIN)
         ++nScriptCount;
-    if (nScriptType & SCRIPTTYPE_ASIAN)
+    if (nScriptType & SvtScriptType::ASIAN)
         ++nScriptCount;
-    if (nScriptType & SCRIPTTYPE_COMPLEX)
+    if (nScriptType & SvtScriptType::COMPLEX)
         ++nScriptCount;
 
     return nScriptCount == 1;

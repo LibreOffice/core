@@ -98,10 +98,10 @@ private:
     virtual ~LangSelectionStatusbarController() {}
 
     bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
-    sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
-    OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
-    OUString     m_aKeyboardLang;    // the keyboard language
-    OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
+    SvtScriptType   m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
+    OUString        m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
+    OUString        m_aKeyboardLang;    // the keyboard language
+    OUString        m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
     LanguageGuessingHelper      m_aLangGuessHelper;
 
     void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException);
@@ -110,7 +110,7 @@ private:
 LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< uno::XComponentContext >& xContext ) :
     svt::StatusbarController( xContext, uno::Reference< frame::XFrame >(), OUString(), 0 ),
     m_bShowMenu( true ),
-    m_nScriptType( LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX ),
+    m_nScriptType( SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX ),
     m_aLangGuessHelper( xContext )
 {
 }
@@ -299,7 +299,7 @@ throw ( RuntimeException, std::exception )
         return;
 
     m_bShowMenu = true;
-    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
+    m_nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;  //set the default value
 
     if ( m_xStatusbarItem.is() )
     {
@@ -322,7 +322,7 @@ throw ( RuntimeException, std::exception )
                 // Retrieve all other values from the sequence and
                 // store it members!
                 m_aCurLang      = aSeq[0];
-                m_nScriptType   = static_cast< sal_Int16 >( aSeq[1].toInt32() );
+                m_nScriptType   = static_cast< SvtScriptType >( aSeq[1].toInt32() );
                 m_aKeyboardLang = aSeq[2];
                 m_aGuessedTextLang  = aSeq[3];
             }

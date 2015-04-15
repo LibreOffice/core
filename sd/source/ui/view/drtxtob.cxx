@@ -179,7 +179,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, false );
 
-                sal_uInt16 nScriptType = mpView->GetScriptType();
+                SvtScriptType nScriptType = mpView->GetScriptType();
 
                 if( (nSlotId == SID_ATTR_CHAR_FONT) || (nSlotId == SID_ATTR_CHAR_FONTHEIGHT) )
                 {

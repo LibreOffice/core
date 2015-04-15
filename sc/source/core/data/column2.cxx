@@ -71,12 +71,12 @@
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
 
-inline bool IsAmbiguousScript( sal_uInt8 nScript )
+inline bool IsAmbiguousScript( SvtScriptType nScript )
 {
     //TODO: move to a header file
-    return ( nScript != SCRIPTTYPE_LATIN &&
-             nScript != SCRIPTTYPE_ASIAN &&
-             nScript != SCRIPTTYPE_COMPLEX );
+    return ( nScript != SvtScriptType::LATIN &&
+             nScript != SvtScriptType::ASIAN &&
+             nScript != SvtScriptType::COMPLEX );
 }
 
 //  Data operations
@@ -233,8 +233,8 @@ long ScColumn::GetNeededSize(
             nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue();
     }
 
-    sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
-    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+    SvtScriptType nScript = pDocument->GetScriptType(nCol, nRow, nTab);
+    if (nScript == SvtScriptType::NONE) nScript = ScGlobal::GetDefaultScriptType();
 
     //  also call SetFont for edit cells, because bGetFont may be set only once
     //  bGetFont is set also if script type changes
@@ -682,7 +682,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         ScNeededSizeOptions aOptions;
         aOptions.bFormula = bFormula;
         const ScPatternAttr* pOldPattern = NULL;
-        sal_uInt8 nOldScript = 0;
+        SvtScriptType nOldScript = SvtScriptType::NONE;
 
         // Go though all non-empty cells within selection.
         sc::CellStoreType::const_iterator itPos = maCells.begin();
@@ -704,8 +704,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
                 for (size_t nOffset = aPos.second; nOffset < itPos->size; ++nOffset, ++nRow)
                 {
-                    sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
-                    if (nScript == 0)
+                    SvtScriptType nScript = pDocument->GetScriptType(nCol, nRow, nTab);
+                    if (nScript == SvtScriptType::NONE)
                         nScript = ScGlobal::GetDefaultScriptType();
 
                     const ScPatternAttr* pPattern = GetPattern(nRow);
@@ -850,10 +850,10 @@ void ScColumn::GetOptimalHeight(
                 sal_uInt16 nCjkHeight = 0;
                 sal_uInt16 nCtlHeight = 0;
                 sal_uInt16 nDefHeight;
-                sal_uInt8 nDefScript = ScGlobal::GetDefaultScriptType();
-                if ( nDefScript == SCRIPTTYPE_ASIAN )
+                SvtScriptType nDefScript = ScGlobal::GetDefaultScriptType();
+                if ( nDefScript == SvtScriptType::ASIAN )
                     nDefHeight = nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
-                else if ( nDefScript == SCRIPTTYPE_COMPLEX )
+                else if ( nDefScript == SvtScriptType::COMPLEX )
                     nDefHeight = nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
                 else
                     nDefHeight = nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
@@ -879,18 +879,18 @@ void ScColumn::GetOptimalHeight(
                     {
                         for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
                         {
-                            sal_uInt8 nScript = GetRangeScriptType(itAttr, nRow, nRow, itCells);
+                            SvtScriptType nScript = GetRangeScriptType(itAttr, nRow, nRow, itCells);
                             if (nScript == nDefScript)
                                 continue;
 
-                            if ( nScript == SCRIPTTYPE_ASIAN )
+                            if ( nScript == SvtScriptType::ASIAN )
                             {
                                 if ( nCjkHeight == 0 )
                                     nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
                                 if (nCjkHeight > rHeights[nRow-nStartRow])
                                     rHeights[nRow-nStartRow] = nCjkHeight;
                             }
-                            else if ( nScript == SCRIPTTYPE_COMPLEX )
+                            else if ( nScript == SvtScriptType::COMPLEX )
                             {
                                 if ( nCtlHeight == 0 )
                                     nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
@@ -1865,19 +1865,19 @@ void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
     CellStorageModified();
 }
 
-sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
+SvtScriptType ScColumn::GetScriptType( SCROW nRow ) const
 {
     if (!ValidRow(nRow) || maCellTextAttrs.is_empty(nRow))
-        return 0;
+        return SvtScriptType::NONE;
 
     return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnScriptType;
 }
 
-sal_uInt8 ScColumn::GetRangeScriptType(
+SvtScriptType ScColumn::GetRangeScriptType(
     sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, const sc::CellStoreType::iterator& itrCells )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
-        return 0;
+        return SvtScriptType::NONE;
 
     SCROW nRow = nRow1;
     std::pair<sc::CellTextAttrStoreType::iterator,size_t> aRet =
@@ -1885,7 +1885,7 @@ sal_uInt8 ScColumn::GetRangeScriptType(
 
     itPos = aRet.first; // Track the position of cell text attribute array.
 
-    sal_uInt8 nScriptType = 0;
+    SvtScriptType nScriptType = SvtScriptType::NONE;
     bool bUpdated = false;
     if (itPos->type == sc::element_type_celltextattr)
     {
@@ -1943,7 +1943,7 @@ sal_uInt8 ScColumn::GetRangeScriptType(
     return nScriptType;
 }
 
-void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
+void ScColumn::SetScriptType( SCROW nRow, SvtScriptType nType )
 {
     if (!ValidRow(nRow))
         return;

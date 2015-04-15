@@ -198,9 +198,9 @@ void SvtCJKOptions_Impl::Load()
 
     if (!bCJKFont)
     {
-        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
         //system locale is CJK
-        bool bAutoEnableCJK = (nScriptType & SCRIPTTYPE_ASIAN);
+        bool bAutoEnableCJK = bool(nScriptType & SvtScriptType::ASIAN);
 
         if (!bAutoEnableCJK)
         {
@@ -210,8 +210,8 @@ void SvtCJKOptions_Impl::Load()
             LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
             if (eSystemLanguage != LANGUAGE_SYSTEM)
             {
-                sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-                bAutoEnableCJK = (nWinScript & SCRIPTTYPE_ASIAN);
+                SvtScriptType nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
+                bAutoEnableCJK = bool(nWinScript & SvtScriptType::ASIAN);
             }
 
             //CJK keyboard is installed

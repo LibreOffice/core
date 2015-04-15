@@ -132,7 +132,7 @@ public:
 
     void SetPattern(
         const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
-        sal_uInt8 nScript );
+        SvtScriptType nScript );
 
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
@@ -167,7 +167,7 @@ public:
     long    GetAscent() const   { return nAscentPixel; }
     bool    IsRotated() const   { return bRotated; }
 
-    void    SetShrinkScale( long nScale, sal_uInt8 nScript );
+    void    SetShrinkScale( long nScale, SvtScriptType nScript );
 
     bool    HasCondHeight() const   { return pCondSet && SfxItemState::SET ==
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, true ); }
@@ -221,7 +221,7 @@ ScDrawStringsVars::~ScDrawStringsVars()
 {
 }
 
-void ScDrawStringsVars::SetShrinkScale( long nScale, sal_uInt8 nScript )
+void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
 {
     // text remains valid, size is updated
 
@@ -281,7 +281,7 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
 
 void ScDrawStringsVars::SetPattern(
     const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
-    sal_uInt8 nScript )
+    SvtScriptType nScript )
 {
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
@@ -1053,11 +1053,11 @@ static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDo
     }
 }
 
-inline bool IsAmbiguousScript( sal_uInt8 nScript )
+inline bool IsAmbiguousScript( SvtScriptType nScript )
 {
-    return ( nScript != SCRIPTTYPE_LATIN &&
-             nScript != SCRIPTTYPE_ASIAN &&
-             nScript != SCRIPTTYPE_COMPLEX );
+    return ( nScript != SvtScriptType::LATIN &&
+             nScript != SvtScriptType::ASIAN &&
+             nScript != SvtScriptType::COMPLEX );
 }
 
 bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
@@ -1463,7 +1463,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
     const SfxItemSet* pCondSet = NULL;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet* pOldCondSet = NULL;
-    sal_uInt8 nOldScript = 0;
+    SvtScriptType nOldScript = SvtScriptType::NONE;
 
     // alternative pattern instances in case we need to modify the pattern
     // before processing the cell value.
@@ -1642,11 +1642,11 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         pPattern = pAltPattern;
                     }
 
-                    sal_uInt8 nScript = mpDoc->GetCellScriptType(
+                    SvtScriptType nScript = mpDoc->GetCellScriptType(
                         ScAddress(nCellX, nCellY, nTab),
                         pPattern->GetNumberFormat(mpDoc->GetFormatTable(), pCondSet));
 
-                    if (nScript == 0)
+                    if (nScript == SvtScriptType::NONE)
                         nScript = ScGlobal::GetDefaultScriptType();
 
                     if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||

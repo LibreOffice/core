@@ -21,11 +21,10 @@
 #define INCLUDED_SVX_SVDEDXV_HXX
 
 #include <rtl/ref.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdglev.hxx>
-
 #include <svx/selectioncontroller.hxx>
-
 #include <memory>
 
 class SdrOutliner;
@@ -216,7 +215,7 @@ public:
     virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
-    virtual sal_uInt16 GetScriptType() const;
+    virtual SvtScriptType GetScriptType() const;
 
     /* new interface src537 */
     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;

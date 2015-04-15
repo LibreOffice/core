@@ -38,11 +38,6 @@
 
 #include <set>
 
-// flags for script types in use within selection
-#define LS_SCRIPT_LATIN     0x0001
-#define LS_SCRIPT_ASIAN     0x0002
-#define LS_SCRIPT_COMPLEX   0x0004
-
 namespace framework
 {
 
@@ -79,9 +74,9 @@ enum LangMenuIDs
     MID_LANG_PARA_MORE,
 };
 
-inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType nLang )
+inline bool IsScriptTypeMatchingToLanguage( SvtScriptType nScriptType, LanguageType nLang )
 {
-    return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
+    return bool(nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
 inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
@@ -135,7 +130,7 @@ FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
-        sal_Int16               nScriptType,
+        SvtScriptType    nScriptType,
         const OUString & rCurLang,
         const OUString & rKeyboardLang,
         const OUString & rGuessedTextLang );

@@ -28,6 +28,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
+#include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
 
 #include <vector>
@@ -44,8 +45,8 @@ class SvxTabStop;
 #define CHARPOSGROW     16
 #define DEFTAB          720
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = true, short nScriptType = 0 );
-sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType );
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = true, SvtScriptType nScriptType = SvtScriptType::NONE );
+sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType );
 bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );

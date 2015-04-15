@@ -156,7 +156,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SvxScriptSetItem aSetItem( nSlot, *pPool2 );
 
             // #i78017 establish the same behaviour as in Writer
-            sal_uInt16 nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            SvtScriptType nScriptTypes = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScriptTypes = pOLV->GetSelectedScriptType();
 
@@ -560,7 +560,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pPool2 );
             aSetItem.GetItemSet().Put( aEditAttr, false );
 
-            sal_uInt16 nScriptTypes = pOLV->GetSelectedScriptType();
+            SvtScriptType nScriptTypes = pOLV->GetSelectedScriptType();
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
 
             if (pSize)
@@ -756,7 +756,7 @@ ASK_ESCAPE:
             // disable "Thesaurus" if the language is not supported
             const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                            GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage())) );
+                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage())) );
             LanguageType nLang = static_cast<const SvxLanguageItem &>(rItem).GetLanguage();
 
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
@@ -888,7 +888,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
-    sal_uInt16 nScriptType = pOLV->GetSelectedScriptType();
+    SvtScriptType nScriptType = pOLV->GetSelectedScriptType();
     while(nWhich)
     {
         sal_uInt16 nEEWhich = 0;

@@ -57,8 +57,8 @@ bool NumFmtUtil::isLatinScript( sal_uLong nFormat, ScDocument& rDoc )
         aDecSep = aLocaleData.getNumDecimalSep();
     }
 
-    sal_uInt8 nScript = rDoc.GetStringScriptType(aDecSep);
-    return (nScript == 0 || nScript == SCRIPTTYPE_LATIN);
+    SvtScriptType nScript = rDoc.GetStringScriptType(aDecSep);
+    return (nScript == SvtScriptType::NONE || nScript == SvtScriptType::LATIN);
 }
 
 }

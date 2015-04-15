@@ -37,6 +37,7 @@
 
 #include <vcl/dndhelp.hxx>
 #include <svl/ondemand.hxx>
+#include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -608,9 +609,9 @@ private:
 
     void                InitScriptTypes( sal_Int32 nPara );
     sal_uInt16          GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEndPos = NULL ) const;
-    sal_uInt16          GetItemScriptType( const EditSelection& rSel ) const;
-    bool            IsScriptChange( const EditPaM& rPaM ) const;
-    bool            HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
+    SvtScriptType       GetItemScriptType( const EditSelection& rSel ) const;
+    bool                IsScriptChange( const EditPaM& rPaM ) const;
+    bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
 
     bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
                                                   long* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );

@@ -66,8 +66,8 @@ namespace SwLangHelper
         EditEngine* pEditEngine=rEditView.GetEditEngine();
 
         // the value of used script types
-        const sal_uInt16 nScriptType =pOLV->GetSelectedScriptType();
-        OUString aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
+        const SvtScriptType nScriptType =pOLV->GetSelectedScriptType();
+        OUString aScriptTypesInUse( OUString::number( static_cast<int>(nScriptType) ) );//pEditEngine->GetScriptType(aSelection)
 
         // get keyboard language
         OUString aKeyboardLang;
@@ -244,9 +244,9 @@ namespace SwLangHelper
             bool bIsSingleScriptType = true;
             switch (SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ))
             {
-                case SCRIPTTYPE_LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
-                case SCRIPTTYPE_ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
-                case SCRIPTTYPE_COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
+                case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
+                case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
+                case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
                 default:
                     bIsSingleScriptType = false;
                     OSL_FAIL("unexpected case" );
@@ -451,9 +451,9 @@ namespace SwLangHelper
         bool bIsSingleScriptType = true;
         switch (rSh.GetScriptType())
         {
-             case SCRIPTTYPE_LATIN :    nLangWhichId = RES_CHRATR_LANGUAGE; break;
-             case SCRIPTTYPE_ASIAN :    nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-             case SCRIPTTYPE_COMPLEX :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+             case SvtScriptType::LATIN :    nLangWhichId = RES_CHRATR_LANGUAGE; break;
+             case SvtScriptType::ASIAN :    nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+             case SvtScriptType::COMPLEX :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
              default: bIsSingleScriptType = false; break;
         }
 
@@ -492,16 +492,16 @@ namespace SwLangHelper
     ///     'In use' means the language(s) matching the script type(s) of the
     ///     selected text. Or in other words, the language a spell checker would use.
     ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
-    LanguageType GetCurrentLanguage( SfxItemSet aSet, sal_uInt16 nScriptType )
+    LanguageType GetCurrentLanguage( SfxItemSet aSet, SvtScriptType nScriptType )
     {
         //set language attribute to use according to the script type
         sal_uInt16 nLangWhichId = 0;
         bool bIsSingleScriptType = true;
         switch (nScriptType)
         {
-             case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE; break;
-             case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-             case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+             case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE; break;
+             case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+             case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
              default: bIsSingleScriptType = false;
         }
 

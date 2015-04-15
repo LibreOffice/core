@@ -136,7 +136,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             }
         }
 
-        const sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        const sal_uInt16 nAppScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
         SwDoc* pDoc = rDocSh.GetDoc();
 
         // initialize language
@@ -155,15 +155,15 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                     SvtLinguConfig().GetOptions( aLinguOpt );
                     switch(nAppScriptType)
                     {
-                        case SCRIPTTYPE_ASIAN:
-                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, SCRIPTTYPE_ASIAN));
+                        case css::i18n::ScriptType::ASIAN:
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN));
                         break;
-                        case SCRIPTTYPE_COMPLEX:
-                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, SCRIPTTYPE_COMPLEX));
+                        case css::i18n::ScriptType::COMPLEX:
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX));
                         break;
-                        //SCRIPTTYPE_LATIN:
+                        //SvtScriptType::LATIN:
                         default:
-                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, SCRIPTTYPE_LATIN));
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN));
                     }
                 }
             }

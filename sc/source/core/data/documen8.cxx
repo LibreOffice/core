@@ -1294,9 +1294,9 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                     if ( bConsiderLanguage )
                     {
-                        sal_uInt8 nScript = GetStringScriptType( aOldStr );        //TODO: cell script type?
-                        sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
-                                        ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
+                        SvtScriptType nScript = GetStringScriptType( aOldStr );        //TODO: cell script type?
+                        sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                                        ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
                         nLanguage = static_cast<const SvxLanguageItem*>(GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
                     }

@@ -894,7 +894,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             // font items from toolbox controller have to be applied for the right script type
 
             // #i78017 establish the same behaviour as in Writer
-            sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScript = pView->GetScriptType();
 
@@ -965,10 +965,10 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  choose font info according to selection script type
 
-    sal_uInt16 nScript = pView->GetScriptType();
+    SvtScriptType nScript = pView->GetScriptType();
 
     // #i55929# input-language-dependent script type (depends on input language if nothing selected)
-    sal_uInt16 nInputScript = nScript;
+    SvtScriptType nInputScript = nScript;
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     if (pOutView && !pOutView->GetSelection().HasRange())
     {

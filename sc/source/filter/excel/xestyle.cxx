@@ -877,36 +877,14 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
     return nScript;
 }
 
-namespace {
-
-sal_uInt8 getCoreScriptType(sal_Int16 nScript)
-{
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-
-    sal_uInt8 nScScript = SCRIPTTYPE_LATIN;
-    switch( nScript )
-    {
-        case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
-        case ApiScriptType::ASIAN:      nScScript = SCRIPTTYPE_ASIAN;   break;
-        case ApiScriptType::COMPLEX:    nScScript = SCRIPTTYPE_COMPLEX; break;
-        default:    OSL_FAIL( "XclExpFontHelper::GetFontFromItemSet - unknown script type" );
-    }
-
-    return nScScript;
-}
-
-}
-
 vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
 {
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-
     // if WEAK is passed, guess script type from existing items in the item set
-    if( nScript == ApiScriptType::WEAK )
+    if( nScript == css::i18n::ScriptType::WEAK )
         nScript = GetFirstUsedScript( rRoot, rItemSet );
 
     // convert to core script type constants
-    sal_uInt8 nScScript = getCoreScriptType(nScript);
+    SvtScriptType nScScript = SvtLanguageOptions::FromI18NToSvtScriptType(nScript);
 
     // fill the font object
     vcl::Font aFont;
@@ -919,7 +897,7 @@ ScDxfFont XclExpFontHelper::GetDxfFontFromItemSet(const XclExpRoot& rRoot, const
     sal_Int16 nScript = GetFirstUsedScript(rRoot, rItemSet);
 
     // convert to core script type constants
-    sal_uInt8 nScScript = getCoreScriptType(nScript);
+    SvtScriptType nScScript = SvtLanguageOptions::FromI18NToSvtScriptType(nScript);
     return ScPatternAttr::GetDxfFont(rItemSet, nScScript);
 }
 

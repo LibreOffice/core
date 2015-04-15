@@ -899,11 +899,11 @@ public:
 
     sal_uLong          AddCondFormat( ScConditionalFormat* pNew );
 
-    sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow ) const;
-    void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
+    SvtScriptType GetScriptType( SCCOL nCol, SCROW nRow ) const;
+    void SetScriptType( SCCOL nCol, SCROW nRow, SvtScriptType nType );
     void UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
-    sal_uInt8 GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+    SvtScriptType GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
     size_t GetFormulaHash( SCCOL nCol, SCROW nRow ) const;
 

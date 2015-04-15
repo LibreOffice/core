@@ -25,6 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/languageoptions.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
@@ -302,9 +303,9 @@ public:
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
-    ESelection  GetSelection();
+    ESelection      GetSelection();
 
-    sal_uInt16      GetSelectedScriptType() const;
+    SvtScriptType   GetSelectedScriptType() const;
 
     void        SetVisArea( const Rectangle& rRect );
     void        SetSelection( const ESelection& );
@@ -689,7 +690,7 @@ public:
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
-    sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
+    SvtScriptType   GetScriptType( const ESelection& rSelection ) const;
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
     void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );

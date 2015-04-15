@@ -368,7 +368,7 @@ void EditTextObject::SetVertical( bool bVertical )
     return mpImpl->SetVertical(bVertical);
 }
 
-sal_uInt16 EditTextObject::GetScriptType() const
+SvtScriptType EditTextObject::GetScriptType() const
 {
     return mpImpl->GetScriptType();
 }
@@ -569,7 +569,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
 
     bVertical = false;
     bStoreUnicodeStrings = false;
-    nScriptType = 0;
+    nScriptType = SvtScriptType::NONE;
 }
 
 EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r ) :
@@ -672,7 +672,7 @@ void EditTextObjectImpl::SetVertical( bool b )
 }
 
 
-void EditTextObjectImpl::SetScriptType( sal_uInt16 nType )
+void EditTextObjectImpl::SetScriptType( SvtScriptType nType )
 {
     nScriptType = nType;
 }
@@ -1244,7 +1244,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteUInt32( nObjSettings );
 
     rOStream.WriteUChar( bVertical );
-    rOStream.WriteUInt16( nScriptType );
+    rOStream.WriteUInt16( static_cast<sal_uInt16>(nScriptType) );
 
     rOStream.WriteUChar( bStoreUnicodeStrings );
     if ( bStoreUnicodeStrings )
@@ -1503,7 +1503,9 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 602 )
     {
-        rIStream.ReadUInt16( nScriptType );
+        sal_uInt16 aTmp16;
+        rIStream.ReadUInt16( aTmp16 );
+        nScriptType = static_cast<SvtScriptType>(aTmp16);
 
         bool bUnicodeStrings(false);
         rIStream.ReadCharAsBool( bUnicodeStrings );

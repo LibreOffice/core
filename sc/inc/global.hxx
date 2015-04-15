@@ -34,6 +34,7 @@ class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;
+enum class SvtScriptType;
 
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
@@ -689,11 +690,11 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 
     static bool IsSystemRTL();                      // depending on system language
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
-    SC_DLLPUBLIC static sal_uInt8   GetDefaultScriptType();             // for all WEAK characters
+    SC_DLLPUBLIC static SvtScriptType GetDefaultScriptType();             // for all WEAK characters
     /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
-        If more than one SCRIPTTYPE_... values are or'ed together, prefers
+        If more than one SvtScriptType::... values are or'ed together, prefers
         first COMPLEX, then ASIAN */
-    SC_DLLPUBLIC static sal_uInt16 GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich );
+    SC_DLLPUBLIC static sal_uInt16 GetScriptedWhichID( SvtScriptType nScriptType, sal_uInt16 nWhich );
 
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */

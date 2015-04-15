@@ -120,7 +120,7 @@ class ScColumn
     // must have non-empty elements. For text width, the value should be
     // either the real text width, or TEXTWIDTH_DIRTY in case it hasn't been
     // calculated yet. For script type, it should be either the real script
-    // type value or SC_SCRIPTTYPE_UNKNOWN.
+    // type value or SvtScriptType::UNKNOWN.
     sc::CellTextAttrStoreType maCellTextAttrs;
 
     // Cell notes
@@ -544,16 +544,16 @@ public:
     sal_uInt16 GetTextWidth(SCROW nRow) const;
     void SetTextWidth(SCROW nRow, sal_uInt16 nWidth);
 
-    sal_uInt8 GetScriptType( SCROW nRow ) const;
+    SvtScriptType GetScriptType( SCROW nRow ) const;
 
     /**
      * Get combined script types of the specified range. This method may
      * update script types on demand if they have not been determined.
      */
-    sal_uInt8 GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2,
+    SvtScriptType GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2,
             const sc::CellStoreType::iterator& itr);
 
-    void SetScriptType( SCROW nRow, sal_uInt8 nType );
+    void SetScriptType( SCROW nRow, SvtScriptType nType );
     void UpdateScriptTypes( SCROW nRow1, SCROW nRow2 );
 
     size_t GetFormulaHash( SCROW nRow ) const;

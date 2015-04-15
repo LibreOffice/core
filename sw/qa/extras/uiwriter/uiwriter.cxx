@@ -742,7 +742,7 @@ static void lcl_setWeight(SwWrtShell* pWrtShell, FontWeight aWeight)
 {
     SvxWeightItem aWeightItem(aWeight, EE_CHAR_WEIGHT);
     SvxScriptSetItem aScriptSetItem(SID_ATTR_CHAR_WEIGHT, pWrtShell->GetAttrPool());
-    aScriptSetItem.PutItemForScriptType(SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX, aWeightItem);
+    aScriptSetItem.PutItemForScriptType(SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX, aWeightItem);
     pWrtShell->SetAttrSet(aScriptSetItem.GetItemSet());
 }
 

@@ -167,7 +167,7 @@ namespace frm
     }
 
 
-    bool RichTextControlImpl::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, ScriptType _nForScriptType )
+    bool RichTextControlImpl::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, SvtScriptType _nForScriptType )
     {
         // let's see whether we have a handler for this attribute
         AttributeHandlerPool::const_iterator aHandlerPos = m_aAttributeHandlers.find( _nAttribute );
@@ -263,10 +263,10 @@ namespace frm
     }
 
 
-    ScriptType RichTextControlImpl::getSelectedScriptType() const
+    SvtScriptType RichTextControlImpl::getSelectedScriptType() const
     {
-        ScriptType nScript = m_pView->GetSelectedScriptType();
-        if ( !nScript )
+        SvtScriptType nScript = m_pView->GetSelectedScriptType();
+        if ( nScript == SvtScriptType::NONE )
             nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
         return nScript;
     }

@@ -1943,7 +1943,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
         sal_uInt16 nSlot = rReq.GetSlot();
         SfxItemPool& rPool = rSh.GetAttrPool();
         sal_uInt16 nWhich = rPool.GetWhich( nSlot );
-        sal_uInt16 nScripts = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+        SvtScriptType nScripts = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
         SfxItemSet aHeightSet( GetPool(),  RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE,
                                             RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,
                                             RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE,
@@ -2007,21 +2007,22 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 
                     switch(nScripts)
                     {
-                        case SCRIPTTYPE_LATIN:
+                        case SvtScriptType::LATIN:
                             nCJKSize = nHeight * nCJKSize / nWesternSize;
                             nCTLSize = nHeight * nCTLSize / nWesternSize;
                             nWesternSize = (sal_Int32) nHeight;
                         break;
-                        case SCRIPTTYPE_ASIAN:
+                        case SvtScriptType::ASIAN:
                             nCTLSize = nHeight* nCTLSize / nCJKSize;
                             nWesternSize = nHeight * nWesternSize / nCJKSize;
                             nCJKSize = (sal_Int32) nHeight;
                         break;
-                        case SCRIPTTYPE_COMPLEX:
+                        case SvtScriptType::COMPLEX:
                             nCJKSize = nHeight * nCJKSize / nCTLSize;
                             nWesternSize = nHeight * nWesternSize / nCTLSize;
                             nCTLSize = (sal_Int32) nHeight;
                         break;
+                        default: break;
                     }
                     aHeightSet.Put( SvxFontHeightItem( (sal_uInt32)nWesternSize, 100, RES_CHRATR_FONTSIZE ));
                     aHeightSet.Put( SvxFontHeightItem( (sal_uInt32)nCJKSize, 100, RES_CHRATR_CJK_FONTSIZE ));
@@ -2068,7 +2069,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
     SwWrtShell &rSh = GetShell();
     bool bFirst = true;
     boost::scoped_ptr<SfxItemSet> pFntCoreSet;
-    sal_uInt16 nScriptType = SCRIPTTYPE_LATIN;
+    SvtScriptType nScriptType = SvtScriptType::LATIN;
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )

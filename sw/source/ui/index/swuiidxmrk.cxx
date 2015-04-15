@@ -322,8 +322,8 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         sal_uInt16 nWhich;
         switch(pSh->GetScriptType())
         {
-            case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
-            case SCRIPTTYPE_COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+            case SvtScriptType::ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+            case SvtScriptType::COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
         SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);

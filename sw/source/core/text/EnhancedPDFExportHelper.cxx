@@ -1489,7 +1489,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aStructStack.clear();
 #endif
 
-    const sal_uInt8 nScript = (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+    const sal_Int16 nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
     sal_uInt16 nLangRes = RES_CHRATR_LANGUAGE;
 
     if ( i18n::ScriptType::ASIAN == nScript )

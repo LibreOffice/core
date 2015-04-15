@@ -94,7 +94,7 @@ class SwLineNumberInfo;
 class SwAuthEntry;
 class SwRewriter;
 struct SwConversionArgs;
-
+enum class SvtScriptType;
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
@@ -278,7 +278,7 @@ public:
     void GCAttr();
 
     /// @return the scripttpye of the selection.
-    sal_uInt16 GetScriptType() const;
+    SvtScriptType GetScriptType() const;
 
     /// @return the language at current cursor position.
     sal_uInt16 GetCurLang() const;

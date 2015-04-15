@@ -52,7 +52,7 @@
 #include <boost/scoped_ptr.hpp>
 
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
-                                sal_uInt16 nWhichId, sal_uInt16 nScript )
+                                sal_uInt16 nWhichId, SvtScriptType nScript )
 {
     //  take the effective item from rCoreSet according to nScript
     //  and put in rShellSet under the (base) nWhichId
@@ -73,9 +73,9 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 
-    sal_uInt8 nScript = pDoc->GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
-    sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
-                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
+    SvtScriptType nScript = pDoc->GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
+    sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                    ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
     const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
     const SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
     LanguageType eLnge;
@@ -86,8 +86,8 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
         {
             LanguageType eLatin, eCjk, eCtl;
             pDoc->GetLanguage( eLatin, eCjk, eCtl );
-            eLnge = ( nScript == SCRIPTTYPE_ASIAN ) ? eCjk :
-                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? eCtl : eLatin );
+            eLnge = ( nScript == SvtScriptType::ASIAN ) ? eCjk :
+                    ( ( nScript == SvtScriptType::COMPLEX ) ? eCtl : eLatin );
         }
     }
     else

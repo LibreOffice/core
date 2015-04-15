@@ -21,6 +21,7 @@
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
 
 #include <unoflatpara.hxx>
@@ -1159,12 +1160,12 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     pCrsr->SetMark();
                 pCrsr->GetPoint()->nContent = aCurrentOldPosition->nLeft;
                 pCrsr->GetMark()->nContent = aCurrentOldPosition->nRight;
-                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                sal_uInt16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
                 sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
                 switch(nScriptType)
                 {
-                    case SCRIPTTYPE_ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-                    case SCRIPTTYPE_COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+                    case css::i18n::ScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+                    case css::i18n::ScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                 }
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
@@ -1208,12 +1209,13 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
             while(aCurrentNewPortion != rNewPortions.end())
             {
                 // set the language attribute
-                sal_uInt16 nScriptType = GetScriptType();
+                SvtScriptType nScriptType = GetScriptType();
                 sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
                 switch(nScriptType)
                 {
-                    case SCRIPTTYPE_ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-                    case SCRIPTTYPE_COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+                    case SvtScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+                    case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+                    default: break;
                 }
                 SfxItemSet aSet(GetAttrPool(), nLangWhichId, nLangWhichId, 0);
                 GetCurAttr( aSet );
@@ -1534,13 +1536,14 @@ void SwSpellIter::ToSentenceStart()
 
 static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
-    sal_uInt16 nScriptType = rSh.GetScriptType();
+    SvtScriptType nScriptType = rSh.GetScriptType();
     sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
 
     switch(nScriptType)
     {
-        case SCRIPTTYPE_ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-        case SCRIPTTYPE_COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+        case SvtScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+        case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+        default: break;
     }
     SfxItemSet aSet(rSh.GetAttrPool(), nLangWhichId, nLangWhichId, 0);
     rSh.GetCurAttr( aSet );

@@ -1403,9 +1403,9 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
     }
 }
 
-sal_uInt16 SdrObjEditView::GetScriptType() const
+SvtScriptType SdrObjEditView::GetScriptType() const
 {
-    sal_uInt16 nScriptType = 0;
+    SvtScriptType nScriptType = SvtScriptType::NONE;
 
     if( IsTextEdit() )
     {
@@ -1430,8 +1430,8 @@ sal_uInt16 SdrObjEditView::GetScriptType() const
         }
     }
 
-    if( nScriptType == 0 )
-        nScriptType = SCRIPTTYPE_LATIN;
+    if( nScriptType == SvtScriptType::NONE )
+        nScriptType = SvtScriptType::LATIN;
 
     return nScriptType;
 }

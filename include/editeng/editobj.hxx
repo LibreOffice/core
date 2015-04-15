@@ -28,6 +28,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -92,7 +93,7 @@ public:
     bool IsVertical() const;
     void SetVertical( bool bVertical );
 
-    sal_uInt16 GetScriptType() const;
+    SvtScriptType GetScriptType() const;
 
     EditTextObject* Clone() const;
 

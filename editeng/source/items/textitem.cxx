@@ -3316,13 +3316,13 @@ bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
 |*    class SvxScriptTypeItemItem
 *************************************************************************/
 
-SvxScriptTypeItem::SvxScriptTypeItem( sal_uInt16 nType )
-    : SfxUInt16Item( SID_ATTR_CHAR_SCRIPTTYPE, nType )
+SvxScriptTypeItem::SvxScriptTypeItem( SvtScriptType nType )
+    : SfxUInt16Item( SID_ATTR_CHAR_SCRIPTTYPE, static_cast<sal_uInt16>(nType) )
 {
 }
 SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool * ) const
 {
-    return new SvxScriptTypeItem( GetValue() );
+    return new SvxScriptTypeItem( static_cast<SvtScriptType>(GetValue()) );
 }
 
 /*************************************************************************
@@ -3363,80 +3363,73 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
     return pI;
 }
 
-const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16 nScript )
+const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, SvtScriptType nScript )
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nSlotId, rSet, nLatin, nAsian, nComplex );
 
     const SfxPoolItem *pRet, *pAsn, *pCmplx;
-    switch( nScript )
+    if (nScript == SvtScriptType::ASIAN)
     {
-    default:                //no one valid -> match to latin
-    //  case SCRIPTTYPE_LATIN:
-        pRet = GetItemOfScriptSet( rSet, nLatin );
-        break;
-    case SCRIPTTYPE_ASIAN:
         pRet = GetItemOfScriptSet( rSet, nAsian );
-        break;
-    case SCRIPTTYPE_COMPLEX:
+    } else if (nScript == SvtScriptType::COMPLEX)
+    {
         pRet = GetItemOfScriptSet( rSet, nComplex );
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN:
+    } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::ASIAN))
+    {
         if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
             0 == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
             *pRet != *pAsn )
             pRet = 0;
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_COMPLEX:
+    } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::COMPLEX))
+    {
         if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
             0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pCmplx )
             pRet = 0;
-        break;
-
-    case SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
+    } else if (nScript == (SvtScriptType::ASIAN|SvtScriptType::COMPLEX))
+    {
         if( 0 == (pRet = GetItemOfScriptSet( rSet, nAsian )) ||
             0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pCmplx )
             pRet = 0;
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
+    } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::ASIAN|SvtScriptType::COMPLEX))
+    {
         if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
             0 == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
             0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pAsn || *pRet != *pCmplx )
             pRet = 0;
-        break;
+    } else {
+        //no one valid -> match to latin
+        pRet = GetItemOfScriptSet( rSet, nLatin );
     }
     return pRet;
 }
 
-const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( sal_uInt16 nScript ) const
+const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( SvtScriptType nScript ) const
 {
     return GetItemOfScript( Which(), GetItemSet(), nScript );
 }
 
-void SvxScriptSetItem::PutItemForScriptType( sal_uInt16 nScriptType,
+void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
                                              const SfxPoolItem& rItem )
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
 
     SfxPoolItem* pCpy = rItem.Clone();
-    if( SCRIPTTYPE_LATIN & nScriptType )
+    if( SvtScriptType::LATIN & nScriptType )
     {
         pCpy->SetWhich( nLatin );
         GetItemSet().Put( *pCpy );
     }
-    if( SCRIPTTYPE_ASIAN & nScriptType )
+    if( SvtScriptType::ASIAN & nScriptType )
     {
         pCpy->SetWhich( nAsian );
         GetItemSet().Put( *pCpy );
     }
-    if( SCRIPTTYPE_COMPLEX & nScriptType )
+    if( SvtScriptType::COMPLEX & nScriptType )
     {
         pCpy->SetWhich( nComplex );
         GetItemSet().Put( *pCpy );
@@ -3538,33 +3531,6 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
     }
 }
 
-
-sal_uInt16 GetI18NScriptTypeOfLanguage( sal_uInt16 nLang )
-{
-    return GetI18NScriptType( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) );
-}
-
-sal_uInt16 GetItemScriptType( short nI18NType )
-{
-    switch ( nI18NType )
-    {
-        case i18n::ScriptType::LATIN:   return SCRIPTTYPE_LATIN;
-        case i18n::ScriptType::ASIAN:   return SCRIPTTYPE_ASIAN;
-        case i18n::ScriptType::COMPLEX: return SCRIPTTYPE_COMPLEX;
-    }
-    return 0;
-}
-
-short GetI18NScriptType( sal_uInt16 nItemType )
-{
-    switch ( nItemType )
-    {
-        case SCRIPTTYPE_LATIN:      return i18n::ScriptType::LATIN;
-        case SCRIPTTYPE_ASIAN:      return i18n::ScriptType::ASIAN;
-        case SCRIPTTYPE_COMPLEX:    return i18n::ScriptType::COMPLEX;
-    }
-    return 0;
-}
 
 bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {

@@ -1686,7 +1686,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+            rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 
         // create writing direction information:
         if ( pParaPortion->aWritingDirectionInfos.empty() )
@@ -1776,15 +1776,15 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
                 *pEndPos = itr->nEndPos;
         }
     }
-    return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+    return nScriptType ? nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
-sal_uInt16 ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
+SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
 {
     EditSelection aSel( rSel );
     aSel.Adjust( aEditDoc );
 
-    short nScriptType = 0;
+    SvtScriptType nScriptType = SvtScriptType::NONE;
 
     sal_Int32 nStartPara = GetEditDoc().GetPos( aSel.Min().GetNode() );
     sal_Int32 nEndPara = GetEditDoc().GetPos( aSel.Max().GetNode() );
@@ -1821,11 +1821,11 @@ sal_uInt16 ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
             if (bStartInRange || bEndInRange)
             {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
-                    nScriptType |= ::GetItemScriptType( rTypes[n].nScriptType );
+                    nScriptType |= SvtLanguageOptions::FromI18NToSvtScriptType( rTypes[n].nScriptType );
             }
         }
     }
-    return nScriptType ? nScriptType : SvtLanguageOptions::GetScriptTypeOfLanguage( GetDefaultLanguage() );
+    return bool(nScriptType) ? nScriptType : SvtLanguageOptions::GetScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const

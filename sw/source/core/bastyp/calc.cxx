@@ -212,7 +212,7 @@ inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
 {
     return static_cast<const SvxLanguageItem&>(rDoc.GetDefault(
                GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                 GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ))
+                                 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ))
             )).GetLanguage();
 }
 

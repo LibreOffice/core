@@ -281,13 +281,13 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 SvxLanguageItem SwAnnotationWin::GetLanguage()
 {
     // set initial language for outliner
-    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
     sal_uInt16 nLangWhichId = 0;
     switch (nScriptType)
     {
-        case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
-        case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-        case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+        case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
+        case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+        case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
         default: OSL_FAIL("GetLanguage: wrong script type");
     }
     return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);

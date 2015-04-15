@@ -86,12 +86,12 @@ static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLa
         else
         {
             sal_uInt16 nLangWhichId = 0;
-            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
+            SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
             switch (nScriptType)
             {
-                case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE; break;
-                case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE; break;
+                case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
                 default:
                     OSL_FAIL("unexpected case" );
                     return;

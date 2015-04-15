@@ -2028,11 +2028,11 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         /******************************************************
                         * normal text object: adjust text height
                         ******************************************************/
-                        sal_uLong nScriptType = pObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
+                        SvtScriptType nScriptType = pObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
                         sal_uInt16 nWhich = EE_CHAR_FONTHEIGHT;
-                        if ( nScriptType == SCRIPTTYPE_ASIAN )
+                        if ( nScriptType == SvtScriptType::ASIAN )
                             nWhich = EE_CHAR_FONTHEIGHT_CJK;
-                        else if ( nScriptType == SCRIPTTYPE_COMPLEX )
+                        else if ( nScriptType == SvtScriptType::COMPLEX )
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
                         // use more modern method to scale the text height

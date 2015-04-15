@@ -22,6 +22,7 @@
 
 #include "rtattributes.hxx"
 #include <rtl/ref.hxx>
+#include <svl/languageoptions.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -38,7 +39,7 @@ namespace frm
     public:
         virtual     AttributeId     getAttributeId( ) const = 0;
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const = 0;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const = 0;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const = 0;
 
     protected:
         virtual ~IAttributeHandler() {}
@@ -60,14 +61,14 @@ namespace frm
         // IAttributeHandler
         virtual     AttributeId     getAttributeId( ) const SAL_OVERRIDE;
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE = 0;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE = 0;
 
     protected:
         /// helper method calling implGetCheckState
         AttributeCheckState getCheckState( const SfxItemSet& _rAttribs ) const;
 
         /// helper method putting an item into a set, respecting a script type
-        void        putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, ScriptType _nForScriptType ) const;
+        void        putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, SvtScriptType _nForScriptType ) const;
 
         // pseudo-abstract
         virtual     AttributeCheckState  implGetCheckState( const SfxPoolItem& _rItem ) const;
@@ -91,7 +92,7 @@ namespace frm
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class LineSpacingHandler : public AttributeHandler
@@ -104,7 +105,7 @@ namespace frm
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class EscapementHandler : public AttributeHandler
@@ -117,7 +118,7 @@ namespace frm
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class SlotHandler : public AttributeHandler
@@ -130,7 +131,7 @@ namespace frm
 
     public:
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class BooleanHandler : public AttributeHandler
@@ -140,7 +141,7 @@ namespace frm
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class FontSizeHandler : public AttributeHandler
@@ -150,7 +151,7 @@ namespace frm
 
     public:
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
     class ParagraphDirectionHandler : public AttributeHandler
@@ -165,7 +166,7 @@ namespace frm
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
 

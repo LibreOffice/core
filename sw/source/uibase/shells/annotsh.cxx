@@ -682,7 +682,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
                 {
-                    sal_uInt16 nScriptType = pOLV->GetSelectedScriptType();
+                    SvtScriptType nScriptType = pOLV->GetSelectedScriptType();
                     SfxItemPool* pSecondPool = aEditAttr.GetPool()->GetSecondaryPool();
                     if( !pSecondPool )
                         pSecondPool = aEditAttr.GetPool();
@@ -1347,7 +1347,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
             {
                 const SfxPoolItem &rItem = rView.GetWrtShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                            GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage())) );
+                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage())) );
                 LanguageType nLang = static_cast<const SvxLanguageItem &>(
                                                         rItem).GetLanguage();
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
@@ -1660,7 +1660,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     }
 
     SfxItemSet aSet(pOLV->GetAttribs());
-    sal_uInt16 nScript = pOLV->GetSelectedScriptType();
+    SvtScriptType nScript = pOLV->GetSelectedScriptType();
     SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
@@ -1671,7 +1671,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         else
             aSetDlgFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
         if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }
@@ -1741,12 +1741,12 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
-        sal_uInt16 nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
-        if( SCRIPTTYPE_LATIN & nScriptBreak )
+        SvtScriptType nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
+        if( SvtScriptType::LATIN & nScriptBreak )
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO );
-        if( SCRIPTTYPE_ASIAN & nScriptBreak )
+        if( SvtScriptType::ASIAN & nScriptBreak )
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
-        if( SCRIPTTYPE_COMPLEX & nScriptBreak )
+        if( SvtScriptType::COMPLEX & nScriptBreak )
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
         pOLV->SetAttribs(aSetFont);
 

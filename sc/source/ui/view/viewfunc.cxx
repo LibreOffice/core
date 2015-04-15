@@ -782,9 +782,9 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-sal_uInt8 ScViewFunc::GetSelectionScriptType()
+SvtScriptType ScViewFunc::GetSelectionScriptType()
 {
-    sal_uInt8 nScript = 0;
+    SvtScriptType nScript = SvtScriptType::NONE;
 
     ScDocument* pDoc = GetViewData().GetDocument();
     const ScMarkData& rMark = GetViewData().GetMarkData();
@@ -802,7 +802,7 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
         nScript = pDoc->GetRangeScriptType(aRanges);
     }
 
-    if (nScript == 0)
+    if (nScript == SvtScriptType::NONE)
         nScript = ScGlobal::GetDefaultScriptType();
 
     return nScript;

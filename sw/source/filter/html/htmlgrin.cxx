@@ -1037,15 +1037,16 @@ void SwHTMLParser::InsertBodyOptions()
             sal_uInt16 nWhich = 0;
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
-            case SCRIPTTYPE_LATIN:
+            case SvtScriptType::LATIN:
                 nWhich = RES_CHRATR_LANGUAGE;
                 break;
-            case SCRIPTTYPE_ASIAN:
+            case SvtScriptType::ASIAN:
                 nWhich = RES_CHRATR_CJK_LANGUAGE;
                 break;
-            case SCRIPTTYPE_COMPLEX:
+            case SvtScriptType::COMPLEX:
                 nWhich = RES_CHRATR_CTL_LANGUAGE;
                 break;
+            default: break;
             }
             if( nWhich )
             {

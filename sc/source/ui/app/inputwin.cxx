@@ -1410,8 +1410,8 @@ void ScMultiTextWnd::InitEditEngine()
     if (pDocSh)
     {
         ScDocument& rDoc = pDocSh->GetDocument(); // any document
-        sal_uInt8 nScript = rDoc.GetStringScriptType( aString );
-        if ( nScript & SCRIPTTYPE_COMPLEX )
+        SvtScriptType nScript = rDoc.GetStringScriptType( aString );
+        if ( nScript & SvtScriptType::COMPLEX )
             Invalidate();
     }
 }
@@ -1783,8 +1783,8 @@ void ScTextWnd::StartEditEngine()
         if ( pObjSh && pObjSh->ISA(ScDocShell) )
         {
             ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();    // any document
-            sal_uInt8 nScript = rDoc.GetStringScriptType( aString );
-            if ( nScript & SCRIPTTYPE_COMPLEX )
+            SvtScriptType nScript = rDoc.GetStringScriptType( aString );
+            if ( nScript & SvtScriptType::COMPLEX )
                 Invalidate();
         }
     }
@@ -1876,8 +1876,8 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
             else
             {
                 //  test if CTL script type is involved
-                sal_uInt8 nOldScript = 0;
-                sal_uInt8 nNewScript = 0;
+                SvtScriptType nOldScript = SvtScriptType::NONE;
+                SvtScriptType nNewScript = SvtScriptType::NONE;
                 SfxObjectShell* pObjSh = SfxObjectShell::Current();
                 if ( pObjSh && pObjSh->ISA(ScDocShell) )
                 {
@@ -1886,7 +1886,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                     nOldScript = rDoc.GetStringScriptType( aString );
                     nNewScript = rDoc.GetStringScriptType( rNewString );
                 }
-                bPaintAll = ( nOldScript & SCRIPTTYPE_COMPLEX ) || ( nNewScript & SCRIPTTYPE_COMPLEX );
+                bPaintAll = ( nOldScript & SvtScriptType::COMPLEX ) || ( nNewScript & SvtScriptType::COMPLEX );
             }
 
             if ( bPaintAll )

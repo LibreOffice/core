@@ -73,7 +73,7 @@ DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
     : svt::PopupMenuControllerBase(xContext)
     , m_bShowMenu(true)
-    , m_nScriptType(LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX)
+    , m_nScriptType(SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX)
     , m_aLangGuessHelper(xContext)
 {
 }
@@ -106,7 +106,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
         return;
 
     m_bShowMenu = true;
-    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
+    m_nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;  //set the default value
 
     Sequence< OUString > aSeq;
 
@@ -117,7 +117,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
             // Retrieve all other values from the sequence and
             // store it members!
             m_aCurLang          = aSeq[0];
-            m_nScriptType       = static_cast< sal_Int16 >(aSeq[1].toInt32());
+            m_nScriptType       = static_cast< SvtScriptType >(aSeq[1].toInt32());
             m_aKeyboardLang     = aSeq[2];
             m_aGuessedTextLang  = aSeq[3];
         }

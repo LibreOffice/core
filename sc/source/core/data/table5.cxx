@@ -1181,7 +1181,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         rCol.SetTextWidth(nRow, TEXTWIDTH_DIRTY);
 
         if ( bNumFormatChanged )
-            rCol.SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
+            rCol.SetScriptType(nRow, SvtScriptType::UNKNOWN);
 
         if ( bBroadcast )
         {   // Only with CalcAsShown
@@ -1221,7 +1221,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 continue;
 
             if ( bNumFormatChanged )
-                aCol[nCol].SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
+                aCol[nCol].SetScriptType(nRow, SvtScriptType::UNKNOWN);
 
             if ( bBroadcast )
             {   // Only with CalcAsShown

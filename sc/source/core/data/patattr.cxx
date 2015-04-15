@@ -217,10 +217,10 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet
 
 namespace {
 
-void getFontIDsByScriptType(sal_uInt8 nScript,
+void getFontIDsByScriptType(SvtScriptType nScript,
 sal_uInt16& nFontId, sal_uInt16& nHeightId, sal_uInt16& nWeightId, sal_uInt16& nPostureId, sal_uInt16& nLangId)
 {
-    if ( nScript == SCRIPTTYPE_ASIAN )
+    if ( nScript == SvtScriptType::ASIAN )
     {
         nFontId    = ATTR_CJK_FONT;
         nHeightId  = ATTR_CJK_FONT_HEIGHT;
@@ -228,7 +228,7 @@ sal_uInt16& nFontId, sal_uInt16& nHeightId, sal_uInt16& nWeightId, sal_uInt16& n
         nPostureId = ATTR_CJK_FONT_POSTURE;
         nLangId    = ATTR_CJK_FONT_LANGUAGE;
     }
-    else if ( nScript == SCRIPTTYPE_COMPLEX )
+    else if ( nScript == SvtScriptType::COMPLEX )
     {
         nFontId    = ATTR_CTL_FONT;
         nHeightId  = ATTR_CTL_FONT_HEIGHT;
@@ -251,7 +251,7 @@ sal_uInt16& nFontId, sal_uInt16& nHeightId, sal_uInt16& nWeightId, sal_uInt16& n
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
         OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, sal_uInt8 nScript,
+        const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
     // Read items
@@ -493,13 +493,13 @@ void ScPatternAttr::GetFont(
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
         OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, sal_uInt8 nScript,
+        const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {
     GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
 }
 
-ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, sal_uInt8 nScript)
+ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)
 {
     sal_uInt16 nFontId, nHeightId, nWeightId, nPostureId, nLangId;
     getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);

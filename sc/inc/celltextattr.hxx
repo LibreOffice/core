@@ -11,13 +11,14 @@
 #define INCLUDED_SC_CELLTEXTATTR_HXX
 
 #include <sal/types.h>
+#include <svl/languageoptions.hxx>
 
 namespace sc {
 
 struct CellTextAttr
 {
-    sal_uInt16 mnTextWidth;
-    sal_uInt8 mnScriptType;
+    sal_uInt16    mnTextWidth;
+    SvtScriptType mnScriptType;
 
     CellTextAttr();
     CellTextAttr(const CellTextAttr& r);

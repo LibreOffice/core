@@ -333,9 +333,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_CHARMAP:
             {
-                sal_uInt16 nScript = pTableView->GetSelectedScriptType();
-                sal_uInt16 nFontWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_FONTINFO_CJK :
-                                ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
+                SvtScriptType nScript = pTableView->GetSelectedScriptType();
+                sal_uInt16 nFontWhich = ( nScript == SvtScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK :
+                                ( ( nScript == SvtScriptType::COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
                                                                         EE_CHAR_FONTINFO );
                 const SvxFontItem& rItem = static_cast<const SvxFontItem&>(
                             pTableView->GetAttribs().Get(nFontWhich));
@@ -377,10 +377,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( !aString.isEmpty() )
                 {
                     //  if string contains WEAK characters, set all fonts
-                    sal_uInt8 nSetScript;
+                    SvtScriptType nSetScript;
                     ScDocument* pDoc = pViewData->GetDocument();
                     if ( pDoc->HasStringWeakCharacters( aString ) )
-                        nSetScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                        nSetScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
                     else
                         nSetScript = pDoc->GetStringScriptType( aString );
 
@@ -844,11 +844,11 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 if (pArgs)
                 {
                     // #i78017 establish the same behaviour as in Writer
-                    sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
                     if (nSlot == SID_ATTR_CHAR_FONT)
                     {
                         nScript = pEditView->GetSelectedScriptType();
-                        if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+                        if (nScript == SvtScriptType::NONE) nScript = ScGlobal::GetDefaultScriptType();
                     }
 
                     SfxItemPool& rPool = GetPool();
@@ -876,7 +876,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_WEIGHT:
             {
                 // #i78017 establish the same behaviour as in Writer
-                sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
 
@@ -899,7 +899,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_POSTURE:
             {
                 // #i78017 establish the same behaviour as in Writer
-                sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
 
@@ -1058,11 +1058,11 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     //  choose font info according to selection script type
 
-    sal_uInt16 nScript = pEditView->GetSelectedScriptType();
-    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+    SvtScriptType nScript = pEditView->GetSelectedScriptType();
+    if (nScript == SvtScriptType::NONE) nScript = ScGlobal::GetDefaultScriptType();
 
     // #i55929# input-language-dependent script type (depends on input language if nothing selected)
-    sal_uInt16 nInputScript = nScript;
+    SvtScriptType nInputScript = nScript;
     if ( !pEditView->GetSelection().HasRange() )
     {
         LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();

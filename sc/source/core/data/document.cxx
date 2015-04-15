@@ -6030,16 +6030,16 @@ sal_uInt16 ScDocument::GetTextWidth( const ScAddress& rPos ) const
     return 0;
 }
 
-sal_uInt8 ScDocument::GetScriptType( const ScAddress& rPos ) const
+SvtScriptType ScDocument::GetScriptType( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetScriptType(rPos.Col(), rPos.Row());
 
-    return 0;
+    return SvtScriptType::NONE;
 }
 
-void ScDocument::SetScriptType( const ScAddress& rPos, sal_uInt8 nType )
+void ScDocument::SetScriptType( const ScAddress& rPos, SvtScriptType nType )
 {
     SCTAB nTab = rPos.Tab();
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])

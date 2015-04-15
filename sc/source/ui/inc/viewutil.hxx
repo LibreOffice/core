@@ -34,7 +34,7 @@ class ScDocument;
 class ScAddress;
 class ScRange;
 class ScMarkData;
-
+enum class SvtScriptType;
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 
 class SC_DLLPUBLIC ScViewUtil
@@ -50,7 +50,7 @@ public:
                                 ScDocument& rDocument );
 
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
-                                sal_uInt16 nWhichId, sal_uInt16 nScript );
+                                sal_uInt16 nWhichId, SvtScriptType nScript );
 
     static sal_uInt16 GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 

@@ -1393,7 +1393,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_LANGUAGE_STATUS:
             {
                 // the value of used script types
-                OUString aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
+                OUString aScriptTypesInUse( OUString::number( static_cast<int>(rSh.GetScriptType()) ) );
 
                 // get keyboard language
                 OUString aKeyboardLang;

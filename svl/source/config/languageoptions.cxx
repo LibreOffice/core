@@ -133,7 +133,7 @@ bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
 }
 
 // returns for a language the scripttype
-sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
+SvtScriptType SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 {
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
@@ -141,21 +141,52 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
 
     sal_Int16 nScriptType = MsLangId::getScriptType( nLang );
-    sal_uInt16 nScript;
+    SvtScriptType nScript;
     switch (nScriptType)
     {
         case ::com::sun::star::i18n::ScriptType::ASIAN:
-            nScript = SCRIPTTYPE_ASIAN;
+            nScript = SvtScriptType::ASIAN;
             break;
         case ::com::sun::star::i18n::ScriptType::COMPLEX:
-            nScript = SCRIPTTYPE_COMPLEX;
+            nScript = SvtScriptType::COMPLEX;
             break;
         default:
-            nScript = SCRIPTTYPE_LATIN;
+            nScript = SvtScriptType::LATIN;
     }
     return nScript;
 }
 
+SvtScriptType SvtLanguageOptions::FromI18NToSvtScriptType( sal_Int16 nI18NType )
+{
+    switch ( nI18NType )
+    {
+        case i18n::ScriptType::LATIN:   return SvtScriptType::LATIN;
+        case i18n::ScriptType::ASIAN:   return SvtScriptType::ASIAN;
+        case i18n::ScriptType::COMPLEX: return SvtScriptType::COMPLEX;
+        case i18n::ScriptType::WEAK:    return SvtScriptType::NONE; // no mapping
+        default: assert(false && nI18NType && "Unknown i18n::ScriptType"); break;
+    }
+    return SvtScriptType::NONE;
+}
+
+sal_Int16 SvtLanguageOptions::FromSvtScriptTypeToI18N( SvtScriptType nItemType )
+{
+    switch ( nItemType )
+    {
+        case SvtScriptType::NONE:       return 0;
+        case SvtScriptType::LATIN:      return i18n::ScriptType::LATIN;
+        case SvtScriptType::ASIAN:      return i18n::ScriptType::ASIAN;
+        case SvtScriptType::COMPLEX:    return i18n::ScriptType::COMPLEX;
+        case SvtScriptType::UNKNOWN:    return 0; // no mapping
+        default: assert(false && static_cast<int>(nItemType) && "unknown SvtScriptType"); break;
+    }
+    return 0;
+}
+
+sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( sal_uInt16 nLang )
+{
+    return FromSvtScriptTypeToI18N( GetScriptTypeOfLanguage( nLang ) );
+}
 
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( "System/L10N")

@@ -492,7 +492,7 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
 
 bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr )
 {
-    if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
+    if (rAttr.mnScriptType != SvtScriptType::UNKNOWN)
         // Already updated. Nothing to do.
         return false;
 

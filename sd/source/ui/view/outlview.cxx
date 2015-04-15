@@ -1404,9 +1404,9 @@ sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, DropTargetHelper&, :
 }
 
 // Re-implement GetScriptType for this view to get correct results
-sal_uInt16 OutlineView::GetScriptType() const
+SvtScriptType OutlineView::GetScriptType() const
 {
-    sal_uInt16 nScriptType = ::sd::View::GetScriptType();
+    SvtScriptType nScriptType = ::sd::View::GetScriptType();
 
     OutlinerParaObject* pTempOPObj = mrOutliner.CreateParaObject();
     if(pTempOPObj)

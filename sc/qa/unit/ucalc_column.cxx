@@ -73,9 +73,9 @@ void Test::testColumnFindEditCells()
     m_pDoc->SetString(ScAddress(1,12,0), "Some text");
     m_pDoc->SetString(ScAddress(1,13,0), "Other text");
 
-    m_pDoc->SetScriptType(ScAddress(1,11,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
-    m_pDoc->SetScriptType(ScAddress(1,12,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
-    m_pDoc->SetScriptType(ScAddress(1,13,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+    m_pDoc->SetScriptType(ScAddress(1,11,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
+    m_pDoc->SetScriptType(ScAddress(1,12,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
+    m_pDoc->SetScriptType(ScAddress(1,13,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
 
     nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,11,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), nResRow);
@@ -85,7 +85,7 @@ void Test::testColumnFindEditCells()
     for (SCROW i = 0; i <= 5; ++i)
         m_pDoc->SetString(ScAddress(2,i,0), "Text");
 
-    m_pDoc->SetScriptType(ScAddress(2,5,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+    m_pDoc->SetScriptType(ScAddress(2,5,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
 
     nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(2,1,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(-1), nResRow);

@@ -26,6 +26,7 @@ class EditView;
 class OutlinerView;
 class SfxItemSet;
 struct ESelection;
+enum class SvtScriptType;
 
 namespace SwLangHelper
 {
@@ -50,7 +51,7 @@ namespace SwLangHelper
     extern LanguageType GetLanguage( SfxItemSet aSet, sal_uInt16 nLangWhichId );
     extern LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId );
 
-    extern LanguageType GetCurrentLanguage( SfxItemSet aSet, sal_uInt16 nScriptType );
+    extern LanguageType GetCurrentLanguage( SfxItemSet aSet, SvtScriptType nScriptType );
     extern LanguageType GetCurrentLanguage( SwWrtShell &rSh );
 }
 

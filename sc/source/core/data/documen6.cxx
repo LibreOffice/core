@@ -76,10 +76,9 @@ bool ScDocument::HasStringWeakCharacters( const OUString& rString )
     return false;       // none found
 }
 
-sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
+SvtScriptType ScDocument::GetStringScriptType( const OUString& rString )
 {
-
-    sal_uInt8 nRet = 0;
+    SvtScriptType nRet = SvtScriptType::NONE;
     if (!rString.isEmpty())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
@@ -94,13 +93,13 @@ sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
                 switch ( nType )
                 {
                     case i18n::ScriptType::LATIN:
-                        nRet |= SCRIPTTYPE_LATIN;
+                        nRet |= SvtScriptType::LATIN;
                         break;
                     case i18n::ScriptType::ASIAN:
-                        nRet |= SCRIPTTYPE_ASIAN;
+                        nRet |= SvtScriptType::ASIAN;
                         break;
                     case i18n::ScriptType::COMPLEX:
-                        nRet |= SCRIPTTYPE_COMPLEX;
+                        nRet |= SvtScriptType::COMPLEX;
                         break;
                     // WEAK is ignored
                 }
@@ -112,35 +111,35 @@ sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat )
+SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat )
 {
-    sal_uInt8 nStored = GetScriptType(rPos);
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+    SvtScriptType nStored = GetScriptType(rPos);
+    if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
     Color* pColor;
     OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *xPoolHelper->GetFormTable());
 
-    sal_uInt8 nRet = GetStringScriptType( aStr );
+    SvtScriptType nRet = GetStringScriptType( aStr );
 
     SetScriptType(rPos, nRet);       // store for later calls
 
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
+SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     // if script type is set, don't have to get number formats
 
     ScAddress aPos(nCol, nRow, nTab);
-    sal_uInt8 nStored = GetScriptType(aPos);
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+    SvtScriptType nStored = GetScriptType(aPos);
+    if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
     // include number formats from conditional formatting
 
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-    if (!pPattern) return 0;
+    if (!pPattern) return SvtScriptType::NONE;
     const SfxItemSet* pCondSet = NULL;
     if ( !static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
@@ -156,10 +155,10 @@ class ScriptTypeAggregator : public sc::ColumnSpanSet::Action
 {
     ScDocument& mrDoc;
     sc::ColumnBlockPosition maBlockPos;
-    sal_uInt8 mnScriptType;
+    SvtScriptType mnScriptType;
 
 public:
-    ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(0) {}
+    ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(SvtScriptType::NONE) {}
 
     virtual void startColumn(SCTAB nTab, SCCOL nCol) SAL_OVERRIDE
     {
@@ -174,21 +173,21 @@ public:
         mnScriptType |= mrDoc.GetRangeScriptType(maBlockPos, rPos, nLength);
     };
 
-    sal_uInt8 getScriptType() const { return mnScriptType; }
+    SvtScriptType getScriptType() const { return mnScriptType; }
 };
 
 }
 
-sal_uInt8 ScDocument::GetRangeScriptType(
+SvtScriptType ScDocument::GetRangeScriptType(
     sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength )
 {
     if (!TableExists(rPos.Tab()))
-        return 0;
+        return SvtScriptType::NONE;
 
     return maTabs[rPos.Tab()]->GetRangeScriptType(rBlockPos, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
-sal_uInt8 ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
+SvtScriptType ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
 {
     sc::ColumnSpanSet aSet(false);
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)

@@ -2782,10 +2782,10 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont
                                ATTR_FONT );
 
     //  if string contains WEAK characters, set all fonts
-    sal_uInt8 nScript;
+    SvtScriptType nScript;
     ScDocument* pDoc = GetViewData().GetDocument();
     if ( pDoc->HasStringWeakCharacters( rStr ) )
-        nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+        nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
     else
         nScript = pDoc->GetStringScriptType( rStr );
 

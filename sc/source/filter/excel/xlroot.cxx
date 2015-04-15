@@ -107,9 +107,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
 
     switch( ScGlobal::GetDefaultScriptType() )
     {
-        case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
-        case SCRIPTTYPE_ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
-        case SCRIPTTYPE_COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
+        case SvtScriptType::LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
+        case SvtScriptType::ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
+        case SvtScriptType::COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
         default:    SAL_WARN( "sc", "XclRootData::XclRootData - unknown script type" );
     }
 

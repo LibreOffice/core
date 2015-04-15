@@ -28,6 +28,7 @@ class ScStyleSheet;
 struct ScSetStringParam;
 struct ScTabOpParam;
 struct ScDocumentImportImpl;
+enum class SvtScriptType;
 
 /**
  * Accessor class to ScDocument.  Its purpose is to allow import filter to
@@ -60,7 +61,7 @@ public:
     ScDocument& getDoc();
     const ScDocument& getDoc() const;
 
-    void setDefaultNumericScript(sal_uInt16 nScript);
+    void setDefaultNumericScript(SvtScriptType nScript);
 
     /**
      * Apply specified cell style to an entire sheet.
