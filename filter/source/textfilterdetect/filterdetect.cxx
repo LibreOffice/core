@@ -11,8 +11,10 @@
 
 #include <svtools/htmltokn.h>
 #include <tools/urlobj.hxx>
+#include <tools/zcodec.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -142,6 +144,20 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 
     else if (aType == "generic_Text")
     {
+        uno::Reference<io::XStream> xStream(aMediaDesc[MediaDescriptor::PROP_STREAM()], uno::UNO_QUERY);
+        if (xStream.is())
+        {
+            ZCodec aCodecGZ;
+            std::unique_ptr<SvStream> pInStream(utl::UcbStreamHelper::CreateStream(xStream));
+            std::unique_ptr<SvMemoryStream> pDecompressedStream(new SvMemoryStream());
+            if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream, false, true))
+            {
+                uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(*pDecompressedStream));
+                pDecompressedStream.release();
+                aMediaDesc[MediaDescriptor::PROP_STREAM()] <<= xStreamDecompressed;
+                aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()] <<= xStreamDecompressed->getInputStream();
+            }
+        }
         // Get the file name extension.
         INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() ) );
         OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
