@@ -285,7 +285,7 @@ private:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED FillAttrLB : public ColorListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FillAttrLB : public ColorListBox
 {
 private:
     BitmapEx        maBitmapEx;
@@ -301,7 +301,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED FillTypeLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FillTypeLB : public ListBox
 {
 
 public:
@@ -313,7 +313,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED LineLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED LineLB : public ListBox
 {
 private:
     /// bitfield
@@ -336,7 +336,7 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED LineEndLB : public ListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED LineEndLB : public ListBox
 {
 
 public:
