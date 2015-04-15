@@ -29,4 +29,5 @@ $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
       -R --append=yes --totals=yes \
       $w/UnoApiHeadersTarget/udkapi/normal \
-      $w/UnoApiHeadersTarget/offapi/normal
+      $w/UnoApiHeadersTarget/offapi/normal \
+      $w/CustomTarget/officecfg/registry
