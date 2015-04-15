@@ -203,7 +203,6 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
         SvxContourDlg       ( _pBindings, pCW, _pParent ),
         pUpdateEditingObject( NULL ),
         pCheckObj           ( NULL ),
-        aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
         nGrfChanged         ( 0UL ),
         bExecState          ( false ),
         bUpdateGraphicLinked( false ),

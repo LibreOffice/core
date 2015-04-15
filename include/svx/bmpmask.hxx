@@ -111,7 +111,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
 
     XColorListRef       pColLst;
     Color               aPipetteColor;
-    SvxBmpMaskSelectItem aSelItem;
 
     virtual bool        Close() SAL_OVERRIDE;
 

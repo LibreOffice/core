@@ -377,7 +377,6 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
                        "svx/ui/dockingcolorreplace.ui" )
     , pData(new MaskData(this, *pBindinx))
     , aPipetteColor(COL_WHITE)
-    , aSelItem(SID_BMPMASK_EXEC, *this, *pBindinx)
 {
     get(m_pTbxPipette, "toolbar");
     m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),

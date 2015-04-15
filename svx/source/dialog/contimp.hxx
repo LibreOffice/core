@@ -41,7 +41,6 @@ class SvxSuperContourDlg : public SvxContourDlg
     Size                aLastSize;
     void*               pUpdateEditingObject;
     void*               pCheckObj;
-    SvxContourDlgItem   aContourItem;
     ToolBox*            m_pTbx1;
     MetricField*        m_pMtfTolerance;
     ContourWindow*      m_pContourWnd;
