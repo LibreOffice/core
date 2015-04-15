@@ -425,8 +425,8 @@ private:
     bool isZip();
     void ensureZipIsInitialized();
 
-    librevenge::RVNGInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
-    librevenge::RVNGInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
+    static librevenge::RVNGInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
+    static librevenge::RVNGInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;

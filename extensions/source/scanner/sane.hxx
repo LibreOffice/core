@@ -98,10 +98,10 @@ private:
 
     Link                        maReloadOptionsLink;
 
-    inline oslGenericFunction
+    static inline oslGenericFunction
                     LoadSymbol( const char* );
-    void            Init();
-    void            DeInit();
+    static void     Init();
+    static void     DeInit();
 
     SANE_Status ControlOption( int, SANE_Action, void* );
 

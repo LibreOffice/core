@@ -103,7 +103,7 @@ public:
 private:
     DECL_LINK(MarkTimeout, void *);
 
-    void Print( Printer* pPrinter, const OUString& rTitle );
+    static void Print( Printer* pPrinter, const OUString& rTitle );
 
 private:
     ScrollBar*          pHScroll;
@@ -202,7 +202,7 @@ public:
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
-    void            printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& );
+    static void     printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& );
 
     bool            AdjustPageSize();
 

@@ -96,7 +96,7 @@ private:
     void                CheckWindows();
     void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy );
     void                UpdateWindows();
-    void                InvalidateBasicIDESlots();
+    static void         InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
     void                EnableScrollbars( bool bEnable );

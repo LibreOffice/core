@@ -132,13 +132,13 @@ namespace basctl
             virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const SAL_OVERRIDE;
 
         private:
-            bool    impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const;
+            static bool    impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument );
 
         private:
             bool    m_bFilterInvisible;
         };
 
-        bool FilterDocuments::impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const
+        bool FilterDocuments::impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument )
         {
             try
             {

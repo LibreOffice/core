@@ -61,7 +61,7 @@ protected:
 
     typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
         CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
     void implSetNewObjectSequence( const ::com::sun::star::uno::Sequence
         < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rObjectSeq );
@@ -69,7 +69,7 @@ protected:
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
-    OUString GetHeadlineName(
+    static OUString GetHeadlineName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
 public:

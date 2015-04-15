@@ -28,7 +28,7 @@ namespace basctl
 class SIDEModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo
 {
-    void notImplemented() throw ( ::com::sun::star::io::IOException );
+    static void notImplemented() throw ( ::com::sun::star::io::IOException );
 public:
     SIDEModel( SfxObjectShell *pObjSh = 0 );
     virtual ~SIDEModel();

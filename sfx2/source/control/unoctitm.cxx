@@ -1046,7 +1046,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     StateChanged( nSID, eState, pState, 0 );
 }
 
-void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent) const
+void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent)
 {
     if (!objSh || !objSh->isTiledRendering())
         return;

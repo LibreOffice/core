@@ -124,9 +124,9 @@ public:
         getSupportedServiceNames_Static() throw();
 
 private:
-        OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
-        OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
-        OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
+        static OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
+        static OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
+        static OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
 
 /*  static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;

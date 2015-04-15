@@ -311,7 +311,7 @@ private:
     void                CheckCompileBasic();
     bool                BasicExecute();
 
-    void                GoOnTop();
+    static void         GoOnTop();
 
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
     SbModuleRef         XModule();

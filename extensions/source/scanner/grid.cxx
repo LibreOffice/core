@@ -105,9 +105,9 @@ class GridWindow : public vcl::Window
     void drawHandles();
 
     void computeExtremes();
-    void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
+    static void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
     void computeNew();
-    double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
+    static double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
 
     virtual void MouseMove( const MouseEvent& ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& ) SAL_OVERRIDE;

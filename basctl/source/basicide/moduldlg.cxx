@@ -695,7 +695,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
                     aModName = aModName.getToken( 0, ' ', nIndex );
                 }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
-                                  aModName, m_pBasicBox->ConvertType( aDesc.GetType() ) );
+                                  aModName, TreeListBox::ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON, &aSbxItem, 0L );
             }
         }
@@ -876,7 +876,7 @@ void ObjectPage::DeleteCurrent()
             m_pBasicBox->Select( m_pBasicBox->GetCurEntry() );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
-            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, m_pBasicBox->ConvertType( eType ) );
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, TreeListBox::ConvertType( eType ) );
             pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
                                   SfxCallMode::SYNCHRON, &aSbxItem, 0L );
         }

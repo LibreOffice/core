@@ -38,7 +38,7 @@ class BibModul
         ResMgr*                 GetResMgr(){return pResMgr;}
         static BibConfig*       GetConfig();
 
-        BibDataManager*         createDataManager();
+        static BibDataManager*  createDataManager();
 
 };
 

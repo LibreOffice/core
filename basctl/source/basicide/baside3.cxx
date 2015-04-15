@@ -1346,7 +1346,7 @@ sal_Int32 DialogWindow::countPages( Printer* )
 
 void DialogWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
 {
-    pEditor->printPage( nPage, pPrinter, CreateQualifiedName() );
+    DlgEditor::printPage( nPage, pPrinter, CreateQualifiedName() );
 }
 
 void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )

@@ -122,9 +122,9 @@ public:
     static Sequence< OUString > getSupportedServiceNames_Static() throw();
 
 private:
-        OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
-        OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
-        OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
+        static OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
+        static OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
+        static OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
 };
 
 inline OUString Hyphenator::getImplementationName_Static() throw()

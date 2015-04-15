@@ -79,7 +79,7 @@ private:
 
     void                EnableButton( Button& rButton, bool bEnable );
 
-    OUString            GetInfo( SbxVariable* pVar );
+    static OUString     GetInfo( SbxVariable* pVar );
 
     void                StoreMacroDescription();
     void                RestoreMacroDescription();

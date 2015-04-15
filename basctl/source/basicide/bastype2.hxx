@@ -225,7 +225,7 @@ public:
 
     EntryDescriptor GetEntryDescriptor( SvTreeListEntry* pEntry );
 
-    ItemType        ConvertType (EntryType eType);
+    static ItemType ConvertType (EntryType eType);
     bool            IsValidEntry( SvTreeListEntry* pEntry );
 
     SvTreeListEntry*    AddEntry(
@@ -236,8 +236,8 @@ public:
     void            RemoveEntry (SvTreeListEntry*);
     void            RemoveEntry (ScriptDocument const&);
 
-    OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
-    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
+    OUString        GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
+    static void     GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry (EntryDescriptor&);
 

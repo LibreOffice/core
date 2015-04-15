@@ -47,8 +47,8 @@ protected:
     osl::Mutex                              maProtector;
     void*                                   mpData;
 
-    void                                    AcquireData();
-    void                                    ReleaseData();
+    static void                             AcquireData();
+    static void                             ReleaseData();
 
 public:
 

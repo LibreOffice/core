@@ -79,7 +79,7 @@ private:
     bool            bFillBox;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
-    void            ReleaseFocus();
+    static void     ReleaseFocus();
     void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
 
     void            ClearBox();
