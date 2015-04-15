@@ -225,6 +225,10 @@ void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentC
     OUString aFilterService;
     if (m_sProgId == "Word.Document.12")
         aFilterService = "com.sun.star.comp.Writer.WriterFilter";
+    else if (m_sProgId == "Equation.3")
+        aFilterService = "com.sun.star.comp.Math.MathTypeFilter";
+    else
+        SAL_WARN("writerfilter", "OLEHandler::importStream: unhandled m_sProgId: " << m_sProgId);
 
     if (!m_xInputStream.is() || aFilterService.isEmpty())
         return;
@@ -253,8 +257,19 @@ OUString OLEHandler::getCLSID(uno::Reference<uno::XComponentContext> xComponentC
 {
     OUString aRet;
 
-    if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext) && m_sProgId == "Word.Document.12")
-        aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
+    // See officecfg/registry/data/org/openoffice/Office/Embedding.xcu.
+    if (m_sProgId == "Word.Document.12")
+    {
+        if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext))
+            aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
+    }
+    else if (m_sProgId == "Equation.3")
+    {
+        if (officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get(xComponentContext))
+            aRet = "078B7ABA-54FC-457F-8551-6147E776A997";
+    }
+    else
+        SAL_WARN("writerfilter", "OLEHandler::getCLSID: unhandled m_sProgId: " << m_sProgId);
 
     return aRet;
 }

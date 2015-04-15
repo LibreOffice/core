@@ -49,6 +49,26 @@ public:
 
         return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
     }
+
+    virtual void preTest(const char* pFilename) SAL_OVERRIDE
+    {
+        if (OString(pFilename) == "fdo58949.docx")
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
+            pBatch->commit();
+        }
+    }
+
+    virtual void postTest(const char* pFilename) SAL_OVERRIDE
+    {
+        if (OString(pFilename) == "fdo58949.docx")
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
+            pBatch->commit();
+        }
+    }
 };
 
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")

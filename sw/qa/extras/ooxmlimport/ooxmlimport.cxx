@@ -2647,6 +2647,15 @@ DECLARE_OOXMLIMPORT_TEST(testFdo87488, "fdo87488.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(mathtype, "mathtype.docx")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+    // This failed as the Model property was empty.
+    auto xModel = getProperty< uno::Reference<lang::XServiceInfo> >(xEmbeddedObjects->getByIndex(0), "Model");
+    CPPUNIT_ASSERT(xModel->supportsService("com.sun.star.formula.FormulaProperties"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
