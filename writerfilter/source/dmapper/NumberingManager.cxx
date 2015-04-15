@@ -829,7 +829,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
 
 void ListsManager::lcl_sprm( Sprm& rSprm )
 {
-    static bool bIsStartVisited = false;
     //fill the attributes of the style sheet
     sal_uInt32 nSprmId = rSprm.getId();
     if( m_pCurrentDefinition.get() ||
@@ -838,6 +837,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         (nSprmId == NS_ooxml::LN_CT_NumPicBullet_pict && m_pCurrentNumPicBullet.get()) ||
         nSprmId == NS_ooxml::LN_CT_Numbering_numPicBullet)
     {
+        static bool bIsStartVisited = false;
         sal_Int32 nIntValue = rSprm.getValue()->getInt();
         switch( nSprmId )
         {
