@@ -250,7 +250,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_aFormfieldSprms(),
       m_aFormfieldAttributes(),
       m_nFormFieldType(RTFFormFieldType::NONE),
-      m_aObjectSprms(),
+      m_aOLEAttributes(),
       m_aObjectAttributes(),
       m_bObject(false),
       m_aFontTableEntries(),
@@ -5391,10 +5391,7 @@ RTFError RTFDocumentImpl::popState()
         uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData.get()));
         auto pStreamValue = std::make_shared<RTFValue>(xInputStream);
 
-        RTFSprms aOLEAttributes;
-        aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
-        auto pValue = std::make_shared<RTFValue>(aOLEAttributes);
-        m_aObjectSprms.set(NS_ooxml::LN_OLEObject_OLEObject, pValue);
+        m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
     }
     break;
     case Destination::OBJECT:
@@ -5407,9 +5404,13 @@ RTFError RTFDocumentImpl::popState()
             break;
         }
 
+        RTFSprms aObjectSprms;
+        auto pOLEValue = std::make_shared<RTFValue>(m_aOLEAttributes);
+        aObjectSprms.set(NS_ooxml::LN_OLEObject_OLEObject, pOLEValue);
+
         RTFSprms aObjAttributes;
         RTFSprms aObjSprms;
-        auto pValue = std::make_shared<RTFValue>(m_aObjectAttributes, m_aObjectSprms);
+        auto pValue = std::make_shared<RTFValue>(m_aObjectAttributes, aObjectSprms);
         aObjSprms.set(NS_ooxml::LN_object, pValue);
         writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aObjAttributes, aObjSprms);
         uno::Reference<drawing::XShape> xShape;
@@ -5421,7 +5422,7 @@ RTFError RTFDocumentImpl::popState()
         Mapper().props(pProperties);
         Mapper().endShape();
         m_aObjectAttributes.clear();
-        m_aObjectSprms.clear();
+        m_aOLEAttributes.clear();
         m_bObject = false;
     }
     break;

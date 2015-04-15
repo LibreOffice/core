@@ -539,7 +539,8 @@ private:
     RTFSprms m_aFormfieldAttributes;
     RTFFormFieldType m_nFormFieldType;
 
-    RTFSprms m_aObjectSprms;
+    /// OLE attributes are attributes of the ooxml:OLEObject_OLEObject sprm.
+    RTFSprms m_aOLEAttributes;
     RTFSprms m_aObjectAttributes;
     /** If we are in an object group and if the we use its
      *  \objdata element.
