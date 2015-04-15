@@ -1867,7 +1867,8 @@ bool DrawFillAttributes(
             rPaintRegion.GetOrigin().Right(),
             rPaintRegion.GetOrigin().Bottom());
 
-        if(!aPaintRange.isEmpty() &&
+        if (!aPaintRange.isEmpty() &&
+            !rPaintRegion.empty() &&
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
@@ -1916,7 +1917,7 @@ bool DrawFillAttributes(
                     pPrimitives(&rSequence);
                 drawinglayer::primitive2d::Primitive2DSequence primitives;
                 // tdf#86578 the awful lcl_SubtractFlys hack
-                if (rPaintRegion.size() > 1 || (!rPaintRegion.empty() && rPaintRegion[0] != rPaintRegion.GetOrigin()))
+                if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
                 {
                     tools::PolyPolygon tempRegion;
                     for (size_t i = 0; i < rPaintRegion.size(); ++i)
