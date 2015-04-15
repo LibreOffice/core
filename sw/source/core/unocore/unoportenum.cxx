@@ -79,7 +79,7 @@ typedef ::std::stack< PortionList_t > PortionStack_t;
 static void lcl_CreatePortions(
     TextRangeList_t & i_rPortions,
     uno::Reference< text::XText > const& i_xParentText,
-    SwUnoCrsr* pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     FrameDependSortList_t & i_rFrames,
     const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos );
 
@@ -363,8 +363,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         const sal_Int32 nEnd )
     : m_Portions()
 {
-    SwUnoCrsr* pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    auto pUnoCrsr(rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false));
     pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
@@ -382,8 +381,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         TextRangeList_t const & rPortions )
     : m_Portions( rPortions )
 {
-    SwUnoCrsr* const pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    auto pUnoCrsr(rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false));
     pUnoCrsr->Add(this);
 }
 
@@ -441,7 +439,7 @@ lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
 static uno::Reference<text::XTextRange>
 lcl_ExportFieldMark(
         uno::Reference< text::XText > const & i_xParentText,
-        SwUnoCrsr * const pUnoCrsr,
+        std::shared_ptr<SwUnoCrsr> pUnoCrsr,
         const SwTxtNode * const pTxtNode )
 {
     uno::Reference<text::XTextRange> xRef;
@@ -519,7 +517,7 @@ lcl_ExportFieldMark(
 static Reference<XTextRange>
 lcl_CreateRefMarkPortion(
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     const SwTxtAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -550,7 +548,7 @@ static void
 lcl_InsertRubyPortion(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     const SwTxtAttr & rAttr, const bool bEnd)
 {
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
@@ -562,7 +560,7 @@ lcl_InsertRubyPortion(
 static Reference<XTextRange>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    ::std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwTxtAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -590,7 +588,7 @@ lcl_CreateTOXMarkPortion(
 static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwTxtAttr & rAttr, ::std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
@@ -616,7 +614,7 @@ lcl_CreateMetaPortion(
 static void lcl_ExportBookmark(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwXBookmarkPortion_ImplList& rBkmArr,
     const sal_Int32 nIndex)
 {
@@ -656,7 +654,7 @@ static void lcl_ExportBookmark(
 static void lcl_ExportSoftPageBreak(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex)
 {
@@ -720,7 +718,7 @@ static Reference<XTextRange>
 lcl_ExportHints(
     PortionStack_t & rPortionStack,
     const Reference<XText> & xParent,
-    SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwpHints * const pHints,
     const sal_Int32 i_nStartPos,
     const sal_Int32 i_nEndPos,
@@ -1025,7 +1023,7 @@ lcl_ExportHints(
     return xRef;
 }
 
-static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
+static void lcl_MoveCursor( std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     const sal_Int32 nCurrentIndex,
     const sal_Int32 nNextFrameIndex,
     const sal_Int32 nNextPortionIndex,
@@ -1107,7 +1105,7 @@ static void lcl_FillSoftPageBreakArray(
 static void lcl_ExportRedline(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwXRedlinePortion_ImplList& rRedlineArr,
     const sal_Int32 nIndex)
 {
@@ -1138,7 +1136,7 @@ static void lcl_ExportRedline(
 static void lcl_ExportBkmAndRedline(
     TextRangeList_t & rPortions,
     Reference<XText> const & xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwXBookmarkPortion_ImplList& rBkmArr,
     SwXRedlinePortion_ImplList& rRedlineArr,
     SwSoftPageBreakList& rBreakArr,
@@ -1157,7 +1155,7 @@ static void lcl_ExportBkmAndRedline(
 static void lcl_ExportAnnotationStarts(
     TextRangeList_t & rPortions,
     Reference<XText> const & xParent,
-    const SwUnoCrsr * const pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> pUnoCrsr,
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
     const sal_Int32 nIndex)
 {
@@ -1190,7 +1188,7 @@ static void lcl_ExportAnnotationStarts(
 static sal_Int32 lcl_ExportFrames(
     TextRangeList_t & rPortions,
     Reference<XText> const & i_xParent,
-    SwUnoCrsr * const i_pUnoCrsr,
+    std::shared_ptr<SwUnoCrsr> i_pUnoCrsr,
     FrameDependSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)
 {
@@ -1246,7 +1244,7 @@ static sal_Int32 lcl_GetNextIndex(
 static void lcl_CreatePortions(
         TextRangeList_t & i_rPortions,
         uno::Reference< text::XText > const & i_xParentText,
-        SwUnoCrsr * const pUnoCrsr,
+        std::shared_ptr<SwUnoCrsr> pUnoCrsr,
         FrameDependSortList_t & i_rFrames,
         const sal_Int32 i_nStartPos,
         const sal_Int32 i_nEndPos )

@@ -168,15 +168,15 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
         if (*m_entries.back()->GetPoint() != rPos)
         {
-            SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
-            m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
+            auto pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
+            m_entries.push_back(pCursor);
         }
         bRet = true;
     }
     else {
         if ( (!m_entries.empty() && *m_entries.back()->GetPoint() != rPos) || m_entries.empty() ) {
-            SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
-            m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
+            auto pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
+            m_entries.push_back(pCursor);
             bRet = true;
         }
         if (m_entries.size() > 1 && *m_entries.back()->GetPoint() == rPos)

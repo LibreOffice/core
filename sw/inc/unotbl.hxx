@@ -457,7 +457,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    SwUnoCrsr*                  pTblCrsr;
+    std::shared_ptr<SwUnoCrsr>                  pTblCrsr;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -466,7 +466,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
 public:
-    SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
+    SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     std::vector< css::uno::Reference< css::table::XCell > > getCells();

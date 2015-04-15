@@ -161,9 +161,9 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
+    ::std::shared_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -177,7 +177,7 @@ sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException, std::excep
 }
 
 SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,
-        SwUnoCrsr const*const pPortionCrsr,
+        std::shared_ptr<SwUnoCrsr> pPortionCrsr,
         uno::Reference< text::XText > const& xParent, bool const bStart)
     : SwXTextPortion(pPortionCrsr, xParent,
             (bStart) ? PORTION_REDLINE_START : PORTION_REDLINE_END)
@@ -539,9 +539,8 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) t
     {
         SwPaM aPam(*pNodeIndex);
         aPam.Move(fnMoveForward, fnGoNode);
-        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-        xRet = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
+        auto pUnoCursor(GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
+        xRet = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
     }
     return xRet;
 }

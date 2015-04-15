@@ -41,10 +41,10 @@ SwUnoCrsr::~SwUnoCrsr()
     {
         // then remove cursor from array
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        if( !rTbl.erase( this ) )
-        {
-            OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
-        }
+        //if( !rTbl.erase( this ) )
+        //{
+        //    OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
+        //}
     }
 
     // delete the whole ring
@@ -56,9 +56,9 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-SwUnoCrsr * SwUnoCrsr::Clone() const
+std::shared_ptr<SwUnoCrsr> SwUnoCrsr::Clone() const
 {
-    SwUnoCrsr * pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
+    auto pNewCrsr(GetDoc()->CreateUnoCrsr( *GetPoint() ));
     if (HasMark())
     {
         pNewCrsr->SetMark();
@@ -67,11 +67,9 @@ SwUnoCrsr * SwUnoCrsr::Clone() const
     return pNewCrsr;
 }
 
-SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
+std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
 {
-    SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
-        GetDoc()->CreateUnoCrsr(
-            *GetPoint(), true /* create SwUnoTableCrsr */ ) );
+    auto pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint(), true /* create SwUnoTableCrsr */ );
     OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
     if (pNewCrsr && HasMark())
     {
@@ -240,15 +238,6 @@ void SwUnoTableCrsr::MakeBoxSels()
             if( pTblNd && 0 != ( pBox = pTblNd->GetTable().GetTblBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );
         }
-    }
-}
-
-SwUnoCrsrTbl::~SwUnoCrsrTbl()
-{
-    while (!empty())
-    {
-        delete *begin();
-        erase( begin() );
     }
 }
 

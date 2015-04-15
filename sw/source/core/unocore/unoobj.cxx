@@ -662,17 +662,18 @@ public:
     const enum CursorType       m_eType;
     const uno::Reference< text::XText > m_xParentText;
     bool                        m_bIsDisposed;
-
+    std::shared_ptr<SwUnoCrsr> m_pCrsr;
     Impl(   SwDoc & rDoc,
             const enum CursorType eType,
             uno::Reference<text::XText> xParent,
             SwPosition const& rPoint, SwPosition const*const pMark)
-        : SwClient(rDoc.CreateUnoCrsr(rPoint, false))
-        , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
+        :  m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
         , m_bIsDisposed(false)
+        , m_pCrsr(rDoc.CreateUnoCrsr(rPoint, false))
     {
+        m_pCrsr->Add(this);
         if (pMark)
         {
             GetCursor()->SetMark();
@@ -2051,7 +2052,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
-    ::std::unique_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
+    auto pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
         pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -3018,8 +3019,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
 
-    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-        rUnoCursor.GetDoc()->CreateUnoCrsr(*rUnoCursor.GetPoint()) );
+    auto pNewCrsr( rUnoCursor.GetDoc()->CreateUnoCrsr(*rUnoCursor.GetPoint()) );
     if (rUnoCursor.HasMark())
     {
         pNewCrsr->SetMark();

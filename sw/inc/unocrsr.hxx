@@ -64,7 +64,7 @@ public:
                                     { m_bSkipOverHiddenSections = bFlag; }
 
     // make copy of cursor
-    virtual SwUnoCrsr * Clone() const;
+    virtual std::shared_ptr<SwUnoCrsr> Clone() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 };
@@ -89,7 +89,7 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
-    virtual SwUnoTableCrsr * Clone() const SAL_OVERRIDE;
+    virtual std::shared_ptr<SwUnoCrsr> Clone() const SAL_OVERRIDE;
 
     void MakeBoxSels();
 

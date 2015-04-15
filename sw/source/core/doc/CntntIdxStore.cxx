@@ -379,13 +379,16 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto
 
 void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
-    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTbl())
+    for (auto& pWeakCrsr : pDoc->GetUnoCrsrTbl())
     {
-        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
+        auto pCrsr(pWeakCrsr.lock());
+        if(!pCrsr)
+            continue;
+        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pCrsr.get()))->GetRingContainer())
         {
             lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, rPaM);
         }
-        const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
+        const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pCrsr.get());
         if( pUnoTblCrsr )
         {
             for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing())->GetRingContainer())

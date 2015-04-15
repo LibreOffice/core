@@ -1500,7 +1500,7 @@ public:
 
     // Uno - Interfaces
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *mpUnoCrsrTbl; }
-    SwUnoCrsr* CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr = false );
+    std::shared_ptr<SwUnoCrsr> CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr = false );
 
     // FeShell - Interfaces
     // !!! These assume always an existing layout !!!

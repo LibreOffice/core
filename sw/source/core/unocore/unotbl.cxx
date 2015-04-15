@@ -1114,12 +1114,12 @@ uno::Reference<container::XEnumeration> SwXCell::createEnumeration(void) throw( 
         return uno::Reference<container::XEnumeration>();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     // remember table and start node for later travelling
     // (used in export of tables in tables)
     SwTable const*const pTable(&pSttNd->FindTableNode()->GetTable());
-    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_TBLTEXT, pSttNd, pTable);
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_TBLTEXT, pSttNd, pTable);
 }
 
 uno::Type SAL_CALL SwXCell::getElementType(void) throw( uno::RuntimeException, std::exception )
@@ -1419,11 +1419,11 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     SwDoc* pDoc = pFmt->GetDoc();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-    rTblCrsr.MakeBoxSels();
+    SwUnoTableCrsr* rTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    rTblCrsr->MakeBoxSels();
 }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor* pTableSelection) :
@@ -1431,7 +1431,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     aCrsrDepend(this, 0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
-    SwUnoCrsr* pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), true);
+    auto pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), true);
     if(pTableSelection->HasMark())
     {
         pUnoCrsr->SetMark();
@@ -2202,19 +2202,16 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, 
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
-    SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     pUnoCrsr->SetRemainInSection(false);
     const SwTableBox* pBRBox(pTable->GetTblBox(rBRName));
     if(!pBRBox)
-    {
-        delete pUnoCrsr;
         return nullptr;
-    }
     pUnoCrsr->SetMark();
     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
     pCrsr->MakeBoxSels();
     // pUnoCrsr will be provided and will not be deleted
     return new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
@@ -2582,7 +2579,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
                     // set cursor to top left cell
-                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
+                    auto pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     pUnoCrsr->SetRemainInSection( false );
 
@@ -2626,7 +2623,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aSet.Put(aBoxInfo);
 
                     pDoc->SetTabBorders(rCrsr, aSet);
-                    delete pUnoCrsr;
                 }
                 break;
 
@@ -2772,7 +2768,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
                     // set cursor to top left cell
-                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
+                    auto pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     pUnoCrsr->SetRemainInSection( false );
 
@@ -2833,7 +2829,6 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
                         aRet <<= aTableBorder;
                     }
-                    delete pUnoCrsr;
                 }
                 break;
 
@@ -3143,10 +3138,10 @@ uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames(void) throw( uno:
         "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
+SwXCellRange::SwXCellRange(std::shared_ptr<SwUnoCrsr> pCrsr, SwFrmFmt& rFrmFmt,
     SwRangeDescriptor& rDesc)
     : SwClient(&rFrmFmt)
-    , aCursorDepend(this, pCrsr)
+    , aCursorDepend(this, pCrsr.get())
     , m_ChartListeners(m_Mutex)
     ,
     aRgDesc(rDesc),
@@ -3173,8 +3168,6 @@ std::vector< uno::Reference< table::XCell > > SwXCellRange::getCells()
 
 SwXCellRange::~SwXCellRange()
 {
-    SolarMutexGuard aGuard;
-    delete pTblCrsr;
 }
 
 uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
@@ -3230,7 +3223,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // set cursor in the upper-left cell of the range
-                SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+                auto pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( false );
                 const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
@@ -3239,14 +3232,12 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
                     pCrsr->MakeBoxSels();
                     // pUnoCrsr will be provided and will not be deleted
                     SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, aNewDesc);
                     aRet = pCellRange;
                 }
-                else
-                    delete pUnoCrsr;
             }
         }
     }
@@ -3463,7 +3454,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // first look at the attributes of the cursor
-                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr.get());
                     SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
@@ -3878,7 +3869,7 @@ sal_uInt16 SwXCellRange::getRowCount(void)
 const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
 {
     SwFrmFmt* pFmt = GetFrmFmt();
-    return pFmt ? pTblCrsr : nullptr;
+    return pFmt ? pTblCrsr.get() : nullptr;
 }
 
 void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -3996,14 +3987,13 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
     UnoActionContext aAction(pFrmFmt->GetDoc());
-    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     {
         // remove actions
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
     pFrmFmt->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
-    delete pUnoCrsr;
 }
 
 void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
@@ -4027,7 +4017,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
-    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     pUnoCrsr->SetRemainInSection( false );
     const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
@@ -4037,12 +4027,11 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->SetMark();
     pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
-    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrmFmt->GetDoc());
         pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
-        delete pUnoCrsr;
     }
     {
         // invalidate all actions
@@ -4135,7 +4124,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     UnoActionContext aAction(pFrmFmt->GetDoc());
-    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
     {
@@ -4144,7 +4133,6 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 
     pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
-    delete pUnoCrsr;
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)
@@ -4169,7 +4157,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
-    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     pUnoCrsr->SetRemainInSection(false);
     const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
@@ -4179,12 +4167,11 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->SetMark();
     pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
-    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrmFmt->GetDoc());
         pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
-        delete pUnoCrsr;
     }
     {
         // invalidate all actions

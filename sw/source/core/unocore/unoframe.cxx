@@ -3263,10 +3263,9 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     if(pFmt)
     {
         SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
-        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-                GetDoc()->CreateUnoCrsr(aPos, false));
+        auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
-        aRef = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_FRAME);
+        aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
 }

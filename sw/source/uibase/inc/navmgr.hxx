@@ -10,8 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVMGR_HXX
 
 #include <vector>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "swtypes.hxx"
 
@@ -31,7 +30,7 @@ private:
      * (e.g. click a link, or double click an entry from the navigator).
      * Every use of the back/forward buttons results in moving the stack pointer within the navigation history
      */
-    typedef ::std::vector< ::boost::shared_ptr<SwUnoCrsr> > Stack_t;
+    typedef ::std::vector< std::shared_ptr<SwUnoCrsr> > Stack_t;
     Stack_t m_entries;
     Stack_t::size_type m_nCurrent; /* Current position within the navigation history */
     SwWrtShell & m_rMyShell; /* The active shell within which the navigation occurs */

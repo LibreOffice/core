@@ -123,7 +123,7 @@ private:
 
     SwFmtFld * GetFldFmt(bool bInit = false);
 
-    void init(const SwUnoCrsr* pPortionCursor);
+    void init(std::shared_ptr<SwUnoCrsr> pPortionCursor);
 
 protected:
 
@@ -152,11 +152,11 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
+    SwXTextPortion(std::shared_ptr<SwUnoCrsr> pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
+    SwXTextPortion(std::shared_ptr<SwUnoCrsr> pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
 
     // for Ruby
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+    SwXTextPortion(const std::shared_ptr<SwUnoCrsr> pPortionCrsr,
         SwTxtRuby const& rAttr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
             const& xParent,
@@ -309,7 +309,7 @@ private:
 public:
     SwXRedlinePortion(
         SwRangeRedline const& rRedline,
-        SwUnoCrsr const* pPortionCrsr,
+        std::shared_ptr<SwUnoCrsr> pPortionCrsr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
             const& xParent,
         bool const bIsStart);

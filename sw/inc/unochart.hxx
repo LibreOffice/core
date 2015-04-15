@@ -265,7 +265,7 @@ class SwChartDataSequence :
     ::com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >    xDataProvider;
     SwChartDataProvider *                   pDataProvider;
 
-    SwUnoCrsr*                  pTblCrsr;   // cursor spanned over cells to use
+    std::shared_ptr<SwUnoCrsr>                  pTblCrsr;   // cursor spanned over cells to use
     SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
 
     const SfxItemPropertySet*   _pPropSet;
@@ -282,7 +282,7 @@ protected:
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
                          SwFrmFmt   &rTblFmt,
-                         SwUnoCrsr  *pTableCursor );
+                         std::shared_ptr<SwUnoCrsr> pTableCursor );
     virtual ~SwChartDataSequence();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();

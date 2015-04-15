@@ -427,10 +427,10 @@ public:
     uno::Reference< text::XTextContent >    m_xNextPara;
 
     Impl(   uno::Reference< text::XText > const& xParent,
-            ::std::unique_ptr<SwUnoCrsr> && pCursor,
+            ::std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
-        : SwClient( pCursor.release() )
+        : SwClient( pCursor.get() )
         , m_xParentText( xParent )
         , m_eCursorType( eType )
         // remember table and start node for later travelling
@@ -487,10 +487,10 @@ void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
 
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
-        ::std::unique_ptr<SwUnoCrsr> && pCursor,
+        ::std::shared_ptr<SwUnoCrsr> pCursor,
         const CursorType eType,
         SwStartNode const*const pStartNode, SwTable const*const pTable)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, std::move(pCursor), eType,
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
                     pStartNode, pTable) )
 {
 }
@@ -587,8 +587,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
-        const ::std::unique_ptr<SwUnoCrsr> aNewCrsr(
-            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
+        auto aNewCrsr(pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false));
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1133,8 +1132,7 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            rDoc.CreateUnoCrsr(rPos, false));
+    auto pNewCrsr(rDoc.CreateUnoCrsr(rPos, false));
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1268,8 +1266,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1290,8 +1287,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1499,22 +1495,17 @@ class SwXTextRanges::Impl
 {
 public:
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    std::shared_ptr<SwUnoCrsr> m_pCrsr;
 
     Impl(SwPaM *const pPaM)
-        : SwClient( (pPaM)
-            ? pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint())
-            : 0 )
+        : m_pCrsr( pPaM ? pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint()) : nullptr )
     {
         if (pPaM)
         {
+            m_pCrsr->Add(this);
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
         MakeRanges();
-    }
-
-    virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
     }
 
     SwUnoCrsr * GetCursor() {
@@ -1679,20 +1670,17 @@ public:
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameDependList_t m_Frames;
+    std::shared_ptr<SwUnoCrsr> m_pCrsr;
 
     Impl(SwPaM const & rPaM)
-        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
+        : m_pCrsr(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
+        m_pCrsr->Add(this);
         if (rPaM.HasMark())
         {
             GetCursor()->SetMark();
             *GetCursor()->GetMark() = *rPaM.GetMark();
         }
-    }
-
-    virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
     }
 
     SwUnoCrsr * GetCursor() {

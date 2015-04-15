@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>
 #include <set>
+#include <memory>
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
 
@@ -262,10 +263,7 @@ public:
     bool DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete );
 };
 
-class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
-public:
-    /// the destructor will free all objects still in the set
-    ~SwUnoCrsrTbl();
+class SwUnoCrsrTbl : public std::list< std::weak_ptr<SwUnoCrsr> > {
 };
 
 typedef std::vector<SwOLENode*> SwOLENodes;

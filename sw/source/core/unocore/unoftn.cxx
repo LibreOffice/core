@@ -478,11 +478,10 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     SwPosition aPos( *pTxtFtn->GetStartNode() );
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    const uno::Reference< container::XEnumeration >  xRet =
-        new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_FOOTNOTE);
+    const uno::Reference< container::XEnumeration > xRet =
+        new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
     return xRet;
 }
 
