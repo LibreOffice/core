@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/tmpdevice \
         starmath/source/typemap \
         starmath/source/unodoc \
+        starmath/source/unofilter \
         starmath/source/unomodel \
         starmath/source/utility \
         starmath/source/view \

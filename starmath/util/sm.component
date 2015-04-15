@@ -49,4 +49,8 @@
   <implementation name="com.sun.star.comp.Math.XMLSettingsExporter">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Math.MathTypeFilter"
+        constructor="com_sun_star_comp_Math_MathTypeFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
 </component>
