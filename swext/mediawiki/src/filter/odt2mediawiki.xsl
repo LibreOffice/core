@@ -555,41 +555,50 @@
 	 -->
 
 	<template match="text:p[string-length(.) &gt; 0]">
-		<variable name="style">
+		<variable name="alignment">
 			<call-template name="mk-style-set">
 				<with-param name="node" select="."/>
 			</call-template>
 		</variable>
 
 		<variable name="code" 
-			select="($style mod (2 * $CODE_BIT)) - ($style mod ($CODE_BIT)) != 0"/>
+			select="($alignment mod (2 * $CODE_BIT)) - ($alignment mod ($CODE_BIT)) != 0"/>
 		<variable name="center" 
-			select="($style mod (2 * $CENTER_BIT)) - ($style mod ($CENTER_BIT)) != 0"/>
+			select="($alignment mod (2 * $CENTER_BIT)) - ($alignment mod ($CENTER_BIT)) != 0"/>
 		<variable name="right" 
-			select="($style mod (2 * $RIGHT_BIT)) - ($style mod ($RIGHT_BIT)) != 0"/>
-		
-		<choose>
-			<when test="$center">
-				<text>&lt;center&gt;</text>
-			</when>
-			<when test="$right">
-				<text>&lt;div align="right"&gt;</text>
-			</when>
-			<when test="$code">
-				<value-of select="' '"/>
-			</when>
-		</choose>
-	
+			select="($alignment mod (2 * $RIGHT_BIT)) - ($alignment mod ($RIGHT_BIT)) != 0"/>
+
+		<variable name="style">
+			<choose>
+				<when test="$center">
+					<text>text-align:center;</text>
+				</when>
+				<when test="$right">
+					<text>text-align:right;</text>
+				</when>
+			</choose>
+			<if test="boolean(@text:style-name)">
+	 			<variable name="style-element" select="key('style-ref', @text:style-name)"/>
+
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'color'"/>
+					<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
+				</call-template>
+			</if>
+		</variable>
+
+
+		<if test="string-length($style) &gt; 0">
+			<text>&lt;div style="</text>
+			<value-of select="$style"/>
+			<text>"&gt;</text>
+		</if>
+
 		<apply-templates/>
 
-		<choose>
-			<when test="$center">
-				<text>&lt;/center&gt;</text>
-			</when>
-			<when test="$right">
-				<text>&lt;/div&gt;</text>
-			</when>
-		</choose>
+		<if test="string-length($style) &gt; 0">
+			<text>&lt;/div&gt;</text>
+		</if>
 
 		<variable name="paragraph-right" 
  			select="./following-sibling::*[1]/self::text:p"/>
