@@ -302,7 +302,9 @@ void TrendlineResources::UpdateControlStates()
         m_pNF_Period->SetMax( m_nNbPoints - 1 );
     }
     bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
-    bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR ) || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL );
+    bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR )
+                            || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL )
+                            || ( m_eTrendLineType == CHREGRESS_EXP );
     m_pFmtFld_ExtrapolateForward->Enable( !bMovingAverage );
     m_pFmtFld_ExtrapolateBackward->Enable( !bMovingAverage );
     m_pCB_SetIntercept->Enable( bInterceptAvailable );

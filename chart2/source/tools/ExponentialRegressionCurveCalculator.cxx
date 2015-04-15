@@ -61,11 +61,24 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
+    double fLogIntercept = mForceIntercept ? log(mInterceptValue) : 0.0;
+    std::vector<double> yVector;
+    yVector.resize(nMax, 0.0);
+
     size_t i = 0;
     for( i = 0; i < nMax; ++i )
     {
-        fAverageX += aValues.first[i];
-        fAverageY += log( aValues.second[i] );
+        double yValue = log(aValues.second[i]);
+        if (mForceIntercept)
+        {
+            yValue -= fLogIntercept;
+        }
+        else
+        {
+            fAverageX += aValues.first[i];
+            fAverageY += yValue;
+        }
+        yVector[i] = yValue;
     }
 
     const double fN = static_cast< double >( nMax );
@@ -76,7 +89,7 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     for( i = 0; i < nMax; ++i )
     {
         double fDeltaX = aValues.first[i] - fAverageX;
-        double fDeltaY = log( aValues.second[i] ) - fAverageY;
+        double fDeltaY = yVector[i] - fAverageY;
 
         fQx  += fDeltaX * fDeltaX;
         fQy  += fDeltaY * fDeltaY;
@@ -84,9 +97,8 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     }
 
     m_fLogSlope = fQxy / fQx;
-    m_fLogIntercept = fAverageY - m_fLogSlope * fAverageX;
+    m_fLogIntercept = mForceIntercept ? fLogIntercept : fAverageY - m_fLogSlope * fAverageX;
     m_fCorrelationCoeffitient = fQxy / sqrt( fQx * fQy );
-
 }
 
 double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
