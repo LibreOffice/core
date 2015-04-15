@@ -394,4 +394,30 @@ void ZCodec::UpdateCRC ( sal_uInt8* pSource, long nDatSize)
     mnCRC = rtl_crc32( mnCRC, pSource, nDatSize );
 }
 
+bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm, bool updateCrc, bool gzLib)
+{
+    assert(meState == STATE_INIT);
+    sal_uLong nStreamPos = rIStm.Tell();
+    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, updateCrc, gzLib);
+    InitDecompress(rIStm);
+    EndCompression();
+    if ( !mbStatus || rIStm.GetError() )
+    {
+        rIStm.Seek(nStreamPos);
+        return false;
+    }
+    rIStm.Seek(nStreamPos);
+    BeginCompression(ZCODEC_DEFAULT_COMPRESSION, updateCrc, gzLib);
+    Decompress(rIStm, rOStm);
+    EndCompression();
+    if( !mbStatus || rIStm.GetError() || rOStm.GetError() )
+    {
+        rIStm.Seek(nStreamPos);
+        return false;
+    }
+    rIStm.Seek(nStreamPos);
+    rOStm.Seek(0);
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
