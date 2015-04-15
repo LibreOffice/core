@@ -46,19 +46,6 @@ public:
 
 class SvxSuperContourDlg;
 
-class SAL_WARN_UNUSED SvxContourDlgItem : public SfxControllerItem
-{
-    SvxSuperContourDlg& rDlg;
-
-protected:
-
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-
-public:
-
-                        SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
-};
-
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
