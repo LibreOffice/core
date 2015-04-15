@@ -605,7 +605,7 @@ namespace pcr
     }
 
 
-    OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const
+    OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement )
     {
         OUString sUIName;
         try

@@ -190,14 +190,14 @@ namespace pcr
                 the property value to set. If it's not compatible with the control value,
                 it will be converted, using <member>XPropertyHandler::convertToControlValue</member>
         */
-        void        impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const ::com::sun::star::uno::Any& _rPropertyValue );
+        static void impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const ::com::sun::star::uno::Any& _rPropertyValue );
 
         /** retrieves the value for the given control, as a property value, after converting it as necessary
             @param _rLine
                 The line whose at which the value is to be set.
         */
-        ::com::sun::star::uno::Any
-                    impl_getControlAsPropertyValue( const ListBoxLine& _rLine ) const;
+        static ::com::sun::star::uno::Any
+                    impl_getControlAsPropertyValue( const ListBoxLine& _rLine );
 
         /** retrieves the ->BrowserLinePointer for a given entry name
             @param  _rEntryName

@@ -79,7 +79,7 @@ namespace helpdatafileproxy {
         int                 m_nItRead;
         int                 m_iItPos;
 
-        bool implReadLenAndData( const char* pData, int& riPos, HDFData& rValue );
+        static bool implReadLenAndData( const char* pData, int& riPos, HDFData& rValue );
 
     public:
         //HDFHelp must get a fileURL which can then directly be used by simple file access.

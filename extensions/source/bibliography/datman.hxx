@@ -114,7 +114,7 @@ protected:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                     updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+        static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                     createGridModel( const OUString& rName );
 
         // XLoadable
@@ -162,7 +162,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
 
 
-        OUString                    getControlName(sal_Int32 nFormatKey );
+        static OUString             getControlName(sal_Int32 nFormatKey );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const OUString& rName,
                                                         bool bForceListBox = false);

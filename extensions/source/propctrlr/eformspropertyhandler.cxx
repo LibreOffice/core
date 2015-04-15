@@ -367,7 +367,7 @@ namespace pcr
         {
             Reference< XPropertySet > xListSourceBinding( _rPropertyValue, UNO_QUERY );
             if ( xListSourceBinding.is() )
-                aReturn <<= m_pHelper->getModelElementUIName( EFormsHelper::Binding, xListSourceBinding );
+                aReturn <<= EFormsHelper::getModelElementUIName( EFormsHelper::Binding, xListSourceBinding );
         }
         break;
 

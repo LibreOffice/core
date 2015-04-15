@@ -186,11 +186,11 @@ namespace pcr
             @see getModelElementFromUIName
             @see getAllElementUINames
         */
-        OUString
+        static OUString
                 getModelElementUIName(
                     const ModelElementType _eType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement
-                ) const;
+                );
 
         /** retrieves the submission object for an UI name
 

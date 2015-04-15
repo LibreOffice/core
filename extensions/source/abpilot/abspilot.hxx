@@ -93,7 +93,7 @@ namespace abp
         /// guesses a default for the table name, if no valid table is selected
         void implDefaultTableName();
 
-        inline bool needAdminInvokationPage( AddressSourceType _eType ) const
+        static inline bool needAdminInvokationPage( AddressSourceType _eType )
         {
             return  (   ( AST_LDAP == _eType )
                     ||  ( AST_OTHER == _eType )
@@ -105,7 +105,7 @@ namespace abp
             return  needAdminInvokationPage( m_aSettings.eType );
         }
 
-        inline bool needManualFieldMapping( AddressSourceType _eType ) const
+        static inline bool needManualFieldMapping( AddressSourceType _eType )
         {
             return  ( AST_OTHER == _eType ) || ( AST_KAB == _eType ) ||
                     ( AST_EVOLUTION == _eType ) || ( AST_EVOLUTION_GROUPWISE == _eType ) ||
@@ -118,7 +118,7 @@ namespace abp
         }
 
         /// determines whether the given address book type does provide one table only
-        inline bool needTableSelection( AddressSourceType _eType ) const
+        static inline bool needTableSelection( AddressSourceType _eType )
         {
             return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType );
         }

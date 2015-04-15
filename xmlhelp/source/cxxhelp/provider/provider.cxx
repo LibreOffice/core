@@ -368,7 +368,7 @@ ContentProvider::getConfiguration() const
 uno::Reference< container::XHierarchicalNameAccess >
 ContentProvider::getHierAccess(
     const uno::Reference< lang::XMultiServiceFactory >& sProvider,
-    const char* file ) const
+    const char* file )
 {
     uno::Reference< container::XHierarchicalNameAccess > xHierAccess;
 
@@ -399,7 +399,7 @@ ContentProvider::getHierAccess(
 OUString
 ContentProvider::getKey(
     const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
-    const char* key ) const
+    const char* key )
 {
     OUString instPath;
     if( xHierAccess.is() )
@@ -422,7 +422,7 @@ ContentProvider::getKey(
 bool
 ContentProvider::getBooleanKey(
     const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
-    const char* key ) const
+    const char* key )
 {
   bool ret = false;
   if( xHierAccess.is() )
@@ -442,7 +442,7 @@ ContentProvider::getBooleanKey(
   return ret;
 }
 
-void ContentProvider::subst( OUString& instpath ) const
+void ContentProvider::subst( OUString& instpath )
 {
     SvtPathOptions aOptions;
     instpath = aOptions.SubstituteVariable( instpath );

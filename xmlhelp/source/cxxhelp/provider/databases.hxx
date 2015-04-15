@@ -231,7 +231,7 @@ namespace chelp {
          *  The returned string maybe empty
          */
 
-        OUString country( const OUString& Language );
+        static OUString country( const OUString& Language );
 
         void replaceName( OUString& oustring ) const;
 
@@ -349,7 +349,7 @@ namespace chelp {
         void init();
 
     private:
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
+        static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
             ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
               com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
 

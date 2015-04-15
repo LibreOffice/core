@@ -145,7 +145,7 @@ private:
         @param      rDescriptor
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
-    void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
+    static void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
 
 
 
@@ -282,7 +282,7 @@ private:
                     reference to the MediaDescriptor (represented by an easy-to-use
                     stl interface!), which should be patched.
      */
-    void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
+    static void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
 
 
 

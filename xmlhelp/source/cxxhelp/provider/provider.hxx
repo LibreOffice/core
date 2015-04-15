@@ -160,21 +160,21 @@ namespace chelp {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getConfiguration() const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
+        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
-                       const char* file ) const;
+                       const char* file );
 
-        OUString
+        static OUString
         getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
-                const char* key ) const;
+                const char* key );
 
-      bool
-      getBooleanKey(
+        static bool
+        getBooleanKey(
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
-                    const char* key) const;
+                    const char* key);
 
-      void subst( OUString& instpath ) const;
+        static void subst( OUString& instpath );
     };
 
 }

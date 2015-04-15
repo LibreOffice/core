@@ -59,13 +59,13 @@ namespace dbp
     //= OGroupBoxSI
 
 
-    OUString OGroupBoxSI::getImplementationName() const
+    OUString OGroupBoxSI::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
     }
 
 
-    Sequence< OUString > OGroupBoxSI::getServiceNames() const
+    Sequence< OUString > OGroupBoxSI::getServiceNames()
     {
         Sequence< OUString > aReturn(1);
         aReturn[0] = "com.sun.star.sdb.GroupBoxAutoPilot";
@@ -76,13 +76,13 @@ namespace dbp
     //= OListComboSI
 
 
-    OUString OListComboSI::getImplementationName() const
+    OUString OListComboSI::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbp.OListComboWizard");
     }
 
 
-    Sequence< OUString > OListComboSI::getServiceNames() const
+    Sequence< OUString > OListComboSI::getServiceNames()
     {
         Sequence< OUString > aReturn(1);
         aReturn[0] = "com.sun.star.sdb.ListComboBoxAutoPilot";
@@ -93,13 +93,13 @@ namespace dbp
     //= OGridSI
 
 
-    OUString OGridSI::getImplementationName() const
+    OUString OGridSI::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbp.OGridWizard");
     }
 
 
-    Sequence< OUString > OGridSI::getServiceNames() const
+    Sequence< OUString > OGridSI::getServiceNames()
     {
         Sequence< OUString > aReturn(1);
         aReturn[0] = "com.sun.star.sdb.GridControlAutoPilot";

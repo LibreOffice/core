@@ -131,9 +131,9 @@ class CGMElements
         CGMElements&        operator=( CGMElements& );
         void                Init();
         Bundle*             GetBundleIndex( long nIndex, BundleList&, Bundle& );
-        Bundle*             GetBundle( BundleList& rList, long nIndex );
+        static Bundle*      GetBundle( BundleList& rList, long nIndex );
         Bundle*             InsertBundle( BundleList&, Bundle& );
-        void                DeleteAllBundles( BundleList& );
+        static void         DeleteAllBundles( BundleList& );
         void                CopyAllBundles( BundleList& Source, BundleList& Dest );
 };
 

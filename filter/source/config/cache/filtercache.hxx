@@ -559,7 +559,7 @@ class FilterCache : public BaseLock
 
         /** TODO document me
          */
-        void removeStatePropsFromItem(CacheItem& aValue)
+        static void removeStatePropsFromItem(CacheItem& aValue)
             throw(css::uno::Exception);
 
 
@@ -886,7 +886,7 @@ class FilterCache : public BaseLock
             @throws An exception if anything failed inside this operation.
                     e.g. the given configuration set was not open.
          */
-        EItemFlushState impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+        static EItemFlushState impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                                    const CacheItemList&                                      rList,
                                                    const OUString&                                    sItem)
             throw(css::uno::Exception);
@@ -901,7 +901,7 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
+        static void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                    const CacheItem&                                           rItem)
             throw(css::uno::Exception);
 
@@ -931,7 +931,7 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        OUStringList impl_tokenizeString(const OUString& sData     ,
+        static OUStringList impl_tokenizeString(const OUString& sData     ,
                                                sal_Unicode      cSeparator);
 
 

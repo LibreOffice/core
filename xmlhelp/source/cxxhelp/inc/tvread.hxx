@@ -244,31 +244,31 @@ namespace treeview {
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
 
-        ConfigData init(
+        static ConfigData init(
             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getConfiguration(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext ) const;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
+        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& rxProvider,
-                       const char* file ) const;
+                       const char* file );
 
-      OUString
-      getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
-                const char* key ) const;
+        static OUString
+        getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+                const char* key );
 
-      bool
-      getBooleanKey(
+        static bool
+        getBooleanKey(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
-                    const char* key) const;
+                    const char* key);
 
-      void subst( OUString& instpath ) const;
+        static void subst( OUString& instpath );
 
-    bool SearchAndInsert(TVDom* p, TVDom* tvDom);
+        bool SearchAndInsert(TVDom* p, TVDom* tvDom);
 
-    void Check(TVDom* tvDom);
+        void Check(TVDom* tvDom);
 
     };  // end class TVChildTarget
 
@@ -287,7 +287,7 @@ namespace treeview {
         void init();
 
     private:
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
+        static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
             ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
               com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
 

@@ -769,7 +769,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 }
 
 Reference< XMultiServiceFactory >
-TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext) const
+TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext)
 {
     Reference< XMultiServiceFactory > xProvider;
     if( rxContext.is() )
@@ -789,7 +789,7 @@ TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext)
 
 Reference< XHierarchicalNameAccess >
 TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
-                              const char* file ) const
+                              const char* file )
 {
     Reference< XHierarchicalNameAccess > xHierAccess;
 
@@ -818,7 +818,7 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
 
 OUString
 TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
-                       const char* key ) const
+                       const char* key )
 {
     OUString instPath;
     if( xHierAccess.is() )
@@ -840,7 +840,7 @@ TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
 bool
 TVChildTarget::getBooleanKey(const Reference<
                              XHierarchicalNameAccess >& xHierAccess,
-                             const char* key) const
+                             const char* key)
 {
   bool ret = false;
   if( xHierAccess.is() )
@@ -860,7 +860,7 @@ TVChildTarget::getBooleanKey(const Reference<
   return ret;
 }
 
-void TVChildTarget::subst( OUString& instpath ) const
+void TVChildTarget::subst( OUString& instpath )
 {
     SvtPathOptions aOptions;
     instpath = aOptions.SubstituteVariable( instpath );

@@ -242,7 +242,7 @@ namespace pcr
         case PROPERTY_ID_BOUND_CELL:
         {
             Reference< XValueBinding > xBinding( m_pHelper->getCurrentBinding() );
-            if ( !m_pHelper->isCellBinding( xBinding ) )
+            if ( !CellBindingHelper::isCellBinding( xBinding ) )
                 xBinding.clear();
 
             aReturn <<= xBinding;
@@ -252,7 +252,7 @@ namespace pcr
         case PROPERTY_ID_LIST_CELL_RANGE:
         {
             Reference< XListEntrySource > xSource( m_pHelper->getCurrentListSource() );
-            if ( !m_pHelper->isCellRangeListSource( xSource ) )
+            if ( !CellBindingHelper::isCellRangeListSource( xSource ) )
                 xSource.clear();
 
             aReturn <<= xSource;
@@ -262,7 +262,7 @@ namespace pcr
         case PROPERTY_ID_CELL_EXCHANGE_TYPE:
         {
             Reference< XValueBinding > xBinding( m_pHelper->getCurrentBinding() );
-            aReturn <<= (sal_Int16)( m_pHelper->isCellIntegerBinding( xBinding ) ? 1 : 0 );
+            aReturn <<= (sal_Int16)( CellBindingHelper::isCellIntegerBinding( xBinding ) ? 1 : 0 );
         }
         break;
 
@@ -313,7 +313,7 @@ namespace pcr
                 if ( xBinding.is() )
                 {
                     bool bNeedIntegerBinding = ( nExchangeType == 1 );
-                    if ( (bool)bNeedIntegerBinding != m_pHelper->isCellIntegerBinding( xBinding ) )
+                    if ( (bool)bNeedIntegerBinding != CellBindingHelper::isCellIntegerBinding( xBinding ) )
                     {
                         CellAddress aAddress;
                         if ( m_pHelper->getAddressFromCellBinding( xBinding, aAddress ) )

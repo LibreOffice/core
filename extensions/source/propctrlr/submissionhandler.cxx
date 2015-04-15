@@ -403,7 +403,7 @@ namespace pcr
         {
             Reference< XPropertySet > xSubmission( _rPropertyValue, UNO_QUERY );
             if ( xSubmission.is() )
-                aControlValue <<= m_pHelper->getModelElementUIName( EFormsHelper::Submission, xSubmission );
+                aControlValue <<= EFormsHelper::getModelElementUIName( EFormsHelper::Submission, xSubmission );
         }
         break;
 

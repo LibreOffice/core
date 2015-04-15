@@ -486,25 +486,25 @@ namespace pcr
     }
 
 
-    bool CellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding ) const
+    bool CellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding )
     {
         return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_BINDING );
     }
 
 
-    bool CellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding ) const
+    bool CellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding )
     {
         return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_INT_BINDING );
     }
 
 
-    bool CellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource ) const
+    bool CellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource )
     {
         return doesComponentSupport( _rxSource.get(), SERVICE_SHEET_CELLRANGE_LISTSOURCE );
     }
 
 
-    bool CellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
+    bool CellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService )
     {
         Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
         bool bDoes = xSI.is() && xSI->supportsService( _rService );

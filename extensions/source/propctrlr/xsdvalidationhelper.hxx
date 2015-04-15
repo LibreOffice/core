@@ -124,11 +124,11 @@ namespace pcr
 
         /** retrieves the name of the basic data type which has the given class, in the given repository
         */
-        OUString
+        static OUString
                 getBasicTypeNameForClass(
                     sal_Int16 _nClass,
                     ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository > _rxRepository
-                ) const;
+                );
     };
 
 

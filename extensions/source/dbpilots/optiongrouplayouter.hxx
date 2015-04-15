@@ -54,7 +54,7 @@ namespace dbp
         );
 
     protected:
-        void    implAnchorShape(
+        static void    implAnchorShape(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxShapeProps
             );
     };

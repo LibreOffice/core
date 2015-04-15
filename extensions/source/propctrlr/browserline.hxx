@@ -123,7 +123,7 @@ namespace pcr
         void    impl_layoutComponents();
 
         PushButton& impl_ensureButton( bool _bPrimary );
-        void        impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage );
+        static void impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage );
     };
 
 

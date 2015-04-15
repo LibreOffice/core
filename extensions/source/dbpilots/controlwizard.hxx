@@ -77,11 +77,11 @@ namespace dbp
         virtual ~OControlWizardPage();
 
     protected:
-        void fillListBox(
+        static void fillListBox(
             ListBox& _rList,
             const ::com::sun::star::uno::Sequence< OUString >& _rItems,
             bool _bClear = true);
-        void fillListBox(
+        static void fillListBox(
             ComboBox& _rList,
             const ::com::sun::star::uno::Sequence< OUString >& _rItems,
             bool _bClear = true);

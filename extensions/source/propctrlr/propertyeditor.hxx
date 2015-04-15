@@ -134,7 +134,7 @@ namespace pcr
         void    setPageLineListener( OBrowserPage& _rPage, const void* );
         void    setPageControlObserver( OBrowserPage& _rPage, const void* );
         void    enableHelpSection( OBrowserPage& _rPage, const void* );
-        void    setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
+        static void setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
         void    setHelpLineLimits( OBrowserPage& _rPage, const void* );
 
     protected:

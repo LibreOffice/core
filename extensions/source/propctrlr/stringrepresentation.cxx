@@ -96,7 +96,7 @@ private:
         @return <TRUE/>
             if and only if the value could be converted
     */
-    bool            convertGenericValueToString(
+    static bool     convertGenericValueToString(
                         const uno::Any&   _rValue,
                                 OUString&              _rStringRep
                     );
@@ -109,7 +109,7 @@ private:
         @return <TRUE/>
             if and only if the value could be converted
     */
-    bool            convertStringToGenericValue(
+    static bool    convertStringToGenericValue(
                         const OUString&              _rStringRep,
                                 uno::Any&   _rValue,
                         const uno::Type& _rTargetType

@@ -71,7 +71,7 @@ friend class BibFrameCtrl_Impl;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
-    bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
+    static bool                 SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);

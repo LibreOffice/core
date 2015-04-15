@@ -101,9 +101,9 @@ namespace pcr
                         ::com::sun::star::uno::Sequence< OUString >& _rMasterFields
                     );
 
-        OUString    getFormDataSourceType(
+        static OUString getFormDataSourceType(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm
-                    ) const;
+                    );
 
         void        getFormFields(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
@@ -115,19 +115,19 @@ namespace pcr
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& /* [out] */ _rxConnection
                     ) const;
 
-        void        getConnectionMetaData(
+        static void getConnectionMetaData(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& /* [out] */ _rxMeta
-                    ) const;
+                    );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     getCanonicUnderlyingTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps ) const;
-        bool    getExistingRelation(
+        static bool getExistingRelation(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLHS,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRHS,
                         ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rLeftFields,
                         ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rRightFields
-                    ) const;
+                    );
     };
 
 

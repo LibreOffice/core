@@ -928,7 +928,7 @@ namespace pcr
     }
 
 
-    Any OBrowserListBox::impl_getControlAsPropertyValue( const ListBoxLine& _rLine ) const
+    Any OBrowserListBox::impl_getControlAsPropertyValue( const ListBoxLine& _rLine )
     {
         Reference< XPropertyControl > xControl( _rLine.pLine->getControl() );
         Any aPropertyValue;

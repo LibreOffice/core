@@ -340,7 +340,15 @@ namespace pcr
 
     void OPropertyEditor::SetHelpText( const OUString& _rHelpText )
     {
-        forEachPage( &OPropertyEditor::setHelpSectionText, &_rHelpText );
+        sal_uInt16 nCount = m_aTabControl.GetPageCount();
+        for ( sal_uInt16 i=0; i<nCount; ++i )
+        {
+            sal_uInt16 nID = m_aTabControl.GetPageId(i);
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nID ) );
+            if ( !pPage )
+                continue;
+            setHelpSectionText( *pPage, &_rHelpText );
+        }
     }
 
 

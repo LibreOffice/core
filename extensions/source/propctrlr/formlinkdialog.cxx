@@ -362,7 +362,7 @@ namespace pcr
     }
 
 
-    OUString FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const
+    OUString FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm )
     {
         OUString sReturn;
         if ( !_rxForm.is() )
@@ -453,7 +453,7 @@ namespace pcr
     }
 
 
-    void FormLinkDialog::getConnectionMetaData( const Reference< XPropertySet >& _rxFormProps, Reference< XDatabaseMetaData >& /* [out] */ _rxMeta ) const
+    void FormLinkDialog::getConnectionMetaData( const Reference< XPropertySet >& _rxFormProps, Reference< XDatabaseMetaData >& /* [out] */ _rxMeta )
     {
         if ( _rxFormProps.is() )
         {
@@ -495,7 +495,7 @@ namespace pcr
 
     bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
             // TODO: fix the usage of _rxRHS. This is issue #i81956#.
-        Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields ) const
+        Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields )
     {
         try
         {
