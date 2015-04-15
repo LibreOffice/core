@@ -221,6 +221,14 @@ void PagePropertyPanel::dispose()
     mpToolBoxMargin.clear();
     mpToolBoxSize.clear();
     mpToolBoxColumn.clear();
+
+    m_aSwPagePgULControl.dispose();
+    m_aSwPagePgLRControl.dispose();
+    m_aSwPagePgSizeControl.dispose();
+    m_aSwPagePgControl.dispose();
+    m_aSwPageColControl.dispose();
+    m_aSwPagePgMetricControl.dispose();
+
     PanelLayout::dispose();
 }
 
@@ -481,6 +489,9 @@ void PagePropertyPanel::NotifyItemUpdate(
     const bool bIsEnabled)
 {
     (void)bIsEnabled;
+
+    if (IsDisposed())
+        return;
 
     switch( nSId )
     {

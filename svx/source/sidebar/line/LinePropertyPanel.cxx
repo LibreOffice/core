@@ -212,6 +212,18 @@ void LinePropertyPanel::dispose()
     mpLBEdgeStyle.clear();
     mpFTCapStyle.clear();
     mpLBCapStyle.clear();
+
+    maStyleControl.dispose();
+    maDashControl.dispose();
+    maWidthControl.dispose();
+    maStartControl.dispose();
+    maEndControl.dispose();
+    maLineEndListControl.dispose();
+    maLineStyleListControl.dispose();
+    maTransControl.dispose();
+    maEdgeStyle.dispose();
+    maCapStyle.dispose();
+
     PanelLayout::dispose();
 }
 

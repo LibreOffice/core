@@ -56,6 +56,7 @@ public:
                         SfxControllerItem(); // for arrays
                         SfxControllerItem( sal_uInt16 nId, SfxBindings & );
     virtual             ~SfxControllerItem();
+    virtual void        dispose();
 
     void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // Register in SfxBindings
     void                UnBind();

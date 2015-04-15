@@ -128,6 +128,11 @@ void TextPropertyPanel::dispose()
     mpToolBoxSpacing.clear();
     mpToolBoxFontColorSw.clear();
     mpToolBoxFontColor.clear();
+
+    maFontSizeControl.dispose();
+    maUnderlineControl.dispose();
+    maSpacingControl.dispose();
+
     PanelLayout::dispose();
 }
 

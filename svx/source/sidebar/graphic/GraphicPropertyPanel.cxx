@@ -81,6 +81,16 @@ void GraphicPropertyPanel::dispose()
     mpMtrGreen.clear();
     mpMtrBlue.clear();
     mpMtrGamma.clear();
+
+    maBrightControl.dispose();
+    maContrastControl.dispose();
+    maTransparenceControl.dispose();
+    maRedControl.dispose();
+    maGreenControl.dispose();
+    maBlueControl.dispose();
+    maGammaControl.dispose();
+    maModeControl.dispose();
+
     PanelLayout::dispose();
 }
 

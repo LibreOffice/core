@@ -80,6 +80,9 @@ public:
         SfxBindings &rBindings,
         ItemUpdateReceiverInterface& rItemUpdateReceiver);
 
+    /// releases our action listener
+    virtual void dispose() SAL_OVERRIDE;
+
     virtual ~ControllerItem();
 
     /** Returns </TRUE> when the slot/command has not been disabled.

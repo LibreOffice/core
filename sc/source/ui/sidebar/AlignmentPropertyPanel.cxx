@@ -81,6 +81,14 @@ void AlignmentPropertyPanel::dispose()
     mpCtrlDial.clear();
     mpMtrAngle.clear();
     mpCbStacked.clear();
+
+    maAlignHorControl.dispose();
+    maLeftIndentControl.dispose();
+    maMergeCellControl.dispose();
+    maWrapTextControl.dispose();
+    maAngleControl.dispose();
+    maStackControl.dispose();
+
     PanelLayout::dispose();
 }
 

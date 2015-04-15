@@ -765,6 +765,15 @@ void ParaPropertyPanel::dispose()
     mpLeftIndent.clear();
     mpRightIndent.clear();
     mpFLineIndent.clear();
+
+    maLRSpaceControl.dispose();
+    maULSpaceControl.dispose();
+    maOutLineLeftControl.dispose();
+    maOutLineRightControl.dispose();
+    maDecIndentControl.dispose();
+    maIncIndentControl.dispose();
+    m_aMetricCtl.dispose();
+
     PanelLayout::dispose();
 }
 

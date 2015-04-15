@@ -136,6 +136,21 @@ void PosSizePropertyPanel::dispose()
     mpDial.clear();
     mpFtFlip.clear();
     mpFlipTbx.clear();
+
+    maTransfPosXControl.dispose();
+    maTransfPosYControl.dispose();
+    maTransfWidthControl.dispose();
+    maTransfHeightControl.dispose();
+
+    maSvxAngleControl.dispose();
+    maRotXControl.dispose();
+    maRotYControl.dispose();
+    maProPosControl.dispose();
+    maProSizeControl.dispose();
+    maAutoWidthControl.dispose();
+    maAutoHeightControl.dispose();
+    m_aMetricCtl.dispose();
+
     PanelLayout::dispose();
 }
 

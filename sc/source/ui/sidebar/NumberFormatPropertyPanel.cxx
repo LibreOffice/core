@@ -81,6 +81,10 @@ void NumberFormatPropertyPanel::dispose()
     mpEdLeadZeroes.clear();
     mpBtnNegRed.clear();
     mpBtnThousand.clear();
+
+    maNumFormatControl.dispose();
+    maFormatControl.dispose();
+
     PanelLayout::dispose();
 }
 

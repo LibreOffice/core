@@ -151,6 +151,14 @@ void CellAppearancePropertyPanel::dispose()
     mpTBLineStyle.clear();
     mpTBLineColor.clear();
     mpCBXShowGrid.clear();
+
+    maLineStyleControl.dispose();
+    maBorderOuterControl.dispose();
+    maBorderInnerControl.dispose();
+    maGridShowControl.dispose();
+    maBorderTLBRControl.dispose();
+    maBorderBLTRControl.dispose();
+
     PanelLayout::dispose();
 }
 

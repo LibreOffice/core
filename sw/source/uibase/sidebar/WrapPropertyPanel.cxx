@@ -102,6 +102,14 @@ void WrapPropertyPanel::dispose()
     mpRBWrapParallel.clear();
     mpRBWrapThrough.clear();
     mpRBIdealWrap.clear();
+
+    maSwNoWrapControl.dispose();
+    maSwWrapLeftControl.dispose();
+    maSwWrapRightControl.dispose();
+    maSwWrapParallelControl.dispose();
+    maSwWrapThroughControl.dispose();
+    maSwWrapIdealControl.dispose();
+
     PanelLayout::dispose();
 }
 

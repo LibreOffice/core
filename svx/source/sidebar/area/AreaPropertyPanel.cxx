@@ -128,6 +128,18 @@ void AreaPropertyPanel::dispose()
     mpLBTransType.clear();
     mpMTRTransparent.clear();
     mpBTNGradient.clear();
+
+    maStyleControl.dispose();
+    maColorControl.dispose();
+    maGradientControl.dispose();
+    maHatchControl.dispose();
+    maBitmapControl.dispose();
+    maGradientListControl.dispose();
+    maHatchListControl.dispose();
+    maBitmapListControl.dispose();
+    maFillTransparenceController.dispose();
+    maFillFloatTransparenceController.dispose();
+
     PanelLayout::dispose();
 }
 
