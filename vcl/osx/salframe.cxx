@@ -802,18 +802,6 @@ void AquaSalFrame::ToTop(sal_uInt16 nFlags)
 
 NSCursor* AquaSalFrame::getCurrentCursor() const
 {
-    /* Create invisible cursor */
-    static NSCursor *invisibleCursor = NULL;
-    if (!invisibleCursor) {
-        NSImage *cursorImage = [[[NSImage alloc] initWithSize:NSMakeSize (16, 16)] autorelease];
-        [cursorImage lockFocus];
-        [[NSColor clearColor] set];
-        NSRectFill( NSMakeRect( 0, 0, 16, 16 ) );
-        [cursorImage unlockFocus];
-        invisibleCursor = [[NSCursor alloc] initWithImage:cursorImage
-                                                  hotSpot:NSZeroPoint];
-    }
-
     NSCursor* pCursor = nil;
     switch( mePointerStyle )
     {
@@ -837,7 +825,6 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
     case POINTER_WINDOW_WSIZE:
                             pCursor = [NSCursor resizeLeftRightCursor]; break;
     case POINTER_REFHAND:   pCursor = [NSCursor pointingHandCursor];    break;
-    case POINTER_NULL:      pCursor = invisibleCursor;                  break;
 
     default:
         pCursor = GetSalData()->getCursor( mePointerStyle );
