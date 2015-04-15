@@ -245,7 +245,7 @@ void DataBarRule::importColor( const AttributeList& rAttribs )
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
-        nColor = getTheme().getColorByToken( nThemeIndex );
+        nColor = getTheme().getColorByIndex( nThemeIndex );
     }
 
     ::Color aColor = RgbToRgbComponents( nColor );

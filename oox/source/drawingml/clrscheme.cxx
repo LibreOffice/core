@@ -43,6 +43,21 @@ void ClrMap::setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken )
     maClrMap[ nClrToken ] = nMappedClrToken;
 }
 
+struct find_by_token
+{
+    find_by_token(sal_Int32 token):
+        m_token(token)
+    {
+    }
+
+    bool operator()(const std::pair<sal_Int32, sal_Int32>& r)
+    {
+        return r.first == m_token;
+    }
+
+private:
+    sal_Int32 m_token;
+};
 
 bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
 {
@@ -54,15 +69,27 @@ bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
         case XML_tx1 : nSchemeClrToken = XML_dk1; break;
         case XML_tx2 : nSchemeClrToken = XML_dk2; break;
     }
-    std::map < sal_Int32, sal_Int32 >::const_iterator aIter( maClrScheme.find( nSchemeClrToken ) );
+
+    auto aIter = std::find_if(maClrScheme.begin(), maClrScheme.end(), find_by_token(nSchemeClrToken) );
+
     if ( aIter != maClrScheme.end() )
-        rColor = (*aIter).second;
+        rColor = aIter->second;
+
     return aIter != maClrScheme.end();
 }
 
 void ClrScheme::setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor )
 {
-    maClrScheme[ nSchemeClrToken ] = nColor;
+    maClrScheme.push_back(std::pair<sal_Int32, sal_Int32>(nSchemeClrToken, nColor));
+}
+
+bool ClrScheme::getColorByIndex(size_t nIndex, sal_Int32& rColor) const
+{
+    if (nIndex >= maClrScheme.size())
+        return false;
+
+    rColor = maClrScheme[nIndex].second;
+    return true;
 }
 
 } }

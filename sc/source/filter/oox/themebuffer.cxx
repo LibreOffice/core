@@ -56,6 +56,12 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
     return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
 
+sal_Int32 ThemeBuffer::getColorByIndex(size_t nIndex) const
+{
+    sal_Int32 nColor = 0;
+    return getClrScheme().getColorByIndex(nIndex, nColor) ? nColor : API_RGB_TRANSPARENT;
+}
+
 } // namespace xls
 } // namespace oox
 

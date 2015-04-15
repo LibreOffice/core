@@ -42,12 +42,15 @@ typedef std::shared_ptr< ClrMap > ClrMapPtr;
 
 class OOX_DLLPUBLIC ClrScheme
 {
-    std::map < sal_Int32, sal_Int32 > maClrScheme;
+    std::vector< std::pair<sal_Int32, sal_Int32> > maClrScheme;
 
 public:
 
     bool     getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
     void     setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
+
+    bool     getColorByIndex(size_t nIndex,
+            sal_Int32& rColor) const;
 };
 
 typedef std::shared_ptr< ClrScheme > ClrSchemePtr;
