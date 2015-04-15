@@ -1165,7 +1165,7 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
                 SwEditShell *pEditShell = GetDoc()->GetEditShell();
                 pEditShell->Push();             // save current cursor on stack
                 pEditShell->SetSelection( aCurPaM );
-                bool bIsAsianScript = (SCRIPTTYPE_ASIAN == pEditShell->GetScriptType());
+                bool bIsAsianScript = (SvtScriptType::ASIAN == pEditShell->GetScriptType());
                 pEditShell->Pop( false );   // restore cursor from stack
 
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)

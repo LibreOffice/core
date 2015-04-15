@@ -51,7 +51,7 @@ struct ScDocumentImportImpl
     ScDocument& mrDoc;
     sc::StartListeningContext maListenCxt;
     sc::ColumnBlockPositionSet maBlockPosSet;
-    sal_uInt16 mnDefaultScriptNumeric;
+    SvtScriptType mnDefaultScriptNumeric;
 
     TabAttrsType maTabAttrs;
 
@@ -59,7 +59,7 @@ struct ScDocumentImportImpl
         mrDoc(rDoc),
         maListenCxt(rDoc),
         maBlockPosSet(rDoc),
-        mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
+        mnDefaultScriptNumeric(SvtScriptType::UNKNOWN) {}
 
     ColAttr* getColAttr( size_t nTab, size_t nCol )
     {
@@ -95,7 +95,7 @@ const ScDocument& ScDocumentImport::getDoc() const
     return mpImpl->mrDoc;
 }
 
-void ScDocumentImport::setDefaultNumericScript(sal_uInt16 nScript)
+void ScDocumentImport::setDefaultNumericScript(SvtScriptType nScript)
 {
     mpImpl->mnDefaultScriptNumeric = nScript;
 }
@@ -487,9 +487,9 @@ class CellStoreInitializer
     {
         sc::CellTextAttrStoreType maAttrs;
         sc::CellTextAttrStoreType::iterator miPos;
-        sal_uInt16 mnScriptNumeric;
+        SvtScriptType mnScriptNumeric;
 
-        Impl(const sal_uInt32 nMaxRowCount, const sal_uInt16 nScriptNumeric)
+        Impl(const sal_uInt32 nMaxRowCount, const SvtScriptType nScriptNumeric)
             : maAttrs(nMaxRowCount), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
         {}
     };
@@ -522,7 +522,7 @@ public:
                 aDefault.mnScriptType = mpImpl->mnScriptNumeric;
                 const ColAttr* p = mrDocImpl.getColAttr(mnTab, mnCol);
                 if (p && p->mbLatinNumFmtOnly)
-                    aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+                    aDefault.mnScriptType = SvtScriptType::LATIN;
             }
             break;
             case sc::element_type_formula:
@@ -546,7 +546,7 @@ public:
                     }
 
                     if (bNumResOnly)
-                        aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+                        aDefault.mnScriptType = SvtScriptType::LATIN;
                 }
             }
             break;

@@ -641,7 +641,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             else
             {
                 aAttribItems.Clear();
-                sal_uInt16 nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
+                sal_uInt16 nScriptTypeI18N = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
+                SvtScriptType nScriptType = SvtLanguageOptions::FromI18NToSvtScriptType(nScriptTypeI18N);
                 if ( !n || IsScriptChange( EditPaM( pNode, nIndex ) ) )
                 {
                     SfxItemSet aAttribs = GetAttribs( nNode, nIndex+1, nIndex+1 );
@@ -652,7 +653,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ) ) );
                 }
                 // Insert hard attribs AFTER CJK attribs...
-                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptType );
+                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptTypeI18N );
 
                 rOutput.WriteChar( '{' );
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
@@ -1421,7 +1422,8 @@ void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRan
 
 LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos ) const
 {
-    short nScriptType = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
+    short nScriptTypeI18N = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
+    SvtScriptType nScriptType = SvtLanguageOptions::FromI18NToSvtScriptType(nScriptTypeI18N);
     sal_uInt16 nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
     const SvxLanguageItem* pLangItem = &static_cast<const SvxLanguageItem&>(rPaM.GetNode()->GetContentAttribs().GetItem( nLangId ));
     const EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
@@ -2146,12 +2148,13 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                     rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
                 }
 
-                sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
                 sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                 switch(nScriptType)
                 {
-                    case SCRIPTTYPE_ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                    case SCRIPTTYPE_COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                    case SvtScriptType::ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                    case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                    default: break;
                 }
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
@@ -2193,12 +2196,13 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                 LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
                 if(eCurLanguage != aCurrentNewPortion->eLanguage)
                 {
-                    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
                     sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                     switch(nScriptType)
                     {
-                        case SCRIPTTYPE_ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                        case SCRIPTTYPE_COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                        case SvtScriptType::ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                        case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                        default: break;
                     }
                     SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
                     aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));

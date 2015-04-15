@@ -138,17 +138,18 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos 
         }
     }
     if( i18n::ScriptType::WEAK == nScript )
-        nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
     return nScript;
 }
 
-sal_uInt16 SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
+SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
 {
-    const sal_uInt16 coAllScripts = ( SCRIPTTYPE_LATIN |
-                                      SCRIPTTYPE_ASIAN |
-                                      SCRIPTTYPE_COMPLEX );
+    const SvtScriptType coAllScripts = ( SvtScriptType::LATIN |
+                                      SvtScriptType::ASIAN |
+                                      SvtScriptType::COMPLEX );
     createBreakIterator();
-    sal_uInt16 nRet = 0, nScript;
+    SvtScriptType nRet = SvtScriptType::NONE;
+    sal_uInt16 nScript = 0;
     if( !xBreak.is() )
     {
         nRet = coAllScripts;
@@ -160,11 +161,11 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
         {
             switch( nScript = xBreak->getScriptType( rTxt, n ) )
             {
-            case i18n::ScriptType::LATIN:   nRet |= SCRIPTTYPE_LATIN;   break;
-            case i18n::ScriptType::ASIAN:   nRet |= SCRIPTTYPE_ASIAN;   break;
-            case i18n::ScriptType::COMPLEX: nRet |= SCRIPTTYPE_COMPLEX; break;
+            case i18n::ScriptType::LATIN:   nRet |= SvtScriptType::LATIN;   break;
+            case i18n::ScriptType::ASIAN:   nRet |= SvtScriptType::ASIAN;   break;
+            case i18n::ScriptType::COMPLEX: nRet |= SvtScriptType::COMPLEX; break;
             case i18n::ScriptType::WEAK:
-                    if( !nRet )
+                    if( nRet == SvtScriptType::NONE )
                         nRet |= coAllScripts;
                     break;
             }

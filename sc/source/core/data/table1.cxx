@@ -2105,15 +2105,15 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     return nMax + 1;
 }
 
-sal_uInt8 ScTable::GetScriptType( SCCOL nCol, SCROW nRow ) const
+SvtScriptType ScTable::GetScriptType( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidCol(nCol))
-        return 0;
+        return SvtScriptType::NONE;
 
     return aCol[nCol].GetScriptType(nRow);
 }
 
-void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType )
+void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, SvtScriptType nType )
 {
     if (!ValidCol(nCol))
         return;
@@ -2121,11 +2121,11 @@ void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType )
     aCol[nCol].SetScriptType(nRow, nType);
 }
 
-sal_uInt8 ScTable::GetRangeScriptType(
+SvtScriptType ScTable::GetRangeScriptType(
     sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
     if (!ValidCol(nCol))
-        return 0;
+        return SvtScriptType::NONE;
 
     sc::CellStoreType::iterator itr = aCol[nCol].maCells.begin();
     return aCol[nCol].GetRangeScriptType(rBlockPos.miCellTextAttrPos, nRow1, nRow2, itr);

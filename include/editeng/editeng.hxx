@@ -37,6 +37,7 @@
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {
@@ -243,7 +244,7 @@ public:
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
-    sal_uInt16      GetScriptType( const ESelection& rSelection ) const;
+    SvtScriptType   GetScriptType( const ESelection& rSelection ) const;
     LanguageType    GetLanguage(const EditPaM& rPaM) const;
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
@@ -513,7 +514,7 @@ public:
     static bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const vcl::Font& rFont );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const SvxFont& rFont );
-    static vcl::Font CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
+    static vcl::Font CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScriptType nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
@@ -573,7 +574,7 @@ public:
     OUString GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
     EditPaM DeleteSelected(const EditSelection& rSel);
 
-    sal_uInt16 GetScriptType(const EditSelection& rSel) const;
+    SvtScriptType GetScriptType(const EditSelection& rSel) const;
 
     void RemoveParaPortion(sal_Int32 nNode);
 

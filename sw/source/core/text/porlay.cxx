@@ -663,7 +663,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     // counter for kashida array
     size_t nCntKash = 0;
 
-    sal_uInt8 nScript = i18n::ScriptType::LATIN;
+    sal_Int16 nScript = i18n::ScriptType::LATIN;
 
     // compression type
     const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
@@ -777,7 +777,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         if (nEnd > rTxt.getLength() || nEnd < 0)
             nEnd = rTxt.getLength();
 
-        nScript = (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
         SAL_WARN_IF( i18n::ScriptType::LATIN != nScript &&
                 i18n::ScriptType::ASIAN != nScript &&
@@ -1243,7 +1243,7 @@ sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 }
 
 // returns the script of the character at the input position
-sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
+sal_Int16 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
 {
     const size_t nEnd = CountScriptChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1253,7 +1253,7 @@ sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
     }
 
     // the default is the application language script
-    return (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+    return SvtLanguageOptions::GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 }
 
 sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,

@@ -65,7 +65,7 @@ namespace frm
     }
 
 
-    void AttributeHandler::putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, ScriptType _nForScriptType ) const
+    void AttributeHandler::putItemForScript( SfxItemSet& _rAttribs, const SfxPoolItem& _rItem, SvtScriptType _nForScriptType ) const
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
         aSetItem.PutItemForScriptType( _nForScriptType, _rItem );
@@ -189,7 +189,7 @@ namespace frm
     }
 
 
-    void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
+    void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "ParaAlignmentHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
         (void)_pAdditionalArg;
@@ -220,7 +220,7 @@ namespace frm
     }
 
 
-    void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
+    void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "LineSpacingHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
         (void)_pAdditionalArg;
@@ -258,8 +258,7 @@ namespace frm
     }
 
 
-    void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
-    {
+    void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const    {
         OSL_ENSURE( !_pAdditionalArg, "EscapementHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
             // well, in theory we could allow an SvxEscapementItem here, but this is not needed
         (void)_pAdditionalArg;
@@ -290,7 +289,7 @@ namespace frm
     }
 
 
-    void SlotHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void SlotHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const
     {
         if ( _pAdditionalArg )
         {
@@ -345,7 +344,7 @@ namespace frm
     }
 
 
-    void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const
     {
         const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, _pAdditionalArg );
         OSL_ENSURE( pFontHeightItem, "FontSizeHandler::executeAttribute: need a FontHeightItem!" );
@@ -367,7 +366,7 @@ namespace frm
             SvxFontHeightItem aNewItem( nHeight, 100, getWhich() );
             aNewItem.SetProp( pFontHeightItem->GetProp(), pFontHeightItem->GetPropUnit() );
 
-            if ( ( getAttributeId() == SID_ATTR_CHAR_FONTHEIGHT ) && _nForScriptType )
+            if ( ( getAttributeId() == SID_ATTR_CHAR_FONTHEIGHT ) && _nForScriptType != SvtScriptType::NONE)
                 putItemForScript( _rNewAttribs, aNewItem, _nForScriptType );
             else
                 _rNewAttribs.Put( aNewItem );
@@ -403,7 +402,7 @@ namespace frm
     }
 
 
-    void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* /*_pAdditionalArg*/, ScriptType /*_nForScriptType*/ ) const
+    void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* /*_pAdditionalArg*/, SvtScriptType /*_nForScriptType*/ ) const
     {
         _rNewAttribs.Put( SvxFrameDirectionItem( m_eParagraphDirection, getWhich() ) );
 
@@ -434,7 +433,7 @@ namespace frm
     }
 
 
-    void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
+    void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( _pAdditionalArg && _pAdditionalArg->ISA( SfxBoolItem ), "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )

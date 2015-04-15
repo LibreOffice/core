@@ -928,13 +928,13 @@ bool ScGlobal::IsSystemRTL()
     return MsLangId::isRightToLeft( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
-sal_uInt8 ScGlobal::GetDefaultScriptType()
+SvtScriptType ScGlobal::GetDefaultScriptType()
 {
     // Used when text contains only WEAK characters.
     // Script type of office language is used then (same as GetEditDefaultLanguage,
     // to get consistent behavior of text in simple cells and EditEngine,
     // also same as GetAppLanguage() in Writer)
-    return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+    return SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
@@ -943,23 +943,23 @@ LanguageType ScGlobal::GetEditDefaultLanguage()
     return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
-sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich )
+sal_uInt16 ScGlobal::GetScriptedWhichID( SvtScriptType nScriptType, sal_uInt16 nWhich )
 {
     switch ( nScriptType )
     {
-        case SCRIPTTYPE_LATIN:
-        case SCRIPTTYPE_ASIAN:
-        case SCRIPTTYPE_COMPLEX:
+        case SvtScriptType::LATIN:
+        case SvtScriptType::ASIAN:
+        case SvtScriptType::COMPLEX:
         break;      // take exact matches
         default:    // prefer one, first COMPLEX, then ASIAN
-            if ( nScriptType & SCRIPTTYPE_COMPLEX )
-                nScriptType = SCRIPTTYPE_COMPLEX;
-            else if ( nScriptType & SCRIPTTYPE_ASIAN )
-                nScriptType = SCRIPTTYPE_ASIAN;
+            if ( nScriptType & SvtScriptType::COMPLEX )
+                nScriptType = SvtScriptType::COMPLEX;
+            else if ( nScriptType & SvtScriptType::ASIAN )
+                nScriptType = SvtScriptType::ASIAN;
     }
     switch ( nScriptType )
     {
-        case SCRIPTTYPE_COMPLEX:
+        case SvtScriptType::COMPLEX:
         {
             switch ( nWhich )
             {
@@ -982,7 +982,7 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
             }
         }
         break;
-        case SCRIPTTYPE_ASIAN:
+        case SvtScriptType::ASIAN:
         {
             switch ( nWhich )
             {

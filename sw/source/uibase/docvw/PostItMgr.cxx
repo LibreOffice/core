@@ -385,13 +385,14 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if ((*i)->pPostIt)
                         {
-                            const sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld().GetField()->GetLanguage() );
+                            const SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld().GetField()->GetLanguage() );
                             sal_uInt16 nLangWhichId = 0;
                             switch (nScriptType)
                             {
-                            case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
-                            case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                            case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                            case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
+                            case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                            case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                            default: break;
                             }
                             (*i)->pPostIt->SetLanguage(
                                 SvxLanguageItem(

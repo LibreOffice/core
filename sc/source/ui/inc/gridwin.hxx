@@ -161,7 +161,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     ScRange                 aPagebreakSource;
     ScRange                 aPagebreakDrag;
 
-    sal_uInt8               nPageScript;
+    SvtScriptType           nPageScript;
 
     long                    nLastClickX;
     long                    nLastClickY;

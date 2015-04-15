@@ -283,9 +283,9 @@ void SvtCTLOptions_Impl::Load()
 
     if (!m_bCTLFontEnabled)
     {
-        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
         //system locale is CTL
-        bool bAutoEnableCTL = (nScriptType & SCRIPTTYPE_COMPLEX);
+        bool bAutoEnableCTL = bool(nScriptType & SvtScriptType::COMPLEX);
 
         LanguageType eSystemLanguage = LANGUAGE_SYSTEM;
 
@@ -297,8 +297,8 @@ void SvtCTLOptions_Impl::Load()
             eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
             if (eSystemLanguage != LANGUAGE_SYSTEM)
             {
-                sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-                bAutoEnableCTL = (nWinScript & SCRIPTTYPE_COMPLEX);
+                SvtScriptType nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
+                bAutoEnableCTL = bool(nWinScript & SvtScriptType::COMPLEX);
             }
 
             //CTL keyboard is installed

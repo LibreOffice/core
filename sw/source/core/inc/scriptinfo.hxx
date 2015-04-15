@@ -178,7 +178,7 @@ public:
 
     // "high" level operations, nPos refers to string position
     sal_Int32 NextScriptChg( const sal_Int32 nPos ) const;
-    sal_uInt8 ScriptType( const sal_Int32 nPos ) const;
+    sal_Int16 ScriptType( const sal_Int32 nPos ) const;
 
     // Returns the position of the next direction level change.
     // If bLevel is set, the position of the next level which is smaller

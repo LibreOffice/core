@@ -259,9 +259,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
                     OUString aStr( mpEngine->GetText( pE->aSel ) );
-                    sal_uInt8 nScriptType = mpDoc->GetStringScriptType( aStr );
-                    const sal_uInt8 nScripts[3] = { SCRIPTTYPE_LATIN,
-                        SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
+                    SvtScriptType nScriptType = mpDoc->GetStringScriptType( aStr );
+                    const SvtScriptType nScripts[3] = { SvtScriptType::LATIN,
+                        SvtScriptType::ASIAN, SvtScriptType::COMPLEX };
                     for ( sal_uInt8 j=0; j<3; ++j )
                     {
                         if ( nScriptType & nScripts[j] )

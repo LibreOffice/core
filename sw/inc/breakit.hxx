@@ -29,6 +29,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <swdllapi.h>
 
+enum class SvtScriptType;
+
 class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
 {
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
@@ -109,7 +111,7 @@ public:
     }
 
     sal_uInt16 GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos ) const;
-    sal_uInt16 GetAllScriptsOfText( const OUString& rTxt ) const;
+    SvtScriptType GetAllScriptsOfText( const OUString& rTxt ) const;
 
     sal_Int32 getGraphemeCount(const OUString& rStr,
         sal_Int32 nStart, sal_Int32 nEnd) const;

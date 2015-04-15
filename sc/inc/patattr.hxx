@@ -22,6 +22,7 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/languageoptions.hxx>
 #include <unotools/fontcvt.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
@@ -86,16 +87,16 @@ public:
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
+                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL );
 
-    static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, sal_uInt8 nScript);
+    static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
     /** Fills a font object from the own item set. */
     void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
+                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL ) const;
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */

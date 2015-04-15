@@ -64,13 +64,13 @@ using namespace formula;
 
 namespace {
 
-inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
+inline bool IsAmbiguousScriptNonZero( SvtScriptType nScript )
 {
     //TODO: move to a header file
-    return ( nScript != SCRIPTTYPE_LATIN &&
-             nScript != SCRIPTTYPE_ASIAN &&
-             nScript != SCRIPTTYPE_COMPLEX &&
-             nScript != 0 );
+    return ( nScript != SvtScriptType::LATIN &&
+             nScript != SvtScriptType::ASIAN &&
+             nScript != SvtScriptType::COMPLEX &&
+             nScript != SvtScriptType::NONE );
 }
 
 }
@@ -2929,7 +2929,7 @@ public:
     {
         // With a formula cell, it's considered an edit text cell when either
         // the result is multi-line or it has more than one script types.
-        sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
+        SvtScriptType nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
         if (IsAmbiguousScriptNonZero(nScriptType))
             return true;
 
@@ -2952,7 +2952,7 @@ public:
         for (size_t i = 0; i < nDataSize; ++i)
         {
             SCROW nRow = node.position + i + nOffset;
-            sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
+            SvtScriptType nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
             if (IsAmbiguousScriptNonZero(nScriptType))
                 // Return the offset from the first row.
                 return RetType(i+nOffset, true);

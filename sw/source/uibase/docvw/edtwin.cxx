@@ -759,7 +759,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
     bool bLang = true;
     if(eBufferLanguage != LANGUAGE_DONTKNOW)
     {
-        switch( GetI18NScriptTypeOfLanguage( eBufferLanguage ))
+        switch( SvtLanguageOptions::GetI18NScriptTypeOfLanguage( eBufferLanguage ))
         {
             case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
             case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;

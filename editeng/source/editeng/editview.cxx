@@ -259,7 +259,7 @@ void EditView::DeleteSelected()
     pImpEditView->DeleteSelected();
 }
 
-sal_uInt16 EditView::GetSelectedScriptType() const
+SvtScriptType EditView::GetSelectedScriptType() const
 {
     return pImpEditView->pEditEngine->GetScriptType( pImpEditView->GetEditSelection() );
 }
@@ -945,14 +945,14 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
         {
             LanguageType nLangToUse = (nId == MN_WORDLANGUAGE) ? nGuessLangWord : nGuessLangPara;
-            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+            SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
 
             SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
-            if (nScriptType == SCRIPTTYPE_LATIN)
+            if (nScriptType == SvtScriptType::LATIN)
                 aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
-            if (nScriptType == SCRIPTTYPE_COMPLEX)
+            if (nScriptType == SvtScriptType::COMPLEX)
                 aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
-            if (nScriptType == SCRIPTTYPE_ASIAN)
+            if (nScriptType == SvtScriptType::ASIAN)
                 aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
             if ( nId == MN_PARALANGUAGE )
             {

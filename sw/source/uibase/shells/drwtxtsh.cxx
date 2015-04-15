@@ -712,7 +712,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     }
 
     SfxItemSet aSet(pOLV->GetAttribs());
-    sal_uInt16 nScript = pOLV->GetSelectedScriptType();
+    SvtScriptType nScript = pOLV->GetSelectedScriptType();
     SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
@@ -723,7 +723,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         else
             aSetDlgFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
         if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }
@@ -792,11 +792,11 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
         nScript = g_pBreakIt->GetAllScriptsOfText( sSym );
-        if( SCRIPTTYPE_LATIN & nScript )
+        if( SvtScriptType::LATIN & nScript )
             aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO );
-        if( SCRIPTTYPE_ASIAN & nScript )
+        if( SvtScriptType::ASIAN & nScript )
             aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
-        if( SCRIPTTYPE_COMPLEX & nScript )
+        if( SvtScriptType::COMPLEX & nScript )
             aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
         pOLV->SetAttribs(aFontAttribSet);
 

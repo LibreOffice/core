@@ -269,13 +269,13 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
                  ((nLangList & LANG_LIST_ALL) != 0 ||
                   ((nLangList & LANG_LIST_WESTERN) != 0 &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
-                    SCRIPTTYPE_LATIN)) ||
+                    SvtScriptType::LATIN)) ||
                   ((nLangList & LANG_LIST_CTL) != 0 &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
-                    SCRIPTTYPE_COMPLEX)) ||
+                    SvtScriptType::COMPLEX)) ||
                   ((nLangList & LANG_LIST_CJK) != 0 &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
-                    SCRIPTTYPE_ASIAN)) ||
+                    SvtScriptType::ASIAN)) ||
                   ((nLangList & LANG_LIST_FBD_CHARS) != 0 &&
                    MsLangId::hasForbiddenCharacters(nLangType)) ||
                   ((nLangList & LANG_LIST_SPELL_AVAIL) != 0 &&

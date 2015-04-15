@@ -222,7 +222,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             rWrtSh.GetCurAttr( aSetItem.GetItemSet() );
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
-            sal_uInt16 nScriptTypes = rWrtSh.GetScriptType();
+            SvtScriptType nScriptTypes = rWrtSh.GetScriptType();
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                         aSetItem.GetItemOfScript( nScriptTypes ) ) );
             std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItems;

@@ -91,7 +91,7 @@ namespace frm
         void    disableAttributeNotification( AttributeId _nAttributeId );
 
         /// executes a toggle of the given attribute
-        bool    executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, ScriptType _nForScriptType );
+        bool    executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, SvtScriptType _nForScriptType );
 
         /// retrieves the state of the given attribute from the cache
         AttributeState  getAttributeState( AttributeId _nAttributeId ) const;
@@ -113,7 +113,7 @@ namespace frm
         void        normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem );
 
         // gets the script type of the selection in our edit view (with fallback)
-        ScriptType  getSelectedScriptType() const;
+        SvtScriptType  getSelectedScriptType() const;
 
         /** re-arranges the view and the scrollbars
         */

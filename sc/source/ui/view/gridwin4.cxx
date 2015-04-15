@@ -1110,18 +1110,18 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
         OUString aPageStr = ScGlobal::GetRscString( STR_PGNUM );
-        if ( nPageScript == 0 )
+        if ( nPageScript == SvtScriptType::NONE )
         {
             //  get script type of translated "Page" string only once
             nPageScript = pDoc->GetStringScriptType( aPageStr );
-            if (nPageScript == 0)
+            if (nPageScript == SvtScriptType::NONE)
                 nPageScript = ScGlobal::GetDefaultScriptType();
         }
 
         vcl::Font aFont;
         std::unique_ptr<ScEditEngineDefaulter> pEditEng;
         const ScPatternAttr& rDefPattern = static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
-        if ( nPageScript == SCRIPTTYPE_LATIN )
+        if ( nPageScript == SvtScriptType::LATIN )
         {
             //  use single font and call DrawText directly
             rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );

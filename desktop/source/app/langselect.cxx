@@ -79,10 +79,10 @@ void setMsLangIdFallback(OUString const & locale) {
     if (!locale.isEmpty()) {
         LanguageType type = LanguageTag::convertToLanguageTypeWithFallback(locale);
         switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
-        case SCRIPTTYPE_ASIAN:
+        case SvtScriptType::ASIAN:
             MsLangId::setConfiguredAsianFallback(type);
             break;
-        case SCRIPTTYPE_COMPLEX:
+        case SvtScriptType::COMPLEX:
             MsLangId::setConfiguredComplexFallback(type);
             break;
         default:

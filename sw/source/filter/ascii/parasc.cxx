@@ -55,7 +55,7 @@ class SwASCIIParser
     const SwAsciiOptions& rOpt;
     SfxItemSet* pItemSet;
     long nFileSize;
-    sal_uInt16 nScript;
+    SvtScriptType nScript;
     bool bNewDoc;
 
     sal_uLong ReadChars();
@@ -90,7 +90,7 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OU
 
 SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bool bReadNewDoc, const SwAsciiOptions& rOpts)
-    : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(0)
+    : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(SvtScriptType::NONE)
     , bNewDoc(bReadNewDoc)
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
@@ -168,17 +168,17 @@ sal_uLong SwASCIIParser::CallParser()
     if( pItemSet )
     {
         // set only the attribute, for scanned scripts.
-        if( !( SCRIPTTYPE_LATIN & nScript ))
+        if( !( SvtScriptType::LATIN & nScript ))
         {
             pItemSet->ClearItem( RES_CHRATR_FONT );
             pItemSet->ClearItem( RES_CHRATR_LANGUAGE );
         }
-        if( !( SCRIPTTYPE_ASIAN & nScript ))
+        if( !( SvtScriptType::ASIAN & nScript ))
         {
             pItemSet->ClearItem( RES_CHRATR_CJK_FONT );
             pItemSet->ClearItem( RES_CHRATR_CJK_LANGUAGE );
         }
-        if( !( SCRIPTTYPE_COMPLEX & nScript ))
+        if( !( SvtScriptType::COMPLEX & nScript ))
         {
             pItemSet->ClearItem( RES_CHRATR_CTL_FONT );
             pItemSet->ClearItem( RES_CHRATR_CTL_LANGUAGE );
@@ -491,9 +491,9 @@ void SwASCIIParser::InsertText( const OUString& rStr )
     pDoc->UpdateRsid( *pPam, rStr.getLength() );
     pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
 
-    if( pItemSet && g_pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
-                                             SCRIPTTYPE_ASIAN |
-                                             SCRIPTTYPE_COMPLEX ) )
+    if( pItemSet && g_pBreakIt && nScript != ( SvtScriptType::LATIN |
+                                             SvtScriptType::ASIAN |
+                                             SvtScriptType::COMPLEX ) )
         nScript |= g_pBreakIt->GetAllScriptsOfText( rStr );
 }
 

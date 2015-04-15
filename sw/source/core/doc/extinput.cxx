@@ -72,7 +72,7 @@ SwExtTextInput::~SwExtTextInput()
                 // for CJK/CTL scripts.
                 bool bLang = true;
                 sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
-                switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
+                switch(SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
                     case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
                     case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;

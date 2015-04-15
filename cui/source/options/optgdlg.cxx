@@ -1331,8 +1331,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet->Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, true ) );
 
-        sal_uInt16 nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
-        bool bNewCJK = ( nNewType & SCRIPTTYPE_ASIAN ) != 0;
+        SvtScriptType nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
+        bool bNewCJK = bool( nNewType & SvtScriptType::ASIAN );
         SvtCompatibilityOptions aCompatOpts;
         aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
@@ -1677,12 +1677,12 @@ namespace
 IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 {
     LanguageType eLang = pBox->GetSelectLanguage();
-    sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
+    SvtScriptType nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
     // first check if CTL must be enabled
     // #103299# - if CTL font setting is not readonly
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
     {
-        bool bIsCTLFixed = (nType & SCRIPTTYPE_COMPLEX) != 0;
+        bool bIsCTLFixed = bool(nType & SvtScriptType::COMPLEX);
         lcl_checkLanguageCheckBox(m_pCTLSupportCB, bIsCTLFixed, m_bOldCtl);
         SupportHdl( m_pCTLSupportCB );
     }
@@ -1690,7 +1690,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     // #103299# - if CJK support is not readonly
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
     {
-        bool bIsCJKFixed = (nType & SCRIPTTYPE_ASIAN) != 0;
+        bool bIsCJKFixed = bool(nType & SvtScriptType::ASIAN);
         lcl_checkLanguageCheckBox(m_pAsianSupportCB, bIsCJKFixed, m_bOldAsian);
         SupportHdl( m_pAsianSupportCB );
     }

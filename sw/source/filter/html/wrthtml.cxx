@@ -306,13 +306,13 @@ sal_uLong SwHTMLWriter::WriteStream()
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
     nCSS1OutMode = 0;
-    sal_uInt16 nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( GetAppLanguage() );
+    SvtScriptType nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( GetAppLanguage() );
     switch( nScript )
     {
-    case SCRIPTTYPE_ASIAN:
+    case SvtScriptType::ASIAN:
         nCSS1Script = CSS1_OUTMODE_CJK;
         break;
-    case SCRIPTTYPE_COMPLEX:
+    case SvtScriptType::COMPLEX:
         nCSS1Script = CSS1_OUTMODE_CTL;
         break;
     default:

@@ -37,7 +37,7 @@ class SdrObject;
 class OutputDevice;
 class ScDrawLayer;
 class EditTextObject;
-
+enum class SvtScriptType;
 namespace editeng { class SvxBorderLine; }
 
 struct ScHTMLStyle
@@ -46,7 +46,7 @@ struct ScHTMLStyle
     OUString            aFontFamilyName;
     sal_uInt32          nFontHeight;        // Item-Value
     sal_uInt16          nFontSizeNumber;    // HTML value 1-7
-    sal_uInt8           nDefaultScriptType; // Font values are valid for the default script type
+    SvtScriptType       nDefaultScriptType; // Font values are valid for the default script type
     bool                bInitialized;
 
     ScHTMLStyle() :

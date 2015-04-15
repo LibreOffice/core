@@ -249,7 +249,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         }
     }
 
-    sal_Int16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+    sal_Int16 nScriptType = SvtLanguageOptions::FromSvtScriptTypeToI18N( SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() ) );
     if ( mpText && mnTextSize && xPPTBreakIter.is() )
     {
         OUString sT( mpText, mnTextSize );

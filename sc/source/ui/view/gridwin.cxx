@@ -460,7 +460,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             nPagebreakMouse( SC_PD_NONE ),
             nPagebreakBreak( 0 ),
             nPagebreakPrev( 0 ),
-            nPageScript( 0 ),
+            nPageScript( SvtScriptType::NONE ),
             nLastClickX( 0 ),
             nLastClickY( 0 ),
             nDragStartX( -1 ),

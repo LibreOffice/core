@@ -222,7 +222,7 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
         using namespace ::com::sun::star;
         {
             if( i18n::ScriptType::WEAK == nScript )
-                nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+                nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
             switch( nScript)
             {
             case i18n::ScriptType::COMPLEX:

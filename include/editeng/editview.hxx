@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/cursor.hxx>
 #include <editeng/editstat.hxx>
+#include <svl/languageoptions.hxx>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -121,7 +122,7 @@ public:
     OUString        GetSelected();
     void            DeleteSelected();
 
-    sal_uInt16          GetSelectedScriptType() const;
+    SvtScriptType       GetSelectedScriptType() const;
 
                         // VisArea position of the Output window.
                         // A size change also affects the VisArea

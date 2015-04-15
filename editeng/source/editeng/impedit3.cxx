@@ -2564,8 +2564,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     /*
      * Set attributes for script types Asian and Complex
     */
-    short nScriptType = GetI18NScriptType( EditPaM( pNode, nPos ) );
-    if ( ( nScriptType == i18n::ScriptType::ASIAN ) || ( nScriptType == i18n::ScriptType::COMPLEX ) )
+    short nScriptTypeI18N = GetI18NScriptType( EditPaM( pNode, nPos ) );
+    SvtScriptType nScriptType = SvtLanguageOptions::FromI18NToSvtScriptType(nScriptTypeI18N);
+    if ( ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) || ( nScriptTypeI18N == i18n::ScriptType::COMPLEX ) )
     {
         const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ));
         rFont.SetName( rFontItem.GetFamilyName() );
@@ -2624,7 +2625,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                      || ( !pNode->Len() ) ) )
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Invalid Attribute in Seek() " );
-                if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
+                if ( IsScriptItemValid( pAttrib->Which(), nScriptTypeI18N ) )
                 {
                     pAttrib->SetFont( rFont, pOut );
                     // #i1550# hard color attrib should win over text color from field
@@ -2649,7 +2650,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
 
-    if ( rFont.GetKerning() && IsKernAsianPunctuation() && ( nScriptType == i18n::ScriptType::ASIAN ) )
+    if ( rFont.GetKerning() && IsKernAsianPunctuation() && ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) )
         rFont.SetKerning( rFont.GetKerning() | KERNING_ASIAN );
 
     if ( aStatus.DoNotUseColors() )

@@ -1370,7 +1370,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_WEIGHT:
             {
                 // #i78017 establish the same behaviour as in Writer
-                sal_uInt8 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
                 SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -1397,7 +1397,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_POSTURE:
             {
                 // #i78017 establish the same behaviour as in Writer
-                sal_uInt8 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
                 SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -1654,7 +1654,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 sal_uInt16 nWhich = rPool.GetWhich( nSlot );
                 const SvxFontItem& rFont = static_cast<const SvxFontItem&>(pNewAttrs->Get( nWhich ));
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, rPool );
-                sal_uInt8 nScript = pTabViewShell->GetSelectionScriptType();
+                SvtScriptType nScript = pTabViewShell->GetSelectionScriptType();
                 aSetItem.PutItemForScriptType( nScript, rFont );
 
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
@@ -1691,7 +1691,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_FONTHEIGHT:
                 {
                     // #i78017 establish the same behaviour as in Writer
-                    sal_uInt8 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
                     if (nSlot == SID_ATTR_CHAR_FONT)
                         nScript = pTabViewShell->GetSelectionScriptType();
 
@@ -1928,15 +1928,15 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
     rSet.Put( rAttrSet, false );
 
     //  choose font info according to selection script type
-    sal_uInt8 nScript = 0;      // GetSelectionScriptType never returns 0
+    SvtScriptType nScript = SvtScriptType::NONE;      // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT ) != SfxItemState::UNKNOWN )
     {
-        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT, nScript );
     }
     if ( rSet.GetItemState( ATTR_FONT_HEIGHT ) != SfxItemState::UNKNOWN )
     {
-        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_HEIGHT, nScript );
     }
 
@@ -2139,15 +2139,15 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     rSet.Put( rAttrSet, false ); // ItemStates mitkopieren
 
     //  choose font info according to selection script type
-    sal_uInt8 nScript = 0;      // GetSelectionScriptType never returns 0
+    SvtScriptType nScript = SvtScriptType::NONE;      // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT_WEIGHT ) != SfxItemState::UNKNOWN )
     {
-        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_WEIGHT, nScript );
     }
     if ( rSet.GetItemState( ATTR_FONT_POSTURE ) != SfxItemState::UNKNOWN )
     {
-        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        if (nScript == SvtScriptType::NONE) nScript = pTabViewShell->GetSelectionScriptType();
         ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_POSTURE, nScript );
     }
 

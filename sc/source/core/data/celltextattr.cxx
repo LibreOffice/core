@@ -14,7 +14,7 @@ namespace sc {
 
 CellTextAttr::CellTextAttr() :
     mnTextWidth(TEXTWIDTH_DIRTY),
-    mnScriptType(SC_SCRIPTTYPE_UNKNOWN) {}
+    mnScriptType(SvtScriptType::UNKNOWN) {}
 
 CellTextAttr::CellTextAttr(const CellTextAttr& r) :
     mnTextWidth(r.mnTextWidth),

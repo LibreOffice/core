@@ -32,8 +32,6 @@ namespace frm
     typedef sal_uInt16      WhichId;
     /// a SFX slot id
     typedef sal_uInt16      SfxSlotId;
-    /// a script type
-    typedef sal_uInt16      ScriptType;
 
     enum AttributeCheckState
     {

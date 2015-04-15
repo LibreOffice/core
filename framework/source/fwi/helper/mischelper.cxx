@@ -133,7 +133,7 @@ OUString RetrieveLabelFromCommand(
 void FillLangItems( std::set< OUString > &rLangItems,
         const uno::Reference< frame::XFrame > & rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
-        sal_Int16        nScriptType,
+        SvtScriptType    nScriptType,
         const OUString & rCurLang,
         const OUString & rKeyboardLang,
         const OUString & rGuessedTextLang )
@@ -197,7 +197,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     const sal_Int16 nMaxCount = 7;
     if ( xDocumentLanguages.is() )
     {
-        Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( nScriptType, nMaxCount ));
+        Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ));
         if ( rLocales.getLength() > 0 )
         {
             for ( sal_uInt16 i = 0; i < rLocales.getLength(); ++i )

@@ -864,11 +864,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
     bool bValueData = aCell.hasNumeric();
-    sal_uInt8 nScriptType = 0;
+    SvtScriptType nScriptType = SvtScriptType::NONE;
     if (!aCell.isEmpty())
         nScriptType = pDoc->GetScriptType(nCol, nRow, nTab);
 
-    if ( nScriptType == 0 )
+    if ( nScriptType == SvtScriptType::NONE )
         nScriptType = aHTMLStyle.nDefaultScriptType;
 
     OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);

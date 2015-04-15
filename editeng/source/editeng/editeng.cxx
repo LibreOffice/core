@@ -459,7 +459,7 @@ EEHorizontalTextDirection EditEngine::GetDefaultHorizontalTextDirection() const
     return pImpEditEngine->GetDefaultHorizontalTextDirection();
 }
 
-sal_uInt16 EditEngine::GetScriptType( const ESelection& rSelection ) const
+SvtScriptType EditEngine::GetScriptType( const ESelection& rSelection ) const
 {
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
     return pImpEditEngine->GetItemScriptType( aSel );
@@ -666,7 +666,7 @@ const ParaPortion* EditEngine::GetPrevVisPortion(const ParaPortion* pCurPortion)
     return pImpEditEngine->GetPrevVisPortion(pCurPortion);
 }
 
-sal_uInt16 EditEngine::GetScriptType(const EditSelection& rSel) const
+SvtScriptType EditEngine::GetScriptType(const EditSelection& rSel) const
 {
     return pImpEditEngine->GetItemScriptType(rSel);
 }
@@ -2598,7 +2598,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxCharReliefItem( rFont.GetRelief(), EE_CHAR_RELIEF ) );
 }
 
-vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType )
+vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScriptType nScriptType )
 {
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );

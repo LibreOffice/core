@@ -904,7 +904,7 @@ private:
             return;
 
         sc::CellTextAttr& rAttr = sc::celltextattr_block::at(*aAttrPos.first->data, aAttrPos.second);
-        if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
+        if (rAttr.mnScriptType != SvtScriptType::UNKNOWN)
             // Script type already deteremined.  Skip it.
             return;
 

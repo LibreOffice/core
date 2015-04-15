@@ -987,7 +987,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                                 RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
                                 0 );
     rSh.GetCurAttr( aSet );
-    sal_uInt16 nScript = rSh.GetScriptType();
+    SvtScriptType nScript = rSh.GetScriptType();
 
     SvxFontItem aFont( RES_CHRATR_FONT );
     {
@@ -1001,7 +1001,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                         aSet.Get(
                             GetWhichOfScript(
                                 RES_CHRATR_FONT,
-                                GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
+                                SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
         if (aFontName.isEmpty())
             aFontName = aFont.GetFamilyName();
     }
@@ -1067,7 +1067,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             else
                 aFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
                             RES_CHRATR_FONT,
-                            GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
+                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
         }
 
         // Insert character.
@@ -1087,17 +1087,17 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT, 0 );
 
             nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
-            if( SCRIPTTYPE_LATIN & nScript )
+            if( SvtScriptType::LATIN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_FONT);
             }
-            if( SCRIPTTYPE_ASIAN & nScript )
+            if( SvtScriptType::ASIAN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
             }
-            if( SCRIPTTYPE_COMPLEX & nScript )
+            if( SvtScriptType::COMPLEX & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );

@@ -31,16 +31,12 @@
     used for the user interface.
 */
 
-EDITENG_DLLPUBLIC sal_uInt16 GetI18NScriptTypeOfLanguage( sal_uInt16 nLang );
-sal_uInt16 GetItemScriptType( short nI18NType );
-short  GetI18NScriptType( sal_uInt16 nItemType );
-
 class EDITENG_DLLPUBLIC SvxScriptTypeItem : public SfxUInt16Item
 {
 public:
     TYPEINFO_OVERRIDE();
 
-    explicit SvxScriptTypeItem( sal_uInt16 nType = SCRIPTTYPE_LATIN );
+    explicit SvxScriptTypeItem( SvtScriptType nType = SvtScriptType::LATIN );
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
 };
@@ -60,11 +56,11 @@ public:
     inline const SfxPoolItem* GetItemOfScriptSet( sal_uInt16 _nWhich ) const
     { return SvxScriptSetItem::GetItemOfScriptSet( GetItemSet(), _nWhich ); }
 
-    static const SfxPoolItem* GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16 nScript );
+    static const SfxPoolItem* GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, SvtScriptType nScript );
 
-    const SfxPoolItem* GetItemOfScript( sal_uInt16 nScript ) const;
+    const SfxPoolItem* GetItemOfScript( SvtScriptType nScript ) const;
 
-    void PutItemForScriptType( sal_uInt16 nScriptType, const SfxPoolItem& rItem );
+    void PutItemForScriptType( SvtScriptType nScriptType, const SfxPoolItem& rItem );
 
     static void GetWhichIds( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16& rLatin, sal_uInt16& rAsian, sal_uInt16& rComplex);
 

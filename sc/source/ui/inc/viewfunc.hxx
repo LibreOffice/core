@@ -75,7 +75,7 @@ public:
     void                    GetSelectionFrame   ( SvxBoxItem&       rLineOuter,
                                                   SvxBoxInfoItem&   rLineInner );
 
-    sal_uInt8       GetSelectionScriptType();
+    SvtScriptType   GetSelectionScriptType();
 
     bool            GetAutoSumArea(ScRangeList& rRangeList);
     void            EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);

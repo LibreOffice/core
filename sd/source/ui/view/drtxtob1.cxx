@@ -618,7 +618,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
                 // #i78017 establish the same behaviour as in Writer
-                sal_uInt16 nScriptType = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                SvtScriptType nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
                 if (nSlot == SID_ATTR_CHAR_FONT)
                     nScriptType = mpView->GetScriptType();
 

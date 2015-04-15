@@ -74,29 +74,29 @@ using namespace ::com::sun::star;
 
 
 
-sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType )
+sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType )
 {
     sal_uInt16 nId = nItemId;
 
-    if ( ( nScriptType == i18n::ScriptType::ASIAN ) ||
-         ( nScriptType == i18n::ScriptType::COMPLEX ) )
+    if ( ( nScriptType == SvtScriptType::ASIAN ) ||
+         ( nScriptType == SvtScriptType::COMPLEX ) )
     {
         switch ( nItemId )
         {
             case EE_CHAR_LANGUAGE:
-                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
             break;
             case EE_CHAR_FONTINFO:
-                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK : EE_CHAR_FONTINFO_CTL;
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK : EE_CHAR_FONTINFO_CTL;
             break;
             case EE_CHAR_FONTHEIGHT:
-                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_FONTHEIGHT_CJK : EE_CHAR_FONTHEIGHT_CTL;
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_FONTHEIGHT_CJK : EE_CHAR_FONTHEIGHT_CTL;
             break;
             case EE_CHAR_WEIGHT:
-                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_WEIGHT_CJK : EE_CHAR_WEIGHT_CTL;
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_WEIGHT_CJK : EE_CHAR_WEIGHT_CTL;
             break;
             case EE_CHAR_ITALIC:
-                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_ITALIC_CJK : EE_CHAR_ITALIC_CTL;
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_ITALIC_CJK : EE_CHAR_ITALIC_CTL;
             break;
         }
     }
@@ -2024,7 +2024,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
     }
 }
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, short nScriptType )
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, SvtScriptType nScriptType )
 {
     vcl::Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );

@@ -50,6 +50,7 @@
 
 #include "markdata.hxx"
 
+enum class SvtScriptType;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -1411,12 +1412,12 @@ public:
 
     SC_DLLPUBLIC const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
     bool            HasStringWeakCharacters( const OUString& rString );
-    SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const OUString& rString );
-    SC_DLLPUBLIC sal_uInt8 GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
-    SC_DLLPUBLIC sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    sal_uInt8 GetRangeScriptType(
+    SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
+    SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
+    SC_DLLPUBLIC SvtScriptType  GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    SvtScriptType   GetRangeScriptType(
         sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
-    sal_uInt8 GetRangeScriptType( const ScRangeList& rRanges );
+    SvtScriptType   GetRangeScriptType( const ScRangeList& rRanges );
 
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );
@@ -2108,8 +2109,8 @@ public:
 
     sal_uInt16 GetTextWidth( const ScAddress& rPos ) const;
 
-    sal_uInt8 GetScriptType( const ScAddress& rPos ) const;
-    void SetScriptType( const ScAddress& rPos, sal_uInt8 nType );
+    SvtScriptType GetScriptType( const ScAddress& rPos ) const;
+    void SetScriptType( const ScAddress& rPos, SvtScriptType nType );
     void UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
     size_t GetFormulaHash( const ScAddress& rPos ) const;

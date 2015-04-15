@@ -540,23 +540,23 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     EndAllAction();
 }
 
-static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
+static inline SvtScriptType lcl_SetScriptFlags( sal_uInt16 nType )
 {
     switch( nType )
     {
         case ::com::sun::star::i18n::ScriptType::LATIN:
-            return SCRIPTTYPE_LATIN;
+            return SvtScriptType::LATIN;
         case ::com::sun::star::i18n::ScriptType::ASIAN:
-            return SCRIPTTYPE_ASIAN;
+            return SvtScriptType::ASIAN;
         case ::com::sun::star::i18n::ScriptType::COMPLEX:
-            return SCRIPTTYPE_COMPLEX;
+            return SvtScriptType::COMPLEX;
         default:
-            return 0;
+            return SvtScriptType::NONE;
     }
 }
 
 static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
-                            sal_uInt16 &rScrpt, bool bInSelection, bool bNum )
+                            SvtScriptType &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
     OUString sExp;
@@ -634,9 +634,9 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
 }
 
 /// returns the script type of the selection
-sal_uInt16 SwEditShell::GetScriptType() const
+SvtScriptType SwEditShell::GetScriptType() const
 {
-    sal_uInt16 nRet = 0;
+    SvtScriptType nRet = SvtScriptType::NONE;
 
     {
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
@@ -672,7 +672,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                   g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
-                        nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+                        nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
                     if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, false, false ))
                         nRet |= lcl_SetScriptFlags( nScript );
@@ -715,8 +715,8 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                       0 == nChg && rTxt.getLength() == nEndPos))
                                 nRet |= lcl_SetScriptFlags( nScript );
 
-                            if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
-                                SCRIPTTYPE_COMPLEX) == nRet )
+                            if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
+                                SvtScriptType::COMPLEX) == nRet )
                                 break;
 
                             sal_Int32 nFldPos = nChg+1;
@@ -731,18 +731,18 @@ sal_uInt16 SwEditShell::GetScriptType() const
                             if ((-1 != nFldPos) && (nFldPos < nChg))
                                 nChg = nFldPos;
                         }
-                        if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
-                                SCRIPTTYPE_COMPLEX) == nRet )
+                        if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
+                                SvtScriptType::COMPLEX) == nRet )
                             break;
                     }
             }
-            if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
-                                SCRIPTTYPE_COMPLEX) == nRet )
+            if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
+                                SvtScriptType::COMPLEX) == nRet )
                 break;
 
         }
     }
-    if( !nRet )
+    if( nRet == SvtScriptType::NONE )
         nRet = SvtLanguageOptions::GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
     return nRet;
 }

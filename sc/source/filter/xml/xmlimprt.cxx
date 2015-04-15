@@ -2447,7 +2447,7 @@ void ScXMLImport::ExamineDefaultStyle()
 
         const ScPatternAttr* pDefPattern = pDoc->GetDefPattern();
         if (pDefPattern && sc::NumFmtUtil::isLatinScript(*pDefPattern, *pDoc))
-            mpDocImport->setDefaultNumericScript(SCRIPTTYPE_LATIN);
+            mpDocImport->setDefaultNumericScript(SvtScriptType::LATIN);
     }
 }
 

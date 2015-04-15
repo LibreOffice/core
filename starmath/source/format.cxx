@@ -79,9 +79,9 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
         const sal_uInt16 *pTable;
         switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
         {
-            case SCRIPTTYPE_LATIN :     pTable = aLatinDefFnts; break;
-            case SCRIPTTYPE_ASIAN :     pTable = aCJKDefFnts; break;
-            case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
+            case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;
+            case SvtScriptType::ASIAN :     pTable = aCJKDefFnts; break;
+            case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts; break;
             default :
                 pTable = aLatinDefFnts;
                 SAL_WARN("starmath", "unknown script-type");

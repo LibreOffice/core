@@ -26,6 +26,7 @@
 
 #include <unotools/fontcvt.hxx>
 #include "svl/sharedstring.hxx"
+#include <svl/languageoptions.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
@@ -185,10 +186,10 @@ private:
     XParaPortionList*       pPortionInfo;
 
     sal_uInt32              nObjSettings;
-    sal_uInt16                  nMetric;
-    sal_uInt16                  nVersion;
-    sal_uInt16                  nUserType;
-    sal_uInt16                  nScriptType;
+    sal_uInt16              nMetric;
+    sal_uInt16              nVersion;
+    sal_uInt16              nUserType;
+    SvtScriptType           nScriptType;
 
     bool                    bOwnerOfPool:1;
     bool                    bVertical:1;
@@ -214,8 +215,8 @@ public:
     bool                    IsVertical() const { return bVertical;}
     void                    SetVertical( bool b );
 
-    sal_uInt16                  GetScriptType() const { return nScriptType;}
-    void                    SetScriptType( sal_uInt16 nType );
+    SvtScriptType           GetScriptType() const { return nScriptType;}
+    void                    SetScriptType( SvtScriptType nType );
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );

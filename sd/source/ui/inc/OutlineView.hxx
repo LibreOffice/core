@@ -136,7 +136,7 @@ public:
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND) SAL_OVERRIDE;
 
     // Re-implement GetScriptType for this view to get correct results
-    virtual sal_uInt16 GetScriptType() const SAL_OVERRIDE;
+    virtual SvtScriptType GetScriptType() const SAL_OVERRIDE;
 
     /** After this method has been called with <TRUE/> following changes of
         the current page are ignored in that the corresponding text is not
