@@ -253,7 +253,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
 
-    m_pDatMan = (*m_pBibMod)->createDataManager();
+    m_pDatMan = BibModul::createDataManager();
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
@@ -332,7 +332,7 @@ BibDataManager* BibliographyLoader::GetDataManager()const
     {
         if(!m_pBibMod)
             const_cast< BibliographyLoader* >( this )->m_pBibMod = OpenBibModul();
-        const_cast< BibliographyLoader* >( this )->m_pDatMan = (*m_pBibMod)->createDataManager();
+        const_cast< BibliographyLoader* >( this )->m_pDatMan = BibModul::createDataManager();
         const_cast< BibliographyLoader* >( this )->m_xDatMan = m_pDatMan;
     }
     return m_pDatMan;
