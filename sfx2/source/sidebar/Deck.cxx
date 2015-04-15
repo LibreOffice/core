@@ -202,8 +202,21 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
     return true;
 }
 
-void Deck::SetPanels (const SharedPanelContainer& rPanels)
+/**
+ * This container may contain existing panels that are
+ * being re-used, and new ones too.
+ */
+void Deck::ResetPanels (const SharedPanelContainer& rPanels)
 {
+    // First dispose old panels we no longer need.
+    for (size_t i = 0; i < maPanels.size(); i++)
+    {
+        bool bFound = false;
+        for (size_t j = 0; j < rPanels.size(); j++)
+            bFound = bFound || (maPanels[i].get() == rPanels[j].get());
+        if (!bFound) // this one didn't survive.
+            maPanels[i].disposeAndClear();
+    }
     maPanels = rPanels;
 
     RequestLayout();

@@ -52,7 +52,7 @@ public:
     const ::rtl::OUString& GetId (void) const { return msId;}
     DeckTitleBar* GetTitleBar (void) const;
     Rectangle GetContentArea (void) const;
-    void SetPanels (const SharedPanelContainer& rPanels);
+    void ResetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels (void) const { return maPanels;}
     void RequestLayout (void);
     vcl::Window* GetPanelParentWindow (void);

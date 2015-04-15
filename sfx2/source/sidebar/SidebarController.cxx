@@ -527,7 +527,6 @@ void SidebarController::SwitchToDeck (
 
     const bool bForceNewDeck ((mnRequestedForceFlags&SwitchFlag_ForceNewDeck)!=0);
     const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
-    mnRequestedForceFlags = SwitchFlag_NoForce;
 
     if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId)
         || bForceNewDeck)
@@ -593,7 +592,7 @@ void SidebarController::SwitchToDeck (
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
     const SharedPanelContainer& rCurrentPanels (mpCurrentDeck->GetPanels());
-    // FIXME: concerns wrt. dispose / lifecycle when we re-use panels here...
+
     aNewPanels.resize(nNewPanelCount);
     sal_Int32 nWriteIndex (0);
     bool bHasPanelSetChanged (false);
@@ -609,21 +608,18 @@ void SidebarController::SwitchToDeck (
 
         // Find the corresponding panel among the currently active
         // panels.
-        SharedPanelContainer::const_iterator iPanel;
-        if (bForceNewPanels)
-        {
-            // All panels have to be created in any case.  There is no
-            // point in searching already existing panels.
-            iPanel = rCurrentPanels.end();
-        }
-        else
+        SharedPanelContainer::const_iterator iPanel = rCurrentPanels.end();
+
+        if (!bForceNewPanels)
         {
             iPanel = rCurrentPanels.end();
             for (auto a = rCurrentPanels.begin(); a != rCurrentPanels.end(); ++a)
             {
-                iPanel = a;
-                if ((*iPanel)->HasIdPredicate(rPanelContexDescriptor.msId))
+                if ((*a)->HasIdPredicate(rPanelContexDescriptor.msId))
+                {
+                    iPanel = a;
                     break;
+                }
             }
         }
         if (iPanel != rCurrentPanels.end())
@@ -669,7 +665,7 @@ void SidebarController::SwitchToDeck (
         mpParentWindow->GetSizePixel().Width()-TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor(),
         mpParentWindow->GetSizePixel().Height());
 
-    mpCurrentDeck->SetPanels(aNewPanels);
+    mpCurrentDeck->ResetPanels(aNewPanels);
     mpCurrentDeck->Show();
 
     mpParentWindow->SetText(rDeckDescriptor.msTitle);
