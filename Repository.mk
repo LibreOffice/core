@@ -186,26 +186,6 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
-ifneq (,$(filter ANDROID IOS,$(OS)))
-
-# these are in NONE layer because
-# a) scp2 is not used on mobile b) layers don't mean anything on mobile
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	$(if $(filter $(OS),ANDROID), \
-		lo-bootstrap \
-	) \
-))
-
-endif
-
-ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	OOoSpotlightImporter \
-))
-
-endif
-
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
 	abp \
 	dbp \
@@ -519,6 +499,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	writerfilter \
 ))
 
+# cli_cppuhelper is NONE even though it is actually in URE because it is CliNativeLibrary
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	getuid \
 	smoketest \
@@ -533,6 +514,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	vclbootstrapprotector \
 	scqahelper \
 	unowinreg \
+	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
+	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
+	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
@@ -574,11 +558,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	unoidl \
 	uuresolver \
 	xmlreader \
-))
-
-# this is NONE even though it is actually in URE because it is CliNativeLibrary
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
