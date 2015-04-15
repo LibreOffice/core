@@ -573,6 +573,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     aGradient.StartIntensity = aXGradient.GetStartIntens();
     aGradient.EndIntensity = aXGradient.GetEndIntens();
     aGradient.StepCount = aXGradient.GetSteps();
+    aGradient.GradDiagonal = aXGradient.GetGradDiag();
 
     uno::Any aAny;
     aAny <<= aGradient;

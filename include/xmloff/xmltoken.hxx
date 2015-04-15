@@ -904,6 +904,7 @@ namespace xmloff { namespace token {
         XML_GL3DBAR,
         XML_GOURAUD,
         XML_GRADIENT,
+        XML_GRADIENT_DIAGONAL,
         XML_GRADIENT_ANGLE,
         XML_GRADIENT_BORDER,
         XML_GRADIENT_STEP_COUNT,

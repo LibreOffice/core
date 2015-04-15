@@ -394,6 +394,7 @@ module com {
      short StartIntensity;
      short EndIntensity;
      short StepCount;
+     short GradDiagonal;
     };
     published constants ImageAlign {
      const short BOTTOM = 3;

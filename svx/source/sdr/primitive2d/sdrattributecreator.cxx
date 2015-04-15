@@ -458,7 +458,8 @@ namespace drawinglayer
                                 (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
-                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
+                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue(),
+                                aXGradient.GetGradDiag());
 
                             break;
                         }
@@ -615,7 +616,8 @@ namespace drawinglayer
                         (double)rGradient.GetAngle() * F_PI1800,
                         basegfx::BColor(fStartLum, fStartLum, fStartLum),
                         basegfx::BColor(fEndLum, fEndLum, fEndLum),
-                        0);
+                        0,
+                       rGradient.GetGradDiag());
                 }
             }
 

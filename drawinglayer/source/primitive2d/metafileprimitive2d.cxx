@@ -902,7 +902,8 @@ namespace
             (double)rGradient.GetAngle() * F_PI1800,
             aStart,
             aEnd,
-            rGradient.GetSteps());
+            rGradient.GetSteps(),
+            rGradient.GetGradDiag());
     }
 
     /** helper to convert from a VCL Hatch definition to the corresponding

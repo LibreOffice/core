@@ -103,7 +103,8 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
         rVclGradient.GetOfsY(),
         rVclGradient.GetStartIntensity(),
         rVclGradient.GetEndIntensity(),
-        rVclGradient.GetSteps());
+        rVclGradient.GetSteps(),
+        rVclGradient.GetGradDiag());
     return aAwtGradient;
 }
 

@@ -75,7 +75,8 @@ namespace drawinglayer
                 double fAngle,
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
-                sal_uInt16 nSteps);
+                sal_uInt16 nSteps,
+                sal_uInt16 nGradDiagonal = 0);
             FillGradientAttribute();
             FillGradientAttribute(const FillGradientAttribute& rCandidate);
             FillGradientAttribute& operator=(const FillGradientAttribute& rCandidate);
@@ -96,6 +97,7 @@ namespace drawinglayer
             const basegfx::BColor& getStartColor() const;
             const basegfx::BColor& getEndColor() const;
             sal_uInt16 getSteps() const;
+            sal_uInt16 getGradDiag() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

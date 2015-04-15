@@ -242,6 +242,7 @@
 <!ATTLIST draw:gradient draw:end-intensity %percentage; #IMPLIED>
 <!ATTLIST draw:gradient draw:angle %integer; #IMPLIED>
 <!ATTLIST draw:gradient draw:border %percentage; #IMPLIED>
+<!ATTLIST draw:gradient draw:grad-diagonal %integer; #IMPLIED>
 
 <!ELEMENT draw:hatch EMPTY >
 <!ATTLIST draw:hatch draw:name %styleName; #REQUIRED>

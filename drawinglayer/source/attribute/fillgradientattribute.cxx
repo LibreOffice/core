@@ -22,7 +22,6 @@
 #include <rtl/instance.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute
@@ -39,6 +38,7 @@ namespace drawinglayer
             basegfx::BColor                         maStartColor;
             basegfx::BColor                         maEndColor;
             sal_uInt16                              mnSteps;
+            sal_uInt16                              mnGradDiagonal;
 
             ImpFillGradientAttribute(
                 GradientStyle eStyle,
@@ -48,7 +48,7 @@ namespace drawinglayer
                 double fAngle,
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
-                sal_uInt16 nSteps)
+                sal_uInt16 nSteps, sal_uInt16 nGradDiag)
             :   meStyle(eStyle),
                 mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
@@ -56,7 +56,8 @@ namespace drawinglayer
                 mfAngle(fAngle),
                 maStartColor(rStartColor),
                 maEndColor(rEndColor),
-                mnSteps(nSteps)
+                mnSteps(nSteps),
+                mnGradDiagonal(nGradDiag)
             {
             }
 
@@ -68,7 +69,8 @@ namespace drawinglayer
                 mfAngle(0.0),
                 maStartColor(basegfx::BColor()),
                 maEndColor(basegfx::BColor()),
-                mnSteps(0)
+                mnSteps(0),
+                mnGradDiagonal(0)
             {
             }
 
@@ -81,6 +83,7 @@ namespace drawinglayer
             const basegfx::BColor& getStartColor() const { return maStartColor; }
             const basegfx::BColor& getEndColor() const { return maEndColor; }
             sal_uInt16 getSteps() const { return mnSteps; }
+            sal_uInt16 getGradDiag() const { return mnGradDiagonal; }
 
             bool operator==(const ImpFillGradientAttribute& rCandidate) const
             {
@@ -91,7 +94,8 @@ namespace drawinglayer
                     && getAngle() == rCandidate.getAngle()
                     && getStartColor() == rCandidate.getStartColor()
                     && getEndColor() == rCandidate.getEndColor()
-                    && getSteps() == rCandidate.getSteps());
+                    && getSteps() == rCandidate.getSteps()
+                    && getGradDiag() == rCandidate.getGradDiag());
             }
         };
 
@@ -109,9 +113,10 @@ namespace drawinglayer
             double fAngle,
             const basegfx::BColor& rStartColor,
             const basegfx::BColor& rEndColor,
-            sal_uInt16 nSteps)
+            sal_uInt16 nSteps,
+            sal_uInt16 nGradDiagonal)
         :   mpFillGradientAttribute(ImpFillGradientAttribute(
-                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps))
+                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps, nGradDiagonal))
         {
         }
 
@@ -184,6 +189,12 @@ namespace drawinglayer
         {
             return mpFillGradientAttribute->getSteps();
         }
+
+        sal_uInt16 FillGradientAttribute::getGradDiag() const
+        {
+            return mpFillGradientAttribute->getGradDiag();
+        }
+
 
     } // end of namespace attribute
 } // end of namespace drawinglayer

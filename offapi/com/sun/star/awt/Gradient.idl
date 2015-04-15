@@ -88,6 +88,11 @@ published struct Gradient
      */
     short StepCount;
 
+    /** Diagonal Left To Right or Right to Left.
+     */
+    short GradDiagonal;
+
+
 };
 
 

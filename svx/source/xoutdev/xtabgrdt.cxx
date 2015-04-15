@@ -167,7 +167,8 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             (double)rGradient.GetAngle() * F_PI1800,
             aStart,
             aEnd,
-            nSteps);
+            nSteps,
+            rGradient.GetGradDiag());
 
         const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
             new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(

@@ -40,6 +40,7 @@ protected:
     sal_uInt16          nIntensStart;
     sal_uInt16          nIntensEnd;
     sal_uInt16          nStepCount;
+    sal_uInt16          nGradDiagonal;
 
 public:
     XGradient();
@@ -47,7 +48,7 @@ public:
                css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, long nAngle = 0,
                sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50, sal_uInt16 nBorder = 0,
                sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
-               sal_uInt16 nSteps = 0 );
+               sal_uInt16 nSteps = 0, sal_uInt16 nGradDiagonal = 0 );
 
     bool operator==(const XGradient& rGradient) const;
 
@@ -72,6 +73,7 @@ public:
     sal_uInt16         GetStartIntens() const           { return nIntensStart; }
     sal_uInt16         GetEndIntens() const             { return nIntensEnd; }
     sal_uInt16         GetSteps() const                 { return nStepCount; }
+    sal_uInt16         GetGradDiag() const              { return nGradDiagonal;  }
 };
 
 #endif

@@ -48,6 +48,7 @@ public:
     sal_uInt16          mnIntensityStart;
     sal_uInt16          mnIntensityEnd;
     sal_uInt16          mnStepCount;
+    sal_uInt16          mnGradDiagonal;
 
     friend SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImplGradient );
     friend SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImplGradient );
@@ -84,6 +85,8 @@ public:
 
     void            SetAngle( sal_uInt16 nAngle );
     sal_uInt16          GetAngle() const { return mpImplGradient->mnAngle; }
+
+    sal_uInt16          GetGradDiag() const { return mpImplGradient->mnGradDiagonal; }
 
     void            SetBorder( sal_uInt16 nBorder );
     sal_uInt16          GetBorder() const { return mpImplGradient->mnBorder; }

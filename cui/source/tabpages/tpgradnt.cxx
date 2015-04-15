@@ -539,6 +539,15 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             if( bDifferent )
             {
                 bLoop = false;
+                sal_uInt16 diagValue = 0;
+                if  (m_pDiagonalCB->IsChecked())
+                {
+                 diagValue = m_pLbDiagType->GetSelectEntryPos();
+                 if (diagValue == 0)
+                    diagValue = 1;  //For Diagonal Right to left
+                 else
+                    diagValue = 2; // For Diagonal Left to Right
+                }
                 XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                                       m_pLbColorTo->GetSelectEntryColor(),
                                       (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
@@ -547,8 +556,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
                                       (sal_uInt16) m_pMtrCenterY->GetValue(),
                                       (sal_uInt16) m_pMtrBorder->GetValue(),
                                       (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                                      (sal_uInt16) m_pMtrColorTo->GetValue() );
-
+                                      (sal_uInt16) m_pMtrColorTo->GetValue(),
+                                      0,
+                                      (sal_uInt16) diagValue );
                 XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
                 delete pGradientList->Replace( pEntry, nPos );

@@ -285,6 +285,12 @@ bool XMLGradientStyleExport::exportXML(
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END_INTENSITY, aStrValue );
 
+                // Diagonal
+                ::sax::Converter::convertNumber(aOut, aGradient.GradDiagonal);
+                aStrValue = aOut.makeStringAndClear();
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_DIAGONAL, aStrValue );
+
+
                 // Angle
                 if( aGradient.Style != awt::GradientStyle_RADIAL )
                 {

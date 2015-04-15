@@ -2327,7 +2327,8 @@ XGradient::XGradient() :
     nOfsY( 50 ),
     nIntensStart( 100 ),
     nIntensEnd( 100 ),
-    nStepCount( 0 )
+    nStepCount( 0 ),
+    nGradDiagonal( 0 )
 {
 }
 
@@ -2335,7 +2336,7 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
                      css::awt::GradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
                      sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
                      sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
-                     sal_uInt16 nSteps) :
+                     sal_uInt16 nSteps, sal_uInt16 nThGradDiag) :
     eStyle(eTheStyle),
     aStartColor(rStart),
     aEndColor(rEnd),
@@ -2345,7 +2346,8 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
     nOfsY(nYOfs),
     nIntensStart(nStartIntens),
     nIntensEnd(nEndIntens),
-    nStepCount(nSteps)
+    nStepCount(nSteps),
+    nGradDiagonal(nThGradDiag)
 {
 }
 
@@ -2360,7 +2362,8 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nOfsY          == rGradient.nOfsY          &&
              nIntensStart   == rGradient.nIntensStart   &&
              nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
+             nStepCount     == rGradient.nStepCount     &&
+             nGradDiagonal  == rGradient.nGradDiagonal);
 }
 
 TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
@@ -2528,6 +2531,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             aGradient2.StartIntensity = aXGradient.GetStartIntens();
             aGradient2.EndIntensity = aXGradient.GetEndIntens();
             aGradient2.StepCount = aXGradient.GetSteps();
+            aGradient2.GradDiagonal = aXGradient.GetGradDiag();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
@@ -2553,6 +2557,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             aGradient2.StartIntensity = aXGradient.GetStartIntens();
             aGradient2.EndIntensity = aXGradient.GetEndIntens();
             aGradient2.StepCount = aXGradient.GetSteps();
+            aGradient2.GradDiagonal = aXGradient.GetGradDiag();
 
             rVal <<= aGradient2;
             break;
