@@ -9320,6 +9320,8 @@ if test "$WITH_WEBDAV" = "neon" -a "$with_system_neon" = no -a "$enable_openssl"
     PKG_CHECK_MODULES(GNUTLS, [gnutls],,
         AC_MSG_ERROR([[Disabling OpenSSL was requested, but GNUTLS is not
                       available in the system to use as replacement.]]))
+else
+    AC_MSG_RESULT([no])
 fi
 
 AC_SUBST([LIBGCRYPT_CFLAGS])
