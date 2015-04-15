@@ -3092,7 +3092,12 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
 
     pFS->startElement( FSNS( XML_c, XML_spPr ),
             FSEND );
-    WriteSolidFill(aSymbol.FillColor);
+
+    util::Color aColor = aSymbol.FillColor;
+    if (GetProperty(xPropSet, "Color"))
+        mAny >>= aColor;
+
+    WriteSolidFill(aColor);
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 
     pFS->endElement( FSNS( XML_c, XML_marker ) );
