@@ -69,6 +69,42 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 
+typedef ::std::pair< OUString, OUString > FilterDesc;
+
+namespace
+{
+
+OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescList )
+{
+    OUString aExtensions;
+    ::std::vector< FilterDesc >::const_iterator aIter( rFilterDescList.begin() );
+
+    while (aIter != rFilterDescList.end())
+    {
+        OUString sWildcard = (*aIter).second;
+
+        if ( aExtensions.indexOf( sWildcard ) == -1 )
+        {
+            if ( !aExtensions.isEmpty() )
+                aExtensions += ";";
+            aExtensions += sWildcard;
+        }
+
+        ++aIter;
+    }
+
+    return aExtensions;
+}
+
+void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
+                     const SfxFilter *pFilter )
+{
+    if (pFilter)
+        rFilterDescList.push_back( ::std::make_pair( pFilter->GetUIName(), pFilter->GetDefaultExtension() ) );
+}
+
+}
+
 namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
@@ -93,10 +129,11 @@ rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* p
 void FuInsertFile::DoExecute( SfxRequest& rReq )
 {
     SfxFilterMatcher&       rMatcher = SfxGetpApp()->GetFilterMatcher();
-    ::std::vector< OUString > aFilterVector;
+    ::std::vector< FilterDesc > aFilterVector;
+    ::std::vector< OUString > aOtherFilterVector;
     const SfxItemSet*       pArgs = rReq.GetArgs ();
 
-    FuInsertFile::GetSupportedFilterVector( aFilterVector );
+    FuInsertFile::GetSupportedFilterVector( aOtherFilterVector );
 
     if (!pArgs)
     {
@@ -128,72 +165,73 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             // Get filter for current format
             try
             {
-                OUString aAllSpec( SD_RESSTR( STR_ALL_FILES ) );
-
-                xFilterManager->appendFilter( aAllSpec, OUString("*.*") );
-                xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
-
                 // Get main filter
                 const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aOwnCont );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 // get template filter
                 if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
                 else
                     pFilter = GraphicDocShell::Factory().GetTemplateFilter();
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 // get cross filter
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aOtherCont );
-                if( pFilter )
-                {
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-                }
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 // get Powerpoint filter
                 OUString aExt = ".ppt";
                 pFilter = aMatch.GetFilter4Extension( aExt );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 // Get other draw/impress filters
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SfxFilterFlags::TEMPLATEPATH );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SfxFilterFlags::TEMPLATEPATH  );
-                if( pFilter )
-                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                lcl_AddFilter( aFilterVector, pFilter );
 
                 // add additional supported filters
-                ::std::vector< OUString >::const_iterator aIter( aFilterVector.begin() );
+                ::std::vector< OUString >::const_iterator aOtherIter( aOtherFilterVector.begin() );
+
+                while( aOtherIter != aOtherFilterVector.end() )
+                {
+                    if( ( pFilter = rMatcher.GetFilter4Mime( *aOtherIter ) ) != NULL )
+                        lcl_AddFilter( aFilterVector, pFilter );
+
+                    ++aOtherIter;
+                }
+
+                // set default-filter (<All>)
+                OUString aAllSpec( SD_RESSTR( STR_ALL_FILES ) );
+                OUString aExtensions = lcl_GetExtensionsList( aFilterVector );
+                OUString aGUIName = aAllSpec + " (" + aExtensions + ")";
+
+                xFilterManager->appendFilter( aGUIName, aExtensions );
+                xFilterManager->setCurrentFilter( aAllSpec );
+
+                // add filters to filter manager finally
+                ::std::vector< ::std::pair < OUString, OUString > >::const_iterator aIter( aFilterVector.begin() );
 
                 while( aIter != aFilterVector.end() )
                 {
-                    if( ( pFilter = rMatcher.GetFilter4Mime( *aIter ) ) != NULL )
-                        xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-
+                    xFilterManager->appendFilter( (*aIter).first, (*aIter).second );
                     ++aIter;
                 }
+
             }
             catch (const IllegalArgumentException&)
             {
@@ -252,7 +290,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            bool bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
+            bool bFound = ( ::std::find( aOtherFilterVector.begin(), aOtherFilterVector.end(), pFilter->GetMimeType() ) != aOtherFilterVector.end() );
             if( !bFound &&
                 ( aFilterName.indexOf( "Text" ) != -1 ||
                 aFilterName.indexOf( "Rich" ) != -1 ||
