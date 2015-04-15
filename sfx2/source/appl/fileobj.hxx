@@ -33,6 +33,8 @@ class SvFileObject : public sfx2::SvLinkSource
     OUString            sReferer;
     Link                aEndEditLink;
     SfxMediumRef        xMed;
+    ImplSVEvent*        nPostUserEventId;
+    SfxMediumRef*       pDelMed;
     Window*             pOldParent;
 
     sal_uInt8 nType;
