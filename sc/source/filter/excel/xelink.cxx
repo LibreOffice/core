@@ -766,14 +766,14 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 bool XclExpTabInfo::IsExportTab( SCTAB nScTab ) const
 {
     /*  Check sheet index before to avoid assertion in GetFlag(). */
-    return (nScTab < mnScCnt) && !GetFlag( nScTab, EXC_TABBUF_SKIPMASK );
+    return (nScTab < mnScCnt && nScTab >= 0) && !GetFlag( nScTab, EXC_TABBUF_SKIPMASK );
 }
 
 bool XclExpTabInfo::IsExternalTab( SCTAB nScTab ) const
 {
     /*  Check sheet index before to avoid assertion (called from formula
         compiler also for deleted references). */
-    return (nScTab < mnScCnt) && GetFlag( nScTab, EXC_TABBUF_EXTERN );
+    return (nScTab < mnScCnt && nScTab >= 0) && GetFlag( nScTab, EXC_TABBUF_EXTERN );
 }
 
 bool XclExpTabInfo::IsVisibleTab( SCTAB nScTab ) const
@@ -788,7 +788,7 @@ bool XclExpTabInfo::IsSelectedTab( SCTAB nScTab ) const
 
 bool XclExpTabInfo::IsDisplayedTab( SCTAB nScTab ) const
 {
-    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
+    OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::IsActiveTab - sheet out of range" );
     return GetXclTab( nScTab ) == mnDisplXclTab;
 }
 
@@ -799,31 +799,31 @@ bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
 
 OUString XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
 {
-    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
-    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : OUString();
+    OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::IsActiveTab - sheet out of range" );
+    return (nScTab < mnScCnt && nScTab >= 0) ? maTabInfoVec[ nScTab ].maScName : OUString();
 }
 
 sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
 {
-    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].mnXclTab : EXC_TAB_DELETED;
+    return (nScTab < mnScCnt && nScTab >= 0) ? maTabInfoVec[ nScTab ].mnXclTab : EXC_TAB_DELETED;
 }
 
 SCTAB XclExpTabInfo::GetRealScTab( SCTAB nSortedScTab ) const
 {
-    OSL_ENSURE( nSortedScTab < mnScCnt, "XclExpTabInfo::GetRealScTab - sheet out of range" );
-    return (nSortedScTab < mnScCnt) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
+    OSL_ENSURE( nSortedScTab < mnScCnt && nSortedScTab >= 0, "XclExpTabInfo::GetRealScTab - sheet out of range" );
+    return (nSortedScTab < mnScCnt && nSortedScTab >= 0) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
 }
 
 bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
 {
-    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::GetFlag - sheet out of range" );
-    return (nScTab < mnScCnt) && ::get_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags );
+    OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::GetFlag - sheet out of range" );
+    return (nScTab < mnScCnt && nScTab >= 0) && ::get_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags );
 }
 
 void XclExpTabInfo::SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet )
 {
-    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::SetFlag - sheet out of range" );
-    if( nScTab < mnScCnt )
+    OSL_ENSURE( nScTab < mnScCnt && nScTab >= 0, "XclExpTabInfo::SetFlag - sheet out of range" );
+    if( nScTab < mnScCnt && nScTab >= 0 )
         ::set_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags, bSet );
 }
 
