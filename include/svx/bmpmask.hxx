@@ -36,7 +36,7 @@
 \************************************************************************/
 class SvxBmpMask;
 
-class SvxBmpMaskSelectItem : public SfxControllerItem
+class SAL_WARN_UNUSED SvxBmpMaskSelectItem : public SfxControllerItem
 {
 private:
     SvxBmpMask  &rBmpMask;
@@ -56,7 +56,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMaskChildWindow : public SfxChildWindow
 {
  public:
                             SvxBmpMaskChildWindow( vcl::Window*,
@@ -76,7 +76,7 @@ class MaskData;
 class MaskSet;
 class ColorWindow;
 
-class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
 {
     friend class MaskData;
     friend class MaskSet;
