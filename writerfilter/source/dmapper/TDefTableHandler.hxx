@@ -59,8 +59,6 @@ private:
     sal_Int32                                           m_nLineColor;
     sal_Int32                                           m_nLineDistance;
 
-    bool                                                m_bOOXML;
-
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
@@ -72,7 +70,7 @@ private:
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
-    TDefTableHandler( bool bOOXML );
+    TDefTableHandler();
     virtual ~TDefTableHandler();
 
     size_t                                      getCellCount() const;

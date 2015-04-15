@@ -244,7 +244,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler(true) );
+                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler() );
                     pProperties->resolve( *pTDefTableHandler );
 
                     TablePropertyMapPtr pRowPropMap( new TablePropertyMap );

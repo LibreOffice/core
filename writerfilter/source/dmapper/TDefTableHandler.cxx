@@ -34,13 +34,12 @@ using namespace ::com::sun::star;
 
 
 
-TDefTableHandler::TDefTableHandler(bool bOOXML) :
+TDefTableHandler::TDefTableHandler() :
 LoggedProperties(dmapper_logger, "TDefTableHandler"),
 m_nLineWidth(0),
 m_nLineType(0),
 m_nLineColor(0),
-m_nLineDistance(0),
-m_bOOXML( bOOXML )
+m_nLineDistance(0)
 {
 }
 
@@ -330,8 +329,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         }
         pProperties->resolve( *this );
         table::BorderLine2 aBorderLine;
-        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                                                                        aBorderLine, m_bOOXML );
+        ConversionHelper::MakeBorderLine(m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, /*bIsOOXML=*/true);
         const bool rtl = false; // TODO
         switch( rName )
         {
