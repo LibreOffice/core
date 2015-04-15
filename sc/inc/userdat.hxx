@@ -75,7 +75,7 @@ public:
     const ImageMap& GetImageMap() const             { return aImageMap; }
 };
 
-class ScMacroInfo : public SdrObjUserData
+class SC_DLLPUBLIC ScMacroInfo : public SdrObjUserData
 {
 public:
                     ScMacroInfo();

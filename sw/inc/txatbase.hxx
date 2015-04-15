@@ -38,7 +38,7 @@
 class SfxItemPool;
 class SvXMLAttrContainerItem;
 
-class SwTxtAttr : private boost::noncopyable
+class SW_DLLPUBLIC SwTxtAttr : private boost::noncopyable
 {
 private:
     SfxPoolItem * const m_pAttr;

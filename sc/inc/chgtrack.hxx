@@ -214,7 +214,7 @@ class ScChangeActionIns;
 class ScChangeActionDel;
 class ScChangeActionContent;
 
-class ScChangeAction
+class SC_DLLPUBLIC ScChangeAction
 {
     friend class ScChangeTrack;
     friend class ScChangeActionIns;
@@ -415,7 +415,7 @@ public:
 };
 
 //  ScChangeActionIns
-class ScChangeActionIns : public ScChangeAction
+class SC_DLLPUBLIC ScChangeActionIns : public ScChangeAction
 {
     friend class ScChangeTrack;
 
@@ -560,7 +560,7 @@ public:
 };
 
 //  ScChangeActionMove
-class ScChangeActionMove : public ScChangeAction
+class SC_DLLPUBLIC ScChangeActionMove : public ScChangeAction
 {
     friend class ScChangeTrack;
     friend class ScChangeActionDel;
@@ -661,7 +661,7 @@ enum ScChangeActionContentCellType
     SC_CACCT_MATREF
 };
 
-class ScChangeActionContent : public ScChangeAction
+class SC_DLLPUBLIC ScChangeActionContent : public ScChangeAction
 {
     friend class ScChangeTrack;
 
@@ -893,7 +893,7 @@ enum ScChangeTrackMergeState
 // and are decremented, to keep values in a table separated from "normal" actions.
 #define SC_CHGTRACK_GENERATED_START ((sal_uInt32) 0xfffffff0)
 
-class ScChangeTrack : public utl::ConfigurationListener
+class SC_DLLPUBLIC ScChangeTrack : public utl::ConfigurationListener
 {
     friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCsCOL, SCsROW );
     friend bool ScChangeActionDel::Reject( ScDocument* pDoc );

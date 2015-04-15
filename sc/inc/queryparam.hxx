@@ -36,7 +36,7 @@ class SharedStringPool;
 
 }
 
-struct ScQueryParamBase
+struct SC_DLLPUBLIC ScQueryParamBase
 {
     bool            bHasHeader;
     bool            bByRow;
@@ -76,7 +76,7 @@ protected:
     EntriesType maEntries;
 };
 
-struct ScQueryParamTable
+struct SC_DLLPUBLIC ScQueryParamTable
 {
     SCCOL           nCol1;
     SCROW           nRow1;

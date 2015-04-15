@@ -135,7 +135,7 @@ class SwTblBoxNumFormat;
 class SwTblBoxFormula;
 class SwTblBoxValue;
 
-class SwAttrPool : public SfxItemPool
+class SW_DLLPUBLIC SwAttrPool : public SfxItemPool
 {
 private:
     //UUUU helpers to add/rmove DrawingLayer ItemPool, used in constructor

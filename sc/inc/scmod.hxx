@@ -80,7 +80,7 @@ class ScAnyRefModalDlg;
 #define SC_DROP_NAVIGATOR       1
 #define SC_DROP_TABLE           2
 
-class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
+class SC_DLLPUBLIC ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Idle                aSpellIdle;

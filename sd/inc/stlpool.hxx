@@ -52,7 +52,7 @@ typedef ::cppu::ImplInheritanceHelper4< SfxStyleSheetPool,
                                         ::com::sun::star::container::XNameAccess,
                                         ::com::sun::star::lang::XComponent > SdStyleSheetPoolBase;
 
-class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
+class SD_DLLPUBLIC SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:

@@ -32,7 +32,7 @@ class EDcr_Impl;
 class ErrHdl_Impl;
 namespace vcl { class Window; }
 
-class ErrorInfo
+class TOOLS_DLLPUBLIC ErrorInfo
 {
 private:
     sal_uIntPtr             lUserId;

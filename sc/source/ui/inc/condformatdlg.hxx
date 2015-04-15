@@ -92,7 +92,7 @@ public:
     DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 
-class ScCondFormatDlg : public ScAnyRefModalDlg
+class SC_DLLPUBLIC ScCondFormatDlg : public ScAnyRefModalDlg
 {
 private:
     PushButton* mpBtnAdd;

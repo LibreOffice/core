@@ -25,7 +25,7 @@ class SwTxtNode;
 class SwDoc;
 
 // Attribute for indices/tables of contents.
-class SwTxtTOXMark : public SwTxtAttrEnd
+class SW_DLLPUBLIC SwTxtTOXMark : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;
     sal_Int32 * m_pEnd;   // 0 if SwTOXMark without AlternativeText

@@ -48,7 +48,7 @@ namespace accessibility {
                                 >   AccessibleControlShape_Base;
 /** @descr
 */
-class AccessibleControlShape
+class SVX_DLLPUBLIC AccessibleControlShape
         :public AccessibleShape
         ,public AccessibleControlShape_Base
 {

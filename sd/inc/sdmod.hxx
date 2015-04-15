@@ -75,7 +75,7 @@ typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache
 
 */
 
-class SdModule : public SfxModule, public SfxListener
+class SD_DLLPUBLIC SdModule : public SfxModule, public SfxListener
 {
 public:
                             TYPEINFO_OVERRIDE();

@@ -22,7 +22,7 @@
 #include <swcrsr.hxx>
 #include <calbck.hxx>
 
-class SwUnoCrsr : public virtual SwCursor, public SwModify
+class SW_DLLPUBLIC SwUnoCrsr : public virtual SwCursor, public SwModify
 {
 private:
     bool m_bRemainInSection : 1;

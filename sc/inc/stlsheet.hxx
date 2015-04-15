@@ -26,7 +26,7 @@
 
 class ScStyleSheetPool;
 
-class ScStyleSheet : public SfxStyleSheet
+class SC_DLLPUBLIC ScStyleSheet : public SfxStyleSheet
 {
 friend class ScStyleSheetPool;
 

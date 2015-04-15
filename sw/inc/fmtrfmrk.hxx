@@ -33,7 +33,7 @@ class SwTxtRefMark;
 
 // ATT_REFMARK
 
-class SwFmtRefMark
+class SW_DLLPUBLIC SwFmtRefMark
     : public SfxPoolItem
     , public SwModify
 {

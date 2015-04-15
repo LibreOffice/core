@@ -36,7 +36,7 @@ class ScDPSaveData;
 struct ScDPNumGroupInfo;
 struct ScSubTotalParam;
 
-class ScDBFunc : public ScViewFunc
+class SC_DLLPUBLIC ScDBFunc : public ScViewFunc
 {
 private:
     void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension);

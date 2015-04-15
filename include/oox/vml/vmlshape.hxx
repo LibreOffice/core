@@ -114,7 +114,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
 
 /** A shape template contains all formatting properties of shapes and can serve
     as templates for several shapes in a drawing. */
-class ShapeType
+class OOX_DLLPUBLIC ShapeType
 {
 public:
     explicit            ShapeType( Drawing& rDrawing );

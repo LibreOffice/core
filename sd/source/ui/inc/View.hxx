@@ -82,7 +82,7 @@ public:
     void End();
 };
 
-class View : public FmFormView
+class SD_DLLPUBLIC View : public FmFormView
 {
 public:
     TYPEINFO_OVERRIDE();

@@ -35,7 +35,7 @@ struct ScQueryParam;
 struct ScSubTotalParam;
 struct ScImportParam;
 
-class ScDBData : public ScRefreshTimer
+class SC_DLLPUBLIC ScDBData : public ScRefreshTimer
 {
 private:
     boost::scoped_ptr<ScSortParam> mpSortParam;

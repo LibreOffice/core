@@ -219,7 +219,7 @@ protected:
 
 //  class VCLXCheckBox
 
-class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
+class TOOLKIT_DLLPUBLIC VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -277,7 +277,7 @@ public:
 
 //  class VCLXRadioButton
 
-class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
+class TOOLKIT_DLLPUBLIC VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -622,7 +622,7 @@ public:
 
 //  class VCLXScrollBar
 
-class VCLXScrollBar :   public ::com::sun::star::awt::XScrollBar,
+class TOOLKIT_DLLPUBLIC VCLXScrollBar :   public ::com::sun::star::awt::XScrollBar,
                         public VCLXWindow
 {
 private:
@@ -930,7 +930,7 @@ public:
 
 //  class VCLXFormattedSpinField
 
-class VCLXFormattedSpinField : public VCLXSpinField
+class TOOLKIT_DLLPUBLIC VCLXFormattedSpinField : public VCLXSpinField
 {
 private:
     FormatterBase*  mpFormatter;

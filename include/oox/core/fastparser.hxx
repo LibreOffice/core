@@ -23,6 +23,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 
+#include <oox/dllapi.h>
+
 namespace oox {
     struct NamespaceMap;
     class StorageBase;
@@ -40,7 +42,7 @@ namespace core {
 /** Wrapper for a fast SAX parser that works on automatically generated OOXML
     token and namespace identifiers.
  */
-class FastParser
+class OOX_DLLPUBLIC FastParser
 {
 public:
     explicit            FastParser(

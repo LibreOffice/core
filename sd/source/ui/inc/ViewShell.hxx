@@ -79,7 +79,7 @@ class ZoomList;
 
     <p>This class replaces the former ViewShell class.</p>
 */
-class ViewShell
+class SD_DLLPUBLIC ViewShell
     : public SfxShell
 {
 public:

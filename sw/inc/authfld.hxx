@@ -141,7 +141,7 @@ public:
 
 };
 
-class SwAuthorityField : public SwField
+class SW_DLLPUBLIC SwAuthorityField : public SwField
 {
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;

@@ -47,7 +47,7 @@ enum INetMessageStreamState
 };
 
 /// Message Generator Interface.
-class INetMessageIStream
+class TOOLS_DLLPUBLIC INetMessageIStream
 {
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;

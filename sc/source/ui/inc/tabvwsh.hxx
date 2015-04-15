@@ -89,7 +89,7 @@ enum ObjectSelectionType
     OST_Media
 };
 
-class ScTabViewShell: public SfxViewShell, public ScDBFunc
+class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
     static sal_uInt16           nInsertCtrlState;

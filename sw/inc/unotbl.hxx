@@ -289,7 +289,7 @@ struct SwRangeDescriptor
 };
 
 class SwTableProperties_Impl;
-class SwXTextTable : public cppu::WeakImplHelper
+class SW_DLLPUBLIC SwXTextTable : public cppu::WeakImplHelper
 <
     ::com::sun::star::text::XTextTable,
     ::com::sun::star::lang::XServiceInfo,

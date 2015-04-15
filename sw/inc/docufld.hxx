@@ -129,7 +129,7 @@ enum SwJumpEditFormat
     JE_FMT_OLE
 };
 
-class SwPageNumberFieldType : public SwFieldType
+class SW_DLLPUBLIC SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
     bool            bVirtuell;
@@ -203,7 +203,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-class SwFileNameFieldType : public SwFieldType
+class SW_DLLPUBLIC SwFileNameFieldType : public SwFieldType
 {
     SwDoc *pDoc;
 public:
@@ -230,7 +230,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-class SwTemplNameFieldType : public SwFieldType
+class SW_DLLPUBLIC SwTemplNameFieldType : public SwFieldType
 {
     SwDoc *pDoc;
 public:
@@ -252,7 +252,7 @@ public:
 };
 
 // Document statistics
-class SwDocStatFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
     sal_Int16       nNumberingType; ///< com::sun::star::style::NumberingType
@@ -378,7 +378,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-class SwMacroFieldType : public SwFieldType
+class SW_DLLPUBLIC SwMacroFieldType : public SwFieldType
 {
     SwDoc* pDoc;
 
@@ -426,7 +426,7 @@ public:
     static bool isScriptURL( const OUString& str );
 };
 
-class SwPostItFieldType : public SwFieldType
+class SW_DLLPUBLIC SwPostItFieldType : public SwFieldType
 {
 private:
     SwDoc* mpDoc;
@@ -489,7 +489,7 @@ public:
     virtual OUString    GetDescription() const SAL_OVERRIDE;
 };
 
-class SwDocInfoFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwDocInfoFieldType : public SwValueFieldType
 {
 public:
     SwDocInfoFieldType(SwDoc* pDc);
@@ -569,7 +569,7 @@ protected:
 };
 
 // Relative page numbering.
-class SwRefPageSetField : public SwField
+class SW_DLLPUBLIC SwRefPageSetField : public SwField
 {
     short   nOffset;
     bool    bOn;
@@ -672,7 +672,7 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-class SwScriptField : public SwField
+class SW_DLLPUBLIC SwScriptField : public SwField
 {
     OUString sType;  ///< Type of Code (Java/VBScript/...)
     OUString sCode;  /**< Code as text.
@@ -703,7 +703,7 @@ public:
 };
 
 // Combined Character Fieldtype
-class SwCombinedCharFieldType : public SwFieldType
+class SW_DLLPUBLIC SwCombinedCharFieldType : public SwFieldType
 {
 public:
     SwCombinedCharFieldType();
