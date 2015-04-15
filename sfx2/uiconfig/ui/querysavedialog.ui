@@ -22,7 +22,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="discard">
-                <property name="label" translatable="yes">Close _without saving</property>
+                <property name="label" translatable="yes">C_lose without saving</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
