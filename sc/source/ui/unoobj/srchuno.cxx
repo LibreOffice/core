@@ -82,7 +82,7 @@ ScCellSearchObj::ScCellSearchObj() :
     pSearchItem->SetLEVLonger(2);
     //  Calc-Flags
     pSearchItem->SetRowDirection(false);
-    pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
+    pSearchItem->SetCellType(SvxSearchCellType::FORMULA);
 
     //  Selection-Flag wird beim Aufruf gesetzt
 }
@@ -153,7 +153,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     else if (aString == SC_UNO_SRCHSIMADD) pSearchItem->SetLEVLonger( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
     else if (aString == SC_UNO_SRCHSIMEX)  pSearchItem->SetLEVOther( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
     else if (aString == SC_UNO_SRCHSIMREM) pSearchItem->SetLEVShorter( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-    else if (aString == SC_UNO_SRCHTYPE)   pSearchItem->SetCellType( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString == SC_UNO_SRCHTYPE)   pSearchItem->SetCellType( static_cast<SvxSearchCellType>(ScUnoHelpFunctions::GetInt16FromAny( aValue )) );
     else if (aString == SC_UNO_SRCHFILTERED) pSearchItem->SetSearchFiltered( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
 }
 

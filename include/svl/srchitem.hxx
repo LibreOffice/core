@@ -42,9 +42,12 @@ enum class SvxSearchCmd
 };
 
 // search flags
-#define     SVX_SEARCHIN_FORMULA        ((sal_uInt16)0)
-#define     SVX_SEARCHIN_VALUE          ((sal_uInt16)1)
-#define     SVX_SEARCHIN_NOTE           ((sal_uInt16)2)
+enum class SvxSearchCellType
+{
+    FORMULA        = 0,
+    VALUE          = 1,
+    NOTE           = 2,
+};
 
 enum class SvxSearchApp
 {
@@ -67,7 +70,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
     SvxSearchCmd    nCommand;           // command (Search, Search all, Replace, Replace all)
 
     // Calc-specific
-    sal_uInt16      nCellType;          // Search in Formulas/Values/Notes
+    SvxSearchCellType nCellType;          // Search in Formulas/Values/Notes
     SvxSearchApp    nAppFlag;           // application which the dialog is for
     bool            bRowDirection;      // search direction: row-wise/column-wise
     bool            bAllTables;         // search in all sheets
@@ -145,8 +148,8 @@ public:
             bool            IsSearchFiltered() const { return bSearchFiltered; }
             void            SetSearchFiltered(bool b) { bSearchFiltered = b; }
 
-            sal_uInt16      GetCellType() const { return nCellType; }
-            void            SetCellType(sal_uInt16 nNewCellType) { nCellType = nNewCellType; }
+            SvxSearchCellType GetCellType() const { return nCellType; }
+            void            SetCellType(SvxSearchCellType nNewCellType) { nCellType = nNewCellType; }
 
             bool            GetNotes() const { return bNotes; }
             void            SetNotes(bool bNew) { bNotes = bNew; }

@@ -1012,7 +1012,7 @@ void ScUndoReplace::Undo()
                                        SC_FOLLOW_JUMP, false, false );
         pDocShell->PostPaintGridAll();
     }
-    else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
+    else if (pSearchItem->GetCellType() == SvxSearchCellType::NOTE)
     {
         ScPostIt* pNote = rDoc.GetNote(aCursorPos);
         OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
