@@ -6042,6 +6042,8 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
         }
     }
 
+    std::unique_ptr<SvStream> pStream(new SvMemoryStream());
+
     // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
     if (aStream.Tell())
     {
@@ -6059,13 +6061,12 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
 
         if (nData)
         {
-            m_pObjectData.reset(new SvMemoryStream());
-            m_pObjectData->WriteStream(aStream);
-            m_pObjectData->Seek(0);
+            pStream->WriteStream(aStream);
+            pStream->Seek(0);
         }
     }
 
-    uno::Reference<io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(m_pObjectData.get()));
+    uno::Reference<io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(pStream.release(), /*_bOwner=*/true));
     auto pStreamValue = std::make_shared<RTFValue>(xInputStream);
     m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
 

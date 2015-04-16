@@ -548,8 +548,6 @@ private:
      *  \objdata element.
      *  (if we don't use the \objdata we use the \result element)*/
     bool m_bObject;
-    /// Contents of the objdata group.
-    std::shared_ptr<SvStream> m_pObjectData;
     /// If the data for a picture is a binary one, it's stored here.
     std::shared_ptr<SvStream> m_pBinaryData;
 
