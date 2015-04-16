@@ -525,9 +525,7 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
         assert(rBoxes.size() != 0);
         const SwTableBox* pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
         assert(pBox);
-        if(!pBox)
-            return nullptr;
-        if(pBox->GetSttNd())
+        if (pBox->GetSttNd())
             return pBox;
         pLines = &pBox->GetTabLines();
     }
