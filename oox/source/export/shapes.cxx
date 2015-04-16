@@ -66,6 +66,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
@@ -1061,8 +1062,64 @@ void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet
     DrawingML::WriteFill(xCellPropSet);
     // TODO
     // tcW : Table cell width
-    // tcBorders : Table cell border values.
+    WriteTableCellBorders(xCellPropSet);
     mpFS->endElementNS( XML_a, XML_tcPr );
+}
+
+void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
+{
+    BorderLine2 aBorderLine;
+
+// lnL - Left Border Line Properties of table cell
+    xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
+    sal_Int32 nLeftBorder = aBorderLine.LineWidth;
+
+// While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
+// To get original value of LineWidth need to multiple by 2.
+    nLeftBorder = nLeftBorder*2;
+    nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
+
+    if(nLeftBorder > 0)
+    {
+        mpFS->startElementNS( XML_a, XML_lnL, XML_w, I32S(nLeftBorder), FSEND );
+        mpFS->endElementNS( XML_a, XML_lnL );
+    }
+
+// lnR - Right Border Line Properties of table cell
+    xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
+    sal_Int32 nRightBorder = aBorderLine.LineWidth;
+    nRightBorder = nRightBorder * 2 ;
+    nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
+
+    if(nRightBorder > 0)
+    {
+        mpFS->startElementNS( XML_a, XML_lnR, XML_w, I32S(nRightBorder), FSEND);
+        mpFS->endElementNS( XML_a, XML_lnR);
+    }
+
+// lnT - Top Border Line Properties of table cell
+    xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
+    sal_Int32 nTopBorder = aBorderLine.LineWidth;
+    nTopBorder = nTopBorder * 2;
+    nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
+
+    if(nTopBorder > 0)
+    {
+        mpFS->startElementNS( XML_a, XML_lnT, XML_w, I32S(nTopBorder), FSEND);
+        mpFS->endElementNS( XML_a, XML_lnT);
+    }
+
+// lnB - Bottom Border Line Properties of table cell
+    xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
+    sal_Int32 nBottomBorder = aBorderLine.LineWidth;
+    nBottomBorder = nBottomBorder * 2;
+    nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
+
+    if(nBottomBorder > 0)
+    {
+        mpFS->startElementNS( XML_a, XML_lnB, XML_w, I32S(nBottomBorder), FSEND);
+        mpFS->endElementNS( XML_a, XML_lnB);
+    }
 }
 
 ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
