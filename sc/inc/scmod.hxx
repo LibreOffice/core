@@ -171,18 +171,18 @@ public:
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
-SC_DLLPUBLIC    const ScDocOptions&     GetDocOptions   ();
-SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
-SC_DLLPUBLIC    const ScDefaultsOptions&   GetDefaultsOptions ();
-    SC_DLLPUBLIC const ScFormulaOptions&   GetFormulaOptions ();
-    SC_DLLPUBLIC const ScInputOptions& GetInputOptions ();
-SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
+    const ScDocOptions&     GetDocOptions   ();
+    const ScAppOptions&     GetAppOptions   ();
+    const ScDefaultsOptions&   GetDefaultsOptions ();
+    const ScFormulaOptions&   GetFormulaOptions ();
+    const ScInputOptions& GetInputOptions ();
+    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
-SC_DLLPUBLIC    void                    SetDocOptions   ( const ScDocOptions& rOpt );
-SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
+    void                    SetDocOptions   ( const ScDocOptions& rOpt );
+    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
-    SC_DLLPUBLIC void                    SetFormulaOptions ( const ScFormulaOptions& rOpt );
-    SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
+    void                    SetFormulaOptions ( const ScFormulaOptions& rOpt );
+    void   SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
     void                    InsertEntryToLRUList(sal_uInt16 nFIndex);
     void                    RecentFunctionsChanged();
@@ -199,7 +199,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
     SvtCTLOptions&      GetCTLOptions();
-    SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
+    SvtUserOptions& GetUserOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
@@ -208,7 +208,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     bool                IsInputMode();  // also for SC_INPUT_TYPE
     void SetInputMode( ScInputMode eMode, const OUString* pInitText = NULL );
     bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
-    SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
+    void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
@@ -233,7 +233,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     // input of reference:
-    SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = NULL );
+    void               SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = NULL );
     bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
     bool                IsFormulaMode();
     bool                IsRefDialogOpen();
@@ -254,9 +254,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
+    bool   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    bool   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 
     ScAnyRefModalDlg* GetCurrentAnyRefDlg();
     void PushNewAnyRefDlg( ScAnyRefModalDlg* pDlg );

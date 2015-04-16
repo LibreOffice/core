@@ -50,12 +50,12 @@ struct SC_DLLPUBLIC ScQueryParamBase
 
     virtual bool IsValidFieldIndex() const;
 
-    SC_DLLPUBLIC SCSIZE GetEntryCount() const;
-    SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
-    SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
-    SC_DLLPUBLIC ScQueryEntry& AppendEntry();
+    SCSIZE GetEntryCount() const;
+    const ScQueryEntry& GetEntry(SCSIZE n) const;
+    ScQueryEntry& GetEntry(SCSIZE n);
+    ScQueryEntry& AppendEntry();
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
-    SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
+    void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
     void FillInExcelSyntax( svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex,
                             SvNumberFormatter* pFormatter );
