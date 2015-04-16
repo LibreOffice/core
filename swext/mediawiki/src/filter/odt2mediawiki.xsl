@@ -695,6 +695,34 @@
 		</if>
 	</template>
 	
+	<template match="text:span[string-length(.) &gt; 0]">
+		<if test="boolean(@text:style-name)">
+			<variable name="style-element" select="key('style-ref', @text:style-name)"/>
+			<variable name="style">
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'background-color'"/>
+					<with-param name="style-property" select="$style-element/style:text-properties/@fo:background-color"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'color'"/>
+					<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
+				</call-template>
+			</variable>
+
+			<if test="string-length($style) &gt; 0">
+				<text>&lt;span style="</text>
+				<value-of select="$style"/>
+				<text>"&gt;</text>
+			</if>
+
+			<apply-templates/>
+
+			<if test="string-length($style) &gt; 0">
+				<text>&lt;/span&gt;</text>
+			</if>
+		</if>
+	</template>
+
 	<template match="text:tab">
 		<variable name="style">
 			<call-template name="mk-style-set">
