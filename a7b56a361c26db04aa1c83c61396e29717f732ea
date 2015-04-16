@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_308d087c",
+        "filename": "filter/source/textfilterdetect/filterdetect.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-16T11:32:31Z",
+      "side": 1,
+      "message": "I think std::scoped_ptr is preferred now. Also, why don\u0027t you initialize the variable already here?",
+      "revId": "a7b56a361c26db04aa1c83c61396e29717f732ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_10900495",
+        "filename": "filter/source/textfilterdetect/filterdetect.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-16T11:32:31Z",
+      "side": 1,
+      "message": "Could you use std::unique_ptr to hold pDecompressedStream and call release() after creating utl::OStreamWrapper, instead of manual delete?",
+      "revId": "a7b56a361c26db04aa1c83c61396e29717f732ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
