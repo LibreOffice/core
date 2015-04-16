@@ -130,7 +130,8 @@ namespace dbaui
     ORelationControl::ORelationControl(vcl::Window *pParent)
         : EditBrowseBox(pParent,
             EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE,
-            WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+            WB_TABSTOP | WB_BORDER,
+            BrowserMode::AUTOSIZE_LASTCOL)
         , m_pBoxControl(NULL)
         , m_nDataPos(0)
         , m_xSourceDef(NULL)
@@ -172,13 +173,13 @@ namespace dbaui
             m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
 
             // set browse mode
-            SetMode(    BROWSER_COLUMNSELECTION |
-                        BROWSER_HLINESFULL      |
-                        BROWSER_VLINESFULL      |
-                        BROWSER_HIDECURSOR      |
-                        BROWSER_HIDESELECT      |
-                        BROWSER_AUTO_HSCROLL    |
-                        BROWSER_AUTO_VSCROLL);
+            SetMode(    BrowserMode::COLUMNSELECTION |
+                        BrowserMode::HLINES      |
+                        BrowserMode::VLINES      |
+                        BrowserMode::HIDECURSOR      |
+                        BrowserMode::HIDESELECT      |
+                        BrowserMode::AUTO_HSCROLL    |
+                        BrowserMode::AUTO_VSCROLL);
         }
         else
             // not the first call

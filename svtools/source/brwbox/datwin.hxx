@@ -103,7 +103,7 @@ class BrowserDataWin
             ,public DropTargetHelper
 {
 public:
-    BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
+    BrowserHeader*  pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
     vcl::Window*         pEventWin;      // Window of forwarded events
     ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
     bool            bInDtor;

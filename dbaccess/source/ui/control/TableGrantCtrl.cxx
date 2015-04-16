@@ -132,8 +132,8 @@ void OTableGrantControl::Init()
 
     UpdateTables();
     // Browser Mode setzen
-    BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL |
-                        BROWSER_HIDECURSOR      | BROWSER_HIDESELECT;
+    BrowserMode nMode = BrowserMode::COLUMNSELECTION | BrowserMode::HLINES | BrowserMode::VLINES |
+                        BrowserMode::HIDECURSOR      | BrowserMode::HIDESELECT;
 
     SetMode(nMode);
 }

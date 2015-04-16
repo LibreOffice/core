@@ -27,8 +27,8 @@
 namespace dbaui
 {
 
-#define BROWSER_STANDARD_FLAGS      BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | \
-                                    BROWSER_HIDECURSOR | BROWSER_HIDESELECT | BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL
+#define BROWSER_STANDARD_FLAGS      BrowserMode::COLUMNSELECTION | BrowserMode::HLINES | BrowserMode::VLINES | \
+                                    BrowserMode::HIDECURSOR | BrowserMode::HIDESELECT | BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL
 
 #define COLUMN_ID_FIELDNAME     1
 #define COLUMN_ID_ORDER         2

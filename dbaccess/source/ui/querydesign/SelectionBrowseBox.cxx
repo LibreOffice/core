@@ -96,8 +96,8 @@ namespace
 }
 
 OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
-                   :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BROWSER_COLUMNSELECTION | BROWSER_KEEPSELECTION |  BROWSER_HIDESELECT |
-                                  BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL )
+                   :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BrowserMode::COLUMNSELECTION | BrowserMode::KEEPHIGHLIGHT |  BrowserMode::HIDESELECT |
+                                  BrowserMode::HIDECURSOR | BrowserMode::HLINES | BrowserMode::VLINES )
                    ,m_nSeekRow(0)
                    ,m_nMaxColumns(0)
                    ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
@@ -112,10 +112,10 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 {
     SetHelpId(HID_CTL_QRYDGNCRIT);
 
-    m_nMode =       BROWSER_COLUMNSELECTION | BROWSER_HIDESELECT
-                |   BROWSER_KEEPSELECTION   | BROWSER_HIDECURSOR
-                |   BROWSER_HLINESFULL      | BROWSER_VLINESFULL
-                |   BROWSER_HEADERBAR_NEW   ;
+    m_nMode =       BrowserMode::COLUMNSELECTION | BrowserMode::HIDESELECT
+                |   BrowserMode::KEEPHIGHLIGHT   | BrowserMode::HIDECURSOR
+                |   BrowserMode::HLINES      | BrowserMode::VLINES
+                |   BrowserMode::HEADERBAR_NEW   ;
 
     m_pTextCell     = new Edit(&GetDataWindow(), 0);
     m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
@@ -263,10 +263,10 @@ namespace
         {
             m_pBrowseBox->DeactivateCell();
             // we are in the right mode if a row hase been selected row
-            if ( BROWSER_HIDESELECT == ( nMode & BROWSER_HIDESELECT ) )
+            if ( BrowserMode::HIDESELECT == ( nMode & BrowserMode::HIDESELECT ) )
             {
-                nMode &= ~BROWSER_HIDESELECT;
-                nMode |= BROWSER_MULTISELECTION;
+                nMode &= ~BrowserMode::HIDESELECT;
+                nMode |= BrowserMode::MULTISELECTION;
                 m_pBrowseBox->SetMode( nMode );
             }
         }
@@ -407,12 +407,12 @@ void OSelectionBrowseBox::SetReadOnly(bool bRO)
     if (bRO)
     {
         DeactivateCell();
-        m_nMode &= ~BROWSER_HIDECURSOR;
+        m_nMode &= ~BrowserMode::HIDECURSOR;
         SetMode(m_nMode);
     }
     else
     {
-        m_nMode |= BROWSER_HIDECURSOR;
+        m_nMode |= BrowserMode::HIDECURSOR;
         SetMode(m_nMode);
         ActivateCell();
     }
@@ -1300,22 +1300,22 @@ void OSelectionBrowseBox::adjustSelectionMode( bool _bClickedOntoHeader, bool _b
     {
         if (0 == GetSelectColumnCount() )
             // I am in the correct mode if a selected column exists
-            if ( BROWSER_HIDESELECT == ( m_nMode & BROWSER_HIDESELECT ) )
+            if ( BrowserMode::HIDESELECT == ( m_nMode & BrowserMode::HIDESELECT ) )
             {
-                m_nMode &= ~BROWSER_HIDESELECT;
-                m_nMode |= BROWSER_MULTISELECTION;
+                m_nMode &= ~BrowserMode::HIDESELECT;
+                m_nMode |= BrowserMode::MULTISELECTION;
                 SetMode( m_nMode );
             }
     }
-    else if ( BROWSER_HIDESELECT != ( m_nMode & BROWSER_HIDESELECT ) )
+    else if ( BrowserMode::HIDESELECT != ( m_nMode & BrowserMode::HIDESELECT ) )
     {
         if ( GetSelectColumnCount() != 0 )
             SetNoSelection();
 
         if ( _bClickedOntoHandleCol )
         {
-            m_nMode |= BROWSER_HIDESELECT;
-            m_nMode &= ~BROWSER_MULTISELECTION;
+            m_nMode |= BrowserMode::HIDESELECT;
+            m_nMode &= ~BrowserMode::MULTISELECTION;
             SetMode( m_nMode );
         }
     }

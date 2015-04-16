@@ -52,23 +52,23 @@
 #include <algorithm>
 #include <functional>
 
-/*  BROWSER_COLUMNSELECTION :  single cells may be selected rather than only
+/*  BrowserMode::COLUMNSELECTION :  single cells may be selected rather than only
                                entire rows
     BROWSER_(H|V)LINES :       show horizontal or vertical grid-lines
 
     BROWSER_AUTO_(H|V)SCROLL : scroll automated horizontally or vertically when
                                cursor is moved beyond the edge of the dialog
-    BROWSER_HIGHLIGHT_NONE :   Do not mark the current row with selection color
+    BrowserMode::HIDESELECT     :   Do not mark the current row with selection color
                                (usually blue)
 
  */
 #define BROWSER_STANDARD_FLAGS  \
-    BROWSER_COLUMNSELECTION | \
-    BROWSER_HLINES | BROWSER_VLINES | \
-    BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL | \
-    BROWSER_HIGHLIGHT_NONE
+    BrowserMode::COLUMNSELECTION | \
+    BrowserMode::HLINES | BrowserMode::VLINES | \
+    BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL | \
+    BrowserMode::HIDESELECT
 
-// BROWSER_HIDECURSOR would prevent flickering in edit fields, but navigating
+// BrowserMode::HIDECURSOR would prevent flickering in edit fields, but navigating
 // with shift up/down, and entering non-editable cells would be problematic,
 // e.g.  the first cell, or when being in read-only mode
 

@@ -590,8 +590,8 @@ namespace svt
             // secure starting of StartEditHdl
 
     public:
-        EditBrowseBox(vcl::Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = 0 );
-        EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
+        EditBrowseBox(vcl::Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
+        EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = BrowserMode::NONE );
         virtual ~EditBrowseBox();
 
         bool IsEditing() const {return aController.Is();}

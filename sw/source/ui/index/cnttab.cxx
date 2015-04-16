@@ -3697,14 +3697,14 @@ void SwTOXStylesTabPage::Modify()
 
 SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder)
     : SwEntryBrowseBox_Base( pParent, EBBF_NONE, WB_TABSTOP | WB_BORDER,
-                           BROWSER_KEEPSELECTION |
-                           BROWSER_COLUMNSELECTION |
-                           BROWSER_MULTISELECTION |
-                           BROWSER_TRACKING_TIPS |
-                           BROWSER_HLINESFULL |
-                           BROWSER_VLINESFULL |
-                           BROWSER_AUTO_VSCROLL|
-                           BROWSER_HIDECURSOR   )
+                           BrowserMode::KEEPHIGHLIGHT |
+                           BrowserMode::COLUMNSELECTION |
+                           BrowserMode::MULTISELECTION |
+                           BrowserMode::TRACKING_TIPS |
+                           BrowserMode::HLINES |
+                           BrowserMode::VLINES |
+                           BrowserMode::AUTO_VSCROLL|
+                           BrowserMode::HIDECURSOR   )
     , aCellEdit(&GetDataWindow(), 0)
     , aCellCheckBox(&GetDataWindow())
     , nCurrentRow(0)

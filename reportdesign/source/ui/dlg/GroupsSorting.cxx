@@ -165,8 +165,9 @@ public:
 
 // class OFieldExpressionControl
 OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
-    :EditBrowseBox( _pParent, EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
-                              BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
+    :EditBrowseBox( _pParent, EBBF_NONE, WB_TABSTOP,
+                    BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
+                              BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
     ,m_aGroupPositions(GROUPS_START_LEN,-1)
     ,m_pComboCell(NULL)
     ,m_nDataPos(-1)
@@ -364,10 +365,10 @@ void OFieldExpressionControl::lateInit()
 
 
         // set browse mode
-        BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION  | BROWSER_KEEPSELECTION |
-                          BROWSER_HLINESFULL | BROWSER_VLINESFULL       | BROWSER_AUTOSIZE_LASTCOL | BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL);
+        BrowserMode nMode(BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION  | BrowserMode::KEEPHIGHLIGHT |
+                          BrowserMode::HLINES | BrowserMode::VLINES       | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::AUTO_VSCROLL | BrowserMode::AUTO_HSCROLL);
         if( m_pParent->isReadOnly() )
-            nMode |= BROWSER_HIDECURSOR;
+            nMode |= BrowserMode::HIDECURSOR;
         SetMode(nMode);
         xGroups->addContainerListener(this);
     }

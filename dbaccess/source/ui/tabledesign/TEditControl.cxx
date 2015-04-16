@@ -177,10 +177,10 @@ void OTableEditorCtrl::SetReadOnly( bool bRead )
     DeactivateCell();
 
     // Select the correct Browsers cursor
-    BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
-                      BROWSER_HLINESFULL      | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
+    BrowserMode nMode(BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::KEEPHIGHLIGHT |
+                      BrowserMode::HLINES      | BrowserMode::VLINES|BrowserMode::AUTOSIZE_LASTCOL);
     if( !bReadOnly )
-        nMode |= BROWSER_HIDECURSOR;
+        nMode |= BrowserMode::HIDECURSOR;
     SetMode(nMode);
 
     if( !bReadOnly )
