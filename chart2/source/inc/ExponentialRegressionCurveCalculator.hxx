@@ -56,10 +56,11 @@ private:
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // formula is: f(x) = exp(m_fLogIntercept) * exp( m_fLogSlope * x )
+    // formula is: f(x) = m_fSign * exp(m_fLogIntercept) * exp( m_fLogSlope * x )
     // mathematical model f(x) = Intercept * Slope^x
     double m_fLogSlope;
     double m_fLogIntercept;
+    double m_fSign;
 };
 
 } //  namespace chart

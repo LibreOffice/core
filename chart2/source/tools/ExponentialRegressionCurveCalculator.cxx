@@ -50,25 +50,34 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
         RegressionCalculationHelper::cleanup(
             aXValues, aYValues,
             RegressionCalculationHelper::isValidAndYPositive()));
+    m_fSign = 1.0;
 
-    const size_t nMax = aValues.first.size();
+    size_t nMax = aValues.first.size();
     if( nMax == 0 )
     {
-        ::rtl::math::setNan( & m_fLogSlope );
-        ::rtl::math::setNan( & m_fLogIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
-        return;
+        aValues = RegressionCalculationHelper::cleanup(
+                    aXValues, aYValues,
+                    RegressionCalculationHelper::isValidAndYNegative());
+        nMax = aValues.first.size();
+        if( nMax == 0 )
+        {
+            ::rtl::math::setNan( & m_fLogSlope );
+            ::rtl::math::setNan( & m_fLogIntercept );
+            ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
+            return;
+        }
+        m_fSign = -1.0;
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
-    double fLogIntercept = mForceIntercept ? log(mInterceptValue) : 0.0;
+    double fLogIntercept = ( mForceIntercept && (m_fSign * mInterceptValue)>0 ) ? log(m_fSign * mInterceptValue) : 0.0;
     std::vector<double> yVector;
     yVector.resize(nMax, 0.0);
 
     size_t i = 0;
     for( i = 0; i < nMax; ++i )
     {
-        double yValue = log(aValues.second[i]);
+        double yValue = log( m_fSign *aValues.second[i] );
         if (mForceIntercept)
         {
             yValue -= fLogIntercept;
@@ -111,7 +120,7 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     if( ! ( ::rtl::math::isNan( m_fLogSlope ) ||
             ::rtl::math::isNan( m_fLogIntercept )))
     {
-        fResult = exp(m_fLogIntercept + x * m_fLogSlope);
+        fResult = m_fSign * exp(m_fLogIntercept + x * m_fLogSlope);
     }
 
     return fResult;
@@ -146,7 +155,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
-    double fIntercept = exp(m_fLogIntercept);
+    double fIntercept = m_fSign * exp(m_fLogIntercept);
     double fSlope = exp(m_fLogSlope);
     bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
     bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
