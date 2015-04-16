@@ -206,7 +206,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 
 // - _SdrItemBrowserControl -
 
-#define MYBROWSEMODE (BROWSER_THUMBDRAGGING|BROWSER_KEEPHIGHLIGHT|BROWSER_NO_HSCROLL|BROWSER_HIDECURSOR)
+#define MYBROWSEMODE (BrowserMode::THUMBDRAGGING|BrowserMode::KEEPHIGHLIGHT|BrowserMode::NO_HSCROLL|BrowserMode::HIDECURSOR)
 
 _SdrItemBrowserControl::_SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits):
     BrowseBox(pParent,nBits,MYBROWSEMODE),
@@ -492,7 +492,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     bool bRet = false;
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
-        SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
+        SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
         pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
@@ -907,7 +907,7 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
 
 void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemSet* p2ndSet)
 {
-    SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
+    SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
     if (pSet!=NULL) {
         sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);

@@ -426,7 +426,7 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
     InitSettings();
 
-    SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL | BROWSER_AUTO_HSCROLL );
+    SetMode( BrowserMode::AUTO_VSCROLL | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::AUTO_HSCROLL );
     SetDataRowHeight( 28 );
     InsertDataColumn( GALLERY_BRWBOX_TITLE, GAL_RESSTR(RID_SVXSTR_GALLERY_TITLE), 256  );
 }

@@ -36,8 +36,8 @@ using namespace ::com::sun::star::util;
 
 OTableRowView::OTableRowView(vcl::Window* pParent)
     :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
-                    BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
-                    BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
+                    BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
+                    BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
@@ -69,10 +69,10 @@ void OTableRowView::Init()
     // set up HandleColumn for at maximum 5 digits
     InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
 
-    BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
-                        BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;
+    BrowserMode nMode = BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::KEEPHIGHLIGHT |
+                        BrowserMode::HLINES | BrowserMode::VLINES | BrowserMode::AUTOSIZE_LASTCOL;
     if (IsUpdatable())
-        nMode |= BROWSER_HIDECURSOR;
+        nMode |= BrowserMode::HIDECURSOR;
 
     SetMode(nMode);
 }
