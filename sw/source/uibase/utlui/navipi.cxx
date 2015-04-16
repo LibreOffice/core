@@ -878,6 +878,9 @@ void SwNavigationPI::dispose()
     aContentTree.disposeAndClear();
     aGlobalTree.disposeAndClear();
     aDocListBox.disposeAndClear();
+
+    aPageChgIdle.Stop();
+
     vcl::Window::dispose();
 }
 
@@ -1249,8 +1252,11 @@ bool    SwNavigationPI::IsGlobalDoc() const
 
 IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl)
 {
-    EditAction(&GetPageEdit());
-    GetPageEdit().GrabFocus();
+    if (!IsDisposed())
+    {
+        EditAction(&GetPageEdit());
+        GetPageEdit().GrabFocus();
+    }
     return 0;
 }
 
