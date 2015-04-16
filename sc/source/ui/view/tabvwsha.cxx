@@ -211,12 +211,12 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_SEARCH_OPTIONS:
                 {
                     // Anything goes
-                    sal_uInt16 nOptions = 0xffff;
+                    SearchOptionFlags nOptions = SearchOptionFlags::ALL;
 
                     // No replacement if ReadOnly
                     if (GetViewData().GetDocShell()->IsReadOnly())
-                        nOptions &= ~( SEARCH_OPTIONS_REPLACE | SEARCH_OPTIONS_REPLACE_ALL );
-                    rSet.Put( SfxUInt16Item( nWhich, nOptions ) );
+                        nOptions &= ~SearchOptionFlags( SearchOptionFlags::REPLACE | SearchOptionFlags::REPLACE_ALL );
+                    rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(nOptions) ) );
                 }
                 break;
 

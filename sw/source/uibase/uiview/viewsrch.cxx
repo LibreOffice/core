@@ -798,11 +798,11 @@ void SwView::StateSearch(SfxItemSet &rSet)
         {
             case SID_SEARCH_OPTIONS:
             {
-                sal_uInt16 nOpt = 0xFFFF;
+                SearchOptionFlags nOpt = SearchOptionFlags::ALL;
                 if( GetDocShell()->IsReadOnly() )
-                    nOpt &= ~( SEARCH_OPTIONS_REPLACE |
-                               SEARCH_OPTIONS_REPLACE_ALL );
-                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, nOpt));
+                    nOpt &= ~SearchOptionFlags( SearchOptionFlags::REPLACE |
+                               SearchOptionFlags::REPLACE_ALL );
+                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, static_cast<sal_uInt16>(nOpt) ));
             }
             break;
             case SID_SEARCH_ITEM:
