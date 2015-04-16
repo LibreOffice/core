@@ -98,7 +98,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
+    SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
@@ -120,7 +120,7 @@ public:
     */
     OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
 
-    SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
+    SvNumberFormatter*     GetNumberFormatter();
 
     // virtual methods for the option dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;

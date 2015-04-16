@@ -149,11 +149,11 @@ public:
 
     inline ::sd::View* GetView() const { return mpView; }
     inline SdrView* GetDrawView() const;
-    SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
+    DrawDocShell* GetDocSh() const;
 
     SdDrawDocument*  GetDoc() const;
 
-    SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
+    SfxViewFrame* GetViewFrame() const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
