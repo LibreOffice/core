@@ -116,7 +116,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           TransliterationModules_IGNORE_CASE ),
     eFamily         ( SFX_STYLE_FAMILY_PARA ),
     nCommand        ( SvxSearchCmd::FIND ),
-    nCellType       ( SVX_SEARCHIN_FORMULA ),
+    nCellType       ( SvxSearchCellType::FORMULA ),
     nAppFlag        ( SvxSearchApp::WRITER ),
     bRowDirection   ( true ),
     bAllTables      ( false ),
@@ -378,7 +378,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             aSeq[2].Name = SRCH_PARA_COMMAND;
             aSeq[2].Value <<= static_cast<sal_uInt16>(nCommand);
             aSeq[3].Name = SRCH_PARA_CELLTYPE;
-            aSeq[3].Value <<= nCellType;
+            aSeq[3].Value <<= static_cast<sal_uInt16>(nCellType);
             aSeq[4].Name = SRCH_PARA_APPFLAG;
             aSeq[4].Value <<= static_cast<sal_uInt16>(nAppFlag);
             aSeq[5].Name = SRCH_PARA_ROWDIR;
@@ -495,8 +495,12 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_CELLTYPE )
                     {
-                        if ( aSeq[i].Value >>= nCellType )
+                        sal_uInt16 nTmp;
+                        if ( aSeq[i].Value >>= nTmp )
+                        {
+                            nCellType = static_cast<SvxSearchCellType>(nTmp);
                             ++nConvertedCount;
+                        }
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_APPFLAG )
                     {
@@ -553,7 +557,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
         case MID_SEARCH_STYLEFAMILY:
             bRet = (rVal >>= nInt); eFamily =  (SfxStyleFamily) (sal_Int16) nInt; break;
         case MID_SEARCH_CELLTYPE:
-            bRet = (rVal >>= nInt); nCellType = (sal_uInt16) nInt; break;
+            bRet = (rVal >>= nInt); nCellType = static_cast<SvxSearchCellType>(nInt); break;
         case MID_SEARCH_ROWDIRECTION:
             bRet = (rVal >>= bRowDirection); break;
         case MID_SEARCH_ALLTABLES:

@@ -3182,23 +3182,23 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             sal_Int32 nLookIn = 0;
             if( LookIn >>= nLookIn )
             {
-                sal_Int16 nSearchType = 0;
+                SvxSearchCellType nSearchType;
                 switch( nLookIn )
                 {
                     case excel::XlFindLookIn::xlComments :
-                        nSearchType = SVX_SEARCHIN_NOTE; // Notes
+                        nSearchType = SvxSearchCellType::NOTE; // Notes
                     break;
                     case excel::XlFindLookIn::xlFormulas :
-                        nSearchType = SVX_SEARCHIN_FORMULA;
+                        nSearchType = SvxSearchCellType::FORMULA;
                     break;
                     case excel::XlFindLookIn::xlValues :
-                        nSearchType = SVX_SEARCHIN_VALUE;
+                        nSearchType = SvxSearchCellType::VALUE;
                     break;
                     default:
                         throw uno::RuntimeException("Range::Replace, illegal value for LookIn." );
                 }
                 newOptions.SetCellType( nSearchType );
-                xDescriptor->setPropertyValue( "SearchType", uno::makeAny( nSearchType ) );
+                xDescriptor->setPropertyValue( "SearchType", uno::makeAny( static_cast<sal_uInt16>(nSearchType) ) );
             }
         }
 

@@ -77,7 +77,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     CellType eCellType = aCell.meType;
     switch (rSearchItem.GetCellType())
     {
-        case SVX_SEARCHIN_FORMULA:
+        case SvxSearchCellType::FORMULA:
         {
             if ( eCellType == CELLTYPE_FORMULA )
                 aCell.mpFormula->GetFormula(aString, pDocument->GetGrammar());
@@ -89,7 +89,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             }
         }
         break;
-        case SVX_SEARCHIN_VALUE:
+        case SvxSearchCellType::VALUE:
             if ( eCellType == CELLTYPE_EDIT )
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
             else
@@ -97,7 +97,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 aCol[nCol].GetInputString( nRow, aString );
             }
             break;
-        case SVX_SEARCHIN_NOTE:
+        case SvxSearchCellType::NOTE:
             break; // don't search this case here
         default:
             break;
