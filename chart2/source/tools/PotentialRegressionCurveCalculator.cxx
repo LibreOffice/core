@@ -50,14 +50,23 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
         RegressionCalculationHelper::cleanup(
             aXValues, aYValues,
             RegressionCalculationHelper::isValidAndBothPositive()));
+    m_fSign = 1.0;
 
-    const size_t nMax = aValues.first.size();
+    size_t nMax = aValues.first.size();
     if( nMax == 0 )
     {
-        ::rtl::math::setNan( & m_fSlope );
-        ::rtl::math::setNan( & m_fIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );
-        return;
+        aValues = RegressionCalculationHelper::cleanup(
+                    aXValues, aYValues,
+                    RegressionCalculationHelper::isValidAndXPositiveAndYNegative());
+         nMax = aValues.first.size();
+         if( nMax == 0 )
+         {
+            ::rtl::math::setNan( & m_fSlope );
+            ::rtl::math::setNan( & m_fIntercept );
+            ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+            return;
+         }
+         m_fSign = -1.0;
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
@@ -65,7 +74,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     for( i = 0; i < nMax; ++i )
     {
         fAverageX += log( aValues.first[i] );
-        fAverageY += log( aValues.second[i] );
+        fAverageY += log( m_fSign * aValues.second[i] );
     }
 
     const double fN = static_cast< double >( nMax );
@@ -76,7 +85,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     for( i = 0; i < nMax; ++i )
     {
         double fDeltaX = log( aValues.first[i] ) - fAverageX;
-        double fDeltaY = log( aValues.second[i] ) - fAverageY;
+        double fDeltaY = log( m_fSign * aValues.second[i] ) - fAverageY;
 
         fQx  += fDeltaX * fDeltaX;
         fQy  += fDeltaY * fDeltaY;
@@ -87,7 +96,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     m_fIntercept = fAverageY - m_fSlope * fAverageX;
     m_fCorrelationCoeffitient = fQxy / sqrt( fQx * fQy );
 
-    m_fIntercept = exp( m_fIntercept );
+    m_fIntercept = m_fSign * exp( m_fIntercept );
 }
 
 double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )

@@ -57,9 +57,10 @@ private:
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // formula is: f(x) = x ^ m_fSlope * m_fIntercept
+    // formula is: f(x) = x ^ m_fSlope * m_fSign * m_fIntercept
     double m_fSlope;
     double m_fIntercept;
+    double m_fSign;
 };
 
 } //  namespace chart
