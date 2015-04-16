@@ -673,7 +673,7 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_CHAR,
-                                SFX_STYLESHEET_ERASED);
+                                SfxStyleSheetHintId::ERASED);
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -714,7 +714,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
             if (bBroadcast)
                 BroadcastStyleOperation(pFmt->GetName(),
                                         SFX_STYLE_FAMILY_FRAME,
-                                        SFX_STYLESHEET_ERASED);
+                                        SfxStyleSheetHintId::ERASED);
 
             if (GetIDocumentUndoRedo().DoesUndo())
             {
@@ -828,7 +828,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const OUString &rFmtName,
     if (bBroadcast)
     {
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_FRAME,
-                                SFX_STYLESHEET_CREATED);
+                                SfxStyleSheetHintId::CREATED);
     }
 
     return pFmt;
@@ -864,7 +864,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const OUString &rFmtName,
     if (bBroadcast)
     {
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_CHAR,
-                                SFX_STYLESHEET_CREATED);
+                                SfxStyleSheetHintId::CREATED);
     }
 
     return pFmt;
@@ -900,7 +900,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const OUString &rFmtName,
 
     if (bBroadcast)
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
-                                SFX_STYLESHEET_CREATED);
+                                SfxStyleSheetHintId::CREATED);
 
     return pFmtColl;
 }
@@ -934,7 +934,7 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
 
     if (bBroadcast)
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
-                                SFX_STYLESHEET_CREATED);
+                                SfxStyleSheetHintId::CREATED);
 
     return pFmtColl;
 }
@@ -963,7 +963,7 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
-                                SFX_STYLESHEET_ERASED);
+                                SfxStyleSheetHintId::ERASED);
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1907,7 +1907,7 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
     rFmt.SetName(sNewName);
 
     if (bBroadcast)
-        BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
+        BroadcastStyleOperation(sNewName, eFamily, SfxStyleSheetHintId::MODIFIED);
 }
 
 void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
