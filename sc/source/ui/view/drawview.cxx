@@ -910,7 +910,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     if ( pGridWin )
     {
         ScAddress aOldStt;
-        if( pData )
+        if( pData && pData->maStart.IsValid())
         {
             aOldStt = pData->maStart;
         }
