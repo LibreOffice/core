@@ -2023,7 +2023,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         {
             OUStringBuffer aTmpStr( aStr );
             // speed it up by removing all but 1.33x as many as the break pos.
-            sal_Int32 nEraseChars = std::max(4, aStr.getLength() - (nIndex*4)/3);
+            sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
             while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
             {
                 aTmpStr = OUStringBuffer(aStr);
