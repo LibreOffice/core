@@ -279,7 +279,7 @@ sub check_system_environment
 
     for my $key ( @environmentvariables )
     {
-        $variables{$key} = $ENV{$key} || "";
+        $variables{$key} = defined($ENV{$key}) ? $ENV{$key} : "";
 
         if ( $variables{$key} eq "" )
         {
