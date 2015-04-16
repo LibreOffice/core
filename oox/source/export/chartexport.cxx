@@ -745,6 +745,10 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
             XML_val, "en-US",
             FSEND );
 
+    pFS->singleElement(FSNS( XML_c, XML_roundedCorners),
+            XML_val, "0",
+            FSEND);
+
     if( !bIncludeTable )
     {
         // TODO:external data
