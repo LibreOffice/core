@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dExtrudeObj : public E3dCompoundObject
+class SVX_DLLPUBLIC SAL_WARN_UNUSED E3dExtrudeObj : public E3dCompoundObject
 {
 private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
