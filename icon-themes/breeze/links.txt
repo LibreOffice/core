@@ -44,10 +44,6 @@ cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 
-# Print Preview Toolbar
-cmd/lc_showsinglepage.png cmd/lc_adddirect.png
-cmd/sc_showsinglepage.png cmd/sc_adddirect.png
-
 # Textbox
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/sc_drawtext.png cmd/sc_text.png
