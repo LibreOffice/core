@@ -186,8 +186,11 @@ SwGlobalTree::~SwGlobalTree()
 void SwGlobalTree::dispose()
 {
     delete pSwGlblDocContents;
+    pSwGlblDocContents = NULL;
     delete pDocInserter;
+    pDocInserter = NULL;
     pDefParentWin.clear();
+    aUpdateTimer.Stop();
     SvTreeListBox::dispose();
 }
 
@@ -1008,7 +1011,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout)
 {
-    if(!HasFocus() && Update( false ))
+    if(!IsDisposed() && !HasFocus() && Update( false ))
         Display();
     return 0;
 }
