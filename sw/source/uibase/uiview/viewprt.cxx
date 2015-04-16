@@ -147,8 +147,8 @@ bool SwView::HasPrintOptionsPage() const
 
 // TabPage for application-specific print options
 
-SfxTabPage* SwView::CreatePrintOptionsPage(vcl::Window* pParent,
-                                                    const SfxItemSet& rSet)
+VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(vcl::Window* pParent,
+                                                  const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, false );
 }
@@ -245,8 +245,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 
 // Create page printer/additions for SwView and SwPagePreview
 
-SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
-                                const SfxItemSet &rOptions, bool bPreview )
+VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
+                                           const SfxItemSet &rOptions,
+                                           bool bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "No Print Dialog");
@@ -258,7 +259,9 @@ SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
     if (!fnCreatePage)
         return NULL;
 
-    SfxTabPage* pPage = (*fnCreatePage)(pParent, &rOptions);
+    VclPtr<SfxTabPage> pPage =
+        VclPtr<SfxTabPage>((*fnCreatePage)(pParent, &rOptions),
+                           SAL_NO_ACQUIRE);
     OSL_ENSURE(pPage, "No page");
     if (!pPage)
         return NULL;

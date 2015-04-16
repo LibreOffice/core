@@ -221,7 +221,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
     VclContainer *pVBox = get_content_area();
 
     // Insert TabPage
-    pPage = pViewSh->CreatePrintOptionsPage(pVBox, *pOptions);
+    pPage.reset(pViewSh->CreatePrintOptionsPage(pVBox, *pOptions));
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {

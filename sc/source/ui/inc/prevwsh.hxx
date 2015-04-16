@@ -109,7 +109,7 @@ public:
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );

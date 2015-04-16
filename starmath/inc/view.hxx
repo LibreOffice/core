@@ -270,8 +270,8 @@ protected:
     void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage *CreatePrintOptionsPage(::vcl::Window    *pParent,
-                                               const SfxItemSet &rOptions) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(::vcl::Window    *pParent,
+                                                      const SfxItemSet &rOptions) SAL_OVERRIDE;
     virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) SAL_OVERRIDE;

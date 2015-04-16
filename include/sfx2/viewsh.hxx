@@ -38,6 +38,7 @@
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
+#include <sfx2/tabdlg.hxx>
 
 class SfxBaseController;
 class Size;
@@ -52,7 +53,6 @@ class SfxMedium;
 class SfxModule;
 class SfxViewFrame;
 class SfxItemPool;
-class SfxTabPage;
 class SfxFrameSetDescriptor;
 class Printer;
 class SfxPrinter;
@@ -229,7 +229,7 @@ public:
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
-    virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
+    virtual VclPtr<SfxTabPage>  CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
     JobSetup                    GetJobSetup() const;
     Printer*                    GetActivePrinter() const;
 

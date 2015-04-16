@@ -33,7 +33,7 @@ namespace vcl { class Window; }
 
 // The following functions are available in viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, bool bWeb );
-SfxTabPage* CreatePrintOptionsPage( vcl::Window*, const SfxItemSet& );
+VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window*, const SfxItemSet& );
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx
