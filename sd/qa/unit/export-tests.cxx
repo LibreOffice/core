@@ -28,6 +28,7 @@
 
 #include <rsc/rscsfx.hxx>
 
+
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
@@ -59,6 +60,10 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
  #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
+
 #include <svx/svdotable.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -93,6 +98,7 @@ public:
     void testLineStyle();
     void testCellLeftAndRightMargin();
     void testRightToLeftParaghraph();
+    void testTableCellBorder();
 
 #if !defined WNT
     void testBnc822341();
@@ -121,6 +127,7 @@ public:
     CPPUNIT_TEST(testLineStyle);
     CPPUNIT_TEST(testCellLeftAndRightMargin);
     CPPUNIT_TEST(testRightToLeftParaghraph);
+    CPPUNIT_TEST(testTableCellBorder);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
@@ -837,7 +844,6 @@ void SdExportTest::testLineStyle()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style",drawing::LineStyle_SOLID, rStyleItem.GetValue());
 
     xDocShRef->DoClose();
-
 }
 
 void SdExportTest::testRightToLeftParaghraph()
@@ -872,7 +878,6 @@ void SdExportTest::testRightToLeftParaghraph()
 
     xDocShRef->DoClose();
 }
-
 #if !defined WNT
 
 void SdExportTest::testBnc822341()
@@ -947,6 +952,58 @@ void SdExportTest::testCellLeftAndRightMargin()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nLeftMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nRightMargin);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTableCellBorder()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/n90190.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    table::BorderLine2 aBorderLine;
+
+    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< com::sun::star::table::XMergeableCell > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCellPropSet (xCell, uno::UNO_QUERY_THROW);
+
+    xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
+    sal_Int32 nLeftBorder = aBorderLine.LineWidth ;
+// While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
+// To get original value of LineWidth need to multiple by 2.
+     nLeftBorder = nLeftBorder * 2 ;
+    nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
+    CPPUNIT_ASSERT(nLeftBorder);
+
+    xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
+    sal_Int32 nRightBorder = aBorderLine.LineWidth ;
+    nRightBorder = nRightBorder * 2 ;
+    nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
+    CPPUNIT_ASSERT(nRightBorder);
+
+    xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
+    sal_Int32 nTopBorder = aBorderLine.LineWidth ;
+    nTopBorder = nTopBorder * 2 ;
+    nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
+    CPPUNIT_ASSERT(nTopBorder);
+
+    xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
+    sal_Int32 nBottomBorder = aBorderLine.LineWidth ;
+    nBottomBorder = nBottomBorder * 2 ;
+    nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
+    CPPUNIT_ASSERT(nBottomBorder);
 
     xDocShRef->DoClose();
 }

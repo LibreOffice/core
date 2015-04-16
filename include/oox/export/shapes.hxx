@@ -162,6 +162,8 @@ public:
 
     void WriteTableCellProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
 
+    void WriteTableCellBorders(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
+
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
     sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
