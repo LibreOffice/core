@@ -181,7 +181,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 #endif
 

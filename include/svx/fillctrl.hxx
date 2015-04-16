@@ -67,7 +67,7 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
     void Update(const SfxPoolItem* pState);
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
 
 

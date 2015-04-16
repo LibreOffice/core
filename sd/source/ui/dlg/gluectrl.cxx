@@ -160,14 +160,12 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 }
 
-vcl::Window* SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )
 {
     if( GetSlotId() == SID_GLUE_ESCDIR )
-    {
-        return new GlueEscDirLB( pParent, m_xFrame );
-    }
+        return VclPtr<GlueEscDirLB>::Create( pParent, m_xFrame ).get();
 
-    return NULL;
+    return VclPtr<vcl::Window>();
 }
 
 /**

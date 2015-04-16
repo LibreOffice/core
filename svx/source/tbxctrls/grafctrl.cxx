@@ -487,9 +487,9 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     }
 }
 
-vcl::Window* SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
+    return VclPtr<ImplGrafControl>::Create( pParent, m_aCommandURL, m_xFrame ).get();
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafRedToolBoxControl, SfxInt16Item );
@@ -574,9 +574,9 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     }
 }
 
-vcl::Window* SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( new ImplGrafModeControl( pParent, m_xFrame ) );
+    return VclPtr<ImplGrafModeControl>::Create( pParent, m_xFrame ).get();
 }
 
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )

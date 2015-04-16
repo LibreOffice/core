@@ -163,7 +163,7 @@ public:
     SvxStyleToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
     virtual ~SvxStyleToolBoxControl();
 
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
@@ -210,7 +210,7 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
 
 class BorderColorStatus

@@ -183,9 +183,9 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 
 
 
-vcl::Window* SvxLineStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxLineStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return new SvxLineBox( pParent, m_xFrame );
+    return VclPtr<SvxLineBox>::Create( pParent, m_xFrame ).get();
 }
 
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
@@ -244,9 +244,9 @@ void SvxLineWidthToolBoxControl::StateChanged(
 
 
 
-vcl::Window* SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( new SvxMetricField( pParent, m_xFrame ) );
+    return VclPtr<SvxMetricField>::Create( pParent, m_xFrame ).get();
 }
 
 SvxLineEndWindow::SvxLineEndWindow(

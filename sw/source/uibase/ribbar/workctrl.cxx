@@ -716,10 +716,10 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     }
 }
 
-vcl::Window* SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
 {
-    SwZoomBox_Impl* pRet = new SwZoomBox_Impl( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
-    return pRet;
+    VclPtrInstance<SwZoomBox_Impl> pRet( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+    return pRet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -132,9 +132,9 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-vcl::Window* SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
 {
-    return new SdPagesField( pParent, m_xFrame );
+    return VclPtrInstance<SdPagesField>( pParent, m_xFrame ).get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

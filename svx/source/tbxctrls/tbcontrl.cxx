@@ -2374,22 +2374,22 @@ void SvxStyleToolBoxControl::StateChanged(
         Update();
 }
 
-vcl::Window* SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
-                                                   OUString( ".uno:StyleApply" ),
-                                                   SFX_STYLE_FAMILY_PARA,
-                                                   Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                                   m_xFrame,
-                                                   pImpl->aClearForm,
-                                                   pImpl->aMore,
-                                                   pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
+    VclPtrInstance<SvxStyleBox_Impl> pBox( pParent,
+                                           OUString( ".uno:StyleApply" ),
+                                           SFX_STYLE_FAMILY_PARA,
+                                           Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                           m_xFrame,
+                                           pImpl->aClearForm,
+                                           pImpl->aMore,
+                                           pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
     if( !pImpl->aDefaultStyles.empty())
         pBox->SetDefaultStyle( pImpl->aDefaultStyles[0] );
     // Set visibility listener to bind/unbind controller
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
 
-    return pBox;
+    return pBox.get();
 }
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
@@ -2434,12 +2434,12 @@ void SvxFontNameToolBoxControl::StateChanged(
     rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
 }
 
-vcl::Window* SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    SvxFontNameBox_Impl* pBox = new SvxFontNameBox_Impl( pParent,
-                                                         Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                                         m_xFrame,0);
-    return pBox;
+    VclPtrInstance<SvxFontNameBox_Impl> pBox( pParent,
+                                              Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                              m_xFrame,0);
+    return pBox.get();
 }
 
 /* Note:

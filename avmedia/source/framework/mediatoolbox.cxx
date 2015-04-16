@@ -124,9 +124,9 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 
 
 
-vcl::Window* MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( pParent ? new MediaToolBoxControl_Impl( *pParent, *this ) : NULL );
+    return ( pParent ? VclPtr<MediaToolBoxControl_Impl>::Create( *pParent, *this ) : nullptr );
 }
 
 

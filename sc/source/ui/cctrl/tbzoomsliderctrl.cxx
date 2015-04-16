@@ -79,14 +79,14 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 }
 
-vcl::Window* ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent )
 {
     // #i98000# Don't try to get a value via SfxViewFrame::Current here.
     // The view's value is always notified via StateChanged later.
-    ScZoomSliderWnd* pSlider    = new ScZoomSliderWnd( pParent,
+    VclPtrInstance<ScZoomSliderWnd> pSlider( pParent,
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >( m_xFrame->getController(),
         ::com::sun::star::uno::UNO_QUERY ), m_xFrame, 100 );
-    return  pSlider;
+    return pSlider.get();
 }
 
 struct ScZoomSliderWnd::ScZoomSliderWnd_Impl

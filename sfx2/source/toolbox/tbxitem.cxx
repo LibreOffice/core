@@ -989,9 +989,9 @@ SfxPopupWindow* SfxToolBoxControl::CreatePopupWindowCascading()
 
 
 
-vcl::Window* SfxToolBoxControl::CreateItemWindow( vcl::Window * )
+VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 {
-    return 0;
+    return VclPtr<vcl::Window>();
 }
 
 

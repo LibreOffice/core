@@ -65,9 +65,9 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
 
 
 
-vcl::Window* LibBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> LibBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return new LibBox( pParent, m_xFrame );
+    return VclPtr<LibBox>::Create( pParent, m_xFrame );
 }
 
 
@@ -362,9 +362,9 @@ void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, cons
     }
 }
 
-vcl::Window* LanguageBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> LanguageBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return new LanguageBox( pParent );
+    return VclPtr<LanguageBox>::Create( pParent );
 }
 
 // class basctl::LanguageBox -----------------------------------------------

@@ -203,7 +203,7 @@ protected:
     virtual SfxPopupWindowType GetPopupWindowType() const;
     virtual SfxPopupWindow*    CreatePopupWindow();
     virtual SfxPopupWindow*    CreatePopupWindowCascading();
-    virtual vcl::Window*            CreateItemWindow( vcl::Window *pParent );
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
 
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
@@ -306,7 +306,7 @@ class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
-    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 
