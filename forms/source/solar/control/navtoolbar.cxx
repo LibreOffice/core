@@ -155,7 +155,7 @@ namespace frm
         for (auto i = m_aChildWins.begin(); i != m_aChildWins.end(); ++i)
             i->disposeAndClear();
         m_aChildWins.clear();
-        m_pToolbar.clear();
+        m_pToolbar.disposeAndClear();
         vcl::Window::dispose();
     }
 

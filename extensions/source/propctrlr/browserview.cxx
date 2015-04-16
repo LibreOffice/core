@@ -65,7 +65,7 @@ namespace pcr
             if (nTmpPage)
                 m_nActivePage = nTmpPage;
         }
-        m_pPropBox.clear();
+        m_pPropBox.disposeAndClear();
         vcl::Window::dispose();
     }
 
