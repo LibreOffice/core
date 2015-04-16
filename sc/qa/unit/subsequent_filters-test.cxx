@@ -131,6 +131,7 @@ public:
     void testColorScaleXLSX();
     void testNewCondFormatODS();
     void testNewCondFormatXLSX();
+    void testCondFormatThemeColorXLSX();
 
     void testLiteralInFormulaXLS();
 
@@ -237,6 +238,7 @@ public:
     CPPUNIT_TEST(testColorScaleXLSX);
     CPPUNIT_TEST(testNewCondFormatODS);
     CPPUNIT_TEST(testNewCondFormatXLSX);
+    CPPUNIT_TEST(testCondFormatThemeColorXLSX);
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2340,6 +2342,39 @@ void ScFiltersTest::testNewCondFormatXLSX()
     testCondFile(aCSVPath, &rDoc, 0);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatThemeColorXLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "condformat_theme_color.", XLSX );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load condformat_theme_color.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
+    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
+
+    CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pDataBarFormatData->maPositiveColor);
+    CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
+    CPPUNIT_ASSERT_EQUAL(Color(COL_LIGHTRED), *pDataBarFormatData->mpNegativeColor.get());
+
+    pFormat = rDoc.GetCondFormat(0, 0, 1);
+    pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::COLORSCALE);
+    const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pColorScale->size());
+    const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(0);
+    CPPUNIT_ASSERT(pColorScaleEntry);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 230, 153), pColorScaleEntry->GetColor());
+
+    pColorScaleEntry = pColorScale->GetEntry(1);
+    CPPUNIT_ASSERT(pColorScaleEntry);
+    CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pColorScaleEntry->GetColor());
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()

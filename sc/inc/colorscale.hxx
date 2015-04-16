@@ -282,6 +282,7 @@ public:
     const_iterator end() const;
 
     ScColorScaleEntry* GetEntry(size_t nPos);
+    const ScColorScaleEntry* GetEntry(size_t nPos) const;
 
     size_t size() const;
 

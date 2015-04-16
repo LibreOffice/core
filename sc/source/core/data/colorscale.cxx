@@ -679,6 +679,14 @@ ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos)
     return &maColorScales[nPos];
 }
 
+const ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos) const
+{
+    if (maColorScales.size() <= nPos)
+        return NULL;
+
+    return &maColorScales[nPos];
+}
+
 size_t ScColorScaleFormat::size() const
 {
     return maColorScales.size();
