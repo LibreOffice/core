@@ -353,7 +353,7 @@ EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
 
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
+    pMEdit=VclPtr<MultiLineEdit>::Create(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
                     WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
     pMEdit->Show();
     aOldSel=pMEdit->GetSelection();

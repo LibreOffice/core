@@ -286,7 +286,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pParent->get(m_pRefBtn, "RB_REF");
     m_pRefBtn->SetReferences(_pDlg, m_pEdRef);
 
-    pParaWin = new ParaWin(m_pParaWinBox, _pDlg);
+    pParaWin = VclPtr<ParaWin>::Create(m_pParaWinBox, _pDlg);
     pParaWin->Show();
     m_pParaWinBox->Hide();
     m_pFtEditName->Hide();
@@ -306,8 +306,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pParaWin->SetArgModifiedHdl(LINK( this, FormulaDlg_Impl, ModifyHdl ) );
     pParaWin->SetFxHdl(LINK( this, FormulaDlg_Impl, FxHdl ) );
 
-    pFuncPage= new FuncPage( m_pTabCtrl,_pFunctionMgr);
-    pStructPage= new StructPage( m_pTabCtrl);
+    pFuncPage= VclPtr<FuncPage>::Create( m_pTabCtrl,_pFunctionMgr);
+    pStructPage= VclPtr<StructPage>::Create( m_pTabCtrl);
     pFuncPage->Hide();
     pStructPage->Hide();
     m_pTabCtrl->SetTabPage( TP_FUNCTION, pFuncPage);
