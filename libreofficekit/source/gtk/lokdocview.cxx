@@ -941,6 +941,7 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
 #endif
     }
+    break;
     case LOK_CALLBACK_STATE_CHANGED:
     {
         commandChanged(pCallback->m_aPayload);
