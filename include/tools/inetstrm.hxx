@@ -72,7 +72,7 @@ public:
     INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIStream();
 
-    TOOLS_DLLPUBLIC int Read (sal_Char *pData, sal_uIntPtr nSize);
+    int Read (sal_Char *pData, sal_uIntPtr nSize);
 
     INetMIMEMessage *GetSourceMessage() const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
