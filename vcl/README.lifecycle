@@ -127,6 +127,15 @@ or:
 -	VirtualDevice aDev;
 +	ScopedVclPtrInstance<VirtualDevice> pDev;
 
+	Other things that are changed are these:
+
+-	pButton = new PushButton(NULL);
++	pButton = VclPtr<PushButton>::Create(nullptr);
+...
+-	vcl::Window *pWindow = new PushButton(NULL);
++	VclPtr<vcl::Window> pWindow;
++       pWindow.reset(VclPtr<PushButton>::Create(nullptr));
+
 ** Why are these 'disposeOnce' calls in destructors ?
 
 	This is an interim measure while we are migrating, such that
@@ -175,6 +184,11 @@ or:
 		+ shrink them - some work should incrementally
 		  migrate back to destructors.
 
+	* VclBuilder
+		+ ideally should keep a reference to pointers assigned
+		  in 'get()' calls - to avoid needing explicit 'clear'
+		  code in destructors.
+
 ---------- FAQ / debugging hints ----------
 
 ** Compile with dbgutil
@@ -208,4 +222,34 @@ or:
 
 	=> also worth git grepping for 'new sfx::sidebar::TabBar' to
 	   see where those children were added.
+
+** Check what it used to do
+
+	While a ton of effort has been put into ensuring that the new
+	lifecycle code is the functional equivalent of the old code,
+	the code was created by humans. If you identify an area where
+	something asserts or crashes here are a few helpful heuristics:
+
+	* Read the git log -u -- path/to/file.cxx
+
+	=> Is the order of destruction different ?
+
+	   in the past many things were destructed (in reverse order of
+	   declaration in the class) without explicit code. Some of these
+	   may be important to do explicitly at the end of the destructor.
+
+	   eg. having a 'Idle' or 'Timer' as a member, may now need an
+	       explicit .Stop() and/or protection from running on a
+	       disposed Window in its callback.
+
+	=> Is it 'clear' not 'disposeAndClear' ?
+
+	   sometimes we get this wrong. If the code previously used to
+	   use 'delete pFoo;' it should now read pFoo->disposeAndClear();
+	   Conversely if it didn't delete it, it should be 'clear()' it
+	   is by far the best to leave disposing to the VclBuilder where
+	   possible.
+
+	   In simple cases, if we allocate the widget with VclPtrInstance
+	   or VclPtr<Foo>::Create - then we need to disposeAndClear it too.
 
