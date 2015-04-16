@@ -219,7 +219,7 @@ private:
 
 struct ExCfRuleModel
 {
-    ExCfRuleModel() : mbGradient( false ), mnAxisColor( API_RGB_TRANSPARENT ), mnNegativeColor( API_RGB_TRANSPARENT ), mbIsLower( true ) {}
+    ExCfRuleModel() : mbGradient( false ), mnAxisColor( UNSIGNED_RGB_TRANSPARENT ), mnNegativeColor( UNSIGNED_RGB_TRANSPARENT ), mbIsLower( true ) {}
     // DataBar
     bool mbGradient;
     OUString maAxisPosition;

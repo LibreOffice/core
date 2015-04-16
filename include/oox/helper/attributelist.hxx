@@ -59,6 +59,9 @@ public:
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
     static sal_Int32    decodeIntegerHex( const OUString& rValue );
+
+    /** Returns the 32-bit unsigned integer value from the passed string (hexadecimal). */
+    static sal_uInt32    decodeUnsignedHex( const OUString& rValue );
 };
 
 
@@ -109,6 +112,9 @@ public:
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
     OptValue< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
 
+    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal). */
+    OptValue< sal_uInt32 > getUnsignedHex( sal_Int32 nAttrToken ) const;
+
     /** Returns the boolean value of the specified attribute. */
     OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
 
@@ -151,6 +157,8 @@ public:
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal),
         or the passed default value if the attribute is missing or not convertible. */
     sal_Int32           getIntegerHex( sal_Int32 nAttrToken, sal_Int32 nDefault ) const;
+
+    sal_uInt32          getUnsignedHex( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const;
 
     /** Returns the boolean value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to bool. */

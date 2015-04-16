@@ -177,7 +177,7 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
 {
     sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
-        nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+        nColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
@@ -254,7 +254,7 @@ void DataBarRule::importColor( const AttributeList& rAttribs )
 {
     sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
-        nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+        nColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
@@ -1194,13 +1194,13 @@ void ExtCfRule::importDataBar( const AttributeList& rAttribs )
 void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
 {
      mnRuleType = NEGATIVEFILLCOLOR;
-     maModel.mnNegativeColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+     maModel.mnNegativeColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
 }
 
 void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
 {
     mnRuleType = AXISCOLOR;
-    maModel.mnAxisColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+    maModel.mnAxisColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
 }
 
 void ExtCfRule::importCfvo( const AttributeList& rAttribs )
