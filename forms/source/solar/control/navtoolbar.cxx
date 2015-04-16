@@ -236,7 +236,7 @@ namespace frm
 
     void NavigationToolBar::implInit( )
     {
-        m_pToolbar = new ImplNavToolBar( this );
+        m_pToolbar = VclPtr<ImplNavToolBar>::Create( this );
         m_pToolbar->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_pToolbar->Show();
 
@@ -301,17 +301,17 @@ namespace frm
                     vcl::Window* pItemWindow = NULL;
                     if ( FormFeature::MoveAbsolute == pSupportedFeatures->nId )
                     {
-                        pItemWindow = new RecordPositionInput( m_pToolbar );
+                        pItemWindow = VclPtr<RecordPositionInput>::Create( m_pToolbar );
                         static_cast< RecordPositionInput* >( pItemWindow )->setDispatcher( m_pDispatcher );
                     }
                     else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
                     {
-                        pItemWindow = new FixedText( m_pToolbar, WB_CENTER | WB_VCENTER );
+                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_CENTER | WB_VCENTER );
                         pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
                     }
                     else
                     {
-                        pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
+                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_VCENTER );
                         pItemWindow->SetBackground();
                         pItemWindow->SetPaintTransparent(true);
                     }

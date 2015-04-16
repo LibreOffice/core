@@ -24,7 +24,7 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
     mpParent( pParent )
 {
     Size aBoxSize = pParent->GetSizePixel( );
-    mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    mpHeaderBar = VclPtr<HeaderBar>::Create( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
 
     long pTabs[] = { 2, 20, 600 };
@@ -70,17 +70,17 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     mbUpdated( false ),
     mbSelectionChanged( false )
 {
-    mpImpl = new PlacesListBox_Impl( this, rTitle );
+    mpImpl = VclPtr<PlacesListBox_Impl>::Create( this, rTitle );
 
     mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 
-    mpAddBtn = new ImageButton( this, 0 );
+    mpAddBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
     mpAddBtn->SetText( OUString( "+" ) );
     mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpAddBtn->Show();
 
-    mpDelBtn = new ImageButton( this, 0 );
+    mpDelBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
     mpDelBtn->SetText( OUString( "-" ) );
     mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpDelBtn->Show();

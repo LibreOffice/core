@@ -56,7 +56,7 @@ namespace frm
         OSL_ENSURE( m_pAntiImpl, "RichTextControlImpl::RichTextControlImpl: invalid window!" );
         OSL_ENSURE( m_pEngine,   "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definitely* crash!" );
 
-        m_pViewport = new RichTextViewPort( m_pAntiImpl );
+        m_pViewport = VclPtr<RichTextViewPort>::Create( m_pAntiImpl );
         m_pViewport->setAttributeInvalidationHandler( LINK( this, RichTextControlImpl, OnInvalidateAllAttributes ) );
         m_pViewport->Show();
 
@@ -348,7 +348,7 @@ namespace frm
         }
         else
         {
-            m_pVScroll = new ScrollBar( m_pAntiImpl, WB_VSCROLL | WB_DRAG | WB_REPEAT );
+            m_pVScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_VSCROLL | WB_DRAG | WB_REPEAT );
             m_pVScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnVScroll ) );
             m_pVScroll->Show();
         }
@@ -359,7 +359,7 @@ namespace frm
         }
         else
         {
-            m_pHScroll = new ScrollBar( m_pAntiImpl, WB_HSCROLL | WB_DRAG | WB_REPEAT );
+            m_pHScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_HSCROLL | WB_DRAG | WB_REPEAT );
             m_pHScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnHScroll ) );
             m_pHScroll->Show();
         }
@@ -367,7 +367,7 @@ namespace frm
         if ( m_pHScroll && m_pVScroll )
         {
             m_pScrollCorner.disposeAndClear();
-            m_pScrollCorner = new ScrollBarBox( m_pAntiImpl );
+            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( m_pAntiImpl );
             m_pScrollCorner->Show();
         }
         else

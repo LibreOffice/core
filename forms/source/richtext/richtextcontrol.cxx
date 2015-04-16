@@ -290,7 +290,7 @@ namespace frm
         pPeer->acquire();   // by definition, the returned object is acquired once
 
         // the VCL control for the peer
-        RichTextControl* pRichTextControl = new RichTextControl( pEngine, _pParentWindow, _nStyle, NULL, pPeer );
+        VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer );
 
         // some knittings
         pRichTextControl->SetComponentInterface( pPeer );

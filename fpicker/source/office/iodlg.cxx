@@ -499,7 +499,7 @@ void SvtFileDialog::Init_Impl
 
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
     vcl::Window *pUpContainer = get<vcl::Window>("up");
-    _pImp->_pBtnUp = new SvtUpButton_Impl(pUpContainer, this, 0);
+    _pImp->_pBtnUp = VclPtr<SvtUpButton_Impl>::Create(pUpContainer, this, 0);
     _pImp->_pBtnUp->SetHelpId( HID_FILEOPEN_LEVELUP );
     _pImp->_pBtnUp->set_vexpand(true);
     _pImp->_pBtnUp->Show();
@@ -541,7 +541,7 @@ void SvtFileDialog::Init_Impl
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
-    _pContainer = new CustomContainer(get<vcl::Window>("container"));
+    _pContainer.reset(VclPtr<CustomContainer>::Create(get<vcl::Window>("container")));
     Size aSize(LogicToPixel(Size(270, 85), MAP_APPFONT));
     _pContainer->set_height_request(aSize.Height());
     _pContainer->set_width_request(aSize.Width());
@@ -549,7 +549,7 @@ void SvtFileDialog::Init_Impl
     _pContainer->set_vexpand(true);
     _pContainer->SetStyle( _pContainer->GetStyle() | WB_TABSTOP );
 
-    _pFileView = new SvtFileView( _pContainer, WB_BORDER,
+    _pFileView = VclPtr<SvtFileView>::Create( _pContainer, WB_BORDER,
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
     _pFileView->Show();
@@ -557,7 +557,7 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
-    _pSplitter = new Splitter( _pContainer, WB_HSCROLL );
+    _pSplitter = VclPtr<Splitter>::Create( _pContainer, WB_HSCROLL );
     _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
 
@@ -2547,7 +2547,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevWin->SetOutputSizePixel(Size(200, 300));
         _pPrevWin->Show();
 
-        _pPrevBmp = new FixedBitmap( _pPrevWin, WinBits( WB_BORDER ) );
+        _pPrevBmp = VclPtr<FixedBitmap>::Create( _pPrevWin, WinBits( WB_BORDER ) );
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
         _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();
@@ -2612,7 +2612,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbImageTemplates->Show();
     }
 
-    _pImp->_pPlaces = new PlacesListBox(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
+    _pImp->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
     _pImp->_pPlaces->SetHelpId("SVT_HID_FILESAVE_PLACES_LISTBOX");
     Size aSize(LogicToPixel(Size(50, 85), MAP_APPFONT));
     _pImp->_pPlaces->set_height_request(aSize.Height());

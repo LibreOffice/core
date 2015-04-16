@@ -223,7 +223,7 @@ namespace frm
 
         // the VCL control for the peer
         Reference< XModel > xContextDocument( getXModel( _rxModel ) );
-        NavigationToolBar* pNavBar = new NavigationToolBar(
+        VclPtrInstance<NavigationToolBar> pNavBar(
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
             createDocumentCommandImageProvider( _rxORB, xContextDocument ),

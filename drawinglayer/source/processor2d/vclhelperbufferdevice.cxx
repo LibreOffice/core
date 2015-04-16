@@ -163,7 +163,7 @@ namespace
         // no success yet, create new buffer
         if(!pRetval)
         {
-            pRetval = new VirtualDevice(rOutDev, nBits);
+            pRetval = VclPtr<VirtualDevice>::Create(rOutDev, nBits);
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else
