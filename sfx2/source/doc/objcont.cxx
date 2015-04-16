@@ -643,7 +643,7 @@ bool SfxObjectShell::IsModifyPasswordEntered()
     return pImp->m_bModifyPasswordEntered;
 }
 
-void SfxObjectShell::libreOfficeKitCallback(SAL_UNUSED_PARAMETER int nType, SAL_UNUSED_PARAMETER const char* pPayload) const
+void SfxObjectShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
 {
     SAL_INFO("tiled-rendering", "SfxObjectShell::libreOfficeKitCallback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
 }
