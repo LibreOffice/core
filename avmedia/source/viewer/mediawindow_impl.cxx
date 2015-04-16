@@ -156,7 +156,7 @@ MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindo
     mpMediaWindow( pMediaWindow ),
     mpEvents( NULL ),
     mbEventTransparent(true),
-    mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
+    mpMediaWindowControl( bInternalMediaControl ? VclPtr<MediaWindowControl>::Create( this ) : nullptr ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
@@ -509,14 +509,14 @@ void MediaWindowImpl::onURLChanged()
     if( m_sMimeType == AVMEDIA_MIMETYPE_COMMON )
     {
         mpChildWindow.disposeAndClear();
-        mpChildWindow.reset(new MediaChildWindow(this) );
+        mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this) );
     }
 #if HAVE_FEATURE_GLTF
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         SystemWindowData aWinData = OpenGLContext::generateWinData(this, false);
         mpChildWindow.disposeAndClear();
-        mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
+        mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this,&aWinData));
         mbEventTransparent = false;
     }
 #endif

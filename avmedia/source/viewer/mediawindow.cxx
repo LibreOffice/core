@@ -46,7 +46,7 @@ namespace avmedia {
 
 
 MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :
-    mpImpl( new priv::MediaWindowImpl( parent, this, bInternalMediaControl ) )
+    mpImpl( VclPtr<priv::MediaWindowImpl>::Create( parent, this, bInternalMediaControl ) )
 {
     mpImpl->Show();
 }
