@@ -116,7 +116,7 @@ void DrawView::ModelHasChanged()
 
     // force framer to rerender
     SfxStyleSheetBasePool* pSSPool = mrDoc.GetStyleSheetPool();
-    pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
+    pSSPool->Broadcast(SfxStyleSheetPoolHint(SfxStyleSheetHintId::CREATED));
 
     if( mpDrawViewShell )
         mpDrawViewShell->ModelHasChanged();

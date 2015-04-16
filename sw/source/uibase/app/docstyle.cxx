@@ -485,7 +485,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     if (bChg)
     {
         dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator();
-        pPool->Broadcast(SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED, *this));
+        pPool->Broadcast(SfxStyleSheetHint(SfxStyleSheetHintId::MODIFIED, *this));
         SwEditShell* pSh = rDoc.GetEditShell();
         if (pSh)
             pSh->CallChgLnk();
@@ -582,7 +582,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
     {
         // calling pPool->First() here would be quite slow...
         dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator(); // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
+        pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -1058,7 +1058,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
     if( bChg )
     {
         pPool->First();  // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
+        pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -1109,7 +1109,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
         if( bRet )
         {
             aParent = rStr;
-            pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED,
+            pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED,
                             *this ) );
         }
     }
@@ -2396,7 +2396,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
     }
 
     if( bBroadcast )
-        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *pStyle ) );
+        Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *pStyle ) );
 }
 
 bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
@@ -2448,7 +2448,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
             else
                 mxStyleSheet->PresetFollow( OUString() );
 
-            Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED,
+            Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED,
                                             *(mxStyleSheet.get()) ) );
         }
     }
@@ -3040,7 +3040,7 @@ void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
     // search and remove from View-List!!
     const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
     if( pStyleSheetHint &&
-        SFX_STYLESHEET_ERASED == pStyleSheetHint->GetHint() )
+        SfxStyleSheetHintId::ERASED == pStyleSheetHint->GetHint() )
     {
         SfxStyleSheetBase* pStyle = pStyleSheetHint->GetStyleSheet();
 
