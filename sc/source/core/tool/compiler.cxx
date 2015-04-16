@@ -5049,10 +5049,20 @@ bool ScCompiler::HandleTableRef()
             }
             if (aRange.IsValid())
             {
-                ScComplexRefData aRefData;
-                aRefData.InitFlags();
-                aRefData.SetRange( aRange, aPos);
-                pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
+                if (aRange.aStart == aRange.aEnd)
+                {
+                    ScSingleRefData aRefData;
+                    aRefData.InitFlags();
+                    aRefData.SetAddress( aRange.aStart, aPos);
+                    pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData ));
+                }
+                else
+                {
+                    ScComplexRefData aRefData;
+                    aRefData.InitFlags();
+                    aRefData.SetRange( aRange, aPos);
+                    pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
+                }
             }
             else
             {
