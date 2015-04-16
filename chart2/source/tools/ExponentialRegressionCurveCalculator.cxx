@@ -50,14 +50,23 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
         RegressionCalculationHelper::cleanup(
             aXValues, aYValues,
             RegressionCalculationHelper::isValidAndYPositive()));
+    m_fSign = 1.0;
 
-    const size_t nMax = aValues.first.size();
+    size_t nMax = aValues.first.size();
     if( nMax == 0 )
     {
-        ::rtl::math::setNan( & m_fLogSlope );
-        ::rtl::math::setNan( & m_fLogIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
-        return;
+        aValues = RegressionCalculationHelper::cleanup(
+                    aXValues, aYValues,
+                    RegressionCalculationHelper::isValidAndYNegative());
+        nMax = aValues.first.size();
+        if( nMax == 0 )
+        {
+            ::rtl::math::setNan( & m_fLogSlope );
+            ::rtl::math::setNan( & m_fLogIntercept );
+            ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
+            return;
+        }
+        m_fSign = -1.0;
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
@@ -65,7 +74,7 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     for( i = 0; i < nMax; ++i )
     {
         fAverageX += aValues.first[i];
-        fAverageY += log( aValues.second[i] );
+        fAverageY += log( m_fSign * aValues.second[i] );
     }
 
     const double fN = static_cast< double >( nMax );
@@ -76,7 +85,7 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     for( i = 0; i < nMax; ++i )
     {
         double fDeltaX = aValues.first[i] - fAverageX;
-        double fDeltaY = log( aValues.second[i] ) - fAverageY;
+        double fDeltaY = log( m_fSign * aValues.second[i] ) - fAverageY;
 
         fQx  += fDeltaX * fDeltaX;
         fQy  += fDeltaY * fDeltaY;
@@ -99,7 +108,7 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     if( ! ( ::rtl::math::isNan( m_fLogSlope ) ||
             ::rtl::math::isNan( m_fLogIntercept )))
     {
-        fResult = exp(m_fLogIntercept + x * m_fLogSlope);
+        fResult = m_fSign * exp(m_fLogIntercept + x * m_fLogSlope);
     }
 
     return fResult;
@@ -134,7 +143,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
-    double fIntercept = exp(m_fLogIntercept);
+    double fIntercept = m_fSign * exp(m_fLogIntercept);
     double fSlope = exp(m_fLogSlope);
     bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
     bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );

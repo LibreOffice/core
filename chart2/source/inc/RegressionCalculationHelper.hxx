@@ -102,6 +102,18 @@ public:
     }
 };
 
+class isValidAndYNegative : public ::std::binary_function< double, double, bool >
+{
+public:
+    inline bool operator()( double x, double y )
+    { return ! ( ::rtl::math::isNan( x ) ||
+                 ::rtl::math::isNan( y ) ||
+                 ::rtl::math::isInf( x ) ||
+                 ::rtl::math::isInf( y ) ||
+                 y >= 0.0 );
+    }
+};
+
 class isValidAndBothPositive : public ::std::binary_function< double, double, bool >
 {
 public:
