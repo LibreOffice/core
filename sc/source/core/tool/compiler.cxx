@@ -5056,12 +5056,12 @@ bool ScCompiler::HandleTableRef()
             }
             else
             {
-                SetError( errNoRef);
+                pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( errNoRef)));
             }
         }
         else
         {
-            SetError( errNoRef);
+            pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( errNoRef)));
         }
         while (nLevel-- > 0)
         {
