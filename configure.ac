@@ -10379,14 +10379,15 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
     if test "$with_system_poppler" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_POPPLER=TRUE
-        PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
+        PKG_CHECK_MODULES( POPPLER, poppler >= 0.12.0 )
         AC_LANG_PUSH([C++])
         save_CXXFLAGS=$CXXFLAGS
         save_CPPFLAGS=$CPPFLAGS
         CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
         CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
-        AC_CHECK_HEADER([cpp/poppler-version.h], [],
-                   [AC_MSG_ERROR([cpp/poppler-version.h not found. Install poppler])], [])
+        AC_CHECK_HEADER([cpp/poppler-version.h],
+            [AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)],
+            [])
         CXXFLAGS=$save_CXXFLAGS
         CPPFLAGS=$save_CPPFLAGS
         AC_LANG_POP([C++])
@@ -10396,6 +10397,7 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         AC_MSG_RESULT([internal])
         SYSTEM_POPPLER=
         BUILD_TYPE="$BUILD_TYPE POPPLER"
+        AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)
     fi
 else
     AC_MSG_RESULT([no])
@@ -12853,6 +12855,7 @@ AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
+AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then

@@ -21,6 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
 
 #include <sal/types.h>
+#include <config_poppler.h>
 
 #if defined __GNUC__
 # pragma GCC diagnostic push
@@ -50,7 +51,14 @@
 class GfxPath;
 class GfxFont;
 class PDFDoc;
+#if HAVE_POPPLER_VERSION_H
 #include <cpp/poppler-version.h>
+#else
+#define POPPLER_VERSION "0.12.3"
+#define POPPLER_VERSION_MAJOR 0
+#define POPPLER_VERSION_MINOR 12
+#define POPPLER_VERSION_MICRO 3
+#endif
 #define POPPLER_CHECK_VERSION(major,minor,micro) \
   (POPPLER_VERSION_MAJOR > (major) || \
    (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR > (minor)) || \
