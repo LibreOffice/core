@@ -32,6 +32,7 @@
 #include <sfx2/passwd.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/srchdefs.hxx>
 
 namespace basctl
 {
@@ -207,9 +208,9 @@ bool BaseWindow::IsPasteAllowed ()
     return NULL;
 }
 
-sal_uInt16 BaseWindow::GetSearchOptions()
+SearchOptionFlags BaseWindow::GetSearchOptions()
 {
-    return 0;
+    return SearchOptionFlags::NONE;
 }
 
 sal_uInt16 BaseWindow::StartSearchAndReplace (SvxSearchItem const&, bool bFromStart)

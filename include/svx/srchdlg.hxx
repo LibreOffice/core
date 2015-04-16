@@ -206,7 +206,7 @@ private:
     bool            bWriter;
     bool            bSearch;
     bool            bFormat;
-    sal_uInt16          nOptions;
+    SearchOptionFlags  nOptions;
     bool            bSet;
     bool            bReadOnly;
     bool            bConstruct;
@@ -255,7 +255,7 @@ private:
     OUString&       BuildAttrText_Impl( OUString& rStr, bool bSrchFlag ) const;
 
     void            TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool );
-    void            EnableControls_Impl( const sal_uInt16 nFlags );
+    void            EnableControls_Impl( const SearchOptionFlags nFlags );
     void            EnableControl_Impl( Control* pCtrl );
     void            SetItem_Impl( const SvxSearchItem* pItem );
 

@@ -33,6 +33,7 @@ class SfxItemSet;
 class SfxRequest;
 class SvxSearchItem;
 class Printer;
+enum class SearchOptionFlags;
 
 namespace svl
 {
@@ -211,7 +212,7 @@ public:
 
     virtual svl::IUndoManager* GetUndoManager ();
 
-    virtual sal_uInt16  GetSearchOptions();
+    virtual SearchOptionFlags  GetSearchOptions();
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
 
     virtual void    BasicStarted();

@@ -383,7 +383,7 @@ public:
 
     void            ShowCursor( bool bOn );
 
-    virtual sal_uInt16  GetSearchOptions() SAL_OVERRIDE;
+    virtual SearchOptionFlags GetSearchOptions() SAL_OVERRIDE;
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false) SAL_OVERRIDE;
 
     EditorWindow&       GetEditorWindow()       { return aXEditorWindow.GetEdtWindow(); }
