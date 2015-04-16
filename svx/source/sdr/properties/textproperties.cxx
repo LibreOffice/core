@@ -600,7 +600,7 @@ namespace sdr
                     const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
 
                     if(pExtendedHint
-                        && SFX_STYLESHEET_MODIFIED == pExtendedHint->GetHint())
+                        && SfxStyleSheetHintId::MODIFIED == pExtendedHint->GetHint())
                     {
                         OUString aOldName(pExtendedHint->GetOldName());
                         OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());

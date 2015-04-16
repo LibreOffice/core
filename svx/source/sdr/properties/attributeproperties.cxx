@@ -531,19 +531,19 @@ namespace sdr
 
                 switch(pStyleHint->GetHint())
                 {
-                    case SFX_STYLESHEET_CREATED         :
+                    case SfxStyleSheetHintId::CREATED         :
                     {
                         // cannot happen, nothing to do
                         break;
                     }
-                    case SFX_STYLESHEET_MODIFIED        :
-                    case SFX_STYLESHEET_CHANGED         :
+                    case SfxStyleSheetHintId::MODIFIED        :
+                    case SfxStyleSheetHintId::CHANGED         :
                     {
                         // notify change
                         break;
                     }
-                    case SFX_STYLESHEET_ERASED          :
-                    case SFX_STYLESHEET_INDESTRUCTION   :
+                    case SfxStyleSheetHintId::ERASED          :
+                    case SfxStyleSheetHintId::INDESTRUCTION   :
                     {
                         // Style needs to be exchanged
                         SfxStyleSheet* pNewStSh = 0L;

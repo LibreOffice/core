@@ -49,24 +49,24 @@ must broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasts.
 The class <SfxStyleSheetHint> is used for this, it contains an Action-Id and a
 pointer to the <SfxStyleSheetBase>. The actions are:
 
-#define SFX_STYLESHEET_CREATED      // style is created
-#define SFX_STYLESHEET_MODIFIED     // style is modified
-#define SFX_STYLESHEET_CHANGED      // style is replaced
-#define SFX_STYLESHEET_ERASED       // style is deleted
+#define SfxStyleSheetHintId::CREATED      // style is created
+#define SfxStyleSheetHintId::MODIFIED     // style is modified
+#define SfxStyleSheetHintId::CHANGED      // style is replaced
+#define SfxStyleSheetHintId::ERASED       // style is deleted
 
 The following methods already broadcast themself
 
 SfxSimpleHint(SFX_HINT_DYING) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
-SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) from:
+SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
    SfxStyleFamily eFam, sal_uInt16 mask)
 
-SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) from:
+SfxStyleSheetHint( SfxStyleSheetHintId::CHANGED, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
 
-SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
+SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *p ) from:
    SfxStyleSheetBasePool::Erase( SfxStyleSheetBase* p )
    SfxStyleSheetBasePool::Clear()
 */
@@ -307,25 +307,23 @@ public:
 
 
 
-#define SFX_STYLESHEET_CREATED       1  // new
-#define SFX_STYLESHEET_MODIFIED      2  // changed
-#define SFX_STYLESHEET_CHANGED       3  // erased and re-created (replaced)
-#define SFX_STYLESHEET_ERASED        4  // erased
-#define SFX_STYLESHEET_INDESTRUCTION 5  // in the process of being destructed
-
-#define SFX_STYLESHEETPOOL_CHANGES  1  // Changes which change the state of the pool, but should not be
-                                       // broadcasted by STYLESHEET hits.
-
-
+enum SfxStyleSheetHintId
+{
+    CREATED       = 1,  // new
+    MODIFIED      = 2,  // changed
+    CHANGED       = 3,  // erased and re-created (replaced)
+    ERASED        = 4,  // erased
+    INDESTRUCTION = 5,  // in the process of being destructed
+};
 
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
-    sal_uInt16 nHint;
+    SfxStyleSheetHintId nHint;
 
 public:
-                        SfxStyleSheetPoolHint(sal_uInt16 nArgHint) :  nHint(nArgHint){}
-    sal_uInt16          GetHint() const
-                        { return nHint; }
+                         SfxStyleSheetPoolHint(SfxStyleSheetHintId nArgHint) :  nHint(nArgHint){}
+    SfxStyleSheetHintId  GetHint() const
+                         { return nHint; }
 };
 
 

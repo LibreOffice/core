@@ -3303,12 +3303,12 @@ void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if( pHint )
     {
-        if(( pHint->GetId() & SFX_HINT_DYING ) || ( pHint->GetId() & SFX_STYLESHEET_ERASED))
+        if(( pHint->GetId() & SFX_HINT_DYING ) || ( pHint->GetId() & SfxStyleSheetHintId::ERASED))
         {
             pBasePool = 0;
             EndListening(rBC);
         }
-        else if( pHint->GetId() &(SFX_STYLESHEET_CHANGED|SFX_STYLESHEET_ERASED) )
+        else if( pHint->GetId() &(SfxStyleSheetHintId::CHANGED|SfxStyleSheetHintId::ERASED) )
         {
             static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(eFamily);
             SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
