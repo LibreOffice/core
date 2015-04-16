@@ -111,7 +111,7 @@ public:
     <SvxSearchItem><SID_ATTR_SEARCH>
 */
 
-class SVX_DLLPUBLIC SvxSearchDialog : public SfxModelessDialog
+class SvxSearchDialog : public SfxModelessDialog
 {
 friend class SvxSearchController;
 friend class SvxSearchDialogWrapper;

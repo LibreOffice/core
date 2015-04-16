@@ -81,7 +81,7 @@ struct SpellCallbackInfo;
 // predefines
 namespace sdr { namespace overlay { class OverlayObjectList; }}
 
-class SC_DLLPUBLIC ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
+class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
     // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;

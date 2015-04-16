@@ -75,7 +75,7 @@ typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache
 
 */
 
-class SD_DLLPUBLIC SdModule : public SfxModule, public SfxListener
+class SdModule : public SfxModule, public SfxListener
 {
 public:
                             TYPEINFO_OVERRIDE();
@@ -98,7 +98,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
@@ -120,7 +120,7 @@ public:
     */
     OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
 
-    SvNumberFormatter*     GetNumberFormatter();
+    SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     // virtual methods for the option dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;

@@ -35,7 +35,7 @@ struct ScQueryParam;
 struct ScSubTotalParam;
 struct ScImportParam;
 
-class SC_DLLPUBLIC ScDBData : public ScRefreshTimer
+class ScDBData : public ScRefreshTimer
 {
 private:
     boost::scoped_ptr<ScSortParam> mpSortParam;
@@ -76,7 +76,7 @@ public:
         bool operator() (const ScDBData& left, const ScDBData& right) const;
     };
 
-    ScDBData(const OUString& rName,
+    SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
              bool bByR = true, bool bHasH = true);
@@ -91,7 +91,7 @@ public:
     const OUString& GetName() const { return aName; }
     const OUString& GetUpperName() const { return aUpper; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
-    void GetArea(ScRange& rRange) const;
+    SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
     void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     bool        IsByRow() const                 { return bByRow; }
@@ -115,10 +115,10 @@ public:
     void        GetSortParam(ScSortParam& rSortParam) const;
     void        SetSortParam(const ScSortParam& rSortParam);
 
-    void       GetQueryParam(ScQueryParam& rQueryParam) const;
-    void       SetQueryParam(const ScQueryParam& rQueryParam);
-    bool       GetAdvancedQuerySource(ScRange& rSource) const;
-    void       SetAdvancedQuerySource(const ScRange* pSource);
+    SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
+    SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
+    SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
+    SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
     void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
@@ -130,7 +130,7 @@ public:
     bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
     bool        HasImportParam() const;
-    bool HasQueryParam() const;
+    SC_DLLPUBLIC bool HasQueryParam() const;
     bool        HasSortParam() const;
     bool        HasSubTotalParam() const;
 

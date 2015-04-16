@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
 
 #include <sfx2/objsh.hxx>
 
-class SC_DLLPUBLIC ScTransferObj : public TransferableHelper
+class ScTransferObj : public TransferableHelper
 {
 private:
     ScDocument*                     pDoc;

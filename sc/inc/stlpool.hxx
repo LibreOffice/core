@@ -25,7 +25,7 @@
 class ScStyleSheet;
 class ScDocument;
 
-class SC_DLLPUBLIC ScStyleSheetPool : public SfxStyleSheetPool
+class ScStyleSheetPool : public SfxStyleSheetPool
 {
 public:
                         ScStyleSheetPool( SfxItemPool&  rPool,

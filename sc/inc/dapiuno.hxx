@@ -150,7 +150,7 @@ public:
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
-class SC_DLLPUBLIC ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescriptor,
+class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescriptor,
                                   public com::sun::star::beans::XPropertySet,
                                   public com::sun::star::sheet::XDataPilotDataLayoutFieldSupplier,
                                   public com::sun::star::lang::XServiceInfo,

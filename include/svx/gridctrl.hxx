@@ -61,7 +61,7 @@ enum GridRowStatus
 // DbGridRow, description of rows
 
 
-class SVX_DLLPUBLIC DbGridRow : public SvRefBase
+class DbGridRow : public SvRefBase
 {
     ::com::sun::star::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     DbDataColumns               m_aVariants;

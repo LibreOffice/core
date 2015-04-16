@@ -379,7 +379,7 @@ private:
 typedef boost::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
 typedef std::list< InteractiveSequencePtr > InteractiveSequenceList;
 
-class SD_DLLPUBLIC MainSequence : public EffectSequenceHelper, public ISequenceListener
+class MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
     friend class MainSequenceRebuildGuard;

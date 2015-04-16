@@ -29,7 +29,7 @@ class SwTxtFlyCnt;
  *
  * A pool item that is attached to the placeholder character of an as-character frame. (TextFrame, etc.)
  */
-class SW_DLLPUBLIC SwFmtFlyCnt : public SfxPoolItem
+class SwFmtFlyCnt : public SfxPoolItem
 {
     friend class SwTxtFlyCnt;
     SwTxtFlyCnt* pTxtAttr;

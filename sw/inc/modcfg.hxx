@@ -60,7 +60,7 @@ public:
     void Insert(InsCaptionOpt* pObj);
 };
 
-class SW_DLLPUBLIC SwRevisionConfig : public utl::ConfigItem
+class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -86,7 +86,7 @@ public:
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
-class SW_DLLPUBLIC SwCompareConfig : public utl::ConfigItem
+class SwCompareConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -110,7 +110,7 @@ public:
     void            SetModified() {ConfigItem::SetModified(); }
 };
 
-class SW_DLLPUBLIC SwInsertConfig : public utl::ConfigItem
+class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -138,7 +138,7 @@ public:
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
-class SW_DLLPUBLIC SwTableConfig : public utl::ConfigItem
+class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -165,7 +165,7 @@ public:
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
-class SW_DLLPUBLIC SwMiscConfig : public utl::ConfigItem
+class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 

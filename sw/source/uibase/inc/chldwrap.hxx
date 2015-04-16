@@ -24,7 +24,7 @@
 
 class SwDocShell;
 
-class SW_DLLPUBLIC SwChildWinWrapper : public SfxChildWindow
+class SwChildWinWrapper : public SfxChildWindow
 {
     Timer       m_aUpdateTimer;
     SwDocShell* m_pDocSh;

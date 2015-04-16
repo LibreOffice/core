@@ -47,7 +47,7 @@ enum INetMessageStreamState
 };
 
 /// Message Generator Interface.
-class TOOLS_DLLPUBLIC INetMessageIStream
+class INetMessageIStream
 {
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
@@ -72,7 +72,7 @@ public:
     INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIStream();
 
-    int Read (sal_Char *pData, sal_uIntPtr nSize);
+    TOOLS_DLLPUBLIC int Read (sal_Char *pData, sal_uIntPtr nSize);
 
     INetMIMEMessage *GetSourceMessage() const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }

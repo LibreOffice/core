@@ -23,7 +23,7 @@
 #include <format.hxx>
 #include <memory>
 
-class SW_DLLPUBLIC SwFmtAutoFmt: public SfxPoolItem
+class SwFmtAutoFmt: public SfxPoolItem
 {
     std::shared_ptr<SfxItemSet> mpHandle;
 

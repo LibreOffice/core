@@ -36,7 +36,7 @@ class SharedStringPool;
 
 }
 
-struct SC_DLLPUBLIC ScQueryParamBase
+struct ScQueryParamBase
 {
     bool            bHasHeader;
     bool            bByRow;
@@ -50,12 +50,12 @@ struct SC_DLLPUBLIC ScQueryParamBase
 
     virtual bool IsValidFieldIndex() const;
 
-    SCSIZE GetEntryCount() const;
-    const ScQueryEntry& GetEntry(SCSIZE n) const;
-    ScQueryEntry& GetEntry(SCSIZE n);
-    ScQueryEntry& AppendEntry();
+    SC_DLLPUBLIC SCSIZE GetEntryCount() const;
+    SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
+    SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
+    SC_DLLPUBLIC ScQueryEntry& AppendEntry();
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
-    void RemoveEntryByField(SCCOLROW nField);
+    SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
     void FillInExcelSyntax( svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex,
                             SvNumberFormatter* pFormatter );
@@ -76,7 +76,7 @@ protected:
     EntriesType maEntries;
 };
 
-struct SC_DLLPUBLIC ScQueryParamTable
+struct ScQueryParamTable
 {
     SCCOL           nCol1;
     SCROW           nRow1;

@@ -43,7 +43,7 @@ class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
 // Delete member <mnVirtPage> and its accessor
-class SW_DLLPUBLIC SwPagePreviewWin : public vcl::Window
+class SwPagePreviewWin : public vcl::Window
 {
     SwViewShell*          mpViewShell;
     sal_uInt16              mnSttPage;

@@ -28,7 +28,7 @@
 class SwPaM;
 class SwTxtNode;
 
-class SW_DLLPUBLIC SwTxtFld : public virtual SwTxtAttr
+class SwTxtFld : public virtual SwTxtAttr
 {
     mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTxtFld()>
     SwTxtNode * m_pTxtNode;

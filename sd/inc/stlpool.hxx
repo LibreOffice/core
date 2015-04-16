@@ -52,7 +52,7 @@ typedef ::cppu::ImplInheritanceHelper4< SfxStyleSheetPool,
                                         ::com::sun::star::container::XNameAccess,
                                         ::com::sun::star::lang::XComponent > SdStyleSheetPoolBase;
 
-class SD_DLLPUBLIC SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
+class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:
@@ -74,7 +74,7 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
+    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
     void                CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const;
     void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );

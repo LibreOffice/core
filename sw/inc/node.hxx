@@ -291,7 +291,7 @@ private:
 };
 
 /// Starts a section of nodes in the document model.
-class SW_DLLPUBLIC SwStartNode: public SwNode
+class SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;
@@ -521,7 +521,7 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
-class SW_DLLPUBLIC SwSectionNode
+class SwSectionNode
     : public SwStartNode
 {
     friend class SwNodes;

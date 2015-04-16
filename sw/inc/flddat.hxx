@@ -80,7 +80,7 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-class SW_DLLPUBLIC SwDateTimeFieldType : public SwValueFieldType
+class SwDateTimeFieldType : public SwValueFieldType
 {
 public:
         SwDateTimeFieldType(SwDoc* pDoc);

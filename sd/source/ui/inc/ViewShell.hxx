@@ -79,7 +79,7 @@ class ZoomList;
 
     <p>This class replaces the former ViewShell class.</p>
 */
-class SD_DLLPUBLIC ViewShell
+class ViewShell
     : public SfxShell
 {
 public:
@@ -149,11 +149,11 @@ public:
 
     inline ::sd::View* GetView() const { return mpView; }
     inline SdrView* GetDrawView() const;
-    DrawDocShell* GetDocSh() const;
+    SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
 
     SdDrawDocument*  GetDoc() const;
 
-    SfxViewFrame* GetViewFrame() const;
+    SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
