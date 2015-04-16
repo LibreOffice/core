@@ -77,13 +77,13 @@ using namespace com::sun::star::accessibility;
 #define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID")
 
 #define DEFAULT_BROWSE_MODE             \
-              BROWSER_COLUMNSELECTION   \
-            | BROWSER_MULTISELECTION    \
-            | BROWSER_KEEPSELECTION     \
-            | BROWSER_TRACKING_TIPS     \
-            | BROWSER_HLINESFULL        \
-            | BROWSER_VLINESFULL        \
-            | BROWSER_HEADERBAR_NEW     \
+              BrowserMode::COLUMNSELECTION   \
+            | BrowserMode::MULTISELECTION    \
+            | BrowserMode::KEEPHIGHLIGHT     \
+            | BrowserMode::TRACKING_TIPS     \
+            | BrowserMode::HLINES        \
+            | BrowserMode::VLINES        \
+            | BrowserMode::HEADERBAR_NEW     \
 
 class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
 {
@@ -1141,26 +1141,26 @@ namespace
 
         if ( !_bNavigationBar )
         {
-            _rMode &= ~BROWSER_AUTO_HSCROLL;
+            _rMode &= ~BrowserMode::AUTO_HSCROLL;
         }
 
         if ( _bHideScrollbars )
         {
-            _rMode |= ( BROWSER_NO_HSCROLL | BROWSER_NO_VSCROLL );
-            _rMode &= ~( BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL );
+            _rMode |= ( BrowserMode::NO_HSCROLL | BrowserMode::NO_VSCROLL );
+            _rMode &= ~BrowserMode( BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL );
         }
         else
         {
-            _rMode |= ( BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL );
-            _rMode &= ~( BROWSER_NO_HSCROLL | BROWSER_NO_VSCROLL );
+            _rMode |= ( BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL );
+            _rMode &= ~BrowserMode( BrowserMode::NO_HSCROLL | BrowserMode::NO_VSCROLL );
         }
 
         // note: if we have a navigation bar, we always have a AUTO_HSCROLL. In particular,
         // _bHideScrollbars is ignored then
         if ( _bNavigationBar )
         {
-            _rMode |= BROWSER_AUTO_HSCROLL;
-            _rMode &= ~BROWSER_NO_HSCROLL;
+            _rMode |= BrowserMode::AUTO_HSCROLL;
+            _rMode &= ~BrowserMode::NO_HSCROLL;
         }
 
         return nOldMode != _rMode;
@@ -1233,15 +1233,15 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
 
     // the 'update' option only affects our BrowserMode (with or w/o focus rect)
     BrowserMode nNewMode = m_nMode;
-    if ((m_nMode & BROWSER_CURSOR_WO_FOCUS) == 0)
+    if (!(m_nMode & BrowserMode::CURSOR_WO_FOCUS))
     {
         if (nOpt & OPT_UPDATE)
-            nNewMode |= BROWSER_HIDECURSOR;
+            nNewMode |= BrowserMode::HIDECURSOR;
         else
-            nNewMode &= ~BROWSER_HIDECURSOR;
+            nNewMode &= ~BrowserMode::HIDECURSOR;
     }
     else
-        nNewMode &= ~BROWSER_HIDECURSOR;
+        nNewMode &= ~BrowserMode::HIDECURSOR;
         // should not be necessary if EnablePermanentCursor is used to change the cursor behaviour, but to be sure ...
 
     if (nNewMode != m_nMode)
@@ -1299,17 +1299,17 @@ void DbGridControl::EnablePermanentCursor(bool bEnable)
 
     if (bEnable)
     {
-        m_nMode &= ~BROWSER_HIDECURSOR;     // without this BROWSER_CURSOR_WO_FOCUS won't have any affect
-        m_nMode |= BROWSER_CURSOR_WO_FOCUS;
+        m_nMode &= ~BrowserMode::HIDECURSOR;     // without this BrowserMode::CURSOR_WO_FOCUS won't have any affect
+        m_nMode |= BrowserMode::CURSOR_WO_FOCUS;
     }
     else
     {
         if (m_nOptions & OPT_UPDATE)
-            m_nMode |= BROWSER_HIDECURSOR;      // no cursor at all
+            m_nMode |= BrowserMode::HIDECURSOR;      // no cursor at all
         else
-            m_nMode &= ~BROWSER_HIDECURSOR;     // at least the "non-permanent" cursor
+            m_nMode &= ~BrowserMode::HIDECURSOR;     // at least the "non-permanent" cursor
 
-        m_nMode &= ~BROWSER_CURSOR_WO_FOCUS;
+        m_nMode &= ~BrowserMode::CURSOR_WO_FOCUS;
     }
     SetMode(m_nMode);
 
@@ -1321,7 +1321,7 @@ void DbGridControl::EnablePermanentCursor(bool bEnable)
 
 bool DbGridControl::IsPermanentCursorEnabled() const
 {
-    return ((m_nMode & BROWSER_CURSOR_WO_FOCUS) != 0) && ((m_nMode & BROWSER_HIDECURSOR) == 0);
+    return (m_nMode & BrowserMode::CURSOR_WO_FOCUS) && !(m_nMode & BrowserMode::HIDECURSOR);
 }
 
 void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_aAccess*/)
@@ -1464,20 +1464,20 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
         if ( bPermanentCursor )
         {
-            m_nMode |= BROWSER_CURSOR_WO_FOCUS;
-            m_nMode &= ~BROWSER_HIDECURSOR;
+            m_nMode |= BrowserMode::CURSOR_WO_FOCUS;
+            m_nMode &= ~BrowserMode::HIDECURSOR;
         }
         else
         {
             // updates are allowed -> no focus rectangle
             if ( m_nOptions & OPT_UPDATE )
-                m_nMode |= BROWSER_HIDECURSOR;
+                m_nMode |= BrowserMode::HIDECURSOR;
         }
 
         if ( m_bMultiSelection )
-            m_nMode |= BROWSER_MULTISELECTION;
+            m_nMode |= BrowserMode::MULTISELECTION;
         else
-            m_nMode &= ~BROWSER_MULTISELECTION;
+            m_nMode &= ~BrowserMode::MULTISELECTION;
 
         adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars );
 
@@ -1970,7 +1970,7 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
     if (pColumn)
     {
         Rectangle aArea(rRect);
-        if ((GetMode() & BROWSER_CURSOR_WO_FOCUS) == BROWSER_CURSOR_WO_FOCUS)
+        if ((GetMode() & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
             aArea.Top() += 1;
             aArea.Bottom() -= 1;

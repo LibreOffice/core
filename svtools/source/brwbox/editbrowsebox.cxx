@@ -1092,7 +1092,7 @@ namespace svt
     Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, bool bRel) const
     {
         Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
-        if ((GetMode()  & BROWSER_CURSOR_WO_FOCUS) == BROWSER_CURSOR_WO_FOCUS)
+        if ((GetMode()  & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
             aRect.Top() += 1;
             aRect.Bottom() -= 1;

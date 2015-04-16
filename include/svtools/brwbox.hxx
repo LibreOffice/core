@@ -32,6 +32,7 @@
 
 #include <limits.h>
 #include <memory>
+#include <o3tl/typed_flags_set.hxx>
 
 class BrowserColumn;
 class BrowserDataWin;
@@ -55,48 +56,47 @@ namespace utl {
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
 #define BROWSER_ENDOFSELECTION      (static_cast<long>(SFX_ENDOFSELECTION))
 
-typedef sal_uLong BrowserMode;
+enum class BrowserMode
+{
+    NONE                 = 0x000000,
+    COLUMNSELECTION      = 0x000001,
+    MULTISELECTION       = 0x000002,
+    THUMBDRAGGING        = 0x000004,
+    KEEPHIGHLIGHT        = 0x000008,
+    HLINES               = 0x000010,
+    VLINES               = 0x000020,
 
-#define BROWSER_COLUMNSELECTION      0x0001
-#define BROWSER_MULTISELECTION       0x0002
-#define BROWSER_THUMBDRAGGING        0x0004
-#define BROWSER_KEEPHIGHLIGHT        0x0008
-#define BROWSER_KEEPSELECTION        BROWSER_KEEPHIGHLIGHT  // old, don't use!
-#define BROWSER_HLINES               0x0010
-#define BROWSER_VLINES               0x0020
-#define BROWSER_HLINESFULL           BROWSER_HLINES // old, don't use!
-#define BROWSER_VLINESFULL           BROWSER_VLINES // old, don't use!
-#define BROWSER_HLINESDOTS           0x0000 // old => don't use!
-#define BROWSER_VLINESDOTS           0x0000 // old => don't use!
+    HIDESELECT           = 0x000100, // old => don't use!
+    HIDECURSOR           = 0x000200,
 
-#define BROWSER_HIDESELECT           0x0100 // old => don't use!
-#define BROWSER_HIDECURSOR           0x0200
+    NO_HSCROLL           = 0x000400,
+    NO_SCROLLBACK        = 0x000800,
 
-#define BROWSER_NO_HSCROLL           0x0400
-#define BROWSER_NO_SCROLLBACK        0x0800
+    AUTO_VSCROLL         = 0x001000,
+    AUTO_HSCROLL         = 0x002000,
 
-#define BROWSER_AUTO_VSCROLL         0x1000
-#define BROWSER_AUTO_HSCROLL         0x2000
+    TRACKING_TIPS        = 0x004000,
 
-#define BROWSER_TRACKING_TIPS        0x4000
+    NO_VSCROLL           = 0x008000,
 
-#define BROWSER_NO_VSCROLL           0x8000
+    HEADERBAR_NEW        = 0x040000,
+    AUTOSIZE_LASTCOL     = 0x080000,
+    OWN_DATACHANGED      = 0x100000,
 
-#define BROWSER_HIGHLIGHT_NONE       0x0100 // == BROWSER_HIDESELECT
-
-#define BROWSER_HEADERBAR_NEW    0x00040000
-#define BROWSER_AUTOSIZE_LASTCOL 0x00080000
-#define BROWSER_OWN_DATACHANGED  0x00100000
-
-#define BROWSER_CURSOR_WO_FOCUS  0x00200000
+    CURSOR_WO_FOCUS      = 0x200000,
     // Allows a cursor which is shown even if the control does not have the focus. This does not affect other
     // situations which require to temporarily hide the cursor (such as scrolling).
 
-#define BROWSER_SMART_HIDECURSOR 0x00400000
-    // is an enhanced version of BROWSER_HIDECURSOR.
-    // When set, BROWSER_HIDECURSOR is overruled, and the cursor is hidden as long as no selection exists,
+    SMART_HIDECURSOR     = 0x400000,
+    // is an enhanced version of BrowserMode::HIDECURSOR.
+    // When set, BrowserMode::HIDECURSOR is overruled, and the cursor is hidden as long as no selection exists,
     // but shown otherwise. This does not affect other situations which require to temporarily hide the
     // cursor (such as scrolling).
+};
+namespace o3tl
+{
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x7aff3f> {};
+}
 
 #define BROWSER_NONE                      0
 #define BROWSER_SELECT                  720
@@ -232,8 +232,6 @@ private:
 
     bool            bHLines;        // draw lines between rows
     bool            bVLines;        // draw lines between columns
-    bool            bHDots;         // draw lines between rows dotted
-    bool            bVDots;         // draw lines between columns dotted
     Color           aGridLineColor;     // color for lines, default dark grey
     bool            bBootstrapped;  // child windows resized etc.
     long            nTopRow;        // no. of first visible row (0...)
@@ -422,9 +420,9 @@ protected:
 
 public:
                     BrowseBox( vcl::Window* pParent, WinBits nBits = 0,
-                               BrowserMode nMode = 0 );
+                               BrowserMode nMode = BrowserMode::NONE );
                     BrowseBox( vcl::Window* pParent, const ResId& rId,
-                               BrowserMode nMode = 0 );
+                               BrowserMode nMode = BrowserMode::NONE );
                     virtual ~BrowseBox();
 
     // override inherited handler
@@ -566,7 +564,7 @@ public:
     Rectangle       GetControlArea() const;
     bool            ProcessKey( const KeyEvent& rEvt );
     void            Dispatch( sal_uInt16 nId );
-    void            SetMode( BrowserMode nMode = 0 );
+    void            SetMode( BrowserMode nMode = BrowserMode::NONE );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
     void            SetCursorColor(const Color& _rCol);

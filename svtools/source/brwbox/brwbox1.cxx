@@ -97,7 +97,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     nRowCount = 0;
     m_bFocusOnlyCursor = true;
     m_aCursorColor = COL_TRANSPARENT;
-    m_nCurrentMode = 0;
+    m_nCurrentMode = BrowserMode::NONE;
     nControlAreaWidth = USHRT_MAX;
     uRow.nSel = BROWSER_ENDOFSELECTION;
 
@@ -2223,10 +2223,10 @@ Rectangle BrowseBox::GetControlArea() const
 void BrowseBox::SetMode( BrowserMode nMode )
 {
 
-    getDataWindow()->bAutoHScroll = BROWSER_AUTO_HSCROLL == ( nMode & BROWSER_AUTO_HSCROLL );
-    getDataWindow()->bAutoVScroll = BROWSER_AUTO_VSCROLL == ( nMode & BROWSER_AUTO_VSCROLL );
-    getDataWindow()->bNoHScroll   = BROWSER_NO_HSCROLL   == ( nMode & BROWSER_NO_HSCROLL );
-    getDataWindow()->bNoVScroll   = BROWSER_NO_VSCROLL   == ( nMode & BROWSER_NO_VSCROLL );
+    getDataWindow()->bAutoHScroll = BrowserMode::AUTO_HSCROLL == ( nMode & BrowserMode::AUTO_HSCROLL );
+    getDataWindow()->bAutoVScroll = BrowserMode::AUTO_VSCROLL == ( nMode & BrowserMode::AUTO_VSCROLL );
+    getDataWindow()->bNoHScroll   = BrowserMode::NO_HSCROLL   == ( nMode & BrowserMode::NO_HSCROLL );
+    getDataWindow()->bNoVScroll   = BrowserMode::NO_VSCROLL   == ( nMode & BrowserMode::NO_VSCROLL );
 
     DBG_ASSERT( !( getDataWindow()->bAutoHScroll && getDataWindow()->bNoHScroll ),
         "BrowseBox::SetMode: AutoHScroll *and* NoHScroll?" );
@@ -2243,7 +2243,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     nControlAreaWidth = USHRT_MAX;
 
     getDataWindow()->bNoScrollBack =
-            BROWSER_NO_SCROLLBACK == ( nMode & BROWSER_NO_SCROLLBACK);
+            BrowserMode::NO_SCROLLBACK == ( nMode & BrowserMode::NO_SCROLLBACK);
 
     long nOldRowSel = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
     MultiSelection *pOldRowSel = bMultiSelection ? uRow.pSel : 0;
@@ -2251,34 +2251,32 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     delete pVScroll;
 
-    bThumbDragging = ( nMode & BROWSER_THUMBDRAGGING ) == BROWSER_THUMBDRAGGING;
-    bMultiSelection = ( nMode & BROWSER_MULTISELECTION ) == BROWSER_MULTISELECTION;
-    bColumnCursor = ( nMode & BROWSER_COLUMNSELECTION ) == BROWSER_COLUMNSELECTION;
-    bKeepHighlight = ( nMode & BROWSER_KEEPSELECTION ) == BROWSER_KEEPSELECTION;
+    bThumbDragging = ( nMode & BrowserMode::THUMBDRAGGING ) == BrowserMode::THUMBDRAGGING;
+    bMultiSelection = ( nMode & BrowserMode::MULTISELECTION ) == BrowserMode::MULTISELECTION;
+    bColumnCursor = ( nMode & BrowserMode::COLUMNSELECTION ) == BrowserMode::COLUMNSELECTION;
+    bKeepHighlight = ( nMode & BrowserMode::KEEPHIGHLIGHT ) == BrowserMode::KEEPHIGHLIGHT;
 
-    bHideSelect = ((nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT);
+    bHideSelect = ((nMode & BrowserMode::HIDESELECT) == BrowserMode::HIDESELECT);
     // default: do not hide the cursor at all (untaken scrolling and such)
     bHideCursor = TRISTATE_FALSE;
 
-    if ( BROWSER_SMART_HIDECURSOR == ( nMode & BROWSER_SMART_HIDECURSOR ) )
+    if ( BrowserMode::SMART_HIDECURSOR == ( nMode & BrowserMode::SMART_HIDECURSOR ) )
     {   // smart cursor hide overrules hard cursor hide
         bHideCursor = TRISTATE_INDET;
     }
-    else if ( BROWSER_HIDECURSOR == ( nMode & BROWSER_HIDECURSOR ) )
+    else if ( BrowserMode::HIDECURSOR == ( nMode & BrowserMode::HIDECURSOR ) )
     {
         bHideCursor = TRISTATE_TRUE;
     }
 
-    m_bFocusOnlyCursor = ((nMode & BROWSER_CURSOR_WO_FOCUS) == 0);
+    m_bFocusOnlyCursor = ((nMode & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::NONE);
 
-    bHLines = ( nMode & BROWSER_HLINESFULL ) == BROWSER_HLINESFULL;
-    bVLines = ( nMode & BROWSER_VLINESFULL ) == BROWSER_VLINESFULL;
-    bHDots  = ( nMode & BROWSER_HLINESDOTS ) == BROWSER_HLINESDOTS;
-    bVDots  = ( nMode & BROWSER_VLINESDOTS ) == BROWSER_VLINESDOTS;
+    bHLines = ( nMode & BrowserMode::HLINES ) == BrowserMode::HLINES;
+    bVLines = ( nMode & BrowserMode::VLINES ) == BrowserMode::VLINES;
 
     WinBits nVScrollWinBits =
-        WB_VSCROLL | ( ( nMode & BROWSER_THUMBDRAGGING ) ? WB_DRAG : 0 );
-    pVScroll = ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
+        WB_VSCROLL | ( ( nMode & BrowserMode::THUMBDRAGGING ) ? WB_DRAG : 0 );
+    pVScroll = ( nMode & BrowserMode::TRACKING_TIPS ) == BrowserMode::TRACKING_TIPS
                 ? new BrowserScrollBar( this, nVScrollWinBits,
                                         static_cast<BrowserDataWin*>( pDataWin ) )
                 : new ScrollBar( this, nVScrollWinBits );
@@ -2288,13 +2286,13 @@ void BrowseBox::SetMode( BrowserMode nMode )
     pVScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
 
     getDataWindow()->bAutoSizeLastCol =
-            BROWSER_AUTOSIZE_LASTCOL == ( nMode & BROWSER_AUTOSIZE_LASTCOL );
+            BrowserMode::AUTOSIZE_LASTCOL == ( nMode & BrowserMode::AUTOSIZE_LASTCOL );
     getDataWindow()->bOwnDataChangedHdl =
-            BROWSER_OWN_DATACHANGED == ( nMode & BROWSER_OWN_DATACHANGED );
+            BrowserMode::OWN_DATACHANGED == ( nMode & BrowserMode::OWN_DATACHANGED );
 
     // create a headerbar. what happens, if a headerbar has to be created and
     // there already are columns?
-    if ( BROWSER_HEADERBAR_NEW == ( nMode & BROWSER_HEADERBAR_NEW ) )
+    if ( BrowserMode::HEADERBAR_NEW == ( nMode & BrowserMode::HEADERBAR_NEW ) )
     {
         if (!getDataWindow()->pHeaderBar)
             getDataWindow()->pHeaderBar = CreateHeaderBar( this );

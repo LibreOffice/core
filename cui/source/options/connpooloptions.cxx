@@ -88,7 +88,8 @@ namespace offapp
 
 
     DriverListControl::DriverListControl(vcl::Window* _pParent)
-        :EditBrowseBox(_pParent, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL | WB_BORDER)
+        :EditBrowseBox(_pParent, EBBF_NOROWPICTURE, WB_BORDER,
+                       BrowserMode::AUTO_VSCROLL | BrowserMode::AUTO_HSCROLL | BrowserMode::HIDECURSOR | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::KEEPHIGHLIGHT)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(CUI_RES(RID_SVXSTR_YES))
         ,m_sNo(CUI_RES(RID_SVXSTR_NO))
