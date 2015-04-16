@@ -127,6 +127,19 @@ public:
     }
 };
 
+class isValidAndXPositiveAndYNegative : public ::std::binary_function< double, double, bool >
+{
+public:
+    inline bool operator()( double x, double y )
+    { return ! ( ::rtl::math::isNan( x ) ||
+                 ::rtl::math::isNan( y ) ||
+                 ::rtl::math::isInf( x ) ||
+                 ::rtl::math::isInf( y ) ||
+                 x <= 0.0 ||
+                 y >= 0.0 );
+    }
+};
+
 } //  namespace RegressionCalculationHelper
 } //  namespace chart
 
