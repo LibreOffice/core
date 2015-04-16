@@ -1993,7 +1993,8 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
         {
             OUStringBuffer aTmpStr( aStr );
-            sal_Int32 nEraseChars = 4;
+            // speed it up by removing all but 1.33x as many as the break pos.
+            sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
             while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
             {
                 aTmpStr = OUStringBuffer(aStr);
