@@ -47,7 +47,7 @@ class ScPreviewShell: public SfxViewShell
     vcl::Window*         pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
-    sal_uInt8           nSourceDesignMode;      // form design mode from TabView
+    TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
     long            nMaxVertPos;
 
@@ -102,7 +102,7 @@ public:
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >
                     GetSourceData() const       { return aSourceData; }
-    sal_uInt8           GetSourceDesignMode() const { return nSourceDesignMode; }
+    TriState        GetSourceDesignMode() const { return nSourceDesignMode; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

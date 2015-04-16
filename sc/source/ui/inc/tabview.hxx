@@ -60,8 +60,6 @@ namespace chart2 { namespace data {
     struct HighlightedRange;
 }}}}}
 
-#define SC_FORCEMODE_NONE   0xff
-
 //      Help - Window
 
 class ScCornerButton : public vcl::Window
@@ -221,7 +219,7 @@ protected:
     bool            IsDrawTextEdit() const;
     void            DrawEnableAnim(bool bSet);
 
-    void            MakeDrawView( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
+    void            MakeDrawView( TriState nForceDesignMode = TRISTATE_INDET );
 
     void            HideNoteMarker();
 

@@ -1447,7 +1447,7 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return TabKeyInput( rKeyEvent );
 }
 
-void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
+void ScTabViewShell::Construct( TriState nForceDesignMode )
 {
     SfxApplication* pSfxApp  = SfxGetpApp();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -1703,7 +1703,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //  has to be shown by the sfx. ReadUserData is deferred until the first Activate call.
     //  old DesignMode state from form layer must be restored, too
 
-    sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE;
+    TriState nForceDesignMode = TRISTATE_INDET;
     if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
     {
         ScPreviewShell* pPreviewShell = static_cast<ScPreviewShell*>(pOldSh);

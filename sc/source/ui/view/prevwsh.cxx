@@ -152,7 +152,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     SfxViewShell( pViewFrame, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS ),
     pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
     mpFrameWindow(NULL),
-    nSourceDesignMode( SC_FORCEMODE_NONE ),
+    nSourceDesignMode( TRISTATE_INDET ),
     nMaxVertPos(0),
     pAccessibilityBroadcaster( NULL )
 {
@@ -174,7 +174,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //  (only if draw view exists)
         SdrView* pDrawView = pTabViewShell->GetSdrView();
         if ( pDrawView )
-            nSourceDesignMode = pDrawView->IsDesignMode();
+            nSourceDesignMode
+                = pDrawView->IsDesignMode() ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
     new ScPreviewObj(this);

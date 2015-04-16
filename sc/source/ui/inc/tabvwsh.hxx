@@ -182,7 +182,7 @@ private:
     OUString   maScope;
 
 private:
-    void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
+    void    Construct( TriState nForceDesignMode = TRISTATE_INDET );
 
     SfxShell*       GetMySubShell() const;
 
