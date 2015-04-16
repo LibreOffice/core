@@ -4554,6 +4554,11 @@ sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eT
     return pConv->getSpecialSymbol(eType);
 }
 
+FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
+{
+    return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
+}
+
 void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
 {
     // All known AddIn functions.
@@ -5068,11 +5073,6 @@ bool ScCompiler::HandleTableRef()
         return GetToken();
     }
     return true;
-}
-
-FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
-{
-    return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
