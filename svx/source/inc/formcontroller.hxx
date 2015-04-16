@@ -77,11 +77,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
-#include <comphelper/implbase_var.hxx>
-#endif
+#include <cppuhelper/compbase.hxx>
 
 struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , bool>
 {
@@ -103,7 +99,7 @@ namespace svxform
     class ControlBorderManager;
     struct FmFieldInfo;
 
-    typedef ::comphelper::WeakComponentImplHelper22 <   ::com::sun::star::form::runtime::XFormController
+    typedef cppu::WeakComponentImplHelper           <   ::com::sun::star::form::runtime::XFormController
                                                     ,   ::com::sun::star::form::runtime::XFilterController
                                                     ,   ::com::sun::star::awt::XFocusListener
                                                     ,   ::com::sun::star::form::XLoadListener
