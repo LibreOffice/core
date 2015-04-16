@@ -414,8 +414,8 @@ public:
     }
     virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
-        *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 7 ) ||
-                    ((COLORDATA_GREEN( nColor ) & 0xf8 ) << 2 ) ||
+        *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 7 ) |
+                    ((COLORDATA_GREEN( nColor ) & 0xf8 ) << 2 ) |
                     ((COLORDATA_BLUE( nColor ) & 0xf8 ) >> 3 );
     }
 };
