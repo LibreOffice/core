@@ -196,10 +196,14 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
             return NULL;
         }
         free( imp_lib );
+        // dlhandle is "leaked"
+        // coverity[leaked_storage]
         return pSym( install_path );
     }
 
     free( imp_lib );
+    // dlhandle is "leaked"
+    // coverity[leaked_storage]
     return pSym2( install_path, user_profile_path );
 }
 
