@@ -401,9 +401,34 @@
 			<value-of select="@table:number-columns-spanned"/>
 			<text>" </text>
 		</if>
+
+		<!-- Cell alignment -->
+		<if test="text:p and count(*) = 1">
+			<variable name="style-number">
+				<call-template name="mk-style-set">
+					<with-param name="node" select="text:p"/>
+				</call-template>
+			</variable>
+
+			<variable name="code"
+				select="($style-number mod (2 * $CODE_BIT)) - ($style-number mod ($CODE_BIT)) != 0"/>
+			<variable name="center"
+				select="($style-number mod (2 * $CENTER_BIT)) - ($style-number mod ($CENTER_BIT)) != 0"/>
+			<variable name="right"
+				select="($style-number mod (2 * $RIGHT_BIT)) - ($style-number mod ($RIGHT_BIT)) != 0"/>
+
+			<choose>
+				<when test="$center">
+					<text> align=center</text>
+				</when>
+				<when test="$right">
+					<text> align=right</text>
+				</when>
+			</choose>
+		</if>
+
 		<if test="not($USE_DEFAULT_TABLE_CLASS) and boolean(@table:style-name)">
-	 		<variable name="style-element" select="key('style-ref', @table:style-name)"/>
-			
+	 		<variable name="style-element" select="key('style-ref', @table:style-name)"/>			
 			<variable name="style">
 				<call-template name="translate-style-property">
 					<with-param name="style-name" select="'background-color'"/>
@@ -569,14 +594,16 @@
 			select="($alignment mod (2 * $RIGHT_BIT)) - ($alignment mod ($RIGHT_BIT)) != 0"/>
 
 		<variable name="style">
-			<choose>
-				<when test="$center">
-					<text>text-align:center;</text>
-				</when>
-				<when test="$right">
-					<text>text-align:right;</text>
-				</when>
-			</choose>
+			<if test="name(parent::*) != 'table:table-cell'">
+				<choose>
+					<when test="$center">
+						<text>text-align:center;</text>
+					</when>
+					<when test="$right">
+						<text>text-align:right;</text>
+					</when>
+				</choose>
+			</if>
 			<if test="boolean(@text:style-name)">
 	 			<variable name="style-element" select="key('style-ref', @text:style-name)"/>
 
