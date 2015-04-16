@@ -603,7 +603,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         pView->InvalidateRulerPos();
 
     if( m_bNew )
-        m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *m_xTmp.get() ) );
+        m_xBasePool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *m_xTmp.get() ) );
 
     pDoc->getIDocumentState().SetModified();
     if( !m_bModified )
@@ -857,7 +857,7 @@ sal_uInt16 SwDocShell::Edit(
             m_pView->InvalidateRulerPos();
 
         if( bNew )
-            m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
+            m_xBasePool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *xTmp.get() ) );
 
         m_pDoc->getIDocumentState().SetModified();
         if( !bModified )        // Bug 57028

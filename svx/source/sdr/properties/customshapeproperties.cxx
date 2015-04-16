@@ -219,8 +219,8 @@ namespace sdr
             {
                 switch( pStyleHint->GetHint() )
                 {
-                    case SFX_STYLESHEET_MODIFIED :
-                    case SFX_STYLESHEET_CHANGED  :
+                    case SfxStyleSheetHintId::MODIFIED :
+                    case SfxStyleSheetHintId::CHANGED  :
                         bRemoveRenderGeometry = true;
                     break;
                 };
