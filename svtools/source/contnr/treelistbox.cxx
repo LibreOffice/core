@@ -2219,10 +2219,10 @@ void SvTreeListBox::GetFocus()
 
 void SvTreeListBox::LoseFocus()
 {
-    //If there is no item in the tree, delete visual focus.
-    if( !First())
+    // If there is no item in the tree, delete visual focus.
+    if ( !First() )
         Invalidate();
-    if( pImp )
+    if ( pImp )
         pImp->LoseFocus();
     Control::LoseFocus();
 }
@@ -3514,6 +3514,8 @@ void SvTreeListBox::NotifyScrolled()
 
 void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
 {
+    if (!pImp)
+        return;
     if( nFocusWidth == -1 )
         // to make sure that the control doesn't show the wrong focus rectangle
         // after painting
