@@ -5053,6 +5053,11 @@ bool ScCompiler::HandleTableRef()
                 {
                     ScSingleRefData aRefData;
                     aRefData.InitFlags();
+                    aRefData.SetColRel( true);
+                    if (eItem == ScTableRefToken::THIS_ROW)
+                    {
+                        aRefData.SetRowRel( true);
+                    }
                     aRefData.SetAddress( aRange.aStart, aPos);
                     pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData ));
                 }
@@ -5060,6 +5065,13 @@ bool ScCompiler::HandleTableRef()
                 {
                     ScComplexRefData aRefData;
                     aRefData.InitFlags();
+                    aRefData.Ref1.SetColRel( true);
+                    aRefData.Ref2.SetColRel( true);
+                    if (eItem == ScTableRefToken::THIS_ROW)
+                    {
+                        aRefData.Ref1.SetRowRel( true);
+                        aRefData.Ref2.SetRowRel( true);
+                    }
                     aRefData.SetRange( aRange, aPos);
                     pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
                 }
