@@ -521,9 +521,15 @@ vcl::Window* ListBox::GetPreferredKeyInputWindow()
 void ListBox::LoseFocus()
 {
     if( IsDropDownBox() )
-        mpImplWin->HideFocus();
+    {
+        if (mpImplWin)
+            mpImplWin->HideFocus();
+    }
     else
-        mpImplLB->HideFocus();
+    {
+        if (mpImplLB)
+            mpImplLB->HideFocus();
+    }
 
     Control::LoseFocus();
 }
