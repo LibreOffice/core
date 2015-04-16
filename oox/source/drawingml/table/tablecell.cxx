@@ -70,10 +70,19 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         sal_Int32 nPropId )
 {
     BorderLine2 aBorderLine;
-    if( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ) )
+    if( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ))
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
         aBorderLine.Color = aColor.getColor( rFilterBase.getGraphicHelper() );
+        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
+        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
+        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
+        aBorderLine.LineDistance = 0;
+    }
+    else if ( rLineProperties.moLineWidth.get(0)!=0 )
+    {
+        // Default color of Line is black.
+        rLineProperties.maLineFill.maFillColor.setSrgbClr( 0 );
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
