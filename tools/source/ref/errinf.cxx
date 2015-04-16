@@ -186,12 +186,11 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
     OSL_FAIL(aErr.getStr());
 }
 
-// FIXME: this is a truly horrible reverse dependency on VCL
-#include <vcl/window.hxx>
+// FIXME: this is a horrible reverse dependency on VCL
 struct ErrorContextImpl
 {
-    ErrorContext*       pNext;
-    VclPtr<vcl::Window> pWin;
+    ErrorContext *pNext;
+    vcl::Window  *pWin; // should be VclPtr for strong lifecyle
 };
 
 ErrorContext::ErrorContext(vcl::Window *pWinP)
@@ -242,7 +241,7 @@ ErrorHandler::~ErrorHandler()
 
 vcl::Window* ErrorContext::GetParent()
 {
-    return pImpl ? pImpl->pWin.get() : NULL;
+    return pImpl ? pImpl->pWin : NULL;
 }
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
