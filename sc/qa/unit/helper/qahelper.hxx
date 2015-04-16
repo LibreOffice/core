@@ -97,15 +97,15 @@ struct FileFormat {
 // Printers for the calc data structures. Needed for the EQUAL assertion
 // macros from CPPUNIT.
 
-std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr);
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr);
 
-std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange);
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange);
 
-std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
 
-std::ostream& operator<<(std::ostream& rStrm, const Color& rColor);
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const Color& rColor);
 
-std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
 
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling

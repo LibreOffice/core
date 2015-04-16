@@ -62,7 +62,7 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
 
 std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 {
-    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: << rColor.GetBlue()";
+    rStrm << "Color: R:" << (int)rColor.GetRed() << " G:" << (int)rColor.GetGreen() << " B: " << (int)rColor.GetBlue();
     return rStrm;
 }
 
