@@ -5349,53 +5349,9 @@ RTFError RTFDocumentImpl::popState()
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
 
-        m_pObjectData.reset(new SvMemoryStream());
-        int b = 0, count = 2;
-
-        // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        const char* str = aStr.getStr();
-        for (int i = 0; i < aStr.getLength(); ++i)
-        {
-            char ch = str[i];
-            if (ch != 0x0d && ch != 0x0a)
-            {
-                b = b << 4;
-                sal_Int8 parsed = m_pTokenizer->asHex(ch);
-                if (parsed == -1)
-                    return RTFError::HEX_INVALID;
-                b += parsed;
-                count--;
-                if (!count)
-                {
-                    m_pObjectData->WriteChar((char)b);
-                    count = 2;
-                    b = 0;
-                }
-            }
-        }
-
-        if (m_pObjectData->Tell())
-        {
-            m_pObjectData->Seek(0);
-
-            // Skip ObjectHeader
-            sal_uInt32 nData;
-            m_pObjectData->ReadUInt32(nData);   // OLEVersion
-            m_pObjectData->ReadUInt32(nData);   // FormatID
-            m_pObjectData->ReadUInt32(nData);   // ClassName
-            m_pObjectData->SeekRel(nData);
-            m_pObjectData->ReadUInt32(nData);   // TopicName
-            m_pObjectData->SeekRel(nData);
-            m_pObjectData->ReadUInt32(nData);   // ItemName
-            m_pObjectData->SeekRel(nData);
-            m_pObjectData->ReadUInt32(nData);   // NativeDataSize
-        }
-
-        uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData.get()));
-        auto pStreamValue = std::make_shared<RTFValue>(xInputStream);
-
-        m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
+        RTFError eError = handleEmbeddedObject();
+        if (eError != RTFError::OK)
+            return eError;
     }
     break;
     case Destination::OBJCLASS:
@@ -6054,6 +6010,64 @@ RTFError RTFDocumentImpl::popState()
 
         m_bHasFootnote = false;
     }
+
+    return RTFError::OK;
+}
+
+RTFError RTFDocumentImpl::handleEmbeddedObject()
+{
+    SvMemoryStream aStream;
+    int b = 0, count = 2;
+
+    // Feed the destination text to a stream.
+    OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+    const char* str = aStr.getStr();
+    for (int i = 0; i < aStr.getLength(); ++i)
+    {
+        char ch = str[i];
+        if (ch != 0x0d && ch != 0x0a)
+        {
+            b = b << 4;
+            sal_Int8 parsed = m_pTokenizer->asHex(ch);
+            if (parsed == -1)
+                return RTFError::HEX_INVALID;
+            b += parsed;
+            count--;
+            if (!count)
+            {
+                aStream.WriteChar(b);
+                count = 2;
+                b = 0;
+            }
+        }
+    }
+
+    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
+    if (aStream.Tell())
+    {
+        aStream.Seek(0);
+        sal_uInt32 nData;
+        aStream.ReadUInt32(nData);   // OLEVersion
+        aStream.ReadUInt32(nData);   // FormatID
+        aStream.ReadUInt32(nData);   // ClassName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData);   // TopicName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData);   // ItemName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData);   // NativeDataSize
+
+        if (nData)
+        {
+            m_pObjectData.reset(new SvMemoryStream());
+            m_pObjectData->WriteStream(aStream);
+            m_pObjectData->Seek(0);
+        }
+    }
+
+    uno::Reference<io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(m_pObjectData.get()));
+    auto pStreamValue = std::make_shared<RTFValue>(xInputStream);
+    m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
 
     return RTFError::OK;
 }

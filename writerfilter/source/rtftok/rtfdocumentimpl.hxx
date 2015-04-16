@@ -439,6 +439,8 @@ private:
     void resetTableRowProperties();
     void backupTableRowProperties();
     void restoreTableRowProperties();
+    /// Turns the destination text into an input stream of the current OLE attributes.
+    RTFError handleEmbeddedObject();
 
     css::uno::Reference<css::uno::XComponentContext> const& m_xContext;
     css::uno::Reference<css::io::XInputStream> const& m_xInputStream;

@@ -2232,6 +2232,12 @@ DECLARE_RTFIMPORT_TEST(testFdo75614, "tdf75614.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("after."), getRun(getParagraph(1), 3)->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(mathtype, "mathtype.rtf")
+{
+    OUString aFormula = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT(!aFormula.isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
