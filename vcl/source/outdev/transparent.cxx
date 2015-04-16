@@ -611,6 +611,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     if( !mbFillColor || (nTransparencePercent >= 100) )
     {
         DrawInvisiblePolygon( rPolyPoly );
+        return; // tdf#84294: do not record it in metafile
     }
 
     // handle metafile recording
