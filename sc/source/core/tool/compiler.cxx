@@ -5052,7 +5052,7 @@ bool ScCompiler::HandleTableRef()
                 ScComplexRefData aRefData;
                 aRefData.InitFlags();
                 aRefData.SetRange( aRange, aPos);
-                pNew->AddDoubleReference( aRefData );
+                pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
             }
             else
             {
