@@ -55,7 +55,7 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         else if ( SID_SEARCH_OPTIONS == nSID )
         {
             DBG_ASSERT( pState->ISA(SfxUInt16Item), "wrong item type" );
-            sal_uInt16 nFlags = (sal_uInt16) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+            SearchOptionFlags nFlags = (SearchOptionFlags) static_cast<const SfxUInt16Item*>(pState)->GetValue();
             rSrchDlg.EnableControls_Impl( nFlags );
         }
         else if ( SID_SEARCH_ITEM == nSID )
@@ -65,7 +65,7 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         }
     }
     else if ( SID_SEARCH_OPTIONS == nSID || SID_SEARCH_ITEM == nSID )
-        rSrchDlg.EnableControls_Impl( 0 );
+        rSrchDlg.EnableControls_Impl( SearchOptionFlags::NONE );
 }
 
 

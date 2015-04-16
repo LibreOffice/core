@@ -1295,20 +1295,20 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     return NULL;
 }
 
-sal_uInt16 ModulWindow::GetSearchOptions()
+SearchOptionFlags ModulWindow::GetSearchOptions()
 {
-    sal_uInt16 nOptions = SEARCH_OPTIONS_SEARCH |
-                      SEARCH_OPTIONS_WHOLE_WORDS |
-                      SEARCH_OPTIONS_BACKWARDS |
-                      SEARCH_OPTIONS_REG_EXP |
-                      SEARCH_OPTIONS_EXACT |
-                      SEARCH_OPTIONS_SELECTION |
-                      SEARCH_OPTIONS_SIMILARITY;
+    SearchOptionFlags nOptions = SearchOptionFlags::SEARCH |
+                      SearchOptionFlags::WHOLE_WORDS |
+                      SearchOptionFlags::BACKWARDS |
+                      SearchOptionFlags::REG_EXP |
+                      SearchOptionFlags::EXACT |
+                      SearchOptionFlags::SELECTION |
+                      SearchOptionFlags::SIMILARITY;
 
     if ( !IsReadOnly() )
     {
-        nOptions |= SEARCH_OPTIONS_REPLACE;
-        nOptions |= SEARCH_OPTIONS_REPLACE_ALL;
+        nOptions |= SearchOptionFlags::REPLACE;
+        nOptions |= SearchOptionFlags::REPLACE_ALL;
     }
 
     return nOptions;

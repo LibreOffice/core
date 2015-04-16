@@ -826,10 +826,10 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_OPTIONS:
             {
-                sal_uInt16 nOptions = 0;
+                SearchOptionFlags nOptions = SearchOptionFlags::NONE;
                 if( pCurWin )
                     nOptions = pCurWin->GetSearchOptions();
-                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, nOptions ) );
+                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, static_cast<sal_uInt16>(nOptions) ) );
             }
             break;
             case SID_BASICIDE_LIBSELECTOR:

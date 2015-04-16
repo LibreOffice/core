@@ -101,7 +101,7 @@ using ::com::sun::star::util::SearchOptions;
 #define SWSRCVIEWFLAGS ( SFX_VIEW_CAN_PRINT|\
                       SFX_VIEW_NO_NEWWINDOW )
 
-#define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))
+#define SRC_SEARCHOPTIONS (SearchOptionFlags::ALL & ~SearchOptionFlags(SearchOptionFlags::FORMAT|SearchOptionFlags::FAMILIES|SearchOptionFlags::SEARCHALL))
 
 // Printing margins -> like Basic - Ide
 #define LMARGPRN        1700
@@ -459,11 +459,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_SEARCH_OPTIONS:
             {
-                sal_uInt16 nOpt = SRC_SEARCHOPTIONS;
+                SearchOptionFlags nOpt = SRC_SEARCHOPTIONS;
                 if(GetDocShell()->IsReadOnly())
-                    nOpt &= ~(SEARCH_OPTIONS_REPLACE|SEARCH_OPTIONS_REPLACE_ALL);
+                    nOpt &= ~SearchOptionFlags(SearchOptionFlags::REPLACE|SearchOptionFlags::REPLACE_ALL);
 
-                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS,  nOpt) );
+                rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS,  static_cast<sal_uInt16>(nOpt) ) );
             }
             break;
             case SID_SEARCH_ITEM:

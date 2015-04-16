@@ -255,7 +255,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , bWriter(false)
     , bSearch(true)
     , bFormat(false)
-    , nOptions(USHRT_MAX)
+    , nOptions(SearchOptionFlags::ALL)
     , bSet(false)
     , bReadOnly(false)
     , bConstruct(true)
@@ -368,7 +368,7 @@ void SvxSearchDialog::Construct_Impl()
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
-    EnableControls_Impl( 0 );
+    EnableControls_Impl( SearchOptionFlags::NONE );
 
     // Store old Text from m_pWordBtn
     aCalcStr += "#";
@@ -1543,14 +1543,14 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
 
 
 
-void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
+void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
 {
     if ( nFlags == nOptions )
         return;
     else
         nOptions = nFlags;
 
-    if ( !nOptions )
+    if ( nOptions == SearchOptionFlags::NONE )
     {
         if ( IsVisible() )
         {
@@ -1562,21 +1562,21 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
         Show();
     bool bNoSearch = true;
 
-    bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
+    bool bEnableSearch = bool( SearchOptionFlags::SEARCH & nOptions );
     m_pSearchBtn->Enable(bEnableSearch);
 
     if( bEnableSearch )
         bNoSearch = false;
 
 
-    if ( ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::SEARCHALL & nOptions ) )
     {
         m_pSearchAllBtn->Enable();
         bNoSearch = false;
     }
     else
         m_pSearchAllBtn->Disable();
-    if ( ( SEARCH_OPTIONS_REPLACE & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::REPLACE & nOptions ) )
     {
         m_pReplaceBtn->Enable();
         m_pReplaceFrame->get_label_widget()->Enable();
@@ -1591,7 +1591,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
         m_pReplaceLB->Disable();
         m_pReplaceTmplLB->Disable();
     }
-    if ( ( SEARCH_OPTIONS_REPLACE_ALL & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::REPLACE_ALL & nOptions ) )
     {
         m_pReplaceAllBtn->Enable();
         bNoSearch = false;
@@ -1604,31 +1604,31 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
     m_pSearchLB->Enable( !bNoSearch );
     m_pNotesBtn->Enable();
 
-    if ( ( SEARCH_OPTIONS_WHOLE_WORDS & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::WHOLE_WORDS & nOptions ) )
         m_pWordBtn->Enable();
     else
         m_pWordBtn->Disable();
-    if ( ( SEARCH_OPTIONS_BACKWARDS & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::BACKWARDS & nOptions ) )
         m_pBackwardsBtn->Enable();
     else
         m_pBackwardsBtn->Disable();
-    if ( ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::REG_EXP & nOptions ) )
         m_pRegExpBtn->Enable();
     else
         m_pRegExpBtn->Disable();
-    if ( ( SEARCH_OPTIONS_EXACT & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::EXACT & nOptions ) )
         m_pMatchCaseCB->Enable();
     else
         m_pMatchCaseCB->Disable();
-    if ( ( SEARCH_OPTIONS_SELECTION & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::SELECTION & nOptions ) )
         m_pSelectionBtn->Enable();
     else
         m_pSelectionBtn->Disable();
-    if ( ( SEARCH_OPTIONS_FAMILIES & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::FAMILIES & nOptions ) )
         m_pLayoutBtn->Enable();
     else
         m_pLayoutBtn->Disable();
-    if ( ( SEARCH_OPTIONS_FORMAT & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::FORMAT & nOptions ) )
     {
         m_pAttributeBtn->Enable();
         m_pFormatBtn->Enable();
@@ -1641,7 +1641,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
         m_pNoFormatBtn->Disable();
     }
 
-    if ( ( SEARCH_OPTIONS_SIMILARITY & nOptions ) != 0 )
+    if ( ( SearchOptionFlags::SIMILARITY & nOptions ) )
     {
         m_pSimilarityBox->Enable();
         m_pSimilarityBtn->Enable();
@@ -1661,35 +1661,35 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
 
 void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
 {
-    if (m_pSearchBtn == pCtrl && ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0)
+    if (m_pSearchBtn == pCtrl && ( SearchOptionFlags::SEARCH & nOptions ) )
     {
         m_pComponentFrame->Enable();
         m_pSearchBtn->Enable();
         return;
     }
     if ( m_pSearchAllBtn == pCtrl &&
-         ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
+         ( SearchOptionFlags::SEARCHALL & nOptions )  )
     {
         m_pSearchAllBtn->Enable( true );
         return;
     }
-    if ( m_pReplaceBtn == pCtrl && ( SEARCH_OPTIONS_REPLACE & nOptions ) != 0 )
+    if ( m_pReplaceBtn == pCtrl && ( SearchOptionFlags::REPLACE & nOptions )  )
     {
         m_pReplaceBtn->Enable();
         return;
     }
     if ( m_pReplaceAllBtn == pCtrl &&
-         ( SEARCH_OPTIONS_REPLACE_ALL & nOptions ) != 0 )
+         ( SearchOptionFlags::REPLACE_ALL & nOptions ) )
     {
         m_pReplaceAllBtn->Enable();
         return;
     }
-    if ( m_pWordBtn == pCtrl && ( SEARCH_OPTIONS_WHOLE_WORDS & nOptions ) != 0 )
+    if ( m_pWordBtn == pCtrl && ( SearchOptionFlags::WHOLE_WORDS & nOptions ) )
     {
         m_pWordBtn->Enable();
         return;
     }
-    if ( m_pBackwardsBtn == pCtrl && ( SEARCH_OPTIONS_BACKWARDS & nOptions ) != 0 )
+    if ( m_pBackwardsBtn == pCtrl && ( SearchOptionFlags::BACKWARDS & nOptions ) )
     {
         m_pBackwardsBtn->Enable();
         return;
@@ -1699,46 +1699,46 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
         m_pNotesBtn->Enable();
         return;
     }
-    if ( m_pRegExpBtn == pCtrl && ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0
+    if ( m_pRegExpBtn == pCtrl && ( SearchOptionFlags::REG_EXP & nOptions )
         && !m_pSimilarityBox->IsChecked())
     {
         m_pRegExpBtn->Enable();
         return;
     }
-    if ( m_pMatchCaseCB == pCtrl && ( SEARCH_OPTIONS_EXACT & nOptions ) != 0 )
+    if ( m_pMatchCaseCB == pCtrl && ( SearchOptionFlags::EXACT & nOptions ) )
     {
         if (!m_pJapOptionsCB->IsChecked())
             m_pMatchCaseCB->Enable();
         return;
     }
-    if ( m_pSelectionBtn == pCtrl && ( SEARCH_OPTIONS_SELECTION & nOptions ) != 0 )
+    if ( m_pSelectionBtn == pCtrl && ( SearchOptionFlags::SELECTION & nOptions ) )
     {
         m_pSelectionBtn->Enable();
         return;
     }
-    if ( m_pLayoutBtn == pCtrl && ( SEARCH_OPTIONS_FAMILIES & nOptions ) != 0 )
+    if ( m_pLayoutBtn == pCtrl && ( SearchOptionFlags::FAMILIES & nOptions ) )
     {
         m_pLayoutBtn->Enable();
         return;
     }
     if ( m_pAttributeBtn == pCtrl
-         && ( SEARCH_OPTIONS_FORMAT & nOptions ) != 0
+         && ( SearchOptionFlags::FORMAT & nOptions )
          && pSearchList )
     {
         m_pAttributeBtn->Enable( pImpl->bFocusOnSearch );
     }
-    if ( m_pFormatBtn == pCtrl && ( SEARCH_OPTIONS_FORMAT & nOptions ) != 0 )
+    if ( m_pFormatBtn == pCtrl && ( SearchOptionFlags::FORMAT & nOptions ) )
     {
         m_pFormatBtn->Enable();
         return;
     }
-    if ( m_pNoFormatBtn == pCtrl && ( SEARCH_OPTIONS_FORMAT & nOptions ) != 0 )
+    if ( m_pNoFormatBtn == pCtrl && ( SearchOptionFlags::FORMAT & nOptions ) )
     {
         m_pNoFormatBtn->Enable();
         return;
     }
     if ( m_pSimilarityBox == pCtrl &&
-         ( SEARCH_OPTIONS_SIMILARITY & nOptions ) != 0 )
+         ( SearchOptionFlags::SIMILARITY & nOptions ) )
     {
         m_pSimilarityBox->Enable();
 

@@ -228,21 +228,21 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_SEARCH_OPTIONS:
             {
-                sal_uInt16 nOpt = SEARCH_OPTIONS_SEARCH      |
-                              SEARCH_OPTIONS_WHOLE_WORDS |
-                              SEARCH_OPTIONS_BACKWARDS   |
-                              SEARCH_OPTIONS_REG_EXP     |
-                              SEARCH_OPTIONS_EXACT       |
-                              SEARCH_OPTIONS_SIMILARITY  |
-                              SEARCH_OPTIONS_SELECTION;
+                SearchOptionFlags nOpt = SearchOptionFlags::SEARCH |
+                              SearchOptionFlags::WHOLE_WORDS |
+                              SearchOptionFlags::BACKWARDS   |
+                              SearchOptionFlags::REG_EXP     |
+                              SearchOptionFlags::EXACT       |
+                              SearchOptionFlags::SIMILARITY  |
+                              SearchOptionFlags::SELECTION;
 
                 if (!IsReadOnly())
                 {
-                    nOpt |= SEARCH_OPTIONS_REPLACE;
-                    nOpt |= SEARCH_OPTIONS_REPLACE_ALL;
+                    nOpt |= SearchOptionFlags::REPLACE;
+                    nOpt |= SearchOptionFlags::REPLACE_ALL;
                 }
 
-                rSet.Put(SfxUInt16Item(nWhich, nOpt));
+                rSet.Put(SfxUInt16Item(nWhich, static_cast<sal_uInt16>(nOpt)));
             }
             break;
 
