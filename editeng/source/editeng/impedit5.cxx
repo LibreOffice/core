@@ -162,13 +162,13 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( pStyle )
         {
             if ( ( nId == SFX_HINT_DYING ) ||
-                 ( nId == SFX_STYLESHEET_INDESTRUCTION ) ||
-                 ( nId == SFX_STYLESHEET_ERASED ) )
+                 ( nId == SfxStyleSheetHintId::INDESTRUCTION ) ||
+                 ( nId == SfxStyleSheetHintId::ERASED ) )
             {
                 RemoveStyleFromParagraphs( pStyle );
             }
             else if ( ( nId == SFX_HINT_DATACHANGED ) ||
-                      ( nId == SFX_STYLESHEET_MODIFIED ) )
+                      ( nId == SfxStyleSheetHintId::MODIFIED ) )
             {
                 UpdateParagraphsWithStyleSheet( pStyle );
             }

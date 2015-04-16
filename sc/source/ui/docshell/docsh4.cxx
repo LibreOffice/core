@@ -1283,7 +1283,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
     if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PAGE )
     {
-        if ( nId == SFX_STYLESHEET_MODIFIED )
+        if ( nId == SfxStyleSheetHintId::MODIFIED )
         {
             ScDocShellModificator aModificator( *this );
 
@@ -1323,7 +1323,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     }
     else if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
-        if ( nId == SFX_STYLESHEET_MODIFIED)
+        if ( nId == SfxStyleSheetHintId::MODIFIED)
         {
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;

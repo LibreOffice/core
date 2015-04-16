@@ -446,7 +446,7 @@ void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
         return;
 
     sal_uInt16 nHint = pHint->GetHint();
-    if(nHint == SFX_STYLESHEET_MODIFIED)
+    if(nHint == SfxStyleSheetHintId::MODIFIED)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(maLbStyle, mpDoc);
@@ -1273,7 +1273,7 @@ void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
         return;
 
     sal_uInt16 nHint = pHint->GetHint();
-    if(nHint == SFX_STYLESHEET_MODIFIED)
+    if(nHint == SfxStyleSheetHintId::MODIFIED)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(maLbStyle, mpDoc);
