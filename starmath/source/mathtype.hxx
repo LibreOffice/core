@@ -148,7 +148,7 @@ private:
     int xfLSPACE(sal_uInt8 nTest) const {return nTest&0x40;}
     int xfRULER(sal_uInt8 nTest) const {return nTest&0x20;}
 
-    sal_uInt8 HandleNodes(SmNode *pNode,int nLevel=0);
+    void HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);
     void EndTemplate(int nOldPendingAttributes);
     void HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel);

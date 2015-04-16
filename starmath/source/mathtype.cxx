@@ -1950,9 +1950,8 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 }
 
 
-sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
+void MathType::HandleNodes(SmNode *pNode,int nLevel)
 {
-    bool bRet=false;
     switch(pNode->GetType())
     {
         case NATTRIBUT:
@@ -2040,7 +2039,6 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             }
             break;
     }
-    return bRet;
 }
 
 
