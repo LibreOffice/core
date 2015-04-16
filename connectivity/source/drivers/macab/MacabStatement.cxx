@@ -530,7 +530,7 @@ void SAL_CALL MacabCommonStatement::clearWarnings(  ) throw(SQLException, Runtim
 
 ::cppu::IPropertyArrayHelper & MacabCommonStatement::getInfoHelper()
 {
-    return *const_cast<MacabCommonStatement*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool MacabCommonStatement::convertFastPropertyValue(
