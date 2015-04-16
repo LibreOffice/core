@@ -2664,7 +2664,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
 
-    if( mbFormat )
+    if( mbFormat && mpData )
         ImplFormat();
 
     return 0;
