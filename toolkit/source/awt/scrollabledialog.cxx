@@ -33,8 +33,8 @@ namespace toolkit
 template< class T>
 ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle )
     : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ),
-      maHScrollBar( new ScrollBar(this, WB_HSCROLL | WB_DRAG) ),
-      maVScrollBar( new ScrollBar(this, WB_VSCROLL | WB_DRAG) ),
+      maHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_DRAG) ),
+      maVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) ),
       mbHasHoriBar( false ),
       mbHasVertBar( false ),
       maScrollVis( None )

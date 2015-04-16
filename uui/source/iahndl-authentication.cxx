@@ -89,7 +89,7 @@ executeLoginDialog(
             nFlags |= LF_NO_USESYSCREDS;
 
         VclPtr< LoginDialog > xDialog(
-                new LoginDialog(pParent, nFlags, rInfo.GetServer(), rRealm));
+                VclPtr<LoginDialog>::Create(pParent, nFlags, rInfo.GetServer(), rRealm));
         if (!rInfo.GetErrorText().isEmpty())
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -418,7 +418,7 @@ executeMasterPasswordDialog(
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             VclPtr< MasterPasswordCreateDialog > xDialog(
-                new MasterPasswordCreateDialog(pParent, xManager.get()));
+                VclPtr<MasterPasswordCreateDialog>::Create(pParent, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
             aMaster = OUStringToOString(
@@ -427,7 +427,7 @@ executeMasterPasswordDialog(
         else
         {
             VclPtr< MasterPasswordDialog > xDialog(
-                new MasterPasswordDialog(pParent, nMode, xManager.get()));
+                VclPtr<MasterPasswordDialog>::Create(pParent, nMode, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
             aMaster = OUStringToOString(
@@ -518,7 +518,7 @@ executePasswordDialog(
             if (bIsSimplePasswordRequest)
             {
                 VclPtr< PasswordDialog > pDialog(
-                    new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
+                    VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
                     bIsPasswordToModify, bIsSimplePasswordRequest ) );
                 pDialog->SetMinLen(0);
 
@@ -542,7 +542,7 @@ executePasswordDialog(
         else // enter password or reenter password
         {
             VclPtr< PasswordDialog > pDialog(
-                new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
+                VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
                 bIsPasswordToModify, bIsSimplePasswordRequest ) );
             pDialog->SetMinLen(0);
 
@@ -752,7 +752,7 @@ UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
     vcl::Window * pParent = getParentProperty( );
-    AuthFallbackDlg *dlg = new AuthFallbackDlg( pParent, instructions, url );
+    VclPtrInstance<AuthFallbackDlg> dlg( pParent, instructions, url );
     int retCode = dlg->Execute( );
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< ucb::XInteractionAuthFallback > xAuthFallback;

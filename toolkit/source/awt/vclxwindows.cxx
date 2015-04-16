@@ -2595,7 +2595,7 @@ TabControl *VCLXMultiPage::getTabControl() const throw (uno::RuntimeException)
 sal_Int32 SAL_CALL VCLXMultiPage::insertTab() throw (uno::RuntimeException, std::exception)
 {
     TabControl *pTabControl = getTabControl();
-    TabPage* pTab = new TabPage( pTabControl );
+    VclPtrInstance<TabPage> pTab( pTabControl );
     OUString title ("");
     return static_cast< sal_Int32 >( insertTab( pTab, title ) );
 }

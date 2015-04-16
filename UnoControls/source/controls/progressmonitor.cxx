@@ -57,7 +57,7 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
     m_xTopic_Bottom = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
     m_xText_Bottom  = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
     m_xButton       = css::uno::Reference< XButton >      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xProgressBar = new ProgressBar(rxContext);
+    m_xProgressBar = VclPtr<ProgressBar>::Create(rxContext);
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
     css::uno::Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY );

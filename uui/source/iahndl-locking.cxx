@@ -121,7 +121,7 @@ handleLockedDocumentRequest_(
                 aMessage, aArguments );
 
             VclPtr< AlreadyOpenQueryBox > xDialog(
-                new AlreadyOpenQueryBox( pParent,
+                VclPtr<AlreadyOpenQueryBox>::Create( pParent,
                                          xManager.get(),
                                          aMessage,
                                          nMode == UUI_DOC_OWN_SAVE_LOCK ) );
@@ -162,7 +162,7 @@ handleChangedByOthersRequest_(
             return;
 
         VclPtr< FileChangedQueryBox > xDialog(
-            new FileChangedQueryBox( pParent, xManager.get() ) );
+            VclPtr<FileChangedQueryBox>::Create( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_YES )
@@ -197,7 +197,7 @@ handleLockFileIgnoreRequest_(
             return;
 
         VclPtr< LockFailedQueryBox > xDialog(
-            new LockFailedQueryBox( pParent, xManager.get() ) );
+            VclPtr<LockFailedQueryBox>::Create( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_OK )

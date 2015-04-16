@@ -61,13 +61,13 @@ executeErrorDialog(
         switch (eClassification)
         {
         case task::InteractionClassification_ERROR:
-            xBox.reset(new ErrorBox(pParent,
+            xBox.reset(VclPtr<ErrorBox>::Create(pParent,
                                     nButtonMask,
                                     aText.makeStringAndClear()));
             break;
 
         case task::InteractionClassification_WARNING:
-            xBox.reset(new WarningBox(pParent,
+            xBox.reset(VclPtr<WarningBox>::Create(pParent,
                                       nButtonMask,
                                       aText.makeStringAndClear()));
             break;
@@ -76,16 +76,16 @@ executeErrorDialog(
 #           define WB_DEF_BUTTONS (WB_DEF_OK | WB_DEF_CANCEL | WB_DEF_RETRY)
             //(want to ignore any default button settings)...
             if ((nButtonMask & WB_DEF_BUTTONS) == WB_DEF_OK)
-                xBox.reset(new InfoBox(pParent,
+                xBox.reset(VclPtr<InfoBox>::Create(pParent,
                                        aText.makeStringAndClear()));
             else
-                xBox.reset(new ErrorBox(pParent,
+                xBox.reset(VclPtr<ErrorBox>::Create(pParent,
                                         nButtonMask,
                                         aText.makeStringAndClear()));
             break;
 
         case task::InteractionClassification_QUERY:
-            xBox.reset(new QueryBox(pParent,
+            xBox.reset(VclPtr<QueryBox>::Create(pParent,
                                     nButtonMask,
                                     aText.makeStringAndClear()));
             break;

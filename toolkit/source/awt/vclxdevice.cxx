@@ -102,7 +102,7 @@ IMPL_XTYPEPROVIDER_END
     if ( GetOutputDevice() )
     {
         VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
-        VirtualDevice* pVclVDev = new VirtualDevice( *GetOutputDevice() );
+        VclPtrInstance<VirtualDevice> pVclVDev( *GetOutputDevice() );
         pVclVDev->SetOutputSizePixel( Size( nWidth, nHeight ) );
         pVDev->SetVirtualDevice( pVclVDev );
         xRef = pVDev;

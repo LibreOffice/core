@@ -53,9 +53,9 @@ CertificateViewer::CertificateViewer(
     mnDetailsId = mpTabCtrl->GetPageId("details");
     mnPathId = mpTabCtrl->GetPageId("path");
 
-    mpTabCtrl->SetTabPage(mnGeneralId, new CertificateViewerGeneralTP( mpTabCtrl, this));
-    mpTabCtrl->SetTabPage(mnDetailsId, new CertificateViewerDetailsTP( mpTabCtrl, this));
-    mpTabCtrl->SetTabPage(mnPathId, new CertificateViewerCertPathTP( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnGeneralId, VclPtr<CertificateViewerGeneralTP>::Create( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnDetailsId, VclPtr<CertificateViewerDetailsTP>::Create( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnPathId, VclPtr<CertificateViewerCertPathTP>::Create( mpTabCtrl, this));
     mpTabCtrl->SetCurPageId(mnGeneralId);
 }
 
@@ -217,7 +217,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 {
     get( m_pValueDetails, "valuedetails" );
     get( m_pElementsLBContainer, "tablecontainer" );
-    m_pElementsLB = new SvSimpleTable( *m_pElementsLBContainer );
+    m_pElementsLB = VclPtr<SvSimpleTable>::Create( *m_pElementsLBContainer );
 
     m_aStdFont = m_pValueDetails->GetControlFont();
     WinBits nStyle = m_pElementsLB->GetStyle();

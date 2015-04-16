@@ -69,8 +69,8 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
     get(m_pResetBtn, "reset");
     get(m_pOkBtn, "ok");
 
-    mpLevelTP = new MacroSecurityLevelTP(m_pTabCtrl, this);
-    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP(m_pTabCtrl, this);
+    mpLevelTP.reset(VclPtr<MacroSecurityLevelTP>::Create(m_pTabCtrl, this));
+    mpTrustSrcTP.reset(VclPtr<MacroSecurityTrustedSourcesTP>::Create(m_pTabCtrl, this));
 
     m_nSecLevelId = m_pTabCtrl->GetPageId("SecurityLevelPage");
     m_nSecTrustId = m_pTabCtrl->GetPageId("SecurityTrustPage");
@@ -388,7 +388,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
     get(m_pRemoveLocPB, "removefile");
 
     SvSimpleTableContainer *pCertificates = get<SvSimpleTableContainer>("certificates");
-    m_pTrustCertLB = new TrustCertLB(*pCertificates);
+    m_pTrustCertLB.reset(VclPtr<TrustCertLB>::Create(*pCertificates));
     static long aTabs[] = { 3, 0, 0, 0 };
     m_pTrustCertLB->SetTabs( aTabs );
 
