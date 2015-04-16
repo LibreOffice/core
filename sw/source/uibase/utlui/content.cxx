@@ -850,6 +850,7 @@ void SwContentTree::dispose()
 {
     Clear(); // If applicable erase content types previously.
     bIsInDrag = false;
+    aUpdTimer.Stop();
     SvTreeListBox::dispose();
 }
 
@@ -2453,6 +2454,9 @@ void    SwContentTree::HideTree()
 
 IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 {
+    if (IsDisposed())
+        return 0;
+
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
