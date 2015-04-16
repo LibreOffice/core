@@ -161,29 +161,42 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 
 namespace {
 
-::Color RgbToRgbComponents( sal_Int32& nRgb )
+::Color ARgbToARgbComponents( sal_uInt32& nRgb )
 {
+    sal_Int32 ornA = 255 - ((nRgb >> 24) & 0xFF);
     sal_Int32 ornR = (nRgb >> 16) & 0xFF;
     sal_Int32 ornG = (nRgb >> 8) & 0xFF;
     sal_Int32 ornB = nRgb & 0xFF;
 
-    return ::Color(ornR, ornG, ornB);
+    return ::Color(ornA, ornR, ornG, ornB);
 }
 
 }
 
 void ColorScaleRule::importColor( const AttributeList& rAttribs )
 {
-    sal_Int32 nColor = 0;
+    sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
         nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
         nColor = getTheme().getColorByIndex( nThemeIndex );
+
     }
 
-    ::Color aColor = RgbToRgbComponents( nColor );
+    ::Color aColor;
+    double nTint = rAttribs.getDouble(XML_tint, 0.0);
+    if (nTint != 0.0)
+    {
+        oox::drawingml::Color aDMColor;
+        aDMColor.setSrgbClr(nColor);
+        aDMColor.addExcelTintTransformation(nTint);
+        nColor = aDMColor.getColor(getBaseFilter().getGraphicHelper());
+        aColor = ::Color(nColor);
+    }
+    else
+        aColor = ARgbToARgbComponents( nColor );
 
     if(mnCol >= maColorScaleRuleEntries.size())
         maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
@@ -239,7 +252,7 @@ DataBarRule::DataBarRule( const CondFormat& rFormat ):
 
 void DataBarRule::importColor( const AttributeList& rAttribs )
 {
-    sal_Int32 nColor = 0;
+    sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
         nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
     else if( rAttribs.hasAttribute( XML_theme ) )
@@ -248,7 +261,18 @@ void DataBarRule::importColor( const AttributeList& rAttribs )
         nColor = getTheme().getColorByIndex( nThemeIndex );
     }
 
-    ::Color aColor = RgbToRgbComponents( nColor );
+    ::Color aColor;
+    double nTint = rAttribs.getDouble(XML_tint, 0.0);
+    if (nTint != 0.0)
+    {
+        oox::drawingml::Color aDMColor;
+        aDMColor.setSrgbClr(nColor);
+        aDMColor.addExcelTintTransformation(nTint);
+        nColor = aDMColor.getColor(getBaseFilter().getGraphicHelper());
+        aColor = ::Color(nColor);
+    }
+    else
+        aColor = ARgbToARgbComponents( nColor );
 
     mxFormat->maPositiveColor = aColor;
 }
@@ -1119,13 +1143,13 @@ void ExtCfRule::finalizeImport()
         case AXISCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
-            pDataBar->maAxisColor = RgbToRgbComponents(maModel.mnAxisColor);
+            pDataBar->maAxisColor = ARgbToARgbComponents(maModel.mnAxisColor);
             break;
         }
         case NEGATIVEFILLCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
-            pDataBar->mpNegativeColor.reset( new ::Color( RgbToRgbComponents(maModel.mnNegativeColor) ) );
+            pDataBar->mpNegativeColor.reset( new ::Color( ARgbToARgbComponents(maModel.mnNegativeColor) ) );
             pDataBar->mbNeg = true;
             break;
         }

@@ -224,9 +224,9 @@ struct ExCfRuleModel
     bool mbGradient;
     OUString maAxisPosition;
     // AxisColor
-    sal_Int32 mnAxisColor;
+    sal_uInt32 mnAxisColor;
     // NegativeFillColor
-    sal_Int32 mnNegativeColor;
+    sal_uInt32 mnNegativeColor;
     // Cfvo
     bool mbIsLower;
     OUString maColorScaleType;
