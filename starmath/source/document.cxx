@@ -595,7 +595,7 @@ Printer* SmDocShell::GetPrt()
 
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
-        pPrinter = new SfxPrinter(pOptions);
+        pPrinter = VclPtr<SfxPrinter>::Create(pOptions);
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     }
     return pPrinter;

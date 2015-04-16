@@ -239,9 +239,9 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 }
 
 
-SfxTabPage* SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)
+VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)
 {
-    return (new SmPrintOptionsTabPage(pWindow, rSet));
+    return VclPtr<SmPrintOptionsTabPage>::Create(pWindow, rSet).get();
 }
 
 /**************************************************************************/
@@ -1294,8 +1294,8 @@ void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
 
 SmShowSymbolSet::SmShowSymbolSet(vcl::Window *pParent)
     : VclHBox(pParent, false, 6)
-    , aSymbolWindow(new SmShowSymbolSetWindow(this, WB_TABSTOP))
-    , aVScrollBar(new ScrollBar(this, WinBits(WB_VSCROLL)))
+    , aSymbolWindow(VclPtr<SmShowSymbolSetWindow>::Create(this, WB_TABSTOP))
+    , aVScrollBar(VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL)))
 {
     aSymbolWindow->set_hexpand(true);
     aSymbolWindow->set_vexpand(true);

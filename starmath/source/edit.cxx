@@ -551,11 +551,11 @@ void SmEditWindow::CreateEditView()
         pEditEngine->InsertView( pEditView );
 
         if (!pVScrollBar)
-            pVScrollBar = new ScrollBar(this, WinBits(WB_VSCROLL));
+            pVScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL));
         if (!pHScrollBar)
-            pHScrollBar = new ScrollBar(this, WinBits(WB_HSCROLL));
+            pHScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL));
         if (!pScrollBox)
-            pScrollBox  = new ScrollBarBox(this);
+            pScrollBox  = VclPtr<ScrollBarBox>::Create(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pVScrollBar->EnableDrag( true );

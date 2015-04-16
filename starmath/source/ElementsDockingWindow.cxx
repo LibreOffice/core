@@ -223,7 +223,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , maCurrentSetId(0)
     , mpCurrentElement(NULL)
     , mbVerticalMode(true)
-    , mxScroll(new ScrollBar(this, WB_VERT))
+    , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
     SetMapMode( MapMode(MAP_100TH_MM) );
     SetDrawMode( DRAWMODE_DEFAULT );
@@ -652,7 +652,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DockingElements",
         "modules/smath/ui/dockingelements.ui")
 {
-    mpElementsControl = new SmElementsControl(get<vcl::Window>("box"));
+    mpElementsControl = VclPtr<SmElementsControl>::Create(get<vcl::Window>("box"));
     mpElementsControl->set_hexpand(true);
     mpElementsControl->set_vexpand(true);
     mpElementsControl->Show();
@@ -768,8 +768,8 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
                             SfxBindings *pBindings, SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    SmElementsDockingWindow* pDialog = new SmElementsDockingWindow(pBindings, this, pParentWindow);
-    pWindow = pDialog;
+    VclPtrInstance<SmElementsDockingWindow> pDialog(pBindings, this, pParentWindow);
+    pWindow.reset(pDialog);
     pDialog->setDeferredProperties();
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();

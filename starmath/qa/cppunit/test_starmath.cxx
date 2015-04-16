@@ -85,9 +85,9 @@ void Test::setUp()
     m_pDispatcher = new SfxDispatcher(pViewFrame);
     m_aBindings.SetDispatcher(m_pDispatcher);
     m_aBindings.EnterRegistrations();
-    m_pSmCmdBoxWindow = new SmCmdBoxWindow(&m_aBindings, NULL, NULL);
+    m_pSmCmdBoxWindow.reset(VclPtr<SmCmdBoxWindow>::Create(&m_aBindings, nullptr, nullptr));
     m_aBindings.LeaveRegistrations();
-    m_pEditWindow = new SmEditWindow(*m_pSmCmdBoxWindow);
+    m_pEditWindow = VclPtr<SmEditWindow>::Create(*m_pSmCmdBoxWindow);
     m_pViewShell = m_pEditWindow->GetView();
     CPPUNIT_ASSERT_MESSAGE("Should have a SmViewShell", m_pViewShell);
 }

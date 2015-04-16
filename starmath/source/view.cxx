@@ -712,7 +712,7 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
                                vcl::Window *pParent) :
     SfxDockingWindow(pBindings_, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE),
-    aEdit       (new SmEditWindow(*this)),
+    aEdit       (VclPtr<SmEditWindow>::Create(*this)),
     aController (*(aEdit.get()), SID_TEXT, *pBindings_),
     bExiting    (false)
 {
@@ -902,7 +902,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
                                  SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    pWindow = new SmCmdBoxWindow(pBindings, this, pParentWindow);
+    pWindow.reset(VclPtr<SmCmdBoxWindow>::Create(pBindings, this, pParentWindow));
 
     // make window docked to the bottom initially (after first start)
     eChildAlignment = SfxChildAlignment::BOTTOM;
@@ -1953,7 +1953,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT)
     , pImpl(new SmViewShell_Impl)
-    , aGraphic(new SmGraphicWindow(this))
+    , aGraphic(VclPtr<SmGraphicWindow>::Create(this))
     , aGraphicController(*aGraphic.get(), SID_GAPHIC_SM, pFrame_->GetBindings())
     , bPasteState(false)
     , bInsertIntoEditWindow(false)
