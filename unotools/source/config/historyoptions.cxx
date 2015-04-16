@@ -315,12 +315,11 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
             xOrderList->getByName(OUString::number(nItem)) >>= xSet;
             xSet->getPropertyValue(s_sHistoryItemRef) >>= sUrl;
 
-            // Check if file is openable and on a local filesystem.
-            // Windows UNC pathes like \\server.domain\file.odt map to
-            // file://server.domain/file.odt. Therefore, we require a beginning
-            // slash which supprisingly also works for local files on Windows
-            // as they map to file:///C:/folder/file.odt. Remote files may
-            // cause hangs if the share is unavailable. See tdf#89394
+            // Check if file is openable, but for performance reasons try to
+            // only do so for files on a local filesystem.  For Windows,
+            // checking for "file:///" nicely filters out UNC paths (that only
+            // have two slashes), but of course misses to filter out remote
+            // mounts on Unix-like systems:
             if (!sUrl.startsWith("file:///") || lcl_fileOpenable(sUrl))
             {
                 xItemList->getByName(sUrl) >>= xSet;
