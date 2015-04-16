@@ -236,9 +236,12 @@ public:
 
             Item                GetItem() const;
             void                AddItem( Item );
+            void                SetAreaRefRPN( formula::FormulaToken* pToken );
+            const formula::FormulaToken*    GetAreaRefRPN() const;
 
 private:
 
+    formula::FormulaTokenRef    mxAreaRefRPN;   ///< resulting RPN area
     sal_uInt16                  mnIndex;    ///< index into table / database range collection
     Item                        meItem;
 

@@ -866,6 +866,16 @@ void ScTableRefToken::AddItem( ScTableRefToken::Item eItem )
     meItem = static_cast<ScTableRefToken::Item>(meItem | eItem);
 }
 
+void ScTableRefToken::SetAreaRefRPN( formula::FormulaToken* pToken )
+{
+    mxAreaRefRPN = pToken;
+}
+
+const formula::FormulaToken* ScTableRefToken::GetAreaRefRPN() const
+{
+    return mxAreaRefRPN.get();
+}
+
 bool ScTableRefToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )
@@ -879,6 +889,13 @@ bool ScTableRefToken::operator==( const FormulaToken& r ) const
         return false;
 
     if (meItem != p->GetItem())
+        return false;
+
+    if (!mxAreaRefRPN && !p->mxAreaRefRPN)
+        ;   // nothing
+    else if (!mxAreaRefRPN || !p->mxAreaRefRPN)
+        return false;
+    else if (!(*mxAreaRefRPN == *(p->mxAreaRefRPN)))
         return false;
 
     return true;
