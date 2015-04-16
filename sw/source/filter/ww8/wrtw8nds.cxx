@@ -2082,13 +2082,19 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     sal_Int32 nAktPos = 0;
     sal_Int32 const nEnd = aStr.getLength();
+    bool bIsEndOfCell = false;
     bool bIncludeEndOfParaCRInRedlineProperties = false;
     sal_Int32 nOpenAttrWithRange = 0;
     OUString aStringForImage("\001");
 
     ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
     if ( pTextNodeInfo.get() != NULL )
+    {
         pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
+        if ( pTextNodeInfoInner->isEndOfCell() ) {
+            bIsEndOfCell = true;
+        }
+    }
 
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
@@ -2291,6 +2297,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
 
                     WriteCR( pTextNodeInfoInner );
+
+                    if ( bIsEndOfCell )
+                    {
+                        AttrOutput().OutputFKP(true);
+                    }
                 }
             }
         }
