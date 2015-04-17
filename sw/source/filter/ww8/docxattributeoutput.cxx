@@ -6120,7 +6120,8 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
-    AddToAttrList( m_pFontsAttrList, 2,
+    if (!sFontNameUtf8.isEmpty())
+        AddToAttrList( m_pFontsAttrList, 2,
             FSNS( XML_w, XML_ascii ), sFontNameUtf8.getStr(),
             FSNS( XML_w, XML_hAnsi ), sFontNameUtf8.getStr() );
 }
