@@ -280,6 +280,29 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
     if (aAbsRange.aEnd.Tab() < aAbs.Tab())
         aAbsRange.aEnd.SetTab(aAbs.Tab());
 
+    // References to other sheets
+    if (aAbsRange.aStart.Tab() != aAbsRange.aEnd.Tab())
+    {
+        // Check if the references are relative
+        if ( Ref1.IsTabRel() || rRef.IsTabRel() )
+        {
+            if ( Ref1.IsTabRel() && !rRef.IsTabRel() )
+            {
+                if ( aAbs.Tab() == aAbsRange.aEnd.Tab() )
+                    aAbsRange.aStart.SetTab(aAbsRange.aEnd.Tab());
+                else
+                    aAbsRange.aEnd.SetTab(aAbsRange.aStart.Tab());
+            }
+            else
+            {
+                if ( Ref1.toAbs(rPos).Tab() == aAbsRange.aStart.Tab() )
+                    aAbsRange.aEnd.SetTab(aAbsRange.aStart.Tab());
+                else
+                    aAbsRange.aStart.SetTab(aAbsRange.aEnd.Tab());
+            }
+        }
+    }
+
     SetRange(aAbsRange, rPos);
 
     return *this;
