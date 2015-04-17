@@ -36,30 +36,68 @@ template<> struct std::iterator_traits<ConstExprIterator> {
 
 namespace {
 
-bool isBool(Expr const * expr, bool allowTypedefs = true) {
-    QualType t1 { expr->getType() };
-    if (t1->isBooleanType()) {
+Expr const * ignoreParenAndTemporaryMaterialization(Expr const * expr) {
+    for (;;) {
+        expr = expr->IgnoreParens();
+        auto e = dyn_cast<MaterializeTemporaryExpr>(expr);
+        if (e == nullptr) {
+            return expr;
+        }
+        expr = e->GetTemporaryExpr();
+    }
+}
+
+Expr const * ignoreParenImpCastAndComma(Expr const * expr) {
+    for (;;) {
+        expr = expr->IgnoreParenImpCasts();
+        BinaryOperator const * op = dyn_cast<BinaryOperator>(expr);
+        if (op == nullptr || op->getOpcode() != BO_Comma) {
+            return expr;
+        }
+        expr = op->getRHS();
+    }
+}
+
+SubstTemplateTypeParmType const * getAsSubstTemplateTypeParmType(QualType type)
+{
+    //TODO: unwrap all kinds of (non-SubstTemplateTypeParmType) sugar, not only
+    // TypedefType sugar:
+    for (;;) {
+        TypedefType const * t = type->getAs<TypedefType>();
+        if (t == nullptr) {
+            return dyn_cast<SubstTemplateTypeParmType>(type);
+        }
+        type = t->desugar();
+    }
+}
+
+bool isBool(QualType type, bool allowTypedefs = true) {
+    if (type->isBooleanType()) {
         return true;
     }
     if (!allowTypedefs) {
         return false;
     }
-// css::uno::Sequence<sal_Bool> s(1);s[0]=false /*unotools/source/config/configitem.cxx*/:
-if(t1->isSpecificBuiltinType(BuiltinType::UChar))return true;
-    TypedefType const * t2 = t1->getAs<TypedefType>();
+    TypedefType const * t2 = type->getAs<TypedefType>();
     if (t2 == nullptr) {
         return false;
     }
     std::string name(t2->getDecl()->getNameAsString());
-    return name == "sal_Bool" || name == "BOOL" || name == "FcBool"
-        || name == "UBool" || name == "dbus_bool_t" || name == "gboolean"
-        || name == "hb_bool_t";
+    return name == "sal_Bool" || name == "BOOL" || name == "Boolean"
+        || name == "FT_Bool" || name == "FcBool" || name == "GLboolean"
+        || name == "NPBool" || name == "UBool" || name == "dbus_bool_t"
+        || name == "gboolean" || name == "hb_bool_t" || name == "jboolean";
+}
+
+bool isBool(Expr const * expr, bool allowTypedefs = true) {
+    return isBool(expr->getType(), allowTypedefs);
 }
 
 bool isBoolExpr(Expr const * expr) {
     if (isBool(expr)) {
         return true;
     }
+    expr = ignoreParenImpCastAndComma(expr);
     ConditionalOperator const * co = dyn_cast<ConditionalOperator>(expr);
     if (co != nullptr) {
         ImplicitCastExpr const * ic1 = dyn_cast<ImplicitCastExpr>(
@@ -73,6 +111,88 @@ bool isBoolExpr(Expr const * expr) {
             && isBoolExpr(ic2->getSubExpr()->IgnoreParens()))
         {
             return true;
+        }
+    }
+    std::stack<Expr const *> stack;
+    Expr const * e = expr;
+    for (;;) {
+        e = ignoreParenImpCastAndComma(e);
+        MemberExpr const * me = dyn_cast<MemberExpr>(e);
+        if (me == nullptr) {
+            break;
+        }
+        stack.push(e);
+        e = me->getBase();
+    }
+    for (;;) {
+        e = ignoreParenImpCastAndComma(e);
+        CXXOperatorCallExpr const * op = dyn_cast<CXXOperatorCallExpr>(e);
+        if (op == nullptr || op->getOperator() != OO_Subscript) {
+            break;
+        }
+        stack.push(e);
+        e = op->getArg(0);
+    }
+    if (!stack.empty()) {
+        TemplateSpecializationType const * t
+            = e->getType()->getAs<TemplateSpecializationType>();
+        for (;;) {
+            if (t == nullptr) {
+                break;
+            }
+            QualType ty;
+            MemberExpr const * me = dyn_cast<MemberExpr>(stack.top());
+            if (me != nullptr) {
+                TemplateDecl const * td
+                    = t->getTemplateName().getAsTemplateDecl();
+                if (td == nullptr) {
+                    break;
+                }
+                TemplateParameterList const * ps = td->getTemplateParameters();
+                SubstTemplateTypeParmType const * t2
+                    = getAsSubstTemplateTypeParmType(
+                        me->getMemberDecl()->getType());
+                if (t2 == nullptr) {
+                    break;
+                }
+                auto i = std::find(
+                    ps->begin(), ps->end(),
+                    t2->getReplacedParameter()->getDecl());
+                if (i == ps->end()) {
+                    break;
+                }
+                if (ps->size() != t->getNumArgs()) { //TODO
+                    break;
+                }
+                TemplateArgument const & arg = t->getArg(i - ps->begin());
+                if (arg.getKind() != TemplateArgument::Type) {
+                    break;
+                }
+                ty = arg.getAsType();
+            } else {
+                CXXOperatorCallExpr const * op
+                    = dyn_cast<CXXOperatorCallExpr>(stack.top());
+                assert(op != nullptr);
+                TemplateDecl const * d
+                    = t->getTemplateName().getAsTemplateDecl();
+                if (d == nullptr
+                    || (d->getQualifiedNameAsString()
+                        != "com::sun::star::uno::Sequence")
+                    || t->getNumArgs() != 1
+                    || t->getArg(0).getKind() != TemplateArgument::Type)
+                {
+                    break;
+                }
+                ty = t->getArg(0).getAsType();
+            }
+            stack.pop();
+            if (stack.empty()) {
+                if (isBool(ty)) {
+                    return true;
+                }
+                break;
+            }
+            t = ty->getAs<TemplateSpecializationType>();
         }
     }
     return false;
@@ -117,6 +237,12 @@ public:
 
     bool TraverseCallExpr(CallExpr * expr);
 
+    bool TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr);
+
+    bool TraverseCXXConstructExpr(CXXConstructExpr * expr);
+
+    bool TraverseCXXTemporaryObjectExpr(CXXTemporaryObjectExpr * expr);
+
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr);
 
     bool TraverseCXXStaticCastExpr(CXXStaticCastExpr * expr);
@@ -152,6 +278,8 @@ public:
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
 private:
+    void checkCXXConstructExpr(CXXConstructExpr const * expr);
+
     void reportWarning(ImplicitCastExpr const * expr);
 
     std::stack<std::vector<ImplicitCastExpr const *>> nested;
@@ -191,34 +319,145 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     }
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        if (ext) {
-            auto j = std::find_if(
-                expr->arg_begin(), expr->arg_end(),
-                [&i](Expr * e) { return i == e->IgnoreParens(); });
-            if (j == expr->arg_end()) {
-                reportWarning(i);
-            } else if (t != nullptr) {
-                std::ptrdiff_t n = j - expr->arg_begin();
-                assert(n >= 0);
-                assert(
-                    static_cast<std::size_t>(n) < compat::getNumParams(*t)
-                    || t->isVariadic());
-                if (static_cast<std::size_t>(n) < compat::getNumParams(*t)
-                    && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
-                             BuiltinType::Int)
-                         || (compat::getParamType(*t, n)->isSpecificBuiltinType(
-                                 BuiltinType::UInt))
-                         || (compat::getParamType(*t, n)->isSpecificBuiltinType(
-                                 BuiltinType::Long))))
-                {
+        auto j = std::find_if(
+            expr->arg_begin(), expr->arg_end(),
+            [&i](Expr * e) {
+                return i == ignoreParenAndTemporaryMaterialization(e);
+            });
+        if (j == expr->arg_end()) {
+            reportWarning(i);
+        } else {
+            std::ptrdiff_t n = j - expr->arg_begin();
+            assert(n >= 0);
+            if (ext) {
+                if (t != nullptr) {
+                    assert(
+                        static_cast<std::size_t>(n) < compat::getNumParams(*t)
+                        || t->isVariadic());
+                    if (static_cast<std::size_t>(n) < compat::getNumParams(*t)
+                        && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
+                                 BuiltinType::Int)
+                             || (compat::getParamType(*t, n)
+                                 ->isSpecificBuiltinType(BuiltinType::UInt))
+                             || (compat::getParamType(*t, n)
+                                 ->isSpecificBuiltinType(BuiltinType::Long))))
+                    {
+                        reportWarning(i);
+                    }
+                } else {
                     reportWarning(i);
                 }
+            } else {
+                // Filter out
+                //
+                //   template<typename T> void f(T);
+                //   f<sal_Bool>(true);
+                //
+                DeclRefExpr const * dr = dyn_cast<DeclRefExpr>(
+                    expr->getCallee()->IgnoreParenImpCasts());
+                if (dr != nullptr && dr->hasExplicitTemplateArgs()) {
+                    FunctionDecl const * fd
+                        = dyn_cast<FunctionDecl>(dr->getDecl());
+                    if (fd != nullptr
+                        && static_cast<std::size_t>(n) < fd->getNumParams())
+                    {
+                        SubstTemplateTypeParmType const * t2
+                            = getAsSubstTemplateTypeParmType(
+                                fd->getParamDecl(n)->getType()
+                                .getNonReferenceType());
+                        if (t2 != nullptr) {
+                            //TODO: fix this superficial nonsense check:
+                            ASTTemplateArgumentListInfo const & ai
+                                = dr->getExplicitTemplateArgs();
+                            if (ai.NumTemplateArgs == 1
+                                && (ai[0].getArgument().getKind()
+                                    == TemplateArgument::Type)
+                                && isBool(ai[0].getTypeSourceInfo()->getType()))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                }
+                reportWarning(i);
             }
-        } else {
-            reportWarning(i);
         }
     }
     calls.pop();
+    nested.pop();
+    return ret;
+}
+
+bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
+{
+    nested.push(std::vector<ImplicitCastExpr const *>());
+    bool ret = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
+    assert(!nested.empty());
+    for (auto i: nested.top()) {
+        auto j = std::find_if(
+            expr->arg_begin(), expr->arg_end(),
+            [&i](Expr * e) {
+                return i == ignoreParenAndTemporaryMaterialization(e);
+            });
+        if (j != expr->arg_end()) {
+            // Filter out
+            //
+            //  template<typename T> struct S { void f(T); };
+            //  S<sal_Bool> s;
+            //  s.f(true);
+            //
+            std::ptrdiff_t n = j - expr->arg_begin();
+            assert(n >= 0);
+            QualType ty
+                = ignoreParenImpCastAndComma(expr->getImplicitObjectArgument())
+                ->getType();
+            if (dyn_cast<MemberExpr>(expr->getCallee())->isArrow()) {
+                ty = ty->getAs<PointerType>()->getPointeeType();
+            }
+            TemplateSpecializationType const * ct
+                = ty->getAs<TemplateSpecializationType>();
+            CXXMethodDecl const * d = expr->getMethodDecl();
+            if (ct != nullptr
+                && static_cast<std::size_t>(n) < d->getNumParams())
+            {
+                SubstTemplateTypeParmType const * pt
+                    = getAsSubstTemplateTypeParmType(
+                        d->getParamDecl(n)->getType().getNonReferenceType());
+                if (pt != nullptr) {
+                    TemplateDecl const * td
+                        = ct->getTemplateName().getAsTemplateDecl();
+                    if (td != nullptr) {
+                        //TODO: fix this superficial nonsense check:
+                        if (ct->getNumArgs() >= 1
+                            && ct->getArg(0).getKind() == TemplateArgument::Type
+                            && isBool(ct->getArg(0).getAsType()))
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        reportWarning(i);
+    }
+    nested.pop();
+    return ret;
+}
+
+bool ImplicitBoolConversion::TraverseCXXConstructExpr(CXXConstructExpr * expr) {
+    nested.push(std::vector<ImplicitCastExpr const *>());
+    bool ret = RecursiveASTVisitor::TraverseCXXConstructExpr(expr);
+    checkCXXConstructExpr(expr);
+    nested.pop();
+    return ret;
+}
+
+bool ImplicitBoolConversion::TraverseCXXTemporaryObjectExpr(
+    CXXTemporaryObjectExpr * expr)
+{
+    nested.push(std::vector<ImplicitCastExpr const *>());
+    bool ret = RecursiveASTVisitor::TraverseCXXTemporaryObjectExpr(expr);
+    checkCXXConstructExpr(expr);
     nested.pop();
     return ret;
 }
@@ -386,13 +625,13 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
     return ret;
 }
 
-// /usr/include/gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
-//  guint GSEAL (active) : 1;
-// even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
-//  "active"               gboolean              : Read / Write
 bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
     bool ret = RecursiveASTVisitor::TraverseBinAssign(expr);
+    // /usr/include/gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
+    //  guint GSEAL (active) : 1;
+    // even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
+    //  "active"               gboolean              : Read / Write
     bool ext = false;
     MemberExpr const * me = dyn_cast<MemberExpr>(expr->getLHS());
     if (me != nullptr) {
@@ -406,7 +645,9 @@ bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
     }
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        if (i != expr->getRHS()->IgnoreParens() || !ext) {
+        if (i != expr->getRHS()->IgnoreParens()
+            || !(ext || isBoolExpr(expr->getLHS())))
+        {
             reportWarning(i);
         }
     }
@@ -574,7 +815,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
             << sub->getType() << expr->getType() << expr->getSourceRange();
         return true;
     }
-    if (expr->getType()->isBooleanType() && !isBool(expr->getSubExpr())
+    if (expr->getType()->isBooleanType() && !isBoolExpr(expr->getSubExpr())
         && !calls.empty())
     {
         CallExpr const * call = calls.top();
@@ -593,6 +834,53 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         }
     }
     return true;
+}
+
+void ImplicitBoolConversion::checkCXXConstructExpr(
+    CXXConstructExpr const * expr)
+{
+    assert(!nested.empty());
+    for (auto i: nested.top()) {
+        auto j = std::find_if(
+            expr->arg_begin(), expr->arg_end(),
+            [&i](Expr const * e) {
+                return i == ignoreParenAndTemporaryMaterialization(e);
+            });
+        if (j != expr->arg_end()) {
+            TemplateSpecializationType const * t1 = expr->getType()->
+                getAs<TemplateSpecializationType>();
+            SubstTemplateTypeParmType const * t2 = nullptr;
+            CXXConstructorDecl const * d = expr->getConstructor();
+            if (d->getNumParams() == expr->getNumArgs()) { //TODO: better check
+                t2 = getAsSubstTemplateTypeParmType(
+                    d->getParamDecl(j - expr->arg_begin())->getType()
+                    .getNonReferenceType());
+            }
+            if (t1 != nullptr && t2 != nullptr) {
+                TemplateDecl const * td
+                    = t1->getTemplateName().getAsTemplateDecl();
+                if (td != nullptr) {
+                    TemplateParameterList const * ps
+                        = td->getTemplateParameters();
+                    auto i = std::find(
+                        ps->begin(), ps->end(),
+                        t2->getReplacedParameter()->getDecl());
+                    if (i != ps->end()) {
+                        if (ps->size() == t1->getNumArgs()) { //TODO
+                            TemplateArgument const & arg = t1->getArg(
+                                i - ps->begin());
+                            if (arg.getKind() == TemplateArgument::Type
+                                && isBool(arg.getAsType()))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        reportWarning(i);
+    }
 }
 
 void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
