@@ -360,10 +360,10 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxHatchTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rSet )
 {
-    return new SvxHatchTabPage( pWindow, *rSet );
+    return VclPtr<SvxHatchTabPage>::Create( pWindow, *rSet );
 }
 
 

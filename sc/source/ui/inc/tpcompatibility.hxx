@@ -19,7 +19,7 @@ class ScTpCompatOptions : public SfxTabPage
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  SfxTabPage* Create (vcl::Window* pParent, const SfxItemSet* rCoreAttrs);
+    static  VclPtr<SfxTabPage> Create (vcl::Window* pParent, const SfxItemSet* rCoreAttrs);
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rCoreAttrs) SAL_OVERRIDE;

@@ -36,7 +36,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 
-SfxTabPage *  SwDocStatPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwDocStatPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwDocStatPage>::Create(pParent, *rSet);
 }

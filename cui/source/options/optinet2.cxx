@@ -241,9 +241,9 @@ void SvxProxyTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxProxyTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxProxyTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SvxProxyTabPage::ReadConfigData_Impl()
@@ -914,9 +914,9 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-SfxTabPage* SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxSecurityTabPage(pParent, *rAttrSet);
+    return VclPtr<SfxTabPage>(new SvxSecurityTabPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
@@ -1030,9 +1030,9 @@ void SvxEMailTabPage::dispose()
 
 /* -------------------------------------------------------------------------*/
 
-SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage>  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxEMailTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxEMailTabPage>::Create(pParent, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/

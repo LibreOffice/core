@@ -65,7 +65,7 @@ public:
     virtual ~SvxConnectionPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

@@ -158,9 +158,9 @@ void OfaMemoryOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaMemoryOptionsPage( pParent, *rAttrSet );
+    return VclPtr<OfaMemoryOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )

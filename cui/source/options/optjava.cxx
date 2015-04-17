@@ -651,9 +651,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
 
 
-SfxTabPage* SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxJavaOptionsPage( pParent, *rAttrSet ) );
+    return VclPtr<SvxJavaOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 

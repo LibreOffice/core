@@ -82,7 +82,7 @@ friend class SfxStyleDialog;
     virtual ~SfxManageStyleSheetPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 
 protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
@@ -95,6 +95,7 @@ protected:
         virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;
         using TabPage::DeactivatePage;
     virtual int     DeactivatePage(SfxItemSet * = 0) SAL_OVERRIDE;
+
 public:
     SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );
 };

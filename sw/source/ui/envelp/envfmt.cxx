@@ -461,9 +461,9 @@ void SwEnvFmtPage::SetMinMax()
     m_pSizeHeightField->Reformat();
 }
 
-SfxTabPage* SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvFmtPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwEnvFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)

@@ -529,16 +529,10 @@ void SvxTextAttrPage::Construct()
     m_pTsbWordWrapText->Enable( bWordWrapTextEnabled );
 }
 
-/*************************************************************************
-|*
-|* creates the page
-|*
-\************************************************************************/
-
-SfxTabPage* SvxTextAttrPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxTextAttrPage::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SvxTextAttrPage( pWindow, *rAttrs );
+    return VclPtr<SvxTextAttrPage>::Create( pWindow, *rAttrs );
 }
 
 /** Check whether we have to uncheck the "Full width" check box.

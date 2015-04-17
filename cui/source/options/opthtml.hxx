@@ -52,13 +52,13 @@ class OfaHtmlTabPage : public SfxTabPage
     DECL_LINK(ExportHdl_Impl, ListBox*);
     DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
 
-    OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
 public:
     virtual ~OfaHtmlTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet );
+    OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+                                       const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

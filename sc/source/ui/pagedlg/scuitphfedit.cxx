@@ -860,8 +860,8 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( vcl::Window* pParent, const SfxIte
                     true )
     {}
 
-SfxTabPage* ScRightHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return ( new ScRightHeaderEditPage( pParent, *rCoreSet ) ); };
+VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+    { return VclPtr<SfxTabPage>( new ScRightHeaderEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); }
 
 // class ScLeftHeaderEditPage
 
@@ -872,8 +872,8 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemS
                     true )
     {}
 
-SfxTabPage* ScLeftHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return ( new ScLeftHeaderEditPage( pParent, *rCoreSet ) ); };
+VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+    { return VclPtr<SfxTabPage>( new ScLeftHeaderEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
 
 // class ScRightFooterEditPage
 
@@ -884,8 +884,8 @@ ScRightFooterEditPage::ScRightFooterEditPage( vcl::Window* pParent, const SfxIte
                     false )
     {}
 
-SfxTabPage* ScRightFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return ( new ScRightFooterEditPage( pParent, *rCoreSet ) ); };
+VclPtr<SfxTabPage> ScRightFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+    { return VclPtr<SfxTabPage>( new ScRightFooterEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
 
 // class ScLeftFooterEditPage
 
@@ -896,7 +896,7 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemS
                     false )
     {}
 
-SfxTabPage* ScLeftFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
-    { return ( new ScLeftFooterEditPage( pParent, *rCoreSet ) ); };
+VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+    { return VclPtr<SfxTabPage>( new ScLeftFooterEditPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE ); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

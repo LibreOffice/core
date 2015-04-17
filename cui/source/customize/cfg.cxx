@@ -735,24 +735,24 @@ ConvertToolbarEntry(
     return aPropSeq;
 }
 
-SfxTabPage *CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxMenuConfigPage( pParent, *rSet );
+    return VclPtr<SvxMenuConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-       return new SfxAcceleratorConfigPage( pParent, *rSet );
+       return VclPtr<SfxAcceleratorConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxToolbarConfigPage( pParent, *rSet );
+    return VclPtr<SvxToolbarConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxEventConfigPage( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
+    return VclPtr<SvxEventConfigPage>::Create( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
 }
 
 namespace {

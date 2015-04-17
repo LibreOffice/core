@@ -186,7 +186,7 @@ public:
     virtual ~SwFrmPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
@@ -234,7 +234,7 @@ class SwGrfExtPage: public SfxTabPage
 public:
     SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -263,7 +263,7 @@ public:
     virtual ~SwFrmURLPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -312,7 +312,7 @@ public:
     virtual ~SwFrmAddPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

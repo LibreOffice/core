@@ -70,7 +70,7 @@ class ScTpContentOptions : public SfxTabPage
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -118,7 +118,7 @@ class ScTpLayoutOptions : public SfxTabPage
 public:
     virtual ~ScTpLayoutOptions();
     virtual void        dispose() SAL_OVERRIDE;
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;

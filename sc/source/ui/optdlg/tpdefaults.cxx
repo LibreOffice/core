@@ -40,9 +40,9 @@ void ScTpDefaultsOptions::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* ScTpDefaultsOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+VclPtr<SfxTabPage> ScTpDefaultsOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
 {
-    return new ScTpDefaultsOptions(pParent, *rCoreAttrs);
+    return VclPtr<SfxTabPage>(new ScTpDefaultsOptions(pParent, *rCoreAttrs), SAL_NO_ACQUIRE);
 }
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)

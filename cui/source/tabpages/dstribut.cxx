@@ -106,10 +106,10 @@ void SvxDistributePage::dispose()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
+VclPtr<SfxTabPage> SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
     SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
 {
-    return new SvxDistributePage(pWindow, rAttrs, eHor, eVer);
+    return VclPtr<SvxDistributePage>::Create(pWindow, rAttrs, eHor, eVer);
 }
 
 void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RECT_POINT /*eRP*/)

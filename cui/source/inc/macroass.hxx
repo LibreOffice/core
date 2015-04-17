@@ -97,7 +97,7 @@ public:
     );
 
     // --------- inherit from the base -------------
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 };
 
 class SfxMacroAssignDlg : public SfxSingleTabDialog

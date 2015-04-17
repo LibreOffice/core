@@ -73,9 +73,9 @@ void SvxCTLOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxCTLOptionsPage( pParent, *rAttrSet );
+    return VclPtr<SvxCTLOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

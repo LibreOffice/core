@@ -99,10 +99,10 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     pCbxRotate->GetClickHdl().Call(0);
 }
 
-SfxTabPage* SdTpOptionsSnap::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsSnap::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsSnap( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsSnap>::Create( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -175,10 +175,10 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-SfxTabPage* SdTpOptionsContents::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsContents::Create( vcl::Window* pWindow,
+                                                const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsContents( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsContents>::Create( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -529,10 +529,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-SfxTabPage* SdTpOptionsMisc::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsMisc::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsMisc( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsMisc>::Create( pWindow, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)

@@ -119,9 +119,9 @@ void SvxDefaultColorOptPage::Construct()
 }
 
 
-SfxTabPage* SvxDefaultColorOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxDefaultColorOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {
-    return new SvxDefaultColorOptPage( pParent, *rAttrs );
+    return VclPtr<SvxDefaultColorOptPage>::Create( pParent, *rAttrs );
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )

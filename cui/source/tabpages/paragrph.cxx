@@ -194,9 +194,9 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
     return 0;
 }
 
-SfxTabPage* SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SvxStdParagraphTabPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxStdParagraphTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1071,9 +1071,9 @@ int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxParaAlignTabPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>( new SvxParaAlignTabPage(pParent, *rSet), SAL_NO_ACQUIRE );
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1344,10 +1344,10 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
             EnableJustifyExt();
 }
 
-SfxTabPage* SvxExtParagraphTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rSet )
 {
-    return new SvxExtParagraphTabPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxExtParagraphTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -2192,9 +2192,9 @@ void SvxAsianTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxAsianTabPage::Create(    vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxAsianTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxAsianTabPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SvxAsianTabPage(pParent, *rSet), SAL_NO_ACQUIRE );
 }
 
 const sal_uInt16*     SvxAsianTabPage::GetRanges()

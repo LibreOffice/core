@@ -461,10 +461,10 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 |*
 \************************************************************************/
 
-SfxTabPage* SvxTextAnimationPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxTextAnimationPage::Create( vcl::Window* pWindow,
+                                                 const SfxItemSet* rAttrs )
 {
-    return new SvxTextAnimationPage( pWindow, *rAttrs );
+    return VclPtr<SvxTextAnimationPage>::Create( pWindow, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)

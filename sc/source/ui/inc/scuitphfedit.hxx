@@ -105,7 +105,7 @@ private:
 class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
     ScRightHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -114,7 +114,7 @@ private:
 class ScLeftHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
     ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -123,7 +123,7 @@ private:
 class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
     ScRightFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -132,7 +132,7 @@ private:
 class ScLeftFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
     ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );

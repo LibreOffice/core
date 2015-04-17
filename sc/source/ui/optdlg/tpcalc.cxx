@@ -101,9 +101,9 @@ void ScTpCalcOptions::Init()
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
-SfxTabPage* ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new ScTpCalcOptions( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new ScTpCalcOptions ( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )

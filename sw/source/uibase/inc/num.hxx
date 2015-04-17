@@ -124,8 +124,8 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
+                                      const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);

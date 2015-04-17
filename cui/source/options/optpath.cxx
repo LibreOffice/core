@@ -266,13 +266,11 @@ void SvxPathTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxPathTabPage::Create( vcl::Window* pParent,
-                                    const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxPathTabPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
 {
-    return ( new SvxPathTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SvxPathTabPage>::Create( pParent, *rAttrSet );
 }
-
-
 
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {

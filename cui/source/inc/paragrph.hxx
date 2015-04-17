@@ -103,7 +103,7 @@ public:
 
     DECL_LINK(ELRLoseFocusHdl, void *);
 
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -165,7 +165,7 @@ public:
     virtual ~SvxParaAlignTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -198,7 +198,7 @@ public:
     virtual ~SvxExtParagraphTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
 
@@ -278,7 +278,7 @@ public:
     virtual ~SvxAsianTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 

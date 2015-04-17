@@ -144,9 +144,9 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
     return 0;
 }
 
-SfxTabPage* SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvPrtPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwEnvPrtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)

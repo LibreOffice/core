@@ -91,12 +91,12 @@ class SvxFontSubstTabPage : public SfxTabPage
     void            CheckEnable();
 
 
-    SvxFontSubstTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxFontSubstTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    SvxFontSubstTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };

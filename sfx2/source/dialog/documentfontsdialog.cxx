@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-SfxTabPage* SfxDocumentFontsPage::Create( vcl::Window* parent, const SfxItemSet* set )
+VclPtr<SfxTabPage> SfxDocumentFontsPage::Create( vcl::Window* parent, const SfxItemSet* set )
 {
     return VclPtr<SfxDocumentFontsPage>::Create( parent, *set );
 }

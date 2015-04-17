@@ -32,9 +32,9 @@
 class SwFootNotePage: public SfxTabPage
 {
     static const sal_uInt16 aPageRg[];
-public:
     SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet);
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+public:
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

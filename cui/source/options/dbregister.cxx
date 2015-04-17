@@ -78,7 +78,7 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog( vcl::Window* pParent, co
     : RegistrationItemSetHolder(rInAttrs)
     , SfxSingleTabDialog(pParent, getRegistrationItems())
 {
-    SfxTabPage* page = DbRegistrationOptionsPage::Create(get_content_area(), &getRegistrationItems());
+    VclPtr<SfxTabPage> page = DbRegistrationOptionsPage::Create(get_content_area(), &getRegistrationItems());
     SetTabPage(page);
     SetText(page->get<VclFrame>("frame1")->get_label());
 }
@@ -180,10 +180,10 @@ void DbRegistrationOptionsPage::dispose()
 
 
 
-SfxTabPage* DbRegistrationOptionsPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )
 {
-    return ( new DbRegistrationOptionsPage( pParent, *rAttrSet ) );
+    return VclPtr<DbRegistrationOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 

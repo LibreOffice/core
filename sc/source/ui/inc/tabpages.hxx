@@ -28,7 +28,7 @@ class ScTabPageProtection : public SfxTabPage
 {
     static const sal_uInt16 pProtectionRanges[];
 public:
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
     static  const sal_uInt16* GetRanges () { return pProtectionRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;

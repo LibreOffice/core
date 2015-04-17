@@ -291,7 +291,7 @@ void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >&
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)( vcl::Window *pParent, const SfxItemSet &rAttrSet );
-SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
     CreateTabPage fnCreate = 0;
     switch(nId)
@@ -332,7 +332,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const Sf
 #endif
     }
 
-    SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, &rSet ) : NULL;
+    VclPtr<SfxTabPage> pRet = fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
     return pRet;
 }
 
@@ -1050,17 +1050,17 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         if(pPageInfo->m_nPageId == RID_SVXPAGE_COLOR)
         {
-            pPageInfo->m_pPage = ::CreateGeneralTabPage(
-                pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet );
+            pPageInfo->m_pPage.reset( ::CreateGeneralTabPage(
+                pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet ) );
             mpColorPage = static_cast<SvxColorTabPage*>(pPageInfo->m_pPage.get());
             mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
         }
         else
         {
-            pPageInfo->m_pPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet );
+            pPageInfo->m_pPage.reset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
 
             if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-                pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet);
+                pPageInfo->m_pPage.reset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
 
         }
 

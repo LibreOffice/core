@@ -27,9 +27,9 @@
 
 // Dokumentinfo-Tabpage:
 
-SfxTabPage* ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new ScDocStatPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new ScDocStatPage ( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )

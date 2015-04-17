@@ -247,9 +247,9 @@ ScHeaderPage::ScHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScHeaderPage( pParent, *rCoreSet ) );
+    return VclPtr<SfxTabPage>( new ScHeaderPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE );
 }
 
 const sal_uInt16* ScHeaderPage::GetRanges()
@@ -264,9 +264,9 @@ ScFooterPage::ScFooterPage( vcl::Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScFooterPage( pParent, *rCoreSet ) );
+    return VclPtr<SfxTabPage>( new ScFooterPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE );
 }
 
 const sal_uInt16* ScFooterPage::GetRanges()

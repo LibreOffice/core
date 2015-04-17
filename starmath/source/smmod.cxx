@@ -293,9 +293,9 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
-SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    VclPtr<SfxTabPage> pRet;
     if(nId == SID_SM_TP_PRINTOPTIONS)
         pRet = SmPrintOptionsTabPage::Create( pParent, rSet );
     return pRet;

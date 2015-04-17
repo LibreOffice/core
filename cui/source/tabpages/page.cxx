@@ -164,9 +164,9 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-SfxTabPage* SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxPageDescPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SvxPageDescPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :

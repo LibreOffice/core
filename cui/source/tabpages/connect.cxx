@@ -390,10 +390,10 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxConnectionPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxConnectionPage::Create( vcl::Window* pWindow,
+                                              const SfxItemSet* rAttrs )
 {
-    return new SvxConnectionPage( pWindow, *rAttrs );
+    return VclPtr<SvxConnectionPage>::Create( pWindow, *rAttrs );
 }
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )

@@ -27,6 +27,7 @@
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
@@ -569,18 +570,8 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
 
 
-SfxTabPage* SfxManageStyleSheetPage::Create( vcl::Window* pParent,
-                                             const SfxItemSet *rAttrSet )
-
-/*  [Description]
-
-    Factory for the creation of the page.
-
-    [Cross-reference]
-
-    <class SfxTabDialog>
-*/
-
+VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( vcl::Window* pParent,
+                                                    const SfxItemSet *rAttrSet )
 {
     return VclPtr<SfxManageStyleSheetPage>::Create( pParent, *rAttrSet );
 }

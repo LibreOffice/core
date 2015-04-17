@@ -295,8 +295,8 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-SfxTabPage* SwCharURLPage::Create(  vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCharURLPage::Create(  vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwCharURLPage>::Create( pParent, *rAttrSet );
 }

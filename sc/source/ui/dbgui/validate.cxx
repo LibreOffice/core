@@ -404,9 +404,9 @@ void ScTPValidationValue::Init()
     CheckHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
 {
-    return( new ScTPValidationValue( pParent, *rArgSet ) );
+    return VclPtr<SfxTabPage>(new ScTPValidationValue( pParent, *rArgSet ), SAL_NO_ACQUIRE);
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
@@ -703,10 +703,10 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-SfxTabPage* ScTPValidationHelp::Create( vcl::Window* pParent,
-                                         const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTPValidationHelp::Create( vcl::Window* pParent,
+                                               const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationHelp( pParent, *rArgSet ) );
+    return VclPtr<ScTPValidationHelp>::Create( pParent, *rArgSet );
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -785,10 +785,10 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationError::Create( vcl::Window*    pParent,
-                                         const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTPValidationError::Create( vcl::Window*    pParent,
+                                                const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationError( pParent, *rArgSet ) );
+    return VclPtr<ScTPValidationError>::Create( pParent, *rArgSet );
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )

@@ -271,9 +271,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
     return 0;
 }
 
-SfxTabPage* ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new ScaleTabPage(pWindow, *rOutAttrs);
+    return VclPtr<ScaleTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)

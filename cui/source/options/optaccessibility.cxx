@@ -77,9 +77,9 @@ void SvxAccessibilityOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxAccessibilityOptionsTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxAccessibilityOptionsTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

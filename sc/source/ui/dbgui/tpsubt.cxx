@@ -385,17 +385,17 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, void *, pLb )
 
 // Derived Group TabPages:
 
-SfxTabPage* ScTpSubTotalGroup1::Create( vcl::Window*         pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( vcl::Window*         pParent,
                                                  const SfxItemSet*  rArgSet )
-    { return ( new ScTpSubTotalGroup1( pParent, *rArgSet ) ); }
+    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup1( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
 
-SfxTabPage* ScTpSubTotalGroup2::Create( vcl::Window*          pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
-    { return ( new ScTpSubTotalGroup2( pParent, *rArgSet ) ); }
+    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup2( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
 
-SfxTabPage* ScTpSubTotalGroup3::Create( vcl::Window*          pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
-    { return ( new ScTpSubTotalGroup3( pParent, *rArgSet ) ); }
+    { return VclPtr<SfxTabPage>( new ScTpSubTotalGroup3( pParent, *rArgSet ), SAL_NO_ACQUIRE ); }
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
@@ -484,10 +484,10 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-SfxTabPage* ScTpSubTotalOptions::Create( vcl::Window*                 pParent,
-                                          const SfxItemSet*     rArgSet )
+VclPtr<SfxTabPage> ScTpSubTotalOptions::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rArgSet )
 {
-    return ( new ScTpSubTotalOptions( pParent, *rArgSet ) );
+    return VclPtr<SfxTabPage>( new ScTpSubTotalOptions( pParent, *rArgSet ), SAL_NO_ACQUIRE );
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

@@ -83,7 +83,7 @@ protected:
 public:
     virtual ~ScTpSubTotalGroup1();
 
-    static  SfxTabPage* Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -98,7 +98,7 @@ protected:
 public:
     virtual ~ScTpSubTotalGroup2();
 
-    static  SfxTabPage* Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -113,7 +113,7 @@ protected:
 public:
     virtual ~ScTpSubTotalGroup3();
 
-    static  SfxTabPage* Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -128,7 +128,7 @@ protected:
 public:
     virtual ~ScTpSubTotalOptions();
     virtual void        dispose() SAL_OVERRIDE;
-    static SfxTabPage*  Create      ( vcl::Window*               pParent,
+    static VclPtr<SfxTabPage>  Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;

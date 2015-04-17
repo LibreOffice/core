@@ -310,10 +310,10 @@ void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxBitmapTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxBitmapTabPage::Create( vcl::Window* pWindow,
+                                             const SfxItemSet* rSet )
 {
-    return new SvxBitmapTabPage( pWindow, *rSet );
+    return VclPtr<SvxBitmapTabPage>::Create( pWindow, *rSet );
 }
 
 

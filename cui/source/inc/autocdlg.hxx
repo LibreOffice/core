@@ -112,7 +112,7 @@ public:
     virtual ~OfaAutocorrOptionsPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -170,7 +170,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
         virtual void dispose() SAL_OVERRIDE;
 
 public:
-        static SfxTabPage*  Create( vcl::Window* pParent,
+        static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
         virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -264,7 +264,7 @@ public:
                         virtual ~OfaAutocorrReplacePage();
     virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -323,7 +323,7 @@ public:
                         virtual ~OfaAutocorrExceptPage();
     virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -390,7 +390,7 @@ public:
                         virtual ~OfaQuoteTabPage();
     virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -442,7 +442,7 @@ private:
 public:
     virtual ~OfaAutoCompleteTabPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -469,9 +469,6 @@ private:
     VclPtr<CheckBox>               m_pMainCB;
     VclPtr<SvxCheckListBox>        m_pSmartTagTypesLB;
     VclPtr<PushButton>             m_pPropertiesPB;
-
-    /// construction via Create()
-    OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     /** Inserts items into m_aSmartTagTypesLB
 
@@ -506,10 +503,12 @@ private:
     DECL_LINK(SelectHdl, void *);
 
 public:
+    /// construction via Create()
+    OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaSmartTagOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

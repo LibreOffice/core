@@ -64,7 +64,7 @@ class SwCondCollPage : public SfxTabPage
 public:
     SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;

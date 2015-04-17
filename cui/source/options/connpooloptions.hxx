@@ -47,13 +47,11 @@ namespace offapp
         VclPtr<FixedText>              m_pTimeoutLabel;
         VclPtr<NumericField>           m_pTimeout;
 
-    protected:
-        ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
-
     public:
+        ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage();
         virtual void dispose() SAL_OVERRIDE;
-        static SfxTabPage*  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
+        static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:
         virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;

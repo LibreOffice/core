@@ -602,16 +602,10 @@ void SvxMeasurePage::Construct()
     m_pCtlPreview->Invalidate();
 }
 
-/*************************************************************************
-|*
-|* create the tabpage
-|*
-\************************************************************************/
-
-SfxTabPage* SvxMeasurePage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxMeasurePage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
 {
-    return new SvxMeasurePage( pWindow, *rAttrs );
+    return VclPtr<SvxMeasurePage>::Create( pWindow, *rAttrs );
 }
 
 void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RECT_POINT /*eRP*/ )

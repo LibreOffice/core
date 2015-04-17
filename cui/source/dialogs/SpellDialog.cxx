@@ -525,8 +525,8 @@ void SpellDialog::StartSpellOptDlg_Impl()
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
     VclPtr<SfxSingleTabDialog> pDlg(
         new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
-    SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
-    static_cast<SvxLinguTabPage*>(pPage)->HideGroups( GROUP_MODULES );
+    VclPtr<SfxTabPage> pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
+    static_cast<SvxLinguTabPage*>(pPage.get())->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );
     if(RET_OK == pDlg->Execute())
     {

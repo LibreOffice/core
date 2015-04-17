@@ -223,7 +223,7 @@ protected:
 
 public:
     SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
 };
@@ -248,7 +248,7 @@ protected:
 
 public:
     SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -529,7 +529,7 @@ protected:
 
 public:
     SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 struct CmisValue : public VclBuilderContainer
@@ -650,7 +650,7 @@ protected:
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

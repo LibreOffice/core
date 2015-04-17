@@ -356,10 +356,10 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxCaptionTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxCaptionTabPage::Create( vcl::Window* pWindow,
+                                              const SfxItemSet* rOutAttrs )
 {
-    return new SvxCaptionTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxCaptionTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 

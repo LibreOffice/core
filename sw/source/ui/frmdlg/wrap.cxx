@@ -57,7 +57,7 @@ SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bo
 
 {
     // create TabPage
-    SwWrapTabPage* pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet) );
+    VclPtr<SwWrapTabPage> pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet).get() );
     pNewPage->SetFormatUsed(false, bDrawMode);
     pNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
@@ -155,9 +155,9 @@ void SwWrapTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwWrapTabPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwWrapTabPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

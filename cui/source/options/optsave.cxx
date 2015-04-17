@@ -226,12 +226,11 @@ void SvxSaveTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SfxSaveTabPage::Create( vcl::Window* pParent,
-                                    const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxSaveTabPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
 {
-    return ( new SfxSaveTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxSaveTabPage>::Create( pParent, *rAttrSet );
 }
-
 
 void SfxSaveTabPage::DetectHiddenControls()
 {

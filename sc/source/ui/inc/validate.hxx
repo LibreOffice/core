@@ -87,7 +87,7 @@ public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
     virtual                     ~ScTPValidationValue();
     virtual void                dispose() SAL_OVERRIDE;
-    static SfxTabPage*          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -296,7 +296,7 @@ public:
             virtual ~ScTPValidationHelp();
     virtual void dispose() SAL_OVERRIDE;
 
-    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -322,7 +322,7 @@ public:
             virtual ~ScTPValidationError();
     virtual void dispose() SAL_OVERRIDE;
 
-    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };

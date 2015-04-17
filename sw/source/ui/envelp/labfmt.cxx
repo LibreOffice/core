@@ -485,9 +485,9 @@ void SwLabFmtPage::ChangeMinMax()
     m_pPHeightField->Reformat();
 }
 
-SfxTabPage* SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabFmtPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwLabFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)

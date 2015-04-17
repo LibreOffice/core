@@ -734,10 +734,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 }
 
 
-SfxTabPage*  ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
-                                           const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabGeneralPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabGeneralPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -905,10 +905,10 @@ void ImpPDFTabOpnFtrPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*  ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabOpnFtrPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabOpnFtrPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1082,10 +1082,10 @@ IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
     return 0;
 }
 
-SfxTabPage*  ImpPDFTabViewerPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabViewerPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabViewerPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1199,10 +1199,10 @@ void ImpPDFTabSecurityPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*  ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabSecurityPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabSecurityPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1431,10 +1431,10 @@ void ImpPDFTabLinksPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*  ImpPDFTabLinksPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabLinksPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabLinksPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1742,10 +1742,10 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
     return 0;
 }
 
-SfxTabPage*  ImpPDFTabSigningPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabSigningPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabSigningPage>::Create( pParent, *rAttrSet );
 }
 
 

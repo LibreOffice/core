@@ -149,8 +149,8 @@ void SwLoadOptPage::dispose()
 }
 
 
-SfxTabPage* SwLoadOptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwLoadOptPage::Create( vcl::Window* pParent,
+                                          const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
@@ -569,13 +569,13 @@ void SwCaptionOptPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SwCaptionOptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCaptionOptPage::Create( vcl::Window* pParent,
+                                             const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCaptionOptPage>::Create(pParent, *rAttrSet );
+    return VclPtr<SwCaptionOptPage>::Create( pParent, *rAttrSet );
 }
 
-bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
+bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();

@@ -640,11 +640,10 @@ void SfxDocumentDescPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage *SfxDocumentDescPage::Create(vcl::Window *pParent, const SfxItemSet *rItemSet)
+VclPtr<SfxTabPage> SfxDocumentDescPage::Create(vcl::Window *pParent, const SfxItemSet *rItemSet)
 {
      return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
 }
-
 
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 {
@@ -941,9 +940,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_pChangePassBtn->Disable();
 }
 
-
-
-SfxTabPage* SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
      return VclPtr<SfxDocumentPage>::Create( pParent, *rItemSet );
 }
@@ -2274,7 +2271,7 @@ int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-SfxTabPage* SfxCustomPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
     return VclPtr<SfxCustomPropertiesPage>::Create( pParent, *rItemSet );
 }
@@ -2770,7 +2767,7 @@ int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
     return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
 }

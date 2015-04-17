@@ -37,7 +37,7 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-typedef SfxTabPage* (*CreateTabPage)(vcl::Window *pParent, const SfxItemSet *rAttrSet);
+typedef VclPtr<SfxTabPage> (*CreateTabPage)(vcl::Window *pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 

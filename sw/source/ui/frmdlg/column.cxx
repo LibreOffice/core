@@ -161,7 +161,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet) );
+    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet).get() );
     pTabPage->get<vcl::Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
@@ -657,10 +657,11 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-SfxTabPage* SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwColumnPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwColumnPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
+
 // stuff attributes into the Set when OK
 bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 {

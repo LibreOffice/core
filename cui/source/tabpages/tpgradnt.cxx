@@ -394,10 +394,10 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 
 
 
-SfxTabPage* SvxGradientTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
+                                               const SfxItemSet* rOutAttrs )
 {
-    return new SvxGradientTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxGradientTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 

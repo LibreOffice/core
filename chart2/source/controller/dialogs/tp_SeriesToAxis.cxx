@@ -97,9 +97,10 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
     return 0;
 }
 
-SfxTabPage* SchOptionTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchOptionTabPage::Create(vcl::Window* pWindow,
+                                            const SfxItemSet* rOutAttrs)
 {
-    return new SchOptionTabPage(pWindow, *rOutAttrs);
+    return VclPtr<SchOptionTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)

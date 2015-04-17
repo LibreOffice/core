@@ -44,7 +44,7 @@ public:
     virtual ~SvxPersonalizationTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create( vcl::Window *pParent, const SfxItemSet *rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window *pParent, const SfxItemSet *rSet );
 
     /// Apply the settings ([OK] button).
     virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;

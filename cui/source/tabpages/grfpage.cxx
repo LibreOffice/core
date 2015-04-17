@@ -154,9 +154,10 @@ void SvxGrfCropPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SvxGrfCropPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxGrfCropPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )

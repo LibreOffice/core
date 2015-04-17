@@ -36,7 +36,7 @@ class SwFldEditDlg : public SfxSingleTabDialog
     DECL_LINK(NextPrevHdl, Button *pBt = 0);
 
     void            Init();
-    SfxTabPage*     CreatePage(sal_uInt16 nGroup);
+    VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);
 
     void EnsureSelection(SwField *pCurFld, SwFldMgr &rMgr);
 public:

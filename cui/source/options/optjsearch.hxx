@@ -58,13 +58,11 @@ private:
 
     sal_Int32               GetTransliterationFlags_Impl();
 
-protected:
-                        SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
 public:
+                        SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxJSearchOptionsPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -83,12 +83,12 @@ SdActionDlg::SdActionDlg (
     , rOutAttrs(*pAttr)
 {
     // FreeResource();
-    SfxTabPage* pNewPage = SdTPAction::Create(get_content_area(), rOutAttrs);
+    VclPtr<SfxTabPage> pNewPage = SdTPAction::Create(get_content_area(), rOutAttrs);
     assert(pNewPage); //Unable to create page
 
     // formerly in PageCreated
-    static_cast<SdTPAction*>( pNewPage )->SetView( pView );
-    static_cast<SdTPAction*>( pNewPage )->Construct();
+    static_cast<SdTPAction*>( pNewPage.get() )->SetView( pView );
+    static_cast<SdTPAction*>( pNewPage.get() )->Construct();
 
     SetTabPage( pNewPage );
 }
@@ -378,10 +378,10 @@ int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SdTPAction::Create( vcl::Window* pWindow,
-                const SfxItemSet& rAttrs )
+VclPtr<SfxTabPage> SdTPAction::Create( vcl::Window* pWindow,
+                                       const SfxItemSet& rAttrs )
 {
-    return new SdTPAction( pWindow, rAttrs );
+    return VclPtr<SdTPAction>::Create( pWindow, rAttrs );
 }
 
 void SdTPAction::UpdateTree()

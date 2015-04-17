@@ -653,8 +653,8 @@ bool SwFldDokPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldDokPage::Create(   vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldDokPage::Create( vcl::Window* pParent,
+                                         const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwFldDokPage>::Create( pParent, *rAttrSet );
 }

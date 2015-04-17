@@ -62,7 +62,7 @@ protected:
 
     OUserAdmin( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
+    static  VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
     virtual void dispose() SAL_OVERRIDE;

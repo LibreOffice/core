@@ -160,16 +160,11 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     m_pLastChecked->SetText( aText );
 }
 
-
-
-SfxTabPage*
+VclPtr<SfxTabPage>
 SvxOnlineUpdateTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxOnlineUpdateTabPage( pParent, *rAttrSet );
+    return VclPtr<SvxOnlineUpdateTabPage>::Create( pParent, *rAttrSet );
 }
-
-
-
 
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 {

@@ -542,8 +542,8 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-SfxTabPage* SwNumPositionTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwNumPositionTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwNumPositionTabPage>::Create(pParent, *rAttrSet);
 }

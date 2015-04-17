@@ -35,7 +35,7 @@ class DataLabelsTabPage : public SfxTabPage
 public:
     DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs);
 
-    static SfxTabPage* Create(vcl::Window* pWindow, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pWindow, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 

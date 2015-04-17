@@ -628,8 +628,8 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
     return rMacro;
 }
 
-SfxTabPage* SwFldFuncPage::Create(  vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldFuncPage::Create( vcl::Window* pParent,
+                                          const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwFldFuncPage>::Create( pParent, *rAttrSet );
 }

@@ -396,8 +396,8 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     bModified = true;
 }
 
-SfxTabPage*  SwFormatTablePage::Create( vcl::Window* pParent,
-                                   const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwFormatTablePage::Create( vcl::Window* pParent,
+                                              const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwFormatTablePage>::Create( pParent, *rAttrSet );
 }
@@ -793,8 +793,8 @@ void SwTableColumnPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*   SwTableColumnPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTableColumnPage::Create( vcl::Window* pParent,
+                                              const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTableColumnPage>::Create( pParent, *rAttrSet );
 }
@@ -1377,10 +1377,10 @@ void SwTextFlowPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*   SwTextFlowPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTextFlowPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SfxTabPage>(new SwTextFlowPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )

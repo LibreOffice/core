@@ -369,14 +369,12 @@ void SvxBorderTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-
-SfxTabPage* SvxBorderTabPage::Create( vcl::Window* pParent,
-                                      const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxBorderTabPage::Create( vcl::Window* pParent,
+                                             const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBorderTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>(new SvxBorderTabPage( pParent, *rAttrSet ),
+                              SAL_NO_ACQUIRE);
 }
-
-
 
 void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const SvxBorderLine* pCoreLine, bool bValid )
 {

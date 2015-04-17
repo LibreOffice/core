@@ -246,7 +246,7 @@ public:
     virtual ~ImpPDFTabGeneralPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet);
 
     void    GetFilterConfigItem(ImpPDFTabDialog* paParent);
@@ -286,7 +286,7 @@ public:
 
     virtual ~ImpPDFTabOpnFtrPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -320,7 +320,7 @@ public:
 
     virtual ~ImpPDFTabViewerPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -376,7 +376,7 @@ public:
 
     virtual ~ImpPDFTabSecurityPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -408,7 +408,7 @@ public:
 
     virtual ~ImpPDFTabLinksPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -440,7 +440,7 @@ public:
 
     virtual ~ImpPDFTabSigningPage();
     virtual void dispose() SAL_OVERRIDE;
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);

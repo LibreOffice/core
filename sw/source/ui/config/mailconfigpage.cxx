@@ -157,7 +157,7 @@ void SwMailConfigPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage*  SwMailConfigPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwMailConfigPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwMailConfigPage>::Create(pParent, *rAttrSet);
 }

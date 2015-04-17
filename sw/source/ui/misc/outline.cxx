@@ -865,8 +865,8 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
     ActivatePage(*rSet);
 }
 
-SfxTabPage* SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
+                                                     const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwOutlineSettingsTabPage>::Create(pParent, *rAttrSet);
 }

@@ -1686,8 +1686,8 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-SfxTabPage* SwInsertSectionTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
 }
@@ -2052,8 +2052,8 @@ void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
                                     RES_END_AT_TXTEND, false )));
 }
 
-SfxTabPage* SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwSectionFtnEndTabPage>::Create(pParent, *rAttrSet);
 }
@@ -2223,7 +2223,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(0);
 }
 
-SfxTabPage*  SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }

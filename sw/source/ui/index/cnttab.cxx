@@ -1313,7 +1313,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
 }
@@ -2210,7 +2210,7 @@ int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
@@ -3751,8 +3751,8 @@ int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXStylesTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
 }

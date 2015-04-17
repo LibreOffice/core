@@ -38,7 +38,7 @@ protected:
 
 public:
     SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 

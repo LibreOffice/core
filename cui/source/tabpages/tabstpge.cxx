@@ -278,10 +278,11 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxTabulatorTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxTabulatorTabPage::Create( vcl::Window* pParent,
                                          const SfxItemSet* rSet)
 {
-    return ( new SvxTabulatorTabPage( pParent, *rSet ) );
+    return VclPtr<SfxTabPage>( new SvxTabulatorTabPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 

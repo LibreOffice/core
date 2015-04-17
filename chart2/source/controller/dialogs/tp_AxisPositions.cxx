@@ -108,9 +108,9 @@ void AxisPositionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* AxisPositionsTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> AxisPositionsTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new AxisPositionsTabPage(pWindow, *rOutAttrs);
+    return VclPtr<AxisPositionsTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

@@ -460,13 +460,13 @@ SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >
 
 namespace
 {
-    SfxMacroTabPage* CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
+    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
     {
-        return new SfxMacroTabPage( pParent, NULL, rAttrSet );
+        return VclPtr<SfxMacroTabPage>( new SfxMacroTabPage( pParent, NULL, rAttrSet ), SAL_NO_ACQUIRE );
     }
 }
 
-SfxTabPage* SfxMacroTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxMacroTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }

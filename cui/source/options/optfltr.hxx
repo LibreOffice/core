@@ -36,15 +36,15 @@ class OfaMSFilterTabPage : public SfxTabPage
     VclPtr<CheckBox>       aPBasicCodeCB;
     VclPtr<CheckBox>       aPBasicStgCB;
 
-    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
 public:
+    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -87,7 +87,6 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     VclPtr<RadioButton> aHighlightingRB;
     VclPtr<RadioButton> aShadingRB;
 
-    OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -97,8 +96,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
 
 public:
-
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

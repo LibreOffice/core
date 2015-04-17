@@ -123,13 +123,14 @@ void SwParagraphNumTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SwParagraphNumTabPage::Create(  vcl::Window* pParent,
-                                const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SwParagraphNumTabPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rSet )
 {
-    return VclPtr<SwParagraphNumTabPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>( new SwParagraphNumTabPage(pParent, *rSet),
+                               SAL_NO_ACQUIRE );
 }
 
-bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
+bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_pOutlineLvLB->IsValueChangedFromSaved())
     {

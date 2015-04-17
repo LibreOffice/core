@@ -153,9 +153,10 @@ int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwCondCollPage(pParent, *rSet),
+                              SAL_NO_ACQUIRE);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

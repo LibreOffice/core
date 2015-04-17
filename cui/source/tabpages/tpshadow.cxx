@@ -479,10 +479,10 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxShadowTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxShadowTabPage::Create( vcl::Window* pWindow,
+                                             const SfxItemSet* rAttrs )
 {
-    return new SvxShadowTabPage( pWindow, *rAttrs );
+    return VclPtr<SvxShadowTabPage>::Create( pWindow, *rAttrs );
 }
 
 

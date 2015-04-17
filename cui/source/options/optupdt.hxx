@@ -55,7 +55,7 @@ public:
     virtual ~SvxOnlineUpdateTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

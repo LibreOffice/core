@@ -101,7 +101,7 @@ public:
     virtual vcl::Window*     GetParentLabeledBy( const vcl::Window* pLabel ) const SAL_OVERRIDE;
     virtual vcl::Window*     GetParentLabelFor( const vcl::Window* pLabel ) const SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 #endif // INCLUDED_SFX2_PRINTOPT_HXX

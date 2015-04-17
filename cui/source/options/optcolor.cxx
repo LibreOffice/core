@@ -1102,9 +1102,9 @@ void SvxColorOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxColorOptionsTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SvxColorOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )

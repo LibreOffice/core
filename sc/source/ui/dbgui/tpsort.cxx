@@ -142,10 +142,10 @@ void ScTabPageSortFields::Init()
     }
 }
 
-SfxTabPage* ScTabPageSortFields::Create( vcl::Window*    pParent,
-                                         const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTabPageSortFields::Create( vcl::Window*    pParent,
+                                                const SfxItemSet*  rArgSet )
 {
-    return ( new ScTabPageSortFields( pParent, *rArgSet ) );
+    return VclPtr<ScTabPageSortFields>::Create( pParent, *rArgSet );
 }
 
 void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
@@ -635,11 +635,10 @@ void ScTabPageSortOptions::Init()
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-SfxTabPage* ScTabPageSortOptions::Create(
-                                            vcl::Window*             pParent,
-                                            const SfxItemSet*   rArgSet )
+VclPtr<SfxTabPage> ScTabPageSortOptions::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rArgSet )
 {
-    return ( new ScTabPageSortOptions( pParent, *rArgSet ) );
+    return VclPtr<ScTabPageSortOptions>::Create( pParent, *rArgSet );
 }
 
 void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )

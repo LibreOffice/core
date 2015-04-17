@@ -42,8 +42,8 @@ namespace linguistic2{
 }}}}
 
 class SvxSpellWrapper;
-typedef SfxTabPage* (*CreateSvxDistributePage)(vcl::Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
-typedef const sal_uInt16*     (*DialogGetRanges)();
+typedef VclPtr<SfxTabPage> (*CreateSvxDistributePage)(vcl::Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
+typedef const sal_uInt16*  (*DialogGetRanges)();
 
 struct ExchangeData;
 class INetURLObject;

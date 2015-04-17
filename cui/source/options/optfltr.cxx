@@ -85,10 +85,10 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
     return 0;
 }
 
-SfxTabPage* OfaMSFilterTabPage::Create( vcl::Window* pParent,
-                                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMSFilterTabPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet )
 {
-    return new OfaMSFilterTabPage( pParent, *rAttrSet );
+    return VclPtr<OfaMSFilterTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
@@ -193,10 +193,10 @@ void OfaMSFilterTabPage2::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* OfaMSFilterTabPage2::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMSFilterTabPage2::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet )
 {
-    return new OfaMSFilterTabPage2( pParent, *rAttrSet );
+    return VclPtr<OfaMSFilterTabPage2>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )

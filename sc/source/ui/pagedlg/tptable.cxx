@@ -154,9 +154,9 @@ void ScTablePage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* ScTablePage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScTablePage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScTablePage( pParent, *rCoreSet ) );
+    return VclPtr<SfxTabPage>( new ScTablePage( pParent, *rCoreSet ), SAL_NO_ACQUIRE );
 }
 
 void ScTablePage::Reset( const SfxItemSet* rCoreSet )

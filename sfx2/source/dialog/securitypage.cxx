@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 }
 
 
-SfxTabPage* SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
+VclPtr<SfxTabPage> SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
 {
     return VclPtr<SfxSecurityPage>::Create( pParent, *rItemSet );
 }

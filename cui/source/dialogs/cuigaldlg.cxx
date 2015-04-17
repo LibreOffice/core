@@ -757,9 +757,9 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 
 
 
-SfxTabPage* TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new TPGalleryThemeGeneral( pParent, *rSet );
+    return VclPtr<TPGalleryThemeGeneral>::Create( pParent, *rSet );
 }
 
 // - TPGalleryThemeProperties -
@@ -854,12 +854,10 @@ void TPGalleryThemeProperties::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new TPGalleryThemeProperties( pParent, *rSet );
+    return VclPtr<TPGalleryThemeProperties>::Create( pParent, *rSet );
 }
-
-
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {

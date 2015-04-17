@@ -72,7 +72,7 @@ public:
                         virtual ~SwContentOptPage();
     virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -121,7 +121,7 @@ public:
     virtual ~SwAddPrinterTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -188,13 +188,13 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK( ModifyHeightHdl, FontSizeBox * );
     DECL_LINK( LoseFocusHdl, ComboBox * );
 
-     virtual ~SwStdFontTabPage();
-     virtual void       dispose() SAL_OVERRIDE;
+    SwStdFontTabPage( vcl::Window* pParent,
+                      const SfxItemSet& rSet );
+    virtual ~SwStdFontTabPage();
+    virtual void       dispose() SAL_OVERRIDE;
 
 public:
-    SwStdFontTabPage( vcl::Window* pParent,
-                                       const SfxItemSet& rSet );
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -236,7 +236,7 @@ public:
     virtual ~SwTableOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -282,7 +282,7 @@ public:
     virtual ~SwShdwCrsrOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -362,7 +362,7 @@ public:
     virtual ~SwRedlineOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -380,8 +380,8 @@ public:
     virtual ~SwTestTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+                                       const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -425,7 +425,7 @@ public:
     virtual ~SwCompareOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

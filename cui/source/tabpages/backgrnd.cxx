@@ -492,16 +492,10 @@ void SvxBackgroundTabPage::dispose()
 
 
 
-SfxTabPage* SvxBackgroundTabPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet )
-
-/*  [Description]
-
-    create method for the TabDialog
-*/
-
+VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBackgroundTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new SvxBackgroundTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 

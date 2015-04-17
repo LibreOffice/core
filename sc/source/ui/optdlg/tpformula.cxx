@@ -237,9 +237,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
     return 0;
 }
 
-SfxTabPage* ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
 {
-    return new ScTpFormulaOptions(pParent, *rCoreSet);
+    return VclPtr<SfxTabPage>(new ScTpFormulaOptions(pParent, *rCoreSet), SAL_NO_ACQUIRE);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

@@ -53,9 +53,9 @@ void SchLegendPosTabPage::dispose()
 }
 
 
-SfxTabPage* SchLegendPosTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchLegendPosTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
 {
-    return new SchLegendPosTabPage(pWindow, *rOutAttrs);
+    return VclPtr<SchLegendPosTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)

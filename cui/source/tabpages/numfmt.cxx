@@ -380,21 +380,10 @@ void SvxNumberFormatTabPage::Init_Impl()
     }
 }
 
-/*************************************************************************
-#*  Method:        Create
-#*------------------------------------------------------------------------
-#*
-#*  Class:      SvxNumberFormatTabPage
-#*  Function:   Creates a new number format page.
-#*  Input:      Window, SfxItemSet
-#*  Output:     new TabPage
-#*
-#************************************************************************/
-
-SfxTabPage* SvxNumberFormatTabPage::Create( vcl::Window* pParent,
-                                            const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rAttrSet )
 {
-    return ( new SvxNumberFormatTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new SvxNumberFormatTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 

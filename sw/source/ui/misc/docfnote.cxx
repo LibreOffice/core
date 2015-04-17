@@ -246,7 +246,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_pPageTemplBox->SelectEntry( pInf->GetPageDesc( *pSh->GetDoc() )->GetName());
 }
 
-SfxTabPage *SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return VclPtr<SwEndNoteOptionPage>::Create( pParent, true, *rSet );
 }
@@ -422,9 +422,9 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-SfxTabPage *SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SwFootNoteOptionPage>::Create( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SwFootNoteOptionPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

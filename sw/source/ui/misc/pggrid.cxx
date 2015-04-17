@@ -180,12 +180,12 @@ void SwTextGridPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage *SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwTextGridPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwTextGridPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
-bool    SwTextGridPage::FillItemSet(SfxItemSet *rSet)
+bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
     if(m_pNoGridRB->IsValueChangedFromSaved() ||

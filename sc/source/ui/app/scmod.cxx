@@ -2094,9 +2094,9 @@ void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage* pRet = NULL;
+    VclPtr<SfxTabPage> pRet;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     switch(nId)
@@ -2105,7 +2105,7 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, cons
                                 {
                                     ::CreateTabPage ScTpLayoutOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_LAYOUT );
                                     if ( ScTpLayoutOptionsCreate )
-                                        pRet =  (*ScTpLayoutOptionsCreate) (pParent, &rSet);
+                                        pRet = (*ScTpLayoutOptionsCreate) (pParent, &rSet);
                                 }
                                 break;
         case SID_SC_TP_CONTENT:

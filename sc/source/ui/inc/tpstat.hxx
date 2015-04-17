@@ -27,7 +27,7 @@
 class ScDocStatPage: public SfxTabPage
 {
 public:
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rSet );
     virtual         ~ScDocStatPage();
     virtual void    dispose() SAL_OVERRIDE;
 

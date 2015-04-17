@@ -149,7 +149,7 @@ public:
     virtual ~SvxPositionSizeTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -207,7 +207,7 @@ public:
     virtual ~SvxAngleTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -254,7 +254,7 @@ public:
     virtual ~SvxSlantTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

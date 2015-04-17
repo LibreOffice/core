@@ -488,9 +488,9 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwLabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwLabPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -633,9 +633,9 @@ void SwVisitingCardPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwVisitingCardPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwVisitingCardPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
@@ -794,9 +794,9 @@ void SwPrivateDataPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage* SwPrivateDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwPrivateDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwPrivateDataPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwPrivateDataPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
@@ -907,9 +907,9 @@ void SwBusinessDataPage::dispose()
 }
 
 
-SfxTabPage* SwBusinessDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwBusinessDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwBusinessDataPage>::Create(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwBusinessDataPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)

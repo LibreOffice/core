@@ -207,10 +207,10 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     ClickBookletHdl( NULL );
 }
 
-SfxTabPage* SdPrintOptions::Create( vcl::Window* pWindow,
-                const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SdPrintOptions::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rOutAttrs )
 {
-    return( new SdPrintOptions( pWindow, *rOutAttrs ) );
+    return VclPtr<SdPrintOptions>::Create( pWindow, *rOutAttrs );
 }
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )

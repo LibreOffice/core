@@ -33,7 +33,7 @@ class ScRangeUtil;
 class ScTpUserLists : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;

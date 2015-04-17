@@ -410,7 +410,7 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-SfxTabPage* SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwCompatibilityOptPage>::Create( pParent, *rAttrSet );
 }
