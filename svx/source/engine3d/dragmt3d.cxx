@@ -159,6 +159,7 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
         for(nOb=0;nOb<nCnt;nOb++)
         {
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
+            E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
             rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
             if( bUndo )
             {
@@ -186,6 +187,7 @@ void E3dDragMethod::CancelSdrDrag()
             {
                 // Restore transformation
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                 rCandidate.mp3DObj->SetTransform(rCandidate.maInitTransform);
             }
         }
@@ -406,6 +408,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             if(mbMoveFull)
             {
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                 rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
             }
             else
@@ -555,6 +558,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                     rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
@@ -673,6 +677,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                     rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
