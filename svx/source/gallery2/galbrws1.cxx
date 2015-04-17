@@ -111,8 +111,8 @@ GalleryBrowser1::GalleryBrowser1(
     const ::boost::function<void(void)>& rThemeSlectionHandler)
     :
     Control               ( pParent, WB_TABSTOP ),
-    maNewTheme            ( new GalleryButton(this, WB_3DLOOK) ),
-    mpThemes              ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
+    maNewTheme            ( VclPtr<GalleryButton>::Create(this, WB_3DLOOK) ),
+    mpThemes              ( VclPtr<GalleryThemeListBox>::Create( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
     mpThemePropsDlgItemSet( NULL ),

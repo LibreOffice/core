@@ -154,7 +154,7 @@ public:
 protected:
     virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
 
-    virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+    virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
     virtual long QueryMinimumRowHeight() SAL_OVERRIDE;
     virtual void RowHeightChanged() SAL_OVERRIDE;
     virtual void ColumnResized(sal_uInt16 nId) SAL_OVERRIDE;

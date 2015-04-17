@@ -66,6 +66,12 @@ public:
 
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
+    ParaPropertyPanel (
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
 private:
     // UI controls
     //Alignment
@@ -110,12 +116,6 @@ private:
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
-
-    ParaPropertyPanel (
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);

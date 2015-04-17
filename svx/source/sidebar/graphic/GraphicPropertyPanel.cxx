@@ -255,7 +255,8 @@ VclPtr<vcl::Window> GraphicPropertyPanel::Create (
         throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", NULL, 2);
 
     return VclPtr<vcl::Window>(
-        new GraphicPropertyPanel(
+        VclPtr<GraphicPropertyPanel>::Create(
+
                 pParent,
                 rxFrame,
                 pBindings),

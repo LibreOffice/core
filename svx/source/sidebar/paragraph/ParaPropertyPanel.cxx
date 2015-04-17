@@ -69,7 +69,8 @@ VclPtr<vcl::Window> ParaPropertyPanel::Create (
         throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", NULL, 2);
 
     return VclPtr<vcl::Window>(
-        new ParaPropertyPanel(
+        VclPtr<ParaPropertyPanel>::Create(
+
                 pParent,
                 rxFrame,
                 pBindings,

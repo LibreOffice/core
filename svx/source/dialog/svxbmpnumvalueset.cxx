@@ -179,7 +179,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // The lines are only one time in the virtual device, only the outline
         // page is currently done
-        pVDev = new VirtualDevice(*pDev);
+        pVDev = VclPtr<VirtualDevice>::Create(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
          pVDev->SetOutputSize( aRectSize );

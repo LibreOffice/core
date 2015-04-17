@@ -381,8 +381,8 @@ namespace sdr
             const SdrModel* pModel,
             bool bRefreshWithPreRendering)
         :   OverlayManager(rOutputDevice, pModel),
-            mpBufferDevice(new VirtualDevice()),
-            mpOutputBufferDevice(new VirtualDevice()),
+            mpBufferDevice(VclPtr<VirtualDevice>::Create()),
+            mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer

@@ -127,7 +127,7 @@ namespace dbaui
         virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        virtual FmGridControl*  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) SAL_OVERRIDE;
+        virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) SAL_OVERRIDE;
 #ifdef _MSC_VER
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;
@@ -274,7 +274,7 @@ namespace dbaui
         virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt) SAL_OVERRIDE;
 
         // EditBrowseBox overridables
-        virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
         virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
 
         // DbGridControl overridables

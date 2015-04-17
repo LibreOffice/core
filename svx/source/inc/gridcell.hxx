@@ -562,7 +562,7 @@ public:
     virtual ::svt::CellControllerRef    CreateController() const SAL_OVERRIDE;
 
 protected:
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -584,7 +584,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -609,7 +609,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -638,7 +638,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -663,7 +663,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel

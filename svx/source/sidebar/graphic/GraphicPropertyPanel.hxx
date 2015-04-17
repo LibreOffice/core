@@ -58,6 +58,12 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    GraphicPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     //ui controls
     VclPtr<MetricField>                                        mpMtrBrightness;
@@ -95,12 +101,6 @@ private:
     DECL_LINK( GreenHdl, void*);
     DECL_LINK( BlueHdl, void*);
     DECL_LINK( GammaHdl, void*);
-
-    // constructor/destuctor
-    GraphicPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     void SetupIcons(void);
     void Initialize();

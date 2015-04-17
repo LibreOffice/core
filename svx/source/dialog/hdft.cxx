@@ -117,14 +117,14 @@ namespace svx {
 
 SfxTabPage* SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxHeaderPage( pParent, *rSet );
+    return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
 }
 
 
 
 SfxTabPage* SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxFooterPage( pParent, *rSet );
+    return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
 }
 
 

@@ -549,7 +549,7 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
     return NULL;
 }
 
-FmGridControl* SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
+VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
     return new SbaGridControl( m_xContext, pParent, this, nStyle);
 }
@@ -727,7 +727,7 @@ void SbaGridControl::dispose()
     FmGridControl::dispose();
 }
 
-BrowserHeader* SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
+VclPtr<BrowserHeader> SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {
     return new SbaGridHeader(pParent);
 }

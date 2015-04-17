@@ -219,7 +219,7 @@ namespace svt
     }
 
 
-    BrowserHeader* EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
+    VclPtr<BrowserHeader> EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
     {
         return new EditBrowserHeader(pParent);
     }

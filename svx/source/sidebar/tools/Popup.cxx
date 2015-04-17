@@ -103,7 +103,7 @@ void Popup::ProvideContainerAndControl (void)
 
 void Popup::CreateContainerAndControl (void)
 {
-    mxContainer.reset(new PopupContainer(mpParent));
+    mxContainer.reset(VclPtr<PopupContainer>::Create(mpParent));
     mxContainer->SetAccessibleName(msAccessibleName);
     mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
     mxContainer->SetBorderStyle(mxContainer->GetBorderStyle() | WindowBorderStyle::MENU);

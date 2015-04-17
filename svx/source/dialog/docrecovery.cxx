@@ -553,7 +553,7 @@ void PluginProgressWindow::dispose()
 PluginProgress::PluginProgress(      vcl::Window*                                             pParent,
                                const css::uno::Reference< css::uno::XComponentContext >& xContext  )
 {
-    m_pPlugProgressWindow = new PluginProgressWindow(pParent, static_cast< css::lang::XComponent* >(this));
+    m_pPlugProgressWindow = VclPtr<PluginProgressWindow>::Create(pParent, static_cast< css::lang::XComponent* >(this));
     css::uno::Reference< css::awt::XWindow > xProgressWindow = VCLUnoHelper::GetInterface(m_pPlugProgressWindow);
     m_xProgressFactory = css::task::StatusIndicatorFactory::createWithWindow(xContext, xProgressWindow, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/);
     m_xProgress = m_xProgressFactory->createStatusIndicator();
@@ -884,7 +884,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, RECOV_FILELISTHEIGHT), MAP_APPFONT));
     pFileListLBContainer->set_width_request(aSize.Width());
     pFileListLBContainer->set_height_request(aSize.Height());
-    m_pFileListLB = new RecovDocList(*pFileListLBContainer, DIALOG_MGR());
+    m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer, DIALOG_MGR());
 
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_pFileListLB->SetTabs( &nTabs[0] );

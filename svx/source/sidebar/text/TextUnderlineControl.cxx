@@ -35,8 +35,8 @@ TextUnderlineControl::TextUnderlineControl (
 :   svx::sidebar::PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_UNDERLINE))
 ,   mrTextPropertyPanel(rPanel)
 ,   mpBindings(pBindings)
-,   maVSUnderline(new ValueSet(this, SVX_RES(VS_UNDERLINE)))
-,   maPBOptions (new PushButton(this, SVX_RES(PB_OPTIONS)))
+,   maVSUnderline(VclPtr<ValueSet>::Create(this, SVX_RES(VS_UNDERLINE)))
+,   maPBOptions (VclPtr<PushButton>::Create(this, SVX_RES(PB_OPTIONS)))
 
 ,   maIMGSingle     (SVX_RES(IMG_SINGLE))
 ,   maIMGDouble     (SVX_RES(IMG_DOUBLE))

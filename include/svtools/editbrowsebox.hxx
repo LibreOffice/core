@@ -508,7 +508,7 @@ namespace svt
         virtual BrowserHeader* CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
 
         // if you want to have an own header ...
-        virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent);
 
         virtual void ColumnMoved(sal_uInt16 nId) SAL_OVERRIDE;
         virtual void ColumnResized(sal_uInt16 nColId) SAL_OVERRIDE;

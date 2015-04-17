@@ -202,7 +202,7 @@ void SvxGridTabPage::dispose()
 
 SfxTabPage* SvxGridTabPage::Create( vcl::Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return new SvxGridTabPage( pParent, rAttrSet );
+    return VclPtr<SvxGridTabPage>::Create( pParent, rAttrSet );
 }
 
 

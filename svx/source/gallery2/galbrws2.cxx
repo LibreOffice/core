@@ -414,12 +414,12 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
     Control             ( pParent, WB_TABSTOP ),
     mpGallery           ( pGallery ),
     mpCurTheme          ( NULL ),
-    mpIconView          ( new GalleryIconView( this, NULL ) ),
-    mpListView          ( new GalleryListView( this, NULL ) ),
-    mpPreview           ( new GalleryPreview(this) ),
-    maViewBox           ( new GalleryToolBox(this) ),
-    maSeparator         ( new FixedLine(this, WB_VERT) ),
-    maInfoBar           ( new FixedText(this, WB_LEFT | WB_VCENTER) ),
+    mpIconView          ( VclPtr<GalleryIconView>::Create( this, nullptr ) ),
+    mpListView          ( VclPtr<GalleryListView>::Create( this, nullptr ) ),
+    mpPreview           ( VclPtr<GalleryPreview>::Create(this) ),
+    maViewBox           ( VclPtr<GalleryToolBox>::Create(this) ),
+    maSeparator         ( VclPtr<FixedLine>::Create(this, WB_VERT) ),
+    maInfoBar           ( VclPtr<FixedText>::Create(this, WB_LEFT | WB_VCENTER) ),
     mnCurActionPos      ( 0xffffffff ),
     meMode              ( GALLERYBROWSERMODE_NONE ),
     meLastMode          ( GALLERYBROWSERMODE_NONE )
@@ -749,9 +749,9 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 
     mpCurTheme = mpGallery->AcquireTheme( rThemeName, *this );
 
-    mpIconView = new GalleryIconView( this, mpCurTheme );
-    mpListView = new GalleryListView( this, mpCurTheme );
-    mpPreview = new GalleryPreview( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
+    mpIconView = VclPtr<GalleryIconView>::Create( this, mpCurTheme );
+    mpListView = VclPtr<GalleryListView>::Create( this, mpCurTheme );
+    mpPreview = VclPtr<GalleryPreview>::Create( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
 
     mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));

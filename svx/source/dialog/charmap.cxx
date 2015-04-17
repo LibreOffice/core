@@ -56,7 +56,7 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(NULL)
-    , aVscrollSB( new ScrollBar(this, WB_VERT) )
+    , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
 {
     init();
     InitSettings( true, true );

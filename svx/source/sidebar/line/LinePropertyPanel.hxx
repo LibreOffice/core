@@ -85,6 +85,12 @@ public:
 
     void EndLineWidthPopupMode (void);
 
+    // constructor/destuctor
+    LinePropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     //ui controls
     VclPtr<FixedText>   mpFTWidth;
@@ -154,12 +160,6 @@ private:
     DECL_LINK(ChangeEndHdl, void *);
     DECL_LINK(ChangeEdgeStyleHdl, void *);
     DECL_LINK(ChangeCapStyleHdl, void *);
-
-    // constructor/destuctor
-    LinePropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };

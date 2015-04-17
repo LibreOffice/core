@@ -1418,10 +1418,10 @@ void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent
 
 }
 
-BrowserHeader* FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
+VclPtr<BrowserHeader> FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {
     DBG_ASSERT( pParent == this, "FmGridControl::imp_CreateHeaderBar: parent?" );
-    return new FmGridHeader( pParent );
+    return VclPtr<FmGridHeader>::Create( pParent );
 }
 
 void FmGridControl::markColumn(sal_uInt16 nId)

@@ -74,6 +74,12 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
+    TextPropertyPanel (
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings,
+        const ::sfx2::sidebar::EnumContext& rContext);
+
 private:
     //ui controls
     VclPtr<ToolBox> mpToolBoxFont;
@@ -99,13 +105,6 @@ private:
 
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
-
-    TextPropertyPanel (
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
-
 
     VclPtr<PopupControl> CreateCharacterSpacingControl (PopupContainer* pParent);
     VclPtr<PopupControl> CreateUnderlinePopupControl (PopupContainer* pParent);

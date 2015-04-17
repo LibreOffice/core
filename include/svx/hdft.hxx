@@ -113,12 +113,10 @@ private:
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
+    SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     // returns the Which values to the range
     static const sal_uInt16*      GetRanges() { return pRanges; }
-
-private:
-    SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 // class SvxFooterPage ---------------------------------------------------
@@ -126,11 +124,9 @@ private:
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
+    SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges() { return pRanges; }
-
-private:
-    SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class SVX_DLLPUBLIC DeleteHeaderDialog : public MessageDialog

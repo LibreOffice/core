@@ -95,7 +95,7 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
                                               SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SvxIMapDlg( pBindings, this, _pParent );
+    pWindow = VclPtr<SvxIMapDlg>::Create( pBindings, this, _pParent );
     SvxIMapDlg* pDlg = static_cast<SvxIMapDlg*>(pWindow.get());
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
@@ -168,7 +168,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     get(m_pStbStatus, "statusbar");
 
     VclVBox* _pContainer = get<VclVBox>("container");
-    pIMapWnd = new IMapWindow( _pContainer, WB_BORDER, _pBindings->GetActiveFrame() );
+    pIMapWnd = VclPtr<IMapWindow>::Create( _pContainer, WB_BORDER, _pBindings->GetActiveFrame() );
     pIMapWnd->set_hexpand(true);
     pIMapWnd->set_vexpand(true);
     pIMapWnd->Show();

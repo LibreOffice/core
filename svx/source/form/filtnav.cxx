@@ -1858,7 +1858,7 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
 {
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
-    m_pNavigator = new FmFilterNavigator( this );
+    m_pNavigator = VclPtr<FmFilterNavigator>::Create( this );
     m_pNavigator->Show();
     SetText( SVX_RES(RID_STR_FILTER_NAVIGATOR) );
     SfxDockingWindow::SetFloatingSize( Size(200,200) );
@@ -1994,7 +1994,7 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
                                     SfxBindings *_pBindings, SfxChildWinInfo* _pInfo )
                  :SfxChildWindow( _pParent, _nId )
 {
-    pWindow = new FmFilterNavigatorWin( _pBindings, this, _pParent );
+    pWindow = VclPtr<FmFilterNavigatorWin>::Create( _pBindings, this, _pParent );
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
 }

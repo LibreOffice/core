@@ -948,10 +948,10 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
 SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent)
 :   Control(pParent, WB_BORDER | WB_TABSTOP),
-    maLightControl(new Svx3DLightControl(this, 0)),
-    maHorScroller(new ScrollBar(this, WB_HORZ | WB_DRAG)),
-    maVerScroller(new ScrollBar(this, WB_VERT | WB_DRAG)),
-    maSwitcher(new PushButton(this, 0))
+    maLightControl(VclPtr<Svx3DLightControl>::Create(this, 0)),
+    maHorScroller(VclPtr<ScrollBar>::Create(this, WB_HORZ | WB_DRAG)),
+    maVerScroller(VclPtr<ScrollBar>::Create(this, WB_VERT | WB_DRAG)),
+    maSwitcher(VclPtr<PushButton>::Create(this, 0))
 {
     // init members
     Init();

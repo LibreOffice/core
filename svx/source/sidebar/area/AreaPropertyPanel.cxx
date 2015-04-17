@@ -540,7 +540,8 @@ VclPtr<vcl::Window> AreaPropertyPanel::Create (
         throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
 
     return VclPtr<vcl::Window>(
-        new AreaPropertyPanel(
+        VclPtr<AreaPropertyPanel>::Create(
+
                 pParent,
                 rxFrame,
                 pBindings),

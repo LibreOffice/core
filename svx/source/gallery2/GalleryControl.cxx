@@ -40,16 +40,18 @@ GalleryControl::GalleryControl (
     vcl::Window* pParentWindow)
     : Window(pParentWindow, WB_SIZEABLE|WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE),
       mpGallery (Gallery::GetGalleryInstance()),
-      mpSplitter(new GallerySplitter(
+      mpSplitter(VclPtr<GallerySplitter>::Create(
+
               this,
               WB_HSCROLL,
               ::boost::bind(&GalleryControl::InitSettings, this))),
-      mpBrowser1(new GalleryBrowser1(
+      mpBrowser1(VclPtr<GalleryBrowser1>::Create(
+
               this,
               mpGallery,
               ::boost::bind(&GalleryControl::GalleryKeyInput,this,_1,_2),
               ::boost::bind(&GalleryControl::ThemeSelectionHasChanged, this))),
-      mpBrowser2(new GalleryBrowser2(this, mpGallery)),
+      mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
       maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)
 {

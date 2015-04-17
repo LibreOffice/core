@@ -1831,19 +1831,19 @@ namespace svxform
         if (sName == "submissions")
         {
             if ( !m_pSubmissionPage )
-                m_pSubmissionPage = new XFormsPage(m_pTabCtrl, this, DGTSubmission);
+                m_pSubmissionPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTSubmission);
             pPage = m_pSubmissionPage;
         }
         else if (sName == "bindings")
         {
             if ( !m_pBindingPage )
-                m_pBindingPage = new XFormsPage(m_pTabCtrl, this, DGTBinding);
+                m_pBindingPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTBinding);
             pPage = m_pBindingPage;
         }
         else if (sName == "instance")
         {
             if ( !m_pInstPage )
-                m_pInstPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
+                m_pInstPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
             pPage = m_pInstPage;
         }
         else
@@ -1855,7 +1855,7 @@ namespace svxform
                 pPage = m_aPageList[nPos];
             else
             {
-                pPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
+                pPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
                 m_aPageList.push_back( pPage );
             }
         }
@@ -2160,7 +2160,7 @@ namespace svxform
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
         SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *_pBindings ),
 
-        m_aDataWin( new DataNavigatorWindow(this, _pBindings) )
+        m_aDataWin( VclPtr<DataNavigatorWindow>::Create(this, _pBindings) )
 
     {
 
@@ -2256,7 +2256,7 @@ namespace svxform
         SfxChildWindow( _pParent, _nId )
 
     {
-        pWindow = new DataNavigator( _pBindings, this, _pParent );
+        pWindow = VclPtr<DataNavigator>::Create( _pBindings, this, _pParent );
         eChildAlignment = SfxChildAlignment::RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
         static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
@@ -2922,7 +2922,7 @@ namespace svxform
         aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
         pNamespacesListContainer->set_width_request(aControlSize.Width());
         pNamespacesListContainer->set_height_request(aControlSize.Height());
-        m_pNamespacesList = new SvSimpleTable(*pNamespacesListContainer, 0);
+        m_pNamespacesList = VclPtr<SvSimpleTable>::Create(*pNamespacesListContainer, 0);
 
         static long aStaticTabs[]= { 3, 0, 35, 200 };
         m_pNamespacesList->SvSimpleTable::SetTabs( aStaticTabs );

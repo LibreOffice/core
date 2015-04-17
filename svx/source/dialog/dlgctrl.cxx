@@ -1824,7 +1824,7 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     : Control(pParent, WB_BORDER)
     , mpModel(new SdrModel())
-    , mpBufferDevice(new VirtualDevice(*this))
+    , mpBufferDevice(VclPtr<VirtualDevice>::Create(*this))
 {
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle(WindowBorderStyle::MONO);

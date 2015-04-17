@@ -1124,18 +1124,18 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     m_bIsSimpleEdit = !bIsMultiLine;
     if ( bIsMultiLine )
     {
-        m_pWindow = new MultiLineTextCell( &rParent, nStyle );
+        m_pWindow = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
         m_pEdit = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow.get() ) );
 
-        m_pPainter = new MultiLineTextCell( &rParent, nStyle );
+        m_pPainter = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
         m_pPainterImplementation = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter.get() ) );
     }
     else
     {
-        m_pWindow = new Edit( &rParent, nStyle );
+        m_pWindow = VclPtr<Edit>::Create( &rParent, nStyle );
         m_pEdit = new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) );
 
-        m_pPainter = new Edit( &rParent, nStyle );
+        m_pPainter = VclPtr<Edit>::Create( &rParent, nStyle );
         m_pPainterImplementation = new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) );
     }
 
@@ -1257,17 +1257,17 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     switch (nAlignment)
     {
         case ::com::sun::star::awt::TextAlign::RIGHT:
-            m_pWindow  = new FormattedField( &rParent, WB_RIGHT );
-            m_pPainter = new FormattedField( &rParent, WB_RIGHT );
+            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
+            m_pPainter = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
             break;
 
         case ::com::sun::star::awt::TextAlign::CENTER:
-            m_pWindow  = new FormattedField( &rParent, WB_CENTER );
-            m_pPainter  = new FormattedField( &rParent, WB_CENTER );
+            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
+            m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
             break;
         default:
-            m_pWindow  = new FormattedField( &rParent, WB_LEFT );
-            m_pPainter  = new FormattedField( &rParent, WB_LEFT );
+            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
+            m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
 
             // Alles nur damit die Selektion bei Focuserhalt von rechts nach links geht
             AllSettings aSettings = m_pWindow->GetSettings();
@@ -1637,8 +1637,8 @@ void DbCheckBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 {
     setTransparent( true );
 
-    m_pWindow  = new CheckBoxControl( &rParent );
-    m_pPainter = new CheckBoxControl( &rParent );
+    m_pWindow  = VclPtr<CheckBoxControl>::Create( &rParent );
+    m_pPainter = VclPtr<CheckBoxControl>::Create( &rParent );
 
     m_pWindow->SetPaintTransparent( true );
     m_pPainter->SetPaintTransparent( true );
@@ -1771,8 +1771,8 @@ void DbPatternField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCu
 {
     m_rColumn.SetAlignmentFromModel(-1);
 
-    m_pWindow = new PatternField( &rParent, 0 );
-    m_pPainter= new PatternField( &rParent, 0 );
+    m_pWindow = VclPtr<PatternField>::Create( &rParent, 0 );
+    m_pPainter= VclPtr<PatternField>::Create( &rParent, 0 );
 
     Reference< XPropertySet >   xModel( m_rColumn.getModel() );
     implAdjustGenericFieldSetting( xModel );
@@ -1946,9 +1946,9 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 }
 
 
-SpinField* DbNumericField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<SpinField> DbNumericField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
 {
-    return new DoubleNumericField( _pParent, _nFieldStyle );
+    return VclPtr<DoubleNumericField>::Create( _pParent, _nFieldStyle );
 }
 
 namespace
@@ -2074,9 +2074,9 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
 }
 
 
-SpinField* DbCurrencyField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<SpinField> DbCurrencyField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
 {
-    return new LongCurrencyField( _pParent, _nFieldStyle );
+    return VclPtr<LongCurrencyField>::Create( _pParent, _nFieldStyle );
 }
 
 
@@ -2180,7 +2180,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
 }
 
 
-SpinField* DbDateField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
+VclPtr<SpinField> DbDateField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
 {
     // check if there is a DropDown property set to TRUE
     bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, _rxModel )
@@ -2188,7 +2188,7 @@ SpinField* DbDateField::createField( vcl::Window* _pParent, WinBits _nFieldStyle
     if ( bDropDown )
         _nFieldStyle |= WB_DROPDOWN;
 
-    CalendarField* pField = new CalendarField( _pParent, _nFieldStyle );
+    VclPtr<CalendarField> pField = VclPtr<CalendarField>::Create( _pParent, _nFieldStyle );
 
     pField->EnableToday();
     pField->EnableNone();
@@ -2308,9 +2308,9 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
 }
 
 
-SpinField* DbTimeField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/ )
+VclPtr<SpinField> DbTimeField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/ )
 {
-    return new TimeField( _pParent, _nFieldStyle );
+    return VclPtr<TimeField>::Create( _pParent, _nFieldStyle );
 }
 
 
@@ -2464,7 +2464,7 @@ void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 {
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
-    m_pWindow = new ComboBoxControl( &rParent );
+    m_pWindow = VclPtr<ComboBoxControl>::Create( &rParent );
 
     // selection von rechts nach links
     AllSettings     aSettings = m_pWindow->GetSettings();
@@ -2579,7 +2579,7 @@ void DbListBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
 
-    m_pWindow = new ListBoxControl( &rParent );
+    m_pWindow = VclPtr<ListBoxControl>::Create( &rParent );
 
     // some initial properties
     Reference< XPropertySet > xModel( m_rColumn.getModel() );
@@ -2748,17 +2748,17 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
     switch (m_nControlClass)
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            m_pWindow = new CheckBoxControl(pParent);
+            m_pWindow = VclPtr<CheckBoxControl>::Create(pParent);
             m_pWindow->SetPaintTransparent( true );
             static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
 
-            m_pPainter = new CheckBoxControl(pParent);
+            m_pPainter = VclPtr<CheckBoxControl>::Create(pParent);
             m_pPainter->SetPaintTransparent( true );
             m_pPainter->SetBackground();
             break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
-            m_pWindow = new ListBoxControl(pParent);
+            m_pWindow = VclPtr<ListBoxControl>::Create(pParent);
             sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
             Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
             SetList(aItems, m_nControlClass == ::com::sun::star::form::FormComponentType::COMBOBOX);
@@ -2766,7 +2766,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
         }   break;
         case ::com::sun::star::form::FormComponentType::COMBOBOX:
         {
-            m_pWindow = new ComboBoxControl(pParent);
+            m_pWindow = VclPtr<ComboBoxControl>::Create(pParent);
 
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
@@ -2788,7 +2788,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
         }   break;
         default:
         {
-            m_pWindow  = new Edit(pParent, WB_LEFT);
+            m_pWindow  = VclPtr<Edit>::Create(pParent, WB_LEFT);
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(

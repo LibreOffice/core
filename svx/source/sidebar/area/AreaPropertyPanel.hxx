@@ -84,6 +84,12 @@ public:
     void SetGradient (const XGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex (void) const;
 
+    // constructor/destuctor
+    AreaPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     sal_uInt16                                          meLastXFS;
 
@@ -149,12 +155,6 @@ private:
     // for transparency gradient
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK( ClickTrGrHdl_Impl, ToolBox* );
-
-    // constructor/destuctor
-    AreaPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     void SetupIcons(void);
     void Initialize();

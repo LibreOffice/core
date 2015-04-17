@@ -67,7 +67,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_u
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
-    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg(pBindings, this, _pParent);
+    VclPtr<SvxSuperContourDlg> pDlg = VclPtr<SvxSuperContourDlg>::Create(pBindings, this, _pParent);
     pWindow = pDlg;
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
@@ -223,7 +223,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 {
     get(m_pTbx1, "toolbar");
     get(m_pMtfTolerance, "spinbutton");
-    m_pContourWnd = new ContourWindow(get<vcl::Window>("container"), WB_BORDER);
+    m_pContourWnd = VclPtr<ContourWindow>::Create(get<vcl::Window>("container"), WB_BORDER);
     m_pContourWnd->set_hexpand(true);
     m_pContourWnd->set_vexpand(true);
     m_pContourWnd->Show();

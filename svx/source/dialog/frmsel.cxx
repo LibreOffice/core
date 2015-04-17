@@ -209,7 +209,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
-    mpVirDev( new VirtualDevice() ),
+    mpVirDev( VclPtr<VirtualDevice>::Create() ),
     maILArrows( 16 ),
     maLeft( FRAMEBORDER_LEFT ),
     maRight( FRAMEBORDER_RIGHT ),

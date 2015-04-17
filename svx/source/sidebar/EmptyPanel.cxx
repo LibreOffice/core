@@ -28,7 +28,7 @@ namespace svx { namespace sidebar {
 
 EmptyPanel::EmptyPanel (vcl::Window* pParent)
     : Control(pParent, SVX_RES(RID_SIDEBAR_EMPTY_PANEL)),
-      maMessageControl(new FixedText(this, SVX_RES(FT_MESSAGE)))
+      maMessageControl(VclPtr<FixedText>::Create(this, SVX_RES(FT_MESSAGE)))
 {
     maMessageControl->setPosSizePixel(5,5, 250,15);
     maMessageControl->SetStyle(WB_WORDBREAK);// | WB_NOMNEMONICS);

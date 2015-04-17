@@ -385,7 +385,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pTable->set_width_request(aControlSize.Width());
     pTable->set_height_request(aControlSize.Height());
-    m_pViewData = new SvxRedlinTable(*pTable, 0);
+    m_pViewData = VclPtr<SvxRedlinTable>::Create(*pTable, 0);
 
     Link aLink=LINK( this, SvxTPView, PbClickHdl);
 
@@ -1096,8 +1096,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");
 
-    pTPFilter = new SvxTPFilter(this);
-    pTPView = new SvxTPView(this, pTopLevel);
+    pTPFilter = VclPtr<SvxTPFilter>::Create(this);
+    pTPView = VclPtr<SvxTPView>::Create(this, pTopLevel);
 
     m_nViewPageId = GetPageId("view");
     m_nFilterPageId = GetPageId("filter");

@@ -64,7 +64,7 @@ SvxRubyChildWindow::SvxRubyChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
     SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
     SfxChildWindow(_pParent, nId)
 {
-    SvxRubyDialog* pDlg = new SvxRubyDialog(pBindings, this, _pParent);
+    VclPtr<SvxRubyDialog> pDlg = VclPtr<SvxRubyDialog>::Create(pBindings, this, _pParent);
     pWindow = pDlg;
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )

@@ -76,7 +76,8 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
         throw lang::IllegalArgumentException("no SfxBindings given to TextPropertyPanel::Create", NULL, 2);
 
     return VclPtr< vcl::Window >(
-        new TextPropertyPanel(
+        VclPtr<TextPropertyPanel>::Create(
+
                 pParent,
                 rxFrame,
                 pBindings,

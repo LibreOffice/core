@@ -1079,9 +1079,9 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
 }
 
 
-FmGridControl* FmXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
+VclPtr<FmGridControl> FmXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
-    return new FmGridControl(m_xContext, pParent, this, nStyle);
+    return VclPtr<FmGridControl>::Create(m_xContext, pParent, this, nStyle);
 }
 
 
