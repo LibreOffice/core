@@ -68,8 +68,8 @@ namespace svt
 
     ToolPanelDrawer::ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )
-        ,m_pPaintDevice( new VirtualDevice( *this ) )
-        ,m_aVisualization( new DrawerVisualization(*this) )
+        ,m_pPaintDevice( VclPtr<VirtualDevice>::Create( *this ) )
+        ,m_aVisualization( VclPtr<DrawerVisualization>::Create(*this) )
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
@@ -261,7 +261,7 @@ namespace svt
                 if ( !( i_rEvent.GetFlags() & AllSettingsFlags::STYLE ) )
                     break;
                 SetSettings( Application::GetSettings() );
-                m_pPaintDevice.reset( new VirtualDevice( *this ) );
+                m_pPaintDevice.reset( VclPtr<VirtualDevice>::Create( *this ) );
 
                 // fall through.
 

@@ -655,7 +655,7 @@ void TabBar::ImplInitControls()
     {
         if (!mpImpl->mpSizer)
         {
-            mpImpl->mpSizer.reset(new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK)));
+            mpImpl->mpSizer.reset(VclPtr<ImplTabSizer>::Create( this, mnWinStyle & (WB_DRAG | WB_3DLOOK)));
         }
         mpImpl->mpSizer->Show();
     }
@@ -668,7 +668,7 @@ void TabBar::ImplInitControls()
     {
         if (!mpImpl->mpPrevButton)
         {
-            mpImpl->mpPrevButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpPrevButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
             mpImpl->mpPrevButton->SetClickHdl(aLink);
         }
         mpImpl->mpPrevButton->SetSymbol(mbMirrored ? SymbolType::NEXT : SymbolType::PREV);
@@ -676,7 +676,7 @@ void TabBar::ImplInitControls()
 
         if (!mpImpl->mpNextButton)
         {
-            mpImpl->mpNextButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpNextButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
             mpImpl->mpNextButton->SetClickHdl(aLink);
         }
         mpImpl->mpNextButton->SetSymbol(mbMirrored ? SymbolType::PREV : SymbolType::NEXT);
@@ -692,7 +692,7 @@ void TabBar::ImplInitControls()
     {
         if (!mpImpl->mpFirstButton)
         {
-            mpImpl->mpFirstButton.reset(new ImplTabButton(this));
+            mpImpl->mpFirstButton.reset(VclPtr<ImplTabButton>::Create(this));
             mpImpl->mpFirstButton->SetClickHdl(aLink);
         }
         mpImpl->mpFirstButton->SetSymbol(mbMirrored ? SymbolType::LAST : SymbolType::FIRST);
@@ -700,7 +700,7 @@ void TabBar::ImplInitControls()
 
         if (!mpImpl->mpLastButton)
         {
-            mpImpl->mpLastButton.reset(new ImplTabButton(this));
+            mpImpl->mpLastButton.reset(VclPtr<ImplTabButton>::Create(this));
             mpImpl->mpLastButton->SetClickHdl(aLink);
         }
         mpImpl->mpLastButton->SetSymbol(mbMirrored ? SymbolType::FIRST : SymbolType::LAST);
@@ -2179,7 +2179,7 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         ImplFormat();
         Update();
 
-        mpImpl->mpEdit.reset(new TabBarEdit(this, WB_CENTER));
+        mpImpl->mpEdit.reset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
         Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();

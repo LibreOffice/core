@@ -681,10 +681,10 @@ namespace svt
     RoadmapItem::RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground )
         :m_aItemPlayground( _rItemPlayground )
     {
-        mpID = new IDLabel( &_rParent, WB_WORDBREAK );
+        mpID = VclPtr<IDLabel>::Create( &_rParent, WB_WORDBREAK );
         mpID->SetTextColor( mpID->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
         mpID->Show();
-        mpDescription = new HyperLabel( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
+        mpDescription = VclPtr<HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
         mpDescription->Show();
     }
 

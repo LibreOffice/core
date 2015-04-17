@@ -1251,7 +1251,7 @@ void BrowseBox::UpdateScrollbars()
     if ( nActualCorderWidth )
     {
         if ( !getDataWindow()->pCornerWin )
-            getDataWindow()->pCornerWin = new ScrollBarBox( this, 0 );
+            getDataWindow()->pCornerWin = VclPtr<ScrollBarBox>::Create( this, 0 );
         getDataWindow()->pCornerWin->SetPosSizePixel(
             Point( GetOutputSizePixel().Width() - nActualCorderWidth, aHScroll->GetPosPixel().Y() ),
             Size( nActualCorderWidth, nCornerSize ) );

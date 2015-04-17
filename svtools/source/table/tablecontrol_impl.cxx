@@ -242,7 +242,7 @@ namespace svt { namespace table
         ,m_nLeftColumn          ( 0                             )
         ,m_nTopRow              ( 0                             )
         ,m_nCursorHidden        ( 1                             )
-        ,m_pDataWindow          ( new TableDataWindow( *this )  )
+        ,m_pDataWindow          ( VclPtr<TableDataWindow>::Create( *this )  )
         ,m_pVScroll             ( NULL                          )
         ,m_pHScroll             ( NULL                          )
         ,m_pScrollCorner        ( NULL                          )
@@ -648,7 +648,8 @@ namespace svt { namespace table
             }
             else if ( !bHaveBar && i_needBar )
             {
-                _rpBar = new ScrollBar(
+                _rpBar = VclPtr<ScrollBar>::Create(
+
                     &_rParent,
                     WB_DRAG | ( _bHorizontal ? WB_HSCROLL : WB_VSCROLL )
                 );
@@ -1169,7 +1170,7 @@ namespace svt { namespace table
         }
         else if ( !bHaveScrollCorner && bNeedScrollCorner )
         {
-            m_pScrollCorner = new ScrollBarBox( &m_rAntiImpl );
+            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( &m_rAntiImpl );
             m_pScrollCorner->SetSizePixel( Size( nScrollbarMetrics, nScrollbarMetrics ) );
             m_pScrollCorner->SetPosPixel( Point( i_dataCellPlayground.Right() + 1, i_dataCellPlayground.Bottom() + 1 ) );
             m_pScrollCorner->Show();

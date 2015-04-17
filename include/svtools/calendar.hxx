@@ -423,7 +423,7 @@ public:
     void        Select();
 
     virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
-    Calendar*   CreateCalendar( vcl::Window* pParent );
+    VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
     void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }

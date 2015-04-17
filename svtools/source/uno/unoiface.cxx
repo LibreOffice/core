@@ -68,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new MultiLineEdit( pParent, nWinBits|WB_IGNORETAB);
+            pWindow = VclPtr<MultiLineEdit>::Create( pParent, nWinBits|WB_IGNORETAB);
             static_cast< MultiLineEdit* >( pWindow )->DisableSelectionOnFocus();
             *ppNewComp = new VCLXMultiLineEdit;
         }
@@ -82,7 +82,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new FileControl( pParent, nWinBits );
+            pWindow = VclPtr<FileControl>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXFileControl;
         }
         else
@@ -93,22 +93,22 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     }
     else if (aServiceName.equalsIgnoreAsciiCase("FormattedField") )
     {
-        pWindow = new FormattedField( pParent, nWinBits );
+        pWindow = VclPtr<FormattedField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXFormattedField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("NumericField") )
     {
-        pWindow = new DoubleNumericField( pParent, nWinBits );
+        pWindow = VclPtr<DoubleNumericField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXNumericField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("LongCurrencyField") )
     {
-        pWindow = new DoubleCurrencyField( pParent, nWinBits );
+        pWindow = VclPtr<DoubleCurrencyField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXCurrencyField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("datefield") )
     {
-        pWindow = new CalendarField( pParent, nWinBits);
+        pWindow = VclPtr<CalendarField>::Create( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
@@ -125,7 +125,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new ProgressBar( pParent, nWinBits );
+            pWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXProgressBar;
         }
         else
@@ -144,7 +144,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new FixedHyperlink( pParent, nWinBits );
+            pWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXFixedHyperlink;
         }
         else

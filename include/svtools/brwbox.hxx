@@ -394,7 +394,7 @@ protected:
     void            DoHideCursor( const char *pWhoLog );
     short           GetCursorHideCount() const;
 
-    virtual BrowserHeader*  CreateHeaderBar( BrowseBox* pParent );
+    virtual VclPtr<BrowserHeader> CreateHeaderBar( BrowseBox* pParent );
 
     // HACK(virtual create is not called in Ctor)
     void            SetHeaderBar( BrowserHeader* );

@@ -207,7 +207,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
 
 vcl::Window* TreeControlPeer::createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle )
 {
-    mpTreeImpl = new UnoTreeListBoxImpl( this, pParent, nWinStyle );
+    mpTreeImpl = VclPtr<UnoTreeListBoxImpl>::Create( this, pParent, nWinStyle );
     return mpTreeImpl;
 }
 

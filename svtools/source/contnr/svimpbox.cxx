@@ -47,9 +47,9 @@ Image*  SvImpLBox::s_pDefExpanded       = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
-    : aVerSBar(new ScrollBar(pLBView, WB_DRAG | WB_VSCROLL))
-    , aHorSBar(new ScrollBar(pLBView, WB_DRAG | WB_HSCROLL))
-    , aScrBarBox(new ScrollBarBox(pLBView))
+    : aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
+    , aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
+    , aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
     , aOutputSize(0, 0)
     , aSelEng(pLBView, (FunctionSet*)0)
     , aFctSet(this, &aSelEng, pLBView)

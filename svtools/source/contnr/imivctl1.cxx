@@ -91,9 +91,9 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     WinBits nWinStyle
 ) :
     aEntries( this ),
-    aVerSBar( new ScrollBar(pCurView, WB_DRAG | WB_VSCROLL) ),
-    aHorSBar( new ScrollBar(pCurView, WB_DRAG | WB_HSCROLL) ),
-    aScrBarBox( new ScrollBarBox(pCurView) ),
+    aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
+    aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
+    aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
     aImageSize( 32, 32 ),
     pColumns( 0 )
 {
@@ -1684,7 +1684,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* pEntr
 {
     if( !pEntryPaintDev )
     {
-        pEntryPaintDev = new VirtualDevice( *pView );
+        pEntryPaintDev = VclPtr<VirtualDevice>::Create( *pView );
         pEntryPaintDev->SetFont( pView->GetFont() );
         pEntryPaintDev->SetLineColor();
         //pEntryPaintDev->SetBackground( pView->GetBackground() );
@@ -3138,7 +3138,8 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
     aPos = pView->GetPixelPos( aPos );
     aRect.SetPos( aPos );
     pView->HideFocus();
-    pEdit = new IcnViewEdit_Impl(
+    pEdit = VclPtr<IcnViewEdit_Impl>::Create(
+
         pView,
         aRect.TopLeft(),
         aRect.GetSize(),

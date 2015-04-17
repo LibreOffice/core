@@ -128,7 +128,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode 
     :Control( pParent, rId )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( new ScrollBar(this, WinBits(WB_HSCROLL)) )
+    ,aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL)) )
 {
     ConstructImpl(nMode);
 }
@@ -2284,9 +2284,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
         WB_VSCROLL | ( ( nMode & BROWSER_THUMBDRAGGING ) ? WB_DRAG : 0 );
     pVScroll = VclPtr<ScrollBar>(
                 ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
-                ? new BrowserScrollBar( this, nVScrollWinBits,
+                ? VclPtr<BrowserScrollBar>::Create( this, nVScrollWinBits,
                                         static_cast<BrowserDataWin*>( pDataWin.get() ) )
-                : new ScrollBar( this, nVScrollWinBits ),
+                : VclPtr<ScrollBar>::Create( this, nVScrollWinBits ),
                 SAL_NO_ACQUIRE);
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
@@ -2397,9 +2397,9 @@ long BrowseBox::GetDataRowHeight() const
 
 
 
-BrowserHeader* BrowseBox::CreateHeaderBar( BrowseBox* pParent )
+VclPtr<BrowserHeader> BrowseBox::CreateHeaderBar( BrowseBox* pParent )
 {
-    BrowserHeader* pNewBar = new BrowserHeader( pParent );
+    VclPtr<BrowserHeader> pNewBar = VclPtr<BrowserHeader>::Create( pParent );
     pNewBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
     return pNewBar;
 }

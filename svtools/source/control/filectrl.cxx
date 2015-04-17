@@ -36,8 +36,8 @@ using namespace ::com::sun::star::ui;
 
 FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
-    maEdit( new Edit(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
-    maButton( new PushButton( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
+    maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
+    maButton( VclPtr<PushButton>::Create( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
     maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
     mnFlags( nFlags ),
     mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )

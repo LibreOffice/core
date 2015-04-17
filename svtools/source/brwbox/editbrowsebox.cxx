@@ -127,7 +127,7 @@ namespace svt
 
         ImplInitSettings(true, true, true);
 
-        pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
+        pCheckBoxPaint = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
         pCheckBoxPaint->SetPaintTransparent( true );
         pCheckBoxPaint->SetBackground();
     }
@@ -210,7 +210,7 @@ namespace svt
     }
 
 
-    BrowserHeader* EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
+    VclPtr<BrowserHeader> EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
     {
         pHeader = imp_CreateHeaderBar(pParent);
         if (!IsUpdateMode())
@@ -221,7 +221,7 @@ namespace svt
 
     VclPtr<BrowserHeader> EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
     {
-        return new EditBrowserHeader(pParent);
+        return VclPtr<EditBrowserHeader>::Create(pParent);
     }
 
 

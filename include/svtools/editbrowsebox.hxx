@@ -505,7 +505,7 @@ namespace svt
     protected:
         BrowserHeader*  GetHeaderBar() const {return pHeader;}
 
-        virtual BrowserHeader* CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
 
         // if you want to have an own header ...
         virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent);

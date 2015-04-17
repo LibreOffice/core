@@ -290,7 +290,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
 Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK ),
-    maVirDev( new VirtualDevice(*this) ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maMapMode( MAP_100TH_MM ),
     mpSaveData(new ImplRulerData),
     mpData(NULL),

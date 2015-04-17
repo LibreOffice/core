@@ -131,9 +131,9 @@ SvInplaceEdit2::SvInplaceEdit2
 {
 
     if( bMulti )
-        pEdit = new MyMultiEdit_Impl( pParent, this );
+        pEdit = VclPtr<MyMultiEdit_Impl>::Create( pParent, this );
     else
-        pEdit = new MyEdit_Impl( pParent, this );
+        pEdit = VclPtr<MyEdit_Impl>::Create( pParent, this );
 
     vcl::Font aFont( pParent->GetFont() );
     aFont.SetTransparent( false );

@@ -92,7 +92,7 @@ void SvSimpleTableContainer::GetFocus()
 SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         m_rParentTableContainer(rParent),
-        aHeaderBar(new HeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP)),
+        aHeaderBar(VclPtr<HeaderBar>::Create(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP)),
         nHeaderItemId(1),
         bPaintFlag(true),
         aCollator(*(IntlWrapper( Application::GetSettings().GetLanguageTag() ).getCaseCollator()))

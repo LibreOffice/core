@@ -45,7 +45,7 @@ namespace svtools {
 
 ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL),
-    m_pEditWin( new ExtMultiLineEdit(this, nBits) ),
+    m_pEditWin( VclPtr<ExtMultiLineEdit>::Create(this, nBits) ),
     m_xInfoTable(new SvtDocInfoTable_Impl),
     m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
 {

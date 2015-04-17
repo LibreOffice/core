@@ -69,7 +69,7 @@ public:
     void            appendSeparator();
 
     /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
-    ValueSet*       createEmptyValueSetControl();
+    VclPtr<ValueSet> createEmptyValueSetControl();
 
     void            checkEntry( int nEntryId, bool bCheck = true );
 

@@ -499,15 +499,15 @@ namespace svt
         ,m_aNormalizer()
         ,m_eTabAlignment( i_eAlignment )
         ,m_rPanelDeck( i_rPanelDeck )
-        ,m_aRenderDevice( new VirtualDevice(i_rTabBar) )
+        ,m_aRenderDevice( VclPtr<VirtualDevice>::Create(i_rTabBar) )
         ,m_pRenderer()
         ,m_aHoveredItem()
         ,m_aFocusedItem()
         ,m_bMouseButtonDown( false )
         ,m_aItems()
         ,m_bItemsDirty( true )
-        ,m_aScrollBack( new PushButton(&i_rTabBar, WB_BEVELBUTTON) )
-        ,m_aScrollForward( new PushButton(&i_rTabBar, WB_BEVELBUTTON) )
+        ,m_aScrollBack( VclPtr<PushButton>::Create(&i_rTabBar, WB_BEVELBUTTON) )
+        ,m_aScrollForward( VclPtr<PushButton>::Create(&i_rTabBar, WB_BEVELBUTTON) )
         ,m_nScrollPosition( 0 )
     {
 #ifdef WNT

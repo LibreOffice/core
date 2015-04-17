@@ -69,7 +69,7 @@ namespace svt
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
             :m_rDeck( i_rDeck )
-            ,m_aPanelAnchor( new vcl::Window(&i_rDeck, WB_DIALOGCONTROL | WB_CHILDDLGCTRL) )
+            ,m_aPanelAnchor( VclPtr<vcl::Window>::Create(&i_rDeck, WB_DIALOGCONTROL | WB_CHILDDLGCTRL) )
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()

@@ -821,9 +821,9 @@ void ToolbarMenu::appendSeparator()
 
 
 /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
-ValueSet* ToolbarMenu::createEmptyValueSetControl()
+VclPtr<ValueSet> ToolbarMenu::createEmptyValueSetControl()
 {
-    ValueSet* pSet = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    VclPtr<ValueSet> pSet = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     pSet->EnableFullItemMode( false );
     pSet->SetColor( GetControlBackground() );
     pSet->SetHighlightHdl( LINK( this, ToolbarMenu, HighlightHdl ) );

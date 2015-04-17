@@ -96,7 +96,7 @@ void ValueSet::ImplInit()
 
 ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
     Control( pParent, nWinStyle ),
-    maVirDev( new VirtualDevice(*this) ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -116,7 +116,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeValueSet(vcl::Window *
 
 ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
     Control( pParent, rResId ),
-    maVirDev( new VirtualDevice(*this) ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -206,7 +206,7 @@ void ValueSet::ImplInitScrollBar()
     {
         if ( !mxScrollBar.get() )
         {
-            mxScrollBar.reset(new ScrollBar( this, WB_VSCROLL | WB_DRAG ));
+            mxScrollBar.reset(VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG ));
             mxScrollBar->SetScrollHdl( LINK( this, ValueSet, ImplScrollHdl ) );
         }
         else

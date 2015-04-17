@@ -583,7 +583,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mbShowHeader        ( (nFlags & FILEVIEW_SHOW_NONE) == 0 )
 {
     Size aBoxSize = pParentWin->GetSizePixel();
-    mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    mpHeaderBar = VclPtr<HeaderBar>::Create( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
@@ -1581,7 +1581,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
 
 {
     maAllFilter = "*.*";
-    mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
+    mpView = VclPtr<ViewTabListBox_Impl>::Create( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }
 

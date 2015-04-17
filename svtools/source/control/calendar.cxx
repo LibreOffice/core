@@ -2244,7 +2244,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
     {
         if ( !mpTodayBtn )
         {
-            mpTodayBtn = new PushButton( this, WB_NOPOINTERFOCUS );
+            mpTodayBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
             OUString aTodayText(SVT_RESSTR(STR_SVT_CALENDAR_TODAY));
             mpTodayBtn->SetText( aTodayText );
             Size aSize;
@@ -2272,7 +2272,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
     {
         if ( !mpNoneBtn )
         {
-            mpNoneBtn = new PushButton( this, WB_NOPOINTERFOCUS );
+            mpNoneBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
             OUString aNoneText(SVT_RESSTR(STR_SVT_CALENDAR_NONE));
             mpNoneBtn->SetText( aNoneText );
             Size aSize;
@@ -2339,7 +2339,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     {
         if ( !mpFixedLine )
         {
-            mpFixedLine = new FixedLine( this );
+            mpFixedLine = VclPtr<FixedLine>::Create( this );
             mpFixedLine->Show();
         }
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
@@ -2517,9 +2517,9 @@ bool CalendarField::ShowDropDown( bool bShow )
 
 
 
-Calendar* CalendarField::CreateCalendar( vcl::Window* pParent )
+VclPtr<Calendar> CalendarField::CreateCalendar( vcl::Window* pParent )
 {
-    return new Calendar( pParent, mnCalendarStyle | WB_TABSTOP );
+    return VclPtr<Calendar>::Create( pParent, mnCalendarStyle | WB_TABSTOP );
 }
 
 
@@ -2528,7 +2528,7 @@ Calendar* CalendarField::GetCalendar()
 {
     if ( !mpFloatWin )
     {
-        mpFloatWin = new ImplCFieldFloatWin( this );
+        mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, CalendarField, ImplPopupModeEndHdl ) );
         mpCalendar = CreateCalendar( mpFloatWin );
         mpCalendar->SetPosPixel( Point() );

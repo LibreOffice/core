@@ -65,9 +65,9 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
             {
                 if ( (pPrinter->GetName() == pInfo->GetPrinterName()) &&
                      (pPrinter->GetDriverName() == pInfo->GetDriver()) )
-                    pTempPrinter = new Printer( pPrinter->GetJobSetup() );
+                    pTempPrinter = VclPtr<Printer>::Create( pPrinter->GetJobSetup() );
                 else
-                    pTempPrinter = new Printer( *pInfo );
+                    pTempPrinter = VclPtr<Printer>::Create( *pInfo );
             }
             else
             {
@@ -75,7 +75,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                      (pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
                 {
                     pTempPrinter.disposeAndClear();
-                    pTempPrinter = new Printer( *pInfo );
+                    pTempPrinter = VclPtr<Printer>::Create( *pInfo );
                 }
             }
 
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 {
     if ( !mpTempPrinter )
-        mpTempPrinter = new Printer( mpPrinter->GetJobSetup() );
+        mpTempPrinter = VclPtr<Printer>::Create( mpPrinter->GetJobSetup() );
     mpTempPrinter->Setup( this );
 
     return 0;

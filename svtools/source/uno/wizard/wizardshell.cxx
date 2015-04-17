@@ -192,7 +192,7 @@ namespace svt { namespace uno
         if ( pPage == NULL )
         {
             // fallback for ill-behaved clients: empty page
-            pPage = new TabPage( this, 0 );
+            pPage = VclPtr<TabPage>::Create( this, 0 );
             pPage->SetSizePixel( LogicToPixel( Size( 280, 185 ), MAP_APPFONT ) );
         }
 
