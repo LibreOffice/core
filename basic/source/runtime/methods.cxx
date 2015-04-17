@@ -4615,19 +4615,19 @@ RTLFUNC(MsgBox)
     switch( nType )
     {
     case 16:
-        pBox.reset(new ErrorBox( pParent, nWinBits, aMsg ));
+        pBox.reset(VclPtr<ErrorBox>::Create( pParent, nWinBits, aMsg ));
         break;
     case 32:
-        pBox.reset(new QueryBox( pParent, nWinBits, aMsg ));
+        pBox.reset(VclPtr<QueryBox>::Create( pParent, nWinBits, aMsg ));
         break;
     case 48:
-        pBox.reset(new WarningBox( pParent, nWinBits, aMsg ));
+        pBox.reset(VclPtr<WarningBox>::Create( pParent, nWinBits, aMsg ));
         break;
     case 64:
-        pBox.reset(new InfoBox( pParent, nWinBits, aMsg ));
+        pBox.reset(VclPtr<InfoBox>::Create( pParent, nWinBits, aMsg ));
         break;
     default:
-        pBox.reset(new MessBox( pParent, nWinBits, aTitle, aMsg ));
+        pBox.reset(VclPtr<MessBox>::Create( pParent, nWinBits, aTitle, aMsg ));
     }
     pBox->SetText( aTitle );
     sal_uInt16 nRet = (sal_uInt16)pBox->Execute();

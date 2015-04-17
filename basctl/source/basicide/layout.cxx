@@ -173,7 +173,7 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     bVertical(eSide == Left || eSide == Right),
     bLower(eSide == Left || eSide == Top),
     nSize(0),
-    aSplitter(new Splitter(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
+    aSplitter(VclPtr<Splitter>::Create(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
 {
     InitSplitter(*aSplitter.get());
 }
@@ -195,7 +195,7 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
     // splitter
     if (!vItems.empty())
     {
-        aItem.pSplit = new Splitter(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
+        aItem.pSplit = VclPtr<Splitter>::Create(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
         aItem.pSplit->SetSplitPosPixel(aItem.nStartPos - nSplitThickness);
         InitSplitter(*aItem.pSplit);
     }

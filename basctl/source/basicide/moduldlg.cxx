@@ -518,25 +518,25 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
         OString sPageName(pTabCtrl->GetPageName(nId));
-        TabPage* pNewTabPage = 0;
+        VclPtr<TabPage> pNewTabPage;
         if (sPageName == "modules")
         {
-            ObjectPage* pObjectPage = new ObjectPage(pTabCtrl, "ModulePage", BROWSEMODE_MODULES);
-            pNewTabPage = pObjectPage;
+            VclPtrInstance<ObjectPage> pObjectPage(pTabCtrl, "ModulePage", BROWSEMODE_MODULES);
+            pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
         }
         else if (sPageName == "dialogs")
         {
-            ObjectPage* pObjectPage = new ObjectPage( pTabCtrl, "DialogPage", BROWSEMODE_DIALOGS );
-            pNewTabPage = pObjectPage;
+            VclPtrInstance<ObjectPage> pObjectPage( pTabCtrl, "DialogPage", BROWSEMODE_DIALOGS );
+            pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
         }
         else if (sPageName == "libraries")
         {
-            LibPage* pLibPage = new LibPage( pTabCtrl );
-            pNewTabPage = pLibPage;
+            VclPtrInstance<LibPage> pLibPage( pTabCtrl );
+            pNewTabPage.reset(pLibPage);
             pLibPage->SetTabDlg( this );
         }
         else

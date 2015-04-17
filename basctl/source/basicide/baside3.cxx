@@ -1427,7 +1427,7 @@ void DialogWindowLayout::ShowPropertyBrowser ()
     if (!pPropertyBrowser)
     {
         // creating
-        pPropertyBrowser = new PropBrw(*this);
+        pPropertyBrowser = VclPtr<PropBrw>::Create(*this);
         pPropertyBrowser->Show();
         // after OnFirstSize():
         if (HasSize())

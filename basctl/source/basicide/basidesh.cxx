@@ -155,11 +155,11 @@ unsigned Shell::nShellCount = 0;
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     SfxViewShell( pFrame_, ShellFlags ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-    aHScrollBar( new ScrollBar(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
-    aVScrollBar( new ScrollBar(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
-    aScrollBarBox( new ScrollBarBox(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
+    aHScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
+    aVScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
+    aScrollBarBox( VclPtr<ScrollBarBox>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
     pLayout(0),
-    aObjectCatalog(new ObjectCatalog(&GetViewFrame()->GetWindow())),
+    aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
 {
@@ -195,7 +195,7 @@ void Shell::Init()
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     bCreatingWindow = false;
 
-    pTabBar.reset(new TabBar(&GetViewFrame()->GetWindow()));
+    pTabBar.reset(VclPtr<TabBar>::Create(&GetViewFrame()->GetWindow()));
     pTabBar->SetSplitHdl( LINK( this, Shell, TabBarSplitHdl ) );
     bTabBarSplitted = false;
 

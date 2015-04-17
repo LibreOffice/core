@@ -227,7 +227,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bHighlightning(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
-    pCodeCompleteWnd(new CodeCompleteWindow(this))
+    pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     SetPointer( Pointer( POINTER_TEXT ) );
@@ -1599,11 +1599,11 @@ namespace
 WatchWindow::WatchWindow (Layout* pParent) :
     DockingWindow(pParent),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
-    aXEdit( new ExtendedEdit(this, IDEResId( RID_EDT_WATCHEDIT )) ),
-    aRemoveWatchButton( new ImageButton(this, IDEResId( RID_IMGBTN_REMOVEWATCH )) ),
-    aTreeListBox( new WatchTreeListBox(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
+    aXEdit( VclPtr<ExtendedEdit>::Create(this, IDEResId( RID_EDT_WATCHEDIT )) ),
+    aRemoveWatchButton( VclPtr<ImageButton>::Create(this, IDEResId( RID_IMGBTN_REMOVEWATCH )) ),
+    aTreeListBox( VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
                                   | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
-    aHeaderBar( new HeaderBar( this, WB_BUTTONSTYLE | WB_BORDER ) )
+    aHeaderBar( VclPtr<HeaderBar>::Create( this, WB_BUTTONSTYLE | WB_BORDER ) )
 {
     aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
     aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
@@ -1902,7 +1902,7 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 
 StackWindow::StackWindow (Layout* pParent) :
     DockingWindow(pParent),
-    aTreeListBox( new SvTreeListBox(this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP) ),
+    aTreeListBox( VclPtr<SvTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
     aTreeListBox->SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
@@ -2044,10 +2044,10 @@ void StackWindow::UpdateCalls()
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
-    aBrkWindow(new BreakPointWindow(this, pParent)),
-    aLineNumberWindow(new LineNumberWindow(this, pParent)),
-    aEdtWindow(new EditorWindow(this, pParent)),
-    aEWVScrollBar( new ScrollBar(this, WB_VSCROLL | WB_DRAG) )
+    aBrkWindow(VclPtr<BreakPointWindow>::Create(this, pParent)),
+    aLineNumberWindow(VclPtr<LineNumberWindow>::Create(this, pParent)),
+    aEdtWindow(VclPtr<EditorWindow>::Create(this, pParent)),
+    aEWVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) )
 {
     aEdtWindow->Show();
     aBrkWindow->Show();
@@ -2862,7 +2862,7 @@ void CodeCompleteListBox::HideAndRestoreFocus()
 CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
 : Window( pPar ),
 pParent( pPar ),
-pListBox( new CodeCompleteListBox(this) )
+pListBox( VclPtr<CodeCompleteListBox>::Create(this) )
 {
     SetSizePixel( Size(151,151) ); //default, later it changes
     InitListBox();

@@ -30,8 +30,8 @@ namespace basctl
 
 ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
     DockingWindow(pParent),
-    aTitle(new FixedText(this)),
-    aTree(new TreeListBox(this, IDEResId(RID_TLB_MACROS)))
+    aTitle(VclPtr<FixedText>::Create(this)),
+    aTree(VclPtr<TreeListBox>::Create(this, IDEResId(RID_TLB_MACROS)))
 {
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
     SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());

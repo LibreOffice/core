@@ -77,8 +77,8 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
                 // new dialog window
                 if (!pDialogLayout)
-                    pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
-                pWin = new DialogWindow(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
+                    pDialogLayout.reset(VclPtr<DialogWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
+                pWin = VclPtr<DialogWindow>::Create(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
                 nKey = InsertWindowInTable( pWin );
             }
         }

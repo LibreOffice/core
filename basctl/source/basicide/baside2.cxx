@@ -192,7 +192,7 @@ ModulWindow::ModulWindow (
     BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
     nValid(ValidWindow),
-    aXEditorWindow(new ComplexEditorWindow(this)),
+    aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this)),
     m_aModule(aModule)
 {
     aXEditorWindow->Show();
@@ -1470,8 +1470,8 @@ void ModulWindow::UpdateModule ()
 ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
-    aWatchWindow(new WatchWindow(this)),
-    aStackWindow(new StackWindow(this)),
+    aWatchWindow(VclPtr<WatchWindow>::Create(this)),
+    aStackWindow(VclPtr<StackWindow>::Create(this)),
     rObjectCatalog(rObjectCatalog_)
 { }
 

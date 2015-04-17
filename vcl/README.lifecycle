@@ -189,6 +189,12 @@ or:
 		  in 'get()' calls - to avoid needing explicit 'clear'
 		  code in destructors.
 
+	* VclBuilder 'makeFoo' methods
+		+ these should return VclPtr<> types and have their
+		  signatures adjusted en-masse.
+		+ currently we use a VclPtr<> constructor with
+		  SAL_NO_ACQUIRE inside the builder.
+
 ---------- FAQ / debugging hints ----------
 
 ** Compile with dbgutil
@@ -252,4 +258,5 @@ or:
 
 	   In simple cases, if we allocate the widget with VclPtrInstance
 	   or VclPtr<Foo>::Create - then we need to disposeAndClear it too.
+
 

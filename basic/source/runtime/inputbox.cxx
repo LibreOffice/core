@@ -55,8 +55,8 @@ SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,
         long nXTwips, long nYTwips ) :
     ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-    aEdit( new Edit(this,  WB_LEFT | WB_BORDER) ),
-    aOk( new OKButton(this) ), aCancel( new CancelButton(this) ), aPromptText( new FixedText(this, WB_WORDBREAK) )
+    aEdit( VclPtr<Edit>::Create(this,  WB_LEFT | WB_BORDER) ),
+    aOk( new OKButton(this) ), aCancel( new CancelButton(this) ), aPromptText( VclPtr<FixedText>::Create(this, WB_WORDBREAK) )
 {
     SetMapMode( MapMode( MAP_APPFONT ) );
     Size aDlgSizeApp( 280, 80 );

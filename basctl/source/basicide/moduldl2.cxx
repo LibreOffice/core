@@ -838,7 +838,7 @@ void LibPage::InsertLib()
                 // library import dialog
                 if ( !pLibDlg )
                 {
-                    pLibDlg.reset(new LibDialog( this ));
+                    pLibDlg.reset(VclPtr<LibDialog>::Create( this ));
                     pLibDlg->SetStorageName( aURLObj.getName() );
                     pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
                 }

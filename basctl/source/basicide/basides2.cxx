@@ -166,8 +166,8 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
             {
                 // new module window
                 if (!pModulLayout)
-                    pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
-                pWin = new ModulWindow(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
+                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
+                pWin = VclPtr<ModulWindow>::Create(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }
             else // we've gotten called recursively ( via listener from createModule above ), get outta here
