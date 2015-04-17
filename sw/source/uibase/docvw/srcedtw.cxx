@@ -487,18 +487,18 @@ void  TextViewOutWin::Paint( const Rectangle& rRect )
 void SwSrcEditWindow::CreateTextEngine()
 {
     const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
-    pOutWin = new TextViewOutWin(this, 0);
+    pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
     pOutWin->SetBackground(Wallpaper(rCol));
     pOutWin->SetPointer(Pointer(POINTER_TEXT));
     pOutWin->Show();
 
     // create Scrollbars
-    pHScrollbar = new ScrollBar(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
+    pHScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
         pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
     pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->Show();
 
-    pVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    pVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
         pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
     pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->EnableDrag();

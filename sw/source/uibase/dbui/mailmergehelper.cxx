@@ -187,7 +187,7 @@ struct  SwAddressPreview_Impl
 
 SwAddressPreview::SwAddressPreview(vcl::Window* pParent, WinBits nStyle)
     : Window( pParent, nStyle )
-    , aVScrollBar(new ScrollBar(this, WB_VSCROLL))
+    , aVScrollBar(VclPtr<ScrollBar>::Create(this, WB_VSCROLL))
     , pImpl(new SwAddressPreview_Impl())
 {
     aVScrollBar->SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
@@ -621,7 +621,7 @@ OUString SwAuthenticator::getPassword(  ) throw (RuntimeException, std::exceptio
     if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
        SfxPasswordDialog* pPasswdDlg =
-                new SfxPasswordDialog( m_pParentWindow );
+                VclPtr<SfxPasswordDialog>::Create( m_pParentWindow );
        pPasswdDlg->SetMinLen( 0 );
        if(RET_OK == pPasswdDlg->Execute())
             m_aPassword = pPasswdDlg->GetPassword();

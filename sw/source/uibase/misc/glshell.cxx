@@ -248,7 +248,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0 );
-            SfxPrinter* pPrinter = new SfxPrinter( pSet );
+            VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( pSet );
 
             // and append it to the document.
             xDocSh->GetDoc()->getIDocumentDeviceAccess().setPrinter( pPrinter, true, true );

@@ -136,7 +136,7 @@ using namespace ::sfx2;
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 vcl::Window *pParent, const SfxItemSet &rSet)
 {
-    SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
+    VclPtr<SfxDocumentInfoDialog> pDlg = VclPtr<SfxDocumentInfoDialog>::Create(pParent, rSet);
     //only with statistics, when this document is being shown, not
     //from within the Doc-Manager
     SwDocShell* pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
@@ -501,7 +501,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SvtPathOptions aPathOpt;
                     ScopedVclPtr<SfxNewFileDialog> pNewFileDlg(
-                        new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE));
+                        VclPtr<SfxNewFileDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE));
                     pNewFileDlg->SetTemplateFlags(nFlags);
 
                     nRet = pNewFileDlg->Execute();
@@ -648,7 +648,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SfxPrinter* pTemp = GetDoc()->getIDocumentDeviceAccess().getPrinter( false );
                     if(pTemp)
-                        pSavePrinter = new SfxPrinter(*pTemp);
+                        pSavePrinter = VclPtr<SfxPrinter>::Create(*pTemp);
                     bSetModified = IsModified() || pSrcView->IsModified();
                     if(pSrcView->IsModified()||pSrcView->HasSourceSaved())
                     {

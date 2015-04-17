@@ -141,7 +141,7 @@ namespace pcr
     {
         m_aFtTitle->SetZOrder(pRefWindow,nFlags);
         if ( m_pControlWindow )
-            m_pControlWindow->SetZOrder( (vcl::Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
+            m_pControlWindow->SetZOrder( m_aFtTitle.get(), WINDOW_ZORDER_BEHIND );
 
         if ( m_pBrowseButton && m_pControlWindow )
             m_pBrowseButton->SetZOrder( m_pControlWindow, WINDOW_ZORDER_BEHIND );

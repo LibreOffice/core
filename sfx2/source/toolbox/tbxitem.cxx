@@ -1335,7 +1335,7 @@ void SfxPopupWindow::StartCascading()
 
 
 
-SfxPopupWindow* SfxPopupWindow::Clone() const
+VclPtr<SfxPopupWindow> SfxPopupWindow::Clone() const
 
 /*  [Description]
 

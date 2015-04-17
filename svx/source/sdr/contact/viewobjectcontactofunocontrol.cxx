@@ -1038,7 +1038,7 @@ namespace sdr { namespace contact {
 
         if ( m_aControl.is() )
         {
-            if ( m_pOutputDeviceForWindow.get() == const_cast<OutputDevice *>( &_rDevice ) )
+            if ( m_pOutputDeviceForWindow.get() == &_rDevice )
                 return true;
 
             // Somebody requested a control for a new device, which means either of

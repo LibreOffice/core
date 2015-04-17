@@ -37,7 +37,7 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SwSyncBtnDlg( pBindings, this, _pParent);
+    pWindow = VclPtr<SwSyncBtnDlg>::Create( pBindings, this, _pParent);
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {

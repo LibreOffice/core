@@ -153,7 +153,7 @@ public:
                             virtual ~SfxPopupWindow();
     virtual void            dispose() SAL_OVERRIDE;
 
-    virtual SfxPopupWindow* Clone() const;
+    virtual VclPtr<SfxPopupWindow> Clone() const;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void                    StartCascading();

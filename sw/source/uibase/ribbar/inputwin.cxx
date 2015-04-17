@@ -58,8 +58,8 @@ SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OB
 
 SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
-    aPos(       new Edit(this,       SW_RES(ED_POS))),
-    aEdit(      new InputEdit(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
+    aPos(       VclPtr<Edit>::Create(this,       SW_RES(ED_POS))),
+    aEdit(      VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
     aPopMenu(   SW_RES(MN_CALC_POPUP)),
     pMgr(0),
     pWrtShell(0),
@@ -625,7 +625,7 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 SfxChildWindow( _pParent, nId )
 {
     pDispatch = pBindings->GetDispatcher();
-    pWindow = new SwInputWindow( _pParent, pBindings );
+    pWindow = VclPtr<SwInputWindow>::Create( _pParent, pBindings );
     static_cast<SwInputWindow*>(pWindow.get())->ShowWin();
     eChildAlignment = SfxChildAlignment::LOWESTTOP;
 }

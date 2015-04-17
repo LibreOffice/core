@@ -67,7 +67,7 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
                                             SfxChildWinInfo* pInfo ) :
     SwChildWinWrapper( _pParent, nId )
 {
-    pWindow = new SwModelessRedlineAcceptDlg( pBindings, this, _pParent);
+    pWindow = VclPtr<SwModelessRedlineAcceptDlg>::Create( pBindings, this, _pParent);
 
     static_cast<SwModelessRedlineAcceptDlg *>(pWindow.get())->Initialize(pInfo);
 }

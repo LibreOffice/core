@@ -86,7 +86,7 @@ public:
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
-    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -166,7 +166,7 @@ void TableWindow::dispose()
     SfxPopupWindow::dispose();
 }
 
-SfxPopupWindow* TableWindow::Clone() const
+VclPtr<SfxPopupWindow> TableWindow::Clone() const
 {
     return new TableWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
@@ -430,7 +430,7 @@ public:
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
-    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
 
 
@@ -472,7 +472,7 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
 
 
 
-SfxPopupWindow* ColumnsWindow::Clone() const
+VclPtr<SfxPopupWindow> ColumnsWindow::Clone() const
 {
     return new ColumnsWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }

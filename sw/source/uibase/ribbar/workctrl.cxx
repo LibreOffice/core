@@ -398,7 +398,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
-    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), this, 0);
+    m_pToolBox = VclPtr<SwScrollNaviToolBox>::Create(get<vcl::Window>("box"), this, 0);
     get(m_pInfoField, "label");
 
     sal_uInt16 i;
@@ -477,9 +477,9 @@ void SwScrollNaviPopup::ApplyImageList()
     }
 }
 
-SfxPopupWindow* SwScrollNaviPopup::Clone() const
+VclPtr<SfxPopupWindow> SwScrollNaviPopup::Clone() const
 {
-    return new SwScrollNaviPopup( GetId(), GetFrame(), GetParent() );
+    return VclPtr<SwScrollNaviPopup>::Create( GetId(), GetFrame(), GetParent() );
 }
 
 IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)

@@ -105,7 +105,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
-    m_pLine = new SwBreakDashedLine( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
+    m_pLine = VclPtr<SwBreakDashedLine>::Create( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
 
     // Create the popup menu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );

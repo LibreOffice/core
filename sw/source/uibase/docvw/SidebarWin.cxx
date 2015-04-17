@@ -356,13 +356,13 @@ void SwSidebarWin::InitControls()
     AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     // actual window which holds the user text
-    mpSidebarTxtControl = new SidebarTxtControl( *this,
+    mpSidebarTxtControl = VclPtr<SidebarTxtControl>::Create( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
     mpSidebarTxtControl->SetPointer(Pointer(POINTER_TEXT));
 
     // window controls for author and date
-    mpMetadataAuthor = new Edit( this, 0 );
+    mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );
     mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataAuthor->SetReadOnly();
@@ -381,7 +381,7 @@ void SwSidebarWin::InitControls()
         mpMetadataAuthor->SetSettings(aSettings);
     }
 
-    mpMetadataDate = new Edit( this, 0 );
+    mpMetadataDate = VclPtr<Edit>::Create( this, 0 );
     mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataDate->SetReadOnly();
@@ -415,7 +415,7 @@ void SwSidebarWin::InitControls()
     mpOutlinerView->SetAttribs(DefaultItem());
 
     //create Scrollbars
-    mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, SwSidebarWin, ScrollHdl));

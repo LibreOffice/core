@@ -950,9 +950,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 if( ! pParent )
                     pParent = pSourceWindow;
                 if( bMergeShell )
-                    pProgressDlg = new CreateMonitor( pParent, pParent != pSourceWindow );
+                    pProgressDlg = VclPtr<CreateMonitor>::Create( pParent, pParent != pSourceWindow );
                 else {
-                    pProgressDlg = new PrintMonitor( pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
+                    pProgressDlg = VclPtr<PrintMonitor>::Create( pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
                     static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
                 }
                 pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
