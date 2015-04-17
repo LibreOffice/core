@@ -1457,28 +1457,35 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
             m_pLbHatchBckgrdColor->SelectEntry( rColorItem.GetColorValue() );
         }
 
-        if (SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_FILLGRADIENT))
+        SfxItemState const eGradState(rAttrs->GetItemState(XATTR_FILLGRADIENT));
+        XFillGradientItem const* pGradientItem(nullptr);
+        if (SfxItemState::DONTCARE != eGradState)
         {
-            XFillGradientItem const& rGradientItem(
-                static_cast<const XFillGradientItem&>(
-                                    rAttrs->Get(XATTR_FILLGRADIENT)) );
-            OUString  const aString( rGradientItem.GetName() );
-            XGradient const aGradient( rGradientItem.GetGradientValue() );
-
+            pGradientItem = &static_cast<const XFillGradientItem&>(
+                                    rAttrs->Get(XATTR_FILLGRADIENT));
+            OUString  const aString( pGradientItem->GetName() );
+            XGradient const aGradient( pGradientItem->GetGradientValue() );
             m_pLbGradient->SelectEntryByList(pGradientList, aString, aGradient);
         }
-        if (!m_pLbGradient->GetSelectEntryCount())
+        if (!m_pLbGradient->GetSelectEntryCount()
+            && (SfxItemState::DEFAULT == eGradState
+                || (pGradientItem && pGradientItem->GetName().isEmpty())))
         {   // avoid relying on pool default - cannot export that
             m_pLbGradient->SelectEntryPos(0); // anything better than nothing
             isMissingGradient = true;
         }
 
-        if (SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_FILLHATCH))
+        SfxItemState const eHatchState(rAttrs->GetItemState(XATTR_FILLHATCH));
+        XFillHatchItem const* pHatch(nullptr);
+        if (SfxItemState::DONTCARE != eHatchState)
         {
-            m_pLbHatching->SelectEntry( static_cast<const XFillHatchItem&>(
-                            rAttrs->Get(XATTR_FILLHATCH)).GetName() );
+            pHatch = &static_cast<const XFillHatchItem&>(
+                                rAttrs->Get(XATTR_FILLHATCH));
+            m_pLbHatching->SelectEntry(pHatch->GetName());
         }
-        if (!m_pLbHatching->GetSelectEntryCount())
+        if (!m_pLbHatching->GetSelectEntryCount()
+            && (SfxItemState::DEFAULT == eHatchState
+                || (pHatch && pHatch->GetName().isEmpty())))
         {   // avoid relying on pool default - cannot export that
             m_pLbHatching->SelectEntryPos(0); // anything better than nothing
             isMissingHatching = true;
@@ -1489,14 +1496,17 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
                         rAttrs->Get(XATTR_FILLBACKGROUND)).GetValue() );
         }
 
-        if (SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_FILLBITMAP))
+        SfxItemState const eBitmapState(rAttrs->GetItemState(XATTR_FILLBITMAP));
+        XFillBitmapItem const* pBitmapItem(nullptr);
+        if (SfxItemState::DONTCARE != eBitmapState)
         {
-            XFillBitmapItem const& rBitmapItem(
-                    static_cast<const XFillBitmapItem&>(
-                        rAttrs->Get(XATTR_FILLBITMAP)));
-            m_pLbBitmap->SelectEntry(rBitmapItem.GetName());
+            pBitmapItem = &static_cast<const XFillBitmapItem&>(
+                            rAttrs->Get(XATTR_FILLBITMAP));
+            m_pLbBitmap->SelectEntry(pBitmapItem->GetName());
         }
-        if (!m_pLbBitmap->GetSelectEntryCount())
+        if (!m_pLbBitmap->GetSelectEntryCount()
+            && (SfxItemState::DEFAULT == eBitmapState
+                || (pBitmapItem && pBitmapItem->GetName().isEmpty())))
         {   // avoid relying on pool default - cannot export that
             m_pLbBitmap->SelectEntryPos(0); // anything better than nothing
             isMissingBitmap = true;
