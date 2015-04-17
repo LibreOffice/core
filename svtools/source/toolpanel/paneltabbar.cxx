@@ -515,7 +515,7 @@ namespace svt
             // this mode requires the NWF framework to be able to render those items onto a virtual
             // device. For some frameworks (some GTK themes, in particular), this is known to fail.
             // So, be on the safe side for the moment.
-            m_pRenderer.reset( new NWFTabItemRenderer( m_aRenderDevice ) );
+            m_pRenderer.reset( new NWFTabItemRenderer( *m_aRenderDevice.get() ) );
         else
 #endif
         if ( m_aRenderDevice->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )

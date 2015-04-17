@@ -709,6 +709,10 @@ namespace sfx2
     {
     }
 
+    ModuleTaskPane::~ModuleTaskPane()
+    {
+        disposeOnce();
+    }
 
     bool ModuleTaskPane::ModuleHasToolPanels( const Reference< XFrame >& i_rDocumentFrame )
     {

@@ -84,6 +84,7 @@ class SVX_DLLPUBLIC FrameSelector : public Control
 {
 public:
     FrameSelector(vcl::Window* pParent);
+    virtual ~FrameSelector();
 
     /** Initializes the control, enables/disables frame borders according to flags. */
     void                Initialize( FrameSelFlags nFlags );

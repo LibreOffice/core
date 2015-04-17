@@ -791,6 +791,11 @@ FrameSelector::FrameSelector(vcl::Window* pParent)
     EnableRTL( false ); // #107808# don't mirror the mouse handling
 }
 
+FrameSelector::~FrameSelector()
+{
+    disposeOnce();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFrameSelector(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FrameSelector(pParent);
