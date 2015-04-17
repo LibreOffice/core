@@ -520,7 +520,7 @@ UpdateDialog::UpdateDialog(
     get(m_pthrobber, "THROBBER");
     get(m_pUpdate, "UPDATE_LABEL");
     get(m_pContainer, "UPDATES_CONTAINER");
-    m_pUpdates = new UpdateDialog::CheckListBox(m_pContainer, *this);
+    m_pUpdates = VclPtr<UpdateDialog::CheckListBox>::Create(m_pContainer, *this);
     Size aSize(LogicToPixel(Size(240, 51), MAP_APPFONT));
     m_pUpdates->set_width_request(aSize.Width());
     m_pUpdates->set_height_request(aSize.Height());

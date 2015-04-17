@@ -814,7 +814,7 @@ void ExtensionCmdQueue::Thread::execute()
 
                 const SolarMutexGuard guard;
                 ScopedVclPtr<MessageDialog> box(
-                    new MessageDialog(currentCmdEnv->activeDialog(), msg));
+                    VclPtr<MessageDialog>::Create(currentCmdEnv->activeDialog(), msg));
                 if ( m_pDialogHelper )
                     box->SetText( m_pDialogHelper->getWindow()->GetText() );
                 box->Execute();
@@ -923,12 +923,10 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 void ExtensionCmdQueue::Thread::_checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    ScopedVclPtr<UpdateDialog> pUpdateDialog;
-    std::vector< UpdateData > vData;
-
     const SolarMutexGuard guard;
 
-    pUpdateDialog = new UpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, vExtensionList, &vData );
+    std::vector< UpdateData > vData;
+    ScopedVclPtrInstance<UpdateDialog> pUpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, vExtensionList, &vData );
 
     pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 

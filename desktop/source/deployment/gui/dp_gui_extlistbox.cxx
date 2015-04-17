@@ -201,7 +201,7 @@ void ExtensionBox_Impl::Init()
 {
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
 
-    m_pScrollBar = new ScrollBar( this, WB_VERT );
+    m_pScrollBar = VclPtr<ScrollBar>::Create( this, WB_VERT );
     m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
     m_pScrollBar->EnableDrag();
 
@@ -544,7 +544,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEnt
     // Init publisher link here
     if ( !rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty() )
     {
-        rEntry->m_pPublisher = new FixedHyperlink( this );
+        rEntry->m_pPublisher = VclPtr<FixedHyperlink>::Create( this );
         rEntry->m_pPublisher->SetBackground();
         rEntry->m_pPublisher->SetPaintTransparent( true );
         rEntry->m_pPublisher->SetURL( rEntry->m_sPublisherURL );

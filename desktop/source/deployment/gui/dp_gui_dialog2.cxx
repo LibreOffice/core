@@ -166,9 +166,9 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 
     m_pParent = pParentDialog;
 
-    m_pOptionsBtn = new PushButton( this, WB_TABSTOP );
-    m_pEnableBtn = new PushButton( this, WB_TABSTOP );
-    m_pRemoveBtn = new PushButton( this, WB_TABSTOP );
+    m_pOptionsBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
+    m_pEnableBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
+    m_pRemoveBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
 
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
     m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );

@@ -112,7 +112,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     {
         if ( !m_pUpdReqDialog )
         {
-            m_pUpdReqDialog = new UpdateRequiredDialog( NULL, this );
+            m_pUpdReqDialog = VclPtr<UpdateRequiredDialog>::Create( nullptr, this );
             delete m_pExecuteCmdQueue;
             m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pUpdReqDialog, this, m_xContext );
             createPackageList();
@@ -120,7 +120,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
     else if ( !m_pExtMgrDialog )
     {
-        m_pExtMgrDialog = new ExtMgrDialog( m_pParent, this );
+        m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( m_pParent, this );
         delete m_pExecuteCmdQueue;
         m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pExtMgrDialog, this, m_xContext );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
