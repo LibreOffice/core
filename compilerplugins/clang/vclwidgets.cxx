@@ -265,13 +265,17 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (fieldDecl->isBitField()) {
         return true;
     }
+    const CXXRecordDecl *pParentRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
     if (containsWindowSubclass(fieldDecl->getType())) {
-        report(
-            DiagnosticsEngine::Warning,
-            "OutputDevice subclass declared as a pointer field, should be wrapped in VclPtr." + fieldDecl->getType().getAsString(),
-            fieldDecl->getLocation())
-          << fieldDecl->getSourceRange();
-        return true;
+        // have to ignore this for now, nasty reverse dependency from tools->vcl
+        if (!(pParentRecordDecl != nullptr && pParentRecordDecl->getQualifiedNameAsString() == "ErrorContextImpl")) {
+            report(
+                DiagnosticsEngine::Warning,
+                "OutputDevice subclass declared as a pointer field, should be wrapped in VclPtr." + fieldDecl->getType().getAsString(),
+                fieldDecl->getLocation())
+              << fieldDecl->getSourceRange();
+            return true;
+       }
     }
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
     if (recordType == nullptr) {
@@ -292,7 +296,6 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     }
 
     // If this field is a VclPtr field, then the class MUST have a dispose method
-    const CXXRecordDecl *pParentRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
     if (pParentRecordDecl && isDerivedFromWindow(pParentRecordDecl)
         && startsWith(recordDecl->getQualifiedNameAsString(), "VclPtr"))
     {
