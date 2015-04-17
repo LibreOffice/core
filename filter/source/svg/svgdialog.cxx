@@ -143,11 +143,12 @@ Sequence< OUString > SAL_CALL SVGDialog::getSupportedServiceNames()
 
 
 
-Dialog* SVGDialog::createDialog( vcl::Window* pParent )
+VclPtr<Dialog> SVGDialog::createDialog( vcl::Window* pParent )
 {
-    return( ( /*KA: *mapResMgr.get() &&*/ mxSrcDoc.is() ) ?
-            new ImpSVGDialog( pParent/*KA: , *mapResMgr*/, maFilterData ) :
-            NULL );
+    if( mxSrcDoc.is() )
+        return VclPtr<ImpSVGDialog>::Create( pParent, maFilterData );
+    else
+        return VclPtr<Dialog>();
 }
 
 

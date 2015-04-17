@@ -193,7 +193,7 @@ namespace dbaui
         virtual ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
 
     private:
@@ -1514,12 +1514,12 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-Dialog* CopyTableWizard::createDialog( vcl::Window* _pParent )
+VclPtr<Dialog> CopyTableWizard::createDialog( vcl::Window* _pParent )
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
 
-    OCopyTableWizard* pWizard = new OCopyTableWizard(
+    VclPtrInstance<OCopyTableWizard> pWizard(
         _pParent,
         m_sDestinationTable,
         m_nOperation,

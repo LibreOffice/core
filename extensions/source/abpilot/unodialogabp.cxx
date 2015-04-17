@@ -152,9 +152,9 @@ namespace abp
     }
 
 
-    Dialog* OABSPilotUno::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> OABSPilotUno::createDialog(vcl::Window* _pParent)
     {
-        return new OAddessBookSourcePilot(_pParent, m_aContext );
+        return VclPtr<OAddessBookSourcePilot>::Create(_pParent, m_aContext );
     }
 
 

@@ -136,7 +136,7 @@ namespace {
         virtual ~Wizard();
 
     protected:
-        virtual Dialog* createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
         virtual void destroyDialog() SAL_OVERRIDE;
 
     private:
@@ -268,12 +268,12 @@ namespace {
     }
 
 
-    Dialog* Wizard::createDialog( vcl::Window* i_pParent )
+    VclPtr<Dialog> Wizard::createDialog( vcl::Window* i_pParent )
     {
-        WizardShell* pDialog( new WizardShell( i_pParent, m_xController, m_aWizardSteps ) );
+        VclPtrInstance<WizardShell> pDialog( i_pParent, m_xController, m_aWizardSteps );
         pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
         pDialog->setTitleBase( m_sTitle );
-        return pDialog;
+        return pDialog.get();
     }
 
 

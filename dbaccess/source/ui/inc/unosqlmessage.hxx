@@ -71,7 +71,7 @@ protected:
     virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& _rConvertedValue, com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue) throw(com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
 // OGenericUnoDialog overridables
-    virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+    virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 };
 
 }   // namespace dbaui

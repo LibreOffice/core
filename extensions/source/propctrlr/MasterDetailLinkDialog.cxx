@@ -103,9 +103,9 @@ namespace pcr
     }
 
 
-    Dialog* MasterDetailLinkDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> MasterDetailLinkDialog::createDialog(vcl::Window* _pParent)
     {
-        return new FormLinkDialog(_pParent,m_xDetail,m_xMaster, m_aContext
+        return VclPtr<FormLinkDialog>::Create(_pParent,m_xDetail,m_xMaster, m_aContext
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
     }
 

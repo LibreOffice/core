@@ -92,10 +92,9 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo() thr
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* ODBTypeWizDialog::createDialog(vcl::Window* _pParent)
+VclPtr<Dialog> ODBTypeWizDialog::createDialog(vcl::Window* _pParent)
 {
-    ODbTypeWizDialog* pDlg = new ODbTypeWizDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
-    return pDlg;
+    return VclPtr<ODbTypeWizDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
 
 }   // namespace dbaui

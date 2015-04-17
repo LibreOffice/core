@@ -79,9 +79,9 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     else
         ChartTypeUnoDlg_BASE::implInitialize(_rValue);
 }
-Dialog* ChartTypeUnoDlg::createDialog(vcl::Window* _pParent)
+VclPtr<Dialog> ChartTypeUnoDlg::createDialog(vcl::Window* _pParent)
 {
-    return new ChartTypeDialog( _pParent, m_xChartModel, m_aContext );
+    return VclPtr<ChartTypeDialog>::Create( _pParent, m_xChartModel, m_aContext );
 }
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo() throw(uno::RuntimeException, std::exception)
 {

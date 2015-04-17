@@ -44,7 +44,7 @@ private:
 
     // OGenericUnoDialog overridables
     virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
-    virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+    virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -85,7 +85,7 @@ namespace dbp
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
     };
 

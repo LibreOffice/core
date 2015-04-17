@@ -130,9 +130,9 @@ namespace pcr
     }
 
 
-    Dialog* OTabOrderDialog::createDialog( vcl::Window* _pParent )
+    VclPtr<Dialog> OTabOrderDialog::createDialog( vcl::Window* _pParent )
     {
-        return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
+        return VclPtr<TabOrderDialog>::Create( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }
 
     void OTabOrderDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)

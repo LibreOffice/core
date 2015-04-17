@@ -78,7 +78,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    Dialog* ODirectSQLDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> ODirectSQLDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
@@ -99,7 +99,7 @@ namespace dbaui
             // can't create the dialog if I have improper settings
             return NULL;
 
-        return new DirectSQLDialog( _pParent, xConnection);
+        return VclPtr<DirectSQLDialog>::Create( _pParent, xConnection );
     }
     void ODirectSQLDialog::implInitialize(const Any& _rValue)
     {

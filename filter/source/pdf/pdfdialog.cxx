@@ -107,17 +107,11 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 
 
 
-Dialog* PDFDialog::createDialog( vcl::Window* pParent )
+VclPtr<Dialog> PDFDialog::createDialog( vcl::Window* pParent )
 {
-    Dialog* pRet = NULL;
-
     if( mxSrcDoc.is() )
-    {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc );
-        pRet = pDlg;
-    }
-
-    return pRet;
+        return VclPtr<ImpPDFTabDialog>::Create( pParent, maFilterData, mxSrcDoc );
+    return VclPtr<Dialog>();
 }
 
 

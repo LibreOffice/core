@@ -60,7 +60,7 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xDetail;

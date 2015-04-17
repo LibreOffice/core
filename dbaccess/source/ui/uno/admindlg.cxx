@@ -92,10 +92,9 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
+VclPtr<Dialog> ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
 {
-
-    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext);
+    VclPtrInstance<ODbAdminDialog> pDialog(_pParent, m_pDatasourceItems, m_aContext);
 
     // the initial selection
     if ( m_aInitialSelection.hasValue() )

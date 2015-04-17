@@ -145,12 +145,12 @@ namespace svxform
     }
 
 
-    Dialog* OAddConditionDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> OAddConditionDialog::createDialog(vcl::Window* _pParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
             throw RuntimeException( OUString(), *this );
 
-        return new AddConditionDialog( _pParent, m_sFacetName, m_xBinding );
+        return VclPtr<AddConditionDialog>::Create( _pParent, m_sFacetName, m_xBinding );
     }
 
 

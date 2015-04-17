@@ -106,9 +106,9 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* ODBTypeWizDialogSetup::createDialog(vcl::Window* _pParent)
+VclPtr<Dialog> ODBTypeWizDialogSetup::createDialog(vcl::Window* _pParent)
 {
-    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
+    return VclPtr<ODbTypeWizDialogSetup>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
 
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
