@@ -2288,7 +2288,12 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const bool bLock,
             }
             if( pDel )
             {
+                bool bUnlockLastFtnFrmGuard = pLastFtnFrm && !pLastFtnFrm->IsColLocked();
+                if (bUnlockLastFtnFrmGuard)
+                    pLastFtnFrm->ColLock();
                 pDel->Cut();
+                if (bUnlockLastFtnFrmGuard)
+                    pLastFtnFrm->ColUnlock();
                 delete pDel;
             }
             if ( bMore )
