@@ -510,7 +510,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 bRet = GetDoc()->MoveParagraph( aCrsr, nOffset );
             }
         }
-        else if( bUpperLeft ? nUpperLevel : nLowerLevel+1 < MAXLEVEL )
+        else if( (bUpperLeft ? nUpperLevel : nLowerLevel+1) < MAXLEVEL )
         {
             aCrsr.Move( fnMoveBackward, fnGoNode );
             bRet = GetDoc()->NumUpDown( aCrsr, !bUpperLeft );
