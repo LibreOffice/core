@@ -40,9 +40,15 @@ namespace o3tl
 }
 
 // Flags for internal use of FileControl
-typedef sal_uInt16 FileControlMode_Internal;
-#define FILECTRL_INRESIZE               ((sal_uInt16)0x0001)
-#define FILECTRL_ORIGINALBUTTONTEXT     ((sal_uInt16)0x0002)
+enum class FileControlMode_Internal
+{
+    INRESIZE               = 0x0001,
+    ORIGINALBUTTONTEXT     = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FileControlMode_Internal> : is_typed_flags<FileControlMode_Internal, 0x03> {};
+}
 
 
 class SVT_DLLPUBLIC FileControl : public vcl::Window
