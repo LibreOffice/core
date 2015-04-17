@@ -80,7 +80,7 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     bool                        bClosed;        // closed object?
     sal_uInt16                  nPoly;          // number of the polygon in the PolyPolygon
     sal_uInt16                  nPnt;           // number of point in the above polygon
-    sal_uInt16                  nPntAnz;        // number of points of the polygon
+    sal_uInt16                  nPointCount;    // number of points of the polygon
     sal_uInt16                  nPntMax;        // maximum index
     bool                        bBegPnt;        // dragged point is first point of a Polyline
     bool                        bEndPnt;        // dragged point is finishing point of a Polyline
@@ -119,7 +119,7 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     , bClosed(false)
     , nPoly(0)
     , nPnt(0)
-    , nPntAnz(0)
+    , nPointCount(0)
     , nPntMax(0)
     , bBegPnt(false)
     , bEndPnt(false)
@@ -171,14 +171,14 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         nPoly=(sal_uInt16)rHdl.GetPolyNum();            // number of the polygon in the PolyPolygon
         nPnt=(sal_uInt16)rHdl.GetPointNum();            // number of points in the above polygon
         const XPolygon aTmpXP(rPO.GetPathPoly().getB2DPolygon(nPoly));
-        nPntAnz=aTmpXP.GetPointCount();        // number of point of the polygon
-        if (nPntAnz==0 || (bClosed && nPntAnz==1)) return; // minimum of 1 points for Lines, minimum of 2 points for Polygon
-        nPntMax=nPntAnz-1;                  // maximum index
+        nPointCount=aTmpXP.GetPointCount();        // number of point of the polygon
+        if (nPointCount==0 || (bClosed && nPointCount==1)) return; // minimum of 1 points for Lines, minimum of 2 points for Polygon
+        nPntMax=nPointCount-1;                  // maximum index
         bBegPnt=!bClosed && nPnt==0;        // dragged point is first point of a Polyline
         bEndPnt=!bClosed && nPnt==nPntMax;  // dragged point is finishing point of a Polyline
-        if (bClosed && nPntAnz<=3) {        // if polygon is only a line
-            bBegPnt=(nPntAnz<3) || nPnt==0;
-            bEndPnt=(nPntAnz<3) || nPnt==nPntMax-1;
+        if (bClosed && nPointCount<=3) {        // if polygon is only a line
+            bBegPnt=(nPointCount<3) || nPnt==0;
+            bEndPnt=(nPointCount<3) || nPnt==nPntMax-1;
         }
         nPrevPnt=nPnt;                      // index of previous point
         nNextPnt=nPnt;                      // index of next point
@@ -685,11 +685,11 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             sal_uInt16 nPnt1=0xFFFF,nPnt2=0xFFFF; // its neighboring points
             Point  aNeuPos1,aNeuPos2;         // new alternative for aPos
             bool bPnt1 = false, bPnt2 = false; // are these valid alternatives?
-            if (!bClosed && mpSdrPathDragData->nPntAnz>=2) { // minimum of 2 points for lines
+            if (!bClosed && mpSdrPathDragData->nPointCount>=2) { // minimum of 2 points for lines
                 if (!bBegPnt) nPnt1=nPrevPnt;
                 if (!bEndPnt) nPnt2=nNextPnt;
             }
-            if (bClosed && mpSdrPathDragData->nPntAnz>=3) { // minimum of 3 points for polygon
+            if (bClosed && mpSdrPathDragData->nPointCount>=3) { // minimum of 3 points for polygon
                 nPnt1=nPrevPnt;
                 nPnt2=nNextPnt;
             }
@@ -1049,11 +1049,11 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         {
             sal_uInt16 nPntNum((sal_uInt16)pHdl->GetPointNum());
             const XPolygon& rXPoly = aPathPolygon[(sal_uInt16)rDrag.GetHdl()->GetPolyNum()];
-            sal_uInt16 nPntAnz((sal_uInt16)rXPoly.GetPointCount());
+            sal_uInt16 nPointCount((sal_uInt16)rXPoly.GetPointCount());
             bool bClose(IsClosed(meObjectKind));
 
             if(bClose)
-                nPntAnz--;
+                nPointCount--;
 
             if(pHdl->IsPlusHdl())
             {
@@ -1077,14 +1077,14 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                 mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
                 aStr += aMetr;
             }
-            else if(nPntAnz > 1)
+            else if(nPointCount > 1)
             {
-                sal_uInt16 nPntMax(nPntAnz - 1);
+                sal_uInt16 nPntMax(nPointCount - 1);
                 bool bIsClosed(IsClosed(meObjectKind));
                 bool bPt1(nPntNum > 0);
                 bool bPt2(nPntNum < nPntMax);
 
-                if(bIsClosed && nPntAnz > 2)
+                if(bIsClosed && nPointCount > 2)
                 {
                     bPt1 = true;
                     bPt2 = true;
@@ -1176,7 +1176,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
         }
         // copy certain data locally to use less code and have faster access times
         bool bClosed           =mpSdrPathDragData->bClosed       ; // closed object?
-        sal_uInt16   nPntAnz       =mpSdrPathDragData->nPntAnz       ; // number of points
+        sal_uInt16 nPointCount = mpSdrPathDragData->nPointCount; // number of points
         sal_uInt16   nPnt          =mpSdrPathDragData->nPnt          ; // number of points in the polygon
         bool bBegPnt           =mpSdrPathDragData->bBegPnt       ; // dragged point is the first point of a Polyline
         bool bEndPnt           =mpSdrPathDragData->bEndPnt       ; // dragged point is the last point of a Polyline
@@ -1249,7 +1249,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
                 if (bEndPnt) aXPoly.Remove(aXPoly.GetPointCount()-1,1);
             }
             if (bClosed) { // "pear problem": 2 lines, 1 curve, everything smoothed, a point between both lines is dragged
-                if (aXPoly.GetPointCount()>nPntAnz && aXPoly.IsControl(1)) {
+                if (aXPoly.GetPointCount()>nPointCount && aXPoly.IsControl(1)) {
                     sal_uInt16 a=aXPoly.GetPointCount();
                     aXPoly[a-2]=aXPoly[2]; aXPoly.SetFlags(a-2,aXPoly.GetFlags(2));
                     aXPoly[a-1]=aXPoly[3]; aXPoly.SetFlags(a-1,aXPoly.GetFlags(3));

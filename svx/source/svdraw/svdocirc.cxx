@@ -569,16 +569,16 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         OUString aStr;
         ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
         OUStringBuffer aBuf(aStr);
-        const sal_uInt32 nPntAnz(rDrag.GetPointAnz());
+        const sal_uInt32 nPointCount(rDrag.GetPointAnz());
 
-        if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
+        if(OBJ_CIRC != meCircleKind && nPointCount > 2)
         {
             const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
             sal_Int32 nAngle;
 
             aBuf.appendAscii(" (");
 
-            if(3 == nPntAnz)
+            if(3 == nPointCount)
             {
                 nAngle = pU->nStart;
             }

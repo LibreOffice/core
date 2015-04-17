@@ -258,8 +258,8 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     }
     Polygon aPol(Rect2Poly(maRect,aGeo));
     sal_uInt16 i;
-    sal_uInt16 nPntAnz=aPol.GetSize();
-    for (i=0; i<nPntAnz; i++) {
+    sal_uInt16 nPointCount=aPol.GetSize();
+    for (i=0; i<nPointCount; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
     // turn polygon and move it a little

@@ -180,7 +180,7 @@ public:
     // all polygons. Default=500.
     // NoDragPolys is (temporarily) activated, if one of the limits
     // is exceeded.
-    void  SetDragXorPointLimit(sal_uIntPtr nPntAnz) { nDragXorPointLimit=nPntAnz; }
+    void  SetDragXorPointLimit(sal_uIntPtr nPointCount) { nDragXorPointLimit=nPointCount; }
     sal_uIntPtr GetDragXorPointLimit() const { return nDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);

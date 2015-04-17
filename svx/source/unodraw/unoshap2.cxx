@@ -1761,8 +1761,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
                 Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
                 sal_uInt16 i;
-                sal_uInt16 nPntAnz=aPol.GetSize();
-                for (i=0; i<nPntAnz; i++)
+                sal_uInt16 nPointCount=aPol.GetSize();
+                for (i=0; i<nPointCount; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
@@ -1783,8 +1783,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                 Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
                 Point aRef2( aRef1.X() + 1000, aRef1.Y() );
                 sal_uInt16 i;
-                sal_uInt16 nPntAnz=aPol.GetSize();
-                for (i=0; i<nPntAnz; i++)
+                sal_uInt16 nPointCount=aPol.GetSize();
+                for (i=0; i<nPointCount; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
