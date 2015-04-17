@@ -384,7 +384,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
                     pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
                 else
                 {
-                    SfxPrinter* pNewPrt = new SfxPrinter( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
+                    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
                     pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
                     mpViewShell->SetPrinter( pNewPrt, SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
                 }
@@ -591,7 +591,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
         {
             OUString aPrinterName;
             pVal[i].Value >>= aPrinterName;
-            aPrt.reset( new Printer( aPrinterName ) );
+            aPrt.reset( VclPtr<Printer>::Create( aPrinterName ) );
             break;
         }
     }
@@ -770,7 +770,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer
-                pPrinter = new SfxPrinter( pDocPrinter->GetOptions().Clone(), ((const SfxStringItem*) pPrinterItem)->GetValue() );
+                pPrinter = VclPtr<SfxPrinter>::Create( pDocPrinter->GetOptions().Clone(), ((const SfxStringItem*) pPrinterItem)->GetValue() );
 
                 // if printer is unknown, it can't be used - now printer from document will be used
                 if ( !pPrinter->IsKnown() )

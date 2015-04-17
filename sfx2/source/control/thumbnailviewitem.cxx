@@ -112,7 +112,7 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     , mpTitleED(NULL)
     , maTextEditMaxArea()
 {
-    mpTitleED = new ResizableMultiLineEdit(&rView, this);
+    mpTitleED = VclPtr<ResizableMultiLineEdit>::Create(&rView, this);
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()

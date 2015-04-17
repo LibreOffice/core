@@ -41,7 +41,7 @@ TitleBar::TitleBar (
     vcl::Window* pParentWindow,
     const sidebar::Paint& rInitialBackgroundPaint)
     : Window(pParentWindow),
-      maToolBox(new SidebarToolBox(this)),
+      maToolBox(VclPtr<SidebarToolBox>::Create(this)),
       msTitle(rsTitle),
       maIcon()
 {

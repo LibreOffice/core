@@ -236,7 +236,7 @@ void ThumbnailView::ImplInitScrollBar()
     {
         if ( !mpScrBar )
         {
-            mpScrBar = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
+            mpScrBar = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
             mpScrBar->SetScrollHdl( LINK( this, ThumbnailView, ImplScrollHdl ) );
         }
         else

@@ -59,7 +59,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     : SfxChildWindow( pParentWnd, nId )
 {
     // Create Window
-    pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
+    pWindow = VclPtr<SfxPartDockWnd_Impl>::Create( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SfxChildAlignment::TOP;
 
     assert(pInfo);

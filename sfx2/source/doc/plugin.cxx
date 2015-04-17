@@ -152,7 +152,7 @@ throw( uno::RuntimeException, std::exception )
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
         vcl::Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-        PluginWindow_Impl* pWin = new PluginWindow_Impl( pParent );
+        VclPtr<PluginWindow_Impl> pWin = VclPtr<PluginWindow_Impl>::Create( pParent );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
         pWin->SetBackground();
         pWin->Show();

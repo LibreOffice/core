@@ -1468,7 +1468,7 @@ SfxViewFrame::SfxViewFrame
     rFrame.SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
     Construct_Impl( pObjShell );
 
-    pImp->pWindow = new SfxFrameViewWindow_Impl( this, rFrame.GetWindow() );
+    pImp->pWindow = VclPtr<SfxFrameViewWindow_Impl>::Create( this, rFrame.GetWindow() );
     pImp->pWindow->SetSizePixel( rFrame.GetWindow().GetOutputSizePixel() );
     rFrame.SetOwnsBindings_Impl( true );
     rFrame.CreateWorkWindow_Impl();

@@ -282,13 +282,13 @@ void SfxObjectShell::UpdateTime_Impl(
 
 
 
-SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
+VclPtr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog
 (
     vcl::Window*             pParent,
     const SfxItemSet&   rSet
 )
 {
-    return new SfxDocumentInfoDialog(pParent, rSet);
+    return VclPtr<SfxDocumentInfoDialog>::Create(pParent, rSet);
 }
 
 

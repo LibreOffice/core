@@ -569,7 +569,7 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, S
                             n == SFX_SPLITWINDOWS_RIGHT ? SfxChildAlignment::RIGHT :
                             n == SFX_SPLITWINDOWS_TOP ? SfxChildAlignment::TOP :
                                 SfxChildAlignment::BOTTOM );
-        SfxSplitWindow *pSplitWin = new SfxSplitWindow(pWorkWin, eAlign, this, pParent==0 );
+        VclPtr<SfxSplitWindow> pSplitWin = VclPtr<SfxSplitWindow>::Create(pWorkWin, eAlign, this, pParent==0 );
         pSplit[n] = pSplitWin;
     }
 

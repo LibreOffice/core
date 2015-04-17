@@ -128,8 +128,8 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),
-      maAllButton(new PushButton(this, SfxResId(BTN_ALL_TEMPLATES))),
-      maFTName(new FixedText(this, SfxResId(FT_NAME)))
+      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
+      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
     maAllButton->Hide();
     maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
@@ -140,8 +140,8 @@ TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinSt
 TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
     : ThumbnailView(pParent),
       mnCurRegionId(0),
-      maAllButton(new PushButton(this, SfxResId(BTN_ALL_TEMPLATES))),
-      maFTName(new FixedText(this, SfxResId(FT_NAME)))
+      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
+      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
     maAllButton->Hide();
     maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);

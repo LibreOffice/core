@@ -719,8 +719,8 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     // create the component window
     vcl::Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
-    vcl::Window* pWindow   = new BackingWindow(pParent);
-            m_xWindow = VCLUnoHelper::GetInterface(pWindow);
+    VclPtr<vcl::Window> pWindow = VclPtr<BackingWindow>::Create(pParent);
+    m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(

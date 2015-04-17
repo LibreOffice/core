@@ -38,7 +38,7 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
     get(mpBtnClose, "close");
     get(mpBox, "box");
     get(mpInfoView, "infoDrawingArea");
-    mpPreviewView = new vcl::Window(mpBox.get());
+    mpPreviewView = VclPtr<vcl::Window>::Create(mpBox.get());
 
     Size aSize(LogicToPixel(Size(250, 160), MAP_APPFONT));
     mpBox->set_width_request(aSize.Width());

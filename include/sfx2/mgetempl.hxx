@@ -79,7 +79,6 @@ friend class SfxStyleDialog;
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
 
-    SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SfxManageStyleSheetPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -96,6 +95,8 @@ protected:
         virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;
         using TabPage::DeactivatePage;
     virtual int     DeactivatePage(SfxItemSet * = 0) SAL_OVERRIDE;
+public:
+    SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );
 };
 
 #endif

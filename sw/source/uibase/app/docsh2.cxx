@@ -133,7 +133,7 @@ using namespace ::com::sun::star;
 using namespace ::sfx2;
 
 // create DocInfo (virtual)
-SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
+VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(
                                 vcl::Window *pParent, const SfxItemSet &rSet)
 {
     VclPtr<SfxDocumentInfoDialog> pDlg = VclPtr<SfxDocumentInfoDialog>::Create(pParent, rSet);

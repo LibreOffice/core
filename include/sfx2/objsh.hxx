@@ -36,6 +36,7 @@
 #include <com/sun/star/document/CmisVersion.hpp>
 
 #include <vcl/timer.hxx>
+#include <vcl/vclptr.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>
@@ -341,7 +342,7 @@ public:
     sal_uInt16                  GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
+    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(
                                         vcl::Window *pParent, const SfxItemSet& );
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,

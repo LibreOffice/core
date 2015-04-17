@@ -224,7 +224,7 @@ public:
 
     void            SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart );
 
-    virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( vcl::Window *pParent,
+    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( vcl::Window *pParent,
                                                               const SfxItemSet &rSet ) SAL_OVERRIDE;
 
     void    GetDocStat( ScDocStat& rDocStat );

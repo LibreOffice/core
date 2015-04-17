@@ -546,8 +546,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(NULL)
 
-    , aFmtLb( new SfxActionListBox(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
-    , aFilterLb( new ListBox(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
+    , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
+    , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -1512,7 +1512,8 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
             const OUString aSelectEntry( GetSelectedEntry());
             aFmtLb->Hide();
 
-            pTreeBox = new StyleTreeListBox_Impl(
+            pTreeBox = VclPtr<StyleTreeListBox_Impl>::Create(
+
                     this, WB_HASBUTTONS | WB_HASLINES |
                     WB_BORDER | WB_TABSTOP | WB_HASLINESATROOT |
                     WB_HASBUTTONSATROOT | WB_HIDESELECTION | WB_QUICK_SEARCH );

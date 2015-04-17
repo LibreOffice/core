@@ -215,7 +215,6 @@ private:
     void                ImplCheckPasswordState();
 
 protected:
-    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
     virtual ~SfxDocumentPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -223,6 +222,7 @@ protected:
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
+    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
@@ -240,7 +240,6 @@ private:
     SfxDocumentInfoItem*      m_pInfoItem;
 
 protected:
-    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
     virtual ~SfxDocumentDescPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -248,6 +247,7 @@ protected:
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
+    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
@@ -520,7 +520,6 @@ private:
     using TabPage::DeactivatePage;
 
 protected:
-    SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
     virtual ~SfxCustomPropertiesPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -529,6 +528,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
+    SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
@@ -644,13 +644,12 @@ private:
     DECL_LINK(UpdateHdl, void *);
 
 protected:
-    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
+    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 };
 

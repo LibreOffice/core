@@ -1130,7 +1130,7 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
+VclPtr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
     DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());

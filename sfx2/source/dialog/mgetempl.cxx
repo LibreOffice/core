@@ -582,7 +582,7 @@ SfxTabPage* SfxManageStyleSheetPage::Create( vcl::Window* pParent,
 */
 
 {
-    return new SfxManageStyleSheetPage( pParent, *rAttrSet );
+    return VclPtr<SfxManageStyleSheetPage>::Create( pParent, *rAttrSet );
 }
 
 

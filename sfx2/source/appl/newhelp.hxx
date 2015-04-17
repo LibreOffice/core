@@ -353,7 +353,7 @@ ContentTabPage_Impl* SfxHelpIndexWindow_Impl::GetContentPage()
 {
     if ( !pCPage )
     {
-        pCPage = new ContentTabPage_Impl( m_pTabCtrl, this );
+        pCPage = VclPtr<ContentTabPage_Impl>::Create( m_pTabCtrl, this );
         pCPage->SetOpenHdl( aPageDoubleClickLink );
     }
     return pCPage;
@@ -362,7 +362,7 @@ IndexTabPage_Impl* SfxHelpIndexWindow_Impl::GetIndexPage()
 {
     if ( !pIPage )
     {
-        pIPage = new IndexTabPage_Impl( m_pTabCtrl, this );
+        pIPage = VclPtr<IndexTabPage_Impl>::Create( m_pTabCtrl, this );
         pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
         pIPage->SetKeywordHdl( aIndexKeywordLink );
     }
@@ -373,7 +373,7 @@ SearchTabPage_Impl* SfxHelpIndexWindow_Impl::GetSearchPage()
 {
     if ( !pSPage )
     {
-        pSPage = new SearchTabPage_Impl( m_pTabCtrl, this );
+        pSPage = VclPtr<SearchTabPage_Impl>::Create( m_pTabCtrl, this );
         pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
     }
     return pSPage;
@@ -383,7 +383,7 @@ BookmarksTabPage_Impl* SfxHelpIndexWindow_Impl::GetBookmarksPage()
 {
     if ( !pBPage )
     {
-        pBPage = new BookmarksTabPage_Impl( m_pTabCtrl, this );
+        pBPage = VclPtr<BookmarksTabPage_Impl>::Create( m_pTabCtrl, this );
         pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
     }
     return pBPage;

@@ -130,7 +130,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     const OUString aDockWindowResourceURL( "private:resource/dockingwindow/" );
 
-    SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
+    VclPtr<SfxTitleDockingWindow> pTitleDockWindow = VclPtr<SfxTitleDockingWindow>::Create( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     pWindow = pTitleDockWindow;
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;

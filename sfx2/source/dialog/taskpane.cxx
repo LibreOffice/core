@@ -202,7 +202,7 @@ namespace sfx2
 
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, vcl::Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
-        ,m_aTaskPane( new ModuleTaskPane(GetContentWindow(), lcl_getFrame( i_pBindings )) )
+        ,m_aTaskPane( VclPtr<ModuleTaskPane>::Create(GetContentWindow(), lcl_getFrame( i_pBindings )) )
         ,m_aPaneController( *m_aTaskPane.get(), *this )
     {
         m_aTaskPane->Show();
@@ -249,7 +249,7 @@ namespace sfx2
     TaskPaneWrapper::TaskPaneWrapper( vcl::Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
-        pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
+        pWindow = VclPtr<TaskPaneDockingWindow>::Create( i_pBindings, *this, i_pParent,
             WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
         eChildAlignment = SfxChildAlignment::RIGHT;
 

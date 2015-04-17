@@ -237,7 +237,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     }
 
     SetAlign (eTbxAlign);
-    pEmptyWin = new SfxEmptySplitWin_Impl( this );
+    pEmptyWin = VclPtr<SfxEmptySplitWin_Impl>::Create( this );
     if ( bPinned )
     {
         pEmptyWin->bFadeIn = true;

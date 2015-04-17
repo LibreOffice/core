@@ -213,7 +213,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
-    m_pVersionBox = new SfxVersionsTabListBox_Impl(*pContainer, WB_TABSTOP);
+    m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
     Link aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
     m_pViewButton->SetClickHdl ( aClickLink );
@@ -548,7 +548,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsS
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
-    m_pVersionBox = new SfxVersionsTabListBox_Impl(*pContainer, WB_TABSTOP);
+    m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
     m_pVersionBox->GrabFocus();
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );

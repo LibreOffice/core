@@ -304,7 +304,7 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
     InsertTopFrame_Impl( this );
     pImp->pExternalContainerWindow = &i_rContainerWindow;
 
-    pWindow = new SfxFrameWindow_Impl( this, i_rContainerWindow );
+    pWindow = VclPtr<SfxFrameWindow_Impl>::Create( this, i_rContainerWindow );
 
     // always show pWindow, which is the ComponentWindow of the XFrame we live in
     // nowadays, since SfxFrames can be created with an XFrame only, hiding or showing the complete XFrame

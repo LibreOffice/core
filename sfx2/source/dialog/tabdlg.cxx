@@ -450,31 +450,31 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     m_pOKBtn = m_pUIBuilder->get<PushButton>("ok");
     m_bOwnsOKBtn = m_pOKBtn == nullptr;
     if (m_bOwnsOKBtn)
-        m_pOKBtn = new OKButton(m_pActionArea);
+        m_pOKBtn = VclPtr<OKButton>::Create(m_pActionArea);
 
     m_pApplyBtn = m_pUIBuilder->get<PushButton>("apply");
     m_pUserBtn = m_pUIBuilder->get<PushButton>("user");
     m_pCancelBtn = m_pUIBuilder->get<CancelButton>("cancel");
     m_bOwnsCancelBtn = m_pCancelBtn == nullptr;
     if (m_bOwnsCancelBtn)
-        m_pCancelBtn = new CancelButton(m_pActionArea);
+        m_pCancelBtn = VclPtr<CancelButton>::Create(m_pActionArea);
 
     m_pHelpBtn = m_pUIBuilder->get<HelpButton>("help");
     m_bOwnsHelpBtn = m_pHelpBtn == nullptr;
     if (m_bOwnsHelpBtn)
-        m_pHelpBtn = new HelpButton(m_pActionArea);
+        m_pHelpBtn = VclPtr<HelpButton>::Create(m_pActionArea);
 
     m_pResetBtn = m_pUIBuilder->get<PushButton>("reset");
     m_bOwnsResetBtn = m_pResetBtn == nullptr;
     if (m_bOwnsResetBtn)
-        m_pResetBtn = new PushButton(m_pActionArea.get());
+        m_pResetBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
     else
         pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
     m_pBaseFmtBtn = m_pUIBuilder->get<PushButton>("standard");
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == nullptr;
     if (m_bOwnsBaseFmtBtn)
-        m_pBaseFmtBtn = new PushButton(m_pActionArea.get());
+        m_pBaseFmtBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
 
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );

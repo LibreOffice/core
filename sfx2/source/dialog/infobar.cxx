@@ -118,8 +118,8 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage) :
     Window(pParent, 0),
     m_sId(sId),
-    m_pMessage(new FixedText(this, 0)),
-    m_pCloseBtn(new SfxCloseButton(this)),
+    m_pMessage(VclPtr<FixedText>::Create(this, 0)),
+    m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
@@ -327,7 +327,7 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_u
     SfxChildWindow(_pParent, nId),
     m_pBindings(pBindings)
 {
-    pWindow = new SfxInfoBarContainerWindow(this);
+    pWindow = VclPtr<SfxInfoBarContainerWindow>::Create(this);
     pWindow->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
     pWindow->Show();
 

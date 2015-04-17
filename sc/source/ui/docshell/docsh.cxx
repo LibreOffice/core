@@ -2883,7 +2883,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
                 (sal_uInt16) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
 }
 
-SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
+VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
                                          vcl::Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );

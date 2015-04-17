@@ -642,7 +642,7 @@ void SfxDocumentDescPage::dispose()
 
 SfxTabPage *SfxDocumentDescPage::Create(vcl::Window *pParent, const SfxItemSet *rItemSet)
 {
-     return new SfxDocumentDescPage(pParent, *rItemSet);
+     return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
 }
 
 
@@ -945,7 +945,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
 
 SfxTabPage* SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
-     return new SfxDocumentPage( pParent, *rItemSet );
+     return VclPtr<SfxDocumentPage>::Create( pParent, *rItemSet );
 }
 
 void SfxDocumentPage::EnableUseUserData()
@@ -1222,8 +1222,8 @@ void SfxDocumentInfoDialog::AddFontTabPage()
 
 CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
-    m_aYesButton( new RadioButton(this, ResId( RB_PROPERTY_YES, *rResId.GetResMgr() )) ),
-    m_aNoButton ( new RadioButton(this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() )) )
+    m_aYesButton( VclPtr<RadioButton>::Create(this, ResId( RB_PROPERTY_YES, *rResId.GetResMgr() )) ),
+    m_aNoButton ( VclPtr<RadioButton>::Create(this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() )) )
 {
     FreeResource();
     Wallpaper aWall( Color( COL_TRANSPARENT ) );
@@ -1391,16 +1391,16 @@ void CustomPropertiesYesNoButton::Resize()
 
 // struct CustomPropertyLine ---------------------------------------------
 CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
-    m_aNameBox      ( new ComboBox(pParent, SfxResId( SFX_CB_PROPERTY_NAME )) ),
-    m_aTypeBox      ( new CustomPropertiesTypeBox(pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this) ),
-    m_aValueEdit    ( new CustomPropertiesEdit(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
-    m_aDateField    ( new CustomPropertiesDateField(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ) ),
-    m_aTimeField    ( new CustomPropertiesTimeField(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ) ),
+    m_aNameBox      ( VclPtr<ComboBox>::Create(pParent, SfxResId( SFX_CB_PROPERTY_NAME )) ),
+    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this) ),
+    m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
+    m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ) ),
+    m_aTimeField    ( VclPtr<CustomPropertiesTimeField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ) ),
     m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
-    m_aDurationField( new CustomPropertiesDurationField(pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
-    m_aEditButton   ( new CustomPropertiesEditButton(pParent, WB_TABSTOP, this) ),
-    m_aYesNoButton  ( new CustomPropertiesYesNoButton(pParent, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
-    m_aRemoveButton ( new CustomPropertiesRemoveButton(pParent, 0, this) ),
+    m_aDurationField( VclPtr<CustomPropertiesDurationField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
+    m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(pParent, WB_TABSTOP, this) ),
+    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(pParent, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
+    m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(pParent, 0, this) ),
     m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
@@ -1438,15 +1438,15 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_pHeaderAccName(pHeaderAccName),
     m_pHeaderAccType(pHeaderAccType),
     m_pHeaderAccValue(pHeaderAccValue),
-    m_aNameBox      ( new ComboBox( this, SfxResId( SFX_CB_PROPERTY_NAME ) ) ),
-    m_aTypeBox      ( new ListBox( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ) ),
-    m_aValueEdit    ( new Edit( this, WB_BORDER|WB_TABSTOP|WB_LEFT ) ),
-    m_aDateField    ( new DateField( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aTimeField    ( new TimeField( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aDurationField( new Edit( this, WB_BORDER|WB_TABSTOP|WB_READONLY ) ),
-    m_aEditButton   ( new PushButton( this, WB_TABSTOP ) ),
-    m_aYesNoButton  ( new CustomPropertiesYesNoButton( this, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
-    m_aRemoveButton ( new ImageButton( this, 0 ) ),
+    m_aNameBox      ( VclPtr<ComboBox>::Create( this, SfxResId( SFX_CB_PROPERTY_NAME ) ) ),
+    m_aTypeBox      ( VclPtr<ListBox>::Create( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ) ),
+    m_aValueEdit    ( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_LEFT ) ),
+    m_aDateField    ( VclPtr<DateField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
+    m_aTimeField    ( VclPtr<TimeField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
+    m_aDurationField( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_READONLY ) ),
+    m_aEditButton   ( VclPtr<PushButton>::Create( this, WB_TABSTOP ) ),
+    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create( this, SfxResId( SFX_WIN_PROPERTY_YESNO )) ),
+    m_aRemoveButton ( VclPtr<ImageButton>::Create( this, 0 ) ),
     m_nScrollPos (0),
     m_pCurrentLine (NULL),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
@@ -2050,17 +2050,17 @@ CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
 
 void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
 {
-    m_pVBox = new VclVBox(this);
-    m_pHeaderBar = new HeaderBar(m_pVBox, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
-    m_pBody = new VclHBox(m_pVBox);
+    m_pVBox = VclPtr<VclVBox>::Create(this);
+    m_pHeaderBar = VclPtr<HeaderBar>::Create(m_pVBox, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pBody = VclPtr<VclHBox>::Create(m_pVBox);
     FixedText* pName = rBuilder.get<FixedText>("name");
     FixedText* pType = rBuilder.get<FixedText>("type");
     FixedText* pValue = rBuilder.get<FixedText>("value");
     OUString sName = pName->GetText();
     OUString sType = pType->GetText();
     OUString sValue = pValue->GetText();
-    m_pPropertiesWin = new CustomPropertiesWindow(m_pBody, pName, pType, pValue);
-    m_pVertScroll = new ScrollBar(m_pBody, WB_VERT);
+    m_pPropertiesWin = VclPtr<CustomPropertiesWindow>::Create(m_pBody, pName, pType, pValue);
+    m_pVertScroll = VclPtr<ScrollBar>::Create(m_pBody, WB_VERT);
 
     set_hexpand(true);
     set_vexpand(true);
@@ -2276,7 +2276,7 @@ int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 
 SfxTabPage* SfxCustomPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
-    return new SfxCustomPropertiesPage( pParent, *rItemSet );
+    return VclPtr<SfxCustomPropertiesPage>::Create( pParent, *rItemSet );
 }
 
 CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
@@ -2772,7 +2772,7 @@ int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 
 SfxTabPage* SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
-    return new SfxCmisPropertiesPage( pParent, *rItemSet );
+    return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

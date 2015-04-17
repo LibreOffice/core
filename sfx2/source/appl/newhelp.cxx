@@ -1903,15 +1903,15 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
-    aToolBox            ( new ToolBox(this, 0) ),
-    aOnStartupCB        ( new CheckBox(this, SfxResId( RID_HELP_ONSTARTUP_BOX )) ),
+    aToolBox            ( VclPtr<ToolBox>::Create(this, 0) ),
+    aOnStartupCB        ( VclPtr<CheckBox>::Create(this, SfxResId( RID_HELP_ONSTARTUP_BOX )) ),
     aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ).toString() ),
     aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ).toString() ),
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ).toString() ),
     pHelpWin            ( pParent ),
-    pTextWin            ( new TextWin_Impl( this ) ),
+    pTextWin            ( VclPtr<TextWin_Impl>::Create( this ) ),
     pSrchDlg            ( NULL ),
     nMinPos             ( 0 ),
     bIsDebug            ( false ),
@@ -2668,7 +2668,7 @@ void SfxHelpTextWindow_Impl::DoSearch()
     if ( !pSrchDlg )
     {
         // create the search dialog
-        pSrchDlg = new sfx2::SearchDialog( pTextWin, "HelpSearchDialog" );
+        pSrchDlg = VclPtr<sfx2::SearchDialog>::Create( pTextWin, "HelpSearchDialog" );
         // set handler
         pSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
         pSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
@@ -3055,12 +3055,12 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     pHelpInterceptor->InitWaiter( this );
-    pIndexWin = new SfxHelpIndexWindow_Impl( this );
+    pIndexWin = VclPtr<SfxHelpIndexWindow_Impl>::Create( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
     pIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MAP_APPFONT));
     pIndexWin->Show();
-    pTextWin = new SfxHelpTextWindow_Impl( this );
+    pTextWin = VclPtr<SfxHelpTextWindow_Impl>::Create( this );
     Reference < XFrames > xFrames = rFrame->getFrames();
     xFrames->append( Reference<XFrame>(pTextWin->getFrame(), UNO_QUERY_THROW) );
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow_Impl, SelectHdl ) );
