@@ -59,7 +59,7 @@ static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
 
 SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
 {
-    sal_uInt8 n = rb.nVal;
+    sal_uInt8 n = int(rb.nVal);
     if( rb.bSet )
         n |= 0x02;
     rStm.WriteUChar( n );
