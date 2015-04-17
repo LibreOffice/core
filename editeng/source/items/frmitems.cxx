@@ -1521,7 +1521,7 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 {
     rStrm.WriteSChar( GetLocation() )
          .WriteUInt16( GetWidth() )
-         .WriteUChar( aShadowColor.GetTransparency() > 0 );
+         .WriteBool( aShadowColor.GetTransparency() > 0 );
     WriteColor( rStrm, GetColor() );
     WriteColor( rStrm, GetColor() );
     rStrm.WriteSChar( aShadowColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
@@ -3874,7 +3874,7 @@ SfxPoolItem* SvxBrushItem::Create( SvStream& rStream, sal_uInt16 nVersion ) cons
 
 SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStream.WriteUChar( false );
+    rStream.WriteBool( false );
     WriteColor( rStream, aColor );
     WriteColor( rStream, aColor );
     rStream.WriteSChar( aColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID

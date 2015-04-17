@@ -110,7 +110,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteUniOrByteString( aItem, eCharSet );
 
     bool bHasValue = ( pResult != 0 );
-    rStream.WriteUChar( bHasValue );
+    rStream.WriteBool( bHasValue );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
         rStream.WriteUChar( nMode );                                   // seit 388b

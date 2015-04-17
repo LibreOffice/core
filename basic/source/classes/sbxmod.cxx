@@ -2064,7 +2064,7 @@ bool SbMethod::StoreData( SvStream& rStrm ) const
          .WriteInt16( nLine1 )
          .WriteInt16( nLine2 )
          .WriteInt16( nStart )
-         .WriteUChar( bInvalid );
+         .WriteBool( bInvalid );
     return true;
 }
 

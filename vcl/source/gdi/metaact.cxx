@@ -889,8 +889,8 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePolygon( rOStm, aSimplePoly );                               // Version 1
     WriteLineInfo( rOStm, maLineInfo );                                // Version 2
 
-    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();        // Version 3
-    rOStm.WriteUChar( bHasPolyFlags );
+    bool bHasPolyFlags = maPoly.HasFlags();        // Version 3
+    rOStm.WriteBool( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
@@ -962,8 +962,8 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maPoly.AdaptiveSubdivide( aSimplePoly );
     WritePolygon( rOStm, aSimplePoly );
 
-    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
-    rOStm.WriteUChar( bHasPolyFlags );
+    bool bHasPolyFlags = maPoly.HasFlags();    // Version 2
+    rOStm.WriteBool( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
@@ -2485,7 +2485,7 @@ void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WriteRegion( rOStm, maRegion );
-    rOStm.WriteUChar( mbClip );
+    rOStm.WriteBool( mbClip );
 }
 
 void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2695,7 +2695,7 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2745,7 +2745,7 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2837,7 +2837,7 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2887,7 +2887,7 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -2937,7 +2937,7 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3479,7 +3479,7 @@ void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WritePair( rOStm, maRefPoint );
-    rOStm.WriteUChar( mbSet );
+    rOStm.WriteBool( mbSet );
 }
 
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )

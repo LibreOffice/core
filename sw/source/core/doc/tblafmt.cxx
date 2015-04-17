@@ -967,12 +967,12 @@ bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( nStrResId );
-    rStream.WriteUChar( bInclFont );
-    rStream.WriteUChar( bInclJustify );
-    rStream.WriteUChar( bInclFrame );
-    rStream.WriteUChar( bInclBackground );
-    rStream.WriteUChar( bInclValueFormat );
-    rStream.WriteUChar( bInclWidthHeight );
+    rStream.WriteBool( bInclFont );
+    rStream.WriteBool( bInclJustify );
+    rStream.WriteBool( bInclFrame );
+    rStream.WriteBool( bInclBackground );
+    rStream.WriteBool( bInclValueFormat );
+    rStream.WriteBool( bInclWidthHeight );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
@@ -980,7 +980,7 @@ bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         m_aBreak.Store(rStream, m_aBreak.GetVersion(fileVersion));
         m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
         m_aKeepWithNextPara.Store(rStream, m_aKeepWithNextPara.GetVersion(fileVersion));
-        rStream.WriteUInt16( m_aRepeatHeading ).WriteUChar( m_bLayoutSplit ).WriteUChar( m_bRowSplit ).WriteUChar( m_bCollapsingBorders );
+        rStream.WriteUInt16( m_aRepeatHeading ).WriteBool( m_bLayoutSplit ).WriteBool( m_bRowSplit ).WriteBool( m_bCollapsingBorders );
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
     }
 

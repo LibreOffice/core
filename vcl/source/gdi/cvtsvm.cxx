@@ -252,10 +252,10 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     rOStm.WriteInt16( nWeight );
     rOStm.WriteInt16( rFont.GetUnderline() );
     rOStm.WriteInt16( rFont.GetStrikeout() );
-    rOStm.WriteUChar( rFont.GetItalic() != ITALIC_NONE );
-    rOStm.WriteUChar( rFont.IsOutline() );
-    rOStm.WriteUChar( rFont.IsShadow() );
-    rOStm.WriteUChar( rFont.IsTransparent() );
+    rOStm.WriteBool( rFont.GetItalic() != ITALIC_NONE );
+    rOStm.WriteBool( rFont.IsOutline() );
+    rOStm.WriteBool( rFont.IsShadow() );
+    rOStm.WriteBool( rFont.IsTransparent() );
     if ( rActualCharSet == RTL_TEXTENCODING_DONTKNOW )
         rActualCharSet = osl_getThreadTextEncoding();
 }
@@ -371,7 +371,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
 
                     if(rCandidate.HasFlags())
                     {
-                        rOStm.WriteUChar( true );
+                        rOStm.WriteBool( true );
 
                         for(sal_uInt16 c(0); c < nPointCount; c++)
                         {
@@ -380,7 +380,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
                     }
                     else
                     {
-                        rOStm.WriteUChar( false );
+                        rOStm.WriteBool( false );
                     }
                 }
             }
@@ -2344,7 +2344,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 WritePair( rOStm, rRefPoint );
-                rOStm.WriteUChar( bSet );
+                rOStm.WriteBool( bSet );
                 rOStm.WriteInt32( 0 ); // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
@@ -2373,7 +2373,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 WriteColor( rOStm, rColor );
-                rOStm.WriteUChar( bSet );
+                rOStm.WriteBool( bSet );
                 rOStm.WriteInt32( 0 ); // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment

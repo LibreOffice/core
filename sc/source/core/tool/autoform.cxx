@@ -795,12 +795,12 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
     rStream.WriteUInt16( nStrResId );
-    rStream.WriteUChar( bIncludeFont );
-    rStream.WriteUChar( bIncludeJustify );
-    rStream.WriteUChar( bIncludeFrame );
-    rStream.WriteUChar( bIncludeBackground );
-    rStream.WriteUChar( bIncludeValueFormat );
-    rStream.WriteUChar( bIncludeWidthHeight );
+    rStream.WriteBool( bIncludeFont );
+    rStream.WriteBool( bIncludeJustify );
+    rStream.WriteBool( bIncludeFrame );
+    rStream.WriteBool( bIncludeBackground );
+    rStream.WriteBool( bIncludeValueFormat );
+    rStream.WriteBool( bIncludeWidthHeight );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         WriteAutoFormatSwBlob( rStream, m_swFields );

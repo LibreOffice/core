@@ -719,15 +719,15 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
 
     rOStm.WriteInt16( rImpl_Font.mnOrientation );
 
-    rOStm.WriteUChar( rImpl_Font.mbWordLine );
-    rOStm.WriteUChar( rImpl_Font.mbOutline );
-    rOStm.WriteUChar( rImpl_Font.mbShadow );
+    rOStm.WriteBool( rImpl_Font.mbWordLine );
+    rOStm.WriteBool( rImpl_Font.mbOutline );
+    rOStm.WriteBool( rImpl_Font.mbShadow );
     rOStm.WriteUChar( rImpl_Font.mnKerning );
 
     // new in version 2
     rOStm.WriteUChar( rImpl_Font.meRelief );
     rOStm.WriteUInt16( rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
-    rOStm.WriteUChar( rImpl_Font.mbVertical );
+    rOStm.WriteBool( rImpl_Font.mbVertical );
     rOStm.WriteUInt16( rImpl_Font.meEmphasisMark );
 
     // new in version 3

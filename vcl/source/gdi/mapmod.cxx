@@ -88,7 +88,7 @@ SvStream& WriteImplMapMode(SvStream& rOStm, const MapMode::ImplMapMode& rImplMap
     WritePair( rOStm, rImplMapMode.maOrigin );
     WriteFraction( rOStm, rImplMapMode.maScaleX );
     WriteFraction( rOStm, rImplMapMode.maScaleY );
-    rOStm.WriteUChar( rImplMapMode.mbSimple );
+    rOStm.WriteBool( rImplMapMode.mbSimple );
 
     return rOStm;
 }

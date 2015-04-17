@@ -316,7 +316,7 @@ bool SbxStdCollection::StoreData( SvStream& rStrm ) const
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm.WriteUChar( bAddRemoveOk );
+        rStrm.WriteBool( bAddRemoveOk );
     }
     return bRes;
 }

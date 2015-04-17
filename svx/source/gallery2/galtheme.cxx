@@ -1346,7 +1346,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
                           << m_aDestDir << "' in '" << aPath << "'");
         }
 
-        rOStm.WriteUChar( bRel );
+        rOStm.WriteBool( bRel );
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
         rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( pObj->eObjKind );
     }
@@ -1358,7 +1358,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     const long      nReservePos = rOStm.Tell();
     boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 2 ));
 
-    rOStm.WriteUInt32( GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
+    rOStm.WriteUInt32( GetId() ).WriteBool( IsThemeNameFromResource() ); // From version 2 and up
 
     pCompat.reset();
 

@@ -151,7 +151,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     rOStm.WriteUInt16( rImplWallpaper.meStyle );
 
     // version 2
-    rOStm.WriteUChar( bRect ).WriteUChar( bGrad ).WriteUChar( bBmp ).WriteUChar( bDummy ).WriteUChar( bDummy ).WriteUChar( bDummy );
+    rOStm.WriteBool( bRect ).WriteBool( bGrad ).WriteBool( bBmp ).WriteBool( bDummy ).WriteBool( bDummy ).WriteBool( bDummy );
 
     if( bRect )
         WriteRectangle( rOStm, *rImplWallpaper.mpRect );

@@ -1100,7 +1100,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     sal_uInt16 nVer = 602;
     rOStream.WriteUInt16( nVer );
 
-    rOStream.WriteUChar( bOwnerOfPool );
+    rOStream.WriteBool( bOwnerOfPool );
 
     // First store the pool, later only the Surregate
     if ( bOwnerOfPool )
@@ -1243,10 +1243,10 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteUInt16( nUserType );
     rOStream.WriteUInt32( nObjSettings );
 
-    rOStream.WriteUChar( bVertical );
+    rOStream.WriteBool( bVertical );
     rOStream.WriteUInt16( static_cast<sal_uInt16>(nScriptType) );
 
-    rOStream.WriteUChar( bStoreUnicodeStrings );
+    rOStream.WriteBool( bStoreUnicodeStrings );
     if ( bStoreUnicodeStrings )
     {
         for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )

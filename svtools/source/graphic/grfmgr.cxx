@@ -1122,7 +1122,7 @@ SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj 
 
     WriteGraphic( rOStm, rGraphicObj.GetGraphic() );
     WriteGraphicAttr( rOStm, rGraphicObj.GetAttr() );
-    rOStm.WriteUChar( bLink );
+    rOStm.WriteBool( bLink );
 
     if( bLink )
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);

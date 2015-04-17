@@ -335,7 +335,7 @@ void SdVectorizeDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
         xOStm->WriteUInt16( m_pNmLayers->GetValue() ).WriteUInt16( m_pMtReduce->GetValue() );
-        xOStm->WriteUInt16( m_pMtFillHoles->GetValue() ).WriteUChar( m_pCbFillHoles->IsChecked() );
+        xOStm->WriteUInt16( m_pMtFillHoles->GetValue() ).WriteBool( m_pCbFillHoles->IsChecked() );
     }
 }
 

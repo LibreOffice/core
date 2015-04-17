@@ -174,7 +174,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
     rOut.WriteUInt32( nInventor ).WriteUInt16( 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( GetObjKind() );
-    rOut.WriteUChar( bIsThumbBmp );
+    rOut.WriteBool( bIsThumbBmp );
 
     if( bIsThumbBmp )
     {

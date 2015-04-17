@@ -78,7 +78,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, aRelURL);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aAltText, eEncoding);
-    rOStm.WriteUChar( bActive );
+    rOStm.WriteBool( bActive );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
     boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
@@ -418,7 +418,7 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, bool bPixel )
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
     WritePolygon( rOStm, aPoly );
-    rOStm.WriteUChar( bEllipse );  // >= Version 2
+    rOStm.WriteBool( bEllipse );  // >= Version 2
     WriteRectangle( rOStm, aEllipse );  // >= Version 2
 }
 

@@ -302,8 +302,8 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
         RTL_TEXTENCODING_UTF8);
 
     rOut.WriteUInt16( rDesign.m_eMode );
-    rOut.WriteUChar( rDesign.m_bContentPage );
-    rOut.WriteUChar( rDesign.m_bNotes );
+    rOut.WriteBool( rDesign.m_bContentPage );
+    rOut.WriteBool( rDesign.m_bNotes );
     rOut.WriteUInt16( rDesign.m_nResolution );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCompression,
         RTL_TEXTENCODING_UTF8);
@@ -316,17 +316,17 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
         RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aMisc,
         RTL_TEXTENCODING_UTF8);
-    rOut.WriteUChar( rDesign.m_bDownload );
-    rOut.WriteUChar( rDesign.m_bCreated );     // not used
+    rOut.WriteBool( rDesign.m_bDownload );
+    rOut.WriteBool( rDesign.m_bCreated );     // not used
     rOut.WriteInt16( rDesign.m_nButtonThema );
-    rOut.WriteUChar( rDesign.m_bUserAttr );
+    rOut.WriteBool( rDesign.m_bUserAttr );
     WriteColor( rOut, rDesign.m_aBackColor );
     WriteColor( rOut, rDesign.m_aTextColor );
     WriteColor( rOut, rDesign.m_aLinkColor );
     WriteColor( rOut, rDesign.m_aVLinkColor );
     WriteColor( rOut, rDesign.m_aALinkColor );
-    rOut.WriteUChar( rDesign.m_bUseAttribs );
-    rOut.WriteUChar( rDesign.m_bUseColor );
+    rOut.WriteBool( rDesign.m_bUseAttribs );
+    rOut.WriteBool( rDesign.m_bUseColor );
 
     rOut.WriteUInt16( rDesign.m_eScript );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aURL,
@@ -334,11 +334,11 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCGI,
         RTL_TEXTENCODING_UTF8);
 
-    rOut.WriteUChar( rDesign.m_bAutoSlide );
+    rOut.WriteBool( rDesign.m_bAutoSlide );
     rOut.WriteUInt32( rDesign.m_nSlideDuration );
-    rOut.WriteUChar( rDesign.m_bEndless );
-    rOut.WriteUChar( rDesign.m_bSlideSound );
-    rOut.WriteUChar( rDesign.m_bHiddenSlides );
+    rOut.WriteBool( rDesign.m_bEndless );
+    rOut.WriteBool( rDesign.m_bSlideSound );
+    rOut.WriteBool( rDesign.m_bHiddenSlides );
 
     return rOut;
 }

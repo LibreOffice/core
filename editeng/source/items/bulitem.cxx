@@ -54,9 +54,9 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
     // UNICODE: rStream << rFont.GetName();
     rStream.WriteUniOrByteString(rFont.GetName(), rStream.GetStreamCharSet());
 
-    rStream.WriteUChar( rFont.IsOutline() );
-    rStream.WriteUChar( rFont.IsShadow() );
-    rStream.WriteUChar( rFont.IsTransparent() );
+    rStream.WriteBool( rFont.IsOutline() );
+    rStream.WriteBool( rFont.IsShadow() );
+    rStream.WriteBool( rFont.IsTransparent() );
 }
 
 

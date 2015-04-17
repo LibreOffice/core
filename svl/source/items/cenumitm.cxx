@@ -211,7 +211,7 @@ SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
 // virtual
 SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream.WriteUChar( m_bValue ); // not bool for serialization!
+    rStream.WriteBool( m_bValue ); // not bool for serialization!
     return rStream;
 }
 

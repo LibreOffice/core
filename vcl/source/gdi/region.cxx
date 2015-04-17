@@ -1682,7 +1682,7 @@ SvStream& WriteRegion( SvStream& rOStrm, const vcl::Region& rRegion )
 
     // write polypolygon if available
     const bool bHasPolyPolygon(rRegion.HasPolyPolygonOrB2DPolyPolygon());
-    rOStrm.WriteUChar( bHasPolyPolygon );
+    rOStrm.WriteBool( bHasPolyPolygon );
 
     if(bHasPolyPolygon)
     {

@@ -1643,7 +1643,7 @@ void Polygon::ImplWrite( SvStream& rOStream ) const
 {
     bool bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
     WritePolygon( rOStream, *this );
-    rOStream.WriteUChar(bHasPolyFlags);
+    rOStream.WriteBool(bHasPolyFlags);
 
     if ( bHasPolyFlags )
         rOStream.Write( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );

@@ -1611,7 +1611,7 @@ SfxPoolItem* SvxShadowedItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxShadowedItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -1660,7 +1660,7 @@ SfxPoolItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxAutoKernItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -1710,7 +1710,7 @@ SfxPoolItem* SvxWordLineModeItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxWordLineModeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -1759,7 +1759,7 @@ SfxPoolItem* SvxContourItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxContourItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -2567,7 +2567,7 @@ SfxPoolItem* SvxNoLinebreakItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxNoLinebreakItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -2612,7 +2612,7 @@ SfxPoolItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxNoHyphenItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -2700,7 +2700,7 @@ SfxPoolItem* SvxBlinkItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxBlinkItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteBool( GetValue() );
     return rStrm;
 }
 
@@ -2984,7 +2984,7 @@ SfxPoolItem* SvxTwoLinesItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*/) con
 
 SvStream& SvxTwoLinesItem::Store(SvStream & rStrm, sal_uInt16 /*nIVer*/) const
 {
-    rStrm.WriteUChar( GetValue() ).WriteUInt16( GetStartBracket() ).WriteUInt16( GetEndBracket() );
+    rStrm.WriteBool( GetValue() ).WriteUInt16( GetStartBracket() ).WriteUInt16( GetEndBracket() );
     return rStrm;
 }
 
@@ -3026,7 +3026,7 @@ SfxPoolItem* SvxCharRotateItem::Create( SvStream& rStrm, sal_uInt16 ) const
 SvStream& SvxCharRotateItem::Store( SvStream & rStrm, sal_uInt16 ) const
 {
     bool bFlag = IsFitToLine();
-    rStrm.WriteUInt16( GetValue() ).WriteUChar( bFlag );
+    rStrm.WriteUInt16( GetValue() ).WriteBool( bFlag );
     return rStrm;
 }
 

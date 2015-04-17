@@ -1405,7 +1405,7 @@ SvStream& SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16 nItemVer
     if ( nItemVersion )
     {
         bool bValue = GetValue();
-        rOut.WriteUChar( bValue );
+        rOut.WriteBool( bValue );
     }
     return rOut;
 }

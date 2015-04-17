@@ -246,7 +246,7 @@ SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) con
     // UNICODE: rStrm << aDescName;
     rStrm.WriteUniOrByteString(aDescName, rStrm.GetStreamCharSet());
 
-    rStrm.WriteUChar( eNumType ).WriteUChar( bLandscape ).WriteUInt16( eUse );
+    rStrm.WriteUChar( eNumType ).WriteBool( bLandscape ).WriteUInt16( eUse );
     return rStrm;
 }
 
