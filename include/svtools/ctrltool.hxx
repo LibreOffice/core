@@ -128,9 +128,6 @@ FontList.
 
 #define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
 
-#define FONTLIST_FONTNAMETYPE_PRINTER           ((sal_uInt16)0x0001)
-#define FONTLIST_FONTNAMETYPE_SCREEN            ((sal_uInt16)0x0002)
-
 class SVT_DLLPUBLIC FontList
 {
 private:

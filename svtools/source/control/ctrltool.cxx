@@ -31,6 +31,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // Standard Fontgroessen fuer scalierbare Fonts
 const sal_IntPtr FontList::aStdSizeAry[] =
@@ -87,6 +88,17 @@ public:
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
 
+enum class FontListFontNameType
+{
+    NONE              = 0x00,
+    PRINTER           = 0x01,
+    SCREEN            = 0x02,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FontListFontNameType> : is_typed_flags<FontListFontNameType, 0x3> {};
+}
+
 class ImplFontListNameInfo
 {
     friend class FontList;
@@ -94,12 +106,12 @@ class ImplFontListNameInfo
 private:
     OUString                maSearchName;
     ImplFontListFontInfo*   mpFirst;
-    sal_uInt16              mnType;
+    FontListFontNameType    mnType;
 
     ImplFontListNameInfo(const OUString& rSearchName)
         : maSearchName(rSearchName)
         , mpFirst(NULL)
-        , mnType(0)
+        , mnType(FontListFontNameType::NONE)
     {
     }
 };
@@ -231,11 +243,11 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
 {
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
-    sal_uInt16 nType;
+    FontListFontNameType nType;
     if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )
-        nType = FONTLIST_FONTNAMETYPE_SCREEN;
+        nType = FontListFontNameType::SCREEN;
     else
-        nType = FONTLIST_FONTNAMETYPE_PRINTER;
+        nType = FontListFontNameType::PRINTER;
 
     // inquire all fonts from the device
     int n = pDevice->GetDevFontCount();
@@ -487,8 +499,8 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
     }
 
     // search for synthetic style
-    sal_uInt16              nType       = pData->mnType;
-    const OUString& rStyleName  = rInfo.GetStyleName();
+    FontListFontNameType nType       = pData->mnType;
+    const OUString&      rStyleName  = rInfo.GetStyleName();
     if (!rStyleName.isEmpty())
     {
         bool                    bNotSynthetic = false;
@@ -516,14 +528,14 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
     }
 
     // Only Printer-Font?
-    if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
+    if ( nType == FontListFontNameType::PRINTER )
     {
         if (maMapPrinterOnly.isEmpty())
             const_cast<FontList*>(this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
     }
     // Only Screen-Font?
-    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN
+    else if ( nType == FontListFontNameType::SCREEN
             && rInfo.GetType() == TYPE_RASTER )
     {
         if (maMapScreenOnly.isEmpty())
