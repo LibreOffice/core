@@ -1059,7 +1059,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     {
         bool bAfterEffect = false;
         if ( *pAny[ DFF_ANIM_AFTEREFFECT ] >>= bAfterEffect )
-            exportAnimPropertyByte( rStrm, DFF_ANIM_AFTEREFFECT, bAfterEffect, TRANSLATE_NONE );
+            exportAnimPropertyByte( rStrm, DFF_ANIM_AFTEREFFECT, int(bAfterEffect), TRANSLATE_NONE );
     }
 
     if ( pAny[ DFF_ANIM_RUNTIMECONTEXT ] )
