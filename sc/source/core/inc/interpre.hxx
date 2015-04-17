@@ -326,8 +326,10 @@ void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const OUString& rStr );
 void PushString( const svl::SharedString& rString );
 void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
+void PushSingleRef(const ScRefAddress& rRef);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+void PushDoubleRef(const ScRefAddress& rRef1, const ScRefAddress& rRef2);
 void PushExternalSingleRef(sal_uInt16 nFileId, const OUString& rTabName,
                            SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName,

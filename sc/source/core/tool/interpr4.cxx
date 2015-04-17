@@ -1934,6 +1934,47 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
     }
 }
 
+// -------------------------------------------------------
+// Push to stack single reference and its relative flags.
+//
+void ScInterpreter::PushSingleRef(const ScRefAddress& rRef)
+{
+    if (!IfErrorPushError())
+    {
+        ScSingleRefData aRef;
+        ScAddress aAddr( rRef.Col(), rRef.Row(), rRef.Tab() );
+        aRef.InitAddress( aAddr );
+        aRef.SetColRel(rRef.IsRelCol());
+        aRef.SetRowRel(rRef.IsRelRow());
+        aRef.SetTabRel(rRef.IsRelTab());
+        aRef.SetAddress( aAddr, aPos );
+        PushTempTokenWithoutError( new ScSingleRefToken( aRef ) );
+    }
+}
+
+// -------------------------------------------------------
+// Push to stack double reference and its relative flags.
+//
+void ScInterpreter::PushDoubleRef(const ScRefAddress& rRef1,
+                                  const ScRefAddress& rRef2)
+{
+    if (!IfErrorPushError())
+    {
+        ScComplexRefData aRef;
+        ScRange aRange( rRef1.Col(), rRef1.Row(), rRef1.Tab(),
+                        rRef2.Col(), rRef2.Row(), rRef2.Tab() );
+        aRef.InitRange( aRange );
+        aRef.Ref1.SetColRel(rRef1.IsRelCol());
+        aRef.Ref1.SetRowRel(rRef1.IsRelRow());
+        aRef.Ref1.SetTabRel(rRef1.IsRelTab());
+        aRef.Ref2.SetColRel(rRef2.IsRelCol());
+        aRef.Ref2.SetRowRel(rRef2.IsRelRow());
+        aRef.Ref2.SetTabRel(rRef2.IsRelTab());
+        aRef.SetRange(aRange, aPos);
+        PushTempTokenWithoutError( new ScDoubleRefToken( aRef ) );
+    }
+}
+
 void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
 {
