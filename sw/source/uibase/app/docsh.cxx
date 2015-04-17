@@ -589,7 +589,8 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     // #i76360# Update document statistics
-    m_pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
+    if ( !rMedium.IsSkipImages() )
+        m_pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
