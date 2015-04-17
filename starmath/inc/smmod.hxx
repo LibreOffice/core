@@ -31,6 +31,7 @@
 #include "starmath.hrc"
 
 #include <unotools/options.hxx>
+#include <memory>
 
 class SfxObjectFactory;
 class SmConfig;
@@ -86,14 +87,11 @@ public:
 
 class SmModule : public SfxModule, utl::ConfigurationListener
 {
-    svtools::ColorConfig        *pColorConfig;
-    SmConfig                *pConfig;
-    SmLocalizedSymbolData   *pLocSymbolData;
-    SvtSysLocale            *pSysLocale;
-    VirtualDevice           *pVirtualDev;
-
-    void _CreateSysLocale() const;
-    void _CreateVirtualDev() const;
+    std::unique_ptr<svtools::ColorConfig> mpColorConfig;
+    std::unique_ptr<SmConfig> mpConfig;
+    std::unique_ptr<SmLocalizedSymbolData> mpLocSymbolData;
+    std::unique_ptr<SvtSysLocale> mpSysLocale;
+    std::unique_ptr<VirtualDevice> mpVirtualDev;
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
@@ -116,23 +114,13 @@ public:
     SmConfig *              GetConfig();
     SmSymbolManager &       GetSymbolManager();
 
-    SmLocalizedSymbolData &   GetLocSymbolData() const;
+    SmLocalizedSymbolData &   GetLocSymbolData();
 
     void GetState(SfxItemSet&);
 
-    const SvtSysLocale& GetSysLocale() const
-    {
-        if( !pSysLocale )
-            _CreateSysLocale();
-        return *pSysLocale;
-    }
+    const SvtSysLocale& GetSysLocale();
 
-    VirtualDevice &     GetDefaultVirtualDev()
-    {
-        if (!pVirtualDev)
-            _CreateVirtualDev();
-        return *pVirtualDev;
-    }
+    VirtualDevice &     GetDefaultVirtualDev();
 
     //virtual methods for options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
