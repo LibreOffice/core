@@ -50,6 +50,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
+#include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -639,6 +640,16 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
                                     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
+    if (rPropertyName == "SymbolBitmapURL")
+    {
+        uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
+        sal_Int32 nVal = com::sun::star::chart::ChartSymbolType::NONE;
+        if (aAny >>= nVal)
+        {
+            if (nVal != com::sun::star::chart::ChartSymbolType::BITMAPURL)
+                return beans::PropertyState::PropertyState_DEFAULT_VALUE;
+        }
+    }
 
     if( m_eType == DATA_SERIES )
         aState = WrappedPropertySet::getPropertyState( rPropertyName );
