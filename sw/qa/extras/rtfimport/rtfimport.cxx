@@ -46,6 +46,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/ustring.hxx>
@@ -2236,6 +2237,12 @@ DECLARE_RTFIMPORT_TEST(mathtype, "mathtype.rtf")
 {
     OUString aFormula = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT(!aFormula.isEmpty());
+}
+
+DECLARE_RTFIMPORT_TEST(testTdf86182, "tdf86182.rtf")
+{
+    // Writing mode was the default, i.e. text::WritingMode2::CONTEXT.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

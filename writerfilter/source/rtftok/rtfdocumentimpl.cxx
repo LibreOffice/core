@@ -3021,7 +3021,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_RTLPAR:
     {
         auto pValue = std::make_shared<RTFValue>(nKeyword == RTF_LTRPAR ? 0 : 1);
-        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_textDirection, pValue);
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_bidi, pValue);
     }
     break;
     case RTF_LTRROW:
