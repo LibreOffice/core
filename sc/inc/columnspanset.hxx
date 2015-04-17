@@ -84,6 +84,7 @@ public:
         virtual ~ColumnAction() = 0;
         virtual void startColumn(ScColumn* pCol) = 0;
         virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) = 0;
+        virtual void executeSum(SCROW, SCROW, bool, double& )  { return; } ;
     };
 
     ColumnSpanSet(bool bInit);
@@ -103,6 +104,7 @@ public:
 
     void executeAction(Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
+    void executeColumnAction(ScDocument& rDoc, ColumnAction& ac, double& fMem) const;
 
     void swap( ColumnSpanSet& r );
 };
