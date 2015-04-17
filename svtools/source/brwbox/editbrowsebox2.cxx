@@ -145,7 +145,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
     {
         bHasFocus = bFocus;
 
-        if ( GetBrowserFlags( ) & EBBF_SMART_TAB_TRAVEL )
+        if ( GetBrowserFlags( ) & EditBrowseBoxFlags::SMART_TAB_TRAVEL )
         {
             if  (   bHasFocus                           // we got the focus
                 &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key

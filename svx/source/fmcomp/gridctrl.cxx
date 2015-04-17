@@ -865,7 +865,7 @@ DbGridControl::DbGridControl(
                 Reference< XComponentContext > _rxContext,
                 vcl::Window* pParent,
                 WinBits nBits)
-            :DbGridControl_Base(pParent, EBBF_NONE, nBits, DEFAULT_BROWSE_MODE )
+            :DbGridControl_Base(pParent, EditBrowseBoxFlags::NONE, nBits, DEFAULT_BROWSE_MODE )
             ,m_xContext(_rxContext)
             ,m_aBar(this)
             ,m_nAsynAdjustEvent(0)

@@ -165,7 +165,7 @@ public:
 
 // class OFieldExpressionControl
 OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
-    :EditBrowseBox( _pParent, EBBF_NONE, WB_TABSTOP,
+    :EditBrowseBox( _pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP,
                     BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
                               BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
     ,m_aGroupPositions(GROUPS_START_LEN,-1)

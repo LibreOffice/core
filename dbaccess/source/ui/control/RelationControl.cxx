@@ -129,7 +129,7 @@ namespace dbaui
     // class ORelationControl
     ORelationControl::ORelationControl(vcl::Window *pParent)
         : EditBrowseBox(pParent,
-            EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE,
+            EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT,
             WB_TABSTOP | WB_BORDER,
             BrowserMode::AUTOSIZE_LASTCOL)
         , m_pBoxControl(NULL)

@@ -451,7 +451,7 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 } // anonymous namespace
 
 DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
-    ::svt::EditBrowseBox( pParent, nStyle, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
+    ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BROWSER_STANDARD_FLAGS ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
     m_bIsDirty( false ),
