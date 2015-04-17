@@ -40,7 +40,7 @@ FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode 
     maButton( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ),
     maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
     mnFlags( nFlags ),
-    mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )
+    mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
     maButton.SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
     mbOpenDlg = true;
@@ -150,13 +150,13 @@ void FileControl::Resize()
 {
     static long ButtonBorder = 10;
 
-    if( mnInternalFlags & FILECTRL_INRESIZE )
+    if( mnInternalFlags & FileControlMode_Internal::INRESIZE )
         return;
-    mnInternalFlags |= FILECTRL_INRESIZE;//InResize = sal_True
+    mnInternalFlags |= FileControlMode_Internal::INRESIZE;//InResize = sal_True
 
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
-    if ( ((mnInternalFlags & FILECTRL_ORIGINALBUTTONTEXT) == 0) ||
+    if ( !(mnInternalFlags & FileControlMode_Internal::ORIGINALBUTTONTEXT) ||
         ( nButtonTextWidth < aOutSz.Width()/3 &&
         ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN
         ? ( maEdit.GetTextWidth( maEdit.GetText() )
@@ -177,7 +177,7 @@ void FileControl::Resize()
     maEdit.setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
     maButton.setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
-    mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = sal_False
+    mnInternalFlags &= ~FileControlMode_Internal::INRESIZE; //InResize = sal_False
 }
 
 
