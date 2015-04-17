@@ -227,6 +227,49 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
     }
 }
 
+void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac, bool& bNull, double& fMem) const
+{
+    for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
+    {
+        if (!maDoc[nTab])
+            continue;
+
+        const TableType& rTab = *maDoc[nTab];
+        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
+        {
+            if (!rTab[nCol])
+                continue;
+
+            ScTable* pTab = rDoc.FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            if (!ValidCol(nCol))
+            {
+                // End the loop.
+                nCol = rTab.size();
+                continue;
+            }
+
+            ScColumn& rColumn = pTab->aCol[nCol];
+            ac.startColumn(&rColumn);
+            ColumnType& rCol = *rTab[nCol];
+            ColumnSpansType::const_iterator it = rCol.maSpans.begin(), itEnd = rCol.maSpans.end();
+            SCROW nRow1, nRow2;
+            nRow1 = it->first;
+            bool bVal = it->second;
+            for (++it; it != itEnd; ++it)
+            {
+                nRow2 = it->first-1;
+                ac.executeSum(nRow1, nRow2, bVal, fMem, bNull);
+
+                nRow1 = nRow2+1; // for the next iteration.
+                bVal = it->second;
+            }
+        }
+    }
+}
+
 void ColumnSpanSet::swap( ColumnSpanSet& r )
 {
     maDoc.swap(r.maDoc);
