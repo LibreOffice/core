@@ -3028,7 +3028,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_RTLPAR:
     {
         RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRPAR ? 0 : 1));
-        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_textDirection, pValue);
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_bidi, pValue);
     }
     break;
     case RTF_LTRROW:
