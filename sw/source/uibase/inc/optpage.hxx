@@ -115,9 +115,9 @@ class SwAddPrinterTabPage : public SfxTabPage
                 DECL_LINK(AutoClickHdl, void *);
                 DECL_LINK(SelectHdl, void *);
 
-                SwAddPrinterTabPage( vcl::Window* pParent,
-                                           const SfxItemSet& rSet );
 public:
+    SwAddPrinterTabPage( vcl::Window* pParent,
+                         const SfxItemSet& rSet );
     virtual ~SwAddPrinterTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -188,12 +188,12 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK( ModifyHeightHdl, FontSizeBox * );
     DECL_LINK( LoseFocusHdl, ComboBox * );
 
-            SwStdFontTabPage( vcl::Window* pParent,
-                                       const SfxItemSet& rSet );
-            virtual ~SwStdFontTabPage();
+     virtual ~SwStdFontTabPage();
      virtual void       dispose() SAL_OVERRIDE;
 
 public:
+    SwStdFontTabPage( vcl::Window* pParent,
+                                       const SfxItemSet& rSet );
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
@@ -230,10 +230,10 @@ class SwTableOptionsTabPage : public SfxTabPage
 
     DECL_LINK(CheckBoxHdl, void *);
 
-                SwTableOptionsTabPage( vcl::Window* pParent,
-                                           const SfxItemSet& rSet );
 public:
-                virtual ~SwTableOptionsTabPage();
+    SwTableOptionsTabPage( vcl::Window* pParent,
+                                           const SfxItemSet& rSet );
+    virtual ~SwTableOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
@@ -277,9 +277,8 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
 
     SwWrtShell *    m_pWrtShell;
 
-    SwShdwCrsrOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
 public:
+    SwShdwCrsrOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwShdwCrsrOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -352,8 +351,6 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sAuthor;
     OUString             sNone;
 
-    SwRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
     DECL_LINK( AttribHdl, ListBox *pLB );
     DECL_LINK(ChangedMaskPrevHdl, void * = 0);
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
@@ -361,6 +358,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     void                InitFontStyle(SvxFontPrevWindow& rExampleWin);
 
 public:
+    SwRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwRedlineOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -419,12 +417,11 @@ class SwCompareOptionsTabPage : public SfxTabPage
     VclPtr<NumericField> m_pLenNF;
     VclPtr<CheckBox>     m_pStoreRsidCB;
 
-    SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
     DECL_LINK(ComparisonHdl, void *);
     DECL_LINK(IgnoreHdl, void *);
 
 public:
+    SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwCompareOptionsTabPage();
     virtual void dispose() SAL_OVERRIDE;
 

@@ -190,7 +190,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
 IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
 {
     VclPtr<SwSelectAddressBlockDialog> pDlg(
-                new SwSelectAddressBlockDialog(pButton, m_pWizard->GetConfigItem()));
+                VclPtr<SwSelectAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem()));
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     pDlg->SetAddressBlocks(rConfig.GetAddressBlocks(), m_pSettingsWIN->GetSelectedAddress());
     pDlg->SetSettings(rConfig.IsIncludeCountry(), rConfig.GetExcludeCountry());
@@ -220,7 +220,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
     VclPtr<SwAssignFieldsDialog> pDlg(
-            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
+            VclPtr<SwAssignFieldsDialog>::Create(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
     if(RET_OK == pDlg->Execute())
     {
         //preview update
@@ -454,7 +454,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT :
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW;
     VclPtr<SwCustomizeAddressBlockDialog> pDlg(
-        new SwCustomizeAddressBlockDialog(pButton,m_rConfig,nType));
+        VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton,m_rConfig,nType));
     if(bCustomize)
     {
         pDlg->SetAddress(m_aAddressBlocks[m_pPreview->GetSelectedAddress()]);
@@ -852,9 +852,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAssignFieldsControl(
 
 SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
     Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
-    m_aVScroll(new ScrollBar(this)),
-    m_aHeaderHB(new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
-    m_aWindow(new vcl::Window(this, WB_BORDER | WB_DIALOGCONTROL)),
+    m_aVScroll(VclPtr<ScrollBar>::Create(this)),
+    m_aHeaderHB(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
+    m_aWindow(VclPtr<vcl::Window>::Create(this, WB_BORDER | WB_DIALOGCONTROL)),
     m_rConfigItem(NULL),
     m_nLBStartTopPos(0),
     m_nYOffset(0),
@@ -906,9 +906,9 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         const OUString rHeader = rHeaders.GetString( i );
-        FixedText* pNewText = new FixedText(m_aWindow.get(), WB_VCENTER);
+        VclPtr<FixedText> pNewText = VclPtr<FixedText>::Create(m_aWindow.get(), WB_VCENTER);
         pNewText->SetText("<" + rHeader + ">");
-        ListBox* pNewLB = new ListBox(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
+        VclPtr<ListBox> pNewLB = VclPtr<ListBox>::Create(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
         pNewText->set_mnemonic_widget(pNewLB);
         pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
         pNewLB->SelectEntryPos(0);
@@ -922,7 +922,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
 
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
-        FixedText* pNewPreview = new FixedText(m_aWindow.get(), WB_VCENTER);
+        VclPtr<FixedText> pNewPreview = VclPtr<FixedText>::Create(m_aWindow.get(), WB_VCENTER);
         pNewText->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
         pNewLB->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
         pNewPreview->SetSizePixel(Size(aOutputSize.Width() - 2 * nControlWidth, nControlHeight));

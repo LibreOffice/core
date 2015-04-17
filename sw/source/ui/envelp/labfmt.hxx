@@ -89,8 +89,6 @@ class SwLabFmtPage : public SfxTabPage
 
     SwLabItem    aItem;
 
-     SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK(PreviewHdl, void *);
     DECL_LINK( LoseFocusHdl, Control * );
@@ -102,6 +100,7 @@ class SwLabFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabFmtPage();
     virtual void dispose() SAL_OVERRIDE;
 

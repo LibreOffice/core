@@ -487,7 +487,7 @@ void SwLabFmtPage::ChangeMinMax()
 
 SfxTabPage* SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabFmtPage(pParent, *rSet);
+    return VclPtr<SwLabFmtPage>::Create(pParent, *rSet);
 }
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)

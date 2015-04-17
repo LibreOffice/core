@@ -412,7 +412,7 @@ void SwCompatibilityOptPage::WriteOptions()
 
 SfxTabPage* SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SwCompatibilityOptPage( pParent, *rAttrSet );
+    return VclPtr<SwCompatibilityOptPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )

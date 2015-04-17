@@ -143,13 +143,13 @@ bool SwAnnotationItem::UseElement()
     return mrFmtFld.IsFldInDoc();
 }
 
-sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
+VclPtr<sw::sidebarwindows::SwSidebarWin> SwAnnotationItem::GetSidebarWindow(
                                                             SwEditWin& rEditWin,
                                                             WinBits nBits,
                                                             SwPostItMgr& aMgr,
                                                             SwPostItBits aBits)
 {
-    return new sw::annotation::SwAnnotationWin( rEditWin, nBits,
+    return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin, nBits,
                                                 aMgr, aBits,
                                                 *this,
                                                 &mrFmtFld );

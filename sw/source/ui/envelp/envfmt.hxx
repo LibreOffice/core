@@ -43,8 +43,6 @@ class SwEnvFmtPage : public SfxTabPage
 
     std::vector<sal_uInt16>  aIDs;
 
-    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );
     DECL_LINK(FormatHdl, void *);
@@ -59,6 +57,7 @@ class SwEnvFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwEnvFmtPage();
     virtual void dispose() SAL_OVERRIDE;
 

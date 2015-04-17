@@ -44,8 +44,6 @@ class SwLabPrtPage : public SfxTabPage
     VclPtr<FixedText>    m_pPrinterInfo;
     VclPtr<PushButton>   m_pPrtSetup;
 
-     SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK( CountHdl, Button * );
 
     SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
@@ -54,6 +52,7 @@ class SwLabPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabPrtPage();
     virtual void dispose() SAL_OVERRIDE;
 

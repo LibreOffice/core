@@ -463,7 +463,7 @@ void SwEnvFmtPage::SetMinMax()
 
 SfxTabPage* SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvFmtPage(pParent, *rSet);
+    return VclPtr<SwEnvFmtPage>::Create(pParent, *rSet);
 }
 
 void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)

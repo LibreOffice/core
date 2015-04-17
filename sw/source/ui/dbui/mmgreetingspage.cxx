@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
 {
     VclPtr<SwCustomizeAddressBlockDialog> pDlg(
-            new SwCustomizeAddressBlockDialog(pButton, m_pWizard->GetConfigItem(),
+            VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem(),
                         pButton == m_pMalePB ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
                         SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
@@ -134,7 +134,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
 {
     const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
     VclPtr<SwAssignFieldsDialog> pDlg(
-            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false));
+            VclPtr<SwAssignFieldsDialog>::Create(pButton, m_pWizard->GetConfigItem(), sPreview, false));
     if(RET_OK == pDlg->Execute())
     {
         UpdatePreview();

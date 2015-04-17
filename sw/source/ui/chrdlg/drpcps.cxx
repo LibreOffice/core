@@ -608,7 +608,7 @@ int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 SfxTabPage*  SwDropCapsPage::Create(vcl::Window *pParent,
     const SfxItemSet *rSet)
 {
-    return new SwDropCapsPage(pParent, *rSet);
+    return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

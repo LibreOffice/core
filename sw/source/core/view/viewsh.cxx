@@ -333,7 +333,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     {
                         //create virtual device and set.
                         if ( !pVout )
-                            pVout = new VirtualDevice( *GetOut() );
+                            pVout = VclPtr<VirtualDevice>::Create( *GetOut() );
                         MapMode aMapMode( GetOut()->GetMapMode() );
                         pVout->SetMapMode( aMapMode );
 

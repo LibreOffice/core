@@ -90,8 +90,6 @@ class SwEnvPage : public SfxTabPage
     SwWrtShell*   pSh;
     OUString      sActDBName;
 
-     SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK( DatabaseHdl, ListBox * );
     DECL_LINK(FieldHdl, void *);
     DECL_LINK(SenderHdl, void *);
@@ -104,6 +102,7 @@ class SwEnvPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
+    SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwEnvPage();
     virtual void dispose() SAL_OVERRIDE;
 

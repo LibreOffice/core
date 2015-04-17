@@ -1689,7 +1689,7 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 SfxTabPage* SwInsertSectionTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwInsertSectionTabPage(pParent, *rAttrSet);
+    return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
@@ -2055,7 +2055,7 @@ void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
 SfxTabPage* SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwSectionFtnEndTabPage(pParent, *rAttrSet);
+    return VclPtr<SwSectionFtnEndTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
@@ -2225,7 +2225,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
 
 SfxTabPage*  SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwSectionIndentTabPage(pParent, *rAttrSet);
+    return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)

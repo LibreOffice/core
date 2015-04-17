@@ -212,7 +212,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0 );
-        SfxPrinter *p = new SfxPrinter( pSet, rJobSetup );
+        VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( pSet, rJobSetup );
         if ( bCheckPageDescs )
             setPrinter( p, true, true );
         else
@@ -261,9 +261,9 @@ DocumentDeviceManager::~DocumentDeviceManager()
 VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
 {
 #ifdef IOS
-    VirtualDevice* pNewVir = new VirtualDevice( 8 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 8 );
 #else
-    VirtualDevice* pNewVir = new VirtualDevice( 1 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 1 );
 #endif
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
@@ -297,7 +297,7 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
 
-    SfxPrinter* pNewPrt = new SfxPrinter( pSet );
+    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pSet );
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
     return *mpPrt.get();
 }

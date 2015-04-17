@@ -66,8 +66,6 @@ friend class SwDropCapsPict;
 
     SwWrtShell &rSh;
 
-    SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
-
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     void    FillSet( SfxItemSet &rSet );
 
@@ -82,6 +80,7 @@ friend class SwDropCapsPict;
     static const sal_uInt16 aPageRg[];
 
 public:
+    SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage();
     virtual void dispose() SAL_OVERRIDE;
 

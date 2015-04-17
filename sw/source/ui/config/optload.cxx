@@ -152,7 +152,7 @@ void SwLoadOptPage::dispose()
 SfxTabPage* SwLoadOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
-    return new SwLoadOptPage(pParent, *rAttrSet );
+    return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
@@ -572,7 +572,7 @@ void SwCaptionOptPage::dispose()
 SfxTabPage* SwCaptionOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
-    return new SwCaptionOptPage(pParent, *rAttrSet );
+    return VclPtr<SwCaptionOptPage>::Create(pParent, *rAttrSet );
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )

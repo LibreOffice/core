@@ -47,8 +47,6 @@ class SwLabPage : public SfxTabPage
 
     bool        m_bLabel;
 
-    SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK(AddrHdl, void *);
     DECL_LINK( DatabaseHdl, ListBox *pListBox );
     DECL_LINK(FieldHdl, void *);
@@ -63,6 +61,8 @@ class SwLabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+
     virtual ~SwLabPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -110,7 +110,6 @@ class SwVisitingCardPage : public SfxTabPage
                                     const OUString* pNames,
                                     const OUString* pValues );
 
-    SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwVisitingCardPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -118,6 +117,7 @@ class SwVisitingCardPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
@@ -150,12 +150,11 @@ class SwPrivateDataPage : public SfxTabPage
     VclPtr<Edit> m_pHomePageED;
     VclPtr<Edit> m_pMailED;
 
-    SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
+    SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -188,12 +187,11 @@ class SwBusinessDataPage : public SfxTabPage
     VclPtr<Edit> m_pHomePageED;
     VclPtr<Edit> m_pMailED;
 
-    SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
+    SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage();
     virtual void dispose() SAL_OVERRIDE;
 

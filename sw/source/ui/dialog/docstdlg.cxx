@@ -38,7 +38,7 @@
 
 SfxTabPage *  SwDocStatPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwDocStatPage(pParent, *rSet);
+    return VclPtr<SwDocStatPage>::Create(pParent, *rSet);
 }
 
 SwDocStatPage::SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet)

@@ -275,7 +275,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MAP_APPFONT);
     m_pContainer->set_width_request(aSize.Width());
     m_pContainer->set_height_request(aSize.Height());
-    m_pStatus = new SvSimpleTable(*m_pContainer);
+    m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);
     m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
 
     m_nStatusHeight = m_pContainer->get_height_request();

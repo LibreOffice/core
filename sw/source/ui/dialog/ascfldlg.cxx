@@ -181,7 +181,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                             0 );
-                pPrt = new SfxPrinter( pSet );
+                pPrt = VclPtr<SfxPrinter>::Create( pSet );
                 bDelPrinter = true;
             }
 

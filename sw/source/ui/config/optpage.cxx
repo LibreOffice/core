@@ -187,7 +187,7 @@ void SwContentOptPage::dispose()
 SfxTabPage* SwContentOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwContentOptPage(pParent, *rAttrSet);
+    return VclPtr<SwContentOptPage>::Create(pParent, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -418,7 +418,7 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
 SfxTabPage* SwAddPrinterTabPage::Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet )
 {
-    return ( new SwAddPrinterTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SwAddPrinterTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -656,7 +656,7 @@ void SwStdFontTabPage::dispose()
 SfxTabPage* SwStdFontTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
-    return new SwStdFontTabPage(pParent, *rAttrSet);
+    return VclPtr<SwStdFontTabPage>::Create(pParent, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -844,7 +844,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
-        pPrt = new SfxPrinter(pPrinterSet);
+        pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
     }
     delete pFontList;
     pFontList = new FontList( pPrt );
@@ -1180,7 +1180,7 @@ void SwTableOptionsTabPage::dispose()
 SfxTabPage* SwTableOptionsTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
-    return new SwTableOptionsTabPage(pParent, *rAttrSet );
+    return VclPtr<SwTableOptionsTabPage>::Create(pParent, *rAttrSet );
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1440,7 +1440,7 @@ void SwShdwCrsrOptionsTabPage::dispose()
 
 SfxTabPage* SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SwShdwCrsrOptionsTabPage( pParent, *rSet );
+    return VclPtr<SwShdwCrsrOptionsTabPage>::Create( pParent, *rSet );
 }
 
 void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1871,7 +1871,7 @@ void SwRedlineOptionsTabPage::dispose()
 
 SfxTabPage* SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwRedlineOptionsTabPage( pParent, *rSet );
+    return VclPtr<SwRedlineOptionsTabPage>::Create( pParent, *rSet );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2385,7 +2385,7 @@ void SwCompareOptionsTabPage::dispose()
 
 SfxTabPage* SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SwCompareOptionsTabPage( pParent, *rAttrSet );
+    return VclPtr<SwCompareOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2539,7 +2539,7 @@ void SwTestTabPage::dispose()
 SfxTabPage* SwTestTabPage::Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet )
 {
-    return new SwTestTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTestTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

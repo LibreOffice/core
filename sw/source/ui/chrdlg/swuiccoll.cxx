@@ -155,7 +155,7 @@ int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 
 SfxTabPage* SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwCondCollPage(pParent, *rSet);
+    return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

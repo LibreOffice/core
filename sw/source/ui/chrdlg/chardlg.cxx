@@ -298,7 +298,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
 SfxTabPage* SwCharURLPage::Create(  vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
-    return ( new SwCharURLPage( pParent, *rAttrSet ) );
+    return VclPtr<SwCharURLPage>::Create( pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)

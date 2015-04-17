@@ -90,9 +90,9 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 
     VclPtr<SwAddRenameEntryDialog> pDlg;
     if (bRename)
-        pDlg = new SwRenameEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg = VclPtr<SwRenameEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders);
     else
-        pDlg = new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg = VclPtr<SwAddEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders);
     if(bRename)
     {
         OUString aTemp = m_pFieldsLB->GetEntry(nPos);

@@ -47,8 +47,6 @@ class SwEnvPrtPage : public SfxTabPage
 
     VclPtr<Printer>     pPrt;
 
-    SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
     DECL_LINK(ClickHdl, void *);
     DECL_LINK(AlignHdl, void *);
     DECL_LINK( ButtonHdl, Button * );
@@ -59,6 +57,7 @@ class SwEnvPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwEnvPrtPage();
     virtual void dispose() SAL_OVERRIDE;
 

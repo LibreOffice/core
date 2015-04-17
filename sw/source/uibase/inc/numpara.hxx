@@ -62,14 +62,14 @@ class SwParagraphNumTabPage : public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 protected:
-        SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     void aCountParaFL();
     bool    ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                           const sal_uInt16* pModifier = NULL );
 
 public:
-        virtual ~SwParagraphNumTabPage();
+    SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SwParagraphNumTabPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,

@@ -199,7 +199,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(182 , 102), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pListLB = new SwAddrSourceLB(*pHeaderTreeContainer);
+    m_pListLB = VclPtr<SwAddrSourceLB>::Create(*pHeaderTreeContainer);
 
     m_pListLB->InsertHeaderEntry(m_sName + "\t" + m_sTable);
     m_pListLB->setColSizes();
@@ -359,7 +359,8 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     OUString sInputURL;
     VclPtr<SwCreateAddressListDialog> pDlg(
-            new SwCreateAddressListDialog(
+            VclPtr<SwCreateAddressListDialog>::Create(
+
                     pButton,
                     sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem()));
@@ -458,7 +459,8 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
         VclPtr<SwCreateAddressListDialog> pDlg(
-                new SwCreateAddressListDialog(
+                VclPtr<SwCreateAddressListDialog>::Create(
+
                         pButton,
                         pUserData->sURL,
                         m_pAddressPage->GetWizard()->GetConfigItem()));

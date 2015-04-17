@@ -838,10 +838,10 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
                 if ((pDocumentPrinter->GetName() == pInfo->GetPrinterName()) &&
                     (pDocumentPrinter->GetDriverName() == pInfo->GetDriver()))
                 {
-                    m_pTempPrinter = new Printer(pDocumentPrinter->GetJobSetup());
+                    m_pTempPrinter = VclPtr<Printer>::Create(pDocumentPrinter->GetJobSetup());
                 }
                 else
-                    m_pTempPrinter = new Printer( *pInfo );
+                    m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
             }
             else
             {
@@ -849,12 +849,12 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
                      (m_pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
                 {
                     m_pTempPrinter.disposeAndClear();
-                    m_pTempPrinter = new Printer( *pInfo );
+                    m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
                 }
             }
         }
         else if( ! m_pTempPrinter )
-            m_pTempPrinter = new Printer();
+            m_pTempPrinter = VclPtr<Printer>::Create();
 
         m_pPrinterSettingsPB->Enable( m_pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
     }
@@ -960,7 +960,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
 
 IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
 {
-    SwMailBodyDialog* pDlg = new SwMailBodyDialog(pButton, m_pWizard);
+    VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton, m_pWizard);
     pDlg->SetBody(m_sBody);
     if(RET_OK == pDlg->Execute())
     {
@@ -1145,7 +1145,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     xStore->storeToURL( sTargetTempURL, aValues   );
 
     //create the send dialog
-    SwSendMailDialog* pDlg = new SwSendMailDialog( pButton, rConfigItem );
+    VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create( pButton, rConfigItem );
     pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
     //help to force painting the dialog

@@ -110,7 +110,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
 SfxTabPage* SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabPrtPage( pParent, *rSet );
+    return VclPtr<SwLabPrtPage>::Create( pParent, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

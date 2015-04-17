@@ -119,7 +119,7 @@ bool SwLayVout::DoesFit( const Size &rNew )
         return true;
     if( !pVirDev )
     {
-        pVirDev = new VirtualDevice();
+        pVirDev = VclPtr<VirtualDevice>::Create();
         pVirDev->SetLineColor();
         if( pOut )
         {

@@ -86,8 +86,8 @@ public:
 
 SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits ) :
     Control(pParent, nBits),
-    m_pScrollBar(new ScrollBar(this)),
-    m_pWindow(new vcl::Window(this, WB_DIALOGCONTROL)),
+    m_pScrollBar(VclPtr<ScrollBar>::Create(this)),
+    m_pWindow(VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL)),
     m_pData(0),
     m_nLineHeight(0),
     m_nCurrentDataSet(0),
@@ -181,8 +181,8 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)
     {
-        FixedText* pNewFT = new FixedText(m_pWindow, WB_RIGHT);
-        Edit* pNewED = new Edit(m_pWindow, WB_BORDER);
+        VclPtr<FixedText> pNewFT = VclPtr<FixedText>::Create(m_pWindow, WB_RIGHT);
+        VclPtr<Edit> pNewED = VclPtr<Edit>::Create(m_pWindow, WB_BORDER);
         //set nLines a position identifier - used in the ModifyHdl
         pNewED->SetData(reinterpret_cast<void*>(nLines));
         pNewED->SetGetFocusHdl(aFocusLink);
@@ -561,7 +561,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
 {
     if(!m_pFindDlg)
     {
-        m_pFindDlg = new SwFindEntryDialog(this);
+        m_pFindDlg = VclPtr<SwFindEntryDialog>::Create(this);
         ListBox& rColumnBox = m_pFindDlg->GetFieldsListBox();
         ::std::vector< OUString >::iterator  aHeaderIter;
         for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
