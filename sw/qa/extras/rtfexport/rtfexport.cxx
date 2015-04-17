@@ -867,6 +867,11 @@ DECLARE_RTFEXPORT_TEST(testSautoupd, "sautoupd.rtf")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xHeading2, "IsAutoUpdate"));
 }
 
+DECLARE_RTFEXPORT_TEST(testHyphauto, "hyphauto.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(1), "ParaIsHyphenation"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

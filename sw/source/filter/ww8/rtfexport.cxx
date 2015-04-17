@@ -36,6 +36,7 @@
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include "ww8par.hxx"
 #include <comphelper/string.hxx>
 #include <svtools/rtfkeywd.hxx>
@@ -45,6 +46,7 @@
 #include <iostream>
 #endif
 #include <svx/xflclit.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -502,6 +504,17 @@ void RtfExport::ExportDocument_Impl()
     WriteInfo();
     // Default TabSize
     Strm().WriteCharPtr(m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr()).WriteCharPtr(SAL_NEWLINE_STRING);
+
+    // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
+    // Use the setting from the default style.
+    SwTxtFmtColl* pTxtFmtColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    const SfxPoolItem* pItem;
+    if (pTxtFmtColl && pTxtFmtColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem) == SfxItemState::SET)
+    {
+        Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_HYPHAUTO);
+        OutULong(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen());
+    }
+
     // Zoom
     SwViewShell* pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SvxZoomType::PERCENT)
