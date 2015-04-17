@@ -9028,8 +9028,8 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
-            ScBreakType nBreak = (rDoc.HasRowBreak(nRow, nTab) & BREAK_MANUAL);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
+            bool bBreak = (rDoc.HasRowBreak(nRow, nTab) & BREAK_MANUAL) != 0;
+            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
