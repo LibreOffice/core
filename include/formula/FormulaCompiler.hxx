@@ -242,9 +242,9 @@ public:
 
     void CreateStringFromTokenArray( OUString& rFormula );
     void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
-    FormulaToken* CreateStringFromToken( OUString& rFormula, FormulaToken* pToken,
+    const FormulaToken* CreateStringFromToken( OUString& rFormula, const FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
-    FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,
+    const FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, const FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 
     void AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const;
@@ -285,11 +285,11 @@ protected:
     virtual bool HandleDbData();
     virtual bool HandleTableRef();
 
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const;
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
-    virtual void CreateStringFromMatrix(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
+    virtual void CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
 
     void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const;

@@ -4393,9 +4393,9 @@ bool ScCompiler::IsCharFlagAllConventions(
         return false;
 }
 
-void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const
+void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
 {
-    FormulaToken* t = pTokenP;
+    const FormulaToken* t = pTokenP;
     sal_uInt16 nFileId = t->GetIndex();
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
@@ -4434,8 +4434,7 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
     }
 }
 
-void ScCompiler::CreateStringFromMatrix(
-    OUStringBuffer& rBuffer, FormulaToken* pTokenP) const
+void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
 {
     const ScMatrix* pMatrix = pTokenP->GetMatrix();
     SCSIZE nC, nMaxC, nR, nMaxR;
@@ -4479,7 +4478,7 @@ void ScCompiler::CreateStringFromMatrix(
     rBuffer.append( mxSymbols->getSymbol(ocArrayClose) );
 }
 
-void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
+void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     const OpCode eOp = _pTokenP->GetOpCode();
@@ -4507,14 +4506,14 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
                           GetSetupTabNames(), aRef, true);
 }
 
-void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
+void ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
                       *_pTokenP->GetDoubleRef(), false);
 }
 
-void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
+void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     const OpCode eOp = _pTokenP->GetOpCode();
     OUStringBuffer aBuffer;

@@ -1762,7 +1762,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
     if ( pArr->IsRecalcModeForced() )
         rBuffer.append( '=');
-    FormulaToken* t = pArr->First();
+    const FormulaToken* t = pArr->First();
     while( t )
         t = CreateStringFromToken( rBuffer, t, true );
 
@@ -1773,19 +1773,21 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     }
 }
 
-FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, FormulaToken* pTokenP,bool bAllowArrAdvance )
+const FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, const FormulaToken* pTokenP,
+        bool bAllowArrAdvance )
 {
     OUStringBuffer aBuffer;
-    FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
+    const FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
     rFormula += aBuffer.makeStringAndClear();
     return p;
 }
 
-FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pTokenP, bool bAllowArrAdvance )
+const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, const FormulaToken* pTokenP,
+        bool bAllowArrAdvance )
 {
     bool bNext = true;
     bool bSpaces = false;
-    FormulaToken* t = pTokenP;
+    const FormulaToken* t = pTokenP;
     OpCode eOp = t->GetOpCode();
     if( eOp >= ocAnd && eOp <= ocOr )
     {
@@ -2116,23 +2118,23 @@ bool FormulaCompiler::HandleTableRef()
     return true;
 }
 
-void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
+void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
+void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
+void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromMatrix( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
+void FormulaCompiler::CreateStringFromMatrix( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
+void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
 }
 

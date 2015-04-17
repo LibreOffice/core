@@ -475,11 +475,11 @@ private:
     virtual bool HandleTableRef() SAL_OVERRIDE;
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) SAL_OVERRIDE;
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void CreateStringFromExternal( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const SAL_OVERRIDE;
+    virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const SAL_OVERRIDE;
+    virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const SAL_OVERRIDE;
+    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const SAL_OVERRIDE;
+    virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const SAL_OVERRIDE;
     virtual void LocalizeString( OUString& rName ) const SAL_OVERRIDE;   // modify rName - input: exact name
 
     /// Access the CharTable flags
