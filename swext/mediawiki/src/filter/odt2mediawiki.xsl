@@ -356,8 +356,43 @@
 			</when>
 			
 			<otherwise>
-				<!-- Default setting to translate detailed office table cell styles correctly. -->
-				<text> style="border-spacing:0;"</text>
+				<variable name="style-element" select="key('style-ref', @table:style-name)"/>
+				<variable name="table-align" select="$style-element/style:table-properties/@table:align"/>
+				<!-- Table alignment using align -->
+				<if test="boolean($table-align)">
+					<variable name="align">
+						<choose>
+							<when test="$table-align='center'">
+								<text>center</text>
+							</when>
+						</choose>
+					</variable>
+					<if test="string-length($align) &gt; 0">
+						<text> align="</text>
+						<value-of select="$align"/>
+						<text>"</text>
+					</if>
+				</if>
+				<variable name="style">
+					<!-- Default setting to translate detailed office table cell styles correctly. -->
+					<text>border-spacing:0;</text>
+					<!-- Table alignment using css -->
+					<if test="boolean($table-align)">
+						<choose>
+							<when test="$table-align='margins'">
+								<text>margin:auto;</text>
+							</when>
+						</choose>
+					</if>
+					<if test="boolean($style-element/style:table-properties/@style:width)">
+						<text>width:</text>
+						<value-of select="$style-element/style:table-properties/@style:width"/>
+						<text>;</text>
+					</if>
+				</variable>
+				<text> style="</text>
+				<value-of select="$style"/>
+				<text>"</text>
 			</otherwise>
 		</choose>
 		
