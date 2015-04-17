@@ -41,7 +41,9 @@ class StgHeader
     sal_uInt16  nByteOrder;                 // 1C Unicode byte order indicator
     sal_Int16   nPageSize;                  // 1E 1 << nPageSize = block size
     sal_Int16   nDataPageSize;              // 20 1 << this size == data block size
-    sal_uInt8   bDirty;                     // 22 internal dirty flag
+    sal_uInt8   bDirty;                     // 22 internal dirty flag (should be
+                                            //    bool, but probably required to
+                                            //    be exactly one byte)
     sal_uInt8   cReserved[ 9 ];             // 23
     sal_Int32   nFATSize;                   // 2C total number of FAT pages
     sal_Int32   nTOCstrm;                   // 30 starting page for the TOC stream

@@ -74,7 +74,7 @@ StgHeader::StgHeader()
 , nByteOrder( 0 )
 , nPageSize( 0 )
 , nDataPageSize( 0 )
-, bDirty( 0 )
+, bDirty( sal_uInt8(false) )
 , nFATSize( 0 )
 , nTOCstrm( 0 )
 , nReserved( 0 )
@@ -98,7 +98,7 @@ void StgHeader::Init()
     nByteOrder    = 0xFFFE;
     nPageSize     = 9;          // 512 bytes
     nDataPageSize = 6;          // 64 bytes
-    bDirty = 0;
+    bDirty = sal_uInt8(false);
     memset( cReserved, 0, sizeof( cReserved ) );
     nFATSize = 0;
     nTOCstrm = 0;
@@ -175,7 +175,7 @@ bool StgHeader::Store( StgIo& rIo )
      .WriteInt32( nMaster );                   // 48 # of additional master blocks
     for( short i = 0; i < cFATPagesInHeader; i++ )
         r.WriteInt32( nMasterFAT[ i ] );
-    bDirty = !rIo.Good();
+    bDirty = sal_uInt8(!rIo.Good());
     return !bDirty;
 }
 
@@ -221,39 +221,39 @@ void StgHeader::SetFATPage( short n, sal_Int32 nb )
     if( n >= 0 && n < cFATPagesInHeader )
     {
         if( nMasterFAT[ n ] != nb )
-            bDirty = sal_True, nMasterFAT[ n ] = nb;
+            bDirty = sal_uInt8(true), nMasterFAT[ n ] = nb;
     }
 }
 
 void StgHeader::SetTOCStart( sal_Int32 n )
 {
-    if( n != nTOCstrm ) bDirty = sal_True, nTOCstrm = n;
+    if( n != nTOCstrm ) bDirty = sal_uInt8(true), nTOCstrm = n;
 }
 
 void StgHeader::SetDataFATStart( sal_Int32 n )
 {
-    if( n != nDataFAT ) bDirty = sal_True, nDataFAT = n;
+    if( n != nDataFAT ) bDirty = sal_uInt8(true), nDataFAT = n;
 }
 
 void StgHeader::SetDataFATSize( sal_Int32 n )
 {
-    if( n != nDataFATSize ) bDirty = sal_True, nDataFATSize = n;
+    if( n != nDataFATSize ) bDirty = sal_uInt8(true), nDataFATSize = n;
 }
 
 void StgHeader::SetFATSize( sal_Int32 n )
 {
-    if( n != nFATSize ) bDirty = sal_True, nFATSize = n;
+    if( n != nFATSize ) bDirty = sal_uInt8(true), nFATSize = n;
 }
 
 void StgHeader::SetFATChain( sal_Int32 n )
 {
     if( n != nMasterChain )
-        bDirty = sal_True, nMasterChain = n;
+        bDirty = sal_uInt8(true), nMasterChain = n;
 }
 
 void StgHeader::SetMasters( sal_Int32 n )
 {
-    if( n != nMaster ) bDirty = sal_True, nMaster = n;
+    if( n != nMaster ) bDirty = sal_uInt8(true), nMaster = n;
 }
 
 ///////////////////////////// class StgEntry
