@@ -334,12 +334,10 @@ namespace {
 
 class ImplPixelFormat
 {
-protected:
-    sal_uInt8* pData;
 public:
     static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
 
-    virtual void StartLine( sal_uInt8* pLine ) { pData = pLine; }
+    virtual void StartLine( sal_uInt8* pLine ) = 0;
     virtual void SkipPixel( sal_uInt32 nPixel ) = 0;
     virtual ColorData ReadPixel() = 0;
     virtual void WritePixel( ColorData nColor ) = 0;
@@ -349,7 +347,9 @@ public:
 class ImplPixelFormat32 : public ImplPixelFormat
 // currently ARGB-format for 32bit depth
 {
+    sal_uInt8* pData;
 public:
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE { pData = pLine; }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += nPixel << 2;
@@ -372,7 +372,9 @@ public:
 class ImplPixelFormat24 : public ImplPixelFormat
 // currently BGR-format for 24bit depth
 {
+    sal_uInt8* pData;
 public:
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE { pData = pLine; }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += (nPixel << 1) + nPixel;
@@ -394,13 +396,12 @@ public:
 class ImplPixelFormat16 : public ImplPixelFormat
 // currently R5G6B5-format for 16bit depth
 {
-protected:
-    sal_uInt16* pData16;
+    sal_uInt16* pData;
 public:
 
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
-        pData16 = reinterpret_cast<sal_uInt16*>(pLine);
+        pData = reinterpret_cast<sal_uInt16*>(pLine);
     }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
@@ -408,14 +409,14 @@ public:
     }
     virtual ColorData ReadPixel() SAL_OVERRIDE
     {
-        const ColorData c = RGB_COLORDATA( (*pData & 0x7c00) >> 7, (*pData & 0x03e0) >> 2 , (*pData & 0x001f) << 3 );
+        const ColorData c = RGB_COLORDATA( (*pData & 0xf800) >> 8, (*pData & 0x07e0) >> 3 , (*pData & 0x001f) << 3 );
         pData++;
         return c;
     }
     virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
-        *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 7 ) |
-                    ((COLORDATA_GREEN( nColor ) & 0xf8 ) << 2 ) |
+        *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 8 ) |
+                    ((COLORDATA_GREEN( nColor ) & 0xfc ) << 3 ) |
                     ((COLORDATA_BLUE( nColor ) & 0xf8 ) >> 3 );
     }
 };
@@ -423,6 +424,7 @@ public:
 class ImplPixelFormat8 : public ImplPixelFormat
 {
 private:
+    sal_uInt8* pData;
     const BitmapPalette& mrPalette;
 
 public:
@@ -430,6 +432,7 @@ public:
     : mrPalette( rPalette )
     {
     }
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE { pData = pLine; }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += nPixel;
@@ -448,6 +451,7 @@ public:
 class ImplPixelFormat4 : public ImplPixelFormat
 {
 private:
+    sal_uInt8* pData;
     const BitmapPalette& mrPalette;
     sal_uInt32 mnX;
     sal_uInt32 mnShift;
@@ -489,6 +493,7 @@ public:
 class ImplPixelFormat1 : public ImplPixelFormat
 {
 private:
+    sal_uInt8* pData;
     const BitmapPalette& mrPalette;
     sal_uInt32 mnX;
 
