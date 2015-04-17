@@ -888,7 +888,7 @@ public:
 ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
     :m_xReport(_rController.getReportDefinition())
     ,m_rController(_rController)
-    ,m_pNavigatorTree(new NavigatorTree(_pParent->get<vcl::Window>("box"),_rController))
+    ,m_pNavigatorTree(VclPtr<NavigatorTree>::Create(_pParent->get<vcl::Window>("box"),_rController))
 {
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);

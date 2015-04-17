@@ -46,11 +46,11 @@ void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize
 OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     : OScrollWindowHelper_BASE( _pDesignView,WB_DIALOGCONTROL)
     ,OPropertyChangeListener(m_aMutex)
-    ,m_aHScroll( new ScrollBar(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
-    ,m_aVScroll( new ScrollBar(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
-    ,m_aCornerWin( new ScrollBarBox(this) )
+    ,m_aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aVScroll( VclPtr<ScrollBar>::Create(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
     ,m_pParent(_pDesignView)
-    ,m_aReportWindow(new rptui::OReportWindow(this,m_pParent))
+    ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
     ,m_pReportDefintionMultiPlexer(NULL)
 {
     SetMapMode( MapMode( MAP_100TH_MM ) );

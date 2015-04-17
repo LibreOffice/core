@@ -299,7 +299,7 @@ void OViewsWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
-    OSectionWindow* pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
+    VclPtrInstance<OSectionWindow> pSectionWindow(this,_xSection,_sColorEntry);
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
     m_pParent->setMarked(&pSectionWindow->getReportSection().getSectionView(),m_aSections.size() == 1);
     Resize();

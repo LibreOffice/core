@@ -48,9 +48,9 @@ oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
-,m_aVRuler(new Ruler(this,WB_VERT))
-,m_aText(new FixedText(this,WB_HYPHENATION))
-,m_aImage(new FixedImage(this,WB_LEFT|WB_TOP|WB_SCALE))
+,m_aVRuler(VclPtr<Ruler>::Create(this,WB_VERT))
+,m_aText(VclPtr<FixedText>::Create(this,WB_HYPHENATION))
+,m_aImage(VclPtr<FixedImage>::Create(this,WB_LEFT|WB_TOP|WB_SCALE))
 ,m_pParent(_pParent)
 ,m_bShowRuler(true)
 {

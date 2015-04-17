@@ -391,7 +391,7 @@ void OFieldExpressionControl::lateInit()
         InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
         InsertDataColumn( FIELD_EXPRESSION, OUString(ModuleRes(STR_RPT_EXPRESSION)), 100);
 
-        m_pComboCell = new ComboBoxControl( &GetDataWindow() );
+        m_pComboCell = VclPtr<ComboBoxControl>::Create( &GetDataWindow() );
         m_pComboCell->SetSelectHdl(LINK(this,OFieldExpressionControl,CBChangeHdl));
         m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
@@ -975,7 +975,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
     get(m_pHelpWindow, "helptext");
     m_pHelpWindow->set_height_request(GetTextHeight() * 4);
     get(m_pProperties, "properties");
-    m_pFieldExpression = new OFieldExpressionControl(this, get<vcl::Window>("box"));
+    m_pFieldExpression = VclPtr<OFieldExpressionControl>::Create(this, get<vcl::Window>("box"));
     m_pFieldExpression->set_hexpand(true);
     m_pFieldExpression->set_vexpand(true);
 

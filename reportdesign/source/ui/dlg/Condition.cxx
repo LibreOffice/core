@@ -116,7 +116,7 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 :FloatingWindow(_pParent, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ))
 ,m_pCondition(_pCondition)
 ,m_nSlotId(0)
-,m_aColorSet( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT)) )
+,m_aColorSet( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT)) )
 {
     m_aColorSet->SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
     SetHelpId( HID_RPT_POPUP_COLOR );
@@ -338,7 +338,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 {
     sal_uInt16 nId( m_pActions->GetCurItemId() );
     if ( !m_pColorFloat )
-        m_pColorFloat = new OColorPopup(m_pActions,this);
+        m_pColorFloat = VclPtr<OColorPopup>::Create(m_pActions,this);
 
     sal_uInt16 nTextId = 0;
     if (nId == m_nFontColorId)

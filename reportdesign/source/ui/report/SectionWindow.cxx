@@ -48,10 +48,10 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 : Window( _pParent,WB_DIALOGCONTROL)
 ,OPropertyChangeListener(m_aMutex)
 ,m_pParent(_pParent)
-,m_aStartMarker( new rptui::OStartMarker(this,_sColorEntry))
-,m_aReportSection( new rptui::OReportSection(this,_xSection))
-,m_aSplitter(new Splitter(this))
-,m_aEndMarker( new rptui::OEndMarker(this,_sColorEntry))
+,m_aStartMarker( VclPtr<rptui::OStartMarker>::Create(this,_sColorEntry))
+,m_aReportSection( VclPtr<rptui::OReportSection>::Create(this,_xSection))
+,m_aSplitter(VclPtr<Splitter>::Create(this))
+,m_aEndMarker( VclPtr<rptui::OEndMarker>::Create(this,_sColorEntry))
 {
     SetUniqueId(UID_RPT_SECTIONSWINDOW);
     const MapMode& rMapMode = _pParent->GetMapMode();

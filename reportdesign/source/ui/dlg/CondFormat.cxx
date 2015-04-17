@@ -192,7 +192,7 @@ namespace rptui
             ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
 
-            Condition *pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
+            VclPtrInstance<Condition> pCon( m_pConditionPlayground, *this, m_rController );
             pCon->setCondition( xCond );
             pCon->reorderWithinParent(_nNewCondIndex);
             m_aConditions.insert( m_aConditions.begin() + _nNewCondIndex, pCon );
@@ -351,7 +351,7 @@ namespace rptui
             sal_Int32 nCount = m_xCopy->getCount();
             for ( sal_Int32 i = 0; i < nCount ; ++i )
             {
-                Condition *pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
+                VclPtrInstance<Condition> pCon( m_pConditionPlayground, *this, m_rController );
                 Reference< XFormatCondition > xCond( m_xCopy->getByIndex(i), UNO_QUERY );
                 pCon->reorderWithinParent(i);
                 pCon->setCondition( xCond );

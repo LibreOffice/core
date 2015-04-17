@@ -204,7 +204,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 
     if ( !m_pAddField )
     {
-        m_pAddField = new OAddFieldWindow(this,m_xRowSet);
+        m_pAddField = VclPtr<OAddFieldWindow>::Create(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )

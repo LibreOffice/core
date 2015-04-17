@@ -1782,7 +1782,7 @@ void OReportController::doOpenHelpAgent()
 
 bool OReportController::Construct(vcl::Window* pParent)
 {
-    ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
+    VclPtrInstance<ODesignView> pMyOwnView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );
     setView( *pMyOwnView );
 
@@ -2578,7 +2578,7 @@ void OReportController::openSortingAndGroupingDialog()
         return;
     if ( !m_pGroupsFloater )
     {
-        m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
+        m_pGroupsFloater = VclPtr<OGroupsSortingDialog>::Create(getView(),!isEditable(),this);
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
             m_pGroupsFloater->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));

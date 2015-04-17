@@ -58,10 +58,10 @@ using namespace ::comphelper;
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
 , ::comphelper::OPropertyChangeListener(m_aMutex)
-,m_aHRuler(new Ruler(this))
+,m_aHRuler(VclPtr<Ruler>::Create(this))
 ,m_pView(_pView)
 ,m_pParent(_pParent)
-,m_aViewsWindow(new rptui::OViewsWindow(this))
+,m_aViewsWindow(VclPtr<rptui::OViewsWindow>::Create(this))
 ,m_pObjFac( new DlgEdFactory() )
 {
     SetHelpId(UID_RPT_REPORTWINDOW);

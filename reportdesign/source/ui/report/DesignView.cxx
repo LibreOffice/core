@@ -86,9 +86,9 @@ ODesignView::ODesignView(   vcl::Window* pParent,
                             const Reference< XComponentContext >& _rxOrb,
                             OReportController& _rController) :
     ODataView( pParent, _rController, _rxOrb, WB_DIALOGCONTROL )
-    ,m_aSplitWin(new SplitWindow(this))
+    ,m_aSplitWin(VclPtr<SplitWindow>::Create(this))
     ,m_rReportController( _rController )
-    ,m_aScrollWindow(new rptui::OScrollWindowHelper(this))
+    ,m_aScrollWindow(VclPtr<rptui::OScrollWindowHelper>::Create(this))
     ,m_pPropWin(NULL)
     ,m_pAddField(NULL)
     ,m_pCurrentView(NULL)
@@ -109,7 +109,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     // now create the task pane on the right side :-)
-    m_pTaskPane = new OTaskWindow(this);
+    m_pTaskPane = VclPtr<OTaskWindow>::Create(this);
 
     m_aSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
     m_aSplitWin->InsertItem( REPORT_ID, m_aScrollWindow.get(), 100, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
@@ -440,7 +440,7 @@ void ODesignView::togglePropertyBrowser(bool _bToogleOn)
 {
     if ( !m_pPropWin && _bToogleOn )
     {
-        m_pPropWin = new PropBrw(getController().getORB(), m_pTaskPane,this);
+        m_pPropWin = VclPtr<PropBrw>::Create(getController().getORB(), m_pTaskPane,this);
         m_pPropWin->Invalidate();
         static_cast<OTaskWindow*>(m_pTaskPane.get())->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));
@@ -487,7 +487,7 @@ void ODesignView::toggleReportExplorer()
     if ( !m_pReportExplorer )
     {
         OReportController& rReportController = getController();
-        m_pReportExplorer = new ONavigator(this,rReportController);
+        m_pReportExplorer = VclPtr<ONavigator>::Create(this,rReportController);
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
             m_pReportExplorer->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
@@ -523,7 +523,7 @@ void ODesignView::toggleAddField()
             xReport = xSection->getReportDefinition();
         }
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
-        m_pAddField = new OAddFieldWindow(this,xSet);
+        m_pAddField = VclPtr<OAddFieldWindow>::Create(this,xSet);
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
         if ( aDlgOpt.Exists() )
