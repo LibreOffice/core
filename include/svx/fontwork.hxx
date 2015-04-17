@@ -55,7 +55,7 @@ class XFormTextShadowYValItem;
 
 class SvxFontWorkDialog;
 
-class SvxFontWorkControllerItem : public SfxControllerItem
+class SAL_WARN_UNUSED SvxFontWorkControllerItem : public SfxControllerItem
 {
     SvxFontWorkDialog  &rFontWorkDlg;
 
@@ -73,7 +73,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
     SvxFontWorkChildWindow(vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
@@ -86,7 +86,7 @@ class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
 {
 #define CONTROLLER_COUNT 11
 

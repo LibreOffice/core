@@ -57,7 +57,7 @@
 
 class DbGridColumn;
 
-class OWeakSubObject : public ::cppu::OWeakObject
+class SAL_WARN_UNUSED OWeakSubObject : public ::cppu::OWeakObject
 {
 protected:
     ::cppu::OWeakObject&    m_rParent;
@@ -72,7 +72,7 @@ public:
 
 // FmXModifyMultiplexer
 
-class FmXModifyMultiplexer  :public OWeakSubObject
+class SAL_WARN_UNUSED FmXModifyMultiplexer  :public OWeakSubObject
                             ,public ::cppu::OInterfaceContainerHelper
                             ,public ::com::sun::star::util::XModifyListener
 {
@@ -95,7 +95,7 @@ public:
 
 // FmXUpdateMultiplexer
 
-class FmXUpdateMultiplexer : public OWeakSubObject,
+class SAL_WARN_UNUSED FmXUpdateMultiplexer : public OWeakSubObject,
                              public ::cppu::OInterfaceContainerHelper,
                              public ::com::sun::star::form::XUpdateListener
 {
@@ -120,7 +120,7 @@ public:
 
 // FmXSelectionMultiplexer
 
-class FmXSelectionMultiplexer   :public OWeakSubObject
+class SAL_WARN_UNUSED FmXSelectionMultiplexer   :public OWeakSubObject
                                 ,public ::cppu::OInterfaceContainerHelper
                                 ,public ::com::sun::star::view::XSelectionChangeListener
 {
@@ -144,7 +144,7 @@ public:
 
 // FmXGridControlMultiplexer
 
-class FmXGridControlMultiplexer :public OWeakSubObject
+class SAL_WARN_UNUSED FmXGridControlMultiplexer :public OWeakSubObject
                                 ,public ::cppu::OInterfaceContainerHelper
                                 ,public ::com::sun::star::form::XGridControlListener
 {
@@ -168,7 +168,7 @@ public:
 
 // FmXContainerMultiplexer
 
-class FmXContainerMultiplexer : public OWeakSubObject,
+class SAL_WARN_UNUSED FmXContainerMultiplexer : public OWeakSubObject,
                                 public ::cppu::OInterfaceContainerHelper,
                                 public ::com::sun::star::container::XContainerListener
 {
@@ -206,7 +206,7 @@ typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
                             >   FmXGridControl_BASE;
 
 class FmXGridPeer;
-class SVX_DLLPUBLIC FmXGridControl  :public UnoControl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridControl  :public UnoControl
                         ,public FmXGridControl_BASE
 {
     FmXModifyMultiplexer        m_aModifyListeners;
@@ -338,7 +338,7 @@ typedef ::comphelper::ImplHelper19  <   ::com::sun::star::form::XGridPeer,
                                         ::com::sun::star::view::XSelectionSupplier
                                     >   FmXGridPeer_BASE;
 class FmGridControl;
-class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridPeer :public VCLXWindow
                     ,public FmXGridPeer_BASE
 {
     css::uno::Reference< css::container::XIndexContainer >    m_xColumns;

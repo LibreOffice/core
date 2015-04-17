@@ -30,7 +30,7 @@
 // FmGridHeader
 
 struct FmGridHeaderData;
-class SVX_DLLPUBLIC FmGridHeader
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmGridHeader
             :public ::svt::EditBrowserHeader
             ,public DropTargetHelper
 {
@@ -91,7 +91,7 @@ private:
 // FmGridControl
 
 class FmXGridPeer;
-class SVX_DLLPUBLIC FmGridControl : public DbGridControl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmGridControl : public DbGridControl
 
 {
     friend class FmGridHeader;

@@ -32,7 +32,7 @@ class SbxArray;
 class SbxValue;
 
 struct FmFormModelImplData;
-class SVX_DLLPUBLIC FmFormModel :
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormModel :
     public SdrModel
 {
 private:

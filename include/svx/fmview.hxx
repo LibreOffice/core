@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace form {
     }
 } } } }
 
-class SVX_DLLPUBLIC FmFormView : public E3dView
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormView : public E3dView
 {
     FmXFormView*    pImpl;
     FmFormShell*    pFormShell;

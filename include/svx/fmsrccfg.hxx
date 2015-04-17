@@ -91,7 +91,7 @@ namespace svxform
     // = class FmSearchConfigItem - a ConfigItem, that remembers search parameters
 
 
-    class SVX_DLLPUBLIC FmSearchConfigItem
+    class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchConfigItem
                 :protected  FmSearchParams
                 ,public     ::utl::OConfigurationValueContainer
                 // order matters!

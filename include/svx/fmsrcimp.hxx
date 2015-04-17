@@ -42,7 +42,7 @@
  * class FmSearchThread
  */
 class FmSearchEngine;
-class FmSearchThread : public ::osl::Thread
+class SAL_WARN_UNUSED FmSearchThread : public ::osl::Thread
 {
     FmSearchEngine*     m_pEngine;
     Link                m_aTerminationHdl;
@@ -81,7 +81,7 @@ struct FmSearchProgress
  * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
  *                               the differences in RecordCount
  */
-class FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
 // attribute
     Link            m_lnkWhoWantsToKnow;
@@ -120,7 +120,7 @@ namespace svxform {
     // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent,
     // ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
     // While searching we don't want to do this distinction for every control in every round. So we need some helpers.
-    class ControlTextWrapper
+    class SAL_WARN_UNUSED ControlTextWrapper
     {
         // attributes
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xControl;
@@ -133,21 +133,24 @@ namespace svxform {
 
         virtual OUString getCurrentText() const = 0;
     };
-    class SimpleTextWrapper : public ControlTextWrapper
+
+    class SAL_WARN_UNUSED SimpleTextWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  m_xText;
     public:
         SimpleTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& _xText);
         virtual OUString getCurrentText() const SAL_OVERRIDE;
     };
-    class ListBoxWrapper : public ControlTextWrapper
+
+    class SAL_WARN_UNUSED ListBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >  m_xBox;
     public:
         ListBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >& _xBox);
         virtual OUString getCurrentText() const SAL_OVERRIDE;
     };
-    class CheckBoxWrapper : public ControlTextWrapper
+
+    class SAL_WARN_UNUSED CheckBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >  m_xBox;
     public:
@@ -160,7 +163,7 @@ enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
 
 typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
 
-class SVX_DLLPUBLIC FmSearchEngine
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
 {
     friend class FmSearchThread;
 

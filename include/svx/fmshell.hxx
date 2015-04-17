@@ -55,7 +55,7 @@ namespace svx
 }
 
 
-class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmDesignModeChangedHint : public SfxHint
 {
     bool m_bDesignMode;
 
@@ -66,8 +66,7 @@ public:
     bool GetDesignMode() const { return m_bDesignMode; }
 };
 
-
-class SVX_DLLPUBLIC FmFormShell : public SfxShell
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormShell : public SfxShell
 {
     friend class FmFormView;
     friend class FmXFormShell;
@@ -175,10 +174,6 @@ protected:
     void DetermineForms(bool bInvalidate);
     void impl_setDesignMode( bool bDesign);
 };
-
-// ***************************************************************************************************
-// ***************************************************************************************************
-// ***************************************************************************************************
 
 #endif // INCLUDED_SVX_FMSHELL_HXX
 

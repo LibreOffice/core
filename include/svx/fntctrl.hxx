@@ -34,7 +34,7 @@ class FontPrevWin_Impl;
 
 // class SvxFontPrevWindow -----------------------------------------------
 
-class SVX_DLLPUBLIC SvxFontPrevWindow : public vcl::Window
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontPrevWindow : public vcl::Window
 {
     using OutputDevice::SetFont;
 private:

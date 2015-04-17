@@ -48,7 +48,7 @@ class SfxBindings;
 namespace svx
 {
 
-class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FontWorkShapeTypeControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -60,9 +60,7 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
-
-
-class FontworkCharacterSpacingDialog : public ModalDialog
+class SAL_WARN_UNUSED FontworkCharacterSpacingDialog : public ModalDialog
 {
     MetricField* m_pMtrScale;
 
@@ -72,8 +70,7 @@ public:
     sal_Int32 getScale() const;
 };
 
-
-class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FontWorkGalleryDialog : public ModalDialog
 {
     ValueSet*           mpCtlFavorites;
     OKButton*           mpOKButton;

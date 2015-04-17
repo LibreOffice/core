@@ -28,7 +28,7 @@
 
 
 /** A list box string item which stores its text and font. */
-class SvLBoxFontString : public SvLBoxString
+class SAL_WARN_UNUSED SvLBoxFontString : public SvLBoxString
 {
 private:
     vcl::Font                   maFont;     /// The font used by this item.
@@ -59,7 +59,7 @@ public:
 
 
 /** A list box supporting formatted string entries. */
-class SVX_DLLPUBLIC SvxFontListBox : public SvTabListBox
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontListBox : public SvTabListBox
 {
 private:
     vcl::Font                   maStdFont;      /// Used for entries without specific font.
@@ -96,8 +96,6 @@ protected:
                                     const Image& rExpImg,
                                     SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 };
-
-
 
 #endif
 

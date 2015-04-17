@@ -35,7 +35,7 @@ namespace svx
 
 bool SVX_DLLPUBLIC checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus );
 
-class SVX_DLLPUBLIC FontworkBar : public SfxShell
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FontworkBar : public SfxShell
 {
 public:
     TYPEINFO_OVERRIDE();

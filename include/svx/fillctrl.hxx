@@ -41,7 +41,7 @@ class ListBox;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxFillToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFillToolBoxControl : public SfxToolBoxControl
 {
 private:
     XFillStyleItem*     mpStyleItem;
@@ -72,7 +72,7 @@ public:
 
 
 
-class FillControl : public vcl::Window
+class SAL_WARN_UNUSED FillControl : public vcl::Window
 {
 private:
     friend class SvxFillToolBoxControl;

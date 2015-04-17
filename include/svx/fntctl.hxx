@@ -30,7 +30,7 @@ class SfxBindings;
 
 // class SvxFontMenuControl ----------------------------------------------
 
-class SVX_DLLPUBLIC SvxFontMenuControl : public SfxMenuControl, public SfxListener
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontMenuControl : public SfxMenuControl, public SfxListener
 {
 private:
     FontNameMenu*   pMenu;
@@ -50,8 +50,6 @@ public:
 
     SFX_DECL_MENU_CONTROL();
 };
-
-
 
 #endif
 

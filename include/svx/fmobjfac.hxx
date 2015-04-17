@@ -25,9 +25,7 @@
 
 class SdrObjFactory;
 
-
-
-class SVX_DLLPUBLIC FmFormObjFactory
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormObjFactory
 {
 public:
     FmFormObjFactory();
@@ -35,9 +33,6 @@ public:
 
     DECL_LINK(MakeObject, SdrObjFactory*);
 };
-
-
-
 
 #endif          // _FM_FMOBJFAC_HXX
 

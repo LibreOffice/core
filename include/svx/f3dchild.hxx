@@ -31,7 +31,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC Svx3DChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DChildWindow : public SfxChildWindow
 {
  public:
     Svx3DChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );

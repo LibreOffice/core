@@ -92,7 +92,7 @@ SVX_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XProp
 //                          XDatabaseBookmarkCursor and XDatabaseDirectCursor each
 
 
-class CursorWrapper
+class SAL_WARN_UNUSED CursorWrapper
 {
 private:
     css::uno::Reference< css::uno::XInterface>                m_xGeneric;
@@ -171,7 +171,7 @@ private:
 
 
 class FmXDisposeMultiplexer;
-class FmXDisposeListener
+class SAL_WARN_UNUSED FmXDisposeListener
 {
     friend class FmXDisposeMultiplexer;
 
@@ -188,9 +188,7 @@ protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
 };
 
-
-
-class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< css::lang::XEventListener>
+class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper1< css::lang::XEventListener>
 {
     css::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
@@ -205,8 +203,6 @@ public:
 
     void dispose();
 };
-
-
 
 sal_Int16       getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports

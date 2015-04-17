@@ -53,7 +53,7 @@ class SvxConvertTo3DItem;
 
 struct Svx3DWinImpl;
 
-class SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
+class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DWin : public SfxDockingWindow
 {
     friend class        Svx3DChildWindow;
     friend class        Svx3DCtrlItem;
@@ -237,7 +237,7 @@ public:
 |*
 \************************************************************************/
 
-class Svx3DCtrlItem : public SfxControllerItem
+class SAL_WARN_UNUSED Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -254,7 +254,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 |*
 \************************************************************************/
 
-class SvxConvertTo3DItem : public SfxControllerItem
+class SAL_WARN_UNUSED SvxConvertTo3DItem : public SfxControllerItem
 {
     bool                        bState;
 

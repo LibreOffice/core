@@ -104,7 +104,7 @@ enum RefMode
                                 |
                                 |<- middle of the frame border
  */
-class SVX_DLLPUBLIC Style
+class SVX_DLLPUBLIC SAL_WARN_UNUSED Style
 {
 public:
     /** Constructs an invisible frame style. */
@@ -187,7 +187,7 @@ inline bool operator>=( const Style& rL, const Style& rR ) { return !(rL < rR); 
     It is dependent on the context, how the value is interpreted, i.e. it may
     specify the angle to a horizontal or vertical frame border.
  */
-class DiagStyle : public Style
+class SAL_WARN_UNUSED DiagStyle : public Style
 {
 public:
     /** Constructs an invisible diagonal frame style. */
