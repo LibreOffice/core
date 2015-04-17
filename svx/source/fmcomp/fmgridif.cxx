@@ -2437,8 +2437,8 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException, std::exception )
 {
     FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
-    sal_Int32 nOldFlags = pGrid->GetBrowserFlags();
-    pGrid->SetBrowserFlags(nOldFlags | EBBF_NOROWPICTURE);
+    EditBrowseBoxFlags nOldFlags = pGrid->GetBrowserFlags();
+    pGrid->SetBrowserFlags(nOldFlags | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT);
 
     VCLXWindow::draw(x, y);
 

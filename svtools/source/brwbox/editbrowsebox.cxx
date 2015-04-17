@@ -133,7 +133,7 @@ namespace svt
     }
 
 
-    EditBrowseBox::EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
+    EditBrowseBox::EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags, BrowserMode _nMode )
                   :BrowseBox( pParent, rId, _nMode )
                   ,nStartEvent(0)
                   ,nEndEvent(0)
@@ -154,7 +154,7 @@ namespace svt
     }
 
 
-    EditBrowseBox::EditBrowseBox( vcl::Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
+    EditBrowseBox::EditBrowseBox( vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
                   ,nStartEvent(0)
                   ,nEndEvent(0)
@@ -339,13 +339,13 @@ namespace svt
             return;
 
         RowStatus eStatus = GetRowStatus( nPaintRow );
-        sal_Int32 nBrowserFlags = GetBrowserFlags();
+        EditBrowseBoxFlags nBrowserFlags = GetBrowserFlags();
 
-        if (nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT)
+        if (nBrowserFlags & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT)
             return;
 
         // draw the text of the header column
-        if (nBrowserFlags & EBBF_HANDLE_COLUMN_TEXT )
+        if (nBrowserFlags & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT )
         {
             rDev.DrawText( rRect, GetCellText( nPaintRow, 0 ),
                            TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_CLIP );
@@ -509,7 +509,7 @@ namespace svt
         BrowseBox::MouseButtonDown(rEvt);
         aMouseEvent.Clear();
 
-        if (0 != (m_nBrowserFlags & EBBF_ACTIVATE_ON_BUTTONDOWN))
+        if (m_nBrowserFlags & EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN)
         {
             // the base class does not travel upon MouseButtonDown, but implActivateCellOnMouseEvent assumes we traveled ...
             GoToRowColumnId( rEvt.GetRow(), rEvt.GetColumnId() );
@@ -529,7 +529,7 @@ namespace svt
         BrowseBox::MouseButtonUp(rEvt);
         aMouseEvent.Clear();
 
-        if (0 == (m_nBrowserFlags & EBBF_ACTIVATE_ON_BUTTONDOWN))
+        if (!(m_nBrowserFlags & EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN))
             if (rEvt.GetRow() >= 0)
                 implActivateCellOnMouseEvent(rEvt, true);
     }
@@ -917,13 +917,13 @@ namespace svt
         if (nNewRow != nEditRow)
         {
             vcl::Window& rWindow = GetDataWindow();
-            if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
+            if ((nEditRow >= 0) && !(GetBrowserFlags() & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT))
             {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
                 // status cell should be painted if and only if text is displayed
                 // note: bPaintStatus is mutable, but Solaris has problems with assigning
                 // probably because it is part of a bitfield
-                pTHIS->bPaintStatus = ( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT;
+                pTHIS->bPaintStatus = ( GetBrowserFlags() & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT ) == EditBrowseBoxFlags::HANDLE_COLUMN_TEXT;
                 rWindow.Invalidate(aRect);
                 pTHIS->bPaintStatus = true;
             }
@@ -980,7 +980,7 @@ namespace svt
         long nNewRow = GetCurRow();
         if (nEditRow != nNewRow)
         {
-            if ((GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
+            if (!(GetBrowserFlags() & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT))
                 InvalidateStatusCell(nNewRow);
             nEditRow = nNewRow;
         }
@@ -1309,13 +1309,13 @@ namespace svt
     }
 
 
-    void EditBrowseBox::SetBrowserFlags(sal_Int32 nFlags)
+    void EditBrowseBox::SetBrowserFlags(EditBrowseBoxFlags nFlags)
     {
         if (m_nBrowserFlags == nFlags)
             return;
 
-        bool RowPicturesChanges = ((m_nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT) !=
-                                       (nFlags & EBBF_NO_HANDLE_COLUMN_CONTENT));
+        bool RowPicturesChanges = ((m_nBrowserFlags & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT) !=
+                                       (nFlags & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT));
         m_nBrowserFlags = nFlags;
 
         if (RowPicturesChanges)

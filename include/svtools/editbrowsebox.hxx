@@ -35,24 +35,27 @@
 #include <svtools/brwhead.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
 // EditBrowseBoxFlags (EBBF)
 
-#define EBBF_NONE                       ((sal_Int32)0x0000)
+enum class EditBrowseBoxFlags
+{
+    NONE                       = 0x0000,
 /** if this bit is _not_ set, the handle column will be invalidated upon
     changing the row in the browse box.  This is for forcing the row picture to
     be repainted. If you do not have row pictures or text, you don't need this
     invalidation, then you would specify this bit to prevent flicker
 */
-#define EBBF_NO_HANDLE_COLUMN_CONTENT   ((sal_Int32)0x0001)
+    NO_HANDLE_COLUMN_CONTENT   = 0x0001,
 /** set this bit to activate the cell on a MouseButtonDown, not a MouseButtonUp event
  */
-#define EBBF_ACTIVATE_ON_BUTTONDOWN     ((sal_Int32)0x0002)
-/** if this bit is set and EBBF_NO_HANDLE_COLUMN_CONTENT is _not_ set, the handle
+    ACTIVATE_ON_BUTTONDOWN     = 0x0002,
+/** if this bit is set and EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT is _not_ set, the handle
     column is drawn with the text contained in column 0 instead of an image
 */
-#define EBBF_HANDLE_COLUMN_TEXT         ((sal_Int32)0x0004)
+    HANDLE_COLUMN_TEXT         = 0x0004,
 
 /** If this bit is set, tab traveling is somewhat modified<br/>
     If the control gets the focus because the user pressed the TAB key, then the
@@ -61,11 +64,13 @@
     @see Window::GetGetFocusFlags
     @see GETFOCUS_*
 */
-#define EBBF_SMART_TAB_TRAVEL           ((sal_Int32)0x0008)
+    SMART_TAB_TRAVEL           = 0x0008,
 
-/// @deprecated
-#define EBBF_NOROWPICTURE               EBBF_NO_HANDLE_COLUMN_CONTENT
-
+};
+namespace o3tl
+{
+    template<> struct typed_flags<EditBrowseBoxFlags> : is_typed_flags<EditBrowseBoxFlags, 0x0f> {};
+}
 
 
 class Edit;
@@ -488,7 +493,7 @@ namespace svt
 
         CheckBoxControl* pCheckBoxPaint;
 
-        sal_Int32   m_nBrowserFlags;
+        EditBrowseBoxFlags  m_nBrowserFlags;
         ImageList   m_aStatusImages;
         ::std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
 
@@ -590,8 +595,8 @@ namespace svt
             // secure starting of StartEditHdl
 
     public:
-        EditBrowseBox(vcl::Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
-        EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = BrowserMode::NONE );
+        EditBrowseBox(vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
+        EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, BrowserMode nMode = BrowserMode::NONE );
         virtual ~EditBrowseBox();
 
         bool IsEditing() const {return aController.Is();}
@@ -604,8 +609,8 @@ namespace svt
         virtual void Dispatch(sal_uInt16 nId);
 
         CellControllerRef Controller() const { return aController; }
-        sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
-        void    SetBrowserFlags(sal_Int32 nFlags);
+        EditBrowseBoxFlags  GetBrowserFlags() const { return m_nBrowserFlags; }
+        void                SetBrowserFlags(EditBrowseBoxFlags nFlags);
 
         virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
         virtual void DeactivateCell(bool bUpdate = true);

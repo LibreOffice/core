@@ -3696,7 +3696,7 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_WORDONLY       7
 
 SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder)
-    : SwEntryBrowseBox_Base( pParent, EBBF_NONE, WB_TABSTOP | WB_BORDER,
+    : SwEntryBrowseBox_Base( pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
                            BrowserMode::KEEPHIGHLIGHT |
                            BrowserMode::COLUMNSELECTION |
                            BrowserMode::MULTISELECTION |

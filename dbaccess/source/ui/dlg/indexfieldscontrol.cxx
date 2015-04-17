@@ -91,7 +91,7 @@ namespace dbaui
 
     // IndexFieldsControl
     IndexFieldsControl::IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle)
-        : EditBrowseBox(_pParent, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
+        : EditBrowseBox(_pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
         , m_aSeekRow(m_aFields.end())
         , m_pSortingCell(NULL)
         , m_pFieldNameCell(NULL)

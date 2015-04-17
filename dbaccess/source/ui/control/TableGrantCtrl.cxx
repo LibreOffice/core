@@ -47,7 +47,7 @@ const sal_uInt16 COL_DROP       = 8;
 
 // OTableGrantControl
 OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
-    :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, nBits )
+    :EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, nBits )
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
     ,m_nDataPos( 0 )

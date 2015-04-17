@@ -96,7 +96,7 @@ namespace
 }
 
 OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
-                   :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BrowserMode::COLUMNSELECTION | BrowserMode::KEEPHIGHLIGHT |  BrowserMode::HIDESELECT |
+                   :EditBrowseBox( pParent,EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, WB_3DLOOK, BrowserMode::COLUMNSELECTION | BrowserMode::KEEPHIGHLIGHT |  BrowserMode::HIDESELECT |
                                   BrowserMode::HIDECURSOR | BrowserMode::HLINES | BrowserMode::VLINES )
                    ,m_nSeekRow(0)
                    ,m_nMaxColumns(0)
