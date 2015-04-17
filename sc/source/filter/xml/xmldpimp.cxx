@@ -1000,6 +1000,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
 {
     bool bHasName = false;
     bool bDataLayout = false;
+    bool bIgnoreSelectedPage = false;
     OUString aDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
@@ -1046,6 +1047,11 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                 bSelectedPage = true;
             }
             break;
+            case XML_TOK_DATA_PILOT_FIELD_ATTR_IGNORE_SELECTED_PAGE:
+            {
+                bIgnoreSelectedPage = true;
+            }
+            break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY :
             {
                 nUsedHierarchy = sValue.toInt32();
@@ -1053,6 +1059,11 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
         }
     }
+
+    // use the new extension elements
+    if (bIgnoreSelectedPage)
+        bSelectedPage = false;
+
     if (bHasName)
     {
         pDim = new ScDPSaveDimension(sName, bDataLayout);

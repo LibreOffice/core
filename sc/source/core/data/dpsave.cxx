@@ -509,6 +509,19 @@ void ScDPSaveDimension::SetCurrentPage( const OUString* pPage )
     }
 }
 
+OUString ScDPSaveDimension::GetCurrentPage() const
+{
+    MemberList::const_iterator it = maMemberList.begin(), itEnd = maMemberList.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPSaveMember* pMem = *it;
+        if (pMem->GetIsVisible())
+            return pMem->GetName();
+    }
+
+    return OUString();
+}
+
 ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const OUString& rName)
 {
     MemberHash::const_iterator res = maMemberHash.find (rName);

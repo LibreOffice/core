@@ -203,6 +203,7 @@ public:
     void SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
     void SetCurrentPage( const OUString* pPage ); // NULL = no selection (all)
+    OUString GetCurrentPage() const; // only for ODF compatibility
 
     sal_uInt16 GetOrientation() const
         { return nOrientation; }

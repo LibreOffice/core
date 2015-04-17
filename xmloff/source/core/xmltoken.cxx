@@ -999,6 +999,7 @@ namespace xmloff { namespace token {
         TOKEN( "ideograph-alpha",                 XML_IDEOGRAPH_ALPHA ),
         TOKEN( "ignore-case",                     XML_IGNORE_CASE ),
         TOKEN( "ignore-empty-rows",               XML_IGNORE_EMPTY_ROWS ),
+        TOKEN( "ignore-selected-page",            XML_IGNORE_SELECTED_PAGE ),
         TOKEN( "illustration-index",              XML_ILLUSTRATION_INDEX ),
         TOKEN( "illustration-index-entry-template",       XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE ),
         TOKEN( "illustration-index-source",       XML_ILLUSTRATION_INDEX_SOURCE ),

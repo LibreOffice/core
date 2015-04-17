@@ -994,6 +994,7 @@ namespace xmloff { namespace token {
         XML_IDEOGRAPH_ALPHA,
         XML_IGNORE_CASE,
         XML_IGNORE_EMPTY_ROWS,
+        XML_IGNORE_SELECTED_PAGE, // used for ODF compatibility
         XML_ILLUSTRATION_INDEX,
         XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE,
         XML_ILLUSTRATION_INDEX_SOURCE,

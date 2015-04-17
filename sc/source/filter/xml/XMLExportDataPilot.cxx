@@ -690,8 +690,9 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
     OUString sValueStr;
+    sheet::DataPilotFieldOrientation eOrientation = (sheet::DataPilotFieldOrientation) pDim->GetOrientation();
     ScXMLConverter::GetStringFromOrientation( sValueStr,
-        (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
+         eOrientation);
     if( !sValueStr.isEmpty() )
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
     if (pDim->GetUsedHierarchy() != 1)
@@ -703,6 +704,15 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     ScXMLConverter::GetStringFromFunction( sValueStr,
         (sheet::GeneralFunction) pDim->GetFunction() );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
+
+    if (eOrientation == sheet::DataPilotFieldOrientation_PAGE)
+    {
+        if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_IGNORE_SELECTED_PAGE, "true");
+        }
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
+    }
 
     SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD, true, true);
     WriteLevels(pDim);
