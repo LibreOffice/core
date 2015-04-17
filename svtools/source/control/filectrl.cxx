@@ -93,7 +93,7 @@ FileControl::~FileControl()
 void FileControl::SetText( const OUString& rStr )
 {
     maEdit.SetText( rStr );
-    if ( mnFlags & FILECTRL_RESIZEBUTTONBYPATHLEN )
+    if ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN )
         Resize();
 }
 
@@ -158,7 +158,7 @@ void FileControl::Resize()
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
     if ( ((mnInternalFlags & FILECTRL_ORIGINALBUTTONTEXT) == 0) ||
         ( nButtonTextWidth < aOutSz.Width()/3 &&
-        ( mnFlags & FILECTRL_RESIZEBUTTONBYPATHLEN
+        ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN
         ? ( maEdit.GetTextWidth( maEdit.GetText() )
             <= aOutSz.Width() - nButtonTextWidth - ButtonBorder )
         : sal_True ) )
