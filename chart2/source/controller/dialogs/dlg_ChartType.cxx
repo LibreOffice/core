@@ -42,7 +42,8 @@ ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
     , m_xChartModel(xChartModel)
     , m_xCC( xContext )
 {
-    m_pChartTypeTabPage = new ChartTypeTabPage(
+    m_pChartTypeTabPage = VclPtr<ChartTypeTabPage>::Create(
+
         get_content_area(),
         uno::Reference<XChartDocument>::query(m_xChartModel),
         m_xCC,

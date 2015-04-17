@@ -200,9 +200,9 @@ private:
 };
 
 SeriesHeader::SeriesHeader( vcl::Window * pParent, vcl::Window *pColorParent ) :
-        m_spSymbol( new FixedImage( pParent, WB_NOBORDER )),
-        m_spSeriesName( new SeriesHeaderEdit( pParent )),
-        m_spColorBar( new FixedText( pColorParent, WB_NOBORDER )),
+        m_spSymbol( VclPtr<FixedImage>::Create( pParent, WB_NOBORDER )),
+        m_spSeriesName( VclPtr<SeriesHeaderEdit>::Create( pParent )),
+        m_spColorBar( VclPtr<FixedText>::Create( pColorParent, WB_NOBORDER )),
         m_pDevice( pParent ),
         m_nStartCol( 0 ),
         m_nEndCol( 0 ),
@@ -453,8 +453,8 @@ DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate
     m_bIsDirty( false ),
     m_bLiveUpdate( bLiveUpdate ),
     m_bDataValid( true ),
-    m_aNumberEditField( new FormattedField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
-    m_aTextEditField( new Edit( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
     m_rTextEditController( new ::svt::EditCellController( m_aTextEditField.get() ))
 {
@@ -766,9 +766,9 @@ void DataBrowser::ShowWarningBox()
 
 bool DataBrowser::ShowQueryBox()
 {
-    QueryBox* pQueryBox = new QueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
+    ScopedVclPtrInstance<QueryBox> pQueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
 
-    return ( pQueryBox->Execute() == RET_YES );
+    return pQueryBox->Execute() == RET_YES;
 }
 
 bool DataBrowser::IsDataValid()

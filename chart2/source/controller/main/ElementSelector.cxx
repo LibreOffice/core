@@ -322,7 +322,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
         vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
         if( pParent )
         {
-            m_apSelectorListBox.reset( new SelectorListBox( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );
+            m_apSelectorListBox.reset( VclPtr<SelectorListBox>::Create( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );
             ::Size aLogicalSize( 95, 160 );
             ::Size aPixelSize = m_apSelectorListBox->LogicToPixel( aLogicalSize, MAP_APPFONT );
             m_apSelectorListBox->SetSizePixel( aPixelSize );

@@ -388,7 +388,7 @@ void SAL_CALL ChartController::attachFrame(
     {
         // calls to VCL
         SolarMutexGuard aSolarGuard;
-        m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);
+        m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         m_pChartWindow->SetBackground();//no Background
         m_xViewWindow = uno::Reference< awt::XWindow >( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
         m_pChartWindow->Show();

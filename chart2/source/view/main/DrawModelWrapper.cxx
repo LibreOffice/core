@@ -151,7 +151,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     if( !pDefaultDevice )
         pDefaultDevice = Application::GetDefaultDevice();
     m_pRefDevice.disposeAndClear();
-    m_pRefDevice = new VirtualDevice(*pDefaultDevice);
+    m_pRefDevice = VclPtr<VirtualDevice>::Create(*pDefaultDevice);
     MapMode aMapMode = m_pRefDevice->GetMapMode();
     aMapMode.SetMapUnit(MAP_100TH_MM);
     m_pRefDevice->SetMapMode(aMapMode);

@@ -522,7 +522,7 @@ SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
     if( !m_pSplinePropertiesDialog.get() )
-        m_pSplinePropertiesDialog.reset( new SplinePropertiesDialog( m_pPB_DetailsDialog->GetParentDialog() ) );
+        m_pSplinePropertiesDialog.reset( VclPtr<SplinePropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
     return *m_pSplinePropertiesDialog;
 }
 
@@ -530,7 +530,7 @@ SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
 {
     if( !m_pSteppedPropertiesDialog.get() )
     {
-        m_pSteppedPropertiesDialog.reset( new SteppedPropertiesDialog( m_pPB_DetailsDialog->GetParentDialog() ) );
+        m_pSteppedPropertiesDialog.reset( VclPtr<SteppedPropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
     }
     return *m_pSteppedPropertiesDialog;
 }

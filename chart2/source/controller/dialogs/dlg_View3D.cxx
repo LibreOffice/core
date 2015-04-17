@@ -49,9 +49,9 @@ View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XM
     get(m_pTabControl, "tabcontrol");
 
     uno::Reference< beans::XPropertySet > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-    m_pGeometry   = new ThreeD_SceneGeometry_TabPage(m_pTabControl,xSceneProperties,m_aControllerLocker);
-    m_pAppearance = new ThreeD_SceneAppearance_TabPage(m_pTabControl,xChartModel,m_aControllerLocker);
-    m_pIllumination = new ThreeD_SceneIllumination_TabPage(m_pTabControl,xSceneProperties,xChartModel,pColorTable);
+    m_pGeometry   = VclPtr<ThreeD_SceneGeometry_TabPage>::Create(m_pTabControl,xSceneProperties,m_aControllerLocker);
+    m_pAppearance = VclPtr<ThreeD_SceneAppearance_TabPage>::Create(m_pTabControl,xChartModel,m_aControllerLocker);
+    m_pIllumination = VclPtr<ThreeD_SceneIllumination_TabPage>::Create(m_pTabControl,xSceneProperties,xChartModel,pColorTable);
 
     m_pTabControl->InsertPage( TP_3D_SCENEGEOMETRY, SCH_RESSTR(STR_PAGE_PERSPECTIVE) );
     m_pTabControl->InsertPage( TP_3D_SCENEAPPEARANCE, SCH_RESSTR(STR_PAGE_APPEARANCE) );

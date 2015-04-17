@@ -212,7 +212,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         uno::Reference< XComponent > xComp( this );
         if( m_xChartModel.is() )
         {
-            m_pDialog = new CreationWizard( pParent, m_xChartModel, m_xCC );
+            m_pDialog = VclPtr<CreationWizard>::Create( pParent, m_xChartModel, m_xCC );
             m_pDialog->AddEventListener( LINK( this, CreationWizardUnoDlg, DialogEventHdl ) );
         }
     }
