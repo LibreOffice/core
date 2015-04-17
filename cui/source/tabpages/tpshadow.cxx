@@ -257,10 +257,14 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     {
         const SfxPoolItem*  pOld = NULL;
 
-        TriState eState = m_pTsbShowShadow->GetState();
         if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {
-            SdrOnOffItem aItem( makeSdrShadowItem(sal::static_int_cast< sal_Bool >( eState )) );
+            TriState eState = m_pTsbShowShadow->GetState();
+            assert(eState != TRISTATE_INDET);
+                // given how m_pTsbShowShadow is set up and saved in Reset(),
+                // eState == TRISTATE_INDET would imply
+                // !IsValueChangedFromSaved()
+            SdrOnOffItem aItem( makeSdrShadowItem(eState == TRISTATE_TRUE) );
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOW );
             if ( !pOld || !( *static_cast<const SdrOnOffItem*>(pOld) == aItem ) )
             {
