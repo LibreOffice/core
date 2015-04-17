@@ -1040,8 +1040,17 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     // or select
     if (  rUDEvt.GetItemId() == rUDEvt.GetStyle() )
     {
+        OUString fontName(GetText());
+        if (IsInDropDown())
+        {
+            /*
+             * when in dropdown mode the selected item should be
+             * used and not the current selection
+             */
+             fontName = GetEntry(rUDEvt.GetItemId());
+        }
         Sequence< PropertyValue > aArgs( 1 );
-        vcl::FontInfo aInfo( pFontList->Get( GetEntry( rUDEvt.GetItemId() ),
+        vcl::FontInfo aInfo( pFontList->Get( fontName,
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
 
