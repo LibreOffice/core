@@ -264,18 +264,9 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
-                    if (m_tableReference->m_pOldTablepInner && m_tableReference->m_pOldTablepInner->getTable() == pInner->getTable() && nCurrentDepth > 1 &&  nDepth != 1)
-                    {
-                       m_tableReference->m_pOldTablepInner = pInner;
-                       break;
-                    }
-                    else
-                    {
                     StartTable( pInner );
                     StartTableRow( pInner );
                     StartTableCell( pInner );
-                    m_tableReference->m_pOldTablepInner = pInner;
-                    }
                 }
 
                 m_tableReference->m_nTableDepth = nCurrentDepth;
