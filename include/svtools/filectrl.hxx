@@ -29,9 +29,15 @@
 #define STR_FILECTRL_BUTTONTEXT     333     // ID-Range?!
 
 // Flags for FileControl
-typedef sal_uInt16 FileControlMode;
-#define FILECTRL_RESIZEBUTTONBYPATHLEN  ((sal_uInt16)0x0001)//if this is set, the button will become small as soon as the Text in the Edit Field is to long to be shown completely
-
+enum class FileControlMode
+{
+    NONE                    = 0x00,
+    RESIZEBUTTONBYPATHLEN   = 0x01, //if this is set, the button will become small as soon as the Text in the Edit Field is to long to be shown completely
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FileControlMode> : is_typed_flags<FileControlMode, 0x01> {};
+}
 
 // Flags for internal use of FileControl
 typedef sal_uInt16 FileControlMode_Internal;
@@ -64,7 +70,7 @@ protected:
     DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
 
 public:
-                    FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = 0 );
+                    FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = FileControlMode::NONE );
                     virtual ~FileControl();
 
     Edit&           GetEdit() { return maEdit; }
