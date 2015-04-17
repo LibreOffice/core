@@ -50,7 +50,7 @@ public:
 
     void init(bool bVirtualRoot) { m_bVirtualRoot = bVirtualRoot; }
 
-    typedef ::std::pair< OUString,sal_Bool>  TTableViewName;
+    typedef ::std::pair< OUString, bool > TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
 
     void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
