@@ -306,9 +306,9 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
 
     BitStream aBits;
 
-    const sal_uInt8 bHasScale = rMatrix.get(0, 0) != 1.0 || rMatrix.get(1, 1) != 1.0;
+    const bool bHasScale = rMatrix.get(0, 0) != 1.0 || rMatrix.get(1, 1) != 1.0;
 
-    aBits.writeUB( bHasScale, 1 );
+    aBits.writeUB( int(bHasScale), 1 );
 
     if( bHasScale )
     {
@@ -319,9 +319,9 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
         aBits.writeFB( getFixed( rMatrix.get(1, 1) ), nScaleBits ); // Scale Y
     }
 
-    const sal_uInt8 bHasRotate = rMatrix.get(0, 1) != 0.0 || rMatrix.get(1, 0) != 0.0;
+    const bool bHasRotate = rMatrix.get(0, 1) != 0.0 || rMatrix.get(1, 0) != 0.0;
 
-    aBits.writeUB( bHasRotate, 1 );
+    aBits.writeUB( int(bHasRotate), 1 );
 
     if( bHasRotate )
     {
