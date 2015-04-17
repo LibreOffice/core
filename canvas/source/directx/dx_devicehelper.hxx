@@ -28,7 +28,7 @@
 #include "dx_bitmap.hxx"
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
 #include <boost/utility.hpp>
 
 class OutputDevice;
@@ -40,6 +40,7 @@ namespace dxcanvas
     {
     public:
         DeviceHelper();
+        ~DeviceHelper();
 
         /** Init the device helper
 

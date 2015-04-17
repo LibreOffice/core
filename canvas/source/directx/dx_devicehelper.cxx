@@ -52,6 +52,10 @@ namespace dxcanvas
     {
     }
 
+    DeviceHelper::~DeviceHelper()
+    {
+    }
+
     void DeviceHelper::init( HDC hdc, OutputDevice* pOutDev,
                              rendering::XGraphicDevice& rDevice )
     {
@@ -191,7 +195,7 @@ namespace dxcanvas
 
     uno::Any DeviceHelper::getDeviceHandle() const
     {
-        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpOutDev) );
+        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpOutDev.get()) );
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const
