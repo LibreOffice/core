@@ -138,6 +138,29 @@ struct TableReference
     }
 };
 
+class DocxWriteTable : public SwWriteTable
+{
+public:
+    DocxWriteTable(const SwTable* pTable, const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
+                 bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
+                 sal_uInt16 nInLeftSub=0, sal_uInt16 nInRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0)
+        : SwWriteTable(rLines, nWidth, nBWidth,
+                       bRel, nMaxDepth, nInLeftSub, nInRightSub, nNumOfRowsToRepeat)
+        , m_pTable(pTable)
+    {
+    }
+
+    DocxWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo )
+        : SwWriteTable(pLayoutInfo)
+        , m_pTable(pTable)
+    {
+    }
+
+    const SwTable* getTable() const { return m_pTable; }
+private:
+    const SwTable* m_pTable;
+};
+
 /// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport, public oox::drawingml::DMLTextExport
 {
@@ -795,7 +818,7 @@ private:
     std::vector<css::beans::PropertyValue> m_aTextEffectsGrabBag;
 
     /// The current table helper
-    std::unique_ptr<SwWriteTable> m_pTableWrt;
+    std::unique_ptr<DocxWriteTable> m_xTableWrt;
 
     sw::Frame* m_pCurrentFrame;
 

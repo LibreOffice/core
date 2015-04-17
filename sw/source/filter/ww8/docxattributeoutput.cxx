@@ -694,9 +694,10 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         // Where are we in the table
         sal_uInt32 nRow = pInner->getRow( );
 
-        const SwTable *pTable = pInner->getTable( );
-        const SwTableLines& rLines = pTable->GetTabLines( );
-        sal_uInt16 nLinesCount = rLines.size( );
+        InitTableHelper( pInner );
+
+        const size_t nLinesCount = m_xTableWrt->GetRows().size();
+
         // HACK
         // msoffice seems to have an internal limitation of 63 columns for tables
         // and refuses to load .docx with more, even though the spec seems to allow that;
@@ -2824,7 +2825,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
            FSEND );
 
     // Horizontal spans
-    const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
+    const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ nRow ];
     const SwWriteTableCells *tableCells =  &pRow->GetCells();
     if (nCell < tableCells->size() )
@@ -2887,21 +2888,24 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
 void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
+    const SwTable* pTable = pTableTextNodeInfoInner->getTable();
+    if (m_xTableWrt && pTable == m_xTableWrt->getTable())
+        return;
+
     long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
     GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
-    const SwTable* pTable = pTableTextNodeInfoInner->getTable( );
     const SwFrmFmt *pFmt = pTable->GetFrmFmt( );
     const sal_uInt32 nTblSz = static_cast<sal_uInt32>(pFmt->GetFrmSize( ).GetWidth( ));
 
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
-        m_pTableWrt.reset(new SwWriteTable(pLayout));
+        m_xTableWrt.reset(new DocxWriteTable(pTable, pLayout));
     else
-        m_pTableWrt.reset(new SwWriteTable(pTable->GetTabLines(), nPageSize, nTblSz, false));
+        m_xTableWrt.reset(new DocxWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false));
 }
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -2933,7 +2937,7 @@ void DocxAttributeOutput::EndTable()
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
-    m_pTableWrt.reset(0);
+    m_xTableWrt.reset(0);
 
     m_aTableStyleConf.clear();
 }
@@ -2980,8 +2984,7 @@ void DocxAttributeOutput::EndTableRow( )
 
 void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
-    if ( !m_pTableWrt )
-        InitTableHelper( pTableTextNodeInfoInner );
+    InitTableHelper( pTableTextNodeInfoInner );
 
     m_pSerializer->startElementNS( XML_w, XML_tc, FSEND );
 
@@ -3566,7 +3569,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         }
     }
 
-    const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
+    const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
     sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
     const SwWriteTableCells *tableCells =  &pRow->GetCells();
