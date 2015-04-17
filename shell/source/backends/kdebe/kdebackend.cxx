@@ -178,6 +178,9 @@ css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
             enabled_
             ? kdeaccess::getValue(PropertyName)
             : css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName == "givenname" || PropertyName == "sn") {
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+            //TODO: obtain values from KDE?
     }
     throw css::beans::UnknownPropertyException(
         PropertyName, static_cast< cppu::OWeakObject * >(this));
