@@ -149,7 +149,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( 0 )
 {
-    m_pComboBox = new ComboBoxControl( m_pToolbar, WB_DROPDOWN, this );
+    m_pComboBox = VclPtr<ComboBoxControl>::Create( m_pToolbar, WB_DROPDOWN, this );
     if ( nWidth == 0 )
         nWidth = 100;
 

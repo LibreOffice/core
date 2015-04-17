@@ -131,7 +131,7 @@ EditToolbarController::EditToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( 0 )
 {
-    m_pEditControl = new EditControl( m_pToolbar, WB_BORDER, this );
+    m_pEditControl = VclPtr<EditControl>::Create( m_pToolbar, WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 

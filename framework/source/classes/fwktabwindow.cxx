@@ -180,7 +180,7 @@ void FwkTabPage::Resize()
 // class FwkTabWindow ---------------------------------------------
 FwkTabWindow::FwkTabWindow( vcl::Window* pParent )
     : Window(pParent)
-    , m_aTabCtrl(new FwkTabControl(this))
+    , m_aTabCtrl(VclPtr<FwkTabControl>::Create(this))
 {
     m_xWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
 
@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
         TabEntry* pEntry = FindEntry( nId );
         if ( pEntry )
         {
-            pTabPage = new FwkTabPage( m_aTabCtrl.get(), pEntry->m_sPageURL, pEntry->m_xEventHdl, m_xWinProvider );
+            pTabPage = VclPtr<FwkTabPage>::Create( m_aTabCtrl.get(), pEntry->m_sPageURL, pEntry->m_xEventHdl, m_xWinProvider );
             pEntry->m_pPage = pTabPage;
             m_aTabCtrl->SetTabPage( nId, pTabPage );
             pTabPage->Show();

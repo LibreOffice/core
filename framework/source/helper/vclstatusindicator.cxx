@@ -48,7 +48,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
 
     vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
     if (!m_pStatusBar)
-        m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
+        m_pStatusBar = VclPtr<StatusBar>::Create(pParentWindow, WB_3DLOOK|WB_BORDER);
 
     VCLStatusIndicator::impl_recalcLayout(m_pStatusBar, pParentWindow);
 

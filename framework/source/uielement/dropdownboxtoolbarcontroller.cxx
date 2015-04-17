@@ -132,7 +132,7 @@ DropdownToolbarController::DropdownToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pListBoxControl( 0 )
 {
-    m_pListBoxControl = new ListBoxControl( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
+    m_pListBoxControl = VclPtr<ListBoxControl>::Create( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 

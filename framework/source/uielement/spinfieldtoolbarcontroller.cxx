@@ -192,7 +192,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ,   m_nStep( 0.0 )
     ,   m_pSpinfieldControl( 0 )
 {
-    m_pSpinfieldControl = new SpinfieldControl( m_pToolbar, WB_SPIN|WB_BORDER, this );
+    m_pSpinfieldControl = VclPtr<SpinfieldControl>::Create( m_pToolbar, WB_SPIN|WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 

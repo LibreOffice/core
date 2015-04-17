@@ -110,7 +110,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                 {
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
-                    pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
+                    pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
                     pStatusBarManager = new StatusBarManager( m_xContext, xFrame, m_aResourceURL, pStatusBar );
                     static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
