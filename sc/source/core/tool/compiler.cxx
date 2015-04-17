@@ -3710,6 +3710,9 @@ bool ScCompiler::NextNewToken( bool bInArray )
         {
             if (IsTableRefColumn( aOrg ))
                 return true;
+            // Do not attempt to resolve as any other name.
+            aUpper = aOrg;  // for ocBad
+            break;          // do; create ocBad token or set error.
         }
 
         mbRewind = false;
@@ -4859,8 +4862,7 @@ bool ScCompiler::HandleTableRef()
         pDBData->GetArea(aDBRange);
         aDBRange.aEnd.SetTab(aDBRange.aStart.Tab());
         ScRange aRange( aDBRange);
-        ScTokenArray* pNew = new ScTokenArray();
-        bool bAddRange = true;
+        sal_uInt16 nError = 0;
         bool bForwardToClose = false;
         ScTableRefToken::Item eItem = pTR->GetItem();
         switch (eItem)
@@ -4874,7 +4876,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4888,7 +4890,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aEnd.SetRow( aRange.aStart.Row());
                     else
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4903,7 +4905,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4912,7 +4914,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aStart.SetRow( aRange.aEnd.Row());
                     else
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4921,7 +4923,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aStart.IncRow();
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4933,7 +4935,7 @@ bool ScCompiler::HandleTableRef()
                         aRange.aEnd.SetRow( aPos.Row());
                     }
                     else
-                        bAddRange = false;
+                        nError = errNoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -4995,6 +4997,11 @@ bool ScCompiler::HandleTableRef()
                                 eState = sStop;
                             }
                             break;
+                        case ocBad:
+                            eState = sLast;
+                            if (!nError)
+                                nError = errNoName;
+                            break;
                         default:
                             eState = sStop;
                     }
@@ -5005,7 +5012,8 @@ bool ScCompiler::HandleTableRef()
                 }
             } while (eState != sStop);
         }
-        if (bAddRange)
+        ScTokenArray* pNew = new ScTokenArray();
+        if (!nError)
         {
             if (bColumnRange)
             {
@@ -5083,7 +5091,7 @@ bool ScCompiler::HandleTableRef()
         }
         else
         {
-            pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( errNoRef)));
+            pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( nError)));
         }
         while (nLevel-- > 0)
         {
