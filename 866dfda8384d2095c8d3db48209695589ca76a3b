@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_b01018aa",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "Thanks. Changing ..",
+      "parentUuid": "ba8a016a_50f8cc7c",
+      "range": {
+        "startLine": 329,
+        "startChar": 19,
+        "endLine": 329,
+        "endChar": 37
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_70f5d081",
         "filename": "sc/source/core/inc/interpre.hxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-04-17T14:34:31Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 332,
+        "startChar": 19,
+        "endLine": 332,
+        "endChar": 59
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_50268c17",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "ba8a016a_70f5d081",
       "range": {
         "startLine": 332,
         "startChar": 19,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_70239006",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "I wanted to use it, but I checked function ScCompiler::IsSingleReference, and I copied code from there.",
+      "parentUuid": "ba8a016a_10f2449b",
+      "range": {
+        "startLine": 1945,
+        "startChar": 13,
+        "endLine": 1945,
+        "endChar": 24
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_30ef48b2",
         "filename": "sc/source/core/tool/interpr4.cxx",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2015-04-17T14:34:31Z",
       "side": 1,
       "message": "It is unnecessary to create two ScSingleRefData first and then assign them to ScComplexRefData parts. Just use ScComplexRefData and operate on the Ref1 and Ref2 parts.",
+      "range": {
+        "startLine": 1962,
+        "startChar": 8,
+        "endLine": 1962,
+        "endChar": 23
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_102004f7",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "Same code above",
+      "parentUuid": "ba8a016a_30ef48b2",
       "range": {
         "startLine": 1962,
         "startChar": 8,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_301d08be",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "Changing ...",
+      "parentUuid": "ba8a016a_d02a7ce7",
+      "range": {
+        "startLine": 1963,
+        "startChar": 14,
+        "endLine": 1963,
+        "endChar": 25
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_b039f843",
         "filename": "sc/source/core/tool/refdata.cxx",
         "patchSetId": 1
@@ -134,6 +254,24 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_506d2c31",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "The Tab always is specified, the difference is the Tab could be relative or absolute. If is not specified is an invalid address.\n\nThe flag IsFlag3D is set by the parser address, when notation is Sheet:ColRow.\n\nI did check git show 194e9f9bae28bdf22a9ed4779c1656ee693f3302\nand most ideas where took it from removed code.",
+      "parentUuid": "ba8a016a_b039f843",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_f02f80f4",
         "filename": "sc/source/core/tool/refdata.cxx",
         "patchSetId": 1
@@ -145,6 +283,24 @@
       "writtenOn": "2015-04-17T14:34:31Z",
       "side": 1,
       "message": "This else path is executed for both, (Ref1.IsTabRel() \u0026\u0026 rRef.IsTabRel()) or (!Ref1.IsTabRel() \u0026\u0026 rRef.IsTabRel()). Should it differentiate instead?",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_706ab01c",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-17T19:15:48Z",
+      "side": 1,
+      "message": "The original idea was 3 Ifs, with 2 repeated code :(\n\nif ( ref1 tab and ref2 tab are relative )\n...\nelse if (ref1 tab is absolute and ref2 is relative )\n\nelse if (ref1 tab is relative and ref2 is absolute )\n\nthe absolute tab take precedence.",
+      "parentUuid": "ba8a016a_f02f80f4",
       "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
