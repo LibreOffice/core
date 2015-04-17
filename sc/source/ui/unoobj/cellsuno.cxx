@@ -8871,7 +8871,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
@@ -9024,12 +9024,12 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasRowBreak(nRow, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             ScBreakType nBreak = (rDoc.HasRowBreak(nRow, nTab) & BREAK_MANUAL);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

@@ -3543,7 +3543,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     else if ( aNameString == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasColBreak(nStartCol, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak != BREAK_NONE );
     }
     else if ( aNameString == SC_UNONAME_MANPAGE )
     {
@@ -3820,7 +3820,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aNameString == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasRowBreak(nStartRow, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak != BREAK_NONE );
     }
     else if ( aNameString == SC_UNONAME_MANPAGE )
     {
