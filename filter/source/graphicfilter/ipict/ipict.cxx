@@ -1881,7 +1881,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     aHRes = aVRes = Fraction( 1, 1 );
 
-    pVirDev = new VirtualDevice();
+    pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 

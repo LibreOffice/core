@@ -331,7 +331,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException,
             pParent = VCLUnoHelper::GetWindow(mxParent);
 
         Reference< XComponent > xComp( this );
-        mpDialog = new XMLFilterSettingsDialog(pParent, mxContext);
+        mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(pParent, mxContext);
         mpDialog->Execute();
     }
     else if( !mpDialog->IsVisible() )

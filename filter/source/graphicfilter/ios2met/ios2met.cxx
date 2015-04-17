@@ -2609,7 +2609,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     pOrdFile=NULL;
 
-    pVirDev = new VirtualDevice();
+    pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 

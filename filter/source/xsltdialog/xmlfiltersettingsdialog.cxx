@@ -1356,12 +1356,12 @@ SvxPathControl::SvxPathControl(vcl::Window* pParent)
     : Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
     , bHasBeenShown(false)
 {
-    m_pVBox = new VclVBox(this);
+    m_pVBox = VclPtr<VclVBox>::Create(this);
 
-    m_pHeaderBar = new HeaderBar(m_pVBox, WB_BOTTOMBORDER);
+    m_pHeaderBar = VclPtr<HeaderBar>::Create(m_pVBox, WB_BOTTOMBORDER);
     m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
-    m_pFocusCtrl = new XMLFilterListBox(m_pVBox, this);
+    m_pFocusCtrl = VclPtr<XMLFilterListBox>::Create(m_pVBox, this);
     m_pFocusCtrl->set_fill(true);
     m_pFocusCtrl->set_expand(true);
 

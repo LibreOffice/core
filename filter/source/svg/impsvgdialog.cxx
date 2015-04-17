@@ -36,13 +36,13 @@ inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
 
 ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent ),
-    maFI( new FixedLine(this) ),
-    maCBTinyProfile( new CheckBox(this) ),
-    maCBEmbedFonts( new CheckBox(this) ),
-    maCBUseNativeDecoration( new CheckBox(this) ),
-    maBTOK( new OKButton(this, WB_DEF_OK) ),
-    maBTCancel( new CancelButton(this) ),
-    maBTHelp( new HelpButton(this) ),
+    maFI( VclPtr<FixedLine>::Create(this) ),
+    maCBTinyProfile( VclPtr<CheckBox>::Create(this) ),
+    maCBEmbedFonts( VclPtr<CheckBox>::Create(this) ),
+    maCBUseNativeDecoration( VclPtr<CheckBox>::Create(this) ),
+    maBTOK( VclPtr<OKButton>::Create(this, WB_DEF_OK) ),
+    maBTCancel( VclPtr<CancelButton>::Create(this) ),
+    maBTHelp( VclPtr<HelpButton>::Create(this) ),
     maConfigItem( SVG_EXPORTFILTER_CONFIGPATH, &rFilterData ),
     mbOldNativeDecoration( false )
 {
