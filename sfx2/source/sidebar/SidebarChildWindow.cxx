@@ -50,10 +50,10 @@ SidebarChildWindow::SidebarChildWindow (
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow);
     if (pDockingParent != NULL)
     {
-        if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "simpress")
+        if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "sdraw" && pInfo->aModule != "simpress")
         {
             // When this is the first start (never had the sidebar open yet),
-            // default to non-expanded sidebars in Writer, Calc, and Draw
+            // default to non-expanded sidebars in Writer and Calc.
             //
             // HACK: unfortunately I haven't found a clean solution to do
             // this, so do it this way:
