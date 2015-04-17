@@ -228,6 +228,15 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOldComplexMerge, "tdf90681.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "//w:vMerge[4]", "val", "continue");
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
 {

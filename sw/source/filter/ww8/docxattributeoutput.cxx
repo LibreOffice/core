@@ -705,11 +705,21 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         // and merge the contents of the remaining ones into it (since we don't close the cell
         // here, following ones will not be opened)
         bool limitWorkaround = ( pInner->getCell() >= 62 && !pInner->isEndOfLine());
+        const bool bEndCell = pInner->isEndOfCell() && !limitWorkaround;
+        const bool bStartCell = bEndCell && !m_nCellsOpen;
 
-        if ( pInner->isEndOfCell() && !limitWorkaround )
+        if ( bEndCell )
         {
             if ( bForceEmptyParagraph )
+            {
+                if (bStartCell)
+                {
+                    const sal_uInt32 nCol = pInner->getCell();
+                    StartTableCell(pInner, nCol+1, nRow);
+                }
+
                 m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
+            }
 
             EndTableCell();
         }
@@ -2986,6 +2996,7 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
 {
     InitTableHelper( pTableTextNodeInfoInner );
 
+    ++m_nCellsOpen;
     m_pSerializer->startElementNS( XML_w, XML_tc, FSEND );
 
     // Write the cell properties here
@@ -3007,6 +3018,7 @@ void DocxAttributeOutput::EndTableCell( )
         EndParaSdtBlock();
 
     m_pSerializer->endElementNS( XML_w, XML_tc );
+    --m_nCellsOpen;
 
     m_bBtLr = false;
     m_tableReference->m_bTableCellOpen = false;
@@ -8302,6 +8314,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
     , m_bParagraphSdtHasId(false)
+    , m_nCellsOpen(0)
 {
 }
 

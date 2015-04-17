@@ -945,6 +945,8 @@ private:
     OUString m_aRunSdtPrAlias;
     /// Currently paragraph SDT has a <w:id> child element.
     bool m_bParagraphSdtHasId;
+    /// Checking for balanced table cells start/ends
+    sal_Int32 m_nCellsOpen;
 
     std::map<SvxBoxItemLine, css::table::BorderLine2> m_aTableStyleConf;
 
