@@ -637,7 +637,7 @@ void Font::Merge( const vcl::Font& rFont )
     SetOrientation( rFont.GetOrientation() );
     SetVertical( rFont.IsVertical() );
     SetEmphasisMark( rFont.GetEmphasisMark() );
-    SetKerning( rFont.IsKerning() );
+    SetKerning( rFont.IsKerning() ? KERNING_FONTSPECIFIC : 0 );
     SetOutline( rFont.IsOutline() );
     SetShadow( rFont.IsShadow() );
     SetRelief( rFont.GetRelief() );

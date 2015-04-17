@@ -433,7 +433,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
                 ReadPair( rIStm , aCandidate[b] );
             }
 
-            sal_uInt8 bHasFlags(false);
+            sal_uInt8 bHasFlags(int(false));
             rIStm.ReadUChar( bHasFlags );
 
             if(bHasFlags)

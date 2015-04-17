@@ -1564,49 +1564,54 @@ bool ReadDIBBitmapEx(
 
         if(bRetval)
         {
-            sal_uInt8 bTransparent(false);
+            sal_uInt8 transparent = TRANSPARENT_NONE;
 
-            rIStm.ReadUChar( bTransparent );
+            rIStm.ReadUChar( transparent );
             bRetval = !rIStm.GetError();
 
             if(bRetval)
             {
-                if((sal_uInt8)TRANSPARENT_BITMAP == bTransparent)
+                switch (transparent)
                 {
-                    Bitmap aMask;
-
-                    bRetval = ImplReadDIB(aMask, 0, rIStm, true);
-
-                    if(bRetval)
+                case TRANSPARENT_BITMAP:
                     {
-                        if(!!aMask)
-                        {
-                            // do we have an alpha mask?
-                            if((8 == aMask.GetBitCount()) && aMask.HasGreyPalette())
-                            {
-                                AlphaMask aAlpha;
+                        Bitmap aMask;
 
-                                // create alpha mask quickly (without greyscale conversion)
-                                aAlpha.ImplSetBitmap(aMask);
-                                rTarget = BitmapEx(aBmp, aAlpha);
-                            }
-                            else
+                        bRetval = ImplReadDIB(aMask, 0, rIStm, true);
+
+                        if(bRetval)
+                        {
+                            if(!!aMask)
                             {
-                                rTarget = BitmapEx(aBmp, aMask);
+                                // do we have an alpha mask?
+                                if((8 == aMask.GetBitCount()) && aMask.HasGreyPalette())
+                                {
+                                    AlphaMask aAlpha;
+
+                                    // create alpha mask quickly (without greyscale conversion)
+                                    aAlpha.ImplSetBitmap(aMask);
+                                    rTarget = BitmapEx(aBmp, aAlpha);
+                                }
+                                else
+                                {
+                                    rTarget = BitmapEx(aBmp, aMask);
+                                }
                             }
                         }
+                        break;
                     }
-                }
-                else if((sal_uInt8)TRANSPARENT_COLOR == bTransparent)
-                {
-                    Color aTransparentColor;
-
-                    ReadColor( rIStm, aTransparentColor );
-                    bRetval = !rIStm.GetError();
-
-                    if(bRetval)
+                case TRANSPARENT_COLOR:
                     {
-                        rTarget = BitmapEx(aBmp, aTransparentColor);
+                        Color aTransparentColor;
+
+                        ReadColor( rIStm, aTransparentColor );
+                        bRetval = !rIStm.GetError();
+
+                        if(bRetval)
+                        {
+                            rTarget = BitmapEx(aBmp, aTransparentColor);
+                        }
+                        break;
                     }
                 }
             }
