@@ -4527,11 +4527,50 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
         }
         break;
         case ocDBArea:
-        case ocTableRef:
         {
             const ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
             if (pDBData)
                 aBuffer.append(pDBData->GetName());
+        }
+        break;
+        case ocTableRef:
+        {
+            if (mxSymbols->getSymbol( ocTableRefOpen).isEmpty())
+            {
+                // Write the resulting reference if TableRef is not supported.
+                const ScTableRefToken* pTR = dynamic_cast<const ScTableRefToken*>(_pTokenP);
+                if (!pTR)
+                    AppendErrorConstant( aBuffer, errNoCode);
+                else
+                {
+                    const FormulaToken* pRef = pTR->GetAreaRefRPN();
+                    if (!pRef)
+                        AppendErrorConstant( aBuffer, errNoCode);
+                    else
+                    {
+                        switch (pRef->GetType())
+                        {
+                            case svSingleRef:
+                                CreateStringFromSingleRef( aBuffer, pRef);
+                                break;
+                            case svDoubleRef:
+                                CreateStringFromDoubleRef( aBuffer, pRef);
+                                break;
+                            case svError:
+                                AppendErrorConstant( aBuffer, pRef->GetError());
+                                break;
+                            default:
+                                AppendErrorConstant( aBuffer, errNoCode);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                const ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
+                if (pDBData)
+                    aBuffer.append(pDBData->GetName());
+            }
         }
         break;
         default:

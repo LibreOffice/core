@@ -1868,6 +1868,44 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
             case svIndex:
                 CreateStringFromIndex( rBuffer, t );
+                if (t->GetOpCode() == ocTableRef && bAllowArrAdvance && mxSymbols->getSymbol( ocTableRefOpen).isEmpty())
+                {
+                    // Suppress all TableRef related tokens, the resulting
+                    // range was written by CreateStringFromIndex().
+                    const FormulaToken* p = pArr->PeekNext();
+                    if (p->GetOpCode() == ocTableRefOpen)
+                    {
+                        p = pArr->Next();
+                        int nLevel = 0;
+                        do
+                        {
+                            // Switch cases correspond with those in
+                            // ScCompiler::HandleTableRef()
+                            switch (p->GetOpCode())
+                            {
+                                case ocTableRefOpen:
+                                    ++nLevel;
+                                    break;
+                                case ocTableRefClose:
+                                    --nLevel;
+                                    break;
+                                case ocTableRefItemAll:
+                                case ocTableRefItemHeaders:
+                                case ocTableRefItemData:
+                                case ocTableRefItemTotals:
+                                case ocTableRefItemThisRow:
+                                case ocSep:
+                                case ocPush:
+                                case ocRange:
+                                case ocSpaces:
+                                    break;
+                                default:
+                                    nLevel = 0;
+                                    bNext = false;
+                            }
+                        } while (nLevel && (p = pArr->Next()));
+                    }
+                }
                 break;
             case svExternal:
             {
