@@ -163,12 +163,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(ResMgr::CreateResMgr("sm"), false, pObjFact, NULL),
-    pColorConfig( 0 ),
-    pConfig( 0 ),
-    pLocSymbolData( 0 ),
-    pSysLocale( 0 ),
-    pVirtualDev( 0 )
+    SfxModule(ResMgr::CreateResMgr("sm"), false, pObjFact, nullptr)
 {
     SetName(OUString("StarMath"));
 
@@ -177,26 +172,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
 
 SmModule::~SmModule()
 {
-    delete pConfig;
-    if (pColorConfig)
-        pColorConfig->RemoveListener(this);
-    delete pColorConfig;
-    delete pLocSymbolData;
-    delete pSysLocale;
-    delete pVirtualDev;
-}
-
-void SmModule::_CreateSysLocale() const
-{
-    SmModule* pThis = const_cast<SmModule*>(this);
-    pThis->pSysLocale = new SvtSysLocale;
-}
-
-void SmModule::_CreateVirtualDev() const
-{
-    SmModule* pThis = const_cast<SmModule*>(this);
-    pThis->pVirtualDev = new VirtualDevice;
-    pThis->pVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+    if (mpColorConfig)
+        mpColorConfig->RemoveListener(this);
 }
 
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
@@ -220,25 +197,25 @@ void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 
 svtools::ColorConfig & SmModule::GetColorConfig()
 {
-    if(!pColorConfig)
+    if(!mpColorConfig)
     {
-        pColorConfig = new svtools::ColorConfig;
-        ApplyColorConfigValues( *pColorConfig );
-        pColorConfig->AddListener(this);
+        mpColorConfig.reset(new svtools::ColorConfig);
+        ApplyColorConfigValues( *mpColorConfig );
+        mpColorConfig->AddListener(this);
     }
-    return *pColorConfig;
+    return *mpColorConfig;
 }
 
 void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    ApplyColorConfigValues(*pColorConfig);
+    ApplyColorConfigValues(*mpColorConfig);
 }
 
 SmConfig * SmModule::GetConfig()
 {
-    if(!pConfig)
-        pConfig = new SmConfig;
-    return pConfig;
+    if(!mpConfig)
+        mpConfig.reset(new SmConfig);
+    return mpConfig.get();
 }
 
 SmSymbolManager & SmModule::GetSymbolManager()
@@ -246,11 +223,28 @@ SmSymbolManager & SmModule::GetSymbolManager()
     return GetConfig()->GetSymbolManager();
 }
 
-SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
+SmLocalizedSymbolData & SmModule::GetLocSymbolData()
 {
-    if (!pLocSymbolData)
-        const_cast<SmModule *>(this)->pLocSymbolData = new SmLocalizedSymbolData;
-    return *pLocSymbolData;
+    if (!mpLocSymbolData)
+        mpLocSymbolData.reset(new SmLocalizedSymbolData);
+    return *mpLocSymbolData;
+}
+
+const SvtSysLocale& SmModule::GetSysLocale()
+{
+    if( !mpSysLocale )
+        mpSysLocale.reset(new SvtSysLocale);
+    return *mpSysLocale;
+}
+
+VirtualDevice &SmModule::GetDefaultVirtualDev()
+{
+    if (!mpVirtualDev)
+    {
+        mpVirtualDev.reset(new VirtualDevice);
+        mpVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+    }
+    return *mpVirtualDev;
 }
 
 void SmModule::GetState(SfxItemSet &rSet)
