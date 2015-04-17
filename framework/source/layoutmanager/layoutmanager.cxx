@@ -60,6 +60,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -139,8 +140,11 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
-    m_pToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
-    m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        m_pToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
+        m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
+    }
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
