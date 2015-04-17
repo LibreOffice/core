@@ -192,10 +192,10 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         if ( pOutView )
             return pOutView->HasSelection() ? (pView->Command(rCEvt,pWindow) ? 1 : 0) : SC_CMD_NONE;
         else
-            return pView->Command(rCEvt,pWindow);
+            return pView->Command(rCEvt,pWindow) ? 1 : 0;
     }
     else
-        return pView->Command(rCEvt,pWindow);
+        return pView->Command(rCEvt,pWindow) ? 1 : 0;
 }
 
 /*************************************************************************

@@ -1236,7 +1236,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();
-    nProtected = (nFlags & SC_SCENARIO_PROTECT) ? 1 : 0;
+    nProtected = (nFlags & SC_SCENARIO_PROTECT);
 
     sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
     nRecLen += sUserName.GetSize();
@@ -1294,7 +1294,7 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     sal_uInt16 count = aCells.size();
 
     rStrm   << (sal_uInt16) count               // number of cells
-            << nProtected                       // fProtection
+            << sal_uInt8(nProtected)            // fProtection
             << (sal_uInt8) 0                    // fHidden
             << (sal_uInt8) sName.Len()          // length of scen name
             << (sal_uInt8) sComment.Len()       // length of comment
