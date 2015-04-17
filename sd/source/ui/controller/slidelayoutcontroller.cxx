@@ -351,7 +351,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     }
 }
 
-::vcl::Window* SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
+VclPtr<::vcl::Window> SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
 {
     return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
 }

@@ -462,10 +462,10 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
 
     get(mpToSimplifiedContainer, "tradtosimpleview");
     mpToSimplifiedContainer->set_height_request(mpToSimplifiedContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToSimplified = new DictionaryList(*mpToSimplifiedContainer, 0);
+    m_pCT_DictionaryToSimplified = VclPtr<DictionaryList>::Create(*mpToSimplifiedContainer, 0);
     get(mpToTraditionalContainer, "simpletotradview");
     mpToTraditionalContainer->set_height_request(mpToTraditionalContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToTraditional = new DictionaryList(*mpToTraditionalContainer, 0);
+    m_pCT_DictionaryToTraditional = VclPtr<DictionaryList>::Create(*mpToTraditionalContainer, 0);
 
     SvtLinguConfig  aLngCfg;
     bool bValue;

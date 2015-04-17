@@ -256,7 +256,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
+    aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
@@ -277,7 +277,7 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
+    aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
@@ -322,7 +322,7 @@ void SvxLineEndWindow::implInit()
 
 VclPtr<SfxPopupWindow> SvxLineEndWindow::Clone() const
 {
-    return new SvxLineEndWindow( GetId(), mxFrame, GetText() );
+    return VclPtr<SvxLineEndWindow>::Create( GetId(), mxFrame, GetText() );
 }
 
 
@@ -629,10 +629,10 @@ SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
-        new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
+        VclPtr<SvxLineEndWindow>::Create( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
     pLineEndWin->StartPopupMode( &GetToolBox(),
                                  FLOATWIN_POPUPMODE_GRABFOCUS |
                                  FLOATWIN_POPUPMODE_ALLOWTEAROFF |

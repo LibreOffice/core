@@ -721,7 +721,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     {
                         if(m_pButtons[nId] == nullptr)
                         {
-                            m_pButtons[nId] = new MenuButton(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+                            m_pButtons[nId] = VclPtr<MenuButton>::Create(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
@@ -1264,7 +1264,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 VclPtr<SfxPopupWindow> SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, mrPaletteManager, mrBorderColorStatus, theSlotId, GetFrame(), GetText(), GetParent() );
+    return VclPtr<SvxColorWindow_Impl>::Create( maCommand, mrPaletteManager, mrBorderColorStatus, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
 IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
@@ -1474,7 +1474,7 @@ Color BorderColorStatus::GetColor()
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aFrameSet   ( new SvxFrmValueSet_Impl(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
+    aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     bParagraphMode(false)
 {
     BindListener();
@@ -1537,7 +1537,7 @@ void SvxFrameWindow_Impl::dispose()
 VclPtr<SfxPopupWindow> SvxFrameWindow_Impl::Clone() const
 {
     //! HACK: How do I get the Paragraph mode?
-    return new SvxFrameWindow_Impl( GetId(), GetFrame(), GetParent() );
+    return VclPtr<SvxFrameWindow_Impl>::Create( GetId(), GetFrame(), GetParent() );
 }
 
 vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
@@ -1752,7 +1752,7 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
-    m_aLineStyleLb( new LineListBox(this) )
+    m_aLineStyleLb( VclPtr<LineListBox>::Create(this) )
 {
     try
     {
@@ -1807,7 +1807,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
 
 VclPtr<SfxPopupWindow> SvxLineWindow_Impl::Clone() const
 {
-    return new SvxLineWindow_Impl( GetId(), GetFrame(), GetParent() );
+    return VclPtr<SvxLineWindow_Impl>::Create( GetId(), GetFrame(), GetParent() );
 }
 
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
@@ -2528,10 +2528,11 @@ SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
     return SfxPopupWindowType::ONTIMEOUT;
 }
 
-SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
-        new SvxColorWindow_Impl(
+        VclPtr<SvxColorWindow_Impl>::Create(
+
                             m_aCommandURL,
                             mPaletteManager,
                             maBorderColorStatus,
@@ -2706,9 +2707,9 @@ SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
     return SfxPopupWindowType::ONCLICK;
 }
 
-SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxFrameToolBoxControl::CreatePopupWindow()
 {
-    SvxFrameWindow_Impl* pFrameWin = new SvxFrameWindow_Impl(
+    VclPtr<SvxFrameWindow_Impl> pFrameWin = VclPtr<SvxFrameWindow_Impl>::Create(
                                         GetSlotId(), m_xFrame, &GetToolBox() );
 
     pFrameWin->StartPopupMode( &GetToolBox(),
@@ -2748,9 +2749,9 @@ SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
     return SfxPopupWindowType::ONCLICK;
 }
 
-SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
-    SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
+    VclPtr<SvxLineWindow_Impl> pLineWin = VclPtr<SvxLineWindow_Impl>::Create( GetSlotId(), m_xFrame, &GetToolBox() );
     pLineWin->StartPopupMode( &GetToolBox(),
                               FLOATWIN_POPUPMODE_GRABFOCUS |
                               FLOATWIN_POPUPMODE_ALLOWTEAROFF |

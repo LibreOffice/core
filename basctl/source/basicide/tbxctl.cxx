@@ -141,7 +141,7 @@ void TbxControls::Select( sal_uInt16 nModifier )
 |* rItemRect are the screen coordinates
 |*
 \************************************************************************/
-SfxPopupWindow* TbxControls::CreatePopupWindow()
+VclPtr<SfxPopupWindow> TbxControls::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
         createAndPositionSubToolBar( aSubToolBarResName );

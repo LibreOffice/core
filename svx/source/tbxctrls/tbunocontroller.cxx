@@ -409,7 +409,8 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pBox = new SvxFontSizeBox_Impl(
+        m_pBox = VclPtr<SvxFontSizeBox_Impl>::Create(
+
                         pParent,
                         uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
                         m_xFrame,

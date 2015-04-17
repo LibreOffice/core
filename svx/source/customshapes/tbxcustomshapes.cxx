@@ -103,7 +103,7 @@ SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 // Here is the window created
 // The location of the Toolbox is queried through GetToolBox()
 // rItemRect are the screen coordinates
-SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxTbxCtlCustomShapes::CreatePopupWindow()
 {
     createAndPositionSubToolBar( m_aSubTbxResName );
     return NULL;

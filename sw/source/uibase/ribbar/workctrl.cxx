@@ -122,7 +122,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
 
 }
 
-SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxInsertCtrl::CreatePopupWindow()
 {
     if(GetSlotId() == FN_INSERT_CTRL)
     {
@@ -176,7 +176,7 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
     DelPopup();
 }
 
-SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
@@ -288,7 +288,7 @@ SwTbxFieldCtrl::~SwTbxFieldCtrl()
 {
 }
 
-SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&

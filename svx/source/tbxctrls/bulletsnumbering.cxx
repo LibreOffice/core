@@ -60,7 +60,7 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 
 public:
     NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
     bool IsInImpressDraw();
 
     // XStatusListener
@@ -89,7 +89,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
     mrController( rController )
 {
     WinBits nBits = WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT;
-    mpValueSet = new SvxNumValueSet( this, nBits );
+    mpValueSet = VclPtr<SvxNumValueSet>::Create( this, nBits );
     mpValueSet->init( mbBulletItem ? NUM_PAGETYPE_BULLET : NUM_PAGETYPE_SINGLENUM );
 
     if ( !mbBulletItem )
@@ -204,9 +204,9 @@ NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css
 {
 }
 
-vcl::Window* NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new NumberingPopup( *this, m_xFrame, pParent, mbBulletItem );
+    return VclPtr<NumberingPopup>::Create( *this, m_xFrame, pParent, mbBulletItem );
 }
 
 bool NumberingToolBoxControl::IsInImpressDraw()

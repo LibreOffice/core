@@ -197,7 +197,7 @@ SfxPopupWindowType SvxFmTbxCtlConfig::GetPopupWindowType() const
 }
 
 
-SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxFmTbxCtlConfig::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_FM_CONFIG )
     {

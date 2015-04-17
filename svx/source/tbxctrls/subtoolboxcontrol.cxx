@@ -37,7 +37,7 @@ SvxSubToolBoxControl::~SvxSubToolBoxControl()
 {
 }
 
-SfxPopupWindow* SvxSubToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxSubToolBoxControl::CreatePopupWindow()
 {
     const sal_Char* pResource = 0;
     switch( GetSlotId() )

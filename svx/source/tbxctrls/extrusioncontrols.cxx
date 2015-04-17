@@ -244,9 +244,9 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 
 
 
-vcl::Window* ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDirectionWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -490,9 +490,9 @@ ExtrusionDepthController::ExtrusionDepthController(
 
 
 
-vcl::Window* ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDepthWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -757,9 +757,9 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 
 
 
-vcl::Window* ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionLightingWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -903,9 +903,9 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 
 
 
-vcl::Window* ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionSurfaceWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization

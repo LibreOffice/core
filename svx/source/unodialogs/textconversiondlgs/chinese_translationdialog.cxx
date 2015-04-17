@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
 {
     if( !m_pDictionaryDialog )
     {
-        m_pDictionaryDialog = new ChineseDictionaryDialog(this);
+        m_pDictionaryDialog = VclPtr<ChineseDictionaryDialog>::Create(this);
     }
     if( m_pDictionaryDialog )
     {

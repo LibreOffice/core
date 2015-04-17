@@ -1125,7 +1125,7 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
 {
     if (bShow) {
         if (pItemBrowser==nullptr) {
-            pItemBrowser=new SdrItemBrowser(*static_cast<SdrView*>(this));
+            pItemBrowser=VclPtr<SdrItemBrowser>::Create(*static_cast<SdrView*>(this));
         }
         pItemBrowser->Show();
         pItemBrowser->GrabFocus();

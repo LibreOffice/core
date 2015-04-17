@@ -78,7 +78,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrLayerID nLay,
     const Rectangle& rRect)
 :   maTmpList(),
-    mpVD(new VirtualDevice()),
+    mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
     mnMapScalingOfs(0),
     mpLineAttr(0),

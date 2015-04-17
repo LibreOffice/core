@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
@@ -40,7 +41,7 @@ public:
                            const OUString& aCommandURL );
     virtual ~PopupWindowController();
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) = 0;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

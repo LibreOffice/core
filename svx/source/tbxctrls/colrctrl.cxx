@@ -186,7 +186,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SfxDockingWindow( _pBindings, pCW, _pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE ),
     pColorList      (),
-    aColorSet       ( new SvxColorValueSet_docking(this) ),
+    aColorSet       ( VclPtr<SvxColorValueSet_docking>::Create(this) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),

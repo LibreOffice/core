@@ -977,7 +977,7 @@ SfxPopupWindowType SfxToolBoxControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* SfxToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
 {
     return 0;
 }
@@ -1399,7 +1399,7 @@ SfxRecentFilesToolBoxControl::~SfxRecentFilesToolBoxControl()
 {
 }
 
-SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
 {
     ToolBox& rBox = GetToolBox();
     sal_uInt16 nItemId = GetId();

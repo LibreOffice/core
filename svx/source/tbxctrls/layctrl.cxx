@@ -110,7 +110,7 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
                           ToolBox& rParentTbx, const Reference< XFrame >& rFrame )
     : SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) )
-    , aTableButton( new PushButton(this) )
+    , aTableButton( VclPtr<PushButton>::Create(this) )
     , nCol( 0 )
     , nLine( 0 )
     , bInitialKeyInput(false)
@@ -168,7 +168,7 @@ void TableWindow::dispose()
 
 VclPtr<SfxPopupWindow> TableWindow::Clone() const
 {
-    return new TableWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
+    return VclPtr<TableWindow>::Create( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
 
 
@@ -474,7 +474,7 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
 
 VclPtr<SfxPopupWindow> ColumnsWindow::Clone() const
 {
-    return new ColumnsWindow( GetId(), maCommand, GetText(), rTbx, mxFrame );
+    return VclPtr<ColumnsWindow>::Create( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
 
 
@@ -728,12 +728,12 @@ SfxPopupWindowType SvxTableToolBoxControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
 {
     if ( bEnabled )
     {
         ToolBox& rTbx = GetToolBox();
-        TableWindow* pWin = new TableWindow( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), rTbx, m_xFrame );
+        VclPtr<TableWindow> pWin = VclPtr<TableWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), rTbx, m_xFrame );
         pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
         SetPopupWindow( pWin );
         return pWin;
@@ -746,7 +746,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
 SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 {
     if ( bEnabled )
-        return new TableWindow( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
+        return VclPtr<TableWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
     return 0;
 }
 
@@ -793,12 +793,12 @@ SfxPopupWindowType SvxColumnsToolBoxControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 {
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-            pWin = new ColumnsWindow( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
+            pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
             pWin->StartPopupMode( &GetToolBox(),
                                   FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
             SetPopupWindow( pWin );
@@ -813,7 +813,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-        pWin = new ColumnsWindow( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
+        pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
     }
     return pWin;
 }

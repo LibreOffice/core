@@ -535,8 +535,8 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
 
 FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 :   Window(pParent,nStyle | WB_DIALOGCONTROL),
-    mpLbFillType(new SvxFillTypeBox(this)),
-    mpLbFillAttr(new SvxFillAttrBox(this)),
+    mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this)),
+    mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this)),
     maLogicalFillSize(40,80),
     maLogicalAttrSize(50,80),
     mnLastFillTypeControlSelectEntryPos(mpLbFillType->GetSelectEntryPos()),

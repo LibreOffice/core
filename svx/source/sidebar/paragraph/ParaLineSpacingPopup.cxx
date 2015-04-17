@@ -42,7 +42,7 @@ SfxPopupWindowType ParaLineSpacingPopup::GetPopupWindowType() const
     return SfxPopupWindowType::ONTIMEOUT;
 }
 
-SfxPopupWindow* ParaLineSpacingPopup::CreatePopupWindow()
+VclPtr<SfxPopupWindow> ParaLineSpacingPopup::CreatePopupWindow()
 {
     ParaLineSpacingControl* pControl = new ParaLineSpacingControl(GetSlotId());
 

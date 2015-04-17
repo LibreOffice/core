@@ -160,7 +160,7 @@ namespace {
         virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-        VirtualDevice* CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
+        VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -395,9 +395,9 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
     @return the returned VirtualDevice is owned by the caller
 */
-VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const
+VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const
 {
-    VirtualDevice*  pVDev = new VirtualDevice();
+    VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
     MapMode         aMM( MAP_100TH_MM );
 
     Point aPoint( 0, 0 );

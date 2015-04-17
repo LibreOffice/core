@@ -201,7 +201,7 @@ protected:
     virtual void               DoubleClick();
     virtual void               Click();
     virtual SfxPopupWindowType GetPopupWindowType() const;
-    virtual SfxPopupWindow*    CreatePopupWindow();
+    virtual VclPtr<SfxPopupWindow>    CreatePopupWindow();
     virtual SfxPopupWindow*    CreatePopupWindowCascading();
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
 
@@ -330,7 +330,7 @@ public:
     virtual ~SfxRecentFilesToolBoxControl();
 
 protected:
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl

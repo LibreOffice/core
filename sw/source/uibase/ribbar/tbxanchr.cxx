@@ -62,7 +62,7 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 
 }
 
-SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxAnchor::CreatePopupWindow()
 {
     SwTbxAnchor::Click();
     return 0;

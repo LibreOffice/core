@@ -107,7 +107,7 @@ void Main()
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
-    maPixelCtl( new SvxPixelCtl(this) )
+    maPixelCtl( VclPtr<SvxPixelCtl>::Create(this) )
 {
     maPixelCtl->SetPosSizePixel( Point( 10, 10 ), Size( 200, 200 ) );
     maPixelCtl->Show();

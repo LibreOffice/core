@@ -495,7 +495,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
-        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
+        pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
@@ -1046,7 +1046,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 
 _SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
-    aBrowse(new _SdrItemBrowserControl(this))
+    aBrowse(VclPtr<_SdrItemBrowserControl>::Create(this))
 {
     SetOutputSizePixel(aBrowse->GetSizePixel());
     SetText(OUString("Joe's ItemBrowser"));

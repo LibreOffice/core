@@ -259,8 +259,8 @@ ImplGrafControl::ImplGrafControl(
     const OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
-    , maImage( new FixedImage(this) )
-    , maField( new ImplGrafMetricField(this, rCmd, rFrame) )
+    , maImage( VclPtr<FixedImage>::Create(this) )
+    , maField( VclPtr<ImplGrafMetricField>::Create(this, rCmd, rFrame) )
 {
     ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
@@ -446,7 +446,7 @@ SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
     return SfxPopupWindowType::ONCLICK;
 }
 
-SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
     OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
     createAndPositionSubToolBar( aSubTbxResName );
