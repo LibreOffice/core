@@ -345,7 +345,7 @@
 	 -->
 
 	<template match="table:table">
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 		<text>{|</text>
 		
 		<choose>
@@ -361,11 +361,11 @@
 			</otherwise>
 		</choose>
 		
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 		<apply-templates/>
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 		<text>|}</text>
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 	</template>
 
 	<template match="table:table-header-rows">
@@ -374,9 +374,9 @@
 
 	<template match="table:table-row[position() &lt; last()] | table:table-header-rows/table:table-row">
 		<apply-templates/>
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 		<text>|-</text>
-		<text>&#10;</text>
+		<value-of select="$NL"/>
 	</template>
 
 	<template match="table:table-row">
@@ -481,7 +481,7 @@
 			<if test="string-length($style) &gt; 0">
 				<text> style="</text>
 				<value-of select="$style"/>
-				<text>"</text>
+				<text>" </text>
 			</if>
 		</if>
 		<text>| </text>
