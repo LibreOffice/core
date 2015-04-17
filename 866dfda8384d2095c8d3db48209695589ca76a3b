@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_50f8cc7c",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "Please pass a const reference instead.",
+      "range": {
+        "startLine": 329,
+        "startChar": 19,
+        "endLine": 329,
+        "endChar": 37
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_70f5d081",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 332,
+        "startChar": 19,
+        "endLine": 332,
+        "endChar": 59
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_10f2449b",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "Use InitFlags() instead, the address is overwritten with SetAddress() below.",
+      "range": {
+        "startLine": 1945,
+        "startChar": 13,
+        "endLine": 1945,
+        "endChar": 24
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_30ef48b2",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "It is unnecessary to create two ScSingleRefData first and then assign them to ScComplexRefData parts. Just use ScComplexRefData and operate on the Ref1 and Ref2 parts.",
+      "range": {
+        "startLine": 1962,
+        "startChar": 8,
+        "endLine": 1962,
+        "endChar": 23
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_d02a7ce7",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "As above, use InitFlags() instead (there\u0027s also ScComplexRefData::InitFlags())",
+      "range": {
+        "startLine": 1963,
+        "startChar": 14,
+        "endLine": 1963,
+        "endChar": 25
+      },
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_b039f843",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "This doesn\u0027t make sense to me. If the end tab equals the extension tab, the start tab is set unconditionally to the end tab. It needs to be checked if the start tab was specified or not, which can be done with IsFlag3D(), and if it was do not adjust.\n\nIt may be helpful to compare with the previous version as of commit f7b4c1ce8d024b7f1faf04073ef0544d5074e71d, after which commit 194e9f9bae28bdf22a9ed4779c1656ee693f3302 oversimplified things. Best check the diff of\n\n git show 194e9f9bae28bdf22a9ed4779c1656ee693f3302\n\nThere were also helpful comments with examples when to inherit which relative reference and flags, unfortunately that got completely lost.\n\nThese things need to be reimplemented.",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_f02f80f4",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-17T14:34:31Z",
+      "side": 1,
+      "message": "This else path is executed for both, (Ref1.IsTabRel() \u0026\u0026 rRef.IsTabRel()) or (!Ref1.IsTabRel() \u0026\u0026 rRef.IsTabRel()). Should it differentiate instead?",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
