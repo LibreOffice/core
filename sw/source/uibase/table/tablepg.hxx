@@ -180,8 +180,8 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
-    SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
+    SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwTextFlowPage();
     virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);

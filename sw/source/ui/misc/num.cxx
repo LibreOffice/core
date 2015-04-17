@@ -545,7 +545,7 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 SfxTabPage* SwNumPositionTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwNumPositionTabPage(pParent, *rAttrSet);
+    return VclPtr<SwNumPositionTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)

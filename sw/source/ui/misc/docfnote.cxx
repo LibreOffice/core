@@ -248,7 +248,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 
 SfxTabPage *SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwEndNoteOptionPage( pParent, true, *rSet );
+    return VclPtr<SwEndNoteOptionPage>::Create( pParent, true, *rSet );
 }
 
 // Different kinds of numbering; because the Listbox has varying numbers of
@@ -424,7 +424,7 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 
 SfxTabPage *SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwFootNoteOptionPage( pParent, *rSet );
+    return VclPtr<SwFootNoteOptionPage>::Create( pParent, *rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

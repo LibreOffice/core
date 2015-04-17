@@ -868,7 +868,7 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
 SfxTabPage* SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwOutlineSettingsTabPage(pParent, *rAttrSet);
+    return VclPtr<SwOutlineSettingsTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)

@@ -1446,7 +1446,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
     {
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        pFixedTexts[nIndex] = new FixedText(bLeft ? pLeft : pRight, WB_VCENTER);
+        pFixedTexts[nIndex] = VclPtr<FixedText>::Create(bLeft ? pLeft : pRight, WB_VCENTER);
 
         pFixedTexts[nIndex]->set_grid_left_attach(0);
         pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1455,7 +1455,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         pEdits[nIndex] = 0;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            pTypeListBox = new ListBox(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
+            pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for(int j = 0; j < AUTH_TYPE_END; j++)
                 pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
             if(!pFields[aCurInfo.nToxField].isEmpty())
@@ -1472,7 +1472,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            pIdentifierBox = new ComboBox(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
+            pIdentifierBox = VclPtr<ComboBox>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
 
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
@@ -1496,7 +1496,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         }
         else
         {
-            pEdits[nIndex] = new Edit(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
+            pEdits[nIndex] = VclPtr<Edit>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
             pEdits[nIndex]->SetWidthInChars(14);
             pEdits[nIndex]->set_grid_left_attach(1);
             pEdits[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);

@@ -156,7 +156,7 @@ void SwFootNotePage::dispose()
 
 SfxTabPage* SwFootNotePage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFootNotePage(pParent, *rSet);
+    return VclPtr<SwFootNotePage>::Create(pParent, *rSet);
 }
 
 void SwFootNotePage::Reset(const SfxItemSet *rSet)

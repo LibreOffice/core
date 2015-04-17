@@ -81,10 +81,10 @@ public:
 
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
-    SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SwFootNoteOptionPage();
 
 public:
+    SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 };
 

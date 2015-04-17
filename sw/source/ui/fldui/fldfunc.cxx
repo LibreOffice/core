@@ -631,7 +631,7 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
 SfxTabPage* SwFldFuncPage::Create(  vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldFuncPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldFuncPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldFuncPage::GetGroup()

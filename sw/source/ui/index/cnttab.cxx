@@ -660,7 +660,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pHeaderTree = new SwIndexTreeLB(*pHeaderTreeContainer);
+    m_pHeaderTree = VclPtr<SwIndexTreeLB>::Create(*pHeaderTreeContainer);
 
     m_pOk->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     m_pLeftPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -1315,7 +1315,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 SfxTabPage* SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwTOXSelectTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
@@ -2212,7 +2212,7 @@ int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
 
 SfxTabPage* SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
 {
-    return new SwTOXEntryTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
@@ -2902,7 +2902,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
     if(TOKEN_TEXT == rToken.eTokenType)
     {
-        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, rToken);
+        VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
         aControlList.push_back(pEdit);
@@ -2931,7 +2931,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
     }
     else
     {
-        SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, rToken);
+        VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
 
         aControlList.push_back(pButton);
@@ -3109,7 +3109,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         static_cast<SwTOXEdit*>(pActiveCtrl.get())->AdjustSize();
 
         SwFormToken aTmpToken(TOKEN_TEXT);
-        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, aTmpToken);
+        VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, aTmpToken);
 
         iterActive = aControlList.insert(iterActive, pEdit);
 
@@ -3141,7 +3141,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     }
 
     //now the new button
-    SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, aToInsertToken);
+    VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, aToInsertToken);
 
     aControlList.insert(iterActive, pButton);
 
@@ -3754,7 +3754,7 @@ int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 SfxTabPage* SwTOXStylesTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
-    return new SwTOXStylesTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
@@ -3866,7 +3866,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
                            BROWSER_VLINESFULL |
                            BROWSER_AUTO_VSCROLL|
                            BROWSER_HIDECURSOR   )
-    , aCellEdit(new Edit(&GetDataWindow(), 0))
+    , aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
     , aCellCheckBox(new ::svt::CheckBoxControl(&GetDataWindow()))
     , nCurrentRow(0)
     , bModified(false)
@@ -4191,7 +4191,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
     , bCreateMode(bCreate)
 {
     get(m_pOKPB, "ok");
-    m_pEntriesBB = new SwEntryBrowseBox(get<VclContainer>("area"), this);
+    m_pEntriesBB = VclPtr<SwEntryBrowseBox>::Create(get<VclContainer>("area"), this);
     m_pEntriesBB->set_expand(true);
     m_pEntriesBB->Show();
     m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));

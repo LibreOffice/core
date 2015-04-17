@@ -67,8 +67,6 @@ class SwTextGridPage: public SfxTabPage
     bool        m_bHRulerChanged;
     bool        m_bVRulerChanged;
 
-    SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet);
-
     void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);
     void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
@@ -83,6 +81,7 @@ class SwTextGridPage: public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
+    SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwTextGridPage();
     virtual void dispose() SAL_OVERRIDE;
 

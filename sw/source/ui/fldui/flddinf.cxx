@@ -465,7 +465,7 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet* )
 SfxTabPage* SwFldDokInfPage::Create(    vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldDokInfPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldDokInfPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldDokInfPage::GetGroup()

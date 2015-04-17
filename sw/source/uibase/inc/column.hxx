@@ -164,8 +164,6 @@ class SwColumnPage : public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
-    SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
-
     void connectPercentField(PercentField &rWrap, const OString &rName);
 
     bool isLineNotNone() const;
@@ -173,6 +171,7 @@ class SwColumnPage : public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
+    SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwColumnPage();
     virtual void dispose() SAL_OVERRIDE;
 

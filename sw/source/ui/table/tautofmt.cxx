@@ -514,7 +514,7 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
-        aVD             ( new VirtualDevice(*this) ),
+        aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
         aScriptedText   ( *aVD.get() ),
         bFitWidth       ( false ),
         mbRTL           ( false ),

@@ -79,7 +79,6 @@ class SwWrapTabPage: public SfxTabPage
     bool bDrawMode;
     bool bContourImage;
 
-    SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwWrapTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -99,6 +98,7 @@ class SwWrapTabPage: public SfxTabPage
     static const sal_uInt16 aWrapPageRg[];
 
 public:
+    SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
