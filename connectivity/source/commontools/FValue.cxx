@@ -1234,7 +1234,7 @@ sal_uInt8 ORowSetValue::getUInt8()    const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = int(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
