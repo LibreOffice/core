@@ -228,6 +228,9 @@ namespace svt { class PopupWindowControllerImpl; }
 #define AUTOSCROLL_VERT                 ((sal_uInt16)0x0001)
 #define AUTOSCROLL_HORZ                 ((sal_uInt16)0x0002)
 
+#ifdef TRANSPARENT
+#undef TRANSPARENT
+#endif
 // Flags for StateChanged()
 enum class StateChangedType : sal_uInt16
 {
