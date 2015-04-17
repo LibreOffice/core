@@ -374,7 +374,6 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         basegfx::B3DHomMatrix mObjTrans(GetTransform());
         mObjTrans *= mTrans;
 
-        E3DModifySceneSnapRectUpdater aUpdater(this);
         SetTransform(mObjTrans);
     }
 }
@@ -427,7 +426,6 @@ void E3dObject::NbcMove(const Size& rSize)
         basegfx::B3DHomMatrix aTranslate;
         aTranslate.translate(aMove.getX() - aPos.getX(), aMove.getY() - aPos.getY(), aMove.getZ() - aPos.getZ());
 
-        E3DModifySceneSnapRectUpdater aUpdater(pScene);
         SetTransform(aTranslate * GetTransform());
     }
 }
@@ -739,7 +737,6 @@ void E3dObject::SaveGeoData(SdrObjGeoData& rGeo) const
 void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
 {
     maLocalBoundVol = static_cast<const E3DObjGeoData &>(rGeo).maLocalBoundVol;
-    E3DModifySceneSnapRectUpdater aUpdater(this);
     NbcSetTransform(static_cast<const E3DObjGeoData &>(rGeo).maTransformation);
     SdrAttrObj::RestGeoData (rGeo);
 }

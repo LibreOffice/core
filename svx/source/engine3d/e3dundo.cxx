@@ -49,7 +49,6 @@ E3dRotateUndoAction::~E3dRotateUndoAction ()
 
 void E3dRotateUndoAction::Undo ()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyOldRotation);
 }
 
@@ -57,7 +56,6 @@ void E3dRotateUndoAction::Undo ()
 
 void E3dRotateUndoAction::Redo ()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyNewRotation);
 }
 
@@ -83,13 +81,11 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 
 void E3dAttributesUndoAction::Undo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aOldSet);
 }
 
 void E3dAttributesUndoAction::Redo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aNewSet);
 }
 

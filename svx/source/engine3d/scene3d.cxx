@@ -397,8 +397,6 @@ E3dScene* E3dScene::GetScene() const
 
 void E3dScene::removeAllNonSelectedObjects()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(this);
-
     for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         SdrObject* pObj = maSubList.GetObj(a);

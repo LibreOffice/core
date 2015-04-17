@@ -322,7 +322,6 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 
 void SdrUndoAttrObj::Undo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObj);
     bool bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     // Trigger PageChangeCall
@@ -429,7 +428,6 @@ void SdrUndoAttrObj::Undo()
 
 void SdrUndoAttrObj::Redo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObj);
     bool bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     if(!pUndoGroup || bIs3DScene)
@@ -743,7 +741,6 @@ void SdrUndoRemoveObj::Undo()
             aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
         }
 
-        E3DModifySceneSnapRectUpdater aUpdater(pObjList->GetOwnerObj());
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
 
@@ -761,7 +758,6 @@ void SdrUndoRemoveObj::Redo()
     if (pObj->IsInserted())
     {
         ImplUnmarkObject( pObj );
-        E3DModifySceneSnapRectUpdater aUpdater(pObj);
         pObjList->RemoveObject(nOrdNum);
     }
 
