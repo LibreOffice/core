@@ -66,7 +66,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
                                         const OUString* pURL ) :
-    aTopWindow(new SwFrmCtrlWindow(&rWin, this)),
+    aTopWindow(VclPtr<SwFrmCtrlWindow>::Create(&rWin, this)),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),

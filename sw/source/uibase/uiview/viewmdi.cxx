@@ -294,7 +294,7 @@ int SwView::_CreateScrollbar( bool bHori )
 
     assert(!ppScrollbar.get()); //check beforehand!
 
-    ppScrollbar = new SwScrollbar( pMDI, bHori );
+    ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
     UpdateScrollbars();
     if(bHori)
         ppScrollbar->SetScrollHdl( LINK( this, SwView, EndScrollHdl ));

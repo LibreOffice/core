@@ -49,13 +49,12 @@ namespace sw { namespace sidebar {
 
         virtual ~WrapPropertyPanel();
         virtual void dispose() SAL_OVERRIDE;
-    private:
+
         WrapPropertyPanel(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
-
-
+    private:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
         SfxBindings* mpBindings;
 

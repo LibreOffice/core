@@ -34,12 +34,6 @@ ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConditionEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
-{
-    VclBuilder::ensureDefaultWidthChars(rMap);
-    return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
-}
-
 // Drop possible, respectively format known?
 
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )

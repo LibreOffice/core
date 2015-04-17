@@ -1159,12 +1159,12 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
 
 SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
-    pViewWin( new SwPagePreviewWin(&(GetViewFrame())->GetWindow(), *this ) ),
+    pViewWin( VclPtr<SwPagePreviewWin>::Create(&(GetViewFrame())->GetWindow(), *this ) ),
     nNewPage(USHRT_MAX),
     sPageStr(SW_RES(STR_PAGE)),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
+    pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(),
         pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
     mbResetFormDesignMode( false ),
@@ -1258,7 +1258,7 @@ int SwPagePreview::_CreateScrollbar( bool bHori )
 
     assert(!ppScrollbar.get()); //check beforehand!
 
-    ppScrollbar = new SwScrollbar( pMDI, bHori );
+    ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 
     ScrollDocSzChg();
     ppScrollbar->EnableDrag( true );

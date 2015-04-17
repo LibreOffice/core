@@ -647,12 +647,12 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     Window( pParent, SW_RES(DLG_NAVIGATION_PI)),
     SfxControllerItem( SID_DOCFULLNAME, *_pBindings ),
 
-    aContentToolBox(new SwNavHelpToolBox(this, SW_RES(TB_CONTENT))),
-    aGlobalToolBox(new SwHelpToolBox(this, SW_RES(TB_GLOBAL))),
+    aContentToolBox(VclPtr<SwNavHelpToolBox>::Create(this, SW_RES(TB_CONTENT))),
+    aGlobalToolBox(VclPtr<SwHelpToolBox>::Create(this, SW_RES(TB_GLOBAL))),
     aContentImageList(SW_RES(IL_CONTENT)),
-    aContentTree(new SwContentTree(this, SW_RES(TL_CONTENT))),
-    aGlobalTree(new SwGlobalTree(this, SW_RES(TL_GLOBAL))),
-    aDocListBox(new ListBox(this, SW_RES(LB_DOCS))),
+    aContentTree(VclPtr<SwContentTree>::Create(this, SW_RES(TL_CONTENT))),
+    aGlobalTree(VclPtr<SwGlobalTree>::Create(this, SW_RES(TL_GLOBAL))),
+    aDocListBox(VclPtr<ListBox>::Create(this, SW_RES(LB_DOCS))),
 
     pxObjectShell(0),
     pContentView(0),
@@ -688,7 +688,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     nZoomOutInit = nZoomOut = Resource::ReadShortRes();
 
     // Insert the numeric field in the toolbox.
-    NumEditAction* pEdit = new NumEditAction(
+    VclPtr<NumEditAction> pEdit = VclPtr<NumEditAction>::Create(
                     aContentToolBox.get(), SW_RES(NF_PAGE ));
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     pEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
@@ -1293,7 +1293,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
-    SwNavigationPI* pNavi  = new SwNavigationPI( _pBindings, this, pParent );
+    VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create( _pBindings, this, pParent );
     SetWindow( pNavi );
     _pBindings->Invalidate(SID_NAVIGATOR);
 

@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 #include <cstddef>
 #include <utility>
+#include <type_traits>
 
 /// @cond INTERNAL
 namespace vcl { namespace detail {
@@ -165,7 +166,16 @@ public:
         m_rInnerRef.set(pBody);
     }
 
-    inline VclPtr<reference_type>& SAL_CALL operator= (reference_type * pBody)
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        Does not work for up-casts to ambiguous bases.  For the special case of
+        up-casting to Reference< XInterface >, see the corresponding conversion
+        operator.
+
+        @param rRef another reference
+    */
+    template< class derived_type, class = typename std::enable_if< ::vcl::detail::UpCast< reference_type, derived_type >::t >::type >
+    inline VclPtr<reference_type>& SAL_CALL operator= (derived_type * pBody)
     {
         m_rInnerRef.set(pBody);
         return *this;

@@ -68,25 +68,6 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     Init(css::util::NumberFormat::NUMBER, true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumFormatListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
-{
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
-
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
-
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-    else
-        nBits |= WB_BORDER;
-
-    NumFormatListBox* pListBox = new NumFormatListBox(pParent, nBits|WB_SIMPLEMODE);
-
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-
-    return pListBox;
-}
-
 void NumFormatListBox::Init(short nFormatType, bool bUsrFmts)
 {
     SwView *pView = GetView();

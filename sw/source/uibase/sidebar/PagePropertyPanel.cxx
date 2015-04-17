@@ -96,7 +96,8 @@ VclPtr<vcl::Window> PagePropertyPanel::Create (
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
     return VclPtr<vcl::Window>(
-                new PagePropertyPanel(
+                VclPtr<PagePropertyPanel>::Create(
+
                         pParent,
                         rxFrame,
                         pBindings),
@@ -294,9 +295,9 @@ void PagePropertyPanel::Initialize()
     mpBindings->Update( SID_ATTR_PAGE_SIZE );
 }
 
-::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr<::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent )
 {
-    return new PageOrientationControl( pParent, *this , mpPageItem->IsLandscape() );
+    return VclPtr<PageOrientationControl>::Create( pParent, *this , mpPageItem->IsLandscape() );
 }
 
 IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
@@ -371,9 +372,10 @@ void PagePropertyPanel::ClosePageOrientationPopup()
     maOrientationPopup.Hide();
 }
 
-::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr<::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent )
 {
-    return new PageMarginControl(
+    return VclPtr<PageMarginControl>::Create(
+
         pParent,
         *this,
         *mpPageLRMarginItem.get(),
@@ -421,9 +423,10 @@ void PagePropertyPanel::ClosePageMarginPopup()
     maMarginPopup.Hide();
 }
 
-::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr<::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent )
 {
-    return new PageSizeControl(
+    return VclPtr<PageSizeControl>::Create(
+
         pParent,
         *this,
         mePaper,
@@ -455,9 +458,10 @@ void PagePropertyPanel::ClosePageSizePopup()
     maSizePopup.Hide();
 }
 
-::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr<::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent )
 {
-    return new PageColumnControl(
+    return VclPtr<PageColumnControl>::Create(
+
         pParent,
         *this,
         mpPageColumnTypeItem->GetValue(),

@@ -812,7 +812,7 @@ public:
 
 SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     FloatingWindow( parent, WB_BORDER | WB_SYSTEMWINDOW ),
-    aListBox(new ListBox(this)),
+    aListBox(VclPtr<ListBox>::Create(this)),
     pFieldmark( fieldBM )
 {
     if ( fieldBM != NULL )
@@ -896,7 +896,7 @@ void SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 {
     const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
-    m_pFieldPopup = new SwFieldDialog( m_pEditWin, fieldBM );
+    m_pFieldPopup = VclPtr<SwFieldDialog>::Create( m_pEditWin, fieldBM );
     m_pFieldPopup->SetPopupModeEndHdl( LINK( this, SwView, FieldPopupModeEndHdl ) );
 
     Rectangle aRect( m_pEditWin->OutputToScreenPixel( aPixPos ), Size( 0, 0 ) );

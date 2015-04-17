@@ -38,7 +38,7 @@ PageColumnControl::PageColumnControl(
     const bool bLandscape )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_COLUMN) )
     , mpColumnValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_COLUMN) ) )
-    , maMoreButton( new PushButton( this, SW_RES(CB_COLUMN_MORE) ) )
+    , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_COLUMN_MORE) ) )
     , mnColumnType( nColumnType )
     , mrPagePropPanel(rPanel)
 {

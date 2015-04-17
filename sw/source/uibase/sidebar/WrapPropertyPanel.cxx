@@ -55,7 +55,8 @@ VclPtr<vcl::Window> WrapPropertyPanel::Create (
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
 
     return VclPtr<vcl::Window>(
-                new WrapPropertyPanel(
+                VclPtr<WrapPropertyPanel>::Create(
+
                         pParent,
                         rxFrame,
                         pBindings),
