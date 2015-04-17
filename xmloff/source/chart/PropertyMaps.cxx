@@ -309,10 +309,6 @@ void XMLChartExportPropertyMapper::handleElementItem(
                 if( !sTempURL.isEmpty() )
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
-                                              XML_SIMPLE );
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
-                                              XML_ONLOAD );
                 }
 
                 {
