@@ -90,6 +90,7 @@ enum ScanState
     ssSkipReference,
     ssGetErrorConstant,
     ssGetTableRefItem,
+    ssGetTableRefColumn,
     ssStop
 };
 
@@ -1901,7 +1902,12 @@ Label_MaskStateMachine:
             case ssGetChar :
             {
                 // Order is important!
-                if( nMask & SC_COMPILER_C_ODF_LABEL_OP )
+                if (eLastOp == ocTableRefOpen && c != '[' && c != '#' && c != ']')
+                {
+                    *pSym++ = c;
+                    eState = ssGetTableRefColumn;
+                }
+                else if( nMask & SC_COMPILER_C_ODF_LABEL_OP )
                 {
                     // '!!' automatic intersection
                     if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_ODF_LABEL_OP)
@@ -2197,6 +2203,26 @@ Label_MaskStateMachine:
                 {
                     // Scan whatever up to the next ']' closer.
                     if (c != ']')
+                    {
+                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        {
+                            SetError( errStringOverflow);
+                            eState = ssStop;
+                        }
+                        else
+                            *pSym++ = c;
+                    }
+                    else
+                    {
+                        --pSrc;
+                        eState = ssStop;
+                    }
+                }
+                break;
+            case ssGetTableRefColumn:
+                {
+                    // Scan whatever up to the next unescaped ']' closer.
+                    if (c != ']' || cLast == '\'')
                     {
                         if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                         {
