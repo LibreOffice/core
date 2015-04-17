@@ -89,6 +89,7 @@ public:
     void testTdf90003();
     void testSearchWithTransliterate();
     void testTdf90362();
+    void testUndoCharAttribute();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf90362);
+    CPPUNIT_TEST(testUndoCharAttribute);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -908,6 +910,42 @@ void SwUiWriterTest::testTdf90362()
     pWrtShell->ApplyViewOptions(aViewOptions);
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+}
+
+void SwUiWriterTest::testUndoCharAttribute()
+{
+    // Create a new empty Writer document
+    SwDoc* pDoc = createDoc();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    // Insert some text
+    rIDCO.InsertString(*pCrsr, "This will be bolded");
+    // Position of word                   9876543210
+    // Use cursor to select part of text
+    pCrsr->SetMark();
+    for (int i = 0; i < 9; i++) {
+        pCrsr->Move(fnMoveBackward);
+    }
+    // Check that correct text was selected
+    CPPUNIT_ASSERT_EQUAL(OUString("be bolded"), pCrsr->GetTxt());
+    // Apply a "Bold" attribute to selection
+    SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    rIDCO.InsertPoolItem(*pCrsr, aWeightItem);
+    SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT);
+    // Adds selected text's attributes to aSet
+    pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
+    SfxPoolItem* aPoolItem = (SfxPoolItem*) aSet.GetItem(RES_CHRATR_WEIGHT);
+    SfxPoolItem& ampPoolItem = aWeightItem;
+    // Check that bold is active on the selection; checks if it's in aSet
+    CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), true);
+    // Invoke Undo
+    rUndoManager.Undo();
+    // Check that bold is no longer active
+    aSet.ClearItem(RES_CHRATR_WEIGHT);
+    pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
+    aPoolItem = (SfxPoolItem*) aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
