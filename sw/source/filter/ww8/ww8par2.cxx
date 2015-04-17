@@ -1157,8 +1157,8 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                 if( i < nColsToRead )
                 {               // TC from file ?
                     sal_uInt8 aBits1 = pTc->aBits1Ver6;
-                    pAktTC->bFirstMerged    = ( ( aBits1 & 0x01 ) != 0 );
-                    pAktTC->bMerged     = ( ( aBits1 & 0x02 ) != 0 );
+                    pAktTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
+                    pAktTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
                     pAktTC->rgbrc[ WW8_TOP ]
                         = WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] );
                     pAktTC->rgbrc[ WW8_LEFT ]
@@ -1187,13 +1187,13 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
             for (int k = 0; k < nColsToRead; ++k, ++pAktTC, ++pTc )
             {
                 sal_uInt16 aBits1 = SVBT16ToShort( pTc->aBits1Ver8 );
-                pAktTC->bFirstMerged    = ( ( aBits1 & 0x0001 ) != 0 );
-                pAktTC->bMerged         = ( ( aBits1 & 0x0002 ) != 0 );
-                pAktTC->bVertical       = ( ( aBits1 & 0x0004 ) != 0 );
-                pAktTC->bBackward       = ( ( aBits1 & 0x0008 ) != 0 );
-                pAktTC->bRotateFont     = ( ( aBits1 & 0x0010 ) != 0 );
-                pAktTC->bVertMerge      = ( ( aBits1 & 0x0020 ) != 0 );
-                pAktTC->bVertRestart    = ( ( aBits1 & 0x0040 ) != 0 );
+                pAktTC->bFirstMerged    = sal_uInt8( ( aBits1 & 0x0001 ) != 0 );
+                pAktTC->bMerged         = sal_uInt8( ( aBits1 & 0x0002 ) != 0 );
+                pAktTC->bVertical       = sal_uInt8( ( aBits1 & 0x0004 ) != 0 );
+                pAktTC->bBackward       = sal_uInt8( ( aBits1 & 0x0008 ) != 0 );
+                pAktTC->bRotateFont     = sal_uInt8( ( aBits1 & 0x0010 ) != 0 );
+                pAktTC->bVertMerge      = sal_uInt8( ( aBits1 & 0x0020 ) != 0 );
+                pAktTC->bVertRestart    = sal_uInt8( ( aBits1 & 0x0040 ) != 0 );
                 pAktTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
                 // note: in aBits1 there are 7 bits unused,
                 //       followed by another 16 unused bits

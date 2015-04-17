@@ -534,6 +534,9 @@ struct WW8_TBD
 
 struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend dem Ver8-Format)
 {
+    // The single-bit fields should ideally be bool, but probably need to keep
+    // them as sal_uInt8 to make them combine with the following two-bit
+    // nVertAlign:
     sal_uInt8 bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
     sal_uInt8 bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
     sal_uInt8 bVertical      : 1;// set to 1 when cell has vertical text flow

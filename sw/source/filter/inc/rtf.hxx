@@ -25,7 +25,7 @@ class RTFSurround
 {
     union {
         struct {
-            sal_uInt8 nGoldCut : 1;
+            sal_uInt8 nGoldCut : 1; // should ideally be bool
             sal_uInt8 nOrder : 4;
             sal_uInt8 nJunk : 3;
         } Flags;
@@ -35,7 +35,7 @@ public:
     RTFSurround( sal_uInt8 nValue ) { Value.nVal = nValue; }
 
     RTFSurround( bool bGoldCut, sal_uInt8 nOrder ) {
-        Value.Flags.nGoldCut = bGoldCut;
+        Value.Flags.nGoldCut = sal_uInt8(bGoldCut);
         Value.Flags.nOrder = nOrder;
         Value.Flags.nJunk = 0;
     }

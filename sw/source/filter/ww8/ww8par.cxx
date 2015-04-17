@@ -2613,12 +2613,12 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     sal_uInt8 nCellLevel = 0;
 
     if (bVer67)
-        nCellLevel = 0 != pPlcxMan->HasParaSprm(24);
+        nCellLevel = int(0 != pPlcxMan->HasParaSprm(24));
     else
     {
-        nCellLevel = 0 != pPlcxMan->HasParaSprm(0x2416);
+        nCellLevel = int(0 != pPlcxMan->HasParaSprm(0x2416));
         if (!nCellLevel)
-            nCellLevel = 0 != pPlcxMan->HasParaSprm(0x244B);
+            nCellLevel = int(0 != pPlcxMan->HasParaSprm(0x244B));
     }
     do
     {

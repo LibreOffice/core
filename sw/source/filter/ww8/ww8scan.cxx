@@ -1843,7 +1843,8 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     void* pData;
     sal_uLong nOldIdx = rPLCF.GetIdx();
 
-    rF.nLen = rF.nId = rF.nOpt = rF.bCodeNest = rF.bResNest = false;
+    rF.nLen = rF.nId = rF.nOpt = 0;
+    rF.bCodeNest = rF.bResNest = false;
 
     if( !rPLCF.Get( rF.nSCode, pData ) )             // end of PLCFspecial?
         goto Err;

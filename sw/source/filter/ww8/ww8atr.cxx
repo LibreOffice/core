@@ -166,7 +166,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
             case RES_CHRATR_CTL_LANGUAGE:
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
-                if (bWrtWW8 == 0)
+                if (!bWrtWW8)
                     bRet = false;
             default:
                 break;
@@ -177,7 +177,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
         //Complex is ok in ww8, but for ww6 there is only
         //one font, one fontsize, one fontsize (weight/posture)
         //and only one language
-        if ( bWrtWW8 == 0 )
+        if ( !bWrtWW8 )
         {
             switch ( nWhich )
             {
@@ -217,7 +217,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
             case RES_CHRATR_CTL_LANGUAGE:
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
-                if ( bWrtWW8 == 0 )
+                if ( !bWrtWW8 )
                     bRet = false;
             default:
                 break;
@@ -3173,7 +3173,7 @@ void WW8AttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
         return;
 
     m_rWW8Export.InsUInt16( NS_sprm::LN_PFUsePgsuSettings );
-    m_rWW8Export.pO->push_back( rGrid.GetValue() );
+    m_rWW8Export.pO->push_back( rGrid.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
@@ -4870,12 +4870,12 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         m_rWW8Export.InsUInt16( NS_sprm::LN_STextFlow );
         m_rWW8Export.InsUInt16( nTextFlow );
         m_rWW8Export.InsUInt16( NS_sprm::LN_SFBiDi );
-        m_rWW8Export.pO->push_back( bBiDi );
+        m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
     }
     else if ( !m_rWW8Export.bOutFlyFrmAttrs )  //paragraph/style
     {
         m_rWW8Export.InsUInt16( NS_sprm::LN_PFBiDi );
-        m_rWW8Export.pO->push_back( bBiDi );
+        m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
     }
 }
 

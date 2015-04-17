@@ -387,7 +387,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
 
         const _FndBoxes& rFndBxs = rFndBox.GetUpper()->GetBoxes();
         if( 8 > pCpyPara->nDelBorderFlag
-                ? pCpyPara->nDelBorderFlag
+                ? pCpyPara->nDelBorderFlag != 0
                 : &rFndBox == &rFndBxs[rFndBxs.size() - 1] )
         {
             const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();

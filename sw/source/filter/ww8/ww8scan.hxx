@@ -605,8 +605,8 @@ private:
     WW8PLCFx_PCD* pPcd;
     WW8PLCFpcd_Iter *pPieceIter;
     WW8_CP nAttrStart, nAttrEnd;
-    sal_uInt8 bLineEnd : 1;
-    sal_uInt8 bComplex : 1;
+    bool bLineEnd : 1;
+    bool bComplex : 1;
 
     WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&) SAL_DELETED_FUNCTION;
     WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&) SAL_DELETED_FUNCTION;

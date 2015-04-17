@@ -886,7 +886,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
 
     // Has a table page
     aNewSection.maSep.fTitlePage =
-        (0 != ReadBSprm( pSep, pIds[1], 0 ));
+        sal_uInt8(0 != ReadBSprm( pSep, pIds[1], 0 ));
 
     // sprmSNfcPgn
     aNewSection.maSep.nfcPgn = ReadBSprm( pSep, pIds[2], 0 );
