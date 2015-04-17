@@ -283,7 +283,7 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
         ListBox::DrawEntry( rUDEvt, true, true, false );
 }
 
-BorderWidthImpl::BorderWidthImpl( sal_uInt16 nFlags, double nRate1, double nRate2, double nRateGap ):
+BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):
     m_nFlags( nFlags ),
     m_nRate1( nRate1 ),
     m_nRate2( nRate2 ),
@@ -311,10 +311,10 @@ bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
 long BorderWidthImpl::GetLine1( long nWidth ) const
 {
     long result = static_cast<long>(m_nRate1);
-    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+    if ( m_nFlags & BorderWidthImplFlags::CHANGE_LINE1 )
     {
-        long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
-        long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
+        long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
+        long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
                     static_cast<long>((m_nRate1 * nWidth) + 0.5)
                         - (nConstant2 + nConstantD));
@@ -329,10 +329,10 @@ long BorderWidthImpl::GetLine1( long nWidth ) const
 long BorderWidthImpl::GetLine2( long nWidth ) const
 {
     long result = static_cast<long>(m_nRate2);
-    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+    if ( m_nFlags & BorderWidthImplFlags::CHANGE_LINE2)
     {
-        long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
-        long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
+        long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
+        long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
                     static_cast<long>((m_nRate2 * nWidth) + 0.5)
                         - (nConstant1 + nConstantD));
@@ -343,10 +343,10 @@ long BorderWidthImpl::GetLine2( long nWidth ) const
 long BorderWidthImpl::GetGap( long nWidth ) const
 {
     long result = static_cast<long>(m_nRateGap);
-    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+    if ( m_nFlags & BorderWidthImplFlags::CHANGE_DIST )
     {
-        long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
-        long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
+        long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
+        long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
         result = std::max<long>(0,
                     static_cast<long>((m_nRateGap * nWidth) + 0.5)
                         - (nConstant1 + nConstant2));
@@ -378,21 +378,21 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     std::vector< double > aToCompare;
     bool bInvalid = false;
 
-    bool bLine1Change = ( m_nFlags & CHANGE_LINE1 ) > 0;
+    bool bLine1Change = bool( m_nFlags & BorderWidthImplFlags::CHANGE_LINE1 );
     double nWidth1 = lcl_getGuessedWidth( nLine1, m_nRate1, bLine1Change );
     if ( bLine1Change )
         aToCompare.push_back( nWidth1 );
     else if ( !bLine1Change && nWidth1 < 0 )
         bInvalid = true;
 
-    bool bLine2Change = ( m_nFlags & CHANGE_LINE2 ) > 0;
+    bool bLine2Change = bool( m_nFlags & BorderWidthImplFlags::CHANGE_LINE2 );
     double nWidth2 = lcl_getGuessedWidth( nLine2, m_nRate2, bLine2Change );
     if ( bLine2Change )
         aToCompare.push_back( nWidth2 );
     else if ( !bLine2Change && nWidth2 < 0 )
         bInvalid = true;
 
-    bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
+    bool bGapChange = bool( m_nFlags & BorderWidthImplFlags::CHANGE_DIST );
     double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
     if ( bGapChange && nGap > MINGAPWIDTH )
         aToCompare.push_back( nWidthGap );

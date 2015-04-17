@@ -30,6 +30,7 @@
 #include <vcl/field.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 class FontList;
 class ImplColorListData;
@@ -38,11 +39,6 @@ class ImpLineListData;
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< vcl::FontInfo         > ImplFontList;
-
-#define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )
-#define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )
-#define CHANGE_DIST                ( ( sal_uInt16 ) 4 )
-#define ADAPT_DIST                 ( ( sal_uInt16 ) 8 )
 
 /*************************************************************************
 
@@ -238,16 +234,28 @@ inline Color ColorListBox::GetSelectEntryColor( sal_Int32  nSelIndex ) const
     For each line, the rate member is used as a multiplication factor is the width
     isn't fixed. Otherwise it is the width in the unit expected by the client code.
  */
+enum class BorderWidthImplFlags
+{
+    FIXED           = 0,
+    CHANGE_LINE1    = 1,
+    CHANGE_LINE2    = 2,
+    CHANGE_DIST     = 4,
+    ADAPT_DIST      = 8,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<BorderWidthImplFlags> : is_typed_flags<BorderWidthImplFlags, 0x0f> {};
+}
 class SVT_DLLPUBLIC BorderWidthImpl
 {
-    sal_uInt16 m_nFlags;
+    BorderWidthImplFlags m_nFlags;
     double m_nRate1;
     double m_nRate2;
     double m_nRateGap;
 
 public:
 
-    BorderWidthImpl( sal_uInt16 nFlags = CHANGE_LINE1, double nRate1 = 0.0,
+    BorderWidthImpl( BorderWidthImplFlags nFlags = BorderWidthImplFlags::CHANGE_LINE1, double nRate1 = 0.0,
             double nRate2 = 0.0, double nRateGap = 0.0 );
 
     BorderWidthImpl& operator= ( const BorderWidthImpl& r );

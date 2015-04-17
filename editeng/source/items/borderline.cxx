@@ -307,7 +307,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
     {
         // No line: no width
         case css::table::BorderLineStyle::NONE:
-            aImpl = BorderWidthImpl( 0, 0.0 );
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::FIXED, 0.0 );
             break;
 
         // Single lines
@@ -317,52 +317,52 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case FINE_DASHED:
         case DASH_DOT:
         case DASH_DOT_DOT:
-            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0 );
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::CHANGE_LINE1, 1.0 );
             break;
 
         // Double lines
 
         case DOUBLE:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     // fdo#46112 fdo#38542 fdo#43249:
                     // non-constant witdths must sum to 1
                     1.0/3.0, 1.0/3.0, 1.0/3.0 );
             break;
 
         case DOUBLE_THIN:
-            aImpl = BorderWidthImpl(CHANGE_DIST, 10.0, 10.0, 1.0);
+            aImpl = BorderWidthImpl(BorderWidthImplFlags::CHANGE_DIST, 10.0, 10.0, 1.0);
             break;
 
         case THINTHICK_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0,
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::CHANGE_LINE1, 1.0,
                     THINTHICK_SMALLGAP_line2, THINTHICK_SMALLGAP_gap );
             break;
 
         case THINTHICK_MEDIUMGAP:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     0.5, 0.25, 0.25 );
             break;
 
         case THINTHICK_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST,
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::CHANGE_DIST,
                     THINTHICK_LARGEGAP_line1, THINTHICK_LARGEGAP_line2, 1.0 );
             break;
 
         case THICKTHIN_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_LINE2, THICKTHIN_SMALLGAP_line1,
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::CHANGE_LINE2, THICKTHIN_SMALLGAP_line1,
                     1.0, THICKTHIN_SMALLGAP_gap );
             break;
 
         case THICKTHIN_MEDIUMGAP:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     0.25, 0.5, 0.25 );
             break;
 
         case THICKTHIN_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, THICKTHIN_LARGEGAP_line1,
+            aImpl = BorderWidthImpl( BorderWidthImplFlags::CHANGE_DIST, THICKTHIN_LARGEGAP_line1,
                     THICKTHIN_LARGEGAP_line2, 1.0 );
             break;
 
@@ -375,7 +375,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case EMBOSSED:
         case ENGRAVED:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     0.25, 0.25, 0.5 );
             break;
 
@@ -386,13 +386,13 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
          */
         case OUTSET:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     OUTSET_line1, 0.5, 0.5 );
             break;
 
         case INSET:
             aImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_DIST,
                     0.5, INSET_line2, 0.5 );
             break;
     }
@@ -481,7 +481,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
             if (nOut + nIn + nDist)
             {
                 m_aWidthImpl = BorderWidthImpl(
-                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     static_cast<double>(nOut ) / static_cast<double>(m_nWidth),
                     static_cast<double>(nIn  ) / static_cast<double>(m_nWidth),
                     static_cast<double>(nDist) / static_cast<double>(m_nWidth));
