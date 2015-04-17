@@ -1015,7 +1015,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf.get(),
-                        aSvxFont, nPara, -1, bRightToLeftPara, 0, 0, false, false, true, 0, Color(), Color());
+                        aSvxFont, nPara, -1, bRightToLeftPara ? 1 : 0, 0, 0, false, false, true, 0, Color(), Color());
                 }
                 else
                 {
