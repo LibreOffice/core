@@ -398,24 +398,77 @@
 		
 		<value-of select="$NL"/>
 		<apply-templates/>
-		<value-of select="$NL"/>
 		<text>|}</text>
 		<value-of select="$NL"/>
 	</template>
 
-	<template match="table:table-header-rows">
-		<apply-templates/>
-	</template>
-
-	<template match="table:table-row[position() &lt; last()] | table:table-header-rows/table:table-row">
-		<apply-templates/>
-		<value-of select="$NL"/>
-		<text>|-</text>
-		<value-of select="$NL"/>
-	</template>
-
 	<template match="table:table-row">
+		<variable name="style-name" select="table:table-cell[1]/@table:style-name"/>
+		<variable name="total-style-name" select="count(table:table-cell/@table:style-name)"/>
+		<variable name="total-equal-style-name" select="count(table:table-cell[@table:style-name=$style-name])"/>
+		<variable name="style">
+			<if test="$total-equal-style-name=$total-style-name">
+				<variable name="style-element" select="key('style-ref', $style-name)"/>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'background-color'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:background-color"/>
+				</call-template>
+
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-top'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-top"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-bottom'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-bottom"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-left'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-left"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-right'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-right"/>
+				</call-template>
+
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-top'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-top"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-bottom'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-bottom"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-left'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-left"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-right'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-right"/>
+				</call-template>
+			</if>
+		</variable>
+
+		<text>|-</text>
+
+                <if test="string-length($style) &gt; 0">
+			<text> style="</text>
+			<value-of select="$style"/>
+			<text>" </text>
+		</if>
+
+                <value-of select="$NL"/>
 		<apply-templates/>
+		<value-of select="$NL"/>
 	</template>
 
 	<template match="table:table-header-rows//table:table-cell">
@@ -462,56 +515,60 @@
 			</choose>
 		</if>
 
+		<variable name="style-name" select="@table:style-name"/>
 		<if test="not($USE_DEFAULT_TABLE_CLASS) and boolean(@table:style-name)">
 	 		<variable name="style-element" select="key('style-ref', @table:style-name)"/>			
 			<variable name="style">
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'background-color'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:background-color"/>
-				</call-template>
+				<!-- Only if cells have a different style-name -->
+				<if test="count(../table:table-cell/@table:style-name) !=  count(../table:table-cell[@table:style-name=$style-name]) and count(../table:table-cell/@table:style-name) &gt; 0">
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'background-color'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:background-color"/>
+					</call-template>
 				
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'border'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'border-top'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-top"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'border-bottom'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-bottom"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'border-left'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-left"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'border-right'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-right"/>
-				</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'border'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'border-top'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-top"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'border-bottom'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-bottom"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'border-left'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-left"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'border-right'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-right"/>
+					</call-template>
 				
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'padding'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'padding-top'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-top"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'padding-bottom'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-bottom"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'padding-left'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-left"/>
-				</call-template>
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'padding-right'"/>
-					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-right"/>
-				</call-template>
-			</variable>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'padding'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'padding-top'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-top"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'padding-bottom'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-bottom"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'padding-left'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-left"/>
+					</call-template>
+					<call-template name="translate-style-property">
+						<with-param name="style-name" select="'padding-right'"/>
+						<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-right"/>
+					</call-template>
+				</if>
+                        </variable>
 			
 			<if test="string-length($style) &gt; 0">
 				<text> style="</text>
