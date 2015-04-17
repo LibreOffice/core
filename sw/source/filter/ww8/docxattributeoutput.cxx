@@ -2839,7 +2839,8 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     }
 
     // Vertical merges
-    long vSpan = pTblBox->getRowSpan( );
+    ww8::RowSpansPtr xRowSpans = pTableTextNodeInfoInner->getRowSpansOfRow();
+    sal_Int32 vSpan = (*xRowSpans)[nCell];
     if ( vSpan > 1 )
     {
         m_pSerializer->singleElementNS( XML_w, XML_vMerge,
