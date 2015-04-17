@@ -2812,7 +2812,7 @@ static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     }
 }
 
-void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
     m_pSerializer->startElementNS( XML_w, XML_tcPr, FSEND );
 
@@ -2824,9 +2824,9 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     TableCellRedline( pTableTextNodeInfoInner );
 
     // Cell preferred width
-    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
-    if ( pTableTextNodeInfoInner->getCell() )
-        nWidth = nWidth - GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() - 1 );
+    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( nCell );
+    if ( nCell )
+        nWidth = nWidth - GetGridCols( pTableTextNodeInfoInner )->at( nCell - 1 );
     m_pSerializer->singleElementNS( XML_w, XML_tcW,
            FSNS( XML_w, XML_w ), OString::number( nWidth ).getStr( ),
            FSNS( XML_w, XML_type ), "dxa",
@@ -2834,8 +2834,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     // Horizontal spans
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
-    SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
+    SwWriteTableRow *pRow = aRows[ nRow ];
     const SwWriteTableCells *tableCells =  &pRow->GetCells();
     if (nCell < tableCells->size() )
     {
@@ -2987,7 +2986,7 @@ void DocxAttributeOutput::EndTableRow( )
     m_pSerializer->endElementNS( XML_w, XML_tr );
 }
 
-void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
     if ( !m_pTableWrt )
         InitTableHelper( pTableTextNodeInfoInner );
@@ -2995,9 +2994,16 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     m_pSerializer->startElementNS( XML_w, XML_tc, FSEND );
 
     // Write the cell properties here
-    TableCellProperties( pTableTextNodeInfoInner );
+    TableCellProperties( pTableTextNodeInfoInner, nCell, nRow );
 
     m_tableReference->m_bTableCellOpen = true;
+}
+
+void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+{
+    const sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
+    const sal_uInt32 nRow = pTableTextNodeInfoInner->getRow();
+    StartTableCell(pTableTextNodeInfoInner, nCell, nRow);
 }
 
 void DocxAttributeOutput::EndTableCell( )
@@ -3574,7 +3580,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     const SwWriteTableCells *tableCells =  &pRow->GetCells();
     if (nCell < tableCells->size() )
     {
-        const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+        const SwWriteTableCell *pCell = &pRow->GetCells( )[ nCell ];
         switch( pCell->GetVertOri())
         {
         case text::VertOrientation::TOP:
