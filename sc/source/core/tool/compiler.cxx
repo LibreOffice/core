@@ -362,20 +362,9 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     }
     else if (FormulaGrammar::CONV_XL_OOX == meConv)
     {
-#if 1
-            /* TODO: currently SC_COMPILER_C_CHAR doesn't work as long as the
-             * table references aren't implemented. */
-/* [ */     t[91] = SC_COMPILER_C_CHAR_IDENT;
-/* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_IDENT;
-#else
-            /* TODO: check if SC_COMPILER_C_CHAR_IDENT and SC_COMPILER_C_IDENT
-             * were only added to be able to import table structured
-             * reference of a whole table. If so, then remove here. */
 /* [ */     t[91] = SC_COMPILER_C_CHAR | SC_COMPILER_C_CHAR_IDENT;
 /* \ */     // FREE
 /* ] */     t[93] = SC_COMPILER_C_CHAR | SC_COMPILER_C_IDENT;
-#endif
     }
     else if (FormulaGrammar::CONV_XL_A1 == meConv)
     {
@@ -1959,8 +1948,20 @@ Label_MaskStateMachine:
                 }
                 else if( nMask & SC_COMPILER_C_CHAR )
                 {
-                    *pSym++ = c;
-                    eState = ssStop;
+                    // '[' is a special case in OOXML, it can start an external
+                    // reference ID like [1]Sheet1!A1 that needs to be scanned
+                    // entirely, or can be ocTableRefOpen, of which the first
+                    // transforms an ocDBArea into an ocTableRef.
+                    if (c == '[' && FormulaGrammar::isOOXML( meGrammar) && eLastOp != ocDBArea && maTableRefs.empty())
+                    {
+                        nMask &= ~SC_COMPILER_C_CHAR;
+                        goto Label_MaskStateMachine;
+                    }
+                    else
+                    {
+                        *pSym++ = c;
+                        eState = ssStop;
+                    }
                 }
                 else if( nMask & SC_COMPILER_C_ODF_LBRACKET )
                 {
@@ -3010,17 +3011,6 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidE
 
 bool ScCompiler::IsDBRange( const OUString& rName )
 {
-    if (rName == "[]")
-    {
-        OpCode eOp = maRawToken.GetOpCode();
-        if (eOp == ocDBArea || eOp == ocTableRef)
-        {
-            // In OOXML, a database range is named Table1[], Table2[] etc.
-            // Skip the [] part if the previous token is a valid db range.
-            maRawToken.eOp = ocSkip;
-            return true;
-        }
-    }
     ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
     const ScDBData* p = rDBs.findByUpperName(rName);
     if (!p)
