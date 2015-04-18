@@ -91,7 +91,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
     if (pError != NULL)
     {
-        // TODO: thow an exception?
+        // TODO: throw an exception?
         DBG( "%p Player::Player error '%s'", this, pError->message );
         g_error_free (pError);
     }
