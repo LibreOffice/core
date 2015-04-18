@@ -1608,6 +1608,9 @@ void ChartExport::exportHiLowLines()
 
 void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
 {
+    if(xChartType->getChartType() != "com.sun.star.chart2.CandleStickChartType")
+        return;
+
     FSHelperPtr pFS = GetFS();
     // export the chart property
     Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );

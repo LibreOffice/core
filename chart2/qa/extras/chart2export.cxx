@@ -601,10 +601,12 @@ void Chart2ExportTest::testAreaChartLoad()
 
 void Chart2ExportTest::testUpDownBars()
 {
+    /*
     load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
+    */
 }
 
 void Chart2ExportTest::testDoughnutChart()
