@@ -3590,8 +3590,12 @@ RTLFUNC(Shell)
         // attach additional parameters - everything must be parsed anyway
         if( nArgCount >= 4 )
         {
-            aCmdLine += " ";
-            aCmdLine += rPar.Get(3)->GetOUString();
+            OUString tmp = rPar.Get(3)->GetOUString().trim();
+            if (!tmp.isEmpty())
+            {
+                aCmdLine += " ";
+                aCmdLine += tmp;
+            }
         }
         else if( aCmdLine.isEmpty() )
         {
