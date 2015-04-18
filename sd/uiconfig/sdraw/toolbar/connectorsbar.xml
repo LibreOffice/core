@@ -26,14 +26,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ConnectorCircleEnd" toolbar:visible="false" toolbar:helpid="27123"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorCircles" toolbar:visible="false" toolbar:helpid="27124"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLines" toolbar:helpid="27139"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowStart" toolbar:visible="false" toolbar:helpid="27140"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowEnd" toolbar:helpid="27141"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrows" toolbar:helpid="27142"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleStart" toolbar:visible="false" toolbar:helpid="27143"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleEnd" toolbar:visible="false" toolbar:helpid="27144"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircles" toolbar:visible="false" toolbar:helpid="27145"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorLine" toolbar:helpid="27125"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowStart" toolbar:visible="false" toolbar:helpid="27126"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowEnd" toolbar:helpid="27127"/>
@@ -49,4 +41,12 @@
  <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleStart" toolbar:visible="false" toolbar:helpid="27136"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleEnd" toolbar:visible="false" toolbar:helpid="27137"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircles" toolbar:visible="false" toolbar:helpid="27138"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLines" toolbar:helpid="27139"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowStart" toolbar:visible="false" toolbar:helpid="27140"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowEnd" toolbar:helpid="27141"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrows" toolbar:helpid="27142"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleStart" toolbar:visible="false" toolbar:helpid="27143"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleEnd" toolbar:visible="false" toolbar:helpid="27144"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircles" toolbar:visible="false" toolbar:helpid="27145"/>
 </toolbar:toolbar>

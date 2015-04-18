@@ -20,21 +20,21 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafMode" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
 </toolbar:toolbar>
