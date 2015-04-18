@@ -874,6 +874,15 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
         pCurrSet = pCurrSet->GetParent();
     }
 
+    if (nScript == 0)
+        nScript = nDefScript;
+
+    if (nScript == 0)
+    {
+        OSL_FAIL( "XclExpFontHelper::GetFirstUsedScript - unknown script type" );
+        nScript = ApiScriptType::LATIN;
+    }
+
     return nScript;
 }
 
