@@ -2762,358 +2762,358 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
 
     switch (nLanguage)
     {
-        case APPLE_LANG_ENGLISH:
+        case AppleLanguageId::ENGLISH:
             nLang = LANGUAGE_ENGLISH;
             break;
-        case APPLE_LANG_FRENCH:
+        case AppleLanguageId::FRENCH:
             nLang = LANGUAGE_FRENCH;
             break;
-        case APPLE_LANG_GERMAN:
+        case AppleLanguageId::GERMAN:
             nLang = LANGUAGE_GERMAN;
             break;
-        case APPLE_LANG_ITALIAN:
+        case AppleLanguageId::ITALIAN:
             nLang = LANGUAGE_ITALIAN;
             break;
-        case APPLE_LANG_DUTCH:
+        case AppleLanguageId::DUTCH:
             nLang = LANGUAGE_DUTCH;
             break;
-        case APPLE_LANG_SWEDISH:
+        case AppleLanguageId::SWEDISH:
             nLang = LANGUAGE_SWEDISH;
             break;
-        case APPLE_LANG_SPANISH:
+        case AppleLanguageId::SPANISH:
             nLang = LANGUAGE_SPANISH;
             break;
-        case APPLE_LANG_DANISH:
+        case AppleLanguageId::DANISH:
             nLang = LANGUAGE_DANISH;
             break;
-        case APPLE_LANG_PORTUGUESE:
+        case AppleLanguageId::PORTUGUESE:
             nLang = LANGUAGE_PORTUGUESE;
             break;
-        case APPLE_LANG_NORWEGIAN:
+        case AppleLanguageId::NORWEGIAN:
             nLang = LANGUAGE_NORWEGIAN;
             break;
-        case APPLE_LANG_HEBREW:
+        case AppleLanguageId::HEBREW:
             nLang = LANGUAGE_HEBREW;
             break;
-        case APPLE_LANG_JAPANESE:
+        case AppleLanguageId::JAPANESE:
             nLang = LANGUAGE_JAPANESE;
             break;
-        case APPLE_LANG_ARABIC:
+        case AppleLanguageId::ARABIC:
             nLang = LANGUAGE_ARABIC_PRIMARY_ONLY;
             break;
-        case APPLE_LANG_FINNISH:
+        case AppleLanguageId::FINNISH:
             nLang = LANGUAGE_FINNISH;
             break;
-        case APPLE_LANG_GREEK:
+        case AppleLanguageId::GREEK:
             nLang = LANGUAGE_GREEK;
             break;
-        case APPLE_LANG_ICELANDIC:
+        case AppleLanguageId::ICELANDIC:
             nLang = LANGUAGE_ICELANDIC;
             break;
-        case APPLE_LANG_MALTESE:
+        case AppleLanguageId::MALTESE:
             nLang = LANGUAGE_MALTESE;
             break;
-        case APPLE_LANG_TURKISH:
+        case AppleLanguageId::TURKISH:
             nLang = LANGUAGE_TURKISH;
             break;
-        case APPLE_LANG_CROATIAN:
+        case AppleLanguageId::CROATIAN:
             nLang = LANGUAGE_CROATIAN;
             break;
-        case APPLE_LANG_CHINESE_TRADITIONAL:
+        case AppleLanguageId::CHINESE_TRADITIONAL:
             nLang = LANGUAGE_CHINESE_TRADITIONAL;
             break;
-        case APPLE_LANG_URDU:
+        case AppleLanguageId::URDU:
             nLang = LANGUAGE_URDU_PAKISTAN; //probably, otherwise we need a LANGUAGE_URDU_PRIMARY_ONLY
             break;
-        case APPLE_LANG_HINDI:
+        case AppleLanguageId::HINDI:
             nLang = LANGUAGE_HINDI;
             break;
-        case APPLE_LANG_THAI:
+        case AppleLanguageId::THAI:
             nLang = LANGUAGE_THAI;
             break;
-        case APPLE_LANG_KOREAN:
+        case AppleLanguageId::KOREAN:
             nLang = LANGUAGE_KOREAN;
             break;
-        case APPLE_LANG_LITHUANIAN:
+        case AppleLanguageId::LITHUANIAN:
             nLang = LANGUAGE_LITHUANIAN;
             break;
-        case APPLE_LANG_POLISH:
+        case AppleLanguageId::POLISH:
             nLang = LANGUAGE_POLISH;
             break;
-        case APPLE_LANG_HUNGARIAN:
+        case AppleLanguageId::HUNGARIAN:
             nLang = LANGUAGE_HUNGARIAN;
             break;
-        case APPLE_LANG_ESTONIAN:
+        case AppleLanguageId::ESTONIAN:
             nLang = LANGUAGE_ESTONIAN;
             break;
-        case APPLE_LANG_LATVIAN:
+        case AppleLanguageId::LATVIAN:
             nLang = LANGUAGE_LATVIAN;
             break;
-        case APPLE_LANG_SAMI:
+        case AppleLanguageId::SAMI:
             nLang = LANGUAGE_SAMI_NORTHERN_NORWAY; //maybe
             break;
-        case APPLE_LANG_FAROESE:
+        case AppleLanguageId::FAROESE:
             nLang = LANGUAGE_FAEROESE;
             break;
-        case APPLE_LANG_FARSI:
+        case AppleLanguageId::FARSI:
             nLang = LANGUAGE_FARSI;
             break;
-        case APPLE_LANG_RUSSIAN:
+        case AppleLanguageId::RUSSIAN:
             nLang = LANGUAGE_RUSSIAN;
             break;
-        case APPLE_LANG_CHINESE_SIMPLIFIED:
+        case AppleLanguageId::CHINESE_SIMPLIFIED:
             nLang = LANGUAGE_CHINESE_SIMPLIFIED;
             break;
-        case APPLE_LANG_FLEMISH:
+        case AppleLanguageId::FLEMISH:
             nLang = LANGUAGE_DUTCH_BELGIAN;
             break;
-        case APPLE_LANG_IRISH_GAELIC:
+        case AppleLanguageId::IRISH_GAELIC:
             nLang = LANGUAGE_GAELIC_IRELAND;
             break;
-        case APPLE_LANG_ALBANIAN:
+        case AppleLanguageId::ALBANIAN:
             nLang = LANGUAGE_ALBANIAN;
             break;
-        case APPLE_LANG_ROMANIAN:
+        case AppleLanguageId::ROMANIAN:
             nLang = LANGUAGE_ROMANIAN;
             break;
-        case APPLE_LANG_CZECH:
+        case AppleLanguageId::CZECH:
             nLang = LANGUAGE_CZECH;
             break;
-        case APPLE_LANG_SLOVAK:
+        case AppleLanguageId::SLOVAK:
             nLang = LANGUAGE_SLOVAK;
             break;
-        case APPLE_LANG_SLOVENIAN:
+        case AppleLanguageId::SLOVENIAN:
             nLang = LANGUAGE_SLOVENIAN;
             break;
-        case APPLE_LANG_YIDDISH:
+        case AppleLanguageId::YIDDISH:
             nLang = LANGUAGE_YIDDISH;
             break;
-        case APPLE_LANG_SERBIAN:
+        case AppleLanguageId::SERBIAN:
             nLang = LANGUAGE_SERBIAN_CYRILLIC_SERBIA;   //maybe
             break;
-        case APPLE_LANG_MACEDONIAN:
+        case AppleLanguageId::MACEDONIAN:
             nLang = LANGUAGE_MACEDONIAN;
             break;
-        case APPLE_LANG_BULGARIAN:
+        case AppleLanguageId::BULGARIAN:
             nLang = LANGUAGE_BULGARIAN;
             break;
-        case APPLE_LANG_UKRAINIAN:
+        case AppleLanguageId::UKRAINIAN:
             nLang = LANGUAGE_UKRAINIAN;
             break;
-        case APPLE_LANG_BYELORUSSIAN:
+        case AppleLanguageId::BYELORUSSIAN:
             nLang = LANGUAGE_BELARUSIAN;
             break;
-        case APPLE_LANG_UZBEK:
+        case AppleLanguageId::UZBEK:
             nLang = LANGUAGE_UZBEK_CYRILLIC; //maybe
             break;
-        case APPLE_LANG_KAZAKH:
+        case AppleLanguageId::KAZAKH:
             nLang = LANGUAGE_KAZAKH;
             break;
-        case APPLE_LANG_AZERI_CYRILLIC:
+        case AppleLanguageId::AZERI_CYRILLIC:
             nLang = LANGUAGE_AZERI_CYRILLIC;
             break;
-        case APPLE_LANG_AZERI_ARABIC:
+        case AppleLanguageId::AZERI_ARABIC:
             return LanguageTag("az-Arab");
             break;
-        case APPLE_LANG_ARMENIAN:
+        case AppleLanguageId::ARMENIAN:
             nLang = LANGUAGE_ARMENIAN;
             break;
-        case APPLE_LANG_GEORGIAN:
+        case AppleLanguageId::GEORGIAN:
             nLang = LANGUAGE_GEORGIAN;
             break;
-        case APPLE_LANG_MOLDAVIAN:
+        case AppleLanguageId::MOLDAVIAN:
             nLang = LANGUAGE_ROMANIAN_MOLDOVA;
             break;
-        case APPLE_LANG_KIRGHIZ:
+        case AppleLanguageId::KIRGHIZ:
             nLang = LANGUAGE_KIRGHIZ;
             break;
-        case APPLE_LANG_TAJIKI:
+        case AppleLanguageId::TAJIKI:
             nLang = LANGUAGE_TAJIK;
             break;
-        case APPLE_LANG_TURKMEN:
+        case AppleLanguageId::TURKMEN:
             nLang = LANGUAGE_TURKMEN;
             break;
-        case APPLE_LANG_MONGOLIAN_MONGOLIAN:
+        case AppleLanguageId::MONGOLIAN_MONGOLIAN:
             nLang = LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA;
             break;
-        case APPLE_LANG_MONGOLIAN_CYRILLIC:
+        case AppleLanguageId::MONGOLIAN_CYRILLIC:
             nLang = LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA;
             break;
-        case APPLE_LANG_PASHTO:
+        case AppleLanguageId::PASHTO:
             nLang = LANGUAGE_PASHTO;
             break;
-        case APPLE_LANG_KURDISH:
+        case AppleLanguageId::KURDISH:
             nLang = LANGUAGE_USER_KURDISH_TURKEY; //maybe
             break;
-        case APPLE_LANG_KASHMIRI:
+        case AppleLanguageId::KASHMIRI:
             nLang = LANGUAGE_KASHMIRI;
             break;
-        case APPLE_LANG_SINDHI:
+        case AppleLanguageId::SINDHI:
             nLang = LANGUAGE_SINDHI;
             break;
-        case APPLE_LANG_TIBETAN:
+        case AppleLanguageId::TIBETAN:
             nLang = LANGUAGE_TIBETAN;
             break;
-        case APPLE_LANG_NEPALI:
+        case AppleLanguageId::NEPALI:
             nLang = LANGUAGE_NEPALI;
             break;
-        case APPLE_LANG_SANSKRIT:
+        case AppleLanguageId::SANSKRIT:
             nLang = LANGUAGE_SANSKRIT;
             break;
-        case APPLE_LANG_MARATHI:
+        case AppleLanguageId::MARATHI:
             nLang = LANGUAGE_MARATHI;
             break;
-        case APPLE_LANG_BENGALI:
+        case AppleLanguageId::BENGALI:
             nLang = LANGUAGE_BENGALI;
             break;
-        case APPLE_LANG_ASSAMESE:
+        case AppleLanguageId::ASSAMESE:
             nLang = LANGUAGE_ASSAMESE;
             break;
-        case APPLE_LANG_GUJARATI:
+        case AppleLanguageId::GUJARATI:
             nLang = LANGUAGE_GUJARATI;
             break;
-        case APPLE_LANG_PUNJABI:
+        case AppleLanguageId::PUNJABI:
             nLang = LANGUAGE_PUNJABI;
             break;
-        case APPLE_LANG_ORIYA:
+        case AppleLanguageId::ORIYA:
             nLang = LANGUAGE_ODIA;
             break;
-        case APPLE_LANG_MALAYALAM:
+        case AppleLanguageId::MALAYALAM:
             nLang = LANGUAGE_MALAYALAM;
             break;
-        case APPLE_LANG_KANNADA:
+        case AppleLanguageId::KANNADA:
             nLang = LANGUAGE_KANNADA;
             break;
-        case APPLE_LANG_TAMIL:
+        case AppleLanguageId::TAMIL:
             nLang = LANGUAGE_TAMIL;
             break;
-        case APPLE_LANG_TELUGU:
+        case AppleLanguageId::TELUGU:
             nLang = LANGUAGE_TELUGU;
             break;
-        case APPLE_LANG_SINHALESE:
+        case AppleLanguageId::SINHALESE:
             nLang = LANGUAGE_SINHALESE_SRI_LANKA;
             break;
-        case APPLE_LANG_BURMESE:
+        case AppleLanguageId::BURMESE:
             nLang = LANGUAGE_BURMESE;
             break;
-        case APPLE_LANG_KHMER:
+        case AppleLanguageId::KHMER:
             nLang = LANGUAGE_KHMER;
             break;
-        case APPLE_LANG_LAO:
+        case AppleLanguageId::LAO:
             nLang = LANGUAGE_LAO;
             break;
-        case APPLE_LANG_VIETNAMESE:
+        case AppleLanguageId::VIETNAMESE:
             nLang = LANGUAGE_VIETNAMESE;
             break;
-        case APPLE_LANG_INDONESIAN:
+        case AppleLanguageId::INDONESIAN:
             nLang = LANGUAGE_INDONESIAN;
             break;
-        case APPLE_LANG_TAGALONG:
+        case AppleLanguageId::TAGALONG:
             nLang = LANGUAGE_USER_TAGALOG;
             break;
-        case APPLE_LANG_MALAY_LATIN:
+        case AppleLanguageId::MALAY_LATIN:
             nLang = LANGUAGE_MALAY_MALAYSIA;
             break;
-        case APPLE_LANG_MALAY_ARABIC:
+        case AppleLanguageId::MALAY_ARABIC:
             return LanguageTag("ms-Arab");
             break;
-        case APPLE_LANG_AMHARIC:
+        case AppleLanguageId::AMHARIC:
             nLang = LANGUAGE_AMHARIC_ETHIOPIA;
             break;
-        case APPLE_LANG_TIGRINYA:
+        case AppleLanguageId::TIGRINYA:
             nLang = LANGUAGE_TIGRIGNA_ETHIOPIA;
             break;
-        case APPLE_LANG_GALLA:
+        case AppleLanguageId::GALLA:
             nLang = LANGUAGE_OROMO;
             break;
-        case APPLE_LANG_SOMALI:
+        case AppleLanguageId::SOMALI:
             nLang = LANGUAGE_SOMALI;
             break;
-        case APPLE_LANG_SWAHILI:
+        case AppleLanguageId::SWAHILI:
             nLang = LANGUAGE_SWAHILI;
             break;
-        case APPLE_LANG_KINYARWANDA:
+        case AppleLanguageId::KINYARWANDA:
             nLang = LANGUAGE_KINYARWANDA_RWANDA;
             break;
-        case APPLE_LANG_RUNDI:
+        case AppleLanguageId::RUNDI:
             return LanguageTag("rn");
             break;
-        case APPLE_LANG_NYANJA:
+        case AppleLanguageId::NYANJA:
             nLang = LANGUAGE_USER_NYANJA;
             break;
-        case APPLE_LANG_MALAGASY:
+        case AppleLanguageId::MALAGASY:
             nLang = LANGUAGE_MALAGASY_PLATEAU;
             break;
-        case APPLE_LANG_ESPERANTO:
+        case AppleLanguageId::ESPERANTO:
             nLang = LANGUAGE_USER_ESPERANTO;
             break;
-        case APPLE_LANG_WELSH:
+        case AppleLanguageId::WELSH:
             nLang = LANGUAGE_WELSH;
             break;
-        case APPLE_LANG_BASQUE:
+        case AppleLanguageId::BASQUE:
             nLang = LANGUAGE_BASQUE;
             break;
-        case APPLE_LANG_CATALAN:
+        case AppleLanguageId::CATALAN:
             nLang = LANGUAGE_CATALAN;
             break;
-        case APPLE_LANG_LATIN:
+        case AppleLanguageId::LATIN:
             nLang = LANGUAGE_USER_LATIN;
             break;
-        case APPLE_LANG_QUENCHUA:
+        case AppleLanguageId::QUENCHUA:
             nLang = LANGUAGE_QUECHUA_BOLIVIA; //maybe
             break;
-        case APPLE_LANG_GUARANI:
+        case AppleLanguageId::GUARANI:
             nLang = LANGUAGE_GUARANI_PARAGUAY;
             break;
-        case APPLE_LANG_AYMARA:
+        case AppleLanguageId::AYMARA:
             return LanguageTag("ay");
             break;
-        case APPLE_LANG_TATAR:
+        case AppleLanguageId::TATAR:
             nLang = LANGUAGE_TATAR;
             break;
-        case APPLE_LANG_UIGHUR:
+        case AppleLanguageId::UIGHUR:
             nLang = LANGUAGE_UIGHUR_CHINA;
             break;
-        case APPLE_LANG_DZONGKHA:
+        case AppleLanguageId::DZONGKHA:
             nLang = LANGUAGE_DZONGKHA;
             break;
-        case APPLE_LANG_JAVANESE_LATIN:
+        case AppleLanguageId::JAVANESE_LATIN:
             return LanguageTag("jv-Latn");
             break;
-        case APPLE_LANG_SUNDANESE_LATIN:
+        case AppleLanguageId::SUNDANESE_LATIN:
             return LanguageTag("su-Latn");
             break;
-        case APPLE_LANG_GALICIAN:
+        case AppleLanguageId::GALICIAN:
             nLang = LANGUAGE_GALICIAN;
             break;
-        case APPLE_LANG_AFRIKAANS:
+        case AppleLanguageId::AFRIKAANS:
             nLang = LANGUAGE_AFRIKAANS;
             break;
-        case APPLE_LANG_BRETON:
+        case AppleLanguageId::BRETON:
             nLang = LANGUAGE_BRETON_FRANCE;
             break;
-        case APPLE_LANG_INUKTITUT:
+        case AppleLanguageId::INUKTITUT:
             nLang = LANGUAGE_INUKTITUT_LATIN_CANADA; //probably
             break;
-        case APPLE_LANG_SCOTTISH_GAELIC:
+        case AppleLanguageId::SCOTTISH_GAELIC:
             nLang = LANGUAGE_GAELIC_SCOTLAND;
             break;
-        case APPLE_LANG_MANX_GAELIC:
+        case AppleLanguageId::MANX_GAELIC:
             nLang = LANGUAGE_USER_MANX;
             break;
-        case APPLE_LANG_IRISH_GAELIC_WITH_DOT_ABOVE:
+        case AppleLanguageId::IRISH_GAELIC_WITH_DOT_ABOVE:
             return LanguageTag("ga-Latg");
             break;
-        case APPLE_LANG_TONGAN:
+        case AppleLanguageId::TONGAN:
             return LanguageTag("to");
             break;
-        case APPLE_LANG_GREEK_POLYTONIC:
+        case AppleLanguageId::GREEK_POLYTONIC:
             nLang = LANGUAGE_USER_ANCIENT_GREEK;
             break;
-        case APPLE_LANG_GREENLANDIC:
+        case AppleLanguageId::GREENLANDIC:
             nLang = LANGUAGE_KALAALLISUT_GREENLAND;
             break;
-        case APPLE_LANG_AZERI_LATIN:
+        case AppleLanguageId::AZERI_LATIN:
             nLang = LANGUAGE_AZERI_LATIN;
             break;
     }
