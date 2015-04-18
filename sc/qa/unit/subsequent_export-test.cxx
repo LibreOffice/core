@@ -153,7 +153,7 @@ public:
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapes();
     void testMatrixMultiplication();
-
+    void testPreserveTextWhitespaceXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -203,6 +203,7 @@ public:
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
+    CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
@@ -230,6 +231,7 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
     {
         { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
+        { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
         { BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml") },
         { BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart") },
         { BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main") },
@@ -2676,6 +2678,18 @@ void ScExportTest::testSheetRunParagraphProperty()
 
     assertXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]", 1);
 
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPreserveTextWhitespaceXLSX()
+{
+    ScDocShellRef xShell = loadDoc("preserve-whitespace.", XLSX);
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:sst/x:si/x:t", "space", "preserve");
     xDocSh->DoClose();
 }
 
