@@ -512,7 +512,7 @@ void RtfExport::ExportDocument_Impl()
     if (pTxtFmtColl && pTxtFmtColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem) == SfxItemState::SET)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_HYPHAUTO);
-        OutULong(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen());
+        OutULong(int(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()));
     }
 
     // Zoom
