@@ -181,6 +181,8 @@ private:
     void exportMissingValueTreatment(com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertySet> xPropSet);
 
+    OUString getNumberFormatCode(sal_Int32 nKey) const;
+
 public:
 
     ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );

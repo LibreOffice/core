@@ -2379,6 +2379,24 @@ void ChartExport::_exportAxis(
     if( xAxisTitle.is() )
         exportTitle( xAxisTitle );
 
+    bool bLinkedNumFmt = true;
+    if (GetProperty(xAxisProp, "LinkNumberFormatToSource"))
+        mAny >>= bLinkedNumFmt;
+
+    OUString aNumberFormatString("General");
+    if (GetProperty(xAxisProp, "NumberFormat"))
+    {
+        sal_Int32 nKey = 0;
+        mAny >>= nKey;
+        aNumberFormatString = getNumberFormatCode(nKey);
+    }
+
+    OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
+    pFS->singleElement(FSNS(XML_c, XML_numFmt),
+            XML_formatCode, sNumberFormatString.getStr(),
+            XML_sourceLinked, bLinkedNumFmt ? "1" : "0",
+            FSEND);
+
     // majorTickMark
     sal_Int32 nValue = 0;
     if(GetProperty( xAxisProp, "Marks" ) )
@@ -3380,6 +3398,21 @@ bool ChartExport::isDeep3dChart()
             mAny >>= isDeep;
     }
     return isDeep;
+}
+
+OUString ChartExport::getNumberFormatCode(sal_Int32 nKey) const
+{
+    uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxChartModel, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+    uno::Reference<beans::XPropertySet> xNumberFormat = xNumberFormats->getByKey(nKey);
+
+    if (!xNumberFormat.is())
+        return OUString();
+
+    uno::Any aAny = xNumberFormat->getPropertyValue("FormatString");
+    OUString aValue;
+    aAny >>= aValue;
+    return aValue;
 }
 
 }// drawingml
