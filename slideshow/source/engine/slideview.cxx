@@ -196,8 +196,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
     if( pCanvas->getClip() )
     {
         ::cppcanvas::PolyPolygonSharedPtr pPolyPoly2(
-            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCliplessCanvas,
-                                                                          aPoly ));
+            ::cppcanvas::BaseGfxFactory::createPolyPolygon( pCliplessCanvas, aPoly ));
         if( pPolyPoly2 )
         {
             pPolyPoly2->setRGBALineColor( 0x008000FFU );
