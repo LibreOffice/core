@@ -98,13 +98,13 @@ SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
                                 sal_uInt32 nBWidth, bool bRel,
                                 sal_uInt16 nLSub, sal_uInt16 nRSub,
                                 sal_uInt16 nNumOfRowsToRepeat )
-    : SwWriteTable( rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat )
+    : SwWriteTable(NULL, rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat)
 {
     PixelizeBorders();
 }
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo )
-    : SwWriteTable( pLayoutInfo )
+    : SwWriteTable(NULL, pLayoutInfo)
 {
     // Einige Twip-Werte an Pixel-Grenzen anpassen
     if( bCollectBorderWidth )

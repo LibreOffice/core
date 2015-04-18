@@ -543,8 +543,7 @@ void RtfAttributeOutput::TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t /*pT
 
 void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
-    if (!m_pTableWrt)
-        InitTableHelper(pTableTextNodeInfoInner);
+    InitTableHelper(pTableTextNodeInfoInner);
 
     const SwTable* pTbl = pTableTextNodeInfoInner->getTable();
     SwFrmFmt* pFmt = pTbl->GetFrmFmt();
@@ -844,21 +843,24 @@ void RtfAttributeOutput::TableRowEnd(sal_uInt32 /*nDepth*/)
 
 void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
+    const SwTable* pTable = pTableTextNodeInfoInner->getTable();
+    if (m_pTableWrt && pTable == m_pTableWrt->GetTable())
+        return;
+
     long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans
     GetTablePageSize(pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize);
 
-    const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwFrmFmt* pFmt = pTable->GetFrmFmt();
     const sal_uInt32 nTblSz = static_cast<sal_uInt32>(pFmt->GetFrmSize().GetWidth());
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
-        m_pTableWrt = new SwWriteTable(pLayout);
+        m_pTableWrt = new SwWriteTable(pTable, pLayout);
     else
-        m_pTableWrt = new SwWriteTable(pTable->GetTabLines(), nPageSize, nTblSz, false);
+        m_pTableWrt = new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false);
 }
 
 void RtfAttributeOutput::StartTable(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)

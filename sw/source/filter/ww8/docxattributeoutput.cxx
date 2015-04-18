@@ -2899,7 +2899,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
-    if (m_xTableWrt && pTable == m_xTableWrt->getTable())
+    if (m_xTableWrt && pTable == m_xTableWrt->GetTable())
         return;
 
     long nPageSize = 0;
@@ -2913,9 +2913,9 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
-        m_xTableWrt.reset(new DocxWriteTable(pTable, pLayout));
+        m_xTableWrt.reset(new SwWriteTable(pTable, pLayout));
     else
-        m_xTableWrt.reset(new DocxWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false));
+        m_xTableWrt.reset(new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false));
 }
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )

@@ -218,8 +218,12 @@ public:
     ~SwWriteTableCols() { DeleteAndDestroyAll(); }
 };
 
+class SwTable;
+
 class SW_DLLPUBLIC SwWriteTable
 {
+private:
+    const SwTable* m_pTable;
 protected:
     SwWriteTableCols aCols; // alle Spalten
     SwWriteTableRows aRows; // alle Zellen
@@ -299,14 +303,16 @@ protected:
     sal_uInt16 GetRightSpace(size_t nCol, sal_uInt16 nColSpan) const;
 
 public:
-    SwWriteTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
-                    sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0 );
-    SwWriteTable( const SwHTMLTableLayout *pLayoutInfo );
+    SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
+                 bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
+                 sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0);
+    SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);
     virtual ~SwWriteTable();
 
     const SwWriteTableCols& GetCols() const { return aCols; }
     const SwWriteTableRows& GetRows() const { return aRows; }
+
+    const SwTable* GetTable() const { return m_pTable; }
 };
 
 #endif
