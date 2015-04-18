@@ -162,7 +162,7 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
-cmd/lc_linetoolbox.png cmd/lc_freeline.png
+cmd/lc_linetoolbox.png cmd/lc_freeline_unfilled.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
@@ -178,7 +178,7 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
-cmd/sc_linetoolbox.png cmd/sc_freeline.png
+cmd/sc_linetoolbox.png cmd/sc_freeline_unfilled.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
