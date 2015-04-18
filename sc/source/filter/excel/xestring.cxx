@@ -413,7 +413,8 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
 
     if( !IsWriteFormats() )
     {
-        rWorksheet->startElement( XML_t, FSEND );
+        rWorksheet->startElement( XML_t,
+                FSNS(XML_xml, XML_space), "preserve", FSEND );
         rWorksheet->writeEscaped( XclXmlUtils::ToOUString( *this ) );
         rWorksheet->endElement( XML_t );
     }
