@@ -84,6 +84,7 @@ public:
     void testDispBlanksAsXLSX();
     void testMarkerColorXLSX();
     void testRoundedCornersXLSX();
+    void testAxisNumberFormatXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testDispBlanksAsXLSX);
     CPPUNIT_TEST(testMarkerColorXLSX);
     CPPUNIT_TEST(testRoundedCornersXLSX);
+    CPPUNIT_TEST(testAxisNumberFormatXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1239,6 +1241,19 @@ void Chart2ExportTest::testRoundedCornersXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:roundedCorners", "val", "0");
+}
+
+void Chart2ExportTest::testAxisNumberFormatXLSX()
+{
+    load("/chart2/qa/extras/data/ods/", "axis_number_format.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx", 2);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:numFmt", "formatCode", "0.00E+000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:numFmt", "sourceLinked", "0");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "formatCode", "[$$-409]#,##0;-[$$-409]#,##0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "sourceLinked", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
