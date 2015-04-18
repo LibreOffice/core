@@ -230,16 +230,15 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testOldComplexMerge, "tdf90681.odt")
 {
-    // FIXME why does this fail on MacOSX_37-tdf-buildbot
-    // is the document truly different, the xslt wrong, or the system libxslt ?
-#if !defined(MACOSX)
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
     if (!pXmlDoc)
        return;
 
-    assertXPath(pXmlDoc, "//w:vMerge[4]", "val", "continue");
-#endif
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:vMerge", "val", "restart");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
