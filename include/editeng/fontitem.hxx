@@ -26,19 +26,14 @@
 
 class SvXMLUnitConverter;
 
-// class SvxFontItem -----------------------------------------------------
-
-/*  [Description]
-
-    This item describes a Font.
+/** This item describes a Font.
 */
-
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 {
-    OUString    aFamilyName;
-    OUString    aStyleName;
-    FontFamily  eFamily;
-    FontPitch   ePitch;
+    OUString aFamilyName;
+    OUString  aStyleName;
+    FontFamily eFamily;
+    FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
     static bool bEnableStoreUnicodeNames;
@@ -46,54 +41,82 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 public:
     TYPEINFO_OVERRIDE();
 
-    explicit SvxFontItem( const sal_uInt16 nId  );
-    SvxFontItem( const FontFamily eFam, const OUString& rFamilyName,
-        const OUString& rStyleName,
-        const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
-        const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
-        const sal_uInt16 nId  );
+    explicit SvxFontItem(const sal_uInt16 nId);
+    SvxFontItem(const FontFamily eFam, const OUString& rFamilyName,
+                const OUString& rStyleName,
+                const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
+                const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
+                const sal_uInt16 nId);
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream& Store(SvStream& rStream, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+                                 OUString &rText, const IntlWrapper* = 0) const SAL_OVERRIDE;
 
     // Access methods:
-    void SetFamilyName( const OUString& rFamilyName ) { aFamilyName = rFamilyName; }
-    const OUString &GetFamilyName() const { return aFamilyName; }
+    void SetFamilyName(const OUString& rFamilyName)
+    {
+        aFamilyName = rFamilyName;
+    }
+    const OUString &GetFamilyName() const
+    {
+        return aFamilyName;
+    }
 
-    void SetStyleName(const OUString &rStyleName ) { aStyleName = rStyleName; }
-    const OUString &GetStyleName() const { return aStyleName; }
+    void SetStyleName(const OUString &rStyleName)
+    {
+        aStyleName = rStyleName;
+    }
+    const OUString &GetStyleName() const
+    {
+        return aStyleName;
+    }
 
-    void SetFamily( FontFamily _eFamily ) { eFamily = _eFamily; }
-    FontFamily GetFamily() const { return eFamily; }
+    void SetFamily(FontFamily _eFamily)
+    {
+        eFamily = _eFamily;
+    }
+    FontFamily GetFamily() const
+    {
+        return eFamily;
+    }
 
-    void SetPitch(FontPitch _ePitch ) { ePitch = _ePitch; }
-    FontPitch GetPitch() const { return ePitch; }
+    void SetPitch(FontPitch _ePitch)
+    {
+        ePitch = _ePitch;
+    }
+    FontPitch GetPitch() const
+    {
+        return ePitch;
+    }
 
-    void SetCharSet(rtl_TextEncoding _eEncoding) { eTextEncoding = _eEncoding; }
-
-    rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
+    void SetCharSet(rtl_TextEncoding _eEncoding)
+    {
+        eTextEncoding = _eEncoding;
+    }
+    rtl_TextEncoding GetCharSet() const
+    {
+        return eTextEncoding;
+    }
 
     SvxFontItem& operator=(const SvxFontItem& rFont);
 
-    static void EnableStoreUnicodeNames( bool bEnable );
+    static void EnableStoreUnicodeNames(bool bEnable);
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-EDITENG_DLLPUBLIC void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
-                        SvxFontItem& rComplex );
+EDITENG_DLLPUBLIC void GetDefaultFonts(SvxFontItem& rLatin,
+                                       SvxFontItem& rAsian,
+                                       SvxFontItem& rComplex);
 
 #endif // INCLUDED_EDITENG_FONTITEM_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
