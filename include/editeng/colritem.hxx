@@ -25,59 +25,50 @@
 
 class SvXMLUnitConverter;
 
-// class SvxColorItem ----------------------------------------------------
-
-/*  [Description]
-
-    This item describes a color.
-*/
-
 #define VERSION_USEAUTOCOLOR    1
 
+/** SvxColorItem item describes a color.
+*/
 class EDITENG_DLLPUBLIC SvxColorItem : public SfxPoolItem
 {
 private:
-    Color                   mColor;
+    Color mColor;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    explicit SvxColorItem( const sal_uInt16 nId );
-    SvxColorItem( const Color& aColor, const sal_uInt16 nId  );
-    SvxColorItem( SvStream& rStrm, const sal_uInt16 nId  );
-    SvxColorItem( const SvxColorItem& rCopy );
+    explicit SvxColorItem(const sal_uInt16 nId);
+    SvxColorItem(const Color& aColor, const sal_uInt16 nId);
+    SvxColorItem(SvStream& rStream, const sal_uInt16 nId);
+    SvxColorItem(const SvxColorItem& rCopy);
     virtual ~SvxColorItem();
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem& rPoolItem) const SAL_OVERRIDE;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+    virtual sal_uInt16 GetVersion(sal_uInt16 nFileVersion) const SAL_OVERRIDE;
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+    virtual bool GetPresentation(SfxItemPresentation ePres,
+                                 SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+                                 OUString &rText, const IntlWrapper* pIntlWrapper = 0) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
+    virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
 
     inline SvxColorItem& operator=(const SvxColorItem& rColor)
     {
-        SetValue( rColor.GetValue() );
+        SetValue(rColor.GetValue());
         return *this;
     }
 
-    const   Color&          GetValue() const
-                            {
-                                return mColor;
-                            }
-            void            SetValue( const Color& rNewCol );
-
+    const Color& GetValue() const
+    {
+        return mColor;
+    }
+    void SetValue(const Color& rNewColor);
 };
-
-// class SvxBackgroundColorItem
 
 // XXX: to be moved in a separate header.
 class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
@@ -85,15 +76,13 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
     public:
         TYPEINFO_OVERRIDE();
 
-        SvxBackgroundColorItem( const sal_uInt16 nId );
-        SvxBackgroundColorItem( const Color& rCol,
-                                const sal_uInt16 nId );
-        SvxBackgroundColorItem( SvStream& rStrm, const sal_uInt16 nId  );
-        SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy );
+        SvxBackgroundColorItem(const sal_uInt16 nId);
+        SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
+        SvxBackgroundColorItem(SvStream& rStrm, const sal_uInt16 nId);
+        SvxBackgroundColorItem(const SvxBackgroundColorItem& rCopy);
 
-        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-        virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-
+        virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+        virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
 };
 
 #endif
