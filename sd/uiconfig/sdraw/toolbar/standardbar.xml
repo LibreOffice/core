@@ -28,6 +28,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="6312" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ExportTo"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:helpid="6674"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
@@ -40,7 +41,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:visible="false" toolbar:helpid="20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomObjects" toolbar:visible="false"/>
@@ -62,9 +63,13 @@
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
+ <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>

@@ -22,10 +22,10 @@
     <node oor:name="States">
       <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,0</value>
+          <value>1,0</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
@@ -57,7 +57,7 @@
           <value xml:lang="en-US">Image</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
           <value>true</value>
@@ -131,7 +131,7 @@
           <value>0</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Line and Filling</value>
@@ -148,9 +148,6 @@
           <value>2</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
-        <prop oor:name="Locked" oor:type="xs:boolean">
           <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
@@ -198,10 +195,10 @@
       </node>
       <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,0</value>
+          <value>1,0</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
@@ -405,10 +402,16 @@
       </node>
       <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Gluepoints</value>
+          <value xml:lang="en-US">Glue Points</value>
+        </prop>
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>1,0</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>
