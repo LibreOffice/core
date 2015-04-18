@@ -161,7 +161,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pJavaListContainer->set_width_request(aControlSize.Width());
     pJavaListContainer->set_height_request(aControlSize.Height());
-    m_pJavaList = new SvxJavaListBox(*pJavaListContainer, m_sAccessibilityText);
+    m_pJavaList = VclPtr<SvxJavaListBox>::Create(*pJavaListContainer, m_sAccessibilityText);
 
     long aStaticTabs[]= { 4, 0, 0, 0, 0 };
 
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     Sequence< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
-        m_pParamDlg = new SvxJavaParameterDlg( this );
+        m_pParamDlg = VclPtr<SvxJavaParameterDlg>::Create( this );
         javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters, &m_nParamSize );
         if ( JFW_E_NONE == eErr && m_parParameters && m_nParamSize > 0 )
         {
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 
     if ( !m_pPathDlg )
     {
-          m_pPathDlg = new SvxJavaClassPathDlg( this );
+          m_pPathDlg = VclPtr<SvxJavaClassPathDlg>::Create( this );
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr && m_pClassPath )
         {

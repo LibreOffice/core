@@ -2206,7 +2206,7 @@ bool SvxConfigPage::MoveEntryData(
 SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
 {
-    m_pContentsListBox = new SvxMenuEntriesListBox(m_pEntries, this);
+    m_pContentsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);
     m_pContentsListBox->set_hexpand(true);
@@ -2461,7 +2461,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
         VclPtr<SvxMainMenuOrganizerDialog> pDialog(
-            new SvxMainMenuOrganizerDialog( this,
+            VclPtr<SvxMainMenuOrganizerDialog>::Create( this,
                 GetSaveInData()->GetEntries(), pMenuData ));
 
         if ( pDialog->Execute() == RET_OK )
@@ -2583,7 +2583,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
     if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which also shows builtin commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
+        m_pSelectorDlg = VclPtr<SvxScriptSelectorDialog>::Create( this, true, m_xFrame );
 
         m_pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
@@ -2887,7 +2887,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
 
-    m_pContentsListBox = new SvxToolbarEntriesListBox(m_pEntries, this);
+    m_pContentsListBox = VclPtr<SvxToolbarEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);
     m_pContentsListBox->set_hexpand(true);
@@ -3319,7 +3319,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             }
 
             VclPtr<SvxIconSelectorDialog> pIconDialog(
-                new SvxIconSelectorDialog( 0,
+                VclPtr<SvxIconSelectorDialog>::Create( nullptr,
                     GetSaveInData()->GetImageManager(),
                     GetSaveInData()->GetParentImageManager() ));
 
@@ -4504,7 +4504,7 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
     if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which shows slot commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
+        m_pSelectorDlg = VclPtr<SvxScriptSelectorDialog>::Create( this, true, m_xFrame );
 
         // Position the Script Selector over the Add button so it is
         // beside the menu contents list and does not obscure it

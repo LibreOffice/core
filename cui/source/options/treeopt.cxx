@@ -1088,7 +1088,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             m_xContainerWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
         }
 
-        pPageInfo->m_pExtPage = new ExtensionsTabPage(
+        pPageInfo->m_pExtPage = VclPtr<ExtensionsTabPage>::Create(
+
             pTabBox, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
     }
 

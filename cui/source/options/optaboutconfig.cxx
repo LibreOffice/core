@@ -130,7 +130,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pSearchBtn( get<PushButton>("searchButton") ),
     m_pSearchEdit( get<Edit>("searchEntry") ),
     m_vectorOfModified(),
-    m_pPrefBox( new SvSimpleTable(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
+    m_pPrefBox( VclPtr<SvSimpleTable>::Create(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
     Size aControlSize(LogicToPixel(Size(385, 230), MAP_APPFONT));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
@@ -564,7 +564,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
             else if( sPropertyType == "hyper" )
                 limit = HYPER_LEN_LIMIT;
 
-            CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue, limit);
+            VclPtrInstance<CuiAboutConfigValueDialog> pValueDialog(nullptr, sDialogValue, limit);
 
             if( pValueDialog->Execute() == RET_OK )
             {

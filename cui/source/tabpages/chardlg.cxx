@@ -1222,7 +1222,7 @@ int SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 VclPtr<SfxTabPage> SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SfxTabPage>( new SvxCharNamePage( pParent, *rSet ),
-                              SAL_NO_ACQUIRE );
+                               SAL_NO_ACQUIRE );
 }
 
 

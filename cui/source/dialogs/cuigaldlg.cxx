@@ -1037,7 +1037,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 
 void TPGalleryThemeProperties::SearchFiles()
 {
-    SearchProgress* pProgress = new SearchProgress( this, aURL );
+    SearchProgress* pProgress = VclPtr<SearchProgress>::Create( this, aURL );
 
     aFoundList.clear();
     m_pLbxFound->Clear();
@@ -1096,12 +1096,12 @@ void TPGalleryThemeProperties::TakeFiles()
 {
     if( m_pLbxFound->GetSelectEntryCount() || ( bTakeAll && bEntriesFound ) )
     {
-        TakeProgress* pTakeProgress = new TakeProgress( this );
+        VclPtrInstance<TakeProgress> pTakeProgress( this );
         pTakeProgress->Update();
 
         pTakeProgress->StartExecuteModal(
             Link() /* no postprocessing needed, pTakeProgress
-                      will be deleted in TakeProgress::CleanupHdl */ );
+                      will be disposed in TakeProgress::CleanupHdl */ );
     }
 }
 

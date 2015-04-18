@@ -40,8 +40,8 @@ class IconChoiceDialog;
 class IconChoicePage;
 
 // Create-Function
-typedef IconChoicePage* (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
-typedef const sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
+typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
+typedef const sal_uInt16*      (*GetPageRanges)(); // gives international Which-value
 
 /// Data-structure for pages in dialog
 struct IconChoicePageData

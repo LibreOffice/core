@@ -70,7 +70,7 @@ public:
     virtual ~SvxHyperlinkDocTp();
     virtual void dispose() SAL_OVERRIDE;
 
-    static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 

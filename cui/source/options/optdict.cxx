@@ -225,8 +225,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxDictEdit(vcl::Window *pParent, VclBuilder::stringmap&)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK;
-    SvxDictEdit *pEdit = new SvxDictEdit(pParent, nWinStyle);
-    return pEdit;
+    return new SvxDictEdit(pParent, nWinStyle);
 };
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(

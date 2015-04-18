@@ -676,7 +676,7 @@ void SvxSecurityTabPage::dispose()
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
 {
     if ( !mpSecOptDlg )
-        mpSecOptDlg = new svx::SecurityOptionsDialog( this, mpSecOptions );
+        mpSecOptDlg = VclPtr<svx::SecurityOptionsDialog>::Create( this, mpSecOptions );
     mpSecOptDlg->Execute();
     return 0;
 }
@@ -817,7 +817,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
 {
     if (!mpCertPathDlg)
-        mpCertPathDlg = new CertPathDialog(this);
+        mpCertPathDlg = VclPtr<CertPathDialog>::Create(this);
 
     OUString sOrig = mpCertPathDlg->getDirectory();
     short nRet = mpCertPathDlg->Execute();

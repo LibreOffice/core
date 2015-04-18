@@ -64,7 +64,7 @@ SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInA
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
-    SvxMeasurePage* _pPage = new SvxMeasurePage( get_content_area(), rInAttrs );
+    VclPtrInstance<SvxMeasurePage> _pPage( get_content_area(), rInAttrs );
 
     _pPage->SetView( pSdrView );
     _pPage->Construct();

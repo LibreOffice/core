@@ -93,7 +93,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     // insert pages
     Image aImage;
     OUString aStrTitle;
-    SvxIconChoiceCtrlEntry* pEntry = NULL;
+    SvxIconChoiceCtrlEntry *pEntry;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );

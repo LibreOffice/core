@@ -171,9 +171,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkMailTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************

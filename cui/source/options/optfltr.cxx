@@ -164,7 +164,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     m_pCheckLBContainer->set_width_request(aControlSize.Width());
     m_pCheckLBContainer->set_height_request(aControlSize.Height());
 
-    m_pCheckLB = new MSFltrSimpleTable(*m_pCheckLBContainer);
+    m_pCheckLB = VclPtr<MSFltrSimpleTable>::Create(*m_pCheckLBContainer);
 
     static long aStaticTabs[] = { 3, 0, 20, 40 };
     m_pCheckLB->SvSimpleTable::SetTabs( aStaticTabs );

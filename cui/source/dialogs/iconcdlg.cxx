@@ -156,8 +156,8 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtIconChoiceCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvtIconChoiceCtrl(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
-                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            WB_NODRAGSELECTION | WB_TABSTOP);
+                                 WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                                 WB_NODRAGSELECTION | WB_TABSTOP);
 }
 
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,

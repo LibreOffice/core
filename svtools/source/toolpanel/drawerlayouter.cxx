@@ -132,7 +132,7 @@ namespace svt
     {
         ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
 
-        ToolPanelDrawer *pDrawer( m_aDrawers[ i_nChildIndex ] );
+        VclPtr<ToolPanelDrawer> pDrawer( m_aDrawers[ i_nChildIndex ] );
 
         Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( false );
         if ( !xItemAccessible.is() )
@@ -151,7 +151,7 @@ namespace svt
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
-        VclPtr<ToolPanelDrawer> pDrawer( VclPtr<ToolPanelDrawer>::Create( m_rParentWindow, i_pPanel->GetDisplayName() ) );
+        VclPtrInstance<ToolPanelDrawer> pDrawer( m_rParentWindow, i_pPanel->GetDisplayName() );
         pDrawer->SetHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )

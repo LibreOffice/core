@@ -111,7 +111,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     get(m_pChangeBtn, "change");
 
     SvSimpleTableContainer *pPasswordsLBContainer = get<SvSimpleTableContainer>("logins");
-    m_pPasswordsLB = new PasswordTable(*pPasswordsLBContainer, 0);
+    m_pPasswordsLB = VclPtr<PasswordTable>::Create(*pPasswordsLBContainer, 0);
 
     long aStaticTabs[]= { 2, 0, 0 };
     m_pPasswordsLB->SetTabs( aStaticTabs );

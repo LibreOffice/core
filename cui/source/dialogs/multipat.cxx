@@ -186,7 +186,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     Size aSize(LogicToPixel(Size(195, 77), MAP_APPFONT));
     pRadioLBContainer->set_width_request(aSize.Width());
     pRadioLBContainer->set_height_request(aSize.Height());
-    m_pRadioLB = new svx::SvxRadioButtonListBox(*pRadioLBContainer, 0);
+    m_pRadioLB = VclPtr<svx::SvxRadioButtonListBox>::Create(*pRadioLBContainer, 0);
 
     static long aStaticTabs[]= { 2, 0, 12 };
     m_pRadioLB->SvSimpleTable::SetTabs( aStaticTabs );

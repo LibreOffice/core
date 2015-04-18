@@ -259,4 +259,3 @@ or:
 	   In simple cases, if we allocate the widget with VclPtrInstance
 	   or VclPtr<Foo>::Create - then we need to disposeAndClear it too.
 
-

@@ -292,7 +292,7 @@ ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
 ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
     unsigned nYPos, const OUString& rDisplayName)
 {
-    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText = VclPtr<FixedText>::Create(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     m_pText->set_font_attribute("weight", "bold");
     m_pText->set_grid_width(3);
     m_pText->set_grid_left_attach(0);
@@ -346,19 +346,19 @@ ColorConfigWindow_Impl::Entry::Entry( vcl::Window *pGrid, unsigned nYPos,
     : m_bOwnsWidgets(true)
     , m_aDefaultColor(rColorEntry.getDefaultColor())
 {
-    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText = VclPtr<FixedText>::Create(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     m_pText->set_grid_left_attach(0);
     m_pText->set_grid_top_attach(nYPos);
     m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
     m_pText->SetText(rColorEntry.getDisplayName());
 
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN;
-    m_pColorList = new ColorListBox(pGrid, nWinBits);
+    m_pColorList = VclPtr<ColorListBox>::Create(pGrid, nWinBits);
     m_pColorList->EnableAutoSize(true);
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
 
-    m_pPreview = new vcl::Window(pGrid, WB_BORDER);
+    m_pPreview = VclPtr<vcl::Window>::Create(pGrid, WB_BORDER);
     m_pPreview->set_grid_left_attach(2);
     m_pPreview->set_grid_top_attach(nYPos);
     m_pPreview->set_margin_right(6);
@@ -869,11 +869,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     , pColorConfig(0)
     , pExtColorConfig(0)
 {
-    m_pHeaderHB = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pHeaderHB = VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
 
-    m_pBody = new VclHBox(this);
-    m_pScrollWindow = new ColorConfigWindow_Impl(m_pBody);
-    m_pVScroll = new ScrollBar(m_pBody, WB_VERT);
+    m_pBody = VclPtr<VclHBox>::Create(this);
+    m_pScrollWindow = VclPtr<ColorConfigWindow_Impl>::Create(m_pBody);
+    m_pVScroll = VclPtr<ScrollBar>::Create(m_pBody, WB_VERT);
     m_pScrollWindow->Init(m_pVScroll, m_pHeaderHB);
 
     m_pBody->set_hexpand(true);

@@ -37,7 +37,7 @@ SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
         "cui/ui/distributiondialog.ui")
     , mpPage(NULL)
 {
-    mpPage = new SvxDistributePage(get_content_area(), rInAttrs, eHor, eVer);
+    mpPage = VclPtr<SvxDistributePage>::Create(get_content_area(), rInAttrs, eHor, eVer);
     SetTabPage(mpPage);
 }
 

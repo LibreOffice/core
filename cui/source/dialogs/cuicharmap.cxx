@@ -184,8 +184,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxShowText(vcl::Windo
     return new SvxShowText(pParent);
 }
 
-
-
 void SvxShowText::Paint( const Rectangle& )
 {
     Color aTextCol = GetTextColor();

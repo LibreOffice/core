@@ -372,8 +372,8 @@ namespace svx
     SuggestionDisplay::SuggestionDisplay( vcl::Window* pParent, WinBits nBits )
         : Control( pParent, nBits )
         , m_bDisplayListBox( true )
-        , m_aValueSet( new SuggestionSet(this) )
-        , m_aListBox( new ListBox(this,GetStyle() | WB_BORDER) )
+        , m_aValueSet( VclPtr<SuggestionSet>::Create(this) )
+        , m_aListBox( VclPtr<ListBox>::Create(this,GetStyle() | WB_BORDER) )
         , m_bInSelectionUpdate( false )
     {
         m_aValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );

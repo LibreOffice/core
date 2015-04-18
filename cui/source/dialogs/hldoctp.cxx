@@ -168,9 +168,9 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkDocTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************

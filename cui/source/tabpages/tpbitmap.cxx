@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(new MessageDialog( GetParentDialog()
+            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -639,7 +639,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
                 if( !pWarnBox )
                 {
-                    pWarnBox.reset(new MessageDialog( GetParentDialog()
+                    pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                                  ,"DuplicateNameDialog"
                                                  ,"cui/ui/queryduplicatedialog.ui"));
                 }

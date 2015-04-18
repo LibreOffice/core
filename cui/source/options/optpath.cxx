@@ -214,7 +214,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPathCtrl->set_width_request(aControlSize.Width());
     m_pPathCtrl->set_height_request(aControlSize.Height());
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new svx::OptHeaderTabListBox( *m_pPathCtrl, nBits );
+    pPathBox = VclPtr<svx::OptHeaderTabListBox>::Create( *m_pPathCtrl, nBits );
 
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
     rBar.SetSelectHdl( LINK( this, SvxPathTabPage, HeaderSelect_Impl ) );

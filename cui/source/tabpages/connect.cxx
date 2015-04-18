@@ -54,7 +54,7 @@ SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
-    SvxConnectionPage* _pPage = new SvxConnectionPage( get_content_area(), rInAttrs );
+    VclPtrInstance<SvxConnectionPage> _pPage( get_content_area(), rInAttrs );
 
     _pPage->SetView( pSdrView );
     _pPage->Construct();

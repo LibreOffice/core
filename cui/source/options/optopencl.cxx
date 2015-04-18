@@ -72,8 +72,8 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     mpWhiteListDelete->SetClickHdl(LINK(this, SvxOpenCLTabPage, WhiteListDeleteHdl));
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    mpBlackList = new SvSimpleTable( *mpBlackListTable, nBits );
-    mpWhiteList = new SvSimpleTable( *mpWhiteListTable, nBits );
+    mpBlackList = VclPtr<SvSimpleTable>::Create( *mpBlackListTable, nBits );
+    mpWhiteList = VclPtr<SvSimpleTable>::Create( *mpWhiteListTable, nBits );
 
     HeaderBar &rBlBar = mpBlackList->GetTheHeaderBar();
     HeaderBar &rWiBar = mpWhiteList->GetTheHeaderBar();

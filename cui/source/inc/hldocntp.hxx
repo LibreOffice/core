@@ -54,7 +54,7 @@ public:
     virtual ~SvxHyperlinkNewDocTp ();
     virtual void dispose() SAL_OVERRIDE;
 
-    static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static  VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual bool        AskApply () SAL_OVERRIDE;
     virtual void        DoApply () SAL_OVERRIDE;

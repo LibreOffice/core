@@ -202,9 +202,9 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkInternetTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************

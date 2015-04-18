@@ -130,8 +130,8 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
 
 MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
-    , maHeaderBar( new HeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ) )
-    , maListBox( new SvHeaderTabListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ) )
+    , maHeaderBar( VclPtr<HeaderBar>::Create( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ) )
+    , maListBox( VclPtr<SvHeaderTabListBox>::Create( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ) )
 {
     maListBox->SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 
@@ -854,7 +854,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
     const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
-    SetTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
+    SetTabPage(VclPtr<SvxMacroTabPage>::Create(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
 

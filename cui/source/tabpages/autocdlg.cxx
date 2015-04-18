@@ -443,7 +443,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
-    m_pCheckLB = new OfaACorrCheckListBox(*pCheckLBContainer);
+    m_pCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pCheckLBContainer);
 
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL| WB_VSCROLL);
 
@@ -1824,7 +1824,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pListContainer->set_width_request(aControlSize.Width());
     pListContainer->set_height_request(aControlSize.Height());
-    m_pSwCheckLB = new OfaACorrCheckListBox(*pListContainer),
+    m_pSwCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pListContainer),
 
     get(m_pSingleTypoCB, "singlereplace");
     get(m_pSglStartQuotePB, "startsingle");
