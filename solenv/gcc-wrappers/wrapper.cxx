@@ -188,6 +188,11 @@ int startprocess(string command, string args) {
         command=command.substr(0,pos+strlen("ccache"))+".exe";
     }
 
+    if (args[0] != ' ')
+    {
+        args.insert(0, " "); // lpCommandLine *must* start with space!
+    }
+
     //cerr << "CMD= " << command << " " << args << endl;
 
     // Commandline may be modified by CreateProcess
