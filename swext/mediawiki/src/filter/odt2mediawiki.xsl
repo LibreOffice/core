@@ -927,6 +927,34 @@
 		<call-template name="mk-image-name">
 			<with-param name="image" select="."/>
 		</call-template>
+
+		<!-- Horizontal align -->
+		<if test="name(..)='draw:frame' and boolean(../@draw:style-name)">
+			<variable name="style-element" select="key('style-ref', ../@draw:style-name)"/>
+			<if test="boolean($style-element/style:graphic-properties/@style:wrap)">
+				<choose>
+					<!-- No wrap -->
+					<when test="$style-element/style:graphic-properties/@style:wrap='none'">
+						<choose>
+							<when test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+								<choose>
+									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='center'">
+										<text>|center</text>
+									</when>
+									<otherwise>
+										<text>|none</text>
+									</otherwise>
+								</choose>
+							</when>
+							<otherwise>
+								<text>|none</text>
+							</otherwise>
+						</choose>
+					</when>
+				</choose>
+			</if>
+		</if>
+
 		<!-- Image alt -->
 		<if test="name(following-sibling::*)='svg:title'">
 			<text>|alt="</text>
