@@ -24,22 +24,21 @@
 
 class SfxCommonTemplateDialog_Impl;
 
-class SfxTemplateControllerItem: public SfxControllerItem {
-    SfxCommonTemplateDialog_Impl  &rTemplateDlg;
-    sal_uInt8                            nWaterCanState;
-    ImplSVEvent *                        nUserEventId;
+class SfxTemplateControllerItem : public SfxControllerItem {
+    SfxCommonTemplateDialog_Impl &rTemplateDlg;
+    sal_uInt8 nWaterCanState;
+    ImplSVEvent* nUserEventId;
 
     DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
-                                SfxTemplateControllerItem*);
+                     SfxTemplateControllerItem*);
 
 protected:
-    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16, SfxItemState, const SfxPoolItem* pState) SAL_OVERRIDE;
 
 public:
-    SfxTemplateControllerItem( sal_uInt16 nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
+    SfxTemplateControllerItem(sal_uInt16 nId, SfxCommonTemplateDialog_Impl& rDialog, SfxBindings& rBindings);
     virtual ~SfxTemplateControllerItem();
 };
-
 
 #endif
 
