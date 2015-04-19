@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
@@ -85,6 +86,7 @@ public:
     void testMarkerColorXLSX();
     void testRoundedCornersXLSX();
     void testAxisNumberFormatXLSX();
+    void testDataLabelDefaultValuesXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -135,6 +137,7 @@ public:
     CPPUNIT_TEST(testMarkerColorXLSX);
     CPPUNIT_TEST(testRoundedCornersXLSX);
     CPPUNIT_TEST(testAxisNumberFormatXLSX);
+    CPPUNIT_TEST(testDataLabelDefaultValuesXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1254,6 +1257,23 @@ void Chart2ExportTest::testAxisNumberFormatXLSX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "formatCode", "[$$-409]#,##0;-[$$-409]#,##0");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "sourceLinked", "1");
+}
+
+void Chart2ExportTest::testDataLabelDefaultValuesXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "data_label.xlsx");
+    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
+    Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("Label");
+    chart2::DataPointLabel aLabel;
+    CPPUNIT_ASSERT(aAny >>= aLabel);
+    CPPUNIT_ASSERT(aLabel.ShowNumber);
+
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:showVal", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLblPos", "val", "outEnd");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
