@@ -913,6 +913,12 @@
 		</call-template>
  		<text>|thumb|</text>
 		<value-of select="normalize-space($image-description)"/>
+		<!-- Image alt -->
+		<if test="name(following-sibling::*)='svg:title'">
+			<text>|alt="</text>
+				<value-of select="following-sibling::*/text()"/>
+			<text>"</text>
+		</if>
  		<text>]]</text>
  	</template>
  	
@@ -921,6 +927,12 @@
 		<call-template name="mk-image-name">
 			<with-param name="image" select="."/>
 		</call-template>
+		<!-- Image alt -->
+		<if test="name(following-sibling::*)='svg:title'">
+			<text>|alt="</text>
+				<value-of select="following-sibling::*/text()"/>
+			<text>"</text>
+		</if>
  		<text>]]</text>
  	</template>
 
