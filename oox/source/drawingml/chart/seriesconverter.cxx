@@ -94,7 +94,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 }
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
-        const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup, bool bDataSeriesLabel )
+        const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup, bool bDataSeriesLabel, bool bMSO2007Doc )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -105,14 +105,17 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         will reset <c:showVal> for this point, unless <c:showVal> is repeated
         in the data point). The elements <c:layout>, <c:numberFormat>,
         <c:spPr>, <c:tx>, and <c:txPr> are not affected at all. */
-    bool bHasAnyElement =
-        rDataLabel.moaSeparator.has() || rDataLabel.monLabelPos.has() ||
-        rDataLabel.mobShowCatName.has() || rDataLabel.mobShowLegendKey.has() ||
-        rDataLabel.mobShowPercent.has() || rDataLabel.mobShowSerName.has() ||
-        rDataLabel.mobShowVal.has();
+    bool bHasAnyElement = true;
+    if (bMSO2007Doc)
+    {
+        bHasAnyElement = rDataLabel.moaSeparator.has() || rDataLabel.monLabelPos.has() ||
+            rDataLabel.mobShowCatName.has() || rDataLabel.mobShowLegendKey.has() ||
+            rDataLabel.mobShowPercent.has() || rDataLabel.mobShowSerName.has() ||
+            rDataLabel.mobShowVal.has();
+    }
 
-    bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( false );
-    bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( false ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
+    bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( !bMSO2007Doc );
+    bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
     if( bShowValue &&
         !bShowPercent && rTypeInfo.meTypeCategory == TYPECATEGORY_PIE &&
         rDataLabel.maNumberFormat.maFormatCode.indexOf('%') >= 0 )
@@ -120,8 +123,8 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         bShowValue = false;
         bShowPercent = true;
     }
-    bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( false );
-    bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( false );
+    bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( !bMSO2007Doc );
+    bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( !bMSO2007Doc );
 
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
@@ -201,8 +204,9 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
     try
     {
+        bool bMSO2007Doc = getFilter().isMSO2007Document();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
         if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
@@ -247,8 +251,9 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
 {
     if( !mrModel.mbDeleted )
     {
+        bool bMSO2007Doc = getFilter().isMSO2007Document();
         PropertySet aPropSet( rxDataSeries );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
             // Import baseline border properties for these data labels.
