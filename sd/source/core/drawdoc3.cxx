@@ -929,7 +929,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             for(sal_uInt32 p = nInsertPos; p < (nInsertPos + nBMSdPageCount); p++)
             {
                 SdPage *pPg = static_cast<SdPage *>( GetPage(p) );
-                for(size_t i = 0; i < pPg->GetObjCount(); ++i)
+                for(size_t i = 0; pPg && (i < pPg->GetObjCount()); ++i)
                 {
                     if(pPg->GetObj(i)->GetStyleSheet())
                     {
