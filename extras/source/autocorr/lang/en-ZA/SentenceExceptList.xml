@@ -35,6 +35,7 @@
   <block-list:block block-list:abbreviated-name="dept."/>
   <block-list:block block-list:abbreviated-name="dr."/>
   <block-list:block block-list:abbreviated-name="e."/>
+  <block-list:block block-list:abbreviated-name="eg."/>
   <block-list:block block-list:abbreviated-name="e.g."/>
   <block-list:block block-list:abbreviated-name="e.m.f."/>
   <block-list:block block-list:abbreviated-name="Econ."/>
@@ -56,6 +57,7 @@
   <block-list:block block-list:abbreviated-name="Hon."/>
   <block-list:block block-list:abbreviated-name="hr."/>
   <block-list:block block-list:abbreviated-name="hrs."/>
+  <block-list:block block-list:abbreviated-name="ie."/>
   <block-list:block block-list:abbreviated-name="i.e."/>
   <block-list:block block-list:abbreviated-name="ib."/>
   <block-list:block block-list:abbreviated-name="ibid."/>
