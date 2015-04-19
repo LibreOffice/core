@@ -48,6 +48,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
+#include "sqlbison.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>

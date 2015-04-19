@@ -122,9 +122,8 @@ namespace
         OUString aConnUrl("sdbc:dbase:");
         aConnUrl += aPath;
 
-        svxform::ODataAccessCharsetHelper aHelper;
         ::std::vector< rtl_TextEncoding > aEncodings;
-        aHelper.getSupportedTextEncodings( aEncodings );
+        svxform::charset_helper::getSupportedTextEncodings( aEncodings );
         ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
         if ( aIter == aEncodings.end() )
         {

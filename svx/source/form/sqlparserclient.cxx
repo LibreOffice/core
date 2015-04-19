@@ -21,8 +21,10 @@
 #include "svx/ParseContext.hxx"
 
 #include <connectivity/dbtools.hxx>
+#include <connectivity/sqlparse.hxx>
 
 using namespace ::dbtools;
+using namespace ::connectivity;
 
 namespace svxform
 {
@@ -30,11 +32,20 @@ namespace svxform
     using namespace ::com::sun::star::lang;
 
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
+        : m_pParser(new OSQLParser(rxContext, getParseContext()))
     {
         m_xContext = rxContext;
-        m_xParser = createSQLParser(m_xContext, getParseContext());
     }
 
+    std::shared_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(
+            OUString& _rErrorMessage,
+            const OUString& _rStatement,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
+        ) const
+    {
+        return std::shared_ptr< OSQLParseNode >(m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField));
+    }
 
 }   // namespace svxform
 

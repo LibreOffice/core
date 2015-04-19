@@ -20,6 +20,7 @@
 #include "file/fcode.hxx"
 #include <osl/diagnose.h>
 #include <connectivity/sqlparse.hxx>
+#include "sqlbison.hxx"
 #include <i18nlangtag/mslangid.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>

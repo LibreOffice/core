@@ -49,6 +49,9 @@
 class DbCellControl;
 class Edit;
 class FmXGridCell;
+namespace dbtools {
+    class FormattedColumnValue;
+}
 
 class FmMutexHelper
 {
