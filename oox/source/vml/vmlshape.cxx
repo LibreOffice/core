@@ -329,6 +329,11 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                         aGrabBag[length+1].Value = uno::makeAny(sal_Int32(NormAngle360((maTypeModel.maRotation.toInt32()) * -100)));
                     }
                     propertySet->setPropertyValue( "FrameInteropGrabBag", uno::makeAny(aGrabBag) );
+                    if (propertySet->getPropertyValue("FillStyle") == FillStyle_NONE &&
+                        propertySet->getPropertyValue("BackColorTransparency") == makeAny(100)) {
+                        // If there is no fill, the Word default is 100% transparency.
+                        propertySet->setPropertyValue("FillTransparence", makeAny(100));
+                    }
                 }
                 else
                 {
