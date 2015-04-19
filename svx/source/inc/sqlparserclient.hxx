@@ -21,8 +21,19 @@
 #define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
 #include "svx/ParseContext.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <connectivity/virtualdbtools.hxx>
+
+namespace com { namespace sun { namespace star {
+namespace util {
+    class XNumberFormatter;
+}
+namespace beans {
+    class XPropertySet;
+} } } }
+
+namespace connectivity {
+    class OSQLParser;
+    class OSQLParseNode;
+}
 
 namespace svxform
 {
@@ -31,26 +42,20 @@ namespace svxform
     class SVX_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
     {
     private:
-
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     protected:
-        mutable ::rtl::Reference< ::connectivity::simple::ISQLParser >  m_xParser;
+        mutable std::shared_ptr< ::connectivity::OSQLParser > m_pParser;
 
-    protected:
         OSQLParserClient(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
 
-    protected:
-        inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
+        std::shared_ptr< ::connectivity::OSQLParseNode > predicateTree(
                 OUString& _rErrorMessage,
                 const OUString& _rStatement,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
-            ) const
-        {
-            return m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
-        }
+            ) const;
     };
 
 

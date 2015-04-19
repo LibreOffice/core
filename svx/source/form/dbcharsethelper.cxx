@@ -20,18 +20,30 @@
 #include "svx/dbcharsethelper.hxx"
 
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbcharset.hxx>
 
 using namespace ::dbtools;
 
-namespace svxform
+namespace svxform { namespace charset_helper
 {
 
-    ODataAccessCharsetHelper::ODataAccessCharsetHelper( )
+    sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs )
     {
-        m_xCharsetHelper = createCharsetHelper();
+        OCharsetMap aCharsetInfo;
+        _rEncs.clear();
+
+        OCharsetMap::const_iterator aLoop = aCharsetInfo.begin();
+        OCharsetMap::const_iterator aLoopEnd = aCharsetInfo.end();
+        while (aLoop != aLoopEnd)
+        {
+            _rEncs.push_back( (*aLoop).getEncoding() );
+            ++aLoop;
+        }
+
+        return _rEncs.size();
     }
 
-
+}   // namespace charset_helper
 }   // namespace svxform
 
 

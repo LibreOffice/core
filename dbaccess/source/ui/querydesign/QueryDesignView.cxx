@@ -22,6 +22,7 @@
 #include "QTableWindow.hxx"
 #include <vcl/toolbox.hxx>
 #include "querycontroller.hxx"
+#include "sqlbison.hxx"
 #include <vcl/split.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>

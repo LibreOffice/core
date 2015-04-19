@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include "file/FStatement.hxx"
 #include "file/FConnection.hxx"
+#include "sqlbison.hxx"
 #include "file/FDriver.hxx"
 #include "file/FResultSet.hxx"
 #include <comphelper/property.hxx>

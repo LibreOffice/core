@@ -21,30 +21,19 @@
 #define INCLUDED_SVX_DBCHARSETHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <connectivity/virtualdbtools.hxx>
+#include <rtl/textenc.h>
 
-namespace svxform
+#include <vector>
+
+namespace svxform { namespace charset_helper
 {
 
+    /** enumerates all supported charsets
+        @return the number of charsets supported
+    */
+    SVX_DLLPUBLIC sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
 
-
-    //= ODataAccessCharsetHelper
-
-    class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessCharsetHelper
-    {
-    protected:
-        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;
-
-    public:
-        ODataAccessCharsetHelper( );
-
-        inline sal_Int32    getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
-        {
-            return m_xCharsetHelper->getSupportedTextEncodings( _rEncs );
-        }
-    };
-
-
+}   // namespace charset_helper
 }   // namespace svxform
 
 

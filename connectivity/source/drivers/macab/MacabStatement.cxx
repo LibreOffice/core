@@ -19,6 +19,7 @@
 
 
 #include "MacabStatement.hxx"
+#include "sqlbison.hxx"
 #include "MacabConnection.hxx"
 #include "MacabAddressBook.hxx"
 #include "MacabDriver.hxx"

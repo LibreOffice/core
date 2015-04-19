@@ -42,6 +42,7 @@
 #include "diagnose_ex.h"
 #include "MDriver.hxx"
 #include "MStatement.hxx"
+#include "sqlbison.hxx"
 #include "MConnection.hxx"
 #include "MResultSet.hxx"
 #include "MDatabaseMetaData.hxx"

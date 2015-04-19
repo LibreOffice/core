@@ -77,6 +77,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -93,7 +94,6 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::connectivity;
-using namespace ::connectivity::simple;
 using namespace ::dbtools;
 
 
@@ -821,13 +821,13 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             OUString sFilterValue( condition->second );
 
                             OUString sErrorMsg, sCriteria;
-                            const ::rtl::Reference< ISQLParseNode > xParseNode =
+                            const std::shared_ptr< OSQLParseNode > pParseNode =
                                 predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
-                            OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
-                            if ( xParseNode.is() )
+                            OSL_ENSURE( pParseNode != nullptr, "FormController::getFastPropertyValue: could not parse the field value predicate!" );
+                            if ( pParseNode != nullptr )
                             {
                                 // don't use a parse context here, we need it unlocalized
-                                xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
+                                pParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
                                 if ( condition != rRow.begin() )
                                     aRowFilter.appendAscii( " AND " );
                                 aRowFilter.append( sCriteria );
@@ -3109,7 +3109,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetUILocaleDataWrapper() );
         /* FIXME: casting this to sal_Char is plain wrong and of course only
          * works for ASCII separators, but
-         * xParseNode->parseNodeToPredicateStr() expects a sal_Char. Fix it
+         * pParseNode->parseNodeToPredicateStr() expects a sal_Char. Fix it
          * there. */
         sal_Char cDecimalSeparator = (sal_Char)rLocaleWrapper.getNumDecimalSep()[0];
         SAL_WARN_IF( (sal_Unicode)cDecimalSeparator != rLocaleWrapper.getNumDecimalSep()[0],
@@ -3180,7 +3180,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         {
                             OUString aCompText = aRow[(*iter).xText];
                             aCompText += " ";
-                            OString aVal = m_xParser->getContext().getIntlKeywordAscii(IParseContext::KEY_AND);
+                            OString aVal = m_pParser->getContext().getIntlKeywordAscii(IParseContext::KEY_AND);
                             aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
                             aCompText += " ";
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
@@ -3190,11 +3190,11 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         {
                             OUString sPredicate,sErrorMsg;
                             pRefValues[j].Value >>= sPredicate;
-                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField);
-                            if ( xParseNode.is() )
+                            std::shared_ptr< OSQLParseNode > pParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField);
+                            if ( pParseNode != nullptr )
                             {
                                 OUString sCriteria;
-                                xParseNode->parseNodeToPredicateStr( sCriteria
+                                pParseNode->parseNodeToPredicateStr( sCriteria
                                                                     ,xConnection
                                                                     ,xFormatter
                                                                     ,xField

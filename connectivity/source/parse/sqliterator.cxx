@@ -20,6 +20,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sqlparse.hxx>
+#include "sqlbison.hxx"
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
