@@ -170,8 +170,6 @@ class MaskData
 public:
                 MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind );
 
-    bool        IsCbxReady() const { return bIsReady; }
-    void        SetExecState( bool bState ) { bExecState = bState; }
     bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK( PipetteHdl, ToolBox* pTbx );
