@@ -127,11 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/sdbcx/VTable \
 	connectivity/source/sdbcx/VUser \
 	connectivity/source/sdbcx/VView \
-	connectivity/source/simpledbt/charset_s \
-	connectivity/source/simpledbt/dbtfactory \
-	connectivity/source/simpledbt/parsenode_s \
-	connectivity/source/simpledbt/parser_s \
-	connectivity/source/simpledbt/staticdbtools_s \
 ))
 
 # vim: set noet sw=4 ts=4:

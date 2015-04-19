@@ -24,13 +24,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 #include <connectivity/sqlnode.hxx>
-#if HAVE_FEATURE_DBCONNECTIVITY
-#ifndef YYBISON
-#ifndef FLEX_SCANNER
-#include "sqlbison.hxx"
-#endif
-#endif
-#endif
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>

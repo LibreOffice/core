@@ -34,6 +34,7 @@
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
 #include "file/FConnection.hxx"
+#include "sqlbison.hxx"
 
 using namespace connectivity;
 using namespace connectivity::file;

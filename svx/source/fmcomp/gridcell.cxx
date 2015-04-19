@@ -65,12 +65,12 @@
 #include <vcl/settings.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <connectivity/sqlnode.hxx>
 
 #include <math.h>
 #include <stdio.h>
 
 using namespace ::connectivity;
-using namespace ::connectivity::simple;
 using namespace ::svxform;
 using namespace ::comphelper;
 using namespace ::svt;
@@ -2909,8 +2909,8 @@ bool DbFilterField::commitControl()
             OUString aErrorMsg;
             Reference< XNumberFormatter >  xNumberFormatter(m_rColumn.GetParent().getNumberFormatter());
 
-            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
-            if (xParseNode.is())
+            std::shared_ptr< OSQLParseNode > pParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
+            if (pParseNode != nullptr)
             {
                 OUString aPreparedText;
 
@@ -2920,7 +2920,7 @@ bool DbFilterField::commitControl()
                     Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
                 Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
 
-                xParseNode->parseNodeToPredicateStr(aPreparedText,
+                pParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection,
                                                     xNumberFormatter,
                                                     m_rColumn.GetField(),

@@ -74,17 +74,6 @@ namespace task {
 } } }
 
 
-namespace connectivity
-{
-    class IParseContext;
-    namespace simple
-    {
-        class ISQLParser;
-        class IDataAccessCharSet;
-    }
-}
-
-
 namespace dbtools
 {
     class ISQLStatementHelper;
@@ -795,13 +784,6 @@ namespace dbtools
             const sal_Int32 _nBooleanComparisonMode,
             OUStringBuffer& _out_rSQLPredicate
         );
-
-    OOO_DLLPUBLIC_DBTOOLS ::connectivity::simple::ISQLParser* createSQLParser(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::connectivity::IParseContext* _pContext
-        );
-
-    OOO_DLLPUBLIC_DBTOOLS ::connectivity::simple::IDataAccessCharSet* createCharsetHelper( );
 
 
 }   // namespace dbtools

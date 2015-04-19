@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "QueryDesignView.hxx"
 #include "querycontroller.hxx"
+#include "sqlbison.hxx"
 #include "QueryTableView.hxx"
 #include "browserids.hxx"
 #include <comphelper/extract.hxx>

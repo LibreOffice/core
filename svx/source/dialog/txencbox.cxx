@@ -138,9 +138,8 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 #else
     rtl_TextEncodingInfo aInfo;
     aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-    svxform::ODataAccessCharsetHelper aCSH;
     ::std::vector< rtl_TextEncoding > aEncs;
-    sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
+    sal_Int32 nCount = svxform::charset_helper::getSupportedTextEncodings( aEncs );
     for ( sal_Int32 j=0; j<nCount; j++ )
     {
         bool bInsert = true;

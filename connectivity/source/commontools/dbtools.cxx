@@ -82,9 +82,6 @@
 #include "resource/sharedresources.hxx"
 #include <connectivity/OSubComponent.hxx>
 
-#include "simpledbt/parser_s.hxx"
-#include "simpledbt/charset_s.hxx"
-
 #include <algorithm>
 #include <iterator>
 #include <set>
@@ -1974,18 +1971,6 @@ void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bV
         _out_rSQLPredicate.appendAscii( _bValue ? " = 1" : " = 0" );
         break;
     }
-}
-
-simple::ISQLParser* createSQLParser(
-    const Reference< XComponentContext >& rxContext,
-    const IParseContext* _pContext )
-{
-    return new OSimpleSQLParser(rxContext, _pContext);
-}
-
-simple::IDataAccessCharSet* createCharsetHelper( )
-{
-    return new ODataAccessCharSet;
 }
 
 }   // namespace dbtools

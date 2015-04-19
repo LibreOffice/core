@@ -38,6 +38,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/sqlnode.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
@@ -66,7 +67,6 @@
     // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
 
 using namespace ::svxform;
-using namespace ::connectivity::simple;
 using namespace ::connectivity;
 using namespace ::dbtools;
 
@@ -880,14 +880,14 @@ bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString&
 
         // parse the given text as filter predicate
         OUString aErr, aTxt( rText );
-        ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
+        std::shared_ptr< OSQLParseNode > pParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
         rErrorMsg = aErr;
         rText = aTxt;
-        if ( xParseNode.is() )
+        if ( pParseNode != nullptr )
         {
             OUString aPreparedText;
             Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-            xParseNode->parseNodeToPredicateStr(
+            pParseNode->parseNodeToPredicateStr(
                 aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, '.', getParseContext() );
             rText = aPreparedText;
             return true;

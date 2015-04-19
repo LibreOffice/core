@@ -23,6 +23,7 @@
 #endif
 #include <connectivity/sdbcx/VColumn.hxx>
 #include "file/FResultSet.hxx"
+#include "sqlbison.hxx"
 #include "file/FResultSetMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

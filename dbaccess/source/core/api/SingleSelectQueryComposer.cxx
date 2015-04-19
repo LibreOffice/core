@@ -24,6 +24,7 @@
 #include "dbastrings.hrc"
 #include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
+#include "sqlbison.hxx"
 #include "sdbcoretools.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

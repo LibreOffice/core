@@ -38,6 +38,7 @@
 #include <vector>
 #include <algorithm>
 #include "MResultSet.hxx"
+#include "sqlbison.hxx"
 #include "MResultSetMetaData.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
 
