@@ -992,11 +992,6 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 
     switch(nSprmId)
     {
-        case 0xf004: //dff record
-        case 0xf00a: //part of 0xf004 - shape properties
-        case 0xf00b: //part of 0xf004
-        case 0xf007:
-        case 0xf122: //udefprop
         case NS_ooxml::LN_CT_Inline_extent: // 90911;
         case NS_ooxml::LN_CT_Inline_effectExtent: // 90912;
         case NS_ooxml::LN_CT_Inline_docPr: // 90913;
@@ -1109,27 +1104,12 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 }
             }
             break;
-        case 0x271b:
-        case 0x271c:
-        {
-            if( nSprmId != 0x271c || m_pImpl->nDffType == 0xf01f || m_pImpl->nDffType == 0xf01e )
-            {
-                writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = rSprm.getBinary();
-                if( pPictureData.get())
-                    pPictureData->resolve(*this);
-            }
-        }
-        break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
             //depending on the behindDoc attribute text wraps through behind or in fron of the object
             m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             m_pImpl->nWrap = text::WrapTextMode_NONE;
-        break;
-        case 0xf010:
-        case 0xf011:
-            //ignore - doesn't contain useful members
         break;
         case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
             {
