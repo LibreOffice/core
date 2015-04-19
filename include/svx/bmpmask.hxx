@@ -124,8 +124,6 @@ public:
     bool                NeedsColorList() const;
     void                SetColorList( const XColorListRef &pColorList );
 
-    void                SetExecState( bool bEnable );
-
     Graphic             Mask( const Graphic& rGraphic );
 
     bool                IsEyedropping() const;

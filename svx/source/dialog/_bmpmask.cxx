@@ -567,18 +567,6 @@ void SvxBmpMask::PipetteClicked()
     pData->PipetteHdl(m_pTbxPipette);
 }
 
-void SvxBmpMask::SetExecState( bool bEnable )
-{
-    pData->SetExecState( bEnable );
-
-    if ( pData->IsExecReady() && pData->IsCbxReady() )
-        m_pBtnExec->Enable();
-    else
-        m_pBtnExec->Disable();
-}
-
-
-
 sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
 {
     sal_uInt16  nCount = 0;

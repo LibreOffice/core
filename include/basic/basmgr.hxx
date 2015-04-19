@@ -217,8 +217,6 @@ public:
 private:
     BASIC_DLLPRIVATE bool IsReference( sal_uInt16 nLib );
 
-    BASIC_DLLPRIVATE bool SetLibName( sal_uInt16 nLib, const OUString& rName );
-
     BASIC_DLLPRIVATE StarBASIC* GetStdLib() const;
     BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference );
     BASIC_DLLPRIVATE bool RemoveLib( sal_uInt16 nLib );

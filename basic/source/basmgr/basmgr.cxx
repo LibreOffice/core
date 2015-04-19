@@ -1350,24 +1350,6 @@ bool BasicManager::HasLib( const OUString& rName ) const
     return false;
 }
 
-bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
-{
-    DBG_ASSERT(  nLib < mpImpl->aLibs.size(), "Lib?!" );
-    if ( nLib < mpImpl->aLibs.size() )
-    {
-        BasicLibInfo& rLibInfo = mpImpl->aLibs[nLib];
-        rLibInfo.SetLibName( rName );
-        if ( rLibInfo.GetLib().Is() )
-        {
-            StarBASICRef xStdLib = rLibInfo.GetLib();
-            xStdLib->SetName( rName );
-            xStdLib->SetModified( true );
-        }
-        return true;
-    }
-    return false;
-}
-
 OUString BasicManager::GetLibName( sal_uInt16 nLib )
 {
     DBG_ASSERT(  nLib < mpImpl->aLibs.size(), "Lib?!" );
