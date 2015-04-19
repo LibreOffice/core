@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/document/XDocumentProperties.idl>
 
 
 module com {  module sun {  module star {  module xml {  module sax {
@@ -43,6 +44,7 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute] string RelationFragmentPath;
     [attribute] long StartToken;
     [attribute] com::sun::star::awt::Point Position;
+    [attribute] com::sun::star::document::XDocumentProperties DocumentProperties;
 };
 
 

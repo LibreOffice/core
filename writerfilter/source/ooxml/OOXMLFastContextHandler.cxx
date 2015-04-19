@@ -1532,6 +1532,8 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
     }
 
     mrShapeContext->setModel(getDocument()->getModel());
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocSupplier(getDocument()->getModel(), uno::UNO_QUERY_THROW);
+    mrShapeContext->setDocumentProperties(xDocSupplier->getDocumentProperties());
     mrShapeContext->setDrawPage(getDocument()->getDrawPage());
     mrShapeContext->setInputStream(getDocument()->getStorageStream());
 

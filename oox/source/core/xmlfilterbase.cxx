@@ -223,33 +223,30 @@ XmlFilterBase::~XmlFilterBase()
     mxImpl->maFastParser.setDocumentHandler( 0 );
 }
 
-namespace {
-
-bool is2007MSODocument(Reference<XDocumentProperties> xDocProps)
+void XmlFilterBase::checkDocumentProperties(Reference<XDocumentProperties> xDocProps)
 {
+    mbMSO2007 = false;
     if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
-        return false;
+        return;
 
     uno::Reference<beans::XPropertyAccess> xUserDefProps(xDocProps->getUserDefinedProperties(), uno::UNO_QUERY);
     if (!xUserDefProps.is())
-        return false;
+        return;
 
     comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefProps->getPropertyValues());
     comphelper::SequenceAsHashMap::iterator it = aUserDefinedProperties.find("AppVersion");
     if (it == aUserDefinedProperties.end())
-        return false;
+        return;
 
     OUString aValue;
     if (!(it->second >>= aValue))
-        return false;
+        return;
 
     if (!aValue.startsWithIgnoreAsciiCase("12."))
-        return false;
+        return;
 
     SAL_WARN("oox", "a MSO 2007 document");
-    return true;
-}
-
+    mbMSO2007 = true;
 }
 
 void XmlFilterBase::importDocumentProperties()
@@ -270,7 +267,7 @@ void XmlFilterBase::importDocumentProperties()
     Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
     Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
     xImporter->importProperties( xDocumentStorage, xDocProps );
-    mbMSO2007 = is2007MSODocument(xDocProps);
+    checkDocumentProperties(xDocProps);
 }
 
 FastParser* XmlFilterBase::createParser() const

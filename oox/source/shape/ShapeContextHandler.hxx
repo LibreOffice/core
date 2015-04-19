@@ -30,6 +30,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "ShapeFilterBase.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 namespace oox { namespace shape {
 
@@ -138,6 +139,11 @@ public:
     virtual css::awt::Point SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual void SAL_CALL setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::document::XDocumentProperties> SAL_CALL getDocumentProperties()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
 private:
     ShapeContextHandler(ShapeContextHandler &) SAL_DELETED_FUNCTION;
     void operator =(ShapeContextHandler &) SAL_DELETED_FUNCTION;
@@ -159,6 +165,7 @@ private:
     css::uno::Reference<css::drawing::XShape> mxSavedShape;
     css::uno::Reference<XFastContextHandler> mxWpgContext;
     css::uno::Reference<XFastContextHandler> mxChartShapeContext;
+    css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
 
     core::XmlFilterRef mxFilterBase;
     drawingml::ThemePtr mpThemePtr;

@@ -236,6 +236,9 @@ public:
 
     bool isMSO2007Document() const;
 
+    void checkDocumentProperties(
+            com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> xDocProps);
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const SAL_OVERRIDE;

@@ -620,6 +620,19 @@ void SAL_CALL ShapeContextHandler::setPosition(const awt::Point& rPosition) thro
     maPosition = rPosition;
 }
 
+void SAL_CALL ShapeContextHandler::setDocumentProperties(const uno::Reference<document::XDocumentProperties>& xDocProps)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    mxDocumentProperties = xDocProps;
+    mxFilterBase->checkDocumentProperties(mxDocumentProperties);
+}
+
+uno::Reference<document::XDocumentProperties> SAL_CALL ShapeContextHandler::getDocumentProperties()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return mxDocumentProperties;
+}
+
 OUString ShapeContextHandler::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
