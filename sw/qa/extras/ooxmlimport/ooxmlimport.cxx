@@ -360,6 +360,18 @@ xray image.FillColor
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xc0504d ), fillColor );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testfdo90720, "testfdo90720.docx")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    uno::Reference<text::XTextFrame> textbox(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> properties(textbox, uno::UNO_QUERY);
+    sal_Int32 fill_transperence;
+    properties->getPropertyValue( "FillTransparence" ) >>= fill_transperence;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(100), fill_transperence );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN747461, "n747461.docx")
 {
 /*
