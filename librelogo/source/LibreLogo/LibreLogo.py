@@ -93,6 +93,7 @@ class __Doc__:
         self.oldlw = 0
         self.oldls = __LineStyle_SOLID__
         self.oldlj = __ROUNDED__
+        self.oldlcap = __Cap_NONE__
         self.continuous = True
         self.areacolor = __FILLCOLOR__
         self.t10y = int((__FILLCOLOR__ >> 24) / (255.0/100))
