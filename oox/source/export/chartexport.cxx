@@ -1070,6 +1070,10 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     pFS->singleElement( FSNS( XML_c, XML_layout ),
             FSEND );
 
+    pFS->singleElement( FSNS(XML_c, XML_overlay),
+            XML_val, "0",
+            FSEND);
+
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
