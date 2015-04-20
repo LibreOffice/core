@@ -16,7 +16,6 @@
 
 using namespace com::sun::star;
 using namespace oox;
-using namespace sax_fastparser;
 
 /// Methods in this class handle values in a table style.
 struct DocxTableStyleExport::Impl
@@ -68,7 +67,7 @@ void DocxTableStyleExport::CharFormat(css::uno::Sequence<css::beans::PropertyVal
 
 void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttributeList)
 {
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
 
     for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
     {
@@ -178,7 +177,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(sal_Int32 nToken, const uno:
     if (!rTcBorder.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rTcBorder.getLength(); ++i)
         if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rTcBorder[i].Name))
             pAttributeList->add(FSNS(XML_w, nAttrToken), rTcBorder[i].Value.get<OUString>().toUtf8());
@@ -219,7 +218,7 @@ void DocxTableStyleExport::Impl::tableStyleShd(uno::Sequence<beans::PropertyValu
     if (!rShd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rShd.getLength(); ++i)
     {
         if (rShd[i].Name == "val")
@@ -244,7 +243,7 @@ void DocxTableStyleExport::Impl::tableStyleRColor(uno::Sequence<beans::PropertyV
     if (!rColor.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rColor.getLength(); ++i)
     {
         if (rColor[i].Name == "val")
@@ -265,7 +264,7 @@ void DocxTableStyleExport::Impl::tableStyleRLang(uno::Sequence<beans::PropertyVa
     if (!rLang.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rLang.getLength(); ++i)
     {
         if (rLang[i].Name == "eastAsia")
@@ -284,7 +283,7 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(uno::Sequence<beans::Property
     if (!rRFonts.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rRFonts.getLength(); ++i)
     {
         if (rRFonts[i].Name == "eastAsiaTheme")
@@ -305,7 +304,7 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
     if (!rSpacing.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rSpacing.getLength(); ++i)
     {
         if (rSpacing[i].Name == "after")
@@ -336,7 +335,7 @@ void DocxTableStyleExport::Impl::tableStylePInd(uno::Sequence<beans::PropertyVal
     if (!rInd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rInd.getLength(); ++i)
     {
         if (rInd[i].Name == "rightChars")
@@ -353,7 +352,7 @@ void DocxTableStyleExport::Impl::tableStyleTblInd(uno::Sequence<beans::PropertyV
     if (!rTblInd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     for (sal_Int32 i = 0; i < rTblInd.getLength(); ++i)
     {
         if (rTblInd[i].Name == "w")
@@ -369,7 +368,7 @@ void DocxTableStyleExport::Impl::handleBoolean(const OUString& aValue, sal_Int32
 {
     if (aValue.isEmpty())
         return;
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     if (aValue != "1")
         pAttributeList->add(FSNS(XML_w, XML_val), aValue.toUtf8());
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
@@ -634,7 +633,7 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
             aTblStylePrs.push_back(rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >());
     }
 
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
     pAttributeList->add(FSNS(XML_w, XML_type), "table");
     if (bDefault)
         pAttributeList->add(FSNS(XML_w, XML_default), "1");

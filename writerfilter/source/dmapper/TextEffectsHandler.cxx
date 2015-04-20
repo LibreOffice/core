@@ -23,8 +23,6 @@ namespace writerfilter {
 namespace dmapper
 {
 
-using namespace std;
-using namespace oox;
 using namespace com::sun::star;
 
 namespace
@@ -487,7 +485,7 @@ TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
     mpGrabBagStack(nullptr)
 {
     convertElementIdToPropertyId(aElementId);
-    mpGrabBagStack.reset(new GrabBagStack(maElementName));
+    mpGrabBagStack.reset(new oox::GrabBagStack(maElementName));
 }
 
 TextEffectsHandler::~TextEffectsHandler()

@@ -29,7 +29,6 @@
 #include <dcontact.hxx>
 #include <algorithm>
 
-using namespace sw::util;
 using namespace css;
 
 RtfSdrExport::RtfSdrExport(RtfExport& rExport)

@@ -69,7 +69,6 @@ namespace writerfilter {
 
 namespace dmapper
 {
-using namespace std;
 using namespace css;
 
 class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
@@ -1431,7 +1430,7 @@ void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>
 }
 
 
-void GraphicImport::lcl_info(const string & /*info*/)
+void GraphicImport::lcl_info(const std::string& /*info*/)
 {
 }
 

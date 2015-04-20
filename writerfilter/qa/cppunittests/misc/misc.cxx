@@ -23,8 +23,6 @@
 #include <dmapper/ConversionHelper.hxx>
 #include <dmapper/DomainMapper_Impl.hxx>
 
-using namespace std;
-
 namespace {
 
 class WriterfilterMiscTest
@@ -74,7 +72,7 @@ void WriterfilterMiscTest::testTwipConversions()
 void WriterfilterMiscTest::testFieldParameters()
 {
     using writerfilter::dmapper::lcl_SplitFieldCommand;
-    boost::tuple<OUString, vector<OUString>, vector<OUString> > result;
+    boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > result;
 
     result = lcl_SplitFieldCommand("PAGEREF last_page");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), boost::get<0>(result));

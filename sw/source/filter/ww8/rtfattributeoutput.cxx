@@ -79,13 +79,9 @@
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-using ::editeng::SvxBorderLine;
-using namespace nsSwDocInfoSubType;
-using namespace nsFieldFlags;
-using namespace sw::util;
 using namespace ::com::sun::star;
 
-static OString OutTBLBorderLine(RtfExport& rExport, const SvxBorderLine* pLine, const sal_Char* pStr)
+static OString OutTBLBorderLine(RtfExport& rExport, const editeng::SvxBorderLine* pLine, const sal_Char* pStr)
 {
     OStringBuffer aRet;
     if (!pLine->isEmpty())
@@ -165,7 +161,7 @@ static OString OutTBLBorderLine(RtfExport& rExport, const SvxBorderLine* pLine, 
     return aRet.makeStringAndClear();
 }
 
-static OString OutBorderLine(RtfExport& rExport, const SvxBorderLine* pLine,
+static OString OutBorderLine(RtfExport& rExport, const editeng::SvxBorderLine* pLine,
                              const sal_Char* pStr, sal_uInt16 nDist, SvxShadowLocation eShadowLocation = SVX_SHADOW_NONE)
 {
     OStringBuffer aRet;
@@ -660,7 +656,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
         };
         for (int i = 0; i < 4; ++i)
         {
-            if (const SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
+            if (const editeng::SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
                 m_aRowDefs.append(OutTBLBorderLine(m_rExport, pLn, aBorderNames[i]));
             if (rDefault.GetDistance(aBorders[i]) !=
                     rBox.GetDistance(aBorders[i]))
@@ -1141,7 +1137,7 @@ void RtfAttributeOutput::SectionTitlePage()
 void RtfAttributeOutput::SectionPageBorders(const SwFrmFmt* pFmt, const SwFrmFmt* /*pFirstPageFmt*/)
 {
     const SvxBoxItem& rBox = pFmt->GetBox();
-    const SvxBorderLine* pLine = rBox.GetTop();
+    const editeng::SvxBorderLine* pLine = rBox.GetTop();
     if (pLine)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine,
                                               OOO_STRING_SVTOOLS_RTF_PGBRDRT,
@@ -2142,7 +2138,7 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
-    FontMapExport aTmp(rFont.GetFamilyName());
+    sw::util::FontMapExport aTmp(rFont.GetFamilyName());
     sal_uInt8 nWindowsCharset = sw::ms::rtl_TextEncodingToWinCharsetRTF(aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet());
     m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(nWindowsCharset);
     if (m_rExport.eCurrentEncoding == RTL_TEXTENCODING_DONTKNOW)
@@ -2467,7 +2463,7 @@ void RtfAttributeOutput::CharHidden(const SvxCharHiddenItem& rHidden)
         m_aStyles.append((sal_Int32)0);
 }
 
-void RtfAttributeOutput::CharBorder(const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow)
+void RtfAttributeOutput::CharBorder(const editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow)
 {
     m_aStyles.append(OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist, bShadow ? SVX_SHADOW_BOTTOMRIGHT : SVX_SHADOW_NONE));
 }
@@ -2855,7 +2851,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
             if (!m_rExport.GetCurItemSet())
                 return;
 
-            HdFtDistanceGlue aDistances(*m_rExport.GetCurItemSet());
+            sw::util::HdFtDistanceGlue aDistances(*m_rExport.GetCurItemSet());
 
             if (aDistances.dyaTop)
             {
@@ -3127,10 +3123,10 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextRight", OString::number(rBox.GetDistance(SvxBoxItemLine::RIGHT) * 635)));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextBottom", OString::number(rBox.GetDistance(SvxBoxItemLine::BOTTOM) * 635)));
 
-        const SvxBorderLine* pLeft = rBox.GetLine(SvxBoxItemLine::LEFT);
-        const SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
-        const SvxBorderLine* pTop = rBox.GetLine(SvxBoxItemLine::TOP);
-        const SvxBorderLine* pBottom = rBox.GetLine(SvxBoxItemLine::BOTTOM);
+        const editeng::SvxBorderLine* pLeft = rBox.GetLine(SvxBoxItemLine::LEFT);
+        const editeng::SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
+        const editeng::SvxBorderLine* pTop = rBox.GetLine(SvxBoxItemLine::TOP);
+        const editeng::SvxBorderLine* pBottom = rBox.GetLine(SvxBoxItemLine::BOTTOM);
         if (pLeft && pRight && pTop && pBottom && *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
             const Color& rColor = pTop->GetColor();
@@ -3171,7 +3167,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
-            if (const SvxBorderLine* pLn = rBox.GetLine(*pBrd))
+            if (const editeng::SvxBorderLine* pLn = rBox.GetLine(*pBrd))
             {
                 m_aSectionBreaks.append(OutBorderLine(m_rExport, pLn, *pBrdNms,
                                                       rBox.GetDistance(*pBrd), eShadowLocation));

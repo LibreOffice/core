@@ -27,11 +27,10 @@ namespace writerfilter
 namespace dmapper
 {
 using namespace com::sun::star;
-using namespace std;
 
-string XTextRangeToString(uno::Reference< text::XTextRange > textRange)
+std::string XTextRangeToString(uno::Reference< text::XTextRange > textRange)
 {
-    string result;
+    std::string result;
 
     (void) textRange;
 #ifdef DEBUG_WRITERFILTER

@@ -32,7 +32,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include <iostream>
-using namespace std;
 
 namespace writerfilter {
 namespace dmapper {
