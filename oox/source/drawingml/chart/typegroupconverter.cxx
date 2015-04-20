@@ -288,7 +288,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
     if( !xLabeledSeq.is() && mrModel.maSeries.size() > 0 ) {
         if( nMaxValues < 0 )
             nMaxValues = 2;
-        SeriesModel &aModel = mrModel.maSeries.create();
+        SeriesModel &aModel = *mrModel.maSeries.get(0);
         DataSourceModel &aSrc = aModel.maSources.create( SeriesModel::CATEGORIES );
         DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
         for( sal_Int32 i = 0; i < nMaxValues; i++ )
