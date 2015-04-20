@@ -3670,7 +3670,8 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
     size_t nRefInList = 0;
     while (nParam-- > 0)
     {
-        switch (GetStackType())
+        const StackVar eStackType = GetStackType();
+        switch (eStackType)
         {
             case formula::svDouble :
                 rArray.push_back( PopDouble());
@@ -3724,7 +3725,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     for (SCSIZE i = 0; i < nCount; ++i)
                         rArray.push_back( pMat->GetDouble(i));
                 }
-                else if (bConvertTextInArray)
+                else if (bConvertTextInArray && eStackType == svMatrix)
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                     {
