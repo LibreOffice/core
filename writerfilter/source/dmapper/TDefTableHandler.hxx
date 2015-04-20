@@ -73,10 +73,7 @@ public:
     TDefTableHandler();
     virtual ~TDefTableHandler();
 
-    size_t                                      getCellCount() const;
     void                                        fillCellProperties( size_t nCell, ::std::shared_ptr< TablePropertyMap > pCellProperties) const;
-    ::std::shared_ptr<PropertyMap>            getRowProperties() const;
-    sal_Int32                                   getTableWidth() const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);

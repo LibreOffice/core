@@ -418,35 +418,6 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
-
-PropertyMapPtr  TDefTableHandler::getRowProperties() const
-{
-    PropertyMapPtr pPropertyMap(new PropertyMap);
-
-    // Writer only wants the separators, Word provides also the outer border positions
-    if( m_aCellBorderPositions.size() > 2 )
-    {
-        //determine table width
-        double nFullWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
-        //the positions have to be distibuted in a range of 10000
-        const double nFullWidthRelative = 10000.;
-        uno::Sequence< text::TableColumnSeparator > aSeparators( m_aCellBorderPositions.size() - 2 );
-        text::TableColumnSeparator* pSeparators = aSeparators.getArray();
-        for( sal_uInt32 nBorder = 1; nBorder < m_aCellBorderPositions.size() - 1; ++nBorder )
-        {
-            sal_Int16 nRelPos =
-                sal::static_int_cast< sal_Int16 >(double(m_aCellBorderPositions[nBorder]) * nFullWidthRelative / nFullWidth );
-
-            pSeparators[nBorder - 1].Position =  nRelPos;
-            pSeparators[nBorder - 1].IsVisible = sal_True;
-        }
-        pPropertyMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
-    }
-
-    return pPropertyMap;
-}
-
-
 void TDefTableHandler::fillCellProperties(
             size_t nCell, ::std::shared_ptr< TablePropertyMap > pCellProperties ) const
 {
@@ -475,23 +446,6 @@ void TDefTableHandler::fillCellProperties(
         pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
 }
 
-
-sal_Int32 TDefTableHandler::getTableWidth() const
-{
-    sal_Int32 nWidth = 0;
-    if( m_aCellBorderPositions.size() > 1 )
-    {
-        //determine table width
-        nWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
-    }
-    return nWidth;
-}
-
-
-size_t TDefTableHandler::getCellCount() const
-{
-    return m_aCellVertAlign.size();
-}
 
 void TDefTableHandler::enableInteropGrabBag(const OUString& aName)
 {
