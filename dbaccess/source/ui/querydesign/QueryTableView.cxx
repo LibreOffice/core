@@ -306,7 +306,7 @@ void OQueryTableView::ReSync()
         }
 
         // adds a new connection to join view and notifies our accessible and invaldates the controller
-        addConnection(new OQueryTableConnection(this, *aConIter));
+        addConnection(VclPtr<OQueryTableConnection>::Create(this, *aConIter));
     }
 }
 
@@ -318,9 +318,9 @@ void OQueryTableView::ClearAll()
     m_pView->getController().setModified(sal_True);
 }
 
-OTableWindow* OQueryTableView::createWindow(const TTableWindowData::value_type& _pData)
+VclPtr<OTableWindow> OQueryTableView::createWindow(const TTableWindowData::value_type& _pData)
 {
-    return new OQueryTableWindow(this,_pData);
+    return VclPtr<OQueryTableWindow>::Create(this,_pData);
 }
 
 void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction)
@@ -355,7 +355,7 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
         OQueryTableConnectionData* pNewData = static_cast< OQueryTableConnectionData*>(rNewConn.GetData()->NewInstance());
         pNewData->CopyFrom(*rNewConn.GetData());
         TTableConnectionData::value_type aData(pNewData);
-        OQueryTableConnection* pNewConn = new OQueryTableConnection(this, aData);
+        VclPtrInstance<OQueryTableConnection> pNewConn(this, aData);
         GetConnection(pNewConn);
 
         connectionModified(this,pNewConn,_bCreateUndoAction);
@@ -457,7 +457,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
         // I do not need to add TabWinData to the DocShell list, ShowTabWin does that.
 
     // Create a new window
-    OQueryTableWindow* pNewTabWin = static_cast<OQueryTableWindow*>(createWindow(pNewTabWinData));
+    VclPtr<OQueryTableWindow> pNewTabWin = static_cast<OQueryTableWindow*>(createWindow(pNewTabWinData).get());
     // No need to initialize, as that happens in ShowTabWin
 
     // New UndoAction
@@ -531,7 +531,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                                 break;
                         }
                     }
-                    if ( aIter != aEnd && pNewTabWin != aIter->second )
+                    if ( aIter != aEnd && pNewTabWin.get() != aIter->second.get() )
                         addConnections( this, *pNewTabWin, *static_cast<OQueryTableWindow*>(aIter->second.get()), xFKeyColumns );
                 }
                 break;
@@ -669,7 +669,7 @@ void OQueryTableView::createNewConnection()
         else
         {
             // create a new conenction and append it
-            OQueryTableConnection* pQConn = new OQueryTableConnection(this, pData);
+            VclPtrInstance<OQueryTableConnection> pQConn(this, pData);
             GetConnection(pQConn);
             pConn = pQConn;
         }

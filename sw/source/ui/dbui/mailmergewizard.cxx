@@ -101,9 +101,9 @@ SwMailMergeWizard::~SwMailMergeWizard()
 {
 }
 
-OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
+VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
-    OWizardPage* pRet = 0;
+    VclPtr<OWizardPage> pRet;
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE : pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this);     break;

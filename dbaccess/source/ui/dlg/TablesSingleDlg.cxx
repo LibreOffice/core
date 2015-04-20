@@ -54,7 +54,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
     SetInputSet(m_pOutSet);
 
-    OTableSubscriptionPage* pTabPage = new OTableSubscriptionPage(get_content_area(), *m_pOutSet, this);
+    VclPtrInstance<OTableSubscriptionPage> pTabPage(get_content_area(), *m_pOutSet, this);
     pTabPage->SetServiceFactory(_rxORB);
     SetTabPage(pTabPage);
 }

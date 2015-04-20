@@ -49,7 +49,7 @@ namespace dbaui
     {
         m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rxContext );
 
-        m_pSplitter = new Splitter(this,WB_VSCROLL);
+        m_pSplitter = VclPtr<Splitter>::Create(this,WB_VSCROLL);
         m_pSplitter->Hide();
         m_pSplitter->SetSplitHdl( LINK( this, OQueryContainerWindow, SplitHdl ) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
@@ -174,7 +174,7 @@ namespace dbaui
     {
         if(!m_pBeamer)
         {
-            m_pBeamer = new OBeamer(this);
+            m_pBeamer = VclPtr<OBeamer>::Create(this);
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 

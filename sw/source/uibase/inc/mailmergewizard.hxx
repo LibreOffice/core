@@ -58,7 +58,7 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
     using svt::OWizardMachine::skipUntil;
 
 protected:
-    virtual svt::OWizardPage*       createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage>         createPage( WizardState _nState ) SAL_OVERRIDE;
     virtual void                    enterState( WizardState _nState ) SAL_OVERRIDE;
 
 // roadmap feature ??

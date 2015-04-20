@@ -233,16 +233,16 @@ void ODbTypeWizDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
+VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
 {
     sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
-    TabPage* pPage = NULL;
+    VclPtr<TabPage> pPage;
     switch(_nState)
     {
         case START_PAGE: // start state
         {
-            pPage = new OGeneralPageDialog(this,*m_pOutSet);
-            OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage );
+            pPage = VclPtr<OGeneralPageDialog>::Create(this,*m_pOutSet);
+            OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage.get() );
             pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
             nStringId = STR_PAGETITLE_GENERAL;
         }
@@ -290,8 +290,8 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     // register ourself as modified listener
     if ( pPage )
     {
-        static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( m_pImpl->getORB() );
-        static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
+        static_cast<OGenericAdministrationPage*>(pPage.get())->SetServiceFactory( m_pImpl->getORB() );
+        static_cast<OGenericAdministrationPage*>(pPage.get())->SetAdminDialog(this,this);
         pPage->SetText(ModuleRes(nStringId));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
         enableButtons( WZB_FINISH, _nState == START_PAGE ? sal_False : sal_True);

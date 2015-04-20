@@ -60,7 +60,7 @@ namespace dbmm
         virtual ~PreparationPage();
         virtual void dispose() SAL_OVERRIDE;
 
-        static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
         void    showCloseDocsError(bool _bShow);
@@ -76,7 +76,7 @@ namespace dbmm
         SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
         virtual ~SaveDBDocPage();
         virtual void dispose() SAL_OVERRIDE;
-        static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
         OUString getBackupLocation() const { return m_pLocationController->getURL(); }
@@ -107,7 +107,7 @@ namespace dbmm
         virtual ~ProgressPage();
         virtual void dispose() SAL_OVERRIDE;
 
-        static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
         void    setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports );
         void    onFinishedSuccessfully();
@@ -140,7 +140,7 @@ namespace dbmm
         virtual ~ResultPage();
         virtual void dispose() SAL_OVERRIDE;
 
-        static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
         void            displayMigrationLog( const bool _bSuccessful, const OUString& _rLog );
 

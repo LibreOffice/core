@@ -29,7 +29,7 @@ using namespace dbaui;
 OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
      TabPage( pParent, WB_3DLOOK )
 {
-    m_pTextWin = new MultiLineEdit( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
+    m_pTextWin = VclPtr<MultiLineEdit>::Create( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
     m_pTextWin->SetHelpId(HID_TABLE_DESIGN_HELP_WINDOW);
     m_pTextWin->SetReadOnly();
     m_pTextWin->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );

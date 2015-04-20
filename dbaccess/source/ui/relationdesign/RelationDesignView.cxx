@@ -52,7 +52,7 @@ ORelationDesignView::ORelationDesignView(vcl::Window* _pParent, ORelationControl
 
 void ORelationDesignView::Construct()
 {
-    m_pTableView    = new ORelationTableView(m_pScrollWindow,this);
+    m_pTableView    = VclPtr<ORelationTableView>::Create(m_pScrollWindow,this);
     OJoinDesignView::Construct();
 }
 

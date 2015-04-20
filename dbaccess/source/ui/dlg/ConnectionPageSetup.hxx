@@ -48,11 +48,11 @@ namespace dbaui
     public:
         virtual ~OConnectionTabPageSetup();
         virtual void dispose() SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 

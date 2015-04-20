@@ -532,9 +532,9 @@ namespace svt
     }
 
 
-    TabPage* RoadmapWizard::createPage( WizardState _nState )
+    VclPtr<TabPage> RoadmapWizard::createPage( WizardState _nState )
     {
-        TabPage* pPage( NULL );
+        VclPtr<TabPage> pPage;
 
         StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
         OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),

@@ -206,7 +206,7 @@ namespace svt
         // our own overridables
 
         /// to override to create new pages
-        virtual TabPage*    createPage(WizardState _nState) = 0;
+        virtual VclPtr<TabPage> createPage(WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
         virtual void        enterState(WizardState _nState);

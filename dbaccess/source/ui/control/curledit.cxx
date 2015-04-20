@@ -89,10 +89,10 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 {
     // create new sub controls, if necessary
     if (!GetSubEdit())
-        SetSubEdit(new Edit(this, 0));
+        SetSubEdit(VclPtr<Edit>::Create(this, 0));
     if ( !m_pForcedPrefix )
     {
-        m_pForcedPrefix = new FixedText(this, WB_VCENTER);
+        m_pForcedPrefix = VclPtr<FixedText>::Create(this, WB_VCENTER);
 
         // we use a gray background for the fixed text
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();

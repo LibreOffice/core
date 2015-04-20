@@ -293,7 +293,7 @@ namespace dbaui
             @param _pData The data corresponding to the window.
             @return The new TableWindow
         */
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) = 0;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) = 0;
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */

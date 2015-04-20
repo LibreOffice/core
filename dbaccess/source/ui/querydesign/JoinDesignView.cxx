@@ -56,7 +56,7 @@ OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rContr
     ,m_pTableView(NULL)
     ,m_rController( _rController )
 {
-    m_pScrollWindow = new OScrollWindowHelper(this);
+    m_pScrollWindow = VclPtr<OScrollWindowHelper>::Create(this);
 }
 
 OJoinDesignView::~OJoinDesignView()

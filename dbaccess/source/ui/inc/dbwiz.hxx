@@ -93,7 +93,7 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*    createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState _nState) SAL_OVERRIDE;
     virtual WizardState determineNextState(WizardState _nCurrentState) const SAL_OVERRIDE;
     virtual bool        leaveState(WizardState _nState) SAL_OVERRIDE;
     virtual ::svt::IWizardPageController*

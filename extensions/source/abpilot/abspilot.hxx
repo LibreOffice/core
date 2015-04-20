@@ -67,7 +67,7 @@ namespace abp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage>     createPage( WizardState _nState ) SAL_OVERRIDE;
         virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) SAL_OVERRIDE;
         virtual bool                onFinish() SAL_OVERRIDE;

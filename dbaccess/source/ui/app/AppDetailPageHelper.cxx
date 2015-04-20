@@ -188,10 +188,10 @@ namespace
 // class OAppDetailPageHelper
 OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
-    ,m_aFL(new FixedLine(this,WB_VERT))
-    ,m_aTBPreview(new ToolBox(this,WB_TABSTOP) )
-    ,m_aBorder(new Window(this,WB_BORDER | WB_READONLY))
-    ,m_aPreview(new OPreviewWindow(m_aBorder.get()))
+    ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
+    ,m_aTBPreview(VclPtr<ToolBox>::Create(this,WB_TABSTOP) )
+    ,m_aBorder(VclPtr<Window>::Create(this,WB_BORDER | WB_READONLY))
+    ,m_aPreview(VclPtr<OPreviewWindow>::Create(m_aBorder.get()))
     ,m_aDocumentInfo(new ::svtools::ODocumentInfoPreview(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
     ,m_ePreviewMode(_ePreviewMode)
 {
@@ -211,7 +211,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 
     m_aPreview->SetHelpId(HID_APP_VIEW_PREVIEW_1);
 
-    m_pTablePreview.set( new OTablePreviewWindow(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL ) );
+    m_pTablePreview.set( VclPtr<OTablePreviewWindow>::Create(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL ) );
     m_pTablePreview->SetHelpId(HID_APP_VIEW_PREVIEW_2);
 
     m_aDocumentInfo->SetHelpId(HID_APP_VIEW_PREVIEW_3);
@@ -570,7 +570,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     if ( !m_pLists[E_TABLE] )
     {
-        OTableTreeListBox* pTreeView = new OTableTreeListBox(this,
+        VclPtrInstance<OTableTreeListBox> pTreeView(this,
             WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
         m_pLists[E_TABLE] = pTreeView;
@@ -737,7 +737,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
 
 DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const OString& _sHelpId, const Image& _rImage)
 {
-    DBTreeListBox* pTreeView = new DBTreeListBox(this,
+    VclPtrInstance<DBTreeListBox> pTreeView(this,
                        WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     pTreeView->SetHelpId( _sHelpId );
     return createTree( pTreeView, _rImage );

@@ -68,9 +68,9 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WindowBorderStyle::MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
+    m_pPanel = VclPtr<OTitleWindow>::Create(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
     m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
-    OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
+    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel, *this );
     pSwap->Show();
     pSwap->SetUniqueId(UID_APP_SWAP_VIEW);
 
@@ -78,7 +78,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
     m_pPanel->SetUniqueId(UID_APP_DATABASE_VIEW);
     m_pPanel->Show();
 
-    m_pDetailView = new OApplicationDetailView(*this,_ePreviewMode);
+    m_pDetailView = VclPtr<OApplicationDetailView>::Create(*this,_ePreviewMode);
     m_pDetailView->Show();
 
     ImplInitSettings();
@@ -195,7 +195,7 @@ OApplicationView::OApplicationView( vcl::Window* pParent
     {
     }
 
-    m_pWin = new OAppBorderWindow(this,_ePreviewMode);
+    m_pWin = VclPtr<OAppBorderWindow>::Create(this,_ePreviewMode);
     m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 

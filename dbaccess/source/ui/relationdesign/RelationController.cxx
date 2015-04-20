@@ -245,7 +245,7 @@ OUString ORelationController::getPrivateTitle( ) const
 
 bool ORelationController::Construct(vcl::Window* pParent)
 {
-    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
+    setView( VclPtr<ORelationDesignView>::Create( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
     return true;
 }

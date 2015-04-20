@@ -763,9 +763,9 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if ( pNode )
                 {
                     vcl::Window* pView = getView();
-                    ModalDialog* pWindow = new ModalDialog( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
+                    ScopedVclPtrInstance<ModalDialog> pWindow( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
                     pWindow->SetSizePixel( ::Size( pView->GetSizePixel().Width() / 2, pView->GetSizePixel().Height() / 2 ) );
-                    SvTreeListBox* pTreeBox = new SvTreeListBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
+                    ScopedVclPtrInstance<SvTreeListBox> pTreeBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
                     pTreeBox->SetPosSizePixel( ::Point( 6, 6 ), ::Size( pWindow->GetSizePixel().Width() - 12, pWindow->GetSizePixel().Height() - 12 ));
                     pTreeBox->SetNodeDefaultImages();
 
@@ -799,8 +799,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     pTreeBox->Show();
                     pWindow->Execute();
 
-                    delete pTreeBox;
-                    delete pWindow;
                     delete pNode;
                 }
                 break;
@@ -1117,7 +1115,7 @@ bool OQueryController::Construct(vcl::Window* pParent)
 {
     // TODO: we have to check if we should create the text view or the design view
 
-    setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
+    setView( VclPtr<OQueryContainerWindow>::Create( pParent, *this, getORB() ) );
 
     return OJoinController::Construct(pParent);
 }

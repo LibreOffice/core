@@ -116,12 +116,12 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                 |   BROWSER_HLINESFULL      | BROWSER_VLINESFULL
                 |   BROWSER_HEADERBAR_NEW   ;
 
-    m_pTextCell     = new Edit(&GetDataWindow(), 0);
-    m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
-    m_pTableCell    = new ListBoxControl(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
-    m_pFieldCell    = new ComboBoxControl(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
-    m_pOrderCell    = new ListBoxControl(&GetDataWindow());
-    m_pFunctionCell = new ListBoxControl(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
+    m_pTextCell     = VclPtr<Edit>::Create(&GetDataWindow(), 0);
+    m_pVisibleCell  = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
+    m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
+    m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
+    m_pOrderCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
+    m_pFunctionCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
 
     m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
     m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
@@ -283,7 +283,7 @@ namespace
 
 VclPtr<BrowserHeader> OSelectionBrowseBox::imp_CreateHeaderBar(BrowseBox* /*pParent*/)
 {
-    return new OSelectionBrwBoxHeader(this);
+    return VclPtr<OSelectionBrwBoxHeader>::Create(this);
 }
 
 void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo )

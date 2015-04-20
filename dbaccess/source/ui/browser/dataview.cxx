@@ -66,7 +66,7 @@ namespace dbaui
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)
         ,m_xController( &_rController )
-        ,m_aSeparator( new FixedLine(this) )
+        ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
     {
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
         m_aSeparator->Show();

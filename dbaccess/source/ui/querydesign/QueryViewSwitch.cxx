@@ -36,8 +36,8 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 : m_bAddTableDialogWasVisible(false)
 {
 
-    m_pTextView     = new OQueryTextView(_pParent);
-    m_pDesignView   = new OQueryDesignView( _pParent, _rController, _rxContext );
+    m_pTextView     = VclPtr<OQueryTextView>::Create(_pParent);
+    m_pDesignView   = VclPtr<OQueryDesignView>::Create( _pParent, _rController, _rxContext );
 }
 
 OQueryViewSwitch::~OQueryViewSwitch()

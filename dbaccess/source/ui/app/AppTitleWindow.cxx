@@ -29,9 +29,9 @@ namespace dbaui
 
 OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
-, m_aSpace1(new FixedText(this))
-, m_aSpace2(new FixedText(this))
-, m_aTitle(new FixedText(this))
+, m_aSpace1(VclPtr<FixedText>::Create(this))
+, m_aSpace2(VclPtr<FixedText>::Create(this))
+, m_aTitle(VclPtr<FixedText>::Create(this))
 , m_pChild(NULL)
 , m_bShift(_bShift)
 {

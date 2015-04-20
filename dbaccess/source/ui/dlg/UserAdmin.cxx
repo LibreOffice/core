@@ -124,7 +124,7 @@ OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
     , m_pNEWUSER(0)
     , m_pCHANGEPWD(0)
     , m_pDELETEUSER(0)
-    ,m_TableCtrl(new OTableGrantControl(get<VclAlignment>("table"), WB_TABSTOP))
+    ,m_TableCtrl(VclPtr<OTableGrantControl>::Create(get<VclAlignment>("table"), WB_TABSTOP))
 {
     m_TableCtrl->Show();
     get(m_pUSER, "user");

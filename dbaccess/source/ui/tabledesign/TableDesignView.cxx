@@ -42,13 +42,13 @@ using namespace ::com::sun::star::beans;
 
 // class OTableBorderWindow
 OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
-    ,m_aHorzSplitter( new Splitter(this) )
+    ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
 
     ImplInitSettings( true, true, true );
     // Children erzeugen
-    m_pEditorCtrl   = new OTableEditorCtrl( this);
-    m_pFieldDescWin = new OTableFieldDescWin( this );
+    m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
+    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 
@@ -183,7 +183,7 @@ OTableDesignView::OTableDesignView( vcl::Window* pParent,
     {
     }
 
-    m_pWin = new OTableBorderWindow(this);
+    m_pWin = VclPtr<OTableBorderWindow>::Create(this);
     m_pWin->Show();
 }
 

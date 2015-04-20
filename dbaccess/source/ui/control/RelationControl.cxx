@@ -166,7 +166,7 @@ namespace dbaui
             InsertDataColumn( DEST_COLUMN, m_pConnData->getReferencedTable()->GetWinName(), 100);
             // If the Defs do not yet exits, we need to set them with SetSource-/-DestDef
 
-            m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
+            m_pListCell.reset( VclPtr<ListBoxControl>::Create( &GetDataWindow() ) );
 
             // set browse mode
             SetMode(    BROWSER_COLUMNSELECTION |

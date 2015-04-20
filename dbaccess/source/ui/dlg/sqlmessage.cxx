@@ -671,9 +671,9 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 
 OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( new FixedImage(this) )
-    ,m_aTitle( new FixedText(this, WB_WORDBREAK | WB_LEFT) )
-    ,m_aMessage( new FixedText(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
+    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
     ,m_sHelpURL( _rHelpURL )
     ,m_pImpl( new SQLMessageBox_Impl( _rException ) )
 {
@@ -682,9 +682,9 @@ OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _r
 
 OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( new FixedImage(this) )
-    ,m_aTitle( new FixedText(this, WB_WORDBREAK | WB_LEFT) )
-    ,m_aMessage( new FixedText(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
+    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
 {
     SQLContext aError;
     aError.Message = _rTitle;

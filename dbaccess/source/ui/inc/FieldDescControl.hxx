@@ -133,8 +133,8 @@ namespace dbaui
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Contruct();
-        OPropNumericEditCtrl* CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId);
-        FixedText*          CreateText(sal_uInt16 _nTextRes);
+        VclPtr<OPropNumericEditCtrl> CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId);
+        VclPtr<FixedText>   CreateText(sal_uInt16 _nTextRes);
         void                InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:

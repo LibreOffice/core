@@ -182,14 +182,14 @@ namespace svt { namespace uno
     }
 
 
-    TabPage* WizardShell::createPage( WizardState i_nState )
+    VclPtr<TabPage> WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );
 
         ::boost::shared_ptr< WizardPageController > pController( new WizardPageController( *this, m_xController, impl_stateToPageId( i_nState ) ) );
-        TabPage* pPage = pController->getTabPage();
-        OSL_ENSURE( pPage != NULL, "WizardShell::createPage: illegal tab page!" );
-        if ( pPage == NULL )
+        VclPtr<TabPage> pPage = pController->getTabPage();
+        OSL_ENSURE( pPage, "WizardShell::createPage: illegal tab page!" );
+        if ( !pPage )
         {
             // fallback for ill-behaved clients: empty page
             pPage = VclPtr<TabPage>::Create( this, 0 );
@@ -199,7 +199,6 @@ namespace svt { namespace uno
         m_aPageControllers[ pPage ] = pController;
         return pPage;
     }
-
 
     IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
     {

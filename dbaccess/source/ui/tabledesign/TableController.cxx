@@ -540,7 +540,7 @@ void OTableController::impl_initialize()
 
 bool OTableController::Construct(vcl::Window* pParent)
 {
-    setView( * new OTableDesignView( pParent, getORB(), *this ) );
+    setView( VclPtr<OTableDesignView>::Create( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
     return true;
 }

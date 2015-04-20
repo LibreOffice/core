@@ -40,7 +40,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
@@ -62,7 +62,7 @@ namespace dbaui
         VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static   OGenericAdministrationPage* CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OTextConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
@@ -82,7 +82,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
@@ -118,7 +118,7 @@ namespace dbaui
         virtual ~MySQLNativeSetupPage();
         virtual void dispose() SAL_OVERRIDE;
 
-        static OGenericAdministrationPage* Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList ) SAL_OVERRIDE;
@@ -146,8 +146,8 @@ namespace dbaui
                                         , sal_uInt16 _nDriverClassId );
         virtual ~OGeneralSpecialJDBCConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
-    static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-    static  OGenericAdministrationPage* CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+    static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+    static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
@@ -183,7 +183,7 @@ namespace dbaui
                 OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OJDBCConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool checkTestConnection() SAL_OVERRIDE;
@@ -215,7 +215,7 @@ namespace dbaui
         virtual ~OMySQLIntroPageSetup();
         virtual void dispose() SAL_OVERRIDE;
 
-        static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
         Link                maClickHdl;
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
@@ -242,7 +242,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OAuthentificationPageSetup();
         virtual void dispose() SAL_OVERRIDE;
@@ -265,7 +265,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-           static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
+        static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
         VclPtr<FixedText>   m_pFTFinalHeader;
         VclPtr<FixedText>   m_pFTFinalHelpText;

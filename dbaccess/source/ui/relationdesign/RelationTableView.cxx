@@ -151,7 +151,7 @@ void ORelationTableView::ReSync()
             }
         }
 
-        addConnection( new ORelationTableConnection(this, *aConIter), false ); // don't add the data again
+        addConnection( VclPtr<ORelationTableConnection>::Create(this, *aConIter), false );
     }
 
     if ( !GetTabWinMap().empty() )
@@ -207,7 +207,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
             if( pTabConnData->Update() )
             {
                 // enter UI-object into ConnList
-                addConnection( new ORelationTableConnection( this, pTabConnData ) );
+                addConnection( VclPtr<ORelationTableConnection>::Create( this, pTabConnData ) );
             }
         }
         catch(const SQLException&)
@@ -258,7 +258,7 @@ void ORelationTableView::AddNewRelation()
     {
         // already updated by the dialog
         // announce it to the document
-        addConnection( new ORelationTableConnection(this, pNewConnData) );
+        addConnection( VclPtr<ORelationTableConnection>::Create(this, pNewConnData) );
     }
 }
 
@@ -368,15 +368,15 @@ void ORelationTableView::lookForUiActivities()
         if (aRelDlg->Execute() == RET_OK)
         {
             // already updated by the dialog
-            addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );
+            addConnection( VclPtr<ORelationTableConnection>::Create( this, m_pCurrentlyTabConnData ) );
         }
         m_pCurrentlyTabConnData.reset();
     }
 }
 
-OTableWindow* ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
+VclPtr<OTableWindow> ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
 {
-    return new ORelationTableWindow(this,_pData);
+    return VclPtr<ORelationTableWindow>::Create(this,_pData);
 }
 
 bool ORelationTableView::allowQueries() const

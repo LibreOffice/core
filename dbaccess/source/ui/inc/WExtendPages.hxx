@@ -35,7 +35,7 @@ namespace dbaui
         {
         }
 
-        static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizHTMLExtend( _pParent, _rInput ); }
+        static VclPtr<OWizTypeSelect> Create( vcl::Window* _pParent, SvStream& _rInput ) { return VclPtr<OWizHTMLExtend>::Create( _pParent, _rInput ); }
     };
     // Wizard Page: OWizRTFExtend
     class OWizRTFExtend : public OWizTypeSelect
@@ -48,7 +48,7 @@ namespace dbaui
         {
         }
 
-        static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizRTFExtend( _pParent, _rInput ); }
+        static VclPtr<OWizTypeSelect> Create( vcl::Window* _pParent, SvStream& _rInput ) { return VclPtr<OWizRTFExtend>::Create( _pParent, _rInput ); }
     };
 
     // Wizard Page: OWizNormalExtend

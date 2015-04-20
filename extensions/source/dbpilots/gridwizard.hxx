@@ -56,7 +56,7 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage>     createPage( WizardState _nState ) SAL_OVERRIDE;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
         virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                leaveState( WizardState _nState ) SAL_OVERRIDE;

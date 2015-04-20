@@ -69,8 +69,8 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
-          ,m_aTypeImage( new FixedImage(this) )
-          ,m_aTitle( new OTableWindowTitle(this) )
+          ,m_aTypeImage( VclPtr<FixedImage>::Create(this) )
+          ,m_aTitle( VclPtr<OTableWindowTitle>::Create(this) )
           ,m_pListBox(NULL)
           ,m_pAccessible(NULL)
           ,m_pData( pTabWinData )
@@ -161,9 +161,9 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetSizePixel( rNewSize );
 }
 
-OTableWindowListBox* OTableWindow::CreateListBox()
+VclPtr<OTableWindowListBox> OTableWindow::CreateListBox()
 {
-    return new OTableWindowListBox(this);
+    return VclPtr<OTableWindowListBox>::Create(this);
 }
 
 bool OTableWindow::FillListBox()

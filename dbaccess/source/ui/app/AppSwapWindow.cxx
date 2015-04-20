@@ -38,7 +38,7 @@ using namespace ::com::sun::star::container;
 // class OApplicationSwapWindow
 OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aIconControl(new OApplicationIconControl(this))
+    ,m_aIconControl(VclPtr<OApplicationIconControl>::Create(this))
     ,m_eLastType(E_NONE)
     ,m_rBorderWin( _rBorderWindow )
 {

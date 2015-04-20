@@ -106,9 +106,9 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     ActivatePage();
 }
 
-svt::OWizardPage* CreationWizard::createPage(WizardState nState)
+VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
-    svt::OWizardPage* pRet = 0;
+    VclPtr<svt::OWizardPage> pRet;
     if(m_nOnePageOnlyIndex!=-1 && m_nOnePageOnlyIndex!=nState)
         return pRet;
     bool bDoLiveUpdate = m_nOnePageOnlyIndex == -1;

@@ -69,24 +69,24 @@ namespace dbp
     }
 
 
-    OWizardPage* OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
+    VclPtr<TabPage> OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
     {
         switch (_nState)
         {
             case GBW_STATE_OPTIONLIST:
-                return new ORadioSelectionPage(this);
+                return VclPtr<ORadioSelectionPage>::Create(this);
 
             case GBW_STATE_DEFAULTOPTION:
-                return new ODefaultFieldSelectionPage(this);
+                return VclPtr<ODefaultFieldSelectionPage>::Create(this);
 
             case GBW_STATE_OPTIONVALUES:
-                return new OOptionValuesPage(this);
+                return VclPtr<OOptionValuesPage>::Create(this);
 
             case GBW_STATE_DBFIELD:
-                return new OOptionDBFieldPage(this);
+                return VclPtr<OOptionDBFieldPage>::Create(this);
 
             case GBW_STATE_FINALIZE:
-                return new OFinalizeGBWPage(this);
+                return VclPtr<OFinalizeGBWPage>::Create(this);
         }
 
         return NULL;

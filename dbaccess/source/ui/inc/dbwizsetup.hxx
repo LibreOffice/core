@@ -128,7 +128,7 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*    createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState _nState) SAL_OVERRIDE;
     virtual bool        leaveState(WizardState _nState) SAL_OVERRIDE;
     virtual void        enterState(WizardState _nState) SAL_OVERRIDE;
     virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const SAL_OVERRIDE;

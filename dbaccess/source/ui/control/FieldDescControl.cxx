@@ -139,8 +139,8 @@ OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar*
 
 void OFieldDescControl::Contruct()
 {
-    m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
-    m_pHorzScroll = new ScrollBar(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
+    m_pVertScroll = VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
+    m_pHorzScroll = VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
     m_pVertScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
     m_pHorzScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
     m_pVertScroll->Show();
@@ -782,7 +782,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         pDefaultText = CreateText(STR_DEFAULT_VALUE);
-        pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
+        pDefault = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
         InitializeControl(pDefault,HID_TAB_ENT_DEFAULT,false);
         break;
     case tpAutoIncrementValue:
@@ -790,7 +790,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pAutoIncrementValueText = CreateText(STR_AUTOINCREMENT_VALUE);
-        m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PROPERTY_AUTOINCREMENT, WB_BORDER );
+        m_pAutoIncrementValue = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PROPERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetText( getAutoIncrementValue() );
         InitializeControl(m_pAutoIncrementValue,HID_TAB_AUTOINCREMENTVALUE,false);
         break;
@@ -805,7 +805,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         {
             m_nPos++;
             pRequiredText = CreateText(STR_FIELD_REQUIRED);
-            pRequired = new OPropListBoxCtrl( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
+            pRequired = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
 
             pRequired->InsertEntry( aYes );
             pRequired->InsertEntry( aNo );
@@ -821,7 +821,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         pAutoIncrementText = CreateText(STR_FIELD_AUTOINCREMENT);
-        pAutoIncrement = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
+        pAutoIncrement = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
         pAutoIncrement->InsertEntry( aYes );
         pAutoIncrement->InsertEntry( aNo );
         pAutoIncrement->SelectEntryPos(0);
@@ -841,7 +841,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pTypeText = CreateText(STR_TAB_FIELD_DATATYPE);
-        m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE, WB_DROPDOWN );
+        m_pType = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE, WB_DROPDOWN );
         m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
@@ -874,7 +874,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                 DBG_UNHANDLED_EXCEPTION();
             }
             m_pColumnNameText = CreateText(STR_TAB_FIELD_NAME);
-            m_pColumnName = new OPropColumnEditCtrl( this,
+            m_pColumnName = VclPtr<OPropColumnEditCtrl>::Create( this,
                                                     aTmpString,
                                                     STR_HELP_DEFAULT_VALUE,
                                                     FIELD_PROPERTY_COLUMNNAME,
@@ -891,7 +891,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_nPos++;
         pNumTypeText = CreateText(STR_NUMERIC_TYPE);
 
-        pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
+        pNumType = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
         pNumType->SetDropDownLineCount(5);
 
         pNumType->InsertEntry( OUString("Byte") );
@@ -925,12 +925,12 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_nPos++;
             pFormatText = CreateText(STR_FORMAT);
 
-            pFormatSample = new OPropEditCtrl( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
+            pFormatSample = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
             pFormatSample->SetReadOnly(true);
             pFormatSample->Enable(false);
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
-            pFormat = new PushButton( this, ModuleRes(PB_FORMAT) );
+            pFormat = VclPtr<PushButton>::Create( this, ModuleRes(PB_FORMAT) );
             const sal_Int32 nControlHeight = GetMaxControlHeight();
             pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
@@ -945,7 +945,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         m_nPos++;
         pBoolDefaultText = CreateText(STR_DEFAULT_VALUE);
-        pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
+        pBoolDefault = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
         pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
         pBoolDefault->InsertEntry(aYes);
@@ -967,17 +967,17 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
     _pControl->EnableClipSiblings();
 }
 
-FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
+VclPtr<FixedText> OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
-    FixedText* pFixedText = new FixedText( this );
+    VclPtrInstance<FixedText> pFixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
     pFixedText->EnableClipSiblings();
     return pFixedText;
 }
 
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
+VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
 {
-    OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
+    VclPtrInstance<OPropNumericEditCtrl> pControl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed

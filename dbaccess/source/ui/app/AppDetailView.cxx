@@ -341,10 +341,10 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
 
 OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aCreation(new OCreationList(*this))
-    ,m_aDescription(new FixedText(this))
-    ,m_aHelpText(new FixedText(this,WB_WORDBREAK))
-    ,m_aFL(new FixedLine(this,WB_VERT))
+    ,m_aCreation(VclPtr<OCreationList>::Create(*this))
+    ,m_aDescription(VclPtr<FixedText>::Create(this))
+    ,m_aHelpText(VclPtr<FixedText>::Create(this,WB_WORDBREAK))
+    ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
     ,m_pDetailView(_pDetailView)
 {
     SetUniqueId(UID_APP_TASKS_WINDOW);
@@ -532,19 +532,19 @@ void OTasksWindow::Clear()
 // class OApplicationDetailView
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,false )
-    ,m_aHorzSplitter(new Splitter(this))
-    ,m_aTasks(new dbaui::OTitleWindow(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL) )
-    ,m_aContainer(new dbaui::OTitleWindow(this,0,WB_BORDER | WB_DIALOGCONTROL) )
+    ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
+    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL) )
+    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this,0,WB_BORDER | WB_DIALOGCONTROL) )
     ,m_rBorderWin(_rParent)
 {
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( true, true, true );
 
-    m_pControlHelper = new OAppDetailPageHelper(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
+    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
     m_aContainer->setChildWindow(m_pControlHelper);
 
-    OTasksWindow* pTasks = new OTasksWindow(m_aTasks.get(),this);
+    VclPtrInstance<OTasksWindow> pTasks(m_aTasks.get(),this);
     pTasks->Show();
     pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks->setChildWindow(pTasks);

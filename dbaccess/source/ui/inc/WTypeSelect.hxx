@@ -127,7 +127,7 @@ namespace dbaui
         inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef OWizTypeSelect* (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );
+    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 

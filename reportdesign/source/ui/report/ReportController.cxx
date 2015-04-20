@@ -1784,7 +1784,7 @@ bool OReportController::Construct(vcl::Window* pParent)
 {
     VclPtrInstance<ODesignView> pMyOwnView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );
-    setView( *pMyOwnView );
+    setView( pMyOwnView );
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );

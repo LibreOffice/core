@@ -83,9 +83,9 @@ namespace dbmm
         m_pCloseDocError->Show( _bShow );
     }
 
-    TabPage* PreparationPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    VclPtr<TabPage> PreparationPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
-        return new PreparationPage(&_rParentDialog);
+        return VclPtr<PreparationPage>::Create(&_rParentDialog);
     }
 
     // SaveDBDocPage
@@ -176,9 +176,9 @@ namespace dbmm
         return true;
     }
 
-    TabPage* SaveDBDocPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    VclPtr<TabPage> SaveDBDocPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
-        return new SaveDBDocPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
+        return VclPtr<SaveDBDocPage>::Create( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
 
     // ProgressPage
@@ -209,9 +209,9 @@ namespace dbmm
         MacroMigrationPage::dispose();
     }
 
-    TabPage* ProgressPage::Create(::svt::RoadmapWizard& _rParentDialog)
+    VclPtr<TabPage> ProgressPage::Create(::svt::RoadmapWizard& _rParentDialog)
     {
-        return new ProgressPage(&_rParentDialog);
+        return VclPtr<ProgressPage>::Create(&_rParentDialog);
     }
 
     void ProgressPage::setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports )
@@ -304,9 +304,9 @@ namespace dbmm
         MacroMigrationPage::dispose();
     }
 
-    TabPage* ResultPage::Create(::svt::RoadmapWizard& _rParentDialog)
+    VclPtr<TabPage> ResultPage::Create(::svt::RoadmapWizard& _rParentDialog)
     {
-        return new ResultPage(&_rParentDialog);
+        return VclPtr<ResultPage>::Create(&_rParentDialog);
     }
 
     void ResultPage::displayMigrationLog(const bool _bSuccessful, const OUString& _rSummary)

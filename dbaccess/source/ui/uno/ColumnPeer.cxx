@@ -36,7 +36,7 @@ OColumnPeer::OColumnPeer(vcl::Window* _pParent,const Reference<XComponentContext
 {
     osl_atomic_increment( &m_refCount );
     {
-        OColumnControlWindow* pFieldControl = new OColumnControlWindow(_pParent, _rxContext);
+        VclPtrInstance<OColumnControlWindow> pFieldControl(_pParent, _rxContext);
         pFieldControl->SetComponentInterface(this);
         pFieldControl->Show();
     }

@@ -65,7 +65,7 @@ private:
     //no default constructor
     CreationWizard();
 
-    virtual svt::OWizardPage* createPage(WizardState nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState nState) SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

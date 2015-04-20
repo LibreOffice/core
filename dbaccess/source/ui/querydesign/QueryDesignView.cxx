@@ -2490,7 +2490,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
                                     const Reference< XComponentContext >& _rxContext)
     :OQueryView( _pParent, _rController, _rxContext )
-    ,m_aSplitter( new Splitter(this) )
+    ,m_aSplitter( VclPtr<Splitter>::Create(this) )
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( false )
 {
@@ -2505,7 +2505,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     {
     }
 
-    m_pSelectionBox = new OSelectionBrowseBox(this);
+    m_pSelectionBox = VclPtr<OSelectionBrowseBox>::Create(this);
 
     setNoneVisbleRow(static_cast<OQueryController&>(getController()).getVisibleRows());
     m_pSelectionBox->Show();
@@ -2545,7 +2545,7 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
 
 void OQueryDesignView::Construct()
 {
-    m_pTableView = new OQueryTableView(m_pScrollWindow,this);
+    m_pTableView = VclPtr<OQueryTableView>::Create(m_pScrollWindow,this);
     ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     OQueryView::Construct();
 }

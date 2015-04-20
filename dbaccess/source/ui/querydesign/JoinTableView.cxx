@@ -65,9 +65,9 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_HEIGHT_STD   120
 
 OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
-    ,m_aHScrollBar( new ScrollBar(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
-    ,m_aVScrollBar( new ScrollBar(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
-    ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
+    ,m_aHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_pCornerWindow(VclPtr<ScrollBarBox>::Create(this, WB_3DLOOK))
     ,m_pTableView(NULL)
 {
 

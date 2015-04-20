@@ -757,7 +757,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     }
 
     // create the view
-    setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
+    setView( VclPtr<UnoDataBrowserView>::Create( pParent, *this, getORB() ) );
     if (!getBrowserView())
         return false;
 

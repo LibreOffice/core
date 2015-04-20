@@ -31,7 +31,7 @@ using namespace dbaui;
 OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelp ) :
      TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
 {
-    m_pFieldControl = new OTableFieldControl(this,pHelp);
+    m_pFieldControl = VclPtr<OTableFieldControl>::Create(this,pHelp);
     m_pFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
     m_pFieldControl->Show();
 }

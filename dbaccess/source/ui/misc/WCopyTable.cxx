@@ -578,16 +578,16 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDef
         m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::eInTableDefinitions);
     }
 
-    OCopyTable* pPage1( new OCopyTable( this ) );
+    VclPtrInstance<OCopyTable> pPage1( this );
     pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
         pPage1->disallowViews();
     pPage1->setCreateStyleAction();
     AddWizardPage(pPage1);
 
-    AddWizardPage( new OWizNameMatching( this ) );
-    AddWizardPage( new OWizColumnSelect( this ) );
-    AddWizardPage( new OWizNormalExtend( this ) );
+    AddWizardPage( VclPtr<OWizNameMatching>::Create( this ) );
+    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this ) );
+    AddWizardPage( VclPtr<OWizNormalExtend>::Create( this ) );
     ActivatePage();
 }
 
@@ -624,13 +624,13 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
 
     m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
 
-    OCopyTable* pPage1( new OCopyTable( this ) );
+    VclPtrInstance<OCopyTable> pPage1( this );
     pPage1->disallowViews();
     pPage1->setCreateStyleAction();
     AddWizardPage( pPage1 );
 
-    AddWizardPage( new OWizNameMatching( this ) );
-    AddWizardPage( new OWizColumnSelect( this ) );
+    AddWizardPage( VclPtr<OWizNameMatching>::Create( this ) );
+    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this ) );
     AddWizardPage( (*_pTypeSelectionPageFactory)( this, _rTypeSelectionPageArg ) );
 
     ActivatePage();
@@ -640,11 +640,11 @@ void OCopyTableWizard::construct()
 {
     SetSizePixel(Size(580, 350));
 
-    AddButton( m_pbHelp = new HelpButton(this, WB_TABSTOP) );
-    AddButton( m_pbCancel = new CancelButton(this, WB_TABSTOP) );
-    AddButton( m_pbPrev = new PushButton(this, WB_TABSTOP));
-    AddButton( m_pbNext = new PushButton(this, WB_TABSTOP));
-    AddButton( m_pbFinish = new PushButton(this, WB_TABSTOP));
+    AddButton( m_pbHelp = VclPtr<HelpButton>::Create(this, WB_TABSTOP) );
+    AddButton( m_pbCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP) );
+    AddButton( m_pbPrev = VclPtr<PushButton>::Create(this, WB_TABSTOP));
+    AddButton( m_pbNext = VclPtr<PushButton>::Create(this, WB_TABSTOP));
+    AddButton( m_pbFinish = VclPtr<PushButton>::Create(this, WB_TABSTOP));
 
     m_pbHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
     m_pbCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );

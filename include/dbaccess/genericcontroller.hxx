@@ -408,7 +408,7 @@ namespace dbaui
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
-        void        setView( ODataView& i_rView );
+        void        setView( const VclPtr<ODataView>& i_rView );
         void        clearView();
         // shows a error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);

@@ -269,7 +269,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
             return;
         case ID_BROWSER_ADDTABLE:
             if ( !m_pAddTableDialog )
-                m_pAddTableDialog = new OAddTableDlg( getView(), impl_getDialogContext() );
+                m_pAddTableDialog = VclPtr<OAddTableDlg>::Create( getView(), impl_getDialogContext() );
 
             if ( m_pAddTableDialog->IsVisible() )
             {

@@ -374,7 +374,7 @@ OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOColumnTreeBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
-    return new OColumnTreeBox(pParent);
+    return new OColumnTreeBox(pParent, SAL_NO_ACQUIRE);
 }
 
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)

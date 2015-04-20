@@ -53,7 +53,7 @@ namespace svt { namespace uno
         virtual short   Execute() SAL_OVERRIDE;
 
         // OWizardMachine overridables
-        virtual TabPage*    createPage( WizardState i_nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState i_nState ) SAL_OVERRIDE;
         virtual void        enterState( WizardState i_nState ) SAL_OVERRIDE;
         virtual bool        leaveState( WizardState i_nState ) SAL_OVERRIDE;
         virtual OUString    getStateDisplayName( WizardState i_nState ) const SAL_OVERRIDE;

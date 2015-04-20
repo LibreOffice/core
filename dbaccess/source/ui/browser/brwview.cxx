@@ -171,7 +171,7 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
     else
     {
         if (!m_pStatus)
-            m_pStatus = new FixedText(this);
+            m_pStatus = VclPtr<FixedText>::Create(this);
         m_pStatus->SetText(_rStatus);
         m_pStatus->Show();
         Resize();

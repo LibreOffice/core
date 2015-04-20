@@ -218,7 +218,7 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
 #define IMG_PRIMARY_KEY 1
 OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
-               ,m_pTypeControl(new OWizTypeSelectControl(get<VclVBox>("control_container"), this) )
+               ,m_pTypeControl(VclPtr<OWizTypeSelectControl>::Create(get<VclVBox>("control_container"), this) )
                ,m_pParserStream( _pStream )
                ,m_nDisplayRow(0)
                ,m_bAutoIncrementEnabled(false)

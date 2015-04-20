@@ -40,7 +40,7 @@ namespace dbaui
         virtual void ConnDoubleClicked( OTableConnection* pConnection ) SAL_OVERRIDE;
         virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool bNewTable = false) SAL_OVERRIDE;
 
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */

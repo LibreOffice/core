@@ -88,23 +88,23 @@ namespace dbp
     }
 
 
-    OWizardPage* OListComboWizard::createPage(WizardState _nState)
+    VclPtr<TabPage> OListComboWizard::createPage(WizardState _nState)
     {
         switch (_nState)
         {
             case LCW_STATE_DATASOURCE_SELECTION:
-                return new OTableSelectionPage(this);
+                return VclPtr<OTableSelectionPage>::Create(this);
             case LCW_STATE_TABLESELECTION:
-                return new OContentTableSelection(this);
+                return VclPtr<OContentTableSelection>::Create(this);
             case LCW_STATE_FIELDSELECTION:
-                return new OContentFieldSelection(this);
+                return VclPtr<OContentFieldSelection>::Create(this);
             case LCW_STATE_FIELDLINK:
-                return new OLinkFieldsPage(this);
+                return VclPtr<OLinkFieldsPage>::Create(this);
             case LCW_STATE_COMBODBFIELD:
-                return new OComboDBFieldPage(this);
+                return VclPtr<OComboDBFieldPage>::Create(this);
         }
 
-        return NULL;
+        return VclPtr<TabPage>();
     }
 
 

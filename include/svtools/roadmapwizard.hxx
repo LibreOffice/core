@@ -36,7 +36,7 @@ namespace svt
     public:
         typedef sal_Int16                                   PathId;
         typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
-        typedef TabPage* (* RoadmapPageFactory)( RoadmapWizard& );
+        typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
     };
 
 
@@ -208,7 +208,7 @@ namespace svt
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual TabPage*    createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState _nState ) SAL_OVERRIDE;
 
         /** asks for a new label of the wizard page
 
