@@ -2797,6 +2797,10 @@ void ChartExport::exportDataLabels(
     // Baseline label properties for all labels.
     writeLabelProperties(pFS, xPropSet, aParam);
 
+    pFS->singleElement(FSNS(XML_c, XML_showLeaderLines),
+            XML_val, "0",
+            FSEND);
+
     pFS->endElement(FSNS(XML_c, XML_dLbls));
 }
 
