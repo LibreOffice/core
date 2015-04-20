@@ -1,0 +1,35 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2015 Canonical Ltd.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Author: Bryan Quigley <bryan.quigley@canonical.com>
+#
+# ------------------------------------------------------------------
+
+#include <tunables/global>
+
+profile libreoffice-senddoc INSTDIR-/usr/lib{,32,64}/libreoffice/program/senddoc {
+  #include <abstractions/base>
+
+  owner /tmp/lu**       rw,    #makes files like luRRRRR.tmp/lubRRRR.tmp where R is random
+                               #Note, usually it's lub or luc, don't know why.
+  /bin/sh               rmix,
+  /bin/dash             rmix,
+  /bin/bash             rmix,
+  /bin/sed              rmix,
+  /usr/bin/dirname      rmix,
+  /usr/bin/basename     rmix,
+  /bin/grep             rmix,
+  /bin/uname            rmix,
+  /usr/bin/xdg-open     Cxr -> sanitized_helper,
+  /usr/bin/gnome-open   Cxr -> sanitized_helper,
+  /dev/null             rw,
+  INSTDIR-program/uri-encode rmPUx,
+  /usr/share/libreoffice/share/config/* r,
+  owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
+}
+
