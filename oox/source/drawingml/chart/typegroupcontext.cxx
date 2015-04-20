@@ -213,8 +213,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( hiLowLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxHiLowLines.create() );
         case C_TOKEN( marker ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbShowMarker = rAttribs.getBool( XML_val, false );
+            mrModel.mbShowMarker = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( ser ):
             return new LineSeriesContext( *this, mrModel.maSeries.create() );
