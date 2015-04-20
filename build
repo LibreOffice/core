@@ -11,8 +11,11 @@ error()
 
 USAGE="USAGE: build [OPTIONEN] [<srcpath>]
   -c Configure nicht aufrufen
-  -d make dev-install aufrufen
+  -i make dev-install aufrufen
   -b Build nicht starten
+  -r Release Build  (ohne -b)
+  -u Dgb-Util-Build (ohne -b)
+  -d debug-Build    (ohne -b)
   -k Baue mit KDE3 (Standard ist KDE4)
   -w Windows-Build
   <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
@@ -24,6 +27,7 @@ fi
 
 # Variablen zum Steuern des Builds
 configure=1
+build_targ=""
 build=1
 devinst=""
 enable_kde="kde4"
@@ -31,16 +35,19 @@ disable_kde="kde"
 clean=0
 MAKE='make'
 
-while getopts bcdklw opt
+while getopts bciklwrud opt
   do case "$opt" in
   b) build=0;;
   c) configure=0;;
-  d) devinst="dev-install";;
+  i) devinst="dev-install";;
   k) enable_kde="kde"
      disable_kde="kde4";;
   l) clean=1;;
   w) windows=1
      MAKE='/opt/lo/bin/make';;
+  r) build_targ="--enable-release-build";;
+  u) build_targ="--enable-dbgutil";;
+  d) build_targ="--enable-debug";;
   [?]) error "$USAGE";;
   esac
 done
@@ -114,9 +121,9 @@ do_configure()
     )
   fi
   OPTIONS=(
+    "${build_targ}"
     --disable-online-update
     --enable-extension-integration
-    --enable-release-build
     --enable-ext-nlpsolver
     --enable-ext-presenter-minimizer
     --enable-ext-wiki-publisher
