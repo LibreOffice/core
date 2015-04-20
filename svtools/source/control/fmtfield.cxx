@@ -560,7 +560,7 @@ void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
     bool bNoFormatter = (m_pFormatter == NULL);
     ImplSetFormatKey(nFormatKey);
-    FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FCT_FORMATTER : FCT_KEYONLY);
+    FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FORMAT_CHANGE_TYPE::FORMATTER : FORMAT_CHANGE_TYPE::KEYONLY);
 }
 
 void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat)
@@ -602,7 +602,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetForm
         m_pFormatter = pFormatter;
     }
 
-    FormatChanged(FCT_FORMATTER);
+    FormatChanged(FORMAT_CHANGE_TYPE::FORMATTER);
 }
 
 OUString FormattedField::GetFormat(LanguageType& eLang) const
@@ -671,7 +671,7 @@ void FormattedField::SetThousandsSep(bool _bUseSeparator)
 
     // set the new key
     ImplSetFormatKey(nNewKey);
-    FormatChanged(FCT_THOUSANDSSEP);
+    FormatChanged(FORMAT_CHANGE_TYPE::THOUSANDSSEP);
 }
 
 sal_uInt16 FormattedField::GetDecimalDigits() const
@@ -712,14 +712,14 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
     // set the new key
     ImplSetFormatKey(nNewKey);
-    FormatChanged(FCT_PRECISION);
+    FormatChanged(FORMAT_CHANGE_TYPE::PRECISION);
 }
 
 void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 {
     m_pLastOutputColor = NULL;
 
-    if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
+    if ( (_nWhat == FORMAT_CHANGE_TYPE::FORMATTER) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
 
     ReFormat();
@@ -1088,18 +1088,19 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 
     switch (nWhat)
     {
-        case FCT_FORMATTER:
-        case FCT_PRECISION:
-        case FCT_THOUSANDSSEP:
+        case FORMAT_CHANGE_TYPE::FORMATTER:
+        case FORMAT_CHANGE_TYPE::PRECISION:
+        case FORMAT_CHANGE_TYPE::THOUSANDSSEP:
             // the aspects which changed don't take our currency settings into account (in fact, they most probably
             // destroyed them)
             UpdateCurrencyFormat();
             break;
-        case FCT_KEYONLY:
+        case FORMAT_CHANGE_TYPE::KEYONLY:
             OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
             // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
             // Nobody but ourself should modifiy the format key directly !
             break;
+        default: break;
     }
 
     FormattedField::FormatChanged(nWhat);
@@ -1112,7 +1113,7 @@ void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
 
     m_sCurrencySymbol = rSymbol;
     UpdateCurrencyFormat();
-    FormatChanged(FCT_CURRENCY_SYMBOL);
+    FormatChanged(FORMAT_CHANGE_TYPE::CURRENCY_SYMBOL);
 }
 
 void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
@@ -1122,7 +1123,7 @@ void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
 
     m_bPrependCurrSym = _bPrepend;
     UpdateCurrencyFormat();
-    FormatChanged(FCT_CURRSYM_POSITION);
+    FormatChanged(FORMAT_CHANGE_TYPE::CURRSYM_POSITION);
 }
 
 void DoubleCurrencyField::UpdateCurrencyFormat()
