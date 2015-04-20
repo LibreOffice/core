@@ -3111,6 +3111,13 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
             break;
     }
 
+    bool bSkipFormatting = false;
+    if (aSymbol.Style == chart2::SymbolStyle_NONE)
+    {
+        bSkipFormatting = true;
+        pSymbolType = "none";
+    }
+
     if( pSymbolType )
     {
         pFS->singleElement( FSNS( XML_c, XML_symbol ),
@@ -3118,30 +3125,34 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
             FSEND );
     }
 
-    awt::Size aSymbolSize = aSymbol.Size;
-    sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
-
-    nSize = nSize/250.0*7.0 + 1; // just guessed based on some test cases,
-                                //the value is always 1 less than the actual value.
-    nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
-    pFS->singleElement( FSNS( XML_c, XML_size),
-            XML_val, I32S(nSize),
-            FSEND );
-
-    pFS->startElement( FSNS( XML_c, XML_spPr ),
-            FSEND );
-
-    util::Color aColor = aSymbol.FillColor;
-    if (GetProperty(xPropSet, "Color"))
-        mAny >>= aColor;
-
-    if (aColor == -1)
+    if (!bSkipFormatting)
     {
-        pFS->singleElement(FSNS(XML_a, XML_noFill), FSEND);
+        awt::Size aSymbolSize = aSymbol.Size;
+        sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
+
+        nSize = nSize/250.0*7.0 + 1; // just guessed based on some test cases,
+        //the value is always 1 less than the actual value.
+        nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
+        pFS->singleElement( FSNS( XML_c, XML_size),
+                XML_val, I32S(nSize),
+                FSEND );
+
+        pFS->startElement( FSNS( XML_c, XML_spPr ),
+                FSEND );
+
+        util::Color aColor = aSymbol.FillColor;
+        if (GetProperty(xPropSet, "Color"))
+            mAny >>= aColor;
+
+        if (aColor == -1)
+        {
+            pFS->singleElement(FSNS(XML_a, XML_noFill), FSEND);
+        }
+        else
+            WriteSolidFill(aColor);
+
+        pFS->endElement( FSNS( XML_c, XML_spPr ) );
     }
-    else
-        WriteSolidFill(aColor);
-    pFS->endElement( FSNS( XML_c, XML_spPr ) );
 
     pFS->endElement( FSNS( XML_c, XML_marker ) );
 }
