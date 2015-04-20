@@ -155,9 +155,9 @@ NameNode * NameNode::Remove( NameNode * pRemove )
 
 COMPARE NameNode::Compare( const NameNode * pCompare ) const
 {
-    if( reinterpret_cast<long>(this) < reinterpret_cast<long>(pCompare) )
+    if( reinterpret_cast<sal_uIntPtr>(this) < reinterpret_cast<sal_uIntPtr>(pCompare) )
         return LESS;
-    else if( reinterpret_cast<long>(this) > reinterpret_cast<long>(pCompare) )
+    else if( reinterpret_cast<sal_uIntPtr>(this) > reinterpret_cast<sal_uIntPtr>(pCompare) )
         return GREATER;
     else
         return EQUAL;
@@ -165,9 +165,9 @@ COMPARE NameNode::Compare( const NameNode * pCompare ) const
 
 COMPARE NameNode::Compare( const void * pCompare ) const
 {
-    if( reinterpret_cast<long>(this) < reinterpret_cast<long>(pCompare) )
+    if( reinterpret_cast<sal_uIntPtr>(this) < reinterpret_cast<sal_uIntPtr>(pCompare) )
         return LESS;
-    else if( reinterpret_cast<long>(this) > reinterpret_cast<long>(pCompare) )
+    else if( reinterpret_cast<sal_uIntPtr>(this) > reinterpret_cast<sal_uIntPtr>(pCompare) )
         return GREATER;
     else
         return EQUAL;
