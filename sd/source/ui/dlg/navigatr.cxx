@@ -68,9 +68,9 @@ SdNavigatorWin::SdNavigatorWin(
     SfxBindings* pInBindings,
     const UpdateRequestFunctor& rUpdateRequest)
     : vcl::Window( pParent, rSdResId )
-    , maToolbox ( new ToolBox( this, SdResId( 1 ) ) )
-    , maTlbObjects( new SdPageObjsTLB( this, SdResId( TLB_OBJECTS ) ) )
-    , maLbDocs ( new ListBox( this, SdResId( LB_DOCS ) ) )
+    , maToolbox ( VclPtr<ToolBox>::Create( this, SdResId( 1 ) ) )
+    , maTlbObjects( VclPtr<SdPageObjsTLB>::Create( this, SdResId( TLB_OBJECTS ) ) )
+    , maLbDocs ( VclPtr<ListBox>::Create( this, SdResId( LB_DOCS ) ) )
     , mpChildWinContext( pChWinCtxt )
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!

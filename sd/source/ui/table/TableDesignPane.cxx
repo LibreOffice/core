@@ -806,9 +806,9 @@ short TableDesignDialog::Execute()
     return RET_CANCEL;
 }
 
-::vcl::Window * createTableDesignPanel( ::vcl::Window* pParent, ViewShellBase& rBase )
+VclPtr<::vcl::Window> createTableDesignPanel( ::vcl::Window* pParent, ViewShellBase& rBase )
 {
-    return new TableDesignPane( pParent, rBase );
+    return VclPtr<TableDesignPane>::Create( pParent, rBase );
 }
 
 void showTableDesignDialog( ::vcl::Window* pParent, ViewShellBase& rBase )

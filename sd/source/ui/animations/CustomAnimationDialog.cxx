@@ -113,7 +113,7 @@ private:
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new ListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<ListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
@@ -189,7 +189,7 @@ private:
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new ColorListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<ColorListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
@@ -262,7 +262,7 @@ private:
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new FontNameBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<FontNameBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
@@ -339,7 +339,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
-    mpDropdownButton = new MenuButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
+    mpDropdownButton = VclPtr<MenuButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
     mpDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
     mpDropdownButton->Show();
     mpDropdownButton->SetPopupMenu( pMenu );
@@ -420,13 +420,13 @@ private:
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpMetric.set( new MetricField( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
+    mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
@@ -502,7 +502,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
@@ -515,7 +515,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
         mpMenu->InsertItem( i, aStr );
     }
 
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
@@ -606,14 +606,14 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_CUSTOM );
     mpMetric->SetCustomUnitText( OUString( sal_Unicode(0xb0)) ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
@@ -732,13 +732,13 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
@@ -897,11 +897,11 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpEdit.set( new Edit( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
+    mpEdit.set( VclPtr<Edit>::Create( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
     mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpEdit, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
 
@@ -2181,9 +2181,9 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     sal_uInt16 mnTimingId = mpTabControl->GetPageId("timing");
     sal_uInt16 mnTextAnimId = mpTabControl->GetPageId("textanim");
 
-    mpEffectTabPage = new CustomAnimationEffectTabPage( mpTabControl, mpSet );
+    mpEffectTabPage = VclPtr<CustomAnimationEffectTabPage>::Create( mpTabControl, mpSet );
     mpTabControl->SetTabPage( mnEffectId, mpEffectTabPage );
-    mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, mpSet );
+    mpDurationTabPage = VclPtr<CustomAnimationDurationTabPage>::Create( mpTabControl, mpSet );
     mpTabControl->SetTabPage( mnTimingId, mpDurationTabPage );
 
     bool bHasText = false;
@@ -2192,7 +2192,7 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
     if( bHasText )
     {
-        mpTextAnimTabPage = new CustomAnimationTextAnimTabPage( mpTabControl, mpSet );
+        mpTextAnimTabPage = VclPtr<CustomAnimationTextAnimTabPage>::Create( mpTabControl, mpSet );
         mpTabControl->SetTabPage( mnTextAnimId, mpTextAnimTabPage );
     }
     else

@@ -64,7 +64,7 @@ namespace {
 PreviewRenderer::PreviewRenderer (
     OutputDevice* pTemplate,
     const bool bHasFrame)
-    : mpPreviewDevice (new VirtualDevice()),
+    : mpPreviewDevice (VclPtr<VirtualDevice>::Create()),
       mpDocShellOfView(NULL),
       maFrameColor (svtools::ColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor),
       mbHasFrame(bHasFrame)

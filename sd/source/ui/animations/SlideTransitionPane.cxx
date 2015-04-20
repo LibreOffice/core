@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     if( pDocSh )
     {
         Size aMinSize( pParent->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
-        pWindow = new SlideTransitionPane( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
+        pWindow = VclPtr<SlideTransitionPane>::Create( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
     }
 
     return pWindow;

@@ -802,7 +802,7 @@ bool SlideshowImpl::startPreview(
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
-        mpShowWindow = new ShowWindow( this, ((pParent == 0) && mpViewShell) ?  mpParentWindow.get() : pParent );
+        mpShowWindow = VclPtr<ShowWindow>::Create( this, ((pParent == 0) && mpViewShell) ?  mpParentWindow.get() : pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -967,7 +967,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // hide child windows
             hideChildWindows();
 
-            mpShowWindow = new ShowWindow( this, mpParentWindow );
+            mpShowWindow = VclPtr<ShowWindow>::Create( this, mpParentWindow );
             mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
             if( mpViewShell )
             {

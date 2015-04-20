@@ -46,7 +46,8 @@ FullScreenPane::FullScreenPane (
       mpWorkWindow(NULL)
 {
     vcl::Window* pParent = NULL;
-    mpWorkWindow.reset(new WorkWindow(
+    mpWorkWindow.reset(VclPtr<WorkWindow>::Create(
+
         pParent,
         0));  // For debugging (non-fullscreen) use WB_BORDER | WB_MOVEABLE | WB_SIZEABLE));
 
@@ -86,7 +87,7 @@ FullScreenPane::FullScreenPane (
     // For some reason the VCL canvas can not paint into a WorkWindow.
     // Therefore a child window is created that covers the WorkWindow
     // completely.
-    mpWindow = new vcl::Window(mpWorkWindow.get());
+    mpWindow = VclPtr<vcl::Window>::Create(mpWorkWindow.get());
     mpWindow->SetPosSizePixel(Point(0,0), mpWorkWindow->GetSizePixel());
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);

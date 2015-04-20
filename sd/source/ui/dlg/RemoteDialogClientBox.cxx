@@ -73,9 +73,9 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
-    m_aPinBox( new NumericBox( this, 0 ) ),
-    m_aDeauthoriseButton( new PushButton( this ) ),
-    m_aScrollBar( new ScrollBar( this, WB_VERT ) )
+    m_aPinBox( VclPtr<NumericBox>::Create( this, 0 ) ),
+    m_aDeauthoriseButton( VclPtr<PushButton>::Create( this ) ),
+    m_aScrollBar( VclPtr<ScrollBar>::Create( this, WB_VERT ) )
 {
     m_aScrollBar->SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
     m_aScrollBar->EnableDrag();

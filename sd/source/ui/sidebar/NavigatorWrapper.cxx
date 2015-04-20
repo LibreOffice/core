@@ -33,9 +33,9 @@ NavigatorWrapper::NavigatorWrapper (
     SfxBindings* pBindings)
     : Control(pParent, 0),
       mrViewShellBase(rViewShellBase),
-      maNavigator(new SdNavigatorWin(
+      maNavigator(VclPtr<SdNavigatorWin>::Create(
         this,
-        NULL,
+        (::sd::NavigatorChildWindow*)NULL,
         SdResId(FLT_NAVIGATOR),
         pBindings,
         ::boost::bind(&NavigatorWrapper::UpdateNavigator, this)))

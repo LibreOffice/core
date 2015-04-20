@@ -211,7 +211,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
     {
-        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+        mpLayoutSet2 = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 
         mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
@@ -353,7 +353,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
 
 VclPtr<::vcl::Window> SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
 {
-    return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
+    return VclPtr<sd::LayoutToolbarMenu>::Create( *this, m_xFrame, pParent, mbInsertPage );
 }
 
 // XServiceInfo

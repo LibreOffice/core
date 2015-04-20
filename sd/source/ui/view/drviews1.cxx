@@ -526,7 +526,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
     sal_uInt16   nFlags = SVXRULER_SUPPORT_OBJECT;
 
-    pRuler = new Ruler(*this, GetParentWindow(), pWin, nFlags,
+    pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 

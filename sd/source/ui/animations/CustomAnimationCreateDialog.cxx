@@ -509,15 +509,15 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, 
     mnMiscId = mpTabControl->GetPageId("misc_effects");
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
+    mpTabPages[ENTRANCE] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
     mpTabControl->SetTabPage( mnEntranceId, mpTabPages[ENTRANCE] );
-    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
+    mpTabPages[EMPHASIS] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
     mpTabControl->SetTabPage( mnEmphasisId, mpTabPages[EMPHASIS] );
-    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
+    mpTabPages[EXIT] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
     mpTabControl->SetTabPage( mnExitId, mpTabPages[EXIT] );
-    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText, true );
+    mpTabPages[MOTIONPATH] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText, true );
     mpTabControl->SetTabPage( mnMPathId, mpTabPages[MOTIONPATH] );
-    mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
+    mpTabPages[MISCEFFECTS] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
     mpTabControl->SetTabPage( mnMiscId, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );

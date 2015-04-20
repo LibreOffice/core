@@ -79,11 +79,11 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     vcl::Window* pWindow = NULL;
     if (bCreateSystemChildWindow)
     {
-        pWindow = new WorkWindow(pParentWindow, WB_SYSTEMCHILDWINDOW);
+        pWindow = VclPtr<WorkWindow>::Create(pParentWindow, WB_SYSTEMCHILDWINDOW);
     }
     else
     {
-        pWindow = new vcl::Window(pParentWindow);
+        pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
     }
     Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 

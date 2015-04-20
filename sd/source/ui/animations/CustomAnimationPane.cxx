@@ -2286,7 +2286,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     if( pDocSh )
     {
         const Size aMinSize( pParent->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
-        pWindow = new CustomAnimationPane( pParent, rBase, rxFrame, aMinSize );
+        pWindow = VclPtr<CustomAnimationPane>::Create( pParent, rBase, rxFrame, aMinSize );
     }
 
     return pWindow;

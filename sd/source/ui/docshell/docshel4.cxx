@@ -109,7 +109,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.GetOptionsPrint().IsWarningPrinter() ) );
         pSet->Put( aFlagItem );
 
-        mpPrinter = new SfxPrinter(pSet);
+        mpPrinter = VclPtr<SfxPrinter>::Create(pSet);
         mbOwnPrinter = true;
 
         // set output quality
@@ -1132,7 +1132,7 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
 
 VclPtr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
 {
-    SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
+    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
     DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());
 
     if( pDocSh == this )

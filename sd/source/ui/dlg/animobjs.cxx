@@ -158,7 +158,7 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     get(m_pLbAdjustment, "alignment");
     get(m_pBtnCreateGroup, "create");
 
-    m_pCtlDisplay = new SdDisplay(get<Window>("box"));
+    m_pCtlDisplay = VclPtr<SdDisplay>::Create(get<Window>("box"));
     m_pCtlDisplay->set_hexpand(true);
     m_pCtlDisplay->set_vexpand(true);
     m_pCtlDisplay->Show();

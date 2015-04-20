@@ -56,7 +56,8 @@ PaneChildWindow::PaneChildWindow (
     SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
-    pWindow = new PaneDockingWindow(
+    pWindow = VclPtr<PaneDockingWindow>::Create(
+
         pBindings,
         this,
         pParentWindow,

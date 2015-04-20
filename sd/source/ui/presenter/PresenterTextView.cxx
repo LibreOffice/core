@@ -242,7 +242,7 @@ PresenterTextView::Implementation::Implementation (void)
       msTotalHeightPropertyName("TotalHeight"),
       mxBitmap(),
       mpCanvas(),
-      mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),
+      mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0)),
       mpEditEngine(NULL),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
@@ -454,7 +454,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
     if ( ! mxBitmap.is())
     {
         mpOutputDevice.disposeAndClear();
-        mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
+        mpOutputDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
         mpOutputDevice->SetOutputSizePixel(maSize, true);
         mpOutputDevice->SetLineColor();

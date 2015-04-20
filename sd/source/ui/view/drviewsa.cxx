@@ -109,7 +109,7 @@ void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventOb
 
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
     : ViewShell (pFrame, pParentWindow, rViewShellBase)
-    , maTabControl(new sd::TabControl(this, pParentWindow))
+    , maTabControl(VclPtr<sd::TabControl>::Create(this, pParentWindow))
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(

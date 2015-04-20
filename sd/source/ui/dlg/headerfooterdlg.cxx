@@ -199,7 +199,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
     mpTabCtrl->Show();
 
     mnSlidesId = mpTabCtrl->GetPageId("slides");
-    mpSlideTabPage = new HeaderFooterTabPage( mpTabCtrl, pDoc, pSlide, false );
+    mpSlideTabPage = VclPtr<HeaderFooterTabPage>::Create( mpTabCtrl, pDoc, pSlide, false );
     mpTabCtrl->SetTabPage( mnSlidesId, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
@@ -212,7 +212,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
     }
 
     mnNotesId = mpTabCtrl->GetPageId("notes");
-    mpNotesHandoutsTabPage = new HeaderFooterTabPage( mpTabCtrl, pDoc, pNotes, true );
+    mpNotesHandoutsTabPage = VclPtr<HeaderFooterTabPage>::Create( mpTabCtrl, pDoc, pNotes, true );
     mpTabCtrl->SetTabPage( mnNotesId, mpNotesHandoutsTabPage );
 
     get(maPBApplyToAll, "apply_all" );

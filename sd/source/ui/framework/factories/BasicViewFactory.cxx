@@ -91,7 +91,7 @@ BasicViewFactory::BasicViewFactory (
       mpViewShellContainer(new ViewShellContainer()),
       mpBase(NULL),
       mpFrameView(NULL),
-      mpWindow(new WorkWindow(NULL,WB_STDWORK)),
+      mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
       mpViewCache(new ViewCache()),
       mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
 {

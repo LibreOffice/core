@@ -162,7 +162,7 @@ private:
 LayeredDevice::LayeredDevice (sd::Window* pTargetWindow)
     : mpTargetWindow(pTargetWindow),
       mpLayers(new LayerContainer()),
-      mpBackBuffer(new VirtualDevice(*mpTargetWindow)),
+      mpBackBuffer(VclPtr<VirtualDevice>::Create(*mpTargetWindow)),
       maSavedMapMode(pTargetWindow->GetMapMode())
 {
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
@@ -386,7 +386,7 @@ void Layer::Initialize (sd::Window *pTargetWindow)
 #else
     if ( ! mpLayerDevice)
     {
-        mpLayerDevice.reset(new VirtualDevice(*pTargetWindow));
+        mpLayerDevice.reset(VclPtr<VirtualDevice>::Create(*pTargetWindow));
         mpLayerDevice->SetOutputSizePixel(pTargetWindow->GetSizePixel());
     }
 #endif

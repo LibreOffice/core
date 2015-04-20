@@ -39,7 +39,7 @@ AnimationChildWindow::AnimationChildWindow(
     SfxChildWinInfo* pInfo )
     : SfxChildWindow( _pParent, nId )
 {
-    AnimationWindow* pAnimWin = new AnimationWindow(pBindings, this, _pParent);
+    VclPtr<AnimationWindow> pAnimWin = VclPtr<AnimationWindow>::Create(pBindings, this, _pParent);
     pWindow = pAnimWin;
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
