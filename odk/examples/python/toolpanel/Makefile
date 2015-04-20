@@ -25,4 +25,5 @@ FILES = \
     toolpanels/poc.xdl
 
 $(OUT_BIN)/toolpanel.$(UNOOXT_EXT): $(FILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_ZIP) $@ $^
