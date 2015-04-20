@@ -41,9 +41,9 @@ TitleModel::~TitleModel()
 {
 }
 
-LegendModel::LegendModel() :
+LegendModel::LegendModel(bool bMSO2007Doc) :
     mnPosition( XML_r ),
-    mbOverlay( false )
+    mbOverlay( !bMSO2007Doc )
 {
 }
 

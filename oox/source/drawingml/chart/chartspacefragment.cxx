@@ -43,6 +43,7 @@ ChartSpaceFragment::~ChartSpaceFragment()
 
 ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Document = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
@@ -82,7 +83,6 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
             {
                 case C_TOKEN( autoTitleDeleted ):
                 {
-                    bool bMSO2007Document = getFilter().isMSO2007Document();
 
                     // default value is false for MSO 2007 and true in OOXML
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, !bMSO2007Document );
@@ -92,7 +92,6 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new WallFloorContext( *this, mrModel.mxBackWall.create() );
                 case C_TOKEN( dispBlanksAs ):
                 {
-                    bool bMSO2007Document = getFilter().isMSO2007Document();
                     // default value is XML_gap for MSO 2007 and XML_zero in OOXML
                     mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, bMSO2007Document ? XML_gap : XML_zero );
                     return 0;
@@ -100,7 +99,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( floor ):
                     return new WallFloorContext( *this, mrModel.mxFloor.create() );
                 case C_TOKEN( legend ):
-                    return new LegendContext( *this, mrModel.mxLegend.create() );
+                    return new LegendContext( *this, mrModel.mxLegend.create(bMSO2007Document) );
                 case C_TOKEN( plotArea ):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):

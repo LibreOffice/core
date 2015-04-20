@@ -74,7 +74,7 @@ struct LegendModel
     sal_Int32           mnPosition;         /// Legend position.
     bool                mbOverlay;          /// True = legend may overlay other objects.
 
-    explicit            LegendModel();
+    explicit            LegendModel(bool bMSO2007Doc);
                         ~LegendModel();
 };
 

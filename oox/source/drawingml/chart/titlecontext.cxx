@@ -122,6 +122,7 @@ LegendContext::~LegendContext()
 
 ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     // this context handler is used for <c:legend> only
     switch( nElement )
     {
@@ -134,7 +135,7 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
 
         case C_TOKEN( overlay ):
             // default is 'false', not 'true' as specified
-            mrModel.mbOverlay = rAttribs.getBool( XML_val, false );
+            mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
 
         case C_TOKEN( spPr ):
