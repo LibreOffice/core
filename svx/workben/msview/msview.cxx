@@ -575,11 +575,11 @@ void AtomContainerTreeListBox::SetTabs()
     long nContextWidthDIV2 = nNodeWidthPixel >> 1;
 
     long nStartPos = 2 + ( nIndent + nContextWidthDIV2 );
-    AddTab( nStartPos, SV_LBOXTAB_DYNAMIC | SV_LBOXTAB_ADJUST_CENTER );
+    AddTab( nStartPos, SvLBoxTabFlags::DYNAMIC | SvLBoxTabFlags::ADJUST_CENTER );
     nStartPos += nNodeWidthPixel + 5;
-    AddTab( nStartPos, SV_LBOXTAB_DYNAMIC | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_SHOW_SELECTION );
+    AddTab( nStartPos, SvLBoxTabFlags::DYNAMIC | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::SHOW_SELECTION );
     nStartPos += nContextWidthDIV2 + 5;
-    AddTab( nStartPos, SV_LBOXTAB_DYNAMIC|SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_SHOW_SELECTION );
+    AddTab( nStartPos, SvLBoxTabFlags::DYNAMIC|SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::SHOW_SELECTION );
 }
 
 void AtomContainerTreeListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& aStr,

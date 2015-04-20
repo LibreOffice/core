@@ -38,6 +38,7 @@
 #include <svtools/treelist.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/idle.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class Application;
 class SvTreeListBox;
@@ -70,21 +71,30 @@ enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE 
 // *************************** Tabulators ******************************
 // *********************************************************************
 
-#define SV_LBOXTAB_DYNAMIC          0x0001 // Item's output column changes according to the Child Depth
-#define SV_LBOXTAB_ADJUST_RIGHT     0x0002 // Item's right margin at the tabulator
-#define SV_LBOXTAB_ADJUST_LEFT      0x0004 // Left margin
-#define SV_LBOXTAB_ADJUST_CENTER    0x0008 // Center the item at the tabulator
-#define SV_LBOXTAB_ADJUST_NUMERIC   0x0010 // Decimal point at the tabulator (strings)
+enum class SvLBoxTabFlags
+{
+    NONE             = 0x0000,
+    DYNAMIC          = 0x0001, // Item's output column changes according to the Child Depth
+    ADJUST_RIGHT     = 0x0002, // Item's right margin at the tabulator
+    ADJUST_LEFT      = 0x0004, // Left margin
+    ADJUST_CENTER    = 0x0008, // Center the item at the tabulator
+    ADJUST_NUMERIC   = 0x0010, // Decimal point at the tabulator (strings)
 
-#define SV_LBOXTAB_SHOW_SELECTION   0x0040 // Visualize selection state
+    SHOW_SELECTION   = 0x0040, // Visualize selection state
                                            // Item needs to be able to return the surrounding polygon (D'n'D cursor)
-#define SV_LBOXTAB_EDITABLE         0x0100 // Item editable at the tabulator
-#define SV_LBOXTAB_PUSHABLE         0x0200 // Item acts like a Button
-#define SV_LBOXTAB_INV_ALWAYS       0x0400 // Always delete the background
-#define SV_LBOXTAB_FORCE            0x0800 // Switch off the default calculation of the first tabulator
-                                           // (on which Abo Tabpage/Extras/Option/Customize, etc. rely on)
-                                           // The first tab's position corresponds precisely to the Flags set
-                                           // and column widths
+    EDITABLE         = 0x0100, // Item editable at the tabulator
+    PUSHABLE         = 0x0200, // Item acts like a Button
+    INV_ALWAYS       = 0x0400, // Always delete the background
+    FORCE            = 0x0800, // Switch off the default calculation of the first tabulator
+                               // (on which Abo Tabpage/Extras/Option/Customize, etc. rely on)
+                               // The first tab's position corresponds precisely to the Flags set
+                               // and column widths
+    ALL              = 0x0f5f,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvLBoxTabFlags> : is_typed_flags<SvLBoxTabFlags, 0x0f5f> {};
+}
 
 #define SV_TAB_BORDER 8
 
@@ -115,20 +125,20 @@ class SvLBoxTab
     void*   pUserData;
 public:
             SvLBoxTab();
-            SvLBoxTab( long nPos, sal_uInt16 nFlags=SV_LBOXTAB_ADJUST_LEFT );
+            SvLBoxTab( long nPos, SvLBoxTabFlags nFlags = SvLBoxTabFlags::ADJUST_LEFT );
             SvLBoxTab( const SvLBoxTab& );
             ~SvLBoxTab();
 
-    sal_uInt16  nFlags;
+    SvLBoxTabFlags nFlags;
 
     void    SetUserData( void* pPtr ) { pUserData = pPtr; }
     void*   GetUserData() const { return pUserData; }
-    bool    IsDynamic() const { return ((nFlags & SV_LBOXTAB_DYNAMIC)!=0); }
+    bool    IsDynamic() const { return bool(nFlags & SvLBoxTabFlags::DYNAMIC); }
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }
     long    CalcOffset( long nItemLength, long nTabWidth );
-    bool    IsEditable() const { return ((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
-    bool    IsPushable() const { return ((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
+    bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
+    bool    IsPushable() const { return bool(nFlags & SvLBoxTabFlags::PUSHABLE); }
 };
 
 // *********************************************************************
@@ -540,7 +550,7 @@ protected:
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine,
-                                             sal_uInt16 nTabFlagMask=0xffff,
+                                             SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL,
                                              bool bHasClipRegion=false );
 
     SVT_DLLPRIVATE void         InitTreeView();
@@ -558,13 +568,13 @@ protected:
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
     void            SetTabs_Impl();
-    void            AddTab( long nPos,sal_uInt16 nFlags=SV_LBOXTAB_ADJUST_LEFT,
+    void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT,
                         void* pUserData = 0 );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
-    SvLBoxTab*      GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos );
-    SvLBoxTab*      GetLastTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos );
+    SvLBoxTab*      GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
+    SvLBoxTab*      GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
     SvLBoxTab*      GetTab( SvTreeListEntry*, SvLBoxItem* ) const;
     void            ClearTabList();
 
@@ -718,7 +728,7 @@ public:
 
     void            PaintEntry( SvTreeListEntry* );
     long            PaintEntry( SvTreeListEntry*, long nLine,
-                                sal_uInt16 nTabFlagMask=0xffff );
+                                SvLBoxTabFlags nTabFlagMask=SvLBoxTabFlags::ALL );
     virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
     // Respects indentation
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );

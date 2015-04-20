@@ -943,7 +943,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     for( sal_uInt16 n=0; n< nCount && pEntry; n++ )
     {
         /*long nMaxRight=*/
-        pView->PaintEntry1( pEntry, nY, 0xffff, true );
+        pView->PaintEntry1( pEntry, nY, SvLBoxTabFlags::ALL, true );
         nY += nEntryHeight;
         pEntry = pView->NextVisible(pEntry);
     }
@@ -1639,7 +1639,7 @@ void SvImpLBox::EntrySelected( SvTreeListEntry* pEntry, bool bSelect )
         if( IsLineVisible( nY ) )
         {
             ShowCursor( false );
-            pView->PaintEntry1( pEntry, nY, 0xffff ); // because of ItemsetBrowser SV_LBOXTAB_SHOW_SELECTION );
+            pView->PaintEntry1( pEntry, nY, SvLBoxTabFlags::ALL ); // because of ItemsetBrowser SvLBoxTabFlags::SHOW_SELECTION );
             ShowCursor( true );
         }
     }
@@ -1907,8 +1907,8 @@ bool SvImpLBox::ButtonDownCheckCtrl(
         pView->CaptureMouse();
         pActiveButton->SetStateHilighted( true );
         pView->PaintEntry1( pActiveEntry, nY,
-                    SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER |
-                    SV_LBOXTAB_ADJUST_RIGHT );
+                    SvLBoxTabFlags::PUSHABLE | SvLBoxTabFlags::ADJUST_CENTER |
+                    SvLBoxTabFlags::ADJUST_RIGHT );
         return true;
     }
     else
@@ -1930,8 +1930,8 @@ bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEn
                 pActiveButton->SetStateHilighted(true );
                 nY = GetEntryLine( pActiveEntry );
                 pView->PaintEntry1( pActiveEntry, nY,
-                    SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER |
-                    SV_LBOXTAB_ADJUST_RIGHT );
+                    SvLBoxTabFlags::PUSHABLE | SvLBoxTabFlags::ADJUST_CENTER |
+                    SvLBoxTabFlags::ADJUST_RIGHT );
             }
         }
         else
@@ -1940,7 +1940,7 @@ bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEn
             {
                 pActiveButton->SetStateHilighted(false );
                 nY = GetEntryLine( pActiveEntry );
-                pView->PaintEntry1( pActiveEntry, nY, SV_LBOXTAB_PUSHABLE );
+                pView->PaintEntry1( pActiveEntry, nY, SvLBoxTabFlags::PUSHABLE );
             }
         }
         return true;
@@ -1961,8 +1961,8 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
              pView->GetItem( pActiveEntry, nMouseX ) == pActiveButton )
             pActiveButton->ClickHdl( pView, pActiveEntry );
         pView->PaintEntry1( pActiveEntry, nY,
-                    SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER |
-                    SV_LBOXTAB_ADJUST_RIGHT );
+                    SvLBoxTabFlags::PUSHABLE | SvLBoxTabFlags::ADJUST_CENTER |
+                    SvLBoxTabFlags::ADJUST_RIGHT );
         if( pCursor == pActiveEntry )
             ShowCursor( true );
         pActiveButton = 0;
@@ -2872,7 +2872,7 @@ void SvImpLBox::SelAllDestrAnch(
             {
                 long nY = GetEntryLine( pEntry );
                 if( IsLineVisible( nY ) )
-                    pView->PaintEntry1( pEntry, nY, 0xffff ); // because of ItemsetBrowser SV_LBOXTAB_SHOW_SELECTION );
+                    pView->PaintEntry1( pEntry, nY ); // because of ItemsetBrowser SvLBoxTabFlags::SHOW_SELECTION );
             }
         }
         pEntry = pTree->Next( pEntry );

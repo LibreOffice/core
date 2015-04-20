@@ -273,10 +273,10 @@ SvLBoxTab::SvLBoxTab()
 {
     nPos = 0;
     pUserData = 0;
-    nFlags = 0;
+    nFlags = SvLBoxTabFlags::NONE;
 }
 
-SvLBoxTab::SvLBoxTab( long nPosition, sal_uInt16 nTabFlags )
+SvLBoxTab::SvLBoxTab( long nPosition, SvLBoxTabFlags nTabFlags )
 {
     nPos = nPosition;
     pUserData = 0;
@@ -298,15 +298,15 @@ SvLBoxTab::~SvLBoxTab()
 long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 {
     long nOffset = 0;
-    if ( nFlags & SV_LBOXTAB_ADJUST_RIGHT )
+    if ( nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
     {
         nOffset = nTabWidth - nItemWidth;
         if( nOffset < 0 )
             nOffset = 0;
     }
-    else if ( nFlags & SV_LBOXTAB_ADJUST_CENTER )
+    else if ( nFlags & SvLBoxTabFlags::ADJUST_CENTER )
     {
-        if( nFlags & SV_LBOXTAB_FORCE )
+        if( nFlags & SvLBoxTabFlags::FORCE )
         {
             // correct implementation of centering
             nOffset = ( nTabWidth - nItemWidth ) / 2;
@@ -1641,16 +1641,16 @@ void SvTreeListBox::Resize()
 #define NODE_AND_CHECK_BUTTONS  2
 #define CHECK_BUTTONS           3
 
-#define TABFLAGS_TEXT (SV_LBOXTAB_DYNAMIC |        \
-                       SV_LBOXTAB_ADJUST_LEFT |    \
-                       SV_LBOXTAB_EDITABLE |       \
-                       SV_LBOXTAB_SHOW_SELECTION)
+#define TABFLAGS_TEXT (SvLBoxTabFlags::DYNAMIC |        \
+                       SvLBoxTabFlags::ADJUST_LEFT |    \
+                       SvLBoxTabFlags::EDITABLE |       \
+                       SvLBoxTabFlags::SHOW_SELECTION)
 
-#define TABFLAGS_CONTEXTBMP (SV_LBOXTAB_DYNAMIC | SV_LBOXTAB_ADJUST_CENTER)
+#define TABFLAGS_CONTEXTBMP (SvLBoxTabFlags::DYNAMIC | SvLBoxTabFlags::ADJUST_CENTER)
 
-#define TABFLAGS_CHECKBTN (SV_LBOXTAB_DYNAMIC |        \
-                           SV_LBOXTAB_ADJUST_CENTER |  \
-                           SV_LBOXTAB_PUSHABLE)
+#define TABFLAGS_CHECKBTN (SvLBoxTabFlags::DYNAMIC |        \
+                           SvLBoxTabFlags::ADJUST_CENTER |  \
+                           SvLBoxTabFlags::PUSHABLE)
 
 #define TAB_STARTPOS    2
 
@@ -2861,12 +2861,12 @@ void SvTreeListBox::InvalidateEntry( SvTreeListEntry* pEntry )
     }
 }
 
-long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nTabFlags)
+long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFlags nTabFlags)
 {
     return PaintEntry1(pEntry,nLine,nTabFlags);
 }
 
-long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nTabFlags,
+long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFlags nTabFlags,
     bool bHasClipRegion )
 {
 
@@ -2930,7 +2930,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
         SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
         SvLBoxItem* pItem = nCurItem < nItemCount ? pEntry->GetItem(nCurItem) : 0;
 
-        sal_uInt16 nFlags = pTab->nFlags;
+        SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize( SvLBoxItem::GetSize( pViewDataEntry, nCurItem ));
         long nTabPos = GetTabPos( pEntry, pTab );
 
@@ -2945,7 +2945,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
         }
 
         long nX;
-        if( pTab->nFlags & SV_LBOXTAB_ADJUST_RIGHT )
+        if( pTab->nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
             // avoid cutting the right edge off the tab separation
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos-SV_TAB_BORDER-1) -nTabPos);
         else
@@ -2965,7 +2965,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 
             Wallpaper aWallpaper = GetBackground();
 
-            int bSelTab = nFlags & SV_LBOXTAB_SHOW_SELECTION;
+            bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
             sal_uInt16 nItemType = pItem->GetType();
 
             if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
@@ -3186,7 +3186,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
     nRealWidth -= GetMapMode().GetOrigin().X();
 
     sal_uInt16 nCurTab;
-    SvLBoxTab* pTab = GetFirstTab( SV_LBOXTAB_SHOW_SELECTION, nCurTab );
+    SvLBoxTab* pTab = GetFirstTab( SvLBoxTabFlags::SHOW_SELECTION, nCurTab );
     long nTabPos = 0;
     if( pTab )
         nTabPos = GetTabPos( pEntry, pTab );
@@ -3231,7 +3231,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
             SvLBoxTab* pLastTab = NULL; // default to select whole width
 
             sal_uInt16 nLastTab;
-            GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
+            GetLastTab(SvLBoxTabFlags::SHOW_SELECTION,nLastTab);
             nLastTab++;
             if( nLastTab < aTabs.size() ) // is there another one?
                 pLastTab = aTabs[ nLastTab ];
@@ -3418,7 +3418,7 @@ SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX )
     return GetItem_Impl( pEntry, nX, &pDummyTab, 0 );
 }
 
-void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
+void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags, void* pUserData )
 {
     nFocusWidth = -1;
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );
@@ -3428,11 +3428,11 @@ void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
     {
         sal_uInt16 nPos = aTabs.size() - 1;
         if( nPos >= nFirstSelTab && nPos <= nLastSelTab )
-            pTab->nFlags |= SV_LBOXTAB_SHOW_SELECTION;
+            pTab->nFlags |= SvLBoxTabFlags::SHOW_SELECTION;
         else
             // string items usually have to be selected -- turn this off
             // explicitly
-            pTab->nFlags &= ~SV_LBOXTAB_SHOW_SELECTION;
+            pTab->nFlags &= ~SvLBoxTabFlags::SHOW_SELECTION;
     }
 }
 
@@ -3445,7 +3445,7 @@ SvLBoxTab* SvTreeListBox::GetFirstDynamicTab( sal_uInt16& rPos ) const
     while( nCurTab < nTabCount )
     {
         SvLBoxTab* pTab = aTabs[nCurTab];
-        if( pTab->nFlags & SV_LBOXTAB_DYNAMIC )
+        if( pTab->nFlags & SvLBoxTabFlags::DYNAMIC )
         {
             rPos = nCurTab;
             return pTab;
@@ -3556,7 +3556,7 @@ void SvTreeListBox::RemoveParentKeepChildren( SvTreeListEntry* pParent )
     pModel->Remove( pParent );
 }
 
-SvLBoxTab* SvTreeListBox::GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rPos )
+SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPos )
 {
     sal_uInt16 nTabCount = aTabs.size();
     for( sal_uInt16 nPos = 0; nPos < nTabCount; nPos++ )
@@ -3572,7 +3572,7 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rPos )
     return 0;
 }
 
-SvLBoxTab* SvTreeListBox::GetLastTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos )
+SvLBoxTab* SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 {
     sal_uInt16 nPos = (sal_uInt16)aTabs.size();
     while( nPos )

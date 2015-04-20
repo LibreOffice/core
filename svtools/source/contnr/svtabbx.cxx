@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 #define MYTABMASK \
-    ( SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC )
+    SvLBoxTabFlags( SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_NUMERIC )
 
 // SvTreeListBox callback
 
@@ -139,7 +139,7 @@ void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
         pTabList[nIdx].SetPos( nNewTab );
-        pTabList[nIdx].nFlags=(SV_LBOXTAB_ADJUST_LEFT| SV_LBOXTAB_INV_ALWAYS);
+        pTabList[nIdx].nFlags=(SvLBoxTabFlags::ADJUST_LEFT| SvLBoxTabFlags::INV_ALWAYS);
     }
     SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
     if( IsUpdateMode() )
@@ -473,9 +473,9 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
     if( nTab >= nTabCount )
         return;
     SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    sal_uInt16 nFlags = pTab->nFlags;
+    SvLBoxTabFlags nFlags = pTab->nFlags;
     nFlags &= (~MYTABMASK);
-    nFlags |= (sal_uInt16)eJustify;
+    nFlags |= static_cast<SvLBoxTabFlags>(eJustify);
     pTab->nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
     if( IsUpdateMode() )

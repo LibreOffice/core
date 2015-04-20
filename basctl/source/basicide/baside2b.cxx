@@ -2152,9 +2152,9 @@ void WatchTreeListBox::SetTabs()
     {
         SvLBoxTab* pTab = aTabs[i];
         if( i == 2 )
-            pTab->nFlags |= SV_LBOXTAB_EDITABLE;
+            pTab->nFlags |= SvLBoxTabFlags::EDITABLE;
         else
-            pTab->nFlags &= ~SV_LBOXTAB_EDITABLE;
+            pTab->nFlags &= ~SvLBoxTabFlags::EDITABLE;
     }
 }
 

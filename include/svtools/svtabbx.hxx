@@ -27,10 +27,10 @@
 
 enum SvTabJustify
 {
-    AdjustRight = SV_LBOXTAB_ADJUST_RIGHT,
-    AdjustLeft = SV_LBOXTAB_ADJUST_LEFT,
-    AdjustCenter = SV_LBOXTAB_ADJUST_CENTER,
-    AdjustNumeric = SV_LBOXTAB_ADJUST_NUMERIC
+    AdjustRight = static_cast<int>(SvLBoxTabFlags::ADJUST_RIGHT),
+    AdjustLeft = static_cast<int>(SvLBoxTabFlags::ADJUST_LEFT),
+    AdjustCenter = static_cast<int>(SvLBoxTabFlags::ADJUST_CENTER),
+    AdjustNumeric = static_cast<int>(SvLBoxTabFlags::ADJUST_NUMERIC)
 };
 
 struct TabListBoxEventData
