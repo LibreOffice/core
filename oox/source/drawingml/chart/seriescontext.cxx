@@ -190,6 +190,7 @@ ErrorBarContext::~ErrorBarContext()
 
 ContextHandlerRef ErrorBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( errBarType ):
@@ -205,7 +206,7 @@ ContextHandlerRef ErrorBarContext::onCreateContext( sal_Int32 nElement, const At
             return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::MINUS ) );
         case C_TOKEN( noEndCap ):
             // default is 'false', not 'true' as specified
-            mrModel.mbNoEndCap = rAttribs.getBool( XML_val, false );
+            mrModel.mbNoEndCap = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( plus ):
             return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::PLUS ) );
