@@ -71,6 +71,9 @@ public:
     void testDispBlanksAsDefaultValue2007XLSX();
     void testDispBlanksAsDefaultValue2013XLSX();
 
+    void testSmoothDefaultValue2007XLSX();
+    void testSmoothDefaultValue2013XLSX();
+
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -105,6 +108,8 @@ public:
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
     CPPUNIT_TEST(testDispBlanksAsDefaultValue2007XLSX);
     CPPUNIT_TEST(testDispBlanksAsDefaultValue2013XLSX);
+    CPPUNIT_TEST(testSmoothDefaultValue2007XLSX);
+    CPPUNIT_TEST(testSmoothDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -810,6 +815,42 @@ void Chart2ImportTest::testDispBlanksAsDefaultValue2013XLSX()
     sal_Int32 nMissingValueTreatment = -2;
     CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::USE_ZERO, nMissingValueTreatment);
+}
+
+void Chart2ImportTest::testSmoothDefaultValue2007XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "smoothed_series2007.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
+    CPPUNIT_ASSERT(xPropSet.is());
+
+    chart2::CurveStyle eCurveStyle;
+    xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+    CPPUNIT_ASSERT_EQUAL(eCurveStyle, chart2::CurveStyle_LINES);
+}
+
+void Chart2ImportTest::testSmoothDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "smoothed_series.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
+    CPPUNIT_ASSERT(xPropSet.is());
+
+    chart2::CurveStyle eCurveStyle;
+    xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+    CPPUNIT_ASSERT(eCurveStyle != chart2::CurveStyle_LINES);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
