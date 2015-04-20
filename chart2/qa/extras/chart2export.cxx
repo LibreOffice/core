@@ -87,6 +87,7 @@ public:
     void testRoundedCornersXLSX();
     void testAxisNumberFormatXLSX();
     void testDataLabelDefaultValuesXLSX();
+    void testTitleOverlayXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -138,6 +139,7 @@ public:
     CPPUNIT_TEST(testRoundedCornersXLSX);
     CPPUNIT_TEST(testAxisNumberFormatXLSX);
     CPPUNIT_TEST(testDataLabelDefaultValuesXLSX);
+    CPPUNIT_TEST(testTitleOverlayXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1274,6 +1276,14 @@ void Chart2ExportTest::testDataLabelDefaultValuesXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:showVal", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLblPos", "val", "outEnd");
+}
+
+void Chart2ExportTest::testTitleOverlayXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart_title.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:overlay", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
