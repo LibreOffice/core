@@ -27,8 +27,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 struct TextModel
 {
     typedef ModelRef< DataSequenceModel >   DataSequenceRef;
@@ -40,8 +38,6 @@ struct TextModel
     explicit            TextModel();
                         ~TextModel();
 };
-
-
 
 struct TitleModel
 {
@@ -60,8 +56,6 @@ struct TitleModel
                         ~TitleModel();
 };
 
-
-
 struct LegendModel
 {
     typedef ModelRef< Shape >       ShapeRef;
@@ -77,8 +71,6 @@ struct LegendModel
     explicit            LegendModel(bool bMSO2007Doc);
                         ~LegendModel();
 };
-
-
 
 } // namespace chart
 } // namespace drawingml
