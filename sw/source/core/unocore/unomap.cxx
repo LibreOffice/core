@@ -569,7 +569,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 
 //UUUU
 #define FILL_PROPERTIES_SW_BMP \
-    { OUString(UNO_NAME_SW_FILLBMP_LOGICAL_SIZE),               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<float>::get(),       0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_LOGICAL_SIZE),               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get(),       0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_OFFSET_X),                   XATTR_FILLBMP_TILEOFFSETX,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_OFFSET_Y),                   XATTR_FILLBMP_TILEOFFSETY,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X),          XATTR_FILLBMP_POSOFFSETX,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
@@ -577,8 +577,8 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_SW_FILLBMP_RECTANGLE_POINT),            XATTR_FILLBMP_POS,          cppu::UnoType<css::drawing::RectanglePoint>::get(), 0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_SIZE_X),                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM}, \
     { OUString(UNO_NAME_SW_FILLBMP_SIZE_Y),                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM},    \
-    { OUString(UNO_NAME_SW_FILLBMP_STRETCH),                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<float>::get(),       0,  0}, \
-    { OUString(UNO_NAME_SW_FILLBMP_TILE),                       XATTR_FILLBMP_TILE,         cppu::UnoType<float>::get(),       0,  0},\
+    { OUString(UNO_NAME_SW_FILLBMP_STRETCH),                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<bool>::get(),       0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_TILE),                       XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get(),       0,  0},\
     { OUString(UNO_NAME_SW_FILLBMP_MODE),                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \
 
 //UUUU
@@ -599,7 +599,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_SW_FILLHATCH),                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(), 0, MID_FILLHATCH}, \
     { OUString(UNO_NAME_SW_FILLHATCHNAME),                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLSTYLE),                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(), 0, 0}, \
-    { OUString(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int32>::get(), 0, 0}, \
+    { OUString(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(), 0, 0}, \
     { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(), 0,  MID_FILLGRADIENT}, \
     { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
