@@ -20,6 +20,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -876,6 +877,16 @@ DECLARE_RTFEXPORT_TEST(testHyphpar, "hyphpar.rtf")
 {
     // Hyphenation was enabled for all 3 paragraphs, but it should be disabled for the 2nd one.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), "ParaIsHyphenation"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    // This was 2, i.e. the second table had 3 cols, now 2 as expected.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
