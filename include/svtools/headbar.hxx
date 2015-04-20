@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 /*************************************************************************
 
@@ -51,36 +52,36 @@ WB_STDHEADERBAR     WB_BUTTONSTYLE | WB_BOTTOMBORDER
 
 ItemBits
 
-HIB_LEFT            content is displayed in the item left-justified
-HIB_CENTER          content is displayed in the item centred
-HIB_RIGHT           content is displayed in the item right-justified
-HIB_TOP             content is displayed in the item at the upper border
-HIB_VCENTER         content is displayed in the item vertically centred
-HIB_BOTTOM          content is displayed in the item at the bottom border
-HIB_LEFTIMAGE       in case of text and image, the image is displayed left of the text
-HIB_RIGHTIMAGE      in case of text and image, the image is displayed right of the text
-HIB_FIXED           item cannot be changed in size
-HIB_FIXEDPOS        item cannot be moved
-HIB_CLICKABLE       item is clickable
+HeaderBarItemBits::LEFT            content is displayed in the item left-justified
+HeaderBarItemBits::CENTER          content is displayed in the item centred
+HeaderBarItemBits::RIGHT           content is displayed in the item right-justified
+HeaderBarItemBits::TOP             content is displayed in the item at the upper border
+HeaderBarItemBits::VCENTER         content is displayed in the item vertically centred
+HeaderBarItemBits::BOTTOM          content is displayed in the item at the bottom border
+HeaderBarItemBits::LEFTIMAGE       in case of text and image, the image is displayed left of the text
+HeaderBarItemBits::RIGHTIMAGE      in case of text and image, the image is displayed right of the text
+HeaderBarItemBits::FIXED           item cannot be changed in size
+HeaderBarItemBits::FIXEDPOS        item cannot be moved
+HeaderBarItemBits::CLICKABLE       item is clickable
                     (select handler is only called on MouseButtonUp)
-HIB_FLAT            item is displayed in a flat way, even if WB_BUTTONSTYLE is set
-HIB_DOWNARROW       An arrow pointing downwards is displayed behind the text,
+HeaderBarItemBits::FLAT            item is displayed in a flat way, even if WB_BUTTONSTYLE is set
+HeaderBarItemBits::DOWNARROW       An arrow pointing downwards is displayed behind the text,
                     which should, for example, be shown, when after this item,
                     a corresponding list is sorted in descending order.
                     The status of the arrow can be set/reset with SetItemBits().
-HIB_UPARROW         An arrow pointing upwards is displayed behind the text,
+HeaderBarItemBits::UPARROW         An arrow pointing upwards is displayed behind the text,
                     which should, for example, be shown, when after this item,
                     a corresponding list is sorted in ascending order.
                     The status of the arrow can be set/reset with SetItemBits().
-HIB_USERDRAW        For this item, the UserDraw handler is called as well.
-HIB_STDSTYLE        (HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER | HIB_CLICKABLE)
+HeaderBarItemBits::USERDRAW        For this item, the UserDraw handler is called as well.
+HeaderBarItemBits::STDSTYLE        (HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE)
 
 --------------------------------------------------------------------------
 
 Handler
 
-Select()            Is called, when the item is clicked. If HIB_CLICKABLE
-                    is set in the item and not HIB_FLAT, the handler is only
+Select()            Is called, when the item is clicked. If HeaderBarItemBits::CLICKABLE
+                    is set in the item and not HeaderBarItemBits::FLAT, the handler is only
                     called in the MouseButtonUp handler, when the mouse has been
                     released over the item. In this case, the Select handler
                     behaves like it does with a ToolBox button.
@@ -165,7 +166,7 @@ If ButtonStyle has been set, it looks better, if an empty item is
 set at the end which takes up the remaining space.
 In order to do that, you can insert an item with an empty string and
 pass HEADERBAR_FULLSIZE as size. For such an item, you should not set
-HIB_CLICKABLE, but HIB_FIXEDPOS.
+HeaderBarItemBits::CLICKABLE, but HeaderBarItemBits::FIXEDPOS.
 
 *************************************************************************/
 
@@ -186,28 +187,30 @@ typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 // - HeaderBarItemBits -
 
 
-typedef sal_uInt16 HeaderBarItemBits;
-
-
-// - Bits for HeaderBarItems -
-
-
-#define HIB_LEFT                ((HeaderBarItemBits)0x0001)
-#define HIB_CENTER              ((HeaderBarItemBits)0x0002)
-#define HIB_RIGHT               ((HeaderBarItemBits)0x0004)
-#define HIB_TOP                 ((HeaderBarItemBits)0x0008)
-#define HIB_VCENTER             ((HeaderBarItemBits)0x0010)
-#define HIB_BOTTOM              ((HeaderBarItemBits)0x0020)
-#define HIB_LEFTIMAGE           ((HeaderBarItemBits)0x0040)
-#define HIB_RIGHTIMAGE          ((HeaderBarItemBits)0x0080)
-#define HIB_FIXED               ((HeaderBarItemBits)0x0100)
-#define HIB_FIXEDPOS            ((HeaderBarItemBits)0x0200)
-#define HIB_CLICKABLE           ((HeaderBarItemBits)0x0400)
-#define HIB_FLAT                ((HeaderBarItemBits)0x0800)
-#define HIB_DOWNARROW           ((HeaderBarItemBits)0x1000)
-#define HIB_UPARROW             ((HeaderBarItemBits)0x2000)
-#define HIB_USERDRAW            ((HeaderBarItemBits)0x4000)
-#define HIB_STDSTYLE            (HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER | HIB_CLICKABLE)
+enum class HeaderBarItemBits
+{
+    NONE                = 0x0000,
+    LEFT                = 0x0001,
+    CENTER              = 0x0002,
+    RIGHT               = 0x0004,
+    TOP                 = 0x0008,
+    VCENTER             = 0x0010,
+    BOTTOM              = 0x0020,
+    LEFTIMAGE           = 0x0040,
+    RIGHTIMAGE          = 0x0080,
+    FIXED               = 0x0100,
+    FIXEDPOS            = 0x0200,
+    CLICKABLE           = 0x0400,
+    FLAT                = 0x0800,
+    DOWNARROW           = 0x1000,
+    UPARROW             = 0x2000,
+    USERDRAW            = 0x4000,
+    STDSTYLE            = LEFT | LEFTIMAGE | VCENTER | CLICKABLE,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x7fff> {};
+}
 
 
 // - HeaderBar-Types -
@@ -304,7 +307,7 @@ public:
     virtual void        DoubleClick();
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
+                                    long nSize, HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
     void                MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos );

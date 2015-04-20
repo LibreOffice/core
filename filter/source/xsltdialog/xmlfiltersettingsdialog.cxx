@@ -1432,9 +1432,9 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
     long nTabSize = aBoxSize.Width() / 2;
 
     m_pHeaderBar->InsertItem( ITEMID_NAME, aStr1, nTabSize,
-                            HIB_LEFT | HIB_VCENTER );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
     m_pHeaderBar->InsertItem( ITEMID_TYPE, aStr2, nTabSize,
-                            HIB_LEFT | HIB_VCENTER );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     static long nTabs[] = {2, 0, nTabSize };
 

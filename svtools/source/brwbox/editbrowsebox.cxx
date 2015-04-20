@@ -1166,7 +1166,7 @@ namespace svt
         if (!w)
             w = GetDefaultColumnWidth(rName);
 
-        InsertDataColumn(nId, rName, w, (HIB_CENTER | HIB_VCENTER | HIB_CLICKABLE), nPos);
+        InsertDataColumn(nId, rName, w, (HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE), nPos);
         return nId;
     }
 

@@ -80,8 +80,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear());
 
     HeaderBar &rBar = m_pCheckLB->GetTheHeaderBar();
-    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
-    nBits &= ~HIB_CLICKABLE;
+    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
+    nBits &= ~HeaderBarItemBits::CLICKABLE;
     rBar.SetItemBits(1, nBits);
     rBar.SetItemBits(2, nBits);
 

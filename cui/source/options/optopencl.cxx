@@ -78,7 +78,7 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     HeaderBar &rBlBar = mpBlackList->GetTheHeaderBar();
     HeaderBar &rWiBar = mpWhiteList->GetTheHeaderBar();
 
-    WinBits nHBits = HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE;
+    HeaderBarItemBits nHBits = HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE;
     rBlBar.InsertItem( 1, mpOS->GetText(),         0, nHBits );
     rBlBar.InsertItem( 2, mpOSVersion->GetText(),  0, nHBits );
     rBlBar.InsertItem( 3, mpVendor->GetText(),     0, nHBits );

@@ -3750,7 +3750,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     --nWidth;
     for(sal_uInt16 i = 1; i < 8; i++)
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
-                          HIB_STDSTYLE, HEADERBAR_APPEND );
+                          HeaderBarItemBits::STDSTYLE, HEADERBAR_APPEND );
 }
 
 void SwEntryBrowseBox::Resize()

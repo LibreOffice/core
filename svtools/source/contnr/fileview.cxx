@@ -599,13 +599,13 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
-    HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
+    HeaderBarItemBits nBits = ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE );
     if (nFlags & FileViewFlags::SHOW_ONLYTITLE)
     {
         long pTabs[] = { 2, 20, 600 };
         SetTabs(&pTabs[0], MAP_PIXEL);
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HIB_UPARROW);
+        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
     }
     else
     {
@@ -613,7 +613,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         SetTabs(&pTabs[0], MAP_PIXEL);
         SetTabJustify(2, AdjustRight); // column "Size"
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HIB_UPARROW);
+        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
         mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
         mpHeaderBar->InsertItem(COLUMN_SIZE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
         mpHeaderBar->InsertItem(COLUMN_DATE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
@@ -1391,23 +1391,23 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
             mpImp->mnSortColumn = COLUMN_TITLE;
         }
         nBits = pBar->GetItemBits( mpImp->mnSortColumn );
-        nBits &= ~( HIB_UPARROW | HIB_DOWNARROW );
+        nBits &= ~HeaderBarItemBits( HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW );
         pBar->SetItemBits( mpImp->mnSortColumn, nBits );
     }
 
     nBits = pBar->GetItemBits( nItemID );
 
-    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
 
     if ( bUp )
     {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
+        nBits &= ~HeaderBarItemBits::UPARROW;
+        nBits |= HeaderBarItemBits::DOWNARROW;
     }
     else
     {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
+        nBits &= ~HeaderBarItemBits::DOWNARROW;
+        nBits |= HeaderBarItemBits::UPARROW;
     }
 
     pBar->SetItemBits( nItemID, nBits );
@@ -1447,7 +1447,7 @@ OUString SvtFileView::GetConfigString() const
     sRet += OUString::number( mpImp->mnSortColumn );
     sRet += ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
-    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
     sRet += bUp ? OUString("1") : OUString("0");
     sRet += ";";
 
@@ -1478,13 +1478,13 @@ void SvtFileView::SetConfigString( const OUString& rCfgStr )
 
     if ( bUp )
     {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
+        nBits &= ~HeaderBarItemBits::UPARROW;
+        nBits |= HeaderBarItemBits::DOWNARROW;
     }
     else
     {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
+        nBits &= ~HeaderBarItemBits::DOWNARROW;
+        nBits |= HeaderBarItemBits::UPARROW;
     }
     pBar->SetItemBits( mpImp->mnSortColumn, nBits );
 

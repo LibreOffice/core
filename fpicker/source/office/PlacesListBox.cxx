@@ -29,7 +29,7 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
 
     long pTabs[] = { 2, 20, 600 };
     SetTabs( &pTabs[0], MAP_PIXEL );
-    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HIB_LEFT | HIB_VCENTER );
+    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
     SetPosSizePixel( Point( 0, aHeadSize.getHeight() ),

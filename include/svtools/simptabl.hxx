@@ -94,7 +94,7 @@ public:
 
     void            InsertHeaderEntry(const OUString& rText,
                             sal_uInt16 nCol=HEADERBAR_APPEND,
-                            HeaderBarItemBits nBits = HIB_STDSTYLE);
+                            HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE);
 
     void            SetTabs(const long* pTabs, MapUnit = MAP_APPFONT);
 

@@ -1425,14 +1425,14 @@ void FmGridControl::markColumn(sal_uInt16 nId)
         // deselektieren
         if (m_nMarkedColumnId != BROWSER_INVALIDID)
         {
-            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(m_nMarkedColumnId) & ~HIB_FLAT;
+            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(m_nMarkedColumnId) & ~HeaderBarItemBits::FLAT;
             GetHeaderBar()->SetItemBits(m_nMarkedColumnId, aBits);
         }
 
 
         if (nId != BROWSER_INVALIDID)
         {
-            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(nId) | HIB_FLAT;
+            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(nId) | HeaderBarItemBits::FLAT;
             GetHeaderBar()->SetItemBits(nId, aBits);
         }
         m_nMarkedColumnId = nId;

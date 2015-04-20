@@ -435,7 +435,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     sHeader.append(get<vcl::Window>("t")->GetText());
     sHeader.append('\t');
     m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND,
-                        HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
+                        HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
 
     m_pEditPB->SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
 }
@@ -1799,7 +1799,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         sHeader += get<vcl::Window>("t")->GetText();
         sHeader += "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
-                        HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
+                        HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
         m_pCheckLB->Hide();
     }
     else

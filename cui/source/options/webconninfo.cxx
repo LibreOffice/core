@@ -55,19 +55,19 @@ void PasswordTable::Resort( bool bForced )
     if ( 0 == nColumn || bForced ) // only the first column is sorted
     {
         HeaderBarItemBits nBits = GetTheHeaderBar().GetItemBits(1);
-        bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+        bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
         SvSortMode eMode = SortAscending;
 
         if ( bUp )
         {
-            nBits &= ~HIB_UPARROW;
-            nBits |= HIB_DOWNARROW;
+            nBits &= ~HeaderBarItemBits::UPARROW;
+            nBits |= HeaderBarItemBits::DOWNARROW;
             eMode = SortDescending;
         }
         else
         {
-            nBits &= ~HIB_DOWNARROW;
-            nBits |= HIB_UPARROW;
+            nBits &= ~HeaderBarItemBits::DOWNARROW;
+            nBits |= HeaderBarItemBits::UPARROW;
         }
         GetTheHeaderBar().SetItemBits( 1, nBits );
         SvTreeList* pListModel = GetModel();
@@ -116,9 +116,9 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     long aStaticTabs[]= { 2, 0, 0 };
     m_pPasswordsLB->SetTabs( aStaticTabs );
     m_pPasswordsLB->InsertHeaderItem( 1, get<FixedText>("website")->GetText(),
-        HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS | HIB_CLICKABLE | HIB_UPARROW );
+        HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     m_pPasswordsLB->InsertHeaderItem( 2, get<FixedText>("username")->GetText(),
-        HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS );
+        HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS );
     pPasswordsLBContainer->set_height_request(m_pPasswordsLB->GetTextHeight()*8);
 
     m_pPasswordsLB->SetHeaderBarClickHdl( LINK( this, WebConnectionInfoDialog, HeaderBarClickedHdl ) );

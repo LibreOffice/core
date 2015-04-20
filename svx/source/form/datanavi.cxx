@@ -2856,7 +2856,7 @@ namespace svxform
         sHeader += "\t";
         sHeader += get<FixedText>("url")->GetText();
         m_pNamespacesList->InsertHeaderEntry(
-            sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
+            sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT /*| HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED*/ );
 
         m_pNamespacesList->SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
         Link aLink = LINK( this, NamespaceItemDialog, ClickHdl );
