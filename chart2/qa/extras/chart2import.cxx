@@ -12,6 +12,7 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
@@ -73,6 +74,8 @@ public:
 
     void testSmoothDefaultValue2007XLSX();
     void testSmoothDefaultValue2013XLSX();
+    void testTrendlineDefaultValue2007XLSX();
+    void testTrendlineDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -110,6 +113,8 @@ public:
     CPPUNIT_TEST(testDispBlanksAsDefaultValue2013XLSX);
     CPPUNIT_TEST(testSmoothDefaultValue2007XLSX);
     CPPUNIT_TEST(testSmoothDefaultValue2013XLSX);
+    CPPUNIT_TEST(testTrendlineDefaultValue2007XLSX);
+    CPPUNIT_TEST(testTrendlineDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -851,6 +856,58 @@ void Chart2ImportTest::testSmoothDefaultValue2013XLSX()
     chart2::CurveStyle eCurveStyle;
     xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
     CPPUNIT_ASSERT(eCurveStyle != chart2::CurveStyle_LINES);
+}
+
+void Chart2ImportTest::testTrendlineDefaultValue2007XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "trendline2007.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<chart2::XRegressionCurveContainer> xRegressionCurveContainer(xDataSeries, UNO_QUERY_THROW);
+    Sequence< Reference<chart2::XRegressionCurve> > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
+    CPPUNIT_ASSERT_EQUAL((sal_Int32) 1, xRegressionCurveSequence.getLength());
+
+    Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
+
+    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
+    bool bShowEquation = true;
+    CPPUNIT_ASSERT(aAny >>= bShowEquation);
+    CPPUNIT_ASSERT(!bShowEquation);
+
+    aAny = xPropSet->getPropertyValue("ShowCorrelationCoefficient");
+    bool bShowCorrelation = true;
+    CPPUNIT_ASSERT(aAny >>= bShowCorrelation);
+    CPPUNIT_ASSERT(!bShowCorrelation);
+}
+
+void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "trendline.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<chart2::XRegressionCurveContainer> xRegressionCurveContainer(xDataSeries, UNO_QUERY_THROW);
+    Sequence< Reference<chart2::XRegressionCurve> > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
+    CPPUNIT_ASSERT_EQUAL((sal_Int32) 1, xRegressionCurveSequence.getLength());
+
+    Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
+
+    Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("ShowEquation");
+    bool bShowEquation = false;
+    CPPUNIT_ASSERT(aAny >>= bShowEquation);
+    CPPUNIT_ASSERT(bShowEquation);
+
+    aAny = xPropSet->getPropertyValue("ShowCorrelationCoefficient");
+    bool bShowCorrelation = false;
+    CPPUNIT_ASSERT(aAny >>= bShowCorrelation);
+    CPPUNIT_ASSERT(bShowCorrelation);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
