@@ -539,6 +539,7 @@ LineSeriesContext::~LineSeriesContext()
 
 ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( ser ):
@@ -555,9 +556,8 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
-                    // TODO: OOXML_spec
                     // MSO 2007 writes false by default and not true
-                    mrModel.mbSmooth = rAttribs.getBool( XML_val, true );
+                    mrModel.mbSmooth = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
