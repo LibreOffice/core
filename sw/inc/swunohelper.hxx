@@ -77,7 +77,7 @@ bool UCB_IsDirectory( const OUString& rURL );
 ///UUUU helper to check if fill style is set to color or bitmap
 /// and thus formally used SvxBrushItem parts need to be mapped
 /// for backwards compatibility
-bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet);
+bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet, sal_uInt16 const nMemberId);
 
 }
 
