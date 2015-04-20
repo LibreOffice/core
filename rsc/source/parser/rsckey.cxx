@@ -69,7 +69,7 @@ void RscNameTable::SetSort( bool bSorted )
     }
 };
 
-Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue )
+Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, sal_IntPtr nValue )
 {
     if( pTable )
         pTable = static_cast<KEY_STRUCT *>(
@@ -90,7 +90,7 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue )
     return nName;
 };
 
-Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, long nValue )
+Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, sal_IntPtr nValue )
 {
     return Put( pHS->getID( pName ), nTyp, nValue );
 };
@@ -100,12 +100,12 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
     Atom  nId;
 
     nId = pHS->getID( pName );
-    return Put( nId, nTyp, (long)nId );
+    return Put( nId, nTyp, (sal_IntPtr)nId );
 };
 
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 {
-    return Put( nName, nTyp, reinterpret_cast<long>(pClass) );
+    return Put( nName, nTyp, reinterpret_cast<sal_IntPtr>(pClass) );
 };
 
 bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
