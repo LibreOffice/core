@@ -245,7 +245,6 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
             // In case of subtables, we may not get the first cell.
             if (pDeepInner && (pDeepInner->getCell() == 0 || m_bTableRowEnded))
             {
-                m_bTableRowEnded = false;
                 StartTableRow(pDeepInner);
             }
 
@@ -882,6 +881,7 @@ void RtfAttributeOutput::StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTa
 {
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << nCurrentDepth << ")");
+    m_bTableRowEnded = false;
 
     TableDefinition(pTableTextNodeInfoInner);
 
