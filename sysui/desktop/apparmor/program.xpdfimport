@@ -1,0 +1,25 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2015 Canonical Ltd.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Author: Bryan Quigley <bryan.quigley@canonical.com>
+#
+# ------------------------------------------------------------------
+
+#include <tunables/global>
+
+profile libreoffice-xpdfimport INSTDIR-program/xpdfimport {
+  #include <abstractions/base>
+
+  owner /tmp/*              r,     #Seems to need to read file created with pattern /tmp/RRRRRR
+  owner /tmp/lu**           rw,    #makes files like luRRRRR.tmp/lubRRRR.tmp where R is random
+                                   #Note, usually it's lub or luc, don't know why.
+  /usr/share/poppler/**     r,
+  /usr/share/libreoffice/share/config/* r,
+  owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
+}
+

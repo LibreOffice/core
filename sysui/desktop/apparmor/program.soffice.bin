@@ -1,0 +1,157 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2015 Canonical Ltd.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Authors: Jonathan Davies <jonathan.davies@canonical.com>
+#             Bryan Quigley <bryan.quigley@canonical.com>
+#
+# ------------------------------------------------------------------
+
+# This profile should enable the average LibreOffice user to get their 
+# work done while blocking some advanced usage
+# Namely not tested and likely not working : embedded plugins,
+# Using the LibreOffice SDK and other development tasks
+# Everything else should be working
+
+#Defines all common supported file formats
+#Some obscure ones we're excluded (mostly input)
+
+#Generic
+@{libreoffice_ext} = [tT][xX][tT]  #.txt
+@{libreoffice_ext} += {,f,F}[oO][dDtT][tTsSpPbBgGfF]  #All the open document format
+@{libreoffice_ext} += [xX][mMsS][lL]  #.xml and xsl
+@{libreoffice_ext} += [pP][dD][fF]  #.pdf
+@{libreoffice_ext} += [uU][oO][fFtTsSpP]  #Unified office format
+@{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}  #(x)htm(l)
+
+#Images
+@{libreoffice_ext} += [jJ][pP][gG]
+@{libreoffice_ext} += [jJ][pP][eE][gG]
+@{libreoffice_ext} += [pP][nN][gG]
+@{libreoffice_ext} += [sS][vV][gG]
+@{libreoffice_ext} += [sS][vV][gG][zZ]
+@{libreoffice_ext} += [tT][iI][fF]
+@{libreoffice_ext} += [tT][iI][fF][fF]
+
+#Writer
+@{libreoffice_ext} += [dD][oO][cCtT]{,x,X}
+@{libreoffice_ext} += [rR][tT][fF]
+
+#Calc
+@{libreoffice_ext} += [xX][lL][sSwWtT]{,x,X}
+@{libreoffice_ext} += [dD][iIbB][fF]  #.dif dbf
+@{libreoffice_ext} += [cCtT][sS][vV]  #.tsv .csv
+@{libreoffice_ext} += [sS][lL][kK]
+
+#Impress/Draw
+@{libreoffice_ext} += [pP][pP][tTsS]{,x,X}
+@{libreoffice_ext} += [pP][oO][tT]{,m,M}
+@{libreoffice_ext} += [sS][wW][fF]
+@{libreoffice_ext} += [pP][sS][dD]  #Photoshop
+
+#Math
+@{libreoffice_ext} += [mM][mM][lL]
+
+@{libo_user_dirs} = @{HOME} /mnt /media
+
+#include <tunables/global>
+
+profile libreoffice-soffice INSTDIR-program/soffice.bin {
+  #include <abstractions/private-files-strict>
+
+  #include <abstractions/audio>
+  #include <abstractions/bash>
+  #include <abstractions/cups-client>
+  #include <abstractions/dbus>
+  #include <abstractions/dbus-session>
+  #include <abstractions/dbus-accessibility>
+  #include <abstractions/ibus>
+  #include <abstractions/nameservice>
+  #include <abstractions/gnome>
+  #include <abstractions/python>
+  #include <abstractions/p11-kit>
+
+  #List directories for file browser
+  /                                     r,
+  /**/                                  r,
+
+  owner @{libo_user_dirs}/**/           rw,  #allow creating directories that we own
+  owner @{libo_user_dirs}/**~lock.*     rw,  #lock file support
+  owner @{libo_user_dirs}/**.@{libreoffice_ext} rwk,  #Open files rw with the right exts
+
+  # Settings
+  /etc/libreoffice/                     r,
+  /etc/libreoffice/**                   r,
+
+  /etc/cups/ppd/*.ppd                   r,
+  /proc/*/status                        r,
+
+  owner @{HOME}/.config/libreoffice{,dev}/** rwk,
+  owner @{HOME}/.cache/fontconfig/**    rw,
+  owner @{HOME}/.config/gtk-???/bookmarks r,  #Make bookmarks work
+  owner @{HOME}/.recently-used          rwk,
+
+  owner /{,var/}run/user/*/dconf/user   rw,
+  owner @{HOME}/.config/dconf/user      r,
+
+  # allow schema to be read
+  /usr/share/glib-*/schemas/            r,
+  /usr/share/glib-*/schemas/**          r,
+
+  # bluetooth send to
+  network bluetooth,
+
+  /bin/sh                               rmix,
+  /bin/bash                             rmix,
+  /bin/dash                             rmix,
+  /usr/bin/bluetooth-sendto             rmPUx,
+  /usr/bin/lpr                          rmPUx,
+  /usr/bin/paperconf                    rmix,
+
+  /dev/tty                              rw,
+
+  /usr/lib{,32,64}/@{multiarch}/gstreamer???/gstreamer-???/gst-plugin-scanner   rmPUx,
+  owner @{HOME}/.cache/gstreamer-???/**                                 rw,
+  unix peer=(addr=@/tmp/.ICE-unix/* label=unconfined),  #Gstreamer doesn't work without this
+
+  /usr/lib{,32,64}/jvm/                         r,
+  /usr/lib{,32,64}/jvm/**                       r,
+  INSTDIR-**                        ra,
+  INSTDIR-**.so                     rm,
+  INSTDIR-program/gnome-open-url    rmPUx,  #This doesn't seem to be used on my install
+  INSTDIR-program/soffice.bin       rmix,
+  INSTDIR-program/xpdfimport        rPx,
+  INSTDIR-program/open-url          rPx,
+  INSTDIR-program/senddoc           rPx,
+  /usr/lib{,32,64}/ure/                         r,
+  /usr/lib{,32,64}/ure/**                       rm,
+
+  /usr/share/java/**.jar                r,
+  /usr/share/hunspell/                  r,
+  /usr/share/hunspell/**                r,
+  /usr/share/hyphen/                    r,
+  /usr/share/hyphen/**                  r,
+  /usr/share/mythes/                    r,
+  /usr/share/mythes/**                  r,
+  /usr/share/liblangtag/                r,
+  /usr/share/liblangtag/**              r,
+  /usr/share/libreoffice/               r,
+  /usr/share/libreoffice/**             r,
+  /usr/share/yelp-xsl/xslt/mallard/**   r,
+  /usr/share/libexttextcat/*            r,
+  /usr/share/icu/**                     r,
+  /usr/share/locale-bundle/*            r,
+
+  /var/spool/libreoffice/               r,
+  /var/spool/libreoffice/**             rw,
+  /var/cache/fontconfig/                rw,
+
+  #Likely moving to abstractions in the future
+  owner @{HOME}/.icons/*/cursors/*      r,
+  /usr/share/*-fonts/conf.avail/*.conf  r,
+  /usr/share/fonts-config/conf.avail/*.conf r,
+}
