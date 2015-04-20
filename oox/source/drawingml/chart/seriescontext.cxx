@@ -157,11 +157,11 @@ PictureOptionsContext::~PictureOptionsContext()
 
 ContextHandlerRef PictureOptionsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( applyToEnd ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbApplyToEnd = rAttribs.getBool( XML_val, false );
+            mrModel.mbApplyToEnd = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( applyToFront ):
             // default is 'false', not 'true' as specified
