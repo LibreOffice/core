@@ -267,8 +267,7 @@ ContextHandlerRef TrendlineContext::onCreateContext( sal_Int32 nElement, const A
             mrModel.mbDispEquation = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( dispRSqr ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbDispRSquared = rAttribs.getBool( XML_val, false );
+            mrModel.mbDispRSquared = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( forward ):
             mrModel.mfForward = rAttribs.getDouble( XML_val, 0.0 );
