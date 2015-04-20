@@ -4890,6 +4890,9 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     case RTF_HYPHAUTO:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_autoHyphenation, pBoolValue);
         break;
+    case RTF_HYPHPAR:
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens, std::make_shared<RTFValue>(int(bParam && nParam == 0)));
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
