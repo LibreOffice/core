@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "surrogates.hxx"
-
 #include "osl/diagnose.h"
 #include "rtl/character.hxx"
 #include "rtl/strbuf.hxx"
+#include "rtl/surrogates.h"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
 #include "rtl/uri.h"

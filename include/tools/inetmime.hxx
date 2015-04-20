@@ -262,13 +262,6 @@ public:
      */
     static sal_uInt32 getHexDigit(int nWeight);
 
-    static inline bool isHighSurrogate(sal_uInt32 nUTF16);
-
-    static inline bool isLowSurrogate(sal_uInt32 nUTF16);
-
-    static inline sal_uInt32 toUTF32(sal_Unicode cHighSurrogate,
-                                     sal_Unicode cLowSurrogate);
-
     /** Check two US-ASCII strings for equality, ignoring case.
 
         @param pBegin1  Points to the start of the first string, must not be
@@ -528,29 +521,6 @@ inline int INetMIME::getBase64Weight(sal_uInt32 nChar)
            nChar == '+' ? 62 :
            nChar == '/' ? 63 :
            nChar == '=' ? -1 : -2;
-}
-
-// static
-inline bool INetMIME::isHighSurrogate(sal_uInt32 nUTF16)
-{
-    return nUTF16 >= 0xD800 && nUTF16 <= 0xDBFF;
-}
-
-// static
-inline bool INetMIME::isLowSurrogate(sal_uInt32 nUTF16)
-{
-    return nUTF16 >= 0xDC00 && nUTF16 <= 0xDFFF;
-}
-
-// static
-inline sal_uInt32 INetMIME::toUTF32(sal_Unicode cHighSurrogate,
-                                    sal_Unicode cLowSurrogate)
-{
-    DBG_ASSERT(isHighSurrogate(cHighSurrogate)
-               && isLowSurrogate(cLowSurrogate),
-               "INetMIME::toUTF32(): Bad chars");
-    return ((sal_uInt32(cHighSurrogate) & 0x3FF) << 10)
-               | (sal_uInt32(cLowSurrogate) & 0x3FF);
 }
 
 // static

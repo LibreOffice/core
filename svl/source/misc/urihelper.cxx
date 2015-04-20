@@ -36,13 +36,14 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <rtl/instance.hxx>
+#include <rtl/surrogates.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/inetmime.hxx>
 #include <unotools/charclass.hxx>
-#include <rtl/instance.hxx>
 
 using namespace com::sun::star;
 
@@ -280,9 +281,9 @@ namespace {
 
 inline sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
 {
-    return INetMIME::isHighSurrogate(rStr[nPos])
+    return isHighSurrogate(rStr[nPos])
            && rStr.getLength() - nPos >= 2
-           && INetMIME::isLowSurrogate(rStr[nPos + 1]) ?
+           && isLowSurrogate(rStr[nPos + 1]) ?
         nPos + 2 : nPos + 1;
 }
 

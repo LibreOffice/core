@@ -39,7 +39,7 @@
 
 #include "hash.hxx"
 #include "strimp.hxx"
-#include "surrogates.hxx"
+#include <rtl/surrogates.h>
 #include <rtl/ustring.h>
 
 #include "rtl/math.h"

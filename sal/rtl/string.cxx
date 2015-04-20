@@ -32,7 +32,7 @@
 #include <rtl/tencinfo.h>
 
 #include "strimp.hxx"
-#include "surrogates.hxx"
+#include <rtl/surrogates.h>
 #include <rtl/string.h>
 
 #include "rtl/math.h"

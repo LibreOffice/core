@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_RTL_SURROGATES_HXX
-#define INCLUDED_SAL_RTL_SURROGATES_HXX
+#ifndef INCLUDED_RTL_SURROGATES_H
+#define INCLUDED_RTL_SURROGATES_H
 
 #include <sal/config.h>
 
@@ -28,6 +28,10 @@
 #define SAL_RTL_LAST_HIGH_SURROGATE 0xDBFF
 #define SAL_RTL_FIRST_LOW_SURROGATE 0xDC00
 #define SAL_RTL_LAST_LOW_SURROGATE 0xDFFF
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 inline bool isHighSurrogate(sal_uInt32 utf16) {
     return utf16 >= SAL_RTL_FIRST_HIGH_SURROGATE
@@ -43,6 +47,10 @@ inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
     return ((high - SAL_RTL_FIRST_HIGH_SURROGATE) << 10)
         + (low - SAL_RTL_FIRST_LOW_SURROGATE) + 0x10000;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
