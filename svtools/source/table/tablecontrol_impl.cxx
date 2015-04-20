@@ -502,13 +502,13 @@ namespace svt { namespace table
     void TableControl_Impl::columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup )
     {
         ColumnAttributeGroup nGroup( i_attributeGroup );
-        if ( nGroup & COL_ATTRS_APPEARANCE )
+        if ( nGroup & ColumnAttributeGroup::APPEARANCE )
         {
             impl_invalidateColumn( i_column );
-            nGroup &= ~COL_ATTRS_APPEARANCE;
+            nGroup &= ~ColumnAttributeGroup::APPEARANCE;
         }
 
-        if ( nGroup & COL_ATTRS_WIDTH )
+        if ( nGroup & ColumnAttributeGroup::WIDTH )
         {
             if ( !m_bUpdatingColWidths )
             {
@@ -516,10 +516,10 @@ namespace svt { namespace table
                 invalidate( TableAreaAll );
             }
 
-            nGroup &= ~COL_ATTRS_WIDTH;
+            nGroup &= ~ColumnAttributeGroup::WIDTH;
         }
 
-        OSL_ENSURE( ( nGroup == COL_ATTRS_NONE ) || ( i_attributeGroup == COL_ATTRS_ALL ),
+        OSL_ENSURE( ( nGroup == ColumnAttributeGroup::NONE ) || ( i_attributeGroup == ColumnAttributeGroup::ALL ),
             "TableControl_Impl::columnChanged: don't know how to handle this change!" );
     }
 

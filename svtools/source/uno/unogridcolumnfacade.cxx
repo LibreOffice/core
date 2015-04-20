@@ -141,10 +141,10 @@ namespace svt { namespace table
             return;
         }
 
-        ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
+        ColumnAttributeGroup nChangedAttributes( ColumnAttributeGroup::NONE );
 
         if ( i_event.AttributeName == "HorizontalAlign" )
-            nChangedAttributes |= COL_ATTRS_APPEARANCE;
+            nChangedAttributes |= ColumnAttributeGroup::APPEARANCE;
 
         if  (   i_event.AttributeName == "ColumnWidth"
             ||  i_event.AttributeName == "MaxWidth"
@@ -153,9 +153,9 @@ namespace svt { namespace table
             ||  i_event.AttributeName == "Resizeable"
             ||  i_event.AttributeName == "Flexibility"
             )
-            nChangedAttributes |= COL_ATTRS_WIDTH;
+            nChangedAttributes |= ColumnAttributeGroup::WIDTH;
 
-        OSL_ENSURE( nChangedAttributes != COL_ATTRS_NONE,
+        OSL_ENSURE( nChangedAttributes != ColumnAttributeGroup::NONE,
             "ColumnChangeMultiplexer::columnChanged: unknown column attributed changed!" );
 
         SolarMutexGuard aGuard;

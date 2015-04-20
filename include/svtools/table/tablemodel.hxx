@@ -35,6 +35,23 @@
 
 #include <boost/optional.hpp>
 #include <memory>
+#include <o3tl/typed_flags_set.hxx>
+
+enum class ColumnAttributeGroup
+{
+    NONE          = 0x00,
+    /// denotes column attributes related to the width of the column
+    WIDTH         = 0x01,
+    /// denotes column attributes related to the appearance of the column, i.e. those relevant for rendering
+    APPEARANCE    = 0x02,
+    /// denotes the entirety of column attributes
+    ALL           = 0x03,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ColumnAttributeGroup> : is_typed_flags<ColumnAttributeGroup, 0x03> {};
+}
+
 
 namespace svt { namespace table
 {
@@ -53,18 +70,6 @@ namespace svt { namespace table
         */
         ScrollbarShowAlways
     };
-
-
-    //= ITableModelListener
-
-    typedef sal_Int32   ColumnAttributeGroup;
-    #define COL_ATTRS_NONE          (0x00000000)
-    /// denotes column attributes related to the width of the column
-    #define COL_ATTRS_WIDTH         (0x00000001)
-    /// denotes column attributes related to the appearance of the column, i.e. those relevant for rendering
-    #define COL_ATTRS_APPEARANCE    (0x00000002)
-    /// denotes the entirety of column attributes
-    #define COL_ATTRS_ALL           (0x7FFFFFFF)
 
 
     //= ITableModelListener
