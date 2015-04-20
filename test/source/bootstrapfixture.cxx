@@ -156,15 +156,24 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     (void)eFormat;
 
 #if HAVE_EXPORT_VALIDATION
-    OUString aValidator;
+    OUString var;
     if( eFormat == test::OOXML )
     {
-        aValidator = "officeotron ";
+        var = "OFFICEOTRON";
     }
     else
     {
-        aValidator = "odfvalidator ";
+        var = "ODFVALIDATOR";
     }
+    OUString aValidator;
+    oslProcessError e = osl_getEnvironment(var.pData, &aValidator.pData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString("cannot get env var " + var).toUtf8().getStr(),
+        osl_Process_E_None, e);
+    CPPUNIT_ASSERT_MESSAGE(
+        OUString("empty get env var " + var).toUtf8().getStr(),
+        !aValidator.isEmpty());
+    aValidator += " ";
 
     utl::TempFile aOutput;
     aOutput.EnableKillingFile();
