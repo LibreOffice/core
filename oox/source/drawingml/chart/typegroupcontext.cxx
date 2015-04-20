@@ -171,8 +171,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
         case C_TOKEN( ser ):
             return new BubbleSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( showNegBubbles ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, false );
+            mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( sizeRepresents ):
             mrModel.mnSizeRepresents = rAttribs.getToken( XML_val, XML_area );
