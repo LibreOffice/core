@@ -288,21 +288,6 @@ it has been dragged. There are the following query methods:
         old value in the StartDrag handler and compare the value in the
         EndDrag handler.
 
-    - GetDragScroll()
-        This method can be used to query whether scrolling should
-        take place. One of the following values is returned:
-            RULER_SCROLL_NO         - Drag position is at no border and
-                                      therefore no scrolling needs to
-                                      take place.
-            RULER_SCROLL_1          - Drag position is at the left/upper
-                                      border and therefore the
-                                      application should possibly trigger
-                                      scrolling.
-            RULER_SCROLL_2          - Drag position is at the right/bottom
-                                      border and therefore the
-                                      application should possibly trigger
-                                      scrolling.
-
     - GetDragModifier()
         Returns the modifier keys that were pressed when the Drag process
         was started. See MouseEvent.
@@ -498,10 +483,6 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_MOUSE_BORDERWIDTH 5
 #define RULER_MOUSE_MARGINWIDTH 3
 
-#define RULER_SCROLL_NO         0
-#define RULER_SCROLL_1          1
-#define RULER_SCROLL_2          2
-
 // - RulerMargin -
 
 #define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
@@ -647,7 +628,6 @@ private:
     sal_uInt16      mnUnitIndex;
     sal_uInt16      mnDragAryPos;
     sal_uInt16      mnDragSize;
-    sal_uInt16      mnDragScroll;
     sal_uInt16      mnDragModifier;
     sal_uInt16      mnExtraStyle;
     sal_uInt16      mnExtraClicks;
@@ -779,7 +759,6 @@ public:
     sal_uInt16      GetDragSize() const { return mnDragSize; }
     bool            IsDragDelete() const { return mbDragDelete; }
     bool            IsDragCanceled() const { return mbDragCanceled; }
-    sal_uInt16      GetDragScroll() const { return mnDragScroll; }
     sal_uInt16      GetDragModifier() const { return mnDragModifier; }
     bool            IsDrag() const { return mbDrag; }
     void            CancelDrag();

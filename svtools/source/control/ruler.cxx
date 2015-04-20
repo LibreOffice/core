@@ -239,7 +239,6 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnUpdateEvtId   = 0;                    // Update event was not sent yet
     mnDragAryPos    = 0;                    // Drag-Array-Index
     mnDragSize      = 0;                    // Did size change at dragging
-    mnDragScroll    = 0;                    // Should scroll when dragging
     mnDragModifier  = 0;                    // Modifier key at dragging
     mnExtraStyle    = 0;                    // Style of Extra field
     mnExtraClicks   = 0;                    // No. of clicks for Extra field
@@ -1908,12 +1907,10 @@ void Ruler::ImplDrag( const Point& rPos )
     if ( nX < mpData->nRulVirOff )
     {
         nX = mpData->nRulVirOff;
-        mnDragScroll = RULER_SCROLL_1;
     }
     else if ( nX > mpData->nRulVirOff+mpData->nRulWidth )
     {
         nX = mpData->nRulVirOff+mpData->nRulWidth;
-        mnDragScroll = RULER_SCROLL_2;
     }
     nX -= mpData->nNullVirOff;
 
@@ -1959,8 +1956,6 @@ void Ruler::ImplDrag( const Point& rPos )
         if ( mbFormat )
             Paint(Rectangle());
     }
-
-    mnDragScroll = 0;
 }
 
 void Ruler::ImplEndDrag()
@@ -1985,7 +1980,6 @@ void Ruler::ImplEndDrag()
     mbDragCanceled  = false;
     mbDragDelete    = false;
     mnDragModifier  = 0;
-    mnDragScroll    = 0;
     mnStartDragPos  = 0;
 
     // redraw
