@@ -915,11 +915,10 @@ AC_ARG_ENABLE([hardlink-deliver],
 )
 
 AC_ARG_ENABLE(mergelibs,
-    AS_HELP_STRING([--enable-mergelibs=<all/yes>],
+    AS_HELP_STRING([--enable-mergelibs],
         [Enables linking of big, merged, library. Experimental feature, tested
         only for Linux at some stage in history, but possibly does not work even
-        for Linux any more. 'all' will link a lot of libraries into libmerged
-        while 'yes' will do it for just a core set of libraries.])
+        for Linux any more. This will link a core set of libraries into libmerged.])
 )
 
 AC_ARG_ENABLE(graphite,
@@ -12735,12 +12734,7 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     if test $_os != Linux -a $_os != WINNT; then
         add_warning "--enable-mergelibs is not tested for this platform"
     fi
-    if test "$enable_mergelibs" = "all"; then
-        MERGELIBS="ALL"
-        AC_DEFINE(STATIC_LINKING)
-    else
-        MERGELIBS="CORE"
-    fi
+    MERGELIBS="TRUE"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])

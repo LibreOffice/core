@@ -32,7 +32,7 @@ endif
 # In mergedlibs mode we have multiply-defined symbols, which Visual Studio
 # does not like. There is no good solution, so just force it.
 ifeq ($(COM),MSC)
-ifeq ($(MERGELIBS),CORE)
+ifneq (,$(MERGELIBS))
 $(eval $(call gb_CppunitTest_add_ldflags,connectivity_commontools,\
 	 /FORCE:MULTIPLE \
 ))
