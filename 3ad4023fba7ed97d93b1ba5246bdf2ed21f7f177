@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_f330eaa0",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-20T07:52:29Z",
+      "side": 1,
+      "message": "Another approach we\u0027ve resorted to to work around this kind of problem with enumerators from (scoped) enumerations is to name them with CamelCase rather than ALL_CAPS.",
+      "revId": "3ad4023fba7ed97d93b1ba5246bdf2ed21f7f177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
