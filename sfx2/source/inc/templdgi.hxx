@@ -114,6 +114,8 @@ protected:
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
 
+    void Recalc();
+
     void SetDoubleClickHdl(const Link &rLink)
     {
         aDoubleClickLink = rLink;
@@ -145,6 +147,7 @@ public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
     virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
+    void Recalc();
 };
 
 class SfxCommonTemplateDialog_Impl : public SfxListener

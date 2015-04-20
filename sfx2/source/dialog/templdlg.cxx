@@ -62,12 +62,109 @@
 #include "appdata.hxx"
 #include <sfx2/viewfrm.hxx>
 
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <comphelper/string.hxx>
+
+#include <sfx2/StyleManager.hxx>
+#include <sfx2/StylePreviewRenderer.hxx>
 
 using namespace css;
 using namespace css::beans;
 using namespace css::frame;
 using namespace css::uno;
+
+namespace
+{
+
+class StyleLBoxString : public SvLBoxString
+{
+    SfxStyleFamily meStyleFamily;
+    std::unique_ptr<sfx2::StylePreviewRenderer> mpStylePreviewRenderer;
+
+public:
+    StyleLBoxString(SvTreeListEntry* pEntry,
+                    sal_uInt16 nFlags,
+                    const OUString& sText,
+                    const SfxStyleFamily& eStyleFamily);
+
+    virtual ~StyleLBoxString();
+
+    virtual void Paint(const Point& aPos,
+                       SvTreeListBox& rDevice,
+                       const SvViewDataEntry* pView,
+                       const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+
+    virtual void InitViewData(SvTreeListBox* pView,
+                              SvTreeListEntry* pEntry,
+                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+};
+
+
+StyleLBoxString::StyleLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText, const SfxStyleFamily& eStyleFamily)
+    : SvLBoxString(pEntry, nFlags, sText)
+    , meStyleFamily(eStyleFamily)
+{}
+
+StyleLBoxString::~StyleLBoxString()
+{}
+
+void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
+{
+    if (!pViewData)
+    {
+        pViewData = pView->GetViewDataItem(pEntry, this);
+    }
+
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    if (!pShell)
+        return;
+
+    sfx2::StyleManager* pStyleManager = pShell->GetStyleManager();
+
+    if (!pStyleManager)
+    {
+        return;
+    }
+    mpStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(*pView, GetText(), meStyleFamily));
+
+    if (!mpStylePreviewRenderer)
+    {
+        return;
+    }
+
+    if (mpStylePreviewRenderer->recalculate())
+    {
+        pViewData->maSize = mpStylePreviewRenderer->getRenderSize();
+    }
+    else
+    {
+        SvLBoxString::InitViewData(pView, pEntry, pViewData);
+    }
+}
+
+void StyleLBoxString::Paint(
+    const Point& aPos, SvTreeListBox& rDevice,
+    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+{
+    if (!pEntry)
+        return;
+
+    bool bResult = false;
+
+    if (mpStylePreviewRenderer)
+    {
+        Rectangle aPaintRectangle = pView->GetPaintRectangle();
+        bResult = mpStylePreviewRenderer->render(aPaintRectangle);
+    }
+
+    if (!bResult)
+    {
+        rDevice.DrawText(aPos, GetText());
+    }
+}
+
+} // end anonymous namespace
 
 // Window is now created dynamically. So here margins, etc.
 
@@ -226,6 +323,12 @@ SfxActionListBox::SfxActionListBox(SfxCommonTemplateDialog_Impl* pParent, WinBit
     : DropListBox_Impl(pParent->GetWindow(), nWinBits, pParent)
 {
     EnableContextMenuHandling();
+}
+
+void SfxActionListBox::Recalc()
+{
+    SetEntryHeight(32);
+    RecalcViewData();
 }
 
 PopupMenu* SfxActionListBox::CreateContextMenu()
@@ -412,6 +515,12 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(SfxCommonTemplateDialog_Impl* pPare
     EnableContextMenuHandling();
 }
 
+void StyleTreeListBox_Impl::Recalc()
+{
+    SetEntryHeight(32);
+    RecalcViewData();
+}
+
 /** Internal structure for the establishment of the hierarchical view */
 class StyleTree_Impl;
 typedef std::vector<StyleTree_Impl*> StyleTreeArr_Impl;
@@ -512,15 +621,25 @@ inline bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
     return false;
 }
 
-SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
-                                 StyleTree_Impl* pEntry,
-                                 const ExpandedEntries_t& rEntries,
-                                 SvTreeListEntry* pParent = 0)
+SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
+                              StyleTree_Impl* pEntry,
+                              const ExpandedEntries_t& rEntries,
+                              SfxStyleFamily eStyleFamily,
+                              SvTreeListEntry* pParent = nullptr)
 {
-    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->getName(), pParent);
+    SvTreeListEntry* pTreeListEntry = pBox->InsertEntry(pEntry->getName(), pParent);
+
+    StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily);
+
+    pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+
+    pBox->GetModel()->InvalidateEntry(pTreeListEntry);
+
     for(sal_uInt16 i = 0; i < pEntry->Count(); ++i)
-        FillBox_Impl(pBox, (*pEntry)[i], rEntries, pNewEntry);
-    return pNewEntry;
+    {
+        FillBox_Impl(pBox, (*pEntry)[i], rEntries, eStyleFamily, pTreeListEntry);
+    }
+    return pTreeListEntry;
 }
 
 // Constructor
@@ -950,8 +1069,12 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         pTreeBox->SetUpdateMode( false );
         pTreeBox->Clear();
         const sal_uInt16 nCount = aArr.size();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
-            FillBox_Impl(pTreeBox, aArr[i], aEntries);
+
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            FillBox_Impl(pTreeBox, aArr[i], aEntries, pItem->GetFamily());
+        }
+        pTreeBox->Recalc();
 
         EnableItem(SID_STYLE_WATERCAN,false);
 
@@ -1103,8 +1226,13 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 aFmtLb.Clear();
 
                 for(nPos = 0; nPos < nCount; ++nPos)
-                    aFmtLb.InsertEntry(aStrings[nPos], 0, false, nPos);
-
+                {
+                    SvTreeListEntry* pTreeListEntry = aFmtLb.InsertEntry(aStrings[nPos], 0, false, nPos);
+                    StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam);
+                    pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+                    aFmtLb.GetModel()->InvalidateEntry(pTreeListEntry);
+                }
+                aFmtLb.Recalc();
                 aFmtLb.SetUpdateMode(true);
             }
             // Selects the current style if any
