@@ -3662,7 +3662,7 @@ void ScInterpreter::ScTrimMean()
     }
 }
 
-void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray, bool bAllowText )
+void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray, bool bConvertTextInArray )
 {
     ScAddress aAdr;
     ScRange aRange;
@@ -3724,7 +3724,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     for (SCSIZE i = 0; i < nCount; ++i)
                         rArray.push_back( pMat->GetDouble(i));
                 }
-                else if (bAllowText)
+                else if (bConvertTextInArray)
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                     {
@@ -3782,9 +3782,9 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         PopError();
 }
 
-void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bAllowText )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray )
 {
-    GetNumberSequenceArray( nParamCount, rSortArray, bAllowText );
+    GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
     else if (rSortArray.empty())
