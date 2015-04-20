@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_3600a0aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-04-20T21:45:03Z",
+      "side": 1,
+      "message": "Use \"tdf#75360\" to refer to the bug report, remove the link below, and add a more descriptive message than \"fix bug\".",
+      "revId": "78e874ad7ad910841b42c2cbb4be21197129d48b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
