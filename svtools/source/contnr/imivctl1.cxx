@@ -283,7 +283,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t
         Size aSize( CalcBoundingSize( pEntry ) );
         SetBoundingRect_Impl( pEntry, *pPos, aSize );
         SetEntryPos( pEntry, *pPos, false, true, true /*keep grid map*/ );
-        pEntry->nFlags |= ICNVIEW_FLAG_POS_MOVED;
+        pEntry->nFlags |= SvxIconViewFlags::POS_MOVED;
         SetEntriesMoved( true );
     }
     else
@@ -377,10 +377,10 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
     if( pEntry->IsSelected() != bSelect )
     {
         pHdlEntry = pEntry;
-        sal_uInt16 nEntryFlags = pEntry->GetFlags();
+        SvxIconViewFlags nEntryFlags = pEntry->GetFlags();
         if( bSelect )
         {
-            nEntryFlags |= ICNVIEW_FLAG_SELECTED;
+            nEntryFlags |= SvxIconViewFlags::SELECTED;
             pEntry->AssignFlags( nEntryFlags );
             nSelectionCount++;
             if( bCallHdl )
@@ -388,7 +388,7 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
         }
         else
         {
-            nEntryFlags &= ~( ICNVIEW_FLAG_SELECTED);
+            nEntryFlags &= ~( SvxIconViewFlags::SELECTED);
             pEntry->AssignFlags( nEntryFlags );
             nSelectionCount--;
             if( bCallHdl )
@@ -447,7 +447,7 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
-        pCur->ClearFlags( ICNVIEW_FLAG_POS_MOVED );
+        pCur->ClearFlags( SvxIconViewFlags::POS_MOVED );
         if( pCur->IsPosLocked() )
         {
             // adapt (among others) VirtSize
@@ -521,8 +521,8 @@ void SvxIconChoiceCtrl_Impl::InitPredecessors()
         SvxIconChoiceCtrlEntry* pPrev = aEntries[ 0 ];
         for( size_t nCur = 1; nCur <= nCount; nCur++ )
         {
-            pPrev->ClearFlags( ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED |
-                                ICNVIEW_FLAG_PRED_SET);
+            pPrev->ClearFlags( SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED |
+                                SvxIconViewFlags::PRED_SET);
 
             SvxIconChoiceCtrlEntry* pNext;
             if( nCur == nCount )
@@ -550,7 +550,7 @@ void SvxIconChoiceCtrl_Impl::ClearPredecessors()
             SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
             pCur->pflink = 0;
             pCur->pblink = 0;
-            pCur->ClearFlags( ICNVIEW_FLAG_PRED_SET );
+            pCur->ClearFlags( SvxIconViewFlags::PRED_SET );
         }
         pHead = 0;
     }
@@ -719,7 +719,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
         pView->SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::RepaintEntries( sal_uInt16 nEntryFlagsMask )
+void SvxIconChoiceCtrl_Impl::RepaintEntries( SvxIconViewFlags nEntryFlagsMask )
 {
     const size_t nCount = pZOrderList->size();
     if( !nCount )
@@ -1510,10 +1510,10 @@ void SvxIconChoiceCtrl_Impl::CheckScrollBars()
 
 void SvxIconChoiceCtrl_Impl::GetFocus()
 {
-    RepaintEntries( ICNVIEW_FLAG_SELECTED );
+    RepaintEntries( SvxIconViewFlags::SELECTED );
     if( pCursor )
     {
-        pCursor->SetFlags( ICNVIEW_FLAG_FOCUSED );
+        pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
         ShowCursor( true );
     }
 }
@@ -1522,13 +1522,13 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
 {
     StopEditTimer();
     if( pCursor )
-        pCursor->ClearFlags( ICNVIEW_FLAG_FOCUSED );
+        pCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
     ShowCursor( false );
 
 //  HideFocus ();
 //  pView->Invalidate ( aFocus.aRect );
 
-    RepaintEntries( ICNVIEW_FLAG_SELECTED );
+    RepaintEntries( SvxIconViewFlags::SELECTED );
 }
 
 void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
@@ -2178,14 +2178,14 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
     pCursor = pEntry;
     if( pOldCursor )
     {
-        pOldCursor->ClearFlags( ICNVIEW_FLAG_FOCUSED );
+        pOldCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
         if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
             SelectEntry( pOldCursor, false, true ); // deselect old cursor
     }
     if( pCursor )
     {
         ToTop( pCursor );
-        pCursor->SetFlags( ICNVIEW_FLAG_FOCUSED );
+        pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
         if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
             SelectEntry( pCursor, true, true );
         if( !bShowFocusAsync )
@@ -2943,7 +2943,7 @@ void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& r
             if( aNewPos != rBoundRect.TopLeft() )
             {
                 SetEntryPos( pCur, aNewPos );
-                pCur->SetFlags( ICNVIEW_FLAG_POS_MOVED );
+                pCur->SetFlags( SvxIconViewFlags::POS_MOVED );
                 nFlags |= F_MOVED_ENTRIES;
             }
             nCurRight = aNewPos.X() + nWidth;
@@ -3461,7 +3461,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
-            if( pEntry->GetFlags() & (ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED))
+            if( pEntry->GetFlags() & SvxIconViewFlags(SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED))
                 SetEntryPos(pEntry, GetEntryBoundRect( pEntry ).TopLeft());
         }
 
@@ -3520,7 +3520,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry
     }
     if( bSetHead )
         pHead = pEntry;
-    pEntry->SetFlags( ICNVIEW_FLAG_PRED_SET );
+    pEntry->SetFlags( SvxIconViewFlags::PRED_SET );
     aAutoArrangeIdle.Start();
 }
 

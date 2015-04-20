@@ -298,7 +298,7 @@ class SvxIconChoiceCtrl_Impl
                             bool bSelect,
                             bool bSyncPaint
                         );
-    void                RepaintEntries( sal_uInt16 nEntryFlagsMask );
+    void                RepaintEntries( SvxIconViewFlags nEntryFlagsMask );
     void                SetListPositions();
     void                SetDefaultTextSize();
     bool                IsAutoArrange() const

@@ -26,21 +26,30 @@
 #include <tools/contnr.hxx>
 #include <vcl/image.hxx>
 #include <vcl/seleng.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ResId;
 class Point;
 class SvxIconChoiceCtrl_Impl;
 class Image;
 
-#define ICNVIEW_FLAG_POS_LOCKED     0x0001
-#define ICNVIEW_FLAG_SELECTED       0x0002
-#define ICNVIEW_FLAG_FOCUSED        0x0004
-#define ICNVIEW_FLAG_IN_USE         0x0008
-#define ICNVIEW_FLAG_CURSORED       0x0010 // Border around image
-#define ICNVIEW_FLAG_POS_MOVED      0x0020 // Moved by Drag and Drop, but not logged
-#define ICNVIEW_FLAG_DROP_TARGET    0x0040 // Set in QueryDrop
-#define ICNVIEW_FLAG_BLOCK_EMPHASIS 0x0080 // Do not paint Emphasis
-#define ICNVIEW_FLAG_PRED_SET       0x0400 // Predecessor moved
+enum class SvxIconViewFlags
+{
+    NONE           = 0x0000,
+    POS_LOCKED     = 0x0001,
+    SELECTED       = 0x0002,
+    FOCUSED        = 0x0004,
+    IN_USE         = 0x0008,
+    CURSORED       = 0x0010, // Border around image
+    POS_MOVED      = 0x0020, // Moved by Drag and Drop, but not logged
+    DROP_TARGET    = 0x0040, // Set in QueryDrop
+    BLOCK_EMPHASIS = 0x0080, // Do not paint Emphasis
+    PRED_SET       = 0x0400, // Predecessor moved
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x04ff> {};
+}
 
 enum SvxIconChoiceCtrlTextMode
 {
@@ -84,12 +93,12 @@ class SvxIconChoiceCtrlEntry
     SvxIconChoiceCtrlEntry*         pflink;     // forward  (rechter neighbour)
 
     SvxIconChoiceCtrlTextMode       eTextMode;
-    sal_uInt16                  nX,nY;      // for keyboard control
-    sal_uInt16                  nFlags;
+    sal_uInt16                      nX,nY;      // for keyboard control
+    SvxIconViewFlags                nFlags;
 
-    void                    ClearFlags( sal_uInt16 nMask ) { nFlags &= (~nMask); }
-    void                    SetFlags( sal_uInt16 nMask ) { nFlags |= nMask; }
-    void                    AssignFlags( sal_uInt16 _nFlags ) { nFlags = _nFlags; }
+    void                    ClearFlags( SvxIconViewFlags nMask ) { nFlags &= (~nMask); }
+    void                    SetFlags( SvxIconViewFlags nMask ) { nFlags |= nMask; }
+    void                    AssignFlags( SvxIconViewFlags _nFlags ) { nFlags = _nFlags; }
 
     // set left neighbour (A <-> B  ==>  A <-> this <-> B)
     void                    SetBacklink( SvxIconChoiceCtrlEntry* pA )
@@ -109,7 +118,7 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, SvxIconViewFlags nFlags = SvxIconViewFlags::NONE );
                             ~SvxIconChoiceCtrlEntry () {}
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
@@ -125,17 +134,17 @@ public:
     const Rectangle &       GetBoundRect() const { return aRect; }
 
     void                    SetFocus ( bool bSet )
-                                     { nFlags = ( bSet ? nFlags | ICNVIEW_FLAG_FOCUSED : nFlags & ~ICNVIEW_FLAG_FOCUSED ); }
+                                     { nFlags = ( bSet ? nFlags | SvxIconViewFlags::FOCUSED : nFlags & ~SvxIconViewFlags::FOCUSED ); }
 
     SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
-    sal_uInt16              GetFlags() const { return nFlags; }
-    bool                    IsSelected() const { return ((nFlags & ICNVIEW_FLAG_SELECTED) !=0); }
-    bool                    IsFocused() const { return ((nFlags & ICNVIEW_FLAG_FOCUSED) !=0); }
-    bool                    IsInUse() const { return ((nFlags & ICNVIEW_FLAG_IN_USE) !=0); }
-    bool                    IsCursored() const { return ((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
-    bool                    IsDropTarget() const { return ((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
-    bool                    IsBlockingEmphasis() const { return ((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
-    bool                    IsPosLocked() const { return ((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
+    SvxIconViewFlags        GetFlags() const { return nFlags; }
+    bool                    IsSelected() const { return bool(nFlags & SvxIconViewFlags::SELECTED); }
+    bool                    IsFocused() const { return bool(nFlags & SvxIconViewFlags::FOCUSED); }
+    bool                    IsInUse() const { return bool(nFlags & SvxIconViewFlags::IN_USE); }
+    bool                    IsCursored() const { return bool(nFlags & SvxIconViewFlags::CURSORED); }
+    bool                    IsDropTarget() const { return bool(nFlags & SvxIconViewFlags::DROP_TARGET); }
+    bool                    IsBlockingEmphasis() const { return bool(nFlags & SvxIconViewFlags::BLOCK_EMPHASIS); }
+    bool                    IsPosLocked() const { return bool(nFlags & SvxIconViewFlags::POS_LOCKED); }
     // Only set at AutoArrange. The head of the list is accessible via SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
@@ -281,7 +290,7 @@ public:
                                          const Image& rImage,
                                          sal_uLong nPos = CONTAINER_APPEND,
                                          const Point* pPos = 0,
-                                         sal_uInt16 nFlags = 0
+                                         SvxIconViewFlags nFlags = SvxIconViewFlags::NONE
                                        );
 
     /** creates automatic mnemonics for all icon texts in the control
