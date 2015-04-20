@@ -72,6 +72,7 @@
 #include <svl/urlfilter.hxx>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -93,6 +94,19 @@ using ::svt::FolderDescriptor;
 
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
+
+enum class FileViewFlags
+{
+    NONE               = 0x00,
+    ONLYFOLDER         = 0x01,
+    MULTISELECTION     = 0x02,
+    SHOW_ONLYTITLE     = 0x10,
+    SHOW_NONE          = 0x20,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x1f> {};
+}
 
 namespace
 {
@@ -191,7 +205,7 @@ protected:
     virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const SAL_OVERRIDE;
 
 public:
-    ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
+    ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
    virtual ~ViewTabListBox_Impl();
 
     virtual void    Resize() SAL_OVERRIDE;
@@ -442,7 +456,7 @@ public:
     Reference< XCommandEnvironment >    mxCmdEnv;
 
     SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv,
-                                              sal_Int16 nFlags,
+                                              FileViewFlags nFlags,
                                               bool bOnlyFolder );
     virtual                ~SvtFileView_Impl();
 
@@ -565,7 +579,7 @@ OUString CreateExactSizeText( sal_Int64 nSize )
 
 ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
                                           SvtFileView_Impl* pParent,
-                                          sal_Int16 nFlags ) :
+                                          FileViewFlags nFlags ) :
 
     SvHeaderTabListBox( pParentWin, WB_TABSTOP ),
 
@@ -579,14 +593,14 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mbAutoResize        ( false ),
     mbEnableDelete      ( false ),
     mbEnableRename      ( true ),
-    mbShowHeader        ( (nFlags & FILEVIEW_SHOW_NONE) == 0 )
+    mbShowHeader        ( !(nFlags & FileViewFlags::SHOW_NONE) )
 {
     Size aBoxSize = pParentWin->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
-    if (nFlags & FILEVIEW_SHOW_ONLYTITLE)
+    if (nFlags & FileViewFlags::SHOW_ONLYTITLE)
     {
         long pTabs[] = { 2, 20, 600 };
         SetTabs(&pTabs[0], MAP_PIXEL);
@@ -611,7 +625,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     InitHeaderBar( mpHeaderBar );
     SetHighlightRange();
     SetEntryHeight( ROW_HEIGHT );
-    if (nFlags & FILEVIEW_MULTISELECTION)
+    if (nFlags & FileViewFlags::MULTISELECTION)
         SetSelectionMode( MULTIPLE_SELECTION );
 
     Show();
@@ -1067,11 +1081,11 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
     Control( pParent, nBits )
 {
-    sal_Int8 nFlags = 0;
+    FileViewFlags nFlags = FileViewFlags::NONE;
     if ( bOnlyFolder )
-        nFlags |= FILEVIEW_ONLYFOLDER;
+        nFlags |= FileViewFlags::ONLYFOLDER;
     if ( bMultiSelection )
-        nFlags |= FILEVIEW_MULTISELECTION;
+        nFlags |= FileViewFlags::MULTISELECTION;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
@@ -1549,7 +1563,7 @@ const OUString* NameTranslator_Impl::GetTransTableFileName() const
 // class SvtFileView_Impl
 
 
-SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv, sal_Int16 nFlags, bool bOnlyFolder )
+SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv, FileViewFlags nFlags, bool bOnlyFolder )
 
     :mpAntiImpl                 ( pAntiImpl )
     ,m_eAsyncActionResult       ( ::svt::ERROR )

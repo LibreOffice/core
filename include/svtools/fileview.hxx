@@ -32,12 +32,6 @@
 
 // class SvtFileView -----------------------------------------------------
 
-#define FILEVIEW_ONLYFOLDER         0x0001
-#define FILEVIEW_MULTISELECTION     0x0002
-
-#define FILEVIEW_SHOW_ONLYTITLE     0x0010
-#define FILEVIEW_SHOW_NONE          0x0020
-
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvTreeListEntry;
