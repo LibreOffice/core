@@ -1772,6 +1772,15 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
                     switch( eChartType )
                     {
+                        case chart::TYPEID_BUBBLE:
+                        case chart::TYPEID_HORBAR:
+                        case chart::TYPEID_BAR:
+                        {
+                            pFS->singleElement(FSNS(XML_c, XML_invertIfNegative),
+                                        XML_val, "0",
+                                        FSEND);
+                        }
+                        break;
                         case chart::TYPEID_LINE:
                         {
                             exportMarker(xDataSeries);
