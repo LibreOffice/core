@@ -24,8 +24,8 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-DataLabelModelBase::DataLabelModelBase() :
-    mbDeleted( false )
+DataLabelModelBase::DataLabelModelBase(bool bMSO2007Doc) :
+    mbDeleted( !bMSO2007Doc )
 {
 }
 
@@ -33,7 +33,8 @@ DataLabelModelBase::~DataLabelModelBase()
 {
 }
 
-DataLabelModel::DataLabelModel() :
+DataLabelModel::DataLabelModel(bool bMSO2007Doc) :
+    DataLabelModelBase(bMSO2007Doc),
     mnIndex( -1 )
 {
 }
@@ -42,8 +43,9 @@ DataLabelModel::~DataLabelModel()
 {
 }
 
-DataLabelsModel::DataLabelsModel() :
-    mbShowLeaderLines( false )
+DataLabelsModel::DataLabelsModel(bool bMSO2007Doc) :
+    DataLabelModelBase(bMSO2007Doc),
+    mbShowLeaderLines( !bMSO2007Doc )
 {
 }
 
@@ -51,12 +53,12 @@ DataLabelsModel::~DataLabelsModel()
 {
 }
 
-PictureOptionsModel::PictureOptionsModel() :
+PictureOptionsModel::PictureOptionsModel(bool bMSO2007Doc) :
     mfStackUnit( 1.0 ),
     mnPictureFormat( XML_stretch ),
-    mbApplyToFront( false ),
-    mbApplyToSides( false ),
-    mbApplyToEnd( false )
+    mbApplyToFront( !bMSO2007Doc ),
+    mbApplyToSides( !bMSO2007Doc ),
+    mbApplyToEnd( !bMSO2007Doc )
 {
 }
 
@@ -85,12 +87,12 @@ TrendlineLabelModel::~TrendlineLabelModel()
 {
 }
 
-TrendlineModel::TrendlineModel() :
+TrendlineModel::TrendlineModel(bool bMSO2007Doc) :
     mnOrder( 2 ),
     mnPeriod( 2 ),
     mnTypeId( XML_linear ),
-    mbDispEquation( false ),
-    mbDispRSquared( false )
+    mbDispEquation( !bMSO2007Doc ),
+    mbDispRSquared( !bMSO2007Doc )
 {
 }
 
@@ -98,9 +100,9 @@ TrendlineModel::~TrendlineModel()
 {
 }
 
-DataPointModel::DataPointModel() :
+DataPointModel::DataPointModel(bool bMSO2007Doc) :
     mnIndex( -1 ),
-    mbInvertNeg( false )
+    mbInvertNeg( !bMSO2007Doc )
 {
 }
 
@@ -108,15 +110,15 @@ DataPointModel::~DataPointModel()
 {
 }
 
-SeriesModel::SeriesModel() :
+SeriesModel::SeriesModel(bool bMSO2007Doc) :
     mnExplosion( 0 ),
     mnIndex( -1 ),
     mnMarkerSize( 5 ),
     mnMarkerSymbol( XML_auto ),
     mnOrder( -1 ),
-    mbBubble3d( false ),
-    mbInvertNeg( false ),
-    mbSmooth( false )
+    mbBubble3d( !bMSO2007Doc ),
+    mbInvertNeg( !bMSO2007Doc ),
+    mbSmooth( !bMSO2007Doc )
 {
 }
 

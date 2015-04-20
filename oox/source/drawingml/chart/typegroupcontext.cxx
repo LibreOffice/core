@@ -76,7 +76,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( dropLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxDropLines.create() );
         case C_TOKEN( gapDepth ):
@@ -86,7 +86,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
             return 0;
         case C_TOKEN( ser ):
-            return new AreaSeriesContext( *this, mrModel.maSeries.create() );
+            return new AreaSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( varyColors ):
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
@@ -115,7 +115,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnBarDir = rAttribs.getToken( XML_val, XML_col );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( gapDepth ):
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
             return 0;
@@ -130,7 +130,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnOverlap = rAttribs.getInteger( XML_val, 0 );
             return 0;
         case C_TOKEN( ser ):
-            return new BarSeriesContext( *this, mrModel.maSeries.create() );
+            return new BarSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( serLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
         case C_TOKEN( shape ):
@@ -167,9 +167,9 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
             mrModel.mnBubbleScale = rAttribs.getInteger( XML_val, 100 );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( ser ):
-            return new BubbleSeriesContext( *this, mrModel.maSeries.create() );
+            return new BubbleSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( showNegBubbles ):
             mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
@@ -201,7 +201,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( dropLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxDropLines.create() );
         case C_TOKEN( gapDepth ):
@@ -216,7 +216,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.mbShowMarker = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( ser ):
-            return new LineSeriesContext( *this, mrModel.maSeries.create() );
+            return new LineSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( smooth ):
             mrModel.mbSmooth = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
@@ -244,7 +244,7 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( firstSliceAng ):
             mrModel.mnFirstAngle = rAttribs.getInteger( XML_val, 0 );
             return 0;
@@ -261,7 +261,7 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnSecondPieSize = rAttribs.getInteger( XML_val, 75 );
             return 0;
         case C_TOKEN( ser ):
-            return new PieSeriesContext( *this, mrModel.maSeries.create() );
+            return new PieSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( serLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
         case C_TOKEN( splitPos ):
@@ -295,12 +295,12 @@ ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, co
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( radarStyle ):
             mrModel.mnRadarStyle = rAttribs.getToken( XML_val, XML_standard );
             return 0;
         case C_TOKEN( ser ):
-            return new RadarSeriesContext( *this, mrModel.maSeries.create() );
+            return new RadarSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( varyColors ):
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
@@ -326,12 +326,12 @@ ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, 
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( dLbls ):
-            return new DataLabelsContext( *this, mrModel.mxLabels.create() );
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
         case C_TOKEN( scatterStyle ):
             mrModel.mnScatterStyle = rAttribs.getInteger( XML_val, XML_marker );
             return 0;
         case C_TOKEN( ser ):
-            return new ScatterSeriesContext( *this, mrModel.maSeries.create() );
+            return new ScatterSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( varyColors ):
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
@@ -357,7 +357,7 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( ser ):
-            return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
+            return new SurfaceSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
         case C_TOKEN( wireframe ):
             mrModel.mbWireframe = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;

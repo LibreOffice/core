@@ -272,6 +272,7 @@ WallFloorConverter::~WallFloorConverter()
 
 void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, ObjectType eObjType )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( rxDiagram.is() )
     {
         PropertySet aPropSet;
@@ -282,7 +283,7 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             default:                OSL_FAIL( "WallFloorConverter::convertFromModel - invalid object type" );
         }
         if( aPropSet.is() )
-            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), eObjType );
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(bMSO2007Doc), eObjType );
     }
 }
 

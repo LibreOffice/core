@@ -87,6 +87,7 @@ WallFloorContext::~WallFloorContext()
 
 ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( backWall ):
@@ -95,7 +96,7 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
             switch( nElement )
             {
                 case C_TOKEN( pictureOptions ):
-                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
+                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create(bMSO2007Doc) );
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }

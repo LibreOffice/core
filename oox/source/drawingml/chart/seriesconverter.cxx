@@ -510,6 +510,7 @@ DataPointConverter::~DataPointConverter()
 void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries,
         const TypeGroupConverter& rTypeGroup, const SeriesModel& rSeries )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     try
     {
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
@@ -527,7 +528,7 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if( mrModel.mxShapeProp.is() )
         {
             if( rTypeGroup.getTypeInfo().mbPictureOptions )
-                getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
+                getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(bMSO2007Doc), rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
             else
                 getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
         }
@@ -631,8 +632,9 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     // series formatting
     ObjectFormatter& rFormatter = getFormatter();
     ObjectType eObjType = rTypeGroup.getSeriesObjectType();
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( rTypeInfo.mbPictureOptions )
-        rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), eObjType, mrModel.mnIndex );
+        rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(bMSO2007Doc), eObjType, mrModel.mnIndex );
     else
         rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
 

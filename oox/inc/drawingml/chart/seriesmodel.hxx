@@ -45,7 +45,7 @@ struct DataLabelModelBase
     OptValue< bool >    mobShowVal;         /// True = show data point value.
     bool                mbDeleted;          /// True = data label(s) deleted.
 
-    explicit            DataLabelModelBase();
+    explicit            DataLabelModelBase(bool bMSO2007Doc);
                         ~DataLabelModelBase();
 };
 
@@ -58,7 +58,7 @@ struct DataLabelModel : public DataLabelModelBase
     TextRef             mxText;             /// Manual or linked text for this data point label.
     sal_Int32           mnIndex;            /// Data point index for this data label.
 
-    explicit            DataLabelModel();
+    explicit            DataLabelModel(bool bMSO2007Doc);
                         ~DataLabelModel();
 };
 
@@ -71,7 +71,7 @@ struct DataLabelsModel : public DataLabelModelBase
     ShapeRef            mxLeaderLines;      /// Formatting of connector lines between data points and labels.
     bool                mbShowLeaderLines;  /// True = show connector lines between data points and labels.
 
-    explicit            DataLabelsModel();
+    explicit            DataLabelsModel(bool bMSO2007Doc);
                         ~DataLabelsModel();
 };
 
@@ -83,7 +83,7 @@ struct PictureOptionsModel
     bool                mbApplyToSides;     /// True = draw picture at left/right side of 3D data points.
     bool                mbApplyToEnd;       /// True = draw picture at top/bottom side of 3D data points.
 
-    explicit            PictureOptionsModel();
+    explicit            PictureOptionsModel(bool bMSO2007Doc);
                         ~PictureOptionsModel();
 };
 
@@ -144,7 +144,7 @@ struct TrendlineModel
     bool                mbDispEquation;     /// True = show equation of the trendline.
     bool                mbDispRSquared;     /// True = show R-squared of the trendline.
 
-    explicit            TrendlineModel();
+    explicit            TrendlineModel(bool bMSO2007Doc);
                         ~TrendlineModel();
 };
 
@@ -163,7 +163,7 @@ struct DataPointModel
     sal_Int32           mnIndex;            /// Unique data point index.
     bool                mbInvertNeg;        /// True = invert negative data points (not derived from series!).
 
-    explicit            DataPointModel();
+    explicit            DataPointModel(bool bMSO2007Doc);
                         ~DataPointModel();
 };
 
@@ -204,7 +204,7 @@ struct SeriesModel
     bool                mbInvertNeg;        /// True = invert negative data points.
     bool                mbSmooth;           /// True = smooth series line.
 
-    explicit            SeriesModel();
+    explicit            SeriesModel(bool bMSO2007Doc);
                         ~SeriesModel();
 };
 

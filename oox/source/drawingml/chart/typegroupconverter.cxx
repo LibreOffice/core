@@ -265,6 +265,7 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 
 Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     sal_Int32 nMaxValues = 0;
     Reference< XLabeledDataSequence > xLabeledSeq;
     /*  Find first existing category sequence. The bahaviour of Excel 2007 is
