@@ -467,8 +467,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( pictureOptions ):
                     return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
                 case C_TOKEN( shape ):
-                    // missing attribute does not change shape type to 'box' as specified
-                    mrModel.monShape = rAttribs.getToken( XML_val );
+                    mrModel.monShape = rAttribs.getToken( bMSO2007Doc ? XML_val : XML_box );
                     return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
