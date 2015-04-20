@@ -244,13 +244,13 @@ private:
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
-    maRes(new CheckBox(this)),
-    maDialog(new CheckBox(this)),
-    maBoldAppFont(new CheckBox(this)),
-    maBox3(new GroupBox(this)),
-    maOKButton(new OKButton(this, WB_DEFBUTTON)),
-    maCancelButton(new CancelButton(this)),
-    maHelpButton(new HelpButton(this))
+    maRes(VclPtr<CheckBox>::Create(this)),
+    maDialog(VclPtr<CheckBox>::Create(this)),
+    maBoldAppFont(VclPtr<CheckBox>::Create(this)),
+    maBox3(VclPtr<GroupBox>::Create(this)),
+    maOKButton(VclPtr<OKButton>::Create(this, WB_DEFBUTTON)),
+    maCancelButton(VclPtr<CancelButton>::Create(this)),
+    maHelpButton(VclPtr<HelpButton>::Create(this))
 {
     DbgData*    pData = DbgGetData();
     MapMode     aAppMap( MAP_APPFONT );
@@ -397,8 +397,8 @@ void DbgDialog::dispose()
 
 DbgInfoDialog::DbgInfoDialog( vcl::Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
-    maListBox(new ListBox( this, WB_BORDER | WB_AUTOHSCROLL )),
-    maOKButton(new OKButton(this, WB_DEFBUTTON))
+    maListBox(VclPtr<ListBox>::Create( this, WB_BORDER | WB_AUTOHSCROLL )),
+    maOKButton(VclPtr<OKButton>::Create(this, WB_DEFBUTTON))
 {
     mbHelpText = bHelpText;
 

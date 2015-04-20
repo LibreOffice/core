@@ -658,7 +658,7 @@ bool OpenGLContext::init( vcl::Window* pParent )
     if(mbInitialized)
         return true;
 
-    m_xWindow.reset(pParent ? NULL : new vcl::Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    m_xWindow.reset(pParent ? nullptr : VclPtr<vcl::Window>::Create(nullptr, WB_NOBORDER|WB_NODIALOGCONTROL));
     mpWindow = pParent ? pParent : m_xWindow.get();
     if(m_xWindow)
         m_xWindow->setPosSizePixel(0,0,0,0);
@@ -1081,7 +1081,7 @@ bool OpenGLContext::initWindow()
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow, false);
-        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
+        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
 
     if( m_pChildWindow )
@@ -1108,7 +1108,7 @@ bool OpenGLContext::initWindow()
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
-        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
+        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
 
     if( m_pChildWindow )

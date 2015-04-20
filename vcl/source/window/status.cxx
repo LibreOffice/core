@@ -123,7 +123,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // remember WinBits
     mpItemList      = new ImplStatusItemList;
-    mpImplData->mpVirDev        = new VirtualDevice( *this );
+    mpImplData->mpVirDev        = VclPtr<VirtualDevice>::Create( *this );
     mnCurItemId     = 0;
     mbFormat        = true;
     mbVisibleItems  = true;

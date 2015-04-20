@@ -119,9 +119,9 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
 MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     Window( pParent, 0 ),
-    aCloseBtn(new DecoToolBox(this)),
-    aFloatBtn(new PushButton( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )),
-    aHideBtn(new PushButton(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ))
+    aCloseBtn(VclPtr<DecoToolBox>::Create(this)),
+    aFloatBtn(VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )),
+    aHideBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ))
 {
     SetType( WINDOW_MENUBARWINDOW );
     pMenu = NULL;

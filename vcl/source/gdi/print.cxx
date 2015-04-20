@@ -792,9 +792,9 @@ void Printer::ImplInitDisplay( const vcl::Window* pWindow )
     mpJobGraphics       = NULL;
 
     if ( pWindow )
-        mpDisplayDev = new VirtualDevice( *pWindow );
+        mpDisplayDev = VclPtr<VirtualDevice>::Create( *pWindow );
     else
-        mpDisplayDev = new VirtualDevice();
+        mpDisplayDev = VclPtr<VirtualDevice>::Create();
     mpFontCollection          = pSVData->maGDIData.mpScreenFontList;
     mpFontCache         = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX              = mpDisplayDev->mnDPIX;

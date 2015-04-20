@@ -64,11 +64,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeShowNupOrderWindow(vcl
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
-    , maPageVDev( new VirtualDevice(*this) )
+    , maPageVDev( VclPtr<VirtualDevice>::Create(*this) )
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
     , mbGreyscale( false )
-    , maHorzDim(new FixedLine(this, WB_HORZ | WB_CENTER))
-    , maVertDim(new FixedLine(this, WB_VERT | WB_VCENTER))
+    , maHorzDim(VclPtr<FixedLine>::Create(this, WB_HORZ | WB_CENTER))
+    , maVertDim(VclPtr<FixedLine>::Create(this, WB_VERT | WB_VCENTER))
 {
     SetPaintTransparent( true );
     SetBackground();

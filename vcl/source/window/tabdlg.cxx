@@ -197,7 +197,7 @@ void TabDialog::ImplPosControls()
     {
         Size aDlgSize = GetOutputSizePixel();
         if ( !mpFixedLine )
-            mpFixedLine = new FixedLine( this );
+            mpFixedLine = VclPtr<FixedLine>::Create( this );
         mpFixedLine->SetPosSizePixel( Point( 0, nOffY ),
                                       Size( aDlgSize.Width(), 2 ) );
         mpFixedLine->Show();

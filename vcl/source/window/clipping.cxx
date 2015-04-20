@@ -842,7 +842,7 @@ void Window::ImplSaveOverlapBackground()
             if ( nSaveBackSize+mpWindowImpl->mpFrameData->mnAllSaveBackSize <= IMPL_MAXALLSAVEBACKSIZE )
             {
                 Size aOutSize( mnOutWidth, mnOutHeight );
-                mpWindowImpl->mpOverlapData->mpSaveBackDev = new VirtualDevice( *mpWindowImpl->mpFrameWindow );
+                mpWindowImpl->mpOverlapData->mpSaveBackDev = VclPtr<VirtualDevice>::Create( *mpWindowImpl->mpFrameWindow );
                 if ( mpWindowImpl->mpOverlapData->mpSaveBackDev->SetOutputSizePixel( aOutSize ) )
                 {
                     mpWindowImpl->mpFrameWindow->ImplUpdateAll();

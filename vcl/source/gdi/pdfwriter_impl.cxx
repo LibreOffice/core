@@ -2220,7 +2220,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 {
     if( ! m_pReferenceDevice )
     {
-        VirtualDevice*  pVDev = new VirtualDevice( 0 );
+        VclPtrInstance<VirtualDevice> pVDev( 0 );
 
         m_pReferenceDevice = pVDev;
 

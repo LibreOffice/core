@@ -111,7 +111,7 @@ public:
 
 XIMStatusWindow::XIMStatusWindow( bool bOn ) :
         StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
-        m_aStatusText(new FixedText(this, 0)),
+        m_aStatusText(VclPtr<FixedText>::Create(this, 0)),
         m_pLastParent( NULL ),
         m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
@@ -330,7 +330,7 @@ public:
 
 IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         StatusWindow( WB_MOVEABLE ),
-        m_aStatusBtn(new MenuButton(this, WB_BORDER)),
+        m_aStatusBtn(VclPtr<MenuButton>::Create(this, WB_BORDER)),
         m_pResetFocus( pParent ),
         m_bShow( true ),
         m_bOn( bOn )
@@ -535,10 +535,10 @@ void I18NStatus::setParent( SalFrame* pParent )
     {
         bool bIIIMPmode = m_aChoices.begin() != m_aChoices.end();
         if( bIIIMPmode )
-            m_pStatusWindow = new IIIMPStatusWindow( pParent,
+            m_pStatusWindow = VclPtr<IIIMPStatusWindow>::Create( pParent,
                                                      getStatusWindowMode() );
         else
-            m_pStatusWindow = new XIMStatusWindow( getStatusWindowMode() );
+            m_pStatusWindow = VclPtr<XIMStatusWindow>::Create( getStatusWindowMode() );
         setStatusText( m_aCurrentIM );
     }
     m_pStatusWindow->setPosition( m_pParent );

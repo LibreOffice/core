@@ -517,7 +517,7 @@ public:
     VclExpander(vcl::Window *pParent)
         : VclBin(pParent)
         , m_bResizeTopLevel(true)
-        , m_pDisclosureButton(new DisclosureButton(this))
+        , m_pDisclosureButton(VclPtr<DisclosureButton>::Create(this))
     {
         m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_pDisclosureButton->Show();
@@ -630,7 +630,7 @@ protected:
 public:
     VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)
-        , m_aEventBoxHelper(new EventBoxHelper(this))
+        , m_aEventBoxHelper(VclPtr<EventBoxHelper>::Create(this))
     {
         m_aEventBoxHelper->Show();
     }

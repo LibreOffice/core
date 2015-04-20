@@ -777,9 +777,9 @@ public:
             ScopedVclPtr<VirtualDevice> pNested;
 
             if ((int)eType < RENDER_AS_BITMAPEX)
-                pNested = new VirtualDevice(rDev);
+                pNested = VclPtr<VirtualDevice>::Create(rDev).get();
             else
-                pNested = new VirtualDevice(rDev,0,0);
+                pNested = VclPtr<VirtualDevice>::Create(rDev,0,0).get();
 
             pNested->SetOutputSizePixel(r.GetSize());
             Rectangle aWhole(Point(0,0), r.GetSize());
@@ -1230,8 +1230,8 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
     // otherwise bounce floating windows
     if (!mpButton)
     {
-        mpButtonWin = new FloatingWindow(this);
-        mpButton = new PushButton(mpButtonWin);
+        mpButtonWin = VclPtr<FloatingWindow>::Create(this);
+        mpButton = VclPtr<PushButton>::Create(mpButtonWin);
         mpButton->SetSymbol(SymbolType::HELP);
         mpButton->SetText("PushButton demo");
         mpButton->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
@@ -1406,7 +1406,7 @@ public:
             }
             else
             { // spawn another window
-                DemoWin *pNewWin = new DemoWin(mrRenderer, testThreads);
+                VclPtrInstance<DemoWin> pNewWin(mrRenderer, testThreads);
                 pNewWin->SetText("Another interactive VCL demo window");
                 pNewWin->Show();
             }

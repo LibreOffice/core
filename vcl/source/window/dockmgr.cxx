@@ -860,7 +860,7 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
-        pWin = new ImplDockFloatWin2( mpParent, mnFloatBits, NULL );
+        pWin = VclPtr<ImplDockFloatWin2>::Create( mpParent, mnFloatBits, nullptr );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
         pWin.disposeAndClear();
@@ -1116,7 +1116,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
         mpOldBorderWin = NULL;  // no border window found
 
     // the new parent for popup mode
-    ImplPopupFloatWin* pWin = new ImplPopupFloatWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
@@ -1225,7 +1225,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                     mpOldBorderWin = NULL;  // no border window found
 
                 ImplDockFloatWin2* pWin =
-                    new ImplDockFloatWin2(
+                    VclPtr<ImplDockFloatWin2>::Create(
+
                                          mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?
                                           mnFloatBits | WB_SYSTEMWINDOW

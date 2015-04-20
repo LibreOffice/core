@@ -73,7 +73,7 @@ void VclOutdevTest::testVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAcc->GetPixel(31,30)).GetColor());
 
 #if 0
-    vcl::Window* pWin = new WorkWindow( (vcl::Window *)NULL );
+    VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
     CPPUNIT_ASSERT( pWin != NULL );
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin );
 #endif

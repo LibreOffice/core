@@ -2141,16 +2141,16 @@ sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
 
 ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
-    maLBWindow(new ImplListBoxWindow( this, nWinStyle&(~WB_BORDER) ))
+    maLBWindow(VclPtr<ImplListBoxWindow>::Create( this, nWinStyle&(~WB_BORDER) ))
 {
     maLBWindow->userDrawSignal.connect( userDrawSignal );
 
     // for native widget rendering we must be able to detect this window type
     SetType( WINDOW_LISTBOXWINDOW );
 
-    mpVScrollBar    = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
-    mpHScrollBar    = new ScrollBar( this, WB_HSCROLL | WB_DRAG );
-    mpScrollBarBox  = new ScrollBarBox( this );
+    mpVScrollBar    = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
+    mpHScrollBar    = VclPtr<ScrollBar>::Create( this, WB_HSCROLL | WB_DRAG );
+    mpScrollBarBox  = VclPtr<ScrollBarBox>::Create( this );
 
     Link aLink( LINK( this, ImplListBox, ScrollBarHdl ) );
     mpVScrollBar->SetScrollHdl( aLink );

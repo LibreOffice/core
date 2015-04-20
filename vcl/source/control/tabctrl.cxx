@@ -112,7 +112,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if( (nStyle & WB_DROPDOWN) )
     {
-        mpTabCtrlData->mpListBox = new ListBox( this, WB_DROPDOWN );
+        mpTabCtrlData->mpListBox = VclPtr<ListBox>::Create( this, WB_DROPDOWN );
         mpTabCtrlData->mpListBox->SetPosSizePixel( Point( 0, 0 ), Size( 200, 20 ) );
         mpTabCtrlData->mpListBox->SetSelectHdl( LINK( this, TabControl, ImplListBoxSelectHdl ) );
         mpTabCtrlData->mpListBox->Show();

@@ -1661,7 +1661,7 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCountProtected() );
+            mpImplData->mpProgress = VclPtr<PrintProgressDialog>::Create( nullptr, getPageCountProtected() );
             mpImplData->mpProgress->Show();
         }
     }

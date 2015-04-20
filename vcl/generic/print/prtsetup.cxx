@@ -117,9 +117,9 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     {
         TabPage *pPage = NULL;
         if (sPage == "paper")
-            pPage = m_pPaperPage = new RTSPaperPage( this );
+            pPage = m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
         else if (sPage == "device")
-            pPage = m_pDevicePage = new RTSDevicePage( this );
+            pPage = m_pDevicePage = VclPtr<RTSDevicePage>::Create( this );
         if( pPage )
             m_pTabControl->SetTabPage( nId, pPage );
     }

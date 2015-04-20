@@ -81,13 +81,13 @@ PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )
     if ( nBtnFlags & BUTTONDIALOG_DEFBUTTON )
         nStyle |= WB_DEFBUTTON;
     if ( nBtnFlags & BUTTONDIALOG_CANCELBUTTON )
-        pBtn = new CancelButton( this, nStyle );
+        pBtn = VclPtr<CancelButton>::Create( this, nStyle );
     else if ( nBtnFlags & BUTTONDIALOG_OKBUTTON )
-        pBtn = new OKButton( this, nStyle );
+        pBtn = VclPtr<OKButton>::Create( this, nStyle );
     else if ( nBtnFlags & BUTTONDIALOG_HELPBUTTON )
-        pBtn = new HelpButton( this, nStyle );
+        pBtn = VclPtr<HelpButton>::Create( this, nStyle );
     else
-        pBtn = new PushButton( this, nStyle );
+        pBtn = VclPtr<PushButton>::Create( this, nStyle );
 
     if ( !(nBtnFlags & BUTTONDIALOG_HELPBUTTON) )
         pBtn->SetClickHdl( LINK( this, ButtonDialog, ImplClickHdl ) );

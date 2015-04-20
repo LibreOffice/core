@@ -405,7 +405,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
 
             if( !mpAlphaVDev )
             {
-                mpAlphaVDev = new VirtualDevice( *this, mnAlphaDepth );
+                mpAlphaVDev = VclPtr<VirtualDevice>::Create( *this, mnAlphaDepth );
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
                                                          basebmp::RawMemorySharedArray(),
                                                          bTopDown );

@@ -250,7 +250,7 @@ namespace cairo
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.rCGContext = getCGContext();
         return VclPtr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, Size(1, 1), getDepth() ));
+            VclPtr<VirtualDevice>::Create( &aSystemGraphicsData, Size(1, 1), getDepth() ));
     }
 
 }  // namespace cairo

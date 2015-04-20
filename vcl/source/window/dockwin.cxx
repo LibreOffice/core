@@ -268,7 +268,7 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
-        pWin = new ImplDockFloatWin( mpImplData->mpParent, mnFloatBits, NULL );
+        pWin = VclPtr<ImplDockFloatWin>::Create( mpImplData->mpParent, mnFloatBits, nullptr );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
         pWin.disposeAndClear();
@@ -801,7 +801,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 mpOldBorderWin = mpWindowImpl->mpBorderWindow;
 
                 ImplDockFloatWin* pWin =
-                    new ImplDockFloatWin(
+                    VclPtr<ImplDockFloatWin>::Create(
+
                                          mpImplData->mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );

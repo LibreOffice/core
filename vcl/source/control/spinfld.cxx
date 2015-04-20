@@ -311,11 +311,11 @@ void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
         if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
         {
             SetBackground();
-            mpEdit.set( new Edit( this, WB_NOBORDER ) );
+            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
             mpEdit->SetBackground();
         }
         else
-            mpEdit.set( new Edit( this, WB_NOBORDER ) );
+            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
 
         mpEdit->EnableRTL( false );
         mpEdit->SetPosPixel( Point() );

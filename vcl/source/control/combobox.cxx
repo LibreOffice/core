@@ -147,11 +147,11 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     WinBits nListStyle = nStyle;
     if( nStyle & WB_DROPDOWN )
     {
-        mpFloatWin = new ImplListBoxFloatingWindow( this );
+        mpFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
         mpFloatWin->SetAutoWidth( true );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ComboBox, ImplPopupModeEndHdl ) );
 
-        mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
+        mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
         mpBtn->buttonDownSignal.connect( boost::bind( &ComboBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
@@ -170,7 +170,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         }
     }
 
-    mpSubEdit.set( new Edit( this, nEditStyle ) );
+    mpSubEdit.set( VclPtr<Edit>::Create( this, nEditStyle ) );
     mpSubEdit->EnableRTL( false );
     SetSubEdit( mpSubEdit );
     mpSubEdit->SetPosPixel( Point() );
@@ -180,7 +180,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     vcl::Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
-    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
+    mpImplLB = VclPtr<ImplListBox>::Create( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );

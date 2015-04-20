@@ -204,9 +204,9 @@ sal_uIntPtr Help::ShowTip( vcl::Window* pParent, const Rectangle& rScreenRect,
                      const OUString& rText, sal_uInt16 nStyle )
 {
     sal_uInt16 nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
-    HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
+    VclPtrInstance<HelpTextWindow> pHelpWin( pParent, rText, nHelpWinStyle, nStyle );
 
-    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin );
+    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin.get() );
     UpdateTip( nId, pParent, rScreenRect, rText );
 
     pHelpWin->ShowHelp( HELPDELAY_NONE );
@@ -530,7 +530,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uIn
             nDelayMode = HELPDELAY_NONE;
 
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
-        pHelpWin = new HelpTextWindow( pParent, rHelpText, nHelpWinStyle, nStyle );
+        pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
         pHelpWin->SetStatusText( rStatusText );
         if ( pHelpArea )

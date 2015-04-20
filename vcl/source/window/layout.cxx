@@ -1627,9 +1627,9 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     : VclBin(pParent, nStyle)
     , m_bUserManagedScrolling(false)
-    , m_pVScroll(new ScrollBar(this, WB_HIDE | WB_VERT))
-    , m_pHScroll(new ScrollBar(this, WB_HIDE | WB_HORZ))
-    , m_aScrollBarBox(new ScrollBarBox(this, WB_HIDE))
+    , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
+    , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
+    , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
 {
     SetType(WINDOW_SCROLLWINDOW);
 
@@ -1975,10 +1975,10 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
 void MessageDialog::create_owned_areas()
 {
     set_border_width(12);
-    m_pOwnedContentArea.set(new VclVBox(this, false, 24));
+    m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
     set_content_area(m_pOwnedContentArea);
     m_pOwnedContentArea->Show();
-    m_pOwnedActionArea.set( new VclHButtonBox(m_pOwnedContentArea) );
+    m_pOwnedActionArea.set( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
     set_action_area(m_pOwnedActionArea);
     m_pOwnedActionArea->Show();
 }
@@ -2134,12 +2134,12 @@ short MessageDialog::Execute()
         VclContainer *pContainer = get_content_area();
         assert(pContainer);
 
-        m_pGrid.set( new VclGrid(pContainer) );
+        m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
         m_pGrid->reorderWithinParent(0);
         m_pGrid->set_column_spacing(12);
         m_pGrid->set_row_spacing(GetTextHeight());
 
-        m_pImage = new FixedImage(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
+        m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
         switch (m_eMessageType)
         {
             case VCL_MESSAGE_INFO:
@@ -2164,7 +2164,7 @@ short MessageDialog::Execute()
 
         bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 
-        m_pPrimaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
         m_pPrimaryMessage->SetPaintTransparent(true);
         m_pPrimaryMessage->EnableCursor(false);
 
@@ -2174,7 +2174,7 @@ short MessageDialog::Execute()
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
 
-        m_pSecondaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
         m_pSecondaryMessage->SetPaintTransparent(true);
         m_pSecondaryMessage->EnableCursor(false);
         m_pSecondaryMessage->set_grid_left_attach(1);
@@ -2194,33 +2194,33 @@ short MessageDialog::Execute()
             case VCL_BUTTONS_NONE:
                 break;
             case VCL_BUTTONS_OK:
-                pBtn.set( new OKButton(pButtonBox) );
+                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
                 break;
             case VCL_BUTTONS_CLOSE:
-                pBtn.set( new CloseButton(pButtonBox) );
+                pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CLOSE;
                 break;
             case VCL_BUTTONS_CANCEL:
-                pBtn.set( new CancelButton(pButtonBox) );
+                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
             case VCL_BUTTONS_YES_NO:
-                pBtn = new PushButton(pButtonBox);
+                pBtn = VclPtr<PushButton>::Create(pButtonBox);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_YES;
 
-                pBtn.set( new PushButton(pButtonBox) );
+                pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
                 pBtn->Show();
@@ -2228,12 +2228,12 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_NO;
                 break;
             case VCL_BUTTONS_OK_CANCEL:
-                pBtn.set( new OKButton(pButtonBox) );
+                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
 
-                pBtn.set( new CancelButton(pButtonBox) );
+                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);

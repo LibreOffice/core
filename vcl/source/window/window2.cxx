@@ -457,7 +457,7 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
 
     pSVData->maWinData.mpAutoScrollWin = this;
     pSVData->maWinData.mnAutoScrollFlags = nFlags;
-    pSVData->maAppData.mpWheelWindow = new ImplWheelWindow( this );
+    pSVData->maAppData.mpWheelWindow = VclPtr<ImplWheelWindow>::Create( this );
 }
 
 void Window::EndAutoScroll()

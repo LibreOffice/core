@@ -130,10 +130,10 @@ void Main()
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
-    m_aListButton(new PushButton(this, 0)),
-    m_aSvpBitmaps(new ListBox(this, WB_BORDER)),
-    m_aImage(new ImageControl(this, WB_BORDER)),
-    m_aQuitButton(new PushButton(this, 0))
+    m_aListButton(VclPtr<PushButton>::Create(this, 0)),
+    m_aSvpBitmaps(VclPtr<ListBox>::Create(this, WB_BORDER)),
+    m_aImage(VclPtr<ImageControl>::Create(this, WB_BORDER)),
+    m_aQuitButton(VclPtr<PushButton>::Create(this, 0))
 {
     m_aListButton->SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
     m_aListButton->SetText( OUString( "List Elements" ) );

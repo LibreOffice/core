@@ -173,11 +173,9 @@ namespace cairo
     VclPtr<VirtualDevice> Win32Surface::createVirtualDevice() const
     {
         SystemGraphicsData aSystemGraphicsData;
-        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
+        aSystemGraphicsData.nSize = sizeof( SystemGraphicsData );
         aSystemGraphicsData.hDC = cairo_win32_surface_get_dc( mpSurface.get() );
-
-        return VclPtr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, Size(1, 1), sal::static_int_cast<USHORT>(getDepth()) ));
+        return VclPtr<VirtualDevice>::Create( &aSystemGraphicsData, Size(1, 1), sal::static_int_cast<USHORT>( getDepth() ) );
     }
 
 }  // namespace cairo

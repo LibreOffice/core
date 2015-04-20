@@ -25,7 +25,7 @@ private:
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
-    mxChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
+    mxChildWindow.reset(VclPtr<SystemChildWindow>::Create(pWindow, 0, &aData));
     mxChildWindow->Show();
     maContext.init(mxChildWindow.get());
     pWindow->SetMouseTransparent(false);

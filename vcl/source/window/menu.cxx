@@ -2505,7 +2505,7 @@ vcl::Window* MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, Men
     MenuBarWindow *pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
     {
-        pWindow = pMenuBarWindow = new MenuBarWindow( pParent );
+        pWindow = pMenuBarWindow = VclPtr<MenuBarWindow>::Create( pParent );
     }
 
     pMenu->pStartedFrom = 0;
@@ -2929,7 +2929,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         CreateAutoMnemonics();
     }
 
-    MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
+    VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else

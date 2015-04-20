@@ -90,7 +90,7 @@ private:
 public:
 
     EMFWriter(SvStream &rStream)
-        : maVDev( new VirtualDevice() )
+        : maVDev( VclPtr<VirtualDevice>::Create() )
         , m_rStm(rStream)
         , mpHandlesUsed(NULL)
         , mnHandleCount(0)

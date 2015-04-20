@@ -231,7 +231,7 @@ void MessBox::ImplPosControls()
         aImageSize.Width()  += 4;
         aImageSize.Height() += 4;
         aTextPos.X() += aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
-        mpFixedImage = new FixedImage( this );
+        mpFixedImage = VclPtr<FixedImage>::Create( this );
         mpFixedImage->SetPosSizePixel( Point( IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_X,
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
                                        aImageSize );
@@ -321,7 +321,7 @@ void MessBox::ImplPosControls()
             }
         }
 
-        mpCheckBox = new CheckBox( this );
+        mpCheckBox = VclPtr<CheckBox>::Create( this );
         mpCheckBox->Check( mbCheck );
         mpCheckBox->SetText( aMnemonicString );
         mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
@@ -343,7 +343,7 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
-    mpVCLMultiLineEdit = new VclMultiLineEdit( this, nWinStyle );
+    mpVCLMultiLineEdit = VclPtr<VclMultiLineEdit>::Create( this, nWinStyle );
     mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();

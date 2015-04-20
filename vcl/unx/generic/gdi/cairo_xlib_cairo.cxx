@@ -269,7 +269,7 @@ namespace cairo
         int height = cairo_xlib_surface_get_height(mpSurface.get());
 
         return VclPtr<VirtualDevice>(
-            new VirtualDevice(&aSystemGraphicsData,
+            VclPtr<VirtualDevice>::Create(&aSystemGraphicsData,
                               Size(width, height),
                               std::max(getDepth(), 0)));
     }

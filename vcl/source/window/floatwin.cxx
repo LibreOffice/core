@@ -107,7 +107,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
-            pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
+            pBorderWin  = VclPtr<ImplBorderWindow>::Create( pParent, nStyle, nBorderStyle );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
