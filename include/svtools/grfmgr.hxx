@@ -22,13 +22,21 @@
 
 #include <vcl/graph.hxx>
 #include <svtools/svtdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
-#define GRFMGR_DRAW_CACHED                  0x00000001UL
-#define GRFMGR_DRAW_SMOOTHSCALE             0x00000002UL
-#define GRFMGR_DRAW_USE_DRAWMODE_SETTINGS   0x00000004UL
-#define GRFMGR_DRAW_SUBSTITUTE              0x00000008UL
-#define GRFMGR_DRAW_NO_SUBSTITUTE           0x00000010UL
-#define GRFMGR_DRAW_STANDARD                (GRFMGR_DRAW_CACHED|GRFMGR_DRAW_SMOOTHSCALE)
+enum class GraphicManagerDrawFlags
+{
+    CACHED                  = 0x01,
+    SMOOTHSCALE             = 0x02,
+    USE_DRAWMODE_SETTINGS   = 0x04,
+    SUBSTITUTE              = 0x08,
+    NO_SUBSTITUTE           = 0x10,
+    STANDARD                = (CACHED|SMOOTHSCALE),
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x1f> {};
+}
 
 // AutoSwap defines
 
@@ -253,7 +261,7 @@ private:
                                 int nNumTilesY,
                                 const Size& rTileSizePixel,
                                 const GraphicAttr* pAttr,
-                                sal_uLong nFlags
+                                GraphicManagerDrawFlags nFlags
                             );
 
     /// internally called by ImplRenderTempTile()
@@ -267,7 +275,7 @@ private:
                                 int nRemainderTilesY,
                                 const Size& rTileSizePixel,
                                 const GraphicAttr* pAttr,
-                                sal_uLong nFlags,
+                                GraphicManagerDrawFlags nFlags,
                                 ImplTileInfo& rTileInfo
                             );
 
@@ -277,7 +285,7 @@ private:
                                 const Size& rSizePixel,
                                 const Size& rOffset,
                                 const GraphicAttr* pAttr,
-                                sal_uLong nFlags,
+                                GraphicManagerDrawFlags nFlags,
                                 int nTileCacheSize1D
                             );
 
@@ -288,7 +296,7 @@ private:
                                 int nNumTilesY,
                                 const Size& rTileSize,
                                 const GraphicAttr* pAttr,
-                                sal_uLong nFlags
+                                GraphicManagerDrawFlags nFlags
                             );
 
     void SVT_DLLPRIVATE     ImplTransformBitmap(
@@ -348,7 +356,7 @@ public:
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicAttr* pAttr = NULL,
-                                sal_uLong nFlags = GRFMGR_DRAW_STANDARD
+                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
                             ) const;
 
     const Graphic&          GetGraphic() const;
@@ -426,7 +434,7 @@ public:
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicAttr* pAttr = NULL,
-                                sal_uLong nFlags = GRFMGR_DRAW_STANDARD
+                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
                             );
 
     /** Draw the graphic repeatedly into the given output rectangle
@@ -468,7 +476,7 @@ public:
                                 const Size& rSize,
                                 const Size& rOffset,
                                 const GraphicAttr* pAttr = NULL,
-                                sal_uLong nFlags = GRFMGR_DRAW_STANDARD,
+                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 int nTileCacheSize1D=128
                             );
 
@@ -478,7 +486,7 @@ public:
                                 const Size& rSz,
                                 long nExtraData = 0L,
                                 const GraphicAttr* pAttr = NULL,
-                                sal_uLong nFlags = GRFMGR_DRAW_STANDARD,
+                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 OutputDevice* pFirstFrameOutDev = NULL
                             );
 
@@ -531,7 +539,7 @@ private:
                             const Size& rSz,
                             GraphicObject& rObj,
                             const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
+                            const GraphicManagerDrawFlags nFlags,
                             bool& rCached
                         );
 
@@ -541,7 +549,7 @@ private:
                             const Size& rSz,
                             const BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
+                            const GraphicManagerDrawFlags nFlags,
                             BitmapEx* pBmpEx = NULL
                         );
     static bool SVT_DLLPRIVATE ImplCreateOutput(
@@ -550,7 +558,7 @@ private:
                             const Size& rSz,
                             const GDIMetaFile& rMtf,
                             const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
+                            const GraphicManagerDrawFlags nFlags,
                             GDIMetaFile& rOutMtf,
                             BitmapEx& rOutBmpEx
                         );
@@ -632,7 +640,7 @@ public:
                             const Size& rSz,
                             GraphicObject& rObj,
                             const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
+                            const GraphicManagerDrawFlags nFlags,
                             bool& rCached
                         );
 };

@@ -487,11 +487,11 @@ void GraphicObject::GraphicManagerDestroyed()
 }
 
 bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              const GraphicAttr* pAttr, sal_uLong nFlags ) const
+                              const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags ) const
 {
     bool bRet;
 
-    if( nFlags & GRFMGR_DRAW_CACHED )
+    if( nFlags & GraphicManagerDrawFlags::CACHED )
     {
         Point aPt( rPt );
         Size aSz( rSz );
@@ -510,7 +510,7 @@ bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
 }
 
 bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                          const GraphicAttr* pAttr, sal_uLong nFlags )
+                          const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );
@@ -523,7 +523,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     // #i29534# Provide output rects for PDF writer
     Rectangle           aCropRect;
 
-    if( !( GRFMGR_DRAW_USE_DRAWMODE_SETTINGS & nFlags ) )
+    if( !( GraphicManagerDrawFlags::USE_DRAWMODE_SETTINGS & nFlags ) )
         pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
 
     // mirrored horizontically
@@ -587,7 +587,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 }
 
 bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
+                               const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
         return false;
@@ -609,7 +609,7 @@ bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData, const GraphicAttr* pAttr, sal_uLong /*nFlags*/,
+                                    long nExtraData, const GraphicAttr* pAttr, GraphicManagerDrawFlags /*nFlags*/,
                                     OutputDevice* pFirstFrameOutDev )
 {
     bool bRet = false;
@@ -660,7 +660,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
             bRet = true;
         }
         else
-            bRet = Draw( pOut, rPt, rSz, &aAttr, GRFMGR_DRAW_STANDARD );
+            bRet = Draw( pOut, rPt, rSz, &aAttr, GraphicManagerDrawFlags::STANDARD );
     }
 
     return bRet;

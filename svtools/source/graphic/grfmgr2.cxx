@@ -89,7 +89,7 @@ bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 
 bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               GraphicObject& rObj, const GraphicAttr& rAttr,
-                              const sal_uLong nFlags, bool& rCached )
+                              const GraphicManagerDrawFlags nFlags, bool& rCached )
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
@@ -102,9 +102,9 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         // create output and fill cache
 
         if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
-            ( !( nFlags & GRFMGR_DRAW_NO_SUBSTITUTE ) &&
-              ( ( nFlags & GRFMGR_DRAW_SUBSTITUTE ) ||
-                !( nFlags & GRFMGR_DRAW_CACHED ) ||
+            ( !( nFlags & GraphicManagerDrawFlags::NO_SUBSTITUTE ) &&
+              ( ( nFlags & GraphicManagerDrawFlags::SUBSTITUTE ) ||
+                !( nFlags & GraphicManagerDrawFlags::CACHED ) ||
                 ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() ) ) ) )
         {
             // simple output of transformed graphic
@@ -243,7 +243,7 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
                                const GraphicAttr& rAttr,
-                               const sal_uLong nFlags, bool& rCached )
+                               const GraphicManagerDrawFlags nFlags, bool& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
     bool            bRet = false;
@@ -870,7 +870,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                                        const Point& rPoint, const Size& rSize,
                                        const BitmapEx& rBitmapEx, const GraphicAttr& rAttributes,
-                                       const sal_uLong /*nFlags*/, BitmapEx* pBmpEx )
+                                       const GraphicManagerDrawFlags /*nFlags*/, BitmapEx* pBmpEx )
 {
     sal_uInt16  nRot10 = rAttributes.GetRotation() % 3600;
 
@@ -1088,7 +1088,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
 bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const sal_uLong /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
+                                       const GraphicManagerDrawFlags /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
 
@@ -1661,7 +1661,7 @@ struct ImplTileInfo
 bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
                                         int nNumTilesX, int nNumTilesY,
                                         const Size& rTileSizePixel,
-                                        const GraphicAttr* pAttr, sal_uLong nFlags )
+                                        const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
 {
     if( nExponent <= 1 )
         return false;
@@ -1703,7 +1703,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              int nNumOrigTilesX, int nNumOrigTilesY,
                                              int nRemainderTilesX, int nRemainderTilesY,
                                              const Size& rTileSizePixel, const GraphicAttr* pAttr,
-                                             sal_uLong nFlags, ImplTileInfo& rTileInfo )
+                                             GraphicManagerDrawFlags nFlags, ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
     GraphicObject aTmpGraphic;
@@ -1876,7 +1876,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 }
 
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
-                                   const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
+                                   const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
     // how many tiles to generate per recursion step
     enum{ SubdivisionExponent=2 };
@@ -1985,7 +1985,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, sal_uLong nFlags )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
 {
     Point   aCurrPos( rPosPixel );
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );
