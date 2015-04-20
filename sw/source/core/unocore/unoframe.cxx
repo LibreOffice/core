@@ -460,9 +460,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             // No fill transparency is given.  On the other hand, we have a
             // BackColorTransparency, so use that.
+            // tdf#90640 tdf#90130: this is necessary for LO 4.4.0 - 4.4.2
+            // that forgot to write draw:opacity into documents
+            // but: the value was *always* wrong for bitmaps! => ignore it
             sal_Int8 nGraphicTransparency(0);
             *pColTrans >>= nGraphicTransparency;
-            rToSet.Put(XFillTransparenceItem(nGraphicTransparency));
+            if (aXFillStyleItem.GetValue() != drawing::FillStyle_BITMAP)
+            {
+                rToSet.Put(XFillTransparenceItem(nGraphicTransparency));
+            }
             if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID)
             {
                 aBrush.PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
