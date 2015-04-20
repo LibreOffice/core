@@ -365,7 +365,10 @@ void SfxObjectShell::LoadStyles
     }
 }
 
-
+sfx2::StyleManager* SfxObjectShell::GetStyleManager()
+{
+    return nullptr;
+}
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 

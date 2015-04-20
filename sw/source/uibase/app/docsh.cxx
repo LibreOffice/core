@@ -1064,6 +1064,11 @@ SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
     return m_xBasePool.get();
 }
 
+sfx2::StyleManager* SwDocShell::GetStyleManager()
+{
+    return m_pStyleManager.get();
+}
+
 void SwDocShell::SetView(SwView* pVw)
 {
     SetViewShell_Impl(pVw);

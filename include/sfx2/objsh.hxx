@@ -97,6 +97,7 @@ enum class SfxModelFlags;
 namespace sfx2
 {
     class SvLinkSource;
+    class StyleManager;
 }
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
@@ -494,8 +495,14 @@ public:
 
     // Contents
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
-    void                     SetStyleSheetPool(SfxStyleSheetBasePool *pBasePool ) {
-                                        pStyleSheetPool = pBasePool; }
+    void                     SetStyleSheetPool(SfxStyleSheetBasePool *pBasePool )
+    {
+        pStyleSheetPool = pBasePool;
+    }
+
+    virtual void                LoadStyles(SfxObjectShell &rSource);
+
+    virtual sfx2::StyleManager* GetStyleManager();
 
     // Determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
@@ -510,7 +517,6 @@ public:
 
     virtual std::set<Color>     GetDocColors();
 
-    virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );
 

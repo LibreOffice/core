@@ -32,6 +32,8 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
+#include <sfx2/StyleManager.hxx>
+
 class SwDoc;
 class SfxDocumentInfoDialog;
 class SfxStyleSheetBasePool;
@@ -66,6 +68,8 @@ class SW_DLLPUBLIC SwDocShell
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool; ///< Passing through for formats.
     FontList*   m_pFontList;          ///< Current Fontlist.
     bool        m_IsInUpdateFontList; ///< prevent nested calls of UpdateFontList
+
+    std::unique_ptr<sfx2::StyleManager> m_pStyleManager;
 
     /** For "historical reasons" nothing can be done without the WrtShell.
      Back-pointer on View (again "for historical reasons").
@@ -212,6 +216,7 @@ public:
 
     /// For Style PI.
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() SAL_OVERRIDE;
+    virtual sfx2::StyleManager* GetStyleManager() SAL_OVERRIDE;
 
     /// Set View for actions via Shell.
     void          SetView(SwView* pVw);

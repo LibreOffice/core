@@ -338,6 +338,8 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdview \
     svx/source/svdraw/svdviter \
     svx/source/svdraw/svdxcgv \
+    svx/source/styles/CommonStylePreviewRenderer \
+    svx/source/styles/CommonStyleManager \
     svx/source/table/cell \
     svx/source/table/cellcursor \
     svx/source/table/cellrange \

@@ -86,6 +86,8 @@
 #include <globals.hrc>
 #include <unochart.hxx>
 
+#include <svx/CommonStyleManager.hxx>
+
 // text grid
 #include <tgrditem.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -326,6 +328,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode const eMode )
     , m_pDoc(nullptr)
     , m_pFontList(nullptr)
     , m_IsInUpdateFontList(false)
+    , m_pStyleManager(new svx::CommonStyleManager(*this))
     , m_pView(nullptr)
     , m_pWrtShell(nullptr)
     , m_pOLEChildList(nullptr)
@@ -342,6 +345,7 @@ SwDocShell::SwDocShell( const SfxModelFlags i_nSfxCreationFlags )
     , m_pDoc(nullptr)
     , m_pFontList(nullptr)
     , m_IsInUpdateFontList(false)
+    , m_pStyleManager(new svx::CommonStyleManager(*this))
     , m_pView(nullptr)
     , m_pWrtShell(nullptr)
     , m_pOLEChildList(nullptr)
@@ -358,6 +362,7 @@ SwDocShell::SwDocShell( SwDoc *const pD, SfxObjectCreateMode const eMode )
     , m_pDoc(pD)
     , m_pFontList(nullptr)
     , m_IsInUpdateFontList(false)
+    , m_pStyleManager(new svx::CommonStyleManager(*this))
     , m_pView(nullptr)
     , m_pWrtShell(nullptr)
     , m_pOLEChildList(nullptr)
