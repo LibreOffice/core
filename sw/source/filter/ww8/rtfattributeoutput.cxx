@@ -2663,20 +2663,8 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 
 void RtfAttributeOutput::ParaHyphenZone(const SvxHyphenZoneItem& rHyphenZone)
 {
-    sal_Int32 nFlags = rHyphenZone.IsHyphen() ? 1 : 0;
-    if (rHyphenZone.IsPageEnd())
-        nFlags += 2;
-    m_aStyles.append('{');
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHEN);
-    m_aStyles.append((sal_Int32)nFlags);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHLEAD);
-    m_aStyles.append((sal_Int32)rHyphenZone.GetMinLead());
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHTRAIL);
-    m_aStyles.append((sal_Int32)rHyphenZone.GetMinTrail());
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHMAX);
-    m_aStyles.append((sal_Int32)rHyphenZone.GetMaxHyphens());
-    m_aStyles.append('}');
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHPAR);
+    m_aStyles.append(int(rHyphenZone.IsHyphen()));
 }
 
 void RtfAttributeOutput::ParaNumRule_Impl(const SwTxtNode* pTxtNd, sal_Int32 nLvl, sal_Int32 nNumId)

@@ -872,6 +872,12 @@ DECLARE_RTFEXPORT_TEST(testHyphauto, "hyphauto.rtf")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(1), "ParaIsHyphenation"));
 }
 
+DECLARE_RTFEXPORT_TEST(testHyphpar, "hyphpar.rtf")
+{
+    // Hyphenation was enabled for all 3 paragraphs, but it should be disabled for the 2nd one.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), "ParaIsHyphenation"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
