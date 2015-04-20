@@ -998,7 +998,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             {
                 // Attribute adjustment if necessary
                 if( rAttributes.IsSpecialDrawMode() || rAttributes.IsAdjusted() || rAttributes.IsTransparent() )
-                    ImplAdjust( aOutBmpEx, rAttributes, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
+                    ImplAdjust( aOutBmpEx, rAttributes, GraphicAdjustmentFlags::DRAWMODE | GraphicAdjustmentFlags::COLORS | GraphicAdjustmentFlags::TRANSPARENCY );
 
                 // OutDev adjustment if necessary
                 if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
@@ -1388,7 +1388,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
     if( nNumBitmaps != 1 || bNonBitmapActionEncountered )
     {
         if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsMirrored() || rAttr.IsRotated() || rAttr.IsTransparent() )
-            ImplAdjust( rOutMtf, rAttr, ADJUSTMENT_ALL );
+            ImplAdjust( rOutMtf, rAttr, GraphicAdjustmentFlags::ALL );
 
         ImplDraw( pOut, rPt, rSz, rOutMtf, rAttr );
         rOutBmpEx = BitmapEx();
@@ -1397,11 +1397,11 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
     return true;
 }
 
-void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
+void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
     {
         switch( aAttr.GetDrawMode() )
         {
@@ -1425,24 +1425,24 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal
         }
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_COLORS ) && aAttr.IsAdjusted() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
         rBmpEx.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
                        aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
                        aAttr.GetGamma(), aAttr.IsInvert() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_MIRROR ) && aAttr.IsMirrored() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
         rBmpEx.Mirror( aAttr.GetMirrorFlags() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
     {
         rBmpEx.Rotate( aAttr.GetRotation(), Color( COL_TRANSPARENT ) );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
         AlphaMask   aAlpha;
         sal_uInt8       cTrans = aAttr.GetTransparency();
@@ -1500,11 +1500,11 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal
     }
 }
 
-void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
+void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
     {
         switch( aAttr.GetDrawMode() )
         {
@@ -1528,34 +1528,34 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sa
         }
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_COLORS ) && aAttr.IsAdjusted() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
         rMtf.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
                      aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
                      aAttr.GetGamma(), aAttr.IsInvert() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_MIRROR ) && aAttr.IsMirrored() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
         rMtf.Mirror( aAttr.GetMirrorFlags() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
     {
         rMtf.Rotate( aAttr.GetRotation() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
         OSL_FAIL( "Missing implementation: Mtf-Transparency" );
     }
 }
 
-void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
+void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
     {
         switch( aAttr.GetDrawMode() )
         {
@@ -1579,24 +1579,24 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
         }
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_COLORS ) && aAttr.IsAdjusted() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
         rAnimation.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
                            aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
                            aAttr.GetGamma(), aAttr.IsInvert() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_MIRROR ) && aAttr.IsMirrored() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
         rAnimation.Mirror( aAttr.GetMirrorFlags() );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
     {
         OSL_FAIL( "Missing implementation: Animation-Rotation" );
     }
 
-    if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
         OSL_FAIL( "Missing implementation: Animation-Transparency" );
     }

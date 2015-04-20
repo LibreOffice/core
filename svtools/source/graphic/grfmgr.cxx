@@ -956,21 +956,21 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
                 if( IsAnimated() )
                 {
                     Animation aAnimation( maGraphic.GetAnimation() );
-                    GraphicManager::ImplAdjust( aAnimation, aAttr, ADJUSTMENT_ALL );
+                    GraphicManager::ImplAdjust( aAnimation, aAttr, GraphicAdjustmentFlags::ALL );
                     aAnimation.SetLoopCount( mnAnimationLoopCount );
                     aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( maGraphic.GetBitmapEx() );
-                    GraphicManager::ImplAdjust( aBmpEx, aAttr, ADJUSTMENT_ALL );
+                    GraphicManager::ImplAdjust( aBmpEx, aAttr, GraphicAdjustmentFlags::ALL );
                     aGraphic = aBmpEx;
                 }
             }
             else
             {
                 GDIMetaFile aMtf( maGraphic.GetGDIMetaFile() );
-                GraphicManager::ImplAdjust( aMtf, aAttr, ADJUSTMENT_ALL );
+                GraphicManager::ImplAdjust( aMtf, aAttr, GraphicAdjustmentFlags::ALL );
                 aGraphic = aMtf;
             }
         }

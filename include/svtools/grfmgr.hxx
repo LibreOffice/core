@@ -46,14 +46,20 @@ namespace o3tl
 #define GRFMGR_AUTOSWAPSTREAM_NONE   reinterpret_cast<SvStream*>(sal_IntPtr(-1))
 
 // Adjustment defines
-
-#define ADJUSTMENT_NONE                 0x00000000UL
-#define ADJUSTMENT_DRAWMODE             0x00000001UL
-#define ADJUSTMENT_COLORS               0x00000002UL
-#define ADJUSTMENT_MIRROR               0x00000004UL
-#define ADJUSTMENT_ROTATE               0x00000008UL
-#define ADJUSTMENT_TRANSPARENCY         0x00000010UL
-#define ADJUSTMENT_ALL                  0xFFFFFFFFUL
+enum class GraphicAdjustmentFlags
+{
+    NONE                 = 0x00,
+    DRAWMODE             = 0x01,
+    COLORS               = 0x02,
+    MIRROR               = 0x04,
+    ROTATE               = 0x08,
+    TRANSPARENCY         = 0x10,
+    ALL                  = 0x1f,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GraphicAdjustmentFlags> : is_typed_flags<GraphicAdjustmentFlags, 0x1f> {};
+}
 
 enum GraphicDrawMode
 {
@@ -566,17 +572,17 @@ private:
     static void SVT_DLLPRIVATE ImplAdjust(
                             BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
+                            GraphicAdjustmentFlags nAdjustmentFlags
                         );
     static void SVT_DLLPRIVATE ImplAdjust(
                             GDIMetaFile& rMtf,
                             const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
+                            GraphicAdjustmentFlags nAdjustmentFlags
                         );
     static void SVT_DLLPRIVATE ImplAdjust(
                             Animation& rAnimation,
                             const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
+                            GraphicAdjustmentFlags nAdjustmentFlags
                         );
 
     static void SVT_DLLPRIVATE ImplDraw(
