@@ -315,6 +315,7 @@ DataPointContext::~DataPointContext()
 
 ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( dPt ):
@@ -331,8 +332,7 @@ ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const A
                     mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
                     return 0;
                 case C_TOKEN( invertIfNegative ):
-                    // default is 'false', not 'true' as specified (value not derived from series!)
-                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
+                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( marker ):
                     return this;
@@ -451,6 +451,7 @@ BarSeriesContext::~BarSeriesContext()
 
 ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( ser ):
@@ -465,8 +466,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( errBars ):
                     return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
                 case C_TOKEN( invertIfNegative ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
+                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( pictureOptions ):
                     return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
@@ -495,6 +495,7 @@ BubbleSeriesContext::~BubbleSeriesContext()
 
 ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( ser ):
@@ -513,8 +514,7 @@ ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, cons
                 case C_TOKEN( errBars ):
                     return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
                 case C_TOKEN( invertIfNegative ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
+                    mrModel.mbInvertNeg = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
