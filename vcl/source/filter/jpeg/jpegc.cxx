@@ -263,6 +263,10 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     jpeg_set_defaults( &cinfo );
     jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
 
+    cinfo.density_unit = 1;
+    cinfo.X_density = 96;
+    cinfo.Y_density = 96;
+
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
 
