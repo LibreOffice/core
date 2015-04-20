@@ -502,8 +502,7 @@ ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, cons
             switch( nElement )
             {
                 case C_TOKEN( bubble3D ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
+                    mrModel.mbBubble3d = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( bubbleSize ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::POINTS ) );

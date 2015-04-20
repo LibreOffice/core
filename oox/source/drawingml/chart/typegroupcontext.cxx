@@ -160,8 +160,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( bubble3D ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
+            mrModel.mbBubble3d = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( bubbleScale ):
             mrModel.mnBubbleScale = rAttribs.getInteger( XML_val, 100 );
