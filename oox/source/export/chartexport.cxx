@@ -3058,19 +3058,19 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
 
             // Show Equation
-            bool aShowEquation = false;
-            xEquationProperties->getPropertyValue("ShowEquation") >>= aShowEquation;
+            bool bShowEquation = false;
+            xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation;
 
             // Show R^2
-            bool aShowCorrelationCoefficient = false;
-            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= aShowCorrelationCoefficient;
+            bool bShowCorrelationCoefficient = false;
+            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient;
 
             pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
-                    XML_val, aShowCorrelationCoefficient ? "1" : "0",
+                    XML_val, bShowCorrelationCoefficient ? "1" : "0",
                     FSEND );
 
             pFS->singleElement( FSNS( XML_c, XML_dispEq ),
-                    XML_val, aShowEquation ? "1" : "0",
+                    XML_val, bShowEquation ? "1" : "0",
                     FSEND );
 
             pFS->endElement( FSNS( XML_c, XML_trendline ) );
