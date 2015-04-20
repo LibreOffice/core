@@ -1,0 +1,31 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2015 Canonical Ltd.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Author: Bryan Quigley <bryan.quigley@canonical.com>
+#
+# ------------------------------------------------------------------
+
+#include <tunables/global>
+
+profile libreoffice-oopslash INSTDIR-program/oosplash {
+  #include <abstractions/base>
+
+  /etc/libreoffice/                     r,
+  /etc/libreoffice/**                   r,
+  /etc/passwd                           r,
+  /etc/nsswitch.conf                    r,
+  /run/nscd/passwd                      r,
+  /usr/lib{,32,64}/ure/bin/javaldx      Cx,
+  /usr/share/libreoffice/program/*      r,
+  INSTDIR-program/soffice.bin rmPUx,
+  INSTDIR-ure/bin/javaldx rmPUx,
+  owner @{HOME}/.Xauthority             r,
+  owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
+  unix peer=(addr=@/tmp/.ICE-unix/* label=unconfined),
+  unix peer=(addr=@/tmp/.X11-unix/* label=unconfined),
+}
