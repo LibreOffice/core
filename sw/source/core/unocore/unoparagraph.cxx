@@ -1031,11 +1031,12 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
         {
             if(*ppSet)
             {
-                if(SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(**ppSet))
+                if (SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(**ppSet,
+                        rEntry.nMemberId))
                 {
                     eRet = beans::PropertyState_DIRECT_VALUE;
-                    bDone = true;
                 }
+                bDone = true;
             }
             break;
         }

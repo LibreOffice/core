@@ -39,6 +39,7 @@
 
 //UUUU
 #include <svx/xfillit0.hxx>
+#include <editeng/memberids.hrc>
 #include <svl/itemset.hxx>
 
 using namespace com::sun::star;
@@ -268,7 +269,8 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
 }
 
 //UUUU
-bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet)
+bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
+        sal_uInt16 const nMID)
 {
     const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSet.GetItem(XATTR_FILLSTYLE, false)));
 
@@ -280,17 +282,50 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet)
     // here different FillStyles can be excluded for export; it will depend on the
     // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
     // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
-    // For now, take them all - except drawing::FillStyle_NONE
-
-    if(drawing::FillStyle_NONE != pXFillStyleItem->GetValue())
+    switch (pXFillStyleItem->GetValue())
     {
-        return true;
+        case drawing::FillStyle_NONE:
+            return false; // ignoring some extremely limited XFillColorItem eval
+            break;
+        case drawing::FillStyle_SOLID:
+        case drawing::FillStyle_GRADIENT: // gradient and hatch don't exist in
+        case drawing::FillStyle_HATCH: // SvxBrushItem so average color is emulated
+            switch (nMID)
+            {
+                case MID_BACK_COLOR:
+                    // Gradient/Hatch always have emulated color
+                    return (drawing::FillStyle_SOLID != nMID)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLCOLOR)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLTRANSPARENCE)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE);
+                case MID_BACK_COLOR_R_G_B:
+                    // Gradient/Hatch always have emulated color
+                    return (drawing::FillStyle_SOLID != nMID)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLCOLOR);
+                case MID_BACK_COLOR_TRANSPARENCY:
+                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLTRANSPARENCE)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE);
+            }
+            break;
+        case drawing::FillStyle_BITMAP:
+            switch (nMID)
+            {
+                case MID_GRAPHIC_URL:
+                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBITMAP);
+                case MID_GRAPHIC_POSITION:
+                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBMP_STRETCH)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLBMP_TILE)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLBMP_POS);
+                case MID_GRAPHIC_TRANSPARENT:
+                case MID_GRAPHIC_TRANSPARENCY:
+                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLTRANSPARENCE)
+                        || SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE);
+            }
+            break;
+        default:
+            assert(false);
     }
 
-    // if(XFILL_SOLID == pXFillStyleItem->GetValue() || XFILL_BITMAP == pXFillStyleItem->GetValue())
-    // {
-    //     return true;
-    // }
 
     return false;
 }

@@ -2920,14 +2920,20 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                     bDone = true;
                 }
 
-                //UUUU for FlyFrames we need to mark all properties from type RES_BACKGROUND
+                //UUUU for FlyFrames we need to mark the used properties from type RES_BACKGROUND
                 // as beans::PropertyState_DIRECT_VALUE to let users of this property call
                 // getPropertyValue where the member properties will be mapped from the
                 // fill attributes to the according SvxBrushItem entries
-                if(!bDone && RES_BACKGROUND == pEntry->nWID
-                    && SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*pSourceSet))
+                if (!bDone && RES_BACKGROUND == pEntry->nWID)
                 {
-                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    if (SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*pSourceSet, pEntry->nMemberId))
+                    {
+                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    }
+                    else
+                    {
+                        pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                    }
                     bDone = true;
                 }
 
@@ -4870,11 +4876,16 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
                 }
                 case RES_BACKGROUND:
                 {
-                    if(SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*mpSet))
+                    if (SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*mpSet,
+                            pEntry->nMemberId))
                     {
                         pStates[i] = beans::PropertyState_DIRECT_VALUE;
-                        bDone = true;
                     }
+                    else
+                    {
+                        pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                    }
+                    bDone = true;
 
                     break;
                 }
