@@ -164,8 +164,7 @@ ContextHandlerRef PictureOptionsContext::onCreateContext( sal_Int32 nElement, co
             mrModel.mbApplyToEnd = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( applyToFront ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbApplyToFront = rAttribs.getBool( XML_val, false );
+            mrModel.mbApplyToFront = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( applyToSides ):
             // default is 'false', not 'true' as specified
