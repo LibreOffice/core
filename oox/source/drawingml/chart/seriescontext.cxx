@@ -127,6 +127,7 @@ DataLabelsContext::~DataLabelsContext()
 
 ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( dLbl ):
@@ -134,12 +135,10 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
         case C_TOKEN( leaderLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
         case C_TOKEN( showLeaderLines ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, false );
+            mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
-    bool bMSO2007 = getFilter().isMSO2007Document();
-    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007 );
+    return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007Doc );
 }
 
 void DataLabelsContext::onCharacters( const OUString& rChars )
