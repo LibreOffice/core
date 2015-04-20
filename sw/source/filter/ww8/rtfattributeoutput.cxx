@@ -2664,7 +2664,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 void RtfAttributeOutput::ParaHyphenZone(const SvxHyphenZoneItem& rHyphenZone)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHPAR);
-    m_aStyles.append(int(rHyphenZone.IsHyphen()));
+    m_aStyles.append(sal_Int32(rHyphenZone.IsHyphen()));
 }
 
 void RtfAttributeOutput::ParaNumRule_Impl(const SwTxtNode* pTxtNd, sal_Int32 nLvl, sal_Int32 nNumId)
