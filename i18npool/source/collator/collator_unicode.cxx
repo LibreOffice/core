@@ -64,6 +64,7 @@ extern "C" {
 // get_zh_pinyin for instance.
 
 const sal_uInt8* get_collator_data_ca_charset();
+const sal_uInt8* get_collator_data_cu_charset();
 const sal_uInt8* get_collator_data_dz_charset();
 const sal_uInt8* get_collator_data_hu_charset();
 const sal_uInt8* get_collator_data_ja_charset();
@@ -85,6 +86,7 @@ const sal_uInt8* get_collator_data_zh_stroke();
 const sal_uInt8* get_collator_data_zh_zhuyin();
 
 size_t get_collator_data_ca_charset_length();
+size_t get_collator_data_cu_charset_length();
 size_t get_collator_data_dz_charset_length();
 size_t get_collator_data_hu_charset_length();
 size_t get_collator_data_ja_charset_length();
@@ -196,6 +198,14 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 {
                     func = get_collator_data_ca_charset;
                     funclen = get_collator_data_ca_charset_length;
+                }
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_cu
+            } else if ( rLocale.language == "cu" ) {
+                if ( rAlgorithm == "charset" )
+                {
+                    func = get_collator_data_cu_charset;
+                    funclen = get_collator_data_cu_charset_length;
                 }
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_dz
