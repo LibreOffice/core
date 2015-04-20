@@ -3135,7 +3135,12 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
     if (GetProperty(xPropSet, "Color"))
         mAny >>= aColor;
 
-    WriteSolidFill(aColor);
+    if (aColor == -1)
+    {
+        pFS->singleElement(FSNS(XML_a, XML_noFill), FSEND);
+    }
+    else
+        WriteSolidFill(aColor);
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 
     pFS->endElement( FSNS( XML_c, XML_marker ) );
