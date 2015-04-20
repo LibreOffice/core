@@ -50,6 +50,29 @@
       "revId": "483c1afa22c1734bc230562e6beeaf50626bb2b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_96a4ec08",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3867,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-20T15:45:03Z",
+      "side": 1,
+      "message": "I could not verify that Excel actually has this behavior. I\u0027ll back it out in an amended commit for this change until we clarified.",
+      "range": {
+        "startLine": 3867,
+        "startChar": 39,
+        "endLine": 3867,
+        "endChar": 43
+      },
+      "revId": "483c1afa22c1734bc230562e6beeaf50626bb2b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
