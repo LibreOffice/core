@@ -56,6 +56,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+ #include <com/sun/star/text/WritingMode2.hpp>
 #include <svx/svdotable.hxx>
 
 #include <config_features.h>
@@ -85,6 +86,7 @@ public:
     void testImageWithSpecialID();
     void testTableCellFillProperties();
     void testBulletStartNumber();
+    void testRightToLeftParaghraph();
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -109,6 +111,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTableCellFillProperties);
     CPPUNIT_TEST(testBulletStartNumber);
+    CPPUNIT_TEST(testRightToLeftParaghraph);
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
@@ -804,6 +807,39 @@ void SdExportTest::testBulletStartNumber()
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's start number is wrong!", sal_Int16(pNumFmt->GetNumRule()->GetLevel(0).GetStart()), sal_Int16(3) );
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testRightToLeftParaghraph()
+{
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/rightToLeftParagraph.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xShape(
+    xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+
+    // Get first paragraph
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
+                uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+
+    sal_Int16 nWritingMode = 0;
+    xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong paragraph WritingMode", text::WritingMode2::RL_TB, nWritingMode);
+
     xDocShRef->DoClose();
 }
 
