@@ -534,7 +534,18 @@
 						<with-param name="style-element" select="key('style-ref', $style-name)"/>
 					</call-template>
                                 </if>
-                        </variable>
+				<!-- Font color -->
+				<if test="text:p and count(*) = 1">
+					<if test="boolean(text:p/@text:style-name)">
+						<variable name="style-element" select="key('style-ref', text:p/@text:style-name)"/>
+
+						<call-template name="translate-style-property">
+							<with-param name="style-name" select="'color'"/>
+							<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
+						</call-template>
+					</if>
+				</if>
+			</variable>
 			
 			<if test="string-length($style) &gt; 0">
 				<text> style="</text>
@@ -702,26 +713,37 @@
 			select="($alignment mod (2 * $RIGHT_BIT)) - ($alignment mod ($RIGHT_BIT)) != 0"/>
 
 		<variable name="style">
-			<if test="name(parent::*) != 'table:table-cell'">
-				<choose>
-					<when test="$center">
-						<text>text-align:center;</text>
-					</when>
-					<when test="$right">
-						<text>text-align:right;</text>
-					</when>
-				</choose>
-			</if>
-			<if test="boolean(@text:style-name)">
-				<variable name="style-element" select="key('style-ref', @text:style-name)"/>
+			<choose>
+				<when test="name(parent::*) != 'table:table-cell'">
+					<choose>
+						<when test="$center">
+							<text>text-align:center;</text>
+						</when>
+						<when test="$right">
+							<text>text-align:right;</text>
+						</when>
+					</choose>
+					<if test="boolean(@text:style-name)">
+						<variable name="style-element" select="key('style-ref', @text:style-name)"/>
 
-				<call-template name="translate-style-property">
-					<with-param name="style-name" select="'color'"/>
-					<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
-				</call-template>
-			</if>
+						<call-template name="translate-style-property">
+							<with-param name="style-name" select="'color'"/>
+							<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
+						</call-template>
+					</if>
+				</when>
+				<otherwise>
+					<if test="count(../text:p) = 1 and boolean(@text:style-name)">
+						<variable name="style-element" select="key('style-ref', @text:style-name)"/>
+
+                                                <call-template name="translate-style-property">
+							<with-param name="style-name" select="'color'"/>
+							<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
+						</call-template>
+					</if>
+				</otherwise>
+			</choose>
 		</variable>
-
 
 		<if test="string-length($style) &gt; 0">
 			<text>&lt;div style="</text>
@@ -799,7 +821,6 @@
  	<template match="text:p[string-length(.) = 0 and string-length(preceding-sibling::*[1]/self::text:p) &gt; 0]">
 		<value-of select="$NL"/>
 	</template>
-
 
 	<!-- 
 		== Preformatted text == 
