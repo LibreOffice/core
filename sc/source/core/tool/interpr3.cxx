@@ -3736,9 +3736,24 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                             OUString aStr = pMat->GetString( i ).getString();
                             if ( aStr.getLength() > 0 )
                             {
+                                sal_uInt16 nErr = nGlobalError;
+                                nGlobalError = 0;
                                 double fVal = ConvertStringToValue( aStr );
                                 if ( !nGlobalError )
+                                {
                                     rArray.push_back( fVal );
+                                    nGlobalError = nErr;
+                                }
+                                else
+                                {
+                                    rArray.push_back( CreateDoubleError( errNoValue));
+                                    // Propagate previous error if any, else
+                                    // the current #VALUE! error.
+                                    if (nErr)
+                                        nGlobalError = nErr;
+                                    else
+                                        nGlobalError = errNoValue;
+                                }
                             }
                         }
                     }
