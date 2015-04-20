@@ -106,7 +106,7 @@ struct ErrorBarModel
     sal_Int32           mnValueType;        /// Type of the values.
     bool                mbNoEndCap;         /// True = no end cap at error bar lines.
 
-    explicit            ErrorBarModel();
+    explicit            ErrorBarModel(bool bMSO2007Doc);
                         ~ErrorBarModel();
 };
 

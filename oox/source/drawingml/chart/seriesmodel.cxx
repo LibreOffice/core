@@ -64,12 +64,12 @@ PictureOptionsModel::~PictureOptionsModel()
 {
 }
 
-ErrorBarModel::ErrorBarModel() :
+ErrorBarModel::ErrorBarModel(bool bMSO2007Doc) :
     mfValue( 0.0 ),
     mnDirection( XML_y ),
     mnTypeId( XML_both ),
     mnValueType( XML_fixedVal ),
-    mbNoEndCap( false )
+    mbNoEndCap( !bMSO2007Doc )
 {
 }
 

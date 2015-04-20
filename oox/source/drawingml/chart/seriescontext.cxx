@@ -423,7 +423,7 @@ ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( cat ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::CATEGORIES ) );
                 case C_TOKEN( errBars ):
-                    return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
+                    return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( dLbls ):
                     return new DataLabelsContext( *this, mrModel.mxLabels.create() );
                 case C_TOKEN( dPt ):
@@ -462,7 +462,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( dPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( errBars ):
-                    return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
+                    return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( invertIfNegative ):
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
@@ -509,7 +509,7 @@ ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, cons
                 case C_TOKEN( dPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( errBars ):
-                    return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
+                    return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( invertIfNegative ):
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
@@ -549,7 +549,7 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( dPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( errBars ):
-                    return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
+                    return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
@@ -656,7 +656,7 @@ ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, con
                 case C_TOKEN( dPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( errBars ):
-                    return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
+                    return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
