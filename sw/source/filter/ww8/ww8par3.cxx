@@ -79,6 +79,7 @@
 
 #include <IMark.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <rtl/surrogates.h>
 #include <xmloff/odffields.hxx>
 
 #include <stdio.h>
@@ -493,6 +494,31 @@ static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
     }
 }
 
+OUString sanitizeString(const OUString& rString)
+{
+    sal_Int32 i=0;
+    while (i < rString.getLength())
+    {
+        sal_Unicode c = rString[i];
+        if (isHighSurrogate(c))
+        {
+            if (i+1 == rString.getLength() || !isLowSurrogate(rString[i+1]))
+            {
+                SAL_WARN("sw.ww8", "Surrogate error: high without low");
+                return rString.copy(0, i);
+            }
+            ++i;    //skip correct low
+        }
+        if (isLowSurrogate(c)) //bare low without preceeding high
+        {
+            SAL_WARN("sw.ww8", "Surrogate error: low without high");
+            return rString.copy(0, i);
+        }
+        ++i;
+    }
+    return rString;
+}
+
 bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     sal_uInt16 nLevelStyle, bool bSetStartNo,
     std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
@@ -703,7 +729,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     // 4. den Nummerierungsstring einlesen: ergibt Prefix und Postfix
 
-    OUString sNumString(read_uInt16_PascalString(rSt));
+    OUString sNumString(sanitizeString(read_uInt16_PascalString(rSt)));
 
     // 5. gelesene Werte in Writer Syntax umwandeln
 
