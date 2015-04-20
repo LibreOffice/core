@@ -26,7 +26,8 @@ SvViewDataEntry::SvViewDataEntry() :
     mbExpanded(false),
     mbFocused(false),
     mbCursored(false),
-    mbSelectable(true)
+    mbSelectable(true),
+    maPaintRectangle()
 {
 }
 
@@ -37,7 +38,8 @@ SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     mbExpanded(rData.mbExpanded),
     mbFocused(false),
     mbCursored(rData.mbCursored),
-    mbSelectable(rData.mbSelectable)
+    mbSelectable(rData.mbSelectable),
+    maPaintRectangle(rData.maPaintRectangle)
 {
 }
 
@@ -47,12 +49,6 @@ SvViewDataEntry::~SvViewDataEntry()
     nVisPos = 0x12345678;
 #endif
 }
-
-
-
-
-
-
 
 void SvViewDataEntry::SetFocus( bool bFocus )
 {
@@ -93,6 +89,16 @@ const SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos) const
 SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos)
 {
     return &maItems[nPos];
+}
+
+void SvViewDataEntry::SetPaintRectangle(Rectangle aRectangle)
+{
+    maPaintRectangle = aRectangle;
+}
+
+Rectangle SvViewDataEntry::GetPaintRectangle() const
+{
+    return maPaintRectangle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

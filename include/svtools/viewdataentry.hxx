@@ -52,6 +52,7 @@ class SVT_DLLPUBLIC SvViewDataEntry
     bool mbFocused:1;
     bool mbCursored:1;
     bool mbSelectable:1;
+    Rectangle maPaintRectangle;
 
 public:
     SvViewDataEntry();
@@ -74,6 +75,10 @@ public:
 
     const SvViewDataItem* GetItem(size_t nPos) const;
     SvViewDataItem* GetItem(size_t nPos);
+
+    void SetPaintRectangle(Rectangle aRectangle);
+    Rectangle GetPaintRectangle() const;
+
 };
 
 #endif

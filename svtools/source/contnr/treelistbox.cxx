@@ -3045,6 +3045,8 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             // draw item
             // center vertically
             aEntryPos.Y() += ( nTempEntryHeight - aSize.Height() ) / 2;
+            pViewDataEntry->SetPaintRectangle(aRect);
+
             pItem->Paint(aEntryPos, *this, pViewDataEntry, pEntry);
 
             // division line between tabs
