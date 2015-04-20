@@ -228,7 +228,7 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOldComplexMerge, "tdf90681.odt")
+DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
@@ -239,6 +239,17 @@ DECLARE_OOXMLEXPORT_TEST(testOldComplexMerge, "tdf90681.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:vMerge", "val", "restart");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:vMerge", "val", "continue");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")

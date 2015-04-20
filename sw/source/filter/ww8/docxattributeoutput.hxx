@@ -421,12 +421,12 @@ private:
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-    void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
-    void EndTableCell( );
+    void EndTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
     void EndTableRow( );
     void EndTable();
+    void SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t pInner, sal_Int32 nCell, sal_uInt32 nRow);
     void PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize);
     bool TextBoxIsFramePr(const SwFrmFmt& rFrmFmt);
     /// End cell, row, and even the entire table if necessary.
@@ -883,6 +883,9 @@ private:
 
     // Remember first cell (used for default borders/margins) of each table
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
+    // Remember last open and closed cells on each level
+    std::vector<sal_Int32> lastOpenCell;
+    std::vector<sal_Int32> lastClosedCell;
 
     boost::optional<css::drawing::FillStyle> m_oFillStyle;
     /// If FormatBox() already handled fill style / gradient.
@@ -922,8 +925,6 @@ private:
     OUString m_aRunSdtPrAlias;
     /// Currently paragraph SDT has a <w:id> child element.
     bool m_bParagraphSdtHasId;
-    /// Checking for balanced table cells start/ends
-    sal_Int32 m_nCellsOpen;
 
     std::map<SvxBoxItemLine, css::table::BorderLine2> m_aTableStyleConf;
 

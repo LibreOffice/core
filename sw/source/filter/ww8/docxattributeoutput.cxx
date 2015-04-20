@@ -237,9 +237,6 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     // Output table/table row/table cell starts if needed
     if ( pTextNodeInfo.get() )
     {
-        sal_uInt32 nRow = pTextNodeInfo->getRow();
-        sal_uInt32 nCell = pTextNodeInfo->getCell();
-
         // New cell/row?
         if ( m_tableReference->m_nTableDepth > 0 && !m_tableReference->m_bTableCellOpen )
         {
@@ -247,9 +244,15 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             if ( pDeepInner->getCell() == 0 )
                 StartTableRow( pDeepInner );
 
-            StartTableCell( pDeepInner );
+            const sal_uInt32 nCell = pDeepInner->getCell();
+            const sal_uInt32 nRow = pDeepInner->getRow();
+
+            SyncNodelessCells(pDeepInner, nCell, nRow);
+            StartTableCell(pDeepInner, nCell, nRow);
         }
 
+        sal_uInt32 nRow = pTextNodeInfo->getRow();
+        sal_uInt32 nCell = pTextNodeInfo->getCell();
         if ( nRow == 0 && nCell == 0 )
         {
             // Do we have to start the table?
@@ -266,7 +269,8 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
 
                     StartTable( pInner );
                     StartTableRow( pInner );
-                    StartTableCell( pInner );
+
+                    StartTableCell(pInner, 0, 0);
                 }
 
                 m_tableReference->m_nTableDepth = nCurrentDepth;
@@ -687,12 +691,34 @@ void DocxAttributeOutput::EndSdtBlock()
     m_pSerializer->endElementNS( XML_w, XML_sdt );
 }
 
+void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t pInner, sal_Int32 nCell, sal_uInt32 nRow)
+{
+    sal_Int32 nOpenCell = lastOpenCell.back();
+    if (nOpenCell != -1 && nOpenCell != nCell)
+        EndTableCell(pInner, nOpenCell, nRow);
+
+    sal_Int32 nClosedCell = lastClosedCell.back();
+    for (sal_Int32 i = nClosedCell+1; i < nCell; ++i)
+    {
+        if (i >= 62)    //words limit
+            break;
+
+        if (i == 0)
+            StartTableRow(pInner);
+
+        StartTableCell(pInner, i, nRow);
+        m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
+        EndTableCell(pInner, i, nRow);
+    }
+}
+
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph )
 {
     if ( pInner.get() )
     {
         // Where are we in the table
-        sal_uInt32 nRow = pInner->getRow( );
+        sal_uInt32 nRow = pInner->getRow();
+        sal_Int32 nCell = pInner->getCell();
 
         InitTableHelper( pInner );
 
@@ -704,28 +730,32 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         // so simply if there are more columns, don't close the last one msoffice will handle
         // and merge the contents of the remaining ones into it (since we don't close the cell
         // here, following ones will not be opened)
-        bool limitWorkaround = ( pInner->getCell() >= 62 && !pInner->isEndOfLine());
+        const bool limitWorkaround = (nCell >= 62 && !pInner->isEndOfLine());
         const bool bEndCell = pInner->isEndOfCell() && !limitWorkaround;
-        const bool bStartCell = bEndCell && !m_nCellsOpen;
+        const bool bEndRow = pInner->isEndOfLine();
 
         if ( bEndCell )
         {
-            if ( bForceEmptyParagraph )
-            {
-                if (bStartCell)
-                {
-                    const sal_uInt32 nCol = pInner->getCell();
-                    StartTableCell(pInner, nCol+1, nRow);
-                }
+            SyncNodelessCells(pInner, nCell, nRow);
 
+            sal_Int32 nClosedCell = lastClosedCell.back();
+            if (nCell == nClosedCell)
+            {
+                //Start missing trailing cell
+                ++nCell;
+                StartTableCell(pInner, nCell, nRow);
+            }
+
+            if (bForceEmptyParagraph)
+            {
                 m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
             }
 
-            EndTableCell();
+            EndTableCell(pInner, nCell, nRow);
         }
 
         // This is a line end
-        if ( pInner->isEndOfLine() )
+        if (bEndRow)
             EndTableRow();
 
         // This is the end of the table
@@ -2839,12 +2869,11 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Horizontal spans
     const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ nRow ];
-    const SwWriteTableCells *tableCells =  &pRow->GetCells();
-    if (nCell < tableCells->size() )
+    const SwWriteTableCells& tableCells =  pRow->GetCells();
+    if (nCell < tableCells.size() )
     {
-        const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
-
-        sal_uInt16 nColSpan = pCell->GetColSpan();
+        const SwWriteTableCell& rCell = tableCells[nCell];
+        const sal_uInt16 nColSpan = rCell.GetColSpan();
         if ( nColSpan > 1 )
             m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
                     FSNS( XML_w, XML_val ), OString::number( nColSpan ).getStr(),
@@ -2928,6 +2957,8 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
 
     tableFirstCells.push_back(pTableTextNodeInfoInner);
+    lastOpenCell.push_back(-1);
+    lastClosedCell.push_back(-1);
 
     InitTableHelper( pTableTextNodeInfoInner );
     TableDefinition( pTableTextNodeInfoInner );
@@ -2940,6 +2971,8 @@ void DocxAttributeOutput::EndTable()
     if ( m_tableReference->m_nTableDepth > 0 )
         --m_tableReference->m_nTableDepth;
 
+    lastClosedCell.pop_back();
+    lastOpenCell.pop_back();
     tableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
@@ -2992,13 +3025,16 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t p
 void DocxAttributeOutput::EndTableRow( )
 {
     m_pSerializer->endElementNS( XML_w, XML_tr );
+    lastOpenCell.back() = -1;
+    lastClosedCell.back() = -1;
 }
 
 void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
+    lastOpenCell.back() = nCell;
+
     InitTableHelper( pTableTextNodeInfoInner );
 
-    ++m_nCellsOpen;
     m_pSerializer->startElementNS( XML_w, XML_tc, FSEND );
 
     // Write the cell properties here
@@ -3007,20 +3043,15 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     m_tableReference->m_bTableCellOpen = true;
 }
 
-void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::EndTableCell(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/, sal_uInt32 nCell, sal_uInt32 /*nRow*/)
 {
-    const sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
-    const sal_uInt32 nRow = pTableTextNodeInfoInner->getRow();
-    StartTableCell(pTableTextNodeInfoInner, nCell, nRow);
-}
+    lastClosedCell.back() = nCell;
+    lastOpenCell.back() = -1;
 
-void DocxAttributeOutput::EndTableCell( )
-{
     if (m_tableReference->m_bTableCellParaSdtOpen)
         EndParaSdtBlock();
 
     m_pSerializer->endElementNS( XML_w, XML_tc );
-    --m_nCellsOpen;
 
     m_bBtLr = false;
     m_tableReference->m_bTableCellOpen = false;
@@ -8311,7 +8342,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
     , m_bParagraphSdtHasId(false)
-    , m_nCellsOpen(0)
 {
 }
 
