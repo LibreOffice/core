@@ -755,6 +755,14 @@
 							<with-param name="style-name" select="'color'"/>
 							<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
 						</call-template>
+						<call-template name="translate-style-property">
+							<with-param name="style-name" select="'margin-left'"/>
+							<with-param name="style-property" select="$style-element/style:paragraph-properties/@fo:margin-left"/>
+						</call-template>
+						<call-template name="translate-style-property">
+							<with-param name="style-name" select="'margin-right'"/>
+							<with-param name="style-property" select="$style-element/style:paragraph-properties/@fo:margin-right"/>
+						</call-template>
 					</if>
 				</when>
 				<otherwise>
