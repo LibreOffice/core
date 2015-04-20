@@ -1433,6 +1433,11 @@ void ChartExport::exportBubbleChart( Reference< chart2::XChartType > xChartType 
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
+
+    pFS->singleElement(FSNS(XML_c, XML_bubble3D),
+            XML_val, "0",
+            FSEND);
+
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, XML_bubbleChart ) );
