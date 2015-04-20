@@ -455,7 +455,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
             rToSet.Put(aXFillTransparenceItem);
         }
-        else if (pColTrans)
+        else if (pColTrans &&
+            !pXFillFloatTransparenceItem && !pXFillFloatTransparenceNameItem)
         {
             // No fill transparency is given.  On the other hand, we have a
             // BackColorTransparency, so use that.
