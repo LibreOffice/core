@@ -57,6 +57,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -1778,6 +1779,16 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     if( GETAD( ParaLineSpacing ) )
         bHasLinespacing = ( mAny >>= aLineSpacing );
 
+    bool bRtl = false;
+    if( GETA( WritingMode ) )
+    {
+        sal_Int16 nWritingMode;
+        if( ( mAny >>= nWritingMode ) && nWritingMode == text::WritingMode2::RL_TB )
+        {
+            bRtl = true;
+        }
+    }
+
     if( nLevel != -1
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing )
@@ -1786,6 +1797,7 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
                               XML_marL, NULL,
                               XML_algn, GetAlignment( nAlignment ),
+                              XML_rtl, bRtl ? BS(bRtl) : NULL,
                               FSEND );
 
         if( bHasLinespacing )
