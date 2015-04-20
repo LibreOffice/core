@@ -3724,7 +3724,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     for (SCSIZE i = 0; i < nCount; ++i)
                         rArray.push_back( pMat->GetDouble(i));
                 }
-                else
+                else if (bAllowText)
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                     {
@@ -3732,18 +3732,23 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                             rArray.push_back( pMat->GetDouble(i));
                         else
                         {
-                            if ( bAllowText )
+                            // tdf#88547 try to convert string to (date)value
+                            OUString aStr = pMat->GetString( i ).getString();
+                            if ( aStr.getLength() > 0 )
                             {
-                                // tdf 88547 try to convert string to (date)value
-                                OUString aStr = pMat->GetString( i ).getString();
-                                if ( aStr.getLength() > 0 )
-                                {
-                                    double fVal = ConvertStringToValue( aStr );
-                                    if ( !nGlobalError )
-                                        rArray.push_back( fVal );
-                                }
+                                double fVal = ConvertStringToValue( aStr );
+                                if ( !nGlobalError )
+                                    rArray.push_back( fVal );
                             }
                         }
+                    }
+                }
+                else
+                {
+                    for (SCSIZE i = 0; i < nCount; ++i)
+                    {
+                        if ( pMat->IsValue( i ) )
+                            rArray.push_back( pMat->GetDouble(i));
                     }
                 }
             }
