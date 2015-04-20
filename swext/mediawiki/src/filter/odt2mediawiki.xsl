@@ -811,7 +811,7 @@
  			<value-of select="$NL"/>
  			<value-of select="$NL"/>
  		</when>
- 		<when test="./following-sibling::*[1]/self::text:list and not(ancestor::text:list-item)">
+		<when test="not(./following-sibling::*[1]/self::text:list) and not(ancestor::text:list-item)">
  			<value-of select="$NL"/>
  			<value-of select="$NL"/>
  		</when>
