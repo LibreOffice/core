@@ -18,7 +18,6 @@
  */
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
@@ -384,9 +383,9 @@ void SfxTemplatePanelControl::FreeResource()
 
 void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if (nStateChange == StateChangedType::INITSHOW)
     {
-        SfxViewFrame *pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
+        SfxViewFrame* pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
         vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
 
         Size aSize = pEditWin->GetSizePixel();
@@ -395,7 +394,7 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
         Size aWinSize = GetSizePixel();
         aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
         aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
-        //      SetFloatingPos( aPoint );
+        // SetFloatingPos( aPoint );
     }
 
     DockingWindow::StateChanged( nStateChange );
@@ -992,7 +991,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
                     aFmtLb.MakeVisible( pEntry );
                     aFmtLb.SelectAll(false);
                     aFmtLb.Select( pEntry );
-                    bWaterDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? sal_False : sal_True;
+                    bWaterDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? false : true;
                     FmtSelectHdl( NULL );
                 }
             }
@@ -1045,24 +1044,27 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( bool bEnable )
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     OSL_ENSURE( pTreeBox, "FillTreeBox() without treebox");
-    if(pStyleSheetPool && nActFamily != 0xffff)
+    if (pStyleSheetPool && nActFamily != 0xffff)
     {
-        const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-        if(!pItem)
+        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+        if (!pItem)
             return;
         pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL_VISIBLE);
         StyleTreeArr_Impl aArr;
-        SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
+        SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+
         if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
             pTreeBox->SetDragDropMode(SV_DRAGDROP_CTRL_MOVE);
         else
             pTreeBox->SetDragDropMode(SV_DRAGDROP_NONE);
-        while(pStyle)
+
+        while (pStyle)
         {
             StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
             aArr.push_back(pNew);
             pStyle = pStyleSheetPool->Next();
         }
+
         MakeTree_Impl(aArr);
         ExpandedEntries_t aEntries;
         pTreeBox->MakeExpanded_Impl(aEntries);
@@ -1076,17 +1078,17 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         }
         pTreeBox->Recalc();
 
-        EnableItem(SID_STYLE_WATERCAN,false);
+        EnableItem(SID_STYLE_WATERCAN, false);
 
-        SfxTemplateItem* pState = pFamilyState[nActFamily-1];
+        SfxTemplateItem* pState = pFamilyState[nActFamily - 1];
 
-        if ( nCount )
-            pTreeBox->Expand( pTreeBox->First() );
+        if (nCount)
+            pTreeBox->Expand(pTreeBox->First());
 
-        for ( SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next( pEntry ) )
+        for (SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next(pEntry))
         {
-            if ( IsExpanded_Impl( aEntries, pTreeBox->GetEntryText( pEntry ) ) )
-                pTreeBox->Expand( pEntry );
+            if (IsExpanded_Impl(aEntries, pTreeBox->GetEntryText(pEntry)))
+                pTreeBox->Expand(pEntry);
         }
 
         pTreeBox->SetUpdateMode( true );
@@ -1244,7 +1246,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             mbIgnoreSelect = true; // in case we get a selection change
             // in anycase we should stop any preview
             Execute_Impl(SID_STYLE_END_PREVIEW,
-            String(), String(),
+            OUString(), OUString(),
             0, 0, 0, 0 );
 #endif
             SelectStyle(aStyle);
@@ -1740,7 +1742,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                boost::scoped_ptr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
+                std::unique_ptr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
                     // why? : FloatingWindow must not be parent of a modal dialog
                 if(RET_OK == pDlg->Execute())
                 {
@@ -2102,14 +2104,14 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
         if ( mbIgnoreSelect )
         {
             Execute_Impl(SID_STYLE_END_PREVIEW,
-            String(), String(),
+            OUString(), OUString(),
             0, 0, 0, 0 );
             mbIgnoreSelect = false;
         }
         else
         {
             Execute_Impl(SID_STYLE_PREVIEW,
-                     GetSelectedEntry(), String(),
+                     GetSelectedEntry(), OUString(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      0, 0, &nModifier );
         }
@@ -2180,13 +2182,12 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu()
     return pMenu;
 }
 
-SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
-    SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow )
-    : SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
-      m_pFloat          ( pDlgWindow ),
-      m_bZoomIn         ( false ),
-      m_aActionTbL        ( pDlgWindow, this ),
-      m_aActionTbR      ( pDlgWindow, SfxResId( TB_ACTION ) )
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
+    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow, true)
+    , m_pFloat(pDlgWindow)
+    , m_bZoomIn(false)
+    , m_aActionTbL(pDlgWindow, this)
+    , m_aActionTbR(pDlgWindow, SfxResId(TB_ACTION))
 {
     pDlgWindow->FreeResource();
     Initialize();
@@ -2202,9 +2203,9 @@ void SfxTemplateDialog_Impl::Initialize()
     m_aActionTbL.Show();
     m_aActionTbR.Show();
     vcl::Font aFont = aFilterLb.GetFont();
-    aFont.SetWeight( WEIGHT_NORMAL );
-    aFilterLb.SetFont( aFont );
-    m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
+    aFont.SetWeight(WEIGHT_NORMAL);
+    aFilterLb.SetFont(aFont);
+    m_aActionTbL.SetHelpId(HID_TEMPLDLG_TOOLBOX_LEFT);
 }
 
 void SfxTemplateDialog_Impl::EnableFamilyItem( sal_uInt16 nId, bool bEnable )
@@ -2232,8 +2233,8 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamil
 void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
     m_aActionTbR.HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
-    m_aActionTbR.SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
-            ToolBoxItemBits::DROPDOWNONLY|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
+    m_aActionTbR.SetItemBits(SID_STYLE_NEW_BY_EXAMPLE,
+            ToolBoxItemBits::DROPDOWNONLY | m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
 }
 
 void SfxTemplateDialog_Impl::updateFamilyImages()
@@ -2295,10 +2296,10 @@ void SfxTemplateDialog_Impl::Resize()
 {
     SfxDockingWindow* pDockingWindow = dynamic_cast<SfxDockingWindow*>(m_pFloat);
     FloatingWindow *pF = pDockingWindow!=NULL ? pDockingWindow->GetFloatingWindow() : NULL;
-    if ( pF )
+    if (pF)
     {
         m_bZoomIn = pF->IsRollUp();
-        if ( m_bZoomIn )
+        if (m_bZoomIn)
             return;
     }
 
@@ -2545,9 +2546,9 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     bTreeDrag = true;
     bUpdateByExampleDisabled = false;
 
-    if ( pStyleSheetPool )
+    if (pStyleSheetPool)
     {
-        if(!pTreeBox)
+        if (!pTreeBox)
             UpdateStyles_Impl(UPDATE_FAMILY | UPDATE_FAMILY_LIST);
         else
         {
@@ -2558,11 +2559,15 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
 
     InvalidateBindings();
 
-    if ( IsCheckedItem( SID_STYLE_WATERCAN ) &&
+    if (IsCheckedItem(SID_STYLE_WATERCAN) &&
          // only if that area is allowed
-         0 != pFamilyState[ nActFamily - 1 ] )
-        Execute_Impl( SID_STYLE_APPLY, GetSelectedEntry(),
-                      OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+         0 != pFamilyState[nActFamily - 1])
+    {
+        Execute_Impl(SID_STYLE_APPLY,
+                     GetSelectedEntry(),
+                     OUString(),
+                     static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()));
+    }
 }
 
 void SfxCommonTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
