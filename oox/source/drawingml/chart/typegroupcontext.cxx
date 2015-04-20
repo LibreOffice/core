@@ -350,6 +350,7 @@ SurfaceTypeGroupContext::~SurfaceTypeGroupContext()
 
 ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -358,8 +359,7 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
         case C_TOKEN( ser ):
             return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( wireframe ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbWireframe = rAttribs.getBool( XML_val, false );
+            mrModel.mbWireframe = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
