@@ -293,13 +293,14 @@ public class LOKitThread extends Thread {
      * Processes touch events.
      */
     private void touch(String touchType, PointF documentCoordinate) {
-        if (!LOKitShell.isEditingEnabled()) {
-            return;
-        }
         if (mTileProvider == null) {
             return;
         }
-        if (touchType.equals("LongPress")) {
+
+        // to handle hyperlinks, enable single tap even in the Viewer
+        boolean editing = LOKitShell.isEditingEnabled();
+
+        if (touchType.equals("LongPress") && editing) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
@@ -309,9 +310,9 @@ public class LOKitThread extends Thread {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
-        } else if (touchType.equals("GraphicSelectionStart")) {
+        } else if (touchType.equals("GraphicSelectionStart") && editing) {
             mTileProvider.setGraphicSelectionStart(documentCoordinate);
-        } else if (touchType.equals("GraphicSelectionEnd")) {
+        } else if (touchType.equals("GraphicSelectionEnd") && editing) {
             mTileProvider.setGraphicSelectionEnd(documentCoordinate);
         }
     }

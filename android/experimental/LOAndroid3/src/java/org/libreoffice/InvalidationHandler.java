@@ -41,7 +41,9 @@ public class InvalidationHandler implements Document.MessageCallback {
     @Override
     public void messageRetrieved(int messageID, String payload) {
         if (!LOKitShell.isEditingEnabled()) {
-            return;
+            // enable handling of hyperlinks even in the Viewer
+            if (messageID != Document.CALLBACK_INVALIDATE_TILES && messageID != Document.CALLBACK_HYPERLINK_CLICKED)
+                return;
         }
         switch (messageID) {
             case Document.CALLBACK_INVALIDATE_TILES:
