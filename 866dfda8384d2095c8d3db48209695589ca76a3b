@@ -272,6 +272,24 @@
     },
     {
       "key": {
+        "uuid": "ba8a016a_564be42b",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-20T19:28:55Z",
+      "side": 1,
+      "message": "With Tab/sheet specified here I referred to whether the sheet name was given in a reference. Of course there\u0027s always some tab value unless it is invalid. But it depends on the 3D flag if the sheet name is displayed when creating a string from a reference.\n\nBear in mind that a range is extended during interpreter runtime and may be constructed from formula results or defined names. If the sheet was not specified and relative it always points to the current sheet. If that is extended with a reference where a sheet was specified, the resulting range depends on on the current position. For example:\n\nname1:\u003d A1\nname2:\u003d Sheet2.A1\n\nFor a formula expression name1:name2, on Sheet1 the resulting range will be Sheet1.A1:Sheet2.A1, on Sheet2 it will be Sheet2.A1:A1 and on Sheet3 it will be Sheet2.A1:Sheet3.A1\n\nAlso, concatenated range expressions are possible, like name1:name2:name3",
+      "parentUuid": "ba8a016a_506d2c31",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_f02f80f4",
         "filename": "sc/source/core/tool/refdata.cxx",
         "patchSetId": 1
@@ -301,6 +319,24 @@
       "side": 1,
       "message": "The original idea was 3 Ifs, with 2 repeated code :(\n\nif ( ref1 tab and ref2 tab are relative )\n...\nelse if (ref1 tab is absolute and ref2 is relative )\n\nelse if (ref1 tab is relative and ref2 is absolute )\n\nthe absolute tab take precedence.",
       "parentUuid": "ba8a016a_f02f80f4",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba8a016a_7648682e",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-20T19:28:55Z",
+      "side": 1,
+      "message": "Given the comment above, I think this should be entirely different.",
+      "parentUuid": "ba8a016a_706ab01c",
       "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
