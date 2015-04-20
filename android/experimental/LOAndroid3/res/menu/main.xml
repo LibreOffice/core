@@ -5,36 +5,42 @@
 
 
     <item android:id="@+id/action_bold"
+          android:visible="false"
           android:title="@string/action_bold"
           android:icon="@drawable/action_bold"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
     <item android:id="@+id/action_italic"
+          android:visible="false"
           android:title="@string/action_italic"
           android:icon="@drawable/action_italic"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
     <item android:id="@+id/action_underline"
+          android:visible="false"
           android:title="@string/action_underline"
           android:icon="@drawable/action_underline"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
     <item android:id="@+id/action_strikeout"
+          android:visible="false"
           android:title="@string/action_strikeout"
           android:icon="@drawable/action_strikeout"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
     <item android:id="@+id/action_keyboard"
+          android:visible="false"
           android:title="@string/action_keyboard"
           android:icon="@drawable/ic_format_keyboard_grey600_24dp"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
     <item android:id="@+id/action_save"
+          android:visible="false"
         android:title="@string/action_save"
         android:orderInCategory="100" />
 
