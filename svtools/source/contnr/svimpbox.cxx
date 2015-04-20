@@ -3257,7 +3257,7 @@ void SvImpLBox::SetUpdateMode( bool bMode )
 
 bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 {
-    if( pView->nTreeFlags & TREEFLAG_RECALCTABS )
+    if( pView->nTreeFlags & SvTreeFlags::RECALCTABS )
     {
         nFlags |= F_IGNORE_CHANGED_TABS;
         pView->SetTabs();

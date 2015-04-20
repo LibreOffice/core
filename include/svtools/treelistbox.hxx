@@ -100,10 +100,18 @@ namespace o3tl
 
 #define SV_ENTRYHEIGHTOFFS_PIXEL 2
 
-#define TREEFLAG_CHKBTN         0x0001
-#define TREEFLAG_USESEL         0x0002
-#define TREEFLAG_MANINS         0x0004
-#define TREEFLAG_RECALCTABS     0x0008
+enum class SvTreeFlags
+{
+    CHKBTN         = 0x01,
+    USESEL         = 0x02,
+    MANINS         = 0x04,
+    RECALCTABS     = 0x08,
+    FIXEDHEIGHT    = 0x10,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvTreeFlags> : is_typed_flags<SvTreeFlags, 0x1f> {};
+}
 
 #define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST   0x01
 #define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE   0x02
@@ -261,7 +269,7 @@ protected:
     SvTreeListEntry*    pTargetEntry;
     SvLBoxButtonData*   pCheckButtonData;
     std::vector<SvLBoxTab*> aTabs;
-    sal_uInt16      nTreeFlags;
+    SvTreeFlags     nTreeFlags;
     sal_uInt16      nImpFlags;
     // Move/CopySelection: Position of the current Entry in SelectionList
     sal_uInt16      nCurEntrySelPos;
@@ -527,7 +535,7 @@ public:
     void                SetAllEntriesAccessibleRoleType( short n ) { nAllItemAccRoleType = n; }
     short               GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
 
-    sal_uInt16          GetTreeFlags() const {return nTreeFlags;}
+    SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 
     OUString            headString;
     OUString            SearchEntryTextWithHeadTitle(SvTreeListEntry* pEntry);

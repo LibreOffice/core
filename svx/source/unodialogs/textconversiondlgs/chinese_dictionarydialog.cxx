@@ -318,7 +318,7 @@ SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16
     {
         sal_uInt16 nCount = pEntry->ItemCount();
         nColumn++;
-        if( nTreeFlags & TREEFLAG_CHKBTN )
+        if( nTreeFlags & SvTreeFlags::CHKBTN )
             nColumn++;
            if( nColumn < nCount )
             pItem = pEntry->GetItem( nColumn );

@@ -414,7 +414,7 @@ namespace accessibility
         }
 
         bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if( !(getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN) )
+        if( !(getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN) )
         {
             if( bHasButtons )
                 nCase = 1;
@@ -445,7 +445,7 @@ namespace accessibility
 
         //o is: return AccessibleRole::TREE;
         bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if(!bHasButtons && (getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN))
+        if(!bHasButtons && (getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN))
             return AccessibleRole::LIST;
         else
             if (GetRoleType() == 0)

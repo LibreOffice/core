@@ -141,7 +141,7 @@ void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
         pTabList[nIdx].SetPos( nNewTab );
         pTabList[nIdx].nFlags=(SvLBoxTabFlags::ADJUST_LEFT| SvLBoxTabFlags::INV_ALWAYS);
     }
-    SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
+    SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
 }
@@ -158,7 +158,7 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         nValue = aSize.Width();
         pTabList[ nTab ].SetPos( nValue );
-        SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
+        SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
         if( IsUpdateMode() )
             Invalidate();
     }
@@ -477,14 +477,14 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
     nFlags &= (~MYTABMASK);
     nFlags |= static_cast<SvLBoxTabFlags>(eJustify);
     pTab->nFlags = nFlags;
-    SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
+    SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
 }
 
 long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
-    if( SvTreeListBox::nTreeFlags & TREEFLAG_RECALCTABS )
+    if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )
         ((SvTabListBox*)this)->SetTabs();
 
     DBG_ASSERT(nTab<nTabCount,"GetTabPos:Invalid Tab");

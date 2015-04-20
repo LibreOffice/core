@@ -435,7 +435,7 @@ SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nP
 
         nPos++;
 
-        if( nTreeFlags & TREEFLAG_CHKBTN ) nPos++;
+        if( nTreeFlags & SvTreeFlags::CHKBTN ) nPos++;
 
         if( nPos < nCount )
         {

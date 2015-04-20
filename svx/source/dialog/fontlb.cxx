@@ -136,7 +136,7 @@ void SvxFontListBox::InitEntry(
 {
     if( mbUseFont )
     {
-        if( nTreeFlags & TREEFLAG_CHKBTN )
+        if( nTreeFlags & SvTreeFlags::CHKBTN )
             pEntry->AddItem( new SvLBoxButton( pEntry, eButtonKind, 0,
                                                pCheckButtonData ) );
         pEntry->AddItem( new SvLBoxContextBmp(pEntry, 0, rCollImg, rExpImg, true) );

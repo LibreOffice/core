@@ -393,7 +393,7 @@ namespace accessibility
         }
 
         bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if( !(getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN) )
+        if( !(getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN) )
         {
             if( bHasButtons )
                 nCase = 1;
@@ -422,8 +422,8 @@ namespace accessibility
             else if( nType == TREEBOX_ALLITEM_ACCROLE_TYPE_LIST)
                     return AccessibleRole::LIST_ITEM;
 
-            sal_uInt16 treeFlag = pBox->GetTreeFlags();
-            if(treeFlag & TREEFLAG_CHKBTN )
+            SvTreeFlags treeFlag = pBox->GetTreeFlags();
+            if(treeFlag & SvTreeFlags::CHKBTN )
             {
                 SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
                 SvButtonState eState = pBox->GetCheckButtonState( pEntry );
@@ -757,9 +757,9 @@ namespace accessibility
 
         // three actions supported
         SvTreeListBox* pBox = getListBox();
-        sal_uInt16 treeFlag = pBox->GetTreeFlags();
+        SvTreeFlags treeFlag = pBox->GetTreeFlags();
         bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
-        if( (treeFlag & TREEFLAG_CHKBTN) && !bHasButtons)
+        if( (treeFlag & SvTreeFlags::CHKBTN) && !bHasButtons)
         {
             sal_Int16 role = getAccessibleRole();
             if ( role == AccessibleRole::CHECK_BOX )
@@ -781,8 +781,8 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        sal_uInt16 treeFlag = getListBox()->GetTreeFlags();
-        if( nIndex == 0 && (treeFlag & TREEFLAG_CHKBTN) )
+        SvTreeFlags treeFlag = getListBox()->GetTreeFlags();
+        if( nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN) )
         {
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
@@ -794,7 +794,7 @@ namespace accessibility
                     getListBox()->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
             }
         }
-        else if( (nIndex == 1 && (treeFlag & TREEFLAG_CHKBTN) ) || (nIndex == 0) )
+        else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN) ) || (nIndex == 0) )
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
             if ( pEntry )
@@ -823,8 +823,8 @@ namespace accessibility
         // sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         SvButtonState state = getListBox()->GetCheckButtonState( pEntry );
-        sal_uInt16 treeFlag = getListBox()->GetTreeFlags();
-        if(nIndex == 0 && (treeFlag & TREEFLAG_CHKBTN))
+        SvTreeFlags treeFlag = getListBox()->GetTreeFlags();
+        if(nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN))
         {
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
@@ -838,7 +838,7 @@ namespace accessibility
                 //Sometimes, a List or Tree may have both checkbox and label at the same time
                 return OUString();
             }
-        }else if( (nIndex == 1 && (treeFlag & TREEFLAG_CHKBTN)) || nIndex == 0 )
+        }else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
         {
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
                 return getListBox()->IsExpanded( pEntry ) ? \

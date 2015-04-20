@@ -334,7 +334,7 @@ SvTreeListEntry* SvxRedlinTable::CreateEntry() const
 void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
         const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
-    if (nTreeFlags & TREEFLAG_CHKBTN)
+    if (nTreeFlags & SvTreeFlags::CHKBTN)
     {
         pEntry->AddItem(new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData));
     }

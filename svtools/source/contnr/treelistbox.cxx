@@ -1429,8 +1429,6 @@ Link SvTreeListBox::GetDragFinishedHdl() const
     - SetSpaceBetweenEntries: offset is not taken into account in SetEntryHeight
 */
 
-#define TREEFLAG_FIXEDHEIGHT        0x0010
-
 #define SV_LBOX_DEFAULT_INDENT_PIXEL 20
 
 void SvTreeListBox::InitTreeView()
@@ -1449,7 +1447,7 @@ void SvTreeListBox::InitTreeView()
     Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
     mpImpl->m_pLink = pLink;
 
-    nTreeFlags = TREEFLAG_RECALCTABS;
+    nTreeFlags = SvTreeFlags::RECALCTABS;
     nIndent = SV_LBOX_DEFAULT_INDENT_PIXEL;
     nEntryHeightOffs = SV_ENTRYHEIGHTOFFS_PIXEL;
     pImp = new SvImpLBox( this, GetModel(), GetStyle() );
@@ -1659,7 +1657,7 @@ void SvTreeListBox::SetTabs()
 {
     if( IsEditingActive() )
         EndEditing( true );
-    nTreeFlags &= (~TREEFLAG_RECALCTABS);
+    nTreeFlags &= (~SvTreeFlags::RECALCTABS);
     nFocusWidth = -1;
     const WinBits nStyle( GetStyle() );
     bool bHasButtons = (nStyle & WB_HASBUTTONS)!=0;
@@ -1671,7 +1669,7 @@ void SvTreeListBox::SetTabs()
     // pCheckButtonData->Width() knows nothing about the native checkbox width,
     // so we have mnCheckboxItemWidth which becomes valid when something is added.
     long nCheckWidth = 0;
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
         nCheckWidth = mnCheckboxItemWidth;
     long nCheckWidthDIV2 = nCheckWidth / 2;
 
@@ -1681,7 +1679,7 @@ void SvTreeListBox::SetTabs()
     ClearTabList();
 
     int nCase = NO_BUTTONS;
-    if( !(nTreeFlags & TREEFLAG_CHKBTN) )
+    if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
     {
         if( bHasButtons )
             nCase = NODE_BUTTONS;
@@ -1760,7 +1758,7 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
     SvLBoxString* pString;
     SvLBoxContextBmp* pContextBmp;
 
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         SvLBoxButton* pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
         pEntry->AddItem( pButton );
@@ -1814,7 +1812,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     SvLBoxButtonKind eButtonKind
 )
 {
-    nTreeFlags |= TREEFLAG_MANINS;
+    nTreeFlags |= SvTreeFlags::MANINS;
 
     const Image& rDefExpBmp = pImp->GetDefaultEntryExpBmp( );
     const Image& rDefColBmp = pImp->GetDefaultEntryColBmp( );
@@ -1835,7 +1833,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     aPrevInsertedExpBmp = rDefExpBmp;
     aPrevInsertedColBmp = rDefColBmp;
 
-    nTreeFlags &= (~TREEFLAG_MANINS);
+    nTreeFlags &= (~SvTreeFlags::MANINS);
 
     return pEntry;
 }
@@ -1845,7 +1843,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     SvTreeListEntry* pParent, bool bChildrenOnDemand, sal_uLong nPos, void* pUser,
     SvLBoxButtonKind eButtonKind )
 {
-    nTreeFlags |= TREEFLAG_MANINS;
+    nTreeFlags |= SvTreeFlags::MANINS;
 
     aCurInsertedExpBmp = aExpEntryBmp;
     aCurInsertedColBmp = aCollEntryBmp;
@@ -1864,7 +1862,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     aPrevInsertedExpBmp = aExpEntryBmp;
     aPrevInsertedColBmp = aCollEntryBmp;
 
-    nTreeFlags &= (~TREEFLAG_MANINS);
+    nTreeFlags &= (~SvTreeFlags::MANINS);
 
     return pEntry;
 }
@@ -1925,7 +1923,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         pParent->SetFlags( nFlags );
     }
 
-    if(!((nTreeFlags & TREEFLAG_MANINS) &&
+    if(!((nTreeFlags & SvTreeFlags::MANINS) &&
          (aPrevInsertedExpBmp == aCurInsertedExpBmp)  &&
          (aPrevInsertedColBmp == aCurInsertedColBmp) ))
     {
@@ -1933,18 +1931,18 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         if( aSize.Width() > nContextBmpWidthMax )
         {
             nContextBmpWidthMax = (short)aSize.Width();
-            nTreeFlags |= TREEFLAG_RECALCTABS;
+            nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
         aSize = GetExpandedEntryBmp( pEntry ).GetSizePixel();
         if( aSize.Width() > nContextBmpWidthMax )
         {
             nContextBmpWidthMax = (short)aSize.Width();
-            nTreeFlags |= TREEFLAG_RECALCTABS;
+            nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
     SetEntryHeight( (SvTreeListEntry*)pEntry );
 
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if( pItem )
@@ -1953,7 +1951,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
             if( mnCheckboxItemWidth < nWidth )
             {
                 mnCheckboxItemWidth = nWidth;
-                nTreeFlags |= TREEFLAG_RECALCTABS;
+                nTreeFlags |= SvTreeFlags::RECALCTABS;
             }
         }
     }
@@ -1963,7 +1961,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 
 void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState eState)
 {
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!(pItem && pItem->CheckModification()))
@@ -1988,7 +1986,7 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
 
 void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 {
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         pItem->SetStateInvisible();
@@ -1999,7 +1997,7 @@ void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!pItem)
@@ -2094,11 +2092,11 @@ void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
 {
     DBG_ASSERT(!GetEntryCount(),"EnableCheckButton: Entry count != 0");
     if( !pData )
-        nTreeFlags &= (~TREEFLAG_CHKBTN);
+        nTreeFlags &= (~SvTreeFlags::CHKBTN);
     else
     {
         SetCheckButtonData( pData );
-        nTreeFlags |= TREEFLAG_CHKBTN;
+        nTreeFlags |= SvTreeFlags::CHKBTN;
         pData->SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
     }
 
@@ -2220,7 +2218,7 @@ void SvTreeListBox::ModelHasCleared()
     SetDefaultExpandedEntryBmp( GetDefaultExpandedEntryBmp() );
     SetDefaultCollapsedEntryBmp( GetDefaultCollapsedEntryBmp() );
 
-    if( !(nTreeFlags & TREEFLAG_FIXEDHEIGHT ))
+    if( !(nTreeFlags & SvTreeFlags::FIXEDHEIGHT ))
         nEntryHeight = 0;
     AdjustEntryHeight( GetFont() );
     AdjustEntryHeight( GetDefaultExpandedEntryBmp() );
@@ -2326,9 +2324,9 @@ void SvTreeListBox::SetEntryHeight( short nHeight, bool bAlways )
     {
         nEntryHeight = nHeight;
         if( nEntryHeight )
-            nTreeFlags |= TREEFLAG_FIXEDHEIGHT;
+            nTreeFlags |= SvTreeFlags::FIXEDHEIGHT;
         else
-            nTreeFlags &= ~TREEFLAG_FIXEDHEIGHT;
+            nTreeFlags &= ~SvTreeFlags::FIXEDHEIGHT;
         Control::SetFont( GetFont() );
         pImp->SetEntryHeight( nHeight );
     }
@@ -2554,7 +2552,7 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
 void SvTreeListBox::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
-    if( nTreeFlags & TREEFLAG_RECALCTABS )
+    if( nTreeFlags & SvTreeFlags::RECALCTABS )
         SetTabs();
     pImp->Paint( rRect );
     //Add visual focus draw
@@ -2829,7 +2827,7 @@ void SvTreeListBox::ImplInitStyle()
 
     const WinBits nWindowStyle = GetStyle();
 
-    nTreeFlags |= TREEFLAG_RECALCTABS;
+    nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( nWindowStyle & WB_SORT )
     {
         GetModel()->SetSortMode( SortAscending );
@@ -2877,7 +2875,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
 
     pImp->UpdateContextBmpWidthMax( pEntry );
 
-    if( nTreeFlags & TREEFLAG_RECALCTABS )
+    if( nTreeFlags & SvTreeFlags::RECALCTABS )
         SetTabs();
 
     short nTempEntryHeight = GetEntryHeight();
@@ -3003,7 +3001,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
             }
 
             // draw background
-            if( !(nTreeFlags & TREEFLAG_USESEL))
+            if( !(nTreeFlags & SvTreeFlags::USESEL))
             {
                 // only draw the area that is used by the item
                 aRectSize.Width() = aSize.Width();
@@ -3035,7 +3033,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
             // A custom selection that starts at a tab position > 0, do not fill
             // the background of the 0th item, else e.g. we might not be able to
             // realize tab listboxes with lines.
-            if( !(nCurTab==0 && (nTreeFlags & TREEFLAG_USESEL) && nFirstSelTab) )
+            if( !(nCurTab==0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab) )
             {
                 SetFillColor( aWallpaper.GetColor() );
                 // this case may occur for smaller horizontal resizes
@@ -3203,7 +3201,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
             nNextTabPos += 50;
     }
 
-    bool bUserSelection = ( nTreeFlags & TREEFLAG_USESEL ) != 0;
+    bool bUserSelection = bool( nTreeFlags & SvTreeFlags::USESEL );
     if( !bUserSelection )
     {
         if( pTab && nCurTab < pEntry->ItemCount() )
@@ -3424,7 +3422,7 @@ void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags, void* pUserData 
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );
     pTab->SetUserData( pUserData );
     aTabs.push_back( pTab );
-    if( nTreeFlags & TREEFLAG_USESEL )
+    if( nTreeFlags & SvTreeFlags::USESEL )
     {
         sal_uInt16 nPos = aTabs.size() - 1;
         if( nPos >= nFirstSelTab && nPos <= nLastSelTab )
@@ -3519,7 +3517,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
 {
 
     sal_uInt16 nTemp;
-    nTreeFlags |= TREEFLAG_USESEL;
+    nTreeFlags |= SvTreeFlags::USESEL;
     if( nStart > nEnd )
     {
         nTemp = nStart;
@@ -3527,7 +3525,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
         nEnd = nTemp;
     }
     // select all tabs that lie within the area
-    nTreeFlags |= TREEFLAG_RECALCTABS;
+    nTreeFlags |= SvTreeFlags::RECALCTABS;
     nFirstSelTab = nStart;
     nLastSelTab = nEnd;
     pImp->RecalcFocusRect();
