@@ -69,6 +69,7 @@ AreaTypeGroupContext::~AreaTypeGroupContext()
 
 ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -87,8 +88,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( ser ):
             return new AreaSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -105,6 +105,7 @@ BarTypeGroupContext::~BarTypeGroupContext()
 
 ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -136,8 +137,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnShape = rAttribs.getToken( XML_val, XML_box );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -154,6 +154,7 @@ BubbleTypeGroupContext::~BubbleTypeGroupContext()
 
 ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -177,8 +178,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
             mrModel.mnSizeRepresents = rAttribs.getToken( XML_val, XML_area );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -195,6 +195,7 @@ LineTypeGroupContext::~LineTypeGroupContext()
 
 ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -226,8 +227,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( upDownBars ):
             return new UpDownBarsContext( *this, mrModel.mxUpDownBars.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -244,6 +244,7 @@ PieTypeGroupContext::~PieTypeGroupContext()
 
 ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( dLbls ):
@@ -274,8 +275,7 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnSplitType = rAttribs.getToken( XML_val, XML_auto );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -292,6 +292,7 @@ RadarTypeGroupContext::~RadarTypeGroupContext()
 
 ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -305,8 +306,7 @@ ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, co
         case C_TOKEN( ser ):
             return new RadarSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
@@ -323,6 +323,7 @@ ScatterTypeGroupContext::~ScatterTypeGroupContext()
 
 ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
@@ -336,8 +337,7 @@ ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, 
         case C_TOKEN( ser ):
             return new ScatterSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;
