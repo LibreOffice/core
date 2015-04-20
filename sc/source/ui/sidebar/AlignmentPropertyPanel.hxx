@@ -58,6 +58,11 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    AlignmentPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
     virtual ~AlignmentPropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -92,12 +97,6 @@ private:
     DECL_LINK( AngleModifiedHdl, void * );
     DECL_LINK( RotationHdl, void * );
     DECL_LINK( ClickStackHdl, void * );
-
-    // constructor/destuctor
-    AlignmentPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     void Initialize();
     void FormatDegrees(double& dTmp);

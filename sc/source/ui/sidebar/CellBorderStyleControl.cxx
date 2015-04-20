@@ -45,11 +45,11 @@ namespace sc { namespace sidebar {
 CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
-    maTBBorder1(new ToolBox(this, ScResId(TB_BORDER1))),
-    maTBBorder2(new ToolBox(this, ScResId(TB_BORDER2))),
-    maTBBorder3(new ToolBox(this, ScResId(TB_BORDER3))),
-    maFL1(new FixedLine(this, ScResId(FL_1))),
-    maFL2(new FixedLine(this, ScResId(FL_2))),
+    maTBBorder1(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER1))),
+    maTBBorder2(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER2))),
+    maTBBorder3(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER3))),
+    maFL1(VclPtr<FixedLine>::Create(this, ScResId(FL_1))),
+    maFL2(VclPtr<FixedLine>::Create(this, ScResId(FL_2))),
     mpImageList(0)
 {
     Initialize();

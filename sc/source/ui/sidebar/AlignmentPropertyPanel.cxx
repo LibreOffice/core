@@ -238,10 +238,8 @@ VclPtr<vcl::Window> AlignmentPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                new AlignmentPropertyPanel(
-                        pParent, rxFrame, pBindings),
-                SAL_NO_ACQUIRE);
+    return  VclPtr<AlignmentPropertyPanel>::Create(
+                        pParent, rxFrame, pBindings);
 }
 
 void AlignmentPropertyPanel::DataChanged(

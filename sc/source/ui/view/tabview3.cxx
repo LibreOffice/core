@@ -623,7 +623,7 @@ void ScTabView::TestHintWindow()
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
                 // HintWindow anlegen, bestimmt seine Groesse selbst
-                mpInputHintWindow.reset(new ScHintWindow(pWin, aTitle, aMessage));
+                mpInputHintWindow.reset(VclPtr<ScHintWindow>::Create(pWin, aTitle, aMessage));
                 Size aHintWndSize = mpInputHintWindow->GetSizePixel();
                 long nCellSizeX = 0;
                 long nCellSizeY = 0;

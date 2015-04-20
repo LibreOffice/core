@@ -74,7 +74,7 @@ void ScTabView::Init()
 
     for (i=0; i<4; i++)
         pGridWin[i] = NULL;
-    pGridWin[SC_SPLIT_BOTTOMLEFT] = new ScGridWindow( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
+    pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
 
     pSelEngine = new ScViewSelectionEngine( pGridWin[SC_SPLIT_BOTTOMLEFT], this,
                                                 SC_SPLIT_BOTTOMLEFT );
@@ -82,23 +82,23 @@ void ScTabView::Init()
 
     pHdrSelEng = new ScHeaderSelectionEngine( pFrameWin, &aHdrFunc );
 
-    pColBar[SC_SPLIT_LEFT] = new ScColBar( pFrameWin, &aViewData, SC_SPLIT_LEFT,
+    pColBar[SC_SPLIT_LEFT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_LEFT,
                                                 &aHdrFunc, pHdrSelEng );
     pColBar[SC_SPLIT_RIGHT] = NULL;
-    pRowBar[SC_SPLIT_BOTTOM] = new ScRowBar( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
+    pRowBar[SC_SPLIT_BOTTOM] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
                                                 &aHdrFunc, pHdrSelEng );
     pRowBar[SC_SPLIT_TOP] = NULL;
     for (i=0; i<2; i++)
         pColOutline[i] = pRowOutline[i] = NULL;
 
-    pHSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
-    pVSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
+    pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
+    pVSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
 
     // SSA: override default keyboard step size to allow snap to row/column
     pHSplitter->SetKeyboardStepSize( 1 );
     pVSplitter->SetKeyboardStepSize( 1 );
 
-    pTabControl = new ScTabControl(pFrameWin, &aViewData);
+    pTabControl = VclPtr<ScTabControl>::Create(pFrameWin, &aViewData);
     if (mbInlineWithScrollbar)
         pTabControl->SetStyle(pTabControl->GetStyle() | WB_SIZEABLE);
 

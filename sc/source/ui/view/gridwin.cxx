@@ -703,7 +703,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
-    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pDoc));
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
@@ -994,9 +994,9 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Die ListBox direkt unter der schwarzen Linie auf dem Zellgitter
     //  (wenn die Linie verdeckt wird, sieht es komisch aus...)
 
-    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
     if (bLayoutRTL)
         mpFilterBox->EnableMirroring();
 
@@ -1120,10 +1120,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     aPos.X() -= 1;
     aPos.Y() += nSizeY - 1;
 
-    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     ScFilterBoxMode eFilterMode = bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER;
-    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();

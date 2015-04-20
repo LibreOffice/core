@@ -69,6 +69,11 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    CellAppearancePropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
     virtual ~CellAppearancePropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -147,12 +152,6 @@ private:
     // for CellBorderStyle popup
     svx::sidebar::PopupControl* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
     void EndCellBorderStylePopupMode(void);
-
-    // constructor/destuctor
-    CellAppearancePropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     void Initialize();
     void SetStyleIcon();

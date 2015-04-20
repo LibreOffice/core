@@ -255,10 +255,8 @@ VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to CellAppearancePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                new CellAppearancePropertyPanel(
-                        pParent, rxFrame, pBindings),
-                SAL_NO_ACQUIRE);
+    return VclPtr<CellAppearancePropertyPanel>::Create(
+                        pParent, rxFrame, pBindings);
 }
 
 void CellAppearancePropertyPanel::DataChanged(

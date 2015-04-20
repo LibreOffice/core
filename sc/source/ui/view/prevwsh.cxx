@@ -119,10 +119,10 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     eZoom = SvxZoomType::WHOLEPAGE;
 
-    pCorner = new ScrollBarBox( pParent, WB_SIZEABLE );
+    pCorner = VclPtr<ScrollBarBox>::Create( pParent, WB_SIZEABLE );
 
-    pHorScroll = new ScrollBar(pParent, WB_HSCROLL );
-    pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
+    pHorScroll = VclPtr<ScrollBar>::Create(pParent, WB_HSCROLL );
+    pVerScroll = VclPtr<ScrollBar>::Create(pParent, WB_VSCROLL);
 
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
     pHorScroll->EnableRTL( false );
@@ -130,7 +130,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
     pVerScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
 
-    pPreview = new ScPreview( pParent, pDocShell, this );
+    pPreview = VclPtr<ScPreview>::Create( pParent, pDocShell, this );
 
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );

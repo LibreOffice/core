@@ -483,7 +483,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     SfxChildWinInfo* /* pInfo */ ) :
         SfxChildWindowContext( nId )
 {
-    pNavigator = new ScNavigatorDlg( pBind, this, pParent, true );
+    pNavigator = VclPtr<ScNavigatorDlg>::Create( pBind, this, pParent, true );
     SetWindow( pNavigator );
 
     //  handle configurations elsewhere,
@@ -555,14 +555,14 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
-        aFtCol      ( new FixedInfo( this, ScResId( FT_COL ) ) ),
-        aEdCol      ( new ColumnEdit( this, ScResId( ED_COL ) ) ),
-        aFtRow      ( new FixedInfo( this, ScResId( FT_ROW ) ) ),
-        aEdRow      ( new RowEdit( this, ScResId( ED_ROW ) ) ),
-        aTbxCmd     ( new CommandToolBox( this, ScResId( TBX_CMD ) ) ),
-        aLbEntries  ( new ScContentTree( this, ScResId( LB_ENTRIES ) ) ),
-        aWndScenarios( new ScScenarioWindow( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
-        aLbDocuments( new ScDocListBox( this, ScResId( LB_DOCUMENTS ) ) ),
+        aFtCol      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_COL ) ) ),
+        aEdCol      ( VclPtr<ColumnEdit>::Create( this, ScResId( ED_COL ) ) ),
+        aFtRow      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_ROW ) ) ),
+        aEdRow      ( VclPtr<RowEdit>::Create( this, ScResId( ED_ROW ) ) ),
+        aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
+        aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
+        aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
+        aLbDocuments( VclPtr<ScDocListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
         aStrDragMode ( ScResId( STR_DRAGMODE ) ),
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),

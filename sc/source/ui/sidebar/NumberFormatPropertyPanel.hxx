@@ -56,6 +56,11 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    NumberFormatPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
     virtual ~NumberFormatPropertyPanel();
     virtual void dispose() SAL_OVERRIDE;
 private:
@@ -79,12 +84,6 @@ private:
     DECL_LINK(NumFormatHdl, ToolBox*);
     DECL_LINK(NumFormatSelectHdl, ListBox*);
     DECL_LINK(NumFormatValueHdl, void*);
-
-    // constructor/destuctor
-    NumberFormatPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
 
     void Initialize();
 };

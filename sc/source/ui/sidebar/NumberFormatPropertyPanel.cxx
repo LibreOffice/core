@@ -194,10 +194,8 @@ VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to NumberFormatPropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                new NumberFormatPropertyPanel(
-                        pParent, rxFrame, pBindings),
-                SAL_NO_ACQUIRE);
+    return  VclPtr<NumberFormatPropertyPanel>::Create(
+                        pParent, rxFrame, pBindings);
 }
 
 void NumberFormatPropertyPanel::DataChanged(

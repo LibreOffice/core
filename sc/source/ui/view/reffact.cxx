@@ -237,9 +237,10 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
         ScTabViewShell* pViewShell =
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         OSL_ENSURE( pViewShell, "missing view shell :-(" );
-        pWindow = pViewShell ?
-            new ScAcceptChgDlg( pBindings, this, pParentP, &pViewShell->GetViewData() ) :
-            NULL;
+        if (pViewShell)
+            pWindow = VclPtr<ScAcceptChgDlg>::Create( pBindings, this, pParentP, &pViewShell->GetViewData() );
+        else
+            pWindow = NULL;
         if(pWindow!=nullptr)
         {
             static_cast<ScAcceptChgDlg*>(pWindow.get())->Initialize( pInfo );

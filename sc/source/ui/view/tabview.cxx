@@ -199,13 +199,13 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     pHdrSelEng( NULL ),
     aHdrFunc( &aViewData ),
     pDrawView( NULL ),
-    aVScrollTop( new ScrollBar( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
-    aVScrollBottom( new ScrollBar( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
-    aHScrollLeft( new ScrollBar( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
-    aHScrollRight( new ScrollBar( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
-    aCornerButton( new ScCornerButton( pFrameWin, &aViewData, false ) ),
-    aTopButton( new ScCornerButton( pFrameWin, &aViewData, true ) ),
-    aScrollBarBox( new ScrollBarBox( pFrameWin, WB_SIZEABLE ) ),
+    aVScrollTop( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
+    aVScrollBottom( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
+    aHScrollLeft( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
+    aHScrollRight( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
+    aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, false ) ),
+    aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, true ) ),
+    aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
     mpInputHintWindow( NULL ),
     pPageBreakData( NULL ),
     pBrushDocument( NULL ),
@@ -1466,35 +1466,35 @@ void ScTabView::UpdateShow()
 
     if (bShowH && !pGridWin[SC_SPLIT_BOTTOMRIGHT])
     {
-        pGridWin[SC_SPLIT_BOTTOMRIGHT] = new ScGridWindow( pFrameWin, &aViewData, SC_SPLIT_BOTTOMRIGHT );
+        pGridWin[SC_SPLIT_BOTTOMRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMRIGHT );
         DoAddWin( pGridWin[SC_SPLIT_BOTTOMRIGHT] );
     }
     if (bShowV && !pGridWin[SC_SPLIT_TOPLEFT])
     {
-        pGridWin[SC_SPLIT_TOPLEFT] = new ScGridWindow( pFrameWin, &aViewData, SC_SPLIT_TOPLEFT );
+        pGridWin[SC_SPLIT_TOPLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_TOPLEFT );
         DoAddWin( pGridWin[SC_SPLIT_TOPLEFT] );
     }
     if (bShowH && bShowV && !pGridWin[SC_SPLIT_TOPRIGHT])
     {
-        pGridWin[SC_SPLIT_TOPRIGHT] = new ScGridWindow( pFrameWin, &aViewData, SC_SPLIT_TOPRIGHT );
+        pGridWin[SC_SPLIT_TOPRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_TOPRIGHT );
         DoAddWin( pGridWin[SC_SPLIT_TOPRIGHT] );
     }
 
     if (bHOutline && !pColOutline[SC_SPLIT_LEFT])
-        pColOutline[SC_SPLIT_LEFT] = new ScOutlineWindow( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMLEFT );
+        pColOutline[SC_SPLIT_LEFT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMLEFT );
     if (bShowH && bHOutline && !pColOutline[SC_SPLIT_RIGHT])
-        pColOutline[SC_SPLIT_RIGHT] = new ScOutlineWindow( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMRIGHT );
+        pColOutline[SC_SPLIT_RIGHT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMRIGHT );
 
     if (bVOutline && !pRowOutline[SC_SPLIT_BOTTOM])
-        pRowOutline[SC_SPLIT_BOTTOM] = new ScOutlineWindow( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_BOTTOMLEFT );
+        pRowOutline[SC_SPLIT_BOTTOM] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_BOTTOMLEFT );
     if (bShowV && bVOutline && !pRowOutline[SC_SPLIT_TOP])
-        pRowOutline[SC_SPLIT_TOP] = new ScOutlineWindow( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_TOPLEFT );
+        pRowOutline[SC_SPLIT_TOP] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_TOPLEFT );
 
     if (bShowH && bHeader && !pColBar[SC_SPLIT_RIGHT])
-        pColBar[SC_SPLIT_RIGHT] = new ScColBar( pFrameWin, &aViewData, SC_SPLIT_RIGHT,
+        pColBar[SC_SPLIT_RIGHT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_RIGHT,
                                                 &aHdrFunc, pHdrSelEng );
     if (bShowV && bHeader && !pRowBar[SC_SPLIT_TOP])
-        pRowBar[SC_SPLIT_TOP] = new ScRowBar( pFrameWin, &aViewData, SC_SPLIT_TOP,
+        pRowBar[SC_SPLIT_TOP] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_TOP,
                                                 &aHdrFunc, pHdrSelEng );
 
         //  Windows anzeigen

@@ -36,8 +36,8 @@ namespace sc { namespace sidebar {
 CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
-    maPushButtonMoreOptions(new PushButton(this, ScResId(PB_OPTIONS))),
-    maCellLineStyleValueSet(new sc::sidebar::CellLineStyleValueSet(this, ScResId(VS_STYLE))),
+    maPushButtonMoreOptions(VclPtr<PushButton>::Create(this, ScResId(PB_OPTIONS))),
+    maCellLineStyleValueSet(VclPtr<sc::sidebar::CellLineStyleValueSet>::Create(this, ScResId(VS_STYLE))),
     mbVSfocus(true)
 {
     Initialize();

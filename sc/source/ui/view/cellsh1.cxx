@@ -1950,7 +1950,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             // found a matching range, edit this conditional format
                             nKey = pCondFormat->GetKey();
-                            pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                            pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
                             break;
                         }
                     }
@@ -1975,7 +1975,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 assert(pCondFormat);
                                 const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                                 nKey = pCondFormat->GetKey();
-                                pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                                pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
                             }
                             else
                             {
@@ -2023,7 +2023,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             assert(false);
                             break;
                     }
-                    pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
+                    pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, nullptr, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
                 }
 
                 sal_uInt16 nId = 1;

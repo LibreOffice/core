@@ -197,8 +197,8 @@ void ScScenarioListBox::DeleteScenario( bool bQueryBox )
 ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)
     :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
-        aLbScenario ( new ScScenarioListBox(*this) ),
-        aEdComment  ( new MultiLineEdit(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
+        aLbScenario ( VclPtr<ScScenarioListBox>::Create(*this) ),
+        aEdComment  ( VclPtr<MultiLineEdit>::Create(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
 {
     vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
