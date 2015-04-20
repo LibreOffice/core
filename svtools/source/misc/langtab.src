@@ -76,6 +76,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Chinese (Hong Kong)" ; LANGUAGE_CHINESE_HONGKONG ; > ;
         < "Chinese (Singapore)" ; LANGUAGE_CHINESE_SINGAPORE ; > ;
         < "Chinese (Macau)" ; LANGUAGE_CHINESE_MACAU ; > ;
+        < "Church Slavic" ; LANGUAGE_CHURCH_SLAVIC ; > ;
         < "Croatian" ; LANGUAGE_CROATIAN ; > ;
         < "Czech" ; LANGUAGE_CZECH ; > ;
         < "Danish" ; LANGUAGE_DANISH ; > ;

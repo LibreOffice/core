@@ -192,6 +192,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG", 0     },
     { LANGUAGE_CHINESE_MACAU,               "zh", "MO", 0     },
     { LANGUAGE_CHINESE_LSO,                 "zh", ""  , 0     },
+    { LANGUAGE_CHURCH_SLAVIC,               "cu", "RU", 0     },
     { LANGUAGE_YUE_CHINESE_HONGKONG,       "yue", "HK", 0     },
     { LANGUAGE_ENGLISH_HONG_KONG_SAR,       "en", "HK", 0     },
     { LANGUAGE_JAPANESE,                    "ja", "JP", 0     },
