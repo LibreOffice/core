@@ -486,8 +486,8 @@ define gb_LinkTarget__command_impl
 	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),\
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
-			mkdir -p $(dir $(1)) && echo invalid > $(1) \
-			$(if $(SOVERSIONSCRIPT),&& echo invalid > $(WORKDIR)/LinkTarget/$(2))),\
+			mkdir -p $(dir $(1)) && echo invalid - merged lib > $(1) \
+			$(if $(SOVERSIONSCRIPT),&& echo invalid - merged lib > $(WORKDIR)/LinkTarget/$(2))),\
 		$(call gb_LinkTarget__command,$(1),$(2)))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
 endef

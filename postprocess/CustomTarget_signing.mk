@@ -29,8 +29,11 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)
+	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
+	cat $(SRCDIR)/postprocess/signing/no_signing.txt > $$EXCLUDELIST && \
+	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' >> $$EXCLUDELIST && \
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
-			-e $(SRCDIR)/postprocess/signing/no_signing.txt \
+			-e $$EXCLUDELIST \
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
@@ -43,7 +46,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \
 			$(INSTDIR)/share/extensions/mysql-connector-ooo/*.dll\
-	&& touch $@
+	&& rm $$EXCLUDELIST && touch $@
 else
 	@echo "Doing nothing on non product builds ..."
 endif
