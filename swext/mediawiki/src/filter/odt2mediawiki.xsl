@@ -285,6 +285,7 @@
 			<text> </text>
 			<value-of select="$token"/>
 			<value-of select="$NL"/>
+			<value-of select="$NL"/>
 		</if>
 	</template>
 
@@ -292,6 +293,7 @@
 		<text>== </text>
 		<apply-templates/>
 		<text> ==</text>
+		<value-of select="$NL"/>
 		<value-of select="$NL"/>
 	</template>
 
@@ -698,7 +700,7 @@
 		== Paragraphs == 
 	 -->
 
-	<template match="text:p[string-length(.) &gt; 0]">
+	<template match="text:p">
 		<variable name="alignment">
 			<call-template name="mk-style-set">
 				<with-param name="node" select="."/>
@@ -768,7 +770,7 @@
 			-->
 			<choose>
 				<when test="boolean(ancestor::text:list-item)">
-					<text>&lt;br/&gt; </text>
+					<text>&lt;br/&gt;</text>
 				</when>
 				<when test="$code">
 					<variable name="style-right">
@@ -806,17 +808,18 @@
 				</otherwise>
 			</choose>
  		</when>
- 		<when test="boolean(./following-sibling::*[1]/self::text:h) or boolean(./following-sibling::*[1]/self::table:table) or boolean(./following-sibling::*[1]/self::text:bibliography)">
+ 		<when test="boolean(./following::*[1]/self::text:h) or boolean(./following::*[1]/self::table:table) or boolean(./following::*[1]/self::text:bibliography)">
  			<!-- Newline before following heading or table. -->
  			<value-of select="$NL"/>
  			<value-of select="$NL"/>
  		</when>
- 		<when test="./following-sibling::*[1]/self::text:list and not(ancestor::text:list-item)">
+ 		<when test="not(./following-sibling::*[1]) and name(./following::*[1])='text:p' and ancestor::text:list-item">
+ 			<!-- End of the list -->
  			<value-of select="$NL"/>
  			<value-of select="$NL"/>
  		</when>
  		</choose>
-	</template>
+        </template>
 
  	<template match="text:p[string-length(.) = 0 and string-length(preceding-sibling::*[1]/self::text:p) &gt; 0]">
 		<value-of select="$NL"/>
