@@ -1188,7 +1188,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, Out
                             const double    Abitmap( k1/k2 * aSize.Width()*aSize.Height() );
 
                             aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
-                                               NULL, GRFMGR_DRAW_STANDARD,
+                                               NULL, GraphicManagerDrawFlags::STANDARD,
                                                ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
                         }
                         else

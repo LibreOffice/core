@@ -53,6 +53,7 @@ class SfxStyleSheet;
 class SdrOle2Obj;
 class SdrModel;
 class SdrObject;
+enum class GraphicManagerDrawFlags;
 
 #ifdef DBG_UTIL
 class SdrItemBrowser;
@@ -161,7 +162,7 @@ protected:
     sal_uInt16                      nMinMovPix;
     sal_uInt16                      nHitTolLog;
     sal_uInt16                      nMinMovLog;
-    sal_uIntPtr                       nGraphicManagerDrawMode;
+    GraphicManagerDrawFlags         nGraphicManagerDrawMode;
 
     // hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
@@ -467,8 +468,8 @@ public:
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
 
     // use this mode as mode to draw all internal GraphicManager objects with
-    sal_uIntPtr GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
-    void SetGraphicManagerDrawMode( sal_uIntPtr nMode ) { nGraphicManagerDrawMode = nMode; }
+    GraphicManagerDrawFlags GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
+    void SetGraphicManagerDrawMode( GraphicManagerDrawFlags nMode ) { nGraphicManagerDrawMode = nMode; }
 
     // SwapIn (z.B. von Grafiken) asynchron durchfuehren. Also nicht
     // beim Paint sofort nachladen, sondern dort das Nachladen anstossen.

@@ -935,7 +935,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), sal_IntPtr(this),
-                                        0, GRFMGR_DRAW_STANDARD, pVout );
+                                        0, GraphicManagerDrawFlags::STANDARD, pVout );
                 }
                 else
                 {

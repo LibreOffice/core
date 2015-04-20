@@ -2119,7 +2119,7 @@ void DrawGraphic(
                                         aAlignedPaintRect.SVRect(),
                                         aGrf.SSize(),
                                         Size( aPaintOffset.X(), aPaintOffset.Y() ),
-                                        NULL, GRFMGR_DRAW_STANDARD,
+                                        NULL, GraphicManagerDrawFlags::STANDARD,
                                         ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
             }
             // reset clipping at output device
