@@ -646,34 +646,34 @@ enum SwWw8ControlType
 class WW8FormulaControl : private ::boost::noncopyable
 {
 protected:
-    SwWW8ImplReader &rRdr;
+    SwWW8ImplReader &mrRdr;
 public:
-    WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rR)
-        : rRdr(rR), fUnknown(0), fDropdownIndex(0),
-        fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
-        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), mnMaxLen(0), sName( rN )
+    WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rRdr)
+        : mrRdr(rRdr), mfUnknown(0), mfDropdownIndex(0),
+        mfToolTip(0), mfNoMark(0), mfUseSize(0), mfNumbersOnly(0), mfDateOnly(0),
+        mfUnused(0), mnSize(0), mhpsCheckBox(20), mnChecked(0), mnMaxLen(0), msName( rN )
     {
     }
-    sal_uInt8 fUnknown:2;
-    sal_uInt8 fDropdownIndex:6;
-    sal_uInt8 fToolTip:1;
-    sal_uInt8 fNoMark:1;
-    sal_uInt8 fUseSize:1;
-    sal_uInt8 fNumbersOnly:1;
-    sal_uInt8 fDateOnly:1;
-    sal_uInt8 fUnused:3;
-    sal_uInt16 nSize;
+    sal_uInt8 mfUnknown:2;
+    sal_uInt8 mfDropdownIndex:6;
+    sal_uInt8 mfToolTip:1;
+    sal_uInt8 mfNoMark:1;
+    sal_uInt8 mfUseSize:1;
+    sal_uInt8 mfNumbersOnly:1;
+    sal_uInt8 mfDateOnly:1;
+    sal_uInt8 mfUnused:3;
+    sal_uInt16 mnSize;
 
-    sal_uInt16 hpsCheckBox;
-    sal_uInt16 nChecked;
+    sal_uInt16 mhpsCheckBox;
+    sal_uInt16 mnChecked;
 
     /// FFData.cch in the spec: maximum length, in characters, of the value of the textbox.
     sal_uInt16 mnMaxLen;
-    OUString sTitle;
-    OUString sDefault;
-    OUString sFormatting;
-    OUString sHelp;
-    OUString sToolTip;
+    OUString msTitle;
+    OUString msDefault;
+    OUString msFormatting;
+    OUString msHelp;
+    OUString msToolTip;
     std::vector<OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
@@ -682,7 +682,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz) = 0;
-    OUString sName;
+    OUString msName;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl

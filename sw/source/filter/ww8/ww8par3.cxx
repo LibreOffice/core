@@ -124,16 +124,16 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
 
     if (!bUseEnhFields)
     {
-        aFormula.sDefault = GetFieldResult(pF);
+        aFormula.msDefault = GetFieldResult(pF);
 
         SwInputField aFld(
             static_cast<SwInputFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )),
-            aFormula.sDefault,
-            aFormula.sTitle,
+            aFormula.msDefault,
+            aFormula.msTitle,
             INP_TXT,
             0 );
-        aFld.SetHelp(aFormula.sHelp);
-        aFld.SetToolTip(aFormula.sToolTip);
+        aFld.SetHelp(aFormula.msHelp);
+        aFld.SetToolTip(aFormula.msToolTip);
 
         rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld));
         return FLD_OK;
@@ -158,14 +158,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         }
 
         if (pB!=NULL && aBookmarkName.isEmpty()) {
-            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
         }
 
         if (!aBookmarkName.isEmpty()) {
             maFieldStack.back().SetBookmarkName(aBookmarkName);
             maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-            maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
-            maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.sTitle));
+            maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.msToolTip));
+            maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.msTitle));
             if (aFormula.mnMaxLen)
                 maFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
         }
@@ -209,7 +209,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     }
 
     if (pB!=NULL && aBookmarkName.isEmpty()) {
-        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
     }
 
     if (!aBookmarkName.isEmpty())
@@ -221,11 +221,11 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(OUString(aFormula.sTitle));
-            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(OUString(aFormula.sToolTip));
+            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(OUString(aFormula.msTitle));
+            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(OUString(aFormula.msToolTip));
 
             if(pCheckboxFm)
-                pCheckboxFm->SetChecked(aFormula.nChecked);
+                pCheckboxFm->SetChecked(aFormula.mnChecked);
             // set field data here...
         }
     }
@@ -246,14 +246,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
     {
         SwDropDownField aFld(static_cast<SwDropDownFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN)));
 
-        aFld.SetName(aFormula.sTitle);
-        aFld.SetHelp(aFormula.sHelp);
-        aFld.SetToolTip(aFormula.sToolTip);
+        aFld.SetName(aFormula.msTitle);
+        aFld.SetHelp(aFormula.msHelp);
+        aFld.SetToolTip(aFormula.msToolTip);
 
         if (!aFormula.maListEntries.empty())
         {
             aFld.SetItems(aFormula.maListEntries);
-            int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+            int nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : 0;
             aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
         }
 
@@ -282,7 +282,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         }
 
         if (pB!=NULL && aBookmarkName.isEmpty())
-            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
 
         if (!aBookmarkName.isEmpty())
         {
@@ -295,7 +295,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
                 uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
-                sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+                sal_Int32 nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : 0;
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);
                 // set field data here...
             }
@@ -2205,33 +2205,33 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     pDataStream->ReadUInt16( hps );
 
     // xstzName
-    sTitle = read_uInt16_BeltAndBracesString(*pDataStream);
+    msTitle = read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_EDIT)
     {   // Field is a textbox
         // Default text
         // xstzTextDef
-        sDefault = read_uInt16_BeltAndBracesString(*pDataStream);
+        msDefault = read_uInt16_BeltAndBracesString(*pDataStream);
     }
     else
     {
         // CheckBox or ComboBox
         sal_uInt16 wDef = 0;
         pDataStream->ReadUInt16( wDef );
-        nChecked = wDef; // default
+        mnChecked = wDef; // default
         if (nWhich == WW8_CT_CHECKBOX)
         {
             if ( iRes != 25 )
-                nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? OUString( "0" ) :  OUString( "1" );
+                mnChecked = iRes;
+            msDefault = ( wDef == 0 ) ? OUString( "0" ) :  OUString( "1" );
         }
     }
     // xstzTextFormat
-    sFormatting = read_uInt16_BeltAndBracesString(*pDataStream);
+    msFormatting = read_uInt16_BeltAndBracesString(*pDataStream);
     // xstzHelpText
-    sHelp = read_uInt16_BeltAndBracesString(*pDataStream);
+    msHelp = read_uInt16_BeltAndBracesString(*pDataStream);
     // xstzStatText
-    sToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
+    msToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
 
     /*String sEntryMacro =*/ read_uInt16_BeltAndBracesString(*pDataStream);
     /*String sExitMcr =*/ read_uInt16_BeltAndBracesString(*pDataStream);
@@ -2273,15 +2273,15 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
             maListEntries.push_back(sEntry);
         }
     }
-    fDropdownIndex = iRes;
+    mfDropdownIndex = iRes;
 
     nField = bits2;
-    fToolTip = nField & 0x01;
-    fNoMark = (nField & 0x02)>>1;
-    fUseSize = (nField & 0x04)>>2;
-    fNumbersOnly= (nField & 0x08)>>3;
-    fDateOnly = (nField & 0x10)>>4;
-    fUnused = (nField & 0xE0)>>5;
+    mfToolTip = nField & 0x01;
+    mfNoMark = (nField & 0x02)>>1;
+    mfUseSize = (nField & 0x04)>>2;
+    mfNumbersOnly= (nField & 0x08)>>3;
+    mfDateOnly = (nField & 0x10)>>4;
+    mfUnused = (nField & 0xE0)>>5;
 }
 
 WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
@@ -2443,15 +2443,15 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
 
     uno::Any aTmp;
-    if (!sTitle.isEmpty())
-        aTmp <<= sTitle;
+    if (!msTitle.isEmpty())
+        aTmp <<= msTitle;
     else
-        aTmp <<= sName;
+        aTmp <<= msName;
     xPropSet->setPropertyValue("Name", aTmp );
 
-    if (!sToolTip.isEmpty())
+    if (!msToolTip.isEmpty())
     {
-        aTmp <<= sToolTip;
+        aTmp <<= msToolTip;
         xPropSet->setPropertyValue("HelpText", aTmp );
     }
 
@@ -2467,9 +2467,9 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         aTmp <<= aListSource;
         xPropSet->setPropertyValue("StringItemList", aTmp );
 
-        if (fDropdownIndex < nLen)
+        if (mfDropdownIndex < nLen)
         {
-            aTmp <<= aListSource[fDropdownIndex];
+            aTmp <<= aListSource[mfDropdownIndex];
         }
         else
         {
@@ -2478,7 +2478,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
 
         xPropSet->setPropertyValue("DefaultText", aTmp );
 
-        rSz = rRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);
+        rSz = mrRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);
     }
     else
     {
@@ -2486,7 +2486,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         {
             0x2002,0x2002,0x2002,0x2002,0x2002
         };
-        rSz = rRdr.MiserableDropDownFormHack(OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
+        rSz = mrRdr.MiserableDropDownFormHack(OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
     }
 
     return true;
@@ -2534,24 +2534,24 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
 
     uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
 
-    rSz.Width = 16 * hpsCheckBox;
-    rSz.Height = 16 * hpsCheckBox;
+    rSz.Width = 16 * mhpsCheckBox;
+    rSz.Height = 16 * mhpsCheckBox;
 
     uno::Any aTmp;
-    if (!sTitle.isEmpty())
-        aTmp <<= sTitle;
+    if (!msTitle.isEmpty())
+        aTmp <<= msTitle;
     else
-        aTmp <<= sName;
+        aTmp <<= msName;
     xPropSet->setPropertyValue("Name", aTmp );
 
-    aTmp <<= (sal_Int16)nChecked;
+    aTmp <<= (sal_Int16)mnChecked;
     xPropSet->setPropertyValue("DefaultState", aTmp);
 
-    if (!sToolTip.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, "HelpText", sToolTip);
+    if (!msToolTip.isEmpty())
+        lcl_AddToPropertyContainer(xPropSet, "HelpText", msToolTip);
 
-    if (!sHelp.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, "HelpF1Text", sHelp);
+    if (!msHelp.isEmpty())
+        lcl_AddToPropertyContainer(xPropSet, "HelpF1Text", msHelp);
 
     return true;
 
