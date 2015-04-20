@@ -89,6 +89,7 @@ public:
     void testDataLabelDefaultValuesXLSX();
     void testTitleOverlayXLSX();
     void testInvertIfNegativeXLSX();
+    void testBubble3DXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -142,6 +143,7 @@ public:
     CPPUNIT_TEST(testDataLabelDefaultValuesXLSX);
     CPPUNIT_TEST(testTitleOverlayXLSX);
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
+    CPPUNIT_TEST(testBubble3DXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1296,6 +1298,14 @@ void Chart2ExportTest::testInvertIfNegativeXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:invertIfNegative", "val", "0");
+}
+
+void Chart2ExportTest::testBubble3DXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "bubble_chart_simple.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bubbleChart/c:bubble3D", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
