@@ -79,7 +79,7 @@
 
 #include <IMark.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <rtl/surrogates.h>
+#include <rtl/character.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <stdio.h>
@@ -500,16 +500,17 @@ OUString sanitizeString(const OUString& rString)
     while (i < rString.getLength())
     {
         sal_Unicode c = rString[i];
-        if (isHighSurrogate(c))
+        if (rtl::isHighSurrogate(c))
         {
-            if (i+1 == rString.getLength() || !isLowSurrogate(rString[i+1]))
+            if (i+1 == rString.getLength()
+                || !rtl::isLowSurrogate(rString[i+1]))
             {
                 SAL_WARN("sw.ww8", "Surrogate error: high without low");
                 return rString.copy(0, i);
             }
             ++i;    //skip correct low
         }
-        if (isLowSurrogate(c)) //bare low without preceeding high
+        if (rtl::isLowSurrogate(c)) //bare low without preceeding high
         {
             SAL_WARN("sw.ww8", "Surrogate error: low without high");
             return rString.copy(0, i);

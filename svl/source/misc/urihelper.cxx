@@ -36,8 +36,8 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/surrogates.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -281,9 +281,9 @@ namespace {
 
 inline sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
 {
-    return isHighSurrogate(rStr[nPos])
+    return rtl::isHighSurrogate(rStr[nPos])
            && rStr.getLength() - nPos >= 2
-           && isLowSurrogate(rStr[nPos + 1]) ?
+           && rtl::isLowSurrogate(rStr[nPos + 1]) ?
         nPos + 2 : nPos + 1;
 }
 

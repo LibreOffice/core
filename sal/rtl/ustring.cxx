@@ -39,7 +39,7 @@
 
 #include "hash.hxx"
 #include "strimp.hxx"
-#include <rtl/surrogates.h>
+#include <rtl/character.hxx>
 #include <rtl/ustring.h>
 
 #include "rtl/math.h"
@@ -588,9 +588,8 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         if (c < 0x10000) {
             *p++ = (sal_Unicode) c;
         } else {
-            c -= 0x10000;
-            *p++ = (sal_Unicode) ((c >> 10) | SAL_RTL_FIRST_HIGH_SURROGATE);
-            *p++ = (sal_Unicode) ((c & 0x3FF) | SAL_RTL_FIRST_LOW_SURROGATE);
+            *p++ = rtl::getHighSurrogate(c);
+            *p++ = rtl::getLowSurrogate(c);
         }
     }
     RTL_LOG_STRING_NEW( *newString );
@@ -1049,8 +1048,8 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     while (incrementCodePoints < 0) {
         assert(n > 0);
         cu = string->buffer[--n];
-        if (isLowSurrogate(cu) && n != 0 &&
-            isHighSurrogate(string->buffer[n - 1]))
+        if (rtl::isLowSurrogate(cu) && n != 0 &&
+            rtl::isHighSurrogate(string->buffer[n - 1]))
         {
             --n;
         }
@@ -1058,18 +1057,18 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     }
     assert(n >= 0 && n < string->length);
     cu = string->buffer[n];
-    if (isHighSurrogate(cu) && string->length - n >= 2 &&
-        isLowSurrogate(string->buffer[n + 1]))
+    if (rtl::isHighSurrogate(cu) && string->length - n >= 2 &&
+        rtl::isLowSurrogate(string->buffer[n + 1]))
     {
-        cp = combineSurrogates(cu, string->buffer[n + 1]);
+        cp = rtl::combineSurrogates(cu, string->buffer[n + 1]);
     } else {
         cp = cu;
     }
     while (incrementCodePoints > 0) {
         assert(n < string->length);
         cu = string->buffer[n++];
-        if (isHighSurrogate(cu) && n != string->length &&
-            isLowSurrogate(string->buffer[n]))
+        if (rtl::isHighSurrogate(cu) && n != string->length &&
+            rtl::isLowSurrogate(string->buffer[n]))
         {
             ++n;
         }

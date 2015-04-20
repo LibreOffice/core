@@ -32,7 +32,7 @@
 #include <rtl/tencinfo.h>
 
 #include "strimp.hxx"
-#include <rtl/surrogates.h>
+#include <rtl/character.hxx>
 #include <rtl/string.h>
 
 #include "rtl/math.h"
@@ -154,7 +154,7 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
             n += 2;
         else
         {
-            if ( !isHighSurrogate(c) )
+            if ( !rtl::isHighSurrogate(c) )
                 n += 3;
             else
             {
@@ -163,9 +163,9 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
                 if ( pStr+1 < pEndStr )
                 {
                     c = *(pStr+1);
-                    if ( isLowSurrogate(c) )
+                    if ( rtl::isLowSurrogate(c) )
                     {
-                        nUCS4Char = combineSurrogates(nUCS4Char, c);
+                        nUCS4Char = rtl::combineSurrogates(nUCS4Char, c);
                         pStr++;
                     }
                 }

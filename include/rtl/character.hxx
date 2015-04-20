@@ -211,6 +211,90 @@ inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
         - static_cast<sal_Int32>(toAsciiLowerCase(code2));
 }
 
+/// @cond INTERNAL
+namespace detail {
+
+sal_uInt32 const surrogatesHighFirst = 0xD800;
+sal_uInt32 const surrogatesHighLast = 0xDBFF;
+sal_uInt32 const surrogatesLowFirst = 0xDC00;
+sal_uInt32 const surrogatesLowLast = 0xDFFF;
+
+}
+/// @endcond
+
+/** Check for high surrogate.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is a high surrogate code point (0xD800--0xDBFF).
+
+    @since LibreOffice 5.0
+*/
+inline bool isHighSurrogate(sal_uInt32 code) {
+    assert(code <= 0x10FFFF);
+    return code >= detail::surrogatesHighFirst
+        && code <= detail::surrogatesHighLast;
+}
+
+/** Check for low surrogate.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is a low surrogate code point (0xDC00--0xDFFF).
+
+    @since LibreOffice 5.0
+*/
+inline bool isLowSurrogate(sal_uInt32 code) {
+    assert(code <= 0x10FFFF);
+    return code >= detail::surrogatesLowFirst
+        && code <= detail::surrogatesLowLast;
+}
+
+/** Get high surrogate half of a non-BMP Unicode code point.
+
+    @param code  A non-BMP Unicode code point.
+
+    @return  The UTF-16 high surrogate half for the give code point.
+
+    @since LibreOffice 5.0
+ */
+inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
+    assert(code <= 0x10FFFF);
+    assert(code >= 0x10000);
+    return ((code - 0x10000) >> 10) | detail::surrogatesHighFirst;
+}
+
+/** Get low surrogate half of a non-BMP Unicode code point.
+
+    @param code  A non-BMP Unicode code point.
+
+    @return  The UTF-16 low surrogate half for the give code point.
+
+    @since LibreOffice 5.0
+ */
+inline sal_Unicode getLowSurrogate(sal_uInt32 code) {
+    assert(code <= 0x10FFFF);
+    assert(code >= 0x10000);
+    return ((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst;
+}
+
+/** Combine surrogates to form a code point.
+
+    @param high  A high surrogate code point.
+
+    @param low  A low surrogate code point.
+
+    @return  The code point represented by the surrogate pair.
+
+    @since LibreOffice 5.0
+*/
+inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
+    assert(isHighSurrogate(high));
+    assert(isLowSurrogate(low));
+    return ((high - detail::surrogatesHighFirst) << 10)
+        + (low - detail::surrogatesLowFirst) + 0x10000;
+}
+
 }
 
 #endif

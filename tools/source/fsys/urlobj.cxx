@@ -31,7 +31,6 @@
 #include <osl/file.hxx>
 #include <rtl/character.hxx>
 #include <rtl/string.h>
-#include <rtl/surrogates.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -4778,9 +4777,9 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                     nShift -= 6;
                                 }
                                 if (bUTF8 && nEncoded >= nMin
-                                    && !isHighSurrogate(nEncoded)
-                                    && !isLowSurrogate(nEncoded)
-                                    && nEncoded <= 0x10FFFF)
+                                    && nEncoded <= 0x10FFFF
+                                    && !rtl::isHighSurrogate(nEncoded)
+                                    && !rtl::isLowSurrogate(nEncoded))
                                 {
                                     rBegin = p;
                                     nUTF32 = nEncoded;

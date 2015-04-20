@@ -20,7 +20,6 @@
 #include "osl/diagnose.h"
 #include "rtl/character.hxx"
 #include "rtl/strbuf.hxx"
-#include "rtl/surrogates.h"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
 #include "rtl/uri.h"
@@ -133,8 +132,9 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     p += 3;
                     nEncoded |= ((nWeight1 & 3) << 4 | nWeight2) << nShift;
                 }
-                if (bUTF8 && nEncoded >= nMin && !isHighSurrogate(nEncoded)
-                    && !isLowSurrogate(nEncoded) && nEncoded <= 0x10FFFF)
+                if (bUTF8 && nEncoded >= nMin && nEncoded <= 0x10FFFF
+                    && !rtl::isHighSurrogate(nEncoded)
+                    && !rtl::isLowSurrogate(nEncoded))
                 {
                     *pBegin = p;
                     *pType = EscapeChar;
@@ -171,10 +171,10 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     *pBegin = p;
                     *pType = EscapeChar;
                     assert( nDstSize == 1
-                        || (nDstSize == 2 && isHighSurrogate(aDst[0])
-                            && isLowSurrogate(aDst[1])));
+                        || (nDstSize == 2 && rtl::isHighSurrogate(aDst[0])
+                            && rtl::isLowSurrogate(aDst[1])));
                     return nDstSize == 1
-                        ? aDst[0] : combineSurrogates(aDst[0], aDst[1]);
+                        ? aDst[0] : rtl::combineSurrogates(aDst[0], aDst[1]);
                 }
                 else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
                          && pEnd - p >= 3 && p[0] == cEscapePrefix
@@ -205,9 +205,9 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
     else
     {
         *pType = EscapeNo;
-        return isHighSurrogate(nChar) && *pBegin < pEnd
-               && isLowSurrogate(**pBegin) ?
-                   combineSurrogates(nChar, *(*pBegin)++) : nChar;
+        return rtl::isHighSurrogate(nChar) && *pBegin < pEnd
+               && rtl::isLowSurrogate(**pBegin) ?
+                   rtl::combineSurrogates(nChar, *(*pBegin)++) : nChar;
     }
 }
 
