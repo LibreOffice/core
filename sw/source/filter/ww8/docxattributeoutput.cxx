@@ -1188,7 +1188,9 @@ void DocxAttributeOutput::EndRun()
 
     m_pSerializer->mergeTopMarks();
 
-    WritePostponedMath();
+    for (std::vector<const SwOLENode*>::iterator it = m_aPostponedMaths.begin(); it != m_aPostponedMaths.end(); ++it)
+        WritePostponedMath(*it);
+    m_aPostponedMaths.clear();
 
     for (std::vector<const SdrObject*>::iterator it = m_aPostponedFormControls.begin(); it != m_aPostponedFormControls.end(); ++it)
         WritePostponedFormControl(*it);
@@ -4339,16 +4341,13 @@ bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLEN
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
-    assert( m_postponedMath == NULL ); // make it a list if there can be more inside one run
-    m_postponedMath = &rOLENode;
+    m_aPostponedMaths.push_back(&rOLENode);
     return true;
 }
 
-void DocxAttributeOutput::WritePostponedMath()
+void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 {
-    if( m_postponedMath == NULL )
-        return;
-    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(pPostponedMath)->GetOLEObj().GetOleRef());
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
@@ -4357,7 +4356,6 @@ void DocxAttributeOutput::WritePostponedMath()
     assert( formulaexport != NULL );
     if (formulaexport)
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
-    m_postponedMath = NULL;
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
@@ -8295,7 +8293,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
       m_postponedDMLDrawing(NULL),
-      m_postponedMath( NULL ),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),

@@ -693,7 +693,7 @@ private:
     void DoWriteBookmarks( );
     void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
-    void WritePostponedMath();
+    void WritePostponedMath(const SwOLENode* pObject);
     void WritePostponedFormControl(const SdrObject* pObject);
     void WritePostponedDiagram();
     void WritePostponedChart();
@@ -860,7 +860,7 @@ private:
     };
     std::unique_ptr< std::list<PostponedOLE> > m_pPostponedOLEs;
 
-    const SwOLENode* m_postponedMath;
+    std::vector<const SwOLENode*> m_aPostponedMaths;
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;
     std::vector<const SdrObject*> m_aPostponedFormControls;
