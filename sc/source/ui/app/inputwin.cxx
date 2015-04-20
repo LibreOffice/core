@@ -124,7 +124,7 @@ ScInputWindowWrapper::ScInputWindowWrapper( vcl::Window*          pParentP,
                                             SfxChildWinInfo* /* pInfo */ )
     :   SfxChildWindow( pParentP, nId )
 {
-    ScInputWindow* pWin=new ScInputWindow( pParentP, pBindings );
+    VclPtr<ScInputWindow> pWin=VclPtr<ScInputWindow>::Create( pParentP, pBindings );
     pWindow = pWin;
 
     pWin->Show();
@@ -154,7 +154,7 @@ static inline bool lcl_isExperimentalMode()
 
 //  class ScInputWindow
 
-static ScTextWndBase* lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
+static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = NULL;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -166,14 +166,14 @@ static ScTextWndBase* lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* 
     }
 
     if ( !lcl_isExperimentalMode() )
-        return new ScTextWnd( pParent, pViewSh );
-    return new ScInputBarGroup( pParent, pViewSh );
+        return VclPtr<ScTextWnd>::Create( pParent, pViewSh );
+    return VclPtr<ScInputBarGroup>::Create( pParent, pViewSh );
 }
 
 ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
-        aWndPos         ( new ScPosWnd(this) ),
+        aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow     ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
@@ -907,9 +907,9 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
-        aMultiTextWnd        ( new ScMultiTextWnd(this, pViewSh) ),
-        aButton              ( new ImageButton(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE) ),
-        aScrollBar           ( new ScrollBar(this, WB_TABSTOP | WB_VERT | WB_DRAG) ),
+        aMultiTextWnd        ( VclPtr<ScMultiTextWnd>::Create(this, pViewSh) ),
+        aButton              ( VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE) ),
+        aScrollBar           ( VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG) ),
         nVertOffset          ( 0 )
 {
       aMultiTextWnd->Show();

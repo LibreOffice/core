@@ -25,11 +25,11 @@
 
 ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
-    maRuler( new ScCsvRuler(*this) ),
-    maGrid( new ScCsvGrid(*this) ),
-    maHScroll( new ScrollBar( this, WB_HORZ | WB_DRAG ) ),
-    maVScroll( new ScrollBar( this, WB_VERT | WB_DRAG ) ),
-    maScrollBox( new ScrollBarBox(this) )
+    maRuler( VclPtr<ScCsvRuler>::Create(*this) ),
+    maGrid( VclPtr<ScCsvGrid>::Create(*this) ),
+    maHScroll( VclPtr<ScrollBar>::Create( this, WB_HORZ | WB_DRAG ) ),
+    maVScroll( VclPtr<ScrollBar>::Create( this, WB_VERT | WB_DRAG ) ),
+    maScrollBox( VclPtr<ScrollBarBox>::Create(this) )
 {
     mbFixedMode = false;
     mnFixedWidth = 1;

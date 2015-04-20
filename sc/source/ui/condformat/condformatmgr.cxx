@@ -120,7 +120,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     Size aSize(LogicToPixel(Size(290, 220), MAP_APPFONT));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
-    m_pCtrlManager = new ScCondFormatManagerWindow(*pContainer, mpDoc, mpFormatList);
+    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, mpDoc, mpFormatList);
     get(m_pBtnAdd, "add");
     get(m_pBtnRemove, "remove");
     get(m_pBtnEdit, "edit");

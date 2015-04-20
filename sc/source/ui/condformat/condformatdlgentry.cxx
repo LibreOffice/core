@@ -38,11 +38,11 @@
 ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
-    maFtCondNr( new FixedText( this, ScResId( FT_COND_NR ) ) ),
-    maFtCondition( new FixedText( this, ScResId( FT_CONDITION ) ) ),
+    maFtCondNr( VclPtr<FixedText>::Create( this, ScResId( FT_COND_NR ) ) ),
+    maFtCondition( VclPtr<FixedText>::Create( this, ScResId( FT_CONDITION ) ) ),
     mnIndex(0),
     maStrCondition(ScResId( STR_CONDITION ).toString()),
-    maLbType( new ListBox( this, ScResId( LB_TYPE ) ) ),
+    maLbType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE ) ) ),
     mpDoc(pDoc),
     maPos(rPos)
 {
@@ -188,13 +188,13 @@ const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::
 ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbCondType( new ListBox( this, ScResId( LB_CELLIS_TYPE ) ) ),
-    maEdVal1( new formula::RefEdit( this, NULL, NULL, ScResId( ED_VAL1 ) ) ),
-    maEdVal2( new formula::RefEdit( this, NULL, NULL, ScResId( ED_VAL2 ) ) ),
-    maFtVal( new FixedText( this, ScResId( FT_VAL ) ) ),
-    maFtStyle( new FixedText( this, ScResId( FT_STYLE ) ) ),
-    maLbStyle( new ListBox( this, ScResId( LB_STYLE ) ) ),
-    maWdPreview( new SvxFontPrevWindow( this, ScResId( WD_PREVIEW ) ) ),
+    maLbCondType( VclPtr<ListBox>::Create( this, ScResId( LB_CELLIS_TYPE ) ) ),
+    maEdVal1( VclPtr<formula::RefEdit>::Create( this, nullptr, nullptr, ScResId( ED_VAL1 ) ) ),
+    maEdVal2( VclPtr<formula::RefEdit>::Create( this, nullptr, nullptr, ScResId( ED_VAL2 ) ) ),
+    maFtVal( VclPtr<FixedText>::Create( this, ScResId( FT_VAL ) ) ),
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
     mbIsInStyleCreate(false)
 {
 
@@ -591,10 +591,10 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 
 ScFormulaFrmtEntry::ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maFtStyle( new FixedText( this, ScResId( FT_STYLE ) ) ),
-    maLbStyle( new ListBox( this, ScResId( LB_STYLE ) ) ),
-    maWdPreview( new SvxFontPrevWindow( this, ScResId( WD_PREVIEW ) ) ),
-    maEdFormula( new formula::RefEdit(this, NULL, NULL, ScResId( ED_FORMULA ) ) )
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
+    maEdFormula( VclPtr<formula::RefEdit>::Create(this, nullptr, nullptr, ScResId( ED_FORMULA ) ) )
 {
     Init(pDialogParent);
 
@@ -775,13 +775,13 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 
 ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( new ListBox( this, ScResId( LB_COLOR_FORMAT ) ) ),
-    maLbEntryTypeMin( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
-    maLbEntryTypeMax( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
-    maEdMin( new Edit( this, ScResId( ED_COL_SCALE_MIN ) ) ),
-    maEdMax( new Edit( this, ScResId( ED_COL_SCALE_MAX ) ) ),
-    maLbColMin( new ColorListBox( this, ScResId( LB_COL_MIN ) ) ),
-    maLbColMax( new ColorListBox( this, ScResId( LB_COL_MAX ) ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbEntryTypeMin( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbEntryTypeMax( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maLbColMin( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIN ) ) ),
+    maLbColMax( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MAX ) ) )
 {
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
@@ -943,16 +943,16 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 
 ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( new ListBox( this, ScResId( LB_COLOR_FORMAT ) ) ),
-    maLbEntryTypeMin( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
-    maLbEntryTypeMiddle( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MIDDLE ) ) ),
-    maLbEntryTypeMax( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
-    maEdMin( new Edit( this, ScResId( ED_COL_SCALE_MIN ) ) ),
-    maEdMiddle( new Edit( this, ScResId( ED_COL_SCALE_MIDDLE ) ) ),
-    maEdMax( new Edit( this, ScResId( ED_COL_SCALE_MAX ) ) ),
-    maLbColMin( new ColorListBox( this, ScResId( LB_COL_MIN ) ) ),
-    maLbColMiddle( new ColorListBox( this, ScResId( LB_COL_MIDDLE ) ) ),
-    maLbColMax( new ColorListBox( this, ScResId( LB_COL_MAX ) ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbEntryTypeMin( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbEntryTypeMiddle( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIDDLE ) ) ),
+    maLbEntryTypeMax( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdMiddle( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIDDLE ) ) ),
+    maEdMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maLbColMin( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIN ) ) ),
+    maLbColMiddle( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIDDLE ) ) ),
+    maLbColMax( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MAX ) ) )
 {
     // remove the automatic entry from color scales
     maLbEntryTypeMin->RemoveEntry(0);
@@ -1197,12 +1197,12 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 
 ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( new ListBox( this, ScResId( LB_COLOR_FORMAT ) ) ),
-    maLbDataBarMinType( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
-    maLbDataBarMaxType( new ListBox( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
-    maEdDataBarMin( new Edit( this, ScResId( ED_COL_SCALE_MIN ) ) ),
-    maEdDataBarMax( new Edit( this, ScResId( ED_COL_SCALE_MAX ) ) ),
-    maBtOptions( new PushButton( this, ScResId( BTN_OPTIONS ) ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbDataBarMinType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbDataBarMaxType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdDataBarMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdDataBarMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maBtOptions( VclPtr<PushButton>::Create( this, ScResId( BTN_OPTIONS ) ) )
 {
     maLbColorFormat->SelectEntryPos(2);
     maLbType->SelectEntryPos(0);
@@ -1326,7 +1326,7 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 {
     SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
-    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData, mpDoc, maPos);
+    ScopedVclPtrInstance<ScDataBarSettingsDlg> pDlg(this, *mpDataBarData, mpDoc, maPos);
     if( pDlg->Execute() == RET_OK)
     {
         mpDataBarData.reset(pDlg->GetData());
@@ -1339,10 +1339,10 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 
 ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, ScAddress() ),
-    maLbDateEntry( new ListBox( this, ScResId( LB_DATE_TYPE ) ) ),
-    maFtStyle( new FixedText( this, ScResId( FT_STYLE ) ) ),
-    maLbStyle( new ListBox( this, ScResId( LB_STYLE ) ) ),
-    maWdPreview( new SvxFontPrevWindow( this, ScResId( WD_PREVIEW ) ) ),
+    maLbDateEntry( VclPtr<ListBox>::Create( this, ScResId( LB_DATE_TYPE ) ) ),
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
     mbIsInStyleCreate(false)
 {
     Init();
@@ -1464,10 +1464,10 @@ class ScIconSetFrmtDataEntry : public Control
 
 ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
-    maImgIcon( new FixedImage( this, ScResId( IMG_ICON ) ) ),
-    maFtEntry( new FixedText( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ) ),
-    maEdEntry( new Edit( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ) ),
-    maLbEntryType( new ListBox( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) ) )
+    maImgIcon( VclPtr<FixedImage>::Create( this, ScResId( IMG_ICON ) ) ),
+    maFtEntry( VclPtr<FixedText>::Create( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ) ),
+    maEdEntry( VclPtr<Edit>::Create( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ) ),
+    maLbEntryType( VclPtr<ListBox>::Create( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) ) )
 {
     maImgIcon->SetImage(Image(ScIconSetFormat::getBitmap(eType, i)));
     if(pEntry)
@@ -1560,8 +1560,8 @@ void ScIconSetFrmtDataEntry::SetFirstEntry()
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
         ScCondFrmtEntry( pParent, pDoc, rPos ),
-        maLbColorFormat( new ListBox( this, ScResId( LB_COLOR_FORMAT ) ) ),
-        maLbIconSetType( new ListBox( this, ScResId( LB_ICONSET_TYPE ) ) )
+        maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+        maLbIconSetType( VclPtr<ListBox>::Create( this, ScResId( LB_ICONSET_TYPE ) ) )
 {
     Init();
     FreeResource();
@@ -1577,7 +1577,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
         for(size_t i = 0, n = pIconSetFormatData->maEntries.size();
                 i < n; ++i)
         {
-            maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
+            maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
             Point aPos = maEntries[0]->GetPosPixel();
             aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
             maEntries[i]->SetPosPixel( aPos );
@@ -1619,7 +1619,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
 
     for(size_t i = 0; i < nElements; ++i)
     {
-        maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
+        maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
         Point aPos = maEntries[0]->GetPosPixel();
         aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
         maEntries[i]->SetPosPixel( aPos );

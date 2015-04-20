@@ -46,7 +46,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
     , pDoc(ptrViewData->GetDocument())
     , aLocalRangeName(*(pDoc->GetRangeName()))
 {
-    m_pFilterCtr = new SvxTPFilter(get<VclContainer>("box"));
+    m_pFilterCtr = VclPtr<SvxTPFilter>::Create(get<VclContainer>("box"));
     get(m_pHighlightBox, "showchanges");
     get(m_pCbAccept, "showaccepted");
     get(m_pCbReject, "showrejected");

@@ -154,8 +154,8 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
             int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
             if (nColWidth)
             {
-                maFixedTexts.push_back( new FixedText(m_pGrid) );
-                maEdits.push_back( new Edit(m_pGrid, WB_BORDER) );
+                maFixedTexts.push_back( VclPtr<FixedText>::Create(m_pGrid) );
+                maEdits.push_back( VclPtr<Edit>::Create(m_pGrid, WB_BORDER) );
 
                 maFixedTexts[nIndex]->set_grid_left_attach(0);
                 maEdits[nIndex]->set_grid_left_attach(1);

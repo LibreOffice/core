@@ -314,7 +314,7 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     MenuItemData aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
-    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc, GetMenuStackLevel()+1));
+    aItem.mpSubMenuWin.reset(VclPtr<ScMenuFloatingWindow>::Create(this, mpDoc, GetMenuStackLevel()+1));
     aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
@@ -875,12 +875,12 @@ void ScCheckListMenuWindow::CancelButton::Click()
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
     maEdSearch(new Edit (this)),
-    maChecks(new ScCheckListBox(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
-    maChkToggleAll(new TriStateBox(this, 0)),
-    maBtnSelectSingle(new ImageButton(this, 0)),
-    maBtnUnselectSingle(new ImageButton(this, 0)),
-    maBtnOk(new OKButton(this)),
-    maBtnCancel(new CancelButton(this)),
+    maChecks(VclPtr<ScCheckListBox>::Create(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
+    maChkToggleAll(VclPtr<TriStateBox>::Create(this, 0)),
+    maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),
+    maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
+    maBtnOk(VclPtr<OKButton>::Create(this)),
+    maBtnCancel(VclPtr<CancelButton>::Create(this)),
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),

@@ -62,8 +62,8 @@ struct Func_Select
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
-    mpBackgrDev( new VirtualDevice() ),
-    mpGridDev( new VirtualDevice() ),
+    mpBackgrDev( VclPtr<VirtualDevice>::Create() ),
+    mpGridDev( VclPtr<VirtualDevice>::Create() ),
     mpColorConfig( 0 ),
     mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) ),
     maHeaderFont( GetFont() ),

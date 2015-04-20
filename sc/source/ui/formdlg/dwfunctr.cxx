@@ -63,7 +63,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
                                     SfxChildWinInfo* pInfo ) :
     SfxChildWindow( pParentP, nId )
 {
-    ScFunctionDockWin* pWin = new ScFunctionDockWin( pBindings, this,
+    VclPtr<ScFunctionDockWin> pWin = VclPtr<ScFunctionDockWin>::Create( pBindings, this,
                                         pParentP, ScResId( FID_FUNCTION_BOX ) );
     pWindow = pWin;
 
@@ -90,12 +90,12 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 SfxChildWindow *pCW, vcl::Window* pParent, const ResId& rResId ) :
 
     SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
-    aPrivatSplit    ( new ScPrivatSplit( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT) ),
-    aCatBox         ( new ListBox( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
-    aFuncList       ( new ListBox( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
-    aDDFuncList     ( new ListBox( this, ResId( DDLB_FUNC, *rResId.GetResMgr() ) ) ),
-    aInsertButton   ( new ImageButton( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
-    aFiFuncDesc     ( new FixedText( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
+    aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT) ),
+    aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
+    aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
+    aDDFuncList     ( VclPtr<ListBox>::Create( this, ResId( DDLB_FUNC, *rResId.GetResMgr() ) ) ),
+    aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
+    aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
     aOldSize        (0,0),
     pFuncDesc       (NULL)
 {

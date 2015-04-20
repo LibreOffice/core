@@ -136,7 +136,7 @@ void ScNameDlg::Init()
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
-    m_pRangeManagerTable = new ScRangeManagerTable(*pCtrl, maRangeMap, maCursorPos);
+    m_pRangeManagerTable = VclPtr<ScRangeManagerTable>::Create(*pCtrl, maRangeMap, maCursorPos);
     m_pRangeManagerTable->setInitListener(this);
     m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );

@@ -83,7 +83,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
 
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("users");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*9);
-    m_pLbUsers = new ScShareTable(*pCtrl);
+    m_pLbUsers = VclPtr<ScShareTable>::Create(*pCtrl);
 
     m_aStrNoUserData = get<FixedText>("nouserdata")->GetText();
     m_aStrUnknownUser = get<FixedText>("unknownuser")->GetText();

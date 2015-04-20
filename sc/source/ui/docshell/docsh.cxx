@@ -2886,7 +2886,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
                                          vcl::Window *pParent, const SfxItemSet &rSet )
 {
-    SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
+    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
     ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     // Only for statistics, if this Doc is shown; not from the Doc Manager

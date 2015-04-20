@@ -110,17 +110,17 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
             aTabItem.mpProtect.reset(new ScTableProtection(*pTabProtect));
 
         maTableItems.push_back(aTabItem);
-        VclHBox* pSheet = new VclHBox(mpSheetsBox, false, 12);
+        VclPtr<VclHBox> pSheet = VclPtr<VclHBox>::Create(mpSheetsBox, false, 12);
         pSheet->Show(true);
 
-        FixedText* pFtSheetName = new FixedText(pSheet);
+        VclPtr<FixedText> pFtSheetName = VclPtr<FixedText>::Create(pSheet);
         pFtSheetName->Show(true);
         pFtSheetName->SetStyle(WB_VCENTER);
-        FixedText* pFtSheetStatus = new FixedText(pSheet);
+        FixedText* pFtSheetStatus = VclPtr<FixedText>::Create(pSheet);
         pFtSheetStatus->Show(true);
         pFtSheetStatus->SetStyle(WB_VCENTER);
 
-        PushButton* pBtnSheet = new PushButton(pSheet);
+        VclPtr<PushButton> pBtnSheet = VclPtr<PushButton>::Create((vcl::Window*)pSheet);
         pBtnSheet->SetText(ScResId(STR_RETYPE));
         pBtnSheet->SetClickHdl(LINK(this, ScRetypePassDlg, RetypeBtnHdl));
         pBtnSheet->Disable();

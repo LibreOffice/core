@@ -137,7 +137,7 @@ ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCursorRefEdit(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new ScCursorRefEdit(pParent, NULL);
+    return new ScCursorRefEdit(pParent, nullptr);
 }
 
 void ScCursorRefEdit::SetCursorLinks( const Link& rUp, const Link& rDown )
@@ -637,7 +637,7 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         //! move options dialog to UI lib?
         ScopedVclPtr<ScSolverOptionsDialog> pOptDlg(
-            new ScSolverOptionsDialog( this, maImplNames, maDescriptions, maEngine, maProperties ));
+            VclPtr<ScSolverOptionsDialog>::Create( this, maImplNames, maDescriptions, maEngine, maProperties ));
         if ( pOptDlg->Execute() == RET_OK )
         {
             maEngine = pOptDlg->GetEngine();
