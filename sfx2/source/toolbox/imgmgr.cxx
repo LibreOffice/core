@@ -45,8 +45,8 @@ const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 
 struct ToolBoxInf_Impl
 {
-    ToolBox* pToolBox;
-    sal_uInt16   nFlags;
+    ToolBox*        pToolBox;
+    SfxToolboxFlags nFlags;
 };
 
 class SfxImageManager_Impl
@@ -167,7 +167,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
         for ( sal_uInt32 n=0; n < m_aToolBoxes.size(); n++ )
         {
             ToolBoxInf_Impl *pInf = m_aToolBoxes[n];
-            if ( pInf->nFlags & SFX_TOOLBOX_CHANGESYMBOLSET )
+            if ( pInf->nFlags & SfxToolboxFlags::CHANGESYMBOLSET )
             {
                 ToolBox *pBox       = pInf->pToolBox;
                 sal_uInt16  nCount      = pBox->GetItemCount();
@@ -300,7 +300,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
     return SeekImage( nId, bLarge );
 }
 
-void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
+void SfxImageManager::RegisterToolBox( ToolBox *pBox, SfxToolboxFlags nFlags )
 {
     SolarMutexGuard aGuard;
 

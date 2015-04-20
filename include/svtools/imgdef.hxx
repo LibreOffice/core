@@ -27,9 +27,6 @@ enum SfxSymbolsSize
     SFX_SYMBOLS_SIZE_AUTO
 };
 
-#define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
-#define SFX_TOOLBOX_CHANGEOUTSTYLE      0x0002
-
 #endif // INCLUDED_SVTOOLS_IMGDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -803,8 +803,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     if ( pCreateView )
         StartListening(*pCreateView);
     SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
-    pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
-    pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
+    pImgMan->RegisterToolBox(&aContentToolBox, SfxToolboxFlags::CHANGEOUTSTYLE);
+    pImgMan->RegisterToolBox(&aGlobalToolBox, SfxToolboxFlags::CHANGEOUTSTYLE);
 
     aContentToolBox.SetItemBits( FN_CREATE_NAVIGATION, aContentToolBox.GetItemBits( FN_CREATE_NAVIGATION ) | ToolBoxItemBits::DROPDOWNONLY );
     aContentToolBox.SetItemBits( FN_DROP_REGION, aContentToolBox.GetItemBits( FN_DROP_REGION ) | ToolBoxItemBits::DROPDOWNONLY );

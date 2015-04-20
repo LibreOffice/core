@@ -21,14 +21,28 @@
 #define INCLUDED_SFX2_IMGMGR_HXX
 
 #include <sal/config.h>
-#include <sfx2/dllapi.h>
-
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
+#include <sfx2/dllapi.h>
 #include <vcl/image.hxx>
+
 
 class ToolBox;
 class SfxModule;
 class SfxImageManager_Impl;
+
+enum class SfxToolboxFlags
+{
+    CHANGESYMBOLSET     = 0x01,
+    CHANGEOUTSTYLE      = 0x02,
+    ALL                 = CHANGESYMBOLSET | CHANGEOUTSTYLE,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxToolboxFlags> : is_typed_flags<SfxToolboxFlags, 0x03> {};
+}
+
+
 class SFX2_DLLPUBLIC SfxImageManager
 {
     SfxImageManager_Impl* pImp;
@@ -39,7 +53,7 @@ public:
     SfxImageManager(SfxModule& rModule);
     ~SfxImageManager();
 
-    void            RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags=0xFFFF);
+    void            RegisterToolBox( ToolBox *pBox, SfxToolboxFlags nFlags=SfxToolboxFlags::ALL);
     void            ReleaseToolBox( ToolBox *pBox );
 
     Image           GetImage( sal_uInt16 nId, bool bLarge ) const;
