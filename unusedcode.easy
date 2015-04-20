@@ -33,7 +33,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrUndoObjList::SetOrdNum(unsigned int)
 SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
-SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 StylePool::getCount() const
 StyleSettings::SetAlternatingRowColor(Color const&)
 StyleSettings::SetCursorSize(long)
