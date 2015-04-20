@@ -24,9 +24,9 @@
 
 void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 {
-    bHandleDragging = (bool) ( nFlags & SCRWIN_THUMBDRAGGING );
-    bVCenter = (nFlags & SCRWIN_VCENTER) == SCRWIN_VCENTER;
-    bHCenter = (nFlags & SCRWIN_HCENTER) == SCRWIN_HCENTER;
+    bHandleDragging = bool( nFlags & ScrollableWindowFlags::THUMBDRAGGING );
+    bVCenter = bool(nFlags & ScrollableWindowFlags::VCENTER);
+    bHCenter = bool(nFlags & ScrollableWindowFlags::HCENTER);
     bScrolling = false;
 
     // set the handlers for the scrollbars

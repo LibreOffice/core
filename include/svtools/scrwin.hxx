@@ -21,8 +21,8 @@
 #define INCLUDED_SVTOOLS_SCRWIN_HXX
 
 #include <svtools/svtdllapi.h>
-
 #include <vcl/scrbar.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class DataChangedEvent;
 
@@ -30,12 +30,17 @@ class DataChangedEvent;
 // - ScrollableWindow-Type -
 
 
-typedef sal_uInt16 ScrollableWindowFlags;
-
-#define SCRWIN_THUMBDRAGGING 1
-#define SCRWIN_VCENTER       2
-#define SCRWIN_HCENTER       4
-#define SCRWIN_DEFAULT       (SCRWIN_THUMBDRAGGING | SCRWIN_VCENTER | SCRWIN_HCENTER)
+enum class ScrollableWindowFlags
+{
+    THUMBDRAGGING = 1,
+    VCENTER       = 2,
+    HCENTER       = 4,
+    DEFAULT       = THUMBDRAGGING | VCENTER | HCENTER,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ScrollableWindowFlags> : is_typed_flags<ScrollableWindowFlags, 0x07> {};
+}
 
 
 // - ScrollableWindow -
@@ -63,7 +68,7 @@ private:
 
 public:
                     ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,
-                                      ScrollableWindowFlags = SCRWIN_DEFAULT );
+                                      ScrollableWindowFlags = ScrollableWindowFlags::DEFAULT );
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
