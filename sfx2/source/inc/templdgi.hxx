@@ -64,13 +64,17 @@ public:
         : SvTreeListBox(pParent, rId)
         , pDialog(pD)
         , nModifier(0)
-    {}
+    {
+        SetHighlightRange();
+    }
 
     DropListBox_Impl(vcl::Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD)
         : SvTreeListBox(pParent, nWinBits)
         , pDialog(pD)
         , nModifier(0)
-    {}
+    {
+        SetHighlightRange();
+    }
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) SAL_OVERRIDE;
