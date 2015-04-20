@@ -64,33 +64,40 @@ MathTypeFilter::~MathTypeFilter()
 sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw(uno::RuntimeException, std::exception)
 {
     bool bSuccess = false;
-    utl::MediaDescriptor aMediaDesc(rDescriptor);
-    aMediaDesc.addInputStream();
-    uno::Reference<io::XInputStream> xInputStream;
-    aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream));
-    if (pStream)
+    try
     {
-        if (SotStorage::IsStorageFile(pStream.get()))
+        utl::MediaDescriptor aMediaDesc(rDescriptor);
+        aMediaDesc.addInputStream();
+        uno::Reference<io::XInputStream> xInputStream;
+        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream));
+        if (pStream)
         {
-            SvStorageRef aStorage(new SotStorage(pStream.get(), false));
-            // Is this a MathType Storage?
-            if (aStorage->IsStream(OUString("Equation Native")))
+            if (SotStorage::IsStorageFile(pStream.get()))
             {
-                if (SmModel* pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
+                SvStorageRef aStorage(new SotStorage(pStream.get(), false));
+                // Is this a MathType Storage?
+                if (aStorage->IsStream(OUString("Equation Native")))
                 {
-                    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-                    OUString aText = pDocShell->GetText();
-                    MathType aEquation(aText);
-                    bSuccess = aEquation.Parse(aStorage) == 1;
-                    if (bSuccess)
+                    if (SmModel* pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
                     {
-                        pDocShell->SetText(aText);
-                        pDocShell->Parse();
+                        SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+                        OUString aText = pDocShell->GetText();
+                        MathType aEquation(aText);
+                        bSuccess = aEquation.Parse(aStorage) == 1;
+                        if (bSuccess)
+                        {
+                            pDocShell->SetText(aText);
+                            pDocShell->Parse();
+                        }
                     }
                 }
             }
         }
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("starmath", "Exception caught: " << rException.Message);
     }
     return bSuccess;
 }
