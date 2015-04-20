@@ -108,8 +108,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     m_pTable = new SwAddressTable(*pHeaderTreeContainer);
     long aStaticTabs[]= { 2, 0, 0 };
     m_pTable->SetTabs( aStaticTabs );
-    m_pTable->InsertHeaderItem(1, m_sName, HIB_LEFT | HIB_VCENTER);
-    m_pTable->InsertHeaderItem(2, m_sType, HIB_LEFT | HIB_VCENTER);
+    m_pTable->InsertHeaderItem(1, m_sName, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
+    m_pTable->InsertHeaderItem(2, m_sType, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
 
     m_pPreviewPB->SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

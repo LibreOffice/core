@@ -172,7 +172,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
         .append("\t").append(get<FixedText>("version")->GetText())
         .append("\t").append(get<FixedText>("features")->GetText())
         .append("\t");
-    m_pJavaList->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT);
+    m_pJavaList->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HeaderBarItemBits::LEFT);
     m_pJavaList->setColSizes();
 
     m_pJavaEnableCB->SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );

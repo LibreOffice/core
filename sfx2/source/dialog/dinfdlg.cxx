@@ -2009,7 +2009,7 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
 
     m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
-    const HeaderBarItemBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS | HIB_LEFT;
+    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::LEFT;
 
     m_pHeaderBar->InsertItem( HI_NAME, sName, 0, nHeadBits );
     m_pHeaderBar->InsertItem( HI_TYPE, sType, 0, nHeadBits );

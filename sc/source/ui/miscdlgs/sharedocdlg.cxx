@@ -100,7 +100,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
     OUString aHeader(get<FixedText>("name")->GetText());
     aHeader += "\t";
     aHeader += get<FixedText>("accessed")->GetText();
-    m_pLbUsers->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
+    m_pLbUsers->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::VCENTER );
     m_pLbUsers->SetSelectionMode( NO_SELECTION );
 
     UpdateView();

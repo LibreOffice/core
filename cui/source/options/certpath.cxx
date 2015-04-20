@@ -51,7 +51,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
 
     OUStringBuffer sHeader;
     sHeader.append('\t').append(sProfile).append('\t').append(sDirectory);
-    m_pCertPathList->InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
+    m_pCertPathList->InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HeaderBarItemBits::LEFT );
     m_pCertPathList->SetCheckButtonHdl( LINK( this, CertPathDialog, CheckHdl_Impl ) );
 
     m_pAddBtn->SetClickHdl( LINK( this, CertPathDialog, AddHdl_Impl ) );

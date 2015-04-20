@@ -267,10 +267,10 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     long nPos2 = aSize.Width()/3;
     m_pStatusHB->InsertItem( ITEMID_TASK, sTask,
                             nPos1,
-                            HIB_LEFT | HIB_VCENTER );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
     m_pStatusHB->InsertItem( ITEMID_STATUS, sStatus,
                             nPos2,
-                            HIB_LEFT | HIB_VCENTER );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     static long nTabs[] = {2, 0, nPos1};
     m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );

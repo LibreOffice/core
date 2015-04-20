@@ -49,9 +49,9 @@ ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost
     OUString aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
 
     HeaderBar& rHeaderBar = GetTheHeaderBar();
-    rHeaderBar.InsertItem( ITEMID_NAME, aNameStr, 0, HIB_LEFT| HIB_VCENTER );
-    rHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, 0, HIB_LEFT| HIB_VCENTER );
-    rHeaderBar.InsertItem( ITEMID_SCOPE, aScopeStr, 0, HIB_LEFT| HIB_VCENTER );
+    rHeaderBar.InsertItem( ITEMID_NAME, aNameStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
+    rHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
+    rHeaderBar.InsertItem( ITEMID_SCOPE, aScopeStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
     rHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
 
     setColWidths();

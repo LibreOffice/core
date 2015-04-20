@@ -193,7 +193,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     OUString sHeader(get<FixedText>("pathlist")->GetText());
     m_pRadioLB->SetQuickHelpText( sHeader );
     sHeader = "\t" + sHeader;
-    m_pRadioLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
+    m_pRadioLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT );
 
     m_pRadioLB->SetSelectHdl( LINK( this, SvxMultiPathDialog, SelectHdl_Impl ) );
     m_pRadioLB->SetCheckButtonHdl( LINK( this, SvxMultiPathDialog, CheckHdl_Impl ) );

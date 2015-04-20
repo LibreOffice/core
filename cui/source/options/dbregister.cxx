@@ -139,11 +139,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     aSz.Width() = TAB_WIDTH1;
     rBar.InsertItem( ITEMID_TYPE, aTypeText,
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
-                            HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     aSz.Width() = TAB_WIDTH2;
     rBar.InsertItem( ITEMID_PATH, aPathText,
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
-                            HIB_LEFT | HIB_VCENTER );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     static long aTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
     Size aHeadSize = rBar.GetSizePixel();
@@ -243,13 +243,13 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
 
         if ( bUp )
         {
-            nBits &= ~HIB_UPARROW;
-            nBits |= HIB_DOWNARROW;
+            nBits &= ~HeaderBarItemBits::UPARROW;
+            nBits |= HeaderBarItemBits::DOWNARROW;
         }
         else
         {
-            nBits &= ~HIB_DOWNARROW;
-            nBits |= HIB_UPARROW;
+            nBits &= ~HeaderBarItemBits::DOWNARROW;
+            nBits |= HeaderBarItemBits::UPARROW;
         }
         rBar.SetItemBits( ITEMID_TYPE, nBits );
         HeaderSelect_Impl( &rBar );
@@ -262,7 +262,7 @@ void DbRegistrationOptionsPage::FillUserData()
 
     OUString aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
-    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
     aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
 }
@@ -314,19 +314,19 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
     {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
+        nBits &= ~HeaderBarItemBits::UPARROW;
+        nBits |= HeaderBarItemBits::DOWNARROW;
         eMode = SortDescending;
     }
     else
     {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
+        nBits &= ~HeaderBarItemBits::DOWNARROW;
+        nBits |= HeaderBarItemBits::UPARROW;
     }
     pBar->SetItemBits( ITEMID_TYPE, nBits );
     SvTreeList* pModel = pPathBox->GetModel();

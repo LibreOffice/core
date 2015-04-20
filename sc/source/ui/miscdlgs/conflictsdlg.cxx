@@ -414,7 +414,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     aHeader += maStrTitleAuthor;
     aHeader += aTab;
     aHeader += maStrTitleDate;
-    m_pLbConflicts->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
+    m_pLbConflicts->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::VCENTER );
 
     m_pLbConflicts->SetStyle( m_pLbConflicts->GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
     m_pLbConflicts->SetSelectionMode( MULTIPLE_SELECTION );

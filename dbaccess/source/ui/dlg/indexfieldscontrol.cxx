@@ -238,7 +238,7 @@ namespace dbaui
             nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
             // (plus some additional space)
             nSortOrderColumnWidth += GetTextWidth(OUString('0')) * 2;
-            InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HIB_STDSTYLE, 1);
+            InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HeaderBarItemBits::STDSTYLE, 1);
 
             m_pSortingCell = new ListBoxControl(&GetDataWindow());
             m_pSortingCell->InsertEntry(m_sAscendingText);
@@ -252,7 +252,7 @@ namespace dbaui
         nFieldNameWidth -= 8;
         // the "field name" column
         OUString sColumnName = ModuleRes(STR_TAB_INDEX_FIELD);
-        InsertDataColumn(COLUMN_ID_FIELDNAME, sColumnName, nFieldNameWidth, HIB_STDSTYLE, 0);
+        InsertDataColumn(COLUMN_ID_FIELDNAME, sColumnName, nFieldNameWidth, HeaderBarItemBits::STDSTYLE, 0);
 
         // create the cell controllers
         // for the field name cell

@@ -47,7 +47,7 @@ namespace textconversiondlgs
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define HEADER_BAR_BITS ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_FIXED | HIB_FIXEDPOS )
+#define HEADER_BAR_BITS ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS )
 
 DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent, nBits)
@@ -406,7 +406,7 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
     long nWidth3 = m_pLB_Property->get_preferred_size().Width();
 
     HeaderBarItemBits nBits = HEADER_BAR_BITS;
-    rHeaderBar.InsertItem( 1, aColumn1, nWidth1, nBits | HIB_UPARROW );
+    rHeaderBar.InsertItem( 1, aColumn1, nWidth1, nBits | HeaderBarItemBits::UPARROW );
     rHeaderBar.InsertItem( 2, aColumn2, nWidth2, nBits );
     rHeaderBar.InsertItem( 3, aColumn3, nWidth3, nBits );
 
@@ -795,18 +795,18 @@ IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar)
 {
     sal_uInt16 nId = pHeaderBar->GetCurItemId();
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nId);
-    if( nBits & HIB_CLICKABLE )
+    if( nBits & HeaderBarItemBits::CLICKABLE )
     {
         //set new arrow positions in headerbar
         pHeaderBar->SetItemBits( getActiveDictionary().getSortColumn()+1, HEADER_BAR_BITS );
-        if( nBits & HIB_UPARROW )
-            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_DOWNARROW );
+        if( nBits & HeaderBarItemBits::UPARROW )
+            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HeaderBarItemBits::DOWNARROW );
         else
-            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_UPARROW );
+            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HeaderBarItemBits::UPARROW );
 
         //sort lists
         nBits = pHeaderBar->GetItemBits(nId);
-        bool bSortAtoZ = nBits & HIB_UPARROW;
+        bool bSortAtoZ = bool(nBits & HeaderBarItemBits::UPARROW);
         getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
         getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
     }

@@ -264,19 +264,19 @@ sal_uInt16 SvSimpleTable::GetSelectedCol()
 void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
 {
     if(nSortCol!=0xFFFF)
-        aHeaderBar.SetItemBits(nSortCol+1,HIB_STDSTYLE);
+        aHeaderBar.SetItemBits(nSortCol+1,HeaderBarItemBits::STDSTYLE);
 
     if (nCol != 0xFFFF)
     {
         if(bDir || nSortCol != nCol)
         {
-            aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_DOWNARROW);
+            aHeaderBar.SetItemBits( nCol+1, HeaderBarItemBits::STDSTYLE | HeaderBarItemBits::DOWNARROW);
             GetModel()->SetSortMode(SortAscending);
             bDir = true;
         }
         else
         {
-            aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_UPARROW);
+            aHeaderBar.SetItemBits( nCol+1, HeaderBarItemBits::STDSTYLE | HeaderBarItemBits::UPARROW);
             GetModel()->SetSortMode(SortDescending);
         }
 
@@ -304,7 +304,7 @@ void SvSimpleTable::HBarClick()
 {
     sal_uInt16 nId=aHeaderBar.GetCurItemId();
 
-    if (aHeaderBar.GetItemBits(nId) & HIB_CLICKABLE)
+    if (aHeaderBar.GetItemBits(nId) & HeaderBarItemBits::CLICKABLE)
     {
         if(nId==nSortCol+1)
         {

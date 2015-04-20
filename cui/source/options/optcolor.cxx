@@ -900,11 +900,11 @@ void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rU
     const OUString &rColorSetting, const OUString &rPreview)
 {
     // filling
-    const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS;
-    m_pHeaderHB->InsertItem(1, rOn, 0, nHeadBits | HIB_CENTER);
-    m_pHeaderHB->InsertItem(2, rUIElems, 0, nHeadBits | HIB_LEFT);
-    m_pHeaderHB->InsertItem(3, rColorSetting, 0, nHeadBits | HIB_LEFT);
-    m_pHeaderHB->InsertItem(4, rPreview, 0, nHeadBits | HIB_LEFT);
+    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS;
+    m_pHeaderHB->InsertItem(1, rOn, 0, nHeadBits | HeaderBarItemBits::CENTER);
+    m_pHeaderHB->InsertItem(2, rUIElems, 0, nHeadBits | HeaderBarItemBits::LEFT);
+    m_pHeaderHB->InsertItem(3, rColorSetting, 0, nHeadBits | HeaderBarItemBits::LEFT);
+    m_pHeaderHB->InsertItem(4, rPreview, 0, nHeadBits | HeaderBarItemBits::LEFT);
     m_pHeaderHB->set_height_request(GetTextHeight() + 6);
 }
 

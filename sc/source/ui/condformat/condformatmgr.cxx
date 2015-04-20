@@ -25,7 +25,7 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rPa
 
     OUStringBuffer sHeader;
     sHeader.append(aRangeStr).append("\t").append(aConditionStr);
-    InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT | HIB_VCENTER);
+    InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
     setColSizes();
 
     Init();

@@ -244,8 +244,8 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
     m_pVersionBox->InsertHeaderEntry(sHeader.makeStringAndClear());
 
     HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
-    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
-    nBits &= ~HIB_CLICKABLE;
+    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
+    nBits &= ~HeaderBarItemBits::CLICKABLE;
     rBar.SetItemBits(1, nBits);
     rBar.SetItemBits(2, nBits);
     rBar.SetItemBits(3, nBits);
@@ -537,8 +537,8 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsS
     m_pVersionBox->InsertHeaderEntry(sHeader.makeStringAndClear());
 
     HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
-    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
-    nBits &= ~HIB_CLICKABLE;
+    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
+    nBits &= ~HeaderBarItemBits::CLICKABLE;
     rBar.SetItemBits(1, nBits);
     rBar.SetItemBits(2, nBits);
     rBar.SetItemBits(3, nBits);

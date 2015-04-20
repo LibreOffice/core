@@ -210,7 +210,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
             {
                 nPos = i;
 
-                if ( !(pItem->mnBits & HIB_FIXED) && (rPos.X() >= (nX+pItem->mnSize-HEADERBAR_SPLITOFF)) )
+                if ( !(pItem->mnBits & HeaderBarItemBits::FIXED) && (rPos.X() >= (nX+pItem->mnSize-HEADERBAR_SPLITOFF)) )
                 {
                     nMode = HEAD_HITTEST_DIVIDER;
                     nMouseOff = rPos.X()-(nX+pItem->mnSize);
@@ -225,7 +225,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
             return nMode;
         }
 
-        if ( pItem->mnBits & HIB_FIXED )
+        if ( pItem->mnBits & HeaderBarItemBits::FIXED )
             bLastFixed = true;
         else
             bLastFixed = false;
@@ -386,7 +386,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         // avoid 3D borders
         if( bHigh )
             DrawSelectionBackground( aRect, 1, true, false, false, &aSelectionTextColor );
-        else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
+        else if ( !mbButtonStyle || (nBits & HeaderBarItemBits::FLAT) )
             DrawSelectionBackground( aRect, 0, true, false, false, &aSelectionTextColor );
     }
 
@@ -401,12 +401,12 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     if (!pItem->maOutText.isEmpty())
         aTxtSize.Height() = pDev->GetTextHeight();
     long nArrowWidth = 0;
-    if ( nBits & (HIB_UPARROW | HIB_DOWNARROW) )
+    if ( nBits & (HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW) )
         nArrowWidth = HEAD_ARROWSIZE2+HEADERBAR_ARROWOFF;
 
     // do not draw if there is not enough space for the image
     long nTestHeight = aImageSize.Height();
-    if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+    if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
         nTestHeight += aTxtSize.Height();
     if ( (aImageSize.Width() > aRect.GetWidth()) || (nTestHeight > aRect.GetHeight()) )
     {
@@ -417,7 +417,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     // cut text to correct length
     bool bLeftText = false;
     long nMaxTxtWidth = aRect.GetWidth()-(HEADERBAR_TEXTOFF*2)-nArrowWidth;
-    if ( nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE) )
+    if ( nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE) )
         nMaxTxtWidth -= aImageSize.Width();
     long nTxtWidth = aTxtSize.Width();
     if ( nTxtWidth > nMaxTxtWidth )
@@ -441,26 +441,26 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
 
     // calculate text/imageposition
     long nTxtPos;
-    if ( !bLeftText && (nBits & HIB_RIGHT) )
+    if ( !bLeftText && (nBits & HeaderBarItemBits::RIGHT) )
     {
         nTxtPos = aRect.Right()-nTxtWidth-HEADERBAR_TEXTOFF;
-        if ( nBits & HIB_RIGHTIMAGE )
+        if ( nBits & HeaderBarItemBits::RIGHTIMAGE )
             nTxtPos -= aImageSize.Width();
     }
-    else if ( !bLeftText && (nBits & HIB_CENTER) )
+    else if ( !bLeftText && (nBits & HeaderBarItemBits::CENTER) )
     {
         long nTempWidth = nTxtWidth;
-        if ( nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE) )
+        if ( nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE) )
             nTempWidth += aImageSize.Width();
         nTxtPos = aRect.Left()+(aRect.GetWidth()-nTempWidth)/2;
-        if ( nBits & HIB_LEFTIMAGE )
+        if ( nBits & HeaderBarItemBits::LEFTIMAGE )
             nTxtPos += aImageSize.Width();
         if ( nArrowWidth )
         {
             if ( nTxtPos+nTxtWidth+nArrowWidth >= aRect.Right() )
             {
                 nTxtPos = aRect.Left()+HEADERBAR_TEXTOFF;
-                if ( nBits & HIB_LEFTIMAGE )
+                if ( nBits & HeaderBarItemBits::LEFTIMAGE )
                     nTxtPos += aImageSize.Width();
             }
         }
@@ -468,9 +468,9 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     else
     {
         nTxtPos = aRect.Left()+HEADERBAR_TEXTOFF;
-        if ( nBits & HIB_LEFTIMAGE )
+        if ( nBits & HeaderBarItemBits::LEFTIMAGE )
             nTxtPos += aImageSize.Width();
-        if ( nBits & HIB_RIGHT )
+        if ( nBits & HeaderBarItemBits::RIGHT )
             nTxtPos += nArrowWidth;
     }
 
@@ -478,21 +478,21 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     long nTxtPosY = 0;
     if ( !pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()) )
     {
-        if ( nBits & HIB_TOP )
+        if ( nBits & HeaderBarItemBits::TOP )
         {
             nTxtPosY = aRect.Top();
-            if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+            if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
                 nTxtPosY += aImageSize.Height();
         }
-        else if ( nBits & HIB_BOTTOM )
+        else if ( nBits & HeaderBarItemBits::BOTTOM )
             nTxtPosY = aRect.Bottom()-aTxtSize.Height();
         else
         {
             long nTempHeight = aTxtSize.Height();
-            if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+            if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
                 nTempHeight += aImageSize.Height();
             nTxtPosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
-            if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+            if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
                 nTxtPosY += aImageSize.Height();
         }
     }
@@ -518,40 +518,40 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     if ( aImageSize.Width() && aImageSize.Height() )
     {
         long nImagePos = nTxtPos;
-        if ( nBits & HIB_LEFTIMAGE )
+        if ( nBits & HeaderBarItemBits::LEFTIMAGE )
         {
             nImagePos -= aImageSize.Width();
-            if ( nBits & HIB_RIGHT )
+            if ( nBits & HeaderBarItemBits::RIGHT )
                 nImagePos -= nArrowWidth;
         }
-        else if ( nBits & HIB_RIGHTIMAGE )
+        else if ( nBits & HeaderBarItemBits::RIGHTIMAGE )
         {
             nImagePos += nTxtWidth;
-            if ( !(nBits & HIB_RIGHT) )
+            if ( !(nBits & HeaderBarItemBits::RIGHT) )
                 nImagePos += nArrowWidth;
         }
         else
         {
-            if ( nBits & HIB_RIGHT )
+            if ( nBits & HeaderBarItemBits::RIGHT )
                 nImagePos = aRect.Right()-aImageSize.Width();
-            else if ( nBits & HIB_CENTER )
+            else if ( nBits & HeaderBarItemBits::CENTER )
                 nImagePos = aRect.Left()+(aRect.GetWidth()-aImageSize.Width())/2;
             else
                 nImagePos = aRect.Left()+HEADERBAR_TEXTOFF;
         }
 
-        if ( nBits & HIB_TOP )
+        if ( nBits & HeaderBarItemBits::TOP )
             nImagePosY = aRect.Top();
-        else if ( nBits & HIB_BOTTOM )
+        else if ( nBits & HeaderBarItemBits::BOTTOM )
         {
             nImagePosY = aRect.Bottom()-aImageSize.Height();
-            if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+            if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
                 nImagePosY -= aTxtSize.Height();
         }
         else
         {
             long nTempHeight = aImageSize.Height();
-            if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
+            if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) )
                 nTempHeight += aTxtSize.Height();
             nImagePosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
         }
@@ -564,16 +564,16 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    if ( nBits & (HIB_UPARROW | HIB_DOWNARROW) )
+    if ( nBits & (HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW) )
     {
         long nArrowX = nTxtPos;
-        if ( nBits & HIB_RIGHT )
+        if ( nBits & HeaderBarItemBits::RIGHT )
             nArrowX -= nArrowWidth;
         else
             nArrowX += nTxtWidth+HEADERBAR_ARROWOFF;
-        if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && pItem->maText.isEmpty() )
+        if ( !(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) && pItem->maText.isEmpty() )
         {
-            if ( nBits & HIB_RIGHT )
+            if ( nBits & HeaderBarItemBits::RIGHT )
                 nArrowX -= aImageSize.Width();
             else
                 nArrowX += aImageSize.Width();
@@ -592,7 +592,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             {
                 aCtrlRegion=Rectangle(Point(nArrowX,aRect.Top()),Size(nArrowWidth,aRect.GetHeight()));
                 // control value passes 1 if arrow points down, 0 otherwise
-                aControlValue.setNumericVal((nBits&HIB_DOWNARROW)?1:0);
+                aControlValue.setNumericVal((nBits&HeaderBarItemBits::DOWNARROW)?1:0);
                 nState|=ControlState::ENABLED;
                 if(bHigh)
                     nState|=ControlState::PRESSED;
@@ -609,15 +609,15 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                     nArrowY = nImagePosY+(aImageSize.Height()/2);
                 else
                 {
-                    if ( nBits & HIB_TOP )
+                    if ( nBits & HeaderBarItemBits::TOP )
                         nArrowY = aRect.Top()+1;
-                    else if ( nBits & HIB_BOTTOM )
+                    else if ( nBits & HeaderBarItemBits::BOTTOM )
                         nArrowY = aRect.Bottom()-HEAD_ARROWSIZE2-1;
                     else
                         nArrowY = aRect.Top()+((aRect.GetHeight()-HEAD_ARROWSIZE2)/2);
                 }
                 nArrowY -= HEAD_ARROWSIZE1-1;
-                if ( nBits & HIB_DOWNARROW )
+                if ( nBits & HeaderBarItemBits::DOWNARROW )
                 {
                     pDev->SetLineColor( rStyleSettings.GetLightColor() );
                     pDev->DrawLine( Point( nArrowX, nArrowY ),
@@ -711,8 +711,8 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
             mbDrag = true;
         else
         {
-            if ( ((pItem->mnBits & HIB_CLICKABLE) && !(pItem->mnBits & HIB_FLAT)) ||
-                 (mbDragable && !(pItem->mnBits & HIB_FIXEDPOS)) )
+            if ( ((pItem->mnBits & HeaderBarItemBits::CLICKABLE) && !(pItem->mnBits & HeaderBarItemBits::FLAT)) ||
+                 (mbDragable && !(pItem->mnBits & HeaderBarItemBits::FIXEDPOS)) )
             {
                 mbItemMode = true;
                 mbDrag = true;
@@ -779,7 +779,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
 
         //  if needed switch on ItemDrag
         if ( bNewOutDrag && mbDragable && !mbItemDrag &&
-             !((*mpItemList)[ nPos ]->mnBits & HIB_FIXEDPOS) )
+             !((*mpItemList)[ nPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) )
         {
             if ( (rMousePos.Y() >= aItemRect.Top()) && (rMousePos.Y() <= aItemRect.Bottom()) )
             {
@@ -814,13 +814,13 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
                 // do not use non-movable items
                 if ( mnItemDragPos < nPos )
                 {
-                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
+                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) &&
                             (mnItemDragPos < nPos) )
                         mnItemDragPos++;
                 }
                 else if ( mnItemDragPos > nPos )
                 {
-                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
+                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) &&
                             (mnItemDragPos > nPos) )
                         mnItemDragPos--;
                 }
@@ -1420,7 +1420,7 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->mnBits;
     else
-        return 0;
+        return HeaderBarItemBits::NONE;
 }
 
 
@@ -1489,7 +1489,7 @@ Size HeaderBar::CalcWindowSizePixel() const
         ImplHeadItem* pItem = (*mpItemList)[ i ];
         // take image size into account
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
-        if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && !pItem->maText.isEmpty() )
+        if ( !(pItem->mnBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) && !pItem->maText.isEmpty() )
             nImageHeight += aSize.Height();
         if ( nImageHeight > nMaxImageSize )
             nMaxImageSize = nImageHeight;

@@ -479,7 +479,7 @@ public:
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( sal_uLong nWidth );
     void            InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
+                                    long nSize, HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
     void            SetColumnTitle( sal_uInt16 nColumnId, const OUString &rTitle );
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
