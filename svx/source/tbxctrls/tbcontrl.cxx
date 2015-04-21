@@ -127,7 +127,7 @@ public:
     virtual ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
-    inline bool IsVisible() { return bVisible; }
+    bool            IsVisible() const { return bVisible; }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -136,9 +136,11 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
+    void            SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
+
+    void            CalcOptimalExtraUserWidth();
 
 protected:
     virtual void    Select() SAL_OVERRIDE;
@@ -162,6 +164,9 @@ private:
 
     void            ReleaseFocus();
     Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
+    void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
+    void            SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice *pDevice, const OUString &rStyleName, bool bIsNotSelected);
+    bool            AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
 
@@ -299,6 +304,9 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
         SvxStyleToolBoxControl& rControl;
 };
 
+#define BUTTON_WIDTH 20
+#define ITEM_HEIGHT 30
+
 SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
                                    const OUString& rCommand,
                                    SfxStyleFamily eFamily,
@@ -326,7 +334,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( true );
     EnableUserDraw( true );
-    SetUserItemSize( Size( 0, 30 ) );
+    SetUserItemSize( Size( 0, ITEM_HEIGHT ) );
 }
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
@@ -550,18 +558,51 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
 }
 
-void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight)
 {
-    sal_uInt16 nItem = rUDEvt.GetItemId();
-
-    if ( nItem == 0 || nItem == GetEntryCount() - 1 )
+    if (rTextRect.Bottom() > nHeight)
     {
-        Rectangle aRect(rUDEvt.GetRect());
-        unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+        // the text does not fit, adjust the font size
+        double ratio = static_cast< double >( nHeight ) / rTextRect.Bottom();
+        vcl::Font aFont(pDevice->GetFont());
+        Size aPixelSize(aFont.GetSize());
+        aPixelSize.Width() *= ratio;
+        aPixelSize.Height() *= ratio;
+        aFont.SetSize(aPixelSize);
+        pDevice->SetFont(aFont);
+        return true;
+    }
+    return false;
+}
+
+void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName)
+{
+    OutputDevice *pDevice = rUDEvt.GetDevice();
+
+    // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
+    // nBorder, and we are adding 1 in order to look better when
+    // italics is present
+    const int nLeftDistance = 8;
+
+    Rectangle aTextRect;
+    pDevice->GetTextBoundRect(aTextRect, rStyleName);
+
+    Point aPos( rUDEvt.GetRect().TopLeft() );
+    aPos.X() += nLeftDistance;
+
+    if (!AdjustFontForItemHeight(pDevice, aTextRect, rUDEvt.GetRect().GetHeight()))
+        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
+
+    pDevice->DrawText(aPos, rStyleName);
+}
+
+void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice* pDevice, const OUString& rStyleName, bool bIsNotSelected)
+{
+    if (nItem == 0 || nItem == GetEntryCount() - 1)
+    {
+        unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
         if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
-        // draw the non-style entries, ie. "Clear Formatting" or "More..."
-        DrawEntry( rUDEvt, true, true );
     }
     else
     {
@@ -569,23 +610,16 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
         SfxStyleSheetBase* pStyle = NULL;
 
-        OUString aStyleName( GetEntry( nItem ) );
-
         if ( pPool )
         {
             pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
 
             pStyle = pPool->First();
-            while ( pStyle && OUString( pStyle->GetName() ) != aStyleName )
+            while (pStyle && pStyle->GetName() != rStyleName)
                 pStyle = pPool->Next();
         }
 
-        if ( !pStyle )
-        {
-            // cannot find the style for whatever reason
-            DrawEntry( rUDEvt, true, true );
-        }
-        else
+        if (pStyle )
         {
             const SfxItemSet& aItemSet = pStyle->GetItemSet();
 
@@ -594,8 +628,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
             if ( pFontItem && pFontHeightItem )
             {
-                OutputDevice *pDevice = rUDEvt.GetDevice();
-
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
@@ -647,25 +679,21 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 // setup the device & draw
                 vcl::Font aOldFont( pDevice->GetFont() );
-                Color aOldColor( pDevice->GetTextColor() );
-                Color aOldFillColor( pDevice->GetFillColor() );
 
                 Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
                 pDevice->SetFont( aFont );
 
-                bool IsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
-
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
                 // text color, when nothing is selected
-                if ( (NULL != pItem) && IsNotSelected)
+                if ( (NULL != pItem) && bIsNotSelected)
                     aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
 
                 sal_uInt16 style = drawing::FillStyle_NONE;
                 // which kind of Fill style is selected
                 pItem = aItemSet.GetItem( XATTR_FILLSTYLE );
                 // only when ok and not selected
-                if ( (NULL != pItem) && IsNotSelected)
+                if ( (NULL != pItem) && bIsNotSelected)
                     style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
 
                 switch(style)
@@ -680,13 +708,13 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                         if ( aBackCol != COL_AUTO )
                         {
                             pDevice->SetFillColor( aBackCol );
-                            pDevice->DrawRect( rUDEvt.GetRect() );
+                            pDevice->DrawRect(rRect);
                         }
                     }
                     break;
 
                     //TODO Draw the other background styles: gradient, hatching and bitmap
-               }
+                }
 
                 // when the font and background color are too similar, adjust the Font-Color
                 if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
@@ -697,65 +725,89 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     pDevice->SetTextColor( aFontCol );
 
                 // handle the push-button
-                if (IsNotSelected)
+                if (bIsNotSelected)
                 {
-                    Rectangle aRect(rUDEvt.GetRect());
-                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
                         m_pButtons[nId]->Hide();
                 }
                 else
                 {
-                    Rectangle aRect(rUDEvt.GetRect());
-                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES)
                     {
                         if(m_pButtons[nId] == NULL)
                         {
                             m_pButtons[nId] = new MenuButton(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
-                            m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
+                            m_pButtons[nId]->SetSizePixel(Size(BUTTON_WIDTH, rRect.GetSize().Height()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
-                        m_pButtons[nId]->SetPosPixel(Point(aRect.GetWidth() - 20, aRect.getY()));
+                        m_pButtons[nId]->SetPosPixel(Point(rRect.GetWidth() - BUTTON_WIDTH, rRect.getY()));
                         m_pButtons[nId]->Show();
                     }
                 }
-
-                // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
-                // nBorder, and we are adding 1 in order to look better when
-                // italics is present
-                const int nLeftDistance = 8;
-
-                Rectangle aTextRect;
-                pDevice->GetTextBoundRect( aTextRect, aStyleName );
-
-                Point aPos( rUDEvt.GetRect().TopLeft() );
-                aPos.X() += nLeftDistance;
-                if ( aTextRect.Bottom() > rUDEvt.GetRect().GetHeight() )
-                {
-                    // the text does not fit, adjust the font size
-                    double ratio = static_cast< double >( rUDEvt.GetRect().GetHeight() ) / aTextRect.Bottom();
-                    aPixelSize.Width() *= ratio;
-                    aPixelSize.Height() *= ratio;
-                    aFont.SetSize( aPixelSize );
-                    pDevice->SetFont( aFont );
-                }
-                else
-                    aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
-
-                pDevice->DrawText( aPos, aStyleName );
-
-                pDevice->SetFillColor( aOldFillColor );
-                pDevice->SetTextColor( aOldColor );
-                pDevice->SetFont( aOldFont );
-
-                // draw separator, if present
-                DrawEntry( rUDEvt, false, false );
             }
-            else
-                DrawEntry( rUDEvt, true, true );
         }
     }
+}
+
+void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    sal_uInt16 nItem = rUDEvt.GetItemId();
+    OUString aStyleName( GetEntry( nItem ) );
+
+    OutputDevice *pDevice = rUDEvt.GetDevice();
+    pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+
+    const Rectangle& rRect(rUDEvt.GetRect());
+    bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
+
+    SetupEntry(nItem, rRect, pDevice, aStyleName, bIsNotSelected);
+
+    UserDrawEntry(rUDEvt, aStyleName);
+
+    pDevice->Pop();
+    // draw separator, if present
+    DrawEntry( rUDEvt, false, false );
+}
+
+void SvxStyleBox_Impl::CalcOptimalExtraUserWidth()
+{
+    long nMaxNormalFontWidth = 0;
+    sal_Int32 nEntryCount = GetEntryCount();
+    for (sal_Int32 i = 0; i < nEntryCount; ++i)
+    {
+        OUString sStyleName(GetEntry(i));
+        Rectangle aTextRectForDefaultFont;
+        GetTextBoundRect(aTextRectForDefaultFont, sStyleName);
+
+        const long nWidth = aTextRectForDefaultFont.GetWidth();
+
+        nMaxNormalFontWidth = std::max(nWidth, nMaxNormalFontWidth);
+    }
+
+    long nMaxUserDrawFontWidth = nMaxNormalFontWidth;
+    for (sal_Int32 i = 1; i < nEntryCount-1; ++i)
+    {
+        OUString sStyleName(GetEntry(i));
+
+        Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+        SetupEntry(i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), this, sStyleName, false);
+        Rectangle aTextRectForActualFont;
+        GetTextBoundRect(aTextRectForActualFont, sStyleName);
+        if (AdjustFontForItemHeight(this, aTextRectForActualFont, ITEM_HEIGHT))
+        {
+            //Font didn't fit, so it was changed, refetch with final font size
+            GetTextBoundRect(aTextRectForActualFont, sStyleName);
+        }
+        Pop();
+
+        const long nWidth = aTextRectForActualFont.GetWidth() + BUTTON_WIDTH;
+
+        nMaxUserDrawFontWidth = std::max(nWidth, nMaxUserDrawFontWidth);
+    }
+
+    SetUserItemSize(Size(nMaxUserDrawFontWidth - nMaxNormalFontWidth, ITEM_HEIGHT));
 }
 
 // test is the color between Font- and background-color to be identify
@@ -2094,7 +2146,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
-        sal_uInt16                  nCount      = pStyleSheetPool->Count();
+        sal_uInt16              nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = NULL;
         bool                    bDoFill     = false;
 
@@ -2195,6 +2247,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
             sal_uInt16 nLines = static_cast<sal_uInt16>(
                     std::min( pBox->GetEntryCount(), static_cast<sal_Int32>(MAX_STYLES_ENTRIES)));
             pBox->SetDropDownLineCount( nLines );
+
+            pBox->CalcOptimalExtraUserWidth();
         }
     }
 }
