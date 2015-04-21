@@ -105,7 +105,7 @@ public:
 // - ToolbarMenuAcc -
 
 
-typedef ::cppu::PartialWeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -126,14 +126,6 @@ public:
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
 public:
-
-    // XComponent
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -201,7 +193,7 @@ private:
 // - ToolbarMenuEntryAcc -
 
 
-typedef ::cppu::PartialWeakComponentImplHelper4< ::com::sun::star::accessibility::XAccessible,
+typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::com::sun::star::accessibility::XAccessibleContext,
                                                      ::com::sun::star::accessibility::XAccessibleComponent > ToolbarMenuEntryAccBase;
@@ -214,13 +206,6 @@ public:
     virtual ~ToolbarMenuEntryAcc();
 
     bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
-
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

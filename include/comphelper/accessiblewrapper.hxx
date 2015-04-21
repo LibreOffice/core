@@ -235,7 +235,7 @@ namespace comphelper
 
     //= OAccessibleContextWrapper
 
-    typedef ::cppu::PartialWeakComponentImplHelper2<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                             ,   ::com::sun::star::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
 
@@ -295,13 +295,6 @@ namespace comphelper
 
         // OAccessibleContextWrapper
         virtual void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-
-        // XComponent
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { WeakComponentImplHelperBase::addEventListener(xListener); }
-        virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
         // OComponentHelper
         using OAccessibleContextWrapperHelper::disposing;

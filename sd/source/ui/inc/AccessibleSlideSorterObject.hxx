@@ -39,7 +39,7 @@ class SlideSorter;
 
 namespace accessibility {
 
-typedef ::cppu::PartialWeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -83,15 +83,6 @@ public:
         const ::com::sun::star::uno::Any& rNewValue);
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
-
-    //=====  XComponent ==============================================
-
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //===== XAccessible =======================================================
 

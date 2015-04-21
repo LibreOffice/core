@@ -52,7 +52,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::PartialWeakComponentImplHelper5 <
+    typedef ::cppu::WeakComponentImplHelper5 <
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleContext,
         css::accessibility::XAccessibleComponent,
@@ -93,15 +93,6 @@ public:
         const css::uno::Any& rNewValue);
 
     void UpdateStateSet();
-
-    //----- XComponent ---------------------------------------------------
-
-    virtual void SAL_CALL dispose()throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const css::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const css::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //----- XAccessible -------------------------------------------------------
 

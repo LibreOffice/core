@@ -658,15 +658,6 @@ namespace comphelper
         if ( nClientId )
             AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
     }
-
-
-    void SAL_CALL OAccessibleContextWrapper::dispose() throw( RuntimeException, std::exception )
-    {
-        // simply disambiguate
-        WeakComponentImplHelperBase::dispose();
-    }
-
-
 }   // namespace accessibility
 
 

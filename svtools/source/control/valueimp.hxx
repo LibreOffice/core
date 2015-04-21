@@ -68,7 +68,7 @@ struct ValueSetItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-typedef ::cppu::PartialWeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -102,14 +102,6 @@ public:
         Stores the new focus state and broadcasts a state change event.
     */
     void LoseFocus();
-
-    // XComponent
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

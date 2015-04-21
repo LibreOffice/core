@@ -79,7 +79,7 @@ struct AccessibleElementInfo
 
 namespace impl
 {
-typedef ::cppu::PartialWeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper6<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleComponent,
@@ -220,14 +220,6 @@ protected:
     AccessibleElementInfo GetInfo() const { return m_aAccInfo;}
     void SetInfo( const AccessibleElementInfo & rNewInfo );
     AccessibleUniqueId GetId() const { return m_aAccInfo.m_aOID;}
-
-    // ________ XComponent ________
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
     virtual void SAL_CALL disposing() SAL_OVERRIDE;

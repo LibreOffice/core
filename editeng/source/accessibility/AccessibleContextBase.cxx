@@ -42,17 +42,10 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
-// Define a shortcut for the somewhot longish base class name.
-typedef ::cppu::PartialWeakComponentImplHelper4<
-    ::com::sun::star::accessibility::XAccessible,
-    ::com::sun::star::accessibility::XAccessibleContext,
-    ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-    ::com::sun::star::lang::XServiceInfo> BaseClass;
-
 AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
-    :   BaseClass (MutexOwner::maMutex),
+    :   WeakComponentImplHelper4 (MutexOwner::maMutex),
         mxStateSet (NULL),
         mxRelationSet (NULL),
         mxParent(rxParent),
@@ -495,7 +488,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
 
     // This class supports no interfaces on its own.  Just return those
     // supported by the base class.
-    return BaseClass::getTypes();
+    return WeakComponentImplHelper4::getTypes();
 }
 
 uno::Sequence<sal_Int8> SAL_CALL

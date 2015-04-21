@@ -52,7 +52,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
     :   public MutexOwner,
-        public cppu::PartialWeakComponentImplHelper4<
+        public cppu::WeakComponentImplHelper4<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
