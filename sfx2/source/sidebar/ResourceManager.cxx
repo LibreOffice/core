@@ -40,15 +40,15 @@ namespace sfx2 { namespace sidebar {
 namespace
 {
 
-OUString getString(utl::OConfigurationNode aNode, const char* pNodeName)
+OUString getString(utl::OConfigurationNode const & aNode, const char* pNodeName)
 {
     return comphelper::getString(aNode.getNodeValue(pNodeName));
 }
-sal_Int32 getInt32(utl::OConfigurationNode aNode, const char* pNodeName)
+sal_Int32 getInt32(utl::OConfigurationNode const & aNode, const char* pNodeName)
 {
     return comphelper::getINT32(aNode.getNodeValue(pNodeName));
 }
-bool getBool(utl::OConfigurationNode aNode, const char* pNodeName)
+bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
 {
     return comphelper::getBOOL(aNode.getNodeValue(pNodeName));
 }
