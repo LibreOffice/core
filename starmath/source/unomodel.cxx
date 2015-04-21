@@ -311,14 +311,11 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
 SmModel::SmModel( SfxObjectShell *pObjSh )
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
-, m_pPrintUIOptions( NULL )
-
 {
 }
 
 SmModel::~SmModel() throw ()
 {
-    delete m_pPrintUIOptions;
 }
 
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
@@ -991,7 +988,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     rValue.Value <<= aPageSize;
 
     if (!m_pPrintUIOptions)
-        m_pPrintUIOptions = new SmPrintUIOptions();
+        m_pPrintUIOptions.reset(new SmPrintUIOptions);
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
 
     return aRenderer;
@@ -1081,7 +1078,7 @@ void SAL_CALL SmModel::render(
                                                 (aPrtPageOffset.X() + OutputRect.Right()));
 
                 if (!m_pPrintUIOptions)
-                    m_pPrintUIOptions = new SmPrintUIOptions();
+                    m_pPrintUIOptions.reset(new SmPrintUIOptions);
                 m_pPrintUIOptions->processProperties( rxOptions );
 
                 pView->Impl_Print( *pOut, *m_pPrintUIOptions, Rectangle( OutputRect ), Point() );
@@ -1090,7 +1087,7 @@ void SAL_CALL SmModel::render(
                 // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
                 if (m_pPrintUIOptions->getBoolValue( "IsLastPage", false ))
                 {
-                    delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;
+                    m_pPrintUIOptions.reset();
                 }
             }
         }
