@@ -142,6 +142,8 @@ public:
     bool bInBackground;
     /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
     RTFSprms aWrapPolygonSprms;
+    /// Anchor attributes like wrap distance, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
+    RTFSprms aAnchorAttributes;
 };
 
 /// Stores the properties of a drawing object.

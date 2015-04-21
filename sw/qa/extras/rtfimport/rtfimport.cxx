@@ -2245,6 +2245,24 @@ DECLARE_RTFIMPORT_TEST(testTdf86182, "tdf86182.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
 }
 
+DECLARE_RTFIMPORT_TEST(testWrapDistance, "wrap-distance.rtf")
+{
+    // Custom shape, handled directly in RTFSdrImport.
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(xShape, "TopMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xShape, "BottomMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), getProperty<sal_Int32>(xShape, "LeftMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), getProperty<sal_Int32>(xShape, "RightMargin") / 1000);
+
+    // Picture, handled in GraphicImport, shared with DOCX.
+    xShape = getShape(2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(xShape, "TopMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xShape, "BottomMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), getProperty<sal_Int32>(xShape, "LeftMargin") / 1000);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), getProperty<sal_Int32>(xShape, "RightMargin") / 1000);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

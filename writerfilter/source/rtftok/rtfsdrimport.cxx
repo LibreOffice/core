@@ -45,6 +45,7 @@ RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
                            uno::Reference<lang::XComponent> const& xDstDoc)
     : m_rImport(rDocument)
     , m_bTextFrame(false)
+    , m_bTextGraphicObject(false)
     , m_bFakePict(false)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
@@ -257,6 +258,7 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
     {
     case ESCHER_ShpInst_PictureFrame:
         createShape("com.sun.star.drawing.GraphicObjectShape", o_xShape, o_xPropSet);
+        m_bTextGraphicObject = true;
         break;
     case ESCHER_ShpInst_Line:
         createShape("com.sun.star.drawing.LineShape", o_xShape, o_xPropSet);
@@ -293,6 +295,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 {
     bool bPib = false;
     m_bTextFrame = false;
+    m_bTextGraphicObject = false;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
@@ -524,22 +527,30 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (i->first == "dxWrapDistLeft")
         {
-            if (xPropertySet.is())
+            if (m_bTextGraphicObject)
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distL, std::make_shared<RTFValue>(i->second.toInt32()));
+            else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("LeftMargin", uno::makeAny(i->second.toInt32() / 360));
         }
         else if (i->first == "dyWrapDistTop")
         {
-            if (xPropertySet.is())
+            if (m_bTextGraphicObject)
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distT, std::make_shared<RTFValue>(i->second.toInt32()));
+            else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("TopMargin", uno::makeAny(i->second.toInt32() / 360));
         }
         else if (i->first == "dxWrapDistRight")
         {
-            if (xPropertySet.is())
+            if (m_bTextGraphicObject)
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distR, std::make_shared<RTFValue>(i->second.toInt32()));
+            else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("RightMargin", uno::makeAny(i->second.toInt32() / 360));
         }
         else if (i->first == "dyWrapDistBottom")
         {
-            if (xPropertySet.is())
+            if (m_bTextGraphicObject)
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distB, std::make_shared<RTFValue>(i->second.toInt32()));
+            else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
         }
         else if (i->first == "fillType")

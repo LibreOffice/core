@@ -926,8 +926,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
     {
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
-        RTFSprms aAnchorAttributes;
-        aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, std::make_shared<RTFValue>((m_aStates.top().aShape.bInBackground) ? 1 : 0));
+        m_aStates.top().aShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, std::make_shared<RTFValue>((m_aStates.top().aShape.bInBackground) ? 1 : 0));
         RTFSprms aAnchorSprms;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
         {
@@ -979,7 +978,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
         // anchor sprm
-        auto pValue = std::make_shared<RTFValue>(aAnchorAttributes, aAnchorSprms);
+        auto pValue = std::make_shared<RTFValue>(m_aStates.top().aShape.aAnchorAttributes, aAnchorSprms);
         aSprms.set(NS_ooxml::LN_anchor_anchor, pValue);
     }
     writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
