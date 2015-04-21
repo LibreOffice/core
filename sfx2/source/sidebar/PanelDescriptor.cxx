@@ -33,7 +33,8 @@ PanelDescriptor::PanelDescriptor()
       msImplementationURL(),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
       mbShowForReadOnlyDocuments(false),
-      mbWantsCanvas(false)
+      mbWantsCanvas(false),
+      mbExperimental(false)
 {
 }
 
@@ -49,7 +50,8 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       msImplementationURL(rOther.msImplementationURL),
       mnOrderIndex(rOther.mnOrderIndex),
       mbShowForReadOnlyDocuments(rOther.mbShowForReadOnlyDocuments),
-      mbWantsCanvas(rOther.mbWantsCanvas)
+      mbWantsCanvas(rOther.mbWantsCanvas),
+      mbExperimental(rOther.mbExperimental)
 {
 }
 

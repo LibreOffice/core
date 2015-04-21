@@ -28,17 +28,18 @@ namespace sfx2 { namespace sidebar {
 class DeckDescriptor
 {
 public:
-    ::rtl::OUString msTitle;
-    ::rtl::OUString msId;
-    ::rtl::OUString msIconURL;
-    ::rtl::OUString msHighContrastIconURL;
-    ::rtl::OUString msTitleBarIconURL;
-    ::rtl::OUString msHighContrastTitleBarIconURL;
-    ::rtl::OUString msHelpURL;
-    ::rtl::OUString msHelpText;
+    OUString msTitle;
+    OUString msId;
+    OUString msIconURL;
+    OUString msHighContrastIconURL;
+    OUString msTitleBarIconURL;
+    OUString msHighContrastTitleBarIconURL;
+    OUString msHelpURL;
+    OUString msHelpText;
     ContextList maContextList;
     bool mbIsEnabled;
     sal_Int32 mnOrderIndex;
+    bool mbExperimental;
 
     DeckDescriptor();
     DeckDescriptor (const DeckDescriptor& rOther);

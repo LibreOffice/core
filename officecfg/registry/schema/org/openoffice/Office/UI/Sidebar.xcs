@@ -97,8 +97,8 @@
                  DrawImpress
                  WriterVariants
              These shortcuts exist for even more convenience and handle the frequent case of Draw
-	     and Impress as well as different variants of the Writer where they have otherwise
-	     identical context descriptions.
+             and Impress as well as different variants of the Writer where they have otherwise
+             identical context descriptions.
 
              Special values:
                  any
@@ -127,6 +127,12 @@
           <desc>Index used for ordering decks in the tab bar.  Smaller values correspond to positions nearer to the top of the tab bar.</desc>
         </info>
         <value>10000</value>
+      </prop>
+      <prop oor:name="IsExperimental" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the deck is experimental and is shown only when experimental mode is enabled.</desc>
+        </info>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="Panel">
@@ -211,6 +217,12 @@
       <prop oor:name="WantsCanvas" oor:type="xs:boolean">
         <info>
           <desc>Experimental: Set to true when panel wants to paint its content via a XCanvas.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsExperimental" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the panel is experimental and is shown only when experimental mode is enabled.</desc>
         </info>
         <value>false</value>
       </prop>

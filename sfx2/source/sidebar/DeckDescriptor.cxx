@@ -32,7 +32,8 @@ DeckDescriptor::DeckDescriptor()
       msHelpText(),
       maContextList(),
       mbIsEnabled(true),
-      mnOrderIndex(10000) // Default value as defined in Sidebar.xcs
+      mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
+      mbExperimental(false)
 {
 }
 
@@ -46,8 +47,9 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       msHelpURL(rOther.msHelpURL),
       msHelpText(rOther.msHelpText),
       maContextList(rOther.maContextList),
-          mbIsEnabled(rOther.mbIsEnabled),
-      mnOrderIndex(rOther.mnOrderIndex)
+      mbIsEnabled(rOther.mbIsEnabled),
+      mnOrderIndex(rOther.mnOrderIndex),
+      mbExperimental(rOther.mbExperimental)
 {
 }
 

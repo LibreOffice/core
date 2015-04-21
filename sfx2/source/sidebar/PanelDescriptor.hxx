@@ -28,18 +28,19 @@ namespace sfx2 { namespace sidebar {
 class PanelDescriptor
 {
 public:
-    ::rtl::OUString msTitle;
+    OUString msTitle;
     bool mbIsTitleBarOptional;
-    ::rtl::OUString msId;
-    ::rtl::OUString msDeckId;
-    ::rtl::OUString msTitleBarIconURL;
-    ::rtl::OUString msHighContrastTitleBarIconURL;
-    ::rtl::OUString msHelpURL;
+    OUString msId;
+    OUString msDeckId;
+    OUString msTitleBarIconURL;
+    OUString msHighContrastTitleBarIconURL;
+    OUString msHelpURL;
     ContextList maContextList;
-    ::rtl::OUString msImplementationURL;
+    OUString msImplementationURL;
     sal_Int32 mnOrderIndex;
     bool mbShowForReadOnlyDocuments;
     bool mbWantsCanvas;
+    bool mbExperimental;
 
     PanelDescriptor();
     PanelDescriptor (const PanelDescriptor& rPanelDescriptor);

@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <set>
 #include <boost/shared_ptr.hpp>
+#include <svtools/miscopt.hxx>
 
 namespace sfx2 { namespace sidebar {
 
@@ -104,6 +105,8 @@ private:
     typedef ::std::vector<PanelDescriptor> PanelContainer;
     PanelContainer maPanels;
     mutable ::std::set<rtl::OUString> maProcessedApplications;
+
+    SvtMiscOptions maMiscOptions;
 
     void ReadDeckList();
     void ReadPanelList();

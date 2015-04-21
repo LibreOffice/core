@@ -47,7 +47,8 @@ ResourceManager& ResourceManager::Instance()
 ResourceManager::ResourceManager()
     : maDecks(),
       maPanels(),
-      maProcessedApplications()
+      maProcessedApplications(),
+      maMiscOptions()
 {
     ReadDeckList();
     ReadPanelList();
@@ -68,6 +69,8 @@ const DeckDescriptor* ResourceManager::GetDeckDescriptor (
          iDeck!=iEnd;
          ++iDeck)
     {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
         if (iDeck->msId.equals(rsDeckId))
             return &*iDeck;
     }
@@ -99,6 +102,8 @@ void ResourceManager::SetIsDeckEnabled (
          iDeck!=iEnd;
          ++iDeck)
     {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
         if (iDeck->msId.equals(rsDeckId))
         {
             iDeck->mbIsEnabled = bIsEnabled;
@@ -122,6 +127,8 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
          iDeck!=iEnd;
          ++iDeck)
     {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
         const DeckDescriptor& rDeckDescriptor (*iDeck);
         if (rDeckDescriptor.maContextList.GetMatch(rContext) == NULL)
             continue;
@@ -163,6 +170,8 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
          ++iPanel)
     {
         const PanelDescriptor& rPanelDescriptor (*iPanel);
+        if (rPanelDescriptor.mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
         if ( ! rPanelDescriptor.msDeckId.equals(rsDeckId))
             continue;
 
@@ -231,6 +240,8 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = ::comphelper::getINT32(
             aDeckNode.getNodeValue("OrderIndex"));
+        rDeckDescriptor.mbExperimental = ::comphelper::getBOOL(
+            aDeckNode.getNodeValue("IsExperimental"));
 
         ReadContextList(
             aDeckNode,
@@ -287,6 +298,8 @@ void ResourceManager::ReadPanelList()
             aPanelNode.getNodeValue("ShowForReadOnlyDocument"));
         rPanelDescriptor.mbWantsCanvas = ::comphelper::getBOOL(
             aPanelNode.getNodeValue("WantsCanvas"));
+        rPanelDescriptor.mbExperimental = ::comphelper::getBOOL(
+            aPanelNode.getNodeValue("IsExperimental"));
         const OUString sDefaultMenuCommand (::comphelper::getString(
                 aPanelNode.getNodeValue("DefaultMenuCommand")));
 
