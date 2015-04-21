@@ -25,7 +25,7 @@
 
 class SdrObjFactory;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormObjFactory
+class SVX_DLLPUBLIC FmFormObjFactory
 {
 public:
     FmFormObjFactory();
