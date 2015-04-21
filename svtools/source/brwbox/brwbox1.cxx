@@ -2286,8 +2286,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
                 ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
                 ? VclPtr<BrowserScrollBar>::Create( this, nVScrollWinBits,
                                         static_cast<BrowserDataWin*>( pDataWin.get() ) )
-                : VclPtr<ScrollBar>::Create( this, nVScrollWinBits ),
-                SAL_NO_ACQUIRE);
+                : VclPtr<ScrollBar>::Create( this, nVScrollWinBits ));
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );

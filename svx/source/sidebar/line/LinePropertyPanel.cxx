@@ -310,9 +310,7 @@ VclPtr<vcl::Window> LinePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                VclPtr<LinePropertyPanel>::Create(pParent, rxFrame, pBindings),
-                SAL_NO_ACQUIRE);
+    return VclPtr<LinePropertyPanel>::Create(pParent, rxFrame, pBindings);
 }
 
 void LinePropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)

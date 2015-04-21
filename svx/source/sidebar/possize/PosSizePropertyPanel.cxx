@@ -260,14 +260,11 @@ VclPtr<vcl::Window> PosSizePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                VclPtr<PosSizePropertyPanel>::Create(
-
+    return VclPtr<PosSizePropertyPanel>::Create(
                         pParent,
                         rxFrame,
                         pBindings,
-                        rxSidebar),
-                SAL_NO_ACQUIRE);
+                        rxSidebar);
 }
 
 

@@ -539,13 +539,10 @@ VclPtr<vcl::Window> AreaPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-        VclPtr<AreaPropertyPanel>::Create(
-
+    return VclPtr<AreaPropertyPanel>::Create(
                 pParent,
                 rxFrame,
-                pBindings),
-        SAL_NO_ACQUIRE);
+                pBindings);
 }
 
 
