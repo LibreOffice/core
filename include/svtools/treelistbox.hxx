@@ -113,8 +113,12 @@ namespace o3tl
     template<> struct typed_flags<SvTreeFlags> : is_typed_flags<SvTreeFlags, 0x1f> {};
 }
 
-#define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST   0x01
-#define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE   0x02
+enum class SvTreeAccRoleType
+{
+    NONE   = 0x00,
+    LIST   = 0x01,
+    TREE   = 0x02
+};
 
 typedef sal_Int64   ExtendedWinBits;
 
@@ -245,7 +249,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
-    short           nAllItemAccRoleType;
+    SvTreeAccRoleType nAllItemAccRoleType;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
     long mnCheckboxItemWidth;
@@ -532,8 +536,8 @@ public:
     void EnableCellFocus();
 
                         // For overwriting accessible role for all entries - normally 0, so each entry can be different
-    void                SetAllEntriesAccessibleRoleType( short n ) { nAllItemAccRoleType = n; }
-    short               GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
+    void                SetAllEntriesAccessibleRoleType( SvTreeAccRoleType n ) { nAllItemAccRoleType = n; }
+    SvTreeAccRoleType   GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 

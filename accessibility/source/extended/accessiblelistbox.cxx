@@ -436,10 +436,10 @@ namespace accessibility
 
         if(getListBox())
         {
-            short nType = getListBox()->GetAllEntriesAccessibleRoleType();
-            if( nType == TREEBOX_ALLITEM_ACCROLE_TYPE_TREE)
+            SvTreeAccRoleType nType = getListBox()->GetAllEntriesAccessibleRoleType();
+            if( nType == SvTreeAccRoleType::TREE)
                     return AccessibleRole::TREE;
-            else if( nType == TREEBOX_ALLITEM_ACCROLE_TYPE_LIST)
+            else if( nType == SvTreeAccRoleType::LIST)
                     return AccessibleRole::LIST;
         }
 
