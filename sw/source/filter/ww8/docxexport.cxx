@@ -348,7 +348,7 @@ void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
-    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
+    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum, m_pAttrOutput->IsFirstParagraph() );
 }
 
 void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
@@ -700,6 +700,15 @@ void DocxExport::WriteSettings()
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
     if( m_pAttrOutput->HasEndnotes())
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
+
+    // Section-specific write protection
+    if ( m_pSections->DocumentIsProtected() )
+    {
+        pFS->singleElementNS( XML_w, XML_documentProtection,
+                              FSNS( XML_w, XML_enforcement ), "true",
+                              FSNS( XML_w, XML_edit ), "forms",
+                              FSEND );
+    }
 
     pFS->endElementNS( XML_w, XML_settings );
 }

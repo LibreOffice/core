@@ -630,6 +630,7 @@ private:
     sal_uInt32 m_nTableDepth;
 
     bool m_bParagraphOpened;
+    bool m_bIsFirstParagraph;
 
     // Remember that a column break has to be opened at the
     // beginning of the next paragraph
@@ -706,6 +707,8 @@ public:
     virtual oox::drawingml::DrawingML& GetDrawingML();
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
+
+    bool IsFirstParagraph() { return m_bIsFirstParagraph; }
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

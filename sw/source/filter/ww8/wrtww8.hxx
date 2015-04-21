@@ -152,16 +152,20 @@ struct WW8_SepInfo
     const SwTxtNode* pNumNd;
     sal_uLong  nLnNumRestartNo;
     sal_uInt16 nPgRestartNo;
+    bool bIsFirstParagraph;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(0)
+        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(0),
+          bIsFirstParagraph(false)
 
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt,
-        sal_uLong nLnRestart, sal_uInt16 nPgRestart = 0, const SwNode* pNd = NULL )
+                 sal_uLong nLnRestart, sal_uInt16 nPgRestart = 0, const SwNode* pNd = NULL,
+                 bool bIsFirstPara = false)
         : pPageDesc( pPD ), pSectionFmt( pFmt ), pPDNd( pNd ), pNumNd( 0 ),
-          nLnNumRestartNo( nLnRestart ), nPgRestartNo( nPgRestart )
+          nLnNumRestartNo( nLnRestart ), nPgRestartNo( nPgRestart ),
+          bIsFirstParagraph( bIsFirstPara )
     {}
 
     bool IsProtected() const;
@@ -190,7 +194,8 @@ public:
 
     void AppendSection( const SwPageDesc* pPd,
                     const SwSectionFmt* pSectionFmt = 0,
-                    sal_uLong nLnNumRestartNo = 0 );
+                    sal_uLong nLnNumRestartNo = 0,
+                    bool bIsFirstParagraph = false );
     void AppendSection( const SwFmtPageDesc& rPd,
                     const SwNode& rNd,
                     const SwSectionFmt* pSectionFmt,

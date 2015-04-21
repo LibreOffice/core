@@ -1058,12 +1058,12 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 }
 
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
-    const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
+    const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo, bool bIsFirstParagraph )
 {
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.push_back( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ) );
+    aSects.push_back( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo, 0, NULL, bIsFirstParagraph ) );
     NeedsDocumentProtected( aSects.back() );
 }
 
@@ -1719,7 +1719,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         ? &pPd->GetFollow()->GetMaster()
         : &pPd->GetLeft();
 
-    if ( nBreakCode != 0 )
+    // Ensure that headers are written if section is first paragraph
+    if ( nBreakCode != 0 || ( rSepInfo.pSectionFmt && rSepInfo.bIsFirstParagraph ))
     {
         if ( titlePage )
         {

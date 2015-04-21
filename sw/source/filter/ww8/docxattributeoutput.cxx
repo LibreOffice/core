@@ -256,6 +256,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_pSectionInfo.reset();
 
     m_bParagraphOpened = true;
+    m_bIsFirstParagraph = false;
 }
 
 void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
@@ -3021,7 +3022,9 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
         case msword::PageBreak:
             if ( pSectionInfo )
             {
-                if ( !m_bParagraphOpened )
+                // don't add section properties if this will be the first
+                // paragraph in the document
+                if ( !m_bParagraphOpened  && !m_bIsFirstParagraph)
                 {
                     // Create a dummy paragraph if needed
                     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
@@ -3116,7 +3119,8 @@ void DocxAttributeOutput::EndSection()
 void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 {
     if ( bProtected )
-        m_pSerializer->singleElementNS( XML_w, XML_formProt, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_formProt,
+                FSNS( XML_w, XML_val ), "true", FSEND );
     else
         m_pSerializer->singleElementNS( XML_w, XML_formProt,
                 FSNS( XML_w, XML_val ), "false", FSEND );
@@ -5172,6 +5176,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bTableCellOpen( false ),
       m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
+      m_bIsFirstParagraph( true ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_bTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
