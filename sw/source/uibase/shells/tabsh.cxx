@@ -562,6 +562,16 @@ void SwTableShell::Execute(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             boost::scoped_ptr<SwTableRep> pTblRep(::lcl_TableParamToItemSet( aCoreSet, rSh ));
+
+            aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+            rSh.GetTblAttr(aCoreSet);
+            // GetTblAttr overwrites the background!
+            SvxBrushItem aBrush( RES_BACKGROUND );
+            if(rSh.GetBoxBackground(aBrush))
+                aCoreSet.Put( aBrush );
+            else
+                aCoreSet.InvalidateItem( RES_BACKGROUND );
+
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -573,14 +583,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if (pItem)
                     pDlg->SetCurPageId(OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
             }
-            aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-            rSh.GetTblAttr(aCoreSet);
-            // GetTblAttr overwrites the background!
-            SvxBrushItem aBrush( RES_BACKGROUND );
-            if(rSh.GetBoxBackground(aBrush))
-                aCoreSet.Put( aBrush );
-            else
-                aCoreSet.InvalidateItem( RES_BACKGROUND );
+
 
             if ( (!pDlg && rReq.GetArgs()) || (pDlg && pDlg->Execute() == RET_OK) )
             {
