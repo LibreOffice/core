@@ -5122,6 +5122,10 @@ bool ScCompiler::HandleTableRef()
                     }
                     if (aRange.aStart.Tab() != aPos.Tab())
                         aRefData.SetFlag3D( true);
+                    else
+                    {
+                        aRefData.SetTabRel( true);
+                    }
                     aRefData.SetAddress( aRange.aStart, aPos);
                     pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData ));
                 }
@@ -5138,6 +5142,11 @@ bool ScCompiler::HandleTableRef()
                     }
                     if (aRange.aStart.Tab() != aPos.Tab())
                         aRefData.Ref1.SetFlag3D( true);
+                    else
+                    {
+                        aRefData.Ref1.SetTabRel( true);
+                        aRefData.Ref2.SetTabRel( true);
+                    }
                     aRefData.SetRange( aRange, aPos);
                     pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
                 }
