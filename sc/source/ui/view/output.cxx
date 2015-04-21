@@ -1669,7 +1669,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                                 std::swap( aLeftLine, aRightLine );
                         }
 
-                        const svx::frame::Style noStyle;
                         // Horizontal lines
                         if (aTopLine.Prim() || aTopLine.Secn())
                         {
