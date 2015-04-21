@@ -32,7 +32,6 @@
 
 #include <map>
 
-using ::rtl::OUString;
 using namespace css;
 using namespace css::uno;
 
@@ -56,18 +55,12 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-    maPanels.clear();
-    maDecks.clear();
 }
 
-const DeckDescriptor* ResourceManager::GetDeckDescriptor (
-    const ::rtl::OUString& rsDeckId) const
+const DeckDescriptor* ResourceManager::GetDeckDescriptor(const OUString& rsDeckId) const
 {
-    for (DeckContainer::const_iterator
-             iDeck(maDecks.begin()),
-             iEnd(maDecks.end());
-         iDeck!=iEnd;
-         ++iDeck)
+    DeckContainer::const_iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
         if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
@@ -77,14 +70,10 @@ const DeckDescriptor* ResourceManager::GetDeckDescriptor (
     return NULL;
 }
 
-const PanelDescriptor* ResourceManager::GetPanelDescriptor (
-    const ::rtl::OUString& rsPanelId) const
+const PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
 {
-    for (PanelContainer::const_iterator
-             iPanel(maPanels.begin()),
-             iEnd(maPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
+    PanelContainer::const_iterator iPanel;
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
         if (iPanel->msId.equals(rsPanelId))
             return &*iPanel;
@@ -92,15 +81,10 @@ const PanelDescriptor* ResourceManager::GetPanelDescriptor (
     return NULL;
 }
 
-void ResourceManager::SetIsDeckEnabled (
-    const ::rtl::OUString& rsDeckId,
-    const bool bIsEnabled)
+void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled)
 {
-    for (DeckContainer::iterator
-             iDeck(maDecks.begin()),
-             iEnd(maDecks.end());
-         iDeck!=iEnd;
-         ++iDeck)
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
         if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
@@ -113,19 +97,16 @@ void ResourceManager::SetIsDeckEnabled (
 }
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
-    DeckContextDescriptorContainer& rDecks,
-    const Context& rContext,
-    const bool bIsDocumentReadOnly,
-    const Reference<frame::XFrame>& rxFrame)
+                                                            DeckContextDescriptorContainer& rDecks,
+                                                            const Context& rContext,
+                                                            const bool bIsDocumentReadOnly,
+                                                            const Reference<frame::XFrame>& rxFrame)
 {
     ReadLegacyAddons(rxFrame);
 
-    ::std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
-    for (DeckContainer::const_iterator
-             iDeck(maDecks.begin()),
-             iEnd (maDecks.end());
-         iDeck!=iEnd;
-         ++iDeck)
+    std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
+    DeckContainer::const_iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
         if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
@@ -142,11 +123,8 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
                 aDeckContextDescriptor));
     }
 
-    for (::std::multimap<sal_Int32,DeckContextDescriptor>::const_iterator
-             iId(aOrderedIds.begin()),
-             iEnd(aOrderedIds.end());
-         iId!=iEnd;
-         ++iId)
+    std::multimap<sal_Int32,DeckContextDescriptor>::const_iterator iId;
+    for (iId = aOrderedIds.begin(); iId != aOrderedIds.end(); ++iId)
     {
         rDecks.push_back(iId->second);
     }
@@ -155,19 +133,16 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
 }
 
 const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatchingPanels (
-    PanelContextDescriptorContainer& rPanelIds,
-    const Context& rContext,
-    const ::rtl::OUString& rsDeckId,
-    const Reference<frame::XFrame>& rxFrame)
+                                                            PanelContextDescriptorContainer& rPanelIds,
+                                                            const Context& rContext,
+                                                            const OUString& rsDeckId,
+                                                            const Reference<frame::XFrame>& rxFrame)
 {
     ReadLegacyAddons(rxFrame);
 
-    ::std::multimap<sal_Int32,PanelContextDescriptor> aOrderedIds;
-    for (PanelContainer::const_iterator
-             iPanel(maPanels.begin()),
-             iEnd(maPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
+    std::multimap<sal_Int32, PanelContextDescriptor> aOrderedIds;
+    PanelContainer::const_iterator iPanel;
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
         const PanelDescriptor& rPanelDescriptor (*iPanel);
         if (rPanelDescriptor.mbExperimental && !maMiscOptions.IsExperimentalMode())
@@ -184,16 +159,13 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
         aPanelContextDescriptor.msMenuCommand = pEntry->msMenuCommand;
         aPanelContextDescriptor.mbIsInitiallyVisible = pEntry->mbIsInitiallyVisible;
         aPanelContextDescriptor.mbShowForReadOnlyDocuments = rPanelDescriptor.mbShowForReadOnlyDocuments;
-        aOrderedIds.insert(::std::multimap<sal_Int32,PanelContextDescriptor>::value_type(
-                rPanelDescriptor.mnOrderIndex,
-                aPanelContextDescriptor));
+        aOrderedIds.insert(std::multimap<sal_Int32, PanelContextDescriptor>::value_type(
+                                                    rPanelDescriptor.mnOrderIndex,
+                                                    aPanelContextDescriptor));
     }
 
-    for (::std::multimap<sal_Int32,PanelContextDescriptor>::const_iterator
-             iId(aOrderedIds.begin()),
-             iEnd(aOrderedIds.end());
-         iId!=iEnd;
-         ++iId)
+    std::multimap<sal_Int32,PanelContextDescriptor>::const_iterator iId;
+    for (iId = aOrderedIds.begin(); iId != aOrderedIds.end(); ++iId)
     {
         rPanelIds.push_back(iId->second);
     }
@@ -203,21 +175,21 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 
 void ResourceManager::ReadDeckList()
 {
-    const ::utl::OConfigurationTreeRoot aDeckRootNode (
-        ::comphelper::getProcessComponentContext(),
-        OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
-        false);
-    if ( ! aDeckRootNode.isValid() )
+    const utl::OConfigurationTreeRoot aDeckRootNode(
+                                        comphelper::getProcessComponentContext(),
+                                        OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
+                                        false);
+    if (!aDeckRootNode.isValid())
         return;
 
     const Sequence<OUString> aDeckNodeNames (aDeckRootNode.getNodeNames());
-    const sal_Int32 nCount (aDeckNodeNames.getLength());
+    const sal_Int32 nCount(aDeckNodeNames.getLength());
     maDecks.resize(nCount);
     sal_Int32 nWriteIndex(0);
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
-        const ::utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(aDeckNodeNames[nReadIndex]));
-        if ( ! aDeckNode.isValid())
+        const utl::OConfigurationNode aDeckNode(aDeckRootNode.openNode(aDeckNodeNames[nReadIndex]));
+        if (!aDeckNode.isValid())
             continue;
 
         DeckDescriptor& rDeckDescriptor (maDecks[nWriteIndex++]);
@@ -257,11 +229,11 @@ void ResourceManager::ReadDeckList()
 
 void ResourceManager::ReadPanelList()
 {
-    const ::utl::OConfigurationTreeRoot aPanelRootNode (
-        ::comphelper::getProcessComponentContext(),
-        OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
-        false);
-    if ( ! aPanelRootNode.isValid() )
+    const utl::OConfigurationTreeRoot aPanelRootNode(
+                                        comphelper::getProcessComponentContext(),
+                                        OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
+                                        false);
+    if (!aPanelRootNode.isValid())
         return;
 
     const Sequence<OUString> aPanelNodeNames (aPanelRootNode.getNodeNames());
@@ -270,8 +242,8 @@ void ResourceManager::ReadPanelList()
     sal_Int32 nWriteIndex (0);
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
-        const ::utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(aPanelNodeNames[nReadIndex]));
-        if ( ! aPanelNode.isValid())
+        const utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(aPanelNodeNames[nReadIndex]));
+        if (!aPanelNode.isValid())
             continue;
 
         PanelDescriptor& rPanelDescriptor (maPanels[nWriteIndex++]);
@@ -303,10 +275,7 @@ void ResourceManager::ReadPanelList()
         const OUString sDefaultMenuCommand (::comphelper::getString(
                 aPanelNode.getNodeValue("DefaultMenuCommand")));
 
-        ReadContextList(
-            aPanelNode,
-            rPanelDescriptor.maContextList,
-            sDefaultMenuCommand);
+        ReadContextList(aPanelNode, rPanelDescriptor.maContextList, sDefaultMenuCommand);
     }
 
     // When there where invalid nodes then we have to adapt the size
@@ -316,9 +285,9 @@ void ResourceManager::ReadPanelList()
 }
 
 void ResourceManager::ReadContextList (
-    const ::utl::OConfigurationNode& rParentNode,
-    ContextList& rContextList,
-    const OUString& rsDefaultMenuCommand) const
+                        const utl::OConfigurationNode& rParentNode,
+                        ContextList& rContextList,
+                        const OUString& rsDefaultMenuCommand) const
 {
     const Any aValue = rParentNode.getNodeValue("ContextList");
     Sequence<OUString> aValues;
@@ -349,22 +318,23 @@ void ResourceManager::ReadContextList (
             }
         }
 
-        const OUString sContextName (sValue.getToken(0, ',', nCharacterIndex).trim());
+        const OUString sContextName(sValue.getToken(0, ',', nCharacterIndex).trim());
         if (nCharacterIndex < 0)
         {
             OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
             continue;
         }
 
-        const OUString sInitialState (sValue.getToken(0, ',', nCharacterIndex).trim());
+        const OUString sInitialState(sValue.getToken(0, ',', nCharacterIndex).trim());
 
         // The fourth argument is optional.
-        const OUString sMenuCommandOverride (
-            nCharacterIndex<0
+        const OUString sMenuCommandOverride(
+            nCharacterIndex < 0
                 ? OUString()
                 : sValue.getToken(0, ',', nCharacterIndex).trim());
-        const OUString sMenuCommand (
-            sMenuCommandOverride.getLength()>0
+
+        const OUString sMenuCommand(
+            sMenuCommandOverride.getLength() > 0
                 ? (sMenuCommandOverride == "none"
                     ? OUString()
                     : sMenuCommandOverride)
@@ -374,7 +344,7 @@ void ResourceManager::ReadContextList (
         // application name may result in more than one value (eg
         // DrawImpress will result in two enums, one for Draw and one
         // for Impress).
-        ::std::vector<EnumContext::Application> aApplications;
+        std::vector<EnumContext::Application> aApplications;
         EnumContext::Application eApplication (EnumContext::GetApplicationEnum(sApplicationName));
         if (eApplication == EnumContext::Application_None
             && !sApplicationName.equals(EnumContext::GetApplicationName(EnumContext::Application_None)))
@@ -442,19 +412,18 @@ void ResourceManager::ReadContextList (
         }
 
         // Add context descriptors.
-        for (::std::vector<EnumContext::Application>::const_iterator
-                 iApplication(aApplications.begin()),
-                 iEnd(aApplications.end());
-             iApplication!=iEnd;
-             ++iApplication)
+        std::vector<EnumContext::Application>::const_iterator iApplication;
+        for (iApplication = aApplications.begin(); iApplication != aApplications.end(); ++iApplication)
         {
             if (*iApplication != EnumContext::Application_None)
+            {
                 rContextList.AddContextDescription(
                     Context(
                         EnumContext::GetApplicationName(*iApplication),
                         EnumContext::GetContextName(eContext)),
                     bIsInitiallyVisible,
                     sMenuCommand);
+            }
         }
     }
 }
@@ -462,7 +431,7 @@ void ResourceManager::ReadContextList (
 void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 {
     // Get module name for given frame.
-    ::rtl::OUString sModuleName (Tools::GetModuleName(rxFrame));
+    OUString sModuleName (Tools::GetModuleName(rxFrame));
     if (sModuleName.getLength() == 0)
         return;
     if (maProcessedApplications.find(sModuleName) != maProcessedApplications.end())
@@ -478,12 +447,12 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
     maProcessedApplications.insert(sModuleName);
 
     // Get access to the configuration root node for the application.
-    ::utl::OConfigurationTreeRoot aLegacyRootNode (GetLegacyAddonRootNode(sModuleName));
-    if ( ! aLegacyRootNode.isValid())
+    utl::OConfigurationTreeRoot aLegacyRootNode (GetLegacyAddonRootNode(sModuleName));
+    if (!aLegacyRootNode.isValid())
         return;
 
     // Process child nodes.
-    ::std::vector<OUString> aMatchingNodeNames;
+    std::vector<OUString> aMatchingNodeNames;
     GetToolPanelNodeNames(aMatchingNodeNames, aLegacyRootNode);
     const sal_Int32 nCount (aMatchingNodeNames.size());
     size_t nDeckWriteIndex (maDecks.size());
@@ -493,8 +462,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
         const OUString& rsNodeName (aMatchingNodeNames[nReadIndex]);
-        const ::utl::OConfigurationNode aChildNode (aLegacyRootNode.openNode(rsNodeName));
-        if ( ! aChildNode.isValid())
+        const utl::OConfigurationNode aChildNode (aLegacyRootNode.openNode(rsNodeName));
+        if (!aChildNode.isValid())
             continue;
 
         if ( rsNodeName == "private:resource/toolpanel/DrawingFramework/CustomAnimations" ||
@@ -541,58 +510,51 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 }
 
 void ResourceManager::StorePanelExpansionState (
-    const ::rtl::OUString& rsPanelId,
-    const bool bExpansionState,
-    const Context& rContext)
+                        const OUString& rsPanelId,
+                        const bool bExpansionState,
+                        const Context& rContext)
 {
-    for (PanelContainer::iterator
-             iPanel(maPanels.begin()),
-             iEnd(maPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
+    PanelContainer::iterator iPanel;
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
         if (iPanel->msId.equals(rsPanelId))
         {
-            ContextList::Entry* pEntry (
-                iPanel->maContextList.GetMatch (rContext));
+            ContextList::Entry* pEntry(iPanel->maContextList.GetMatch(rContext));
             if (pEntry != NULL)
                 pEntry->mbIsInitiallyVisible = bExpansionState;
         }
     }
 }
 
-::utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (
-    const ::rtl::OUString& rsModuleName) const
+utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUString& rsModuleName) const
 {
     try
     {
-        const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
-        const Reference<frame::XModuleManager2> xModuleAccess =
-            frame::ModuleManager::create( xContext );
-        const ::comphelper::NamedValueCollection aModuleProperties (xModuleAccess->getByName(rsModuleName));
-        const ::rtl::OUString sWindowStateRef (aModuleProperties.getOrDefault(
-                "ooSetupFactoryWindowStateConfigRef",
-                ::rtl::OUString()));
+        const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+        const Reference<frame::XModuleManager2> xModuleAccess = frame::ModuleManager::create(xContext);
+        const comphelper::NamedValueCollection aModuleProperties(xModuleAccess->getByName(rsModuleName));
+        const OUString sWindowStateRef(aModuleProperties.getOrDefault(
+                                       "ooSetupFactoryWindowStateConfigRef",
+                                       OUString()));
 
-        ::rtl::OUStringBuffer aPathComposer;
+        OUStringBuffer aPathComposer;
         aPathComposer.appendAscii("org.openoffice.Office.UI.");
         aPathComposer.append(sWindowStateRef);
         aPathComposer.appendAscii("/UIElements/States");
 
-        return ::utl::OConfigurationTreeRoot(xContext,
-            aPathComposer.makeStringAndClear(), false);
+        return utl::OConfigurationTreeRoot(xContext, aPathComposer.makeStringAndClear(), false);
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return ::utl::OConfigurationTreeRoot();
+    return utl::OConfigurationTreeRoot();
 }
 
 void ResourceManager::GetToolPanelNodeNames (
-    ::std::vector<OUString>& rMatchingNames,
-    const ::utl::OConfigurationTreeRoot& aRoot) const
+                        std::vector<OUString>& rMatchingNames,
+                        const utl::OConfigurationTreeRoot& aRoot) const
 {
     Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
     const sal_Int32 nCount (aChildNodeNames.getLength());
@@ -604,24 +566,18 @@ void ResourceManager::GetToolPanelNodeNames (
 }
 
 bool ResourceManager::IsDeckEnabled (
-    const OUString& rsDeckId,
-    const Context& rContext,
-    const Reference<frame::XFrame>& rxFrame) const
+                        const OUString& rsDeckId,
+                        const Context& rContext,
+                        const Reference<frame::XFrame>& rxFrame) const
 {
     // Check if any panel that matches the current context can be
     // displayed.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
-    ResourceManager::Instance().GetMatchingPanels(
-        aPanelContextDescriptors,
-        rContext,
-        rsDeckId,
-        rxFrame);
+    ResourceManager::Instance().GetMatchingPanels(aPanelContextDescriptors,
+                                                  rContext, rsDeckId, rxFrame);
 
-    for (ResourceManager::PanelContextDescriptorContainer::const_iterator
-             iPanel(aPanelContextDescriptors.begin()),
-             iEnd(aPanelContextDescriptors.end());
-         iPanel!=iEnd;
-         ++iPanel)
+    ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
+    for (iPanel = aPanelContextDescriptors.begin(); iPanel != aPanelContextDescriptors.end(); ++iPanel)
     {
         if (iPanel->mbShowForReadOnlyDocuments)
             return true;

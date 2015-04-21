@@ -42,10 +42,8 @@ class ResourceManager
 public:
     static ResourceManager& Instance();
 
-    const DeckDescriptor* GetDeckDescriptor (
-        const ::rtl::OUString& rsDeckId) const;
-    const PanelDescriptor* GetPanelDescriptor (
-        const ::rtl::OUString& rsPanelId) const;
+    const DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId) const;
+    const PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId) const;
 
     /** Excluded or include a deck from being displayed in the tab
         bar.
@@ -54,77 +52,70 @@ public:
         because the ResourceManager gives access to them only
         read-only.
     */
-    void SetIsDeckEnabled (
-        const ::rtl::OUString& rsDeckId,
-        const bool bIsEnabled);
+    void SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled);
 
     class DeckContextDescriptor
     {
     public:
-        ::rtl::OUString msId;
+        OUString msId;
         bool mbIsEnabled;
     };
-    typedef ::std::vector<DeckContextDescriptor> DeckContextDescriptorContainer;
+    typedef std::vector<DeckContextDescriptor> DeckContextDescriptorContainer;
 
     class PanelContextDescriptor
     {
     public:
-        ::rtl::OUString msId;
-        ::rtl::OUString msMenuCommand;
+        OUString msId;
+        OUString msMenuCommand;
         bool mbIsInitiallyVisible;
         bool mbShowForReadOnlyDocuments;
     };
-    typedef ::std::vector<PanelContextDescriptor> PanelContextDescriptorContainer;
+    typedef std::vector<PanelContextDescriptor> PanelContextDescriptorContainer;
 
-    const DeckContextDescriptorContainer& GetMatchingDecks (
-        DeckContextDescriptorContainer& rDeckDescriptors,
-        const Context& rContext,
-        const bool bIsDocumentReadOnly,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    const DeckContextDescriptorContainer& GetMatchingDecks(
+                                            DeckContextDescriptorContainer& rDeckDescriptors,
+                                            const Context& rContext,
+                                            const bool bIsDocumentReadOnly,
+                                            const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    const PanelContextDescriptorContainer& GetMatchingPanels (
-        PanelContextDescriptorContainer& rPanelDescriptors,
-        const Context& rContext,
-        const ::rtl::OUString& rsDeckId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    const PanelContextDescriptorContainer& GetMatchingPanels(
+                                            PanelContextDescriptorContainer& rPanelDescriptors,
+                                            const Context& rContext,
+                                            const OUString& rsDeckId,
+                                            const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Remember the expansions state per panel and context.
         This is not persistent past application end.
     */
-    void StorePanelExpansionState (
-        const ::rtl::OUString& rsPanelId,
-        const bool bExpansionState,
-        const Context& rContext);
+    void StorePanelExpansionState(const OUString& rsPanelId,
+                                  const bool bExpansionState,
+                                  const Context& rContext);
 
 private:
     ResourceManager();
     ~ResourceManager();
 
-    typedef ::std::vector<DeckDescriptor> DeckContainer;
+    typedef std::vector<DeckDescriptor> DeckContainer;
     DeckContainer maDecks;
-    typedef ::std::vector<PanelDescriptor> PanelContainer;
+
+    typedef std::vector<PanelDescriptor> PanelContainer;
     PanelContainer maPanels;
-    mutable ::std::set<rtl::OUString> maProcessedApplications;
+    mutable std::set<rtl::OUString> maProcessedApplications;
 
     SvtMiscOptions maMiscOptions;
 
     void ReadDeckList();
     void ReadPanelList();
-    void ReadContextList (
-        const ::utl::OConfigurationNode& rNode,
-        ContextList& rContextList,
-        const ::rtl::OUString& rsDefaultMenuCommand) const;
-    void ReadLegacyAddons (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    ::utl::OConfigurationTreeRoot GetLegacyAddonRootNode (
-        const ::rtl::OUString& rsModuleName) const;
-    void GetToolPanelNodeNames (
-        ::std::vector<rtl::OUString>& rMatchingNames,
-        const ::utl::OConfigurationTreeRoot& aRoot) const;
-    bool IsDeckEnabled (
-        const ::rtl::OUString& rsDeckId,
-        const Context& rContext,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame) const;
+    void ReadContextList(const utl::OConfigurationNode& rNode,
+                         ContextList& rContextList,
+                         const OUString& rsDefaultMenuCommand) const;
+    void ReadLegacyAddons(const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName) const;
+    void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
+                               const utl::OConfigurationTreeRoot& aRoot) const;
+    bool IsDeckEnabled(const OUString& rsDeckId,
+                       const Context& rContext,
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame) const;
 };
 
 } } // end of namespace sfx2::sidebar
