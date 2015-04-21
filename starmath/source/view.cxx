@@ -908,20 +908,9 @@ SmCmdBoxWrapper::~SmCmdBoxWrapper()
 
 struct SmViewShell_Impl
 {
-    sfx2::DocumentInserter* pDocInserter;
-    SfxRequest*             pRequest;
+    std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
+    std::unique_ptr<SfxRequest> pRequest;
     SvtMiscOptions          aOpts;
-
-    SmViewShell_Impl() :
-          pDocInserter( NULL )
-        , pRequest( NULL )
-    {}
-
-    ~SmViewShell_Impl()
-    {
-        delete pDocInserter;
-        delete pRequest;
-    }
 };
 
 TYPEINIT1( SmViewShell, SfxViewShell );
@@ -1679,11 +1668,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_IMPORT_FORMULA:
         {
-            delete pImpl->pRequest;
-            pImpl->pRequest = new SfxRequest( rReq );
-            delete pImpl->pDocInserter;
-            pImpl->pDocInserter = new ::sfx2::DocumentInserter(
-                        GetDoc()->GetFactory().GetFactoryName(), false );
+            pImpl->pRequest.reset(new SfxRequest( rReq ));
+            pImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(
+                              GetDoc()->GetFactory().GetFactoryName(), false ));
             pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
             break;
         }
