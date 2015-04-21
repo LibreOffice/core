@@ -158,6 +158,7 @@ private:
 
     void            ReleaseFocus();
     Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
+    void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
 
@@ -546,6 +547,38 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
 }
 
+void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName)
+{
+    OutputDevice *pDevice = rUDEvt.GetDevice();
+
+    // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
+    // nBorder, and we are adding 1 in order to look better when
+    // italics is present
+    const int nLeftDistance = 8;
+
+    Rectangle aTextRect;
+    pDevice->GetTextBoundRect(aTextRect, rStyleName);
+
+    Point aPos( rUDEvt.GetRect().TopLeft() );
+    aPos.X() += nLeftDistance;
+    if ( aTextRect.Bottom() > rUDEvt.GetRect().GetHeight() )
+    {
+        // the text does not fit, adjust the font size
+        double ratio = static_cast< double >( rUDEvt.GetRect().GetHeight() ) / aTextRect.Bottom();
+        vcl::Font aFont(pDevice->GetFont());
+        Size aPixelSize(aFont.GetSize());
+        aPixelSize.Width() *= ratio;
+        aPixelSize.Height() *= ratio;
+        aFont.SetSize(aPixelSize);
+        pDevice->SetFont(aFont);
+    }
+    else
+        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
+
+    pDevice->DrawText(aPos, rStyleName);
+}
+
+
 void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     sal_uInt16 nItem = rUDEvt.GetItemId();
@@ -716,29 +749,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                 }
 
-                // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
-                // nBorder, and we are adding 1 in order to look better when
-                // italics is present
-                const int nLeftDistance = 8;
-
-                Rectangle aTextRect;
-                pDevice->GetTextBoundRect( aTextRect, aStyleName );
-
-                Point aPos( rUDEvt.GetRect().TopLeft() );
-                aPos.X() += nLeftDistance;
-                if ( aTextRect.Bottom() > rUDEvt.GetRect().GetHeight() )
-                {
-                    // the text does not fit, adjust the font size
-                    double ratio = static_cast< double >( rUDEvt.GetRect().GetHeight() ) / aTextRect.Bottom();
-                    aPixelSize.Width() *= ratio;
-                    aPixelSize.Height() *= ratio;
-                    aFont.SetSize( aPixelSize );
-                    pDevice->SetFont( aFont );
-                }
-                else
-                    aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
-
-                pDevice->DrawText( aPos, aStyleName );
+                UserDrawEntry(rUDEvt, aStyleName);
 
                 pDevice->Pop();
 
