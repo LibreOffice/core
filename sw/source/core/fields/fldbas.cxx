@@ -198,7 +198,7 @@ SwField::SwField(
     , m_nFormat( nFormat )
     , m_pType( pType )
 {
-    OSL_ENSURE( pType, "SwField: no SwFieldType" );
+    assert(m_pType);
 }
 
 SwField::~SwField()
@@ -210,7 +210,7 @@ SwField::~SwField()
 #ifdef DBG_UTIL
 sal_uInt16 SwField::Which() const
 {
-    OSL_ENSURE(m_pType, "SwField: No FieldType");
+    assert(m_pType);
     return m_pType->Which();
 }
 #endif
@@ -346,8 +346,7 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
  */
 SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 {
-    OSL_ENSURE( pNewType && pNewType->Which() == m_pType->Which(),
-            "no or different type" );
+    assert(pNewType && pNewType->Which() == m_pType->Which());
 
     SwFieldType* pOld = m_pType;
     m_pType = pNewType;
