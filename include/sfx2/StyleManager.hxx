@@ -36,8 +36,8 @@ public:
     {}
 
     virtual StylePreviewRenderer* CreateStylePreviewRenderer(
-                    OutputDevice& /*rOutputDev*/, OUString /*rName*/,
-                    SfxStyleFamily /*eFamily*/, long /*nMaxHeight*/ = 32) = 0;
+                    OutputDevice& rOutputDev, OUString const & rName,
+                    SfxStyleFamily eFamily, long nMaxHeight = 32) = 0;
 };
 
 } // end namespace sfx2
