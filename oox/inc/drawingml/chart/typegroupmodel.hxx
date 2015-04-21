@@ -77,7 +77,7 @@ struct TypeGroupModel
     bool                mbVaryColors;       /// True = different automatic colors for each point.
     bool                mbWireframe;        /// True = wireframe surface chart, false = filled surface chart.
 
-    explicit            TypeGroupModel( sal_Int32 nTypeId );
+    explicit            TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc );
                         ~TypeGroupModel();
 };
 

@@ -227,7 +227,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( upDownBars ):
             return new UpDownBarsContext( *this, mrModel.mxUpDownBars.create() );
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, bMSO2007Doc );
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
     }
     return 0;

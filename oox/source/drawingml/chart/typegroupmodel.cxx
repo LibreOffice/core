@@ -33,7 +33,7 @@ UpDownBarsModel::~UpDownBarsModel()
 {
 }
 
-TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId ) :
+TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mfSplitPos( 0.0 ),
     mnBarDir( XML_col ),
     mnBubbleScale( 100 ),
@@ -51,12 +51,12 @@ TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId ) :
     mnSizeRepresents( XML_area ),
     mnSplitType( XML_auto ),
     mnTypeId( nTypeId ),
-    mbBubble3d( false ),
-    mbShowMarker( false ),
-    mbShowNegBubbles( false ),
-    mbSmooth( false ),
-    mbVaryColors( false ),
-    mbWireframe( false )
+    mbBubble3d( !bMSO2007Doc ),
+    mbShowMarker( !bMSO2007Doc ),
+    mbShowNegBubbles( !bMSO2007Doc ),
+    mbSmooth( !bMSO2007Doc ),
+    mbVaryColors( !bMSO2007Doc ),
+    mbWireframe( !bMSO2007Doc )
 {
 }
 

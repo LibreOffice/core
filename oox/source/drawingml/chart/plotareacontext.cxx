@@ -146,6 +146,7 @@ PlotAreaContext::~PlotAreaContext()
 
 ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( plotArea ):
@@ -153,28 +154,28 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
             {
                 case C_TOKEN( area3DChart ):
                 case C_TOKEN( areaChart ):
-                    return new AreaTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new AreaTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( bar3DChart ):
                 case C_TOKEN( barChart ):
-                    return new BarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new BarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( bubbleChart ):
-                    return new BubbleTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new BubbleTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( line3DChart ):
                 case C_TOKEN( lineChart ):
                 case C_TOKEN( stockChart ):
-                    return new LineTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new LineTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( doughnutChart ):
                 case C_TOKEN( ofPieChart ):
                 case C_TOKEN( pie3DChart ):
                 case C_TOKEN( pieChart ):
-                    return new PieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new PieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( radarChart ):
-                    return new RadarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new RadarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( scatterChart ):
-                    return new ScatterTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new ScatterTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( surface3DChart ):
                 case C_TOKEN( surfaceChart ):
-                    return new SurfaceTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
+                    return new SurfaceTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
 
                 case C_TOKEN( catAx ):
                     return new CatAxisContext( *this, mrModel.maAxes.create( nElement ) );

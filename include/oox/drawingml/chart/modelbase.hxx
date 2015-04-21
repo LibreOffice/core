@@ -43,6 +43,8 @@ public:
     ModelType&   create() { this->reset( new ModelType ); return **this; }
     template< typename Param1Type >
     ModelType&   create( const Param1Type& rParam1 ) { this->reset( new ModelType( rParam1 ) ); return **this; }
+    template< typename Param1Type, typename Param2Type >
+    ModelType&   create( const Param1Type& rParam1, const Param2Type& rParam2 ) { this->reset( new ModelType( rParam1, rParam2 ) ); return **this; }
 
     ModelType&   getOrCreate() { if( !*this ) this->reset( new ModelType ); return **this; }
     template< typename Param1Type >
@@ -62,6 +64,8 @@ public:
     ModelType&   create() { return append( new ModelType ); }
     template< typename Param1Type >
     ModelType&   create( const Param1Type& rParam1 ) { return append( new ModelType( rParam1 ) ); }
+    template< typename Param1Type, typename Param2Type >
+    ModelType&   create( const Param1Type& rParam1, const Param2Type& rParam2 ) { return append( new ModelType( rParam1, rParam2 ) ); }
 
 private:
     ModelType&   append( ModelType* pModel ) { this->push_back( value_type( pModel ) ); return *pModel; }
