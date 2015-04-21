@@ -638,7 +638,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 
     // set the (unused) property default value used by the Chart2 templates (true for pie/doughnut charts)
     bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
-    aSeriesProp.setProperty( PROP_VaryColorsByPoint, bIsPie );
+    aSeriesProp.setProperty( PROP_VaryColorsByPoint, bVaryColorsByPoint );
 
     // own area formatting for every data point (TODO: varying line color not supported)
     // #i91271# always set area formatting for every point in pie/doughnut charts to override their automatic point formatting
