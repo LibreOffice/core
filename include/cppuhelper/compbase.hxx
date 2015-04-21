@@ -35,7 +35,7 @@
 #include <rtl/instance.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com { namespace sun { namespace star { namespace lang {
     class XEventListener;
 } } } }
 namespace osl { class Mutex; }
