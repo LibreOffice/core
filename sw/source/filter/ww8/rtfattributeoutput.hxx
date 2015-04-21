@@ -596,6 +596,9 @@ private:
 
     boost::optional<css::drawing::FillStyle> m_oFillStyle;
 
+    /// If we're in the process of exporting a hyperlink, then its URL.
+    OUString m_sURL;
+
 public:
     RtfAttributeOutput(RtfExport& rExport);
 
