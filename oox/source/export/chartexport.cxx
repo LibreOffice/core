@@ -1820,10 +1820,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     exportDataPoints( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
                     // export data labels
-                    // Excel does not like our current data label export
-                    // for scatter charts
-                    if( eChartType != chart::TYPEID_SCATTER )
-                        exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
+                    exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
 
                     exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
