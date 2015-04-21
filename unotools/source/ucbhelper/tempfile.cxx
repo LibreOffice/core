@@ -37,6 +37,8 @@
 
 #ifdef UNX
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 
 using namespace osl;
@@ -290,13 +292,17 @@ OUString lcl_createName(
 OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
 {
     OUString aEyeCatcher = "lu";
-#ifdef DBG_UTIL
 #ifdef UNX
+#ifdef DBG_UTIL
     const char* eye = getenv("LO_TESTNAME");
     if(eye)
     {
         aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
     }
+#else
+    static const pid_t pid = getpid();
+    static const OUString aPidString = OUString::number(pid);
+    aEyeCatcher += aPidString;
 #endif
 #endif
     UniqueTokens t;
