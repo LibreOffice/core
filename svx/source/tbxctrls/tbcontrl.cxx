@@ -158,7 +158,7 @@ private:
 
     void            ReleaseFocus();
     Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
-    void            SetupEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
+    void            SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice *pDevice, const OUString &rStyleName, bool bIsNotSelected);
     void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
@@ -579,13 +579,11 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& rStyleName)
+void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice* pDevice, const OUString& rStyleName, bool bIsNotSelected)
 {
-    sal_uInt16 nItem = rUDEvt.GetItemId();
     if (nItem == 0 || nItem == GetEntryCount() - 1)
     {
-        Rectangle aRect(rUDEvt.GetRect());
-        unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+        unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
         if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
     }
@@ -613,8 +611,6 @@ void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& r
 
             if ( pFontItem && pFontHeightItem )
             {
-                OutputDevice *pDevice = rUDEvt.GetDevice();
-
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
@@ -671,18 +667,16 @@ void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& r
 
                 pDevice->SetFont( aFont );
 
-                bool IsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
-
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
                 // text color, when nothing is selected
-                if ( (NULL != pItem) && IsNotSelected)
+                if ( (NULL != pItem) && bIsNotSelected)
                     aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
 
                 sal_uInt16 style = drawing::FillStyle_NONE;
                 // which kind of Fill style is selected
                 pItem = aItemSet.GetItem( XATTR_FILLSTYLE );
                 // only when ok and not selected
-                if ( (NULL != pItem) && IsNotSelected)
+                if ( (NULL != pItem) && bIsNotSelected)
                     style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
 
                 switch(style)
@@ -697,7 +691,7 @@ void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& r
                         if ( aBackCol != COL_AUTO )
                         {
                             pDevice->SetFillColor( aBackCol );
-                            pDevice->DrawRect( rUDEvt.GetRect() );
+                            pDevice->DrawRect(rRect);
                         }
                     }
                     break;
@@ -714,26 +708,24 @@ void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& r
                     pDevice->SetTextColor( aFontCol );
 
                 // handle the push-button
-                if (IsNotSelected)
+                if (bIsNotSelected)
                 {
-                    Rectangle aRect(rUDEvt.GetRect());
-                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
                         m_pButtons[nId]->Hide();
                 }
                 else
                 {
-                    Rectangle aRect(rUDEvt.GetRect());
-                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    unsigned int nId = (rRect.getY() / rRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES)
                     {
                         if(m_pButtons[nId] == NULL)
                         {
                             m_pButtons[nId] = new MenuButton(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
-                            m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
+                            m_pButtons[nId]->SetSizePixel(Size(20, rRect.GetSize().Height()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
-                        m_pButtons[nId]->SetPosPixel(Point(aRect.GetWidth() - 20, aRect.getY()));
+                        m_pButtons[nId]->SetPosPixel(Point(rRect.GetWidth() - 20, rRect.getY()));
                         m_pButtons[nId]->Show();
                     }
                 }
@@ -750,7 +742,10 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     OutputDevice *pDevice = rUDEvt.GetDevice();
     pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
-    SetupEntry(rUDEvt, aStyleName);
+    const Rectangle& rRect(rUDEvt.GetRect());
+    bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
+
+    SetupEntry(nItem, rRect, pDevice, aStyleName, bIsNotSelected);
 
     UserDrawEntry(rUDEvt, aStyleName);
 
