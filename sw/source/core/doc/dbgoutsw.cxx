@@ -611,8 +611,16 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             aTmpStr += pColl->GetName();
 
             aTmpStr += "(";
-            aTmpStr += OUString::number
-                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());
+
+            SwTxtFmtColl *pTxtColl = static_cast<SwTxtFmtColl*>(pColl);
+            if (pTxtColl->IsAssignedToListLevelOfOutlineStyle())
+            {
+                aTmpStr += OUString::number(pTxtColl->GetAssignedOutlineStyleLevel());
+            }
+            else
+            {
+                aTmpStr += OUString::number(-1);
+            }
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
