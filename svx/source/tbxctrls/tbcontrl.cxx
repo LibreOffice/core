@@ -582,23 +582,23 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
 void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     sal_uInt16 nItem = rUDEvt.GetItemId();
+    OUString aStyleName( GetEntry( nItem ) );
 
-    if ( nItem == 0 || nItem == GetEntryCount() - 1 )
+    OutputDevice *pDevice = rUDEvt.GetDevice();
+    pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+
+    if (nItem == 0 || nItem == GetEntryCount() - 1)
     {
         Rectangle aRect(rUDEvt.GetRect());
         unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
         if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
-        // draw the non-style entries, ie. "Clear Formatting" or "More..."
-        DrawEntry( rUDEvt, true, true );
     }
     else
     {
         SfxObjectShell *pShell = SfxObjectShell::Current();
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
         SfxStyleSheetBase* pStyle = NULL;
-
-        OUString aStyleName( GetEntry( nItem ) );
 
         if ( pPool )
         {
@@ -609,12 +609,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 pStyle = pPool->Next();
         }
 
-        if ( !pStyle )
-        {
-            // cannot find the style for whatever reason
-            DrawEntry( rUDEvt, true, true );
-        }
-        else
+        if (pStyle )
         {
             const SfxItemSet& aItemSet = pStyle->GetItemSet();
 
@@ -623,8 +618,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
             if ( pFontItem && pFontHeightItem )
             {
-                OutputDevice *pDevice = rUDEvt.GetDevice();
-
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
@@ -676,7 +669,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 // setup the device & draw
                 vcl::Font aOldFont( pDevice->GetFont() );
-                pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
                 Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
@@ -748,18 +740,16 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                         m_pButtons[nId]->Show();
                     }
                 }
-
-                UserDrawEntry(rUDEvt, aStyleName);
-
-                pDevice->Pop();
-
-                // draw separator, if present
-                DrawEntry( rUDEvt, false, false );
             }
-            else
-                DrawEntry( rUDEvt, true, true );
         }
     }
+
+    UserDrawEntry(rUDEvt, aStyleName);
+
+    pDevice->Pop();
+    // draw separator, if present
+    DrawEntry( rUDEvt, false, false );
+
 }
 
 // test is the color between Font- and background-color to be identify
