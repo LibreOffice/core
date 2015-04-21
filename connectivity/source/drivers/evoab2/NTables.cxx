@@ -63,7 +63,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
         {
             OEvoabTable* pRet = new OEvoabTable(
                     this,
-                    (OEvoabConnection *)static_cast<OEvoabCatalog&>(m_rParent).getConnection(),
+                    static_cast<OEvoabConnection*>(static_cast<OEvoabCatalog&>(m_rParent).getConnection()),
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
