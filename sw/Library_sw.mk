@@ -675,6 +675,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/shells/txtattr \
     sw/source/uibase/shells/txtcrsr \
     sw/source/uibase/shells/txtnum \
+    sw/source/uibase/sidebar/StylePresetsPanel \
     sw/source/uibase/sidebar/PageOrientationControl \
     sw/source/uibase/sidebar/PageMarginControl \
     sw/source/uibase/sidebar/PageSizeControl \

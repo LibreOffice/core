@@ -205,6 +205,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/selecttabledialog \
 	sw/uiconfig/swriter/ui/sidebarpage \
 	sw/uiconfig/swriter/ui/sidebarwrap \
+	sw/uiconfig/swriter/ui/sidebarstylepresets \
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
