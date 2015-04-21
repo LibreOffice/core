@@ -71,7 +71,6 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -570,13 +569,13 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_bSuspendFilterTextListening( false )
 {
 
-    ::comphelper::increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xTabController = TabController::create( m_xComponentContext );
         m_xAggregate = Reference< XAggregation >( m_xTabController, UNO_QUERY_THROW );
         m_xAggregate->setDelegator( *this );
     }
-    ::comphelper::decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 
     m_aTabActivationIdle.SetPriority( SchedulerPriority::LOWEST );
     m_aTabActivationIdle.SetIdleHdl( LINK( this, FormController, OnActivateTabOrder ) );

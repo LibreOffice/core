@@ -83,7 +83,7 @@
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
-        increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         {
             m_xAggregate = _pAggregateInstance;
 
@@ -95,7 +95,7 @@
             setAggregation(m_xAggregate);
             m_xAggregate->setDelegator(static_cast< XWeak* >(this));
         }
-        decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
 
         registerProperties();
     }
@@ -113,7 +113,7 @@
         ,m_nStep(0)
         ,m_bCloneable(_rxAggregateInstance.is())
     {
-        increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         {
             {
                 // ensure that the temporary gets destructed NOW
@@ -128,7 +128,7 @@
             setAggregation(m_xAggregate);
             m_xAggregate->setDelegator(static_cast< XWeak* >(this));
         }
-        decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
 
         registerProperties();
     }

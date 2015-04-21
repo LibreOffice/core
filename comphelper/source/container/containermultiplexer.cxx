@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/containermultiplexer.hxx>
-#include <comphelper/uno3.hxx>
 #include <osl/diagnose.h>
 
 namespace comphelper
@@ -104,7 +103,7 @@ namespace comphelper
         if (m_pListener)
             m_pListener->setAdapter(this);
 
-        ::comphelper::increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         try
         {
             m_xContainer->addContainerListener(this);
@@ -113,7 +112,7 @@ namespace comphelper
         {
             OSL_FAIL("Exception caught!");
         }
-        ::comphelper::decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 
 

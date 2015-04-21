@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/uno3.hxx>
+#include <comphelper/sequence.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
@@ -96,7 +96,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       bIsNoteCaption(false),
       bInitializedNotifier(false)
 {
-    comphelper::increment( m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     {
         mxShapeAgg = uno::Reference<uno::XAggregation>( xShape, uno::UNO_QUERY );
@@ -124,7 +124,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
         }
     }
 
-    comphelper::decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 ScShapeObj::~ScShapeObj()

@@ -166,7 +166,7 @@ OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFact
                :OBoundControl(_rxFactory, VCL_CONTROL_FORMATTEDFIELD)
                ,m_nKeyEvent(0)
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
@@ -174,7 +174,7 @@ OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFact
             xComp->addKeyListener(this);
         }
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 OFormattedControl::~OFormattedControl()
 {
@@ -276,9 +276,9 @@ void OFormattedModel::implConstruct()
     m_aNullDate = DBTypeConversion::getStandardDate();
     m_nFieldType =  DataType::OTHER;
     // default our formats supplier
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     setPropertyToDefaultByHandle(PROPERTY_ID_FORMATSSUPPLIER);
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
     startAggregatePropertyListening( PROPERTY_FORMATKEY );
     startAggregatePropertyListening( PROPERTY_FORMATSSUPPLIER );
 }

@@ -122,12 +122,12 @@ OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUSt
 {
     // Aggregate VCL Control
     // Increment the RefCount for aggregates, because the aggregate by itself increments the RefCount in the setDelegator
-    increment( m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_xAggregate.set(_rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext), css::uno::UNO_QUERY);
         m_xControl.set(m_xAggregate, css::uno::UNO_QUERY);
     }
-    decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     if ( _bSetDelegator )
         doSetDelegator();
@@ -146,14 +146,14 @@ void OControl::doResetDelegator()
 
 void OControl::doSetDelegator()
 {
-    increment( m_refCount );
+    osl_atomic_increment( &m_refCount );
     if ( m_xAggregate.is() )
     {   // those brackets are important for some compilers, don't remove!
         // (they ensure that the temporary object created in the line below
         // is destroyed *before* the refcount-decrement)
         m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
     }
-    decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 // UNO Binding
@@ -516,7 +516,7 @@ OControlModel::OControlModel(
 {
     if (!_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
     {
-        increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         {
             m_xAggregate = Reference<XAggregation>(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
             setAggregation(m_xAggregate);
@@ -539,7 +539,7 @@ OControlModel::OControlModel(
             doSetDelegator();
 
         // Refcount is at NULL again
-        decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 }
 
@@ -567,7 +567,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     if ( _bCloneAggregate )
     {
         // temporarily increment refcount because of temporary references to ourself in the following
-        increment( m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             // transfer the (only, at the very moment!) ref count
             m_xAggregate = createAggregateClone( _pOriginal );
@@ -581,7 +581,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
             doSetDelegator();
 
         // decrement ref count
-        decrement( m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 
@@ -604,12 +604,12 @@ void OControlModel::doResetDelegator()
 
 void OControlModel::doSetDelegator()
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     if (m_xAggregate.is())
     {
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 // XChild
@@ -1263,14 +1263,14 @@ void OBoundControlModel::clonedFrom( const OControlModel* _pOriginal )
 
 void OBoundControlModel::implInitAggMultiplexer( )
 {
-    increment( m_refCount );
+    osl_atomic_increment( &m_refCount );
     if ( m_xAggregateSet.is() )
     {
         m_pAggPropMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, false );
         m_pAggPropMultiplexer->acquire();
     }
 
-    decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
     doSetDelegator();
 }
 

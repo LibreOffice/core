@@ -142,7 +142,7 @@ namespace frm
 
     void ORichTextModel::implDoAggregation()
     {
-        increment( m_refCount );
+        osl_atomic_increment( &m_refCount );
 
         {
             m_xAggregate = new ORichTextUnoWrapper( *m_pEngine, this );
@@ -150,7 +150,7 @@ namespace frm
             doSetDelegator();
         }
 
-        decrement( m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
 

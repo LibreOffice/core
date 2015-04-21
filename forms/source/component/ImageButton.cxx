@@ -164,7 +164,7 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw(std::excep
 OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rxFactory)
             :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         // Register as MouseListener
         Reference< awt::XWindow >  xComp;
@@ -172,7 +172,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
         if (xComp.is())
             xComp->addMouseListener( static_cast< awt::XMouseListener* >( this ) );
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 // UNO Binding

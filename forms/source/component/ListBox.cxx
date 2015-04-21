@@ -1770,7 +1770,7 @@ namespace frm
         ,m_aItemListeners( m_aMutex )
     {
 
-        increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         {
             // Register as FocusListener
             Reference<XWindow> xComp;
@@ -1782,7 +1782,7 @@ namespace frm
                 m_xAggregateListBox->addItemListener(this);
         }
         // Refcount at 2 for registered Listener
-        decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
 
         doSetDelegator();
 

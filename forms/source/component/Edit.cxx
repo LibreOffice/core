@@ -88,7 +88,7 @@ OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                ,m_nKeyEvent( 0 )
 {
 
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
@@ -97,7 +97,7 @@ OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
             xComp->addKeyListener(this);
         }
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 

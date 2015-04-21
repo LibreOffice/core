@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/viewfrm.hxx>
-#include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
@@ -58,7 +57,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
         m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
         if (m_xIntercepted.is())
         {
-            comphelper::increment( m_refCount );
+            osl_atomic_increment( &m_refCount );
 
             m_xIntercepted->registerDispatchProviderInterceptor(
                         static_cast<frame::XDispatchProviderInterceptor*>(this));
@@ -68,7 +67,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
             if (xInterceptedComponent.is())
                 xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));
 
-            comphelper::decrement( m_refCount );
+            osl_atomic_decrement( &m_refCount );
         }
 
         StartListening(*pViewShell);

@@ -69,7 +69,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
         pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xContext));
     }
 
-    increment(pRef->m_refCount);
+    osl_atomic_increment(&pRef->m_refCount);
 
     if (pRef->m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
@@ -77,7 +77,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
     }
 
     InterfaceRef xRef(*pRef);
-    decrement(pRef->m_refCount);
+    osl_atomic_decrement(&pRef->m_refCount);
 
     return xRef;
 }
@@ -296,12 +296,12 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
     }
 
     // do the aggregation
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     if (m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 void OFormattedFieldWrapper::ensureAggregate()
@@ -333,12 +333,12 @@ void OFormattedFieldWrapper::ensureAggregate()
         }
     }
 
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     if (m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

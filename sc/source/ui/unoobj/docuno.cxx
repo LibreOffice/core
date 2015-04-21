@@ -394,7 +394,7 @@ uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
     {
         // setDelegator veraendert den RefCount, darum eine Referenz selber halten
         // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
-        comphelper::increment( m_refCount );
+        osl_atomic_increment( &m_refCount );
         // waehrend des queryInterface braucht man ein Ref auf das
         // SvNumberFormatsSupplierObj, sonst wird es geloescht.
         uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(pDocShell->GetDocument().GetFormatTable() ));
@@ -408,7 +408,7 @@ uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
 
         if (xNumberAgg.is())
             xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
-        comphelper::decrement( m_refCount );
+        osl_atomic_decrement( &m_refCount );
     } // if ( !xNumberAgg.is() )
     return xNumberAgg;
 }

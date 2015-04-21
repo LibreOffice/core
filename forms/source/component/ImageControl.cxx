@@ -697,7 +697,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
     ,m_aModifyListeners( m_aMutex )
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         // Add as Focus- and MouseListener
         Reference< XWindow > xComp;
@@ -705,7 +705,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
         if ( xComp.is() )
             xComp->addMouseListener( this );
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 

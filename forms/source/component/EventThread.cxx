@@ -35,7 +35,7 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
     m_pCompImpl( pCompImpl )
 {
 
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
 
     // Hold a reference of the Control
     {
@@ -49,7 +49,7 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
         m_xComp->addEventListener( xEvtLstnr );
     }
 
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 OComponentEventThread::~OComponentEventThread()

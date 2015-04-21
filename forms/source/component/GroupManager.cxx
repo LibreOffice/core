@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <comphelper/property.hxx>
-#include <comphelper/uno3.hxx>
+#include <osl/diagnose.h>
 #include <tools/solar.h>
 
 #include "property.hrc"
@@ -203,11 +203,11 @@ OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     :m_pCompGroup( new OGroup( OUString("AllComponentGroup") ) )
     ,m_xContainer(_rxContainer)
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         _rxContainer->addContainerListener(this);
     }
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 OGroupManager::~OGroupManager()

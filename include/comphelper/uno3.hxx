@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_UNO3_HXX
 #define INCLUDED_COMPHELPER_UNO3_HXX
 
-#include <osl/interlck.h>
 #include <rtl/instance.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
@@ -30,16 +29,6 @@
 
 namespace comphelper
 {
-
-
-
-
-    /// manipulate ref counts without calling acquire/release
-    inline oslInterlockedCount increment(oslInterlockedCount& _counter) { return osl_atomic_increment(&_counter); }
-    inline oslInterlockedCount decrement(oslInterlockedCount& _counter) { return osl_atomic_decrement(&_counter); }
-
-
-
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \

@@ -357,7 +357,7 @@ OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
                  ,m_nTargetUrlFeatureId( -1 )
                  ,m_bEnabledByPropertyValue( false )
 {
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         // Register as ActionListener
         Reference<XButton>  xButton;
@@ -366,7 +366,7 @@ OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
             xButton->addActionListener(this);
     }
     // For Listener: refcount at one
-    decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 

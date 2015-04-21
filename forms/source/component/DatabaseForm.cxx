@@ -61,7 +61,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -392,7 +391,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
 void ODatabaseForm::impl_construct()
 {
     // aggregate a row set
-    increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xAggregate = Reference< XAggregation >( m_xContext->getServiceManager()->createInstanceWithContext(SRV_SDB_ROWSET, m_xContext), UNO_QUERY_THROW );
         m_xAggregateAsRowSet.set( m_xAggregate, UNO_QUERY_THROW );
@@ -424,7 +423,7 @@ void ODatabaseForm::impl_construct()
 
         declareForwardedProperty( PROPERTY_ID_ACTIVE_CONNECTION );
     }
-    decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     m_pGroupManager = new OGroupManager( this );
     m_pGroupManager->acquire();

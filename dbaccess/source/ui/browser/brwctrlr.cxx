@@ -546,13 +546,13 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bCannotSelectUnfiltered( true )
 {
     // create the form controller aggregate
-    ::comphelper::increment(m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_pFormControllerImpl = new FormControllerImpl(this);
         m_xFormControllerImpl = m_pFormControllerImpl;
         m_xFormControllerImpl->setDelegator(*this);
     }
-    ::comphelper::decrement(m_refCount);
+    osl_atomic_decrement(&m_refCount);
 
     m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
     m_aInvalidateClipboard.SetTimeout(300);

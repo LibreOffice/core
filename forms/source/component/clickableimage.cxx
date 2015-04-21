@@ -497,7 +497,7 @@ namespace frm
     void OClickableImageBaseModel::implConstruct()
     {
         m_pProducer = new ImageProducer;
-        increment( m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             m_xProducer = m_pProducer;
 
@@ -507,7 +507,7 @@ namespace frm
                 pMultiplexer->addProperty( PROPERTY_IMAGE_URL );
             }
         }
-        decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 
 

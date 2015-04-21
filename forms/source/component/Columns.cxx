@@ -206,7 +206,7 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
     // Create the UnoControlModel
     if ( !m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
     {
-        increment( m_refCount );
+        osl_atomic_increment( &m_refCount );
 
         {
             m_xAggregate.set( _rContext->getServiceManager()->createInstanceWithContext( m_aModelName, _rContext ), UNO_QUERY );
@@ -219,7 +219,7 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
         }
 
         // Set refcount back to zero
-        decrement( m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 
@@ -235,7 +235,7 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     m_aModelName = _pOriginal->m_aModelName;
     m_aLabel = _pOriginal->m_aLabel;
 
-    increment( m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         {
             m_xAggregate = createAggregateClone( _pOriginal );
@@ -247,7 +247,7 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
     }
-    decrement( m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 

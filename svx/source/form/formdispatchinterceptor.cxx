@@ -52,7 +52,7 @@ namespace svxform
     {
 
         ::osl::MutexGuard aGuard( *m_pMutex );
-        ::comphelper::increment(m_refCount);
+        osl_atomic_increment(&m_refCount);
         if (_rxToIntercept.is())
         {
             _rxToIntercept->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
@@ -65,7 +65,7 @@ namespace svxform
                 m_bListening = true;
             }
         }
-        ::comphelper::decrement(m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 
 

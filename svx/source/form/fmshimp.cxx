@@ -654,10 +654,10 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     m_xAttachedFrame = _pViewFrame->GetFrame().GetFrameInterface();
 
     // to prevent deletion of this we acquire our refcounter once
-    ::comphelper::increment(FmXFormShell_BASE::m_refCount);
+    osl_atomic_increment(&m_refCount);
 
     // correct the refcounter
-    ::comphelper::decrement(FmXFormShell_BASE::m_refCount);
+    osl_atomic_decrement(&m_refCount);
 
     // cache the current configuration settings we're interested in
     implAdjustConfigCache();
