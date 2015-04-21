@@ -20,7 +20,6 @@
 /** This header generates the following template classes with a variable number
     of interfaces:
 
-    comphelper::ImplHelper<N> <typename Ifc1, ..., typename Ifc<N> >
     comphelper::PartialWeakComponentImplHelper<N> <typename Ifc1, ...,
                                             typename Ifc<N> >
 
@@ -115,52 +114,6 @@ struct BOOST_PP_CAT(ImplClassData, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
 };
 
 } // namespace detail
-
-/** Implementation helper implementing interface
-    ::com::sun::star::lang::XTypeProvider and method
-    XInterface::queryInterface(), but no reference counting.
-
-    @derive
-    Inherit from this class giving your interface(s) to be implemented as
-    template argument(s).  Your sub class defines method implementations for
-    these interface(s) including acquire()/release() and delegates incoming
-    queryInterface() calls to this base class.
-*/
-template< BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER,
-                               typename Ifc) >
-class SAL_NO_VTABLE BOOST_PP_CAT(ImplHelper,
-                                 COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
-    : public ::com::sun::star::lang::XTypeProvider,
-      BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, public Ifc)
-{
-    /// @internal
-    struct cd : public ::rtl::StaticAggregate<
-        ::cppu::class_data,
-        BOOST_PP_CAT(detail::ImplClassData,
-                     COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
-        <
-            BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, Ifc),
-            BOOST_PP_CAT(ImplHelper, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)<
-                BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, Ifc)>
-        > > {};
-
-protected:
-    BOOST_PP_CAT(ImplHelper, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)() {}
-    virtual ~BOOST_PP_CAT(ImplHelper, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)() {}
-
-public:
-    virtual ::com::sun::star::uno::Any
-        SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { return ::cppu::ImplHelper_query( rType, cd::get(), this ); }
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { return ::cppu::ImplHelper_getTypes( cd::get() ); }
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>
-        SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
-};
 
 template < BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER,
                                 typename Ifc) >
