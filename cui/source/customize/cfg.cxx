@@ -1389,10 +1389,10 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
     SetHighlightRange();
     SetSelectionMode(SINGLE_SELECTION);
 
-    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE  |
-                     SV_DRAGDROP_APP_COPY   |
-                     SV_DRAGDROP_ENABLE_TOP |
-                     SV_DRAGDROP_APP_DROP);
+    SetDragDropMode( DragDropMode::CTRL_MOVE  |
+                     DragDropMode::APP_COPY   |
+                     DragDropMode::ENABLE_TOP |
+                     DragDropMode::APP_DROP);
 }
 
 SvxMenuEntriesListBox::~SvxMenuEntriesListBox()

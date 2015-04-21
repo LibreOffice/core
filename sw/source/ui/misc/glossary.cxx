@@ -812,7 +812,7 @@ SwGlTreeListBox::SwGlTreeListBox(vcl::Window* pParent, WinBits nBits)
     , sReadonly(SW_RESSTR(SW_STR_READONLY)),
     pDragEntry(0)
 {
-    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
+    SetDragDropMode( DragDropMode::CTRL_MOVE|DragDropMode::CTRL_COPY );
 }
 
 Size SwGlTreeListBox::GetOptimalSize() const
@@ -892,7 +892,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
     DragDropMode  eRet;
     pDragEntry = pEntry;
     if(!GetParent(pEntry))
-        eRet = SV_DRAGDROP_NONE;
+        eRet = DragDropMode::NONE;
     else
     {
         SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
@@ -903,10 +903,10 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
             + OUStringLiteral1<GLOS_DELIM>()
             + OUString::number(pGroupData->nPathIdx);
         sal_Int8 nDragOption = DND_ACTION_COPY;
-        eRet = SV_DRAGDROP_CTRL_COPY;
+        eRet = DragDropMode::CTRL_COPY;
         if(!pDlg->pGlossaryHdl->IsReadOnly(&sEntry))
         {
-            eRet |= SV_DRAGDROP_CTRL_MOVE;
+            eRet |= DragDropMode::CTRL_MOVE;
             nDragOption |= DND_ACTION_MOVE;
         }
         SetDragOptions( nDragOption );

@@ -197,16 +197,23 @@ inline void delete_clone(const SvLBoxItem* p)
 
 #define WB_FORCE_SELECTION          ((WinBits)0x8000)
 
-#define DragDropMode sal_uInt16
-#define SV_DRAGDROP_NONE            (DragDropMode)0x0000
-#define SV_DRAGDROP_CTRL_MOVE       (DragDropMode)0x0001
-#define SV_DRAGDROP_CTRL_COPY       (DragDropMode)0x0002
-#define SV_DRAGDROP_APP_MOVE        (DragDropMode)0x0004
-#define SV_DRAGDROP_APP_COPY        (DragDropMode)0x0008
-#define SV_DRAGDROP_APP_DROP        (DragDropMode)0x0010
-// Entries may be dropped via the uppermost Entry
-// The DropTarget is 0 in that case
-#define SV_DRAGDROP_ENABLE_TOP      (DragDropMode)0x0020
+enum class DragDropMode
+{
+    NONE            = 0x0000,
+    CTRL_MOVE       = 0x0001,
+    CTRL_COPY       = 0x0002,
+    APP_MOVE        = 0x0004,
+    APP_COPY        = 0x0008,
+    APP_DROP        = 0x0010,
+    // Entries may be dropped via the uppermost Entry
+    // The DropTarget is 0 in that case
+    ENABLE_TOP      = 0x0020,
+    ALL             = 0x003f,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DragDropMode> : is_typed_flags<DragDropMode, 0x003f> {};
+}
 
 
 #define SVLBOX_IN_EDT           0x0001

@@ -57,7 +57,7 @@ SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent, WinBits nBits)
 {
     SetSpaceBetweenEntries(3);
     SetSelectionMode(SINGLE_SELECTION);
-    SetDragDropMode(0);
+    SetDragDropMode(DragDropMode::NONE);
     EnableAsyncDrag(false);
 }
 

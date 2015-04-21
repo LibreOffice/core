@@ -106,7 +106,7 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
 {
     SetHelpId( HID_RPT_FIELD_SEL );
     SetSelectionMode(MULTIPLE_SELECTION);
-    SetDragDropMode( 0xFFFF );
+    SetDragDropMode( DragDropMode::ALL );
     SetHighlightRange( );
 }
 

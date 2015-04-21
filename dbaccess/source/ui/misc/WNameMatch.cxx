@@ -350,7 +350,7 @@ OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
     : OMarkableTreeListBox(pParent, nBits)
     , m_bReadOnly(false)
 {
-    SetDragDropMode( 0 );
+    SetDragDropMode( DragDropMode::NONE );
     EnableInplaceEditing( false );
     SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL | nBits);
     SetSelectionMode( SINGLE_SELECTION );

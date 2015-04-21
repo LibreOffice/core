@@ -387,7 +387,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = 0;
     pTargetEntry = 0;
-    nDragDropMode = 0;
+    nDragDropMode = DragDropMode::NONE;
     SvTreeList* pTempModel = new SvTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
@@ -396,7 +396,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     pHdlEntry = 0;
     pEdCtrl = 0;
     eSelMode = SINGLE_SELECTION;
-    nDragDropMode = SV_DRAGDROP_NONE;
+    nDragDropMode = DragDropMode::NONE;
     SetType(WINDOW_TREELISTBOX);
 
     InitTreeView();
@@ -417,7 +417,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     pTargetEntry = 0;
     nImpFlags = 0;
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
-    nDragDropMode = 0;
+    nDragDropMode = DragDropMode::NONE;
     SvTreeList* pTempModel = new SvTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
@@ -532,31 +532,31 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 nActi
 {
     if ( pSource == this )
     {
-        if ( !(nDragDropMode & (SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY) ) )
+        if ( !(nDragDropMode & (DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY) ) )
             return false; // D&D locked within list
         if( DND_ACTION_MOVE == nAction )
         {
-            if ( !(nDragDropMode & SV_DRAGDROP_CTRL_MOVE) )
+            if ( !(nDragDropMode & DragDropMode::CTRL_MOVE) )
                  return false; // no local move
         }
         else
         {
-            if ( !(nDragDropMode & SV_DRAGDROP_CTRL_COPY))
+            if ( !(nDragDropMode & DragDropMode::CTRL_COPY))
                 return false; // no local copy
         }
     }
     else
     {
-        if ( !(nDragDropMode & SV_DRAGDROP_APP_DROP ) )
+        if ( !(nDragDropMode & DragDropMode::APP_DROP ) )
             return false; // no drop
         if ( DND_ACTION_MOVE == nAction )
         {
-            if ( !(nDragDropMode & SV_DRAGDROP_APP_MOVE) )
+            if ( !(nDragDropMode & DragDropMode::APP_MOVE) )
                 return false; // no global move
         }
         else
         {
-            if ( !(nDragDropMode & SV_DRAGDROP_APP_COPY))
+            if ( !(nDragDropMode & DragDropMode::APP_COPY))
                 return false; // no global copy
         }
     }
@@ -1197,7 +1197,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         ImplShowTargetEmphasis( pTargetEntry, false );
     }
-    else if( !nDragDropMode )
+    else if( nDragDropMode == DragDropMode::NONE )
     {
         SAL_WARN( "svtools.contnr", "SvTreeListBox::QueryDrop(): no target" );
     }
@@ -1296,7 +1296,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     MouseButtonUp( aMouseEvt );
 
     nOldDragMode = GetDragDropMode();
-    if ( !nOldDragMode )
+    if ( nOldDragMode == DragDropMode::NONE )
         return;
 
     ReleaseMouse();
@@ -1313,7 +1313,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
         ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
 
     nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
-    if( !nDragDropMode || 0 == GetSelectionCount() )
+    if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
         nDragDropMode = nOldDragMode;
         DragFinished( DND_ACTION_NONE );
@@ -2797,7 +2797,7 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
     // when dropping in a vacant space, use the last entry
     if( !pTarget )
         return (SvTreeListEntry*)LastVisible();
-    else if( (GetDragDropMode() & SV_DRAGDROP_ENABLE_TOP) &&
+    else if( (GetDragDropMode() & DragDropMode::ENABLE_TOP) &&
              pTarget == First() && rPos.Y() < 6 )
         return 0;
 

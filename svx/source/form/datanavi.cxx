@@ -137,7 +137,7 @@ namespace svxform
         EnableContextMenuHandling();
 
         if ( DGTInstance == m_eGroup )
-            SetDragDropMode( SV_DRAGDROP_CTRL_MOVE |SV_DRAGDROP_CTRL_COPY | SV_DRAGDROP_APP_COPY );
+            SetDragDropMode( DragDropMode::CTRL_MOVE |DragDropMode::CTRL_COPY | DragDropMode::APP_COPY );
     }
 
     DataTreeListBox::~DataTreeListBox()

@@ -218,8 +218,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, const SdResId& rSdResId )
                     Image(Bitmap( SdResId(BMP_COLLAPSE) )));
 
     SetDragDropMode(
-         SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |
-            SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
+         DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
+            DragDropMode::APP_MOVE  | DragDropMode::APP_COPY  | DragDropMode::APP_DROP );
 }
 
 SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
@@ -249,8 +249,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
                     Image(Bitmap( SdResId(BMP_COLLAPSE) )));
 
     SetDragDropMode(
-         SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |
-            SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
+         DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
+            DragDropMode::APP_MOVE  | DragDropMode::APP_COPY  | DragDropMode::APP_DROP );
 }
 
 SdPageObjsTLB::~SdPageObjsTLB()
@@ -1292,7 +1292,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
         {
             ImplShowTargetEmphasis( pTargetEntry, false );
         }
-        else if( !GetDragDropMode() )
+        else if( GetDragDropMode() == DragDropMode::NONE )
         {
             SAL_WARN( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
         }

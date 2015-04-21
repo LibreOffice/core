@@ -1033,9 +1033,9 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( bool bEnable )
         if ( pTreeBox )
         {
             if ( pStyle && pStyle->HasParentSupport() && bEnable )
-                pTreeBox->SetDragDropMode(SV_DRAGDROP_CTRL_MOVE);
+                pTreeBox->SetDragDropMode(DragDropMode::CTRL_MOVE);
             else
-                pTreeBox->SetDragDropMode(SV_DRAGDROP_NONE);
+                pTreeBox->SetDragDropMode(DragDropMode::NONE);
         }
     }
     bTreeDrag = bEnable;
@@ -1054,9 +1054,9 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
 
         if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
-            pTreeBox->SetDragDropMode(SV_DRAGDROP_CTRL_MOVE);
+            pTreeBox->SetDragDropMode(DragDropMode::CTRL_MOVE);
         else
-            pTreeBox->SetDragDropMode(SV_DRAGDROP_NONE);
+            pTreeBox->SetDragDropMode(DragDropMode::NONE);
 
         while (pStyle)
         {

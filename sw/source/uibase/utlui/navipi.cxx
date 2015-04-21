@@ -763,9 +763,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aContentTree.SetSpaceBetweenEntries(3);
     aContentTree.SetSelectionMode( SINGLE_SELECTION );
-    aContentTree.SetDragDropMode(   SV_DRAGDROP_CTRL_MOVE |
-                                    SV_DRAGDROP_CTRL_COPY |
-                                    SV_DRAGDROP_ENABLE_TOP );
+    aContentTree.SetDragDropMode(   DragDropMode::CTRL_MOVE |
+                                    DragDropMode::CTRL_COPY |
+                                    DragDropMode::ENABLE_TOP );
     aContentTree.EnableAsyncDrag(true);
     aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, true);

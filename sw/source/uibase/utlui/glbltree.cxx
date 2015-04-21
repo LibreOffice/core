@@ -161,9 +161,9 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, const ResId& rResId) :
     bIsImageListInitialized ( false )
 
 {
-    SetDragDropMode(SV_DRAGDROP_APP_COPY  |
-                    SV_DRAGDROP_CTRL_MOVE |
-                    SV_DRAGDROP_ENABLE_TOP );
+    SetDragDropMode(DragDropMode::APP_COPY  |
+                    DragDropMode::CTRL_MOVE |
+                    DragDropMode::ENABLE_TOP );
 
     aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
     aUpdateTimer.SetTimeoutHdl(LINK(this, SwGlobalTree, Timeout));
@@ -525,7 +525,7 @@ DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
 {
     bIsInternalDrag = true;
     pDDSource = pEntry;
-    return SV_DRAGDROP_CTRL_MOVE;
+    return DragDropMode::CTRL_MOVE;
 }
 
 sal_IntPtr SwGlobalTree::GetTabPos( SvTreeListEntry*, SvLBoxTab* pTab)

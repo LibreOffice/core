@@ -873,7 +873,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
         // If we are showing Slot API commands update labels in the UI, and
         // enable drag'n'drop
         SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
-        m_pCommands->SetDragDropMode( SV_DRAGDROP_APP_COPY );
+        m_pCommands->SetDragDropMode( DragDropMode::APP_COPY );
 
         get(m_pCancelButton, "close");
         get(m_pDialogDescription, "helptoolbar");

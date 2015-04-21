@@ -816,7 +816,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
 
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
-    SetDragDropMode(SV_DRAGDROP_APP_COPY);
+    SetDragDropMode(DragDropMode::APP_COPY);
     for (sal_uInt16 i = 0; i < CONTENT_TYPE_MAX; i++)
     {
         aActiveContentArr[i]    = 0;
@@ -2492,7 +2492,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
         && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
         eMode = GetDragDropMode();
     else if(!bIsActive && GetWrtShell()->GetView().GetDocShell()->HasName())
-        eMode = SV_DRAGDROP_APP_COPY;
+        eMode = DragDropMode::APP_COPY;
 
     sal_Int8 nDragMode;
     FillTransferData( rContainer, nDragMode );

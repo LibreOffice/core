@@ -327,7 +327,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
         rpCustomShow->SetName( m_pEdtName->GetText() );
     }
 
-    m_pLbCustomPages->SetDragDropMode( SV_DRAGDROP_CTRL_MOVE );
+    m_pLbCustomPages->SetDragDropMode( DragDropMode::CTRL_MOVE );
     m_pLbCustomPages->SetHighlightRange();
 
     m_pBtnOK->Enable( false );

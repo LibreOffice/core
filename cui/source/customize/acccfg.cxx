@@ -776,7 +776,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     m_pEntriesBox->SetTabs(&AccCfgTabs[0], MAP_APPFONT);
     m_pEntriesBox->Resize(); // OS: Hack for right selection
     m_pEntriesBox->SetSpaceBetweenEntries(0);
-    m_pEntriesBox->SetDragDropMode(0);
+    m_pEntriesBox->SetDragDropMode(DragDropMode::NONE);
 
     // detect max keyname width
     long nMaxWidth  = 0;

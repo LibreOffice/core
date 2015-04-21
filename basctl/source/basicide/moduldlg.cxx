@@ -141,14 +141,14 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 
 DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeListEntry* pEntry )
 {
-    DragDropMode nMode_ = SV_DRAGDROP_NONE;
+    DragDropMode nMode_ = DragDropMode::NONE;
 
     if ( pEntry )
     {
         sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         if ( nDepth >= 2 )
         {
-            nMode_ = SV_DRAGDROP_CTRL_COPY;
+            nMode_ = DragDropMode::CTRL_COPY;
             EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
             ScriptDocument aDocument( aDesc.GetDocument() );
             OUString aLibName( aDesc.GetLibName() );
@@ -170,7 +170,7 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeList
                         bAllowMove = ( xSourceMgr->getLocales().getLength() == 0 );
                 }
                 if( bAllowMove )
-                    nMode_ |= SV_DRAGDROP_CTRL_MOVE;
+                    nMode_ |= DragDropMode::CTRL_MOVE;
             }
         }
     }
@@ -577,7 +577,7 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
         m_pNewModButton->Hide();
     }
 
-    m_pBasicBox->SetDragDropMode( SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY );
+    m_pBasicBox->SetDragDropMode( DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY );
     m_pBasicBox->EnableInplaceEditing(true);
     m_pBasicBox->SetMode( nMode );
     m_pBasicBox->SetStyle( WB_BORDER | WB_TABSTOP |

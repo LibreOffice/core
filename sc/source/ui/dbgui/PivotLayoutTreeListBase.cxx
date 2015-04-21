@@ -24,7 +24,7 @@ ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBi
     , mpParent(NULL)
 {
     SetHighlightRange();
-    SetDragDropMode(SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_DROP);
+    SetDragDropMode(DragDropMode::CTRL_MOVE | DragDropMode::APP_MOVE  | DragDropMode::APP_DROP);
 }
 
 ScPivotLayoutTreeListBase::~ScPivotLayoutTreeListBase()

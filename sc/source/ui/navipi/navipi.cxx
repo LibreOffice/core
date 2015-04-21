@@ -635,9 +635,9 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
 
     aLbEntries.SetSpaceBetweenEntries(0);
     aLbEntries.SetSelectionMode( SINGLE_SELECTION );
-    aLbEntries.SetDragDropMode(     SV_DRAGDROP_CTRL_MOVE |
-                                    SV_DRAGDROP_CTRL_COPY |
-                                    SV_DRAGDROP_ENABLE_TOP );
+    aLbEntries.SetDragDropMode(     DragDropMode::CTRL_MOVE |
+                                    DragDropMode::CTRL_COPY |
+                                    DragDropMode::ENABLE_TOP );
 
     //  was a category chosen as root?
     sal_uInt16 nLastRoot = rCfg.GetRootType();

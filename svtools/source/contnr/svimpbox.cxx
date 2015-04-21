@@ -65,7 +65,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     aSelEng.ExpandSelectionOnMouseMove( false );
     SetStyle( nWinStyle );
     SetSelectionMode( SINGLE_SELECTION );
-    SetDragDropMode( 0 );
+    SetDragDropMode( DragDropMode::NONE );
 
     aVerSBar.SetScrollHdl( LINK( this, SvImpLBox, ScrollUpDownHdl ) );
     aHorSBar.SetScrollHdl( LINK( this, SvImpLBox, ScrollLeftRightHdl ) );
@@ -2903,7 +2903,7 @@ void SvImpLBox::SetSelectionMode( SelectionMode eSelMode  )
 
 void SvImpLBox::SetDragDropMode( DragDropMode eDDMode )
 {
-    if( eDDMode && eDDMode != SV_DRAGDROP_APP_DROP )
+    if( eDDMode != DragDropMode::NONE && eDDMode != DragDropMode::APP_DROP )
     {
         aSelEng.ExpandSelectionOnMouseMove( false );
         aSelEng.EnableDrag( true );

@@ -243,7 +243,7 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
         m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
     );
 
-    SetDragDropMode(0xFFFF);
+    SetDragDropMode(DragDropMode::ALL);
     EnableInplaceEditing( false );
     SetSelectionMode(MULTIPLE_SELECTION);
     Clear();

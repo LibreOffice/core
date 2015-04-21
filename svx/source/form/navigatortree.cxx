@@ -143,7 +143,7 @@ namespace svxform
             m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
         );
 
-        SetDragDropMode(0xFFFF);
+        SetDragDropMode(DragDropMode::ALL);
         EnableInplaceEditing( true );
         SetSelectionMode(MULTIPLE_SELECTION);
 

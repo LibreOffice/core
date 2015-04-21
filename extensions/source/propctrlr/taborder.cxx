@@ -292,7 +292,7 @@ namespace pcr
     TabOrderListBox::TabOrderListBox( vcl::Window* pParent, WinBits nBits  )
         :SvTreeListBox( pParent, nBits  )
     {
-        SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
+        SetDragDropMode(DragDropMode::ALL/*DragDropMode::CTRL_MOVE*/);
             // Hmm. The flag alone is not enough, so to be on the safe side ...
 
         SetSelectionMode( MULTIPLE_SELECTION );

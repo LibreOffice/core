@@ -210,7 +210,7 @@ void SwDBTreeList::InitTreeList()
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
                     aImageList.GetImage(IMG_EXPAND  ) );
 
-    SetDragDropMode(SV_DRAGDROP_APP_COPY);
+    SetDragDropMode(DragDropMode::APP_COPY);
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 

@@ -61,7 +61,7 @@ namespace pcr
 
         // initialize the TreeListBox
         m_pControlTree->SetSelectionMode( SINGLE_SELECTION );
-        m_pControlTree->SetDragDropMode( 0 );
+        m_pControlTree->SetDragDropMode( DragDropMode::NONE );
         m_pControlTree->EnableInplaceEditing( false );
         m_pControlTree->SetStyle(m_pControlTree->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 

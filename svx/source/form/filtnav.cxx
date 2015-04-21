@@ -1141,7 +1141,7 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
     EnableInplaceEditing( true );
     SetSelectionMode(MULTIPLE_SELECTION);
 
-    SetDragDropMode(0xFFFF);
+    SetDragDropMode(DragDropMode::ALL);
 
     m_aDropActionTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnDropActionTimer));
 }
