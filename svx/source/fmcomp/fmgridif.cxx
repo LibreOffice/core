@@ -1012,29 +1012,6 @@ void FmXGridPeer::GridListenerDelegator::columnChanged()
     m_pPeer->columnChanged();
 }
 
-Sequence< Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(RuntimeException, std::exception)
-{
-    return comphelper::concatSequences( VCLXWindow::getTypes(), FmXGridPeer_BASE::getTypes() );
-}
-
-
-Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeException, std::exception)
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-Any SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
-{
-    Any aReturn = FmXGridPeer_BASE::queryInterface(_rType);
-
-    if (!aReturn.hasValue())
-        aReturn = VCLXWindow::queryInterface( _rType );
-
-    return aReturn;
-}
-
-
 void FmXGridPeer::selectionChanged()
 {
     EventObject aSource;

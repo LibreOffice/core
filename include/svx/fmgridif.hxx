@@ -46,14 +46,8 @@
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase10.hxx>
-
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 19
-#include <comphelper/implbase_var.hxx>
-#endif
-
 
 class DbGridColumn;
 
@@ -317,29 +311,29 @@ protected:
 
 // FmXGridPeer -> Peer for the Gridcontrol
 
-typedef ::comphelper::ImplHelper19  <   ::com::sun::star::form::XGridPeer,
-                                        ::com::sun::star::form::XBoundComponent,
-                                        ::com::sun::star::form::XGridControl,
-                                        ::com::sun::star::sdb::XRowSetSupplier,
-                                        ::com::sun::star::util::XModifyBroadcaster,
-                                        ::com::sun::star::beans::XPropertyChangeListener,
-                                        ::com::sun::star::container::XContainerListener,
-                                        ::com::sun::star::sdbc::XRowSetListener,
-                                        ::com::sun::star::form::XLoadListener,
-                                        ::com::sun::star::view::XSelectionChangeListener,
-                                        ::com::sun::star::container::XIndexAccess,
-                                        ::com::sun::star::container::XEnumerationAccess,
-                                        ::com::sun::star::util::XModeSelector,
-                                        ::com::sun::star::container::XContainer,
-                                        ::com::sun::star::frame::XStatusListener,
-                                        ::com::sun::star::frame::XDispatchProvider,
-                                        ::com::sun::star::frame::XDispatchProviderInterception,
-                                        ::com::sun::star::form::XResetListener,
-                                        ::com::sun::star::view::XSelectionSupplier
-                                    >   FmXGridPeer_BASE;
 class FmGridControl;
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridPeer :public VCLXWindow
-                    ,public FmXGridPeer_BASE
+class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridPeer:
+    public cppu::ImplInheritanceHelper<
+        VCLXWindow,
+        css::form::XGridPeer,
+        css::form::XBoundComponent,
+        css::form::XGridControl,
+        css::sdb::XRowSetSupplier,
+        css::util::XModifyBroadcaster,
+        css::beans::XPropertyChangeListener,
+        css::container::XContainerListener,
+        css::sdbc::XRowSetListener,
+        css::form::XLoadListener,
+        css::view::XSelectionChangeListener,
+        css::container::XIndexAccess,
+        css::container::XEnumerationAccess,
+        css::util::XModeSelector,
+        css::container::XContainer,
+        css::frame::XStatusListener,
+        css::frame::XDispatchProvider,
+        css::frame::XDispatchProviderInterception,
+        css::form::XResetListener,
+        css::view::XSelectionSupplier>
 {
     css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
     css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
@@ -377,14 +371,6 @@ public:
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
     void Create(vcl::Window* pParent, WinBits nStyle);
-
-// UNO connection
-    DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow)
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-// XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::lang::XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&   getUnoTunnelImplementationId() throw();
