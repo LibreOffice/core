@@ -225,32 +225,33 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     //  Optional CSS2 code for dot leaders (dotted line between the Table of Contents titles and page numbers):
     //  (More inforation: http://www.w3.org/Style/Examples/007/leaders.en.html)
     //
-    //  p.leaders {
+      p.leaders {
     //      /* FIXME:
     //         (1) dots line up vertically only in the paragraphs with the same alignation/level
     //         (2) max-width = 18 cm instead of 80em; possible improvement with the new CSS3 calc() */
-    //      max-width: 18cm; /* note: need to overwrite max-width with max-width - border-left_of_the_actual_paragraph */
-    //      padding: 0;
-    //      overflow-x: hidden;
-    //      line-height: 120%; /* note: avoid HTML scrollbars and missing descenders of the letters */
-    //  }
-    //  p.leaders:after {
-    //      float: left;
-    //      width: 0;
-    //      white-space: nowrap;
-    //      content: ". . . . . . . . . . . . . . . . . . ...";
-    //  }
-    //  p.leaders span:first-child {
-    //      padding-right: 0.33em;
-    //      background: white;
-    //  }
-    //  p.leaders span + span {
-    //      float: right;
-    //      padding-left: 0.33em;
-    //      background: white;
-    //      position: relative;
-    //      z-index: 1
-    //  }
+          max-width: 18cm; /* note: need to overwrite max-width with max-width - border-left_of_the_actual_paragraph */
+                           /* 80em equivalent to 1280px : 120em equivalent to 1920px */
+          padding: 2;
+          overflow-x: hidden;
+          line-height: 110%; /* note: avoid HTML scrollbars and missing descenders of the letters */
+      }
+      p.leaders:after {
+          float: left;
+          width: 0;
+          white-space: nowrap;
+          content: ". . . . . . . . . . . . . . . . . . ..";
+      }
+      p.leaders span:first-child {
+          padding-right: 0.33em;
+          background: white;
+      }
+      p.leaders span + span {
+          float: right;
+          padding-left: 0.33em;
+          background: white;
+          position: relative;
+          z-index: 1
+      }
 
         if (bCfgPrintLayout) {
             sOut.append(
