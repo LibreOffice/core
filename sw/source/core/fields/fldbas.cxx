@@ -466,17 +466,17 @@ OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
     return aNumber.GetNumStr(nNum);
 }
 
-SwValueFieldType::SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId )
-    : SwFieldType(nWhichId),
-    pDoc(pDocPtr),
-    bUseFormat(true)
+SwValueFieldType::SwValueFieldType(SwDoc *const pDoc, sal_uInt16 const nWhichId)
+    : SwFieldType(nWhichId)
+    , m_pDoc(pDoc)
+    , m_bUseFormat(true)
 {
 }
 
 SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
-    : SwFieldType(rTyp.Which()),
-    pDoc(rTyp.GetDoc()),
-    bUseFormat(rTyp.UseFormat())
+    : SwFieldType(rTyp.Which())
+    , m_pDoc(rTyp.GetDoc())
+    , m_bUseFormat(rTyp.UseFormat())
 {
 }
 
@@ -488,7 +488,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
         return SwViewShell::GetShellRes()->aCalc_Error;
 
     OUString sExpand;
-    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
     Color* pCol = 0;
 
     // Bug #60010
@@ -535,7 +535,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 OUString SwValueFieldType::DoubleToString(const double &rVal,
                                         sal_uInt32 nFmt) const
 {
-    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
 
     if (!pEntry)
@@ -547,7 +547,7 @@ OUString SwValueFieldType::DoubleToString(const double &rVal,
 OUString SwValueFieldType::DoubleToString( const double &rVal,
                                         sal_uInt16 nLng ) const
 {
-    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
 
     // Bug #60010
     if( nLng == LANGUAGE_NONE )
@@ -560,14 +560,14 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
 
 SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
                             sal_uInt16 nLng, const double fVal )
-    : SwField(pFldType, nFmt, nLng),
-    fValue(fVal)
+    : SwField(pFldType, nFmt, nLng)
+    , m_fValue(fVal)
 {
 }
 
 SwValueField::SwValueField( const SwValueField& rFld )
-    : SwField(rFld),
-    fValue(rFld.GetValue())
+    : SwField(rFld)
+    , m_fValue(rFld.GetValue())
 {
 }
 
@@ -675,12 +675,12 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
 
 double SwValueField::GetValue() const
 {
-    return fValue;
+    return m_fValue;
 }
 
 void SwValueField::SetValue( const double& rVal )
 {
-    fValue = rVal;
+    m_fValue = rVal;
 }
 
 SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt, const double fVal)
@@ -696,12 +696,12 @@ SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
 
 OUString SwFormulaField::GetFormula() const
 {
-    return sFormula;
+    return m_sFormula;
 }
 
 void SwFormulaField::SetFormula(const OUString& rStr)
 {
-    sFormula = rStr;
+    m_sFormula = rStr;
 
     sal_uLong nFmt(GetFormat());
 
@@ -728,11 +728,11 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
         {
             SwValueField::SetValue(fTmpValue);
 
-            sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFmt);
+            m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFmt);
             return;
         }
     }
-    sFormula = rStr;
+    m_sFormula = rStr;
 }
 
 OUString SwFormulaField::GetExpandedFormula() const

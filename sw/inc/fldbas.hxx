@@ -381,19 +381,20 @@ inline sal_uInt16 SwField::GetLanguage() const
  /// Fields containing values that have to be formatted via number formatter.
 class SwValueFieldType : public SwFieldType
 {
-    SwDoc*  pDoc;
-    bool    bUseFormat; ///< Use number formatter.
+private:
+    SwDoc*  m_pDoc;
+    bool    m_bUseFormat; ///< Use number formatter.
 
 protected:
     SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId );
     SwValueFieldType( const SwValueFieldType& rTyp );
 
 public:
-    inline SwDoc*   GetDoc() const                      { return pDoc; }
-    inline void     SetDoc(SwDoc* pNewDoc)              { pDoc = pNewDoc; }
+    inline SwDoc*   GetDoc() const                      { return m_pDoc; }
+    inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
 
-    inline bool     UseFormat() const                   { return bUseFormat; }
-    inline void     EnableFormat(bool bFormat = true)   { bUseFormat = bFormat; }
+    inline bool     UseFormat() const                   { return m_bUseFormat; }
+    inline void     EnableFormat(bool bFormat = true)   { m_bUseFormat = bFormat; }
 
     OUString        ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
@@ -402,7 +403,8 @@ public:
 
 class SW_DLLPUBLIC SwValueField : public SwField
 {
-    double fValue;
+private:
+    double m_fValue;
 
 protected:
     SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
@@ -427,7 +429,8 @@ public:
 
 class SW_DLLPUBLIC SwFormulaField : public SwValueField
 {
-    OUString sFormula;
+private:
+    OUString m_sFormula;
 
 protected:
     SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, const double fVal = 0.0 );
