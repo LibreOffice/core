@@ -515,7 +515,7 @@ void SvLBoxContextBmp::Paint(
     // get the image.
     const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
 
-    bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
+    bool _bSemiTransparent = pEntry && bool( SvTLEntryFlags::SEMITRANSPARENT  & pEntry->GetFlags( ) );
     // draw
     sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     if ( _bSemiTransparent )

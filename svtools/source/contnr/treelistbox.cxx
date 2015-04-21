@@ -971,28 +971,28 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable, bool bWithChildre
     {
         if ( !bEnable )
         {
-            pSelEntry->nEntryFlags |= SV_ENTRYFLAG_DISABLE_DROP;
+            pSelEntry->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
             if ( bWithChildren )
             {
                 nRefDepth = pModel->GetDepth( pSelEntry );
                 pTemp = Next( pSelEntry );
                 while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
                 {
-                    pTemp->nEntryFlags |= SV_ENTRYFLAG_DISABLE_DROP;
+                    pTemp->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
                     pTemp = Next( pTemp );
                 }
             }
         }
         else
         {
-            pSelEntry->nEntryFlags &= (~SV_ENTRYFLAG_DISABLE_DROP);
+            pSelEntry->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
             if ( bWithChildren )
             {
                 nRefDepth = pModel->GetDepth( pSelEntry );
                 pTemp = Next( pSelEntry );
                 while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
                 {
-                    pTemp->nEntryFlags &= (~SV_ENTRYFLAG_DISABLE_DROP);
+                    pTemp->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
                     pTemp = Next( pTemp );
                 }
             }
@@ -1213,7 +1213,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
             DBG_ASSERT( pDDSource, "SvTreeListBox::QueryDrop(): SourceBox == 0" );
             if( !( pEntry && pDDSource->GetModel() == this->GetModel()
                     && DND_ACTION_MOVE == rEvt.mnAction
-                    && ( pEntry->nEntryFlags & SV_ENTRYFLAG_DISABLE_DROP ) ))
+                    && ( pEntry->nEntryFlags & SvTLEntryFlags::DISABLE_DROP ) ))
             {
                 if( NotifyAcceptDrop( pEntry ))
                     nRet = rEvt.mnAction;
@@ -1918,8 +1918,8 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
     SvTreeListEntry* pParent = (SvTreeListEntry*)pModel->GetParent( pEntry );
     if( pParent )
     {
-        sal_uInt16 nFlags = pParent->GetFlags();
-        nFlags &= ~SV_ENTRYFLAG_NO_NODEBMP;
+        SvTLEntryFlags nFlags = pParent->GetFlags();
+        nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
         pParent->SetFlags( nFlags );
     }
 
@@ -2359,7 +2359,7 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
 {
     pHdlEntry = pParent;
     bool bExpanded = false;
-    sal_uInt16 nFlags;
+    SvTLEntryFlags nFlags;
 
     if( pParent->HasChildrenOnDemand() )
         RequestingChildren( pParent );
@@ -2375,14 +2375,14 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
             ExpandedHdl();
         }
         nFlags = pParent->GetFlags();
-        nFlags &= ~SV_ENTRYFLAG_NO_NODEBMP;
-        nFlags |= SV_ENTRYFLAG_HAD_CHILDREN;
+        nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
+        nFlags |= SvTLEntryFlags::HAD_CHILDREN;
         pParent->SetFlags( nFlags );
     }
     else
     {
         nFlags = pParent->GetFlags();
-        nFlags |= SV_ENTRYFLAG_NO_NODEBMP;
+        nFlags |= SvTLEntryFlags::NO_NODEBMP;
         pParent->SetFlags( nFlags );
         GetModel()->InvalidateEntry( pParent ); // repaint
     }
@@ -3089,7 +3089,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
                      // to the next tab
 
-    if( (!(pEntry->GetFlags() & SV_ENTRYFLAG_NO_NODEBMP)) &&
+    if( (!(pEntry->GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
         ( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() ) )
     {
@@ -3116,7 +3116,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
                 else
                 {
                     if( (!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
-                        (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
+                        (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                         pImp->GetDontKnowNodeBmp().GetSizePixel().Width() )
                         pImg = &pImp->GetDontKnowNodeBmp( );
                     else
@@ -3144,7 +3144,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
                     {
                         if( (!pEntry->HasChildren() )                              &&
                               pEntry->HasChildrenOnDemand()                        &&
-                             (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
+                             (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width()
                         )
                             aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //dont know

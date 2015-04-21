@@ -24,19 +24,27 @@
 #include <tools/solar.h>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentries.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
 // flags related to the model
-#define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
-#define SV_ENTRYFLAG_DISABLE_DROP       0x0002
-#define SV_ENTRYFLAG_IN_USE             0x0004
-// is set if RequestingChildren has not set any children
-#define SV_ENTRYFLAG_NO_NODEBMP         0x0008
-// entry had or has children
-#define SV_ENTRYFLAG_HAD_CHILDREN       0x0010
-
-#define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
+enum class SvTLEntryFlags
+{
+    NONE                = 0x0000,
+    CHILDREN_ON_DEMAND  = 0x0001,
+    DISABLE_DROP        = 0x0002,
+    IN_USE              = 0x0004,
+    // is set if RequestingChildren has not set any children
+    NO_NODEBMP          = 0x0008,
+    // entry had or has children
+    HAD_CHILDREN        = 0x0010,
+    SEMITRANSPARENT     = 0x8000,      // draw semi-transparent entry bitmaps
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
+}
 
 
 class SVT_DLLPUBLIC SvTreeListEntry
@@ -54,7 +62,7 @@ class SVT_DLLPUBLIC SvTreeListEntry
     ItemsType           maItems;
     bool                bIsMarked;
     void*               pUserData;
-    sal_uInt16          nEntryFlags;
+    SvTLEntryFlags      nEntryFlags;
     Color               maBackColor;
 
 private:
@@ -96,8 +104,8 @@ public:
     bool        HasChildrenOnDemand() const;
     bool        HasInUseEmphasis() const;
 
-    sal_uInt16 GetFlags() const { return nEntryFlags;}
-    void SetFlags( sal_uInt16 nFlags );
+    SvTLEntryFlags GetFlags() const { return nEntryFlags;}
+    void SetFlags( SvTLEntryFlags nFlags );
 
     bool GetIsMarked() const { return bIsMarked; }
     void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }

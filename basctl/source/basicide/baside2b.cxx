@@ -2415,14 +2415,12 @@ void implEnableChildren( SvTreeListEntry* pEntry, bool bEnable )
     if( bEnable )
     {
         pEntry->SetFlags(
-            (pEntry->GetFlags() &
-            ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN))
-            | SV_ENTRYFLAG_CHILDREN_ON_DEMAND );
+            (pEntry->GetFlags() & ~SvTLEntryFlags(SvTLEntryFlags::NO_NODEBMP | SvTLEntryFlags::HAD_CHILDREN))
+            | SvTLEntryFlags::CHILDREN_ON_DEMAND );
     }
     else
     {
-        pEntry->SetFlags(
-            (pEntry->GetFlags() & ~(SV_ENTRYFLAG_CHILDREN_ON_DEMAND)) );
+        pEntry->SetFlags( pEntry->GetFlags() & ~SvTLEntryFlags::CHILDREN_ON_DEMAND );
     }
 }
 

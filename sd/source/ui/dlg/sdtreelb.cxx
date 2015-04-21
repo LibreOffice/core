@@ -1492,7 +1492,7 @@ bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry* pEntry)
     if ( ! IsDropFormatSupported(SdPageObjsTransferable::GetListBoxDropFormatId()))
         return false;
 
-    if ((pEntry->GetFlags() & SV_ENTRYFLAG_DISABLE_DROP) != 0)
+    if (pEntry->GetFlags() & SvTLEntryFlags::DISABLE_DROP)
         return false;
 
     return true;

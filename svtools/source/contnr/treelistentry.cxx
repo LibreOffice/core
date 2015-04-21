@@ -56,7 +56,7 @@ SvTreeListEntry::SvTreeListEntry()
     , nListPos(0)
     , bIsMarked(false)
     , pUserData(NULL)
-    , nEntryFlags(0)
+    , nEntryFlags(SvTLEntryFlags::NONE)
     , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
 }
@@ -139,9 +139,9 @@ void SvTreeListEntry::AddItem( SvLBoxItem* pItem )
 void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
 {
     if ( bEnable )
-        nEntryFlags |= SV_ENTRYFLAG_CHILDREN_ON_DEMAND;
+        nEntryFlags |= SvTLEntryFlags::CHILDREN_ON_DEMAND;
     else
-        nEntryFlags &= (~SV_ENTRYFLAG_CHILDREN_ON_DEMAND);
+        nEntryFlags &= (~SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
 void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, size_t nPos )
@@ -220,16 +220,16 @@ void SvTreeListEntry::SetUserData( void* pPtr )
 
 bool SvTreeListEntry::HasChildrenOnDemand() const
 {
-    return (bool)((nEntryFlags & SV_ENTRYFLAG_CHILDREN_ON_DEMAND)!=0);
+    return (bool)(nEntryFlags & SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
 bool SvTreeListEntry::HasInUseEmphasis() const
 {
-    return (bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0);
+    return (bool)(nEntryFlags & SvTLEntryFlags::IN_USE);
 }
 
 
-void SvTreeListEntry::SetFlags( sal_uInt16 nFlags )
+void SvTreeListEntry::SetFlags( SvTLEntryFlags nFlags )
 {
     nEntryFlags = nFlags;
 }

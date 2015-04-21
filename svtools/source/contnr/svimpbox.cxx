@@ -1673,7 +1673,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
     if (pParent && pView->GetModel()->GetChildList(pParent).size() == 1)
     {
         DBG_ASSERT( pView->IsExpanded( pParent ), "Parent not expanded");
-        pParent->SetFlags( pParent->GetFlags() | SV_ENTRYFLAG_NO_NODEBMP);
+        pParent->SetFlags( pParent->GetFlags() | SvTLEntryFlags::NO_NODEBMP);
         InvalidateEntry( pParent );
     }
 

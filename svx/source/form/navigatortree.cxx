@@ -1260,7 +1260,7 @@ namespace svxform
                 if ( pEntry )
                 {
                     m_aCutEntries.insert( pEntry );
-                    pEntry->SetFlags( pEntry->GetFlags() | SV_ENTRYFLAG_SEMITRANSPARENT );
+                    pEntry->SetFlags( pEntry->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT );
                     InvalidateEntry( pEntry );
                 }
             }
@@ -1564,7 +1564,7 @@ namespace svxform
                     if ( !pEntry )
                         continue;
 
-                    pEntry->SetFlags( pEntry->GetFlags() & ~SV_ENTRYFLAG_SEMITRANSPARENT );
+                    pEntry->SetFlags( pEntry->GetFlags() & ~SvTLEntryFlags::SEMITRANSPARENT );
                     InvalidateEntry( pEntry );
                 }
                 ListBoxEntrySet aEmpty;
