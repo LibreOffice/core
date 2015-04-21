@@ -103,6 +103,13 @@ void SwTxtAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
                 oValue = "name: " + OUStringToOString(pCharFmt->GetName(), RTL_TEXTENCODING_UTF8);
             break;
         }
+    case RES_TXTATR_INETFMT:
+        {
+            pWhich = "inet format";
+            const SwFmtINetFmt& rFmt = GetINetFmt();
+            oValue = "url: " + rFmt.GetValue().toUtf8();
+            break;
+        }
     default:
         break;
     }
