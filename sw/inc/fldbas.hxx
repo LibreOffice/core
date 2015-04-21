@@ -237,10 +237,10 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::beans::XPropertySet> m_wXFieldMaster;
 
-    sal_uInt16 nWhich;
+    sal_uInt16 m_nWhich;
 
     friend void _FinitUI();     ///< In order to delete pointer!
-    static  std::vector<OUString>* pFldNames;
+    static  std::vector<OUString>* s_pFldNames;
 
     static void _GetFldName();  ///< Sets up FldNames; fldmgr.cxx!
 
@@ -265,7 +265,7 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
-            sal_uInt16          Which() const { return nWhich; }
+            sal_uInt16          Which() const { return m_nWhich; }
 
     inline  void            UpdateFlds() const;
 };

@@ -73,7 +73,7 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 // Globals
 
 /// field names
-std::vector<OUString>* SwFieldType::pFldNames = 0;
+std::vector<OUString>* SwFieldType::s_pFldNames = nullptr;
 
 namespace
 {
@@ -125,18 +125,18 @@ namespace
 
 OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
-    if( !pFldNames )
+    if (!s_pFldNames)
         _GetFldName();
 
-    if( nTypeId < SwFieldType::pFldNames->size() )
-        return (*SwFieldType::pFldNames)[nTypeId];
+    if (nTypeId < SwFieldType::s_pFldNames->size())
+        return (*SwFieldType::s_pFldNames)[nTypeId];
     return OUString();
 }
 
 // each field refences a field type that is unique for each document
 SwFieldType::SwFieldType( sal_uInt16 nWhichId )
-    : SwModify(0),
-    nWhich( nWhichId )
+    : SwModify(nullptr)
+    , m_nWhich(nWhichId)
 {
 }
 

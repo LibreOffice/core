@@ -155,7 +155,7 @@ void _FinitUI()
 
     DELETEZ(pGlossaries);
 
-    delete SwFieldType::pFldNames;
+    delete SwFieldType::s_pFldNames;
 
     ClearStringCache();
     delete pGlossaryList;

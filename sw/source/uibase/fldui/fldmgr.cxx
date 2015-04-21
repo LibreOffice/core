@@ -1604,12 +1604,12 @@ void SwFieldType::_GetFldName()
     };
 
     // insert infos for fields
-    SwFieldType::pFldNames = new std::vector<OUString>;
-    SwFieldType::pFldNames->reserve(SAL_N_ELEMENTS(coFldNms));
+    SwFieldType::s_pFldNames = new std::vector<OUString>;
+    SwFieldType::s_pFldNames->reserve(SAL_N_ELEMENTS(coFldNms));
     for( sal_uInt16 nIdx = 0; nIdx < SAL_N_ELEMENTS(coFldNms); ++nIdx )
     {
         const OUString aTmp(SW_RES( coFldNms[ nIdx ] ));
-        SwFieldType::pFldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
+        SwFieldType::s_pFldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
     }
 }
 
