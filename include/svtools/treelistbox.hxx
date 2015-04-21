@@ -216,12 +216,20 @@ namespace o3tl
 }
 
 
-#define SVLBOX_IN_EDT           0x0001
-#define SVLBOX_EDT_ENABLED      0x0002
-#define SVLBOX_IS_EXPANDING     0x0004
-#define SVLBOX_IS_TRAVELSELECT  0x0008
-#define SVLBOX_TARGEMPH_VIS     0x0010
-#define SVLBOX_EDTEND_CALLED    0x0020
+enum class SvTreeListBoxFlags
+{
+    NONE             = 0x0000,
+    IN_EDT           = 0x0001,
+    EDT_ENABLED      = 0x0002,
+    IS_EXPANDING     = 0x0004,
+    IS_TRAVELSELECT  = 0x0008,
+    TARGEMPH_VIS     = 0x0010,
+    EDTEND_CALLED    = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvTreeListBoxFlags> : is_typed_flags<SvTreeListBoxFlags, 0x003f> {};
+}
 
 struct SvTreeListBoxImpl;
 
@@ -273,17 +281,17 @@ class SVT_DLLPUBLIC SvTreeListBox
     sal_Int32       nMinWidthInChars;
 
     SvTreeListEntry*        pEdEntry;
-    SvLBoxItem*         pEdItem;
+    SvLBoxItem*             pEdItem;
 
 protected:
-    Link            aDoubleClickHdl;
-    SvTreeListEntry*    pTargetEntry;
-    SvLBoxButtonData*   pCheckButtonData;
+    Link                    aDoubleClickHdl;
+    SvTreeListEntry*        pTargetEntry;
+    SvLBoxButtonData*       pCheckButtonData;
     std::vector<SvLBoxTab*> aTabs;
-    SvTreeFlags     nTreeFlags;
-    sal_uInt16      nImpFlags;
+    SvTreeFlags             nTreeFlags;
+    SvTreeListBoxFlags      nImpFlags;
     // Move/CopySelection: Position of the current Entry in SelectionList
-    sal_uInt16      nCurEntrySelPos;
+    sal_uInt16              nCurEntrySelPos;
 
 private:
     void SetBaseModel(SvTreeList* pNewModel);
@@ -428,8 +436,8 @@ public:
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry*, SvLBoxItem*);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
-    bool IsInplaceEditingEnabled() const { return ((nImpFlags & SVLBOX_EDT_ENABLED) != 0); }
-    bool IsEditingActive() const { return ((nImpFlags & SVLBOX_IN_EDT) != 0); }
+    bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
+    bool IsEditingActive() const { return bool(nImpFlags & SvTreeListBoxFlags::IN_EDT); }
     void EndEditing( bool bCancel = false );
     void ForbidEmptyText();
 
@@ -484,7 +492,7 @@ public:
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
     virtual bool    DoubleClickHdl();
-    bool            IsTravelSelect() const { return ((nImpFlags&SVLBOX_IS_TRAVELSELECT)!=0);}
+    bool            IsTravelSelect() const { return bool(nImpFlags&SvTreeListBoxFlags::IS_TRAVELSELECT);}
     SvTreeListEntry*    GetHdlEntry() const { return pHdlEntry; }
     SvLBoxItem*     GetHdlItem() const;
 

@@ -385,7 +385,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     nMinWidthInChars(0)
 {
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
-    nImpFlags = 0;
+    nImpFlags = SvTreeListBoxFlags::NONE;
     pTargetEntry = 0;
     nDragDropMode = DragDropMode::NONE;
     SvTreeList* pTempModel = new SvTreeList;
@@ -415,7 +415,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     nMinWidthInChars(0)
 {
     pTargetEntry = 0;
-    nImpFlags = 0;
+    nImpFlags = SvTreeListBoxFlags::NONE;
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = DragDropMode::NONE;
     SvTreeList* pTempModel = new SvTreeList;
@@ -810,15 +810,15 @@ void SvTreeListBox::RecalcViewData()
 
 void SvTreeListBox::ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow)
 {
-    if ( bShow && (nImpFlags & SVLBOX_TARGEMPH_VIS) )
+    if ( bShow && (nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         return;
-    if ( !bShow && !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
+    if ( !bShow && !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         return;
     ShowTargetEmphasis( pEntry, bShow );
     if( bShow )
-        nImpFlags |= SVLBOX_TARGEMPH_VIS;
+        nImpFlags |= SvTreeListBoxFlags::TARGEMPH_VIS;
     else
-        nImpFlags &= ~SVLBOX_TARGEMPH_VIS;
+        nImpFlags &= ~SvTreeListBoxFlags::TARGEMPH_VIS;
 }
 
 void SvTreeListBox::OnCurrentEntryChanged()
@@ -1016,8 +1016,8 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
 {
     if( pEdCtrl )
         delete pEdCtrl;
-    nImpFlags |= SVLBOX_IN_EDT;
-    nImpFlags &= ~SVLBOX_EDTEND_CALLED;
+    nImpFlags |= SvTreeListBoxFlags::IN_EDT;
+    nImpFlags &= ~SvTreeListBoxFlags::EDTEND_CALLED;
     HideFocus();
     pEdCtrl = new SvInplaceEdit2(
         this, rRect.TopLeft(), rRect.GetSize(), rStr,
@@ -1027,9 +1027,9 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
 
 IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
 {
-    if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // avoid nesting
+    if ( nImpFlags & SvTreeListBoxFlags::EDTEND_CALLED ) // avoid nesting
         return 0;
-    nImpFlags |= SVLBOX_EDTEND_CALLED;
+    nImpFlags |= SvTreeListBoxFlags::EDTEND_CALLED;
     OUString aStr;
     if ( !pEdCtrl->EditingCanceled() )
         aStr = pEdCtrl->GetText();
@@ -1043,7 +1043,7 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
     pEdCtrl->Hide();
     // delete pEdCtrl;
     // pEdCtrl = 0;
-    nImpFlags &= (~SVLBOX_IN_EDT);
+    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
     GrabFocus();
     return 0;
 }
@@ -1052,14 +1052,14 @@ void SvTreeListBox::CancelTextEditing()
 {
     if ( pEdCtrl )
         pEdCtrl->StopEditing( true );
-    nImpFlags &= (~SVLBOX_IN_EDT);
+    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
 }
 
 void SvTreeListBox::EndEditing( bool bCancel )
 {
     if( pEdCtrl )
         pEdCtrl->StopEditing( bCancel );
-    nImpFlags &= (~SVLBOX_IN_EDT);
+    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
 }
 
 
@@ -1223,7 +1223,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
         // **** draw emphasis ****
         if( DND_ACTION_NONE == nRet )
                ImplShowTargetEmphasis( pTargetEntry, false );
-        else if( pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
+        else if( pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         {
             ImplShowTargetEmphasis( pTargetEntry, false );
             pTargetEntry = pEntry;
@@ -2141,9 +2141,9 @@ bool SvTreeListBox::EditedEntry( SvTreeListEntry* /*pEntry*/,const OUString& /*r
 void SvTreeListBox::EnableInplaceEditing( bool bOn )
 {
     if (bOn)
-        nImpFlags |= SVLBOX_EDT_ENABLED;
+        nImpFlags |= SvTreeListBoxFlags::EDT_ENABLED;
     else
-        nImpFlags &= ~SVLBOX_EDT_ENABLED;
+        nImpFlags &= ~SvTreeListBoxFlags::EDT_ENABLED;
 }
 
 void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
@@ -2152,7 +2152,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     if( IsEditingActive() )
         return;
 
-    nImpFlags |= SVLBOX_IS_TRAVELSELECT;
+    nImpFlags |= SvTreeListBoxFlags::IS_TRAVELSELECT;
 
     if( !pImp->KeyInput( rKEvt ) )
     {
@@ -2161,7 +2161,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
             Control::KeyInput( rKEvt );
     }
 
-    nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
+    nImpFlags &= ~SvTreeListBoxFlags::IS_TRAVELSELECT;
 }
 
 void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
@@ -2365,7 +2365,7 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
         RequestingChildren( pParent );
     if( pParent->HasChildren() )
     {
-        nImpFlags |= SVLBOX_IS_EXPANDING;
+        nImpFlags |= SvTreeListBoxFlags::IS_EXPANDING;
         if( ExpandingHdl() )
         {
             bExpanded = true;
@@ -2398,7 +2398,7 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
 
 bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
 {
-    nImpFlags &= ~SVLBOX_IS_EXPANDING;
+    nImpFlags &= ~SvTreeListBoxFlags::IS_EXPANDING;
     pHdlEntry = pParent;
     bool bCollapsed = false;
 

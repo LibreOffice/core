@@ -1301,7 +1301,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
             nResult = DND_ACTION_MOVE;
 
             // Draw emphasis.
-            if (pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS))
+            if (pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS))
             {
                 ImplShowTargetEmphasis( pTargetEntry, false );
                 pTargetEntry = pEntry;
