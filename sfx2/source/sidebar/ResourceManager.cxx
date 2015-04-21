@@ -37,6 +37,24 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
+namespace
+{
+
+OUString getString(utl::OConfigurationNode aNode, const char* pNodeName)
+{
+    return comphelper::getString(aNode.getNodeValue(pNodeName));
+}
+sal_Int32 getInt32(utl::OConfigurationNode aNode, const char* pNodeName)
+{
+    return comphelper::getINT32(aNode.getNodeValue(pNodeName));
+}
+bool getBool(utl::OConfigurationNode aNode, const char* pNodeName)
+{
+    return comphelper::getBOOL(aNode.getNodeValue(pNodeName));
+}
+
+} //end anonymous namespace
+
 ResourceManager& ResourceManager::Instance()
 {
     static ResourceManager maInstance;
@@ -194,26 +212,17 @@ void ResourceManager::ReadDeckList()
 
         DeckDescriptor& rDeckDescriptor (maDecks[nWriteIndex++]);
 
-        rDeckDescriptor.msTitle = ::comphelper::getString(
-            aDeckNode.getNodeValue("Title"));
-        rDeckDescriptor.msId = ::comphelper::getString(
-            aDeckNode.getNodeValue("Id"));
-        rDeckDescriptor.msIconURL = ::comphelper::getString(
-            aDeckNode.getNodeValue("IconURL"));
-        rDeckDescriptor.msHighContrastIconURL = ::comphelper::getString(
-            aDeckNode.getNodeValue("HighContrastIconURL"));
-        rDeckDescriptor.msTitleBarIconURL = ::comphelper::getString(
-            aDeckNode.getNodeValue("TitleBarIconURL"));
-        rDeckDescriptor.msHighContrastTitleBarIconURL = ::comphelper::getString(
-            aDeckNode.getNodeValue("HighContrastTitleBarIconURL"));
-        rDeckDescriptor.msHelpURL = ::comphelper::getString(
-            aDeckNode.getNodeValue("HelpURL"));
+        rDeckDescriptor.msTitle = getString(aDeckNode, "Title");
+        rDeckDescriptor.msId = getString(aDeckNode, "Id");
+        rDeckDescriptor.msIconURL = getString(aDeckNode, "IconURL");
+        rDeckDescriptor.msHighContrastIconURL = getString(aDeckNode, "HighContrastIconURL");
+        rDeckDescriptor.msTitleBarIconURL = getString(aDeckNode, "TitleBarIconURL");
+        rDeckDescriptor.msHighContrastTitleBarIconURL = getString(aDeckNode, "HighContrastTitleBarIconURL");
+        rDeckDescriptor.msHelpURL = getString(aDeckNode, "HelpURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
-        rDeckDescriptor.mnOrderIndex = ::comphelper::getINT32(
-            aDeckNode.getNodeValue("OrderIndex"));
-        rDeckDescriptor.mbExperimental = ::comphelper::getBOOL(
-            aDeckNode.getNodeValue("IsExperimental"));
+        rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, "OrderIndex");
+        rDeckDescriptor.mbExperimental = getBool(aDeckNode, "IsExperimental");
 
         ReadContextList(
             aDeckNode,
@@ -248,32 +257,19 @@ void ResourceManager::ReadPanelList()
 
         PanelDescriptor& rPanelDescriptor (maPanels[nWriteIndex++]);
 
-        rPanelDescriptor.msTitle = ::comphelper::getString(
-            aPanelNode.getNodeValue("Title"));
-        rPanelDescriptor.mbIsTitleBarOptional = ::comphelper::getBOOL(
-            aPanelNode.getNodeValue("TitleBarIsOptional"));
-        rPanelDescriptor.msId = ::comphelper::getString(
-            aPanelNode.getNodeValue("Id"));
-        rPanelDescriptor.msDeckId = ::comphelper::getString(
-            aPanelNode.getNodeValue("DeckId"));
-        rPanelDescriptor.msTitleBarIconURL = ::comphelper::getString(
-            aPanelNode.getNodeValue("TitleBarIconURL"));
-        rPanelDescriptor.msHighContrastTitleBarIconURL = ::comphelper::getString(
-            aPanelNode.getNodeValue("HighContrastTitleBarIconURL"));
-        rPanelDescriptor.msHelpURL = ::comphelper::getString(
-            aPanelNode.getNodeValue("HelpURL"));
-        rPanelDescriptor.msImplementationURL = ::comphelper::getString(
-            aPanelNode.getNodeValue("ImplementationURL"));
-        rPanelDescriptor.mnOrderIndex = ::comphelper::getINT32(
-            aPanelNode.getNodeValue("OrderIndex"));
-        rPanelDescriptor.mbShowForReadOnlyDocuments = ::comphelper::getBOOL(
-            aPanelNode.getNodeValue("ShowForReadOnlyDocument"));
-        rPanelDescriptor.mbWantsCanvas = ::comphelper::getBOOL(
-            aPanelNode.getNodeValue("WantsCanvas"));
-        rPanelDescriptor.mbExperimental = ::comphelper::getBOOL(
-            aPanelNode.getNodeValue("IsExperimental"));
-        const OUString sDefaultMenuCommand (::comphelper::getString(
-                aPanelNode.getNodeValue("DefaultMenuCommand")));
+        rPanelDescriptor.msTitle = getString(aPanelNode, "Title");
+        rPanelDescriptor.mbIsTitleBarOptional = getBool(aPanelNode, "TitleBarIsOptional");
+        rPanelDescriptor.msId = getString(aPanelNode, "Id");
+        rPanelDescriptor.msDeckId = getString(aPanelNode, "DeckId");
+        rPanelDescriptor.msTitleBarIconURL = getString(aPanelNode, "TitleBarIconURL");
+        rPanelDescriptor.msHighContrastTitleBarIconURL = getString(aPanelNode, "HighContrastTitleBarIconURL");
+        rPanelDescriptor.msHelpURL = getString(aPanelNode, "HelpURL");
+        rPanelDescriptor.msImplementationURL = getString(aPanelNode, "ImplementationURL");
+        rPanelDescriptor.mnOrderIndex = getInt32(aPanelNode, "OrderIndex");
+        rPanelDescriptor.mbShowForReadOnlyDocuments = getBool(aPanelNode, "ShowForReadOnlyDocument");
+        rPanelDescriptor.mbWantsCanvas = getBool(aPanelNode, "WantsCanvas");
+        rPanelDescriptor.mbExperimental = getBool(aPanelNode, "IsExperimental");
+        const OUString sDefaultMenuCommand(getString(aPanelNode, "DefaultMenuCommand"));
 
         ReadContextList(aPanelNode, rPanelDescriptor.maContextList, sDefaultMenuCommand);
     }
@@ -474,26 +470,26 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
           continue;
 
         DeckDescriptor& rDeckDescriptor (maDecks[nDeckWriteIndex++]);
-        rDeckDescriptor.msTitle = ::comphelper::getString(aChildNode.getNodeValue("UIName"));
+        rDeckDescriptor.msTitle = getString(aChildNode, "UIName");
         rDeckDescriptor.msId = rsNodeName;
-        rDeckDescriptor.msIconURL = ::comphelper::getString(aChildNode.getNodeValue("ImageURL"));
+        rDeckDescriptor.msIconURL = getString(aChildNode, "ImageURL");
         rDeckDescriptor.msHighContrastIconURL = rDeckDescriptor.msIconURL;
         rDeckDescriptor.msTitleBarIconURL.clear();
         rDeckDescriptor.msHighContrastTitleBarIconURL.clear();
-        rDeckDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
+        rDeckDescriptor.msHelpURL = getString(aChildNode, "HelpURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
 
         PanelDescriptor& rPanelDescriptor (maPanels[nPanelWriteIndex++]);
-        rPanelDescriptor.msTitle = ::comphelper::getString(aChildNode.getNodeValue("UIName"));
+        rPanelDescriptor.msTitle = getString(aChildNode, "UIName");
         rPanelDescriptor.mbIsTitleBarOptional = true;
         rPanelDescriptor.msId = rsNodeName;
         rPanelDescriptor.msDeckId = rsNodeName;
         rPanelDescriptor.msTitleBarIconURL.clear();
         rPanelDescriptor.msHighContrastTitleBarIconURL.clear();
-        rPanelDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
+        rPanelDescriptor.msHelpURL = getString(aChildNode, "HelpURL");
         rPanelDescriptor.msImplementationURL = rsNodeName;
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
