@@ -423,7 +423,7 @@ namespace
         // data about ourself
         Size aSize = _pView->getRealOutputSize(); //GetOutputSizePixel();
 
-        bool bVisbile = true;
+        bool bVisible = true;
         bool bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());
         bool bFitsVert= (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
         if (!bFitsHor || !bFitsVert)
@@ -450,24 +450,24 @@ namespace
             }
 
             if ( _nScrollX ) // aSize.Width() > _rSize.Width() &&
-                bVisbile = isScrollAllowed(_pView,_nScrollX, true);
+                bVisible = isScrollAllowed(_pView,_nScrollX, true);
 
             if ( _nScrollY ) // aSize.Height() > _rSize.Height() &&
-                bVisbile = bVisbile && isScrollAllowed(_pView,_nScrollY, false);
+                bVisible = bVisible && isScrollAllowed(_pView,_nScrollY, false);
 
-            if ( bVisbile )
+            if ( bVisible )
             {
                 sal_Int32 nHRangeMax = _pView->GetHScrollBar().GetRangeMax();
                 sal_Int32 nVRangeMax = _pView->GetVScrollBar().GetRangeMax();
 
                 if ( aSize.Width() + _pView->GetHScrollBar().GetThumbPos() + _nScrollX > nHRangeMax )
-                    bVisbile = false;
-                if ( bVisbile && aSize.Height() + _pView->GetVScrollBar().GetThumbPos() + _nScrollY > nVRangeMax )
-                    bVisbile = false;
+                    bVisible = false;
+                if ( bVisible && aSize.Height() + _pView->GetVScrollBar().GetThumbPos() + _nScrollY > nVRangeMax )
+                    bVisible = false;
             }
         }
 
-        return bVisbile;
+        return bVisible;
     }
 } // end of ano namespace
 
@@ -491,11 +491,11 @@ void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
 
     if ( getMovementImpl(this,_rPoint,_rSize,nScrollX,nScrollY) )
     {
-        bool bVisbile = true;
+        bool bVisible = true;
         if (nScrollX)
-            bVisbile = ScrollPane(nScrollX, true, true);
+            bVisible = ScrollPane(nScrollX, true, true);
 
-        if (nScrollY && bVisbile)
+        if (nScrollY && bVisible)
             ScrollPane(nScrollY, false, true);
     }
 }
