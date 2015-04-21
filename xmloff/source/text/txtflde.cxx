@@ -414,6 +414,10 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
             {
                 return FIELD_ID_DRAW_DATE_TIME;
             }
+            else if( sFieldName == "PageTitle" )
+            {
+                return FIELD_ID_DRAW_PAGETITLE;
+            }
         }
     }
 
@@ -738,6 +742,7 @@ bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_HEADER:
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
+    case FIELD_ID_DRAW_PAGETITLE:
     default:
         OSL_FAIL("unknown field type/field has no content");
         return true; // invalid info; string in case of doubt
@@ -953,6 +958,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_DRAW_DATE_TIME:
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_HEADER:
+    case FIELD_ID_DRAW_PAGETITLE:
         ; // no formats for these fields!
         break;
 
@@ -1847,6 +1853,17 @@ void XMLTextFieldExport::ExportFieldHelper(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, false, false );
     }
     break;
+
+    case FIELD_ID_DRAW_PAGETITLE:
+    {
+        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT, XML_PAGE_TITLE, false, false );
+            GetExport().Characters( sPresentation );
+        }
+    }
+    break;
+
 
     case FIELD_ID_UNKNOWN:
     default:
