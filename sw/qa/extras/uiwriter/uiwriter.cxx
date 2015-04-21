@@ -935,7 +935,7 @@ void SwUiWriterTest::testUndoCharAttribute()
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT);
     // Adds selected text's attributes to aSet
     pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
-    SfxPoolItem* aPoolItem = (SfxPoolItem*) aSet.GetItem(RES_CHRATR_WEIGHT);
+    SfxPoolItem const * aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     SfxPoolItem& ampPoolItem = aWeightItem;
     // Check that bold is active on the selection; checks if it's in aSet
     CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), true);
@@ -944,7 +944,7 @@ void SwUiWriterTest::testUndoCharAttribute()
     // Check that bold is no longer active
     aSet.ClearItem(RES_CHRATR_WEIGHT);
     pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
-    aPoolItem = (SfxPoolItem*) aSet.GetItem(RES_CHRATR_WEIGHT);
+    aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), false);
 }
 
