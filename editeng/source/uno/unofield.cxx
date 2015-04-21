@@ -508,7 +508,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::PRESENTATION_DATE_TIME:
         pData = new SvxDateTimeField();
         break;
-    case text::textfield::Type::PAGE_TITLE:
+    case text::textfield::Type::PRESENTATION_PAGE_TITLE:
         pData = new SvxPageTitleField();
         break;
     };
@@ -613,7 +613,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
                 return OUString("Footer");
             case text::textfield::Type::PRESENTATION_DATE_TIME:
                 return OUString("DateTime");
-            case text::textfield::Type::PAGE_TITLE:
+            case text::textfield::Type::PRESENTATION_PAGE_TITLE:
                 return OUString("PageTitle");
             default:
                 return OUString("Unknown");
@@ -862,9 +862,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[2] = "com.sun.star.presentation.TextField.DateTime";
             pServices[3] = "com.sun.star.presentation.textfield.DateTime";
         break;
-        case text::textfield::Type::PAGE_TITLE:
-            pServices[2] = "com.sun.star.text.TextField.PageTitle";
-            pServices[3] = "com.sun.star.text.textfield.PageTitle";
+        case text::textfield::Type::PRESENTATION_PAGE_TITLE:
+            pServices[2] = "com.sun.star.presentation.TextField.PageTitle";
+            pServices[3] = "com.sun.star.presentation.textfield.PageTitle";
         break;
         default:
             aSeq.realloc(0);
