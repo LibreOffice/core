@@ -761,9 +761,9 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
             Sequence<sal_Int32> aIndices;
             xPropSet->getPropertyValue("AttributedDataPoints") >>= aIndices;
-            CPPUNIT_ASSERT_MESSAGE("There should be 2 data points with local properties.", aIndices.getLength() == 2);
-            CPPUNIT_ASSERT(aIndices[0] == 0);
-            CPPUNIT_ASSERT(aIndices[1] == 2);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 2 data points with local properties.", sal_Int32(2), aIndices.getLength());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aIndices[0]);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aIndices[1]);
 
             const Check aDataPoints[] =
             {
@@ -778,7 +778,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
                 css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
-                CPPUNIT_ASSERT(eLineStyle == aDataPoints[i].meStyle);
+                CPPUNIT_ASSERT_EQUAL(aDataPoints[i].meStyle, eLineStyle);
 
                 sal_Int32 nWidth = -1;
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
@@ -786,7 +786,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
                 sal_Int32 nColor = -1;
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-                CPPUNIT_ASSERT_MESSAGE("Border color is wrong.", nColor == aDataPoints[i].mnColor);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color is wrong.", aDataPoints[i].mnColor, nColor);
             }
         }
 
@@ -805,7 +805,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
             css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
-            CPPUNIT_ASSERT(eLineStyle == css::drawing::LineStyle_SOLID);
+            CPPUNIT_ASSERT_EQUAL(css::drawing::LineStyle_SOLID, eLineStyle);
 
             sal_Int32 nWidth = -1;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
@@ -813,7 +813,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
             sal_Int32 nColor = -1;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-            CPPUNIT_ASSERT_MESSAGE("Border color should be green.", nColor == 0x0000FF00);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", sal_Int32(0x0000FF00), nColor);
         }
 
     } aTest;
