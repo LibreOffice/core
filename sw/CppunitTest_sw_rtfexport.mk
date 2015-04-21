@@ -48,36 +48,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_rtfexport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_rtfexport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_rtfexport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_rtfexport,\
-	basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    embeddedobj/util/embobj \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/storagefilterdetect/storagefd \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    sfx2/util/sfx \
-    starmath/util/sm \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    sw/util/msword \
-    sw/util/sw \
-    sw/util/swd \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-    unoxml/source/service/unoxml \
-	uui/util/uui \
-    writerfilter/util/writerfilter \
-    xmloff/util/xo \
-	oox/util/oox \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_rtfexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_rtfexport))
 

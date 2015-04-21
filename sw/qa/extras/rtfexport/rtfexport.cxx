@@ -76,6 +76,16 @@ public:
         return false;
 
     }
+
+    virtual void postLoad(const char* pFilename) SAL_OVERRIDE
+    {
+        if (OString(pFilename) == "tdf90421.fodt")
+        {
+            // Change the hyperlink, so its URL is empty.
+            uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
+            xRun->setPropertyValue("HyperLinkURL", uno::makeAny(OUString()));
+        }
+    }
 };
 
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
@@ -867,6 +877,19 @@ DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     // This was 2, i.e. the second table had 3 cols, now 2 as expected.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf90421, "tdf90421.fodt")
+{
+    if (mbExported)
+    {
+        SvMemoryStream aMemoryStream;
+        SvFileStream aStream(maTempFile.GetURL(), STREAM_READ);
+        aStream.ReadStream(aMemoryStream);
+        OString aData(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+        // This was some positive number, i.e. we exported a hyperlink with an empty URL.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aData.indexOf("HYPERLINK"));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

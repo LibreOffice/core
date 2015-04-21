@@ -264,6 +264,7 @@ protected:
         header();
         preTest(filename);
         load(mpTestDocumentPath, filename);
+        postLoad(filename);
         reload(mpFilter, filename);
         postTest(filename);
         verify();
@@ -310,6 +311,11 @@ protected:
      * Override this function if some special filename-specific setup is needed
      */
     virtual void preTest(const char* /*filename*/)
+    {
+    }
+
+    /// Override this function if some special file-specific setup is needed during export test: after load, but before save.
+    virtual void postLoad(const char* /*pFilename*/)
     {
     }
 
