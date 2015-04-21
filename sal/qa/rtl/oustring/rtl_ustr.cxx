@@ -518,8 +518,8 @@ namespace rtl_ustr
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc( nLength + sizeof(sal_Unicode)); // length + 1 (null terminator)
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-                memset(pStr, 0, nLength + sizeof(sal_Unicode));
                 memcpy(pStr, aStr1.getStr(), nLength);
+                pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_replaceChar( pStr, 'e', 'u' );
                 rtl::OUString suStr(pStr, aStr1.getLength());
@@ -614,8 +614,8 @@ namespace rtl_ustr
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode) );  // we need to add '\0' so one more
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-                memset(pStr, 0, nLength + sizeof(sal_Unicode));                             // empty the sal_Unicode array
                 memcpy(pStr, aStr1.getStr(), nLength);
+                pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_toAsciiLowerCase( pStr );
                 rtl::OUString suStr(pStr, aStr1.getLength());
@@ -693,8 +693,8 @@ namespace rtl_ustr
                 sal_uInt32 nLength = aStr1.getLength() * sizeof(sal_Unicode);
                 sal_Unicode* pStr = (sal_Unicode*) malloc(nLength + sizeof(sal_Unicode)); // length + null terminator
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
-                memset(pStr, 0, nLength + sizeof(sal_Unicode));
                 memcpy(pStr, aStr1.getStr(), nLength);
+                pStr[aStr1.getLength()] = 0;
 
                 rtl_ustr_toAsciiUpperCase( pStr );
                 rtl::OUString suStr(pStr, aStr1.getLength());
