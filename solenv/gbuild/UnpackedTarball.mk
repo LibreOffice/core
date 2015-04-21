@@ -51,6 +51,9 @@ $(dir $(call gb_UnpackedTarget_get_target,%)).dir :
 $(call gb_UnpackedTarget_get_target,%).tar.bz2 :
 	$(call gb_UnpackedTarget__command,untar,$@,$*,-j)
 
+$(call gb_UnpackedTarget_get_target,%).tar.xz :
+	$(call gb_UnpackedTarget__command,untar,$@,$*,-J)
+
 $(call gb_UnpackedTarget_get_target,%).tar.gz :
 	$(call gb_UnpackedTarget__command,untar,$@,$*,-z)
 
