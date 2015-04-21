@@ -29,7 +29,7 @@
 #include <vcl/print.hxx>
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
-
+#include <memory>
 
 
 #define PRTUIOPT_TITLE_ROW          "TitleRow"
@@ -55,7 +55,7 @@ class SmModel : public SfxBaseModel,
                 public oox::FormulaExportBase,
                 public oox::FormulaImportBase
 {
-    SmPrintUIOptions* m_pPrintUIOptions;
+    std::unique_ptr<SmPrintUIOptions> m_pPrintUIOptions;
 protected:
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues )
         throw (css::uno::RuntimeException, css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
