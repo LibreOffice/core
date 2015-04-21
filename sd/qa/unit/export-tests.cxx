@@ -103,11 +103,13 @@ public:
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
 
+    void testFdo90607();
 #if !defined WNT
     void testBnc822341();
 #endif
 
     CPPUNIT_TEST_SUITE(SdExportTest);
+    CPPUNIT_TEST(testFdo90607);
     CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testBnc870233_1);
     CPPUNIT_TEST(testBnc870233_2);
@@ -524,6 +526,30 @@ void SdExportTest::testBnc822347_EmptyBullet()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), nDepth); // depth >= 0 means that the paragraph has bullets enabled
 
+    xDocShRef->DoClose();
+}
+
+//Bullets not having  any text following them are not getting exported to pptx correctly.
+void SdExportTest::testFdo90607()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo90607.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+     SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
+    const sal_Int16 nDepth = pOutlinerParagraphObject->GetDepth(0);
+    CPPUNIT_ASSERT_MESSAGE("not equal", nDepth != -1);
     xDocShRef->DoClose();
 }
 
