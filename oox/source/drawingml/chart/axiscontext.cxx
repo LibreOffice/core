@@ -86,6 +86,7 @@ AxisContextBase::~AxisContextBase()
 
 ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( catAx ):
@@ -107,8 +108,7 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                     mrModel.mofCrossesAt = rAttribs.getDouble( XML_val, 0.0 );
                     return 0;
                 case C_TOKEN( delete ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbDeleted = rAttribs.getBool( XML_val, false );
+                    mrModel.mbDeleted = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( majorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );

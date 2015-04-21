@@ -179,13 +179,13 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                     return new SurfaceTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
 
                 case C_TOKEN( catAx ):
-                    return new CatAxisContext( *this, mrModel.maAxes.create( nElement ) );
+                    return new CatAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( dateAx ):
-                    return new DateAxisContext( *this, mrModel.maAxes.create( nElement ) );
+                    return new DateAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( serAx ):
-                    return new SerAxisContext( *this, mrModel.maAxes.create( nElement ) );
+                    return new SerAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
                 case C_TOKEN( valAx ):
-                    return new ValAxisContext( *this, mrModel.maAxes.create( nElement ) );
+                    return new ValAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
 
                 case C_TOKEN( layout ):
                     return new LayoutContext( *this, mrModel.mxLayout.create() );

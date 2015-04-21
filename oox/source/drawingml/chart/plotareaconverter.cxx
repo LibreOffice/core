@@ -99,11 +99,11 @@ AxesSetConverter::~AxesSetConverter()
 {
 }
 
-ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId )
+ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId, bool bMSO2007Doc )
 {
     ModelRef< AxisModel > xAxis = rFromAxes.get( nAxisIdx );
     if( !xAxis )
-        xAxis.create( nDefTypeId ).mbDeleted = true;  // missing axis is invisible
+        xAxis.create( nDefTypeId, bMSO2007Doc ).mbDeleted = true;  // missing axis is invisible
     return xAxis;
 }
 
@@ -159,9 +159,10 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
+            bool bMSO2007Doc = getFilter().isMSO2007Document();
             // convert all axes (create missing axis models)
-            ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ) );
-            ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
+            ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ), bMSO2007Doc );
+            ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ), bMSO2007Doc );
 
             AxisConverter aXAxisConv( *this, *xXAxis );
             aXAxisConv.convertFromModel( xCoordSystem, aTypeGroups, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
@@ -170,7 +171,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
 
             if( rFirstTypeGroup.isDeep3dChart() )
             {
-                ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ) );
+                ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ), bMSO2007Doc );
                 AxisConverter aZAxisConv( *this, *xZAxis );
                 aZAxisConv.convertFromModel( xCoordSystem, aTypeGroups, 0, nAxesSetIdx, API_Z_AXIS );
             }

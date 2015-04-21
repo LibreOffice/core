@@ -32,7 +32,7 @@ AxisDispUnitsModel::~AxisDispUnitsModel()
 {
 }
 
-AxisModel::AxisModel( sal_Int32 nTypeId ) :
+AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
     mnCrossAxisId( -1 ),
@@ -50,7 +50,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnTickMarkSkip( 0 ),
     mnTypeId( nTypeId ),
     mbAuto( false ),
-    mbDeleted( false ),
+    mbDeleted( !bMSO2007Doc ),
     mbNoMultiLevel( false )
 {
 }

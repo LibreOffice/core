@@ -87,7 +87,7 @@ struct AxisModel
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.
 
-    explicit            AxisModel( sal_Int32 nTypeId );
+    explicit            AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc );
                         ~AxisModel();
 };
 
