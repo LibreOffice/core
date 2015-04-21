@@ -437,52 +437,58 @@ void RtfAttributeOutput::EndRuby()
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
 {
-    m_aStyles.append('{');
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FIELD);
-    m_aStyles.append('{');
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FLDINST);
-    m_aStyles.append(" HYPERLINK ");
-
-    OUString sURL(rUrl);
-    if (!sURL.isEmpty())
+    m_sURL = rUrl;
+    // Ignore hyperlink without an URL.
+    if (!rUrl.isEmpty())
     {
+        m_aStyles.append('{');
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FIELD);
+        m_aStyles.append('{');
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FLDINST);
+        m_aStyles.append(" HYPERLINK ");
+
+        OUString sURL(rUrl);
         m_aStyles.append("\"");
         m_aStyles.append(msfilter::rtfutil::OutString(sURL, m_rExport.eCurrentEncoding));
         m_aStyles.append("\" ");
-    }
 
-    if (!rTarget.isEmpty())
-    {
-        m_aStyles.append("\\\\t \"");
-        m_aStyles.append(msfilter::rtfutil::OutString(rTarget, m_rExport.eCurrentEncoding));
-        m_aStyles.append("\" ");
-    }
+        if (!rTarget.isEmpty())
+        {
+            m_aStyles.append("\\\\t \"");
+            m_aStyles.append(msfilter::rtfutil::OutString(rTarget, m_rExport.eCurrentEncoding));
+            m_aStyles.append("\" ");
+        }
 
-    m_aStyles.append("}");
-    m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
+        m_aStyles.append("}");
+        m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
+    }
     return true;
 }
 
 bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
 {
-    // UGLY: usually EndRun is called earlier, but there is an extra
-    // call to OutAttrWithRange() when at the end of the paragraph,
-    // so in that special case the output needs to be appended to the
-    // new run's text instead of the previous run
-    if (isAtEndOfParagraph)
+    if (!m_sURL.isEmpty())
     {
-        // close the fldrslt group
-        m_aRunText->append("}}");
-        // close the field group
-        m_aRunText->append('}');
-    }
-    else
-    {
-        // close the fldrslt group
-        m_aRun->append("}}");
-        // close the field group
-        m_aRun->append('}');
+        // UGLY: usually EndRun is called earlier, but there is an extra
+        // call to OutAttrWithRange() when at the end of the paragraph,
+        // so in that special case the output needs to be appended to the
+        // new run's text instead of the previous run
+        if (isAtEndOfParagraph)
+        {
+            // close the fldrslt group
+            m_aRunText->append("}}");
+            // close the field group
+            m_aRunText->append('}');
+        }
+        else
+        {
+            // close the fldrslt group
+            m_aRun->append("}}");
+            // close the field group
+            m_aRun->append('}');
+        }
+        m_sURL.clear();
     }
     return true;
 }
