@@ -76,6 +76,8 @@ public:
     void testSmoothDefaultValue2013XLSX();
     void testTrendlineDefaultValue2007XLSX();
     void testTrendlineDefaultValue2013XLSX();
+    void testVaryColorDefaultValues2007XLSX();
+    void testVaryColorDefaultValues2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -115,6 +117,8 @@ public:
     CPPUNIT_TEST(testSmoothDefaultValue2013XLSX);
     CPPUNIT_TEST(testTrendlineDefaultValue2007XLSX);
     CPPUNIT_TEST(testTrendlineDefaultValue2013XLSX);
+    CPPUNIT_TEST(testVaryColorDefaultValues2007XLSX);
+    CPPUNIT_TEST(testVaryColorDefaultValues2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -908,6 +912,36 @@ void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
     bool bShowCorrelation = false;
     CPPUNIT_ASSERT(aAny >>= bShowCorrelation);
     CPPUNIT_ASSERT(bShowCorrelation);
+}
+
+void Chart2ImportTest::testVaryColorDefaultValues2007XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "vary_color2007.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    bool bVaryColor = true;
+    CPPUNIT_ASSERT(aAny >>= bVaryColor);
+    CPPUNIT_ASSERT(!bVaryColor);
+}
+
+void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "vary_color.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    bool bVaryColor = false;
+    CPPUNIT_ASSERT(aAny >>= bVaryColor);
+    CPPUNIT_ASSERT(bVaryColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
