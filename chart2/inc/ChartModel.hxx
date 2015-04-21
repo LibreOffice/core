@@ -56,13 +56,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_23
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_23
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 23
-#include "comphelper/implbase_var.hxx"
-#endif
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/grfmgr.hxx>
 
@@ -78,7 +74,7 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper23<
+typedef cppu::WeakImplHelper<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)

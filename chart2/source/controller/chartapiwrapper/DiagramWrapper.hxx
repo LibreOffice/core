@@ -22,12 +22,6 @@
 #include "WrappedPropertySet.hxx"
 #include "DiagramHelper.hxx"
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
-#include "comphelper/implbase_var.hxx"
-#endif
-
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -59,7 +53,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DiagramWrapper : public ::comphelper::ImplInheritanceHelper13<
+class DiagramWrapper : public cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
                      , ::com::sun::star::chart::XAxisSupplier
