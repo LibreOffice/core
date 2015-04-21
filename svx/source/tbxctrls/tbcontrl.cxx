@@ -158,6 +158,7 @@ private:
 
     void            ReleaseFocus();
     Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
+    void            SetupEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
@@ -578,15 +579,9 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->DrawText(aPos, rStyleName);
 }
 
-
-void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+void SvxStyleBox_Impl::SetupEntry(const UserDrawEvent& rUDEvt, const OUString& rStyleName)
 {
     sal_uInt16 nItem = rUDEvt.GetItemId();
-    OUString aStyleName( GetEntry( nItem ) );
-
-    OutputDevice *pDevice = rUDEvt.GetDevice();
-    pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
-
     if (nItem == 0 || nItem == GetEntryCount() - 1)
     {
         Rectangle aRect(rUDEvt.GetRect());
@@ -605,7 +600,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
 
             pStyle = pPool->First();
-            while ( pStyle && OUString( pStyle->GetName() ) != aStyleName )
+            while (pStyle && pStyle->GetName() != rStyleName)
                 pStyle = pPool->Next();
         }
 
@@ -618,6 +613,8 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
             if ( pFontItem && pFontHeightItem )
             {
+                OutputDevice *pDevice = rUDEvt.GetDevice();
+
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
@@ -743,6 +740,17 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             }
         }
     }
+}
+
+void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    sal_uInt16 nItem = rUDEvt.GetItemId();
+    OUString aStyleName( GetEntry( nItem ) );
+
+    OutputDevice *pDevice = rUDEvt.GetDevice();
+    pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+
+    SetupEntry(rUDEvt, aStyleName);
 
     UserDrawEntry(rUDEvt, aStyleName);
 
@@ -2097,7 +2105,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
-        sal_uInt16                  nCount      = pStyleSheetPool->Count();
+        sal_uInt16              nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = NULL;
         bool                    bDoFill     = false;
 
