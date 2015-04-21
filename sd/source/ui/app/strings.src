@@ -1076,6 +1076,11 @@ String STR_FIELD_PLACEHOLDER_COUNT
     Text [ en-US ] = "<count>" ;
 };
 
+String STR_FIELD_PLACEHOLDER_PAGETITLE
+{
+    Text [ en-US ] = "<title>" ;
+};
+
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
 {
     Text [ en-US ] = "Notes Area";

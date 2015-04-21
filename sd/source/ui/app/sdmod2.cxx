@@ -268,6 +268,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             {
                 aRepresentation = pPage->GetName();
             }
+            else
+                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_PAGETITLE).toString();
 
             pInfo->SetRepresentation( aRepresentation );
         }
