@@ -180,31 +180,6 @@ namespace comphelper
         }
         return _rxOut.is();
     }
-
-    /** ask for an iface of an object
-        usage:<br/>
-            Reference<XFoo> xFoo;<br/>
-            if (query_interface(xAnything, xFoo))<br/>
-                ....
-    */
-    template <class iface>
-    bool query_interface(const InterfaceRef& _rxObject, ::com::sun::star::uno::Reference<iface>& _rxOut)
-    {
-        _rxOut = static_cast<iface*>(NULL);
-        if (_rxObject.is())
-        {
-            ::com::sun::star::uno::Any aCheck = _rxObject->queryInterface(
-                cppu::UnoType<iface>::get());
-            if(aCheck.hasValue())
-            {
-                _rxOut = *static_cast<const ::com::sun::star::uno::Reference<iface>*>(aCheck.getValue());
-                return _rxOut.is();
-            }
-        }
-        return false;
-    }
-
-
 }   // namespace comphelper
 
 

@@ -21,7 +21,6 @@
 #include "ado/AConnection.hxx"
 #include "ado/AResultSet.hxx"
 #include <comphelper/property.hxx>
-#include <comphelper/uno3.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -182,8 +181,9 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 
     try
     {
-        Reference<XCloseable> xCloseable;
-        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
+        Reference<XCloseable> xCloseable(
+            m_xResultSet.get(), css::uno::UNO_QUERY);
+        if ( xCloseable.is() )
             xCloseable->close();
     }
     catch( const DisposedException& ) { }

@@ -40,7 +40,7 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
     // Hold a reference of the Control
     {
         InterfaceRef xIFace(static_cast<XWeak*>(pCompImpl));
-        query_interface(xIFace, m_xComp);
+        m_xComp.set(xIFace, css::uno::UNO_QUERY);
     }
 
     // and add us at the Control
@@ -189,7 +189,8 @@ void OComponentEventThread::run()
                 // the mutex is locked.
                 Reference<XControl>  xControl;
                 if ( xControlAdapter.is() )
-                    query_interface(xControlAdapter->queryAdapted(), xControl);
+                    xControl.set(
+                        xControlAdapter->queryAdapted(), css::uno::UNO_QUERY);
 
                 if( xComp.is() )
                     processEvent( pCompImpl, pEvt.get(), xControl, bFlag );

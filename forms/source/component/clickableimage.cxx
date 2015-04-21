@@ -738,7 +738,7 @@ namespace frm
             {
                 Reference<XChild>  xChild( xIfc, UNO_QUERY );
                 xIfc = xChild->getParent();
-                query_interface(xIfc, xModel);
+                xModel.set(xIfc, css::uno::UNO_QUERY);
             }
 
             // Search for the Object shell by iterating over all Object shells

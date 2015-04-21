@@ -25,7 +25,6 @@
 #include "odbc/OResultSet.hxx"
 #include <comphelper/property.hxx>
 #include "odbc/OTools.hxx"
-#include <comphelper/uno3.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -226,8 +225,9 @@ void OStatement_Base::clearMyResultSet()
 
     try
     {
-        Reference<XCloseable> xCloseable;
-        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
+        Reference<XCloseable> xCloseable(
+            m_xResultSet.get(), css::uno::UNO_QUERY);
+        if ( xCloseable.is() )
             xCloseable->close();
     }
     catch( const DisposedException& ) { }

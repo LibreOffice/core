@@ -431,7 +431,8 @@ namespace
             sReturn = sCurrentIndex;
 
             // travel up
-            if (::comphelper::query_interface(Reference< XInterface >(xParent),xChild))
+            xChild.set(xParent, css::uno::UNO_QUERY);
+            if (xChild.is())
                 xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
         }
 

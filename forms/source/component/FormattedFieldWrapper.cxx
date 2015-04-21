@@ -55,17 +55,17 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
     if (bActAsFormatted)
     {
         // instantiate an FormattedModel
-        InterfaceRef  xFormattedModel;
         // (instantiate it directly ..., as the OFormattedModel isn't
         // registered for any service names anymore)
         OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
-        query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
+        InterfaceRef xFormattedModel(
+            static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
 
         pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
         OSL_ENSURE(pRef->m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
 
         // _before_ setting the delegator, give it to the member references
-        query_interface(xFormattedModel, pRef->m_xFormattedPart);
+        pRef->m_xFormattedPart.set(xFormattedModel, css::uno::UNO_QUERY);
         pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xContext));
     }
 
@@ -98,7 +98,8 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (Ru
         xRef->m_xAggregate = Reference< XAggregation >(xClone, UNO_QUERY);
         OSL_ENSURE(xRef->m_xAggregate.is(), "invalid aggregate cloned !");
 
-        query_interface( Reference< XInterface >(xClone.get() ), xRef->m_xFormattedPart);
+        xRef->m_xFormattedPart.set(
+            Reference< XInterface >(xClone.get()), css::uno::UNO_QUERY);
 
         if ( m_pEditPart.is() )
         {
@@ -217,8 +218,8 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
-    Reference<XPropertySet>  xEditProps;
-    query_interface(static_cast<XWeak*>(m_pEditPart.get()), xEditProps);
+    Reference<XPropertySet> xEditProps(
+        static_cast<XWeak*>(m_pEditPart.get()), css::uno::UNO_QUERY);
 
     Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
     dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
@@ -317,7 +318,7 @@ void OFormattedFieldWrapper::ensureAggregate()
         {
             // arghhh ... instantiate it directly ... it's dirty, but we really need this aggregate
             OEditModel* pModel = new OEditModel(m_xContext);
-            query_interface(static_cast<XWeak*>(pModel), xEditModel);
+            xEditModel.set(static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
         }
 
         m_xAggregate = Reference<XAggregation> (xEditModel, UNO_QUERY);
