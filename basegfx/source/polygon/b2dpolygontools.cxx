@@ -662,7 +662,7 @@ namespace basegfx
                     // is checked above. Unfortunately, with floating-
                     // point calculations, this case might happen.
                     // Handled by nIndex check below
-                    if(nIndex < nEdgeCount && fTools::moreOrEqual(fDistance, fEdgeLength))
+                    if (nIndex+1 < nEdgeCount && fTools::moreOrEqual(fDistance, fEdgeLength))
                     {
                         // go to next edge
                         fDistance -= fEdgeLength;
