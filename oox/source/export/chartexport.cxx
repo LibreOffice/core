@@ -1558,7 +1558,18 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
     pFS->startElement( FSNS( XML_c, XML_scatterChart ),
             FSEND );
     // TODO:scatterStyle
+
+    sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
+    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
+    if( GetProperty( xPropSet, "SymbolType" ) )
+        mAny >>= nSymbolType;
+
     const char* scatterStyle = "lineMarker";
+    if (nSymbolType == css::chart::ChartSymbolType::NONE)
+    {
+        scatterStyle = "line";
+    }
+
     pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
             XML_val, scatterStyle,
             FSEND );
