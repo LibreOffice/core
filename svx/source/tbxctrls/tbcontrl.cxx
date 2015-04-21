@@ -643,8 +643,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 // setup the device & draw
                 vcl::Font aOldFont( pDevice->GetFont() );
-                Color aOldColor( pDevice->GetTextColor() );
-                Color aOldFillColor( pDevice->GetFillColor() );
+                pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
                 Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
@@ -682,7 +681,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     break;
 
                     //TODO Draw the other background styles: gradient, hatching and bitmap
-               }
+                }
 
                 // when the font and background color are too similar, adjust the Font-Color
                 if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
@@ -741,9 +740,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 pDevice->DrawText( aPos, aStyleName );
 
-                pDevice->SetFillColor( aOldFillColor );
-                pDevice->SetTextColor( aOldColor );
-                pDevice->SetFont( aOldFont );
+                pDevice->Pop();
 
                 // draw separator, if present
                 DrawEntry( rUDEvt, false, false );
