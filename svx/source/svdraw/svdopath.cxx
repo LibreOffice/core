@@ -1451,11 +1451,11 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                     nActPoint--;
                 }
                 if (pU->IsFormFlag()) {
-                    sal_uInt16 nPtAnz0=rXPoly.GetPointCount();
+                    sal_uInt16 nPointCount0=rXPoly.GetPointCount();
                     rXPoly.Remove(nActPoint-1,2); // remove last two points and replace by form
                     rXPoly.Insert(XPOLY_APPEND,pU->GetFormPoly());
-                    sal_uInt16 nPtAnz1=rXPoly.GetPointCount();
-                    for (sal_uInt16 i=nPtAnz0+1; i<nPtAnz1-1; i++) { // to make BckAction work
+                    sal_uInt16 nPointCount1=rXPoly.GetPointCount();
+                    for (sal_uInt16 i=nPointCount0+1; i<nPointCount1-1; i++) { // to make BckAction work
                         if (!rXPoly.IsControl(i)) rStat.NextPoint();
                     }
                     nActPoint=rXPoly.GetPointCount()-1;
@@ -1481,15 +1481,15 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         // delete last point, if necessary
         if (eCmd==SDRCREATE_FORCEEND) {
             XPolygon& rXP=aPathPolygon[nPolyAnz-1];
-            sal_uInt16 nPtAnz=rXP.GetPointCount();
-            if (nPtAnz>=2) {
-                if (!rXP.IsControl(nPtAnz-2)) {
-                    if (rXP[nPtAnz-1]==rXP[nPtAnz-2]) {
-                        rXP.Remove(nPtAnz-1,1);
+            sal_uInt16 nPointCount=rXP.GetPointCount();
+            if (nPointCount>=2) {
+                if (!rXP.IsControl(nPointCount-2)) {
+                    if (rXP[nPointCount-1]==rXP[nPointCount-2]) {
+                        rXP.Remove(nPointCount-1,1);
                     }
                 } else {
-                    if (rXP[nPtAnz-3]==rXP[nPtAnz-2]) {
-                        rXP.Remove(nPtAnz-3,3);
+                    if (rXP[nPointCount-3]==rXP[nPointCount-2]) {
+                        rXP.Remove(nPointCount-3,3);
                     }
                 }
             }
@@ -1497,10 +1497,10 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         for (sal_uInt16 nPolyNum=nPolyAnz; nPolyNum>0;) {
             nPolyNum--;
             XPolygon& rXP=aPathPolygon[nPolyNum];
-            sal_uInt16 nPtAnz=rXP.GetPointCount();
+            sal_uInt16 nPointCount=rXP.GetPointCount();
             // delete polygons with too few points
             if (nPolyNum<nPolyAnz-1 || eCmd==SDRCREATE_FORCEEND) {
-                if (nPtAnz<2) aPathPolygon.Remove(nPolyNum);
+                if (nPointCount<2) aPathPolygon.Remove(nPolyNum);
             }
         }
     }

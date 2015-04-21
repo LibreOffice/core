@@ -1687,9 +1687,9 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
             {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                const size_t nPtAnz=pPts==NULL ? 0 : pPts->size();
+                const size_t nPointCount=pPts==NULL ? 0 : pPts->size();
 
-                if (nPtAnz!=0)
+                if (nPointCount!=0)
                 {
                     const SdrObject* pObj=pM->GetMarkedSdrObj();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
@@ -3066,16 +3066,16 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                 for (j=0; j<nPolyAnz; j++)
                 {
                     XPolygon& aPol=aTempPolyPoly[j];
-                    sal_uInt16 nPtAnz=aPol.GetPointCount();
+                    sal_uInt16 nPointCount=aPol.GetPointCount();
                     i=0;
 
-                    while (i<nPtAnz)
+                    while (i<nPointCount)
                     {
                         Point* pPnt=&aPol[i];
                         Point* pC1=NULL;
                         Point* pC2=NULL;
 
-                        if (i+1<nPtAnz && aPol.IsControl(i))
+                        if (i+1<nPointCount && aPol.IsControl(i))
                         { // control point on the left
                             pC1=pPnt;
                             i++;
@@ -3084,7 +3084,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
                         i++;
 
-                        if (i<nPtAnz && aPol.IsControl(i))
+                        if (i<nPointCount && aPol.IsControl(i))
                         { // control point on the right
                             pC2=&aPol[i];
                             i++;

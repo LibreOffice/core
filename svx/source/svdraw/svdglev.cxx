@@ -49,8 +49,8 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->size();
-        if (nPtAnz!=0) {
+        sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
+        if (nPointCount!=0) {
             SdrGluePointList* pGPL=NULL;
             if (bConst) {
                 const SdrGluePointList* pConstGPL=pObj->GetGluePointList();
@@ -233,8 +233,8 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->size();
-        if (nPtAnz!=0)
+        sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
+        if (nPointCount!=0)
         {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
             if (pGPL!=NULL)
@@ -279,8 +279,8 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
-        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->size();
-        if (nPtAnz!=0 && pGPL!=NULL)
+        sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
+        if (nPointCount!=0 && pGPL!=NULL)
         {
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
@@ -322,8 +322,8 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->size();
-        if (nPtAnz!=0) {
+        sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
+        if (nPointCount!=0) {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
             if (pGPL!=NULL)
             {

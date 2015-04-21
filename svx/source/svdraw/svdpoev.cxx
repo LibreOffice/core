@@ -588,9 +588,9 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedPoints();
-        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->size();
+        sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
         SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
-        if (nPtAnz!=0 && pPath!=NULL)
+        if (nPointCount!=0 && pPath!=NULL)
         {
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));

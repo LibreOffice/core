@@ -493,12 +493,12 @@ bool SdrEdgeObj::CheckNodeConnection(bool bTail1) const
 {
     bool bRet = false;
     const SdrObjConnection& rCon=GetConnection(bTail1);
-    sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
-    if (rCon.pObj!=NULL && rCon.pObj->GetPage()==pPage && nPtAnz!=0) {
+    sal_uInt16 nPointCount=pEdgeTrack->GetPointCount();
+    if (rCon.pObj!=NULL && rCon.pObj->GetPage()==pPage && nPointCount!=0) {
         const SdrGluePointList* pGPL=rCon.pObj->GetGluePointList();
         sal_uInt16 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
         sal_uInt16 nGesAnz=nConAnz+8;
-        Point aTail(bTail1 ? (*pEdgeTrack)[0] : (*pEdgeTrack)[sal_uInt16(nPtAnz-1)]);
+        Point aTail(bTail1 ? (*pEdgeTrack)[0] : (*pEdgeTrack)[sal_uInt16(nPointCount-1)]);
         for (sal_uInt16 i=0; i<nGesAnz && !bRet; i++) {
             if (i<nConAnz) { // UserDefined
                 bRet=aTail==(*pGPL)[i].GetAbsolutePos(*rCon.pObj);
@@ -516,15 +516,15 @@ bool SdrEdgeObj::CheckNodeConnection(bool bTail1) const
 
 void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const Point& rPt)
 {
-    sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
-    if (nPtAnz==0) {
+    sal_uInt16 nPointCount=pEdgeTrack->GetPointCount();
+    if (nPointCount==0) {
         (*pEdgeTrack)[0]=rPt;
         (*pEdgeTrack)[1]=rPt;
-    } else if (nPtAnz==1) {
+    } else if (nPointCount==1) {
         if (!bTail1) (*pEdgeTrack)[1]=rPt;
         else { (*pEdgeTrack)[1]=(*pEdgeTrack)[0]; (*pEdgeTrack)[0]=rPt; }
     } else {
-        if (!bTail1) (*pEdgeTrack)[sal_uInt16(nPtAnz-1)]=rPt;
+        if (!bTail1) (*pEdgeTrack)[sal_uInt16(nPointCount-1)]=rPt;
         else (*pEdgeTrack)[0]=rPt;
     }
     ImpRecalcEdgeTrack();
