@@ -1561,9 +1561,9 @@ b32MWC(void)
 }
 
 // Congruential
-#define CNG ( cng = 69069 * cng + 13579 )
+#define CNG ( ScCNG = 69069 * ScCNG + 13579 )
 // Xorshift
-#define XS ( xs ^= (xs << 13), xs ^= (xs >> 17), xs ^= (xs << 5) )
+#define XS ( ScXS ^= (ScXS << 13), ScXS ^= (ScXS >> 17), ScXS ^= (ScXS << 5) )
 
 #define KISS (b32MWC() + CNG + XS)
 
@@ -1573,11 +1573,11 @@ void ScInterpreter::ScRandom()
 
     static rtlRandomPool aPool = rtl_random_createPool();
     static sal_Bool SqSeeded = sal_False;
-    static sal_uInt32 i, x, cng, xs = 362436069;
+    static sal_uInt32 ScCNG, ScXS = 362436069;
 
     // Seeding for the PRNG
     if (SqSeeded == sal_False) {
-        rtl_random_getBytes(aPool, &cng, sizeof(cng));
+        rtl_random_getBytes(aPool, &ScCNG, sizeof(ScCNG));
         rtl_random_getBytes(aPool, &nScRandomQ,
                             sizeof(nScRandomQ[0]) * SCRANDOMQ_SIZE);
         SqSeeded = sal_True;
