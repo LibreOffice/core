@@ -91,88 +91,120 @@ typedef sal_uInt32 ColorData;
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Color
 {
 protected:
-    ColorData           mnColor;
+    ColorData mnColor;
 
 public:
-                        Color() { mnColor = COL_BLACK; }
-                        Color( ColorData nColor ) { mnColor = nColor; }
-                        Color( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue )
-                            { mnColor = RGB_COLORDATA( nRed, nGreen, nBlue ); }
-                        Color( sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue )
-                            { mnColor = TRGB_COLORDATA( nTransparency, nRed, nGreen, nBlue ); }
-                        // This ctor is defined in svtools, not tools!
-                        Color( const ResId& rResId );
+    Color()
+        : mnColor(COL_BLACK)
+    {}
+    Color(ColorData nColor)
+        : mnColor(nColor)
+    {}
+    Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : mnColor(RGB_COLORDATA(nRed, nGreen, nBlue))
+    {}
+    Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : mnColor(TRGB_COLORDATA(nTransparency, nRed, nGreen, nBlue))
+    {}
+    // This ctor is defined in svtools, not tools!
+    Color(const ResId& rResId);
 
-                        // constructor to create a tools-Color from ::basegfx::BColor
-                        explicit Color(const ::basegfx::BColor& rBColor)
-                        {
-                            mnColor = RGB_COLORDATA(
-                                sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
+    // constructor to create a tools-Color from ::basegfx::BColor
+    explicit Color(const basegfx::BColor& rBColor)
+        : mnColor(RGB_COLORDATA(sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
                                 sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
-                                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5));
-                        }
+                                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5)))
+    {}
 
-                        bool operator<(const Color& b) const
-                        {
-                            return mnColor < b.GetColor();
-                        }
+    bool operator<(const Color& b) const
+    {
+        return mnColor < b.GetColor();
+    }
 
-    void                SetRed( sal_uInt8 nRed );
-    sal_uInt8           GetRed() const { return COLORDATA_RED( mnColor ); }
-    void                SetGreen( sal_uInt8 nGreen );
-    sal_uInt8           GetGreen() const { return COLORDATA_GREEN( mnColor ); }
-    void                SetBlue( sal_uInt8 nBlue );
-    sal_uInt8           GetBlue() const { return COLORDATA_BLUE( mnColor ); }
-    void                SetTransparency( sal_uInt8 nTransparency );
-    sal_uInt8           GetTransparency() const { return COLORDATA_TRANSPARENCY( mnColor ); }
+    void SetRed(sal_uInt8 nRed);
+    sal_uInt8 GetRed() const
+    {
+        return COLORDATA_RED(mnColor);
+    }
+    void SetGreen(sal_uInt8 nGreen);
+    sal_uInt8 GetGreen() const
+    {
+        return COLORDATA_GREEN(mnColor);
+    }
+    void SetBlue(sal_uInt8 nBlue);
+    sal_uInt8 GetBlue() const
+    {
+        return COLORDATA_BLUE(mnColor);
+    }
+    void SetTransparency(sal_uInt8 nTransparency);
+    sal_uInt8 GetTransparency() const
+    {
+        return COLORDATA_TRANSPARENCY(mnColor);
+    }
 
-    void                SetColor( ColorData nColor ) { mnColor = nColor; }
-    ColorData           GetColor() const { return mnColor; }
-    ColorData           GetRGBColor() const { return COLORDATA_RGB( mnColor ); }
+    void SetColor(ColorData nColor)
+    {
+        mnColor = nColor;
+    }
+    ColorData GetColor() const
+    {
+        return mnColor;
+    }
+    ColorData GetRGBColor() const
+    {
+        return COLORDATA_RGB(mnColor);
+    }
 
-    sal_uInt8           GetColorError( const Color& rCompareColor ) const;
+    sal_uInt8 GetColorError(const Color& rCompareColor) const;
 
-    sal_uInt8           GetLuminance() const;
-    void                IncreaseLuminance( sal_uInt8 cLumInc );
-    void                DecreaseLuminance( sal_uInt8 cLumDec );
+    sal_uInt8 GetLuminance() const;
+    void IncreaseLuminance(sal_uInt8 cLumInc);
+    void DecreaseLuminance(sal_uInt8 cLumDec);
 
-    void                DecreaseContrast( sal_uInt8 cContDec );
+    void DecreaseContrast(sal_uInt8 cContDec);
 
-    void                Invert();
+    void Invert();
 
-    void                Merge( const Color& rMergeColor, sal_uInt8 cTransparency );
+    void Merge(const Color& rMergeColor, sal_uInt8 cTransparency);
 
-    bool                IsRGBEqual( const Color& rColor ) const;
+    bool IsRGBEqual(const Color& rColor) const;
 
     // comparison with luminance thresholds
-    bool                IsDark()    const;
-    bool                IsBright()  const;
+    bool IsDark() const;
+    bool IsBright() const;
 
     // color space conversion tools
     // the range for h/s/b is:
     // Hue: 0-360 degree
     // Saturation: 0-100%
     // Brightness: 0-100%
-    static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
-    void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
+    static ColorData HSBtoRGB(sal_uInt16 nHue, sal_uInt16 nSaturation, sal_uInt16 nBrightness);
+    void RGBtoHSB(sal_uInt16& nHue, sal_uInt16& nSaturation, sal_uInt16& nBrightness) const;
 
-    bool                operator==( const Color& rColor ) const
-                            { return (mnColor == rColor.mnColor); }
-    bool                operator!=( const Color& rColor ) const
-                            { return !(Color::operator==( rColor )); }
+    bool operator==(const Color& rColor) const
+    {
+        return mnColor == rColor.mnColor;
+    }
+    bool operator!=(const Color& rColor) const
+    {
+        return !(Color::operator==(rColor));
+    }
 
-    SvStream&           Read( SvStream& rIStm, bool bNewFormat = true );
-    SvStream&           Write( SvStream& rOStm, bool bNewFormat = true );
+    SvStream& Read(SvStream& rIStream, bool bNewFormat = true);
+    SvStream& Write(SvStream& rOStream, bool bNewFormat = true);
 
-    TOOLS_DLLPUBLIC friend SvStream&    ReadColor( SvStream& rIStream, Color& rColor );
-    TOOLS_DLLPUBLIC friend SvStream&    WriteColor( SvStream& rOStream, const Color& rColor );
+    TOOLS_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
+    TOOLS_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
 
     // Return color as RGB hex string
     // for example "00ff00" for green color
     OUString AsRGBHexString() const;
 
     // get ::basegfx::BColor from this color
-    ::basegfx::BColor getBColor() const { return ::basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0); }
+    basegfx::BColor getBColor() const
+    {
+        return basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0);
+    }
 };
 
 inline void Color::SetRed( sal_uInt8 nRed )
@@ -201,21 +233,21 @@ inline void Color::SetTransparency( sal_uInt8 nTransparency )
 
 inline bool Color::IsRGBEqual( const Color& rColor ) const
 {
-    return (COLORDATA_RGB( mnColor ) == COLORDATA_RGB( rColor.mnColor ));
+    return COLORDATA_RGB( mnColor ) == COLORDATA_RGB(rColor.mnColor);
 }
 
 inline sal_uInt8 Color::GetLuminance() const
 {
-    return( (sal_uInt8) ( ( COLORDATA_BLUE( mnColor ) * 29UL +
-                        COLORDATA_GREEN( mnColor ) * 151UL +
-                        COLORDATA_RED( mnColor ) * 76UL ) >> 8UL ) );
+    return static_cast<sal_uInt8>((COLORDATA_BLUE(mnColor) * 29UL +
+                                   COLORDATA_GREEN(mnColor) * 151UL +
+                                   COLORDATA_RED(mnColor) * 76UL) >> 8UL);
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
-    SetRed( COLOR_CHANNEL_MERGE( COLORDATA_RED( mnColor ), COLORDATA_RED( rMergeColor.mnColor ), cTransparency ) );
-    SetGreen( COLOR_CHANNEL_MERGE( COLORDATA_GREEN( mnColor ), COLORDATA_GREEN( rMergeColor.mnColor ), cTransparency ) );
-    SetBlue( COLOR_CHANNEL_MERGE( COLORDATA_BLUE( mnColor ), COLORDATA_BLUE( rMergeColor.mnColor ), cTransparency ) );
+    SetRed(COLOR_CHANNEL_MERGE(COLORDATA_RED(mnColor), COLORDATA_RED(rMergeColor.mnColor), cTransparency));
+    SetGreen(COLOR_CHANNEL_MERGE(COLORDATA_GREEN(mnColor), COLORDATA_GREEN(rMergeColor.mnColor), cTransparency));
+    SetBlue(COLOR_CHANNEL_MERGE(COLORDATA_BLUE(mnColor), COLORDATA_BLUE(rMergeColor.mnColor), cTransparency));
 }
 
 #endif
