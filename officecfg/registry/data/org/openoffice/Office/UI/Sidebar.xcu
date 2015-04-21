@@ -205,6 +205,29 @@
         </prop>
       </node>
 
+      <node oor:name="DesignDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Design</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>DesignDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-property-large.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, Text, hidden;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>700</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+
     </node>
     <node oor:name="PanelList">
 
