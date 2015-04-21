@@ -284,17 +284,17 @@ private:
     mutable OUString    m_Cache;     ///< Cached expansion (for clipboard).
     bool m_bUseFieldValueCache; /// control the usage of the cached field value
 
-    sal_uInt16              nLang;   ///< Always change via SetLanguage!
-    bool                bIsAutomaticLanguage;
-    sal_uInt32          nFormat;
+    sal_uInt16          m_nLang;   ///< Always change via SetLanguage!
+    bool                m_bIsAutomaticLanguage;
+    sal_uInt32          m_nFormat;
 
-    SwFieldType*        pType;
+    SwFieldType*        m_pType;
 
     virtual OUString    Expand() const = 0;
     virtual SwField*    Copy() const = 0;
 
 protected:
-    void                SetFormat(sal_uInt32 nSet) {nFormat = nSet;}
+    void                SetFormat(sal_uInt32 const nSet) { m_nFormat = nSet; }
 
     SwField( SwFieldType* pTyp,
              sal_uInt32 nFmt = 0,
@@ -331,7 +331,7 @@ public:
 #ifdef DBG_UTIL
         ;       // implemented in fldbas.cxx
 #else
-        { return pType->Which(); }
+        { return m_pType->Which(); }
 #endif
 
     // TYP_ID
@@ -361,8 +361,8 @@ public:
     bool            HasClickHdl() const;
     bool            IsFixed() const;
 
-    bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
-    void                SetAutomaticLanguage(bool bSet){bIsAutomaticLanguage = bSet;}
+    bool IsAutomaticLanguage() const { return m_bIsAutomaticLanguage;}
+    void SetAutomaticLanguage(bool const bSet) {m_bIsAutomaticLanguage = bSet;}
 
     virtual OUString    GetDescription() const;
     /// Is this field clickable?
@@ -370,13 +370,13 @@ public:
 };
 
 inline SwFieldType* SwField::GetTyp() const
-    { return pType;     }
+    { return m_pType; }
 
 inline sal_uInt32 SwField::GetFormat() const
-    { return nFormat;   }
+    { return m_nFormat; }
 
 inline sal_uInt16 SwField::GetLanguage() const
-    { return nLang;     }
+    { return m_nLang; }
 
  /// Fields containing values that have to be formatted via number formatter.
 class SwValueFieldType : public SwFieldType

@@ -187,18 +187,18 @@ void SwFldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Base class for all fields.
 // A field (multiple can exist) references a field type (can exists only once)
 SwField::SwField(
-    SwFieldType* pTyp,
-    sal_uInt32 nFmt,
-    sal_uInt16 nLng,
-    bool bUseFieldValueCache )
+        SwFieldType* pType,
+        sal_uInt32 nFormat,
+        sal_uInt16 nLang,
+        bool bUseFieldValueCache)
     : m_Cache()
     , m_bUseFieldValueCache( bUseFieldValueCache )
-    , nLang( nLng )
-    , bIsAutomaticLanguage( true )
-    , nFormat( nFmt )
-    , pType( pTyp )
+    , m_nLang( nLang )
+    , m_bIsAutomaticLanguage( true )
+    , m_nFormat( nFormat )
+    , m_pType( pType )
 {
-    OSL_ENSURE( pTyp, "SwField: no SwFieldType" );
+    OSL_ENSURE( pType, "SwField: no SwFieldType" );
 }
 
 SwField::~SwField()
@@ -210,8 +210,8 @@ SwField::~SwField()
 #ifdef DBG_UTIL
 sal_uInt16 SwField::Which() const
 {
-    OSL_ENSURE(pType, "SwField: No FieldType");
-    return pType->Which();
+    OSL_ENSURE(m_pType, "SwField: No FieldType");
+    return m_pType->Which();
 }
 #endif
 
@@ -219,7 +219,7 @@ sal_uInt16 SwField::GetTypeId() const
 {
 
     sal_uInt16 nRet;
-    switch( pType->Which() )
+    switch (m_pType->Which())
     {
     case RES_DATETIMEFLD:
         if (GetSubType() & FIXEDFLD)
@@ -255,7 +255,7 @@ sal_uInt16 SwField::GetTypeId() const
         break;
 
     default:
-        nRet = aTypeTab[ pType->Which() ];
+        nRet = aTypeTab[ m_pType->Which() ];
     }
     return nRet;
 }
@@ -312,7 +312,7 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
-            rVal <<= !bIsAutomaticLanguage;
+            rVal <<= !m_bIsAutomaticLanguage;
         break;
         default:
             OSL_FAIL("illegal property");
@@ -328,7 +328,7 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         {
             bool bFixed = false;
             if(rVal >>= bFixed)
-                bIsAutomaticLanguage = !bFixed;
+                m_bIsAutomaticLanguage = !bFixed;
         }
         break;
         default:
@@ -346,11 +346,11 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
  */
 SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 {
-    OSL_ENSURE( pNewType && pNewType->Which() == pType->Which(),
+    OSL_ENSURE( pNewType && pNewType->Which() == m_pType->Which(),
             "no or different type" );
 
-    SwFieldType* pOld = pType;
-    pType = pNewType;
+    SwFieldType* pOld = m_pType;
+    m_pType = pNewType;
     return pOld;
 }
 
@@ -358,7 +358,7 @@ SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 bool SwField::HasClickHdl() const
 {
     bool bRet = false;
-    switch( pType->Which() )
+    switch (m_pType->Which())
     {
     case RES_INTERNETFLD:
     case RES_JUMPEDITFLD:
@@ -376,20 +376,20 @@ bool SwField::HasClickHdl() const
     return bRet;
 }
 
-void SwField::SetLanguage(sal_uInt16 nLng)
+void SwField::SetLanguage(sal_uInt16 const nLang)
 {
-    nLang = nLng;
+    m_nLang = nLang;
 }
 
-void SwField::ChangeFormat(sal_uInt32 n)
+void SwField::ChangeFormat(sal_uInt32 const nFormat)
 {
-    nFormat = n;
+    m_nFormat = nFormat;
 }
 
 bool SwField::IsFixed() const
 {
     bool bRet = false;
-    switch( pType->Which() )
+    switch (m_pType->Which())
     {
     case RES_FIXDATEFLD:
     case RES_FIXTIMEFLD:
