@@ -416,7 +416,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     }
 
     /**
-     * A key event happend (i.e. user started typing.
+     * A key event happend (i.e. user started typing).
      */
     public void keyEvent() {
         mKeyEvent = true;
