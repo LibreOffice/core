@@ -847,7 +847,7 @@ AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vc
     return new AbstractSwAutoFormatDlg_Impl(pDlg);
 }
 
-SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId )
+SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId )
 {
     VclPtr<SfxModalDialog> pDlg;
     switch ( nResId )

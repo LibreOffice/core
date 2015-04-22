@@ -420,7 +420,7 @@ public:
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFmt = true,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) SAL_OVERRIDE;
-    virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) SAL_OVERRIDE;
+    virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) SAL_OVERRIDE;
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) SAL_OVERRIDE;
     virtual VclAbstractDialog * CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) SAL_OVERRIDE;

@@ -72,6 +72,7 @@ class SwChildWinWrapper;
 struct SfxChildWinInfo;
 class SwTOXMark;
 struct SwDocStat;
+enum class SwBorderModes;
 #include <cnttab.hxx>
 
 namespace com{namespace sun{namespace star{
@@ -373,7 +374,7 @@ public:
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFmt = true,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) = 0;
-    virtual SfxAbstractDialog * CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) = 0;
+    virtual SfxAbstractDialog * CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) = 0;
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) = 0;
 
     virtual VclAbstractDialog * CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) = 0;

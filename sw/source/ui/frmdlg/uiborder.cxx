@@ -29,7 +29,7 @@
 #include "uiborder.hxx"
 #include "frmui.hrc"
 
-SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
+SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) :
     SfxSingleTabDialog(pParent, rSet)
 
 {
@@ -43,8 +43,8 @@ SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nTyp
     {
         SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
-        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,nType));
-        if(SW_BORDER_MODE_TABLE == nType)
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
+        if(SwBorderModes::TABLE == nType)
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_HIDESHADOWCTL));
         pNewPage->PageCreated(aSet);
         SetTabPage(pNewPage);

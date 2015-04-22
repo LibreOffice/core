@@ -32,7 +32,7 @@ public:
      // SW_BORDER_MODE_TABLE
      // SW_BORDER_MODE_FRAME
 
-     SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType);
+     SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType);
     virtual ~SwBorderDlg();
 };
 

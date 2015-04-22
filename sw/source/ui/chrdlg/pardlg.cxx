@@ -180,7 +180,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     // Table borders cannot get any shade in Writer
     if (nId == m_nParaBorder)
     {
-        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
         rPage.PageCreated(aSet);
     }
     else if( nId == m_nParaStd )

@@ -19,13 +19,23 @@
 #ifndef INCLUDED_SVX_FLAGSDEF_HXX
 #define INCLUDED_SVX_FLAGSDEF_HXX
 
+#include <o3tl/typed_flags_set.hxx>
+
 // defines ---------------------------------------------------------------
 
 // copy from border.hxx
 // Border-Modes for SvxBorderTabPage
-#define SW_BORDER_MODE_PARA     0x01
-#define SW_BORDER_MODE_TABLE    0x02
-#define SW_BORDER_MODE_FRAME    0x04
+enum class SwBorderModes
+{
+    NONE     = 0x00,
+    PARA     = 0x01,
+    TABLE    = 0x02,
+    FRAME    = 0x04,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SwBorderModes> : is_typed_flags<SwBorderModes, 0x07> {};
+}
 
 // flags for SvxBackgroundTabPage
 #define SVX_SHOW_SELECTOR       0x01

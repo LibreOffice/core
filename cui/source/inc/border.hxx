@@ -103,7 +103,7 @@ private:
     ImageList           aBorderImgLst;
 
     long                nMinValue;  ///< minimum distance
-    int                 nSWMode;    ///< table, textframe, paragraph
+    SwBorderModes       nSWMode;    ///< table, textframe, paragraph
 
     bool                mbHorEnabled;       ///< true = Inner horizontal border enabled.
     bool                mbVerEnabled;       ///< true = Inner vertical border enabled.

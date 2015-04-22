@@ -93,7 +93,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
         aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
-        nSWMode(0),
+        nSWMode(SwBorderModes::NONE),
         mbHorEnabled( false ),
         mbVerEnabled( false ),
         mbTLBREnabled( false ),
@@ -581,7 +581,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             // there are no shadows in Html-mode and only complete borders
             m_pShadowFrame->Disable();
 
-            if( !(nSWMode & SW_BORDER_MODE_TABLE) )
+            if( !(nSWMode & SwBorderModes::TABLE) )
             {
                 m_pUserDefFT->Disable();
                 m_pFrameSel->Disable();
@@ -666,7 +666,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             if( !m_pLeftMF->GetText().isEmpty() || !m_pRightMF->GetText().isEmpty() ||
                 !m_pTopMF->GetText().isEmpty() || !m_pBottomMF->GetText().isEmpty() )
             {
-                if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SW_BORDER_MODE_TABLE)) &&
+                if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
                             m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )||
                      m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP ) != svx::FRAMESTATE_HIDE
@@ -1107,7 +1107,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
     if(!mbUseMarginItem && m_pLeftMF->IsVisible())
     {
         bool bLineSet = m_pFrameSel->IsAnyBorderVisible();
-        bool bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
+        bool bMinAllowed = bool(nSWMode & (SwBorderModes::FRAME|SwBorderModes::TABLE));
         bool bSpaceModified =   m_pLeftMF->IsModified()||
                                 m_pRightMF->IsModified()||
                                 m_pTopMF->IsModified()||
@@ -1152,7 +1152,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
         SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
         // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
-        if(!(nSWMode & SW_BORDER_MODE_TABLE))
+        if(!(nSWMode & SwBorderModes::TABLE))
         {
             if(bLineSet)
             {
@@ -1217,16 +1217,16 @@ void SvxBorderTabPage::PageCreated(const SfxAllItemSet& aSet)
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pSWModeItem)
     {
-        nSWMode = pSWModeItem->GetValue();
+        nSWMode = static_cast<SwBorderModes>(pSWModeItem->GetValue());
         // #i43593#
         // show checkbox <m_pMergeWithNextCB> for format.paragraph
-        if ( nSWMode == SW_BORDER_MODE_PARA )
+        if ( nSWMode == SwBorderModes::PARA )
         {
             m_pMergeWithNextCB->Show();
             m_pPropertiesFrame->Show();
         }
         // show checkbox <m_pMergeAdjacentBordersCB> for format.paragraph
-        else if ( nSWMode == SW_BORDER_MODE_TABLE )
+        else if ( nSWMode == SwBorderModes::TABLE )
         {
             m_pMergeAdjacentBordersCB->Show();
             m_pPropertiesFrame->Show();
@@ -1239,7 +1239,7 @@ void SvxBorderTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 void SvxBorderTabPage::SetTableMode()
 {
-    nSWMode = SW_BORDER_MODE_TABLE;
+    nSWMode = SwBorderModes::TABLE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

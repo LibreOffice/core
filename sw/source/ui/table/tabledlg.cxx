@@ -1266,7 +1266,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if (nId == m_nBorderId)
     {
-        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_TABLE));
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(SwBorderModes::TABLE)));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nTextFlowId)
