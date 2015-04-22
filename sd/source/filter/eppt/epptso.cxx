@@ -3571,6 +3571,22 @@ void PPTWriter::WriteCString( SvStream& rSt, const OUString& rString, sal_uInt32
     }
 }
 
+class ContainerGuard
+{
+private:
+    PptEscherEx* m_pPptEscherEx;
+public:
+    ContainerGuard(PptEscherEx* pPptEscherEx, sal_uInt16 nRecord)
+        : m_pPptEscherEx(pPptEscherEx)
+    {
+        m_pPptEscherEx->OpenContainer(nRecord);
+    }
+    ~ContainerGuard()
+    {
+        m_pPptEscherEx->CloseContainer();
+    }
+};
+
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )
 {
@@ -3618,8 +3634,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
                     maRect.Bottom() = nPosition;
             }
-            mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
-            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+            std::unique_ptr<ContainerGuard> xSpgrContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpgrContainer));
+            std::unique_ptr<ContainerGuard> xSpContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));
             mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
             mpStrm    ->WriteInt32( maRect.Left() ) // Bounding box for the grouped shapes to which they are attached
                        .WriteInt32( maRect.Top() )
@@ -3651,7 +3667,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 mpPptEscherEx->AddChildAnchor( maRect );
             else
                 mpPptEscherEx->AddClientAnchor( maRect );
-            mpPptEscherEx->CloseContainer();
+            xSpContainer.reset(); //ESCHER_SpContainer
 
             uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
             for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
@@ -3676,7 +3692,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             aAny >>= mbFontIndependentLineSpacing;
 
                         EscherPropertyContainer aPropOptSp;
-                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                        std::unique_ptr<ContainerGuard> xCellContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                         aPropOptSp.CreateFillProperties( mXPropSet, true );
                         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
@@ -3711,7 +3727,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                            .WriteUInt32( aClientTextBox.Tell() );
 
                         mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
-                        mpPptEscherEx->CloseContainer();
+                        xCellContainer.reset();
                     }
                 }
             }
@@ -3830,12 +3846,13 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                     }
                 }
             }
+
+            xSpgrContainer.reset(); //ESCHER_SpgrContainer
         }
     }
     catch( uno::Exception& )
     {
     }
-    mpPptEscherEx->CloseContainer();
 }
 
 void TextObjBinary::Write( SvStream* pStrm )
