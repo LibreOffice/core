@@ -90,6 +90,7 @@ public:
     void testTitleOverlayXLSX();
     void testInvertIfNegativeXLSX();
     void testBubble3DXLSX();
+    void testNoMarkerXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testTitleOverlayXLSX);
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
     CPPUNIT_TEST(testBubble3DXLSX);
+    CPPUNIT_TEST(testNoMarkerXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1306,6 +1308,16 @@ void Chart2ExportTest::testBubble3DXLSX()
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bubbleChart/c:bubble3D", "val", "0");
+}
+
+void Chart2ExportTest::testNoMarkerXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "no_marker.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:marker/c:symbol", "val", "none");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:marker/c:symbol", "val", "none");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:marker", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
