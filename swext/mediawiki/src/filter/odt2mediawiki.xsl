@@ -658,12 +658,30 @@
 		<variable name="link-ref" select="@xlink:href"/>
 		<choose>
 			<when test="string-length($link-ref) &gt; 0">
-				<variable name="link-label" select="string(.)"/>
-				<text>[</text>
-				<value-of select="$link-ref"/>
-				<text> </text>
-				<value-of select="$link-label"/>
-				<text>]</text>
+				<choose>
+					<when test="starts-with($link-ref, '#')">
+						<text>[[</text>
+						<choose>
+							<when test="contains($link-ref, '_')">
+								<value-of select="translate($link-ref,'_','')"/>
+							</when>
+							<otherwise>
+								<value-of select="$link-ref"/>
+							</otherwise>
+						</choose>
+						<text>|</text>
+						<value-of select="string(.)"/>
+						<text>]]</text>
+					</when>
+
+                                        <otherwise>
+						<text>[</text>
+						<value-of select="$link-ref"/>
+						<text> </text>
+						<value-of select="string(.)"/>
+						<text>]</text>
+					</otherwise>
+				</choose>
 			</when>
 			
 			<otherwise>
@@ -1124,7 +1142,26 @@
  		<!-- TODO: Output an anchor. -->
  	</template>
 
-	<!-- 
+	<template match="text:bookmark-start">
+		<if test="boolean(@text:name)">
+			<variable name="bookmark">
+				<choose>
+					<when test="contains(@text:name,'__')">
+						<value-of select="translate(@text:name,'_','')"/>
+					</when>
+					<otherwise>
+						<value-of select="@text:name"/>
+					</otherwise>
+				</choose>
+			</variable>
+			<text>{{anchor|</text>
+			<value-of select="$bookmark"/>
+			<text>}} </text>
+		</if>
+		<apply-templates/>
+	</template>
+
+	<!--
 		== Plain text == 
 	-->
 
