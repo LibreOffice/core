@@ -130,10 +130,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -145,10 +145,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Range:</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Range or formula expression:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">range</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -160,10 +160,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Scope:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">scope</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
