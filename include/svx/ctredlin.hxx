@@ -35,12 +35,10 @@
 #include <unotools/textsearch.hxx>
 #include <svx/svxdllapi.h>
 
-#define FLT_DATE_BEFORE     0
-#define FLT_DATE_SINCE      1
-#define FLT_DATE_EQUAL      2
-#define FLT_DATE_NOTEQUAL   3
-#define FLT_DATE_BETWEEN    4
-#define FLT_DATE_SAVE       5
+enum class SvxRedlinDateMode
+{
+    BEFORE, SINCE, EQUAL, NOTEQUAL, BETWEEN, SAVE
+};
 
 /// Struct for sorting data.
 class SVX_DLLPUBLIC SAL_WARN_UNUSED RedlinData
@@ -95,7 +93,7 @@ private:
     bool            bAuthor;
     bool            bDate;
     bool            bComment;
-    sal_uInt16      nDaTiMode;
+    SvxRedlinDateMode nDaTiMode;
     DateTime        aDaTiFirst;
     DateTime        aDaTiLast;
     DateTime        aDaTiFilterFirst;
@@ -120,7 +118,7 @@ public:
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag=true);
-    void            SetDateTimeMode(sal_uInt16 nMode);
+    void            SetDateTimeMode(SvxRedlinDateMode nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
     void            SetFirstTime(const tools::Time&);
@@ -210,7 +208,7 @@ private:
 
 protected:
 
-    void            ShowDateFields(sal_uInt16 nKind);
+    void            ShowDateFields(SvxRedlinDateMode nKind);
     void            EnableDateLine1(bool bFlag);
     void            EnableDateLine2(bool bFlag);
 
@@ -233,7 +231,7 @@ public:
     void            SetLastTime(const tools::Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
-    sal_uInt16      GetDateMode();
+    SvxRedlinDateMode GetDateMode();
 
     void            ClearAuthors();
     void            InsertAuthor( const OUString& rString, sal_Int32  nPos = LISTBOX_APPEND );

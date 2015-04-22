@@ -100,7 +100,7 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     , bAuthor(false)
     , bDate(false)
     , bComment(false)
-    , nDaTiMode(0)
+    , nDaTiMode(SvxRedlinDateMode::BEFORE)
     , aDaTiFirst( DateTime::EMPTY )
     , aDaTiLast( DateTime::EMPTY )
     , aDaTiFilterFirst( DateTime::EMPTY )
@@ -190,28 +190,28 @@ void SvxRedlinTable::UpdateFilterTest()
 
     switch(nDaTiMode)
     {
-        case FLT_DATE_BEFORE:
+        case SvxRedlinDateMode::BEFORE:
                                 aDaTiFilterFirst=aDTMin;
                                 aDaTiFilterLast=aDaTiFirst;
                                 break;
-        case FLT_DATE_SAVE:
-        case FLT_DATE_SINCE:
+        case SvxRedlinDateMode::SAVE:
+        case SvxRedlinDateMode::SINCE:
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDTMax;
                                 break;
-        case FLT_DATE_EQUAL:
+        case SvxRedlinDateMode::EQUAL:
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDaTiFirst;
                                 aDaTiFilterFirst.SetTime(aTMin.GetTime());
                                 aDaTiFilterLast.SetTime(aTMax.GetTime());
                                 break;
-        case FLT_DATE_NOTEQUAL:
+        case SvxRedlinDateMode::NOTEQUAL:
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDaTiFirst;
                                 aDaTiFilterFirst.SetTime(aTMin.GetTime());
                                 aDaTiFilterLast.SetTime(aTMax.GetTime());
                                 break;
-        case FLT_DATE_BETWEEN:
+        case SvxRedlinDateMode::BETWEEN:
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDaTiLast;
                                 break;
@@ -223,7 +223,7 @@ void SvxRedlinTable::SetFilterDate(bool bFlag)
     bDate=bFlag;
 }
 
-void SvxRedlinTable::SetDateTimeMode(sal_uInt16 nMode)
+void SvxRedlinTable::SetDateTimeMode(SvxRedlinDateMode nMode)
 {
     nDaTiMode=nMode;
 }
@@ -289,7 +289,7 @@ bool SvxRedlinTable::IsValidEntry(const OUString &rAuthorStr, const DateTime &rD
         return true;
 
     const bool bRes = rDateTime.IsBetween(aDaTiFilterFirst, aDaTiFilterLast);
-    return nDaTiMode!=FLT_DATE_NOTEQUAL ? bRes : !bRes;
+    return nDaTiMode!=SvxRedlinDateMode::NOTEQUAL ? bRes : !bRes;
 }
 
 bool SvxRedlinTable::IsValidComment(const OUString &rCommentStr)
@@ -636,35 +636,35 @@ void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
     pRedlinTable=pTable;
 }
 
-void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
+void SvxTPFilter::ShowDateFields(SvxRedlinDateMode nKind)
 {
     switch(nKind)
     {
-        case FLT_DATE_BEFORE:
+        case SvxRedlinDateMode::BEFORE:
                 EnableDateLine1(true);
                 EnableDateLine2(false);
                 break;
-        case FLT_DATE_SINCE:
+        case SvxRedlinDateMode::SINCE:
                 EnableDateLine1(true);
                 EnableDateLine2(false);
                 break;
-        case FLT_DATE_EQUAL:
-                EnableDateLine1(true);
-                m_pTfDate->Disable();
-                m_pTfDate->SetText(OUString());
-                EnableDateLine2(false);
-                break;
-        case FLT_DATE_NOTEQUAL:
+        case SvxRedlinDateMode::EQUAL:
                 EnableDateLine1(true);
                 m_pTfDate->Disable();
                 m_pTfDate->SetText(OUString());
                 EnableDateLine2(false);
                 break;
-        case FLT_DATE_BETWEEN:
+        case SvxRedlinDateMode::NOTEQUAL:
+                EnableDateLine1(true);
+                m_pTfDate->Disable();
+                m_pTfDate->SetText(OUString());
+                EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::BETWEEN:
                 EnableDateLine1(true);
                 EnableDateLine2(true);
                 break;
-        case FLT_DATE_SAVE:
+        case SvxRedlinDateMode::SAVE:
                 EnableDateLine1(false);
                 EnableDateLine2(false);
                 break;
@@ -753,9 +753,9 @@ void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
     SelDateHdl(m_pLbDate);
 }
 
-sal_uInt16 SvxTPFilter::GetDateMode()
+SvxRedlinDateMode SvxTPFilter::GetDateMode()
 {
-    return (sal_uInt16) m_pLbDate->GetSelectEntryPos();
+    return static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos());
 }
 void SvxTPFilter::ClearAuthors()
 {
@@ -903,7 +903,7 @@ void SvxTPFilter::ShowAction(bool bShow)
 
 IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
 {
-    ShowDateFields((sal_uInt16)m_pLbDate->GetSelectEntryPos());
+    ShowDateFields(static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos()));
     ModifyHdl(pLb);
     return 0;
 }
