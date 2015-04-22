@@ -1872,16 +1872,16 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 {
                     // Suppress all TableRef related tokens, the resulting
                     // range was written by CreateStringFromIndex().
-                    const FormulaToken* p = pArr->PeekNext();
+                    const FormulaToken* const p = pArr->PeekNext();
                     if (p && p->GetOpCode() == ocTableRefOpen)
                     {
-                        p = pArr->Next();
+                        t = pArr->Next();
                         int nLevel = 0;
                         do
                         {
                             // Switch cases correspond with those in
                             // ScCompiler::HandleTableRef()
-                            switch (p->GetOpCode())
+                            switch (t->GetOpCode())
                             {
                                 case ocTableRefOpen:
                                     ++nLevel;
@@ -1903,7 +1903,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                                     nLevel = 0;
                                     bNext = false;
                             }
-                        } while (nLevel && (p = pArr->Next()));
+                        } while (nLevel && (t = pArr->Next()));
                     }
                 }
                 break;
