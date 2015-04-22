@@ -4476,8 +4476,36 @@ void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaT
     rBuffer.append( mxSymbols->getSymbol(ocArrayClose) );
 }
 
+namespace {
+void escapeTableRefColumnSpecifier( OUString& rStr )
+{
+    const sal_Int32 n = rStr.getLength();
+    OUStringBuffer aBuf( n * 2 );
+    const sal_Unicode* p = rStr.getStr();
+    const sal_Unicode* const pStop = p + n;
+    for ( ; p < pStop; ++p)
+    {
+        const sal_Unicode c = *p;
+        switch (c)
+        {
+            case '\'':
+            case '[':
+            case '#':
+            case ']':
+                aBuf.append( '\'' );
+                break;
+            default:
+                ;   // nothing
+        }
+        aBuf.append( c );
+    }
+    rStr = aBuf.makeStringAndClear();
+}
+}
+
 void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
+    const FormulaToken* p;
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     const OpCode eOp = _pTokenP->GetOpCode();
     const ScSingleRefData& rRef = *_pTokenP->GetSingleRef();
@@ -4498,6 +4526,13 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
             pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
                               GetSetupTabNames(), aRef, true);
         }
+    }
+    else if ((p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
+    {
+        ScAddress aAbs = rRef.toAbs(aPos);
+        OUString aStr = pDoc->GetString(aAbs);
+        escapeTableRefColumnSpecifier( aStr);
+        rBuffer.append(aStr);
     }
     else
         pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
