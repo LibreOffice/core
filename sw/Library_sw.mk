@@ -682,6 +682,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/sidebar/PageColumnControl \
     sw/source/uibase/sidebar/PagePropertyPanel \
     sw/source/uibase/sidebar/WrapPropertyPanel \
+    sw/source/uibase/sidebar/ThemePanel \
     sw/source/uibase/sidebar/SwPanelFactory \
     sw/source/uibase/smartmenu/stmenu \
     sw/source/uibase/table/chartins \

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
+#include <ThemePanel.hxx>
 #include <StylePresetsPanel.hxx>
 #include <PagePropertyPanel.hxx>
 #include <WrapPropertyPanel.hxx>
@@ -157,6 +158,12 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/StylePresetsPanel"))
     {
         sw::sidebar::StylePresetsPanel* pPanel = sw::sidebar::StylePresetsPanel::Create(pParentWindow, xFrame, pBindings);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                        rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/ThemePanel"))
+    {
+        sw::sidebar::ThemePanel* pPanel = sw::sidebar::ThemePanel::Create(pParentWindow, xFrame, pBindings);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }

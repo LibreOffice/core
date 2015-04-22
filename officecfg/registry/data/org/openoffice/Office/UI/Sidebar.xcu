@@ -1027,6 +1027,32 @@
           <value>true</value>
         </prop>
       </node>
+
+      <node oor:name="ThemePanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Themes</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ThemePanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>DesignDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/ThemePanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
