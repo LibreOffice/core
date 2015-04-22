@@ -111,10 +111,10 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
     //! will be set to LANGUAGE_UNDETERMINED
-    sal_Int16 nLangList = LANG_LIST_WESTERN;
+    SvxLanguageListFlags nLangList = SvxLanguageListFlags::WESTERN;
 
     if( SvtLanguageOptions().IsCTLFontEnabled() )
-        nLangList |= LANG_LIST_CTL;
+        nLangList |= SvxLanguageListFlags::CTL;
     m_pLanguageLB->SetLanguageList( nLangList, true, true );
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();

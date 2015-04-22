@@ -847,7 +847,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
-    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
+    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
                                  false, false, false );
 
     //Default mode is arranged to be the tallest mode

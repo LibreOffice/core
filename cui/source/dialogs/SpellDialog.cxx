@@ -311,7 +311,7 @@ void SpellDialog::Init_Impl()
     m_pExplainLink->SetClickHdl( LINK( this, SpellDialog, HandleHyperlink ) );
 
     // initialize language ListBox
-    m_pLanguageLB->SetLanguageList( LANG_LIST_SPELL_USED, false, false, true );
+    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, false, true );
 
     m_pSentenceED->ClearModifyFlag();
     SvxGetChangeAllList()->clear();

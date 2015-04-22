@@ -631,7 +631,7 @@ void ScTabPageSortOptions::Init()
 
     //  get available languages
 
-    m_pLbLanguage->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false );
+    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false );
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 

@@ -48,7 +48,7 @@ SdModifyFieldDlg::SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pI
     get(m_pLbLanguage, "languageLB");
     get(m_pLbFormat, "formatLB");
 
-    m_pLbLanguage->SetLanguageList( LANG_LIST_ALL|LANG_LIST_ONLY_KNOWN, false );
+    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );
     m_pLbLanguage->SetSelectHdl( LINK( this, SdModifyFieldDlg, LanguageChangeHdl ) );
     FillControls();
 }

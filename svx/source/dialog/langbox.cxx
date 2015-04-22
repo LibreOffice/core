@@ -133,7 +133,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageComboBox(vc
 
 SvxLanguageBoxBase::SvxLanguageBoxBase( bool bCheck )
     : m_pSpellUsedLang(NULL)
-    , m_nLangList(LANG_LIST_EMPTY)
+    , m_nLangList(SvxLanguageListFlags::EMPTY)
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(bCheck)
@@ -145,7 +145,7 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
-    m_nLangList             = LANG_LIST_EMPTY;
+    m_nLangList             = SvxLanguageListFlags::EMPTY;
     m_bHasLangNone          = false;
     m_bLangNoneIsLangAll    = false;
 
@@ -166,7 +166,7 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
             if ( bInsert )
                 InsertLanguage( nLangType );
         }
-        m_nLangList = LANG_LIST_ALL;
+        m_nLangList = SvxLanguageListFlags::ALL;
     }
 }
 
@@ -177,7 +177,7 @@ SvxLanguageBoxBase::~SvxLanguageBoxBase()
 }
 
 
-void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
+void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
         bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
     ImplClear();
@@ -187,7 +187,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
     m_bWithCheckmark        = bCheckSpellAvail;
 
-    if ( LANG_LIST_EMPTY != nLangList )
+    if ( SvxLanguageListFlags::EMPTY != nLangList )
     {
         Sequence< sal_Int16 > aSpellAvailLang;
         Sequence< sal_Int16 > aHyphAvailLang;
@@ -200,29 +200,29 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         {
             Sequence< css::lang::Locale > aTmp;
 
-            if (LANG_LIST_SPELL_AVAIL & nLangList)
+            if (SvxLanguageListFlags::SPELL_AVAIL & nLangList)
             {
                 aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
                 aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
-            if (LANG_LIST_HYPH_AVAIL  & nLangList)
+            if (SvxLanguageListFlags::HYPH_AVAIL  & nLangList)
             {
                 aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
                 aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
-            if (LANG_LIST_THES_AVAIL  & nLangList)
+            if (SvxLanguageListFlags::THES_AVAIL  & nLangList)
             {
                 aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
                 aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
         }
-        if (LANG_LIST_SPELL_USED & nLangList)
+        if (SvxLanguageListFlags::SPELL_USED & nLangList)
         {
             Reference< XSpellChecker1 > xTmp1( SvxGetSpellChecker(), UNO_QUERY );
             if (xTmp1.is())
                 aSpellUsedLang = xTmp1->getLanguages();
         }
-        if (LANG_LIST_HYPH_USED  & nLangList)
+        if (SvxLanguageListFlags::HYPH_USED  & nLangList)
         {
             Reference< XHyphenator > xTmp( SvxGetHyphenator() );
             if (xTmp.is()) {
@@ -230,7 +230,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
                 aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
             }
         }
-        if (LANG_LIST_THES_USED  & nLangList)
+        if (SvxLanguageListFlags::THES_USED  & nLangList)
         {
             Reference< XThesaurus > xTmp( SvxGetThesaurus() );
             if (xTmp.is()) {
@@ -242,7 +242,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
         const sal_uInt16* pKnown;
         sal_uInt32 nCount;
-        if ( nLangList & LANG_LIST_ONLY_KNOWN )
+        if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
         {
             xKnown = LocaleDataWrapper::getInstalledLanguageTypes();
             pKnown = xKnown.getConstArray();
@@ -256,7 +256,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             LanguageType nLangType;
-            if ( nLangList & LANG_LIST_ONLY_KNOWN )
+            if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
                 nLangType = pKnown[i];
             else
                 nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
@@ -264,31 +264,31 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
                  !MsLangId::isLegacy( nLangType) &&
-                 (MsLangId::getSubLanguage( nLangType) != 0 ||
-                  (nLangList & LANG_LIST_ALSO_PRIMARY_ONLY)) &&
-                 ((nLangList & LANG_LIST_ALL) != 0 ||
-                  ((nLangList & LANG_LIST_WESTERN) != 0 &&
+                 (MsLangId::getSubLanguage( nLangType) ||
+                  bool(nLangList & SvxLanguageListFlags::ALSO_PRIMARY_ONLY)) &&
+                 (bool(nLangList & SvxLanguageListFlags::ALL) ||
+                  (bool(nLangList & SvxLanguageListFlags::WESTERN) &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
                     SvtScriptType::LATIN)) ||
-                  ((nLangList & LANG_LIST_CTL) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::CTL) &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
                     SvtScriptType::COMPLEX)) ||
-                  ((nLangList & LANG_LIST_CJK) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::CJK) &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
                     SvtScriptType::ASIAN)) ||
-                  ((nLangList & LANG_LIST_FBD_CHARS) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
                    MsLangId::hasForbiddenCharacters(nLangType)) ||
-                  ((nLangList & LANG_LIST_SPELL_AVAIL) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::SPELL_AVAIL) &&
                    lcl_SeqHasLang(aSpellAvailLang, nLangType)) ||
-                  ((nLangList & LANG_LIST_HYPH_AVAIL) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::HYPH_AVAIL) &&
                    lcl_SeqHasLang(aHyphAvailLang, nLangType)) ||
-                  ((nLangList & LANG_LIST_THES_AVAIL) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::THES_AVAIL) &&
                    lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
-                  ((nLangList & LANG_LIST_SPELL_USED) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
                    lcl_SeqHasLang(aSpellUsedLang, nLangType)) ||
-                  ((nLangList & LANG_LIST_HYPH_USED) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::HYPH_USED) &&
                    lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
-                  ((nLangList & LANG_LIST_THES_USED) != 0 &&
+                  (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
                    lcl_SeqHasLang(aThesUsedLang, nLangType))) )
                 InsertLanguage( nLangType );
         }

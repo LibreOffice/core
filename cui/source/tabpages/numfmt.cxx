@@ -366,7 +366,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
     /* TODO: any reason we're doing a manual init here instead of using
-     * SvxLanguageBoxBase::SetLanguageList( LANG_LIST_ONLY_KNOWN, ...)? */
+     * SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags::ONLY_KNOWN, ...)? */
     // Don't list ambiguous locales where we won't be able to convert the
     // LanguageType back to an identical Language_Country name and therefore
     // couldn't load the i18n LocaleData. Show DebugMsg in non-PRODUCT version.

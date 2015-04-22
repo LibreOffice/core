@@ -276,7 +276,7 @@ void SetDefaultLanguageDialog::dispose()
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
-    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, false );
+    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL, false );
     // remove the already localized languages
     Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();

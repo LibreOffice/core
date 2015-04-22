@@ -24,25 +24,33 @@
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
-#define LANG_LIST_EMPTY             0x0000
-#define LANG_LIST_ALL               0x0001
-#define LANG_LIST_WESTERN           0x0002
-#define LANG_LIST_CTL               0x0004
-#define LANG_LIST_CJK               0x0008
-#define LANG_LIST_FBD_CHARS         0x0010
-#define LANG_LIST_SPELL_AVAIL       0x0020
-#define LANG_LIST_HYPH_AVAIL        0x0040
-#define LANG_LIST_THES_AVAIL        0x0080
-#define LANG_LIST_ONLY_KNOWN        0x0100  // list only locales provided by I18N
-#define LANG_LIST_SPELL_USED        0x0200
-#define LANG_LIST_HYPH_USED         0x0400
-#define LANG_LIST_THES_USED         0x0800
-#define LANG_LIST_ALSO_PRIMARY_ONLY 0x1000  // Do not exclude primary-only
-                                            // languages that do not form a
-                                            // locale, such as Arabic as
-                                            // opposed to Arabic-Egypt.
+enum class SvxLanguageListFlags
+{
+    EMPTY             = 0x0000,
+    ALL               = 0x0001,
+    WESTERN           = 0x0002,
+    CTL               = 0x0004,
+    CJK               = 0x0008,
+    FBD_CHARS         = 0x0010,
+    SPELL_AVAIL       = 0x0020,
+    HYPH_AVAIL        = 0x0040,
+    THES_AVAIL        = 0x0080,
+    ONLY_KNOWN        = 0x0100,  // list only locales provided by I18N
+    SPELL_USED        = 0x0200,
+    HYPH_USED         = 0x0400,
+    THES_USED         = 0x0800,
+    ALSO_PRIMARY_ONLY = 0x1000,  // Do not exclude primary-only
+                                 // languages that do not form a
+                                 // locale, such as Arabic as
+                                 // opposed to Arabic-Egypt.
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxLanguageListFlags> : is_typed_flags<SvxLanguageListFlags, 0x1fff> {};
+}
 
 // load language strings from resource
 SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg );
@@ -56,7 +64,7 @@ public:
     explicit SvxLanguageBoxBase( bool bCheck );
     virtual ~SvxLanguageBoxBase();
 
-    void            SetLanguageList( sal_Int16 nLangList,
+    void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
 
@@ -83,7 +91,7 @@ protected:
     Image                   m_aCheckedImage;
     OUString                m_aAllString;
     com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
-    sal_Int16               m_nLangList;
+    SvxLanguageListFlags    m_nLangList;
     bool                    m_bHasLangNone;
     bool                    m_bLangNoneIsLangAll;
     bool                    m_bWithCheckmark;
