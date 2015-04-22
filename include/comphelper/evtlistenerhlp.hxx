@@ -33,7 +33,7 @@ namespace comphelper
 
     //= OCommandsListener
     // is helper class to avoid a cycle in refcount between the XEventListener
-    // and the member XEventBroadcaster
+    // and the member XComponent
 
     class COMPHELPER_DLLPUBLIC OEventListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
     {
