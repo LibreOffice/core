@@ -51,8 +51,8 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 
 #ifdef UNX
 #include <sys/resource.h>
@@ -2245,7 +2245,7 @@ void SbObjModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 typedef ::cppu::WeakImplHelper3<
     awt::XTopWindowListener,
     awt::XWindowListener,
-    document::XEventListener > FormObjEventListener_BASE;
+    document::XDocumentEventListener > FormObjEventListener_BASE;
 
 class FormObjEventListenerImpl:
     public FormObjEventListener_BASE, private boost::noncopyable
@@ -2282,7 +2282,7 @@ public:
         {
             try
             {
-                uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->addEventListener( this );
+                uno::Reference< document::XDocumentEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->addDocumentEventListener( this );
             }
             catch(const uno::Exception& ) {}
         }
@@ -2317,7 +2317,7 @@ public:
         {
             try
             {
-                uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->removeEventListener( this );
+                uno::Reference< document::XDocumentEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->removeDocumentEventListener( this );
             }
             catch(const uno::Exception& ) {}
         }
@@ -2427,7 +2427,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // early dosposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
         if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
