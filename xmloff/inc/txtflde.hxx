@@ -143,6 +143,7 @@ enum FieldIdEnum {
     FIELD_ID_DRAW_HEADER,
     FIELD_ID_DRAW_FOOTER,
     FIELD_ID_DRAW_DATE_TIME,
+    FIELD_ID_DRAW_PAGETITLE,        // page/slide title
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };

@@ -138,6 +138,7 @@ const sal_Char sAPI_drop_down[]                 = "DropDown";
 const sal_Char sAPI_header[]                    = "Header";
 const sal_Char sAPI_footer[]                    = "Footer";
 const sal_Char sAPI_datetime[]                  = "DateTime";
+const sal_Char sAPI_pagetitle[]                 = "PageTitle";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -578,6 +579,10 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             break;
         case XML_TOK_DRAW_DATE_TIME:
             pContext = new XMLDateTimeFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
+            break;
+        case XML_TOK_DRAW_PAGE_TITLE:
+            pContext = new XMLPageTitleFieldImportContext( rImport, rHlp,
                                                           nPrefix, rName );
             break;
 
@@ -4149,6 +4154,33 @@ void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
 
 /// prepare XTextField for insertion into document
 void XMLDateTimeFieldImportContext::PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> &)
+{
+}
+
+/** import page|slide title fields (<presentation:page-title>) */
+TYPEINIT1( XMLPageTitleFieldImportContext, XMLTextFieldImportContext );
+
+XMLPageTitleFieldImportContext::XMLPageTitleFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const OUString& sLocalName)      /// element name w/o prefix
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_pagetitle, nPrfx, sLocalName )
+{
+    sServicePrefix = sAPI_presentation_prefix;
+    bValid = true;
+}
+
+/// process attribute values
+void XMLPageTitleFieldImportContext::ProcessAttribute( sal_uInt16,
+                                   const OUString& )
+{
+}
+
+/// prepare XTextField for insertion into document
+void XMLPageTitleFieldImportContext::PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> &)
 {

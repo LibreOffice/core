@@ -1374,6 +1374,7 @@ namespace xmloff { namespace token {
         TOKEN( "page-master",                     XML_PAGE_MASTER ),
         TOKEN( "page-master-name",                XML_PAGE_MASTER_NAME ),
         TOKEN( "page-number",                     XML_PAGE_NUMBER ),
+        TOKEN( "page-title",                      XML_PAGE_TITLE ),
         TOKEN( "page-start-margin",               XML_PAGE_START_MARGIN ),
         TOKEN( "page-style-name",                 XML_PAGE_STYLE_NAME ),
         TOKEN( "page-thumbnail",                  XML_PAGE_THUMBNAIL ),
