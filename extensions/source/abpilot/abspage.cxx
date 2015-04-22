@@ -38,7 +38,7 @@ namespace abp
     void AddressBookSourcePage::DeactivatePage()
     {
         AddressBookSourcePage_Base::DeactivatePage();
-        getDialog()->enableButtons(WZB_NEXT, true);
+        getDialog()->enableButtons(WizardButtonFlags::NEXT, true);
     }
 
 

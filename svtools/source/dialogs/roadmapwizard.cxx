@@ -113,14 +113,14 @@ namespace svt
     }
 
     //= RoadmapWizard
-    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags )
         :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
     {
         impl_construct();
     }
 
-    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, sal_uInt32 _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, WizardButtonFlags _nButtonFlags )
         :OWizardMachine( _pParent, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
     {
@@ -457,7 +457,7 @@ namespace svt
                 bHaveEnabledState = true;
         }
 
-        enableButtons( WZB_PREVIOUS, bHaveEnabledState );
+        enableButtons( WizardButtonFlags::PREVIOUS, bHaveEnabledState );
 
         implUpdateRoadmap();
     }

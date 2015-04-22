@@ -60,7 +60,7 @@ namespace abp
 
     OAddessBookSourcePilot::OAddessBookSourcePilot(vcl::Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent,
-            static_cast<sal_uInt32>(WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS) )
+            WizardButtonFlags::HELP | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS )
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
@@ -119,8 +119,8 @@ namespace abp
         m_aSettings.bRegisterDataSource = false;
         m_aSettings.bIgnoreNoTable = false;
 
-        defaultButton(WZB_NEXT);
-        enableButtons(WZB_FINISH, false);
+        defaultButton(WizardButtonFlags::NEXT);
+        enableButtons(WizardButtonFlags::FINISH, false);
         ActivatePage();
 
         typeSelectionChanged( m_aSettings.eType );

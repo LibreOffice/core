@@ -191,14 +191,14 @@ namespace abp
             }
         }
 
-        getDialog()->enableButtons(WZB_PREVIOUS, false);
+        getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, false);
     }
 
 
     void TypeSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
-        getDialog()->enableButtons(WZB_PREVIOUS, true);
+        getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, true);
     }
 
 

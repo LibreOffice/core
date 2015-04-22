@@ -583,7 +583,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
             rConfigItem.AddSavedDocument(
                     aURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
             pButton->Enable(false);
-            m_pWizard->enableButtons(WZB_FINISH, true);
+            m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
             pButton->Enable(false);
 
         }
@@ -739,7 +739,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
         m_bCancelSaving = false;
         aSaveMonitor->Show();
-        m_pWizard->enableButtons(WZB_CANCEL, false);
+        m_pWizard->enableButtons(WizardButtonFlags::CANCEL, false);
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
         {
@@ -817,8 +817,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
         ::osl::File::remove( sTargetTempURL );
     }
-    m_pWizard->enableButtons(WZB_CANCEL, true);
-    m_pWizard->enableButtons(WZB_FINISH, true);
+    m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
+    m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
     return 0;
 }
 
@@ -906,7 +906,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     SfxBoolItem aMergeSilent(SID_SILENT, false);
-    m_pWizard->enableButtons(WZB_CANCEL, false);
+    m_pWizard->enableButtons(WizardButtonFlags::CANCEL, false);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
     aProps[0]. Name = "MonitorVisible";
@@ -918,8 +918,8 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, false);
-    m_pWizard->enableButtons(WZB_CANCEL, true);
-    m_pWizard->enableButtons(WZB_FINISH, true);
+    m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
+    m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
     return 0;
 }
 
@@ -1308,7 +1308,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     pDlg->EnableDesctruction();
     ::osl::File::remove( sTargetTempURL );
 
-    m_pWizard->enableButtons(WZB_FINISH, true);
+    m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
     //the dialog deletes itself
     //delete pDlg;
     return 0;

@@ -23,20 +23,27 @@
 #include <svtools/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class Bitmap;
+
+enum class WizardButtonFlags
+{
+    NONE                = 0x0000,
+    NEXT                = 0x0001,
+    PREVIOUS            = 0x0002,
+    FINISH              = 0x0004,
+    CANCEL              = 0x0008,
+    HELP                = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<WizardButtonFlags> : is_typed_flags<WizardButtonFlags, 0x001f> {};
+}
 
 namespace svt
 {
 
-
-// wizard buttons
-#define WZB_NONE                0x0000
-#define WZB_NEXT                0x0001
-#define WZB_PREVIOUS            0x0002
-#define WZB_FINISH              0x0004
-#define WZB_CANCEL              0x0008
-#define WZB_HELP                0x0010
 
 // wizard states
 #define WZS_INVALID_STATE       ((WizardState)-1)
@@ -76,7 +83,7 @@ namespace svt
 
             The default implementation always returns <TRUE/>.
         */
-        virtual bool    canAdvance() const = 0;
+        virtual bool        canAdvance() const = 0;
 
     protected:
         ~IWizardPageController() {}
@@ -109,14 +116,14 @@ namespace svt
 
     protected:
         // TabPage overridables
-        virtual void    ActivatePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() SAL_OVERRIDE;
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
             If the parent of the tab page is a OWizardMachine, then updateTravelUI at this instance
             is called. Otherwise, nothing happens.
         */
-        void    updateDialogTravelUI();
+        void                updateDialogTravelUI();
     };
 
 
@@ -162,33 +169,29 @@ namespace svt
         VclPtr<HelpButton>     m_pHelp;
 
     private:
+        // hold members in this structure to allow keeping compatible when members are added
         WizardMachineImplData*  m_pImpl;
-            // hold members in this structure to allow keeping compatible when members are added
 
         SVT_DLLPRIVATE void addButtons(vcl::Window* _pParent, sal_uInt32 _nButtonFlags);
 
     public:
-        /** ctor
-
-            For the button flags, use any combination of the WZB_* flags.
-        */
-        OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
-        OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags );
+        OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
+        OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
         virtual ~OWizardMachine();
         virtual void dispose() SAL_OVERRIDE;
 
         /// enable (or disable) buttons
-        void    enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable);
+        void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
         /// set the default style for a button
-        void    defaultButton(sal_uInt32 _nWizardButtonFlags);
+        void                defaultButton(WizardButtonFlags _nWizardButtonFlags);
         /// set the default style for a button
-        void    defaultButton(PushButton* _pNewDefButton);
+        void                defaultButton(PushButton* _pNewDefButton);
 
         /// set the base of the title to use - the title of the current page is appended
-        void            setTitleBase(const OUString& _rTitleBase);
+        void                setTitleBase(const OUString& _rTitleBase);
 
         /// determines whether there is a next state to which we can advance
-        virtual bool    canAdvance() const;
+        virtual bool        canAdvance() const;
 
         /** updates the user interface which deals with traveling in the wizard
 
@@ -196,7 +199,7 @@ namespace svt
             itself allow to advance to the next state (<code>canAdvance</code>), and enables the "Next"
             button if and only if this is the case.
         */
-        virtual void    updateTravelUI();
+        virtual void        updateTravelUI();
 
     protected:
         // WizardDialog overridables
@@ -310,8 +313,8 @@ namespace svt
 
             For instance, if you want to travel two steps backward at a time, you could used
             two travelPrevious calls, but this would <em>show</em> both pages, which is not necessary,
-            since you're interested in the target page only. Using <member>skipBackwardUntil</member> reliefs
-            you from this.
+            since you're interested in the target page only. Using <member>skipBackwardUntil</member> relieves
+            you of this.
 
             @return
                 <TRUE/> if and only if traveling was successful
@@ -332,27 +335,31 @@ namespace svt
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
-        void    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
+        void                    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
 
     public:
-        class AccessGuard { friend class WizardTravelSuspension; private: AccessGuard() { } };
+        class AccessGuard
+        {
+            friend class WizardTravelSuspension;
+        private:
+            AccessGuard() { }
+        };
 
-        void suspendTraveling( AccessGuard );
-        void resumeTraveling( AccessGuard );
-        bool isTravelingSuspended() const;
+        void                   suspendTraveling( AccessGuard );
+        void                   resumeTraveling( AccessGuard );
+        bool                   isTravelingSuspended() const;
 
     protected:
         TabPage* GetOrCreatePage( const WizardState i_nState );
 
     private:
-       // long OnNextPage( PushButton* );
         DECL_DLLPRIVATE_LINK(OnNextPage, void*);
         DECL_DLLPRIVATE_LINK(OnPrevPage, void*);
         DECL_DLLPRIVATE_LINK(OnFinish, void*);
 
         SVT_DLLPRIVATE void     implResetDefault(vcl::Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
-        SVT_DLLPRIVATE void     implConstruct( const sal_uInt32 _nButtonFlags );
+        SVT_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
     /// helper class to temporarily suspend any traveling in the wizard

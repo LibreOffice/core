@@ -98,7 +98,7 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
     {
         m_pWizard->GetConfigItem().SetIndividualGreeting(bIndividual, false);
         m_pWizard->UpdateRoadmap();
-        m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+        m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
     UpdatePreview();
     return 0;
@@ -118,7 +118,7 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
         if(m_bIsTabPage)
         {
             m_pWizard->UpdateRoadmap();
-            m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+            m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
         }
         UpdatePreview();
     }
@@ -139,7 +139,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
     {
         UpdatePreview();
         m_pWizard->UpdateRoadmap();
-        m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+        m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
     return 0;
 }
@@ -328,7 +328,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     m_pFemaleFieldCB->SaveValue();
 
     UpdatePreview();
-    m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
+    m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
 }
 
 bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )

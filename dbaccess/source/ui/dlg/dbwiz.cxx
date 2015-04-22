@@ -67,7 +67,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :OWizardMachine(_pParent, WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
+    :OWizardMachine(_pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
     ,m_pOutSet(NULL)
     ,m_bResetting(false)
     ,m_bApplied(false)
@@ -82,8 +82,8 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
-    defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, false);
+    defaultButton(WizardButtonFlags::NEXT);
+    enableButtons(WizardButtonFlags::FINISH, false);
     enableAutomaticNextButtonState( true );
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
@@ -115,8 +115,8 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
     m_eType = _pTabPage->GetSelectedType();
     const bool bURLRequired = m_pCollection->isConnectionUrlRequired(m_eType);
-    enableButtons(WZB_NEXT,bURLRequired);
-    enableButtons(WZB_FINISH,!bURLRequired);
+    enableButtons(WizardButtonFlags::NEXT,bURLRequired);
+    enableButtons(WizardButtonFlags::FINISH,!bURLRequired);
     return 1L;
 }
 
@@ -293,8 +293,8 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
         static_cast<OGenericAdministrationPage*>(pPage.get())->SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage*>(pPage.get())->SetAdminDialog(this,this);
         pPage->SetText(ModuleRes(nStringId));
-        defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
-        enableButtons( WZB_FINISH, _nState != START_PAGE);
+        defaultButton( _nState == START_PAGE ? WizardButtonFlags::NEXT : WizardButtonFlags::FINISH );
+        enableButtons( WizardButtonFlags::FINISH, _nState != START_PAGE);
         pPage->Show();
     }
     return pPage;
@@ -315,7 +315,7 @@ void ODbTypeWizDialog::setTitle(const OUString& _sTitle)
 
 void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
-    enableButtons( WZB_FINISH, _bEnable );
+    enableButtons( WizardButtonFlags::FINISH, _bEnable );
     // TODO:
     // this is hacky. At the moment, this method is used in only one case.
     // As soon as it is to be used more wide-spread, we should find a proper concept

@@ -128,13 +128,13 @@ namespace dbp
     {
         OControlWizard::enterState(_nState);
 
-        enableButtons(WZB_PREVIOUS, m_bHadDataSelection ? (LCW_STATE_DATASOURCE_SELECTION < _nState) : LCW_STATE_TABLESELECTION < _nState);
-        enableButtons(WZB_NEXT, getFinalState() != _nState);
+        enableButtons(WizardButtonFlags::PREVIOUS, m_bHadDataSelection ? (LCW_STATE_DATASOURCE_SELECTION < _nState) : LCW_STATE_TABLESELECTION < _nState);
+        enableButtons(WizardButtonFlags::NEXT, getFinalState() != _nState);
         if (_nState < getFinalState())
-            enableButtons(WZB_FINISH, false);
+            enableButtons(WizardButtonFlags::FINISH, false);
 
         if (getFinalState() == _nState)
-            defaultButton(WZB_FINISH);
+            defaultButton(WizardButtonFlags::FINISH);
     }
 
 
@@ -144,7 +144,7 @@ namespace dbp
             return false;
 
         if (getFinalState() == _nState)
-            defaultButton(WZB_NEXT);
+            defaultButton(WizardButtonFlags::NEXT);
 
         return true;
     }
@@ -508,7 +508,7 @@ namespace dbp
     {
         bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_pValueListField->GetEntryPos(m_pValueListField->GetText()));
         bInvalidSelection |= (COMBOBOX_ENTRY_NOTFOUND == m_pTableField->GetEntryPos(m_pTableField->GetText()));
-        getDialog()->enableButtons(WZB_FINISH, !bInvalidSelection);
+        getDialog()->enableButtons(WizardButtonFlags::FINISH, !bInvalidSelection);
     }
 
 
@@ -550,7 +550,7 @@ namespace dbp
     void OComboDBFieldPage::ActivatePage()
     {
         ODBFieldPage::ActivatePage();
-        getDialog()->enableButtons(WZB_FINISH, true);
+        getDialog()->enableButtons(WizardButtonFlags::FINISH, true);
     }
 
 

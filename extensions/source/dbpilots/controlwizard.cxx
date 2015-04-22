@@ -242,15 +242,15 @@ namespace dbp
 
     OControlWizard::OControlWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OWizardMachine(_pParent, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
+        :OWizardMachine(_pParent, WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH)
         ,m_xContext(_rxContext)
     {
         m_aContext.xObjectModel = _rxObjectModel;
         initContext();
 
         SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
-        defaultButton(WZB_NEXT);
-        enableButtons(WZB_FINISH, false);
+        defaultButton(WizardButtonFlags::NEXT);
+        enableButtons(WizardButtonFlags::FINISH, false);
     }
 
     OControlWizard::~OControlWizard()

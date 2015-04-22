@@ -146,8 +146,8 @@ namespace dbmm
         SetPageSizePixel( LogicToPixel( ::Size( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT ), MAP_APPFONT ) );
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
-        defaultButton( WZB_NEXT );
-        enableButtons( WZB_FINISH, true );
+        defaultButton( WizardButtonFlags::NEXT );
+        enableButtons( WizardButtonFlags::FINISH, true );
         ActivatePage();
 
         OSL_PRECOND( m_pData->xDocumentModel.is(), "MacroMigrationDialog::MacroMigrationDialog: illegal document!" );
@@ -191,7 +191,7 @@ namespace dbmm
         switch ( _nState )
         {
         case STATE_CLOSE_SUB_DOCS:
-            enableButtons( WZB_FINISH, false );
+            enableButtons( WizardButtonFlags::FINISH, false );
             enableState( STATE_MIGRATE, false );
             enableState( STATE_SUMMARY, false );
             break;
@@ -211,7 +211,7 @@ namespace dbmm
             enableState( STATE_BACKUP_DBDOC, false );
             enableState( STATE_SUMMARY, false );
 
-            enableButtons( WZB_FINISH | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT, false );
+            enableButtons( WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT, false );
 
             // start the migration asynchronously
             PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ) );
@@ -227,9 +227,9 @@ namespace dbmm
             dynamic_cast< ResultPage& >( *GetPage( STATE_SUMMARY ) ).displayMigrationLog(
                 m_pData->bMigrationSuccess, m_pData->aLogger.getCompleteLog() );
 
-            enableButtons( WZB_FINISH, m_pData->bMigrationSuccess );
-            enableButtons( WZB_CANCEL, m_pData->bMigrationFailure );
-            defaultButton( m_pData->bMigrationSuccess ? WZB_FINISH : WZB_CANCEL );
+            enableButtons( WizardButtonFlags::FINISH, m_pData->bMigrationSuccess );
+            enableButtons( WizardButtonFlags::CANCEL, m_pData->bMigrationFailure );
+            defaultButton( m_pData->bMigrationSuccess ? WizardButtonFlags::FINISH : WizardButtonFlags::CANCEL );
             break;
 
         default:
@@ -293,7 +293,7 @@ namespace dbmm
         m_pData->bMigrationFailure = !m_pData->bMigrationSuccess;
 
         // re-enable the UI
-        enableButtons( WZB_FINISH | WZB_NEXT, true );
+        enableButtons( WizardButtonFlags::FINISH | WizardButtonFlags::NEXT, true );
         enableState( STATE_SUMMARY, true );
         updateTravelUI();
 

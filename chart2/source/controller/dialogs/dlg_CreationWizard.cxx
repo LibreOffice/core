@@ -54,9 +54,9 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
                                , const uno::Reference< uno::XComponentContext >& xContext
                                , sal_Int32 nOnePageOnlyIndex )
                 : svt::RoadmapWizard( pParent,
-                    static_cast<sal_uInt32>((nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount)
-                        ?  WZB_HELP | WZB_CANCEL | WZB_FINISH
-                        :  WZB_HELP | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
+                    (nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount)
+                        ?  WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::FINISH
+                        :  WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH
                   )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
@@ -69,7 +69,7 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
                 , m_bCanTravel( true )
 {
     m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
-    defaultButton( WZB_FINISH );
+    defaultButton( WizardButtonFlags::FINISH );
 
     if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )
     {
@@ -169,8 +169,8 @@ svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nC
 void CreationWizard::enterState(WizardState nState)
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    enableButtons( WZB_PREVIOUS, bool( nState > m_nFirstState ) );
-    enableButtons( WZB_NEXT, bool( nState < m_nLastState ) );
+    enableButtons( WizardButtonFlags::PREVIOUS, bool( nState > m_nFirstState ) );
+    enableButtons( WizardButtonFlags::NEXT, bool( nState < m_nLastState ) );
     if( isStateEnabled( nState ))
         svt::RoadmapWizard::enterState(nState);
 }

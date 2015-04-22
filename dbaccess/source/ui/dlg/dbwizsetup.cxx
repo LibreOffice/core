@@ -105,7 +105,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :svt::RoadmapWizard( _pParent, static_cast<sal_uInt32>(WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP) )
+    :svt::RoadmapWizard( _pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 
     , m_pOutSet(NULL)
     , m_bResetting(false)
@@ -148,8 +148,8 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
-    defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, true);
+    defaultButton(WizardButtonFlags::NEXT);
+    enableButtons(WizardButtonFlags::FINISH, true);
     enableAutomaticNextButtonState();
 
     ::dbaccess::ODsnTypeCollection::TypeIterator aIter = m_pCollection->begin();
@@ -328,7 +328,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
 
         enableState(PAGE_DBSETUPWIZARD_FINAL, true );
-        enableButtons( WZB_FINISH, true);
+        enableButtons( WizardButtonFlags::FINISH, true);
     }
     break;
     case OGeneralPageWizard::eConnectExternal:
@@ -347,14 +347,14 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPageWizard::eOpenExisting:
     {
         activatePath( static_cast<PathId>(m_pCollection->size() + 1), true );
-        enableButtons( WZB_FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
+        enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
     }
     break;
     default:
         OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
-    enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
+    enableButtons( WizardButtonFlags::NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
         // TODO: this should go into the base class. Point is, we activate a path whose *last*
         // step is also the current one. The base class should automatically disable
         // the Next button in such a case. However, not for this patch ...
@@ -374,7 +374,7 @@ void ODbTypeWizDialogSetup::updateTypeDependentStates()
     }
     enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, bDoEnable);
     enableState(PAGE_DBSETUPWIZARD_FINAL, bDoEnable );
-    enableButtons( WZB_FINISH, bDoEnable);
+    enableButtons( WizardButtonFlags::FINISH, bDoEnable);
 }
 
 bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
@@ -566,9 +566,9 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
         pPage->SetServiceFactory( m_pImpl->getORB() );
         pPage->SetAdminDialog(this, this);
 
-        defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );
-        enableButtons( WZB_FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
-        enableButtons( WZB_NEXT, _nState != PAGE_DBSETUPWIZARD_FINAL );
+        defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WizardButtonFlags::FINISH : WizardButtonFlags::NEXT );
+        enableButtons( WizardButtonFlags::FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
+        enableButtons( WizardButtonFlags::NEXT, _nState != PAGE_DBSETUPWIZARD_FINAL );
         pPage->Show();
     }
     return pPage;
@@ -580,10 +580,10 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
     enableState(PAGE_DBSETUPWIZARD_FINAL, m_bIsConnectable);
     enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, m_bIsConnectable);
     if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-        enableButtons( WZB_FINISH, true);
+        enableButtons( WizardButtonFlags::FINISH, true);
     else
-        enableButtons( WZB_FINISH, m_bIsConnectable);
-    enableButtons( WZB_NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
+        enableButtons( WizardButtonFlags::FINISH, m_bIsConnectable);
+    enableButtons( WizardButtonFlags::NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
     return sal_True;
 }
 
@@ -614,7 +614,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_p
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
-    enableButtons( WZB_FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
+    enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
     return 0L;
 }
 
@@ -635,7 +635,7 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
             m_sOldURL = m_sURL;
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
-            enableButtons( WZB_FINISH, true);
+            enableButtons( WizardButtonFlags::FINISH, true);
             if ( m_pFinalPage )
                 m_pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_sURL));
             break;
@@ -1020,7 +1020,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             return SaveDatabaseDocument() && OWizardMachine::onFinish();
         else
         {
-            enableButtons( WZB_FINISH, false );
+            enableButtons( WizardButtonFlags::FINISH, false );
             return false;
         }
     }

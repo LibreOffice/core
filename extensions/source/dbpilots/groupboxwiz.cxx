@@ -144,14 +144,14 @@ namespace dbp
 
         // setting the def button .... to be done before the base class is called, too, 'cause the base class
         // calls the pages, which are allowed to override our def button behaviour
-        defaultButton(GBW_STATE_FINALIZE == _nState ? WZB_FINISH : WZB_NEXT);
+        defaultButton(GBW_STATE_FINALIZE == _nState ? WizardButtonFlags::FINISH : WizardButtonFlags::NEXT);
 
         // allow "finish" on the last page only
-        enableButtons(WZB_FINISH, GBW_STATE_FINALIZE == _nState);
+        enableButtons(WizardButtonFlags::FINISH, GBW_STATE_FINALIZE == _nState);
         // allow previous on all pages but the first one
-        enableButtons(WZB_PREVIOUS, GBW_STATE_OPTIONLIST != _nState);
+        enableButtons(WizardButtonFlags::PREVIOUS, GBW_STATE_OPTIONLIST != _nState);
         // allow next on all pages but the last one
-        enableButtons(WZB_NEXT, GBW_STATE_FINALIZE != _nState);
+        enableButtons(WizardButtonFlags::NEXT, GBW_STATE_FINALIZE != _nState);
 
         OControlWizard::enterState(_nState);
     }
@@ -323,7 +323,7 @@ namespace dbp
         m_pMoveLeft->Enable(bSelectedSome);
         m_pMoveRight->Enable(bUnfinishedInput);
 
-        getDialog()->enableButtons(WZB_NEXT, bHaveSome);
+        getDialog()->enableButtons(WizardButtonFlags::NEXT, bHaveSome);
 
         if (bUnfinishedInput)
         {
@@ -333,7 +333,7 @@ namespace dbp
         else
         {
             if (WB_DEFBUTTON == (m_pMoveRight->GetStyle() & WB_DEFBUTTON))
-                getDialog()->defaultButton(WZB_NEXT);
+                getDialog()->defaultButton(WizardButtonFlags::NEXT);
         }
     }
 

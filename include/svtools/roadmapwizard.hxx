@@ -70,11 +70,11 @@ namespace svt
         RoadmapWizard(
             vcl::Window* _pParent,
             const WinBits i_nStyle,
-            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
+            WizardButtonFlags _nButtonFlags = WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP
         );
         RoadmapWizard(
             vcl::Window* _pParent,
-            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
+            WizardButtonFlags _nButtonFlags = WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP
         );
         virtual ~RoadmapWizard( );
         virtual void dispose() SAL_OVERRIDE;

@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
-                        static_cast<sal_uInt32>(WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP)),
+                        WizardButtonFlags::NEXT|WizardButtonFlags::PREVIOUS|WizardButtonFlags::FINISH|WizardButtonFlags::CANCEL|WizardButtonFlags::HELP),
         m_pSwView(&rView),
         m_bDocumentLoad( false ),
         m_rConfigItem(rItem),
@@ -59,8 +59,8 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
-    defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, false);
+    defaultButton(WizardButtonFlags::NEXT);
+    enableButtons(WizardButtonFlags::FINISH, false);
 
     m_pFinish->SetText(m_sFinish);
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
@@ -165,8 +165,8 @@ void SwMailMergeWizard::enterState( WizardState _nState )
             bEnableNext = false;
         break;
     }
-    enableButtons( WZB_PREVIOUS, bEnablePrev);
-    enableButtons( WZB_NEXT, bEnableNext);
+    enableButtons( WizardButtonFlags::PREVIOUS, bEnablePrev);
+    enableButtons( WizardButtonFlags::NEXT, bEnableNext);
 
     UpdateRoadmap();
 }

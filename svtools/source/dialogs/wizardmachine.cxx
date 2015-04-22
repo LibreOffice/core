@@ -106,7 +106,7 @@ namespace svt
         }
     };
 
-    OWizardMachine::OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+    OWizardMachine::OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags )
         :WizardDialog( _pParent, i_nStyle )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -118,7 +118,7 @@ namespace svt
         implConstruct( _nButtonFlags );
     }
 
-    OWizardMachine::OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags )
+    OWizardMachine::OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags )
         :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -131,13 +131,13 @@ namespace svt
     }
 
 
-    void OWizardMachine::implConstruct( const sal_uInt32 _nButtonFlags )
+    void OWizardMachine::implConstruct( const WizardButtonFlags _nButtonFlags )
     {
         m_pImpl->sTitleBase = GetText();
 
         // create the buttons according to the wizard button flags
         // the help button
-        if (_nButtonFlags & WZB_HELP)
+        if (_nButtonFlags & WizardButtonFlags::HELP)
         {
             m_pHelp= VclPtr<HelpButton>::Create(this, WB_TABSTOP);
             m_pHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
@@ -146,7 +146,7 @@ namespace svt
         }
 
         // the previous button
-        if (_nButtonFlags & WZB_PREVIOUS)
+        if (_nButtonFlags & WizardButtonFlags::PREVIOUS)
         {
             m_pPrevPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
@@ -154,7 +154,7 @@ namespace svt
             m_pPrevPage->SetText(SVT_RESSTR(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
 
-            if (_nButtonFlags & WZB_NEXT)
+            if (_nButtonFlags & WizardButtonFlags::NEXT)
                 AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
@@ -163,7 +163,7 @@ namespace svt
         }
 
         // the next button
-        if (_nButtonFlags & WZB_NEXT)
+        if (_nButtonFlags & WizardButtonFlags::NEXT)
         {
             m_pNextPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
@@ -177,7 +177,7 @@ namespace svt
         }
 
         // the finish button
-        if (_nButtonFlags & WZB_FINISH)
+        if (_nButtonFlags & WizardButtonFlags::FINISH)
         {
             m_pFinish = VclPtr<OKButton>::Create(this, WB_TABSTOP);
             m_pFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
@@ -189,7 +189,7 @@ namespace svt
         }
 
         // the cancel button
-        if (_nButtonFlags & WZB_CANCEL)
+        if (_nButtonFlags & WizardButtonFlags::CANCEL)
         {
             m_pCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP);
             m_pCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
@@ -291,19 +291,19 @@ namespace svt
     }
 
 
-    void OWizardMachine::defaultButton(sal_uInt32 _nWizardButtonFlags)
+    void OWizardMachine::defaultButton(WizardButtonFlags _nWizardButtonFlags)
     {
         // the new default button
         PushButton* pNewDefButton = NULL;
-        if (m_pFinish && (_nWizardButtonFlags & WZB_FINISH))
+        if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
             pNewDefButton = m_pFinish;
-        if (m_pNextPage && (_nWizardButtonFlags & WZB_NEXT))
+        if (m_pNextPage && (_nWizardButtonFlags & WizardButtonFlags::NEXT))
             pNewDefButton = m_pNextPage;
-        if (m_pPrevPage && (_nWizardButtonFlags & WZB_PREVIOUS))
+        if (m_pPrevPage && (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS))
             pNewDefButton = m_pPrevPage;
-        if (m_pHelp && (_nWizardButtonFlags & WZB_HELP))
+        if (m_pHelp && (_nWizardButtonFlags & WizardButtonFlags::HELP))
             pNewDefButton = m_pHelp;
-        if (m_pCancel && (_nWizardButtonFlags & WZB_CANCEL))
+        if (m_pCancel && (_nWizardButtonFlags & WizardButtonFlags::CANCEL))
             pNewDefButton = m_pCancel;
 
         if ( pNewDefButton )
@@ -355,17 +355,17 @@ namespace svt
     }
 
 
-    void OWizardMachine::enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable)
+    void OWizardMachine::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
     {
-        if (m_pFinish && (_nWizardButtonFlags & WZB_FINISH))
+        if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
             m_pFinish->Enable(_bEnable);
-        if (m_pNextPage && (_nWizardButtonFlags & WZB_NEXT))
+        if (m_pNextPage && (_nWizardButtonFlags & WizardButtonFlags::NEXT))
             m_pNextPage->Enable(_bEnable);
-        if (m_pPrevPage && (_nWizardButtonFlags & WZB_PREVIOUS))
+        if (m_pPrevPage && (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS))
             m_pPrevPage->Enable(_bEnable);
-        if (m_pHelp && (_nWizardButtonFlags & WZB_HELP))
+        if (m_pHelp && (_nWizardButtonFlags & WizardButtonFlags::HELP))
             m_pHelp->Enable(_bEnable);
-        if (m_pCancel && (_nWizardButtonFlags & WZB_CANCEL))
+        if (m_pCancel && (_nWizardButtonFlags & WizardButtonFlags::CANCEL))
             m_pCancel->Enable(_bEnable);
     }
 
@@ -379,9 +379,9 @@ namespace svt
             pController->initializePage();
 
         if ( isAutomaticNextButtonStateEnabled() )
-            enableButtons( WZB_NEXT, canAdvance() );
+            enableButtons( WizardButtonFlags::NEXT, canAdvance() );
 
-        enableButtons( WZB_PREVIOUS, !m_pImpl->aStateHistory.empty() );
+        enableButtons( WizardButtonFlags::PREVIOUS, !m_pImpl->aStateHistory.empty() );
 
         // set the new title - it depends on the current page (i.e. state)
         implUpdateTitle();
@@ -673,7 +673,7 @@ namespace svt
         bool bCanAdvance =
                 ( !pController || pController->canAdvance() )   // the current page allows to advance
             &&  canAdvance();                                   // the dialog as a whole allows to advance
-        enableButtons( WZB_NEXT, bCanAdvance );
+        enableButtons( WizardButtonFlags::NEXT, bCanAdvance );
     }
 
 

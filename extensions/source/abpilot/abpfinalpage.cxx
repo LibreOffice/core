@@ -169,7 +169,7 @@ namespace abp
         m_pLocation->GrabFocus();
 
         // default the finish button
-        getDialog()->defaultButton( WZB_FINISH );
+        getDialog()->defaultButton( WizardButtonFlags::FINISH );
     }
 
 
@@ -178,9 +178,9 @@ namespace abp
         AddressBookSourcePage::DeactivatePage();
 
         // default the "next" button, again
-        getDialog()->defaultButton( WZB_NEXT );
+        getDialog()->defaultButton( WizardButtonFlags::NEXT );
         // disable the finish button
-        getDialog()->enableButtons( WZB_FINISH, false );
+        getDialog()->enableButtons( WizardButtonFlags::FINISH, false );
     }
 
 
@@ -197,7 +197,7 @@ namespace abp
         bool bEmptyLocation = m_pLocation->GetText().isEmpty();
 
         // enable or disable the finish button
-        getDialog()->enableButtons( WZB_FINISH, !bEmptyLocation && (!m_pRegisterName->IsChecked() || bValidName) );
+        getDialog()->enableButtons( WizardButtonFlags::FINISH, !bEmptyLocation && (!m_pRegisterName->IsChecked() || bValidName) );
 
         // show the error message for an invalid name
         m_pDuplicateNameError->Show( !bValidName && !bEmptyName );

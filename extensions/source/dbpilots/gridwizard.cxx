@@ -259,13 +259,13 @@ namespace dbp
     {
         OControlWizard::enterState(_nState);
 
-        enableButtons(WZB_PREVIOUS, m_bHadDataSelection ? (GW_STATE_DATASOURCE_SELECTION < _nState) : GW_STATE_FIELDSELECTION < _nState);
-        enableButtons(WZB_NEXT, GW_STATE_FIELDSELECTION != _nState);
+        enableButtons(WizardButtonFlags::PREVIOUS, m_bHadDataSelection ? (GW_STATE_DATASOURCE_SELECTION < _nState) : GW_STATE_FIELDSELECTION < _nState);
+        enableButtons(WizardButtonFlags::NEXT, GW_STATE_FIELDSELECTION != _nState);
         if (_nState < GW_STATE_FIELDSELECTION)
-            enableButtons(WZB_FINISH, false);
+            enableButtons(WizardButtonFlags::FINISH, false);
 
         if (GW_STATE_FIELDSELECTION == _nState)
-            defaultButton(WZB_FINISH);
+            defaultButton(WizardButtonFlags::FINISH);
     }
 
 
@@ -275,7 +275,7 @@ namespace dbp
             return false;
 
         if (GW_STATE_FIELDSELECTION == _nState)
-            defaultButton(WZB_NEXT);
+            defaultButton(WizardButtonFlags::NEXT);
 
         return true;
     }
@@ -395,7 +395,7 @@ namespace dbp
         m_pDeselectOne->Enable(m_pSelFields->GetSelectEntryCount() != 0);
         m_pDeselectAll->Enable(m_pSelFields->GetEntryCount() != 0);
 
-        getDialog()->enableButtons(WZB_FINISH, 0 != m_pSelFields->GetEntryCount());
+        getDialog()->enableButtons(WizardButtonFlags::FINISH, 0 != m_pSelFields->GetEntryCount());
     }
 
 

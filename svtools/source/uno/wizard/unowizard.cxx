@@ -72,19 +72,19 @@ namespace {
 
     namespace
     {
-        sal_uInt32 lcl_convertWizardButtonToWZB( const sal_Int16 i_nWizardButton )
+        WizardButtonFlags lcl_convertWizardButtonToWZB( const sal_Int16 i_nWizardButton )
         {
             switch ( i_nWizardButton )
             {
-            case WizardButton::NONE:        return WZB_NONE;
-            case WizardButton::NEXT:        return WZB_NEXT;
-            case WizardButton::PREVIOUS:    return WZB_PREVIOUS;
-            case WizardButton::FINISH:      return WZB_FINISH;
-            case WizardButton::CANCEL:      return WZB_CANCEL;
-            case WizardButton::HELP:        return WZB_HELP;
+            case WizardButton::NONE:        return WizardButtonFlags::NONE;
+            case WizardButton::NEXT:        return WizardButtonFlags::NEXT;
+            case WizardButton::PREVIOUS:    return WizardButtonFlags::PREVIOUS;
+            case WizardButton::FINISH:      return WizardButtonFlags::FINISH;
+            case WizardButton::CANCEL:      return WizardButtonFlags::CANCEL;
+            case WizardButton::HELP:        return WizardButtonFlags::HELP;
             }
             OSL_FAIL( "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
-            return WZB_NONE;
+            return WizardButtonFlags::NONE;
         }
     }
 
