@@ -31,6 +31,27 @@
 
 /*************************************************************************
 |*
+|*  class SvxBmpMaskSelectItem
+|*
+\************************************************************************/
+class SvxBmpMask;
+
+class SvxBmpMaskSelectItem : public SfxControllerItem
+{
+private:
+    SvxBmpMask  &rBmpMask;
+
+protected:
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
+                               const SfxPoolItem* pState ) SAL_OVERRIDE;
+
+public:
+    SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
+                          SfxBindings& rBindings );
+};
+
+/*************************************************************************
+|*
 |* Derivative from SfxChildWindow as 'container' for Float
 |*
 \************************************************************************/
@@ -90,10 +111,9 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
 
     XColorListRef       pColLst;
     Color               aPipetteColor;
+    SvxBmpMaskSelectItem aSelItem;
 
     virtual bool        Close() SAL_OVERRIDE;
-
-#ifdef BMPMASK_PRIVATE
 
     sal_uInt16              InitColorArrays( Color* pSrcCols, Color* pDstCols,
                                          sal_uIntPtr* pTols );
@@ -111,8 +131,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
     GDIMetaFile         ImpReplaceTransparency( const GDIMetaFile& rMtf,
                                                 const Color& rColor );
 
-#endif // BMPMASK_PRIVATE
-
 public:
 
     SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent);
@@ -123,6 +141,8 @@ public:
 
     bool                NeedsColorList() const;
     void                SetColorList( const XColorListRef &pColorList );
+
+    void                SetExecState( bool bEnable );
 
     Graphic             Mask( const Graphic& rGraphic );
 

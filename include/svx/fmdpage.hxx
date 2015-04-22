@@ -27,7 +27,7 @@
 
 // SvxFmDrawPage
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFmDrawPage   :public SvxDrawPage
+class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
                                     ,public ::com::sun::star::form::XFormsSupplier2
 {
 protected:

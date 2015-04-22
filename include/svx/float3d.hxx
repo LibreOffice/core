@@ -237,7 +237,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED Svx3DCtrlItem : public SfxControllerItem
+class Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -254,7 +254,7 @@ class SAL_WARN_UNUSED Svx3DCtrlItem : public SfxControllerItem
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SvxConvertTo3DItem : public SfxControllerItem
+class SvxConvertTo3DItem : public SfxControllerItem
 {
     bool                        bState;
 

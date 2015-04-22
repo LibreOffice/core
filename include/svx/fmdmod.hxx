@@ -22,7 +22,7 @@
 #include <svx/unomod.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFmMSFactory : public SvxUnoDrawMSFactory
+class SVX_DLLPUBLIC SvxFmMSFactory : public SvxUnoDrawMSFactory
 {
 
 public:

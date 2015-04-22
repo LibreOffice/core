@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
 class SdrView;
 class HelpEvent;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormPage : public SdrPage
+class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     FmFormPage& operator=(const FmFormPage&) SAL_DELETED_FUNCTION;
 

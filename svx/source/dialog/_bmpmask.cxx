@@ -25,8 +25,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 
-#define BMPMASK_PRIVATE
-
 #include <svx/dialmgr.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/dialogs.hrc>
@@ -170,6 +168,8 @@ class MaskData
 public:
                 MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind );
 
+    bool        IsCbxReady() const { return bIsReady; }
+    void        SetExecState( bool bState ) { bExecState = bState; }
     bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK( PipetteHdl, ToolBox* pTbx );
@@ -335,6 +335,27 @@ void ColorWindow::Paint( const Rectangle &/*Rect*/ )
     SetFillColor( rOldFillColor );
 }
 
+SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
+                                            SfxBindings& rBindings ) :
+            SfxControllerItem   ( nId_, rBindings ),
+            rBmpMask            ( rMask)
+{
+}
+
+
+
+void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
+                                         const SfxPoolItem* pItem )
+{
+    if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
+    {
+        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
+        assert(pStateItem); //SfxBoolItem erwartet
+        if (pStateItem)
+            rBmpMask.SetExecState( pStateItem->GetValue() );
+    }
+}
+
 SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 nId,
                                              SfxBindings* pBindings,
                                              SfxChildWinInfo* pInfo)
@@ -354,6 +375,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
                        "svx/ui/dockingcolorreplace.ui" )
     , pData(new MaskData(this, *pBindinx))
     , aPipetteColor(COL_WHITE)
+    , aSelItem(SID_BMPMASK_EXEC, *this, *pBindinx)
 {
     get(m_pTbxPipette, "toolbar");
     m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),
@@ -564,6 +586,18 @@ void SvxBmpMask::PipetteClicked()
     m_pTbxPipette->CheckItem( m_pTbxPipette->GetItemId(0), false );
     pData->PipetteHdl(m_pTbxPipette);
 }
+
+void SvxBmpMask::SetExecState( bool bEnable )
+{
+    pData->SetExecState( bEnable );
+
+    if ( pData->IsExecReady() && pData->IsCbxReady() )
+        m_pBtnExec->Enable();
+    else
+        m_pBtnExec->Disable();
+}
+
+
 
 sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
 {

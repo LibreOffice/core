@@ -27,6 +27,21 @@
 
 #define CONT_RESID(nId)  ResId( nId, DIALOG_MGR() )
 
+class SvxSuperContourDlg;
+
+class SvxContourDlgItem : public SfxControllerItem
+{
+    SvxSuperContourDlg& rDlg;
+
+protected:
+
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+
+public:
+
+    SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
+};
+
 class SvxSuperContourDlg : public SvxContourDlg
 {
     using SvxContourDlg::GetPolyPolygon;
@@ -41,6 +56,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     Size                aLastSize;
     void*               pUpdateEditingObject;
     void*               pCheckObj;
+    SvxContourDlgItem   aContourItem;
     ToolBox*            m_pTbx1;
     MetricField*        m_pMtfTolerance;
     ContourWindow*      m_pContourWnd;
@@ -83,6 +99,8 @@ public:
                         SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                            vcl::Window* pParent);
                         virtual ~SvxSuperContourDlg();
+
+    void                SetExecState( bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
     void                SetGraphicLinked( bool bLinked ) { bGraphicLinked = bLinked; }

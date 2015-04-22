@@ -41,9 +41,6 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID( SvxContourDlgChildWindow );
 };
 
-#ifndef _REDUCED_ContourDlg_HXX_
-#define _REDUCED INCLUDED_SVX_CONTDLG_HXX
-
 class SvxSuperContourDlg;
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlg : public SfxFloatingWindow
@@ -78,7 +75,6 @@ public:
                                             const sal_uIntPtr nFlags = 0L );
 };
 
-#endif // _REDUCED INCLUDED_SVX_CONTDLG_HXX
 #endif // INCLUDED_SVX_CONTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

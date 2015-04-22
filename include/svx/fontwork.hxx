@@ -55,7 +55,7 @@ class XFormTextShadowYValItem;
 
 class SvxFontWorkDialog;
 
-class SAL_WARN_UNUSED SvxFontWorkControllerItem : public SfxControllerItem
+class SvxFontWorkControllerItem : public SfxControllerItem
 {
     SvxFontWorkDialog  &rFontWorkDlg;
 

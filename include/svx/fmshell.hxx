@@ -66,7 +66,7 @@ public:
     bool GetDesignMode() const { return m_bDesignMode; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmFormShell : public SfxShell
+class SVX_DLLPUBLIC FmFormShell : public SfxShell
 {
     friend class FmFormView;
     friend class FmXFormShell;
