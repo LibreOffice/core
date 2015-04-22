@@ -228,7 +228,7 @@ void changeFont(SwFmt* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
 {
     bool bChanged = false;
 
-    if (pFormat->GetAttrSet().GetItem(RES_CHRATR_FONT, false) == nullptr)
+    if (pStyle->GetName() != "Default Style" && pFormat->GetAttrSet().GetItem(RES_CHRATR_FONT, false) == nullptr)
     {
         return;
     }
@@ -242,7 +242,7 @@ void changeFont(SwFmt* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
         aFontItem.SetFamilyName(rFontSet.msMonoFont);
         bChanged = true;
     }
-    else if (ePitch == PITCH_VARIABLE)
+    else
     {
         if (pStyle->GetName() == "Heading")
         {
@@ -290,7 +290,7 @@ std::vector<FontSet> initFontSets()
     std::vector<FontSet> aFontSets;
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice";
+        aFontSet.maName = "Liberation Family";
         aFontSet.msHeadingFont = "Liberation Sans";
         aFontSet.msBaseFont = "Liberation Serif";
         aFontSet.msMonoFont = "Liberation Mono";
@@ -298,7 +298,7 @@ std::vector<FontSet> initFontSets()
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice 2";
+        aFontSet.maName = "DejaVu Family";
         aFontSet.msHeadingFont = "DejaVu Sans";
         aFontSet.msBaseFont = "DejaVu Serif";
         aFontSet.msMonoFont = "DejaVu Sans Mono";
@@ -306,15 +306,23 @@ std::vector<FontSet> initFontSets()
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice Modern";
+        aFontSet.maName = "Croscore Modern";
         aFontSet.msHeadingFont = "Caladea";
         aFontSet.msBaseFont = "Carlito";
-        aFontSet.msMonoFont = "Source Code Pro";
+        aFontSet.msMonoFont = "Liberation Mono";
         aFontSets.push_back(aFontSet);
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice Modern 2";
+        aFontSet.maName = "Carlito";
+        aFontSet.msHeadingFont = "Carlito";
+        aFontSet.msBaseFont = "Carlito";
+        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSets.push_back(aFontSet);
+    }
+    {
+        FontSet aFontSet;
+        aFontSet.maName = "Source Sans Family";
         aFontSet.msHeadingFont = "Source Sans Pro";
         aFontSet.msBaseFont = "Source Sans Pro";
         aFontSet.msMonoFont = "Source Code Pro";
@@ -322,18 +330,34 @@ std::vector<FontSet> initFontSets()
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice 3";
-        aFontSet.msHeadingFont = "Linux Biolinum";
-        aFontSet.msBaseFont = "Linux Libertine";
+        aFontSet.maName = "Source Sans Family 2";
+        aFontSet.msHeadingFont = "Source Sans Pro";
+        aFontSet.msBaseFont = "Source Sans Pro Light";
+        aFontSet.msMonoFont = "Source Code Pro";
+        aFontSets.push_back(aFontSet);
+    }
+    {
+        FontSet aFontSet;
+        aFontSet.maName = "Libertine Family";
+        aFontSet.msHeadingFont = "Linux Biolinum G";
+        aFontSet.msBaseFont = "Linux Libertine G";
         aFontSet.msMonoFont = "Liberation Mono";
         aFontSets.push_back(aFontSet);
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "LibreOffice 4";
-        aFontSet.msHeadingFont = "OpenSans";
-        aFontSet.msBaseFont = "OpenSans";
-        aFontSet.msMonoFont = "Liberation Mono";
+        aFontSet.maName = "Open Sans";
+        aFontSet.msHeadingFont = "Open Sans";
+        aFontSet.msBaseFont = "Open Sans";
+        aFontSet.msMonoFont = "Droid Sans Mono";
+        aFontSets.push_back(aFontSet);
+    }
+    {
+        FontSet aFontSet;
+        aFontSet.maName = "Droid Sans";
+        aFontSet.msHeadingFont = "Droid Sans";
+        aFontSet.msBaseFont = "Droid Sans";
+        aFontSet.msMonoFont = "Droid Sans Mono";
         aFontSets.push_back(aFontSet);
     }
     return aFontSets;
