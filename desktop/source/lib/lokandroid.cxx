@@ -289,7 +289,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUno
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
 
-    pDocument->pClass->postUnoCommand(pDocument, pCommand);
+    pDocument->pClass->postUnoCommand(pDocument, pCommand, 0);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
 }
