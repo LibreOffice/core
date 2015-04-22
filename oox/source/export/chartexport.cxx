@@ -3049,10 +3049,10 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                     XML_val, OString::number(aExtrapolateBackward).getStr(),
                     FSEND );
 
-            bool aForceIntercept = false;
-            xProperties->getPropertyValue("ForceIntercept") >>= aForceIntercept;
+            bool bForceIntercept = false;
+            xProperties->getPropertyValue("ForceIntercept") >>= bForceIntercept;
 
-            if (aForceIntercept)
+            if (bForceIntercept)
             {
                 double aInterceptValue = 0.0;
                 xProperties->getPropertyValue("InterceptValue") >>= aInterceptValue;
