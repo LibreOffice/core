@@ -130,7 +130,6 @@ protected:
     DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
 
 public:
-    static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
     SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
     virtual ~SfxAppMenuControl_Impl();
 

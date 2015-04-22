@@ -291,13 +291,6 @@ bool SvxSuperContourDlg::Close()
     return( bRet ? SfxFloatingWindow::Close() : sal_False );
 }
 
-// Enabled or disabled all Controls
-
-void SvxSuperContourDlg::SetExecState( bool bEnable )
-{
-    bExecState = bEnable;
-}
-
 void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
 {
     aUndoGraphic = aRedoGraphic = Graphic();

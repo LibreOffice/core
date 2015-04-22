@@ -71,7 +71,6 @@ public:
     virtual int32_t NPP_Write( NPP instance, NPStream* stream, int32_t offset,
                                int32_t len, void* buffer ) SAL_OVERRIDE;
     virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream ) SAL_OVERRIDE;
-    char* NPP_GetMIMEDescription();
     virtual NPError NPP_GetValue( NPP instance, NPPVariable variable, void* value ) SAL_OVERRIDE;
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value) SAL_OVERRIDE;

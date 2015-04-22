@@ -84,8 +84,6 @@ public:
                                            vcl::Window* pParent);
                         virtual ~SvxSuperContourDlg();
 
-    void                SetExecState( bool bEnable );
-
     void                SetGraphic( const Graphic& rGraphic );
     void                SetGraphicLinked( bool bLinked ) { bGraphicLinked = bLinked; }
     const Graphic&      GetGraphic() const { return aGraphic; }

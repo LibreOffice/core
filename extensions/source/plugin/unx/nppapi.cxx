@@ -601,22 +601,6 @@ int32_t UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
     return aRet;
 }
 
-char* UnxPluginComm::NPP_GetMIMEDescription()
-{
-    static char* pDesc = NULL;
-    MediatorMessage* pMes =
-        Transact( eNPP_GetMIMEDescription,
-                  NULL );
-    if( ! pMes )
-        return const_cast<char*>("");
-
-    if( pDesc )
-        delete [] pDesc;
-    pDesc = pMes->GetString();
-    delete pMes;
-    return pDesc;
-}
-
 NPError UnxPluginComm::NPP_GetValue( NPP /*instance*/, NPPVariable /*variable*/, void* /*value*/ )
 {
     return 0;
