@@ -1406,6 +1406,28 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
+/** import page|slide title fields (<presentation:page-title>) */
+class XMLPageTitleFieldImportContext : public XMLTextFieldImportContext
+{
+public:
+    TYPEINFO_OVERRIDE();
+
+    XMLPageTitleFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const OUString& sLocalName);     /// element name w/o prefix
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+};
+
 class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
 {
     OUString sName;
