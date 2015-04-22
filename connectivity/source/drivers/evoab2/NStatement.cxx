@@ -32,6 +32,7 @@
 #include "NDatabaseMetaData.hxx"
 #include "NResultSet.hxx"
 #include "resource/evoab2_res.hrc"
+#include "sqlbison.hxx"
 #include <resource/common_res.hrc>
 #include <connectivity/dbexception.hxx>
 #include <tools/diagnose_ex.h>
