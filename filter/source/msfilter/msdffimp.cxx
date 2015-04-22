@@ -1917,9 +1917,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             for ( sal_uInt16 i = 0; i < nNumElem; i++ )
             {
                 PropVec aHandlePropVec;
-                sal_uInt32  nFlags;
+                sal_uInt32  nFlagsTmp;
+                SvxMSDffHandleFlags nFlags;
                 sal_Int32   nPositionX, nPositionY, nCenterX, nCenterY, nRangeXMin, nRangeXMax, nRangeYMin, nRangeYMax;
-                rIn.ReadUInt32( nFlags )
+                rIn.ReadUInt32( nFlagsTmp )
                    .ReadInt32( nPositionX )
                    .ReadInt32( nPositionY )
                    .ReadInt32( nCenterX )
@@ -1928,7 +1929,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                    .ReadInt32( nRangeXMax )
                    .ReadInt32( nRangeYMin )
                    .ReadInt32( nRangeYMax );
-
+                nFlags = static_cast<SvxMSDffHandleFlags>(nFlagsTmp);
                 if ( nPositionX == 2 )  // replacing center position with absolute value
                     nPositionX = nCoordWidth / 2;
                 if ( nPositionY == 2 )
@@ -1941,7 +1942,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 aProp.Value <<= aPosition;
                 aHandlePropVec.push_back( aProp );
 
-                if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+                if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
                 {
                     bool bMirroredX = true;
                     const OUString sHandleMirroredX( "MirroredX" );
@@ -1949,7 +1950,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     aProp.Value <<= bMirroredX;
                     aHandlePropVec.push_back( aProp );
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+                if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
                 {
                     bool bMirroredY = true;
                     const OUString sHandleMirroredY( "MirroredY" );
@@ -1957,7 +1958,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     aProp.Value <<= bMirroredY;
                     aHandlePropVec.push_back( aProp );
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+                if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
                 {
                     bool bSwitched = true;
                     const OUString sHandleSwitched( "Switched" );
@@ -1965,7 +1966,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     aProp.Value <<= bSwitched;
                     aHandlePropVec.push_back( aProp );
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+                if ( nFlags & SvxMSDffHandleFlags::POLAR )
                 {
                     if ( nCenterX == 2 )
                         nCenterX = nCoordWidth / 2;
@@ -1974,28 +1975,28 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
                         nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
                     EnhancedCustomShapeParameterPair aPolar;
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, ( nFlags & 0x800  ) != 0, true  );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, ( nFlags & 0x1000 ) != 0, false );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
                     const OUString sHandlePolar( "Polar" );
                     aProp.Name = sHandlePolar;
                     aProp.Value <<= aPolar;
                     aHandlePropVec.push_back( aProp );
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_MAP )
+                if ( nFlags & SvxMSDffHandleFlags::MAP )
                 {
                     if ( nCenterX == 2 )
                         nCenterX = nCoordWidth / 2;
                     if ( nCenterY == 2 )
                         nCenterY = nCoordHeight / 2;
                     EnhancedCustomShapeParameterPair aMap;
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, true  );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, false );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
                     const OUString sHandleMap( "Map" );
                     aProp.Name = sHandleMap;
                     aProp.Value <<= aMap;
                     aHandlePropVec.push_back( aProp );
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+                if ( nFlags & SvxMSDffHandleFlags::RANGE )
                 {
                     if ( (sal_uInt32)nRangeXMin != 0x80000000 )
                     {
@@ -2003,7 +2004,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
                         const OUString sHandleRangeXMinimum( "RangeXMinimum" );
                         aProp.Name = sHandleRangeXMinimum;
                         aProp.Value <<= aRangeXMinimum;
@@ -2015,7 +2016,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
                         const OUString sHandleRangeXMaximum( "RangeXMaximum" );
                         aProp.Name = sHandleRangeXMaximum;
                         aProp.Value <<= aRangeXMaximum;
@@ -2027,7 +2028,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeYMin = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, true );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
                         const OUString sHandleRangeYMinimum( "RangeYMinimum" );
                         aProp.Name = sHandleRangeYMinimum;
                         aProp.Value <<= aRangeYMinimum;
@@ -2039,14 +2040,14 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeYMax = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, false );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
                         const OUString sHandleRangeYMaximum( "RangeYMaximum" );
                         aProp.Name = sHandleRangeYMaximum;
                         aProp.Value <<= aRangeYMaximum;
                         aHandlePropVec.push_back( aProp );
                     }
                 }
-                if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+                if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
                 {
                     if ( (sal_uInt32)nRangeXMin != 0x7fffffff )
                     {
@@ -2054,7 +2055,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
                         const OUString sHandleRadiusRangeMinimum( "RadiusRangeMinimum" );
                         aProp.Name = sHandleRadiusRangeMinimum;
                         aProp.Value <<= aRadiusRangeMinimum;
@@ -2066,7 +2067,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
+                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
                         const OUString sHandleRadiusRangeMaximum( "RadiusRangeMaximum" );
                         aProp.Name = sHandleRadiusRangeMaximum;
                         aProp.Value <<= aRadiusRangeMaximum;
@@ -2100,7 +2101,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
             for ( i = 0; i < nCnt; i++, pData++ )
             {
-                if ( pData->nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+                if ( pData->nFlags & SvxMSDffHandleFlags::POLAR )
                 {
                     if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
                         nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );

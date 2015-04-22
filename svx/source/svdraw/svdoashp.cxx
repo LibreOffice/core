@@ -696,19 +696,19 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
 
 static sal_Int32 GetNumberOfProperties ( const SvxMSDffHandle* pData )
 {
-    sal_Int32     nPropertiesNeeded=1;  // position is always needed
-    sal_Int32     nFlags = pData->nFlags;
+    sal_Int32           nPropertiesNeeded=1;  // position is always needed
+    SvxMSDffHandleFlags nFlags = pData->nFlags;
 
-    if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+    if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
         nPropertiesNeeded++;
-    if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+    if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
         nPropertiesNeeded++;
-    if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+    if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
         nPropertiesNeeded++;
-    if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+    if ( nFlags & SvxMSDffHandleFlags::POLAR )
     {
         nPropertiesNeeded++;
-        if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+        if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
         {
             if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
                 nPropertiesNeeded++;
@@ -716,7 +716,7 @@ static sal_Int32 GetNumberOfProperties ( const SvxMSDffHandle* pData )
                 nPropertiesNeeded++;
         }
     }
-    else if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+    else if ( nFlags & SvxMSDffHandleFlags::RANGE )
     {
         if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
             nPropertiesNeeded++;
@@ -733,7 +733,8 @@ static sal_Int32 GetNumberOfProperties ( const SvxMSDffHandle* pData )
 
 static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::star::beans::PropertyValues& rPropValues )
 {
-    sal_Int32 nFlags = pData->nFlags, n=0;
+    SvxMSDffHandleFlags nFlags = pData->nFlags;
+    sal_Int32 n=0;
 
     // POSITION
     {
@@ -744,45 +745,45 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
         rPropValues[ n ].Name = sPosition;
         rPropValues[ n++ ].Value <<= aPosition;
     }
-    if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+    if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
     {
         const OUString sMirroredX( "MirroredX" );
         bool bMirroredX = true;
         rPropValues[ n ].Name = sMirroredX;
         rPropValues[ n++ ].Value <<= bMirroredX;
     }
-    if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+    if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
     {
         const OUString sMirroredY( "MirroredY" );
         bool bMirroredY = true;
         rPropValues[ n ].Name = sMirroredY;
         rPropValues[ n++ ].Value <<= bMirroredY;
     }
-    if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+    if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
     {
         const OUString sSwitched( "Switched" );
         bool bSwitched = true;
         rPropValues[ n ].Name = sSwitched;
         rPropValues[ n++ ].Value <<= bSwitched;
     }
-    if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+    if ( nFlags & SvxMSDffHandleFlags::POLAR )
     {
         const OUString sPolar( "Polar" );
         ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aCenter;
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.First, pData->nCenterX,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_CENTER_X_IS_SPECIAL ) != 0, true  );
+                           bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_CENTER_Y_IS_SPECIAL ) != 0, false );
+                           bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
         rPropValues[ n ].Name = sPolar;
         rPropValues[ n++ ].Value <<= aCenter;
-        if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+        if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
         {
             if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
             {
                 const OUString sRadiusRangeMinimum( "RadiusRangeMinimum" );
                 ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
+                           bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
                 rPropValues[ n ].Name = sRadiusRangeMinimum;
                 rPropValues[ n++ ].Value <<= aRadiusRangeMinimum;
             }
@@ -791,20 +792,20 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
                 const OUString sRadiusRangeMaximum( "RadiusRangeMaximum" );
                 ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
+                           bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
                 rPropValues[ n ].Name = sRadiusRangeMaximum;
                 rPropValues[ n++ ].Value <<= aRadiusRangeMaximum;
             }
         }
     }
-    else if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+    else if ( nFlags & SvxMSDffHandleFlags::RANGE )
     {
         if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
             const OUString sRangeXMinimum( "RangeXMinimum" );
             ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
+                           bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
             rPropValues[ n ].Name = sRangeXMinimum;
             rPropValues[ n++ ].Value <<= aRangeXMinimum;
         }
@@ -813,7 +814,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
             const OUString sRangeXMaximum( "RangeXMaximum" );
             ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
-                           ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
+                           bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
             rPropValues[ n ].Name = sRangeXMaximum;
             rPropValues[ n++ ].Value <<= aRangeXMaximum;
         }
@@ -822,7 +823,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
             const OUString sRangeYMinimum( "RangeYMinimum" );
             ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
-                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, true );
+                             bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
             rPropValues[ n ].Name = sRangeYMinimum;
             rPropValues[ n++ ].Value <<= aRangeYMinimum;
         }
@@ -831,7 +832,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
             const OUString sRangeYMaximum( "RangeYMaximum" );
             ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
-                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, false );
+                             bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
             rPropValues[ n ].Name = sRangeYMaximum;
             rPropValues[ n++ ].Value <<= aRangeYMaximum;
         }

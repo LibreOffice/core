@@ -119,9 +119,9 @@ static const SvxMSDffVertPair mso_sptStandardGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptArcHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x100, 10800, 10800, 10800, 10800, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x101, 10800, 10800, 10800, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoArc =
@@ -200,7 +200,7 @@ static const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
 };
 static const SvxMSDffHandle mso_sptRoundRectangleHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoRoundRectangle =
@@ -305,7 +305,7 @@ static const SvxMSDffVertPair mso_sptParallelogramGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptParallelogramHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoParallelogram =
@@ -370,7 +370,7 @@ static const SvxMSDffVertPair mso_sptTrapezoidGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptTrapezoidHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoTrapezoid =
@@ -461,7 +461,7 @@ static const SvxMSDffTextRectangles mso_sptOctagonTextRect[] =
 };
 static const SvxMSDffHandle mso_sptOctagonHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoOctagon =
@@ -507,7 +507,7 @@ static const SvxMSDffVertPair mso_sptIsocelesTriangleGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptIsocelesTriangleHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoIsocelesTriangle =
@@ -546,7 +546,7 @@ static const SvxMSDffTextRectangles mso_sptHexagonTextRect[] =
 };
 static const SvxMSDffHandle mso_sptHexagonHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoHexagon =
@@ -608,7 +608,7 @@ static const SvxMSDffTextRectangles mso_sptPlusTextRect[] =
 };
 static const SvxMSDffHandle mso_sptPlusHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoPlus =
@@ -665,7 +665,7 @@ static const SvxMSDffVertPair mso_sptCanGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptCanHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         7 + 3, 0x100, 44, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoCan =
@@ -707,7 +707,7 @@ static const SvxMSDffTextRectangles mso_sptArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
 static const mso_CustomShape msoArrow =
@@ -742,7 +742,7 @@ static const SvxMSDffTextRectangles mso_sptLeftArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
 static const mso_CustomShape msoLeftArrow =
@@ -773,7 +773,7 @@ static const SvxMSDffTextRectangles mso_sptDownArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptDownArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, 0, 21600 }
 };
 static const mso_CustomShape msoDownArrow =
@@ -808,7 +808,7 @@ static const SvxMSDffTextRectangles mso_sptUpArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptUpArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, 0, 21600 }
 };
 static const mso_CustomShape msoUpArrow =
@@ -857,7 +857,7 @@ static const SvxMSDffTextRectangles mso_sptLeftRightArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftRightArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 10800, 0, 10800 }
 };
 static const mso_CustomShape msoLeftRightArrow =
@@ -893,7 +893,7 @@ static const SvxMSDffTextRectangles mso_sptUpDownArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptUpDownArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 10800, 0, 10800 }
 };
 static const mso_CustomShape msoUpDownArrow =
@@ -941,9 +941,9 @@ static const SvxMSDffTextRectangles mso_sptQuadArrowTextRect[] =    // todo
 };
 static const SvxMSDffHandle mso_sptQuadArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 0x100, 10800, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 0x101, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoQuadArrow =
@@ -990,9 +990,9 @@ static const SvxMSDffTextRectangles mso_sptLeftRightUpArrowTextRect[] =     // t
 };
 static const SvxMSDffHandle mso_sptLeftRightUpArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 0x100, 10800, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 0x101, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoLeftRightUpArrow =
@@ -1036,7 +1036,7 @@ static const SvxMSDffTextRectangles mso_sptBentArrowTextRect[] =    // todo
 };
 static const SvxMSDffHandle mso_sptBentArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 12427, 21600, 0, 6079 }
 };
 static const mso_CustomShape msoBentArrow =
@@ -1117,9 +1117,9 @@ static const SvxMSDffTextRectangles mso_sptLeftUpArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftUpArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 3 + 5, 21600, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 3 + 9, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoLeftUpArrow =
@@ -1170,9 +1170,9 @@ static const SvxMSDffTextRectangles mso_sptBentUpArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptBentUpArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 3 + 5, 21600, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 3 + 10, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBentUpArrow =
@@ -1276,11 +1276,11 @@ static const SvxMSDffVertPair mso_sptCurvedRightGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptCurvedRightHandles[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         21600, 0x100, 10800, 10800, 0, 10800, 3 + 40, 3 + 29 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         21600, 0x101, 10800, 10800, 0, 10800, 3 + 27, 3 + 21 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x102, 21600, 10800, 10800, 3 + 44, 3 + 22, 3375, 21600 }
 };
 static const mso_CustomShape msoCurvedRightArrow =
@@ -1330,11 +1330,11 @@ static const SvxMSDffVertPair mso_sptCurvedDownGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
 {
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x100, 21600, 10800, 10800, 3 + 40, 3 + 29, 0, 10800 },
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x101, 21600, 10800, 10800, 3 + 27, 3 + 21, 0, 10800 },
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
        21600, 0x102, 10800, 10800, 3375, 21600, 3 + 44, 3 + 22 }
 };
 
@@ -1437,11 +1437,11 @@ static const SvxMSDffVertPair mso_sptCurvedUpGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
 {
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x100, 0, 10800, 10800, 3 + 37, 3 + 27, 0, 10800 },
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x101, 0, 10800, 10800, 3 + 25, 3 + 20, 0, 10800 },
-   {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+   {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
        21600, 0x102, 10800, 10800, 3375, 21600, 0, 3 + 40 }
 };
 static const mso_CustomShape msoCurvedUpArrow =
@@ -1490,11 +1490,11 @@ static const SvxMSDffVertPair mso_sptCurvedLeftGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptCurvedLeftHandles[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, 0, 10800, 3 + 37, 3 + 27 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x101, 10800, 10800, 0, 10800, 3 + 25, 3 + 20 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x102, 21600, 10800, 10800, 0, 3 + 40, 3375, 21600 }
 };
 static const mso_CustomShape msoCurvedLeftArrow =
@@ -1538,7 +1538,7 @@ static const SvxMSDffTextRectangles mso_sptStripedRightArrowTextRect[] =
 };
 static const SvxMSDffHandle mso_sptStripedRightArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 3375, 21600, 0, 10800 }
 };
 static const mso_CustomShape msoStripedRightArrow =
@@ -1575,7 +1575,7 @@ static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // t
 };
 static const SvxMSDffHandle mso_sptNotchedRightArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
 static const mso_CustomShape msoNotchedRightArrow =
@@ -1614,7 +1614,7 @@ static const SvxMSDffTextRectangles mso_sptHomePlateTextRect[] =    // todo
 };
 static const SvxMSDffHandle mso_sptHomePlateHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoHomePlate =
@@ -1654,7 +1654,7 @@ static const SvxMSDffTextRectangles mso_sptChevronTextRect[] =  // todo
 };
 static const SvxMSDffHandle mso_sptChevronHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoChevron =
@@ -1699,11 +1699,11 @@ static const SvxMSDffTextRectangles mso_sptRightArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptRightArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0, 0x102, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0x102, 0x103, 10800, 10800, 0x100, 21600, 0x101, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         1, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
 static const mso_CustomShape msoRightArrowCallout =
@@ -1748,11 +1748,11 @@ static const SvxMSDffTextRectangles mso_sptLeftArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 21600, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0x102, 0x103, 10800, 10800, 0, 0x100, 0x101, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
 static const mso_CustomShape msoLeftArrowCallout =
@@ -1797,11 +1797,11 @@ static const SvxMSDffTextRectangles mso_sptUpArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptUpArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 21600 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x103, 0x102, 10800, 10800, 0x101, 10800, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 0, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoUpArrowCallout =
@@ -1846,11 +1846,11 @@ static const SvxMSDffTextRectangles mso_sptDownArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptDownArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x102 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0x103, 0x102, 10800, 10800, 0x101, 10800, 0x100, 21600 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 1, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoDownArrowCallout =
@@ -1899,11 +1899,11 @@ static const SvxMSDffTextRectangles mso_sptLeftRightArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftRightArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 10800, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0x102, 0x103, 10800, 10800, 0, 0x100, 0x101, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
 static const mso_CustomShape msoLeftRightArrowCallout =
@@ -1952,11 +1952,11 @@ static const SvxMSDffTextRectangles mso_sptUpDownArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptUpDownArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x103, 0x102, 10800, 10800, 0x101, 10800, 0, 0x100 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 0, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoUpDownArrowCallout =
@@ -2008,11 +2008,11 @@ static const SvxMSDffTextRectangles mso_sptQuadArrowCalloutTextRect[] =
 };
 static const SvxMSDffHandle mso_sptQuadArrowCalloutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 0x101 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0, 10800, 10800, 0x100, 10800, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x103, 0x102, 10800, 10800, 0x101, 10800, 0, 0x100 }
 };
 static const mso_CustomShape msoQuadArrowCallout =
@@ -2106,9 +2106,9 @@ static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
 };
 static const SvxMSDffHandle mso_sptCircularArrowHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x100, 10800, 10800, 10800, 10800, -0x7f4c0000, 0x00b40000 },
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x102, 0x101, 10800, 10800, 0, 10800, -0x7f4c0000, 0x00b40000 }
 };
 static const mso_CustomShape msoCircularArrow =
@@ -2158,7 +2158,7 @@ static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 };
 static const SvxMSDffHandle mso_sptCubeHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
 static const SvxMSDffVertPair mso_sptCubeGluePoints[] =
@@ -2207,7 +2207,7 @@ static const SvxMSDffTextRectangles mso_sptBevelTextRect[] =
 };
 static const SvxMSDffHandle mso_sptBevelHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBevel =
@@ -2259,7 +2259,7 @@ static const SvxMSDffTextRectangles mso_sptFoldedCornerTextRect[] =
 };
 static const SvxMSDffHandle mso_sptFoldedCornerHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 10800, 21600, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoFoldedCorner =
@@ -2303,7 +2303,7 @@ static const SvxMSDffTextRectangles mso_sptActionButtonBlankTextRect[] =
 };
 static const SvxMSDffHandle mso_sptButtonHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 5400, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoActionButtonBlank =
@@ -3110,7 +3110,7 @@ static const sal_Int32 mso_sptSmileyFaceDefault[] =
 };
 static const SvxMSDffHandle mso_sptSmileyHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 14510, 18520 }
 };
 static const mso_CustomShape msoSmileyFace =
@@ -3142,7 +3142,7 @@ static const SvxMSDffCalculationData mso_sptDonutCalc[] =
 };
 static const SvxMSDffHandle mso_sptDonutHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoDonut =
@@ -3191,7 +3191,7 @@ static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
 };
 static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 7200, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoNoSmoking =
@@ -3234,7 +3234,7 @@ static const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
 };
 static const SvxMSDffHandle mso_sptBlockArcHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBlockArc =
@@ -3430,7 +3430,7 @@ static const SvxMSDffTextRectangles mso_sptSunTextRect[] =
 };
 static const SvxMSDffHandle mso_sptSunHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 2700, 10125, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoSun =
@@ -3482,7 +3482,7 @@ static const SvxMSDffVertPair mso_sptMoonGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptMoonHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 18900, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoMoon =
@@ -3541,7 +3541,7 @@ static const SvxMSDffTextRectangles mso_sptBracketPairTextRect[] =
 };
 static const SvxMSDffHandle mso_sptBracketPairHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBracketPair =
@@ -3567,7 +3567,7 @@ static const SvxMSDffTextRectangles mso_sptPlaqueTextRect[] =
 };
 static const SvxMSDffHandle mso_sptPlaqueHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoPlaque =
@@ -3625,7 +3625,7 @@ static const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
 };
 static const SvxMSDffHandle mso_sptBracePairHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 }
 };
 static const mso_CustomShape msoBracePair =
@@ -3668,7 +3668,7 @@ static const SvxMSDffVertPair mso_sptLeftBracketGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptLeftBracketHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoLeftBracket =
@@ -3698,7 +3698,7 @@ static const SvxMSDffVertPair mso_sptRightBracketGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptRightBracketHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         1, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoRightBracket =
@@ -3752,9 +3752,9 @@ static const SvxMSDffTextRectangles mso_sptLeftBraceTextRect[] =
 };
 static const SvxMSDffHandle mso_sptLeftBraceHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
 static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
@@ -3785,9 +3785,9 @@ static const SvxMSDffTextRectangles mso_sptRightBraceTextRect[] =
 };
 static const SvxMSDffHandle mso_sptRightBraceHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         1, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
 static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
@@ -3885,7 +3885,7 @@ static const SvxMSDffTextRectangles mso_sptSeal4TextRect[] =
 };
 static const SvxMSDffHandle mso_sptSealHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoSeal4 =
@@ -4424,9 +4424,9 @@ static const SvxMSDffTextRectangles mso_sptRibbon2TextRect[] =
 };
 static const SvxMSDffHandle mso_sptRibbon2Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 2700, 8100, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 14400, 21600 }
 };
 static const mso_CustomShape msoRibbon2 =
@@ -4505,9 +4505,9 @@ static const SvxMSDffVertPair mso_sptRibbonGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptRibbonHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 2700, 8100, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 7200 }
 };
 static const mso_CustomShape msoRibbon =
@@ -4647,11 +4647,11 @@ static const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
 //position="#0,bottomRight" xrange="@5,@47
 //position="center,#1" yrange="@10,@43
 //position="topLeft,#2" yrange="@27,@45
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL| SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 21600, 0, 0, 0x8/*5+3*/, 0x32/*47+3*/, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x101, 0, 0, MIN_INT32, 0x7fffffff,0xd/*10+3*/, 0x2e /*43+3*/ },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x102, 0, 0, MIN_INT32, 0x7fffffff,0x1e/*27+3*/, 0x30 /*45+3*/ }
 };
 
@@ -4787,11 +4787,11 @@ static const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
 //position="#0,topLeft" xrange="@5,@43
 //position="center,#1" yrange="@39,@31
 //position="topLeft,#2" yrange="@41,@24
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL| SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 0, 0, 0x8/*5+3*/, 0x2e/*43+3*/, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x101, 0, 0, MIN_INT32, 0x7fffffff,0x2a/*39+3*/, 0x22 /*31+3*/ },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x102, 0, 0, MIN_INT32, 0x7fffffff,0x2c/*41+3*/, 0x1b /*24+3*/ }
 };
 
@@ -4858,7 +4858,7 @@ static const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
 };
 static const SvxMSDffHandle mso_sptVerticalScrollHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 }
 };
 static const mso_CustomShape msoVerticalScroll =
@@ -4904,7 +4904,7 @@ static const sal_uInt16 mso_sptHorizontalScrollSegm[] =
 };
 static const SvxMSDffHandle mso_sptHorizontalScrollHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 5400, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoHorizontalScroll =
@@ -5773,7 +5773,7 @@ static const SvxMSDffVertPair mso_sptWedgeRectCalloutGluePoints[] =
 static const SvxMSDffHandle mso_sptCalloutHandle[] =
 {
     {
-        0,
+        SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff
     }
 };
@@ -5844,7 +5844,7 @@ static const sal_uInt16 mso_sptBalloonSegm[] =
 static const SvxMSDffHandle mso_sptBalloonHandle[] =
 {
     {
-        MSDFF_HANDLE_FLAGS_RANGE,
+        SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 0, 8990, MIN_INT32, 0x7fffffff
     }
 };
@@ -6081,9 +6081,9 @@ static const sal_uInt16 mso_sptWaveSegm[] =
 };
 static const SvxMSDffHandle mso_sptWaveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 4460 },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x101, 21600, 10800, 10800, 8640, 12960, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptWaveDefault[] =
@@ -6163,9 +6163,9 @@ static const sal_uInt16 mso_sptDoubleWaveSegm[] =
 };
 static const SvxMSDffHandle mso_sptDoubleWaveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 2230 },
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x101, 21600, 10800, 10800, 8640, 12960, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptDoubleWaveDefault[] =
@@ -6288,7 +6288,7 @@ static const sal_uInt16 mso_sptTextPlainTextSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextPlainTextHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 21600, 10800, 10800, 6629, 14971, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoTextPlainText =
@@ -6325,7 +6325,7 @@ static const sal_Int32 mso_sptTextStopDefault[] =
 };
 static const SvxMSDffHandle mso_sptTextStopHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 3080, 10800 }
 };
 static const mso_CustomShape msoTextStop =
@@ -6356,7 +6356,7 @@ static const sal_uInt16 mso_sptTextTriangleSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextTriangleHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
 static const mso_CustomShape msoTextTriangle =
@@ -6409,7 +6409,7 @@ static const sal_uInt16 mso_sptTextChevronSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextChevronHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoTextChevron =
@@ -6441,7 +6441,7 @@ static const sal_uInt16 mso_sptTextChevronInvertedSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextChevronInvertedHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextChevronInverted =
@@ -6482,7 +6482,7 @@ static const sal_uInt16 mso_sptTextRingInsideSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE| MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE| SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextRingInside =
@@ -6520,7 +6520,7 @@ static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextRingOutside =
@@ -6552,7 +6552,7 @@ static const sal_uInt16 mso_sptTextFadeSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextFadeRightHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoTextFadeRight =
@@ -6574,7 +6574,7 @@ static const SvxMSDffVertPair mso_sptTextFadeLeftVert[] =
 };
 static const SvxMSDffHandle mso_sptTextFadeLeftHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
 static const mso_CustomShape msoTextFadeLeft =
@@ -6596,7 +6596,7 @@ static const SvxMSDffVertPair mso_sptTextFadeUpVert[] =
 };
 static const SvxMSDffHandle mso_sptTextFadeUpHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoTextFadeUp =
@@ -6618,7 +6618,7 @@ static const SvxMSDffVertPair mso_sptTextFadeDownVert[] =
 };
 static const SvxMSDffHandle mso_sptTextFadeDownHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 21600, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoTextFadeDown =
@@ -6640,7 +6640,7 @@ static const SvxMSDffVertPair mso_sptTextSlantUpVert[] =
 };
 static const SvxMSDffHandle mso_sptTextSlantUpHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 15400 }
 };
 static const mso_CustomShape msoTextSlantUp =
@@ -6662,7 +6662,7 @@ static const SvxMSDffVertPair mso_sptTextSlantDownVert[] =
 };
 static const SvxMSDffHandle mso_sptTextSlantDownHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
 static const mso_CustomShape msoTextSlantDown =
@@ -6690,7 +6690,7 @@ static const SvxMSDffCalculationData mso_sptTextCascadeCalc[] =
 };
 static const SvxMSDffHandle mso_sptTextCascadeUpHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
 static const mso_CustomShape msoTextCascadeUp =
@@ -6712,7 +6712,7 @@ static const SvxMSDffVertPair mso_sptTextCascadeDownVert[] =
 };
 static const SvxMSDffHandle mso_sptTextCascadeDownHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
 static const mso_CustomShape msoTextCascadeDown =
@@ -6746,7 +6746,7 @@ static const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextArchUpCurveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR,
+    {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextArchUpCurveDefault[] =
@@ -6776,7 +6776,7 @@ static const sal_uInt16 mso_sptTextArchDownCurveSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextArchDownCurveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR,
+    {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextArchDownCurveDefault[] =
@@ -6814,7 +6814,7 @@ static const sal_uInt16 mso_sptTextCircleCurveSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextCircleCurveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR,
+    {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextCircleCurveDefault[] =
@@ -6857,7 +6857,7 @@ static const sal_uInt16 mso_sptTextButtonCurveSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextButtonCurveHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR,
+    {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextButtonCurveDefault[] =
@@ -6903,7 +6903,7 @@ static const sal_uInt16 mso_sptTextArchUpPourSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextArchPourHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextArchUpPourDefault[] =
@@ -6976,7 +6976,7 @@ static const sal_uInt16 mso_sptTextCirclePourSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextCirclePourHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextCirclePourDefault[] =
@@ -7044,7 +7044,7 @@ static const sal_uInt16 mso_sptTextButtonPourSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextButtonPourHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+    {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 4320, 10800, MIN_INT32, 0x7fffffff }
 };
 static const sal_Int32 mso_sptTextButtonPourDefault[] =
@@ -7084,7 +7084,7 @@ static const sal_uInt16 mso_sptTextCurveUpSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextCurveUpHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 12170 }
 };
 static const sal_Int32 mso_sptTextCurveUpDefault[] =
@@ -7114,7 +7114,7 @@ static const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
 };
 static const SvxMSDffHandle mso_sptTextCurveDownHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 12170 }
 };
 static const mso_CustomShape msoTextCurveDown =
@@ -7150,7 +7150,7 @@ static const sal_uInt16 mso_sptTextCanUpSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextCanUpHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 14400, 21600 }
 };
 static const sal_Int32 mso_sptTextCanUpDefault[] =
@@ -7183,7 +7183,7 @@ static const SvxMSDffCalculationData mso_sptTextCanDownCalc[] =
 };
 static const SvxMSDffHandle mso_sptTextCanDownHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 7200 }
 };
 static const sal_Int32 mso_sptTextCanDownDefault[] =
@@ -7217,7 +7217,7 @@ static const SvxMSDffCalculationData mso_sptTextInflateCalc[] =
 };
 static const SvxMSDffHandle mso_sptTextInflateHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 4650 }
 };
 static const sal_Int32 mso_sptTextInflateDefault[] =
@@ -7251,7 +7251,7 @@ static const SvxMSDffCalculationData mso_sptTextDeflateCalc[] =
 };
 static const SvxMSDffHandle mso_sptTextDeflateHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 8100 }
 };
 static const mso_CustomShape msoTextDeflate =
@@ -7286,7 +7286,7 @@ static const sal_uInt16 mso_sptTextInflateBottomSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextInflateBottomHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 11150, 21600 }
 };
 static const sal_Int32 mso_sptTextInflateBottomDefault[] =
@@ -7325,7 +7325,7 @@ static const sal_uInt16 mso_sptTextDeflateBottomSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextDeflateBottomHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 1350, 21600 }
 };
 static const sal_Int32 mso_sptTextDeflateBottomDefault[] =
@@ -7362,7 +7362,7 @@ static const sal_uInt16 mso_sptTextInflateTopSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextInflateTopHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10450 }
 };
 static const sal_Int32 mso_sptTextInflateTopDefault[] =
@@ -7399,7 +7399,7 @@ static const sal_uInt16 mso_sptTextDeflateTopSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextDeflateTopHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 20250 }
 };
 static const sal_Int32 mso_sptTextDeflateTopDefault[] =
@@ -7445,7 +7445,7 @@ static const sal_uInt16 mso_sptTextDeflateInflateSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextDeflateInflateHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 1300, 20300 }
 };
 static const sal_Int32 mso_sptTextDeflateInflateDefault[] =
@@ -7499,7 +7499,7 @@ static const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextDeflateInflateDeflateHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 850, 9550 }
 };
 static const sal_Int32 mso_sptTextDeflateInflateDeflateDefault[] =
@@ -7623,9 +7623,9 @@ static const SvxMSDffVertPair mso_sptCalloutVert1[] =
 };
 static const SvxMSDffHandle mso_sptCalloutHandle1[] =
 {
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x102, 0x103, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
 static const sal_uInt16 mso_sptCalloutSegm1a[] =
@@ -7664,11 +7664,11 @@ static const SvxMSDffVertPair mso_sptCallout2Vertb[] =
 };
 static const SvxMSDffHandle mso_sptCalloutHandle2[] =
 {
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x102, 0x103, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x104, 0x105, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
 static const sal_uInt16 mso_sptCallout2Segm1a[] =
@@ -7711,13 +7711,13 @@ static const SvxMSDffVertPair mso_sptCallout3Vertb[] =
 };
 static const SvxMSDffHandle mso_sptCalloutHandle3[] =
 {
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x102, 0x103, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x104, 0x105, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
-    {   0,
+    {   SvxMSDffHandleFlags::NONE,
         0x106, 0x107, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
 static const sal_uInt16 mso_sptCallout3Segm1a[] =
@@ -8008,7 +8008,7 @@ static const sal_Int32 mso_sptBentConnector3Default[] =
 };
 static const SvxMSDffHandle mso_sptBentConnector3Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBentConnector3 =
@@ -8046,9 +8046,9 @@ static const sal_Int32 mso_sptBentConnector4Default[] =
 };
 static const SvxMSDffHandle mso_sptBentConnector4Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 4 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 4 + 3, 4 + 3 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoBentConnector4 =
@@ -8089,11 +8089,11 @@ static const sal_Int32 mso_sptBentConnector5Default[] =
 };
 static const SvxMSDffHandle mso_sptBentConnector5Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 5 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 5 + 3, 5 + 3 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x102, 7 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 7 + 3, 7 + 3 }
 };
 static const mso_CustomShape msoBentConnector5 =
@@ -8151,7 +8151,7 @@ static const sal_Int32 mso_sptCurvedConnector3Default[] =
 };
 static const SvxMSDffHandle mso_sptCurvedConnector3Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoCurvedConnector3 =
@@ -8202,9 +8202,9 @@ static const sal_Int32 mso_sptCurvedConnector4Default[] =
 };
 static const SvxMSDffHandle mso_sptCurvedConnector4Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 9 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 9 + 3, 9 + 3 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff }
 };
 static const mso_CustomShape msoCurvedConnector4 =
@@ -8263,11 +8263,11 @@ static const sal_Int32 mso_sptCurvedConnector5Default[] =
 };
 static const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 11 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 11 + 3, 11 + 3 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x102, 16 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 16 + 3, 16 + 3 }
 };
 static const mso_CustomShape msoCurvedConnector5 =
@@ -8321,7 +8321,7 @@ static const SvxMSDffTextRectangles mso_sptTearDropTextRect[] =
 static const SvxMSDffHandle mso_sptTearDropHandle[] =
 {
     //position="$0,0" xrange="10800,32400"
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL| SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 10800, 32400, MIN_INT32, 0x7fffffff }
 };
 
