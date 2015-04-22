@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
