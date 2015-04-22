@@ -698,7 +698,6 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     bOOXMLShape         ( false ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
-    nFlags              ( 0 ),
     nColorData          ( 0 ),
     bTextFlow           ( false ),
     bFilled             ( static_cast<const XFillStyleItem&>(pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
@@ -939,14 +938,10 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
                                         const bool bScale, const bool bReplaceGeoSize ) const
 {
     Point       aRetValue;
-    bool    bExchange = ( nFlags & DFF_CUSTOMSHAPE_EXCH ) != 0; // x <-> y
     sal_uInt32  nPass = 0;
     do
     {
         sal_uInt32  nIndex = nPass;
-
-        if ( bExchange )
-            nIndex ^= 1;
 
         double      fVal;
         const EnhancedCustomShapeParameter& rParameter = nIndex ? rPair.Second : rPair.First;
@@ -957,9 +952,6 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
             if ( bScale )
             {
                 fVal *= fYScale;
-
-                if ( nFlags & DFF_CUSTOMSHAPE_FLIP_V )
-                    fVal = aLogicRect.GetHeight() - fVal;
             }
             aRetValue.Y() = (sal_Int32)fVal;
         }
@@ -970,9 +962,6 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
             if ( bScale )
             {
                 fVal *= fXScale;
-
-                if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
-                    fVal = aLogicRect.GetWidth() - fVal;
             }
             aRetValue.X() = static_cast<long>(fVal);
         }

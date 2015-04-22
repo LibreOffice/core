@@ -38,10 +38,6 @@
 #include <memory>
 #include <vector>
 
-#define DFF_CUSTOMSHAPE_FLIP_V      1
-#define DFF_CUSTOMSHAPE_FLIP_H      2
-#define DFF_CUSTOMSHAPE_EXCH            4
-
 class SdrModel;
 class SdrObject;
 class SfxItemSet;
@@ -92,7 +88,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         sal_Int32                   nXRef;
         sal_Int32                   nYRef;
-        sal_uInt32                  nFlags;
         sal_uInt32                  nColorData;
 
         /*
