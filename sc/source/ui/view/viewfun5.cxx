@@ -416,7 +416,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     {
         //  insert database field control
 
-        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE ) )
+        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), ColumnTransferFormatFlags::COLUMN_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE ) )
         {
             MakeDrawLayer();
             ScDrawView* pScDrawView = GetScDrawView();

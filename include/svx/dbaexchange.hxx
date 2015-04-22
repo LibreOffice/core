@@ -28,14 +28,21 @@
 #include <svx/svxdllapi.h>
 
 
+// column transfer formats
+enum class ColumnTransferFormatFlags
+{
+    FIELD_DESCRIPTOR        = 0x01,    // the field descriptor format
+    CONTROL_EXCHANGE        = 0x02,    // the control exchange format
+    COLUMN_DESCRIPTOR       = 0x04,    // data access descriptor for a column
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ColumnTransferFormatFlags> : is_typed_flags<ColumnTransferFormatFlags, 0x07> {};
+}
+
+
 namespace svx
 {
-
-
-// column transfer formats
-#define CTF_FIELD_DESCRIPTOR        0x0001      // the field descriptor format
-#define CTF_CONTROL_EXCHANGE        0x0002      // the control exchange format
-#define CTF_COLUMN_DESCRIPTOR       0x0004      // data access descriptor for a column
 
 
     //= OColumnTransferable
@@ -43,9 +50,9 @@ namespace svx
     class SVX_DLLPUBLIC SAL_WARN_UNUSED OColumnTransferable : public TransferableHelper
     {
     protected:
-        ODataAccessDescriptor   m_aDescriptor;
-        OUString         m_sCompatibleFormat;
-        sal_Int32               m_nFormatFlags;
+        ODataAccessDescriptor      m_aDescriptor;
+        OUString                   m_sCompatibleFormat;
+        ColumnTransferFormatFlags  m_nFormatFlags;
 
     public:
         /** construct the transferable
@@ -56,7 +63,7 @@ namespace svx
             ,const sal_Int32        _nCommandType
             ,const OUString& _rCommand
             ,const OUString& _rFieldName
-            ,sal_Int32  _nFormats
+            ,ColumnTransferFormatFlags  _nFormats
         );
 
         /** construct the transferable from a data access descriptor
@@ -75,7 +82,7 @@ namespace svx
         */
         OColumnTransferable(
             const ODataAccessDescriptor& _rDescriptor,
-            sal_Int32                    _nFormats
+            ColumnTransferFormatFlags    _nFormats
         );
 
         /** construct the transferable from a DatabaseForm component and a field name
@@ -104,7 +111,7 @@ namespace svx
             const OUString& _rFieldName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            sal_Int32   _nFormats
+            ColumnTransferFormatFlags  _nFormats
         );
 
         /** checks whether or not a column descriptor can be extracted from the data flavor vector given
@@ -113,7 +120,7 @@ namespace svx
             @param _nFormats
                 formats to accept
         */
-        static bool canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats);
+        static bool canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, ColumnTransferFormatFlags _nFormats);
 
         /** extracts a column descriptor from the transferable given
         */

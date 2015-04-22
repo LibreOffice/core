@@ -46,7 +46,7 @@ sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor
         ( GetDataFlavorExVector(),
-                                CTF_COLUMN_DESCRIPTOR )
+                                ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
                 ? DND_ACTION_COPY
                 : DND_ACTION_NONE;
 }
@@ -59,7 +59,7 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
         TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
 
             DataFlavorExVector& rVector = aData.GetDataFlavorExVector();
-            if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
+            if(OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR))
             {
                 ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
                                                                     aData);

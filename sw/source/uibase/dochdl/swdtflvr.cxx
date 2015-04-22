@@ -2649,7 +2649,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     ? 0
                                     : FN_QRY_INSERT_FIELD );
         DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
-        bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE);
+        bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE);
         if ( SotClipboardFormatId::XFORMS == nFmt )
         {
             rSh.MakeDrawView();

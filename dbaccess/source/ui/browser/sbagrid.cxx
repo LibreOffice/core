@@ -1164,7 +1164,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     if (sField.isEmpty())
         return;
 
-    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedField, xActiveConnection, CTF_FIELD_DESCRIPTOR | CTF_COLUMN_DESCRIPTOR);
+    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedField, xActiveConnection, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
     Reference< XTransferable > xEnsureDelete = pDataTransfer;
     pDataTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
 }

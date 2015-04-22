@@ -48,14 +48,14 @@ namespace svx
                                             ,const sal_Int32        _nCommandType
                                             ,const OUString& _rCommand
                                             ,const OUString& _rFieldName
-                                            ,sal_Int32  _nFormats)
+                                            ,ColumnTransferFormatFlags _nFormats)
         :m_nFormatFlags(_nFormats)
     {
         implConstruct(_rDatasource,_rConnectionResource,_nCommandType, _rCommand, _rFieldName);
     }
 
 
-    OColumnTransferable::OColumnTransferable(const ODataAccessDescriptor& _rDescriptor, sal_Int32 _nFormats )
+    OColumnTransferable::OColumnTransferable(const ODataAccessDescriptor& _rDescriptor, ColumnTransferFormatFlags _nFormats )
         :m_nFormatFlags(_nFormats)
     {
         OUString sDataSource, sDatabaseLocation, sConnectionResource, sCommand, sFieldName;
@@ -73,7 +73,7 @@ namespace svx
             sDataSource.isEmpty() ? sDatabaseLocation : sDataSource,
             sConnectionResource, nCommandType, sCommand, sFieldName );
 
-        if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
+        if ( m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
         {
             if ( _rDescriptor.has( daConnection ) )
                 m_aDescriptor[ daConnection ] = _rDescriptor[ daConnection ];
@@ -85,7 +85,7 @@ namespace svx
 
     OColumnTransferable::OColumnTransferable(const Reference< XPropertySet >& _rxForm,
             const OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn,
-            const Reference< XConnection >& _rxConnection, sal_Int32 _nFormats)
+            const Reference< XConnection >& _rxConnection, ColumnTransferFormatFlags _nFormats)
         :m_nFormatFlags(_nFormats)
     {
         OSL_ENSURE(_rxForm.is(), "OColumnTransferable::OColumnTransferable: invalid form!");
@@ -139,7 +139,7 @@ namespace svx
 
         implConstruct(sDatasource, sURL,nCommandType, sCommand, _rFieldName);
 
-        if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
+        if ((m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) == ColumnTransferFormatFlags::COLUMN_DESCRIPTOR)
         {
             if (_rxColumn.is())
                 m_aDescriptor[daColumnObject] <<= _rxColumn;
@@ -194,7 +194,7 @@ namespace svx
         m_sCompatibleFormat += _rFieldName;
 
         m_aDescriptor.clear();
-        if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
+        if ((m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) == ColumnTransferFormatFlags::COLUMN_DESCRIPTOR)
         {
             m_aDescriptor.setDataSource(_rDatasource);
             if ( !_rConnectionResource.isEmpty() )
@@ -209,13 +209,13 @@ namespace svx
 
     void OColumnTransferable::AddSupportedFormats()
     {
-        if (CTF_CONTROL_EXCHANGE & m_nFormatFlags)
+        if (ColumnTransferFormatFlags::CONTROL_EXCHANGE & m_nFormatFlags)
             AddFormat(SotClipboardFormatId::SBA_CTRLDATAEXCHANGE);
 
-        if (CTF_FIELD_DESCRIPTOR & m_nFormatFlags)
+        if (ColumnTransferFormatFlags::FIELD_DESCRIPTOR & m_nFormatFlags)
             AddFormat(SotClipboardFormatId::SBA_FIELDDATAEXCHANGE);
 
-        if (CTF_COLUMN_DESCRIPTOR & m_nFormatFlags)
+        if (ColumnTransferFormatFlags::COLUMN_DESCRIPTOR & m_nFormatFlags)
             AddFormat(getDescriptorFormatId());
     }
 
@@ -237,11 +237,11 @@ namespace svx
     }
 
 
-    bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats)
+    bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, ColumnTransferFormatFlags _nFormats)
     {
-        bool bFieldFormat       = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
-        bool bControlFormat     = 0 != (_nFormats & CTF_CONTROL_EXCHANGE);
-        bool bDescriptorFormat  = 0 != (_nFormats & CTF_COLUMN_DESCRIPTOR);
+        bool bFieldFormat       = bool(_nFormats & ColumnTransferFormatFlags::FIELD_DESCRIPTOR);
+        bool bControlFormat     = bool(_nFormats & ColumnTransferFormatFlags::CONTROL_EXCHANGE);
+        bool bDescriptorFormat  = bool(_nFormats & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
                 aCheck != _rFlavors.end();
                 ++aCheck
@@ -361,13 +361,13 @@ namespace svx
         OSL_ENSURE( _pContainer, "OColumnTransferable::addDataToContainer: invalid container!" );
         if ( _pContainer )
         {
-            if ( m_nFormatFlags & CTF_FIELD_DESCRIPTOR )
+            if ( m_nFormatFlags & ColumnTransferFormatFlags::FIELD_DESCRIPTOR )
                 _pContainer->CopyAny( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
 
-            if ( m_nFormatFlags & CTF_CONTROL_EXCHANGE )
+            if ( m_nFormatFlags & ColumnTransferFormatFlags::CONTROL_EXCHANGE )
                 _pContainer->CopyAny( SotClipboardFormatId::SBA_CTRLDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
 
-            if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
+            if ( m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
             {
                 Any aContent = makeAny( m_aDescriptor.createPropertyValueSequence() );
                 _pContainer->CopyAny( getDescriptorFormatId(), aContent );

@@ -222,7 +222,7 @@ sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
 
     // search for recognized formats
     const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
-    if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_COLUMN_DESCRIPTOR | CTF_FIELD_DESCRIPTOR))
+    if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR | ColumnTransferFormatFlags::FIELD_DESCRIPTOR))
         return rEvt.mnAction;
 
     return DND_ACTION_NONE;
@@ -236,8 +236,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
     // check the formats
-    bool bColumnDescriptor  = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR);
-    bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
+    bool bColumnDescriptor  = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
+    bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), ColumnTransferFormatFlags::FIELD_DESCRIPTOR);
     if (!bColumnDescriptor && !bFieldDescriptor)
     {
         OSL_FAIL("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");

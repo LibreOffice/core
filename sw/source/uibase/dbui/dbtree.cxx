@@ -497,7 +497,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
                             sdb::CommandType::TABLE,
                             sTableName,
                             sColumnName,
-                            (CTF_FIELD_DESCRIPTOR|CTF_COLUMN_DESCRIPTOR) );
+                            (ColumnTransferFormatFlags::FIELD_DESCRIPTOR|ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) );
             aColTransfer.addDataToContainer( pContainer );
         }
 

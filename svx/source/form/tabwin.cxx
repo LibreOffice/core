@@ -162,7 +162,7 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     aDescriptor[ daColumnName ] <<= pInfo->sColumnName;
 
     TransferableHelper* pTransferColumn = new OColumnTransferable(
-        aDescriptor, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR
+        aDescriptor, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR
     );
     Reference< XTransferable> xEnsureDelete = pTransferColumn;
     EndSelection();
