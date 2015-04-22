@@ -705,7 +705,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pC
 {
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
 
-    if (!comphelper::dispatchCommand(aCommand))
+    if (!comphelper::dispatchCommand(aCommand, uno::Sequence<beans::PropertyValue>()))
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
     }

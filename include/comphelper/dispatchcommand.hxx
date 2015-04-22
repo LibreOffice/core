@@ -12,6 +12,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace comphelper
 {
@@ -22,7 +24,7 @@ namespace comphelper
 
     @return true on success.
 */
-COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand);
+COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
 
 }
 

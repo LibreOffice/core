@@ -30,7 +30,7 @@ using namespace css;
 
 namespace comphelper {
 
-bool dispatchCommand(const OUString& rCommand)
+bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     // Target where we will execute the .uno: command
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
@@ -54,7 +54,7 @@ bool dispatchCommand(const OUString& rCommand)
         return false;
 
     // And do the work...
-    xDisp->dispatch(aCommandURL, uno::Sequence<beans::PropertyValue>());
+    xDisp->dispatch(aCommandURL, rArguments);
 
     return true;
 }

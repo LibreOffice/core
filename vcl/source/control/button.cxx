@@ -599,7 +599,7 @@ sal_IntPtr Button::dispatchCommandHandler(void *, void *pCaller)
     if (pButton == NULL)
         return 0;
 
-    if (!comphelper::dispatchCommand(pButton->maCommand))
+    if (!comphelper::dispatchCommand(pButton->maCommand, uno::Sequence<beans::PropertyValue>()))
         return 0;
 
     return 1;
