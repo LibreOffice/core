@@ -38,10 +38,18 @@ namespace o3tl
 }
 
 // flags for SvxBackgroundTabPage
-#define SVX_SHOW_SELECTOR       0x01
-#define SVX_SHOW_PARACTL        0x02
-#define SVX_ENABLE_TRANSPARENCY     0x04
-#define SVX_SHOW_TBLCTL         0x08
+enum class SvxBackgroundTabFlags
+{
+    NONE                = 0x00,
+    SHOW_SELECTOR       = 0x01,
+    SHOW_PARACTL        = 0x02,
+    ENABLE_TRANSPARENCY = 0x04,
+    SHOW_TBLCTL         = 0x08,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxBackgroundTabFlags> : is_typed_flags<SvxBackgroundTabFlags, 0x0f> {};
+}
 
 // flags for SvxBorderTabPage
 #define SVX_HIDESHADOWCTL   0x01

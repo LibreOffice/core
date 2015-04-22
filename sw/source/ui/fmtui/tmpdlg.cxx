@@ -479,14 +479,14 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
     else if (nId == m_nBackgroundId)
     {
-        sal_Int32 nFlagType = 0;
+        SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
         if( SFX_STYLE_FAMILY_PARA == nType )
-            nFlagType |= SVX_SHOW_PARACTL;
+            nFlagType |= SvxBackgroundTabFlags::SHOW_PARACTL;
         if( SFX_STYLE_FAMILY_CHAR != nType )
-            nFlagType |= SVX_SHOW_SELECTOR;
+            nFlagType |= SvxBackgroundTabFlags::SHOW_SELECTOR;
         if( SFX_STYLE_FAMILY_FRAME == nType )
-            nFlagType |= SVX_ENABLE_TRANSPARENCY;
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+            nFlagType |= SvxBackgroundTabFlags::ENABLE_TRANSPARENCY;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nConditionId)

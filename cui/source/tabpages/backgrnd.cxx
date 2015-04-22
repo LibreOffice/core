@@ -1865,14 +1865,14 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 
     if (pFlagItem)
     {
-        sal_uInt32 nFlags=pFlagItem->GetValue();
-        if ( ( nFlags & SVX_SHOW_TBLCTL ) == SVX_SHOW_TBLCTL )
+        SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
+        if (nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
             ShowTblControl();
-        if ( ( nFlags & SVX_SHOW_PARACTL ) == SVX_SHOW_PARACTL )
+        if ( nFlags & SvxBackgroundTabFlags::SHOW_PARACTL )
             ShowParaControl();
-        if ( ( nFlags & SVX_SHOW_SELECTOR ) == SVX_SHOW_SELECTOR )
+        if ( nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR )
             ShowSelector();
-        if ( ( nFlags & SVX_ENABLE_TRANSPARENCY ) == SVX_ENABLE_TRANSPARENCY )
+        if ( nFlags & SvxBackgroundTabFlags::ENABLE_TRANSPARENCY )
             EnableTransparency(true, true);
     }
 }

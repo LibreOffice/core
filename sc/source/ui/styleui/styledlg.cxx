@@ -167,7 +167,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         }
         else if (nPageId == m_nBackgroundId)
         {
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
             rTabPage.PageCreated(aSet);
         }
     }

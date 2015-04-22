@@ -354,7 +354,7 @@ void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     if (nId == m_nBackGroundId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
         rPage.PageCreated(aSet);
     }
     else if(nId == m_nColumnId)
