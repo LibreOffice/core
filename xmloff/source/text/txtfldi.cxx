@@ -129,6 +129,7 @@ const sal_Char sAPI_macro[]                     = "Macro";
 const sal_Char sAPI_dde[]                       = "DDE";
 const sal_Char sAPI_get_reference[]             = "GetReference";
 const sal_Char sAPI_sheet_name[]                = "SheetName";
+const sal_Char sAPI_pagename[]                  = "PageName";
 const sal_Char sAPI_url[]                       = "URL";
 const sal_Char sAPI_bibliography[]              = "Bibliography";
 const sal_Char sAPI_annotation[]                = "Annotation";
@@ -536,6 +537,11 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_SHEET_NAME:
             pContext = new XMLSheetNameImportContext( rImport, rHlp,
                                                       nPrefix, rName );
+            break;
+
+        case XML_TOK_TEXT_PAGE_NAME:
+            pContext = new XMLPageNameFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
             break;
 
         case XML_TOK_TEXT_BIBLIOGRAPHY_MARK:
@@ -3267,6 +3273,31 @@ void XMLSheetNameImportContext::PrepareField(
     // no attributes -> nothing to be done
 }
 
+/** import page|slide name fields (<text:page-name>) */
+TYPEINIT1( XMLPageNameFieldImportContext, XMLTextFieldImportContext );
+
+XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const OUString& sLocalName)      /// element name w/o prefix
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_pagename, nPrfx, sLocalName )
+{
+    bValid = true;
+}
+
+/// process attribute values
+void XMLPageNameFieldImportContext::ProcessAttribute( sal_uInt16,
+                                   const OUString& )
+{
+}
+
+/// prepare XTextField for insertion into document
+void XMLPageNameFieldImportContext::PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> &)
+{
+}
 
 
 // URL fields (Calc, Impress, Draw)

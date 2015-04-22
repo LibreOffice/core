@@ -57,6 +57,7 @@ enum FieldIdEnum {
     FIELD_ID_AUTHOR,
     FIELD_ID_DATE,          // current date
     FIELD_ID_TIME,          // current time (+date)
+    FIELD_ID_PAGENAME,      // page/slide name
     FIELD_ID_PAGENUMBER,    // page number
     FIELD_ID_PAGESTRING,    // page contination string (page number string)
     FIELD_ID_REFPAGE_SET,   // set reference page
