@@ -580,7 +580,7 @@ DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
         //Ensure that EditTime is written inside w:fldChar in "HH:MM:SS" format.
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:00:05");
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:05");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
     }
 }
