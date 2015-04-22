@@ -130,7 +130,7 @@ public:
     OUString maElementName;
 
 public:
-    StyleRedefinition(OUString aElementName)
+    StyleRedefinition(const OUString& aElementName)
         : maElementName(aElementName)
     {}
 
@@ -158,7 +158,7 @@ class StyleSet
     std::vector<StyleRedefinition> maStyles;
 
 public:
-    StyleSet(OUString aName)
+    StyleSet(const OUString& aName)
         : maName(aName)
         , maStyles()
     {}
@@ -168,7 +168,7 @@ public:
         maStyles.push_back(aRedefinition);
     }
 
-    StyleRedefinition* get(OUString aString)
+    StyleRedefinition* get(const OUString& aString)
     {
         for (size_t i = 0; i < maStyles.size(); i++)
         {
@@ -307,7 +307,7 @@ std::vector<FontSet> initFontSets()
     return aFontSets;
 }
 
-FontSet getFontSet(OUString& rFontVariant, std::vector<FontSet>& aFontSets)
+FontSet getFontSet(const OUString& rFontVariant, std::vector<FontSet>& aFontSets)
 {
     for (size_t i = 0; i < aFontSets.size(); ++i)
     {
@@ -348,7 +348,7 @@ std::vector<ColorSet> initColorSets()
     return aColorSets;
 }
 
-ColorSet getColorSet(OUString& rColorVariant, std::vector<ColorSet>& aColorSets)
+ColorSet getColorSet(const OUString& rColorVariant, std::vector<ColorSet>& aColorSets)
 {
     for (size_t i = 0; i < aColorSets.size(); ++i)
     {
@@ -358,7 +358,7 @@ ColorSet getColorSet(OUString& rColorVariant, std::vector<ColorSet>& aColorSets)
     return aColorSets[0];
 }
 
-void applyTheme(SfxStyleSheetBasePool* pPool, OUString sFontSetName, OUString sColorSetName, StyleSet& rStyleSet)
+void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, const OUString& sColorSetName, StyleSet& rStyleSet)
 {
     SwDocStyleSheet* pStyle;
 
