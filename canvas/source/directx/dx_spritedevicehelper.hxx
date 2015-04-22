@@ -67,7 +67,6 @@ namespace dxcanvas
         bool hasFullScreenMode(  );
         bool enterFullScreenMode( bool bEnter );
 
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
         void        destroyBuffers(  );
         sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
         sal_Bool  switchBuffer( bool bIsVisible, sal_Bool bUpdateAll );

@@ -59,15 +59,6 @@ namespace vclcanvas
 #endif
     }
 
-    ::sal_Int32 SpriteDeviceHelper::createBuffers( ::sal_Int32 nBuffers )
-    {
-        (void)nBuffers;
-
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-        return 1;
-    }
-
     bool SpriteDeviceHelper::showBuffer( bool, bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
