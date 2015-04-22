@@ -765,7 +765,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_pColumnsBtn->SetClickHdl( aLink );
         m_pAllSheetsCB->SetClickHdl( aLink );
 
-        sal_uIntPtr nModifyFlagCheck;
+        sal_uIntPtr nModifyFlagCheck(nModifyFlag);
         switch ( pSearchItem->GetCellType() )
         {
             case SvxSearchCellType::FORMULA:
