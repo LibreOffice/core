@@ -15,10 +15,8 @@ $(eval $(call gb_ExternalProject_register_targets,librevenge,\
 	build \
 ))
 
-# TODO: test for zlib is unconditional in configure by mistake. Remove on the next release.
 $(eval $(call gb_ExternalProject_use_externals,librevenge,\
 	boost_headers \
-	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,librevenge,build) :
