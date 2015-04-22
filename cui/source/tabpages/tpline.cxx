@@ -805,7 +805,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     TriState eState = m_pTsbCenterStart->GetState();
     if( m_pTsbCenterStart->IsValueChangedFromSaved() )
     {
-        XLineStartCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
+        XLineStartCenterItem aItem( eState != TRISTATE_FALSE );
         pOld = GetOldItem( *rAttrs, XATTR_LINESTARTCENTER );
         if ( !pOld || !( *static_cast<const XLineStartCenterItem*>(pOld) == aItem ) )
         {
@@ -816,7 +816,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     eState = m_pTsbCenterEnd->GetState();
     if( m_pTsbCenterEnd->IsValueChangedFromSaved() )
     {
-        XLineEndCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
+        XLineEndCenterItem aItem( eState != TRISTATE_FALSE );
         pOld = GetOldItem( *rAttrs, XATTR_LINEENDCENTER );
         if ( !pOld || !( *static_cast<const XLineEndCenterItem*>(pOld) == aItem ) )
         {

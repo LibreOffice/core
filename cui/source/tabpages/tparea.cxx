@@ -1200,8 +1200,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
             TriState eState = m_pTsbTile->GetState();
             if( m_pTsbTile->IsValueChangedFromSaved() )
             {
-                XFillBmpTileItem aFillBmpTileItem(
-                    sal::static_int_cast< sal_Bool >( eState ) );
+                XFillBmpTileItem aFillBmpTileItem( eState != TRISTATE_FALSE );
                 pOld = GetOldItem( *rAttrs, XATTR_FILLBMP_TILE );
                 if ( !pOld || !( *static_cast<const XFillBmpTileItem*>(pOld) == aFillBmpTileItem ) )
                 {
@@ -1217,7 +1216,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
             if( m_pTsbStretch->IsValueChangedFromSaved() )
             {
                 XFillBmpStretchItem aFillBmpStretchItem(
-                    sal::static_int_cast< sal_Bool >( eState ) );
+                    eState != TRISTATE_FALSE );
                 pOld = GetOldItem( *rAttrs, XATTR_FILLBMP_STRETCH );
                 if ( !pOld || !( *static_cast<const XFillBmpStretchItem*>(pOld) == aFillBmpStretchItem ) )
                 {
@@ -2244,12 +2243,12 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
         m_pMtrFldYSize->SetValue( m_pMtrFldYSize->GetValue() );
     }
 
-    rXFSet.Put( XFillBmpTileItem( sal::static_int_cast< sal_Bool >( eState ) ) );
+    rXFSet.Put( XFillBmpTileItem( eState != TRISTATE_FALSE ) );
 
     if( m_pTsbStretch->IsEnabled() )
         rXFSet.Put(
             XFillBmpStretchItem(
-                sal::static_int_cast< sal_Bool >( m_pTsbStretch->GetState() ) ) );
+                m_pTsbStretch->GetState() != TRISTATE_FALSE ) );
 
     if( m_pTsbScale->IsEnabled() )
         rXFSet.Put( XFillBmpSizeLogItem( m_pTsbScale->GetState() == TRISTATE_FALSE ) );

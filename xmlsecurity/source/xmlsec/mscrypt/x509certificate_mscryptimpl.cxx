@@ -380,7 +380,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
             if( xExtn == NULL )
                 throw RuntimeException() ;
 
-            xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), sal::static_int_cast<sal_Bool>(pExtn->fCritical) ) ;
+            xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
 
             xExtns[i] = xExtn ;
         }
@@ -406,7 +406,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
                 if( xExtn == NULL )
                     throw RuntimeException() ;
 
-                xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), sal::static_int_cast<sal_Bool>(pExtn->fCritical) ) ;
+                xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
             }
         }
 
