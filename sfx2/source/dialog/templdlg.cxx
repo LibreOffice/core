@@ -125,7 +125,7 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
     {
         return;
     }
-    mpStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(*pView, GetText(), meStyleFamily));
+    mpStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(*pView, GetText(), meStyleFamily, 32 * pView->GetDPIScaleFactor()));
 
     if (!mpStylePreviewRenderer)
     {
@@ -326,7 +326,7 @@ SfxActionListBox::SfxActionListBox(SfxCommonTemplateDialog_Impl* pParent, WinBit
 
 void SfxActionListBox::Recalc()
 {
-    SetEntryHeight(32);
+    SetEntryHeight(32 * GetDPIScaleFactor());
     RecalcViewData();
 }
 
@@ -516,7 +516,7 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(SfxCommonTemplateDialog_Impl* pPare
 
 void StyleTreeListBox_Impl::Recalc()
 {
-    SetEntryHeight(32);
+    SetEntryHeight(32 * GetDPIScaleFactor());
     RecalcViewData();
 }
 
