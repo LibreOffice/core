@@ -1774,7 +1774,7 @@ Resource RID_GLOBSTR
     };
     String STR_HEADER_RANGE
     {
-        Text [en-US] = "Range";
+        Text [en-US] = "Range or formula expression";
     };
     String STR_HEADER_SCOPE
     {
