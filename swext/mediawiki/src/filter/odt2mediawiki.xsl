@@ -658,12 +658,31 @@
 		<variable name="link-ref" select="@xlink:href"/>
 		<choose>
 			<when test="string-length($link-ref) &gt; 0">
-				<variable name="link-label" select="string(.)"/>
-				<text>[</text>
-				<value-of select="$link-ref"/>
-				<text> </text>
-				<value-of select="$link-label"/>
-				<text>]</text>
+				<choose>
+					<when test="starts-with($link-ref, '#')">
+						<text>[[</text>
+						<value-of select="$link-ref"/>
+						<text>|</text>
+
+						<choose>
+							<when test="text:tab and ancestor::text:index-body">
+								<value-of select="node()[1]"/>
+							</when>
+							<otherwise>
+								<value-of select="string(.)"/>
+							</otherwise>
+						</choose>
+						<text>]]</text>
+					</when>
+
+                                        <otherwise>
+						<text>[</text>
+						<value-of select="$link-ref"/>
+						<text> </text>
+						<value-of select="string(.)"/>
+						<text>]</text>
+					</otherwise>
+				</choose>
 			</when>
 			
 			<otherwise>
@@ -1124,7 +1143,16 @@
  		<!-- TODO: Output an anchor. -->
  	</template>
 
-	<!-- 
+	<template match="text:bookmark-start">
+		<if test="boolean(@text:name)">
+			<text>&lt;span id="</text>
+			<value-of select="@text:name"/>
+			<text>"&gt;&lt;/span&gt; </text>
+		</if>
+		<apply-templates/>
+	</template>
+
+	<!--
 		== Plain text == 
 	-->
 
