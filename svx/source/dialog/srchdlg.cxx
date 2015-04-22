@@ -780,7 +780,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                 nModifyFlagCheck = MODIFY_CALC_NOTES;
                 break;
         }
-        if ( ( nModifyFlag & MODIFY_FORMULAS ) == 0 )
+        if ( (nModifyFlag & nModifyFlagCheck) == 0 )
             m_pCalcSearchInLB->SelectEntryPos( static_cast<sal_Int32>(pSearchItem->GetCellType()) );
 
         m_pWordBtn->SetText( aCalcStr.getToken( 0, '#' ) );
