@@ -3363,6 +3363,36 @@ bool ScCompiler::IsTableRefItem( const OUString& rName ) const
     return bItem;
 }
 
+namespace {
+OUString unescapeTableRefColumnSpecifier( const OUString& rStr )
+{
+    // '#', '[', ']' and '\'' are escaped with '\''
+
+    if (rStr.indexOf( '\'' ) < 0)
+        return rStr;
+
+    const sal_Int32 n = rStr.getLength();
+    OUStringBuffer aBuf( n );
+    const sal_Unicode* p = rStr.getStr();
+    const sal_Unicode* const pStop = p + n;
+    bool bEscaped = false;
+    for ( ; p < pStop; ++p)
+    {
+        const sal_Unicode c = *p;
+        if (bEscaped)
+        {
+            aBuf.append( c );
+            bEscaped = false;
+        }
+        else if (c == '\'')
+            bEscaped = true;    // unescaped escaping '\''
+        else
+            aBuf.append( c );
+    }
+    return aBuf.makeStringAndClear();
+}
+}
+
 bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
 {
     // Only called when there actually is a current TableRef, hence
@@ -3374,8 +3404,7 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     if (!pDBData)
         return false;
 
-    // '#', '[', ']' and '\'' are escaped with '\''
-    OUString aName( rName.replaceAll( OUString("'"), OUString()));
+    OUString aName( unescapeTableRefColumnSpecifier( rName));
 
     ScRange aRange;
     pDBData->GetArea( aRange);
