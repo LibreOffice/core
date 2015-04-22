@@ -3631,204 +3631,201 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             aSolverContainer.AddShape( rXShape, nShapeId );
             EscherPropertyContainer aPropOpt2;
 
-            if ( nRowCount )
+            SvMemoryStream aMemStrm;
+            aMemStrm.ObjectOwnsMemory( false );
+            aMemStrm.WriteUInt16( nRowCount )
+                    .WriteUInt16( nRowCount )
+                    .WriteUInt16( 4 );
+
+            std::vector< std::pair< sal_Int32, sal_Int32 > >::const_iterator aIter( aRows.begin() );
+            while( aIter != aRows.end() )
+                aMemStrm.WriteInt32( (*aIter++).second );
+
+            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
+            aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
+            aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, true, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+            aPropOpt.CreateShapeProperties( rXShape );
+            aPropOpt.Commit( *mpStrm );
+            aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
+            if ( GetCurrentGroupLevel() > 0 )
+                mpPptEscherEx->AddChildAnchor( maRect );
+            else
+                mpPptEscherEx->AddClientAnchor( maRect );
+            mpPptEscherEx->CloseContainer();
+
+            uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
+            for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
             {
-                SvMemoryStream aMemStrm;
-                aMemStrm.ObjectOwnsMemory( false );
-                aMemStrm.WriteUInt16( nRowCount )
-                        .WriteUInt16( nRowCount )
-                        .WriteUInt16( 4 );
-
-                std::vector< std::pair< sal_Int32, sal_Int32 > >::const_iterator aIter( aRows.begin() );
-                while( aIter != aRows.end() )
-                    aMemStrm.WriteInt32( (*aIter++).second );
-
-                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
-                aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
-                aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, true, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
-                aPropOpt.CreateShapeProperties( rXShape );
-                aPropOpt.Commit( *mpStrm );
-                aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
-                if ( GetCurrentGroupLevel() > 0 )
-                    mpPptEscherEx->AddChildAnchor( maRect );
-                else
-                    mpPptEscherEx->AddClientAnchor( maRect );
-                mpPptEscherEx->CloseContainer();
-
-                uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
-                for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
+                for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
                 {
-                    for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
+                    uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ), uno::UNO_QUERY_THROW );
+                    if ( !xCell->isMerged() )
                     {
-                        uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ), uno::UNO_QUERY_THROW );
-                        if ( !xCell->isMerged() )
+                        sal_Int32 nLeft   = aColumns[ nColumn ].first;
+                        sal_Int32 nTop    = aRows[ nRow ].first;
+                        sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
+                        sal_Int32 nBottom = GetCellBottom( nRow,  maRect,aRows,xCell );
+
+                        mbFontIndependentLineSpacing = false;
+                        mXPropSet = uno::Reference< beans::XPropertySet >( xCell, uno::UNO_QUERY_THROW );
+                        mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
+                        mnTextSize = mXText->getString().getLength();
+
+                        ::com::sun::star::uno::Any aAny;
+                        if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
+                            aAny >>= mbFontIndependentLineSpacing;
+
+                        EscherPropertyContainer aPropOptSp;
+                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                        ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
+                        aPropOptSp.CreateFillProperties( mXPropSet, true );
+                        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
+                        aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                        aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
+
+                        SvMemoryStream aClientTextBox( 0x200, 0x200 );
+                        SvMemoryStream  aExtBu( 0x200, 0x200 );
+
+                        ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
+
+                        // need write client data for extend bullet
+                        if ( aExtBu.Tell() )
                         {
-                            sal_Int32 nLeft   = aColumns[ nColumn ].first;
-                            sal_Int32 nTop    = aRows[ nRow ].first;
-                            sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
-                            sal_Int32 nBottom = GetCellBottom( nRow,  maRect,aRows,xCell );
+                            SvMemoryStream* pClientData = new SvMemoryStream( 0x200, 0x200 );
+                            ImplProgTagContainer( pClientData, &aExtBu );
+                            mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
+                               .WriteUInt32( pClientData->Tell() );
 
-                            mbFontIndependentLineSpacing = false;
-                            mXPropSet = uno::Reference< beans::XPropertySet >( xCell, uno::UNO_QUERY_THROW );
-                            mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
-                            mnTextSize = mXText->getString().getLength();
-
-                            ::com::sun::star::uno::Any aAny;
-                            if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
-                                aAny >>= mbFontIndependentLineSpacing;
-
-                            EscherPropertyContainer aPropOptSp;
-                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                            ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
-                            aPropOptSp.CreateFillProperties( mXPropSet, true );
-                            aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
-                            aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
-
-                            SvMemoryStream aClientTextBox( 0x200, 0x200 );
-                            SvMemoryStream  aExtBu( 0x200, 0x200 );
-
-                            ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
-
-                            // need write client data for extend bullet
-                            if ( aExtBu.Tell() )
-                            {
-                                SvMemoryStream* pClientData = new SvMemoryStream( 0x200, 0x200 );
-                                ImplProgTagContainer( pClientData, &aExtBu );
-                                mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
-                                   .WriteUInt32( pClientData->Tell() );
-
-                                mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
-                                delete pClientData, pClientData = NULL;
-                            }
-
-                            aPropOptSp.Commit( *mpStrm );
-                            mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                            mpStrm    ->WriteInt32( nLeft )
-                               .WriteInt32( nTop )
-                               .WriteInt32( nRight )
-                               .WriteInt32( nBottom );
-
-                            mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
-                               .WriteUInt32( aClientTextBox.Tell() );
-
-                            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
-                            mpPptEscherEx->CloseContainer();
+                            mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
+                            delete pClientData, pClientData = NULL;
                         }
+
+                        aPropOptSp.Commit( *mpStrm );
+                        mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+                        mpStrm    ->WriteInt32( nLeft )
+                           .WriteInt32( nTop )
+                           .WriteInt32( nRight )
+                           .WriteInt32( nBottom );
+
+                        mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                           .WriteUInt32( aClientTextBox.Tell() );
+
+                        mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
+                        mpPptEscherEx->CloseContainer();
                     }
                 }
+            }
 
-                static const char sTopBorder[] = "TopBorder";
-                static const char sBottomBorder[] = "BottomBorder";
-                static const char sLeftBorder[] = "LeftBorder";
-                static const char sRightBorder[] = "RightBorder";
+            static const char sTopBorder[] = "TopBorder";
+            static const char sBottomBorder[] = "BottomBorder";
+            static const char sLeftBorder[] = "LeftBorder";
+            static const char sRightBorder[] = "RightBorder";
 
-                // creating horz lines
-                for( sal_Int32 nLine = 0; nLine < ( xRows->getCount() + 1 ); nLine++ )
+            // creating horz lines
+            for( sal_Int32 nLine = 0; nLine < ( xRows->getCount() + 1 ); nLine++ )
+            {
+                for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
                 {
-                    for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
-                    {
-                        CellBorder aCellBorder;
-                        aCellBorder.mnPos = aColumns[ nColumn ].first;
-                        aCellBorder.mnLength = aColumns[ nColumn ].second;
-                        bool bTop = false;
-                        //write nLine*nColumn cell's top border
-                        if ( nLine < xRows->getCount() )
-                        {   // top border
-                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nLine ), uno::UNO_QUERY_THROW );
+                    CellBorder aCellBorder;
+                    aCellBorder.mnPos = aColumns[ nColumn ].first;
+                    aCellBorder.mnLength = aColumns[ nColumn ].second;
+                    bool bTop = false;
+                    //write nLine*nColumn cell's top border
+                    if ( nLine < xRows->getCount() )
+                    {   // top border
+                        uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nLine ), uno::UNO_QUERY_THROW );
+                        if ( !xCell->isMerged()  )
+                        {
+                            uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xPropSet2->getPropertyValue( sTopBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                            sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
+                            bTop = ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
+                                aRows[ nLine ].first, nRight,  aRows[ nLine ].first );
+                        }
+                    }
+
+                    //if nLine*nColumn cell's top border is empty, check (nLine-1)*nColumn cell's bottom border
+                    //and write the last row's bottom border
+                    if (( nLine && !bTop ) || (nLine == xRows->getCount()))
+                    {   // bottom border
+                        sal_Int32 nRow =  nLine;
+
+                        while( nRow )
+                        {   //find last no merged cell
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
                             if ( !xCell->isMerged()  )
                             {
-                                uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
-                                table::BorderLine aBorderLine;
-                                if ( xPropSet2->getPropertyValue( sTopBorder ) >>= aBorderLine )
-                                    aCellBorder.maCellBorder = aBorderLine;
-                                sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
-                                bTop = ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
-                                    aRows[ nLine ].first, nRight,  aRows[ nLine ].first );
-                            }
-                        }
-
-                        //if nLine*nColumn cell's top border is empty, check (nLine-1)*nColumn cell's bottom border
-                        //and write the last row's bottom border
-                        if (( nLine && !bTop ) || (nLine == xRows->getCount()))
-                        {   // bottom border
-                            sal_Int32 nRow =  nLine;
-
-                            while( nRow )
-                            {   //find last no merged cell
-                                uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
-                                if ( !xCell->isMerged()  )
+                                sal_Int32 nRight  = GetCellRight( nColumn,  maRect,aColumns,xCell );
+                                sal_Int32 nBottom = GetCellBottom( nRow - 1, maRect,aRows,xCell );
+                                if ( nBottom == ( aRows[ nLine-1 ].first + aRows[ nLine-1 ].second ) )
                                 {
-                                    sal_Int32 nRight  = GetCellRight( nColumn,  maRect,aColumns,xCell );
-                                    sal_Int32 nBottom = GetCellBottom( nRow - 1, maRect,aRows,xCell );
-                                    if ( nBottom == ( aRows[ nLine-1 ].first + aRows[ nLine-1 ].second ) )
-                                    {
-                                        uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
-                                        uno::Reference< beans::XPropertySet > xPropSet2( xCellOwn, uno::UNO_QUERY_THROW );
-                                        table::BorderLine aBorderLine;
-                                        if ( xPropSet2->getPropertyValue( sBottomBorder ) >>= aBorderLine )
-                                            aCellBorder.maCellBorder = aBorderLine;
-                                        ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
-                                            nBottom, nRight, nBottom);
-                                    }
-                                    nRow=0;
+                                    uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
+                                    uno::Reference< beans::XPropertySet > xPropSet2( xCellOwn, uno::UNO_QUERY_THROW );
+                                    table::BorderLine aBorderLine;
+                                    if ( xPropSet2->getPropertyValue( sBottomBorder ) >>= aBorderLine )
+                                        aCellBorder.maCellBorder = aBorderLine;
+                                    ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
+                                        nBottom, nRight, nBottom);
                                 }
-                                else
-                                    nRow--;
+                                nRow=0;
                             }
+                            else
+                                nRow--;
                         }
                     }
                 }
+            }
 
-                // creating vertical lines
-                for( sal_Int32 nLine = 0; nLine < ( xColumns->getCount() + 1 ); nLine++ )
+            // creating vertical lines
+            for( sal_Int32 nLine = 0; nLine < ( xColumns->getCount() + 1 ); nLine++ )
+            {
+                for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
                 {
-                    for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
-                    {
 
-                        CellBorder aCellBorder;
-                        aCellBorder.mnPos = aRows[ nRow].first;
-                        aCellBorder.mnLength = aRows[ nRow].second;
-                        bool bLeft = false;
-                        if ( nLine < xColumns->getCount() )
-                        {   // left border
-                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nLine, nRow ), uno::UNO_QUERY_THROW );
+                    CellBorder aCellBorder;
+                    aCellBorder.mnPos = aRows[ nRow].first;
+                    aCellBorder.mnLength = aRows[ nRow].second;
+                    bool bLeft = false;
+                    if ( nLine < xColumns->getCount() )
+                    {   // left border
+                        uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nLine, nRow ), uno::UNO_QUERY_THROW );
+                        if (!xCell->isMerged() )
+                        {
+                            uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xCellSet->getPropertyValue( sLeftBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                            sal_Int32 nBottom = GetCellBottom( nRow, maRect, aRows,xCell );
+                            bLeft = ImplCreateCellBorder( &aCellBorder, aColumns[nLine].first, aCellBorder.mnPos,
+                                aColumns[nLine].first, nBottom );
+                        }
+                    }
+                    if ( ( nLine && !bLeft )||(nLine == xColumns->getCount()))
+                    {   // right border
+                        sal_Int32 nColumn = nLine;
+                        while ( nColumn )
+                        {
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
                             if (!xCell->isMerged() )
                             {
-                                uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
-                                table::BorderLine aBorderLine;
-                                if ( xCellSet->getPropertyValue( sLeftBorder ) >>= aBorderLine )
-                                    aCellBorder.maCellBorder = aBorderLine;
-                                sal_Int32 nBottom = GetCellBottom( nRow, maRect, aRows,xCell );
-                                bLeft = ImplCreateCellBorder( &aCellBorder, aColumns[nLine].first, aCellBorder.mnPos,
-                                    aColumns[nLine].first, nBottom );
-                            }
-                        }
-                        if ( ( nLine && !bLeft )||(nLine == xColumns->getCount()))
-                        {   // right border
-                            sal_Int32 nColumn = nLine;
-                            while ( nColumn )
-                            {
-                                uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
-                                if (!xCell->isMerged() )
+                                sal_Int32 nRight  = GetCellRight( nColumn-1, maRect, aColumns,xCell );
+                                sal_Int32 nBottom = GetCellBottom( nRow,   maRect, aRows, xCell );
+                                if ( nRight == (aColumns[nLine-1].first + aColumns[nLine-1].second) )
                                 {
-                                    sal_Int32 nRight  = GetCellRight( nColumn-1, maRect, aColumns,xCell );
-                                    sal_Int32 nBottom = GetCellBottom( nRow,   maRect, aRows, xCell );
-                                    if ( nRight == (aColumns[nLine-1].first + aColumns[nLine-1].second) )
-                                    {
-                                        uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
-                                        uno::Reference< beans::XPropertySet > xCellSet( xCellOwn, uno::UNO_QUERY_THROW );
-                                        table::BorderLine aBorderLine;
-                                        if ( xCellSet->getPropertyValue( sRightBorder ) >>= aBorderLine )
-                                            aCellBorder.maCellBorder = aBorderLine;
-                                        ImplCreateCellBorder( &aCellBorder, nRight, aCellBorder.mnPos,
-                                            nRight,  nBottom );
-                                    }
-                                    nColumn = 0;
+                                    uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
+                                    uno::Reference< beans::XPropertySet > xCellSet( xCellOwn, uno::UNO_QUERY_THROW );
+                                    table::BorderLine aBorderLine;
+                                    if ( xCellSet->getPropertyValue( sRightBorder ) >>= aBorderLine )
+                                        aCellBorder.maCellBorder = aBorderLine;
+                                    ImplCreateCellBorder( &aCellBorder, nRight, aCellBorder.mnPos,
+                                        nRight,  nBottom );
                                 }
-                                else
-                                    nColumn --;
+                                nColumn = 0;
                             }
+                            else
+                                nColumn --;
                         }
                     }
                 }
