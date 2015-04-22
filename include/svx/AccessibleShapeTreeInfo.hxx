@@ -76,18 +76,6 @@ public:
         ::com::sun::star::accessibility::XAccessibleComponent>
         GetDocumentWindow() const { return mxDocumentWindow;}
 
-    /** Deprecated.   Use the correctly named SetModelBroadcaster method
-        instead.
-    */
-    void SetControllerBroadcaster (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster>& rxControllerBroadcaster);
-    /** Deprecated.   Use the correctly named GetModelBroadcaster method
-        instead.
-    */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster>
-        GetControllerBroadcaster() const { return mxModelBroadcaster;}
-
     /** Set a new broadcaster that sends events indicating shape changes.
         The broadcaster usually is or belongs to a document model.
         @param rxModelBroadcaster

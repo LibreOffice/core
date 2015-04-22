@@ -244,7 +244,7 @@ public:
         uno::Reference < document::XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
                     pMap->GetShell()->getIDocumentDrawModelAccess()->GetOrCreateDrawModel() );
-        maInfo.SetControllerBroadcaster( xModelBroadcaster );
+        maInfo.SetModelBroadcaster( xModelBroadcaster );
     }
 
     ~SwAccessibleShapeMap_Impl();
@@ -267,7 +267,7 @@ public:
 
 SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
 {
-    uno::Reference < document::XEventBroadcaster > xBrd( maInfo.GetControllerBroadcaster() );
+    uno::Reference < document::XEventBroadcaster > xBrd( maInfo.GetModelBroadcaster() );
     if( xBrd.is() )
         static_cast < SwDrawModellListener_Impl * >( xBrd.get() )->Dispose();
 }

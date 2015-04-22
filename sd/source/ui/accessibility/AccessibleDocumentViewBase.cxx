@@ -516,7 +516,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     }
 
     // Propagate change of controller down the shape tree.
-    maShapeTreeInfo.SetControllerBroadcaster (NULL);
+    maShapeTreeInfo.SetModelBroadcaster (NULL);
 
     // Reset the model reference.
     mxModel = NULL;
