@@ -58,47 +58,6 @@ class ColorSet
 public:
     OUString maName;
     Color maColors[10];
-
-    Color getBackgroundColor1()
-    {
-        return maColors[0];
-    }
-    Color getTextColor1()
-    {
-        return maColors[1];
-    }
-    Color getBackgroundColor2()
-    {
-        return maColors[2];
-    }
-    Color getTextColor2()
-    {
-        return maColors[3];
-    }
-    Color getAccent1()
-    {
-        return maColors[4];
-    }
-    Color getAccent2()
-    {
-        return maColors[5];
-    }
-    Color getAccent3()
-    {
-        return maColors[6];
-    }
-    Color getAccent4()
-    {
-        return maColors[7];
-    }
-    Color getAccent5()
-    {
-        return maColors[8];
-    }
-    Color getAccent6()
-    {
-        return maColors[9];
-    }
 };
 
 class ColorVariable
@@ -108,11 +67,6 @@ public:
     Color maColor;
 
     ColorVariable()
-    {}
-
-    ColorVariable(Color aColor)
-        : mnIndex(-1)
-        , maColor(aColor)
     {}
 
     ColorVariable(long nIndex)
