@@ -25,6 +25,7 @@
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
 #include <svx/xtable.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class XOBitmap;
 class XOutdevItemPool;
@@ -54,9 +55,16 @@ public:
 |* an object
 \************************************************************************/
 
-typedef sal_uInt16 CTL_STATE;
-#define CS_NOHORZ   1       // no horizontal input information is used
-#define CS_NOVERT   2       // no vertikal input information is used
+enum class CTL_STATE
+{
+    NONE     = 0,
+    NOHORZ   = 1,       // no horizontal input information is used
+    NOVERT   = 2,       // no vertical input information is used
+};
+namespace o3tl
+{
+    template<> struct typed_flags<CTL_STATE> : is_typed_flags<CTL_STATE, 0x03> {};
+}
 
 class SvxRectCtlAccessibleContext;
 class SvxPixelCtlAccessible;

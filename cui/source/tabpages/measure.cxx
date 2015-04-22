@@ -392,18 +392,18 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                  default: ;//prevent warning
                 }
 
-                CTL_STATE nState = 0;
+                CTL_STATE nState = CTL_STATE::NONE;
 
                 if( eHPos == SDRMEASURE_TEXTHAUTO )
                 {
                     m_pTsbAutoPosH->SetState( TRISTATE_TRUE );
-                    nState = CS_NOHORZ;
+                    nState = CTL_STATE::NOHORZ;
                 }
 
                 if( eVPos == SDRMEASURE_TEXTVAUTO )
                 {
                     m_pTsbAutoPosV->SetState( TRISTATE_TRUE );
-                    nState |= CS_NOVERT;
+                    nState |= CTL_STATE::NOVERT;
                 }
 
                 m_pCtlPosition->SetState( nState );
@@ -766,18 +766,18 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
         }
 
-        CTL_STATE nState = 0;
+        CTL_STATE nState = CTL_STATE::NONE;
 
         if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
         {
             eHPos = SDRMEASURE_TEXTHAUTO;
-            nState = CS_NOHORZ;
+            nState = CTL_STATE::NOHORZ;
         }
 
         if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
         {
             eVPos = SDRMEASURE_TEXTVAUTO;
-            nState |= CS_NOVERT;
+            nState |= CTL_STATE::NOVERT;
         }
 
         if( p == m_pTsbAutoPosV || p == m_pTsbAutoPosH )

@@ -76,7 +76,7 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     , eDefRP(eRpt)
     , eCS(eStyle)
     , pBitmap(NULL)
-    , m_nState(0)
+    , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
 {
     SetMapMode(MAP_100TH_MM);
@@ -289,7 +289,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
         {
             case KEY_DOWN:
             {
-                if( !(m_nState & CS_NOVERT) )
+                if( !(m_nState & CTL_STATE::NOVERT) )
                     switch( eNewRP )
                     {
                         case RP_LT: eNewRP = RP_LM; break;
@@ -304,7 +304,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
             break;
             case KEY_UP:
             {
-                if( !(m_nState & CS_NOVERT) )
+                if( !(m_nState & CTL_STATE::NOVERT) )
                     switch( eNewRP )
                     {
                         case RP_LM: eNewRP = RP_LT; break;
@@ -319,7 +319,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
             break;
             case KEY_LEFT:
             {
-                if( !(m_nState & CS_NOHORZ) )
+                if( !(m_nState & CTL_STATE::NOHORZ) )
                     switch( eNewRP )
                     {
                         case RP_MT: eNewRP = RP_LT; break;
@@ -334,7 +334,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
             break;
             case KEY_RIGHT:
             {
-                if( !(m_nState & CS_NOHORZ) )
+                if( !(m_nState & CTL_STATE::NOHORZ) )
                     switch( eNewRP )
                     {
                         case RP_LT: eNewRP = RP_MT; break;
@@ -462,8 +462,8 @@ void SvxRectCtl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle&
     Point aBtnPnt2( 11,0 );
     Point aBtnPnt3( 22,0 );
 
-    bool bNoHorz = (m_nState & CS_NOHORZ) != 0;
-    bool bNoVert = (m_nState & CS_NOVERT) != 0;
+    bool bNoHorz = bool(m_nState & CTL_STATE::NOHORZ);
+    bool bNoVert = bool(m_nState & CTL_STATE::NOVERT);
 
     Bitmap&         rBitmap = GetRectBitmap();
 
@@ -549,10 +549,10 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
     Point aPtLast = aPtNew;
     aPtNew = GetPointFromRP( eNewRP );
 
-    if( (m_nState & CS_NOHORZ) != 0 )
+    if( m_nState & CTL_STATE::NOHORZ )
         aPtNew.X() = aPtMM.X();
 
-    if( (m_nState & CS_NOVERT) != 0 )
+    if( m_nState & CTL_STATE::NOVERT )
         aPtNew.Y() = aPtMM.Y();
 
     // fdo#74751 this fix reverse base point on RTL UI.
@@ -590,7 +590,7 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
     long    x;
     long    y;
 
-    if( ( m_nState & CS_NOHORZ ) == 0 )
+    if( !( m_nState & CTL_STATE::NOHORZ ) )
     {
         if( aPt.X() < aSize.Width() / 3 )
             x = aPtLT.X();
@@ -602,7 +602,7 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
     else
         x = aPtMM.X();
 
-    if( ( m_nState & CS_NOVERT ) == 0 )
+    if( !( m_nState & CTL_STATE::NOVERT ) )
     {
         if( aPt.Y() < aSize.Height() / 3 )
             y = aPtLT.Y();
@@ -667,10 +667,10 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     Point aPtLast( GetPointFromRP( eRP ) );
     Point _aPtNew( aPtLast );
 
-    if( (m_nState & CS_NOHORZ) != 0 )
+    if( m_nState & CTL_STATE::NOHORZ )
         _aPtNew.X() = aPtMM.X();
 
-    if( (m_nState & CS_NOVERT) != 0 )
+    if( m_nState & CTL_STATE::NOVERT)
         _aPtNew.Y() = aPtMM.Y();
 
     eRP = GetRPFromPoint( _aPtNew );

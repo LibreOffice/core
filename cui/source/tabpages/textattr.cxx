@@ -298,7 +298,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         // VertAdjust or HorAdjust is not unequivocal
         m_pCtlPosition->Reset();
 
-        m_pCtlPosition->SetState(TRISTATE_INDET);
+        m_pCtlPosition->SetState(CTL_STATE::NOVERT);
         m_pCtlPosition->DoCompletelyDisable(true);
 
         m_pTsbFullWidth->SetState(TRISTATE_INDET);
