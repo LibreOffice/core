@@ -1368,6 +1368,7 @@ namespace xmloff { namespace token {
         XML_PAGE_HEIGHT,
         XML_PAGE_MASTER,
         XML_PAGE_MASTER_NAME,
+        XML_PAGE_NAME,
         XML_PAGE_NUMBER,
         XML_PAGE_START_MARGIN,
         XML_PAGE_STYLE_NAME,
