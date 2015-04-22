@@ -48,7 +48,7 @@ Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
     mp3DView(0),
     mpScene(0),
     mp3DObj(0),
-    mnObjectType(PREVIEW_OBJECTTYPE_SPHERE)
+    mnObjectType(SvxPreviewObjectType::SPHERE)
 {
     Construct();
 
@@ -103,7 +103,7 @@ void Svx3DPreviewControl::Construct()
     mpScene = new E3dPolyScene(mp3DView->Get3DDefaultAttributes());
 
     // initially create object
-    SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
+    SetObjectType(SvxPreviewObjectType::SPHERE);
 
     // camera and perspective
     Camera3D& rCamera  = (Camera3D&) mpScene->GetCamera();
@@ -177,18 +177,18 @@ void Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     if( rMEvt.IsShift() && rMEvt.IsMod1() )
     {
-        if(PREVIEW_OBJECTTYPE_SPHERE == GetObjectType())
+        if(SvxPreviewObjectType::SPHERE == GetObjectType())
         {
-            SetObjectType(PREVIEW_OBJECTTYPE_CUBE);
+            SetObjectType(SvxPreviewObjectType::CUBE);
         }
         else
         {
-            SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
+            SetObjectType(SvxPreviewObjectType::SPHERE);
         }
     }
 }
 
-void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
+void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
 {
     if( mnObjectType != nType || !mp3DObj)
     {
@@ -205,7 +205,7 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
 
         switch( nType )
         {
-            case PREVIEW_OBJECTTYPE_SPHERE:
+            case SvxPreviewObjectType::SPHERE:
             {
                 mp3DObj = new E3dSphereObj(
                     mp3DView->Get3DDefaultAttributes(),
@@ -214,7 +214,7 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
             }
             break;
 
-            case PREVIEW_OBJECTTYPE_CUBE:
+            case SvxPreviewObjectType::CUBE:
             {
                 mp3DObj = new E3dCubeObj(
                     mp3DView->Get3DDefaultAttributes(),
@@ -713,7 +713,7 @@ void Svx3DLightControl::Resize()
     mpScene->SetSnapRect(Rectangle(Point(0, 0), aSize));
 }
 
-void Svx3DLightControl::SetObjectType(sal_uInt16 nType)
+void Svx3DLightControl::SetObjectType(SvxPreviewObjectType nType)
 {
     // call parent
     Svx3DPreviewControl::SetObjectType(nType);
@@ -1251,13 +1251,13 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
 
 IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress)
 {
-    if(PREVIEW_OBJECTTYPE_SPHERE == GetSvx3DLightControl().GetObjectType())
+    if(SvxPreviewObjectType::SPHERE == GetSvx3DLightControl().GetObjectType())
     {
-        GetSvx3DLightControl().SetObjectType(PREVIEW_OBJECTTYPE_CUBE);
+        GetSvx3DLightControl().SetObjectType(SvxPreviewObjectType::CUBE);
     }
     else
     {
-        GetSvx3DLightControl().SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
+        GetSvx3DLightControl().SetObjectType(SvxPreviewObjectType::SPHERE);
     }
 
     return 0;

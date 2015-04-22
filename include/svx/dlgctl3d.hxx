@@ -33,8 +33,7 @@ class E3dView;
 class E3dPolyScene;
 class E3dObject;
 
-#define PREVIEW_OBJECTTYPE_SPHERE           0x0000
-#define PREVIEW_OBJECTTYPE_CUBE             0x0001
+enum class SvxPreviewObjectType { SPHERE, CUBE };
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DPreviewControl : public Control
 {
@@ -44,7 +43,7 @@ protected:
     E3dView*                mp3DView;
     E3dPolyScene*           mpScene;
     E3dObject*              mp3DObj;
-    sal_uInt16              mnObjectType;
+    SvxPreviewObjectType    mnObjectType;
 
     void Construct();
 
@@ -59,8 +58,8 @@ public:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void Reset();
-    virtual void SetObjectType(sal_uInt16 nType);
-    sal_uInt16 GetObjectType() const { return mnObjectType; }
+    virtual void SetObjectType(SvxPreviewObjectType nType);
+    SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
     SfxItemSet Get3DAttributes() const;
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
@@ -111,7 +110,7 @@ public:
     virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
-    virtual void SetObjectType(sal_uInt16 nType) SAL_OVERRIDE;
+    virtual void SetObjectType(SvxPreviewObjectType nType) SAL_OVERRIDE;
 
     // register user callback
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
