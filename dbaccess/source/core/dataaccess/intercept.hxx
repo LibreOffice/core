@@ -25,7 +25,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include "documentdefinition.hxx"
 #include <vcl/svapp.hxx>
@@ -37,7 +37,7 @@ namespace dbaccess
 class OInterceptor : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XDispatchProviderInterceptor,
                                                        ::com::sun::star::frame::XInterceptorInfo,
                                                        ::com::sun::star::frame::XDispatch,
-                                                    ::com::sun::star::document::XEventListener>
+                                                    ::com::sun::star::document::XDocumentEventListener>
 {
     DECL_LINK( OnDispatch, void* _aURL  );
 protected:
@@ -133,8 +133,8 @@ public:
             ::com::sun::star::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
-    // XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // XDocumentEventListener
+    virtual void SAL_CALL documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:

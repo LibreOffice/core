@@ -22,7 +22,7 @@
 #include "dbastrings.hrc"
 
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <cppuhelper/weak.hxx>
 
@@ -191,9 +191,9 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, "_self", 0 );
             if ( xDispatch.is() )
             {
-                Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+                Reference< ::com::sun::star::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
                 if ( xEvtB.is() )
-                    xEvtB->removeEventListener(this);
+                    xEvtB->removeDocumentEventListener(this);
 
                 Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
                 xDispatch->dispatch( pHelper->aURL,pHelper->aArguments);
@@ -257,9 +257,9 @@ void SAL_CALL OInterceptor::addStatusListener(
         }
 
         m_pStatCL->addInterface(_URL.Complete,Control);
-        Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+        Reference< ::com::sun::star::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
         if ( xEvtB.is() )
-            xEvtB->addEventListener(this);
+            xEvtB->addDocumentEventListener(this);
     }
     else
     {
@@ -401,7 +401,7 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
     m_xMasterDispatchProvider = NewSupplier;
 }
 
-void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OInterceptor::documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard _rGuard(m_aMutex);
     if ( m_pStatCL &&   Event.EventName == "OnModifyChanged" )
