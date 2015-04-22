@@ -20,22 +20,25 @@
 #define INCLUDED_SVX_OPTGENRL_HXX
 
 // Defines for setting the focus of a Edit via a slot from external.
-#define UNKNOWN_EDIT    ((sal_uInt16)0)
-#define COMPANY_EDIT    ((sal_uInt16)1)
-#define FIRSTNAME_EDIT  ((sal_uInt16)2)
-#define LASTNAME_EDIT   ((sal_uInt16)3)
-#define STREET_EDIT     ((sal_uInt16)4)
-#define COUNTRY_EDIT    ((sal_uInt16)5)
-#define PLZ_EDIT        ((sal_uInt16)6)
-#define CITY_EDIT       ((sal_uInt16)7)
-#define STATE_EDIT      ((sal_uInt16)8)
-#define TITLE_EDIT      ((sal_uInt16)9)
-#define POSITION_EDIT   ((sal_uInt16)10)
-#define SHORTNAME_EDIT  ((sal_uInt16)11)
-#define TELPRIV_EDIT    ((sal_uInt16)12)
-#define TELCOMPANY_EDIT ((sal_uInt16)13)
-#define FAX_EDIT        ((sal_uInt16)14)
-#define EMAIL_EDIT      ((sal_uInt16)15)
+enum class EditPosition
+{
+    UNKNOWN    = 0,
+    COMPANY    = 1,
+    FIRSTNAME  = 2,
+    LASTNAME   = 3,
+    STREET     = 4,
+    COUNTRY    = 5,
+    PLZ        = 6,
+    CITY       = 7,
+    STATE      = 8,
+    TITLE      = 9,
+    POSITION   = 10,
+    SHORTNAME  = 11,
+    TELPRIV    = 12,
+    TELCOMPANY = 13,
+    FAX        = 14,
+    EMAIL      = 15,
+};
 
 #endif // INCLUDED_SVX_OPTGENRL_HXX
 

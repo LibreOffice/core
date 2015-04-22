@@ -109,48 +109,48 @@ struct
     // id for SvtUserOptions in unotools/useroptions.hxx
     int nUserOptionsId;
     // id for settings the focus (defined in svx/optgenrl.hxx)
-    int nGrabFocusId;
+    EditPosition nGrabFocusId;
 }
 const vFieldInfo[] =
 {
     // Company
-    { Row_Company, "company", USER_OPT_COMPANY, COMPANY_EDIT },
+    { Row_Company, "company", USER_OPT_COMPANY, EditPosition::COMPANY },
     // Name
-    { Row_Name, "firstname", USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
-    { Row_Name, "lastname", USER_OPT_LASTNAME, LASTNAME_EDIT  },
-    { Row_Name, "shortname", USER_OPT_ID, SHORTNAME_EDIT },
+    { Row_Name, "firstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
+    { Row_Name, "lastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
+    { Row_Name, "shortname", USER_OPT_ID, EditPosition::SHORTNAME },
     // Name (russian)
-    { Row_Name_Russian, "ruslastname", USER_OPT_LASTNAME, LASTNAME_EDIT  },
-    { Row_Name_Russian, "rusfirstname", USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
-    { Row_Name_Russian, "rusfathersname", USER_OPT_FATHERSNAME, 0 },
-    { Row_Name_Russian, "russhortname", USER_OPT_ID, SHORTNAME_EDIT },
+    { Row_Name_Russian, "ruslastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
+    { Row_Name_Russian, "rusfirstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
+    { Row_Name_Russian, "rusfathersname", USER_OPT_FATHERSNAME, EditPosition::UNKNOWN },
+    { Row_Name_Russian, "russhortname", USER_OPT_ID, EditPosition::SHORTNAME },
     // Name (eastern: reversed name ord
-    { Row_Name_Eastern, "eastlastname", USER_OPT_LASTNAME, LASTNAME_EDIT  },
-    { Row_Name_Eastern, "eastfirstname", USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
-    { Row_Name_Eastern, "eastshortname", USER_OPT_ID, SHORTNAME_EDIT },
+    { Row_Name_Eastern, "eastlastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
+    { Row_Name_Eastern, "eastfirstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
+    { Row_Name_Eastern, "eastshortname", USER_OPT_ID, EditPosition::SHORTNAME },
     // Street
-    { Row_Street, "street", USER_OPT_STREET, STREET_EDIT },
+    { Row_Street, "street", USER_OPT_STREET, EditPosition::STREET },
     // Street (russian)
-    { Row_Street_Russian, "russtreet", USER_OPT_STREET, STREET_EDIT },
-    { Row_Street_Russian, "apartnum", USER_OPT_APARTMENT, 0 },
+    { Row_Street_Russian, "russtreet", USER_OPT_STREET, EditPosition::STREET },
+    { Row_Street_Russian, "apartnum", USER_OPT_APARTMENT, EditPosition::UNKNOWN },
     // City
-    { Row_City, "izip", USER_OPT_ZIP, PLZ_EDIT },
-    { Row_City, "icity", USER_OPT_CITY, CITY_EDIT },
+    { Row_City, "izip", USER_OPT_ZIP, EditPosition::PLZ },
+    { Row_City, "icity", USER_OPT_CITY, EditPosition::CITY },
     // City (US)
-    { Row_City_US, "city", USER_OPT_CITY, CITY_EDIT },
-    { Row_City_US, "state", USER_OPT_STATE, STATE_EDIT },
-    { Row_City_US, "zip", USER_OPT_ZIP, PLZ_EDIT },
+    { Row_City_US, "city", USER_OPT_CITY, EditPosition::CITY },
+    { Row_City_US, "state", USER_OPT_STATE, EditPosition::STATE },
+    { Row_City_US, "zip", USER_OPT_ZIP, EditPosition::PLZ },
     // Country
-    { Row_Country, "country", USER_OPT_COUNTRY, COUNTRY_EDIT },
+    { Row_Country, "country", USER_OPT_COUNTRY, EditPosition::COUNTRY },
     // Title/Position
-    { Row_TitlePos, "title", USER_OPT_TITLE,    TITLE_EDIT },
-    { Row_TitlePos, "position", USER_OPT_POSITION, POSITION_EDIT },
+    { Row_TitlePos, "title", USER_OPT_TITLE,    EditPosition::TITLE },
+    { Row_TitlePos, "position", USER_OPT_POSITION, EditPosition::POSITION },
     // Phone
-    { Row_Phone, "home", USER_OPT_TELEPHONEHOME, TELPRIV_EDIT },
-    { Row_Phone, "work", USER_OPT_TELEPHONEWORK, TELCOMPANY_EDIT },
+    { Row_Phone, "home", USER_OPT_TELEPHONEHOME, EditPosition::TELPRIV },
+    { Row_Phone, "work", USER_OPT_TELEPHONEWORK, EditPosition::TELCOMPANY },
     // Fax/Mail
-    { Row_FaxMail, "fax", USER_OPT_FAX, FAX_EDIT },
-    { Row_FaxMail, "email", USER_OPT_EMAIL, EMAIL_EDIT },
+    { Row_FaxMail, "fax", USER_OPT_FAX, EditPosition::FAX },
+    { Row_FaxMail, "email", USER_OPT_EMAIL, EditPosition::EMAIL },
 };
 
 
@@ -335,7 +335,8 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 
     if (rSet->GetItemState(nWhich) == SfxItemState::SET)
     {
-        if (sal_uInt16 const nField = static_cast<const SfxUInt16Item&>(rSet->Get(nWhich)).GetValue())
+        EditPosition nField = static_cast<EditPosition>(static_cast<const SfxUInt16Item&>(rSet->Get(nWhich)).GetValue());
+        if (nField != EditPosition::UNKNOWN)
         {
             for (unsigned i = 0; i != vFields.size(); ++i)
                 if (nField == vFieldInfo[vFields[i]->iField].nGrabFocusId)

@@ -306,30 +306,30 @@ IMPL_LINK_NOARG(SwFldEditDlg, AddressHdl)
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
 
-    sal_uInt16 nEditPos = UNKNOWN_EDIT;
+    EditPosition nEditPos = EditPosition::UNKNOWN;
 
     switch(pCurFld->GetSubType())
     {
-        case EU_FIRSTNAME:  nEditPos = FIRSTNAME_EDIT;  break;
-        case EU_NAME:       nEditPos = LASTNAME_EDIT;   break;
-        case EU_SHORTCUT:   nEditPos = SHORTNAME_EDIT;  break;
-        case EU_COMPANY:    nEditPos = COMPANY_EDIT;    break;
-        case EU_STREET:     nEditPos = STREET_EDIT;     break;
-        case EU_TITLE:      nEditPos = TITLE_EDIT;      break;
-        case EU_POSITION:   nEditPos = POSITION_EDIT;   break;
-        case EU_PHONE_PRIVATE:nEditPos = TELPRIV_EDIT;  break;
-        case EU_PHONE_COMPANY:nEditPos = TELCOMPANY_EDIT;   break;
-        case EU_FAX:        nEditPos = FAX_EDIT;        break;
-        case EU_EMAIL:      nEditPos = EMAIL_EDIT;      break;
-        case EU_COUNTRY:    nEditPos = COUNTRY_EDIT;    break;
-        case EU_ZIP:        nEditPos = PLZ_EDIT;        break;
-        case EU_CITY:       nEditPos = CITY_EDIT;       break;
-        case EU_STATE:      nEditPos = STATE_EDIT;      break;
+        case EU_FIRSTNAME:  nEditPos = EditPosition::FIRSTNAME;  break;
+        case EU_NAME:       nEditPos = EditPosition::LASTNAME;   break;
+        case EU_SHORTCUT:   nEditPos = EditPosition::SHORTNAME;  break;
+        case EU_COMPANY:    nEditPos = EditPosition::COMPANY;    break;
+        case EU_STREET:     nEditPos = EditPosition::STREET;     break;
+        case EU_TITLE:      nEditPos = EditPosition::TITLE;      break;
+        case EU_POSITION:   nEditPos = EditPosition::POSITION;   break;
+        case EU_PHONE_PRIVATE:nEditPos = EditPosition::TELPRIV;  break;
+        case EU_PHONE_COMPANY:nEditPos = EditPosition::TELCOMPANY;   break;
+        case EU_FAX:        nEditPos = EditPosition::FAX;        break;
+        case EU_EMAIL:      nEditPos = EditPosition::EMAIL;      break;
+        case EU_COUNTRY:    nEditPos = EditPosition::COUNTRY;    break;
+        case EU_ZIP:        nEditPos = EditPosition::PLZ;        break;
+        case EU_CITY:       nEditPos = EditPosition::CITY;       break;
+        case EU_STATE:      nEditPos = EditPosition::STATE;      break;
 
-        default:            nEditPos = UNKNOWN_EDIT;    break;
+        default:            nEditPos = EditPosition::UNKNOWN;    break;
 
     }
-    aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
+    aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, static_cast<sal_uInt16>(nEditPos)));
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
