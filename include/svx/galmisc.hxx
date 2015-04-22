@@ -69,9 +69,10 @@ enum SgaObjKind
 #define GAL_RESSTR(nId)         GAL_RES(nId).toString()
 #define STREAMBUF_SIZE          16384L
 
-#define SGA_IMPORT_NONE         0x0000
-#define SGA_IMPORT_FILE         0x0001
-#define SGA_IMPORT_INET         0x0002
+enum class GalleryGraphicImportRet
+{
+    NONE, FILE, INET
+};
 
 #define GALLERY_PROGRESS_RANGE  10000
 
@@ -88,7 +89,7 @@ class Gallery;
 
 SVX_DLLPUBLIC ResMgr*
                     GetGalleryResMgr();
-sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, bool bShowProgress = false );
+GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, bool bShowProgress = false );
 bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 bool                CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
 SVX_DLLPUBLIC OUString

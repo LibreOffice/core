@@ -82,10 +82,10 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
     return 0L;
 }
 
-sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
+GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName, bool bShowProgress )
 {
-    sal_uInt16      nRet = SGA_IMPORT_NONE;
+    GalleryGraphicImportRet  nRet = GalleryGraphicImportRet::NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
 
     aMedium.Download();
@@ -101,7 +101,7 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
             rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
-            nRet = SGA_IMPORT_FILE;
+            nRet = GalleryGraphicImportRet::FILE;
         }
     }
 
