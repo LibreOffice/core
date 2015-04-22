@@ -1639,8 +1639,8 @@ void DocxAttributeOutput::StartRunProperties()
     OSL_ASSERT( !m_pPostponedVMLDrawings );
     m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>());
 
-    assert(!m_postponedDMLDrawing);
-    m_postponedDMLDrawing = new std::list< PostponedDrawing >;
+    assert(!m_pPostponedDMLDrawings);
+    m_pPostponedDMLDrawings.reset(new std::list<PostponedDrawing>());
 
     assert( !m_pPostponedOLEs );
     m_pPostponedOLEs.reset(new std::list<PostponedOLE>());
@@ -4785,17 +4785,16 @@ void DocxAttributeOutput::WritePostponedCustomShape()
 
 void DocxAttributeOutput::WritePostponedDMLDrawing()
 {
-    if(m_postponedDMLDrawing == NULL)
+    if (!m_pPostponedDMLDrawings)
         return;
 
     // Clear the list early, this method may be called recursively.
-    std::list<PostponedDrawing>* postponedDMLDrawing = m_postponedDMLDrawing;
-    m_postponedDMLDrawing = NULL;
+    std::unique_ptr< std::list<PostponedDrawing> > pPostponedDMLDrawings(m_pPostponedDMLDrawings.release());
     std::unique_ptr< std::list<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::list< PostponedDrawing >::iterator it = postponedDMLDrawing->begin();
-         it != postponedDMLDrawing->end();
+    for( std::list< PostponedDrawing >::iterator it = pPostponedDMLDrawings->begin();
+         it != pPostponedDMLDrawings->end();
          ++it )
     {
         // Avoid w:drawing within another w:drawing.
@@ -4806,7 +4805,6 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     }
     m_bStartedParaSdt = bStartedParaSdt;
 
-    delete postponedDMLDrawing;
     m_pPostponedOLEs.reset(pPostponedOLEs.release());
 }
 
@@ -4856,7 +4854,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
-                        if ( m_postponedDMLDrawing == NULL )
+                        if (!m_pPostponedDMLDrawings)
                         {
                             bool bStartedParaSdt = m_bStartedParaSdt;
                             if ( IsAlternateContentChoiceOpen() )
@@ -4881,7 +4879,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
                             m_bPostponedProcessingFly = true ;
-                            m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
+                            m_pPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                         }
                     }
                 }
@@ -8323,7 +8321,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
-      m_postponedDMLDrawing(NULL),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),

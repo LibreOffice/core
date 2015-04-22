@@ -848,7 +848,7 @@ private:
         const Point* point;
     };
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedVMLDrawings;
-    std::list< PostponedDrawing >* m_postponedDMLDrawing;
+    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedDMLDrawings;
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;
 
     struct PostponedOLE
