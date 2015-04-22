@@ -132,7 +132,8 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::postUnoCommand
     void (*postUnoCommand) (LibreOfficeKitDocument* pThis,
-                            const char* pCommand);
+                            const char* pCommand,
+                            const char* pArguments);
 
     /// @see lok::Document::setTextSelection
     void (*setTextSelection) (LibreOfficeKitDocument* pThis,

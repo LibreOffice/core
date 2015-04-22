@@ -181,11 +181,27 @@ public:
     /**
      * Posts an UNO command to the document.
      *
+     * Example argument string:
+     *
+     * {
+     *     "SearchItem.SearchString":
+     *     {
+     *         "type": "string",
+     *         "value": "foobar"
+     *     },
+     *     "SearchItem.Backward":
+     *     {
+     *         "type": "boolean",
+     *         "value": "false"
+     *     }
+     * }
+     *
      * @param pCommand uno command to be posted to the document, like ".uno:Bold"
+     * @param pArguments arguments of the uno command.
      */
-    inline void postUnoCommand(const char* pCommand)
+    inline void postUnoCommand(const char* pCommand, const char* pArguments = 0)
     {
-        mpDoc->pClass->postUnoCommand(mpDoc, pCommand);
+        mpDoc->pClass->postUnoCommand(mpDoc, pCommand, pArguments);
     }
 
     /**

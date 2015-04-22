@@ -68,7 +68,7 @@ void            lok_docview_set_edit        (LOKDocView* pDocView,
 gboolean        lok_docview_get_edit        (LOKDocView* pDocView);
 
 /// Posts the .uno: command to the LibreOfficeKit.
-void            lok_docview_post_command    (LOKDocView* pDocView, const char* pCommand);
+void            lok_docview_post_command    (LOKDocView* pDocView, const char* pCommand, const char* pArguments);
 
 /// Posts a keyboard event to LibreOfficeKit.
 void            lok_docview_post_key    (GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData);

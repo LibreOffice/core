@@ -156,7 +156,7 @@ void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = g_aToolItemCommandNames[pItem];
         g_info("toggleToolItem: lok_docview_post_command('%s')", rString.c_str());
-        lok_docview_post_command(pLOKDocView, rString.c_str());
+        lok_docview_post_command(pLOKDocView, rString.c_str(), 0);
     }
 }
 

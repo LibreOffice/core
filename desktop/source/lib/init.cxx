@@ -15,6 +15,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -52,6 +53,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <app.hxx>
 
@@ -207,7 +209,8 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nY,
                                 int nCount);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
-                               const char* pCommand);
+                               const char* pCommand,
+                               const char* pArguments);
 static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -701,11 +704,38 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
-static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pCommand)
+static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pJSON);
+    boost::property_tree::read_json(aStream, aTree);
+
+    std::vector<beans::PropertyValue> aArguments;
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    {
+        const std::string& rType = rPair.second.get<std::string>("type");
+        const std::string& rValue = rPair.second.get<std::string>("value");
+
+        beans::PropertyValue aValue;
+        aValue.Name = OUString::fromUtf8(rPair.first.c_str());
+        if (rType == "string")
+            aValue.Value <<= OUString::fromUtf8(rValue.c_str());
+        else if (rType == "boolean")
+            aValue.Value <<= OString(rValue.c_str()).toBoolean();
+        else
+            SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
+        aArguments.push_back(aValue);
+    }
+    rPropertyValues = comphelper::containerToSequence(aArguments);
+}
+
+static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pCommand, const char* pArguments)
 {
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
 
-    if (!comphelper::dispatchCommand(aCommand, uno::Sequence<beans::PropertyValue>()))
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    jsonToPropertyValues(pArguments, aPropertyValues);
+    if (!comphelper::dispatchCommand(aCommand, aPropertyValues))
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
     }
