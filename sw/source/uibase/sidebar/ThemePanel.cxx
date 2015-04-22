@@ -15,6 +15,8 @@
 #include <swtypes.hxx>
 #include <cmdid.h>
 
+#include <tools/helpers.hxx>
+
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
@@ -65,15 +67,19 @@ class ColorVariable
 public:
     long mnIndex;
     Color maColor;
+    sal_Int16 mnTintShade;
 
     ColorVariable()
+        : mnIndex(-1)
+        , maColor()
+        , mnTintShade()
     {}
 
-    ColorVariable(long nIndex)
+    ColorVariable(long nIndex, sal_Int16 nTintShade = 0)
         : mnIndex(nIndex)
         , maColor()
+        , mnTintShade(nTintShade)
     {}
-
 };
 
 class StyleRedefinition
@@ -95,14 +101,30 @@ public:
 
     Color getColor(ColorSet& rColorSet)
     {
+        Color aColor;
         if (maVariable.mnIndex > -1)
         {
-            return rColorSet.maColors[maVariable.mnIndex];
+            aColor.SetColor(rColorSet.maColors[maVariable.mnIndex].GetColor());
+            if (maVariable.mnTintShade < 0)
+            {
+                double fFactor = std::abs(maVariable.mnTintShade) / 10000.0;
+                aColor.SetRed(MinMax(aColor.GetRed() + (fFactor * (255.0 - aColor.GetRed())), 0, 255));
+                aColor.SetGreen(MinMax(aColor.GetGreen() + (fFactor * (255.0 - aColor.GetGreen())), 0, 255));
+                aColor.SetBlue(MinMax(aColor.GetBlue() + (fFactor * (255.0 - aColor.GetBlue())), 0, 255));
+            }
+            else if (maVariable.mnTintShade > 0)
+            {
+                double fFactor = 1.0 - std::abs(maVariable.mnTintShade) / 10000.0;
+                aColor.SetRed(MinMax(aColor.GetRed() * fFactor, 0, 255));
+                aColor.SetGreen(MinMax(aColor.GetGreen() * fFactor, 0, 255));
+                aColor.SetBlue(MinMax(aColor.GetBlue() * fFactor, 0, 255));
+            }
         }
         else
         {
-            return maVariable.maColor;
+            aColor.SetColor(maVariable.maColor.GetColor());
         }
+        return aColor;
     }
 };
 
@@ -139,9 +161,65 @@ StyleSet setupThemes()
 {
     StyleSet aSet("Default");
 
-    StyleRedefinition aRedefinition("Heading");
-    aRedefinition.setColorVariable(ColorVariable(0));
-    aSet.add(aRedefinition);
+    {
+        StyleRedefinition aRedefinition("Heading 1");
+        aRedefinition.setColorVariable(ColorVariable(0, 4000));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 2");
+        aRedefinition.setColorVariable(ColorVariable(0, 2500));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 3");
+        aRedefinition.setColorVariable(ColorVariable(0, 1000));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 4");
+        aRedefinition.setColorVariable(ColorVariable(0));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 5");
+        aRedefinition.setColorVariable(ColorVariable(0, -500));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 6");
+        aRedefinition.setColorVariable(ColorVariable(0, -1000));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 7");
+        aRedefinition.setColorVariable(ColorVariable(0, -1500));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 8");
+        aRedefinition.setColorVariable(ColorVariable(0, -2000));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 9");
+        aRedefinition.setColorVariable(ColorVariable(0, -2500));
+        aSet.add(aRedefinition);
+    }
+
+    {
+        StyleRedefinition aRedefinition("Heading 10");
+        aRedefinition.setColorVariable(ColorVariable(0, -3000));
+        aSet.add(aRedefinition);
+    }
 
     return aSet;
 }
@@ -296,6 +374,12 @@ std::vector<ColorSet> initColorSets()
         ColorSet aColorSet;
         aColorSet.maName = "Blue";
         aColorSet.maColors[0] = Color(0x00, 0x00, 0xa4);
+        aColorSets.push_back(aColorSet);
+    }
+    {
+        ColorSet aColorSet;
+        aColorSet.maName = "Sky";
+        aColorSet.maColors[0] = Color(0x72, 0x9f, 0xcf);
         aColorSets.push_back(aColorSet);
     }
 
