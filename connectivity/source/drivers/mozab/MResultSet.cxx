@@ -42,6 +42,7 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "resource/mozab_res.hrc"
 #include "resource/common_res.hrc"
+#include "sqlbison.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
