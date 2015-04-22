@@ -480,7 +480,8 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 case EXTPR_TOKEN( TotalTime ):
                     try
                     {
-                        m_xDocProp->setEditingDuration( aChars.toInt32() );
+                        // The TotalTime is in mins as per ECMA specification.
+                        m_xDocProp->setEditingDuration( aChars.toInt32() * 60 );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
