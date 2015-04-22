@@ -24,7 +24,7 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
-
+#include "internal/oslrandom.h"
 /*========================================================================
  *
  * rtlRandom internals.
@@ -269,13 +269,19 @@ static void __rtl_random_readPool (
 rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl = nullptr;
+    char sanity[4];
+
+    /* try to get system random number, if it fail fall back on own pool */
     pImpl = static_cast<RandomPool_Impl*>(rtl_allocateZeroMemory (sizeof(RandomPool_Impl)));
     if (pImpl)
     {
-        if (!__rtl_random_initPool (pImpl))
+        if(!osl_get_system_random_data(sanity, 4))
         {
-            rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
-            pImpl = nullptr;
+            if (!__rtl_random_initPool (pImpl))
+            {
+                rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
+                pImpl = nullptr;
+            }
         }
     }
     return static_cast<rtlRandomPool>(pImpl);
@@ -289,8 +295,11 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
     RandomPool_Impl *pImpl = static_cast<RandomPool_Impl *>(Pool);
     if (pImpl)
     {
-        rtl_digest_destroy (pImpl->m_hDigest);
-        rtl_freeZeroMemory (pImpl, sizeof (RandomPool_Impl));
+        if(pImpl->m_hDigest)
+        {
+            rtl_digest_destroy (pImpl->m_hDigest);
+            rtl_freeZeroMemory (pImpl, sizeof (RandomPool_Impl));
+        }
     }
 }
 
@@ -305,8 +314,10 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
 
     if ((pImpl == NULL) || (pBuffer == NULL))
         return rtl_Random_E_Argument;
-
-    __rtl_random_seedPool (pImpl, pBuffer, Bytes);
+    if(pImpl->m_hDigest)
+    {
+        __rtl_random_seedPool (pImpl, pBuffer, Bytes);
+    }
     return rtl_Random_E_None;
 }
 
@@ -322,7 +333,17 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
     if ((pImpl == NULL) || (pBuffer == NULL))
         return rtl_Random_E_Argument;
 
-    __rtl_random_readPool (pImpl, pBuffer, Bytes);
+    if(pImpl->m_hDigest || !osl_get_system_random_data((char*)Buffer, Bytes))
+    {
+        if(!pImpl->m_hDigest)
+        {
+            if (!__rtl_random_initPool (pImpl))
+            {
+                return rtl_Random_E_Unknown;
+            }
+        }
+        __rtl_random_readPool (pImpl, pBuffer, Bytes);
+    }
     return rtl_Random_E_None;
 }
 
