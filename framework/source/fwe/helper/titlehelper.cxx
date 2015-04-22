@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <unotools/configmgr.hxx>
@@ -166,7 +166,7 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
     impl_updateTitle ();
 }
 
-void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
+void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEvent& aEvent)
     throw (css::uno::RuntimeException, std::exception)
 {
     if ( ! aEvent.EventName.equalsIgnoreAsciiCase("OnSaveAsDone")
@@ -562,11 +562,11 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 
 void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel)
 {
-    css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster(xModel, css::uno::UNO_QUERY);
+    css::uno::Reference< css::document::XDocumentEventBroadcaster > xBroadcaster(xModel, css::uno::UNO_QUERY);
     if ( ! xBroadcaster.is ())
         return;
 
-    xBroadcaster->addEventListener (static_cast< css::document::XEventListener* >(this));
+    xBroadcaster->addDocumentEventListener (static_cast< css::document::XDocumentEventListener* >(this));
 }
 
 void TitleHelper::impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController)
