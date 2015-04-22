@@ -3218,9 +3218,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
     switch(nErrorBarStyle)
     {
         case cssc::ErrorBarStyle::NONE:
-            // I have no idea how to map it to OOXML
-            // this approach is as good as any else
-            return "fixedVal";
+            return NULL;
         case cssc::ErrorBarStyle::VARIANCE:
             break;
         case cssc::ErrorBarStyle::STANDARD_DEVIATION:
