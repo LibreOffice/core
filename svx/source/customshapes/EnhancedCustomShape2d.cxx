@@ -438,7 +438,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
     sal_uInt32 i, nProperties = rHandleProperties.getLength();
     if ( nProperties )
     {
-        rDestinationHandle.nFlags = 0;
+        rDestinationHandle.nFlags = HandleFlags::NONE;
         for ( i = 0; i < nProperties; i++ )
         {
             const com::sun::star::beans::PropertyValue& rPropVal = rHandleProperties[ i ];
@@ -454,7 +454,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                 if ( rPropVal.Value >>= bMirroredX )
                 {
                     if ( bMirroredX )
-                        rDestinationHandle.nFlags |= HANDLE_FLAGS_MIRRORED_X;
+                        rDestinationHandle.nFlags |= HandleFlags::MIRRORED_X;
                 }
             }
             else if ( rPropVal.Name == "MirroredY" )
@@ -463,7 +463,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                 if ( rPropVal.Value >>= bMirroredY )
                 {
                     if ( bMirroredY )
-                        rDestinationHandle.nFlags |= HANDLE_FLAGS_MIRRORED_Y;
+                        rDestinationHandle.nFlags |= HandleFlags::MIRRORED_Y;
                 }
             }
             else if ( rPropVal.Name == "Switched" )
@@ -472,63 +472,63 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                 if ( rPropVal.Value >>= bSwitched )
                 {
                     if ( bSwitched )
-                        rDestinationHandle.nFlags |= HANDLE_FLAGS_SWITCHED;
+                        rDestinationHandle.nFlags |= HandleFlags::SWITCHED;
                 }
             }
             else if ( rPropVal.Name == "Polar" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aPolar )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_POLAR;
+                    rDestinationHandle.nFlags |= HandleFlags::POLAR;
             }
             else if ( rPropVal.Name == "RefX" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefX )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFX;
+                    rDestinationHandle.nFlags |= HandleFlags::REFX;
             }
             else if ( rPropVal.Name == "RefY" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefY )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFY;
+                    rDestinationHandle.nFlags |= HandleFlags::REFY;
             }
             else if ( rPropVal.Name == "RefAngle" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefAngle )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFANGLE;
+                    rDestinationHandle.nFlags |= HandleFlags::REFANGLE;
             }
             else if ( rPropVal.Name == "RefR" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefR )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFR;
+                    rDestinationHandle.nFlags |= HandleFlags::REFR;
             }
             else if ( rPropVal.Name == "RadiusRangeMinimum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aRadiusRangeMinimum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RADIUS_RANGE_MINIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RADIUS_RANGE_MINIMUM;
             }
             else if ( rPropVal.Name == "RadiusRangeMaximum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aRadiusRangeMaximum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RADIUS_RANGE_MAXIMUM;
             }
             else if ( rPropVal.Name == "RangeXMinimum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aXRangeMinimum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_X_MINIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RANGE_X_MINIMUM;
             }
             else if ( rPropVal.Name == "RangeXMaximum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aXRangeMaximum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_X_MAXIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RANGE_X_MAXIMUM;
             }
             else if ( rPropVal.Name == "RangeYMinimum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aYRangeMinimum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_Y_MINIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RANGE_Y_MINIMUM;
             }
             else if ( rPropVal.Name == "RangeYMaximum" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aYRangeMaximum )
-                    rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_Y_MAXIMUM;
+                    rDestinationHandle.nFlags |= HandleFlags::RANGE_Y_MAXIMUM;
             }
         }
     }
@@ -1143,7 +1143,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
         Handle aHandle;
         if ( ConvertSequenceToEnhancedCustomShape2dHandle( seqHandles[ nIndex ], aHandle ) )
         {
-            if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
+            if ( aHandle.nFlags & HandleFlags::POLAR )
             {
                 Point aReferencePoint( GetPoint( aHandle.aPolar, true, false ) );
 
@@ -1164,7 +1164,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
             }
             else
             {
-                if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
+                if ( aHandle.nFlags & HandleFlags::SWITCHED )
                 {
                     if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                     {
@@ -1235,7 +1235,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             fPos1 /= fXScale;
             fPos2 /= fYScale;
 
-            if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
+            if ( aHandle.nFlags & HandleFlags::SWITCHED )
             {
                 if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                 {
@@ -1253,7 +1253,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             if ( aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
-            if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
+            if ( aHandle.nFlags & HandleFlags::POLAR )
             {
                 double fXRef, fYRef, fAngle;
                 GetParameter( fXRef, aHandle.aPolar.First, false, false );
@@ -1263,14 +1263,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 double fX = ( fPos1 - fXRef );
                 double fY = ( fPos2 - fYRef );
                 double fRadius = sqrt( fX * fX + fY * fY );
-                if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MINIMUM )
+                if ( aHandle.nFlags & HandleFlags::RADIUS_RANGE_MINIMUM )
                 {
                     double fMin;
                     GetParameter( fMin,  aHandle.aRadiusRangeMinimum, false, false );
                     if ( fRadius < fMin )
                         fRadius = fMin;
                 }
-                if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM )
+                if ( aHandle.nFlags & HandleFlags::RADIUS_RANGE_MAXIMUM )
                 {
                     double fMax;
                     GetParameter( fMax, aHandle.aRadiusRangeMaximum, false, false );
@@ -1284,13 +1284,13 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             }
             else
             {
-                if ( aHandle.nFlags & HANDLE_FLAGS_REFX )
+                if ( aHandle.nFlags & HandleFlags::REFX )
                 {
                     nFirstAdjustmentValue = aHandle.nRefX;
                     fPos1 *= 100000.0;
                     fPos1 /= nCoordWidth;
                 }
-                if ( aHandle.nFlags & HANDLE_FLAGS_REFY )
+                if ( aHandle.nFlags & HandleFlags::REFY )
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
                     fPos2 *= 100000.0;
@@ -1298,14 +1298,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                 {
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
+                    if ( aHandle.nFlags & HandleFlags::RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
                     {
                         double fXMin;
                         GetParameter( fXMin, aHandle.aXRangeMinimum, false, false );
                         if ( fPos1 < fXMin )
                             fPos1 = fXMin;
                     }
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
+                    if ( aHandle.nFlags & HandleFlags::RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
                     {
                         double fXMax;
                         GetParameter( fXMax, aHandle.aXRangeMaximum, false, false );
@@ -1316,14 +1316,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 }
                 if ( nSecondAdjustmentValue >= 0 )
                 {
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
+                    if ( aHandle.nFlags & HandleFlags::RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
                     {
                         double fYMin;
                         GetParameter( fYMin, aHandle.aYRangeMinimum, false, false );
                         if ( fPos2 < fYMin )
                             fPos2 = fYMin;
                     }
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
+                    if ( aHandle.nFlags & HandleFlags::RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
                     {
                         double fYMax;
                         GetParameter( fYMax, aHandle.aYRangeMaximum, false, false );

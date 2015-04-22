@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <tools/gen.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 #include <vector>
@@ -45,20 +46,28 @@ struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;
 struct SvxMSDffTextRectangles;
 
-#define HANDLE_FLAGS_MIRRORED_X             0x0001
-#define HANDLE_FLAGS_MIRRORED_Y             0x0002
-#define HANDLE_FLAGS_SWITCHED               0x0004
-#define HANDLE_FLAGS_POLAR                  0x0008
-#define HANDLE_FLAGS_RANGE_X_MINIMUM        0x0020
-#define HANDLE_FLAGS_RANGE_X_MAXIMUM        0x0040
-#define HANDLE_FLAGS_RANGE_Y_MINIMUM        0x0080
-#define HANDLE_FLAGS_RANGE_Y_MAXIMUM        0x0100
-#define HANDLE_FLAGS_RADIUS_RANGE_MINIMUM   0x0200
-#define HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM   0x0400
-#define HANDLE_FLAGS_REFX                   0x0800
-#define HANDLE_FLAGS_REFY                   0x1000
-#define HANDLE_FLAGS_REFANGLE               0x2000
-#define HANDLE_FLAGS_REFR                   0x4000
+enum class HandleFlags
+{
+    NONE                   = 0x0000,
+    MIRRORED_X             = 0x0001,
+    MIRRORED_Y             = 0x0002,
+    SWITCHED               = 0x0004,
+    POLAR                  = 0x0008,
+    RANGE_X_MINIMUM        = 0x0020,
+    RANGE_X_MAXIMUM        = 0x0040,
+    RANGE_Y_MINIMUM        = 0x0080,
+    RANGE_Y_MAXIMUM        = 0x0100,
+    RADIUS_RANGE_MINIMUM   = 0x0200,
+    RADIUS_RANGE_MAXIMUM   = 0x0400,
+    REFX                   = 0x0800,
+    REFY                   = 0x1000,
+    REFANGLE               = 0x2000,
+    REFR                   = 0x4000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HandleFlags> : is_typed_flags<HandleFlags, 0x7fef> {};
+}
 
 // MSDFF_HANDLE_FLAGS_RANGE_Y seems to be not defined in
 // escher, but we are using it internally in to differentiate
@@ -139,7 +148,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         struct SAL_DLLPRIVATE Handle
         {
-            sal_uInt32  nFlags;
+            HandleFlags nFlags;
 
             bool        bMirroredX;
             bool        bMirroredY;
@@ -161,7 +170,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
 
             Handle()
-                : nFlags(0)
+                : nFlags(HandleFlags::NONE)
                 , bMirroredX ( false )
                 , bMirroredY ( false )
                 , bSwitched( false )
