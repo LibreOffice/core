@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplofficorr \
 	Package_tploffimisc \
 	Package_tplpresnt \
+	Package_tpl_styles \
 	Package_tplpersonal \
 	Package_tplwizagenda \
 	Package_tplwizbitmap \
