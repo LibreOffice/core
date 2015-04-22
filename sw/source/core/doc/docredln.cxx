@@ -139,7 +139,7 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
         */
     }
 
-    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < GetSize(); ++nCurRedlinePos )
+    for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < GetSize(); )
     {
         SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
         const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
@@ -154,11 +154,13 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
                 const RedlineType_t nRedlineType = aRedlineData.GetType();
 
                 // Check if this redline object type should be deleted
-                if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
-                    continue;
+                if (USHRT_MAX == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
+                {
 
-                DeleteAndDestroy( nCurRedlinePos );
-                bChg = true;
+                    DeleteAndDestroy( nCurRedlinePos );
+                    bChg = true;
+                    continue; // don't increment position after delete
+                }
             }
         }
         else
@@ -176,14 +178,17 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
                     const RedlineType_t nRedlineType = aRedlineData.GetType();
 
                     // Check if this redline object type should be deleted
-                    if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
-                        continue;
+                    if (USHRT_MAX == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
 
-                    DeleteAndDestroy( nCurRedlinePos );
-                    bChg = true;
+                    {
+                        DeleteAndDestroy( nCurRedlinePos );
+                        bChg = true;
+                        continue; // don't increment position after delete
+                    }
                 }
             }
         }
+        ++nCurRedlinePos;
     }
 
     if( bChg )
