@@ -748,9 +748,10 @@ void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
 
 // SmCaretPosGraphBuildingVisitor
 
-SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ) {
-    pRightMost  = NULL;
-    pGraph = new SmCaretPosGraph( );
+SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode )
+    : mpRightMost(nullptr)
+    , mpGraph(new SmCaretPosGraph)
+{
     //pRootNode should always be a table
     SAL_WARN_IF( pRootNode->GetType( ) != NTABLE, "starmath", "pRootNode must be a table node");
     //Handle the special case where NTABLE is used a rootnode
@@ -761,7 +762,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
         SmNodeIterator it( pRootNode );
         while( it.Next( ) ){
             //There's a special invariant between this method and the Visit( SmLineNode* )
-            //Usually pRightMost may not be NULL, to avoid this pRightMost should here be
+            //Usually mpRightMost may not be NULL, to avoid this mpRightMost should here be
             //set to a new SmCaretPos in front of it.Current( ), however, if it.Current( ) is
             //an instance of SmLineNode we let SmLineNode create this position in front of
             //the visual line.
@@ -769,7 +770,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
             //being a visual line composition node. Thus, no need for yet another special case
             //in SmCursor::IsLineCompositionNode and everywhere this method is used.
             //if( it->GetType( ) != NLINE )
-                pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
+                mpRightMost = mpGraph->Add( SmCaretPos( it.Current( ), 0 ) );
             it->Accept( this );
         }
     }else
@@ -778,7 +779,6 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
 
 SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor()
 {
-    delete pGraph;
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
@@ -794,21 +794,21 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
  * handled in the constructor.
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
-    SmCaretPosGraphEntry *left  = pRightMost,
-                         *right = pGraph->Add( SmCaretPos( pNode, 1) );
+    SmCaretPosGraphEntry *left  = mpRightMost,
+                         *right = mpGraph->Add( SmCaretPos( pNode, 1) );
     bool bIsFirst = true;
     SmNodeIterator it( pNode );
     while( it.Next() ){
-        pRightMost = pGraph->Add( SmCaretPos( it.Current(), 0 ), left);
+        mpRightMost = mpGraph->Add( SmCaretPos( it.Current(), 0 ), left);
         if(bIsFirst)
-            left->SetRight(pRightMost);
+            left->SetRight(mpRightMost);
         it->Accept( this );
-        pRightMost->SetRight(right);
+        mpRightMost->SetRight(right);
         if(bIsFirst)
-            right->SetLeft(pRightMost);
+            right->SetLeft(mpRightMost);
         bIsFirst = false;
     }
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmSubSupNode
@@ -848,21 +848,21 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
                          *bodyLeft,
                          *bodyRight;
 
-    left = pRightMost;
-    SAL_WARN_IF( !pRightMost, "starmath", "pRightMost shouldn't be NULL here!" );
+    left = mpRightMost;
+    SAL_WARN_IF( !mpRightMost, "starmath", "mpRightMost shouldn't be NULL here!" );
 
     //Create bodyLeft
     SAL_WARN_IF( !pNode->GetBody(), "starmath", "SmSubSupNode Doesn't have a body!" );
-    bodyLeft = pGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
     left->SetRight( bodyLeft ); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Visit the body, to get bodyRight
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pNode->GetBody( )->Accept( this );
-    bodyRight = pRightMost;
+    bodyRight = mpRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
@@ -870,66 +870,66 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
     //If there's an LSUP
     if( ( pChild = pNode->GetSubSup( LSUP ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( bodyLeft );
+        mpRightMost->SetRight( bodyLeft );
     }
     //If there's an LSUB
     if( ( pChild = pNode->GetSubSup( LSUB ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( bodyLeft );
+        mpRightMost->SetRight( bodyLeft );
     }
     //If there's an CSUP
     if( ( pChild = pNode->GetSubSup( CSUP ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( right );
+        mpRightMost->SetRight( right );
     }
     //If there's an CSUB
     if( ( pChild = pNode->GetSubSup( CSUB ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( right );
+        mpRightMost->SetRight( right );
     }
     //If there's an RSUP
     if( ( pChild = pNode->GetSubSup( RSUP ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( right );
+        mpRightMost->SetRight( right );
     }
     //If there's an RSUB
     if( ( pChild = pNode->GetSubSup( RSUB ) ) ){
         SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
+        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
-        pRightMost = cLeft;
+        mpRightMost = cLeft;
         pChild->Accept( this );
 
-        pRightMost->SetRight( right );
+        mpRightMost->SetRight( right );
     }
 
     //Set return parameters
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build caret position for SmOperNode
@@ -974,21 +974,21 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     SmNode *pOper = pNode->GetSubNode( 0 ),
            *pBody = pNode->GetSubNode( 1 );
 
-    SmCaretPosGraphEntry *left = pRightMost,
+    SmCaretPosGraphEntry *left = mpRightMost,
                          *bodyLeft,
                          *bodyRight,
                          *right;
     //Create body left
-    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
     //Visit body, get bodyRight
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pBody->Accept( this );
-    bodyRight = pRightMost;
+    bodyRight = mpRightMost;
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ), bodyRight );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ), bodyRight );
     bodyRight->SetRight( right );
 
     //Get subsup pNode if any
@@ -998,87 +998,87 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     SmCaretPosGraphEntry *childLeft;
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {//TO
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUB ) ) ) { //FROM
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
         //Create position in front of pChild
-        childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
+        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
-        pRightMost = childLeft;
+        mpRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
-        pRightMost->SetRight( bodyLeft );
+        //Set right on mpRightMost from pChild
+        mpRightMost->SetRight( bodyLeft );
     }
 
     //Return right
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
 {
-    SmCaretPosGraphEntry *left  = pRightMost,
-                         *right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    SmCaretPosGraphEntry *left  = mpRightMost,
+                         *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     for ( sal_uInt16 i = 0;  i < pNode->GetNumRows( ); i++ ) {
         SmCaretPosGraphEntry* r = left;
         for ( sal_uInt16 j = 0;  j < pNode->GetNumCols( ); j++ ){
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
 
-            pRightMost = pGraph->Add( SmCaretPos( pSubNode, 0 ), r );
+            mpRightMost = mpGraph->Add( SmCaretPos( pSubNode, 0 ), r );
             if( j != 0 || ( pNode->GetNumRows( ) - 1 ) / 2 == i )
-                r->SetRight( pRightMost );
+                r->SetRight( mpRightMost );
 
             pSubNode->Accept( this );
 
-            r = pRightMost;
+            r = mpRightMost;
         }
-        pRightMost->SetRight( right );
+        mpRightMost->SetRight( right );
         if( ( pNode->GetNumRows( ) - 1 ) / 2 == i )
-            right->SetLeft( pRightMost );
+            right->SetLeft( mpRightMost );
     }
 
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmTextNode
@@ -1105,9 +1105,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
 
     int size = pNode->GetText().getLength();
     for( int i = 1; i <= size; i++ ){
-        SmCaretPosGraphEntry* pRight = pRightMost;
-        pRightMost = pGraph->Add( SmCaretPos( pNode, i ), pRight );
-        pRight->SetRight( pRightMost );
+        SmCaretPosGraphEntry* pRight = mpRightMost;
+        mpRightMost = mpGraph->Add( SmCaretPos( pNode, i ), pRight );
+        pRight->SetRight( mpRightMost );
     }
 }
 
@@ -1141,32 +1141,32 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
                          *denomLeft;
 
     //Set left
-    left = pRightMost;
-    SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
+    left = mpRightMost;
+    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Create numLeft
-    numLeft = pGraph->Add( SmCaretPos( pNum, 0 ), left );
+    numLeft = mpGraph->Add( SmCaretPos( pNum, 0 ), left );
     left->SetRight( numLeft );
 
     //Visit pNum
-    pRightMost = numLeft;
+    mpRightMost = numLeft;
     pNum->Accept( this );
-    pRightMost->SetRight( right );
-    right->SetLeft( pRightMost );
+    mpRightMost->SetRight( right );
+    right->SetLeft( mpRightMost );
 
     //Create denomLeft
-    denomLeft = pGraph->Add( SmCaretPos( pDenom, 0 ), left );
+    denomLeft = mpGraph->Add( SmCaretPos( pDenom, 0 ), left );
 
     //Visit pDenom
-    pRightMost = denomLeft;
+    mpRightMost = denomLeft;
     pDenom->Accept( this );
-    pRightMost->SetRight( right );
+    mpRightMost->SetRight( right );
 
     //Set return parameter
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmVerticalBraceNode
@@ -1191,27 +1191,27 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
                         *scriptLeft,
                         *right;
 
-    left = pRightMost;
+    left = mpRightMost;
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Create bodyLeft
-    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pBody->Accept( this );
-    pRightMost->SetRight( right );
-    right->SetLeft( pRightMost );
+    mpRightMost->SetRight( right );
+    right->SetLeft( mpRightMost );
 
     //Create script
-    scriptLeft = pGraph->Add( SmCaretPos( pScript, 0 ), left );
-    pRightMost = scriptLeft;
+    scriptLeft = mpGraph->Add( SmCaretPos( pScript, 0 ), left );
+    mpRightMost = scriptLeft;
     pScript->Accept( this );
-    pRightMost->SetRight( right );
+    mpRightMost->SetRight( right );
 
     //Set return value
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmBinDiagonalNode
@@ -1236,32 +1236,32 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
                         *rightA,
                         *leftB,
                         *right;
-    left = pRightMost;
+    left = mpRightMost;
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Create left A
-    leftA = pGraph->Add( SmCaretPos( A, 0 ), left );
+    leftA = mpGraph->Add( SmCaretPos( A, 0 ), left );
     left->SetRight( leftA );
 
     //Visit A
-    pRightMost = leftA;
+    mpRightMost = leftA;
     A->Accept( this );
-    rightA = pRightMost;
+    rightA = mpRightMost;
 
     //Create left B
-    leftB = pGraph->Add( SmCaretPos( B, 0 ), rightA );
+    leftB = mpGraph->Add( SmCaretPos( B, 0 ), rightA );
     rightA->SetRight( leftB );
 
     //Visit B
-    pRightMost = leftB;
+    mpRightMost = leftB;
     B->Accept( this );
-    pRightMost->SetRight( right );
-    right->SetLeft( pRightMost );
+    mpRightMost->SetRight( right );
+    right->SetLeft( mpRightMost );
 
     //Set return value
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 //Straigt forward ( I think )
@@ -1339,9 +1339,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBracebodyNode* pNode )
 {
     SmNodeIterator it( pNode );
     while( it.Next( ) ) {
-        SmCaretPosGraphEntry* pStart = pGraph->Add( SmCaretPos( it.Current(), 0), pRightMost );
-        pRightMost->SetRight( pStart );
-        pRightMost = pStart;
+        SmCaretPosGraphEntry* pStart = mpGraph->Add( SmCaretPos( it.Current(), 0), mpRightMost );
+        mpRightMost->SetRight( pStart );
+        mpRightMost = pStart;
         it->Accept( this );
     }
 }
@@ -1389,31 +1389,31 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
-    left = pRightMost;
+    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
+    left = mpRightMost;
 
     //Create body left
-    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Visit body
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pBody->Accept( this );
-    bodyRight = pRightMost;
+    bodyRight = mpRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
     //Visit pExtra
     if( pExtra ){
-        pRightMost = pGraph->Add( SmCaretPos( pExtra, 0 ), left );
+        mpRightMost = mpGraph->Add( SmCaretPos( pExtra, 0 ), left );
         pExtra->Accept( this );
-        pRightMost->SetRight( bodyLeft );
+        mpRightMost->SetRight( bodyLeft );
     }
 
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 
@@ -1429,24 +1429,24 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
-    left = pRightMost;
+    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
+    left = mpRightMost;
 
     //Create body left
-    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
     //Create right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Visit body
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pBody->Accept( this );
-    bodyRight = pRightMost;
+    bodyRight = mpRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 
@@ -1455,9 +1455,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmPlaceNode* pNode )
 {
-    SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
-    pRightMost->SetRight( right );
-    pRightMost = right;
+    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
+    mpRightMost->SetRight( right );
+    mpRightMost = right;
 }
 
 /** SmErrorNode is context dependent metadata, it can't be selected
@@ -1475,9 +1475,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmErrorNode* )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmBlankNode* pNode )
 {
-    SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
-    pRightMost->SetRight( right );
-    pRightMost = right;
+    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
+    mpRightMost->SetRight( right );
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmBraceNode
@@ -1502,20 +1502,20 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
 {
     SmNode* pBody = pNode->GetSubNode( 1 );
 
-    SmCaretPosGraphEntry  *left = pRightMost,
-                        *right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    SmCaretPosGraphEntry  *left = mpRightMost,
+                        *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     if( pBody->GetType() != NBRACEBODY ) {
-        pRightMost = pGraph->Add( SmCaretPos( pBody, 0 ), left );
-        left->SetRight( pRightMost );
+        mpRightMost = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
+        left->SetRight( mpRightMost );
     }else
-        pRightMost = left;
+        mpRightMost = left;
 
     pBody->Accept( this );
-    pRightMost->SetRight( right );
-    right->SetLeft( pRightMost );
+    mpRightMost->SetRight( right );
+    right->SetLeft( mpRightMost );
 
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmAttributNode
@@ -1536,56 +1536,56 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
             *pBody = pNode->GetSubNode( 1 );
     //None of the children can be NULL
 
-    SmCaretPosGraphEntry  *left = pRightMost,
+    SmCaretPosGraphEntry  *left = mpRightMost,
                         *attrLeft,
                         *bodyLeft,
                         *bodyRight,
                         *right;
 
     //Creating bodyleft
-    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
     //Creating right
-    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
     //Visit the body
-    pRightMost = bodyLeft;
+    mpRightMost = bodyLeft;
     pBody->Accept( this );
-    bodyRight = pRightMost;
+    bodyRight = mpRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
     //Create attrLeft
-    attrLeft = pGraph->Add( SmCaretPos( pAttr, 0 ), left );
+    attrLeft = mpGraph->Add( SmCaretPos( pAttr, 0 ), left );
 
     //Visit attribute
-    pRightMost = attrLeft;
+    mpRightMost = attrLeft;
     pAttr->Accept( this );
-    pRightMost->SetRight( right );
+    mpRightMost->SetRight( right );
 
     //Set return value
-    pRightMost = right;
+    mpRightMost = right;
 }
 
 //Consider these single symboles
 void SmCaretPosGraphBuildingVisitor::Visit( SmSpecialNode* pNode )
 {
-    SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
-    pRightMost->SetRight( right );
-    pRightMost = right;
+    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
+    mpRightMost->SetRight( right );
+    mpRightMost = right;
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmGlyphSpecialNode* pNode )
 {
-    SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
-    pRightMost->SetRight( right );
-    pRightMost = right;
+    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
+    mpRightMost->SetRight( right );
+    mpRightMost = right;
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmMathSymbolNode* pNode )
 {
-    SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
-    pRightMost->SetRight( right );
-    pRightMost = right;
+    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
+    mpRightMost->SetRight( right );
+    mpRightMost = right;
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmRootSymbolNode* )
