@@ -74,7 +74,6 @@
 #include "document.hxx"
 #include "eqnolefilehdr.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -307,9 +306,7 @@ SmFilterDetect::~SmFilterDetect()
             }
             else
             {
-                //Test to see if this begins with xml and if so run it through
-                //the MathML filter. There are all sorts of things wrong with
-                //this approach, to be fixed at a better level than here
+                // DesignScience Equation Editor MathType 3.0 ?
                 SvStream *pStrm = aMedium.GetInStream();
                 aTypeName.Erase();
                 if (pStrm && !pStrm->GetError())
@@ -326,63 +323,96 @@ SmFilterDetect::~SmFilterDetect()
                     }
                     else
                     {
-                        // #124636# detection should not only check for xml, but at least also for
-                        // the math start element and the MathML URL. Additionally take their order
-                        // into account. Also allow the case where the start element has a namespace
-                        // (e.g. <bla:math), but in that case ensure that it is in front of an evtl.
-                        // xmlns:math namespace declaration and thus not part of that
-                        const sal_uInt16 nReadSize(4095);
-                        sal_Char aBuffer[nReadSize+1];
+                        // MathML? The SAX parser expects the 'math' root element incl.
+                        // the namespace URL. Neither '<?xml' prolog nor <!doctype is needed.
+                        // If the math element has a prefix (e.g. <bla:math), the
+                        // prefix has to be defined in the namespace attribut
+                        // (e.g. xmlns:bla="http://www.w3.org/1998/Math/MathML")
+                        // #124636 is fixed too.
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        const sal_uLong nBytesRead(pStrm->Read( aBuffer, nReadSize ));
+                        const size_t nBufSize=2048;
+                        sal_uInt16 aBuffer[nBufSize]; // will be casted to an Unicode-Array below
+                        sal_uInt8* pByte = reinterpret_cast<sal_uInt8*>(aBuffer);
+                        const sal_uLong nBytesRead(pStrm->Read( pByte, nBufSize * 2 ) );
+                        const sal_uLong nUnicodeCharsRead (nBytesRead / 2 );
 
-                        if(nBytesRead > (5 + 1 + 34 + 5)) // xml + '>' + URL + '(<|:)math'
+                        // For backwards searching an OUString is used. The conversion needs an
+                        // encoding information. Default encoding is UTF-8, UTF-16 is possible
+                        // (e.g. from MS "Math Input Control"), others are unlikely.
+                        // Looking for Byte Order Mark
+                        rtl_TextEncoding aEncoding = RTL_TEXTENCODING_UTF8;
+                        bool bIsUnicode = false;
+                        if (nBytesRead >= 2 && (aBuffer[0]==0xfffe || aBuffer[0]==0xfeff) )
                         {
-                            // end string with null
-                            aBuffer[nBytesRead + 1] = 0;
+                            aEncoding = RTL_TEXTENCODING_UNICODE;
+                            bIsUnicode = true;
+                            if ( aBuffer[0] == 0xfffe)
+                            { //swap bytes to make Big Endian
+                              for (size_t i=0; i < nUnicodeCharsRead; ++i)
+                              {
+                                  aBuffer[i] = (aBuffer[i]>>8) | (aBuffer[i]<<8) ;
+                              }
+                            }
+                        }
 
-                            // is it a xml file?
-                            const sal_Char* pXML = strstr(aBuffer, "<?xml");
-                            bool isMathFile(false);
+                        bool isMathFile(false);
+                        if ( nBytesRead > 56) // minimal <math xmlns="http://www.w3.org/1998/Math/MathML"></math>
+                        {
+                            const sal_Char* pChar = reinterpret_cast<sal_Char*>(aBuffer);
+                            sal_Unicode* pUnicode = (sal_Unicode*) aBuffer;
 
-                            if(pXML)
+                            const OUString sFragment( (bIsUnicode)
+                                   ? OUString( pUnicode , nUnicodeCharsRead )
+                                   : OUString( pChar, nBytesRead, aEncoding) );
+                            const sal_Int32 nFragmentLength(sFragment.getLength());
+
+                            // look for MathML URL http://www.w3.org/1998/Math/MathML
+                            // #i53509 A MathML URL can be value of a namespace attribute, but can be as well
+                            // inside a doctype e.g. [<!ENTITY mathml 'http://www.w3.org/1998/Math/MathML'>]
+                            // or inside a schema reference e.g. s:schemaLocation="http://www.w3.org/1998/Math/MathML"
+                            // Use a loop to get the correct one.
+                            const OUString sURL( OUString::createFromAscii("http://www.w3.org/1998/Math/MathML"));
+                            const sal_Int32 nURLLength = sURL.getLength();
+                            const OUString sEQ( OUString::createFromAscii("=") );
+                            const OUString sXMLNS( OUString::createFromAscii("xmlns") );
+                            sal_Int32 nPosURL = -1; // for index of first character of URL
+                            sal_Int32 nPosURLSearchStart = 0;
+                            sal_Int32 nPosEQ = -1; // for index of equal sign
+                            sal_Int32 nPosXMLNS = -1; // for index of first character of string "xmlns"
+                            do
                             {
-                                // does it have the MathML URL?
-                                const sal_Char* pURL = strstr(aBuffer, "http://www.w3.org/1998/Math/MathML");
-
-                                // URL has to be after XML start
-                                if(pURL && pURL > pXML)
+                                nPosURL = sFragment.indexOf(sURL,nPosURLSearchStart);
+                                if( nPosURL < 0 )
                                 {
-                                    // look if we have a direct math start element
-                                    sal_Char* pMathStart = strstr(aBuffer, "<math");
-
-                                    if(!pMathStart)
-                                    {
-                                        // if not, look if we have a math start element in another namespace
-                                        pMathStart = strstr(aBuffer, ":math");
-
-                                        if(pMathStart)
-                                        {
-                                            // if found, this has to be in front of the evtl. also existing namespace
-                                            // declaration also containing :math to be the start element
-                                            sal_Char* pNamespaceMath = strstr(aBuffer, "xmlns:math");
-
-                                            if(pNamespaceMath && pMathStart > pNamespaceMath)
-                                            {
-                                                // invalid :math found (probably part of the namespace declaration)
-                                                // -> this cannot be the math start element
-                                                pMathStart = 0;
-                                            }
+                                    break; // no MathML URL, cannot be parsed
+                                }
+                                // need 'xmlns:prefix =' or 'xmlns =', look backwards, first for equal sign
+                                nPosEQ = sFragment.lastIndexOf(sEQ,nPosURL);
+                                if (nPosEQ >= 0 && nPosEQ >= nPosURLSearchStart)
+                                {
+                                    nPosXMLNS = sFragment.lastIndexOf(sXMLNS,nPosEQ);
+                                    if( nPosXMLNS >= nPosURLSearchStart )
+                                    { // an xmlns attribute is found, but it might belong to a schema
+                                        // get prefix if present
+                                        const OUString sPrefix = (sFragment.copy(nPosXMLNS+5,nPosEQ-(nPosXMLNS+5))).trim();
+                                        // such prefix definition must start with colon (will be removed below)
+                                        bool bHasPrefix( (sPrefix.isEmpty()) ? false : sPrefix.toChar() == sal_Unicode(':') );
+                                        // the math element starts either with '<prefix:math' or '<math'
+                                        const OUString sMathStart( (bHasPrefix)
+                                                ?   OUString::createFromAscii("<") + sPrefix.copy(1,sPrefix.getLength()-1) + OUString::createFromAscii(":math")
+                                                :   OUString::createFromAscii("<math") );
+                                        sal_Int32 nPosMath (sFragment.lastIndexOf(sMathStart,nPosXMLNS));
+                                        if( nPosMath >= 0)
+                                        {   // xmlns attribute belongs to math element
+                                            isMathFile = true;
+                                            break;
                                         }
                                     }
-
-                                    // MathStart has to be before the URL
-                                    if(pMathStart && pMathStart < pURL)
-                                    {
-                                        isMathFile = true;
-                                    }
                                 }
+                                // MathML URL was wrong one, look for next
+                                nPosURLSearchStart = nPosURL + nURLLength;
                             }
+                            while ( nPosURLSearchStart + nURLLength <= nFragmentLength);
 
                             if(isMathFile)
                             {
