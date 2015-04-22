@@ -519,7 +519,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
 
         aThemeList.push_back( pNewEntry );
         delete( new GalleryTheme( this, pNewEntry ) );
-        Broadcast( GalleryHint( GALLERY_HINT_THEME_CREATED, rThemeName ) );
+        Broadcast( GalleryHint( GalleryHintType::THEME_CREATED, rThemeName ) );
         bRet = true;
     }
 
@@ -544,7 +544,7 @@ bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
             pThemeEntry->SetName( rNewName );
             pThm->ImplWrite();
 
-            Broadcast( GalleryHint( GALLERY_HINT_THEME_RENAMED, aOldName, pThm->GetName() ) );
+            Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, aOldName, pThm->GetName() ) );
             ReleaseTheme( pThm, aListener );
             bRet = true;
         }
@@ -560,7 +560,7 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
 
     if( pThemeEntry && !pThemeEntry->IsReadOnly() )
     {
-        Broadcast( GalleryHint( GALLERY_HINT_CLOSE_THEME, rThemeName ) );
+        Broadcast( GalleryHint( GalleryHintType::CLOSE_THEME, rThemeName ) );
 
         SfxListener     aListener;
         GalleryTheme*   pThm = AcquireTheme( rThemeName, aListener );
@@ -589,7 +589,7 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
             }
         }
 
-        Broadcast( GalleryHint( GALLERY_HINT_THEME_REMOVED, rThemeName ) );
+        Broadcast( GalleryHint( GalleryHintType::THEME_REMOVED, rThemeName ) );
 
         bRet = true;
     }

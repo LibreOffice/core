@@ -188,37 +188,39 @@ protected:
                                                sal_Int32 nDragImage = DND_IMAGE_NONE );
 };
 
-#define GALLERY_HINT_CLOSE_THEME        0x00000001
-#define GALLERY_HINT_THEME_REMOVED      0x00000002
-#define GALLERY_HINT_THEME_RENAMED      0x00000004
-#define GALLERY_HINT_THEME_CREATED      0x00000008
-#define GALLERY_HINT_THEME_UPDATEVIEW   0x00000010
-#define GALLERY_HINT_CLOSE_OBJECT       0x00000020
-#define GALLERY_HINT_OBJECT_REMOVED     0x00000040
+enum class GalleryHintType
+{
+    CLOSE_THEME,
+    THEME_REMOVED,
+    THEME_RENAMED,
+    THEME_CREATED,
+    THEME_UPDATEVIEW,
+    CLOSE_OBJECT,
+    OBJECT_REMOVED,
+};
 
 class GalleryHint : public SfxHint
 {
 private:
 
-    sal_uIntPtr         mnType;
-    OUString       maThemeName;
-    OUString       maStringData;
+    GalleryHintType     mnType;
+    OUString            maThemeName;
+    OUString            maStringData;
     sal_uIntPtr         mnData1;
 
 public:
 
-                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL ) :
+                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ) {}
 
-                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL ) :
+                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ) {}
 
-    sal_uIntPtr          GetType() const { return mnType; }
-    const OUString& GetThemeName() const { return maThemeName; }
-    const OUString& GetStringData() const { return maStringData; }
-    sal_uIntPtr          GetData1() const { return mnData1; }
+    GalleryHintType  GetType() const { return mnType; }
+    const OUString&  GetThemeName() const { return maThemeName; }
+    const OUString&  GetStringData() const { return maStringData; }
+    sal_uIntPtr      GetData1() const { return mnData1; }
 };
 
-    #endif
-
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

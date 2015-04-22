@@ -556,7 +556,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     switch( rGalleryHint.GetType() )
     {
-        case( GALLERY_HINT_THEME_UPDATEVIEW ):
+        case( GalleryHintType::THEME_UPDATEVIEW ):
         {
             if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
                 SetMode( meLastMode );

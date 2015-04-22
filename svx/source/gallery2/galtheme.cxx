@@ -83,8 +83,8 @@ GalleryTheme::~GalleryTheme()
     for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
     {
         GalleryObject* pEntry = aObjectList[ i ];
-        Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-        Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
     }
     aObjectList.clear();
@@ -339,7 +339,7 @@ void GalleryTheme::ImplBroadcast( sal_uIntPtr nUpdatePos )
         if( GetObjectCount() && ( nUpdatePos >= GetObjectCount() ) )
             nUpdatePos = GetObjectCount() - 1;
 
-        Broadcast( GalleryHint( GALLERY_HINT_THEME_UPDATEVIEW, GetName(), nUpdatePos ) );
+        Broadcast( GalleryHint( GalleryHintType::THEME_UPDATEVIEW, GetName(), nUpdatePos ) );
     }
 }
 
@@ -474,8 +474,8 @@ bool GalleryTheme::RemoveObject( size_t nPos )
         if( SGA_OBJ_SVDRAW == pEntry->eObjKind )
             aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-        Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
         pEntry = NULL;
 
@@ -599,8 +599,8 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             pEntry = aObjectList[ i ];
             if( pEntry->mbDelete )
             {
-                Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
+                Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+                Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
                 GalleryObjectList::iterator it = aObjectList.begin();
                 ::std::advance( it, i );
                 aObjectList.erase( it );
@@ -1408,8 +1408,8 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         for( size_t i = 0, n = aObjectList.size(); i < n; ++i )
         {
             pObj = aObjectList[ i ];
-            Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
-            Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
+            Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
+            Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
             delete pObj;
         }
         aObjectList.clear();

@@ -457,11 +457,11 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     switch( rGalleryHint.GetType() )
     {
-        case( GALLERY_HINT_THEME_CREATED ):
+        case( GalleryHintType::THEME_CREATED ):
             ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetThemeName() ) );
         break;
 
-        case( GALLERY_HINT_THEME_RENAMED ):
+        case( GalleryHintType::THEME_RENAMED ):
         {
             const sal_uInt16 nCurSelectPos = mpThemes->GetSelectEntryPos();
             const sal_uInt16 nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
@@ -477,13 +477,13 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         break;
 
-        case( GALLERY_HINT_THEME_REMOVED ):
+        case( GalleryHintType::THEME_REMOVED ):
         {
             mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
         }
         break;
 
-        case( GALLERY_HINT_CLOSE_THEME ):
+        case( GalleryHintType::CLOSE_THEME ):
         {
             const sal_uInt16 nCurSelectPos = mpThemes->GetSelectEntryPos();
             const sal_uInt16 nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
