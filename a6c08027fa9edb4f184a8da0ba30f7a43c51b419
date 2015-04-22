@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8a016a_1934afdc",
+        "filename": "sal/inc/internal/oslrandom.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-22T07:37:59Z",
+      "side": 1,
+      "message": "why extern \"C\"?  (and then, why int instead of bool return type)",
+      "revId": "a6c08027fa9edb4f184a8da0ba30f7a43c51b419",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
