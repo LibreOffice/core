@@ -196,7 +196,7 @@ void xdictionary::setJapaneseWordBreak()
 bool xdictionary::exists(const sal_uInt32 c)
 {
     // 0x1FFF is the hardcoded limit in gendict for data.existMarks
-    bool exist = (data.existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((data.existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
+    bool exist = data.existMark && (c>>3) < 0x1FFF && (data.existMark[c>>3] & (1<<(c&0x07))) != 0;
     if (!exist && japaneseWordBreak)
         return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
     else

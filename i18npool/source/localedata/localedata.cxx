@@ -710,7 +710,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException
         for(sal_Int16 i = 0; i < calendarsCount; i++) {
             OUString calendarID(allCalendars[offset]);
             offset++;
-            bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
+            bool defaultCalendar = allCalendars[offset][0] != 0;
             offset++;
             Sequence< CalendarItem2 > days = getCalendarItems( allCalendars, offset, REF_DAYS, i,
                     rLocale, calendarsSeq);
@@ -879,7 +879,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, s
                         formatArray[nOff + 3],
                         formatArray[nOff + 4],
                         formatArray[nOff + 5][0],
-                        sal::static_int_cast<sal_Bool>(formatArray[nOff + 6][0]));
+                        formatArray[nOff + 6][0] != 0);
                 seq[f] = elem;
             }
         }
@@ -943,8 +943,7 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale ) throw(Runtim
         Sequence< Implementation > seq(collatorCount);
         for(sal_Int16 i = 0; i < collatorCount; i++) {
             Implementation impl(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO],
-                    sal::static_int_cast<sal_Bool>(
-                        collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0]));
+                    collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0] != 0);
             seq[i] = impl;
         }
         return seq;
