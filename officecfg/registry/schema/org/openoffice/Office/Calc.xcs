@@ -1288,7 +1288,7 @@
             <desc>Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
             <label>Automatically find column and row labels</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="DecimalPlaces" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Calc/Calculate -->
