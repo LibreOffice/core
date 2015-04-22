@@ -1873,7 +1873,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                     // Suppress all TableRef related tokens, the resulting
                     // range was written by CreateStringFromIndex().
                     const FormulaToken* p = pArr->PeekNext();
-                    if (p->GetOpCode() == ocTableRefOpen)
+                    if (p && p->GetOpCode() == ocTableRefOpen)
                     {
                         p = pArr->Next();
                         int nLevel = 0;
