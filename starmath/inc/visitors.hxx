@@ -11,6 +11,7 @@
 
 #include "node.hxx"
 #include "caret.hxx"
+#include <memory>
 
 /** Base class for visitors that visits a tree of SmNodes
  * @remarks all methods have been left abstract to ensure that implementers
@@ -319,13 +320,11 @@ public:
     void Visit( SmVerticalBraceNode* pNode ) SAL_OVERRIDE;
     SmCaretPosGraph* takeGraph()
     {
-        SmCaretPosGraph *pRet = pGraph;
-        pGraph = 0;
-        return pRet;
+        return mpGraph.release();
     }
 private:
-    SmCaretPosGraphEntry* pRightMost;
-    SmCaretPosGraph*      pGraph;
+    SmCaretPosGraphEntry* mpRightMost;
+    std::unique_ptr<SmCaretPosGraph> mpGraph;
 };
 
 // SmCloningVisitor
