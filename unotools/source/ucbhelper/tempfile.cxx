@@ -29,6 +29,7 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/random.h>
 #include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>
@@ -192,40 +193,58 @@ private:
 
 class UniqueTokens: public Tokens {
 public:
-    UniqueTokens(): m_count(0) {}
+    UniqueTokens()
+    {
+        /* we go via a rtl_random_createPool()
+         * because osl_get_system_random_data()
+         * is not exported...
+         * that waste a calloc/free, but other than
+         * that that rtl_random_* is just a thin wrapper
+         * unless the system entropy source fails
+         * in which case it fall back to a home made
+         * pseudo-random number generator
+         */
+        m_pEntropySource = rtl_random_createPool();
+    }
+    ~UniqueTokens()
+    {
+        if(m_pEntropySource)
+        {
+            rtl_random_destroyPool(m_pEntropySource);
+        }
+    }
 
-    bool next(OUString * token) SAL_OVERRIDE {
-        assert(token != 0);
-        // Because of the shared globalValue, no single instance of UniqueTokens
-        // is guaranteed to exhaustively test all 36^6 possible values, but stop
-        // after that many attempts anyway:
+
+    bool next(OUString * token) SAL_OVERRIDE
+    {
         sal_uInt32 radix = 36;
         sal_uInt32 max = radix * radix * radix * radix * radix * radix;
-            // 36^6 == 2'176'782'336 < SAL_MAX_UINT32 == 4'294'967'295
-        if (m_count == max) {
-            return false;
-        }
         sal_uInt32 v;
+
+        assert(token != 0);
+
+        if(m_pEntropySource)
         {
-            osl::MutexGuard g(osl::Mutex::getGlobalMutex());
-            globalValue
-                = ((globalValue == SAL_MAX_UINT32
-                    ? tools::Time::GetSystemTicks() : globalValue + 1)
-                   % max);
-            v = globalValue;
+            // 36^6 == 2'176'782'336 < SAL_MAX_UINT32 == 4'294'967'295
+            union r
+            {
+                char data[4];
+                int value;
+            } r;
+
+            if(rtl_random_getBytes(m_pEntropySource, r.data, 4) == rtl_Random_E_None)
+            {
+                v = r.value % max;
+                *token = OUString::number(v, radix);
+                return true;
+            }
         }
-        *token = OUString::number(v, radix);
-        ++m_count;
-        return true;
+        return false;
     }
 
 private:
-    static sal_uInt32 globalValue;
-
-    sal_uInt32 m_count;
+    rtlRandomPool m_pEntropySource;
 };
-
-sal_uInt32 UniqueTokens::globalValue = SAL_MAX_UINT32;
 
 OUString lcl_createName(
     const OUString& rLeadingChars, Tokens & tokens, const OUString* pExtension,
