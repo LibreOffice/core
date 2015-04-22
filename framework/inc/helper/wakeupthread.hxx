@@ -20,57 +20,38 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_WAKEUPTHREAD_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_WAKEUPTHREAD_HXX
 
-// include files of own module
+#include <sal/config.h>
 
-#include <macros/generic.hxx>
-
-#include <general.h>
-
-// include UNO interfaces
-
-#include <com/sun/star/util/XUpdatable.hpp>
-
-// include all others
+#include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <osl/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <sal/types.h>
+#include <salhelper/thread.hxx>
+
+namespace com { namespace sun { namespace star { namespace util {
+    class XUpdatable;
+} } } }
 
 namespace framework{
 
-/** @short  implements a "sleeping" thread, which try to sleep
-            without a using cpu consumption :-) */
-class WakeUpThread : public ::osl::Thread
-{
+class WakeUpThread: public salhelper::Thread {
+    css::uno::WeakReference<css::util::XUpdatable> updatable_;
+    osl::Condition condition_;
 
-    // member
-    private:
+    osl::Mutex mutex_;
+    bool terminate_;
 
-        /** @short  this listener will be notified if this thread
-                    waked up. */
-        css::uno::WeakReference< css::util::XUpdatable > m_xListener;
+    void execute() SAL_OVERRIDE;
 
-    // interface
-    public:
+public:
+    WakeUpThread(css::uno::Reference<css::util::XUpdatable> const & updatable);
 
-        /** @short  Register a new listener on this thread.
-
-            @descr  The listener is holded as a weak reference.
-                    If the thread detects, that no listener exists ...
-                    he will terminate itself.
-         */
-        WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener);
-
-        /** @descr  The thread waits on a condition using a fix timeout value.
-                    If the thread wakes up he notify the internal set listener.
-                    The listener can use this "timeout" info for it's own purpose.
-                    The thread itself will wait on the condition again.
-         */
-        virtual void SAL_CALL run() SAL_OVERRIDE;
-
-        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    void stop();
 };
 
-} // namespace framework
+}
 
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_WAKEUPTHREAD_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

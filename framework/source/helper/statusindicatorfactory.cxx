@@ -55,7 +55,6 @@ const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext          (xContext )
-    , m_pWakeUp           (0        )
     , m_bAllowReschedule  (false)
     , m_bAllowParentShow  (false)
     , m_bDisableReschedule(false)
@@ -542,21 +541,18 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
     if (m_bDisableReschedule)
         return;
 
-    if (!m_pWakeUp)
+    if (!m_pWakeUp.is())
     {
         m_pWakeUp = new WakeUpThread(this);
-        m_pWakeUp->create();
     }
 }
 
 void StatusIndicatorFactory::impl_stopWakeUpThread()
 {
     osl::MutexGuard g(m_mutex);
-    if (m_pWakeUp)
+    if (m_pWakeUp.is())
     {
-        // Thread kill itself after terminate()!
-        m_pWakeUp->terminate();
-        m_pWakeUp = 0;
+        m_pWakeUp->stop();
     }
 }
 

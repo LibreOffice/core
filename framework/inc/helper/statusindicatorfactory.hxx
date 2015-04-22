@@ -173,7 +173,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
 
         /** Notify us if a fix time is over. We use it to implement an
             intelligent "Reschedule" ... */
-        WakeUpThread* m_pWakeUp;
+        rtl::Reference<WakeUpThread> m_pWakeUp;
 
         /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
             There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()

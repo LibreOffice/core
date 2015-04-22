@@ -19,44 +19,41 @@
 
 #include <sal/config.h>
 
-#include <osl/conditn.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/XUpdatable.hpp>
+#include <osl/mutex.hxx>
+#include <osl/time.h>
 
-// include files of own module
 #include <helper/wakeupthread.hxx>
 
-namespace framework{
-
-WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)
-    : m_xListener   (xListener)
-{
-}
-
-void SAL_CALL WakeUpThread::run()
-{
-    osl_setThreadName("framework::WakeUpThread");
-
-    ::osl::Condition aSleeper;
-
-    TimeValue aTime;
-    aTime.Seconds = 0;
-    aTime.Nanosec = 25000000; // 25 msec
-
-    while(schedule())
-    {
-        aSleeper.reset();
-        aSleeper.wait(&aTime);
-
-        css::uno::Reference< css::util::XUpdatable > xListener(m_xListener);
-        if (xListener.is())
-            xListener->update();
+void framework::WakeUpThread::execute() {
+    for (;;) {
+        TimeValue t{0, 25000000}; // 25 msec
+        condition_.wait(&t);
+        {
+            osl::MutexGuard g(mutex_);
+            if (terminate_) {
+                break;
+            }
+        }
+        css::uno::Reference<css::util::XUpdatable> up(updatable_);
+        if (up.is()) {
+            up->update();
+        }
     }
 }
 
-void SAL_CALL WakeUpThread::onTerminated()
-{
-    delete this;
-}
+framework::WakeUpThread::WakeUpThread(
+    css::uno::Reference<css::util::XUpdatable> const & updatable):
+    Thread("WakeUpThread"), updatable_(updatable), terminate_(false)
+{}
 
-} // namespace framework
+void framework::WakeUpThread::stop() {
+    {
+        osl::MutexGuard g(mutex_);
+        terminate_ = true;
+    }
+    join();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
