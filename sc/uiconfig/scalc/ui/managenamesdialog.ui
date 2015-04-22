@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="0" version="0.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ManageNamesDialog">
     <property name="can_focus">False</property>
@@ -110,6 +111,7 @@
               <object class="GtkLabel" id="info">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Select cells in the document to update the range.</property>
               </object>
               <packing>
@@ -129,11 +131,10 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Name:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">name</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -141,25 +142,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Range or formula expression:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">range</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Scope:</property>
                     <property name="use_underline">True</property>
@@ -167,19 +153,18 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="name">
+                  <object class="GtkComboBoxText" id="scope">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -216,19 +201,36 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="scope">
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
+                    <property name="halign">start</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Range or formula expression:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">range</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="name">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin_left">25</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -389,5 +391,8 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+    <property name="title" translatable="yes">column</property>
   </object>
 </interface>
