@@ -40,7 +40,7 @@ struct DefaultsInitializer
     }
 private:
 
-    void addDefaults( tPropertyValueMap & rOutMap )
+    static void addDefaults( tPropertyValueMap & rOutMap )
     {
         PropertyHelper::setPropertyValueDefault(rOutMap, PROP_GL3DCHARTTYPE_ROUNDED_EDGE, false);
     }
@@ -56,7 +56,7 @@ struct InfoHelperInitializer
         return &aHelper;
     }
 
-    uno::Sequence<beans::Property> getProperties()
+    static uno::Sequence<beans::Property> getProperties()
     {
         uno::Sequence<beans::Property> aRet(1);
 

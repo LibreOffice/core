@@ -103,7 +103,7 @@ private:
     void updateRenderFPS();
     void updateDataUpdateFPS();
     DECL_LINK(UpdateTimerHdl, void*);
-    int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
+    static int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
     float addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag = true,
                                   const glm::vec4& rColor = glm::vec4(0.0f, 1.0f, 1.0f, 0.0f),
                                   const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -111,10 +111,10 @@ private:
     void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
     void updateClickEvent();
     void calcDistance(std::vector<sal_uInt32> &vectorNearest);
-    float calcScrollDistance(const glm::mat4 &mvp, const glm::vec3& rPos);
+    static float calcScrollDistance(const glm::mat4 &mvp, const glm::vec3& rPos);
     void initDistanceHeap(std::vector<sal_uInt32> &vectorNearest);
     void keepHeap(std::vector<sal_uInt32> &vectorNearest, int index);
-    void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
+    static void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
     void getNearestBars(std::vector<sal_uInt32> &vectorNearest);
     void updateScroll();
     void processAutoFly(sal_uInt32 nId, sal_uInt32 nColor);

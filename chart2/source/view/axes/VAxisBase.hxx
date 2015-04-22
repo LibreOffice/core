@@ -65,7 +65,7 @@ public:
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
 protected: //methods
-    size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
+    static size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
     void removeTextShapesFromTicks();
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 

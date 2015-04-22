@@ -79,7 +79,7 @@ void VCartesianCoordinateSystem::createGridShapes()
         if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
             continue;
 
-        VCartesianGrid aGrid(nDimensionIndex,nDimensionCount,this->getGridListFromAxis( xAxis ));
+        VCartesianGrid aGrid(nDimensionIndex,nDimensionCount, getGridListFromAxis( xAxis ));
         aGrid.setExplicitScaleAndIncrement( this->getExplicitScale(nDimensionIndex,nAxisIndex)
                             , this->getExplicitIncrement(nDimensionIndex,nAxisIndex) );
         aGrid.set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );

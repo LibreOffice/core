@@ -499,7 +499,7 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
 }
 
 bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed(
-    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis )
 {
     if( rAxisLabelProperties.eStaggering != STAGGER_AUTO )
         return false;

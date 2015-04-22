@@ -66,7 +66,7 @@ struct StaticGridDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
 
@@ -91,7 +91,7 @@ struct StaticGridInfoHelper_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

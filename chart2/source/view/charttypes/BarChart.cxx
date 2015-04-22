@@ -316,7 +316,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
             return xShape;
     }
     if( nGeometry3D != DataPointGeometry3D::PYRAMID )
-        this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+        setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
 
@@ -801,7 +801,7 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
                                 xShape = m_pShapeFactory->createArea2D( xPointGroupShape_Shapes, aPoly );
-                                this->setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                                setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 
                             if(bHasFillColorMapping)
@@ -913,7 +913,7 @@ void BarChart::createShapes()
                         getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
                     uno::Reference< drawing::XShape > xShape( m_pShapeFactory->createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
-                    this->setMappedProperties( xShape, pSeries->getPropertiesOfSeries()
+                    setMappedProperties( xShape, pSeries->getPropertiesOfSeries()
                         , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                 }
             }

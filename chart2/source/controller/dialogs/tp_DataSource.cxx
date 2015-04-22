@@ -439,7 +439,7 @@ void DataSourceTabPage::fillRoleListBox()
     if( bHasSelectedEntry )
     {
         DialogModel::tRolesWithRanges aRoles(
-            m_rDialogModel.getRolesWithRanges(
+            DialogModel::getRolesWithRanges(
                 pSeriesEntry->m_xDataSeries,
                 lcl_GetSequenceNameForLabel( pSeriesEntry ),
                 pSeriesEntry->m_xChartType ));

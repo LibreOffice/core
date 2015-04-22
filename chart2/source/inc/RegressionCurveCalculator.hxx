@@ -45,10 +45,10 @@ protected:
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey ) const = 0;
 
-    OUString getFormattedString(
+    static OUString getFormattedString(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
-        double fNumber ) const;
+        double fNumber );
 
     double m_fCorrelationCoeffitient;
 

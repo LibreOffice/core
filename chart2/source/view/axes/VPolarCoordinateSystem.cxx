@@ -173,7 +173,7 @@ void VPolarCoordinateSystem::createGridShapes()
         if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
             continue;
 
-        VPolarGrid aGrid(nDimensionIndex,nDimensionCount,this->getGridListFromAxis( xAxis ));
+        VPolarGrid aGrid(nDimensionIndex,nDimensionCount,getGridListFromAxis( xAxis ));
         aGrid.setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
         aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
             , this->createCIDForGrid( xAxis, nDimensionIndex, nAxisIndex ) );

@@ -52,9 +52,9 @@ public:
 
     void InvertNormal( bool bInvertNormal );
 
-    ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
-    ::com::sun::star::uno::Any      getNormalsPolygon() const;
-    ::com::sun::star::uno::Any      getTexturePolygon( short nRotatedTexture ) const; //0 to 7 are the different possibilities
+    ::com::sun::star::uno::Any         getPolyPolygonShape3D() const;
+    ::com::sun::star::uno::Any         getNormalsPolygon() const;
+    static ::com::sun::star::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
 
     ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }

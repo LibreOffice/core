@@ -175,7 +175,7 @@ uno::Any Stripe::getNormalsPolygon() const
     return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
-uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
+uno::Any Stripe::getTexturePolygon( short nRotatedTexture )
 {
     drawing::PolyPolygonShape3D aPP;
 

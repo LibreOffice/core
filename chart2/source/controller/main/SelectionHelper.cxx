@@ -260,7 +260,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                     SdrObject* pDiagram = pDrawViewWrapper->getNamedSdrObject( aDiagramCID );
                     if( pDiagram )
                     {
-                        if( pDrawViewWrapper->IsObjectHit( pDiagram, rMousePos ) )
+                        if( DrawViewWrapper::IsObjectHit( pDiagram, rMousePos ) )
                         {
                             m_aSelectedOID = ObjectIdentifier( aDiagramCID );
                         }
@@ -273,7 +273,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                     SdrObject* pLegend = pDrawViewWrapper->getNamedSdrObject( aLegendCID );
                     if( pLegend )
                     {
-                        if( pDrawViewWrapper->IsObjectHit( pLegend, rMousePos ) )
+                        if( DrawViewWrapper::IsObjectHit( pLegend, rMousePos ) )
                         {
                             m_aSelectedOID = ObjectIdentifier( aLegendCID );
                         }
@@ -375,7 +375,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
         return false;
     SolarMutexGuard aSolarGuard;
     SdrObject* pObj = rDrawViewWrapper.getNamedSdrObject( rNameOfSelectedObject );
-    if( !rDrawViewWrapper.IsObjectHit( pObj, rMPos ) )
+    if( !DrawViewWrapper::IsObjectHit( pObj, rMPos ) )
         return false;
     return true;
 }
@@ -423,7 +423,7 @@ OUString SelectionHelper::getHitObjectCID(
             SdrObject* pDiagram = rDrawViewWrapper.getNamedSdrObject( aDiagramCID );
             if( pDiagram )
             {
-                if( rDrawViewWrapper.IsObjectHit( pDiagram, rMPos ) )
+                if( DrawViewWrapper::IsObjectHit( pDiagram, rMPos ) )
                 {
                     aRet = aDiagramCID;
                 }

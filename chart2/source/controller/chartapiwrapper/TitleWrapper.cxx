@@ -170,7 +170,7 @@ struct StaticTitleWrapperPropertyArray_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

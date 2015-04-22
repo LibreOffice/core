@@ -95,7 +95,7 @@ struct StaticPieChartTypeTemplateDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
         ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
@@ -117,7 +117,7 @@ struct StaticPieChartTypeTemplateInfoHelper_Initializer
     }
 
 private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
+    static uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

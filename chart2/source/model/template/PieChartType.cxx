@@ -71,7 +71,7 @@ struct StaticPieChartTypeDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIECHARTTYPE_USE_RINGS, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
@@ -91,7 +91,7 @@ struct StaticPieChartTypeInfoHelper_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

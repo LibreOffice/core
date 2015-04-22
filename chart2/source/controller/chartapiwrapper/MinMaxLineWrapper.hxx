@@ -111,7 +111,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private: //methods
-    ::cppu::IPropertyArrayHelper&   getInfoHelper();
+    static ::cppu::IPropertyArrayHelper&   getInfoHelper();
 
 private: //member
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

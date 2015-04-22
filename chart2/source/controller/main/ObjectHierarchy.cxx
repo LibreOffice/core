@@ -146,7 +146,7 @@ private:
     void createDataSeriesTree(
         ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
         const Reference< XDiagram > & xDiagram );
-    void createWallAndFloor(
+    static void createWallAndFloor(
         ObjectHierarchy::tChildContainer & rContainer,
         const Reference< XDiagram > & xDiagram );
     void createLegendTree(

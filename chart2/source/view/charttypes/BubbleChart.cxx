@@ -317,7 +317,7 @@ void BubbleChart::createShapes()
                         xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
                                 , aScenePosition, aSymbolSize );
 
-                        this->setMappedProperties( xShape
+                        setMappedProperties( xShape
                                 , pSeries->getPropertiesOfPoint( nIndex )
                                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
 

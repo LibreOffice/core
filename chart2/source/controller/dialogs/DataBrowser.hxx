@@ -180,7 +180,7 @@ private:
     void ImplAdjustHeaderControls();
 
     OUString GetColString( sal_Int32 nColumnId ) const;
-    OUString GetRowString( sal_Int32 nRow ) const;
+    static OUString GetRowString( sal_Int32 nRow );
 
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit* );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit* );

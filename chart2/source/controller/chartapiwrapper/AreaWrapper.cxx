@@ -52,7 +52,7 @@ struct StaticAreaWrapperPropertyArray_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );

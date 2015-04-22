@@ -623,7 +623,7 @@ OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
     return OUString();
 }
 
-OUString DataBrowser::GetRowString( sal_Int32 nRow ) const
+OUString DataBrowser::GetRowString( sal_Int32 nRow )
 {
     return OUString::number(nRow + 1);
 }

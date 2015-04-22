@@ -228,7 +228,7 @@ public:
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
-    void ClearBuffer();
+    static void ClearBuffer();
     void RenderPolygon3DObject();
     void RenderLine3D(const Polygon3DInfo &polygon);
     void RenderPolygon3D(const Polygon3DInfo &polygon);
@@ -247,17 +247,17 @@ private:
     void AddNormalData(GLuint normalBuf);
     void AddIndexData(GLuint indexBuf);
     void RenderNonRoundedBar(const Extrude3DInfo& extrude3D);
-    bool GetSimilarVertexIndex(PackedVertex & packed,
+    static bool GetSimilarVertexIndex(PackedVertex & packed,
         std::map<PackedVertex,unsigned short> & VertexToOutIndex,
         unsigned short & result
         );
-    void SetVertex(PackedVertex &packed,
+    static void SetVertex(PackedVertex &packed,
         std::map<PackedVertex,unsigned short> &VertexToOutIndex,
         std::vector<glm::vec3> &vertex,
         std::vector<glm::vec3> &normal,
         std::vector<unsigned short> &indeices);
     void CreateActualRoundedCube(float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth);
-    int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
+    static int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
                                int iSubDivZ, float width, float height, float depth);
     void CreateSceneBoxView();
 

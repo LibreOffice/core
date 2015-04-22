@@ -99,12 +99,12 @@ public:
     ::std::vector< tSeriesWithChartTypeByName >
         getAllDataSeriesWithLabel() const;
 
-    tRolesWithRanges getRolesWithRanges(
+    static tRolesWithRanges getRolesWithRanges(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xSeries,
         const OUString & aRoleOfSequenceForLabel,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType ) const;
+            ::com::sun::star::chart2::XChartType > & xChartType );
 
     enum eMoveDirection
     {

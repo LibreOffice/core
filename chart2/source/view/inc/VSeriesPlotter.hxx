@@ -405,7 +405,7 @@ protected:
             ::com::sun::star::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
         , ::com::sun::star::awt::Point aDefaultPos );
 
-    void setMappedProperties(
+    static void setMappedProperties(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape >& xTarget
         , const ::com::sun::star::uno::Reference<

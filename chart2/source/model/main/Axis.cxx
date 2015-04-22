@@ -221,7 +221,7 @@ struct StaticAxisDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
@@ -262,7 +262,7 @@ struct StaticAxisInfoHelper_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

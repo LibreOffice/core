@@ -143,7 +143,7 @@ protected: //methods
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
         getGridListFromAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
@@ -161,7 +161,7 @@ protected: //methods
                      ::com::sun::star::chart2::XChartDocument>& xChartDoc);
 
 private: //methods
-    void impl_adjustDimension( sal_Int32& rDimensionIndex ) const;
+    static void impl_adjustDimension( sal_Int32& rDimensionIndex );
     void impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex, sal_Int32& rAxisIndex ) const;
 
 protected: //member

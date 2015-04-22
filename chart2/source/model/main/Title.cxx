@@ -155,7 +155,7 @@ struct StaticTitleDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
@@ -194,7 +194,7 @@ struct StaticTitleInfoHelper_Initializer
     }
 
 private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
+    static uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

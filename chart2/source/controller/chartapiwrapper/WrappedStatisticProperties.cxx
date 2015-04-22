@@ -180,7 +180,7 @@ public:
     virtual ~WrappedStatisticProperty() {};
 
 protected:
-    uno::Reference< beans::XPropertySet > getOrCreateErrorBarProperties( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+    static uno::Reference< beans::XPropertySet > getOrCreateErrorBarProperties( const Reference< beans::XPropertySet >& xSeriesPropertySet )
     {
         if(!xSeriesPropertySet.is())
             return 0;

@@ -302,7 +302,7 @@ SdrObject* DrawViewWrapper::getNamedSdrObject( const OUString& rName ) const
     return 0;
 }
 
-bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
+bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt )
 {
     if(pObj)
     {

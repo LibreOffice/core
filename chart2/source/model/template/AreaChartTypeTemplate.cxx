@@ -65,7 +65,7 @@ struct StaticAreaChartTypeTemplateDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AREA_TEMPLATE_DIMENSION, 2 );
     }
@@ -84,7 +84,7 @@ struct StaticAreaChartTypeTemplateInfoHelper_Initializer
     }
 
 private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
+    static uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

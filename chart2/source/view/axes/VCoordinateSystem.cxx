@@ -221,7 +221,7 @@ Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromA
     return ContainerHelper::ContainerToSequence( aRet );
 }
 
-void VCoordinateSystem::impl_adjustDimension( sal_Int32& rDimensionIndex ) const
+void VCoordinateSystem::impl_adjustDimension( sal_Int32& rDimensionIndex )
 {
     if( rDimensionIndex<0 )
         rDimensionIndex=0;

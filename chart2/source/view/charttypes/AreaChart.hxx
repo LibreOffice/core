@@ -63,7 +63,7 @@ private: //methods
     bool impl_createLine( VDataSeries* pSeries
                 , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper );
-    bool create_stepped_line( ::com::sun::star::drawing::PolyPolygonShape3D aStartPoly
+    static bool create_stepped_line( ::com::sun::star::drawing::PolyPolygonShape3D aStartPoly
                 , ::com::sun::star::chart2::CurveStyle eCurveStyle
                 , PlottingPositionHelper* pPosHelper
                 , ::com::sun::star::drawing::PolyPolygonShape3D &aPoly );

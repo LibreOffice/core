@@ -424,7 +424,7 @@ void RenderBenchMarkThread::ProcessClickFlyBack()
     if (!mbNeedFlyBack)
         return;
     osl_getSystemTime(&maClickFlyBackEndTime);
-    int nDeltaMs = mpChart->calcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
+    int nDeltaMs = GL3DBarChart::calcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
     if(nDeltaMs >= 10000)
     {
         mpChart->maRenderEvent = EVENT_MOVE_TO_DEFAULT;

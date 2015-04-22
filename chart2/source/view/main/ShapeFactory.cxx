@@ -1004,7 +1004,7 @@ uno::Reference< drawing::XShape >
 
             //TexturePolygon
             xProp->setPropertyValue( UNO_NAME_3D_TEXTUREPOLYGON3D
-                , rStripe.getTexturePolygon( nRotatedTexture ) );
+                , Stripe::getTexturePolygon( nRotatedTexture ) );
 
             //Normals Polygon
             xProp->setPropertyValue( UNO_NAME_3D_NORMALSPOLYGON3D

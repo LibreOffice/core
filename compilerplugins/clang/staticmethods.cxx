@@ -162,6 +162,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || fqn == "SfxApplication::InitializeDde" || fqn == "SfxApplication::RemoveDdeTopic") {
         return true;
     }
+    // debugging stuff
+    if (fqn == "chart::InternalData::dump") {
+        return true;
+    }
     // used in a function-pointer-table
     if (startsWith(fqn, "SbiRuntime::Step")) {
         return true;
@@ -181,7 +185,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", true);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
 
 }
 

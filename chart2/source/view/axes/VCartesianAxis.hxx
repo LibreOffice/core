@@ -150,8 +150,8 @@ private: //methods
      * @return true if we can try to stagger labels in order to avoid
      *         overlaps, otherwise false.
      */
-    bool isAutoStaggeringOfLabelsAllowed(
-        const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const;
+    static bool isAutoStaggeringOfLabelsAllowed(
+        const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis );
 
     /**
      * @return true if we can break a single line label text into multiple

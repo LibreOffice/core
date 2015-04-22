@@ -53,7 +53,7 @@ struct StaticMinMaxLineWrapperDefaults_Initializer
         return &aStaticDefaults;
     }
 private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     }
@@ -72,7 +72,7 @@ struct StaticMinMaxLineWrapperPropertyArray_Initializer
     }
 
 private:
-    Sequence< Property > lcl_GetPropertySequence()
+    static Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 

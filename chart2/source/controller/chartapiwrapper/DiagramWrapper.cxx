@@ -459,7 +459,7 @@ struct StaticDiagramWrapperPropertyArray_Initializer
     }
 
 private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
+    static uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );

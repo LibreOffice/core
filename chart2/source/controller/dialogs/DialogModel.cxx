@@ -515,7 +515,7 @@ void addNewSeriesToContainer(
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     const Reference< XDataSeries > & xSeries,
     const OUString & aRoleOfSequenceForLabel,
-    const Reference< chart2::XChartType > & xChartType ) const
+    const Reference< chart2::XChartType > & xChartType )
 {
     DialogModel::tRolesWithRanges aResult;
     try

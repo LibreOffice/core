@@ -105,7 +105,7 @@ public:
 
     void DisposeAndClear();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
         getContainerDispatchForURL(
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xChartController,
             const ::com::sun::star::util::URL & rURL );

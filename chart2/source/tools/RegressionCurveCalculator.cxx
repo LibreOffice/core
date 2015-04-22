@@ -82,7 +82,7 @@ void RegressionCurveCalculator::setRegressionProperties(
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey,
-    double fNumber ) const
+    double fNumber )
 {
     OUString aResult;
 

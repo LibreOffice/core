@@ -239,7 +239,7 @@ void CandleStickChart::createShapes()
                         uno::Reference< drawing::XShape > xShape =
                             m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,
                                     PolyToPointSequence(aPoly), NULL);
-                        this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                        setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
                     //create first-last shape
@@ -294,7 +294,7 @@ void CandleStickChart::createShapes()
                             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                             if(xProp.is())
                             {
-                                this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                                setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                             }
                         }
                     }
