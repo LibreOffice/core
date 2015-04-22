@@ -104,7 +104,6 @@ namespace basctl
     using ::com::sun::star::document::XEventListener;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::document::XEventBroadcaster;
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::ModuleInfo;
     using ::com::sun::star::script::vba::XVBACompatibility;
