@@ -2210,13 +2210,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if ( sType == sAnnotationEnd )
             {
-                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                const OUString& rName = xBookmark->getName();
-                if ( rName.getLength() > 0 )
+                if (!bAutoStyles)
                 {
-                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
+                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    const OUString& rName = xBookmark->getName();
+                    if (!rName.isEmpty())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
+                    }
+                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, false, false );
                 }
-                SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, false, false );
             }
             else if( sType.equals( sFrame ) )
             {
