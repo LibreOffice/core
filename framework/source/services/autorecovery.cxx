@@ -62,8 +62,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -162,7 +162,7 @@ public:
 typedef ::cppu::WeakComponentImplHelper5<
             css::lang::XServiceInfo,
             css::frame::XDispatch,
-            css::document::XEventListener,    // => css.lang.XEventListener
+            css::document::XDocumentEventListener, // => css.lang.XEventListener
             css::util::XChangesListener,      // => css.lang.XEventListener
             css::util::XModifyListener >      // => css.lang.XEventListener
          AutoRecovery_BASE;
@@ -363,7 +363,7 @@ private:
     /** @short  proxy weak binding to forward Events to ourself without
                 an ownership cycle
       */
-    css::uno::Reference< css::document::XEventListener > m_xNewDocBroadcasterListener;
+    css::uno::Reference< css::document::XDocumentEventListener > m_xNewDocBroadcasterListener;
 
     /** @short  because we stop/restart listening sometimes, it's a good idea to know
                 if we already registered as listener .-)
@@ -499,7 +499,7 @@ public:
                                                const css::util::URL&                                     aURL     )
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // css.document.XEventListener
+    // css.document.XDocumentEventListener
     /** @short  informs about created/opened documents.
 
         @descr  Every new opened/created document will be saved internally
@@ -509,7 +509,7 @@ public:
         @param  aEvent
                 points to the new created/opened document.
      */
-    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
+    virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css.util.XChangesListener
@@ -1589,7 +1589,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
 
-void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent)
+void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
@@ -2210,7 +2210,7 @@ void AutoRecovery::implts_startListening()
        )
     {
         m_xNewDocBroadcasterListener = new WeakDocumentEventListener(this);
-        xBroadcaster->addEventListener(m_xNewDocBroadcasterListener);
+        xBroadcaster->addDocumentEventListener(m_xNewDocBroadcasterListener);
         /* SAFE */ {
         osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_bListenForDocEvents = true;
@@ -2221,7 +2221,7 @@ void AutoRecovery::implts_startListening()
 void AutoRecovery::implts_stopListening()
 {
     css::uno::Reference< css::util::XChangesNotifier > xCFG;
-    css::uno::Reference< css::document::XEventBroadcaster > xGlobalEventBroadcaster;
+    css::uno::Reference< css::document::XDocumentEventBroadcaster > xGlobalEventBroadcaster;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // Attention: Dont reset our internal members here too.
@@ -2236,7 +2236,7 @@ void AutoRecovery::implts_stopListening()
         (m_bListenForDocEvents       )
        )
     {
-        xGlobalEventBroadcaster->removeEventListener(m_xNewDocBroadcasterListener);
+        xGlobalEventBroadcaster->removeDocumentEventListener(m_xNewDocBroadcasterListener);
         m_bListenForDocEvents = false;
     }
 

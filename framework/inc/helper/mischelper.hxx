@@ -22,7 +22,7 @@
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -267,13 +267,13 @@ class WeakEventListener : public ::cppu::WeakImplHelper1<com::sun::star::lang::X
         }
 };
 
-class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star::document::XEventListener>
+class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star::document::XDocumentEventListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::document::XEventListener> mxOwner;
+        com::sun::star::uno::WeakReference<com::sun::star::document::XDocumentEventListener> mxOwner;
 
     public:
-        WeakDocumentEventListener(com::sun::star::uno::Reference<com::sun::star::document::XEventListener> xOwner)
+        WeakDocumentEventListener(com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -282,13 +282,13 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
         {
         }
 
-        virtual void SAL_CALL notifyEvent(const com::sun::star::document::EventObject& rEvent)
+        virtual void SAL_CALL documentEventOccured(const com::sun::star::document::DocumentEvent& rEvent)
             throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
-            com::sun::star::uno::Reference<com::sun::star::document::XEventListener> xOwner(mxOwner.get(),
+            com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
             if (xOwner.is())
-                xOwner->notifyEvent(rEvent);
+                xOwner->documentEventOccured(rEvent);
 
         }
 
@@ -296,7 +296,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
             throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
-            com::sun::star::uno::Reference<com::sun::star::document::XEventListener> xOwner(mxOwner.get(),
+            com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);

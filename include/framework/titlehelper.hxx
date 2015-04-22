@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -55,7 +55,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,
                                                      css::frame::XFrameActionListener   ,
-                                                     css::document::XEventListener      >
+                                                     css::document::XDocumentEventListener >
 {
 
     // interface
@@ -125,8 +125,8 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
-        /** @see css.document.XEventListener */
-        virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
+        /** @see css.document.XDocumentEventListener */
+        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
