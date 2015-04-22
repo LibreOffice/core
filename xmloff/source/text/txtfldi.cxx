@@ -4166,7 +4166,7 @@ XMLPageTitleFieldImportContext::XMLPageTitleFieldImportContext(
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName)      /// element name w/o prefix
-: XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_pagetitle, nPrfx, sLocalName )
 {
     sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
