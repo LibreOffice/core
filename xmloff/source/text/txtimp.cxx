@@ -269,6 +269,8 @@ static const SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
     // draw fields
     { XML_NAMESPACE_TEXT, XML_MEASURE,  XML_TOK_TEXT_MEASURE },
+    { XML_NAMESPACE_LO_EXT, XML_PAGE_NAME, XML_TOK_TEXT_PAGE_NAME },
+    { XML_NAMESPACE_TEXT, XML_PAGE_NAME, XML_TOK_TEXT_PAGE_NAME },
 
     // RDF metadata
     { XML_NAMESPACE_TEXT, XML_META,         XML_TOK_TEXT_META },

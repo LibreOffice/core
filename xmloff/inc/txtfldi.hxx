@@ -1131,6 +1131,28 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
+/** import page|slide name fields (<text:page-name>) */
+class XMLPageNameFieldImportContext : public XMLTextFieldImportContext
+{
+public:
+    TYPEINFO_OVERRIDE();
+
+    XMLPageNameFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const OUString& sLocalName);     /// element name w/o prefix
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+};
+
 /** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
 class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 {
