@@ -29,6 +29,7 @@
 #include <connectivity/dbexception.hxx>
 #include "resource/kab_res.hrc"
 #include "resource/sharedresources.hxx"
+#include "sqlbison.hxx"
 
 
 #if OSL_DEBUG_LEVEL > 0
