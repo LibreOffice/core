@@ -3035,18 +3035,18 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                 assert(false);
             }
 
-            double aExtrapolateForward = 0.0;
-            double aExtrapolateBackward = 0.0;
+            double fExtrapolateForward = 0.0;
+            double fExtrapolateBackward = 0.0;
 
-            xProperties->getPropertyValue("ExtrapolateForward") >>= aExtrapolateForward;
-            xProperties->getPropertyValue("ExtrapolateBackward") >>= aExtrapolateBackward;
+            xProperties->getPropertyValue("ExtrapolateForward") >>= fExtrapolateForward;
+            xProperties->getPropertyValue("ExtrapolateBackward") >>= fExtrapolateBackward;
 
             pFS->singleElement( FSNS( XML_c, XML_forward ),
-                    XML_val, OString::number(aExtrapolateForward).getStr(),
+                    XML_val, OString::number(fExtrapolateForward).getStr(),
                     FSEND );
 
             pFS->singleElement( FSNS( XML_c, XML_backward ),
-                    XML_val, OString::number(aExtrapolateBackward).getStr(),
+                    XML_val, OString::number(fExtrapolateBackward).getStr(),
                     FSEND );
 
             bool bForceIntercept = false;
@@ -3054,11 +3054,11 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
 
             if (bForceIntercept)
             {
-                double aInterceptValue = 0.0;
-                xProperties->getPropertyValue("InterceptValue") >>= aInterceptValue;
+                double fInterceptValue = 0.0;
+                xProperties->getPropertyValue("InterceptValue") >>= fInterceptValue;
 
                 pFS->singleElement( FSNS( XML_c, XML_intercept ),
-                    XML_val, OString::number(aInterceptValue).getStr(),
+                    XML_val, OString::number(fInterceptValue).getStr(),
                     FSEND );
             }
 
