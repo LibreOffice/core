@@ -221,7 +221,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     // We truncate ...
     const sal_uInt16 nLineWidth = (sal_uInt16)(rInf.Width() - rInf.X());
     sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
-    if( nLen )
+    if (nLen > 0)
     {
         // special case: guess does not always provide the correct
         // width, only in common cases.

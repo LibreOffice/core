@@ -201,7 +201,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if ( rPor.IsFtnPortion() )
     {
         nBreakPos = rInf.GetIdx();
-        nCutPos = rInf.GetLen();
+        nCutPos = -1;
         return false;
     }
 
