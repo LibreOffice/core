@@ -13,7 +13,9 @@
 #include <string>
 #include <map>
 
+#include <boost/property_tree/json_parser.hpp>
 #include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
@@ -44,6 +46,8 @@ static GtkWidget* pVBox;
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 static GtkComboBoxText* pPartSelector;
 #endif
+GtkWidget* pFindbar;
+GtkWidget* pFindbarEntry;
 
 static LibreOfficeKit* pOffice;
 static char* pFileName;
@@ -110,6 +114,67 @@ void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
     if (bool(lok_docview_get_edit(pLOKDocView)) != bActive)
         lok_docview_set_edit(pLOKDocView, bActive);
+}
+
+/// Toggle the visibility of the findbar.
+void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    if (gtk_widget_get_visible(pFindbar))
+    {
+        gtk_widget_hide(pFindbar);
+    }
+    else
+        gtk_widget_show_all(pFindbar);
+}
+
+/// Searches for the next or previous text of pFindbarEntry.
+void doSearch(bool bBackwards)
+{
+    GtkEntry* pEntry = GTK_ENTRY(pFindbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    lok_docview_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str());
+}
+
+/// Click handler for the search next button.
+void signalSearchNext(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    doSearch(/*bBackwards=*/false);
+}
+
+/// Click handler for the search previous button.
+void signalSearchPrev(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    doSearch(/*bBackwards=*/true);
+}
+
+/// Handles the key-press-event of the search entry widget.
+gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
+{
+    switch(pEvent->keyval)
+    {
+        case GDK_Return:
+        {
+            // Search forward.
+            doSearch(/*bBackwards=*/false);
+            return TRUE;
+        }
+        case GDK_Escape:
+        {
+            // Hide the findbar.
+            gtk_widget_hide(pFindbar);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /// LOKDocView changed edit state -> inform the tool button.
@@ -297,6 +362,9 @@ int main( int argc, char* argv[] )
     pEnableEditing = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_EDIT);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
+    GtkToolItem* pFindButton = gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pFindButton, -1);
+    g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
     pBold = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_BOLD);
@@ -318,6 +386,29 @@ int main( int argc, char* argv[] )
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
+    // Findbar
+    pFindbar = gtk_toolbar_new();
+    gtk_toolbar_set_style(GTK_TOOLBAR(pFindbar), GTK_TOOLBAR_ICONS);
+
+    GtkToolItem* pFindbarClose = gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
+    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarClose, -1);
+    g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
+
+    GtkToolItem* pEntryContainer = gtk_tool_item_new();
+    pFindbarEntry = gtk_entry_new();
+    gtk_container_add(GTK_CONTAINER(pEntryContainer), pFindbarEntry);
+    g_signal_connect(pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
+    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pEntryContainer, -1);
+
+    GtkToolItem* pFindbarNext = gtk_tool_button_new_from_stock(GTK_STOCK_GO_DOWN);
+    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarNext, -1);
+    g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
+    GtkToolItem* pFindbarPrev = gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP);
+    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarPrev, -1);
+    g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
+
+    gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
+
     // Docview
     pDocView = lok_docview_new( pOffice );
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
@@ -330,6 +421,8 @@ int main( int argc, char* argv[] )
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
     gtk_widget_show_all( pWindow );
+    // Hide the findbar by default.
+    gtk_widget_hide(pFindbar);
 
     pFileName = argv[2];
     int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
