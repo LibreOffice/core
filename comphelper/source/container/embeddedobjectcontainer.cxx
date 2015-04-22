@@ -42,6 +42,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <sal/log.hxx>
+
 #include <algorithm>
 #include <unordered_map>
 

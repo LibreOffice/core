@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
 

@@ -28,6 +28,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/svmain.hxx>
 

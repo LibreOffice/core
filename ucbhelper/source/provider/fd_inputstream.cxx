@@ -21,6 +21,7 @@
 
 #include <rtl/alloc.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <algorithm>
 
 using namespace com::sun::star::uno;

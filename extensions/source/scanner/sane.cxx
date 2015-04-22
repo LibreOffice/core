@@ -20,6 +20,7 @@
 #include <cstdarg>
 #include <math.h>
 #include <osl/file.h>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <sane.hxx>

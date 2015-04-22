@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/ChainablePropertySetInfo.hxx>
+#include <sal/log.hxx>
 
 using ::comphelper::PropertyInfo;
 using ::comphelper::ChainablePropertySetInfo;

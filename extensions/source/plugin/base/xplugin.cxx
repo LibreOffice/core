@@ -45,6 +45,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
+#include <sal/log.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

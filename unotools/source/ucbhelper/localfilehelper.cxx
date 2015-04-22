@@ -22,6 +22,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sal/log.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>

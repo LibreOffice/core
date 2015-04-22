@@ -24,6 +24,7 @@
 #include <toxe.hxx>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <sal/log.hxx>
 
 class SwAuthEntry
 {

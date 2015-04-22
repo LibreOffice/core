@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

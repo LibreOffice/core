@@ -25,6 +25,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/compbase3.hxx>
 
 #include <vcl/wrkwin.hxx>

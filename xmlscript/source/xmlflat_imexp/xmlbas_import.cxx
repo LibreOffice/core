@@ -21,6 +21,7 @@
 
 #include "unoservices.hxx"
 #include "xmlbas_import.hxx"
+#include <sal/log.hxx>
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xml_helper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

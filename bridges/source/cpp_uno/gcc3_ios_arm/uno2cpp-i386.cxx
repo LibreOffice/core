@@ -24,6 +24,7 @@
 // changes.
 
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <sal/log.hxx>
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 #include "bridges/cpp_uno/shared/types.hxx"

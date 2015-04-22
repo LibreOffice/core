@@ -31,6 +31,7 @@
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
 #include <editeng/paravertalignitem.hxx>
+#include <sal/log.hxx>
 
 namespace vcl { class Font; }
 class OutputDevice;

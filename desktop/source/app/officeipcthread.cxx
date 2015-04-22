@@ -27,6 +27,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <stdio.h>
 #include <osl/process.h>
+#include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

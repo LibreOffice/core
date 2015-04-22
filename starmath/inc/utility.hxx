@@ -19,6 +19,9 @@
 #ifndef INCLUDED_STARMATH_INC_UTILITY_HXX
 #define INCLUDED_STARMATH_INC_UTILITY_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>

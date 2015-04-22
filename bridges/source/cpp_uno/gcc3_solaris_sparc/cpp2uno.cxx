@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/uno/genfunc.hxx>
+#include <sal/log.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
 #include "bridges/cpp_uno/shared/bridge.hxx"

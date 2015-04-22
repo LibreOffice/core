@@ -30,6 +30,7 @@
 #include "osl/thread.h"
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.h"
+#include "sal/log.hxx"
 
 #include "file_path_helper.hxx"
 

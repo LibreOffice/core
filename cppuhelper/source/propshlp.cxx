@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <boost/scoped_array.hpp>
+#include <sal/log.hxx>
 
 using namespace osl;
 using namespace com::sun::star::uno;

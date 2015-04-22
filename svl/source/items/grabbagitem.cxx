@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

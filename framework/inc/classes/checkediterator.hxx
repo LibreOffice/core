@@ -20,6 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_CHECKEDITERATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_CHECKEDITERATOR_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <sal/types.h>
 
 #include <iterator>

@@ -24,6 +24,7 @@
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>

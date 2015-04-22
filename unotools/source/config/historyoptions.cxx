@@ -18,6 +18,7 @@
  */
 
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

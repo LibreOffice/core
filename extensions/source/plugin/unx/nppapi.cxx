@@ -35,6 +35,7 @@
 
 #include <cstdarg>
 
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #include <plugin/unx/plugcon.hxx>

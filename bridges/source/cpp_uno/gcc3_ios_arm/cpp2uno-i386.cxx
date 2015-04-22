@@ -31,6 +31,7 @@
 // copy/paste. So I continue in that tradition...
 
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 

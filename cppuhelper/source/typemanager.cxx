@@ -52,6 +52,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
 

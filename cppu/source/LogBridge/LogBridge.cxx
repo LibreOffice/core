@@ -30,6 +30,7 @@
 #include "cppu/EnvDcp.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
+#include <sal/log.hxx>
 
 namespace
 {

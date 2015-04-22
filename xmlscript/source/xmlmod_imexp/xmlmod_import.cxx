@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
+
 #include "imp_share.hxx"
 #include "xml_import.hxx"
 

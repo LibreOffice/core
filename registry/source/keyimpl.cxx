@@ -26,6 +26,7 @@
 #include "rtl/alloc.h"
 #include "rtl/ustrbuf.hxx"
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace store;
 

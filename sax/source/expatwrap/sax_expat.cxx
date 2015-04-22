@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include <expat.h>
 

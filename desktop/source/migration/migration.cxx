@@ -28,6 +28,7 @@
 #include "migration.hxx"
 #include "migration_impl.hxx"
 
+#include <sal/log.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

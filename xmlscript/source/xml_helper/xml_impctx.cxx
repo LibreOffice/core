@@ -31,6 +31,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <sal/log.hxx>
+
 #include <memory>
 #include <unordered_map>
 #include <vector>

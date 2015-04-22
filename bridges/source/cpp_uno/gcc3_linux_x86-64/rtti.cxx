@@ -31,6 +31,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <typelib/typedescription.h>
 
 #include <rtti.hxx>

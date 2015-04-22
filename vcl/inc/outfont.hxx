@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_OUTFONT_HXX
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <i18nlangtag/lang.h>
 #include <tools/solar.h>

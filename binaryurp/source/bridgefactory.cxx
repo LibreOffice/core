@@ -33,6 +33,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include "rtl/ref.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 
 #include "bridge.hxx"

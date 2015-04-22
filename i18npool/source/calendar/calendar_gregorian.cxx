@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <stdio.h>
 #include <string.h>

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sstream>
 #include <stdlib.h>
 
 #include <tools/color.hxx>

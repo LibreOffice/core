@@ -21,6 +21,7 @@
 #include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
+#include "sal/log.hxx"
 
 #include <cppu/Enterable.hxx>
 #include "cppu/helper/purpenv/Environment.hxx"

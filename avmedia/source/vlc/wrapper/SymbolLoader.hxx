@@ -15,6 +15,7 @@
 #endif
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 

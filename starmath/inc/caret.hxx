@@ -9,6 +9,10 @@
 #ifndef INCLUDED_STARMATH_INC_CARET_HXX
 #define INCLUDED_STARMATH_INC_CARET_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
+
 #include "node.hxx"
 
 /** Representation of caret position with an equation */

@@ -22,6 +22,7 @@
 #include <float.h>
 #include <errno.h>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>

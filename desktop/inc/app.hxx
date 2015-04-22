@@ -23,6 +23,7 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <tools/resmgr.hxx>

@@ -20,6 +20,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <boost/scoped_array.hpp>
 #include <unicode/regex.h>

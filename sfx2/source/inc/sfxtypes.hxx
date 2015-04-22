@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>

@@ -24,6 +24,7 @@
 
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <uno/environment.h>
 #include <uno/lbnames.h>

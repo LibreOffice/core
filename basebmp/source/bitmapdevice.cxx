@@ -52,6 +52,7 @@
 #include "intconversion.hxx"
 
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <basegfx/tools/tools.hxx>

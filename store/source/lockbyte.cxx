@@ -26,6 +26,7 @@
 #include "osl/process.h"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 
 #include "object.hxx"
 #include "storbase.hxx"

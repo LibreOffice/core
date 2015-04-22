@@ -9,6 +9,10 @@
 #ifndef INCLUDED_STARMATH_INC_VISITORS_HXX
 #define INCLUDED_STARMATH_INC_VISITORS_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
+
 #include "node.hxx"
 #include "caret.hxx"
 #include <memory>

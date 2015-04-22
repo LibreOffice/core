@@ -37,6 +37,7 @@
 #include "cppu/unotype.hxx"
 #include "rtl/byteseq.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"

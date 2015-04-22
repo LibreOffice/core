@@ -23,6 +23,7 @@
 #define POLY_CLIP_XOR   3
 
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <poly.h>
 #include <tools/poly.hxx>

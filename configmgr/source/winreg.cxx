@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include "winreg.hxx"

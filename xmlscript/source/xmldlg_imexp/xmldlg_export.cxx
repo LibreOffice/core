@@ -20,6 +20,7 @@
 #include "exp_share.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/CharSet.hpp>

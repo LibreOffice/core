@@ -24,6 +24,7 @@
 #include <vector>
 #include <editeng/outlobj.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <tools/link.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>

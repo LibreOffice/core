@@ -26,6 +26,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/anytostring.hxx>

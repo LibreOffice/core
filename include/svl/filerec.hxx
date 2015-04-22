@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVL_FILEREC_HXX
 #define INCLUDED_SVL_FILEREC_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

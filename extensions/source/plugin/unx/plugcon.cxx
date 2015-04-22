@@ -33,6 +33,8 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#include <sal/log.hxx>
+
 #include <plugin/unx/plugcon.hxx>
 
 #include <cstdarg>

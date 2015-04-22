@@ -31,6 +31,7 @@
 
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 
 #include "uno/environment.h"
 #include "typelib/typedescription.h"

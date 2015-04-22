@@ -28,6 +28,7 @@
 
 #include <osl/endian.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <comphelper/string.hxx>
 

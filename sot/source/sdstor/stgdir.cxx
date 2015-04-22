@@ -28,6 +28,7 @@
 #include "stgio.hxx"
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <boost/scoped_array.hpp>
 

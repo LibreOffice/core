@@ -23,6 +23,7 @@
 #include "modulepcr.hxx"
 #include "formresid.hrc"
 #include "formstrings.hxx"
+#include <sal/log.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>

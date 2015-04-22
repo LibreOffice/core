@@ -31,6 +31,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

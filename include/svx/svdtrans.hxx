@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDTRANS_HXX
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

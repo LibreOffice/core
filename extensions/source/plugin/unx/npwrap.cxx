@@ -42,6 +42,7 @@
 
 #include <osl/file.h>
 #include <osl/module.h>
+#include <sal/log.hxx>
 
 #include <config_vclplug.h>
 

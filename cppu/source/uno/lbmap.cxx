@@ -32,6 +32,7 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "osl/interlck.h"
+#include "sal/log.hxx"
 
 #include "uno/dispatcher.h"
 #include "uno/mapping.h"

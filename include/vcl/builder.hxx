@@ -12,6 +12,7 @@
 
 #include <typeinfo>
 #include <osl/module.hxx>
+#include <sal/log.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>

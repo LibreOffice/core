@@ -30,6 +30,8 @@
 #include <prewin.h>
 #include <postwin.h>
 
+#include <sal/log.hxx>
+
 #include <plugin/impl.hxx>
 
 #if defined _MSC_VER

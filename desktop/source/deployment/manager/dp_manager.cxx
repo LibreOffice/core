@@ -29,6 +29,7 @@
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/security.hxx>

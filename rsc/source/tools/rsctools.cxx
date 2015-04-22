@@ -31,6 +31,7 @@
 
 #include <osl/file.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 /* case insensitive compare of two strings up to a given length */
 int rsc_strnicmp( const char *string1, const char *string2, size_t count )

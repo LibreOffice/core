@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/uno/genfunc.hxx>
+#include <sal/log.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
 #include <osl/endian.h>

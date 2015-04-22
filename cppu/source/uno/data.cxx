@@ -23,6 +23,7 @@
 
 #include "cppu/macros.hxx"
 #include "osl/mutex.hxx"
+#include "sal/log.hxx"
 #include "uno/data.h"
 
 #include "constr.hxx"

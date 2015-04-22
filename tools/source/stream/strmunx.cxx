@@ -30,6 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 // class FileBase
 #include <osl/file.hxx>

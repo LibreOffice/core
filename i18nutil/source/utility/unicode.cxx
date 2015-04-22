@@ -24,6 +24,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <i18nutil/unicode.hxx>
+#include <sal/log.hxx>
 #include <unicode/numfmt.h>
 #include "unicode_data.h"
 

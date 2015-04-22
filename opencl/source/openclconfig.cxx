@@ -15,6 +15,7 @@
 #include <opencl/openclconfig.hxx>
 #include <opencl/platforminfo.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 
 OpenCLConfig::OpenCLConfig() :

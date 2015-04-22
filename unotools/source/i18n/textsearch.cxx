@@ -22,6 +22,7 @@
 #include <com/sun/star/util/TextSearch.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/textsearch.hxx>

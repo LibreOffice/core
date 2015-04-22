@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <sal/log.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
 #include <comphelper/namedvaluecollection.hxx>

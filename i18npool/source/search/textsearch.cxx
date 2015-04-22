@@ -35,6 +35,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <sal/log.hxx>
 
 #ifdef _MSC_VER
 // get rid of that dumb compiler warning

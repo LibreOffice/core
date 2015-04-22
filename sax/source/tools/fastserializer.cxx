@@ -21,6 +21,7 @@
 
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 

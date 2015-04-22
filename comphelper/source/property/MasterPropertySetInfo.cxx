@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/MasterPropertySetInfo.hxx>
+#include <sal/log.hxx>
 
 using ::comphelper::PropertyInfo;
 using ::comphelper::MasterPropertySetInfo;

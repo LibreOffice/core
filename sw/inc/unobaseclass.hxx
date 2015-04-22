@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <sal/log.hxx>
 
 class SfxPoolItem;
 class SwClient;

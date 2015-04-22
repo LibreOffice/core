@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/mslangid.hxx>

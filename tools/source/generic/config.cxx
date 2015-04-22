@@ -32,6 +32,7 @@
 #include <tools/config.hxx>
 #include <osl/security.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 struct ImplKeyData
 {

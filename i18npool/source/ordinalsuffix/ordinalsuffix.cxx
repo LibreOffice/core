@@ -21,6 +21,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <string.h>
 #include "ordinalsuffix.hxx"

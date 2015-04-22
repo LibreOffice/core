@@ -33,6 +33,7 @@
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/macros.h"
 #include "sal/types.h"
 

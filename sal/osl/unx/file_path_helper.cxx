@@ -23,6 +23,7 @@
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 const sal_Unicode FPH_CHAR_PATH_SEPARATOR = (sal_Unicode)'/';
 const sal_Unicode FPH_CHAR_DOT            = (sal_Unicode)'.';

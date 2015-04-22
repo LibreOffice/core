@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <comphelper/flagguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <libxml/xmlwriter.h>

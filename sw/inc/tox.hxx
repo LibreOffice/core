@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_TOX_HXX
 
 #include <cppuhelper/weakref.hxx>
+#include <sal/log.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <svl/poolitem.hxx>

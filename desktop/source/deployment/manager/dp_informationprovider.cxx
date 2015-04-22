@@ -35,6 +35,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <ucbhelper/content.hxx>
 

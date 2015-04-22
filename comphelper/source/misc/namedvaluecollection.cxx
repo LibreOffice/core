@@ -25,6 +25,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <functional>

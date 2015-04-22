@@ -20,6 +20,9 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_MTAFOP_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_MTAFOP_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>

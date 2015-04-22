@@ -23,6 +23,7 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/fixed.hxx>

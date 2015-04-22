@@ -35,6 +35,7 @@
 #include <osl/mutex.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>

@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <uno/dispatcher.h>
 #include <uno/data.h>

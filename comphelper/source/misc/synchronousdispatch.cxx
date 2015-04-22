@@ -26,8 +26,7 @@
 
 #include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/processfactory.hxx>
-
-
+#include <sal/log.hxx>
 
 namespace comphelper
 {

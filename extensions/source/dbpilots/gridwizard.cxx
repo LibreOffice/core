@@ -27,6 +27,7 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
 #include "dbpilots.hrc"

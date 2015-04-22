@@ -27,6 +27,7 @@
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <osl/pipe.hxx>

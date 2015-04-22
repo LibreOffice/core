@@ -35,8 +35,9 @@
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
-#include <tools/time.hxx>
 
+#include <sal/log.hxx>
+#include <tools/time.hxx>
 #include <osl/diagnose.h>
 
 #if defined(SOLARIS) && defined(__GNUC__)

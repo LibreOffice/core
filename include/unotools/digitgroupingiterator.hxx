@@ -21,6 +21,7 @@
 #define INCLUDED_UNOTOOLS_DIGITGROUPINGITERATOR_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <sal/log.hxx>
 
 namespace utl {
 

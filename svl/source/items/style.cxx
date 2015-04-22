@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <sal/log.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>

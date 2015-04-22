@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string>
 
+#include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/calendarwrapper.hxx>

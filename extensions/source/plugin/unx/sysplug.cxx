@@ -40,6 +40,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 #include <plugin/impl.hxx>
 

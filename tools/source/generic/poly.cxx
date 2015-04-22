@@ -19,6 +19,7 @@
 
 #include <osl/endian.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>

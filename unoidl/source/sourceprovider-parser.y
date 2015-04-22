@@ -54,6 +54,7 @@
 
 #include "osl/file.h"
 #include "osl/thread.h"
+#include "sal/log.hxx"
 
 #include "sourceprovider-scanner.hxx"
 

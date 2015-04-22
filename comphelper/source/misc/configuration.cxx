@@ -30,6 +30,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace {

@@ -27,6 +27,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <osl/module.hxx>
+#include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
 
