@@ -3135,7 +3135,6 @@ void Window::SetUpdateMode( bool bUpdate )
 
 void Window::GrabFocus()
 {
-
     ImplGrabFocus( 0 );
 }
 

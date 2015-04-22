@@ -88,11 +88,11 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
-    VclPtr<SwAddRenameEntryDialog> pDlg;
+    ScopedVclPtr<SwAddRenameEntryDialog> pDlg;
     if (bRename)
-        pDlg = VclPtr<SwRenameEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg.reset(VclPtr<SwRenameEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
     else
-        pDlg = VclPtr<SwAddEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg.reset(VclPtr<SwAddEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
     if(bRename)
     {
         OUString aTemp = m_pFieldsLB->GetEntry(nPos);

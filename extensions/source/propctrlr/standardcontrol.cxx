@@ -1079,8 +1079,8 @@ namespace pcr
     {
         SetSubEdit(nullptr);
         m_pImplEdit.disposeAndClear();
-        m_pFloatingEdit.clear();
-        m_pDropdownButton.clear();
+        m_pFloatingEdit.disposeAndClear();
+        m_pDropdownButton.disposeAndClear();
         DropDownEditControl_Base::dispose();
     }
 

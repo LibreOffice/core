@@ -43,7 +43,7 @@ OFieldDescGenWin::~OFieldDescGenWin()
 
 void OFieldDescGenWin::dispose()
 {
-    m_pFieldControl.clear();
+    m_pFieldControl.disposeAndClear();
     TabPage::dispose();
 }
 
@@ -79,7 +79,6 @@ void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rT
 
 void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-
     m_pFieldControl->DisplayData(pFieldDescr);
 }
 

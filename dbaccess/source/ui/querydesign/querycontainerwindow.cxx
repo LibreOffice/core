@@ -75,7 +75,7 @@ namespace dbaui
                 xCloseable->close(sal_False); // false - holds the ownership of this frame
         }
 
-        m_pSplitter.clear();
+        m_pSplitter.disposeAndClear();
         ODataView::dispose();
     }
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )

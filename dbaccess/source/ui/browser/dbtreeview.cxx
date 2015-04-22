@@ -59,7 +59,7 @@ void DBTreeView::dispose()
             m_pTreeListBox->DisconnectFromModel();
         }
     }
-    m_pTreeListBox.clear();
+    m_pTreeListBox.disposeAndClear();
     vcl::Window::dispose();
 }
 

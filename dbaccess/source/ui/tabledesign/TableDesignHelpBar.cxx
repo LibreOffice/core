@@ -43,7 +43,7 @@ OTableDesignHelpBar::~OTableDesignHelpBar()
 
 void OTableDesignHelpBar::dispose()
 {
-    m_pTextWin.clear();
+    m_pTextWin.disposeAndClear();
     TabPage::dispose();
 }
 

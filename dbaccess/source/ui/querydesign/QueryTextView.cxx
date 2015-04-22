@@ -57,7 +57,7 @@ OQueryTextView::~OQueryTextView()
 
 void OQueryTextView::dispose()
 {
-    m_pEdit.clear();
+    m_pEdit.disposeAndClear();
     vcl::Window::dispose();
 }
 

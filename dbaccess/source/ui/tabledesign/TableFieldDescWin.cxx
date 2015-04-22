@@ -76,9 +76,9 @@ void OTableFieldDescWin::dispose()
     getGenPage()->Hide();
     m_pHeader->Hide();
 
-    m_pGenPage.clear();
-    m_pHeader.clear();
-    m_pHelpBar.clear();
+    m_pGenPage.disposeAndClear();
+    m_pHeader.disposeAndClear();
+    m_pHelpBar.disposeAndClear();
     TabPage::dispose();
 }
 

@@ -2524,7 +2524,7 @@ void OQueryDesignView::dispose()
 {
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    m_pSelectionBox.clear();
+    m_pSelectionBox.disposeAndClear();
     m_aSplitter.disposeAndClear();
     OQueryView::dispose();
 }

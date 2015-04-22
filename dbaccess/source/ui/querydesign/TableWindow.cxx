@@ -108,7 +108,7 @@ void OTableWindow::dispose()
     {
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
     }
-    m_pListBox.clear();
+    m_pListBox.disposeAndClear();
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
