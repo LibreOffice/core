@@ -138,7 +138,6 @@ const sal_Char sAPI_drop_down[]                 = "DropDown";
 const sal_Char sAPI_header[]                    = "Header";
 const sal_Char sAPI_footer[]                    = "Footer";
 const sal_Char sAPI_datetime[]                  = "DateTime";
-const sal_Char sAPI_pagetitle[]                 = "PageTitle";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
