@@ -159,7 +159,7 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
     if (m_pTreeView.get() != _pTreeView)
     {
-        m_pTreeView.clear();
+        m_pTreeView.disposeAndClear();
         m_pTreeView = _pTreeView;
     }
 }

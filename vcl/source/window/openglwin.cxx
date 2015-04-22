@@ -16,6 +16,7 @@ class OpenGLWindowImpl
 {
 public:
     OpenGLWindowImpl(vcl::Window* pWindow);
+    ~OpenGLWindowImpl() { mxChildWindow.disposeAndClear(); }
     OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
@@ -30,7 +31,6 @@ OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
     maContext.init(mxChildWindow.get());
     pWindow->SetMouseTransparent(false);
 }
-
 
 OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
     Window(pParent, 0),
@@ -49,7 +49,7 @@ void OpenGLWindow::dispose()
     if(mpRenderer)
         mpRenderer->contextDestroyed();
     mpRenderer = NULL;
-
+    mxImpl.reset();
     Window::dispose();
 }
 
