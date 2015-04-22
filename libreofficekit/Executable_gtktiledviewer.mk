@@ -15,6 +15,7 @@ $(eval $(call gb_Executable_set_include,gtktiledviewer,\
 ))
 
 $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
+    boost_headers \
     gtk \
 ))
 
