@@ -703,7 +703,7 @@ namespace pcr
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
         DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");
 
-        m_pView = new OPropertyBrowserView(_pParentWin);
+        m_pView = VclPtr<OPropertyBrowserView>::Create(_pParentWin);
         m_pView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,

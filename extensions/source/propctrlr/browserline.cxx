@@ -55,7 +55,7 @@ namespace pcr
 
     OBrowserLine::OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent )
             :m_sEntryName( _rEntryName )
-            ,m_aFtTitle(new FixedText(pParent))
+            ,m_aFtTitle(VclPtr<FixedText>::Create(pParent))
             ,m_pControlWindow( NULL )
             ,m_pBrowseButton(NULL)
             ,m_pAdditionalBrowseButton( NULL )
@@ -380,7 +380,7 @@ namespace pcr
 
         if ( !rpButton )
         {
-            rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
+            rpButton = VclPtr<PushButton>::Create( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
             rpButton->SetText(OUString("..."));

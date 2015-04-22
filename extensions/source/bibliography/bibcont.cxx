@@ -183,7 +183,7 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
         RemoveItem(TOP_WINDOW);
         pTopWin.disposeAndClear();
     }
-    pTopWin=new BibWindowContainer(this,pWin);
+    pTopWin=VclPtr<BibWindowContainer>::Create(this,pWin);
     pTopWin->Show();
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getBeamerSize();
@@ -201,7 +201,7 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
         pBottomWin.disposeAndClear();
     }
 
-    pBottomWin=new BibWindowContainer(this,pWin);
+    pBottomWin=VclPtr<BibWindowContainer>::Create(this,pWin);
 
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getViewSize();

@@ -224,7 +224,7 @@ namespace bib
 
     void BibBeamer::createToolBar()
     {
-        pToolBar= new BibToolBar(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
+        pToolBar= VclPtr<BibToolBar>::Create(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
         ::Size aSize=pToolBar->GetSizePixel();
         InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
         if ( m_xController.is() )
@@ -233,7 +233,7 @@ namespace bib
 
     void BibBeamer::createGridWin()
     {
-        pGridWin = new BibGridwin(this,0);
+        pGridWin = VclPtr<BibGridwin>::Create(this,0);
 
         InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SWIB_RELATIVESIZE );
 

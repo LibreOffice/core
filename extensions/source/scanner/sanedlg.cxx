@@ -157,8 +157,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScanPreview(vcl::Windo
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    ScanPreview *pWindow = new ScanPreview(pParent, nWinStyle);
-    return pWindow;
+    return new ScanPreview(pParent, nWinStyle);
 }
 
 SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :

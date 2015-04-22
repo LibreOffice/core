@@ -977,7 +977,7 @@ namespace pcr
 
     OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* _pParent)
         :FloatingWindow(_pParent, WB_BORDER)
-        ,m_aImplEdit(new MultiLineEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER))
+        ,m_aImplEdit(VclPtr<MultiLineEdit>::Create(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER))
     {
         m_aImplEdit->Show();
     }
@@ -1041,19 +1041,19 @@ namespace pcr
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
+        m_pImplEdit = VclPtr<MultiLineEdit>::Create( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
         if ( _nStyle & WB_DROPDOWN )
         {
-            m_pDropdownButton = new PushButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
+            m_pDropdownButton = VclPtr<PushButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
             m_pDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
             m_pDropdownButton->SetClickHdl( LINK( this, DropDownEditControl, DropDownHdl ) );
             m_pDropdownButton->Show();
         }
 
-        m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
+        m_pFloatingEdit = VclPtr<OMultilineFloatingEdit>::Create(this);
 
         m_pFloatingEdit->SetPopupModeEndHdl( LINK( this, DropDownEditControl, ReturnHdl ) );
         m_pFloatingEdit->getEdit().SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );

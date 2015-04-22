@@ -119,7 +119,7 @@ namespace bib
             m_xGeneralPage = 0;
         }
 
-        m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
+        m_pGeneralPage = VclPtr<BibGeneralPage>::Create( this, m_pDatMan );
         m_xGeneralPage = &m_pGeneralPage->GetFocusListener();
         m_pGeneralPage->Show();
 

@@ -35,7 +35,7 @@ namespace pcr
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)
     {
-        m_pPropBox = new OPropertyEditor( this );
+        m_pPropBox = VclPtr<OPropertyEditor>::Create( this );
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
         m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 

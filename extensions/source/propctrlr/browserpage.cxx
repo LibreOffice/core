@@ -35,7 +35,7 @@ namespace pcr
 
     OBrowserPage::OBrowserPage(vcl::Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
-            ,m_aListBox(new OBrowserListBox(this))
+            ,m_aListBox(VclPtr<OBrowserListBox>::Create(this))
     {
         m_aListBox->SetBackground(GetBackground());
         m_aListBox->SetPaintTransparent( true );

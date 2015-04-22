@@ -273,7 +273,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
     vcl::Window* pParent = VCLUnoHelper::GetWindow( aWindow );
 
-    BibBookContainer *pMyWindow = new BibBookContainer( pParent );
+    VclPtrInstance<BibBookContainer> pMyWindow( pParent );
     pMyWindow->Show();
 
     ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );

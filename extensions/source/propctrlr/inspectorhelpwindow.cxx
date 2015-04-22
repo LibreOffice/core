@@ -29,8 +29,8 @@ namespace pcr
 
     InspectorHelpWindow::InspectorHelpWindow( vcl::Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )
-        ,m_aSeparator( new FixedLine(this) )
-        ,m_aHelpText( new MultiLineEdit(this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL) )
+        ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
+        ,m_aHelpText( VclPtr<MultiLineEdit>::Create(this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL) )
         ,m_nMinLines( 3 )
         ,m_nMaxLines( 8 )
     {

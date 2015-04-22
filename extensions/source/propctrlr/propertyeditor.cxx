@@ -43,7 +43,7 @@ namespace pcr
 
     OPropertyEditor::OPropertyEditor( vcl::Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
-            ,m_aTabControl( new TabControl(this) )
+            ,m_aTabControl( VclPtr<TabControl>::Create(this) )
             ,m_pListener(NULL)
             ,m_pObserver(NULL)
             ,m_nNextId(1)
@@ -221,7 +221,7 @@ namespace pcr
         m_aTabControl->InsertPage(nId, _rText);
 
         // create a new page
-        OBrowserPage* pPage = new OBrowserPage(m_aTabControl.get());
+        VclPtrInstance<OBrowserPage> pPage(m_aTabControl.get());
         pPage->SetText( _rText );
         // some knittings
         pPage->SetSizePixel(m_aTabControl->GetTabPageSizePixel());
