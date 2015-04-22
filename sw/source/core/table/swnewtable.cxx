@@ -2126,19 +2126,22 @@ void SwTable::CheckConsistency() const
             {
                 SAL_WARN_IF( aIter == aRowSpanCells.end(),
                         "sw.core", "Missing master box");
-                SAL_WARN_IF( aIter->nLeft != nWidth || aIter->nRight != nNewWidth,
-                    "sw.core", "Wrong position/size of overlapped table box");
-                --(aIter->nRowSpan);
-                SAL_WARN_IF( aIter->nRowSpan != -nRowSp, "sw.core",
-                        "Wrong row span value" );
-                if( nRowSp == -1 )
+                if (aIter != aRowSpanCells.end())
                 {
-                    std::list< RowSpanCheck >::iterator aEraseIter = aIter;
-                    ++aIter;
-                    aRowSpanCells.erase( aEraseIter );
+                    SAL_WARN_IF( aIter->nLeft != nWidth || aIter->nRight != nNewWidth,
+                        "sw.core", "Wrong position/size of overlapped table box");
+                    --(aIter->nRowSpan);
+                    SAL_WARN_IF( aIter->nRowSpan != -nRowSp, "sw.core",
+                            "Wrong row span value" );
+                    if( nRowSp == -1 )
+                    {
+                        std::list< RowSpanCheck >::iterator aEraseIter = aIter;
+                        ++aIter;
+                        aRowSpanCells.erase( aEraseIter );
+                    }
+                    else
+                        ++aIter;
                 }
-                else
-                    ++aIter;
             }
             else if( nRowSp != 1 )
             {
