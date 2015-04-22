@@ -2869,10 +2869,10 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Horizontal spans
     const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ nRow ];
-    const SwWriteTableCells& tableCells =  pRow->GetCells();
-    if (nCell < tableCells.size() )
+    const SwWriteTableCells rTableCells =  pRow->GetCells();
+    if (nCell < rTableCells.size() )
     {
-        const SwWriteTableCell& rCell = tableCells[nCell];
+        const SwWriteTableCell& rCell = rTableCells[nCell];
         const sal_uInt16 nColSpan = rCell.GetColSpan();
         if ( nColSpan > 1 )
             m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
@@ -3617,8 +3617,8 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     const SwWriteTableRows& aRows = m_xTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
     sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
-    const SwWriteTableCells *tableCells =  &pRow->GetCells();
-    if (nCell < tableCells->size() )
+    const SwWriteTableCells& rTableCells =  pRow->GetCells();
+    if (nCell < rTableCells.size() )
     {
         const SwWriteTableCell *pCell = &pRow->GetCells( )[ nCell ];
         switch( pCell->GetVertOri())
