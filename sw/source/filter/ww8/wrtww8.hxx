@@ -1477,7 +1477,7 @@ public:
     MSWord_SdrAttrIter( MSWordExportBase& rWr, const EditTextObject& rEditObj,
         sal_uInt8 nType );
     void NextPara( sal_Int32 nPar );
-    void OutParaAttr(bool bCharAttr);
+    void OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore = NULL);
     void OutEEField(const SfxPoolItem& rHt);
 
     bool IsTxtAttr(sal_Int32 nSwPos);
