@@ -659,32 +659,6 @@ void RegisteredDb::addEntry(OUString const & url)
     }
 }
 
-bool RegisteredDb::getEntry(OUString const & url)
-{
-    try
-    {
-        const OUString sPrefix = getNSPrefix();
-        const OUString sEntry = getKeyElementName();
-        const OUString sExpression(
-            sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        Reference<css::xml::dom::XNode> aNode =
-            xpathApi->selectSingleNode(root, sExpression);
-
-        return aNode.is();
-    }
-    catch(const css::uno::Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        throw css::deployment::DeploymentException(
-            "Extension Manager: failed to read data entry in backend db: " +
-            m_urlDb, 0, exc);
-    }
-}
-
 } // namespace backend
 } // namespace dp_registry
 

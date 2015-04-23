@@ -159,8 +159,6 @@ public:
 
 
     void addEntry(OUString const & url);
-    bool getEntry(OUString const & url);
-
 };
 
 }

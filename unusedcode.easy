@@ -82,7 +82,6 @@ connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
 dbaccess::OBookmarkContainer::dispose()
 dbaccess::StorageInputStream::close()
 dbaui::OTableRowView::SetUpdatable(bool)
-dp_registry::backend::RegisteredDb::getEntry(rtl::OUString const&)
 oglcanvas::CanvasHelper::drawPoint(com::sun::star::rendering::XCanvas const*, com::sun::star::geometry::RealPoint2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::AttributeList::getUnsignedHex(int) const
