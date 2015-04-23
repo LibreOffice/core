@@ -10,11 +10,14 @@ package org.libreoffice.ui;
 
 import org.libreoffice.R;
 
+import org.libreoffice.storage.IFile;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Map;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Comparator;
 import android.util.Log;
@@ -198,55 +201,52 @@ public class FileUtilities {
         };
     }
 
-    static void sortFiles(File[] files, int sortMode) {
-        // Should really change all this to a switch statement...
-        if (sortMode == SORT_AZ) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return lhs.getName().compareTo(rhs.getName());
-                }
-            });
-            return;
-        }
-        if (sortMode == SORT_ZA) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return rhs.getName().compareTo(lhs.getName());
-                }
-            });
-            return;
-        }
-        if (sortMode == SORT_OLDEST) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return Long.valueOf(lhs.lastModified()).compareTo(rhs.lastModified());
-                }
-            });
-            return;
-        }
-        if (sortMode == SORT_NEWEST) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return Long.valueOf(rhs.lastModified()).compareTo(lhs.lastModified());
-                }
-            });
-            return;
-        }
-        if (sortMode == SORT_LARGEST) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return Long.valueOf(rhs.length()).compareTo(lhs.length());
-                }
-            });
-            return;
-        }
-        if (sortMode == SORT_SMALLEST) {
-            Arrays.sort(files , new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    return Long.valueOf(lhs.length()).compareTo(rhs.length());
-                }
-            });
-            return;
+    static void sortFiles(List<IFile> files, int sortMode) {
+        switch (sortMode) {
+            case SORT_AZ:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+                break;
+            case SORT_ZA:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return rhs.getName().compareTo(lhs.getName());
+                    }
+                });
+                break;
+            case SORT_OLDEST:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return lhs.getLastModified().compareTo(rhs.getLastModified());
+                    }
+                });
+                break;
+            case SORT_NEWEST:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return rhs.getLastModified().compareTo(lhs.getLastModified());
+                    }
+                });
+                break;
+            case SORT_LARGEST:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return Long.valueOf(rhs.getSize()).compareTo(lhs.getSize());
+                    }
+                });
+                break;
+            case SORT_SMALLEST:
+                Collections.sort(files , new Comparator<IFile>() {
+                    public int compare(IFile lhs, IFile rhs) {
+                        return Long.valueOf(lhs.getSize()).compareTo(rhs.getSize());
+                    }
+                });
+                break;
+            default:
+                Log.e(LOGTAG, "uncatched sortMode: " + sortMode);
         }
         return;
     }

@@ -177,6 +177,8 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
+
+        FileUtilities.sortFiles(filePaths, sortMode);
         // refresh view
         if (viewMode == GRID_VIEW) {
             gv.setAdapter(new GridItemAdapter(getApplicationContext(),
