@@ -3,15 +3,6 @@ Support for Office Open XML, the office XML-format designed by Microsoft.
 See also:
 [http://wiki.openoffice.org/wiki/OOX]
 
-
-The "TODO: OOXML_spec" comments are related to wrong implementation of the spec. The oox code was
-written against the OOXML dialect produced by MSO 2007,
-which is not standard compliant. Newer MSO version use the correct
-default values as desribed in the spec. We need a way to handle both in the future.
-The first step is to mark these places when you see them. Many of them
-already have a comment that the implemented default value is not
-in line with the spec.
-
 == DrawingML Custom shapes and presets ==
 
 custom shapes are part of DrawingML and are different to binary ppt
