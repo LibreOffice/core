@@ -21,6 +21,9 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 public class FileUtilities {
+
+    private String LOGTAG = FileUtilities.class.getSimpleName();
+
     static final int ALL = -1;
 
     // These have to be in sync with the file_view_modes resource.
@@ -135,7 +138,7 @@ public class FileUtilities {
 
     static int getType(String filename) {
         int type = lookupExtension (filename);
-        Log.d("debug", "extn : " + filename + " -> " + type);
+        Log.d(LOGTAG, "extn : " + filename + " -> " + type);
         return type;
     }
 
@@ -152,7 +155,7 @@ public class FileUtilities {
 
     // Filter by mode, and/or in future by filename/wildcard
     static private boolean doAccept(String filename, int byMode, String byFilename) {
-        Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
+        Log.d(LOGTAG, "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
         if (filename == null)
             return false;
 
