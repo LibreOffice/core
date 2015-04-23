@@ -367,24 +367,24 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
         CrookRotatePoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
         CrookSlantPoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
         CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
     }
 }

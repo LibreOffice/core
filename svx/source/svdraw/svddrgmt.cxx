@@ -2993,17 +2993,17 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
         if (pPV->HasMarkedObjPageView())
         {
-            sal_uInt16 nPolyAnz=aTempPolyPoly.Count();
+            sal_uInt16 nPolyCount=aTempPolyPoly.Count();
 
             if (!bContortion && !getSdrDragView().IsNoDragXorPolys())
             {
                 sal_uInt16 n1st=0,nLast=0;
                 Point aC(aCenter);
 
-                while (n1st<nPolyAnz)
+                while (n1st<nPolyCount)
                 {
                     nLast=n1st;
-                    while (nLast<nPolyAnz && aTempPolyPoly[nLast].GetPointCount()!=0) nLast++;
+                    while (nLast<nPolyCount && aTempPolyPoly[nLast].GetPointCount()!=0) nLast++;
                     Rectangle aBound(aTempPolyPoly[n1st].GetBoundRect());
                     sal_uInt16 i;
 
@@ -3063,7 +3063,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
             {
                 sal_uInt16 i,j;
 
-                for (j=0; j<nPolyAnz; j++)
+                for (j=0; j<nPolyCount; j++)
                 {
                     XPolygon& aPol=aTempPolyPoly[j];
                     sal_uInt16 nPointCount=aPol.GetPointCount();
